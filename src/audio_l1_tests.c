@@ -22,6 +22,7 @@
 #include <dsError.h>
 #include <dsAudio.h>
 #include <ut.h>
+#include <limits.h>
 
 void test_audio_hal_l1_dsAudioPortInit(void)
 {
@@ -36,7 +37,7 @@ void test_audio_hal_l1_dsAudioPortInit(void)
 
 } 
 
-void test_audio_hal_l1_dsGetAudioPort((void)
+void test_audio_hal_l1_dsGetAudioPort(void)
 {
     dsError_t result;
     dsAudioPortType_t type = dsAUDIOPORT_TYPE_ID_LR;
@@ -477,7 +478,7 @@ void test_audio_hal_l1_dsGetGraphicEqualizerMode(void)
     UT_ASSERT_EQUAL( result, dsERR_NONE);
 }
 
-void test_audio_hal_l1_dsGetSurroundVirtualizer(void)
+void test_audio_hal_l1_dsGetMS12AudioProfileList(void)
 {
     dsError_t result;
     dsMS12AudioProfileList_t profiles;
@@ -511,7 +512,7 @@ void test_audio_hal_l1_dsGetSurroundVirtualizer(void)
 void test_audio_hal_l1_dsGetMS12AudioProfile(void)
 {
     dsError_t result;
-    char[50] profiles = {0};
+    char profiles [50] = {0};
     int index = 0;
     int handle = 0;
     /* Positive result */
@@ -941,7 +942,7 @@ void test_audio_hal_l1_dsGetSinkDeviceAtmosCapability(void)
     result = dsGetSinkDeviceAtmosCapability(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetSinkDeviceAtmosCapability(NULL,&stereoMode);
+    result = dsGetSinkDeviceAtmosCapability(NULL,&capabilities);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -972,7 +973,7 @@ void test_audio_hal_l1_dsIsAudioLoopThru(void)
     result = dsIsAudioLoopThru(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsIsAudioLoopThru(NULL,&stereoMode);
+    result = dsIsAudioLoopThru(NULL,&loopThrough);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -1115,7 +1116,7 @@ void test_audio_hal_l1_dsSetAudioEncoding(void)
             UT_ASSERT_EQUAL( result, dsERR_NONE );
         }
     }
-    result = dsSetAudioEncoding(handle,NULL);
+    result = dsSetAudioEncoding(handle, INT_MAX);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsSetAudioEncoding(NULL,enabled);
@@ -1277,8 +1278,6 @@ void test_audio_hal_l1_dsSetVolumeLeveller(void)
             UT_ASSERT_EQUAL( result, dsERR_NONE );
         }
     }
-    result = dsSetVolumeLeveller(handle,NULL);
-    UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsSetVolumeLeveller(NULL,mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
@@ -1401,8 +1400,6 @@ void test_audio_hal_l1_dsSetSurroundVirtualizer(void)
             UT_ASSERT_EQUAL( result, dsERR_NONE );
         }
     }
-    result = dsSetSurroundVirtualizer(handle,NULL);
-    UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsSetSurroundVirtualizer(NULL,mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
@@ -1523,7 +1520,7 @@ void test_audio_hal_l1_dsSetStereoMode(void)
             UT_ASSERT_EQUAL( result, dsERR_NONE );
         }
     }
-    result = dsSetStereoMode(handle,NULL);
+    result = dsSetStereoMode(handle, INT_MAX);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsSetStereoMode(NULL,mode);
@@ -1593,7 +1590,7 @@ void test_audio_hal_l1_dsSetAudioGain(void)
             UT_ASSERT_EQUAL( result, dsERR_NONE );
         }
     }
-    result = dsSetAudioGain(handle,NULL);
+    result = dsSetAudioGain(handle, INT_MAX);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsSetAudioGain(NULL,mode);
@@ -1622,7 +1619,7 @@ void test_audio_hal_l1_dsSetAudioDB(void)
             UT_ASSERT_EQUAL( result, dsERR_NONE );
         }
     }
-    result = dsSetAudioDB(handle,NULL);
+    result = dsSetAudioDB(handle, INT_MAX);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsSetAudioDB(NULL,mode);
@@ -1651,7 +1648,7 @@ void test_audio_hal_l1_dsSetAudioLevel(void)
             UT_ASSERT_EQUAL( result, dsERR_NONE );
         }
     }
-    result = dsSetAudioLevel(handle,NULL);
+    result = dsSetAudioLevel(handle, INT_MAX);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsSetAudioLevel(NULL,mode);
@@ -1663,10 +1660,11 @@ void test_audio_hal_l1_dsSetAudioLevel(void)
 void test_audio_hal_l1_dsSetAudioDucking(void)
 {
     dsError_t result;
-    const unsigned char mode = 1;
-    dsAudioDuckingType_t type = dsAUDIO_DUCKINGTYPE_ABSOLUTE;
     int index = 0;
     int handle = 0;
+    dsAudioDuckingAction_t action = 0;
+    dsAudioDuckingType_t type = dsAUDIO_DUCKINGTYPE_ABSOLUTE;
+    const unsigned char level = 1;
     /* Positive result */
     result = dsAudioPortInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -1677,19 +1675,19 @@ void test_audio_hal_l1_dsSetAudioDucking(void)
         {
             result = dsGetAudioPort(type,i,&handle);
             UT_ASSERT_EQUAL( result, dsERR_NONE );
-            result = dsSetAudioDucking(handle,dsAUDIO_DUCKINGTYPE_ABSOLUTE,mode);
+            result = dsSetAudioDucking(handle, action, dsAUDIO_DUCKINGTYPE_ABSOLUTE, level);
             UT_ASSERT_EQUAL( result, dsERR_NONE );
-            result = dsSetAudioDucking(handle,dsAUDIO_DUCKINGTYPE_RELATIVE,mode);
+            result = dsSetAudioDucking(handle, action, dsAUDIO_DUCKINGTYPE_RELATIVE, level);
             UT_ASSERT_EQUAL( result, dsERR_NONE );
         }
     }
-    result = dsSetAudioDucking(NULL,dsAUDIO_DUCKINGTYPE_RELATIVE,mode);
+    result = dsSetAudioDucking(NULL, action, dsAUDIO_DUCKINGTYPE_RELATIVE, level);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    result = dsSetAudioDucking(handle,NULL,mode);
+    result = dsSetAudioDucking(handle, action, INT_MAX, level);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsSetAudioDucking(handle,dsAUDIO_DUCKINGTYPE_RELATIVE,NULL);
+    result = dsSetAudioDucking(handle, action, dsAUDIO_DUCKINGTYPE_RELATIVE,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -2290,7 +2288,7 @@ void test_audio_hal_l1_dsSetSecondaryLanguage(void)
     result = dsSetSecondaryLanguage(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    result = dsSetSecondaryLanguage(NULL,mode);
+    result = dsSetSecondaryLanguage(NULL, sLang);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -2359,9 +2357,89 @@ int audio_l1_register( void )
         return -1;
     }
 
-    UT_add_test( pSuite, "audio_level1_test_func", test_audio_hal_l1_func);
-    UT_add_test( pSuite, "audio_level1_test_func", test_audio_hal_l1_func1);
-    UT_add_test( pSuite, "audio_level1_test_func", test_audio_hal_l1_func2);
+    UT_add_test( pSuite, "l1_dsAudioPortInit", test_audio_hal_l1_dsAudioPortInit);
+    UT_add_test( pSuite, "l1_dsGetAudioPort", test_audio_hal_l1_dsGetAudioPort);
+    UT_add_test( pSuite, "l1_dsGetAudioEncoding", test_audio_hal_l1_dsGetAudioEncoding);
+    UT_add_test( pSuite, "l1_dsGetAudioFormat", test_audio_hal_l1_dsGetAudioFormat);
+    UT_add_test( pSuite, "l1_dsGetAudioCompression", test_audio_hal_l1_dsGetAudioCompression);
+    UT_add_test( pSuite, "l1_dsGetDialogEnhancement", test_audio_hal_l1_dsGetDialogEnhancement);
+    UT_add_test( pSuite, "l1_dsGetDolbyVolumeMode", test_audio_hal_l1_dsGetDolbyVolumeMode);
+    UT_add_test( pSuite, "l1_dsGetIntelligentEqualizerMode", test_audio_hal_l1_dsGetIntelligentEqualizerMode);
+    UT_add_test( pSuite, "l1_dsGetVolumeLeveller", test_audio_hal_l1_dsGetVolumeLeveller);
+    UT_add_test( pSuite, "l1_dsGetBassEnhancer", test_audio_hal_l1_dsGetBassEnhancer);
+    UT_add_test( pSuite, "l1_dsIsSurroundDecoderEnabled", test_audio_hal_l1_dsIsSurroundDecoderEnabled);
+    UT_add_test( pSuite, "l1_dsGetDRCMode", test_audio_hal_l1_dsGetDRCMode);
+    UT_add_test( pSuite, "l1_dsGetSurroundVirtualizer", test_audio_hal_l1_dsGetSurroundVirtualizer);
+    UT_add_test( pSuite, "l1_dsGetMISteering", test_audio_hal_l1_dsGetMISteering);
+    UT_add_test( pSuite, "l1_dsGetGraphicEqualizerMode", test_audio_hal_l1_dsGetGraphicEqualizerMode);
+    UT_add_test( pSuite, "l1_dsGetMS12AudioProfileList", test_audio_hal_l1_dsGetMS12AudioProfileList);
+    UT_add_test( pSuite, "l1_dsGetMS12AudioProfile", test_audio_hal_l1_dsGetMS12AudioProfile);
+    UT_add_test( pSuite, "l1_dsGetSupportedARCTypes", test_audio_hal_l1_dsGetSupportedARCTypes);
+    UT_add_test( pSuite, "l1_dsAudioSetSAD", test_audio_hal_l1_dsAudioSetSAD);
+    UT_add_test( pSuite, "l1_dsAudioEnableARC", test_audio_hal_l1_dsAudioEnableARC);
+    UT_add_test( pSuite, "l1_dsGetStereoMode", test_audio_hal_l1_dsGetStereoMode);
+    UT_add_test( pSuite, "l1_dsGetStereoAuto", test_audio_hal_l1_dsGetStereoAuto);
+    UT_add_test( pSuite, "l1_dsGetAudioGain", test_audio_hal_l1_dsGetAudioGain);
+    UT_add_test( pSuite, "l1_dsGetAudioDB", test_audio_hal_l1_dsGetAudioDB);
+    UT_add_test( pSuite, "l1_dsGetAudioLevel", test_audio_hal_l1_dsGetAudioLevel);
+    UT_add_test( pSuite, "l1_dsGetAudioMaxDB", test_audio_hal_l1_dsGetAudioMaxDB);
+    UT_add_test( pSuite, "l1_dsGetAudioMinDB", test_audio_hal_l1_dsGetAudioMinDB);
+    UT_add_test( pSuite, "l1_dsGetAudioOptimalLevel", test_audio_hal_l1_dsGetAudioOptimalLevel);
+    UT_add_test( pSuite, "l1_dsGetAudioDelay", test_audio_hal_l1_dsGetAudioDelay);
+    UT_add_test( pSuite, "l1_dsGetAudioDelayOffset", test_audio_hal_l1_dsGetAudioDelayOffset);
+    UT_add_test( pSuite, "l1_dsSetAudioAtmosOutputMode", test_audio_hal_l1_dsSetAudioAtmosOutputMode);
+    UT_add_test( pSuite, "l1_dsGetSinkDeviceAtmosCapability", test_audio_hal_l1_dsGetSinkDeviceAtmosCapability);
+    UT_add_test( pSuite, "l1_dsIsAudioLoopThru", test_audio_hal_l1_dsIsAudioLoopThru);
+    UT_add_test( pSuite, "l1_dsIsAudioMute", test_audio_hal_l1_dsIsAudioMute);
+    UT_add_test( pSuite, "l1_dsIsAudioPortEnabled", test_audio_hal_l1_dsIsAudioPortEnabled);
+    UT_add_test( pSuite, "l1_dsEnableAudioPort", test_audio_hal_l1_dsEnableAudioPort);
+    UT_add_test( pSuite, "l1_dsEnableMS12Config", test_audio_hal_l1_dsEnableMS12Config);
+    UT_add_test( pSuite, "l1_dsEnableLEConfig", test_audio_hal_l1_dsEnableLEConfig);
+    UT_add_test( pSuite, "l1_dsGetLEConfig", test_audio_hal_l1_dsGetLEConfig);
+    UT_add_test( pSuite, "l1_dsSetAudioEncoding", test_audio_hal_l1_dsSetAudioEncoding);
+    UT_add_test( pSuite, "l1_dsSetAudioCompression", test_audio_hal_l1_dsSetAudioCompression);
+    UT_add_test( pSuite, "l1_dsSetDialogEnhancement", test_audio_hal_l1_dsSetDialogEnhancement);
+    UT_add_test( pSuite, "l1_dsSetDolbyVolumeMode", test_audio_hal_l1_dsSetDolbyVolumeMode);
+    UT_add_test( pSuite, "l1_dsSetIntelligentEqualizerMode", test_audio_hal_l1_dsSetIntelligentEqualizerMode);
+    UT_add_test( pSuite, "l1_dsSetVolumeLeveller", test_audio_hal_l1_dsSetVolumeLeveller);
+    UT_add_test( pSuite, "l1_dsSetBassEnhancer", test_audio_hal_l1_dsSetBassEnhancer);
+    UT_add_test( pSuite, "l1_dsEnableSurroundDecoder", test_audio_hal_l1_dsEnableSurroundDecoder);
+    UT_add_test( pSuite, "l1_dsSetDRCMode", test_audio_hal_l1_dsSetDRCMode);
+    UT_add_test( pSuite, "l1_dsSetSurroundVirtualizer", test_audio_hal_l1_dsSetSurroundVirtualizer);
+    UT_add_test( pSuite, "l1_dsSetMISteering", test_audio_hal_l1_dsSetMISteering);
+    UT_add_test( pSuite, "l1_dsSetGraphicEqualizerMode", test_audio_hal_l1_dsSetGraphicEqualizerMode);
+    UT_add_test( pSuite, "l1_dsSetMS12AudioProfile", test_audio_hal_l1_dsSetMS12AudioProfile);
+    UT_add_test( pSuite, "l1_dsSetStereoMode", test_audio_hal_l1_dsSetStereoMode);
+    UT_add_test( pSuite, "l1_dsSetStereoAuto", test_audio_hal_l1_dsSetStereoAuto);
+    UT_add_test( pSuite, "l1_dsSetAudioGain", test_audio_hal_l1_dsSetAudioGain);
+    UT_add_test( pSuite, "l1_dsSetAudioDB", test_audio_hal_l1_dsSetAudioDB);
+    UT_add_test( pSuite, "l1_dsSetAudioLevel", test_audio_hal_l1_dsSetAudioLevel);
+    UT_add_test( pSuite, "l1_dsSetAudioDucking", test_audio_hal_l1_dsSetAudioDucking);
+    UT_add_test( pSuite, "l1_dsEnableLoopThru", test_audio_hal_l1_dsEnableLoopThru);
+    UT_add_test( pSuite, "l1_dsSetAudioMute", test_audio_hal_l1_dsSetAudioMute);
+    UT_add_test( pSuite, "l1_dsIsAudioMSDecode", test_audio_hal_l1_dsIsAudioMSDecode);
+    UT_add_test( pSuite, "l1_dsIsAudioMS12Decode", test_audio_hal_l1_dsIsAudioMS12Decode);
+    UT_add_test( pSuite, "l1_dsSetAudioDelay", test_audio_hal_l1_dsSetAudioDelay);
+    UT_add_test( pSuite, "l1_dsSetAudioDelayOffset", test_audio_hal_l1_dsSetAudioDelayOffset);
+    UT_add_test( pSuite, "l1_dsAudioOutIsConnected", test_audio_hal_l1_dsAudioOutIsConnected);
+    UT_add_test( pSuite, "l1_dsAudioOutRegisterConnectCB", test_audio_hal_l1_dsAudioOutRegisterConnectCB);
+    UT_add_test( pSuite, "l1_dsAudioFormatUpdateRegisterCB", test_audio_hal_l1_dsAudioFormatUpdateRegisterCB);
+    UT_add_test( pSuite, "l1_dsGetAudioCapabilities", test_audio_hal_l1_dsGetAudioCapabilities);
+    UT_add_test( pSuite, "l1_dsGetMS12Capabilities", test_audio_hal_l1_dsGetMS12Capabilities);
+    UT_add_test( pSuite, "l1_dsResetDialogEnhancement", test_audio_hal_l1_dsResetDialogEnhancement);
+    UT_add_test( pSuite, "l1_dsResetBassEnhancer", test_audio_hal_l1_dsResetBassEnhancer);
+    UT_add_test( pSuite, "l1_dsResetSurroundVirtualizer", test_audio_hal_l1_dsResetSurroundVirtualizer);
+    UT_add_test( pSuite, "l1_dsResetVolumeLeveller", test_audio_hal_l1_dsResetVolumeLeveller);
+    UT_add_test( pSuite, "l1_dsSetMS12AudioProfileSetttingsOverride", test_audio_hal_l1_dsSetMS12AudioProfileSetttingsOverride);
+    UT_add_test( pSuite, "l1_dsSetAssociatedAudioMixing", test_audio_hal_l1_dsSetAssociatedAudioMixing);
+    UT_add_test( pSuite, "l1_dsGetAssociatedAudioMixing", test_audio_hal_l1_dsGetAssociatedAudioMixing);
+    UT_add_test( pSuite, "l1_dsSetFaderControl", test_audio_hal_l1_dsSetFaderControl);
+    UT_add_test( pSuite, "l1_dsGetFaderControl", test_audio_hal_l1_dsGetFaderControl);
+    UT_add_test( pSuite, "l1_dsSetPrimaryLanguage", test_audio_hal_l1_dsSetPrimaryLanguage);
+    UT_add_test( pSuite, "l1_dsGetPrimaryLanguage", test_audio_hal_l1_dsGetPrimaryLanguage);
+    UT_add_test( pSuite, "l1_dsSetSecondaryLanguage", test_audio_hal_l1_dsSetSecondaryLanguage);
+    UT_add_test( pSuite, "l1_dsGetSecondaryLanguage", test_audio_hal_l1_dsGetSecondaryLanguage);
+    UT_add_test( pSuite, "l1_dsGetHDMIARCPortId", test_audio_hal_l1_dsGetHDMIARCPortId);
 
     return 0;
 }

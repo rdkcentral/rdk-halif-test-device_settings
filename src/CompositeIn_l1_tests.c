@@ -22,6 +22,7 @@
 #include <dsError.h>
 #include <dsCompositeIn.h>
 #include <ut.h>
+#include <limits.h>
 
 void test_compositeIn_hal_l1_dsCompositeInInit(void)
 {
@@ -91,35 +92,14 @@ void test_compositeIn_hal_l1_dsCompositeInSelectPort(void)
         UT_ASSERT_EQUAL( result, dsERR_NONE );
     }
 
-    result = dsCompositeInSelectPort(NULL);
+    result = dsCompositeInSelectPort(INT_MAX);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     /*Terminating Audio Port*/
     result = dsCompositeInTerm();
     UT_ASSERT_EQUAL( result, dsERR_NONE);
 }
-void test_compositeIn_hal_l1_dsCompositeInSelectPort(void)
-{
-    dsError_t result;
-    dsAudioPortType_t type = dsAUDIOPORT_TYPE_ID_LR;
-    dsCompositeInStatus_t status;
-    /* Positive result */
-    result = dsCompositeInInit();
-    UT_ASSERT_EQUAL( result, dsERR_NONE );
 
-    for(dsCompositeInPort_t port; port>=dsCOMPOSITE_IN_PORT_MAX; port++)
-    {
-        result = dsCompositeInSelectPort(port);
-        UT_ASSERT_EQUAL( result, dsERR_NONE );
-    }
-
-    result = dsCompositeInSelectPort(NULL);
-    UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
-
-    /*Terminating Audio Port*/
-    result = dsCompositeInTerm();
-    UT_ASSERT_EQUAL( result, dsERR_NONE);
-}
 static UT_test_suite_t *pSuite = NULL;
 
 /**
@@ -136,9 +116,10 @@ int CompositeIn_l1_register( void )
         return -1;
     }
 
-    UT_add_test( pSuite, "CompositeIn_level1_test_func", test_CompositeIn_hal_l1_func);
-    UT_add_test( pSuite, "CompositeIn_level1_test_func", test_CompositeIn_hal_l1_func1);
-    UT_add_test( pSuite, "CompositeIn_level1_test_func", test_CompositeIn_hal_l1_func2);
+    UT_add_test( pSuite, "l1_dsCompositeInInit", test_compositeIn_hal_l1_dsCompositeInInit);
+    UT_add_test( pSuite, "l1_dsCompositeInGetNumberOfInputs", test_compositeIn_hal_l1_dsCompositeInGetNumberOfInputs);
+    UT_add_test( pSuite, "l1_dsCompositeInGetStatus", test_compositeIn_hal_l1_dsCompositeInGetStatus);
+    UT_add_test( pSuite, "l1_dsCompositeInSelectPort", test_compositeIn_hal_l1_dsCompositeInSelectPort);
 
     return 0;
 }

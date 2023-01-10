@@ -22,7 +22,7 @@
 #include <dsError.h>
 #include <dsHdmiIn.h>
 #include <ut.h>
-
+#include <limits.h>
 
 void test_hdmiIn_hal_l1_dsHdmiInInit(void)
 {
@@ -86,7 +86,7 @@ void test_hdmiIn_hal_l1_dsHdmiInSelectPort(void)
         UT_ASSERT_EQUAL( result, dsERR_NONE );
     }
     
-    result = dsHdmiInSelectPort(NULL);
+    result = dsHdmiInSelectPort(INT_MAX);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     result = dsHdmiInSelectPort(dsHDMI_IN_PORT_NONE);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
@@ -133,7 +133,7 @@ void test_hdmiIn_hal_l1_dsHdmiInSelectZoomMode(void)
     }
     result = dsHdmiInSelectZoomMode( dsVIDEO_ZOOM_UNKNOWN);    
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM);
-    result = dsHdmiInSelectZoomMode(NULL);    
+    result = dsHdmiInSelectZoomMode(INT_MAX);    
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM);
     /*Terminating Display*/
     result = dsHdmiInTerm();
@@ -206,9 +206,15 @@ int HdmiIn_l1_register( void )
         return -1;
     }
 
-    UT_add_test( pSuite, "HdmiIn_level1_test_func", test_HdmiIn_hal_l1_func);
-    UT_add_test( pSuite, "HdmiIn_level1_test_func", test_HdmiIn_hal_l1_func1);
-    UT_add_test( pSuite, "HdmiIn_level1_test_func", test_HdmiIn_hal_l1_func2);
+    UT_add_test( pSuite, "l1_dsHdmiInInit", test_hdmiIn_hal_l1_dsHdmiInInit);
+    UT_add_test( pSuite, "l1_dsHdmiInGetNumberOfInputs", test_hdmiIn_hal_l1_dsHdmiInGetNumberOfInputs);
+    UT_add_test( pSuite, "l1_dsHdmiInGetStatus", test_hdmiIn_hal_l1_dsHdmiInGetStatus);
+    UT_add_test( pSuite, "l1_dsHdmiInSelectPort", test_hdmiIn_hal_l1_dsHdmiInSelectPort);
+    UT_add_test( pSuite, "l1_dsHdmiInScaleVideo", test_hdmiIn_hal_l1_dsHdmiInScaleVideo);
+    UT_add_test( pSuite, "l1_dsHdmiInSelectZoomMode", test_hdmiIn_hal_l1_dsHdmiInSelectZoomMode);
+    UT_add_test( pSuite, "l1_dsHdmiInPauseAudio", test_hdmiIn_hal_l1_dsHdmiInPauseAudio);
+    UT_add_test( pSuite, "l1_dsHdmiInResumeAudio", test_hdmiIn_hal_l1_dsHdmiInResumeAudio);
+    UT_add_test( pSuite, "l1_dsHdmiInGetCurrentVideoMode", test_hdmiIn_hal_l1_dsHdmiInGetCurrentVideoMode);
 
     return 0;
 }
