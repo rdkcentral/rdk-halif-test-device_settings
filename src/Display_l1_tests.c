@@ -89,7 +89,7 @@ void test_display_hal_l1_dsGetEDID(void)
             result = dsGetDisplay(type,i,&handle);
             UT_ASSERT_EQUAL( result, dsERR_NONE );
 
-            result  = dsGetEDID(handle,&edid)
+            result  = dsGetEDID(handle,&edid);
             UT_ASSERT_EQUAL( result, dsERR_NONE );
         }
     }
@@ -120,7 +120,7 @@ void test_display_hal_l1_dsGetDisplayAspectRatio(void)
             result = dsGetDisplay(type,i,&handle);
             UT_ASSERT_EQUAL( result, dsERR_NONE );
 
-            result  = dsGetDisplayAspectRatio(handle,&aspectRatio)
+            result  = dsGetDisplayAspectRatio(handle,&aspectRatio);
             UT_ASSERT_EQUAL( result, dsERR_NONE );
         }
     }
@@ -143,7 +143,6 @@ void test_display_hal_l1_dsGetEDIDBytes(void)
     char edidBytes[256] = {0};
     int length = 0;
 
-    aspectRatio = memset()
     /* Positive result */
     result = dsDisplayInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -189,9 +188,11 @@ int Display_l1_register( void )
         return -1;
     }
 
-    UT_add_test( pSuite, "Display_level1_test_func", test_Display_hal_l1_func);
-    UT_add_test( pSuite, "Display_level1_test_func", test_Display_hal_l1_func1);
-    UT_add_test( pSuite, "Display_level1_test_func", test_Display_hal_l1_func2);
+    UT_add_test( pSuite, "l1_dsDisplayInit", test_display_hal_l1_dsDisplayInit);
+    UT_add_test( pSuite, "l1_dsGetDisplay", test_display_hal_l1_dsGetDisplay);
+    UT_add_test( pSuite, "l1_dsGetEDID", test_display_hal_l1_dsGetEDID);
+    UT_add_test( pSuite, "l1_dsGetDisplayAspectRatio", test_display_hal_l1_dsGetDisplayAspectRatio);
+    UT_add_test( pSuite, "l1_dsGetEDIDBytes", test_display_hal_l1_dsGetEDIDBytes);
 
     return 0;
 }

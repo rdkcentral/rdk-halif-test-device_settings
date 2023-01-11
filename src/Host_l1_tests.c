@@ -374,7 +374,7 @@ static UT_test_suite_t *pSuite = NULL;
  *
  * @return int - 0 on success, otherwise failure
  */
-int test_ds_host_hal_l1_register( void )
+int Host_l1_register( void )
 {
     /* add a suite to the registry */
     pSuite = UT_add_suite("[L1 ds host]", NULL, NULL);

@@ -1,3 +1,11 @@
+#include <string.h>
+#include <stdlib.h>
+#include <dsError.h>
+#include <dsHdmiIn.h>
+#include <ut.h>
+#include <limits.h>
+
+
 void test_FPD_hal_l1_init(void)
 {
     dsError_t result;
@@ -171,6 +179,10 @@ void test_videodevice_hal_l1_dsGetFPBrightness(void)
 
 void test_FPD_hal_l1_dsGetFPColor(void)
 {
+    uint32_t R8 = 0;
+    uint32_t G8 = 0;
+    uint32_t B8 = 0;
+
     dsError_t result;
     dsFPDIndicator_t eIndicator = dsFPD_INDICATOR_MESSAGE;
 	dsFPDColor_t *pColor = dsFPDColor_Make(R8,G8,B8);
@@ -199,6 +211,9 @@ void test_FPD_hal_l1_dsGetFPColor(void)
 
 void test_FDP_hal_l1_dsSetFPColor(void)
 {
+    uint32_t R8 = 0;
+    uint32_t G8 = 0;
+    uint32_t B8 = 0;
     dsError_t result;
     dsFPDIndicator_t eIndicator = dsFPD_INDICATOR_MESSAGE;
 	dsFPDColor_t eColor = dsFPDColor_Make(R8,G8,B8);
@@ -228,8 +243,8 @@ void test_FPD_hal_l1_dsSetFPTime(void)
 {
     dsError_t result;
     dsFPDTimeFormat_t eTimeFormat = dsFPD_TIME_12_HOUR; 
-	const unsigned int uHour = 1;
-	const unsigned int uMinutes = 1;
+    unsigned int uHour = 1;
+    unsigned int uMinutes = 1;
 	
     /* Positive result */
     result = dsFPInit();
@@ -445,6 +460,9 @@ void test_FDP_hal_l1_dsSetFPDBrightness(void)
 
 void test_FDP_hal_l1_dsSetFPDColor(void)
 {
+    uint32_t R8 = 0;
+    uint32_t G8 = 0;
+    uint32_t B8 = 0;
     dsError_t result;
     dsFPDIndicator_t eIndicator = dsFPD_INDICATOR_MESSAGE;
 	dsFPDColor_t eColor = dsFPDColor_Make(R8,G8,B8);
@@ -454,9 +472,9 @@ void test_FDP_hal_l1_dsSetFPDColor(void)
     result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
 
-    for(eIndicator = dsFPD_INDICATOR_MESSAGE,eColor = dsFPDColor_Make(R8,G8,B8); eIndicator<=dsFPD_INDICATOR_MAX, eColor<=dsFPD_COLOR_MAX ){
-    result = dsSetFPDColor(eIndicator,eColor,toPersist);
-    UT_ASSERT_EQUAL( result, dsERR_NONE );
+    for(eIndicator = dsFPD_INDICATOR_MESSAGE,eColor = dsFPDColor_Make(R8,G8,B8); eIndicator<=dsFPD_INDICATOR_MAX, eColor<=dsFPD_COLOR_MAX;eIndicator++ ){
+        result = dsSetFPDColor(eIndicator,eColor,toPersist);
+        UT_ASSERT_EQUAL( result, dsERR_NONE );
     }
 
     /* Passing Invalid Parameter to the function*/
@@ -484,9 +502,9 @@ void test_FDP_hal_l1_dsSetFPTimeFormat(void)
     result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
    
-    for(eTimeFormat=dsFPD_TIME_12_HOUR;eIndicator<=dsFPD_TIME_STRING;eIndicator++){
-    result = dsSetFPTimeFormat(eTimeFormat);
-    UT_ASSERT_EQUAL( result, dsERR_NONE );
+    for(eTimeFormat=dsFPD_TIME_12_HOUR;eTimeFormat<=dsFPD_TIME_STRING;eTimeFormat++){
+        result = dsSetFPTimeFormat(eTimeFormat);
+        UT_ASSERT_EQUAL( result, dsERR_NONE );
     }
 
     /* Passing Invalid Parameter to the function*/
@@ -549,4 +567,42 @@ void test_FDP_hal_l1_dsSetFPDMode(void)
 
 
 
+static UT_test_suite_t *pSuite = NULL;
+
+/**
+ * @brief Register the main tests for this module
+ *
+ * @return int - 0 on success, otherwise failure
+ */
+int FPD_l1_register ( void )
+{
+    /* add a suite to the registry */
+    pSuite = UT_add_suite("[L1 ds host]", NULL, NULL);
+    if (NULL == pSuite)
+    {
+        return -1;
+    }
+
+    UT_add_test( pSuite, "l1_init", test_FPD_hal_l1_init);
+    UT_add_test( pSuite, "l1_dsSetFPBlink", test_FPD_hal_l1_dsSetFPBlink);
+    UT_add_test( pSuite, "l1_dsSetFPBrightness", test_FPD_hal_l1_dsSetFPBrightness);
+    UT_add_test( pSuite, "l1_dsSetFPBrightness", test_FPD_hal_l1_dsSetFPBrightness);
+    UT_add_test( pSuite, "l1_dsSetFPState", test_videodevice_hal_l1_dsSetFPState);
+    UT_add_test( pSuite, "l1_dsGetFPBrightness", test_videodevice_hal_l1_dsGetFPBrightness);
+    UT_add_test( pSuite, "l1_dsGetFPColor", test_FPD_hal_l1_dsGetFPColor);
+    UT_add_test( pSuite, "l1_dsSetFPColor", test_FDP_hal_l1_dsSetFPColor);
+    UT_add_test( pSuite, "l1_dsSetFPTime", test_FPD_hal_l1_dsSetFPTime);
+    UT_add_test( pSuite, "l1_dsSetFPText", test_FPD_hal_l1_dsSetFPText);
+    UT_add_test( pSuite, "l1_dsSetFPTextBrightness", test_FDP_hal_l1_dsSetFPTextBrightness);
+    UT_add_test( pSuite, "l1_dsGetFPTextBrightness", test_FDP_hal_l1_dsGetFPTextBrightness);
+    UT_add_test( pSuite, "l1_dsFPEnableCLockDisplay", test_FDP_hal_l1_dsFPEnableCLockDisplay);
+    UT_add_test( pSuite, "l1_dsSetFPScroll", test_FDP_hal_l1_dsSetFPScroll);
+    UT_add_test( pSuite, "l1_dsSetFPDBrightness", test_FDP_hal_l1_dsSetFPDBrightness);
+    UT_add_test( pSuite, "l1_dsSetFPDColor", test_FDP_hal_l1_dsSetFPDColor);
+    UT_add_test( pSuite, "l1_dsSetFPTimeFormat", test_FDP_hal_l1_dsSetFPTimeFormat);
+    UT_add_test( pSuite, "l1_dsGetFPTimeFormat", test_FDP_hal_l1_dsGetFPTimeFormat);
+    UT_add_test( pSuite, "l1_dsSetFPDMode", test_FDP_hal_l1_dsSetFPDMode);
+
+    return 0;
+}
 

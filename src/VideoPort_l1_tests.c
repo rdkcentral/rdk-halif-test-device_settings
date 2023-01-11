@@ -1702,7 +1702,7 @@ static UT_test_suite_t *pSuite = NULL;
  * 
  * @return int - 0 on success, otherwise failure
  */
-int test_l1_ds_videoport_register( void )
+int VideoPort_l1_register( void )
 {
     /* add a suite to the registry */
     pSuite = UT_add_suite("[IR DS VideoPort L1 cases]", NULL, NULL);
