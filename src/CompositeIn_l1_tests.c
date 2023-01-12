@@ -24,6 +24,13 @@
 #include <ut.h>
 #include <limits.h>
 
+/**
+ * @brief This function will do the unit testing of dsAudioPortInit ()
+ * This function will ensure underlying API implementation is handling
+ * invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsAudioPortInit () is called successfully.
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_compositeIn_hal_l1_dsCompositeInInit(void)
 {
     dsError_t result;
@@ -31,17 +38,34 @@ void test_compositeIn_hal_l1_dsCompositeInInit(void)
     result = dsCompositeInInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
 
-    /*calling hdmicec_init second time should pass and return the valid pointer*/
+    /*Second time init should pass*/
+    result = dsCompositeInInit();
+    UT_ASSERT_EQUAL( result, dsERR_NONE );
+
     result = dsCompositeInTerm();
     UT_ASSERT_EQUAL( result, dsERR_NONE);
 
 } 
 
+/**
+ * @brief This function will do the unit testing of dsCompositeInGetNumberOfInputs ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsCompositeInGetNumberOfInputs () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsCompositeInInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_compositeIn_hal_l1_dsCompositeInGetNumberOfInputs(void)
 {
     dsError_t result;
     dsAudioPortType_t type = dsAUDIOPORT_TYPE_ID_LR;
     uint8_t numberOfInputs = 0;
+    
+    //Calling before init should fail.
+    result = dsCompositeInGetNumberOfInputs(&numberOfInputs);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsCompositeInInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -57,11 +81,26 @@ void test_compositeIn_hal_l1_dsCompositeInGetNumberOfInputs(void)
     UT_ASSERT_EQUAL( result, dsERR_NONE);
 }
 
+
+/**
+ * @brief This function will do the unit testing of dsCompositeInGetStatus ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsCompositeInGetStatus () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsCompositeInInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_compositeIn_hal_l1_dsCompositeInGetStatus(void)
 {
     dsError_t result;
     dsAudioPortType_t type = dsAUDIOPORT_TYPE_ID_LR;
     dsCompositeInStatus_t status;
+
+    //Calling before init should fail.
+    result = dsCompositeInGetStatus(&status);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsCompositeInInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -77,11 +116,24 @@ void test_compositeIn_hal_l1_dsCompositeInGetStatus(void)
     UT_ASSERT_EQUAL( result, dsERR_NONE);
 }
 
+/**
+ * @brief This function will do the unit testing of dsCompositeInSelectPort ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsCompositeInSelectPort () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsCompositeInInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_compositeIn_hal_l1_dsCompositeInSelectPort(void)
 {
     dsError_t result;
     dsAudioPortType_t type = dsAUDIOPORT_TYPE_ID_LR;
     dsCompositeInStatus_t status;
+
+    result = dsCompositeInSelectPort(port);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsCompositeInInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );

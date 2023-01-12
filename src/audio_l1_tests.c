@@ -28,13 +28,17 @@
  * @brief This function will do the unit testing of dsAudioPortInit ()
  * This function will ensure underlying API implementation is handling
  * invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsAudioPortInit () is called successfully.
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_NONE : will be returned if dsAudioPortInit () is called successfully.
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsAudioPortInit(void)
 {
     dsError_t result;
     /* Positive result */
+    result = dsAudioPortInit();
+    UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+    /* Second time init should pass */
     result = dsAudioPortInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
 
@@ -48,10 +52,10 @@ void test_audio_hal_l1_dsAudioPortInit(void)
  * @brief This function will do the unit testing of dsGetAudioPort ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetAudioPort () is called successfully.
+ * dsERR_NONE : will be returned if dsGetAudioPort () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetAudioPort(void)
 {
@@ -99,11 +103,11 @@ void test_audio_hal_l1_dsGetAudioPort(void)
  * @brief This function will do the unit testing of dsGetAudioEncoding ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetAudioEncoding () is called successfully.
+ * dsERR_NONE : will be returned if dsGetAudioEncoding () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
  * dsERR_OPERATION_NOT_SUPPORTED : Not able to simulate this condition with the UT implementation
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetAudioEncoding(void)
 {
@@ -144,11 +148,11 @@ void test_audio_hal_l1_dsGetAudioEncoding(void)
  * @brief This function will do the unit testing of dsGetAudioEncoding ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetAudioEncoding () is called successfully.
+ * dsERR_NONE : will be returned if dsGetAudioEncoding () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
  * dsERR_OPERATION_NOT_SUPPORTED : Not able to simulate this condition with the UT implementation
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetAudioFormat(void)
 {
@@ -189,11 +193,11 @@ void test_audio_hal_l1_dsGetAudioFormat(void)
  * @brief This function will do the unit testing of dsGetAudioCompression ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetAudioCompression () is called successfully.
+ * dsERR_NONE : will be returned if dsGetAudioCompression () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
  * dsERR_OPERATION_NOT_SUPPORTED : Not able to simulate this condition with the UT implementation
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetAudioCompression(void)
 {
@@ -234,11 +238,11 @@ void test_audio_hal_l1_dsGetAudioCompression(void)
  * @brief This function will do the unit testing of dsGetDialogEnhancement ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetDialogEnhancement () is called successfully.
+ * dsERR_NONE : will be returned if dsGetDialogEnhancement () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
  * dsERR_OPERATION_NOT_SUPPORTED : Not able to simulate this condition with the UT implementation
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetDialogEnhancement(void)
 {
@@ -279,11 +283,11 @@ void test_audio_hal_l1_dsGetDialogEnhancement(void)
  * @brief This function will do the unit testing of dsGetDolbyVolumeMode ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetDolbyVolumeMode () is called successfully.
+ * dsERR_NONE : will be returned if dsGetDolbyVolumeMode () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
  * dsERR_OPERATION_NOT_SUPPORTED : Not able to simulate this condition with the UT implementation
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetDolbyVolumeMode(void)
 {
@@ -324,11 +328,11 @@ void test_audio_hal_l1_dsGetDolbyVolumeMode(void)
  * @brief This function will do the unit testing of dsGetIntelligentEqualizerMode ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetIntelligentEqualizerMode () is called successfully.
+ * dsERR_NONE : will be returned if dsGetIntelligentEqualizerMode () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
  * dsERR_OPERATION_NOT_SUPPORTED : Not able to simulate this condition with the UT implementation
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetIntelligentEqualizerMode(void)
 {
@@ -369,11 +373,11 @@ void test_audio_hal_l1_dsGetIntelligentEqualizerMode(void)
  * @brief This function will do the unit testing of dsGetVolumeLeveller ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetVolumeLeveller () is called successfully.
+ * dsERR_NONE : will be returned if dsGetVolumeLeveller () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
  * dsERR_OPERATION_NOT_SUPPORTED : Not able to simulate this condition with the UT implementation
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetVolumeLeveller(void)
 {
@@ -414,11 +418,11 @@ void test_audio_hal_l1_dsGetVolumeLeveller(void)
  * @brief This function will do the unit testing of dsGetBassEnhancer ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetBassEnhancer () is called successfully.
+ * dsERR_NONE : will be returned if dsGetBassEnhancer () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
  * dsERR_OPERATION_NOT_SUPPORTED : Not able to simulate this condition with the UT implementation
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetBassEnhancer(void)
 {
@@ -459,11 +463,11 @@ void test_audio_hal_l1_dsGetBassEnhancer(void)
  * @brief This function will do the unit testing of dsIsSurroundDecoderEnabled ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsIsSurroundDecoderEnabled () is called successfully.
+ * dsERR_NONE : will be returned if dsIsSurroundDecoderEnabled () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
  * dsERR_OPERATION_NOT_SUPPORTED : Not able to simulate this condition with the UT implementation
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsIsSurroundDecoderEnabled(void)
 {
@@ -504,11 +508,11 @@ void test_audio_hal_l1_dsIsSurroundDecoderEnabled(void)
  * @brief This function will do the unit testing of dsGetDRCMode ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetDRCMode () is called successfully.
+ * dsERR_NONE : will be returned if dsGetDRCMode () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
  * dsERR_OPERATION_NOT_SUPPORTED : Not able to simulate this condition with the UT implementation
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetDRCMode(void)
 {
@@ -549,11 +553,11 @@ void test_audio_hal_l1_dsGetDRCMode(void)
  * @brief This function will do the unit testing of dsGetSurroundVirtualizer ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetSurroundVirtualizer () is called successfully.
+ * dsERR_NONE : will be returned if dsGetSurroundVirtualizer () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
  * dsERR_OPERATION_NOT_SUPPORTED : Not able to simulate this condition with the UT implementation
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetSurroundVirtualizer(void)
 {
@@ -594,11 +598,11 @@ void test_audio_hal_l1_dsGetSurroundVirtualizer(void)
  * @brief This function will do the unit testing of dsGetMISteering ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetMISteering () is called successfully.
+ * dsERR_NONE : will be returned if dsGetMISteering () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
  * dsERR_OPERATION_NOT_SUPPORTED : Not able to simulate this condition with the UT implementation
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetMISteering(void)
 {
@@ -639,11 +643,11 @@ void test_audio_hal_l1_dsGetMISteering(void)
  * @brief This function will do the unit testing of dsGetGraphicEqualizerMode ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetGraphicEqualizerMode () is called successfully.
+ * dsERR_NONE : will be returned if dsGetGraphicEqualizerMode () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
  * dsERR_OPERATION_NOT_SUPPORTED : Not able to simulate this condition with the UT implementation
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetGraphicEqualizerMode(void)
 {
@@ -684,11 +688,11 @@ void test_audio_hal_l1_dsGetGraphicEqualizerMode(void)
  * @brief This function will do the unit testing of dsGetMS12AudioProfileList ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetMS12AudioProfileList () is called successfully.
+ * dsERR_NONE : will be returned if dsGetMS12AudioProfileList () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
  * dsERR_OPERATION_NOT_SUPPORTED : Not able to simulate this condition with the UT implementation
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetMS12AudioProfileList(void)
 {
@@ -729,11 +733,11 @@ void test_audio_hal_l1_dsGetMS12AudioProfileList(void)
  * @brief This function will do the unit testing of dsGetMS12AudioProfileList ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetMS12AudioProfileList () is called successfully.
+ * dsERR_NONE : will be returned if dsGetMS12AudioProfileList () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
  * dsERR_OPERATION_NOT_SUPPORTED : Not able to simulate this condition with the UT implementation
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetMS12AudioProfile(void)
 {
@@ -774,11 +778,11 @@ void test_audio_hal_l1_dsGetMS12AudioProfile(void)
  * @brief This function will do the unit testing of dsGetSupportedARCTypes ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetSupportedARCTypes () is called successfully.
+ * dsERR_NONE : will be returned if dsGetSupportedARCTypes () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
  * dsERR_OPERATION_NOT_SUPPORTED : Not able to simulate this condition with the UT implementation
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetSupportedARCTypes(void)
 {
@@ -819,10 +823,10 @@ void test_audio_hal_l1_dsGetSupportedARCTypes(void)
  * @brief This function will do the unit testing of dsAudioSetSAD ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsAudioSetSAD () is called successfully.
+ * dsERR_NONE : will be returned if dsAudioSetSAD () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsAudioSetSAD(void)
 {
@@ -858,10 +862,10 @@ void test_audio_hal_l1_dsAudioSetSAD(void)
  * @brief This function will do the unit testing of dsAudioEnableARC ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsAudioEnableARC () is called successfully.
+ * dsERR_NONE : will be returned if dsAudioEnableARC () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsAudioEnableARC(void)
 {
@@ -894,10 +898,10 @@ void test_audio_hal_l1_dsAudioEnableARC(void)
  * @brief This function will do the unit testing of dsGetStereoMode ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetStereoMode () is called successfully.
+ * dsERR_NONE : will be returned if dsGetStereoMode () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetStereoMode(void)
 {
@@ -938,10 +942,10 @@ void test_audio_hal_l1_dsGetStereoMode(void)
  * @brief This function will do the unit testing of dsGetStereoAuto ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetStereoAuto () is called successfully.
+ * dsERR_NONE : will be returned if dsGetStereoAuto () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetStereoAuto(void)
 {
@@ -982,10 +986,10 @@ void test_audio_hal_l1_dsGetStereoAuto(void)
  * @brief This function will do the unit testing of dsGetAudioGain ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetAudioGain () is called successfully.
+ * dsERR_NONE : will be returned if dsGetAudioGain () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetAudioGain(void)
 {
@@ -1027,10 +1031,10 @@ void test_audio_hal_l1_dsGetAudioGain(void)
  * @brief This function will do the unit testing of dsGetAudioDB ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetAudioDB () is called successfully.
+ * dsERR_NONE : will be returned if dsGetAudioDB () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetAudioDB(void)
 {
@@ -1071,10 +1075,10 @@ void test_audio_hal_l1_dsGetAudioDB(void)
  * @brief This function will do the unit testing of dsGetAudioLevel ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetAudioLevel () is called successfully.
+ * dsERR_NONE : will be returned if dsGetAudioLevel () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetAudioLevel(void)
 {
@@ -1115,10 +1119,10 @@ void test_audio_hal_l1_dsGetAudioLevel(void)
  * @brief This function will do the unit testing of dsGetAudioMaxDB ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetAudioMaxDB () is called successfully.
+ * dsERR_NONE : will be returned if dsGetAudioMaxDB () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetAudioMaxDB(void)
 {
@@ -1159,10 +1163,10 @@ void test_audio_hal_l1_dsGetAudioMaxDB(void)
  * @brief This function will do the unit testing of dsGetAudioMinDB ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetAudioMinDB () is called successfully.
+ * dsERR_NONE : will be returned if dsGetAudioMinDB () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetAudioMinDB(void)
 {
@@ -1203,10 +1207,10 @@ void test_audio_hal_l1_dsGetAudioMinDB(void)
  * @brief This function will do the unit testing of dsGetAudioMinDB ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetAudioMinDB () is called successfully.
+ * dsERR_NONE : will be returned if dsGetAudioMinDB () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetAudioOptimalLevel(void)
 {
@@ -1247,10 +1251,10 @@ void test_audio_hal_l1_dsGetAudioOptimalLevel(void)
  * @brief This function will do the unit testing of dsGetAudioDelay ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetAudioDelay () is called successfully.
+ * dsERR_NONE : will be returned if dsGetAudioDelay () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetAudioDelay(void)
 {
@@ -1291,10 +1295,10 @@ void test_audio_hal_l1_dsGetAudioDelay(void)
  * @brief This function will do the unit testing of dsGetAudioDelayOffset ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetAudioDelayOffset () is called successfully.
+ * dsERR_NONE : will be returned if dsGetAudioDelayOffset () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetAudioDelayOffset(void)
 {
@@ -1335,10 +1339,10 @@ void test_audio_hal_l1_dsGetAudioDelayOffset(void)
  * @brief This function will do the unit testing of dsSetAudioAtmosOutputMode ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsSetAudioAtmosOutputMode () is called successfully.
+ * dsERR_NONE : will be returned if dsSetAudioAtmosOutputMode () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetAudioAtmosOutputMode(void)
 {
@@ -1372,10 +1376,10 @@ void test_audio_hal_l1_dsSetAudioAtmosOutputMode(void)
  * @brief This function will do the unit testing of dsGetSinkDeviceAtmosCapability ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetSinkDeviceAtmosCapability () is called successfully.
+ * dsERR_NONE : will be returned if dsGetSinkDeviceAtmosCapability () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetSinkDeviceAtmosCapability(void)
 {
@@ -1416,10 +1420,10 @@ void test_audio_hal_l1_dsGetSinkDeviceAtmosCapability(void)
  * @brief This function will do the unit testing of dsIsAudioLoopThru ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsIsAudioLoopThru () is called successfully.
+ * dsERR_NONE : will be returned if dsIsAudioLoopThru () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsIsAudioLoopThru(void)
 {
@@ -1460,10 +1464,10 @@ void test_audio_hal_l1_dsIsAudioLoopThru(void)
  * @brief This function will do the unit testing of dsIsAudioMute ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsIsAudioMute () is called successfully.
+ * dsERR_NONE : will be returned if dsIsAudioMute () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsIsAudioMute(void)
 {
@@ -1504,10 +1508,10 @@ void test_audio_hal_l1_dsIsAudioMute(void)
  * @brief This function will do the unit testing of dsIsAudioPortEnabled ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsIsAudioPortEnabled () is called successfully.
+ * dsERR_NONE : will be returned if dsIsAudioPortEnabled () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsIsAudioPortEnabled(void)
 {
@@ -1548,10 +1552,10 @@ void test_audio_hal_l1_dsIsAudioPortEnabled(void)
  * @brief This function will do the unit testing of dsEnableAudioPort ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsEnableAudioPort () is called successfully.
+ * dsERR_NONE : will be returned if dsEnableAudioPort () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsEnableAudioPort(void)
 {
@@ -1589,10 +1593,10 @@ void test_audio_hal_l1_dsEnableAudioPort(void)
  * @brief This function will do the unit testing of dsEnableMS12Config ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsEnableMS12Config () is called successfully.
+ * dsERR_NONE : will be returned if dsEnableMS12Config () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsEnableMS12Config(void)
 {
@@ -1631,10 +1635,10 @@ void test_audio_hal_l1_dsEnableMS12Config(void)
  * @brief This function will do the unit testing of dsEnableLEConfig ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsEnableLEConfig () is called successfully.
+ * dsERR_NONE : will be returned if dsEnableLEConfig () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsEnableLEConfig(void)
 {
@@ -1672,10 +1676,10 @@ void test_audio_hal_l1_dsEnableLEConfig(void)
  * @brief This function will do the unit testing of dsGetLEConfig ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetLEConfig () is called successfully.
+ * dsERR_NONE : will be returned if dsGetLEConfig () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetLEConfig(void)
 {
@@ -1716,10 +1720,10 @@ void test_audio_hal_l1_dsGetLEConfig(void)
  * @brief This function will do the unit testing of dsSetAudioEncoding ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsSetAudioEncoding () is called successfully.
+ * dsERR_NONE : will be returned if dsSetAudioEncoding () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetAudioEncoding(void)
 {
@@ -1761,10 +1765,10 @@ void test_audio_hal_l1_dsSetAudioEncoding(void)
  * @brief This function will do the unit testing of dsSetAudioCompression ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsSetAudioCompression () is called successfully.
+ * dsERR_NONE : will be returned if dsSetAudioCompression () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetAudioCompression(void)
 {
@@ -1807,10 +1811,10 @@ void test_audio_hal_l1_dsSetAudioCompression(void)
  * @brief This function will do the unit testing of dsSetDialogEnhancement ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsSetDialogEnhancement () is called successfully.
+ * dsERR_NONE : will be returned if dsSetDialogEnhancement () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetDialogEnhancement(void)
 {
@@ -1853,10 +1857,10 @@ void test_audio_hal_l1_dsSetDialogEnhancement(void)
  * @brief This function will do the unit testing of dsSetDolbyVolumeMode ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsSetDolbyVolumeMode () is called successfully.
+ * dsERR_NONE : will be returned if dsSetDolbyVolumeMode () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetDolbyVolumeMode(void)
 {
@@ -1896,10 +1900,10 @@ void test_audio_hal_l1_dsSetDolbyVolumeMode(void)
  * @brief This function will do the unit testing of dsSetIntelligentEqualizerMode ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsSetIntelligentEqualizerMode () is called successfully.
+ * dsERR_NONE : will be returned if dsSetIntelligentEqualizerMode () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetIntelligentEqualizerMode(void)
 {
@@ -1945,10 +1949,10 @@ void test_audio_hal_l1_dsSetIntelligentEqualizerMode(void)
  * @brief This function will do the unit testing of dsSetVolumeLeveller ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsSetVolumeLeveller () is called successfully.
+ * dsERR_NONE : will be returned if dsSetVolumeLeveller () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetVolumeLeveller(void)
 {
@@ -1988,10 +1992,10 @@ void test_audio_hal_l1_dsSetVolumeLeveller(void)
  * @brief This function will do the unit testing of dsSetBassEnhancer ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsSetBassEnhancer () is called successfully.
+ * dsERR_NONE : will be returned if dsSetBassEnhancer () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetBassEnhancer(void)
 {
@@ -2031,10 +2035,10 @@ void test_audio_hal_l1_dsSetBassEnhancer(void)
  * @brief This function will do the unit testing of dsEnableSurroundDecoder ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsEnableSurroundDecoder () is called successfully.
+ * dsERR_NONE : will be returned if dsEnableSurroundDecoder () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsEnableSurroundDecoder(void)
 {
@@ -2074,10 +2078,10 @@ void test_audio_hal_l1_dsEnableSurroundDecoder(void)
  * @brief This function will do the unit testing of dsSetDRCMode ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsSetDRCMode () is called successfully.
+ * dsERR_NONE : will be returned if dsSetDRCMode () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetDRCMode(void)
 {
@@ -2123,10 +2127,10 @@ void test_audio_hal_l1_dsSetDRCMode(void)
  * @brief This function will do the unit testing of dsSetSurroundVirtualizer ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsSetSurroundVirtualizer () is called successfully.
+ * dsERR_NONE : will be returned if dsSetSurroundVirtualizer () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetSurroundVirtualizer(void)
 {
@@ -2166,10 +2170,10 @@ void test_audio_hal_l1_dsSetSurroundVirtualizer(void)
  * @brief This function will do the unit testing of dsSetMISteering ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsSetMISteering () is called successfully.
+ * dsERR_NONE : will be returned if dsSetMISteering () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetMISteering(void)
 {
@@ -2209,10 +2213,10 @@ void test_audio_hal_l1_dsSetMISteering(void)
  * @brief This function will do the unit testing of dsSetGraphicEqualizerMode ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsSetGraphicEqualizerMode () is called successfully.
+ * dsERR_NONE : will be returned if dsSetGraphicEqualizerMode () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetGraphicEqualizerMode(void)
 {
@@ -2258,10 +2262,10 @@ void test_audio_hal_l1_dsSetGraphicEqualizerMode(void)
  * @brief This function will do the unit testing of dsSetMS12AudioProfile ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsSetMS12AudioProfile () is called successfully.
+ * dsERR_NONE : will be returned if dsSetMS12AudioProfile () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetMS12AudioProfile(void)
 {
@@ -2301,10 +2305,10 @@ void test_audio_hal_l1_dsSetMS12AudioProfile(void)
  * @brief This function will do the unit testing of dsSetStereoMode ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsSetStereoMode () is called successfully.
+ * dsERR_NONE : will be returned if dsSetStereoMode () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetStereoMode(void)
 {
@@ -2350,10 +2354,10 @@ void test_audio_hal_l1_dsSetStereoMode(void)
  * @brief This function will do the unit testing of dsSetStereoAuto ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsSetStereoAuto () is called successfully.
+ * dsERR_NONE : will be returned if dsSetStereoAuto () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetStereoAuto(void)
 {
@@ -2399,10 +2403,10 @@ void test_audio_hal_l1_dsSetStereoAuto(void)
  * @brief This function will do the unit testing of dsSetAudioGain ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsSetAudioGain () is called successfully.
+ * dsERR_NONE : will be returned if dsSetAudioGain () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetAudioGain(void)
 {
@@ -2442,10 +2446,10 @@ void test_audio_hal_l1_dsSetAudioGain(void)
  * @brief This function will do the unit testing of dsSetAudioDB ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsSetAudioDB () is called successfully.
+ * dsERR_NONE : will be returned if dsSetAudioDB () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetAudioDB(void)
 {
@@ -2485,10 +2489,10 @@ void test_audio_hal_l1_dsSetAudioDB(void)
  * @brief This function will do the unit testing of dsSetAudioLevel ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsSetAudioLevel () is called successfully.
+ * dsERR_NONE : will be returned if dsSetAudioLevel () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetAudioLevel(void)
 {
@@ -2528,10 +2532,10 @@ void test_audio_hal_l1_dsSetAudioLevel(void)
  * @brief This function will do the unit testing of dsSetStereoAuto ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsSetStereoAuto () is called successfully.
+ * dsERR_NONE : will be returned if dsSetStereoAuto () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetAudioDucking(void)
 {
@@ -2574,10 +2578,10 @@ void test_audio_hal_l1_dsSetAudioDucking(void)
  * @brief This function will do the unit testing of dsEnableLoopThru ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsEnableLoopThru () is called successfully.
+ * dsERR_NONE : will be returned if dsEnableLoopThru () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsEnableLoopThru(void)
 {
@@ -2617,10 +2621,10 @@ void test_audio_hal_l1_dsEnableLoopThru(void)
  * @brief This function will do the unit testing of dsSetAudioMute ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsSetAudioMute () is called successfully.
+ * dsERR_NONE : will be returned if dsSetAudioMute () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetAudioMute(void)
 {
@@ -2660,10 +2664,10 @@ void test_audio_hal_l1_dsSetAudioMute(void)
  * @brief This function will do the unit testing of dsIsAudioMSDecode ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsIsAudioMSDecode () is called successfully.
+ * dsERR_NONE : will be returned if dsIsAudioMSDecode () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsIsAudioMSDecode(void)
 {
@@ -2704,10 +2708,10 @@ void test_audio_hal_l1_dsIsAudioMSDecode(void)
  * @brief This function will do the unit testing of dsIsAudioMS12Decode ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsIsAudioMS12Decode () is called successfully.
+ * dsERR_NONE : will be returned if dsIsAudioMS12Decode () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsIsAudioMS12Decode(void)
 {
@@ -2748,10 +2752,10 @@ void test_audio_hal_l1_dsIsAudioMS12Decode(void)
  * @brief This function will do the unit testing of dsSetAudioDelay ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsSetAudioDelay () is called successfully.
+ * dsERR_NONE : will be returned if dsSetAudioDelay () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetAudioDelay(void)
 {
@@ -2791,10 +2795,10 @@ void test_audio_hal_l1_dsSetAudioDelay(void)
  * @brief This function will do the unit testing of dsSetAudioDelayOffset ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsSetAudioDelayOffset () is called successfully.
+ * dsERR_NONE : will be returned if dsSetAudioDelayOffset () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetAudioDelayOffset(void)
 {
@@ -2834,10 +2838,10 @@ void test_audio_hal_l1_dsSetAudioDelayOffset(void)
  * @brief This function will do the unit testing of dsAudioOutIsConnected ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsAudioOutIsConnected () is called successfully.
+ * dsERR_NONE : will be returned if dsAudioOutIsConnected () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsAudioOutIsConnected(void)
 {
@@ -2878,8 +2882,8 @@ void test_audio_hal_l1_dsAudioOutIsConnected(void)
  * @brief This function will do the unit testing of dsAudioOutIsConnected ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsAudioOutIsConnected () is called successfully.
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_NONE : will be returned if dsAudioOutIsConnected () is called successfully.
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsAudioOutRegisterConnectCB(void)
 {
@@ -2892,8 +2896,8 @@ void test_audio_hal_l1_dsAudioOutRegisterConnectCB(void)
  * @brief This function will do the unit testing of dsAudioOutIsConnected ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsAudioOutIsConnected () is called successfully.
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_NONE : will be returned if dsAudioOutIsConnected () is called successfully.
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsAudioFormatUpdateRegisterCB(void)
 {
@@ -2906,10 +2910,10 @@ void test_audio_hal_l1_dsAudioFormatUpdateRegisterCB(void)
  * @brief This function will do the unit testing of dsGetAudioCapabilities ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetAudioCapabilities () is called successfully.
+ * dsERR_NONE : will be returned if dsGetAudioCapabilities () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetAudioCapabilities(void)
 {
@@ -2950,10 +2954,10 @@ void test_audio_hal_l1_dsGetAudioCapabilities(void)
  * @brief This function will do the unit testing of dsGetAudioCapabilities ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetAudioCapabilities () is called successfully.
+ * dsERR_NONE : will be returned if dsGetAudioCapabilities () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetMS12Capabilities(void)
 {
@@ -2994,10 +2998,10 @@ void test_audio_hal_l1_dsGetMS12Capabilities(void)
  * @brief This function will do the unit testing of dsResetDialogEnhancement ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsResetDialogEnhancement () is called successfully.
+ * dsERR_NONE : will be returned if dsResetDialogEnhancement () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsResetDialogEnhancement(void)
 {
@@ -3034,10 +3038,10 @@ void test_audio_hal_l1_dsResetDialogEnhancement(void)
  * @brief This function will do the unit testing of dsResetBassEnhancer ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsResetBassEnhancer () is called successfully.
+ * dsERR_NONE : will be returned if dsResetBassEnhancer () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsResetBassEnhancer(void)
 {
@@ -3074,10 +3078,10 @@ void test_audio_hal_l1_dsResetBassEnhancer(void)
  * @brief This function will do the unit testing of dsResetSurroundVirtualizer ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsResetSurroundVirtualizer () is called successfully.
+ * dsERR_NONE : will be returned if dsResetSurroundVirtualizer () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsResetSurroundVirtualizer(void)
 {
@@ -3114,10 +3118,10 @@ void test_audio_hal_l1_dsResetSurroundVirtualizer(void)
  * @brief This function will do the unit testing of dsResetVolumeLeveller ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsResetVolumeLeveller () is called successfully.
+ * dsERR_NONE : will be returned if dsResetVolumeLeveller () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsResetVolumeLeveller(void)
 {
@@ -3154,10 +3158,10 @@ void test_audio_hal_l1_dsResetVolumeLeveller(void)
  * @brief This function will do the unit testing of dsResetVolumeLeveller ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsResetVolumeLeveller () is called successfully.
+ * dsERR_NONE : will be returned if dsResetVolumeLeveller () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetMS12AudioProfileSetttingsOverride(void)
 {
@@ -3170,10 +3174,10 @@ void test_audio_hal_l1_dsSetMS12AudioProfileSetttingsOverride(void)
  * @brief This function will do the unit testing of dsResetVolumeLeveller ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsResetVolumeLeveller () is called successfully.
+ * dsERR_NONE : will be returned if dsResetVolumeLeveller () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetAssociatedAudioMixing(void)
 {
@@ -3213,10 +3217,10 @@ void test_audio_hal_l1_dsSetAssociatedAudioMixing(void)
  * @brief This function will do the unit testing of dsGetAssociatedAudioMixing ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetAssociatedAudioMixing () is called successfully.
+ * dsERR_NONE : will be returned if dsGetAssociatedAudioMixing () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetAssociatedAudioMixing(void)
 {
@@ -3257,10 +3261,10 @@ void test_audio_hal_l1_dsGetAssociatedAudioMixing(void)
  * @brief This function will do the unit testing of dsSetFaderControl ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsSetFaderControl () is called successfully.
+ * dsERR_NONE : will be returned if dsSetFaderControl () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetFaderControl(void)
 {
@@ -3306,10 +3310,10 @@ void test_audio_hal_l1_dsSetFaderControl(void)
  * @brief This function will do the unit testing of dsGetFaderControl ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetFaderControl () is called successfully.
+ * dsERR_NONE : will be returned if dsGetFaderControl () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetFaderControl(void)
 {
@@ -3350,10 +3354,10 @@ void test_audio_hal_l1_dsGetFaderControl(void)
  * @brief This function will do the unit testing of dsSetPrimaryLanguage ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsSetPrimaryLanguage () is called successfully.
+ * dsERR_NONE : will be returned if dsSetPrimaryLanguage () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetPrimaryLanguage(void)
 {
@@ -3393,10 +3397,10 @@ void test_audio_hal_l1_dsSetPrimaryLanguage(void)
  * @brief This function will do the unit testing of dsGetPrimaryLanguage ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetPrimaryLanguage () is called successfully.
+ * dsERR_NONE : will be returned if dsGetPrimaryLanguage () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetPrimaryLanguage(void)
 {
@@ -3437,10 +3441,10 @@ void test_audio_hal_l1_dsGetPrimaryLanguage(void)
  * @brief This function will do the unit testing of dsSetSecondaryLanguage ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsSetSecondaryLanguage () is called successfully.
+ * dsERR_NONE : will be returned if dsSetSecondaryLanguage () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsSetSecondaryLanguage(void)
 {
@@ -3480,10 +3484,10 @@ void test_audio_hal_l1_dsSetSecondaryLanguage(void)
  * @brief This function will do the unit testing of dsGetSecondaryLanguage ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetSecondaryLanguage () is called successfully.
+ * dsERR_NONE : will be returned if dsGetSecondaryLanguage () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetSecondaryLanguage(void)
 {
@@ -3524,10 +3528,10 @@ void test_audio_hal_l1_dsGetSecondaryLanguage(void)
  * @brief This function will do the unit testing of dsGetHDMIARCPortId ()
  * This function will ensure underlying API implementation is handling
  * the invalid arguments passed and invalid call sequences to the API
- * mfrERR_NONE : will be returned if dsGetHDMIARCPortId () is called successfully.
+ * dsERR_NONE : will be returned if dsGetHDMIARCPortId () is called successfully.
  * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
  * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * mfrERR_GENERAL: Not able to simulate this condition with the UT implementation
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
  */
 void test_audio_hal_l1_dsGetHDMIARCPortId(void)
 {
