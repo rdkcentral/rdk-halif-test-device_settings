@@ -23,10 +23,20 @@
 #include <dsDisplay.h>
 #include <ut.h>
 
+/**
+ * @brief This function will do the unit testing of dsDisplayInit ()
+ * This function will ensure underlying API implementation is handling
+ * invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsDisplayInit () is called successfully.
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_display_hal_l1_dsDisplayInit(void)
 {
     dsError_t result;
     /* Positive result */
+    result = dsDisplayInit();
+    UT_ASSERT_EQUAL( result, dsERR_NONE );
+
     result = dsDisplayInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
 
@@ -36,12 +46,25 @@ void test_display_hal_l1_dsDisplayInit(void)
 
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetDisplay ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetDisplay () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsDisplayInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_display_hal_l1_dsGetDisplay(void)
 {
     dsError_t result;
     dsVideoPortType_t type = dsVIDEOPORT_TYPE_RF;
     int index = 0;
     int handle = 0;
+
+    result = dsGetDisplay(dsVIDEOPORT_TYPE_RF,3,&handle);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsDisplayInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -72,6 +95,15 @@ void test_display_hal_l1_dsGetDisplay(void)
     UT_ASSERT_EQUAL( result, dsERR_NONE);
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetEDID ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetEDID () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsDisplayInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_display_hal_l1_dsGetEDID(void)
 {
     dsError_t result;
@@ -79,6 +111,10 @@ void test_display_hal_l1_dsGetEDID(void)
     int index = 0;
     int handle = 0;
     dsDisplayEDID_t edid;
+
+    result  = dsGetEDID(handle,&edid);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsDisplayInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -103,6 +139,15 @@ void test_display_hal_l1_dsGetEDID(void)
     UT_ASSERT_EQUAL( result, dsERR_NONE);
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetDisplayAspectRatio ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetDisplayAspectRatio () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsDisplayInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_display_hal_l1_dsGetDisplayAspectRatio(void)
 {
     dsError_t result;
@@ -110,6 +155,10 @@ void test_display_hal_l1_dsGetDisplayAspectRatio(void)
     int index = 0;
     int handle = 0;
     dsVideoAspectRatio_t aspectRatio;
+
+    result  = dsGetDisplayAspectRatio(handle,&aspectRatio);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsDisplayInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -134,6 +183,15 @@ void test_display_hal_l1_dsGetDisplayAspectRatio(void)
     UT_ASSERT_EQUAL( result, dsERR_NONE);
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetEDIDBytes ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetEDIDBytes () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsDisplayInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_display_hal_l1_dsGetEDIDBytes(void)
 {
     dsError_t result;
@@ -142,6 +200,9 @@ void test_display_hal_l1_dsGetEDIDBytes(void)
     int handle = 0;
     char edidBytes[256] = {0};
     int length = 0;
+
+    result  = dsGetEDIDBytes(handle,&edidBytes,&length);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
 
     /* Positive result */
     result = dsDisplayInit();

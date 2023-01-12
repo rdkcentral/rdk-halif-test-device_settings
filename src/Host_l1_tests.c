@@ -24,6 +24,14 @@
 #include <ut.h>
 #include "dsHost.h"
 
+
+/**
+ * @brief This function will do the unit testing of dsHostInit ()
+ * This function will ensure underlying API implementation is handling
+ * invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsHostInit () is called successfully.
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_host_hal_l1_init( void )
 {
     int result;
@@ -42,6 +50,15 @@ void test_ds_host_hal_l1_init( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsHostTerm ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsHostTerm () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsHostInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_host_hal_l1_close( void )
 {
     int result;
@@ -70,6 +87,16 @@ void test_ds_host_hal_l1_close( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+
+/**
+ * @brief This function will do the unit testing of dsSetHostPowerMode ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSetHostPowerMode () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsHostInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_host_hal_l1_setHostPowerMode( void )
 {
     int result;
@@ -103,6 +130,15 @@ void test_ds_host_hal_l1_setHostPowerMode( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetHostPowerMode ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetHostPowerMode () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsHostInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_host_hal_l1_getHostPowerMode( void )
 {
     int result;
@@ -136,6 +172,15 @@ void test_ds_host_hal_l1_getHostPowerMode( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetPreferredSleepMode ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetPreferredSleepMode () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsHostInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_host_hal_l1_getPreferredSleepMode( void )
 {
     int result;
@@ -169,6 +214,15 @@ void test_ds_host_hal_l1_getPreferredSleepMode( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsSetPreferredSleepMode ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSetPreferredSleepMode () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsHostInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_host_hal_l1_setPreferredSleepMode( void )
 {
     int result;
@@ -202,6 +256,15 @@ void test_ds_host_hal_l1_setPreferredSleepMode( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetCPUTemperature ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetCPUTemperature () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsHostInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_host_hal_l1_getCPUTemperature( void )
 {
     int result;
@@ -235,6 +298,15 @@ void test_ds_host_hal_l1_getCPUTemperature( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetVersion ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetVersion () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsHostInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_host_hal_l1_getVersion( void )
 {
     int result;
@@ -268,6 +340,15 @@ void test_ds_host_hal_l1_getVersion( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsSetVersion ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSetVersion () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsHostInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_host_hal_l1_setVersion( void )
 {
     int result;
@@ -297,6 +378,15 @@ void test_ds_host_hal_l1_setVersion( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetSocIDFromSDK ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetSocIDFromSDK () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsHostInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_host_hal_l1_getSocIDFromSDK( void )
 {
     int result;
@@ -330,6 +420,15 @@ void test_ds_host_hal_l1_getSocIDFromSDK( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetHostEDID ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetHostEDID () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsHostInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_host_hal_l1_getHostEDID( void )
 {
     int result;

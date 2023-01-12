@@ -6,10 +6,20 @@
 #include <limits.h>
 
 
+/**
+ * @brief This function will do the unit testing of dsFPInit ()
+ * This function will ensure underlying API implementation is handling
+ * invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsFPInit () is called successfully.
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_FPD_hal_l1_init(void)
 {
     dsError_t result;
     /* Positive result */
+    result = dsFPInit();
+    UT_ASSERT_EQUAL( result, dsERR_NONE );
+
     result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
 
@@ -20,6 +30,15 @@ void test_FPD_hal_l1_init(void)
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsSetFPBlink ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSetFPBlink () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsFPInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_FPD_hal_l1_dsSetFPBlink(void)
 {
     dsError_t result;
@@ -31,6 +50,9 @@ void test_FPD_hal_l1_dsSetFPBlink(void)
     {
         return;
     }
+
+    result = dsSetFPBlink(eIndicator,uBlinkDuration,uBlinkIterations);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
 
     /* Positive result */
     result =  dsFPInit();
@@ -64,12 +86,25 @@ void test_FPD_hal_l1_dsSetFPBlink(void)
 
 }
 
+
+/**
+ * @brief This function will do the unit testing of dsSetFPBrightness ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSetFPBrightness () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsFPInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_FPD_hal_l1_dsSetFPBrightness(void)
 {
     dsError_t result;
 	// Make the changes
     dsFPDIndicator_t eIndicator = dsFPD_INDICATOR_MESSAGE; 
 	dsFPDBrightness_t eBrightness = dsFPD_MODE_ANY;
+
+    result = dsSetFPBrightness(eIndicator,eBrightness);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
     /* Positive result */
     result = dsFPInit();
@@ -93,6 +128,15 @@ void test_FPD_hal_l1_dsSetFPBrightness(void)
 
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetFPState ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetFPState () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsFPInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_FPD_hal_l1_dsGetFPState(void)
 {
     dsError_t result;
@@ -100,6 +144,9 @@ void test_FPD_hal_l1_dsGetFPState(void)
 	dsFPDIndicator_t eIndicator = dsFPD_INDICATOR_MESSAGE; 
 	dsFPDState_t* state = dsFPD_STATE_OFF;
 	
+    result = dsGetFPState(eIndicator,&state);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
      result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -122,11 +169,23 @@ void test_FPD_hal_l1_dsGetFPState(void)
 
 }
 
+/**
+ * @brief This function will do the unit testing of dsSetFPState ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSetFPState () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsFPInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_videodevice_hal_l1_dsSetFPState(void)
 {
     dsError_t result;
     dsFPDIndicator_t eIndicator = dsFPD_INDICATOR_MESSAGE;
 	dsFPDState_t state = dsFPD_STATE_OFF;
+
+    result = dsSetFPState(eIndicator,state);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
 
     /* Positive result */
     result = dsFPInit();
@@ -149,11 +208,23 @@ void test_videodevice_hal_l1_dsSetFPState(void)
 
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetFPBrightness ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetFPBrightness () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsFPInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_videodevice_hal_l1_dsGetFPBrightness(void)
 {
     dsError_t result;
     dsFPDIndicator_t eIndicator = dsFPD_INDICATOR_MESSAGE; 
 	dsFPDBrightness_t *pBrightness = dsFPD_MODE_ANY;
+
+    result = dsGetFPBrightness(eIndicator,&pBrightness);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
 
     /* Positive result */
     result = dsFPInit();
@@ -177,6 +248,15 @@ void test_videodevice_hal_l1_dsGetFPBrightness(void)
 
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetFPColor ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetFPColor () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsFPInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_FPD_hal_l1_dsGetFPColor(void)
 {
     uint32_t R8 = 0;
@@ -186,6 +266,9 @@ void test_FPD_hal_l1_dsGetFPColor(void)
     dsError_t result;
     dsFPDIndicator_t eIndicator = dsFPD_INDICATOR_MESSAGE;
 	dsFPDColor_t *pColor = dsFPDColor_Make(R8,G8,B8);
+
+    result = dsGetFPColor(eIndicator,&pColor);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
 
     /* Positive result */
     result = dsFPInit();
@@ -209,6 +292,15 @@ void test_FPD_hal_l1_dsGetFPColor(void)
 
 }
 
+/**
+ * @brief This function will do the unit testing of dsSetFPColor ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSetFPColor () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsFPInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_FDP_hal_l1_dsSetFPColor(void)
 {
     uint32_t R8 = 0;
@@ -218,6 +310,9 @@ void test_FDP_hal_l1_dsSetFPColor(void)
     dsFPDIndicator_t eIndicator = dsFPD_INDICATOR_MESSAGE;
 	dsFPDColor_t eColor = dsFPDColor_Make(R8,G8,B8);
 	
+    result = dsSetFPColor(eIndicator,eColor);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -239,6 +334,15 @@ void test_FDP_hal_l1_dsSetFPColor(void)
 
 }
 
+/**
+ * @brief This function will do the unit testing of dsSetFPTime ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSetFPTime () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsFPInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_FPD_hal_l1_dsSetFPTime(void)
 {
     dsError_t result;
@@ -246,6 +350,9 @@ void test_FPD_hal_l1_dsSetFPTime(void)
     unsigned int uHour = 1;
     unsigned int uMinutes = 1;
 	
+    result = dsSetFPTime(eTimeFormat,uHour,uMinutes);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -277,11 +384,23 @@ void test_FPD_hal_l1_dsSetFPTime(void)
 
 }
 
+/**
+ * @brief This function will do the unit testing of dsSetFPText ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSetFPText () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsFPInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_FPD_hal_l1_dsSetFPText(void)
 {
     dsError_t result;
     const char* pText = "";
 	
+    result = dsSetFPText(&pText);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -302,12 +421,24 @@ void test_FPD_hal_l1_dsSetFPText(void)
 
 }
 
+/**
+ * @brief This function will do the unit testing of dsSetFPTextBrightness ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSetFPTextBrightness () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsFPInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_FDP_hal_l1_dsSetFPTextBrightness(void)
 {
     dsError_t result;
     dsFPDTextDisplay_t eIndicator = dsFPD_TEXTDISP_TEXT; 
 	dsFPDBrightness_t eBrightness = dsFPD_MODE_ANY;
 	
+    result = dsSetFPTextBrightness(eIndicator,eBrightness);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -330,12 +461,24 @@ void test_FDP_hal_l1_dsSetFPTextBrightness(void)
 
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetFPTextBrightness ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetFPTextBrightness () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsFPInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_FDP_hal_l1_dsGetFPTextBrightness(void)
 {
     dsError_t result;
     dsFPDTextDisplay_t eIndicator = dsFPD_TEXTDISP_TEXT; 
 	dsFPDBrightness_t *eBrightness = dsFPD_MODE_ANY;
 	
+    result = dsGetFPTextBrightness(eIndicator,&eBrightness);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -357,11 +500,23 @@ void test_FDP_hal_l1_dsGetFPTextBrightness(void)
 
 }
 
+/**
+ * @brief This function will do the unit testing of dsFPEnableCLockDisplay ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsFPEnableCLockDisplay () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsFPInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_FDP_hal_l1_dsFPEnableCLockDisplay(void)
 {
     dsError_t result;
     int enable = 0;
 	
+    result = dsFPEnableCLockDisplay(enable);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -382,6 +537,15 @@ void test_FDP_hal_l1_dsFPEnableCLockDisplay(void)
 
 }
 
+/**
+ * @brief This function will do the unit testing of dsSetFPScroll ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSetFPScroll () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsFPInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_FDP_hal_l1_dsSetFPScroll(void)
 {
     dsError_t result;
@@ -389,6 +553,9 @@ void test_FDP_hal_l1_dsSetFPScroll(void)
 	unsigned int uHorzScrollIterations = 1;
 	unsigned int uVertScrollIterations = 1;
 	
+    result = dsSetFPScroll(uScrollHoldOnDur,uHorzScrollIterations,uVertScrollIterations);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -427,6 +594,15 @@ void test_FDP_hal_l1_dsSetFPScroll(void)
 
 }
 
+/**
+ * @brief This function will do the unit testing of dsSetFPDBrightness ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSetFPDBrightness () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsFPInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_FDP_hal_l1_dsSetFPDBrightness(void)
 {
     dsError_t result;
@@ -434,6 +610,9 @@ void test_FDP_hal_l1_dsSetFPDBrightness(void)
 	dsFPDBrightness_t eBrightness = dsFPD_MODE_ANY;
 	bool toPersist = true;
 	
+    result = dsSetFPDBrightness(eIndicator,eBrightness,toPersist);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -458,6 +637,15 @@ void test_FDP_hal_l1_dsSetFPDBrightness(void)
 
 }
 
+/**
+ * @brief This function will do the unit testing of dsSetFPDColor ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSetFPDColor () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsFPInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_FDP_hal_l1_dsSetFPDColor(void)
 {
     uint32_t R8 = 0;
@@ -467,7 +655,10 @@ void test_FDP_hal_l1_dsSetFPDColor(void)
     dsFPDIndicator_t eIndicator = dsFPD_INDICATOR_MESSAGE;
 	dsFPDColor_t eColor = dsFPDColor_Make(R8,G8,B8);
 	bool toPersist = true;
-	
+
+    result = dsSetFPDColor(eIndicator,eColor,toPersist);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -493,11 +684,23 @@ void test_FDP_hal_l1_dsSetFPDColor(void)
 
 }
 
+/**
+ * @brief This function will do the unit testing of dsSetFPTimeFormat ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSetFPTimeFormat () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsFPInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_FDP_hal_l1_dsSetFPTimeFormat(void)
 {
     dsError_t result;
     dsFPDTimeFormat_t eTimeFormat = dsFPD_TIME_12_HOUR;
 	
+    result = dsSetFPTimeFormat(eTimeFormat);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -517,11 +720,23 @@ void test_FDP_hal_l1_dsSetFPTimeFormat(void)
 
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetFPTimeFormat ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetFPTimeFormat () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsFPInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_FDP_hal_l1_dsGetFPTimeFormat(void)
 {
     dsError_t result;
     dsFPDTimeFormat_t *pTimeFormat = dsFPD_TIME_12_HOUR;
 	
+    result = dsGetFPTimeFormat(&pTimeFormat);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -541,11 +756,23 @@ void test_FDP_hal_l1_dsGetFPTimeFormat(void)
 
 }
 
+/**
+ * @brief This function will do the unit testing of dsSetFPDMode ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSetFPDMode () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsFPInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_FDP_hal_l1_dsSetFPDMode(void)
 {
     dsError_t result;
     dsFPDMode_t eMode = dsFPD_MODE_ANY;
 	
+    result = dsSetFPDMode(eMode);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );

@@ -23,10 +23,20 @@
 #include <dsVideoDevice.h>
 #include <ut.h>
 
+/**
+ * @brief This function will do the unit testing of dsVideoDeviceInit ()
+ * This function will ensure underlying API implementation is handling
+ * invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsVideoDeviceInit () is called successfully.
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_videodevice_hal_l1_init(void)
 {
     dsError_t result;
     /* Positive result */
+    result = dsVideoDeviceInit();
+    UT_ASSERT_EQUAL( result, dsERR_NONE );
+
     result = dsVideoDeviceInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
 
@@ -37,6 +47,15 @@ void test_videodevice_hal_l1_init(void)
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 } 
 
+/**
+ * @brief This function will do the unit testing of dsGetVideoDevice ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetVideoDevice () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoDeviceInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_videodevice_hal_l1_dsGetVideoDevice(void)
 {
     dsError_t result;
@@ -47,6 +66,9 @@ void test_videodevice_hal_l1_dsGetVideoDevice(void)
     {
         return;
     }
+
+    result = dsGetVideoDevice(index,handle);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
 
     /* Positive result */
     result = dsVideoDeviceInit();
@@ -73,11 +95,23 @@ void test_videodevice_hal_l1_dsGetVideoDevice(void)
 
 } 
 
+/**
+ * @brief This function will do the unit testing of dsSetDFC ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSetDFC () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoDeviceInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_videodevice_hal_l1_dsSetDFC(void)
 {
     dsError_t result;
     int index = 0;
     int handle = 0;
+
+    result = dsSetDFC(handle,0);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
 
     /* Positive result */
     result = dsVideoDeviceInit();
@@ -112,6 +146,15 @@ void test_videodevice_hal_l1_dsSetDFC(void)
 
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetDFC ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetDFC () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoDeviceInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_videodevice_hal_l1_dsGetDFC(void)
 {
     dsError_t result;
@@ -124,6 +167,9 @@ void test_videodevice_hal_l1_dsGetDFC(void)
     {
         return;
     }
+
+    result = dsGetDFC(handle,dfc);
+    UT_ASSERT_EQUAL( result , dsERR_INVALID_STATE );
 
     /* Positive result */
     result = dsVideoDeviceInit();
@@ -156,13 +202,24 @@ void test_videodevice_hal_l1_dsGetDFC(void)
 
 }
 
-
+/**
+ * @brief This function will do the unit testing of dsGetHDRCapabilities ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetHDRCapabilities () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoDeviceInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_videodevice_hal_l1_dsGetHDRCapabilities(void)
 {
     dsError_t result;
     int capabilities = 0;
     int index = 0;
     int handle = 0;
+
+    result = dsGetHDRCapabilities(handle,&capabilities);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
 
     /* Positive result */
     result = dsVideoDeviceInit();
@@ -187,12 +244,24 @@ void test_videodevice_hal_l1_dsGetHDRCapabilities(void)
 
 } 
 
+/**
+ * @brief This function will do the unit testing of dsGetSupportedVideoCodingFormats ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetSupportedVideoCodingFormats () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoDeviceInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_videodevice_hal_l1_dsGetSupportedVideoCodingFormats(void)
 {
     dsError_t result;
     unsigned int supported_formats = 0;
     int index = 0;
     int handle = 0;
+
+    result = dsGetSupportedVideoCodingFormats(handle,&supported_formats);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
 
     /* Positive result */
     result = dsVideoDeviceInit();
@@ -217,7 +286,15 @@ void test_videodevice_hal_l1_dsGetSupportedVideoCodingFormats(void)
 
 } 
 
-
+/**
+ * @brief This function will do the unit testing of dsGetVideoCodecInfo ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetVideoCodecInfo () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoDeviceInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_videodevice_hal_l1_dsGetVideoCodecInfo(void)
 {
     dsError_t result;
@@ -225,6 +302,9 @@ void test_videodevice_hal_l1_dsGetVideoCodecInfo(void)
     dsVideoCodecInfo_t info;
     int index = 0;
     int handle = 0;
+
+    result = dsGetVideoCodecInfo(handle,code,&info);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
 
     /* Positive result */
     result = dsVideoDeviceInit();
@@ -258,12 +338,25 @@ void test_videodevice_hal_l1_dsGetVideoCodecInfo(void)
 
 } 
 
+/**
+ * @brief This function will do the unit testing of dsForceDisableHDRSupport ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsForceDisableHDRSupport () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoDeviceInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_videodevice_hal_l1_dsForceDisableHDRSupport(void)
 {
     dsError_t result;
     int index = 0;
     int handle = 0;
     bool disableStatus = false;
+
+    result = dsForceDisableHDRSupport(handle,disableStatus);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsVideoDeviceInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -288,12 +381,25 @@ void test_videodevice_hal_l1_dsForceDisableHDRSupport(void)
 
 } 
 
+/**
+ * @brief This function will do the unit testing of dsSetFRFMode ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSetFRFMode () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoDeviceInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_videodevice_hal_l1_dsSetFRFMode(void)
 {
     dsError_t result;
     int index = 0;
     int handle = 0;
     int frfMode = 0;
+
+    result = dsSetFRFMode(handle,frfMode);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsVideoDeviceInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -317,13 +423,25 @@ void test_videodevice_hal_l1_dsSetFRFMode(void)
 
 } 
 
-
+/**
+ * @brief This function will do the unit testing of dsGetFRFMode ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetFRFMode () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoDeviceInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_videodevice_hal_l1_dsGetFRFMode(void)
 {
     dsError_t result;
     int index = 0;
     int handle = 0;
     int frfMode = 0;
+
+    result = dsGetFRFMode(handle,&frfMode);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsVideoDeviceInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -347,13 +465,25 @@ void test_videodevice_hal_l1_dsGetFRFMode(void)
 
 } 
 
-
+/**
+ * @brief This function will do the unit testing of dsGetCurrentDisplayframerate ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetCurrentDisplayframerate () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoDeviceInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_videodevice_hal_l1_dsGetCurrentDisplayframerate(void)
 {
     dsError_t result;
     int index = 0;
     int handle = 0;
     char frameRate[50] = {0};
+
+    result = dsGetCurrentDisplayframerate(handle,frameRate);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsVideoDeviceInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -377,13 +507,25 @@ void test_videodevice_hal_l1_dsGetCurrentDisplayframerate(void)
 
 } 
 
-
+/**
+ * @brief This function will do the unit testing of dsSetDisplayframerate ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSetDisplayframerate () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoDeviceInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_videodevice_hal_l1_dsSetDisplayframerate(void)
 {
     dsError_t result;
     int index = 0;
     int handle = 0;
     char frameRate[50] = "FRAMERATE_DATA";
+
+    result = dsSetDisplayframerate(handle,frameRate);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsVideoDeviceInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );

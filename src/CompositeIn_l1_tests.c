@@ -131,7 +131,7 @@ void test_compositeIn_hal_l1_dsCompositeInSelectPort(void)
     dsAudioPortType_t type = dsAUDIOPORT_TYPE_ID_LR;
     dsCompositeInStatus_t status;
 
-    result = dsCompositeInSelectPort(port);
+    result = dsCompositeInSelectPort(0);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
 
     /* Positive result */

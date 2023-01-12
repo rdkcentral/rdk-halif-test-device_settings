@@ -24,10 +24,20 @@
 #include <ut.h>
 #include <limits.h>
 
+/**
+ * @brief This function will do the unit testing of dsHdmiInInit ()
+ * This function will ensure underlying API implementation is handling
+ * invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsHdmiInInit () is called successfully.
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_hdmiIn_hal_l1_dsHdmiInInit(void)
 {
     dsError_t result;
     /* Positive result */
+    result = dsHdmiInInit();
+    UT_ASSERT_EQUAL( result, dsERR_NONE );
+
     result = dsHdmiInInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
 
@@ -37,10 +47,23 @@ void test_hdmiIn_hal_l1_dsHdmiInInit(void)
 
 }
 
+/**
+ * @brief This function will do the unit testing of dsHdmiInGetNumberOfInputs ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsHdmiInGetNumberOfInputs () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsHdmiInInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_hdmiIn_hal_l1_dsHdmiInGetNumberOfInputs(void)
 {
     dsError_t result;
     uint8_t count;
+
+    result = dsHdmiInGetNumberOfInputs(&count);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsHdmiInInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -55,10 +78,23 @@ void test_hdmiIn_hal_l1_dsHdmiInGetNumberOfInputs(void)
     UT_ASSERT_EQUAL( result, dsERR_NONE);
 }
 
+/**
+ * @brief This function will do the unit testing of dsHdmiInGetStatus ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsHdmiInGetStatus () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsHdmiInInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_hdmiIn_hal_l1_dsHdmiInGetStatus(void)
 {
     dsError_t result;
     dsHdmiInStatus_t status;
+
+    result = dsHdmiInGetStatus(&status);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsHdmiInInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -73,10 +109,23 @@ void test_hdmiIn_hal_l1_dsHdmiInGetStatus(void)
     UT_ASSERT_EQUAL( result, dsERR_NONE);
 }
 
+/**
+ * @brief This function will do the unit testing of dsHdmiInSelectPort ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsHdmiInSelectPort () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsHdmiInInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_hdmiIn_hal_l1_dsHdmiInSelectPort(void)
 {
     dsError_t result;
     dsHdmiInPort_t port;
+
+    result = dsHdmiInSelectPort(port);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsHdmiInInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -97,10 +146,23 @@ void test_hdmiIn_hal_l1_dsHdmiInSelectPort(void)
     UT_ASSERT_EQUAL( result, dsERR_NONE);
 }
 
+/**
+ * @brief This function will do the unit testing of dsHdmiInScaleVideo ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsHdmiInScaleVideo () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsHdmiInInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_hdmiIn_hal_l1_dsHdmiInScaleVideo(void)
 {
     dsError_t result;
     int32_t x=0, y=0, width =1920, height =1080;
+
+    result = dsHdmiInScaleVideo(x,y,width,height);    
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsHdmiInInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -119,10 +181,23 @@ void test_hdmiIn_hal_l1_dsHdmiInScaleVideo(void)
     UT_ASSERT_EQUAL( result, dsERR_NONE);
 }
 
+/**
+ * @brief This function will do the unit testing of dsHdmiInSelectZoomMode ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsHdmiInSelectZoomMode () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsHdmiInInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_hdmiIn_hal_l1_dsHdmiInSelectZoomMode(void)
 {
     dsError_t result;
     dsVideoZoom_t zoom;
+
+    result = dsHdmiInSelectZoomMode(zoom);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsHdmiInInit();    
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -140,9 +215,22 @@ void test_hdmiIn_hal_l1_dsHdmiInSelectZoomMode(void)
     UT_ASSERT_EQUAL( result, dsERR_NONE);
 }
 
+/**
+ * @brief This function will do the unit testing of dsHdmiInPauseAudio ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsHdmiInPauseAudio () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsHdmiInInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_hdmiIn_hal_l1_dsHdmiInPauseAudio(void)
 {
     dsError_t result;
+
+    result = dsHdmiInPauseAudio();
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsHdmiInInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -156,9 +244,22 @@ void test_hdmiIn_hal_l1_dsHdmiInPauseAudio(void)
 
 }
 
+/**
+ * @brief This function will do the unit testing of dsHdmiInResumeAudio ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsHdmiInResumeAudio () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsHdmiInInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_hdmiIn_hal_l1_dsHdmiInResumeAudio(void)
 {
     dsError_t result;
+
+    result = dsHdmiInResumeAudio();
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsHdmiInInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -172,10 +273,23 @@ void test_hdmiIn_hal_l1_dsHdmiInResumeAudio(void)
 
 }
 
+/**
+ * @brief This function will do the unit testing of dsHdmiInGetCurrentVideoMode ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsHdmiInGetCurrentVideoMode () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsHdmiInInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_hdmiIn_hal_l1_dsHdmiInGetCurrentVideoMode(void)
 {
     dsError_t result;
     dsVideoPortResolution_t resolution;
+
+    result = dsHdmiInGetCurrentVideoMode(&resolution);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
     /* Positive result */
     result = dsHdmiInInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
