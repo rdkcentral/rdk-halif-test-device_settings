@@ -26,7 +26,13 @@
 #include "dsVideoPort.h"
 
 
-
+/**
+ * @brief This function will do the unit testing of dsVideoPortInit ()
+ * This function will ensure underlying API implementation is handling
+ * invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsVideoPortInit () is called successfully.
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_init( void )
 {
     int result;
@@ -45,6 +51,15 @@ void test_ds_video_hal_l1_init( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsVideoPortTerm ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsVideoPortTerm () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_term( void )
 {
     int result;
@@ -67,6 +82,15 @@ void test_ds_video_hal_l1_term( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetVideoPort ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetVideoPort () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_getVideoPort( void )
 {
     int result;
@@ -109,6 +133,15 @@ void test_ds_video_hal_l1_getVideoPort( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsIsVideoPortEnabled ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsIsVideoPortEnabled () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_isVideoPortEnabled( void )
 {
     int result;
@@ -150,6 +183,15 @@ void test_ds_video_hal_l1_isVideoPortEnabled( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsIsDisplayConnected ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsIsDisplayConnected () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_isDispalyConnected( void )
 {
     int result;
@@ -191,6 +233,15 @@ void test_ds_video_hal_l1_isDispalyConnected( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsIsDisplaySurround ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsIsDisplaySurround () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_getSurrondMode( void )
 {
     int result;
@@ -232,6 +283,15 @@ void test_ds_video_hal_l1_getSurrondMode( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsIsVideoPortActive ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsIsVideoPortActive () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_isVideoPortActive( void )
 {
     int result;
@@ -273,6 +333,15 @@ void test_ds_video_hal_l1_isVideoPortActive( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsEnableDTCP ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsEnableDTCP () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_enableDTCP( void )
 {
     int result;
@@ -313,6 +382,15 @@ void test_ds_video_hal_l1_enableDTCP( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsEnableHDCP ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsEnableHDCP () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_enableHDCP( void )
 {
     int result;
@@ -361,6 +439,15 @@ void test_ds_video_hal_l1_enableHDCP( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsIsDTCPEnabled ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsIsDTCPEnabled () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_isDTCPEnabled( void )
 {
     int result;
@@ -402,6 +489,15 @@ void test_ds_video_hal_l1_isDTCPEnabled( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsIsHDCPEnabled ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsIsHDCPEnabled () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_isHDCPEnabled( void )
 {
     int result;
@@ -443,6 +539,15 @@ void test_ds_video_hal_l1_isHDCPEnabled( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsEnableVideoPort ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsEnableVideoPort () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_enableVideoPort( void )
 {
     int result;
@@ -483,6 +588,15 @@ void test_ds_video_hal_l1_enableVideoPort( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsSetResolution ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSetResolution () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_setResolution( void )
 {
     int result;
@@ -529,6 +643,15 @@ void test_ds_video_hal_l1_setResolution( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetResolution ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetResolution () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_getResolution( void )
 {
     int result;
@@ -570,6 +693,15 @@ void test_ds_video_hal_l1_getResolution( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetVideoPort ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetVideoPort () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_setActiveSoruce( void )
 {
     int result;
@@ -607,6 +739,13 @@ void test_ds_video_hal_l1_setActiveSoruce( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsInitResolution ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsInitResolution () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ */
 void test_ds_video_hal_l1_initResolution( void )
 {
     int result;
@@ -616,6 +755,9 @@ void test_ds_video_hal_l1_initResolution( void )
     //result = dsInitResolution (&resolution);//Fixme: BCM crashing
     UT_ASSERT_EQUAL( result, dsERR_NONE);
 
+        //result = dsInitResolution (NULL);//Fixme: BCM crashing
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM);
+
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
@@ -623,6 +765,13 @@ void test_ds_video_hal_dsHDCPStatusCallback (int handle, dsHdcpStatus_t status){
     printf ("Inside the callback %s", __FUNCTION__);
 }
 
+/**
+ * @brief This function will do the unit testing of dsRegisterHdcpStatusCallback ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsRegisterHdcpStatusCallback () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ */
 void test_ds_video_hal_l1_registerHdcpStatusCallback( void )
 {
     int result;
@@ -662,7 +811,15 @@ void test_ds_video_hal_l1_registerHdcpStatusCallback( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
-
+/**
+ * @brief This function will do the unit testing of dsGetHDCPStatus ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetHDCPStatus () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_getHDCPStatus( void )
 {
     int result;
@@ -704,6 +861,15 @@ void test_ds_video_hal_l1_getHDCPStatus( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetHDCPProtocol ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetHDCPProtocol () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_getHDCPProtocol( void )
 {
     int result;
@@ -745,6 +911,15 @@ void test_ds_video_hal_l1_getHDCPProtocol( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetHDCPReceiverProtocol ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetHDCPReceiverProtocol () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_getHDCPReceiverProtocol( void )
 {
     int result;
@@ -786,6 +961,15 @@ void test_ds_video_hal_l1_getHDCPReceiverProtocol( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetHDCPCurrentProtocol ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetHDCPCurrentProtocol () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_getHDCPCurrentProtocol( void )
 {
     int result;
@@ -827,6 +1011,15 @@ void test_ds_video_hal_l1_getHDCPCurrentProtocol( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetTVHDRCapabilities ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetTVHDRCapabilities () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_getTVHDRCapabilities( void )
 {
     int result;
@@ -868,6 +1061,15 @@ void test_ds_video_hal_l1_getTVHDRCapabilities( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsSupportedTvResolutions ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSupportedTvResolutions () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_getSupportedTvResolutions( void )
 {
     int result;
@@ -909,6 +1111,15 @@ void test_ds_video_hal_l1_getSupportedTvResolutions( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsSetForceDisable4KSupport ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSetForceDisable4KSupport () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_setForceDisable4KSupport( void )
 {
     int result;
@@ -952,6 +1163,15 @@ void test_ds_video_hal_l1_setForceDisable4KSupport( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetForceDisable4KSupport ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetForceDisable4KSupport () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_getForceDisable4KSupport( void )
 {
     int result;
@@ -993,6 +1213,15 @@ void test_ds_video_hal_l1_getForceDisable4KSupport( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsSetScartParameter ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSetScartParameter () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_setScartParameter( void )
 {
     int result;
@@ -1038,6 +1267,15 @@ void test_ds_video_hal_l1_setScartParameter( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetVideoEOTF ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetVideoEOTF () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_getVideoEOTF( void )
 {
     int result;
@@ -1079,6 +1317,15 @@ void test_ds_video_hal_l1_getVideoEOTF( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetMatrixCoefficients ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetMatrixCoefficients () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_getMatrixCoefficients( void )
 {
     int result;
@@ -1120,6 +1367,15 @@ void test_ds_video_hal_l1_getMatrixCoefficients( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetColorDepth ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetColorDepth () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_getColorDepth( void )
 {
     int result;
@@ -1161,6 +1417,15 @@ void test_ds_video_hal_l1_getColorDepth( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetColorSpace ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetColorSpace () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_getColorSpace( void )
 {
     int result;
@@ -1202,6 +1467,15 @@ void test_ds_video_hal_l1_getColorSpace( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetQuantizationRange ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetQuantizationRange () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_getQuantizationRange( void )
 {
     int result;
@@ -1243,6 +1517,15 @@ void test_ds_video_hal_l1_getQuantizationRange( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetCurrentOutputSettings ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetCurrentOutputSettings () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_getCurrentOutputSettings( void )
 {
     int result;
@@ -1296,6 +1579,15 @@ void test_ds_video_hal_l1_getCurrentOutputSettings( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsIsOutputHDR ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsIsOutputHDR () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_isOutputHDR( void )
 {
     int result;
@@ -1337,6 +1629,15 @@ void test_ds_video_hal_l1_isOutputHDR( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsResetOutputToSDR ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsResetOutputToSDR () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_resetOutputToSDR( void )
 {
     int result;
@@ -1370,6 +1671,15 @@ void test_ds_video_hal_l1_resetOutputToSDR( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsSetHdmiPreference ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSetHdmiPreference () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_setHdmiPreference( void )
 {
     int result;
@@ -1411,6 +1721,15 @@ void test_ds_video_hal_l1_setHdmiPreference( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetHdmiPreference ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetHdmiPreference () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_getHdmiPreference( void )
 {
     int result;
@@ -1452,6 +1771,15 @@ void test_ds_video_hal_l1_getHdmiPreference( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetIgnoreEDIDStatus ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetIgnoreEDIDStatus () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_getIgnoreEDIDStatus( void )
 {
     int result;
@@ -1493,6 +1821,15 @@ void test_ds_video_hal_l1_getIgnoreEDIDStatus( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsSetBackgroundColor ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSetBackgroundColor () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_setBackgroundColor( void )
 {
     int result;
@@ -1531,6 +1868,15 @@ void test_ds_video_hal_l1_setBackgroundColor( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsSetForceHDRMode ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSetForceHDRMode () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_setForceHDRMode( void )
 {
     int result;
@@ -1569,6 +1915,15 @@ void test_ds_video_hal_l1_setForceHDRMode( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsColorDepthCapabilities ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsColorDepthCapabilities () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_getColorDepthCapabilities( void )
 {
     int result;
@@ -1610,6 +1965,15 @@ void test_ds_video_hal_l1_getColorDepthCapabilities( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsGetPreferredColorDepth ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetPreferredColorDepth () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_getPreferredColorDepth( void )
 {
     int result;
@@ -1654,6 +2018,15 @@ void test_ds_video_hal_l1_getPreferredColorDepth( void )
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
+/**
+ * @brief This function will do the unit testing of dsSetPreferredColorDepth ()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsSetPreferredColorDepth () is called successfully.
+ * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
+ * dsERR_INVALID_STATE : will be returned if this api is called before calling dsVideoPortInit()
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_video_hal_l1_setPreferredColorDepth( void )
 {
     int result;
