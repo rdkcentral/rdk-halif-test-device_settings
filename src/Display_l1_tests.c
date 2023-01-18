@@ -22,6 +22,7 @@
 #include <dsError.h>
 #include <dsDisplay.h>
 #include <ut.h>
+#include <dsAudio.h>
 
 /**
  * @brief This function will do the unit testing of dsDisplayInit ()
@@ -32,7 +33,7 @@
  */
 void test_display_hal_l1_dsDisplayInit(void)
 {
-    dsError_t result;
+    int result = dsERR_GENERAL;
     /* Positive result */
     result = dsDisplayInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -57,7 +58,7 @@ void test_display_hal_l1_dsDisplayInit(void)
  */
 void test_display_hal_l1_dsGetDisplay(void)
 {
-    dsError_t result;
+    int result = dsERR_GENERAL;
     dsVideoPortType_t type = dsVIDEOPORT_TYPE_RF;
     int index = 0;
     int handle = 0;
@@ -106,9 +107,8 @@ void test_display_hal_l1_dsGetDisplay(void)
  */
 void test_display_hal_l1_dsGetEDID(void)
 {
-    dsError_t result;
+    int result = dsERR_GENERAL;
     dsVideoPortType_t type = dsVIDEOPORT_TYPE_RF;
-    int index = 0;
     int handle = 0;
     dsDisplayEDID_t edid;
 
@@ -132,7 +132,7 @@ void test_display_hal_l1_dsGetEDID(void)
     result = dsGetEDID(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    result = dsGetEDID(NULL,&edid);
+    result = dsGetEDID(0,&edid);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     /*Terminating Display*/
     result = dsDisplayTerm();
@@ -150,9 +150,8 @@ void test_display_hal_l1_dsGetEDID(void)
  */
 void test_display_hal_l1_dsGetDisplayAspectRatio(void)
 {
-    dsError_t result;
+    int result = dsERR_GENERAL;
     dsVideoPortType_t type = dsVIDEOPORT_TYPE_RF;
-    int index = 0;
     int handle = 0;
     dsVideoAspectRatio_t aspectRatio;
 
@@ -176,7 +175,7 @@ void test_display_hal_l1_dsGetDisplayAspectRatio(void)
     result = dsGetDisplayAspectRatio(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    result = dsGetDisplayAspectRatio(NULL,&aspectRatio);
+    result = dsGetDisplayAspectRatio(0,&aspectRatio);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     /*Terminating Display*/
     result = dsDisplayTerm();
@@ -194,14 +193,13 @@ void test_display_hal_l1_dsGetDisplayAspectRatio(void)
  */
 void test_display_hal_l1_dsGetEDIDBytes(void)
 {
-    dsError_t result;
+    int result = dsERR_GENERAL;
     dsVideoPortType_t type = dsVIDEOPORT_TYPE_RF;
-    int index = 0;
     int handle = 0;
-    char edidBytes[256] = {0};
+    unsigned char edidBytes[256] = {0};
     int length = 0;
 
-    result  = dsGetEDIDBytes(handle,&edidBytes,&length);
+    result  = dsGetEDIDBytes(handle,(unsigned char **)&edidBytes,&length);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
 
     /* Positive result */
@@ -214,17 +212,17 @@ void test_display_hal_l1_dsGetEDIDBytes(void)
             result = dsGetDisplay(type,i,&handle);
             UT_ASSERT_EQUAL( result, dsERR_NONE );
 
-            result  = dsGetEDIDBytes(handle,&edidBytes,&length);
+            result  = dsGetEDIDBytes(handle, (unsigned char **)&edidBytes,&length);
             UT_ASSERT_EQUAL( result, dsERR_NONE );
         }
     }
     result = dsGetEDIDBytes(handle,NULL, &length);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    result = dsGetEDIDBytes(handle,&edidBytes, NULL);
+    result = dsGetEDIDBytes(handle, (unsigned char **)&edidBytes, NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    result = dsGetEDIDBytes(NULL,&edidBytes, &length);
+    result = dsGetEDIDBytes(0, (unsigned char **)&edidBytes, &length);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     /*Terminating Display*/
     result = dsDisplayTerm();

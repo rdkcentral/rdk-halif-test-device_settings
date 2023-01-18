@@ -1,7 +1,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <dsError.h>
-#include <dsHdmiIn.h>
+#include <dsFPD.h>
 #include <ut.h>
 #include <limits.h>
 
@@ -61,7 +61,7 @@ void test_FPD_hal_l1_dsSetFPBlink(void)
     for(eIndicator=dsFPD_INDICATOR_MESSAGE;eIndicator<=dsFPD_INDICATOR_MAX;eIndicator++){
     result = dsSetFPBlink(eIndicator,uBlinkDuration,uBlinkIterations);
     UT_ASSERT_EQUAL( result, dsERR_NONE );
-	}
+    }
 	
     /* Passing Invalid Parameter to the function*/
     uBlinkDuration = -1;
@@ -100,8 +100,8 @@ void test_FPD_hal_l1_dsSetFPBrightness(void)
 {
     dsError_t result;
 	// Make the changes
-    dsFPDIndicator_t eIndicator = dsFPD_INDICATOR_MESSAGE; 
-	dsFPDBrightness_t eBrightness = dsFPD_MODE_ANY;
+    dsFPDIndicator_t eIndicator = dsFPD_INDICATOR_MESSAGE;
+    dsFPDBrightness_t eBrightness = dsFPD_MODE_ANY;
 
     result = dsSetFPBrightness(eIndicator,eBrightness);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
@@ -110,16 +110,18 @@ void test_FPD_hal_l1_dsSetFPBrightness(void)
     result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
 
-    for(eIndicator=dsFPD_INDICATOR_MESSAGE,eBrightness = dsFPD_MODE_ANY;eIndicator<=dsFPD_INDICATOR_MAX,eBrightness<=dsFPD_MODE_CLOCK;eIndicator++,eBrightness++){
+    for(eIndicator=dsFPD_INDICATOR_MESSAGE ; eIndicator<=dsFPD_INDICATOR_MAX; eIndicator++ ){
+    for(eBrightness = dsFPD_MODE_ANY; eBrightness<=dsFPD_MODE_CLOCK; eBrightness++){
     result = dsSetFPBrightness(eIndicator,eBrightness);
     UT_ASSERT_EQUAL( result, dsERR_NONE );
-	}
+    }
+    }
   
     /* Passing Invalid Parameter to the function*/
-    result = dsSetFPBrightness(NULL,eBrightness);
+    result = dsSetFPBrightness(dsFPD_INDICATOR_MAX+1,eBrightness);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM);
     
-    result = dsSetFPBrightness(eIndicator,NULL);
+    result = dsSetFPBrightness(eIndicator, dsFPD_BRIGHTNESS_MAX+1);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM);
 
     /*calling hdmicec_init second time should pass and return the valid pointer*/
@@ -141,8 +143,8 @@ void test_FPD_hal_l1_dsGetFPState(void)
 {
     dsError_t result;
     // initialization
-	dsFPDIndicator_t eIndicator = dsFPD_INDICATOR_MESSAGE; 
-	dsFPDState_t* state = dsFPD_STATE_OFF;
+    dsFPDIndicator_t eIndicator = dsFPD_INDICATOR_MESSAGE; 
+    dsFPDState_t state = dsFPD_STATE_OFF;
 	
     result = dsGetFPState(eIndicator,&state);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
@@ -151,16 +153,17 @@ void test_FPD_hal_l1_dsGetFPState(void)
      result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
 
-    for(eIndicator=dsFPD_INDICATOR_MESSAGE,state = dsFPD_STATE_OFF;eIndicator<=dsFPD_INDICATOR_MAX,state<=dsFPD_STATE_ON;eIndicator++,state++){
+    for(eIndicator=dsFPD_INDICATOR_MESSAGE ; eIndicator<=dsFPD_INDICATOR_MAX; eIndicator++ ){
+    for(state = dsFPD_STATE_OFF; state<=dsFPD_STATE_ON; state++){
     result = dsGetFPState(eIndicator,&state);
     UT_ASSERT_EQUAL( result, dsERR_NONE );
-	}
+    }}
 
     /* Passing Invalid Parameter to the function*/
-    result = dsGetFPState(NULL,&state);
+    result = dsGetFPState((dsFPDIndicator_t)INT_MAX,&state);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-     result = dsGetFPState(eIndicator,NULL);
+     result = dsGetFPState(eIndicator, NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     /*calling hdmicec_init second time should pass and return the valid pointer*/
@@ -182,7 +185,7 @@ void test_videodevice_hal_l1_dsSetFPState(void)
 {
     dsError_t result;
     dsFPDIndicator_t eIndicator = dsFPD_INDICATOR_MESSAGE;
-	dsFPDState_t state = dsFPD_STATE_OFF;
+    dsFPDState_t state = dsFPD_STATE_OFF;
 
     result = dsSetFPState(eIndicator,state);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
@@ -191,15 +194,17 @@ void test_videodevice_hal_l1_dsSetFPState(void)
     result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
 
-   for(eIndicator=dsFPD_INDICATOR_MESSAGE,state = dsFPD_STATE_OFF;eIndicator<=dsFPD_INDICATOR_MAX,state<=dsFPD_STATE_ON;eIndicator++,state++){
+    for(eIndicator=dsFPD_INDICATOR_MESSAGE ; eIndicator<=dsFPD_INDICATOR_MAX; eIndicator++ ){
+    for(state = dsFPD_STATE_OFF; state<=dsFPD_STATE_ON; state++){
     result = dsSetFPState(eIndicator,state);
     UT_ASSERT_EQUAL( result, dsERR_NONE );
-	}
+    }}
+
     /* Passing Invalid Parameter to the function*/
-    result = dsSetFPState(NULL,state);
+    result = dsSetFPState(INT_MAX, state);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    result = dsSetFPState(eIndicator,NULL);
+    result = dsSetFPState(eIndicator, INT_MAX);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 	
     /*calling hdmicec_init second time should pass and return the valid pointer*/
@@ -221,7 +226,7 @@ void test_videodevice_hal_l1_dsGetFPBrightness(void)
 {
     dsError_t result;
     dsFPDIndicator_t eIndicator = dsFPD_INDICATOR_MESSAGE; 
-	dsFPDBrightness_t *pBrightness = dsFPD_MODE_ANY;
+    dsFPDBrightness_t pBrightness = dsFPD_MODE_ANY;
 
     result = dsGetFPBrightness(eIndicator,&pBrightness);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
@@ -230,13 +235,13 @@ void test_videodevice_hal_l1_dsGetFPBrightness(void)
     result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
 
-    for(eIndicator=dsFPD_INDICATOR_MESSAGE,pBrightness = dsFPD_MODE_ANY;eIndicator<=dsFPD_INDICATOR_MAX,pBrightness<=dsFPD_MODE_CLOCK;eIndicator++,pBrightness++){
+    for(eIndicator=dsFPD_INDICATOR_MESSAGE ; eIndicator<=dsFPD_INDICATOR_MAX; eIndicator++ ){
     result = dsGetFPBrightness(eIndicator,&pBrightness);
     UT_ASSERT_EQUAL( result, dsERR_NONE );
-	}
+    }
 
     /* Passing Invalid Parameter to the function*/
-    result = dsGetFPBrightness(NULL,&pBrightness);
+    result = dsGetFPBrightness(INT_MAX, &pBrightness);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsGetFPBrightness(eIndicator,NULL);
@@ -265,7 +270,7 @@ void test_FPD_hal_l1_dsGetFPColor(void)
 
     dsError_t result;
     dsFPDIndicator_t eIndicator = dsFPD_INDICATOR_MESSAGE;
-	dsFPDColor_t *pColor = dsFPDColor_Make(R8,G8,B8);
+    dsFPDColor_t pColor = dsFPDColor_Make(R8,G8,B8);
 
     result = dsGetFPColor(eIndicator,&pColor);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
@@ -274,16 +279,16 @@ void test_FPD_hal_l1_dsGetFPColor(void)
     result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
 
-    for(eIndicator=dsFPD_INDICATOR_MESSAGE,pColor = dsFPDColor_Make(R8,G8,B8);eIndicator<=dsFPD_INDICATOR_MAX,pColor<=dsFPD_COLOR_MAX;eIndicator++,pColor++){
-    result = dsGetFPColor(eIndicator,&pColor);
-    UT_ASSERT_EQUAL( result, dsERR_NONE );
-	}
+    for(eIndicator=dsFPD_INDICATOR_MESSAGE ; eIndicator<=dsFPD_INDICATOR_MAX; eIndicator++ ){
+        result = dsGetFPColor(eIndicator,&pColor);
+        UT_ASSERT_EQUAL( result, dsERR_NONE );
+    }
 
     /* Passing Invalid Parameter to the function*/
     result = dsGetFPColor(eIndicator,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    result = dsGetFPColor(NULL,&pColor);
+    result = dsGetFPColor((dsFPDIndicator_t)INT_MAX,&pColor);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     /*calling hdmicec_init second time should pass and return the valid pointer*/
@@ -308,7 +313,7 @@ void test_FDP_hal_l1_dsSetFPColor(void)
     uint32_t B8 = 0;
     dsError_t result;
     dsFPDIndicator_t eIndicator = dsFPD_INDICATOR_MESSAGE;
-	dsFPDColor_t eColor = dsFPDColor_Make(R8,G8,B8);
+    dsFPDColor_t eColor = dsFPDColor_Make(R8,G8,B8);
 	
     result = dsSetFPColor(eIndicator,eColor);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
@@ -317,16 +322,17 @@ void test_FDP_hal_l1_dsSetFPColor(void)
     result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
 
-    for(eIndicator=dsFPD_INDICATOR_MESSAGE,eColor = dsFPDColor_Make(R8,G8,B8);eIndicator<=dsFPD_INDICATOR_MAX,eColor<=dsFPD_COLOR_MAX;eIndicator++,eColor++){
+    for(eIndicator=dsFPD_INDICATOR_MESSAGE ; eIndicator<=dsFPD_INDICATOR_MAX; eIndicator++ ){
+    for(eColor = dsFPDColor_Make(R8,G8,B8); eColor<=dsFPD_COLOR_MAX; eColor++){
     result = dsSetFPColor(eIndicator,eColor);
     UT_ASSERT_EQUAL( result, dsERR_NONE );
-	}
+    }}
 
     /* Passing Invalid Parameter to the function*/
-    result = dsSetFPColor(eIndicator,NULL);
+    result = dsSetFPColor(eIndicator,(dsFPDColor_t) INT_MAX);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    result = dsSetFPColor(NULL,eColor);
+    result = dsSetFPColor((dsFPDIndicator_t)INT_MAX,eColor);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsFPTerm();
@@ -398,19 +404,19 @@ void test_FPD_hal_l1_dsSetFPText(void)
     dsError_t result;
     const char* pText = "";
 	
-    result = dsSetFPText(&pText);
+    result = dsSetFPText(pText);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
 
     /* Positive result */
     result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
 
-    result = dsSetFPText(&pText);
+    result = dsSetFPText(pText);
     UT_ASSERT_EQUAL( result, dsERR_NONE );
 
     /* Passing Invalid Parameter to the function*/
     /*calling hdmicec_init second time should pass and return the valid pointer*/
-    result = dsSetFPText(&pText);
+    result = dsSetFPText(pText);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsSetFPText(NULL);
@@ -434,7 +440,7 @@ void test_FDP_hal_l1_dsSetFPTextBrightness(void)
 {
     dsError_t result;
     dsFPDTextDisplay_t eIndicator = dsFPD_TEXTDISP_TEXT; 
-	dsFPDBrightness_t eBrightness = dsFPD_MODE_ANY;
+    dsFPDBrightness_t eBrightness = dsFPD_MODE_ANY;
 	
     result = dsSetFPTextBrightness(eIndicator,eBrightness);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
@@ -443,17 +449,18 @@ void test_FDP_hal_l1_dsSetFPTextBrightness(void)
     result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
     
-    for(eIndicator = dsFPD_TEXTDISP_TEXT,eBrightness = dsFPD_MODE_ANY;eIndicator<=dsFPD_TEXTDISP_MAX,eBrightness<=dsFPD_MODE_CLOCK;eIndicator++,eBrightness++){
+    for(eIndicator=dsFPD_INDICATOR_MESSAGE ; eIndicator<=dsFPD_INDICATOR_MAX; eIndicator++ ){
+    for(eBrightness = dsFPD_MODE_ANY; eBrightness<=dsFPD_MODE_CLOCK; eBrightness++){
     result = dsSetFPTextBrightness(eIndicator,eBrightness);
     UT_ASSERT_EQUAL( result, dsERR_NONE );
-    }
+    }}
 
     /* Passing Invalid Parameter to the function*/
     /*calling hdmicec_init second time should pass and return the valid pointer*/
-    result = dsSetFPTextBrightness(eIndicator,NULL);
+    result = dsSetFPTextBrightness(eIndicator, (dsFPDBrightness_t)INT_MAX);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    result = dsSetFPTextBrightness(NULL,eBrightness);
+    result = dsSetFPTextBrightness((dsFPDTextDisplay_t)INT_MAX, eBrightness);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsFPTerm();
@@ -474,7 +481,7 @@ void test_FDP_hal_l1_dsGetFPTextBrightness(void)
 {
     dsError_t result;
     dsFPDTextDisplay_t eIndicator = dsFPD_TEXTDISP_TEXT; 
-	dsFPDBrightness_t *eBrightness = dsFPD_MODE_ANY;
+    dsFPDBrightness_t eBrightness = dsFPD_MODE_ANY;
 	
     result = dsGetFPTextBrightness(eIndicator,&eBrightness);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
@@ -482,17 +489,18 @@ void test_FDP_hal_l1_dsGetFPTextBrightness(void)
     /* Positive result */
     result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
-    for(eIndicator = dsFPD_TEXTDISP_TEXT,eBrightness = dsFPD_MODE_ANY;eIndicator<=dsFPD_TEXTDISP_MAX,eBrightness<=dsFPD_MODE_CLOCK;eIndicator++,eBrightness++){
+    for(eIndicator=dsFPD_INDICATOR_MESSAGE ; eIndicator<=dsFPD_INDICATOR_MAX; eIndicator++ ){
+    for(eBrightness = dsFPD_MODE_ANY; eBrightness<=dsFPD_MODE_CLOCK; eBrightness++){
     result = dsGetFPTextBrightness(eIndicator,&eBrightness);
     UT_ASSERT_EQUAL( result, dsERR_NONE );
-    }
+    }}
 
     /* Passing Invalid Parameter to the function*/
     /*calling hdmicec_init second time should pass and return the valid pointer*/
     result = dsGetFPTextBrightness(eIndicator,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    result = dsGetFPTextBrightness(NULL,&eBrightness);
+    result = dsGetFPTextBrightness((dsFPDTextDisplay_t)INT_MAX, &eBrightness);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsFPTerm();
@@ -607,8 +615,8 @@ void test_FDP_hal_l1_dsSetFPDBrightness(void)
 {
     dsError_t result;
     dsFPDIndicator_t eIndicator = dsFPD_INDICATOR_MESSAGE;
-	dsFPDBrightness_t eBrightness = dsFPD_MODE_ANY;
-	bool toPersist = true;
+    dsFPDBrightness_t eBrightness = dsFPD_MODE_ANY;
+    bool toPersist = true;
 	
     result = dsSetFPDBrightness(eIndicator,eBrightness,toPersist);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
@@ -616,20 +624,18 @@ void test_FDP_hal_l1_dsSetFPDBrightness(void)
     /* Positive result */
     result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
-    for(eIndicator=dsFPD_INDICATOR_MESSAGE,eBrightness = dsFPD_MODE_ANY;eIndicator<=dsFPD_INDICATOR_MAX,eBrightness<=dsFPD_MODE_CLOCK;eIndicator++,eBrightness++){
+    for(eIndicator=dsFPD_INDICATOR_MESSAGE ; eIndicator<=dsFPD_INDICATOR_MAX; eIndicator++ ){
+    for(eBrightness = dsFPD_MODE_ANY; eBrightness<=dsFPD_MODE_CLOCK; eBrightness++){
     result = dsSetFPDBrightness(eIndicator,eBrightness,toPersist);
     UT_ASSERT_EQUAL( result, dsERR_NONE );
-    }
+    }}
 
     /* Passing Invalid Parameter to the function*/
     /*calling hdmicec_init second time should pass and return the valid pointer*/
-    result = dsSetFPDBrightness(NULL,eBrightness,toPersist);
+    result = dsSetFPDBrightness((dsFPDIndicator_t)INT_MAX, eBrightness,toPersist);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    result = dsSetFPDBrightness(eIndicator,NULL,toPersist);
-    UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
-
-    result = dsSetFPDBrightness(eIndicator,eBrightness,NULL);
+    result = dsSetFPDBrightness(eIndicator, (dsFPDBrightness_t)INT_MAX, toPersist);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsFPTerm();
@@ -653,8 +659,8 @@ void test_FDP_hal_l1_dsSetFPDColor(void)
     uint32_t B8 = 0;
     dsError_t result;
     dsFPDIndicator_t eIndicator = dsFPD_INDICATOR_MESSAGE;
-	dsFPDColor_t eColor = dsFPDColor_Make(R8,G8,B8);
-	bool toPersist = true;
+    dsFPDColor_t eColor = dsFPDColor_Make(R8,G8,B8);
+    bool toPersist = true;
 
     result = dsSetFPDColor(eIndicator,eColor,toPersist);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
@@ -663,17 +669,18 @@ void test_FDP_hal_l1_dsSetFPDColor(void)
     result = dsFPInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
 
-    for(eIndicator = dsFPD_INDICATOR_MESSAGE,eColor = dsFPDColor_Make(R8,G8,B8); eIndicator<=dsFPD_INDICATOR_MAX, eColor<=dsFPD_COLOR_MAX;eIndicator++ ){
+    for(eIndicator=dsFPD_INDICATOR_MESSAGE ; eIndicator<=dsFPD_INDICATOR_MAX; eIndicator++ ){
+    for(eColor = dsFPDColor_Make(R8,G8,B8); eColor<=dsFPD_COLOR_MAX; eColor++){
         result = dsSetFPDColor(eIndicator,eColor,toPersist);
         UT_ASSERT_EQUAL( result, dsERR_NONE );
-    }
+    }}
 
     /* Passing Invalid Parameter to the function*/
     /*calling hdmicec_init second time should pass and return the valid pointer*/
-    result = dsSetFPDColor(NULL,eColor,toPersist);
+    result = dsSetFPDColor((dsFPDIndicator_t)INT_MAX, eColor,toPersist);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    result = dsSetFPDColor(eIndicator,NULL,toPersist);
+    result = dsSetFPDColor(eIndicator, (dsFPDColor_t)INT_MAX, toPersist);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsSetFPDColor(eIndicator,eColor,NULL);
@@ -712,7 +719,7 @@ void test_FDP_hal_l1_dsSetFPTimeFormat(void)
 
     /* Passing Invalid Parameter to the function*/
     /*calling hdmicec_init second time should pass and return the valid pointer*/
-    result = dsSetFPTimeFormat(NULL);
+    result = dsSetFPTimeFormat((dsFPDTimeFormat_t)INT_MAX);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsFPTerm();
@@ -732,7 +739,7 @@ void test_FDP_hal_l1_dsSetFPTimeFormat(void)
 void test_FDP_hal_l1_dsGetFPTimeFormat(void)
 {
     dsError_t result;
-    dsFPDTimeFormat_t *pTimeFormat = dsFPD_TIME_12_HOUR;
+    dsFPDTimeFormat_t pTimeFormat = dsFPD_TIME_12_HOUR;
 	
     result = dsGetFPTimeFormat(&pTimeFormat);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
@@ -784,7 +791,7 @@ void test_FDP_hal_l1_dsSetFPDMode(void)
 
     /* Passing Invalid Parameter to the function*/
     /*calling hdmicec_init second time should pass and return the valid pointer*/
-    result = dsSetFPDMode(NULL);
+    result = dsSetFPDMode((dsFPDMode_t)INT_MAX);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsFPTerm();

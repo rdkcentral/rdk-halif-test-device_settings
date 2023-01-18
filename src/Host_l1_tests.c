@@ -34,7 +34,7 @@
  */
 void test_ds_host_hal_l1_init( void )
 {
-    int result;
+    int result=dsERR_GENERAL;
     /* Positive result */
     result = dsHostInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -61,8 +61,7 @@ void test_ds_host_hal_l1_init( void )
  */
 void test_ds_host_hal_l1_close( void )
 {
-    int result;
-    int handle = 0;
+    int result=dsERR_GENERAL;
 
     /*calling close before calling open, should return the invalid argument error*/
     //result = dsHostTerm();//Fixme: Bcm undefined symbol//Code crash here
@@ -99,8 +98,8 @@ void test_ds_host_hal_l1_close( void )
  */
 void test_ds_host_hal_l1_setHostPowerMode( void )
 {
-    int result;
-    int newPower = 0;
+    int result=dsERR_GENERAL;
+    //int newPower = 0;//Fixme: Bcm error.
 
 
     //Calling api before open, should give invalid state
@@ -141,8 +140,8 @@ void test_ds_host_hal_l1_setHostPowerMode( void )
  */
 void test_ds_host_hal_l1_getHostPowerMode( void )
 {
-    int result;
-    int currPower = 0;
+    int result=dsERR_GENERAL;
+    //int currPower = 0;//Fixme: Bcm error.
 
 
     //Calling api before open, should give invalid state
@@ -183,8 +182,8 @@ void test_ds_host_hal_l1_getHostPowerMode( void )
  */
 void test_ds_host_hal_l1_getPreferredSleepMode( void )
 {
-    int result;
-    dsSleepMode_t mode= 0;
+    int result=dsERR_GENERAL;
+    //dsSleepMode_t mode= 0;/Fixme: Bcm error.
 
 
     //Calling api before open, should give invalid state
@@ -225,8 +224,8 @@ void test_ds_host_hal_l1_getPreferredSleepMode( void )
  */
 void test_ds_host_hal_l1_setPreferredSleepMode( void )
 {
-    int result;
-    dsSleepMode_t mode = 0;
+    int result=dsERR_GENERAL;
+    //dsSleepMode_t mode = 0; //Fixme: Bcm undefined symbol. Avoid unused variable.
 
 
     //Calling api before open, should give invalid state
@@ -267,7 +266,7 @@ void test_ds_host_hal_l1_setPreferredSleepMode( void )
  */
 void test_ds_host_hal_l1_getCPUTemperature( void )
 {
-    int result;
+    int result=dsERR_GENERAL;
     float cpuTemperature= 0;
 
 
@@ -309,7 +308,7 @@ void test_ds_host_hal_l1_getCPUTemperature( void )
  */
 void test_ds_host_hal_l1_getVersion( void )
 {
-    int result;
+    int result=dsERR_GENERAL;
     uint32_t versionNumber= 0;
 
 
@@ -351,7 +350,7 @@ void test_ds_host_hal_l1_getVersion( void )
  */
 void test_ds_host_hal_l1_setVersion( void )
 {
-    int result;
+    int result=dsERR_GENERAL;
     uint32_t versionNumber = 0;
 
 
@@ -389,7 +388,7 @@ void test_ds_host_hal_l1_setVersion( void )
  */
 void test_ds_host_hal_l1_getSocIDFromSDK( void )
 {
-    int result;
+    int result=dsERR_GENERAL;
     char socID[128];
 
 
@@ -431,7 +430,7 @@ void test_ds_host_hal_l1_getSocIDFromSDK( void )
  */
 void test_ds_host_hal_l1_getHostEDID( void )
 {
-    int result;
+    int result=dsERR_GENERAL;
     unsigned char edid[2048];
     int length = 0;
 

@@ -35,7 +35,7 @@
  */
 void test_ds_video_hal_l1_init( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     /* Positive result */
     //result = dsVideoPortInit ();//Fixme: BCM crashing
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -62,7 +62,7 @@ void test_ds_video_hal_l1_init( void )
  */
 void test_ds_video_hal_l1_term( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
 
     /*calling ir_term before calling init, should return the invalid state error*/
     result = dsVideoPortTerm ();
@@ -93,7 +93,7 @@ void test_ds_video_hal_l1_term( void )
  */
 void test_ds_video_hal_l1_getVideoPort( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -144,7 +144,7 @@ void test_ds_video_hal_l1_getVideoPort( void )
  */
 void test_ds_video_hal_l1_isVideoPortEnabled( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -166,7 +166,7 @@ void test_ds_video_hal_l1_isVideoPortEnabled( void )
     UT_ASSERT_EQUAL( result, dsERR_NONE);
 
     //Using invalid params
-    result = dsIsVideoPortEnabled(NULL, &enabled);
+    result = dsIsVideoPortEnabled(0, &enabled);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM);
 
     result = dsIsVideoPortEnabled(handle, NULL);
@@ -194,7 +194,7 @@ void test_ds_video_hal_l1_isVideoPortEnabled( void )
  */
 void test_ds_video_hal_l1_isDispalyConnected( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -244,7 +244,7 @@ void test_ds_video_hal_l1_isDispalyConnected( void )
  */
 void test_ds_video_hal_l1_getSurrondMode( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -294,7 +294,7 @@ void test_ds_video_hal_l1_getSurrondMode( void )
  */
 void test_ds_video_hal_l1_isVideoPortActive( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -344,7 +344,7 @@ void test_ds_video_hal_l1_isVideoPortActive( void )
  */
 void test_ds_video_hal_l1_enableDTCP( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -393,7 +393,7 @@ void test_ds_video_hal_l1_enableDTCP( void )
  */
 void test_ds_video_hal_l1_enableHDCP( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -450,7 +450,7 @@ void test_ds_video_hal_l1_enableHDCP( void )
  */
 void test_ds_video_hal_l1_isDTCPEnabled( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -500,7 +500,7 @@ void test_ds_video_hal_l1_isDTCPEnabled( void )
  */
 void test_ds_video_hal_l1_isHDCPEnabled( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -550,7 +550,7 @@ void test_ds_video_hal_l1_isHDCPEnabled( void )
  */
 void test_ds_video_hal_l1_enableVideoPort( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -599,7 +599,7 @@ void test_ds_video_hal_l1_enableVideoPort( void )
  */
 void test_ds_video_hal_l1_setResolution( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -654,7 +654,7 @@ void test_ds_video_hal_l1_setResolution( void )
  */
 void test_ds_video_hal_l1_getResolution( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -704,7 +704,7 @@ void test_ds_video_hal_l1_getResolution( void )
  */
 void test_ds_video_hal_l1_setActiveSoruce( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -748,8 +748,8 @@ void test_ds_video_hal_l1_setActiveSoruce( void )
  */
 void test_ds_video_hal_l1_initResolution( void )
 {
-    int result;
-    dsVideoPortResolution_t resolution;
+    int result = dsERR_GENERAL;
+    //dsVideoPortResolution_t resolution;//Fixme: BCM crashing
 
 
     //result = dsInitResolution (&resolution);//Fixme: BCM crashing
@@ -774,7 +774,7 @@ void test_ds_video_hal_dsHDCPStatusCallback (int handle, dsHdcpStatus_t status){
  */
 void test_ds_video_hal_l1_registerHdcpStatusCallback( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -822,11 +822,11 @@ void test_ds_video_hal_l1_registerHdcpStatusCallback( void )
  */
 void test_ds_video_hal_l1_getHDCPStatus( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
-    dsHdcpStatus_t status;
+    //dsHdcpStatus_t status = dsHDCP_STATUS_UNAUTHENTICATED;//Fixme: BCM crashing. Avoid unused variable error.
 
 
     //Calling api before open, should give invalid state
@@ -872,7 +872,7 @@ void test_ds_video_hal_l1_getHDCPStatus( void )
  */
 void test_ds_video_hal_l1_getHDCPProtocol( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -922,7 +922,7 @@ void test_ds_video_hal_l1_getHDCPProtocol( void )
  */
 void test_ds_video_hal_l1_getHDCPReceiverProtocol( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -972,7 +972,7 @@ void test_ds_video_hal_l1_getHDCPReceiverProtocol( void )
  */
 void test_ds_video_hal_l1_getHDCPCurrentProtocol( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -1022,7 +1022,7 @@ void test_ds_video_hal_l1_getHDCPCurrentProtocol( void )
  */
 void test_ds_video_hal_l1_getTVHDRCapabilities( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -1072,7 +1072,7 @@ void test_ds_video_hal_l1_getTVHDRCapabilities( void )
  */
 void test_ds_video_hal_l1_getSupportedTvResolutions( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -1122,11 +1122,10 @@ void test_ds_video_hal_l1_getSupportedTvResolutions( void )
  */
 void test_ds_video_hal_l1_setForceDisable4KSupport( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
-    bool disable = true;
 
 
     //Calling api before open, should give invalid state
@@ -1174,11 +1173,11 @@ void test_ds_video_hal_l1_setForceDisable4KSupport( void )
  */
 void test_ds_video_hal_l1_getForceDisable4KSupport( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
-    bool disable = false;
+    //bool disable = false;//Fixme: BCM crashing
 
 
     //Calling api before open, should give invalid state
@@ -1224,12 +1223,12 @@ void test_ds_video_hal_l1_getForceDisable4KSupport( void )
  */
 void test_ds_video_hal_l1_setScartParameter( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;//Fixme: give the scart as the type here
     int index = 0;
-    const char* parameter_str = "param"; //Fixme: replace with right value
-    const char* value_str = "value";//Fixme: repalce with right value
+    //const char* parameter_str = "param"; //Fixme: replace with right value. Avoid unused variable error
+    //const char* value_str = "value";//Fixme: repalce with right value. Avoid unused varible error.
 
 
     //Calling api before open, should give invalid state
@@ -1278,7 +1277,7 @@ void test_ds_video_hal_l1_setScartParameter( void )
  */
 void test_ds_video_hal_l1_getVideoEOTF( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -1328,7 +1327,7 @@ void test_ds_video_hal_l1_getVideoEOTF( void )
  */
 void test_ds_video_hal_l1_getMatrixCoefficients( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -1378,7 +1377,7 @@ void test_ds_video_hal_l1_getMatrixCoefficients( void )
  */
 void test_ds_video_hal_l1_getColorDepth( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -1428,7 +1427,7 @@ void test_ds_video_hal_l1_getColorDepth( void )
  */
 void test_ds_video_hal_l1_getColorSpace( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -1478,7 +1477,7 @@ void test_ds_video_hal_l1_getColorSpace( void )
  */
 void test_ds_video_hal_l1_getQuantizationRange( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -1528,7 +1527,7 @@ void test_ds_video_hal_l1_getQuantizationRange( void )
  */
 void test_ds_video_hal_l1_getCurrentOutputSettings( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -1590,7 +1589,7 @@ void test_ds_video_hal_l1_getCurrentOutputSettings( void )
  */
 void test_ds_video_hal_l1_isOutputHDR( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -1640,7 +1639,7 @@ void test_ds_video_hal_l1_isOutputHDR( void )
  */
 void test_ds_video_hal_l1_resetOutputToSDR( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -1682,7 +1681,7 @@ void test_ds_video_hal_l1_resetOutputToSDR( void )
  */
 void test_ds_video_hal_l1_setHdmiPreference( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -1732,7 +1731,7 @@ void test_ds_video_hal_l1_setHdmiPreference( void )
  */
 void test_ds_video_hal_l1_getHdmiPreference( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -1782,11 +1781,11 @@ void test_ds_video_hal_l1_getHdmiPreference( void )
  */
 void test_ds_video_hal_l1_getIgnoreEDIDStatus( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
-    bool status = false;
+    //bool status = false; //Fixme: BCM crashing. unused variable warning here
 
 
     //Calling api before open, should give invalid state
@@ -1832,7 +1831,7 @@ void test_ds_video_hal_l1_getIgnoreEDIDStatus( void )
  */
 void test_ds_video_hal_l1_setBackgroundColor( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
@@ -1879,11 +1878,11 @@ void test_ds_video_hal_l1_setBackgroundColor( void )
  */
 void test_ds_video_hal_l1_setForceHDRMode( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
-    dsHDRStandard_t mode = 0;
+    //dsHDRStandard_t mode = 0; //Fixme: BCM crashing. Avoid unused varible error.
 
 
     //Calling api before open, should give invalid state
@@ -1926,11 +1925,11 @@ void test_ds_video_hal_l1_setForceHDRMode( void )
  */
 void test_ds_video_hal_l1_getColorDepthCapabilities( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
-    unsigned int colorDepthCapability = 0;
+    //unsigned int colorDepthCapability = 0;//Fixme: BCM crashing. Avoid unused variable error.
 
 
     //Calling api before open, should give invalid state
@@ -1976,12 +1975,12 @@ void test_ds_video_hal_l1_getColorDepthCapabilities( void )
  */
 void test_ds_video_hal_l1_getPreferredColorDepth( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
-    dsDisplayColorDepth_t colorDepth;
-    bool persist = true;
+    //dsDisplayColorDepth_t colorDepth;//Fixme: BCM crashing. Aviod unused varible error.
+    //bool persist = true;//Fixme: BCM crashing. Aviod unused varible error.
 
 
     //Calling api before open, should give invalid state
@@ -2029,12 +2028,12 @@ void test_ds_video_hal_l1_getPreferredColorDepth( void )
  */
 void test_ds_video_hal_l1_setPreferredColorDepth( void )
 {
-    int result;
+    int result = dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
-    dsDisplayColorDepth_t colorDepth=0;
-    bool persist = true;
+    //dsDisplayColorDepth_t colorDepth=0;//Fixme: BCM crashing. Avoid unused varible error.
+    //bool persist = true;//Fixme: BCM crashing. Avoid unused varible error.
 
 
     //Calling api before open, should give invalid state

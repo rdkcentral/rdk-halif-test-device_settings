@@ -113,7 +113,6 @@ void test_audio_hal_l1_dsGetAudioEncoding(void)
 {
     dsError_t result;
     dsAudioEncoding_t encoding;
-    int index = 0;
     int handle = 0;
 
     result = dsGetAudioEncoding(handle,&encoding);
@@ -137,7 +136,7 @@ void test_audio_hal_l1_dsGetAudioEncoding(void)
     result = dsGetAudioEncoding(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetAudioEncoding(NULL,&encoding);
+    result = dsGetAudioEncoding(0,&encoding);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -158,7 +157,6 @@ void test_audio_hal_l1_dsGetAudioFormat(void)
 {
     dsError_t result;
     dsAudioFormat_t format;
-    int index = 0;
     int handle = 0;
 
     result = dsGetAudioFormat(handle,&format);
@@ -182,7 +180,7 @@ void test_audio_hal_l1_dsGetAudioFormat(void)
     result = dsGetAudioFormat(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetAudioFormat(NULL,&format);
+    result = dsGetAudioFormat(0,&format);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -203,7 +201,6 @@ void test_audio_hal_l1_dsGetAudioCompression(void)
 {
     dsError_t result;
     int compression;
-    int index = 0;
     int handle = 0;
 
     result = dsGetAudioCompression(handle,&compression);
@@ -227,7 +224,7 @@ void test_audio_hal_l1_dsGetAudioCompression(void)
     result = dsGetAudioCompression(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetAudioCompression(NULL,&compression);
+    result = dsGetAudioCompression(0,&compression);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -248,7 +245,6 @@ void test_audio_hal_l1_dsGetDialogEnhancement(void)
 {
     dsError_t result;
     int level=0;
-    int index = 0;
     int handle = 0;
 
     result = dsGetDialogEnhancement(handle,&level);
@@ -272,7 +268,7 @@ void test_audio_hal_l1_dsGetDialogEnhancement(void)
     result = dsGetDialogEnhancement(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetDialogEnhancement(NULL,&level);
+    result = dsGetDialogEnhancement(0,&level);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -293,7 +289,6 @@ void test_audio_hal_l1_dsGetDolbyVolumeMode(void)
 {
     dsError_t result;
     bool mode=false;
-    int index = 0;
     int handle = 0;
 
     result = dsGetDolbyVolumeMode(handle,&mode);
@@ -317,7 +312,7 @@ void test_audio_hal_l1_dsGetDolbyVolumeMode(void)
     result = dsGetDolbyVolumeMode(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetDolbyVolumeMode(NULL,&mode);
+    result = dsGetDolbyVolumeMode(0,&mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -337,8 +332,7 @@ void test_audio_hal_l1_dsGetDolbyVolumeMode(void)
 void test_audio_hal_l1_dsGetIntelligentEqualizerMode(void)
 {
     dsError_t result;
-    bool mode=false;
-    int index = 0;
+    int mode=0;
     int handle = 0;
 
     result = dsGetIntelligentEqualizerMode(handle,&mode);
@@ -362,7 +356,7 @@ void test_audio_hal_l1_dsGetIntelligentEqualizerMode(void)
     result = dsGetIntelligentEqualizerMode(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetIntelligentEqualizerMode(NULL,&mode);
+    result = dsGetIntelligentEqualizerMode(0,&mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -383,7 +377,6 @@ void test_audio_hal_l1_dsGetVolumeLeveller(void)
 {
     dsError_t result;
     dsVolumeLeveller_t volLeveler;
-    int index = 0;
     int handle = 0;
 
     result = dsGetVolumeLeveller(handle,&volLeveler);
@@ -407,7 +400,7 @@ void test_audio_hal_l1_dsGetVolumeLeveller(void)
     result = dsGetVolumeLeveller(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetVolumeLeveller(NULL,&volLeveler);
+    result = dsGetVolumeLeveller(0,&volLeveler);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -428,7 +421,6 @@ void test_audio_hal_l1_dsGetBassEnhancer(void)
 {
     dsError_t result;
     int boost=0;
-    int index = 0;
     int handle = 0;
 
     result = dsGetBassEnhancer(handle,&boost);
@@ -452,7 +444,7 @@ void test_audio_hal_l1_dsGetBassEnhancer(void)
     result = dsGetBassEnhancer(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetBassEnhancer(NULL,&boost);
+    result = dsGetBassEnhancer(0,&boost);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -473,7 +465,6 @@ void test_audio_hal_l1_dsIsSurroundDecoderEnabled(void)
 {
     dsError_t result;
     bool enabled=false;
-    int index = 0;
     int handle = 0;
 
     result = dsIsSurroundDecoderEnabled(handle,&enabled);
@@ -497,7 +488,7 @@ void test_audio_hal_l1_dsIsSurroundDecoderEnabled(void)
     result = dsIsSurroundDecoderEnabled(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsIsSurroundDecoderEnabled(NULL,&enabled);
+    result = dsIsSurroundDecoderEnabled(0,&enabled);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -518,7 +509,6 @@ void test_audio_hal_l1_dsGetDRCMode(void)
 {
     dsError_t result;
     int mode=0;
-    int index = 0;
     int handle = 0;
 
     result = dsGetDRCMode(handle,&mode);
@@ -542,7 +532,7 @@ void test_audio_hal_l1_dsGetDRCMode(void)
     result = dsGetDRCMode(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetDRCMode(NULL,&mode);
+    result = dsGetDRCMode(0,&mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -563,7 +553,6 @@ void test_audio_hal_l1_dsGetSurroundVirtualizer(void)
 {
     dsError_t result;
     dsSurroundVirtualizer_t virtualizer;
-    int index = 0;
     int handle = 0;
 
     result = dsGetSurroundVirtualizer(handle,&virtualizer);
@@ -587,7 +576,7 @@ void test_audio_hal_l1_dsGetSurroundVirtualizer(void)
     result = dsGetSurroundVirtualizer(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetSurroundVirtualizer(NULL,&virtualizer);
+    result = dsGetSurroundVirtualizer(0,&virtualizer);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -608,7 +597,6 @@ void test_audio_hal_l1_dsGetMISteering(void)
 {
     dsError_t result;
     bool enabled=false;
-    int index = 0;
     int handle = 0;
 
     result = dsGetMISteering(handle,&enabled);
@@ -632,7 +620,7 @@ void test_audio_hal_l1_dsGetMISteering(void)
     result = dsGetMISteering(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetMISteering(NULL,&enabled);
+    result = dsGetMISteering(0,&enabled);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -653,7 +641,6 @@ void test_audio_hal_l1_dsGetGraphicEqualizerMode(void)
 {
     dsError_t result;
     int mode=0;
-    int index = 0;
     int handle = 0;
 
     result = dsGetGraphicEqualizerMode(handle,&mode);
@@ -677,7 +664,7 @@ void test_audio_hal_l1_dsGetGraphicEqualizerMode(void)
     result = dsGetGraphicEqualizerMode(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetGraphicEqualizerMode(NULL,&mode);
+    result = dsGetGraphicEqualizerMode(0,&mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -698,7 +685,6 @@ void test_audio_hal_l1_dsGetMS12AudioProfileList(void)
 {
     dsError_t result;
     dsMS12AudioProfileList_t profiles;
-    int index = 0;
     int handle = 0;
 
     result = dsGetMS12AudioProfileList(handle,&profiles);
@@ -722,52 +708,7 @@ void test_audio_hal_l1_dsGetMS12AudioProfileList(void)
     result = dsGetMS12AudioProfileList(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetMS12AudioProfileList(NULL,&profiles);
-    UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
-    
-    result = dsAudioPortTerm();
-    UT_ASSERT_EQUAL( result, dsERR_NONE);
-}
-
-/**
- * @brief This function will do the unit testing of dsGetMS12AudioProfileList ()
- * This function will ensure underlying API implementation is handling
- * the invalid arguments passed and invalid call sequences to the API
- * dsERR_NONE : will be returned if dsGetMS12AudioProfileList () is called successfully.
- * dsERR_INVALID_PARAM Indicates error due to invalid parameter value.
- * dsERR_INVALID_STATE : will be returned if this api is called before calling dsAudioPortInit()
- * dsERR_OPERATION_NOT_SUPPORTED : Not able to simulate this condition with the UT implementation
- * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
- */
-void test_audio_hal_l1_dsGetMS12AudioProfile(void)
-{
-    dsError_t result;
-    char profiles [50] = {0};
-    int index = 0;
-    int handle = 0;
-
-    result = dsGetMS12AudioProfileList(handle,&profiles);
-    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE  );
-
-    /* Positive result */
-    result = dsAudioPortInit();
-    UT_ASSERT_EQUAL( result, dsERR_NONE );
-
-    for (int i = 0; i > 1; i++)
-    {
-        for(dsAudioPortType_t type = dsAUDIOPORT_TYPE_ID_LR; type < dsAUDIOPORT_TYPE_MAX; type++)
-        {
-            result = dsGetAudioPort(type,i,&handle);
-            UT_ASSERT_EQUAL( result, dsERR_NONE );
-            result = dsGetMS12AudioProfileList(handle,profiles);
-            UT_ASSERT_EQUAL( result, dsERR_NONE );
-        }
-    }
-    /* Passing Invalid Parameter to the function*/
-    result = dsGetMS12AudioProfileList(handle,NULL);
-    UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
-    
-    result = dsGetMS12AudioProfileList(NULL,profiles);
+    result = dsGetMS12AudioProfileList(0,&profiles);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -788,7 +729,6 @@ void test_audio_hal_l1_dsGetSupportedARCTypes(void)
 {
     dsError_t result;
     int types;
-    int index = 0;
     int handle = 0;
 
     result = dsGetSupportedARCTypes(handle,&types);
@@ -812,7 +752,7 @@ void test_audio_hal_l1_dsGetSupportedARCTypes(void)
     result = dsGetSupportedARCTypes(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetSupportedARCTypes(NULL,&types);
+    result = dsGetSupportedARCTypes(0,&types);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -832,7 +772,6 @@ void test_audio_hal_l1_dsAudioSetSAD(void)
 {
     dsError_t result;
     dsAudioSADList_t sad_list;
-    int index = 0;
     int handle = 0;
 
     result = dsAudioSetSAD(handle,sad_list);
@@ -850,7 +789,7 @@ void test_audio_hal_l1_dsAudioSetSAD(void)
         UT_ASSERT_EQUAL( result, dsERR_NONE );
     }
 
-    result = dsAudioSetSAD(NULL,sad_list);
+    result = dsAudioSetSAD(0,sad_list);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     //#TODO: Check and add fucntions unit testing
@@ -871,7 +810,6 @@ void test_audio_hal_l1_dsAudioEnableARC(void)
 {
     dsError_t result;
     dsAudioARCStatus_t arcStatus;
-    int index = 0;
     int handle = 0;
 
     result = dsAudioEnableARC(handle,arcStatus);
@@ -907,7 +845,6 @@ void test_audio_hal_l1_dsGetStereoMode(void)
 {
     dsError_t result;
     dsAudioStereoMode_t stereoMode;
-    int index = 0;
     int handle = 0;
 
     result = dsGetStereoMode(handle,&stereoMode);
@@ -931,7 +868,7 @@ void test_audio_hal_l1_dsGetStereoMode(void)
     result = dsGetStereoMode(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetStereoMode(NULL,&stereoMode);
+    result = dsGetStereoMode(0,&stereoMode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -951,7 +888,6 @@ void test_audio_hal_l1_dsGetStereoAuto(void)
 {
     dsError_t result;
     int autoMode=0;
-    int index = 0;
     int handle = 0;
 
     result = dsGetStereoAuto(handle,&autoMode);
@@ -975,7 +911,7 @@ void test_audio_hal_l1_dsGetStereoAuto(void)
     result = dsGetStereoAuto(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetStereoAuto(NULL,&autoMode);
+    result = dsGetStereoAuto(0,&autoMode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -995,7 +931,6 @@ void test_audio_hal_l1_dsGetAudioGain(void)
 {
     dsError_t result;
     float gain=0.0f;
-    int index = 0;
     int handle = 0;
 
     result = dsGetAudioGain(handle,&gain);
@@ -1020,7 +955,7 @@ void test_audio_hal_l1_dsGetAudioGain(void)
     result = dsGetAudioGain(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetAudioGain(NULL,&gain);
+    result = dsGetAudioGain(0,&gain);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -1040,7 +975,6 @@ void test_audio_hal_l1_dsGetAudioDB(void)
 {
     dsError_t result;
     float db=0.0f;
-    int index = 0;
     int handle = 0;
 
     result = dsGetAudioDB(handle,&db);
@@ -1064,7 +998,7 @@ void test_audio_hal_l1_dsGetAudioDB(void)
     result = dsGetAudioDB(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetAudioDB(NULL,&db);
+    result = dsGetAudioDB(0,&db);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -1084,7 +1018,6 @@ void test_audio_hal_l1_dsGetAudioLevel(void)
 {
     dsError_t result;
     float level=0.0f;
-    int index = 0;
     int handle = 0;
 
     result = dsGetAudioLevel(handle,&level);
@@ -1108,7 +1041,7 @@ void test_audio_hal_l1_dsGetAudioLevel(void)
     result = dsGetAudioLevel(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetAudioLevel(NULL,&level);
+    result = dsGetAudioLevel(0,&level);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -1128,7 +1061,6 @@ void test_audio_hal_l1_dsGetAudioMaxDB(void)
 {
     dsError_t result;
     float db=0.0f;
-    int index = 0;
     int handle = 0;
 
     result = dsGetAudioMaxDB(handle,&db);
@@ -1152,7 +1084,7 @@ void test_audio_hal_l1_dsGetAudioMaxDB(void)
     result = dsGetAudioMaxDB(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetAudioMaxDB(NULL,&db);
+    result = dsGetAudioMaxDB(0,&db);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -1172,7 +1104,6 @@ void test_audio_hal_l1_dsGetAudioMinDB(void)
 {
     dsError_t result;
     float db=0.0f;
-    int index = 0;
     int handle = 0;
 
     result = dsGetAudioMinDB(handle,&db);
@@ -1196,7 +1127,7 @@ void test_audio_hal_l1_dsGetAudioMinDB(void)
     result = dsGetAudioMinDB(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetAudioMinDB(NULL,&db);
+    result = dsGetAudioMinDB(0,&db);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -1216,7 +1147,6 @@ void test_audio_hal_l1_dsGetAudioOptimalLevel(void)
 {
     dsError_t result;
     float optimalLevel=0.0f;
-    int index = 0;
     int handle = 0;
 
     result = dsGetAudioOptimalLevel(handle,&optimalLevel);
@@ -1240,7 +1170,7 @@ void test_audio_hal_l1_dsGetAudioOptimalLevel(void)
     result = dsGetAudioOptimalLevel(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetAudioOptimalLevel(NULL,&optimalLevel);
+    result = dsGetAudioOptimalLevel(0,&optimalLevel);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -1260,7 +1190,6 @@ void test_audio_hal_l1_dsGetAudioDelay(void)
 {
     dsError_t result;
     uint32_t audioDelayMs=0;
-    int index = 0;
     int handle = 0;
 
     result = dsGetAudioDelay(handle,&audioDelayMs);
@@ -1284,7 +1213,7 @@ void test_audio_hal_l1_dsGetAudioDelay(void)
     result = dsGetAudioDelay(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetAudioDelay(NULL,&audioDelayMs);
+    result = dsGetAudioDelay(0,&audioDelayMs);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -1304,7 +1233,6 @@ void test_audio_hal_l1_dsGetAudioDelayOffset(void)
 {
     dsError_t result;
     uint32_t audioDelayOffsetMs=0;
-    int index = 0;
     int handle = 0;
 
     result = dsGetAudioDelayOffset(handle,&audioDelayOffsetMs);
@@ -1328,7 +1256,7 @@ void test_audio_hal_l1_dsGetAudioDelayOffset(void)
     result = dsGetAudioDelayOffset(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetAudioDelayOffset(NULL,&audioDelayOffsetMs);
+    result = dsGetAudioDelayOffset(0,&audioDelayOffsetMs);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -1385,7 +1313,6 @@ void test_audio_hal_l1_dsGetSinkDeviceAtmosCapability(void)
 {
     dsError_t result;
     dsATMOSCapability_t capabilities;
-    int index = 0;
     int handle = 0;
 
     result = dsGetSinkDeviceAtmosCapability(handle,&capabilities);
@@ -1409,7 +1336,7 @@ void test_audio_hal_l1_dsGetSinkDeviceAtmosCapability(void)
     result = dsGetSinkDeviceAtmosCapability(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetSinkDeviceAtmosCapability(NULL,&capabilities);
+    result = dsGetSinkDeviceAtmosCapability(0,&capabilities);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -1429,7 +1356,6 @@ void test_audio_hal_l1_dsIsAudioLoopThru(void)
 {
     dsError_t result;
     bool loopThrough;
-    int index = 0;
     int handle = 0;
 
     result = dsIsAudioLoopThru(handle,&loopThrough);
@@ -1453,7 +1379,7 @@ void test_audio_hal_l1_dsIsAudioLoopThru(void)
     result = dsIsAudioLoopThru(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsIsAudioLoopThru(NULL,&loopThrough);
+    result = dsIsAudioLoopThru(0,&loopThrough);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -1473,7 +1399,6 @@ void test_audio_hal_l1_dsIsAudioMute(void)
 {
     dsError_t result;
     bool muted;
-    int index = 0;
     int handle = 0;
 
     result = dsIsAudioMute(handle,&muted);
@@ -1497,7 +1422,7 @@ void test_audio_hal_l1_dsIsAudioMute(void)
     result = dsIsAudioMute(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsIsAudioMute(NULL,&muted);
+    result = dsIsAudioMute(0,&muted);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -1517,7 +1442,6 @@ void test_audio_hal_l1_dsIsAudioPortEnabled(void)
 {
     dsError_t result;
     bool enabled;
-    int index = 0;
     int handle = 0;
 
     result = dsIsAudioPortEnabled(handle,&enabled);
@@ -1541,7 +1465,7 @@ void test_audio_hal_l1_dsIsAudioPortEnabled(void)
     result = dsIsAudioPortEnabled(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsIsAudioPortEnabled(NULL,&enabled);
+    result = dsIsAudioPortEnabled(0,&enabled);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -1559,9 +1483,8 @@ void test_audio_hal_l1_dsIsAudioPortEnabled(void)
  */
 void test_audio_hal_l1_dsEnableAudioPort(void)
 {
-    dsError_t result;
-    bool enabled;
-    int index = 0;
+    dsError_t result = dsERR_GENERAL;
+    bool enabled = true;
     int handle = 0;
 
     result = dsEnableAudioPort(handle,enabled);
@@ -1582,7 +1505,7 @@ void test_audio_hal_l1_dsEnableAudioPort(void)
         }
     }
     /* Passing Invalid Parameter to the function*/  
-    result = dsEnableAudioPort(NULL,enabled);
+    result = dsEnableAudioPort(0,enabled);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -1600,11 +1523,10 @@ void test_audio_hal_l1_dsEnableAudioPort(void)
  */
 void test_audio_hal_l1_dsEnableMS12Config(void)
 {
-    dsError_t result;
-    bool enabled;
-    int index = 0;
+    dsError_t result = dsERR_GENERAL;
+    bool enabled = true;
     int handle = 0;
-    dsMS12FEATURE_t feature;
+    dsMS12FEATURE_t feature = dsMS12FEATURE_DAPV2;
 
     result = dsEnableMS12Config(handle,feature, enabled);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
@@ -1624,7 +1546,7 @@ void test_audio_hal_l1_dsEnableMS12Config(void)
         }
     }
     /* Passing Invalid Parameter to the function*/  
-    result = dsEnableMS12Config(NULL,feature, enabled);
+    result = dsEnableMS12Config(0,feature, enabled);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -1643,8 +1565,7 @@ void test_audio_hal_l1_dsEnableMS12Config(void)
 void test_audio_hal_l1_dsEnableLEConfig(void)
 {
     dsError_t result;
-    bool enabled;
-    int index = 0;
+    bool enabled = true;
     int handle = 0;
 
     result = dsEnableLEConfig(handle,enabled);
@@ -1665,7 +1586,7 @@ void test_audio_hal_l1_dsEnableLEConfig(void)
         }
     }
     /* Passing Invalid Parameter to the function*/  
-    result = dsEnableLEConfig(NULL,enabled);
+    result = dsEnableLEConfig(0,enabled);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -1685,7 +1606,6 @@ void test_audio_hal_l1_dsGetLEConfig(void)
 {
     dsError_t result;
     bool enabled;
-    int index = 0;
     int handle = 0;
 
     result = dsGetLEConfig(handle,&enabled);
@@ -1709,7 +1629,7 @@ void test_audio_hal_l1_dsGetLEConfig(void)
     result = dsGetLEConfig(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetLEConfig(NULL,&enabled);
+    result = dsGetLEConfig(0,&enabled);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -1729,7 +1649,6 @@ void test_audio_hal_l1_dsSetAudioEncoding(void)
 {
     dsError_t result;
     bool enabled = false;
-    int index = 0;
     int handle = 0;
 
     result = dsSetAudioEncoding(handle,true);
@@ -1754,7 +1673,7 @@ void test_audio_hal_l1_dsSetAudioEncoding(void)
     result = dsSetAudioEncoding(handle, INT_MAX);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsSetAudioEncoding(NULL,enabled);
+    result = dsSetAudioEncoding(0,enabled);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -1774,7 +1693,6 @@ void test_audio_hal_l1_dsSetAudioCompression(void)
 {
     dsError_t result;
     int compression = 1;
-    int index = 0;
     int handle = 0;
 
     result = dsSetAudioCompression(handle,compression);
@@ -1794,13 +1712,11 @@ void test_audio_hal_l1_dsSetAudioCompression(void)
             UT_ASSERT_EQUAL( result, dsERR_NONE );
         }
     }
-    result = dsSetAudioCompression(handle,NULL);
-    UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsSetAudioCompression(handle,-1);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsSetAudioCompression(NULL,compression);
+    result = dsSetAudioCompression(0,compression);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -1820,7 +1736,6 @@ void test_audio_hal_l1_dsSetDialogEnhancement(void)
 {
     dsError_t result;
     int level = 1;
-    int index = 0;
     int handle = 0;
 
     result = dsSetDialogEnhancement(handle,level);
@@ -1840,13 +1755,11 @@ void test_audio_hal_l1_dsSetDialogEnhancement(void)
             UT_ASSERT_EQUAL( result, dsERR_NONE );
         }
     }
-    result = dsSetDialogEnhancement(handle,NULL);
-    UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsSetDialogEnhancement(handle,-1);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsSetDialogEnhancement(NULL,level);
+    result = dsSetDialogEnhancement(0,level);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -1866,7 +1779,6 @@ void test_audio_hal_l1_dsSetDolbyVolumeMode(void)
 {
     dsError_t result;
     bool mode = true;
-    int index = 0;
     int handle = 0;
 
     result = dsSetDolbyVolumeMode(handle,mode);
@@ -1889,7 +1801,7 @@ void test_audio_hal_l1_dsSetDolbyVolumeMode(void)
     result = dsSetDolbyVolumeMode(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    result = dsSetDolbyVolumeMode(NULL,mode);
+    result = dsSetDolbyVolumeMode(0,mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -1909,7 +1821,6 @@ void test_audio_hal_l1_dsSetIntelligentEqualizerMode(void)
 {
     dsError_t result;
     int mode = 1;
-    int index = 0;
     int handle = 0;
 
     result = dsSetIntelligentEqualizerMode(handle,mode);
@@ -1929,10 +1840,7 @@ void test_audio_hal_l1_dsSetIntelligentEqualizerMode(void)
             UT_ASSERT_EQUAL( result, dsERR_NONE );
         }
     }
-    result = dsSetIntelligentEqualizerMode(handle,NULL);
-    UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
-
-    result = dsSetIntelligentEqualizerMode(NULL,mode);
+    result = dsSetIntelligentEqualizerMode(0,mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsSetIntelligentEqualizerMode(handle,-1);
@@ -1958,7 +1866,6 @@ void test_audio_hal_l1_dsSetVolumeLeveller(void)
 {
     dsError_t result;
     dsVolumeLeveller_t mode;
-    int index = 0;
     int handle = 0;
     mode.mode = 0;
     mode.level = 10;
@@ -1981,7 +1888,7 @@ void test_audio_hal_l1_dsSetVolumeLeveller(void)
         }
     }
 
-    result = dsSetVolumeLeveller(NULL,mode);
+    result = dsSetVolumeLeveller(0,mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsAudioPortTerm();
@@ -2001,7 +1908,6 @@ void test_audio_hal_l1_dsSetBassEnhancer(void)
 {
     dsError_t result;
     int mode = 1;
-    int index = 0;
     int handle = 0;
 
     result = dsSetBassEnhancer(handle,mode);
@@ -2021,10 +1927,7 @@ void test_audio_hal_l1_dsSetBassEnhancer(void)
             UT_ASSERT_EQUAL( result, dsERR_NONE );
         }
     }
-    result = dsSetBassEnhancer(handle,NULL);
-    UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
-
-    result = dsSetBassEnhancer(NULL,mode);
+    result = dsSetBassEnhancer(0,mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -2044,7 +1947,6 @@ void test_audio_hal_l1_dsEnableSurroundDecoder(void)
 {
     dsError_t result;
     bool mode = true;
-    int index = 0;
     int handle = 0;
 
     result = dsEnableSurroundDecoder(handle,mode);
@@ -2067,7 +1969,7 @@ void test_audio_hal_l1_dsEnableSurroundDecoder(void)
     result = dsEnableSurroundDecoder(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    result = dsEnableSurroundDecoder(NULL,mode);
+    result = dsEnableSurroundDecoder(0,mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsAudioPortTerm();
@@ -2087,7 +1989,6 @@ void test_audio_hal_l1_dsSetDRCMode(void)
 {
     dsError_t result;
     int mode = 1;
-    int index = 0;
     int handle = 0;
 
     result = dsSetDRCMode(handle,mode);
@@ -2107,10 +2008,7 @@ void test_audio_hal_l1_dsSetDRCMode(void)
             UT_ASSERT_EQUAL( result, dsERR_NONE );
         }
     }
-    result = dsSetDRCMode(handle,NULL);
-    UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
-
-    result = dsSetDRCMode(NULL,mode);
+    result = dsSetDRCMode(0,mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsSetDRCMode(handle,-1);
@@ -2136,7 +2034,6 @@ void test_audio_hal_l1_dsSetSurroundVirtualizer(void)
 {
     dsError_t result;
     dsSurroundVirtualizer_t mode;
-    int index = 0;
     int handle = 0;
     mode.mode = 1;
     mode.boost =1;
@@ -2159,7 +2056,7 @@ void test_audio_hal_l1_dsSetSurroundVirtualizer(void)
         }
     }
 
-    result = dsSetSurroundVirtualizer(NULL,mode);
+    result = dsSetSurroundVirtualizer(0,mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -2179,7 +2076,6 @@ void test_audio_hal_l1_dsSetMISteering(void)
 {
     dsError_t result;
     bool mode = false;
-    int index = 0;
     int handle = 0;
 
     result = dsSetMISteering(handle,mode);
@@ -2202,7 +2098,7 @@ void test_audio_hal_l1_dsSetMISteering(void)
     result = dsSetMISteering(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    result = dsSetMISteering(NULL,mode);
+    result = dsSetMISteering(0,mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -2222,7 +2118,6 @@ void test_audio_hal_l1_dsSetGraphicEqualizerMode(void)
 {
     dsError_t result;
     int mode = 1;
-    int index = 0;
     int handle = 0;
 
     result = dsSetGraphicEqualizerMode(handle,mode);
@@ -2242,10 +2137,7 @@ void test_audio_hal_l1_dsSetGraphicEqualizerMode(void)
             UT_ASSERT_EQUAL( result, dsERR_NONE );
         }
     }
-    result = dsSetGraphicEqualizerMode(handle,NULL);
-    UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
-
-    result = dsSetGraphicEqualizerMode(NULL,mode);
+    result = dsSetGraphicEqualizerMode(0,mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsSetGraphicEqualizerMode(handle,-1);
@@ -2270,11 +2162,10 @@ void test_audio_hal_l1_dsSetGraphicEqualizerMode(void)
 void test_audio_hal_l1_dsSetMS12AudioProfile(void)
 {
     dsError_t result;
-    char mode = 0x01;
-    int index = 0;
+    char* mode = "auto";
     int handle = 0;
 
-    result = dsSetMS12AudioProfile(handle,mode);
+    result = dsSetMS12AudioProfile(handle, mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
 
     /* Positive result */
@@ -2291,10 +2182,7 @@ void test_audio_hal_l1_dsSetMS12AudioProfile(void)
             UT_ASSERT_EQUAL( result, dsERR_NONE );
         }
     }
-    result = dsSetMS12AudioProfile(handle,NULL);
-    UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
-
-    result = dsSetMS12AudioProfile(NULL,mode);
+    result = dsSetMS12AudioProfile(0,mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -2314,7 +2202,6 @@ void test_audio_hal_l1_dsSetStereoMode(void)
 {
     dsError_t result;
     dsAudioStereoMode_t mode = dsAUDIO_STEREO_MONO;
-    int index = 0;
     int handle = 0;
 
     result = dsSetStereoMode(handle,mode);
@@ -2337,7 +2224,7 @@ void test_audio_hal_l1_dsSetStereoMode(void)
     result = dsSetStereoMode(handle, INT_MAX);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    result = dsSetStereoMode(NULL,mode);
+    result = dsSetStereoMode(0,mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsSetStereoMode(handle,dsAUDIO_STEREO_UNKNOWN);
@@ -2363,7 +2250,6 @@ void test_audio_hal_l1_dsSetStereoAuto(void)
 {
     dsError_t result;
     int mode = 1;
-    int index = 0;
     int handle = 0;
 
     result = dsSetStereoAuto(handle,mode);
@@ -2383,10 +2269,7 @@ void test_audio_hal_l1_dsSetStereoAuto(void)
             UT_ASSERT_EQUAL( result, dsERR_NONE );
         }
     }
-    result = dsSetStereoAuto(handle,NULL);
-    UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
-
-    result = dsSetStereoAuto(NULL,mode);
+    result = dsSetStereoAuto(0,mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsSetStereoAuto(handle,-1);
@@ -2412,7 +2295,6 @@ void test_audio_hal_l1_dsSetAudioGain(void)
 {
     dsError_t result;
     float mode = 1.0f;
-    int index = 0;
     int handle = 0;
 
     result = dsSetAudioGain(handle,mode);
@@ -2435,7 +2317,7 @@ void test_audio_hal_l1_dsSetAudioGain(void)
     result = dsSetAudioGain(handle, INT_MAX);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    result = dsSetAudioGain(NULL,mode);
+    result = dsSetAudioGain(0,mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -2455,7 +2337,6 @@ void test_audio_hal_l1_dsSetAudioDB(void)
 {
     dsError_t result;
     float mode = 1.0f;
-    int index = 0;
     int handle = 0;
 
     result = dsSetAudioDB(handle,mode);
@@ -2478,7 +2359,7 @@ void test_audio_hal_l1_dsSetAudioDB(void)
     result = dsSetAudioDB(handle, INT_MAX);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    result = dsSetAudioDB(NULL,mode);
+    result = dsSetAudioDB(0,mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -2498,7 +2379,6 @@ void test_audio_hal_l1_dsSetAudioLevel(void)
 {
     dsError_t result;
     float mode = 1.0f;
-    int index = 0;
     int handle = 0;
 
     result = dsSetAudioLevel(handle,mode);
@@ -2521,7 +2401,7 @@ void test_audio_hal_l1_dsSetAudioLevel(void)
     result = dsSetAudioLevel(handle, INT_MAX);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    result = dsSetAudioLevel(NULL,mode);
+    result = dsSetAudioLevel(0,mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -2540,10 +2420,8 @@ void test_audio_hal_l1_dsSetAudioLevel(void)
 void test_audio_hal_l1_dsSetAudioDucking(void)
 {
     dsError_t result;
-    int index = 0;
     int handle = 0;
     dsAudioDuckingAction_t action = 0;
-    dsAudioDuckingType_t type = dsAUDIO_DUCKINGTYPE_ABSOLUTE;
     const unsigned char level = 1;
     /* Positive result */
     result = dsAudioPortInit();
@@ -2561,13 +2439,10 @@ void test_audio_hal_l1_dsSetAudioDucking(void)
             UT_ASSERT_EQUAL( result, dsERR_NONE );
         }
     }
-    result = dsSetAudioDucking(NULL, action, dsAUDIO_DUCKINGTYPE_RELATIVE, level);
+    result = dsSetAudioDucking(0, action, dsAUDIO_DUCKINGTYPE_RELATIVE, level);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsSetAudioDucking(handle, action, INT_MAX, level);
-    UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
-    
-    result = dsSetAudioDucking(handle, action, dsAUDIO_DUCKINGTYPE_RELATIVE,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -2587,7 +2462,6 @@ void test_audio_hal_l1_dsEnableLoopThru(void)
 {
     dsError_t result;
     bool mode = true;
-    int index = 0;
     int handle = 0;
 
     result = dsEnableLoopThru(handle,mode);
@@ -2610,7 +2484,7 @@ void test_audio_hal_l1_dsEnableLoopThru(void)
     result = dsEnableLoopThru(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    result = dsEnableLoopThru(NULL,mode);
+    result = dsEnableLoopThru(0,mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -2630,7 +2504,6 @@ void test_audio_hal_l1_dsSetAudioMute(void)
 {
     dsError_t result;
     bool mode = true;
-    int index = 0;
     int handle = 0;
 
     result = dsSetAudioMute(handle,mode);
@@ -2653,7 +2526,7 @@ void test_audio_hal_l1_dsSetAudioMute(void)
     result = dsSetAudioMute(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    result = dsSetAudioMute(NULL,mode);
+    result = dsSetAudioMute(0,mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -2673,7 +2546,6 @@ void test_audio_hal_l1_dsIsAudioMSDecode(void)
 {
     dsError_t result;
     bool HasMs11Decode;
-    int index = 0;
     int handle = 0;
 
     result = dsIsAudioMSDecode(handle,&HasMs11Decode);
@@ -2697,7 +2569,7 @@ void test_audio_hal_l1_dsIsAudioMSDecode(void)
     result = dsIsAudioMSDecode(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsIsAudioMSDecode(NULL,&HasMs11Decode);
+    result = dsIsAudioMSDecode(0,&HasMs11Decode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -2717,7 +2589,6 @@ void test_audio_hal_l1_dsIsAudioMS12Decode(void)
 {
     dsError_t result;
     bool HasMs12Decode;
-    int index = 0;
     int handle = 0;
 
     result = dsIsAudioMS12Decode(handle,&HasMs12Decode);
@@ -2741,7 +2612,7 @@ void test_audio_hal_l1_dsIsAudioMS12Decode(void)
     result = dsIsAudioMS12Decode(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsIsAudioMS12Decode(NULL,&HasMs12Decode);
+    result = dsIsAudioMS12Decode(0,&HasMs12Decode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -2761,7 +2632,6 @@ void test_audio_hal_l1_dsSetAudioDelay(void)
 {
     dsError_t result;
     uint32_t mode = 10;
-    int index = 0;
     int handle = 0;
 
     result = dsSetAudioDelay(handle,mode);
@@ -2781,10 +2651,7 @@ void test_audio_hal_l1_dsSetAudioDelay(void)
             UT_ASSERT_EQUAL( result, dsERR_NONE );
         }
     }
-    result = dsSetAudioDelay(handle,NULL);
-    UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
-
-    result = dsSetAudioDelay(NULL,mode);
+    result = dsSetAudioDelay(0,mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -2804,7 +2671,6 @@ void test_audio_hal_l1_dsSetAudioDelayOffset(void)
 {
     dsError_t result;
     uint32_t mode = 10;
-    int index = 0;
     int handle = 0;
 
     result = dsSetAudioDelayOffset(handle,mode);
@@ -2824,10 +2690,7 @@ void test_audio_hal_l1_dsSetAudioDelayOffset(void)
             UT_ASSERT_EQUAL( result, dsERR_NONE );
         }
     }
-    result = dsSetAudioDelayOffset(handle,NULL);
-    UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
-
-    result = dsSetAudioDelayOffset(NULL,mode);
+    result = dsSetAudioDelayOffset(0,mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -2847,7 +2710,6 @@ void test_audio_hal_l1_dsAudioOutIsConnected(void)
 {
     dsError_t result;
     bool isCon;
-    int index = 0;
     int handle = 0;
 
     result = dsAudioOutIsConnected(handle,&isCon);
@@ -2871,7 +2733,7 @@ void test_audio_hal_l1_dsAudioOutIsConnected(void)
     result = dsAudioOutIsConnected(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsAudioOutIsConnected(NULL,&isCon);
+    result = dsAudioOutIsConnected(0,&isCon);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -2887,7 +2749,7 @@ void test_audio_hal_l1_dsAudioOutIsConnected(void)
  */
 void test_audio_hal_l1_dsAudioOutRegisterConnectCB(void)
 {
-    dsError_t result;
+    dsError_t result = dsERR_GENERAL;
     //TODO:
     UT_ASSERT_EQUAL( result, dsERR_NONE);
 }
@@ -2901,7 +2763,7 @@ void test_audio_hal_l1_dsAudioOutRegisterConnectCB(void)
  */
 void test_audio_hal_l1_dsAudioFormatUpdateRegisterCB(void)
 {
-    dsError_t result;
+    dsError_t result = dsERR_GENERAL;
     //TODO:
     UT_ASSERT_EQUAL( result, dsERR_NONE);
 }
@@ -2919,7 +2781,6 @@ void test_audio_hal_l1_dsGetAudioCapabilities(void)
 {
     dsError_t result;
     int capabilites;
-    int index = 0;
     int handle = 0;
 
     result = dsGetAudioCapabilities(handle,&capabilites);
@@ -2943,7 +2804,7 @@ void test_audio_hal_l1_dsGetAudioCapabilities(void)
     result = dsGetAudioCapabilities(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetAudioCapabilities(NULL,&capabilites);
+    result = dsGetAudioCapabilities(0,&capabilites);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -2963,7 +2824,6 @@ void test_audio_hal_l1_dsGetMS12Capabilities(void)
 {
     dsError_t result;
     int capabilites;
-    int index = 0;
     int handle = 0;
 
     result = dsGetMS12Capabilities(handle,&capabilites);
@@ -2987,7 +2847,7 @@ void test_audio_hal_l1_dsGetMS12Capabilities(void)
     result = dsGetMS12Capabilities(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetMS12Capabilities(NULL,&capabilites);
+    result = dsGetMS12Capabilities(0,&capabilites);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -3006,7 +2866,6 @@ void test_audio_hal_l1_dsGetMS12Capabilities(void)
 void test_audio_hal_l1_dsResetDialogEnhancement(void)
 {
     dsError_t result;
-    int index = 0;
     int handle = 0;
 
     result = dsResetDialogEnhancement(handle);
@@ -3027,7 +2886,7 @@ void test_audio_hal_l1_dsResetDialogEnhancement(void)
         }
     }
     /* Passing Invalid Parameter to the function*/
-    result = dsResetDialogEnhancement(NULL);
+    result = dsResetDialogEnhancement(0);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -3046,7 +2905,6 @@ void test_audio_hal_l1_dsResetDialogEnhancement(void)
 void test_audio_hal_l1_dsResetBassEnhancer(void)
 {
     dsError_t result;
-    int index = 0;
     int handle = 0;
 
     result = dsResetBassEnhancer(handle);
@@ -3067,7 +2925,7 @@ void test_audio_hal_l1_dsResetBassEnhancer(void)
         }
     }
     /* Passing Invalid Parameter to the function*/
-    result = dsResetBassEnhancer(NULL);
+    result = dsResetBassEnhancer(0);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -3086,7 +2944,6 @@ void test_audio_hal_l1_dsResetBassEnhancer(void)
 void test_audio_hal_l1_dsResetSurroundVirtualizer(void)
 {
     dsError_t result;
-    int index = 0;
     int handle = 0;
 
     result = dsResetSurroundVirtualizer(handle);
@@ -3107,7 +2964,7 @@ void test_audio_hal_l1_dsResetSurroundVirtualizer(void)
         }
     }
     /* Passing Invalid Parameter to the function*/
-    result = dsResetSurroundVirtualizer(NULL);
+    result = dsResetSurroundVirtualizer(0);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -3126,7 +2983,6 @@ void test_audio_hal_l1_dsResetSurroundVirtualizer(void)
 void test_audio_hal_l1_dsResetVolumeLeveller(void)
 {
     dsError_t result;
-    int index = 0;
     int handle = 0;
 
     result = dsResetVolumeLeveller(handle);
@@ -3147,7 +3003,7 @@ void test_audio_hal_l1_dsResetVolumeLeveller(void)
         }
     }
     /* Passing Invalid Parameter to the function*/
-    result = dsResetVolumeLeveller(NULL);
+    result = dsResetVolumeLeveller(0);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -3183,7 +3039,6 @@ void test_audio_hal_l1_dsSetAssociatedAudioMixing(void)
 {
     dsError_t result;
     bool mode = true;
-    int index = 0;
     int handle = 0;
 
     result = dsSetAssociatedAudioMixing(handle,mode);
@@ -3206,7 +3061,7 @@ void test_audio_hal_l1_dsSetAssociatedAudioMixing(void)
     result = dsSetAssociatedAudioMixing(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    result = dsSetAssociatedAudioMixing(NULL,mode);
+    result = dsSetAssociatedAudioMixing(0,mode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -3226,7 +3081,6 @@ void test_audio_hal_l1_dsGetAssociatedAudioMixing(void)
 {
     dsError_t result;
     bool mixing;
-    int index = 0;
     int handle = 0;
 
     result = dsGetAssociatedAudioMixing(handle,&mixing);
@@ -3250,7 +3104,7 @@ void test_audio_hal_l1_dsGetAssociatedAudioMixing(void)
     result = dsGetAssociatedAudioMixing(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetAssociatedAudioMixing(NULL,&mixing);
+    result = dsGetAssociatedAudioMixing(0,&mixing);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -3270,7 +3124,6 @@ void test_audio_hal_l1_dsSetFaderControl(void)
 {
     dsError_t result;
     int mixerControl = 1;
-    int index = 0;
     int handle = 0;
 
     result = dsSetFaderControl(handle,mixerControl);
@@ -3290,10 +3143,7 @@ void test_audio_hal_l1_dsSetFaderControl(void)
             UT_ASSERT_EQUAL( result, dsERR_NONE );
         }
     }
-    result = dsSetFaderControl(handle,NULL);
-    UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
-
-    result = dsSetFaderControl(NULL,mixerControl);
+    result = dsSetFaderControl(0,mixerControl);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsSetFaderControl(handle,-1);
@@ -3319,7 +3169,6 @@ void test_audio_hal_l1_dsGetFaderControl(void)
 {
     dsError_t result;
     int mixerbalance;
-    int index = 0;
     int handle = 0;
 
     result = dsGetFaderControl(handle,&mixerbalance);
@@ -3343,7 +3192,7 @@ void test_audio_hal_l1_dsGetFaderControl(void)
     result = dsGetFaderControl(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetFaderControl(NULL,&mixerbalance);
+    result = dsGetFaderControl(0,&mixerbalance);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -3363,7 +3212,6 @@ void test_audio_hal_l1_dsSetPrimaryLanguage(void)
 {
     dsError_t result;
     char pLang[25] = "ENGLISH";
-    int index = 0;
     int handle = 0;
 
     result = dsSetPrimaryLanguage(handle,pLang);
@@ -3386,7 +3234,7 @@ void test_audio_hal_l1_dsSetPrimaryLanguage(void)
     result = dsSetPrimaryLanguage(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    result = dsSetPrimaryLanguage(NULL,pLang);
+    result = dsSetPrimaryLanguage(0,pLang);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -3406,7 +3254,6 @@ void test_audio_hal_l1_dsGetPrimaryLanguage(void)
 {
     dsError_t result;
     char lang[100]={0};
-    int index = 0;
     int handle = 0;
 
     result = dsGetPrimaryLanguage(handle,lang);
@@ -3430,7 +3277,7 @@ void test_audio_hal_l1_dsGetPrimaryLanguage(void)
     result = dsGetPrimaryLanguage(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetPrimaryLanguage(NULL,lang);
+    result = dsGetPrimaryLanguage(0,lang);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -3450,7 +3297,6 @@ void test_audio_hal_l1_dsSetSecondaryLanguage(void)
 {
     dsError_t result;
     char sLang[25] = "ENGLISH";
-    int index = 0;
     int handle = 0;
 
     result = dsSetSecondaryLanguage(handle,sLang);
@@ -3473,7 +3319,7 @@ void test_audio_hal_l1_dsSetSecondaryLanguage(void)
     result = dsSetSecondaryLanguage(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    result = dsSetSecondaryLanguage(NULL, sLang);
+    result = dsSetSecondaryLanguage(0, sLang);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -3493,7 +3339,6 @@ void test_audio_hal_l1_dsGetSecondaryLanguage(void)
 {
     dsError_t result;
     char lang[100] = {0};
-    int index = 0;
     int handle = 0;
 
     result = dsGetSecondaryLanguage(handle,lang);
@@ -3517,7 +3362,7 @@ void test_audio_hal_l1_dsGetSecondaryLanguage(void)
     result = dsGetSecondaryLanguage(handle,NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsGetSecondaryLanguage(NULL,lang);
+    result = dsGetSecondaryLanguage(0,lang);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();
@@ -3586,7 +3431,6 @@ int audio_l1_register( void )
     UT_add_test( pSuite, "l1_dsGetMISteering", test_audio_hal_l1_dsGetMISteering);
     UT_add_test( pSuite, "l1_dsGetGraphicEqualizerMode", test_audio_hal_l1_dsGetGraphicEqualizerMode);
     UT_add_test( pSuite, "l1_dsGetMS12AudioProfileList", test_audio_hal_l1_dsGetMS12AudioProfileList);
-    UT_add_test( pSuite, "l1_dsGetMS12AudioProfile", test_audio_hal_l1_dsGetMS12AudioProfile);
     UT_add_test( pSuite, "l1_dsGetSupportedARCTypes", test_audio_hal_l1_dsGetSupportedARCTypes);
     UT_add_test( pSuite, "l1_dsAudioSetSAD", test_audio_hal_l1_dsAudioSetSAD);
     UT_add_test( pSuite, "l1_dsAudioEnableARC", test_audio_hal_l1_dsAudioEnableARC);

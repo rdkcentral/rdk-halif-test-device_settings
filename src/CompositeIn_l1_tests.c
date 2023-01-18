@@ -59,7 +59,6 @@ void test_compositeIn_hal_l1_dsCompositeInInit(void)
 void test_compositeIn_hal_l1_dsCompositeInGetNumberOfInputs(void)
 {
     dsError_t result;
-    dsAudioPortType_t type = dsAUDIOPORT_TYPE_ID_LR;
     uint8_t numberOfInputs = 0;
     
     //Calling before init should fail.
@@ -94,7 +93,6 @@ void test_compositeIn_hal_l1_dsCompositeInGetNumberOfInputs(void)
 void test_compositeIn_hal_l1_dsCompositeInGetStatus(void)
 {
     dsError_t result;
-    dsAudioPortType_t type = dsAUDIOPORT_TYPE_ID_LR;
     dsCompositeInStatus_t status;
 
     //Calling before init should fail.
@@ -128,8 +126,6 @@ void test_compositeIn_hal_l1_dsCompositeInGetStatus(void)
 void test_compositeIn_hal_l1_dsCompositeInSelectPort(void)
 {
     dsError_t result;
-    dsAudioPortType_t type = dsAUDIOPORT_TYPE_ID_LR;
-    dsCompositeInStatus_t status;
 
     result = dsCompositeInSelectPort(0);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );

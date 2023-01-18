@@ -33,7 +33,7 @@
  */
 void test_hdmiIn_hal_l1_dsHdmiInInit(void)
 {
-    dsError_t result;
+    dsError_t result=dsERR_GENERAL;
     /* Positive result */
     result = dsHdmiInInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -58,8 +58,8 @@ void test_hdmiIn_hal_l1_dsHdmiInInit(void)
  */
 void test_hdmiIn_hal_l1_dsHdmiInGetNumberOfInputs(void)
 {
-    dsError_t result;
-    uint8_t count;
+    dsError_t result=dsERR_GENERAL;
+    uint8_t count = 0;
 
     result = dsHdmiInGetNumberOfInputs(&count);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
@@ -89,7 +89,7 @@ void test_hdmiIn_hal_l1_dsHdmiInGetNumberOfInputs(void)
  */
 void test_hdmiIn_hal_l1_dsHdmiInGetStatus(void)
 {
-    dsError_t result;
+    dsError_t result=dsERR_GENERAL;
     dsHdmiInStatus_t status;
 
     result = dsHdmiInGetStatus(&status);
@@ -120,8 +120,8 @@ void test_hdmiIn_hal_l1_dsHdmiInGetStatus(void)
  */
 void test_hdmiIn_hal_l1_dsHdmiInSelectPort(void)
 {
-    dsError_t result;
-    dsHdmiInPort_t port;
+    dsError_t result=dsERR_GENERAL;
+    dsHdmiInPort_t port = dsHDMI_IN_PORT_0;
 
     result = dsHdmiInSelectPort(port);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
@@ -157,7 +157,7 @@ void test_hdmiIn_hal_l1_dsHdmiInSelectPort(void)
  */
 void test_hdmiIn_hal_l1_dsHdmiInScaleVideo(void)
 {
-    dsError_t result;
+    dsError_t result=dsERR_GENERAL;
     int32_t x=0, y=0, width =1920, height =1080;
 
     result = dsHdmiInScaleVideo(x,y,width,height);    
@@ -192,8 +192,8 @@ void test_hdmiIn_hal_l1_dsHdmiInScaleVideo(void)
  */
 void test_hdmiIn_hal_l1_dsHdmiInSelectZoomMode(void)
 {
-    dsError_t result;
-    dsVideoZoom_t zoom;
+    dsError_t result=dsERR_GENERAL;
+    dsVideoZoom_t zoom = dsVIDEO_ZOOM_NONE;
 
     result = dsHdmiInSelectZoomMode(zoom);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
@@ -226,7 +226,7 @@ void test_hdmiIn_hal_l1_dsHdmiInSelectZoomMode(void)
  */
 void test_hdmiIn_hal_l1_dsHdmiInPauseAudio(void)
 {
-    dsError_t result;
+    dsError_t result=dsERR_GENERAL;
 
     result = dsHdmiInPauseAudio();
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
@@ -255,7 +255,7 @@ void test_hdmiIn_hal_l1_dsHdmiInPauseAudio(void)
  */
 void test_hdmiIn_hal_l1_dsHdmiInResumeAudio(void)
 {
-    dsError_t result;
+    dsError_t result=dsERR_GENERAL;
 
     result = dsHdmiInResumeAudio();
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
@@ -284,7 +284,7 @@ void test_hdmiIn_hal_l1_dsHdmiInResumeAudio(void)
  */
 void test_hdmiIn_hal_l1_dsHdmiInGetCurrentVideoMode(void)
 {
-    dsError_t result;
+    dsError_t result=dsERR_GENERAL;
     dsVideoPortResolution_t resolution;
 
     result = dsHdmiInGetCurrentVideoMode(&resolution);

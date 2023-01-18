@@ -32,7 +32,7 @@
  */
 void test_videodevice_hal_l1_init(void)
 {
-    dsError_t result;
+    dsError_t result = dsERR_GENERAL;
     /* Positive result */
     result = dsVideoDeviceInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
@@ -58,7 +58,7 @@ void test_videodevice_hal_l1_init(void)
  */
 void test_videodevice_hal_l1_dsGetVideoDevice(void)
 {
-    dsError_t result;
+    dsError_t result = dsERR_GENERAL;
     int index = 0;
     int* handle = NULL;
     handle = malloc(sizeof(int));
@@ -106,7 +106,7 @@ void test_videodevice_hal_l1_dsGetVideoDevice(void)
  */
 void test_videodevice_hal_l1_dsSetDFC(void)
 {
-    dsError_t result;
+    dsError_t result = dsERR_GENERAL;
     int index = 0;
     int handle = 0;
 
@@ -157,18 +157,12 @@ void test_videodevice_hal_l1_dsSetDFC(void)
  */
 void test_videodevice_hal_l1_dsGetDFC(void)
 {
-    dsError_t result;
+    dsError_t result = dsERR_GENERAL;
     int index = 0;
     int handle = 0;
-    dsVideoZoom_t* dfc = NULL;
+    dsVideoZoom_t dfc = dsVIDEO_ZOOM_NONE;
 
-    dfc = malloc(sizeof(dsVideoZoom_t));
-    if(dfc == NULL)
-    {
-        return;
-    }
-
-    result = dsGetDFC(handle,dfc);
+    result = dsGetDFC(handle, &dfc);
     UT_ASSERT_EQUAL( result , dsERR_INVALID_STATE );
 
     /* Positive result */
@@ -180,7 +174,7 @@ void test_videodevice_hal_l1_dsGetDFC(void)
     for(dsVideoZoom_t i = dsVIDEO_ZOOM_FULL; i < dsVIDEO_ZOOM_MAX;i++)
     {    
         result = dsSetDFC(handle,i);
-        result = dsGetDFC(handle,dfc);
+        result = dsGetDFC(handle, &dfc);
         UT_ASSERT_EQUAL( result , dsERR_NONE );
         UT_ASSERT_EQUAL( dfc, i );
     }
@@ -188,12 +182,10 @@ void test_videodevice_hal_l1_dsGetDFC(void)
     /* Passing Invalid Parameter to the function*/
     // Passing invalid index
     
-    result = dsGetDFC(0,dfc);
+    result = dsGetDFC(0, &dfc);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    free(dfc);
-    dfc = NULL;
-    result = dsGetDFC(handle,dfc);
+    result = dsGetDFC(handle, NULL);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     /*calling hdmicec_init second time should pass and return the valid pointer*/
@@ -213,7 +205,7 @@ void test_videodevice_hal_l1_dsGetDFC(void)
  */
 void test_videodevice_hal_l1_dsGetHDRCapabilities(void)
 {
-    dsError_t result;
+    dsError_t result = dsERR_GENERAL;
     int capabilities = 0;
     int index = 0;
     int handle = 0;
@@ -232,7 +224,7 @@ void test_videodevice_hal_l1_dsGetHDRCapabilities(void)
     UT_ASSERT_EQUAL( result, dsERR_NONE );
 
     /* Passing Invalid Parameter to the function*/
-    result = dsGetHDRCapabilities(NULL,&capabilities);
+    result = dsGetHDRCapabilities(0,&capabilities);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsGetHDRCapabilities(handle,NULL);
@@ -255,7 +247,7 @@ void test_videodevice_hal_l1_dsGetHDRCapabilities(void)
  */
 void test_videodevice_hal_l1_dsGetSupportedVideoCodingFormats(void)
 {
-    dsError_t result;
+    dsError_t result = dsERR_GENERAL;
     unsigned int supported_formats = 0;
     int index = 0;
     int handle = 0;
@@ -274,7 +266,7 @@ void test_videodevice_hal_l1_dsGetSupportedVideoCodingFormats(void)
     UT_ASSERT_EQUAL( result, dsERR_NONE );
 
     /* Passing Invalid Parameter to the function*/
-    result = dsGetSupportedVideoCodingFormats(NULL,&supported_formats);
+    result = dsGetSupportedVideoCodingFormats(0,&supported_formats);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsGetSupportedVideoCodingFormats(handle,NULL);
@@ -297,7 +289,7 @@ void test_videodevice_hal_l1_dsGetSupportedVideoCodingFormats(void)
  */
 void test_videodevice_hal_l1_dsGetVideoCodecInfo(void)
 {
-    dsError_t result;
+    dsError_t result = dsERR_GENERAL;
     dsVideoCodingFormat_t code = dsVIDEO_CODEC_MPEG2;
     dsVideoCodecInfo_t info;
     int index = 0;
@@ -323,7 +315,7 @@ void test_videodevice_hal_l1_dsGetVideoCodecInfo(void)
     UT_ASSERT_EQUAL( result, dsERR_NONE );
 
     /* Passing Invalid Parameter to the function*/
-    result = dsGetVideoCodecInfo(NULL,code,&info);
+    result = dsGetVideoCodecInfo(0,code,&info);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsGetVideoCodecInfo(handle,0,&info);
@@ -349,7 +341,7 @@ void test_videodevice_hal_l1_dsGetVideoCodecInfo(void)
  */
 void test_videodevice_hal_l1_dsForceDisableHDRSupport(void)
 {
-    dsError_t result;
+    dsError_t result = dsERR_GENERAL;
     int index = 0;
     int handle = 0;
     bool disableStatus = false;
@@ -373,7 +365,7 @@ void test_videodevice_hal_l1_dsForceDisableHDRSupport(void)
 
     /* Passing Invalid Parameter to the function*/
     /*calling hdmicec_init second time should pass and return the valid pointer*/
-    result = dsForceDisableHDRSupport(NULL,disableStatus);
+    result = dsForceDisableHDRSupport(0,disableStatus);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsVideoDeviceTerm();
@@ -392,7 +384,7 @@ void test_videodevice_hal_l1_dsForceDisableHDRSupport(void)
  */
 void test_videodevice_hal_l1_dsSetFRFMode(void)
 {
-    dsError_t result;
+    dsError_t result = dsERR_GENERAL;
     int index = 0;
     int handle = 0;
     int frfMode = 0;
@@ -412,7 +404,7 @@ void test_videodevice_hal_l1_dsSetFRFMode(void)
 
     /* Passing Invalid Parameter to the function*/
     /*calling hdmicec_init second time should pass and return the valid pointer*/
-    result = dsSetFRFMode(NULL,frfMode);
+    result = dsSetFRFMode(0,frfMode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsForceDisableHDRSupport(handle,NULL);
@@ -434,7 +426,7 @@ void test_videodevice_hal_l1_dsSetFRFMode(void)
  */
 void test_videodevice_hal_l1_dsGetFRFMode(void)
 {
-    dsError_t result;
+    dsError_t result = dsERR_GENERAL;
     int index = 0;
     int handle = 0;
     int frfMode = 0;
@@ -454,7 +446,7 @@ void test_videodevice_hal_l1_dsGetFRFMode(void)
 
     /* Passing Invalid Parameter to the function*/
     /*calling hdmicec_init second time should pass and return the valid pointer*/
-    result = dsGetFRFMode(NULL,&frfMode);
+    result = dsGetFRFMode(0,&frfMode);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsGetFRFMode(handle,NULL);
@@ -476,7 +468,7 @@ void test_videodevice_hal_l1_dsGetFRFMode(void)
  */
 void test_videodevice_hal_l1_dsGetCurrentDisplayframerate(void)
 {
-    dsError_t result;
+    dsError_t result = dsERR_GENERAL;
     int index = 0;
     int handle = 0;
     char frameRate[50] = {0};
@@ -496,7 +488,7 @@ void test_videodevice_hal_l1_dsGetCurrentDisplayframerate(void)
 
     /* Passing Invalid Parameter to the function*/
     /*calling hdmicec_init second time should pass and return the valid pointer*/
-    result = dsGetCurrentDisplayframerate(NULL,frameRate);
+    result = dsGetCurrentDisplayframerate(0,frameRate);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsGetCurrentDisplayframerate(handle,NULL);
@@ -518,7 +510,7 @@ void test_videodevice_hal_l1_dsGetCurrentDisplayframerate(void)
  */
 void test_videodevice_hal_l1_dsSetDisplayframerate(void)
 {
-    dsError_t result;
+    dsError_t result = dsERR_GENERAL;
     int index = 0;
     int handle = 0;
     char frameRate[50] = "FRAMERATE_DATA";
@@ -538,7 +530,7 @@ void test_videodevice_hal_l1_dsSetDisplayframerate(void)
 
     /* Passing Invalid Parameter to the function*/
     /*calling hdmicec_init second time should pass and return the valid pointer*/
-    result = dsSetDisplayframerate(NULL,frameRate);
+    result = dsSetDisplayframerate(0,frameRate);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
     result = dsSetDisplayframerate(handle,NULL);

@@ -26,7 +26,7 @@
 
 void test_ds_video_hal_l2_getSetEnableVideoPort( void )
 {
-    int result;
+    int result=dsERR_GENERAL;
     int handle = 0;
     dsVideoPortType_t type = 0;
     int index = 0;
