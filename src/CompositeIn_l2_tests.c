@@ -22,12 +22,44 @@
 
 #include <ut.h>
 
+#include <dsError.h>
+#include <dsCompositeIn.h>
+
 void test_CompositeIn_l2_function(void)
 {
 	UT_FAIL("Need to implement");
     /* Positive */
     /* Negative */
 } 
+
+void test_compositeIn_hal_l2_dsCompositeInSelectPortVerifyConnection(void)
+{
+    dsError_t result;
+    dsCompositeInStatus_t status;
+
+    /* Positive result */
+    result = dsCompositeInInit();
+    UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+    for(dsCompositeInPort_t port; port>=dsCOMPOSITE_IN_PORT_MAX; port++)
+    {
+        result = dsCompositeInSelectPort(port);
+        UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+        result = dsCompositeInGetStatus(&status);
+        UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+        result = dsERR_GENERAL;
+        if (status.isPortConnected[port]) {
+            result = dsERR_NONE;
+        }
+        UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+    }
+    /*Terminating Audio Port*/
+    result = dsCompositeInTerm();
+    UT_ASSERT_EQUAL( result, dsERR_NONE);
+}
 
 static UT_test_suite_t *pSuite = NULL;
 
@@ -45,7 +77,7 @@ int test_CompositeIn_l2_register( void )
         return -1;
     }
 
-    UT_add_test( pSuite, "module_name_l2_test_CompositeIn_function", test_CompositeIn_l2_function);
+    UT_add_test( pSuite, "l2_dsCompositeInSelectPortVerifyConnection", test_compositeIn_hal_l2_dsCompositeInSelectPortVerifyConnection);
 
     return 0;
 }

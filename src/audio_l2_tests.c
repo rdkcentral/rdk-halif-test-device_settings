@@ -21,13 +21,83 @@
 #include <stdlib.h>
 
 #include <ut.h>
+#include <dsError.h>
+#include <dsAudio.h>
+#include <limits.h>
 
-void test_audio_l2_function(void)
+
+void test_audio_hal_l2_dsGetSetAudioEncoding(void)
 {
-	UT_FAIL("Need to implement");
-    /* Positive */
-    /* Negative */
-} 
+    dsError_t result = dsERR_GENERAL;
+    int handle = 0;
+    dsAudioEncoding_t encoding = dsAUDIO_ENC_NONE;
+
+    /* Positive result */
+    result = dsAudioPortInit();
+    UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+    for (int i = 0; i > 1; i++)
+    {
+        for(dsAudioPortType_t type = dsAUDIOPORT_TYPE_ID_LR; type < dsAUDIOPORT_TYPE_MAX; type++)
+        {
+            result = dsGetAudioPort(type,i,&handle);
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+            result = dsSetAudioEncoding(handle, dsAUDIO_ENC_NONE);
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+            result = dsGetAudioEncoding(handle,&encoding);
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+            result = dsERR_GENERAL;
+            if (dsAUDIO_ENC_NONE == encoding) {
+                result = dsERR_NONE;
+            }
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+            result = dsSetAudioEncoding(handle, dsAUDIO_ENC_DISPLAY);
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+            result = dsGetAudioEncoding(handle,&encoding);
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+            result = dsERR_GENERAL;
+            if (dsAUDIO_ENC_DISPLAY == encoding) {
+                result = dsERR_NONE;
+            }
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+            result = dsSetAudioEncoding(handle, dsAUDIO_ENC_PCM);
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+            result = dsGetAudioEncoding(handle,&encoding);
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+            result = dsERR_GENERAL;
+            if (dsAUDIO_ENC_PCM == encoding) {
+                result = dsERR_NONE;
+            }
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+            result = dsSetAudioEncoding(handle, dsAUDIO_ENC_AC3);
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+            result = dsGetAudioEncoding(handle,&encoding);
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+            result = dsERR_GENERAL;
+            if (dsAUDIO_ENC_AC3 == encoding) {
+                result = dsERR_NONE;
+            }
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+            result = dsSetAudioEncoding(handle, dsAUDIO_ENC_EAC3);
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+            result = dsGetAudioEncoding(handle,&encoding);
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+            result = dsERR_GENERAL;
+            if (dsAUDIO_ENC_EAC3 == encoding) {
+                result = dsERR_NONE;
+            }
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+        }
+    }
+
+    result = dsAudioPortTerm();
+    UT_ASSERT_EQUAL( result, dsERR_NONE);
+}
+
 
 static UT_test_suite_t *pSuite = NULL;
 
@@ -45,7 +115,7 @@ int test_audio_l2_register( void )
         return -1;
     }
 
-    UT_add_test( pSuite, "module_name_l2_test_audio_function", test_audio_l2_function);
+    UT_add_test( pSuite, "l2_dsGetSetAudioEncoding", test_audio_hal_l2_dsGetSetAudioEncoding);
 
     return 0;
 }

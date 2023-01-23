@@ -23,44 +23,33 @@
 #include <ut.h>
 #include "dsHost.h"
 
-void test_ds_host_hal_l2_getSetPowerMode( void )
+void test_ds_host_hal_l2_setGetVersion( void )
 {
-    int result;
-    int newPower = 0;
-    int currPower = 0;
+    int result=dsERR_GENERAL;
+    uint32_t versionNumber = 0;
+
+
+    //Calling api before open, should give invalid state
+    result = dsSetVersion(versionNumber);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
     /* Positive result */
     result = dsHostInit();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
 
     //+ve call
-    newPower = 0;
-    //result = dsSetHostPowerMode(newPower);//Fixme: Bcm undefined symbol
+    uint32_t versionNumberToSet = 1;
+    result = dsSetVersion(versionNumberToSet);
     UT_ASSERT_EQUAL( result, dsERR_NONE);
-    //result = dsGetHostPowerMode(result = dsGetHostPowerMode(&currPower);currPower);//Fixme: Bcm undefined symbol
+
+    result = dsGetVersion(&versionNumber);
     UT_ASSERT_EQUAL( result, dsERR_NONE);
+
     result = dsERR_GENERAL;
-    //Power mode properly applied
-    if (newPower==currPower){
+    if (versionNumberToSet==versionNumber) {
         result = dsERR_NONE;
     }
-    UT_ASSERT_EQUAL( result, dsERR_NONE);
-
-    newPower = 1;
-    //result = dsSetHostPowerMode(newPower);//Fixme: Bcm undefined symbol
-    UT_ASSERT_EQUAL( result, dsERR_NONE);
-    //result = dsGetHostPowerMode(result = dsGetHostPowerMode(&currPower);currPower);//Fixme: Bcm undefined symbol
-    UT_ASSERT_EQUAL( result, dsERR_NONE);
-    result = dsERR_GENERAL;
-    //Power mode properly applied
-    if (newPower==currPower){
-        result = dsERR_NONE;
-    }
-    UT_ASSERT_EQUAL( result, dsERR_NONE);
-
-
-    /*calling close should pass */
-    //result = dsHostTerm();//Fixme: Bcm undefined symbol
+    UT_ASSERT_EQUAL( result, dsERR_NONE );
 
     /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
@@ -83,7 +72,7 @@ int test_l2_ds_host_register( void )
         return -1;
     }
 
-    UT_add_test( pSuite, "host_getSetPowerMode", test_ds_host_hal_l2_getSetPowerMode);
+    UT_add_test( pSuite, "l2_setGetVersion", test_ds_host_hal_l2_setGetVersion);
 
     return 0;
 }

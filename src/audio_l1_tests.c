@@ -1648,7 +1648,7 @@ void test_audio_hal_l1_dsGetLEConfig(void)
 void test_audio_hal_l1_dsSetAudioEncoding(void)
 {
     dsError_t result;
-    bool enabled = false;
+    dsAudioEncoding_t encoding = dsAUDIO_ENC_NONE;
     int handle = 0;
 
     result = dsSetAudioEncoding(handle,true);
@@ -1664,16 +1664,22 @@ void test_audio_hal_l1_dsSetAudioEncoding(void)
         {
             result = dsGetAudioPort(type,i,&handle);
             UT_ASSERT_EQUAL( result, dsERR_NONE );
-            result = dsSetAudioEncoding(handle,true);
+            result = dsSetAudioEncoding(handle, dsAUDIO_ENC_NONE);
             UT_ASSERT_EQUAL( result, dsERR_NONE );
-            result = dsSetAudioEncoding(handle,false);
+            result = dsSetAudioEncoding(handle, dsAUDIO_ENC_DISPLAY);
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+            result = dsSetAudioEncoding(handle, dsAUDIO_ENC_PCM);
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+            result = dsSetAudioEncoding(handle, dsAUDIO_ENC_AC3);
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+            result = dsSetAudioEncoding(handle, dsAUDIO_ENC_EAC3);
             UT_ASSERT_EQUAL( result, dsERR_NONE );
         }
     }
-    result = dsSetAudioEncoding(handle, INT_MAX);
+    result = dsSetAudioEncoding(handle, dsAUDIO_ENC_MAX);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
-    result = dsSetAudioEncoding(0,enabled);
+    result = dsSetAudioEncoding(0, encoding);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
     
     result = dsAudioPortTerm();

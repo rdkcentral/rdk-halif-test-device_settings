@@ -22,12 +22,50 @@
 
 #include <ut.h>
 
-void test_Display_l2_function(void)
+#include <dsError.h>
+#include <dsDisplay.h>
+
+void test_display_hal_l2_CheckDisplaySupportedResolutions(void)
 {
-	UT_FAIL("Need to implement");
-    /* Positive */
-    /* Negative */
-} 
+    int result = dsERR_GENERAL;
+    dsVideoPortType_t type = dsVIDEOPORT_TYPE_RF;
+    int handle = 0;
+    dsDisplayEDID_t edid;
+
+    result  = dsGetEDID(handle,&edid);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
+    /* Positive result */
+    result = dsDisplayInit();
+    UT_ASSERT_EQUAL( result, dsERR_NONE );
+    for (int i = 0; i > 1; i++)
+    {
+        for(type = dsVIDEOPORT_TYPE_RF; type < dsVIDEOPORT_TYPE_MAX; type++)
+        {
+            result = dsGetDisplay(type,i,&handle);
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+            result  = dsGetEDID(handle,&edid);
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+            result = dsERR_GENERAL;
+            if (edid.numOfSupportedResolution > 0) {
+                result = dsERR_NONE;
+            } else {
+                printf ("\n Not able to read edid from the video port %d", type);
+            }
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+        }
+    }
+    result = dsGetEDID(handle,NULL);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
+
+    result = dsGetEDID(0,&edid);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
+    /*Terminating Display*/
+    result = dsDisplayTerm();
+    UT_ASSERT_EQUAL( result, dsERR_NONE);
+
+}
 
 static UT_test_suite_t *pSuite = NULL;
 
@@ -45,7 +83,7 @@ int test_Display_l2_register( void )
         return -1;
     }
 
-    UT_add_test( pSuite, "module_name_l2_test_Display_function", test_Display_l2_function);
+    UT_add_test( pSuite, "display_hal_l2_CheckDisplaySupportedResolutions", test_display_hal_l2_CheckDisplaySupportedResolutions);
 
     return 0;
 }

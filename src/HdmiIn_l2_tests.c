@@ -22,12 +22,40 @@
 
 #include <ut.h>
 
-void test_HdmiIn_l2_function(void)
+#include <dsError.h>
+#include <dsHdmiIn.h>
+
+void test_hdmiIn_hal_l1_dsHdmiInSelectPortVerifyConnection (void)
 {
-	UT_FAIL("Need to implement");
-    /* Positive */
-    /* Negative */
-} 
+    dsError_t result=dsERR_GENERAL;
+    dsHdmiInPort_t port = dsHDMI_IN_PORT_0;
+    dsHdmiInStatus_t status;
+
+    result = dsHdmiInSelectPort(port);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
+    /* Positive result */
+    result = dsHdmiInInit();
+    UT_ASSERT_EQUAL( result, dsERR_NONE );
+    for (port = dsHDMI_IN_PORT_0; port < dsHDMI_IN_PORT_MAX; port++)
+    {
+        result = dsHdmiInSelectPort(port);
+        UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+        result = dsHdmiInGetStatus(&status);
+        UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
+
+        result = dsERR_GENERAL;
+        if (status.isPortConnected[port]) {
+            result = dsERR_NONE;
+        }
+        UT_ASSERT_EQUAL( result, dsERR_NONE );
+    }
+    
+    /*Terminating Display*/
+    result = dsHdmiInTerm();
+    UT_ASSERT_EQUAL( result, dsERR_NONE);
+}
 
 static UT_test_suite_t *pSuite = NULL;
 
@@ -45,7 +73,7 @@ int test_HdmiIn_l2_register( void )
         return -1;
     }
 
-    UT_add_test( pSuite, "module_name_l2_test_HdmiIn_function", test_HdmiIn_l2_function);
+    UT_add_test( pSuite, "l1_dsHdmiInSelectPortVerifyConnection", test_hdmiIn_hal_l1_dsHdmiInSelectPortVerifyConnection);
 
     return 0;
 }

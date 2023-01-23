@@ -22,12 +22,60 @@
 
 #include <ut.h>
 
+#include <dsError.h>
+#include <dsFPD.h>
+
 void test_FPD_l2_function(void)
 {
 	UT_FAIL("Need to implement");
     /* Positive */
     /* Negative */
 } 
+
+void test_videodevice_hal_l2_dsSetGetFPState(void)
+{
+    dsError_t result;
+    dsFPDIndicator_t eIndicator = dsFPD_INDICATOR_MESSAGE;
+    dsFPDState_t state = dsFPD_STATE_OFF;
+
+    /* Positive result */
+    result = dsFPInit();
+    UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+    for(eIndicator=dsFPD_INDICATOR_MESSAGE ; eIndicator<=dsFPD_INDICATOR_MAX; eIndicator++ ){
+        for(state = dsFPD_STATE_OFF; state<=dsFPD_STATE_ON; state++){
+            state = dsFPD_STATE_OFF;
+            result = dsSetFPState(eIndicator,state);
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+            result = dsGetFPState(eIndicator,&state);
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+            result = dsERR_GENERAL;
+            if (dsFPD_STATE_OFF == state) {
+                result = dsERR_NONE;
+            }
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+            dsFPDState_t state = dsFPD_STATE_ON;
+            result = dsSetFPState(eIndicator,state);
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+            result = dsGetFPState(eIndicator,&state);
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+            result = dsERR_GENERAL;
+            if (dsFPD_STATE_ON == state) {
+                result = dsERR_NONE;
+            }
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+        }
+    }
+	
+    /*calling hdmicec_init second time should pass and return the valid pointer*/
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL( result, dsERR_NONE);
+
+}
 
 static UT_test_suite_t *pSuite = NULL;
 
@@ -45,7 +93,7 @@ int test_FPD_l2_register( void )
         return -1;
     }
 
-    UT_add_test( pSuite, "module_name_l2_test_FPD_function", test_FPD_l2_function);
+    UT_add_test( pSuite, "l2_dsSetGetFPState", test_videodevice_hal_l2_dsSetGetFPState);
 
     return 0;
 }

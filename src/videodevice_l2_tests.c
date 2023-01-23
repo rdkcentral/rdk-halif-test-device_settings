@@ -22,11 +22,36 @@
 
 #include <ut.h>
 
-void test_l2_function(void)
+#include <dsError.h>
+#include <dsVideoDevice.h>
+
+void test_videodevice_hal_l2_dsGetSupportedVideoCodingFormatsAndVerifyCount(void)
 {
-	UT_FAIL("Need to implement");
-    /* Positive */
-    /* Negative */
+    dsError_t result = dsERR_GENERAL;
+    unsigned int supported_formats = 0;
+    int index = 0;
+    int handle = 0;
+
+    /* Positive result */
+    result = dsVideoDeviceInit();
+    UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+    result = dsGetVideoDevice(index,&handle);
+    UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+    result = dsGetSupportedVideoCodingFormats(handle,&supported_formats);
+    UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+    result = dsERR_GENERAL;
+    //supported formats should be greater than zero.
+    if (supported_formats) {
+        result = dsERR_NONE;
+    }
+    UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+    result = dsVideoDeviceTerm();
+    UT_ASSERT_EQUAL( result, dsERR_NONE);
+
 } 
 
 static UT_test_suite_t *pSuite = NULL;
@@ -45,7 +70,7 @@ int test_l2_register( void )
         return -1;
     }
 
-    UT_add_test( pSuite, "module_name_l2_test_function", test_l2_function);
+    UT_add_test( pSuite, "l2_dsGetSupportedVideoCodingFormatsAndVerifyCount", test_videodevice_hal_l2_dsGetSupportedVideoCodingFormatsAndVerifyCount);
 
     return 0;
 }
