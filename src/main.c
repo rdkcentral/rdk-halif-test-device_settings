@@ -25,8 +25,6 @@ extern int audio_l1_register( void );
 extern int CompositeIn_l1_register( void );
 extern int Display_l1_register( void );
 extern int FPD_l1_register( void );
-extern int hallogger_l1_register( void );
-extern int halregisterlog_l1_register( void );
 extern int HdmiIn_l1_register( void );
 extern int Host_l1_register( void );
 extern int VideoPort_l1_register( void );
@@ -46,8 +44,6 @@ int main(int argc, char** argv)
     registerFailed |= CompositeIn_l1_register();
     registerFailed |= Display_l1_register();
     registerFailed |= FPD_l1_register();
-    registerFailed |= hallogger_l1_register();
-    registerFailed |= halregisterlog_l1_register();
     registerFailed |= HdmiIn_l1_register();
     registerFailed |= Host_l1_register();
     registerFailed |= VideoPort_l1_register();

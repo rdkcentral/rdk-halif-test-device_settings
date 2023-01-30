@@ -132,7 +132,7 @@ void test_audio_hal_l2_dsGetSetAudioCompression(void)
             {
                 result = dsSetAudioCompression(handle, value);
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
-                result = dsGetAudioFormat(handle, &compression);
+                result = dsGetAudioCompression(handle, &compression);
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
                 result = dsERR_GENERAL;
                 if (value == compression)
