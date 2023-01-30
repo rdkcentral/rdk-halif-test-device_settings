@@ -23,6 +23,13 @@
 #include <ut.h>
 #include "dsHost.h"
 
+/**
+ * @brief This function will do the functional testing of dsSetVesion () and verify its value using dsGetVersion().
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetVersion () os dsGEtVersion is called successfully.
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_ds_host_hal_l2_setGetVersion( void )
 {
     int result=dsERR_GENERAL;
@@ -51,7 +58,6 @@ void test_ds_host_hal_l2_setGetVersion( void )
     }
     UT_ASSERT_EQUAL( result, dsERR_NONE );
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 

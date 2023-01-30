@@ -25,6 +25,13 @@
 #include <dsError.h>
 #include <dsHdmiIn.h>
 
+/**
+ * @brief This function will do the functional testing of dsHdmiInSelectPort() and verify its connection using dsHdmiInGetStatus.
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsHdmiInSelectPort () or dsHdmiInGetStatus () is called successfully.
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_hdmiIn_hal_l1_dsHdmiInSelectPortVerifyConnection (void)
 {
     dsError_t result=dsERR_GENERAL;

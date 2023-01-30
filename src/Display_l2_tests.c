@@ -25,7 +25,14 @@
 #include <dsError.h>
 #include <dsDisplay.h>
 
-void test_display_hal_l2_CheckDisplaySupportedResolutions(void)
+/**
+ * @brief This function will do the functional testing of dsGetEDID() and verify its returnign the value properly.
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetSetAudioCompression () is called successfully.
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
+void test_display_hal_l2_CheckDisplayEDIDResolutions(void)
 {
     int result = dsERR_GENERAL;
     dsVideoPortType_t type = dsVIDEOPORT_TYPE_RF;
@@ -83,7 +90,7 @@ int test_Display_l2_register( void )
         return -1;
     }
 
-    UT_add_test( pSuite, "display_hal_l2_CheckDisplaySupportedResolutions", test_display_hal_l2_CheckDisplaySupportedResolutions);
+    UT_add_test( pSuite, "display_hal_l2_CheckDisplayEDIDResolutions", test_display_hal_l2_CheckDisplayEDIDResolutions);
 
     return 0;
 }

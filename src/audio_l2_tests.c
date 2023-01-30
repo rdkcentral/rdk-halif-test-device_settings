@@ -25,6 +25,13 @@
 #include <dsAudio.h>
 #include <limits.h>
 
+/**
+ * @brief This function will do the unit testing of dsGetSetAudioEncoding()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetSetAudioEncoding () is called successfully.
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 
 void test_audio_hal_l2_dsGetSetAudioEncoding(void)
 {
@@ -97,8 +104,261 @@ void test_audio_hal_l2_dsGetSetAudioEncoding(void)
     result = dsAudioPortTerm();
     UT_ASSERT_EQUAL( result, dsERR_NONE);
 }
+/**
+ * @brief This function will do the unit testing of dsGetSetAudioFormat()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetSetAudioFormat () is called successfully.
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 
+void test_audio_hal_l2_dsSetAudioFormat(void)
+{
+    dsError_t result = dsERR_GENERAL;
+    int handle = 0;
+    dsAudioFormat_t setFormat = dsAUDIO_FORMAT_NONE;
 
+    /* Positive result */
+    result = dsAudioPortInit();
+    UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+    for (int i = 0; i > 1; i++)
+    {
+        for(dsAudioPortType_t type = dsAUDIOPORT_TYPE_ID_LR; type < dsAUDIOPORT_TYPE_MAX; type++)
+        {
+            result = dsGetAudioPort(type,i,&handle);
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+            for (dsAudioFormat_t format = dsAUDIO_FORMAT_NONE; format < dsAUDIO_FORMAT_MAX; format++)
+            {
+                result = dsSetAudioFormat(handle, format);
+                UT_ASSERT_EQUAL(result, dsERR_NONE);
+                result = dsGetAudioFormat(handle, &setFormat);
+                UT_ASSERT_EQUAL(result, dsERR_NONE);
+                result = dsERR_GENERAL;
+                if (format == setFormat)
+                {
+                    result = dsERR_NONE;
+                }
+                UT_ASSERT_EQUAL( result, dsERR_NONE );
+                setFormat = dsAUDIO_FORMAT_NONE;
+            }
+        }
+    }
+
+    result = dsAudioPortTerm();
+    UT_ASSERT_EQUAL( result, dsERR_NONE);
+}
+
+/**
+ * @brief This function will do the unit testing of dsGetSetAudioCompression()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetSetAudioCompression () is called successfully.
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
+
+void test_audio_hal_l2_dsSetAudioCompression(void)
+{
+    dsError_t result = dsERR_GENERAL;
+    int handle = 0;
+    int compression = 0;
+
+    /* Positive result */
+    result = dsAudioPortInit();
+    UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+    for (int i = 0; i > 1; i++)
+    {
+        for(dsAudioPortType_t type = dsAUDIOPORT_TYPE_ID_LR; type < dsAUDIOPORT_TYPE_MAX; type++)
+        {
+            result = dsGetAudioPort(type,i,&handle);
+            UT_ASSERT_EQUAL( result, dsERR_NONE );
+            for (int value = 0; value <=10; value++)
+            {
+                result = dsSetAudioCompression(handle, value);
+                UT_ASSERT_EQUAL(result, dsERR_NONE);
+                result = dsGetAudioFormat(handle, &compression);
+                UT_ASSERT_EQUAL(result, dsERR_NONE);
+                result = dsERR_GENERAL;
+                if (value == compression)
+                {
+                    result = dsERR_NONE;
+                }
+                UT_ASSERT_EQUAL( result, dsERR_NONE );
+                compression = 0;
+            }
+        }
+    }
+
+    result = dsAudioPortTerm();
+    UT_ASSERT_EQUAL( result, dsERR_NONE);
+}
+/**
+ * @brief This function will do the unit testing of dsGetSetAudioGain()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetSetAudioGain () is called successfully.
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
+void test_audio_hal_l2_dsSetAudioGain(void)
+{
+    dsError_t result = dsERR_GENERAL;
+    int handle = 0;
+    float gain = -2080.00f;
+
+    /* Positive result */
+    result = dsAudioPortInit();
+    UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+    for (int i = 0; i > 1; i++)
+    {
+        for(dsAudioPortType_t type = dsAUDIOPORT_TYPE_ID_LR; type < dsAUDIOPORT_TYPE_MAX; type++)
+        {
+            result = dsGetAudioPort(type, i, &handle);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+            for (float value = -2080f; value <= 480f; value += 1f)
+            {
+                result = dsSetAudioGain(handle, value);
+                UT_ASSERT_EQUAL(result, dsERR_NONE);
+                result = dsGetAudioGain(handle, &gain);
+                UT_ASSERT_EQUAL(result, dsERR_NONE);
+                result = dsERR_GENERAL;
+                if (value == gain)
+                {
+                    result = dsERR_NONE;
+                }
+            }
+        }
+    }
+
+    result = dsAudioPortTerm();
+    UT_ASSERT_EQUAL( result, dsERR_NONE);
+}
+
+/**
+ * @brief This function will do the unit testing of dsGetSetAudioDB()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetSetAudioDB () is called successfully.
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
+void test_audio_hal_l2_dsSetAudioDB(void)
+{
+    dsError_t result = dsERR_GENERAL;
+    int handle = 0;
+    float db = 0f;
+
+    /* Positive result */
+    result = dsAudioPortInit();
+    UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+    for (int i = 0; i > 1; i++)
+    {
+        for(dsAudioPortType_t type = dsAUDIOPORT_TYPE_ID_LR; type < dsAUDIOPORT_TYPE_MAX; type++)
+        {
+            result = dsGetAudioPort(type, i, &handle);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+            for (float value = 0f; value <= 10f; value += 0.1f)
+            {
+                result = dsSetAudioDB(handle, value);
+                UT_ASSERT_EQUAL(result, dsERR_NONE);
+                result = dsGetAudioDB(handle, &db);
+                UT_ASSERT_EQUAL(result, dsERR_NONE);
+                result = dsERR_GENERAL;
+                if (value == db)
+                {
+                    result = dsERR_NONE;
+                }
+            }
+        }
+    }
+
+    result = dsAudioPortTerm();
+    UT_ASSERT_EQUAL( result, dsERR_NONE);
+}
+/**
+ * @brief This function will do the unit testing of dsGetSetAudioLevel()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetSetAudioLevel () is called successfully.
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
+void test_audio_hal_l2_dsSetAudioLevel(void)
+{
+    dsError_t result = dsERR_GENERAL;
+    int handle = 0;
+    float level = 0f;
+
+    /* Positive result */
+    result = dsAudioPortInit();
+    UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+    for (int i = 0; i > 1; i++)
+    {
+        for(dsAudioPortType_t type = dsAUDIOPORT_TYPE_ID_LR; type < dsAUDIOPORT_TYPE_MAX; type++)
+        {
+            result = dsGetAudioPort(type, i, &handle);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+            for (float value = 0f; value <= 100f; value += 1f)
+            {
+                result = dsSetAudioLevel(handle, value);
+                UT_ASSERT_EQUAL(result, dsERR_NONE);
+                result = dsGetAudioLevel(handle, &level);
+                UT_ASSERT_EQUAL(result, dsERR_NONE);
+                result = dsERR_GENERAL;
+                if (value == level)
+                {
+                    result = dsERR_NONE;
+                }
+            }
+        }
+    }
+
+    result = dsAudioPortTerm();
+    UT_ASSERT_EQUAL( result, dsERR_NONE);
+}
+
+/**
+ * @brief This function will do the unit testing of dsGetSetAudioLevel()
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetSetAudioLevel () is called successfully.
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
+void test_audio_hal_l2_dsSetAudioLevel(void)
+{
+    dsError_t result = dsERR_GENERAL;
+    int handle = 0;
+    float level = 0f;
+
+    /* Positive result */
+    result = dsAudioPortInit();
+    UT_ASSERT_EQUAL( result, dsERR_NONE );
+
+    for (int i = 0; i > 1; i++)
+    {
+        for(dsAudioPortType_t type = dsAUDIOPORT_TYPE_ID_LR; type < dsAUDIOPORT_TYPE_MAX; type++)
+        {
+            result = dsGetAudioPort(type, i, &handle);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+            for (float value = 0f; value <= 100f; value += 1f)
+            {
+                result = dsSetAudioLevel(handle, value);
+                UT_ASSERT_EQUAL(result, dsERR_NONE);
+                result = dsGetAudioLevel(handle, &level);
+                UT_ASSERT_EQUAL(result, dsERR_NONE);
+                result = dsERR_GENERAL;
+                if (value == level)
+                {
+                    result = dsERR_NONE;
+                }
+            }
+        }
+    }
+
+    result = dsAudioPortTerm();
+    UT_ASSERT_EQUAL( result, dsERR_NONE);
+}
 static UT_test_suite_t *pSuite = NULL;
 
 /**

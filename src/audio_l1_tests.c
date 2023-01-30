@@ -792,7 +792,6 @@ void test_audio_hal_l1_dsAudioSetSAD(void)
     result = dsAudioSetSAD(0,sad_list);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM );
 
-    //#TODO: Check and add fucntions unit testing
     result = dsAudioPortTerm();
     UT_ASSERT_EQUAL( result, dsERR_NONE);
 }
@@ -827,7 +826,6 @@ void test_audio_hal_l1_dsAudioEnableARC(void)
         UT_ASSERT_EQUAL( result, dsERR_NONE );
     }
 
-    //#TODO: Check and add fucntions unit testing
     result = dsAudioPortTerm();
     UT_ASSERT_EQUAL( result, dsERR_NONE);
 }

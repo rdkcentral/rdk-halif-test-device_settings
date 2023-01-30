@@ -48,7 +48,6 @@ void test_ds_video_hal_l1_init( void )
     result = dsVideoPortTerm ();
     UT_ASSERT_EQUAL( result, dsERR_NONE );
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -79,7 +78,6 @@ void test_ds_video_hal_l1_term( void )
     /*Calling second time should fail*/
     result = dsVideoPortTerm ();
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE );
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -130,7 +128,6 @@ void test_ds_video_hal_l1_getVideoPort( void )
     result = dsGetVideoPort(type, index, &handle);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -180,7 +177,6 @@ void test_ds_video_hal_l1_isVideoPortEnabled( void )
     result = dsIsVideoPortEnabled(handle, &enabled);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -230,7 +226,6 @@ void test_ds_video_hal_l1_isDispalyConnected( void )
     result = dsIsDisplayConnected(handle, &connected);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -280,7 +275,6 @@ void test_ds_video_hal_l1_getSurrondMode( void )
     result = dsIsDisplaySurround(handle, &connected);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -330,7 +324,6 @@ void test_ds_video_hal_l1_isVideoPortActive( void )
     result = dsIsVideoPortActive(handle, &active);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -379,7 +372,6 @@ void test_ds_video_hal_l1_enableDTCP( void )
     result = dsEnableDTCP(handle, contentProtect);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -436,7 +428,6 @@ void test_ds_video_hal_l1_enableHDCP( void )
     result = dsEnableHDCP(handle, contentProtect, hdcpKey, keySize);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -486,7 +477,6 @@ void test_ds_video_hal_l1_isDTCPEnabled( void )
     result = dsIsDTCPEnabled(handle, &pContentProtected);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -536,7 +526,6 @@ void test_ds_video_hal_l1_isHDCPEnabled( void )
     result = dsIsHDCPEnabled(handle, &pContentProtected);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -585,7 +574,6 @@ void test_ds_video_hal_l1_enableVideoPort( void )
     result = dsEnableVideoPort(handle, true);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -640,7 +628,6 @@ void test_ds_video_hal_l1_setResolution( void )
     result = dsSetResolution(handle, &resolution, persist);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -690,7 +677,6 @@ void test_ds_video_hal_l1_getResolution( void )
     result = dsGetResolution(handle, &resolution);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -736,7 +722,6 @@ void test_ds_video_hal_l1_setActiveSoruce( void )
     //result = dsSetActiveSource(handle);//Fixme: BCM crashing
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -758,7 +743,6 @@ void test_ds_video_hal_l1_initResolution( void )
         //result = dsInitResolution (NULL);//Fixme: BCM crashing
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 void test_ds_video_hal_dsHDCPStatusCallback (int handle, dsHdcpStatus_t status){
@@ -808,7 +792,6 @@ void test_ds_video_hal_l1_registerHdcpStatusCallback( void )
     //result = dsRegisterHdcpStatusCallback(handle, test_ds_video_hal_dsHDCPStatusCallback);//Fixme: BCM crashing
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -858,7 +841,6 @@ void test_ds_video_hal_l1_getHDCPStatus( void )
     //result = dsGetHDCPStatus(handle, &status);//Fixme: BCM symbol lookup error
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -908,7 +890,6 @@ void test_ds_video_hal_l1_getHDCPProtocol( void )
     result = dsGetHDCPReceiverProtocol(handle, &protocolVersion);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -958,7 +939,6 @@ void test_ds_video_hal_l1_getHDCPReceiverProtocol( void )
     result = dsGetHDCPReceiverProtocol(handle, &protocolVersion);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -1008,7 +988,6 @@ void test_ds_video_hal_l1_getHDCPCurrentProtocol( void )
     result = dsGetHDCPCurrentProtocol(handle, &protocolVersion);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -1058,7 +1037,6 @@ void test_ds_video_hal_l1_getTVHDRCapabilities( void )
     result = dsGetTVHDRCapabilities(handle, &capabilities);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -1108,7 +1086,6 @@ void test_ds_video_hal_l1_getSupportedTvResolutions( void )
     result = dsSupportedTvResolutions(handle, &resolutions);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -1159,7 +1136,6 @@ void test_ds_video_hal_l1_setForceDisable4KSupport( void )
     //result = dsSetForceDisable4KSupport(handle, disable);//Fixme: BCM symbol lookup error
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -1209,7 +1185,6 @@ void test_ds_video_hal_l1_getForceDisable4KSupport( void )
     //result = dsGetForceDisable4KSupport(handle, &disable);//Fixme: BCM symbol lookup error
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -1263,7 +1238,6 @@ void test_ds_video_hal_l1_setScartParameter( void )
     //result = dsSetScartParameter(handle, parameter_str, value_str);//Fixme: BCM symbol lookup error
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -1313,7 +1287,6 @@ void test_ds_video_hal_l1_getVideoEOTF( void )
     result = dsGetVideoEOTF(handle, &video_eotf);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -1363,7 +1336,6 @@ void test_ds_video_hal_l1_getMatrixCoefficients( void )
     result = dsGetMatrixCoefficients(handle, &matrix_coefficients);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -1413,7 +1385,6 @@ void test_ds_video_hal_l1_getColorDepth( void )
     result = dsGetColorDepth(handle, &color_depth);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -1463,7 +1434,6 @@ void test_ds_video_hal_l1_getColorSpace( void )
     result = dsGetColorSpace(handle, &color_space);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -1513,7 +1483,6 @@ void test_ds_video_hal_l1_getQuantizationRange( void )
     result = dsGetQuantizationRange(handle, &quantization_range);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -1575,7 +1544,6 @@ void test_ds_video_hal_l1_getCurrentOutputSettings( void )
     result = dsGetCurrentOutputSettings(handle, &video_eotf, &matrix_coefficients, &color_space, &color_depth, &quantization_range);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -1625,7 +1593,6 @@ void test_ds_video_hal_l1_isOutputHDR( void )
     result = dsIsOutputHDR(handle, &hdr);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -1667,7 +1634,6 @@ void test_ds_video_hal_l1_resetOutputToSDR( void )
     //result = dsResetOutputToSDR();//Fixme: BCM crashing
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -1717,7 +1683,6 @@ void test_ds_video_hal_l1_setHdmiPreference( void )
     result = dsSetHdmiPreference(handle, &hdcpCurrentProtocol);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -1767,7 +1732,6 @@ void test_ds_video_hal_l1_getHdmiPreference( void )
     result = dsGetHdmiPreference(handle, &hdcpCurrentProtocol);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -1817,7 +1781,6 @@ void test_ds_video_hal_l1_getIgnoreEDIDStatus( void )
     //result = dsGetIgnoreEDIDStatus(handle, &status);//Fixme: BCM symbol lookup error
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -1864,7 +1827,6 @@ void test_ds_video_hal_l1_setBackgroundColor( void )
     result = dsSetBackgroundColor(handle, color);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -1911,7 +1873,6 @@ void test_ds_video_hal_l1_setForceHDRMode( void )
     //result = dsSetForceHDRMode(handle, mode);//Fixme: BCM symbol lookup error
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -1961,7 +1922,6 @@ void test_ds_video_hal_l1_getColorDepthCapabilities( void )
     //result = dsColorDepthCapabilities(handle, &colorDepthCapability);//Fixme: BCM symbol lookup error
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -2014,7 +1974,6 @@ void test_ds_video_hal_l1_getPreferredColorDepth( void )
     //result = dsGetPreferredColorDepth(handle, &colorDepth, persist);//Fixme: BCM symbol lookup error
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -2064,7 +2023,6 @@ void test_ds_video_hal_l1_setPreferredColorDepth( void )
     //result = dsSetPreferredColorDepth(handle, colorDepth, persist);//Fixme: BCM symbol lookup error
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 static UT_test_suite_t *pSuite = NULL;

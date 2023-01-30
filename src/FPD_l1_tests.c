@@ -27,7 +27,6 @@ void test_FPD_hal_l1_init(void)
     result = dsFPTerm();
     UT_ASSERT_EQUAL( result, dsERR_NONE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**

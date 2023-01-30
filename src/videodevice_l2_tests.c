@@ -25,6 +25,13 @@
 #include <dsError.h>
 #include <dsVideoDevice.h>
 
+/**
+ * @brief This function will do the functional testing of dsGetSuportedVideoCodingFormats() verify its result.
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetSupportedVedioCodingFormats () is called successfully.
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_videodevice_hal_l2_dsGetSupportedVideoCodingFormatsAndVerifyCount(void)
 {
     dsError_t result = dsERR_GENERAL;

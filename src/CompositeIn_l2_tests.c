@@ -25,13 +25,14 @@
 #include <dsError.h>
 #include <dsCompositeIn.h>
 
-void test_CompositeIn_l2_function(void)
-{
-	UT_FAIL("Need to implement");
-    /* Positive */
-    /* Negative */
-} 
 
+/**
+ * @brief This function will do the functional testing of dsCompositeInSelectPort() and verify its connection.
+ * This function will ensure underlying API implementation is handling
+ * the invalid arguments passed and invalid call sequences to the API
+ * dsERR_NONE : will be returned if dsGetSetAudioCompression () is called successfully.
+ * dsERR_GENERAL: Not able to simulate this condition with the UT implementation
+ */
 void test_compositeIn_hal_l2_dsCompositeInSelectPortVerifyConnection(void)
 {
     dsError_t result;

@@ -47,7 +47,6 @@ void test_ds_host_hal_l1_init( void )
     //result = dsHostTerm();//Fixme: Bcm undefined symbol
     UT_ASSERT_EQUAL( result, dsERR_NONE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -83,7 +82,6 @@ void test_ds_host_hal_l1_close( void )
     //result = dsHostTerm();//Fixme: Bcm undefined symbol
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 
@@ -126,7 +124,6 @@ void test_ds_host_hal_l1_setHostPowerMode( void )
     //result = dsSetHostPowerMode(newPower);//Fixme: Bcm undefined symbol
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -168,7 +165,6 @@ void test_ds_host_hal_l1_getHostPowerMode( void )
     //result = dsGetHostPowerMode(result = dsGetHostPowerMode(&currPower);currPower);//Fixme: Bcm undefined symbol
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -210,7 +206,6 @@ void test_ds_host_hal_l1_getPreferredSleepMode( void )
     //result = dsGetPreferredSleepMode(result = dsGetPreferredSleepMode(&mode);mode);//Fixme: Bcm undefined symbol
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -252,7 +247,6 @@ void test_ds_host_hal_l1_setPreferredSleepMode( void )
     //result = dsSetPreferredSleepMode(mode);//Fixme: Bcm undefined symbol
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -294,7 +288,6 @@ void test_ds_host_hal_l1_getCPUTemperature( void )
     result = dsGetCPUTemperature(&cpuTemperature);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -336,7 +329,6 @@ void test_ds_host_hal_l1_getVersion( void )
     result = dsGetVersion(&versionNumber);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -374,7 +366,6 @@ void test_ds_host_hal_l1_setVersion( void )
     result = dsSetVersion(versionNumber);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -416,7 +407,6 @@ void test_ds_host_hal_l1_getSocIDFromSDK( void )
     result = dsGetSocIDFromSDK(socID);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 /**
@@ -462,7 +452,6 @@ void test_ds_host_hal_l1_getHostEDID( void )
     result = dsGetHostEDID(edid, &length);
     UT_ASSERT_EQUAL( result, dsERR_INVALID_STATE);
 
-    /* #TODO: Unclear how the function will fail, maybe this function should be void? */
 }
 
 static UT_test_suite_t *pSuite = NULL;
