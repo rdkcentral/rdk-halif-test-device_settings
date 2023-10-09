@@ -53,10 +53,10 @@
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsHostInit() for the first time | | dsERR_NONE | Initialization should pass as it's the first call |
- * |02|Call dsHostTerm() to terminate the initialized module | | dsERR_NONE | Termination should be successful after initialization |
- * |03|Call dsHostInit() again after termination | | dsERR_NONE | Initialization should pass after termination |
- * |04|Call dsHostTerm() again to terminate the initialized module | | dsERR_NONE | Termination should be successful after initialization |
+ * |01|Call dsHostInit() Initialize dsHost | | dsERR_NONE | Should pass|
+ * |02|Call dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful after initialization |
+ * |03|Call dsHostInit() Initialize dsHost | | dsERR_NONE | Initialization should pass after termination |
+ * |04|Call dsHostTerm() Terminate dsHost again | | dsERR_NONE | Termination should be successful after initialization |
  * 
  */
 void test_l1_dsHost_positive_dsHostInit (void)
@@ -79,8 +79,9 @@ void test_l1_dsHost_positive_dsHostInit (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsHostInit() for the first time | | dsERR_NONE | Initialization should pass as it's the first call |
- * |02|Call dsHostInit() again without terminating | | dsERR_ALREADY_INITIALIZED | Initialization should fail as it's already initialized |
+ * |01|Call dsHostInit() Initialize dsHost | | dsERR_NONE | Initialization should pass as it's the first call |
+ * |02|Call dsHostInit() Attempt to initailize dsHost again | | dsERR_ALREADY_INITIALIZED | Initialization should fail as it's already initialized |
+ * |03|Call dsHostTerm() Terminate dsHost| | dsERR_NONE | Should pass |
  * 
  * **Additional Notes:**
  * - Testing for dsERR_GENERAL might be challenging as it represents undefined platform errors. Such errors can be hard to simulate consistently in a controlled testing environment.
@@ -97,18 +98,18 @@ void test_l1_dsHost_negative_dsHostInit (void)
  * **Test Case ID:** 003@n
  * 
  * **Pre-Conditions:**@n
- * Module has been initialized using dsHostInit().
+ * None.
  * 
- * **Dependencies:** dsHostInit()@n
+ * **Dependencies:** None
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Initialize the module using dsHostInit() | | dsERR_NONE | Initialization should pass |
- * |02|Call dsHostTerm() to terminate the initialized module | | dsERR_NONE | Termination should be successful after initialization |
- * |03|Initialize the module again using dsHostInit() | | dsERR_NONE | Initialization should pass |
- * |04|Call dsHostTerm() again to terminate the initialized module | | dsERR_NONE | Termination should be successful after re-initialization |
+ * |01|dsHostInit() Initialize dsHost | | dsERR_NONE | Initialization should pass |
+ * |02|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful after initialization |
+ * |03|dsHostInit() Initialize dsHost again | | dsERR_NONE | Initialization should pass |
+ * |04|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful after re-initialization |
  * 
  */
 void test_l1_dsHost_positive_dsHostTerm (void)
@@ -131,7 +132,10 @@ void test_l1_dsHost_positive_dsHostTerm (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsHostTerm() without prior initialization | | dsERR_NOT_INITIALIZED | Termination should fail as module is not initialized |
+ * |01|dsHostTerm() Attempt to terminate dsHost| | dsERR_NOT_INITIALIZED | Termination should fail as module is not initialized |
+ * |01|dsHostInit() Initialize dsHost | | dsERR_NONE | Initialization should pass |
+ * |02|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful after initialization |
+ * |01|dsHostTerm() Attempt to terminate dsHost | | dsERR_NOT_INITIALIZED | Termination should fail as module is not initialized |
  * 
  * **Additional Notes:**
  * - Testing for dsERR_GENERAL in dsHostTerm() might be challenging as it represents undefined platform errors. Such errors can be hard to simulate consistently in a controlled testing environment.
@@ -156,9 +160,10 @@ void test_l1_dsHost_negative_dsHostTerm (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Initialize the module using dsHostInit() | | dsERR_NONE | Initialization should pass |
- * |02|Call dsGetCPUTemperature() with valid pointer to store temperature | Valid float pointer | dsERR_NONE | Temperature value should be fetched successfully |
- * |03|Terminate the module using dsHostTerm() | | dsERR_NONE | Termination should be successful |
+ * |01|dsHostInit() Initialize dsHost | | dsERR_NONE | Initialization should pass |
+ * |02|dsGetCPUTemperature() Call with valid pointer to store temperature | Valid float pointer | dsERR_NONE | Temperature value should be fetched successfully |
+ * |03|dsGetCPUTemperature() Call with valid pointer to store temperature | Valid float pointer | dsERR_NONE | Temperature value should be fetched successfully |
+ * |04|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful |
  * 
  */
 void test_l1_dsHost_positive_dsGetCPUTemperature (void)
@@ -181,11 +186,11 @@ void test_l1_dsHost_positive_dsGetCPUTemperature (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsGetCPUTemperature() without prior initialization | Valid float pointer | dsERR_NOT_INITIALIZED | Fetching temperature should fail as module is not initialized |
- * |02|Initialize the module using dsHostInit() | | dsERR_NONE | Initialization should pass |
- * |03|Call dsGetCPUTemperature() with NULL pointer | NULL | dsERR_INVALID_PARAM | Should return invalid parameter error |
- * |04|Terminate the module using dsHostTerm() | | dsERR_NONE | Termination should be successful |
- * |05|Call dsGetCPUTemperature() after termination | Valid float pointer | dsERR_NOT_INITIALIZED | Fetching temperature should fail as module is terminated |
+ * |01|dsGetCPUTemperature() Call without prior initialization | Valid float pointer | dsERR_NOT_INITIALIZED | Fetching temperature should fail as module is not initialized |
+ * |02|dsHostInit() Initialize dsHost | | dsERR_NONE | Initialization should pass |
+ * |03|dsGetCPUTemperature() Call with NULL pointer | NULL | dsERR_INVALID_PARAM | Should return invalid parameter error |
+ * |04|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful |
+ * |05|dsGetCPUTemperature() Call after termination | Valid float pointer | dsERR_NOT_INITIALIZED | Fetching temperature should fail as module is terminated |
  * 
  * **Additional Notes:**
  * - Testing for dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED in dsGetCPUTemperature() might be challenging as these represent undefined platform errors or specific hardware constraints. Such errors can be hard to simulate consistently in a controlled testing environment.
@@ -210,9 +215,11 @@ void test_l1_dsHost_negative_dsGetCPUTemperature (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Initialize the module using dsHostInit() | | dsERR_NONE | Initialization should pass |
- * |02|Call dsGetSocIDFromSDK() with a valid pointer to store the SOC ID | Valid char pointer (size of 8 bytes) | dsERR_NONE | SOC ID should be fetched successfully |
- * |03|Terminate the module using dsHostTerm() | | dsERR_NONE | Termination should be successful |
+ * |01|dsHostInit() Initialize dsHost | | dsERR_NONE | Initialization should pass |
+ * |02|dsGetSocIDFromSDK() Call with a valid pointer to store the SOC ID | Valid char pointer (size of 8 bytes) | dsERR_NONE | SOC ID should be fetched successfully |
+ * |03|dsGetSocIDFromSDK() Call with a valid pointer to store the SOC ID again | Valid char pointer (size of 8 bytes) | dsERR_NONE | SOC ID should be fetched successfully |
+ * |04|Compare return values from step 2/3 to ensure that they are the same |  |  | Success |
+ * |05|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful |
  * 
  */
 void test_l1_dsHost_positive_dsGetSocIDFromSDK (void)
@@ -235,14 +242,16 @@ void test_l1_dsHost_positive_dsGetSocIDFromSDK (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsGetSocIDFromSDK() without prior initialization | Valid char pointer (size of 8 bytes) | dsERR_NOT_INITIALIZED | Fetching SOC ID should fail as module is not initialized |
- * |02|Initialize the module using dsHostInit() | | dsERR_NONE | Initialization should pass |
- * |03|Call dsGetSocIDFromSDK() with NULL pointer | NULL | dsERR_INVALID_PARAM | Should return invalid parameter error |
- * |04|Terminate the module using dsHostTerm() | | dsERR_NONE | Termination should be successful |
- * |05|Call dsGetSocIDFromSDK() after termination | Valid char pointer (size of 8 bytes) | dsERR_NOT_INITIALIZED | Fetching SOC ID should fail as module is terminated |
+ * |01|dsGetSocIDFromSDK() Call without prior initialization | Valid char pointer (size of 8 bytes) | dsERR_NOT_INITIALIZED | Fetching SOC ID should fail as module is not initialized |
+ * |02|dsHostInit() Initialize dsHost | | dsERR_NONE | Initialization should pass |
+ * |03|dsGetSocIDFromSDK() Call with NULL pointer | NULL | dsERR_INVALID_PARAM | Should return invalid parameter error |
+ * |04|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful |
+ * |05|dsGetSocIDFromSDK() Call after termination | Valid char pointer (size of 8 bytes) | dsERR_NOT_INITIALIZED | Fetching SOC ID should fail as module is terminated |
  * 
  * **Additional Notes:**
  * - Testing for dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED in dsGetSocIDFromSDK() might be challenging as these represent undefined platform
+ * 
+ */
 void test_l1_dsHost_negative_dsGetSocIDFromSDK (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
@@ -263,9 +272,11 @@ void test_l1_dsHost_negative_dsGetSocIDFromSDK (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Initialize the module using dsHostInit() | | dsERR_NONE | Initialization should pass |
- * |02|Call dsGetHostEDID() with valid pointers for edid and length | Valid unsigned char pointer, valid int pointer | dsERR_NONE | EDID and its length should be fetched successfully |
- * |03|Terminate the module using dsHostTerm() | | dsERR_NONE | Termination should be successful |
+ * |01|dsHostInit() Initialize dsHost | | dsERR_NONE | Initialization should pass |
+ * |02|dsGetHostEDID() Call with valid pointers for edid and length | Valid unsigned char pointer, valid int pointer | dsERR_NONE | EDID and its length should be fetched successfully |
+ * |03|dsGetHostEDID() Call with valid pointers for edid and length | Valid unsigned char pointer, valid int pointer | dsERR_NONE | EDID and its length should be fetched successfully |
+ * |04|Compare returns from step 2/3 and verify they are the same| |  | Should succeed |
+ * |05|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful |
  * 
  */
 void test_l1_dsHost_positive_dsGetHostEDID (void)
@@ -288,11 +299,11 @@ void test_l1_dsHost_positive_dsGetHostEDID (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsGetHostEDID() without prior initialization | Valid unsigned char pointer, valid int pointer | dsERR_NOT_INITIALIZED | Fetching EDID should fail as module is not initialized |
- * |02|Initialize the module using dsHostInit() | | dsERR_NONE | Initialization should pass |
- * |03|Call dsGetHostEDID() with NULL pointers | NULL, NULL | dsERR_INVALID_PARAM | Should return invalid parameter error |
- * |04|Terminate the module using dsHostTerm() | | dsERR_NONE | Termination should be successful |
- * |05|Call dsGetHostEDID() after termination | Valid unsigned char pointer, valid int pointer | dsERR_NOT_INITIALIZED | Fetching EDID should fail as module is terminated |
+ * |01|dsGetHostEDID() Call without prior initialization | Valid unsigned char pointer, valid int pointer | dsERR_NOT_INITIALIZED | Fetching EDID should fail as module is not initialized |
+ * |02|dsHostInit() Initialize dsHost| | dsERR_NONE | Initialization should pass |
+ * |03|dsGetHostEDID() Call with NULL pointers | NULL, NULL | dsERR_INVALID_PARAM | Should return invalid parameter error |
+ * |04|dsHostTerm() Terminate dsHost| | dsERR_NONE | Termination should be successful |
+ * |05|dsGetHostEDID() Call after termination | Valid unsigned char pointer, valid int pointer | dsERR_NOT_INITIALIZED | Fetching EDID should fail as module is terminated |
  * 
  * **Additional Notes:**
  * - Testing for dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED in dsGetHostEDID() might be challenging as these represent undefined platform errors or specific hardware constraints. Such errors can be hard to simulate consistently in a controlled testing environment.
