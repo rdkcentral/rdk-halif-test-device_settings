@@ -39,230 +39,264 @@
 #include <ut_log.h>
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsHostInit() returns correct error codes during positive scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 001@n
+ * 
+ * **Pre-Conditions:**@n
+ * None.
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Call dsHostInit() for the first time | | dsERR_NONE | Initialization should pass as it's the first call |
+ * |02|Call dsHostTerm() to terminate the initialized module | | dsERR_NONE | Termination should be successful after initialization |
+ * |03|Call dsHostInit() again after termination | | dsERR_NONE | Initialization should pass after termination |
+ * |04|Call dsHostTerm() again to terminate the initialized module | | dsERR_NONE | Termination should be successful after initialization |
+ * 
+ */
 void test_l1_dsHost_positive_dsHostInit (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsHostInit() returns correct error codes during negative scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 002@n
+ * 
+ * **Pre-Conditions:**@n
+ * None.
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Call dsHostInit() for the first time | | dsERR_NONE | Initialization should pass as it's the first call |
+ * |02|Call dsHostInit() again without terminating | | dsERR_ALREADY_INITIALIZED | Initialization should fail as it's already initialized |
+ * 
+ * **Additional Notes:**
+ * - Testing for dsERR_GENERAL might be challenging as it represents undefined platform errors. Such errors can be hard to simulate consistently in a controlled testing environment.
+ */
 void test_l1_dsHost_negative_dsHostInit (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsHostTerm() returns correct error codes during positive scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 003@n
+ * 
+ * **Pre-Conditions:**@n
+ * Module has been initialized using dsHostInit().
+ * 
+ * **Dependencies:** dsHostInit()@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Initialize the module using dsHostInit() | | dsERR_NONE | Initialization should pass |
+ * |02|Call dsHostTerm() to terminate the initialized module | | dsERR_NONE | Termination should be successful after initialization |
+ * |03|Initialize the module again using dsHostInit() | | dsERR_NONE | Initialization should pass |
+ * |04|Call dsHostTerm() again to terminate the initialized module | | dsERR_NONE | Termination should be successful after re-initialization |
+ * 
+ */
 void test_l1_dsHost_positive_dsHostTerm (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsHostTerm() returns correct error codes during negative scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 004@n
+ * 
+ * **Pre-Conditions:**@n
+ * None.
+ * 
+ * **Dependencies:** dsHostInit()@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Call dsHostTerm() without prior initialization | | dsERR_NOT_INITIALIZED | Termination should fail as module is not initialized |
+ * 
+ * **Additional Notes:**
+ * - Testing for dsERR_GENERAL in dsHostTerm() might be challenging as it represents undefined platform errors. Such errors can be hard to simulate consistently in a controlled testing environment.
+ */
 void test_l1_dsHost_negative_dsHostTerm (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsGetCPUTemperature() returns correct error codes during positive scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 005@n
+ * 
+ * **Pre-Conditions:**@n
+ * None.
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Initialize the module using dsHostInit() | | dsERR_NONE | Initialization should pass |
+ * |02|Call dsGetCPUTemperature() with valid pointer to store temperature | Valid float pointer | dsERR_NONE | Temperature value should be fetched successfully |
+ * |03|Terminate the module using dsHostTerm() | | dsERR_NONE | Termination should be successful |
+ * 
+ */
 void test_l1_dsHost_positive_dsGetCPUTemperature (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsGetCPUTemperature() returns correct error codes during negative scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 006@n
+ * 
+ * **Pre-Conditions:**@n
+ * None.
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Call dsGetCPUTemperature() without prior initialization | Valid float pointer | dsERR_NOT_INITIALIZED | Fetching temperature should fail as module is not initialized |
+ * |02|Initialize the module using dsHostInit() | | dsERR_NONE | Initialization should pass |
+ * |03|Call dsGetCPUTemperature() with NULL pointer | NULL | dsERR_INVALID_PARAM | Should return invalid parameter error |
+ * |04|Terminate the module using dsHostTerm() | | dsERR_NONE | Termination should be successful |
+ * |05|Call dsGetCPUTemperature() after termination | Valid float pointer | dsERR_NOT_INITIALIZED | Fetching temperature should fail as module is terminated |
+ * 
+ * **Additional Notes:**
+ * - Testing for dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED in dsGetCPUTemperature() might be challenging as these represent undefined platform errors or specific hardware constraints. Such errors can be hard to simulate consistently in a controlled testing environment.
+ */
 void test_l1_dsHost_negative_dsGetCPUTemperature (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsGetSocIDFromSDK() returns correct error codes during positive scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 007@n
+ * 
+ * **Pre-Conditions:**@n
+ * None.
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Initialize the module using dsHostInit() | | dsERR_NONE | Initialization should pass |
+ * |02|Call dsGetSocIDFromSDK() with a valid pointer to store the SOC ID | Valid char pointer (size of 8 bytes) | dsERR_NONE | SOC ID should be fetched successfully |
+ * |03|Terminate the module using dsHostTerm() | | dsERR_NONE | Termination should be successful |
+ * 
+ */
 void test_l1_dsHost_positive_dsGetSocIDFromSDK (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsGetSocIDFromSDK() returns correct error codes during negative scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 008@n
+ * 
+ * **Pre-Conditions:**@n
+ * None.
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Call dsGetSocIDFromSDK() without prior initialization | Valid char pointer (size of 8 bytes) | dsERR_NOT_INITIALIZED | Fetching SOC ID should fail as module is not initialized |
+ * |02|Initialize the module using dsHostInit() | | dsERR_NONE | Initialization should pass |
+ * |03|Call dsGetSocIDFromSDK() with NULL pointer | NULL | dsERR_INVALID_PARAM | Should return invalid parameter error |
+ * |04|Terminate the module using dsHostTerm() | | dsERR_NONE | Termination should be successful |
+ * |05|Call dsGetSocIDFromSDK() after termination | Valid char pointer (size of 8 bytes) | dsERR_NOT_INITIALIZED | Fetching SOC ID should fail as module is terminated |
+ * 
+ * **Additional Notes:**
+ * - Testing for dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED in dsGetSocIDFromSDK() might be challenging as these represent undefined platform
 void test_l1_dsHost_negative_dsGetSocIDFromSDK (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsGetHostEDID() returns correct error codes during positive scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 009@n
+ * 
+ * **Pre-Conditions:**@n
+ * None.
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Initialize the module using dsHostInit() | | dsERR_NONE | Initialization should pass |
+ * |02|Call dsGetHostEDID() with valid pointers for edid and length | Valid unsigned char pointer, valid int pointer | dsERR_NONE | EDID and its length should be fetched successfully |
+ * |03|Terminate the module using dsHostTerm() | | dsERR_NONE | Termination should be successful |
+ * 
+ */
 void test_l1_dsHost_positive_dsGetHostEDID (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsGetHostEDID() returns correct error codes during negative scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 010@n
+ * 
+ * **Pre-Conditions:**@n
+ * None.
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Call dsGetHostEDID() without prior initialization | Valid unsigned char pointer, valid int pointer | dsERR_NOT_INITIALIZED | Fetching EDID should fail as module is not initialized |
+ * |02|Initialize the module using dsHostInit() | | dsERR_NONE | Initialization should pass |
+ * |03|Call dsGetHostEDID() with NULL pointers | NULL, NULL | dsERR_INVALID_PARAM | Should return invalid parameter error |
+ * |04|Terminate the module using dsHostTerm() | | dsERR_NONE | Termination should be successful |
+ * |05|Call dsGetHostEDID() after termination | Valid unsigned char pointer, valid int pointer | dsERR_NOT_INITIALIZED | Fetching EDID should fail as module is terminated |
+ * 
+ * **Additional Notes:**
+ * - Testing for dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED in dsGetHostEDID() might be challenging as these represent undefined platform errors or specific hardware constraints. Such errors can be hard to simulate consistently in a controlled testing environment.
+ */
 void test_l1_dsHost_negative_dsGetHostEDID (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
