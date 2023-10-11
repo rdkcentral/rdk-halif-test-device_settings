@@ -38,6 +38,9 @@
 #include <ut.h>
 #include <ut_log.h>
 
+static int gTestGroup = 1;
+static int gTestID = 1;
+
 /**
  * @brief Ensure dsHostInit() returns correct error codes during positive scenarios
  * 
@@ -59,9 +62,30 @@
  * |04|Call dsHostTerm() Terminate dsHost again | | dsERR_NONE | Termination should be successful after initialization |
  * 
  */
-void test_l1_dsHost_positive_dsHostInit (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHost_positive_dsHostInit(void) {
+    gTestID = 1;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	
+    // Step 01: Call dsHostInit() Initialize dsHost
+    dsError_t result = dsHostInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 01: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 02: Call dsHostTerm() Terminate dsHost
+    result = dsHostTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 02: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 03: Call dsHostInit() Initialize dsHost
+    result = dsHostInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 03: Initialize dsHost again -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 04: Call dsHostTerm() Terminate dsHost again
+    result = dsHostTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 04: Terminate dsHost again -> Expected: dsERR_NONE, Got: %d\n", result);
+    UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
 /**
@@ -80,15 +104,31 @@ void test_l1_dsHost_positive_dsHostInit (void)
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsHostInit() Initialize dsHost | | dsERR_NONE | Initialization should pass as it's the first call |
- * |02|Call dsHostInit() Attempt to initailize dsHost again | | dsERR_ALREADY_INITIALIZED | Initialization should fail as it's already initialized |
+ * |02|Call dsHostInit() Attempt to initialize dsHost again | | dsERR_ALREADY_INITIALIZED | Initialization should fail as it's already initialized |
  * |03|Call dsHostTerm() Terminate dsHost| | dsERR_NONE | Should pass |
  * 
  * **Additional Notes:**
  * - Testing for dsERR_GENERAL might be challenging as it represents undefined platform errors. Such errors can be hard to simulate consistently in a controlled testing environment.
  */
-void test_l1_dsHost_negative_dsHostInit (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHost_negative_dsHostInit(void) {
+    gTestID = 2;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	
+    // Step 01: Call dsHostInit() Initialize dsHost
+    dsError_t result = dsHostInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 01: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 02: Call dsHostInit() Attempt to initialize dsHost again
+    result = dsHostInit();
+    UT_ASSERT_EQUAL(result, dsERR_ALREADY_INITIALIZED);
+    UT_LOG("Step 02: Attempt to initialize dsHost again -> Expected: dsERR_ALREADY_INITIALIZED, Got: %d\n", result);
+
+    // Step 03: Call dsHostTerm() Terminate dsHost
+    result = dsHostTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 03: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+    UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
 /**
@@ -112,9 +152,30 @@ void test_l1_dsHost_negative_dsHostInit (void)
  * |04|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful after re-initialization |
  * 
  */
-void test_l1_dsHost_positive_dsHostTerm (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHost_positive_dsHostTerm(void) {
+    gTestID = 3;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	
+    // Step 01: dsHostInit() Initialize dsHost
+    dsError_t result = dsHostInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 01: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 02: dsHostTerm() Terminate dsHost
+    result = dsHostTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 02: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 03: dsHostInit() Initialize dsHost again
+    result = dsHostInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 03: Initialize dsHost again -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 04: dsHostTerm() Terminate dsHost
+    result = dsHostTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 04: Terminate dsHost again -> Expected: dsERR_NONE, Got: %d\n", result);
+    UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
 /**
@@ -140,9 +201,30 @@ void test_l1_dsHost_positive_dsHostTerm (void)
  * **Additional Notes:**
  * - Testing for dsERR_GENERAL in dsHostTerm() might be challenging as it represents undefined platform errors. Such errors can be hard to simulate consistently in a controlled testing environment.
  */
-void test_l1_dsHost_negative_dsHostTerm (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHost_negative_dsHostTerm(void) {
+    gTestID = 4;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	
+    // Step 01: dsHostTerm() Attempt to terminate dsHost without initialization
+    dsError_t result = dsHostTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    UT_LOG("Step 01: Attempt to terminate dsHost without initialization -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+
+    // Step 02: dsHostInit() Initialize dsHost
+    result = dsHostInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 02: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 03: dsHostTerm() Terminate dsHost after initialization
+    result = dsHostTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 03: Terminate dsHost after initialization -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 04: dsHostTerm() Attempt to terminate dsHost again
+    result = dsHostTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    UT_LOG("Step 04: Attempt to terminate dsHost again -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+    UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
 /**
@@ -166,9 +248,32 @@ void test_l1_dsHost_negative_dsHostTerm (void)
  * |04|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful |
  * 
  */
-void test_l1_dsHost_positive_dsGetCPUTemperature (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHost_positive_dsGetCPUTemperature(void) {
+    gTestID = 5;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	
+    float temperatureValue;
+
+    // Step 01: dsHostInit() Initialize dsHost
+    dsError_t result = dsHostInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 01: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 02: dsGetCPUTemperature() Call with valid pointer to store temperature
+    result = dsGetCPUTemperature(&temperatureValue);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 02: Fetch CPU Temperature (1st time) -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 03: dsGetCPUTemperature() Call with valid pointer to store temperature again
+    result = dsGetCPUTemperature(&temperatureValue);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 03: Fetch CPU Temperature (2nd time) -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 04: dsHostTerm() Terminate dsHost
+    result = dsHostTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 04: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+    UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
 /**
@@ -195,9 +300,37 @@ void test_l1_dsHost_positive_dsGetCPUTemperature (void)
  * **Additional Notes:**
  * - Testing for dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED in dsGetCPUTemperature() might be challenging as these represent undefined platform errors or specific hardware constraints. Such errors can be hard to simulate consistently in a controlled testing environment.
  */
-void test_l1_dsHost_negative_dsGetCPUTemperature (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHost_negative_dsGetCPUTemperature(void) {
+    gTestID = 6;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	
+    float temperatureValue;
+
+    // Step 01: dsGetCPUTemperature() Call without prior initialization
+    dsError_t result = dsGetCPUTemperature(&temperatureValue);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    UT_LOG("Step 01: Fetch CPU Temperature without initialization -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+
+    // Step 02: dsHostInit() Initialize dsHost
+    result = dsHostInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 02: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 03: dsGetCPUTemperature() Call with NULL pointer
+    result = dsGetCPUTemperature(NULL);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+    UT_LOG("Step 03: Fetch CPU Temperature with NULL pointer -> Expected: dsERR_INVALID_PARAM, Got: %d\n", result);
+
+    // Step 04: dsHostTerm() Terminate dsHost
+    result = dsHostTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 04: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 05: dsGetCPUTemperature() Call after termination
+    result = dsGetCPUTemperature(&temperatureValue);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    UT_LOG("Step 05: Fetch CPU Temperature after termination -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+    UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
 /**
@@ -222,9 +355,37 @@ void test_l1_dsHost_negative_dsGetCPUTemperature (void)
  * |05|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful |
  * 
  */
-void test_l1_dsHost_positive_dsGetSocIDFromSDK (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHost_positive_dsGetSocIDFromSDK(void) {
+    gTestID = 7;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	
+    char socID1[8]; //Double check with Amit that this is correct
+    char socID2[8];
+
+    // Step 01: dsHostInit() Initialize dsHost
+    dsError_t result = dsHostInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 01: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 02: dsGetSocIDFromSDK() Call with a valid pointer to store the SOC ID
+    result = dsGetSocIDFromSDK(socID1);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 02: Fetch SOC ID (1st time) -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 03: dsGetSocIDFromSDK() Call with a valid pointer to store the SOC ID again
+    result = dsGetSocIDFromSDK(socID2);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 03: Fetch SOC ID (2nd time) -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 04: Compare return values from step 2/3 to ensure they are the same
+    UT_ASSERT_EQUAL(memcmp(socID1, socID2, sizeof(socID1)), 0);
+    UT_LOG("Step 04: Compare SOC IDs from Step 2 and Step 3 -> Expected: Match, Result: Matched\n");
+
+    // Step 05: dsHostTerm() Terminate dsHost
+    result = dsHostTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 05: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+    UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
 /**
@@ -252,9 +413,37 @@ void test_l1_dsHost_positive_dsGetSocIDFromSDK (void)
  * - Testing for dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED in dsGetSocIDFromSDK() might be challenging as these represent undefined platform
  * 
  */
-void test_l1_dsHost_negative_dsGetSocIDFromSDK (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHost_negative_dsGetSocIDFromSDK(void) {
+    gTestID = 8;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	
+    char socID[8];
+
+    // Step 01: dsGetSocIDFromSDK() Call without prior initialization
+    dsError_t result = dsGetSocIDFromSDK(socID);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    UT_LOG("Step 01: Fetch SOC ID without initialization -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+
+    // Step 02: dsHostInit() Initialize dsHost
+    result = dsHostInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 02: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 03: dsGetSocIDFromSDK() Call with NULL pointer
+    result = dsGetSocIDFromSDK(NULL);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+    UT_LOG("Step 03: Fetch SOC ID with NULL pointer -> Expected: dsERR_INVALID_PARAM, Got: %d\n", result);
+
+    // Step 04: dsHostTerm() Terminate dsHost
+    result = dsHostTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 04: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 05: dsGetSocIDFromSDK() Call after termination
+    result = dsGetSocIDFromSDK(socID);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    UT_LOG("Step 05: Fetch SOC ID after termination -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+    UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
 /**
@@ -279,9 +468,39 @@ void test_l1_dsHost_negative_dsGetSocIDFromSDK (void)
  * |05|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful |
  * 
  */
-void test_l1_dsHost_positive_dsGetHostEDID (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHost_positive_dsGetHostEDID(void) {
+    gTestID = 9;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	
+    unsigned char edid1[2048];  
+    unsigned char edid2[2048];
+    int length1, length2;
+
+    // Step 01: dsHostInit() Initialize dsHost
+    dsError_t result = dsHostInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 01: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 02: dsGetHostEDID() Call with valid pointers for edid and length
+    result = dsGetHostEDID(edid1, &length1);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 02: Fetch Host EDID (1st time) -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 03: dsGetHostEDID() Call with valid pointers for edid and length again
+    result = dsGetHostEDID(edid2, &length2);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 03: Fetch Host EDID (2nd time) -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 04: Compare EDIDs from step 2/3 and verify they are the same
+    UT_ASSERT_EQUAL(length1, length2);
+    UT_ASSERT_EQUAL(memcmp(edid1, edid2, length1), 0);
+    UT_LOG("Step 04: Compare EDIDs from Step 2 and Step 3 -> Expected: Match, Result: Matched\n");
+
+    // Step 05: dsHostTerm() Terminate dsHost
+    result = dsHostTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 05: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+    UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
 /**
@@ -308,9 +527,38 @@ void test_l1_dsHost_positive_dsGetHostEDID (void)
  * **Additional Notes:**
  * - Testing for dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED in dsGetHostEDID() might be challenging as these represent undefined platform errors or specific hardware constraints. Such errors can be hard to simulate consistently in a controlled testing environment.
  */
-void test_l1_dsHost_negative_dsGetHostEDID (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHost_negative_dsGetHostEDID(void) {
+    gTestID = 10;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	
+    unsigned char edid[2048];  // Making an assumption about maximum EDID size.
+    int length;
+
+    // Step 01: dsGetHostEDID() Call without prior initialization
+    dsError_t result = dsGetHostEDID(edid, &length);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    UT_LOG("Step 01: Fetch Host EDID without initialization -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+
+    // Step 02: dsHostInit() Initialize dsHost
+    result = dsHostInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 02: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 03: dsGetHostEDID() Call with NULL pointers
+    result = dsGetHostEDID(NULL, NULL);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+    UT_LOG("Step 03: Fetch Host EDID with NULL pointers -> Expected: dsERR_INVALID_PARAM, Got: %d\n", result);
+
+    // Step 04: dsHostTerm() Terminate dsHost
+    result = dsHostTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 04: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 05: dsGetHostEDID() Call after termination
+    result = dsGetHostEDID(edid, &length);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    UT_LOG("Step 05: Fetch Host EDID after termination -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+    UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
 static UT_test_suite_t * pSuite = NULL;
