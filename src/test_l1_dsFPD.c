@@ -144,6 +144,9 @@ void test_l1_dsFPD_negative_dsFPTerm (void)
 /**
  * @brief Ensure dsSetFPBlink() sets the blink pattern successfully
  * 
+ * @todo turn on LED before making any tests. (Or off we need to turn it off before the test)
+ * @todo move the LED power function to above
+ * 
  * **Test Group ID:** SetFPBlink: 01@n
  * **Test Case ID:** 001@n
  * 
@@ -168,6 +171,8 @@ void test_l1_dsFPD_positive_dsSetFPBlink (void)
 
 /**
  * @brief Ensure dsSetFPBlink() handles error scenarios gracefully
+ * 
+ * @todo update [invalid duration] to actual invalid values now that they are set
  * 
  * **Test Group ID:** SetFPBlink: 02@n
  * **Test Case ID:** 002@n
@@ -199,6 +204,8 @@ void test_l1_dsFPD_negative_dsSetFPBlink (void)
 /**
  * @brief Ensure dsSetFPBrightness() sets the brightness level correctly under positive scenarios
  * 
+ * @todo link to the settings file and check all positive indicators within the kIndicators array. (do this for all functions)
+ * 
  * **Test Group ID:** SetFPBrightness: 01@n
  * **Test Case ID:** 001@n
  * 
@@ -223,6 +230,9 @@ void test_l1_dsFPD_positive_dsSetFPBrightness (void)
 
 /**
  * @brief Ensure dsSetFPBrightness() handles error scenarios gracefully
+ * 
+ * @todo Go through and double check and input actual invalid bright instead of the generic term
+ * @todo link to the settings file and check all invalid indicators within the kIndicators array. (do this for all functions)
  * 
  * **Test Group ID:** SetFPBrightness: 02@n
  * **Test Case ID:** 002@n
@@ -313,6 +323,10 @@ void test_l1_dsFPD_negative_dsGetFPBrightness (void)
 
 /**
  * @brief Ensure dsSetFPState() correctly sets the Front Panel Display LED state
+ * 
+ * @todo loop through all possible valid indicators
+ * 
+ * @todo STOPPED HERE
  * 
  * **Test Group ID:** SetFPState: 01@n
  * **Test Case ID:** 001@n
