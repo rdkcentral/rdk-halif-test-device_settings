@@ -18,18 +18,57 @@
 */
 
 /**
-* @file TODO: test_l1_dsHost.c
-* @page module_name TODO: Required field, name of the main module
-* @subpage sub_page_name TODO: Add a function group if relevant
+ * @addtogroup HPK Hardware Porting Kit
+ * @{
+ * @par The Hardware Porting Kit
+ * HPK is the next evolution of the well-defined Hardware Abstraction Layer
+ * (HAL), but augmented with more comprehensive documentation and test suites
+ * that OEM or SOC vendors can use to self-certify their ports before taking
+ * them to RDKM for validation or to an operator for final integration and
+ * deployment. The Hardware Porting Kit effectively enables an OEM and/or SOC
+ * vendor to self-certify their own Video Accelerator devices, with minimal RDKM
+ * assistance.
+ *
+ */
+
+/**
+ * @addtogroup Device_Settings Device Settings Module
+ * @{
+ */
+
+/**
+ * @defgroup Device_Settings_HALTEST Device Settings HALTEST
+ * @par Application API Specification
+ * Described herein are the DeviceSettings HAL types and functions that are part of
+ * the Host subsystem. The Host subsystem manages system-specific HAL operations.
+ *  @{
+ */
+
+/**
+ * @defgroup dsHOST_HALTEST Device Settings Host HALTEST
+ *  @{
+ * @par Application API Specification
+ * dsHost HAL provides an interface for managing the host settings for the device settings module
+ */
+
+/**
+ * @defgroup DSHAL_HOST_HALTEST_L1 Device Settings HAL Host Public API
+ *  @{
+ */
+
+/**
+* @file test_l1_dsHost.c
+* @page Device Settings
+* @subpage dsHost
 *
 * ## Module's Role
-* TODO: Explain the module's role in the system in general
-* This is to ensure that the API meets the operational requirements of the module across all vendors.
+* This module includes Level 1 functional tests (success and failure scenarios)
+* This is to ensure that the API meets the operational requirements of the dsHost across all vendors
 *
-* **Pre-Conditions:**  TODO: Add pre-conditions if any@n
-* **Dependencies:** TODO: Add dependencies if any@n
+* **Pre-Conditions:**  None
+* **Dependencies:** None
 *
-* Ref to API Definition specification documentation : [halSpec.md](../../../docs/halSpec.md)
+* Ref to API Definition specification documentation : [ds-host_halSpec.md](../../../docs/ds-host_halSpec.md)
 */
 
 #include <string.h>
@@ -194,9 +233,9 @@ void test_l1_dsHost_positive_dsHostTerm(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
  * |01|dsHostTerm() Attempt to terminate dsHost| | dsERR_NOT_INITIALIZED | Termination should fail as module is not initialized |
- * |01|dsHostInit() Initialize dsHost | | dsERR_NONE | Initialization should pass |
- * |02|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful after initialization |
- * |01|dsHostTerm() Attempt to terminate dsHost | | dsERR_NOT_INITIALIZED | Termination should fail as module is not initialized |
+ * |02|dsHostInit() Initialize dsHost | | dsERR_NONE | Initialization should pass |
+ * |03|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful after initialization |
+ * |04|dsHostTerm() Attempt to terminate dsHost | | dsERR_NOT_INITIALIZED | Termination should fail as module is not initialized |
  * 
  * **Additional Notes:**
  * - Testing for dsERR_GENERAL in dsHostTerm() might be challenging as it represents undefined platform errors. Such errors can be hard to simulate consistently in a controlled testing environment.
@@ -359,8 +398,8 @@ void test_l1_dsHost_positive_dsGetSocIDFromSDK(void) {
     gTestID = 7;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 	
-    char socID1[8]; //Double check with Amit that this is correct
-    char socID2[8];
+    char* socID1; 
+    char* socID2;
 
     // Step 01: dsHostInit() Initialize dsHost
     dsError_t result = dsHostInit();
@@ -378,7 +417,7 @@ void test_l1_dsHost_positive_dsGetSocIDFromSDK(void) {
     UT_LOG("Step 03: Fetch SOC ID (2nd time) -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 04: Compare return values from step 2/3 to ensure they are the same
-    UT_ASSERT_EQUAL(memcmp(socID1, socID2, sizeof(socID1)), 0);
+    UT_ASSERT_EQUAL(socID1, socID2);
     UT_LOG("Step 04: Compare SOC IDs from Step 2 and Step 3 -> Expected: Match, Result: Matched\n");
 
     // Step 05: dsHostTerm() Terminate dsHost
@@ -472,8 +511,8 @@ void test_l1_dsHost_positive_dsGetHostEDID(void) {
     gTestID = 9;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 	
-    unsigned char edid1[2048];  
-    unsigned char edid2[2048];
+    unsigned char edid1[512];  
+    unsigned char edid2[512];
     int length1, length2;
 
     // Step 01: dsHostInit() Initialize dsHost
@@ -520,9 +559,10 @@ void test_l1_dsHost_positive_dsGetHostEDID(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|dsGetHostEDID() Call without prior initialization | Valid unsigned char pointer, valid int pointer | dsERR_NOT_INITIALIZED | Fetching EDID should fail as module is not initialized |
  * |02|dsHostInit() Initialize dsHost| | dsERR_NONE | Initialization should pass |
- * |03|dsGetHostEDID() Call with NULL pointers | NULL, NULL | dsERR_INVALID_PARAM | Should return invalid parameter error |
- * |04|dsHostTerm() Terminate dsHost| | dsERR_NONE | Termination should be successful |
- * |05|dsGetHostEDID() Call after termination | Valid unsigned char pointer, valid int pointer | dsERR_NOT_INITIALIZED | Fetching EDID should fail as module is terminated |
+ * |03|dsGetHostEDID() Call with NULL pointers | Valid char, NULL | dsERR_INVALID_PARAM | Should return invalid parameter error |
+ * |04|dsGetHostEDID() Call with NULL pointers | NULL, Valid length | dsERR_INVALID_PARAM | Should return invalid parameter error |
+ * |05|dsHostTerm() Terminate dsHost| | dsERR_NONE | Termination should be successful |
+ * |06|dsGetHostEDID() Call after termination | Valid unsigned char pointer, valid int pointer | dsERR_NOT_INITIALIZED | Fetching EDID should fail as module is terminated |
  * 
  * **Additional Notes:**
  * - Testing for dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED in dsGetHostEDID() might be challenging as these represent undefined platform errors or specific hardware constraints. Such errors can be hard to simulate consistently in a controlled testing environment.
@@ -531,7 +571,7 @@ void test_l1_dsHost_negative_dsGetHostEDID(void) {
     gTestID = 10;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 	
-    unsigned char edid[2048];  // Making an assumption about maximum EDID size.
+    unsigned char edid[512];  // Making an assumption about maximum EDID size.
     int length;
 
     // Step 01: dsGetHostEDID() Call without prior initialization
@@ -545,16 +585,21 @@ void test_l1_dsHost_negative_dsGetHostEDID(void) {
     UT_LOG("Step 02: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 03: dsGetHostEDID() Call with NULL pointers
-    result = dsGetHostEDID(NULL, NULL);
+    result = dsGetHostEDID(edid, NULL);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     UT_LOG("Step 03: Fetch Host EDID with NULL pointers -> Expected: dsERR_INVALID_PARAM, Got: %d\n", result);
 
-    // Step 04: dsHostTerm() Terminate dsHost
+    // Step 04: dsGetHostEDID() Call with NULL pointers
+    result = dsGetHostEDID(NULL, length);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+    UT_LOG("Step 03: Fetch Host EDID with NULL pointers -> Expected: dsERR_INVALID_PARAM, Got: %d\n", result);
+
+    // Step 05: dsHostTerm() Terminate dsHost
     result = dsHostTerm();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
     UT_LOG("Step 04: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
-    // Step 05: dsGetHostEDID() Call after termination
+    // Step 06: dsGetHostEDID() Call after termination
     result = dsGetHostEDID(edid, &length);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("Step 05: Fetch Host EDID after termination -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
@@ -591,3 +636,9 @@ int test_l1_dsHost_register ( void )
 
 	return 0;
 } 
+
+/** @} */ // End of DSHAL_HOST_HALTEST_L1 doxygen group 
+/** @} */ // End of DS Host HALTEST
+/** @} */ // End of Device Settings HALTEST
+/** @} */ // End of Device Settings Module
+/** @} */ // End of HPK
