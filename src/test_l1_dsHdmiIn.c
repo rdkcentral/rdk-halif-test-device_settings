@@ -46,8 +46,8 @@
  * @todo Note retvals that cannot be tested easily in negative cases
  * @todo make sure we call after termination
  * 
- * **Test Group ID:** Basic: 74@n
- * **Test Case ID:** 306@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 001@n
  * 
  * **Dependencies:** HDMI input hardware is properly connected and functioning.@n
  * **User Interaction:** None
@@ -55,10 +55,10 @@
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsHdmiInInit() for the first time | dsERR_NONE | Should Pass |
- * |02|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after initialization |
- * |03|Call dsHdmiInInit() for the first time | dsERR_NONE | Should Pass |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after initialization |
+ * |01|Call dsHdmiInInit() for the first time | | dsERR_NONE | Should Pass |
+ * |02|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after initialization |
+ * |03|Call dsHdmiInInit() again | | dsERR_NONE | Should Pass |
+ * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after initialization |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsHdmiInInit (void)
@@ -69,8 +69,8 @@ void test_l1_dsHdmiIn_positive_dsHdmiInInit (void)
 /**
  * @brief Ensure dsHdmiInInit() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 74@n
- * **Test Case ID:** 307@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 002@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -78,9 +78,9 @@ void test_l1_dsHdmiIn_positive_dsHdmiInInit (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsHdmiInInit() for the first time | dsERR_NONE | Should Pass |
- * |02|Call dsHdmiInInit() again without terminating the HDMI input sub-system | dsERR_ALREADY_INITIALIZED | Should Pass |
- * |03|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Call dsHdmiInInit() for the first time | | dsERR_NONE | Should Pass |
+ * |02|Call dsHdmiInInit() again without terminating the HDMI input sub-system | | dsERR_ALREADY_INITIALIZED | Should Pass |
+ * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInInit (void)
@@ -91,8 +91,8 @@ void test_l1_dsHdmiIn_negative_dsHdmiInInit (void)
 /**
  * @brief Ensure dsHdmiInTerm() correctly terminates the HDMI input sub-system during positive scenarios.
  * 
- * **Test Group ID:** Basic: 75@n
- * **Test Case ID:** 308@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 003@n
  * 
  * **Dependencies:** HDMI input hardware is properly connected and functioning.@n
  * **User Interaction:** None
@@ -100,10 +100,10 @@ void test_l1_dsHdmiIn_negative_dsHdmiInInit (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsHdmiInInit() for the first time | dsERR_NONE | Should Pass |
- * |02|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after initialization |
- * |03|Call dsHdmiInInit() for the first time | dsERR_NONE | Should Pass |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after initialization |
+ * |01|Call dsHdmiInInit() for the first time | | dsERR_NONE | Should Pass |
+ * |02|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after initialization |
+ * |03|Call dsHdmiInInit() again | | dsERR_NONE | Should Pass |
+ * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after initialization |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsHdmiInTerm (void)
@@ -114,8 +114,8 @@ void test_l1_dsHdmiIn_positive_dsHdmiInTerm (void)
 /**
  * @brief Ensure dsHdmiInTerm() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 75@n
- * **Test Case ID:** 309@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 004@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -124,8 +124,8 @@ void test_l1_dsHdmiIn_positive_dsHdmiInTerm (void)
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Call dsHdmiInTerm() without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
- * |02|Call dsHdmiInInit() for the first time | dsERR_NONE | Should Pass |
- * |03|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after initialization |
+ * |02|Call dsHdmiInInit() for the first time | | dsERR_NONE | Should Pass |
+ * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after initialization |
  * |04|Call dsHdmiInTerm() without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
  */
 
@@ -137,8 +137,8 @@ void test_l1_dsHdmiIn_negative_dsHdmiInTerm (void)
 /**
  * @brief Ensure dsHdmiInGetNumberOfinputs() correctly fetches the number of HDMI input ports during positive scenarios.
  * 
- * **Test Group ID:** Basic: 76@n
- * **Test Case ID:** 310@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 005@n
  * 
  * **Dependencies:** HDMI input hardware is properly connected and functioning.@n
  *                   The HDMI input sub-system has been initialized using dsHdmiInInit().@n
@@ -147,9 +147,11 @@ void test_l1_dsHdmiIn_negative_dsHdmiInTerm (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |02|Call dsHdmiInGetNumberOfinputs() to fetch the number of HDMI input ports | dsERR_NONE | Number should be between 0 and max number of inputs defined in dsHdmiInPort_t |
- * |03|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Call dsHdmiInGetNumberOfinputs() to fetch the number of HDMI input ports |uint8_t*| dsERR_NONE | Number should be between 0 and max number of inputs defined in dsHdmiInPort_t |
+ * |02|Call dsHdmiInGetNumberOfinputs() to fetch the number of HDMI input ports |uint8_t*| dsERR_NONE | Number should be between 0 and max number of inputs defined in dsHdmiInPort_t |
+ * |02|Compare the results to make sure they are equal || Success | The values should be equal |
+ * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsHdmiInGetNumberOfinputs (void)
@@ -160,8 +162,8 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetNumberOfinputs (void)
 /**
  * @brief Ensure dsHdmiInGetNumberOfinputs() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 76@n
- * **Test Case ID:** 311@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 006@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -169,10 +171,11 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetNumberOfinputs (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsHdmiInGetNumberOfinputs() without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
- * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |03|Call dsHdmiInGetNumberOfinputs() with NULL as the parameter | dsERR_INVALID_PARAM | Should Pass |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Call dsHdmiInGetNumberOfinputs() without initializing the HDMI input sub-system |uint8_t*| dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsHdmiInGetNumberOfinputs() with NULL as the parameter |NULL| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |05|Call dsHdmiInGetNumberOfinputs() after termination of the HDMI input sub-system |uint8_t*| dsERR_NOT_INITIALIZED | Should Pass |
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInGetNumberOfinputs (void)
@@ -183,8 +186,8 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetNumberOfinputs (void)
 /**
  * @brief Ensure dsHdmiInGetStatus() correctly fetches the HDMI input port status during positive scenarios.
  * 
- * **Test Group ID:** Basic: 78@n
- * **Test Case ID:** 320@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 007@n
  * 
  * **Dependencies:** HDMI input hardware is properly connected and functioning.@n
  *                   The HDMI input sub-system has been initialized using dsHdmiInInit().@n
@@ -193,12 +196,11 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetNumberOfinputs (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |02|Allocate memory for dsHdmiInStatus_t and call dsHdmiInGetStatus() | dsERR_NONE | Status information should be populated. Validate the output structure |
- * |03|Check if `isPresented` is either TRUE or FALSE | - | Only valid values are TRUE or FALSE |
- * |04|Check if `activePort` is within range, between `dsHDMI_IN_PORT_NONE` and `dsHDMI_IN_PORT_MAX` | - | It should be |
- * |05|Loop through `isPortConnected` and check if each value is either TRUE or FALSE | - | Only valid values are TRUE or FALSE |
- * |06|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Allocate memory for dsHdmiInStatus_t and call dsHdmiInGetStatus() |dsHdmiInStatus_t*| dsERR_NONE | Status information should be populated. Validate the output structure |
+ * |02|Allocate memory for dsHdmiInStatus_t and call dsHdmiInGetStatus() |dsHdmiInStatus_t*| dsERR_NONE | Status information should be populated. Validate the output structure |
+ * |02|Compare the returned values to make sure they are equal || Success | The values should be the same |
+ * |06|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsHdmiInGetStatus (void)
@@ -209,8 +211,8 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetStatus (void)
 /**
  * @brief Ensure dsHdmiInGetStatus() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 78@n
- * **Test Case ID:** 321@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 008@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -218,10 +220,11 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetStatus (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsHdmiInGetStatus() without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
- * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |03|Call dsHdmiInGetStatus() with NULL as the parameter | dsERR_INVALID_PARAM | Should Pass |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Call dsHdmiInGetStatus() without initializing the HDMI input sub-system |dsHdmiInStatus_t*| dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsHdmiInGetStatus() with NULL as the parameter |NULL| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |01|Call dsHdmiInGetStatus() after terminating the HDMI input sub-system |dsHdmiInStatus_t*| dsERR_NOT_INITIALIZED | Should Pass |
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInGetStatus (void)
@@ -232,8 +235,8 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetStatus (void)
 /**
  * @brief Ensure dsHdmiInSelectPort() correctly selects an HDMI input port during positive scenarios.
  * 
- * **Test Group ID:** Basic: 82@n
- * **Test Case ID:** 325@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 009@n
  * 
  * **Dependencies:** HDMI input hardware is properly connected and functioning.@n
  *                   The HDMI input sub-system has been initialized using dsHdmiInInit().@n
@@ -242,11 +245,11 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetStatus (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |02|Select HDMI input port `dsHDMI_IN_PORT_0` using dsHdmiInSelectPort() | dsERR_NONE | Port 0 should be selected |
- * |03|Select HDMI input port `dsHDMI_IN_PORT_1` using dsHdmiInSelectPort() | dsERR_NONE | Port 1 should be selected |
- * |04|Select HDMI input port `dsHDMI_IN_PORT_2` using dsHdmiInSelectPort() | dsERR_NONE | Port 2 should be selected |
- * |05|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_0| dsERR_NONE | Port 0 should be selected |
+ * |03|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_1| dsERR_NONE | Port 1 should be selected |
+ * |04|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_2| dsERR_NONE | Port 2 should be selected |
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsHdmiInSelectPort (void)
@@ -257,8 +260,8 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSelectPort (void)
 /**
  * @brief Ensure dsHdmiInSelectPort() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 82@n
- * **Test Case ID:** 326@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 010@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -266,10 +269,11 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSelectPort (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Select HDMI input port `dsHDMI_IN_PORT_0` without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
- * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |03|Select HDMI input port `dsHDMI_IN_PORT_MAX` which is out of range | dsERR_INVALID_PARAM | Should Pass |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Call dsHdmiInSelectPort() without initializing the HDMI input sub-system |dsHDMI_IN_PORT_0| dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsHdmiInSelectPort() with invalid value |dsHDMI_IN_PORT_MAX| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |01|Call dsHdmiInSelectPort() after terminating the HDMI input sub-system |dsHDMI_IN_PORT_0| dsERR_NOT_INITIALIZED | Should Pass |
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInSelectPort (void)
@@ -280,8 +284,8 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectPort (void)
 /**
  * @brief Ensure dsHdmiInScaleVideo() correctly scales the HDMI input video during positive scenarios.
  * 
- * **Test Group ID:** Basic: 83@n
- * **Test Case ID:** 327@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 011@n
  * 
  * **Dependencies:** HDMI input hardware is properly connected and functioning.@n
  *                   The HDMI input sub-system has been initialized using dsHdmiInInit().@n
@@ -290,9 +294,9 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectPort (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |02|Scale HDMI input video with x=100, y=100, width=800, height=600 using dsHdmiInScaleVideo() | dsERR_NONE | Video should be scaled |
- * |03|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Scale HDMI input video using dsHdmiInScaleVideo() |x=0, y=0, width=800, height=600| dsERR_NONE | Video should be scaled |
+ * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsHdmiInScaleVideo (void)
@@ -303,8 +307,8 @@ void test_l1_dsHdmiIn_positive_dsHdmiInScaleVideo (void)
 /**
  * @brief Ensure dsHdmiInScaleVideo() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 83@n
- * **Test Case ID:** 328@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 012@n
  * 
  * **Dependencies:** Assuming device resolution is 1920x1080@n
  * **User Interaction:** None
@@ -312,11 +316,12 @@ void test_l1_dsHdmiIn_positive_dsHdmiInScaleVideo (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Scale HDMI input video with x=0, y=0, width=2000, height=600 (width is greater than device resolution) without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
- * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |03|Scale HDMI input video with x=0, y=0, width=2000, height=600 (width is greater than device resolution) | dsERR_INVALID_PARAM | Should Pass |
- * |04|Scale HDMI input video with negative x or y coordinates, e.g., x=-100, y=0, width=800, height=600 | dsERR_INVALID_PARAM | Should Pass |
- * |05|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|dsHdmiInScaleVideo() without initializing the HDMI input sub-system |x=0, y=0, width=800, height=600| dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|dsHdmiInScaleVideo()  |x=0, y=0, width=2000, height=600 | dsERR_INVALID_PARAM | Should Pass |
+ * |04|dsHdmiInScaleVideo() with out of bounds|x=-1000, y=0, width=800, height=600| dsERR_INVALID_PARAM | Should Pass |
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |06|dsHdmiInScaleVideo() after terminating the HDMI input sub-system |x=0, y=0, width=800, height=600| dsERR_NOT_INITIALIZED | Should Pass |
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInScaleVideo (void)
@@ -327,8 +332,8 @@ void test_l1_dsHdmiIn_negative_dsHdmiInScaleVideo (void)
 /**
  * @brief Ensure dsHdmiInSelectZoomMode() correctly updates the zoom mode during positive scenarios.
  * 
- * **Test Group ID:** Basic: 84@n
- * **Test Case ID:** 329@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 013@n
  * 
  * **Dependencies:** HDMI input hardware is properly connected and functioning.@n
  *                   The HDMI input sub-system has been initialized using dsHdmiInInit().@n
@@ -337,12 +342,20 @@ void test_l1_dsHdmiIn_negative_dsHdmiInScaleVideo (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |02|Update zoom mode to `dsVIDEO_ZOOM_NONE` using dsHdmiInSelectZoomMode() | dsERR_NONE | Zoom mode should be updated |
- * |03|Update zoom mode to `dsVIDEO_ZOOM_FULL` using dsHdmiInSelectZoomMode() | dsERR_NONE | Zoom mode should be updated |
- * |...|...|...|...|
- * |n|Update zoom mode to `dsVIDEO_ZOOM_MAX - 1` using dsHdmiInSelectZoomMode() | dsERR_NONE | Zoom mode should be updated |
- * |n+1|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Call dsHdmiInSelectZoomMode() |dsVIDEO_ZOOM_NONE| dsERR_NONE | Zoom mode should be updated |
+ * |03|Call dsHdmiInSelectZoomMode() |dsVIDEO_ZOOM_FULL| dsERR_NONE | Zoom mode should be updated |
+ * |04|Call dsHdmiInSelectZoomMode() |dsVIDEO_ZOOM_LB_16_9| dsERR_NONE | Zoom mode should be updated |
+ * |05|Call dsHdmiInSelectZoomMode() |dsVIDEO_ZOOM_LB_14_9| dsERR_NONE | Zoom mode should be updated |
+ * |06|Call dsHdmiInSelectZoomMode() |dsVIDEO_ZOOM_CCO| dsERR_NONE | Zoom mode should be updated |
+ * |07|Call dsHdmiInSelectZoomMode() |dsVIDEO_ZOOM_PAN_SCAN| dsERR_NONE | Zoom mode should be updated |
+ * |08|Call dsHdmiInSelectZoomMode() |dsVIDEO_ZOOM_LB_2_21_1_ON_4_3| dsERR_NONE | Zoom mode should be updated |
+ * |09|Call dsHdmiInSelectZoomMode() |dsVIDEO_ZOOM_LB_2_21_1_ON_16_9| dsERR_NONE | Zoom mode should be updated |
+ * |10|Call dsHdmiInSelectZoomMode() |dsVIDEO_ZOOM_PLATFORM| dsERR_NONE | Zoom mode should be updated |
+ * |11|Call dsHdmiInSelectZoomMode() |dsVIDEO_ZOOM_16_9_ZOOM| dsERR_NONE | Zoom mode should be updated |
+ * |12|Call dsHdmiInSelectZoomMode() |dsVIDEO_ZOOM_PILLARBOX_4_3| dsERR_NONE | Zoom mode should be updated |
+ * |13|Call dsHdmiInSelectZoomMode() |dsVIDEO_ZOOM_WIDE_4_3| dsERR_NONE | Zoom mode should be updated |
+ * |14|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 
@@ -354,8 +367,8 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSelectZoomMode (void)
 /**
  * @brief Ensure dsHdmiInSelectZoomMode() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 84@n
- * **Test Case ID:** 330@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 014@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -363,10 +376,11 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSelectZoomMode (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Update zoom mode to `dsVIDEO_ZOOM_NONE` without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
- * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |03|Update zoom mode to `dsVIDEO_ZOOM_MAX` (out of range) using dsHdmiInSelectZoomMode() | dsERR_INVALID_PARAM | Should Pass |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Call dsHdmiInSelectZoomMode() without initializing the HDMI input sub-system |dsVIDEO_ZOOM_NONE| dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsHdmiInSelectZoomMode() with invalid value |dsVIDEO_ZOOM_MAX| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |05|Call dsHdmiInSelectZoomMode() without terminating the HDMI input sub-system |dsVIDEO_ZOOM_NONE| dsERR_NOT_INITIALIZED | Should Pass |
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode (void)
@@ -377,8 +391,8 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode (void)
 /**
  * @brief Ensure dsHdmiInGetCurrentVideoMode() correctly retrieves the current HDMI video mode during positive scenarios.
  * 
- * **Test Group ID:** Basic: 85@n
- * **Test Case ID:** 331@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 015@n
  * 
  * **Dependencies:** HDMI input hardware is properly connected and functioning.@n
  *                   The HDMI input sub-system has been initialized using dsHdmiInInit().@n
@@ -387,10 +401,11 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |02|Retrieve the current HDMI video mode using dsHdmiInGetCurrentVideoMode() | dsERR_NONE | Video mode should be retrieved |
- * |03|Ensure returned video mode details (resolution, aspect ratio, etc.) match expected settings | - | Ensure accuracy |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Retrieve the current HDMI video mode using dsHdmiInGetCurrentVideoMode() |dsVideoPortResolution_t*| dsERR_NONE | Video mode should be retrieved |
+ * |02|Retrieve the current HDMI video mode using dsHdmiInGetCurrentVideoMode() |dsVideoPortResolution_t*| dsERR_NONE | Video mode should be retrieved |
+ * |03|Ensure returned values are the same| |Success| The values should be the same |
+ * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsHdmiInGetCurrentVideoMode (void)
@@ -401,8 +416,8 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetCurrentVideoMode (void)
 /**
  * @brief Ensure dsHdmiInGetCurrentVideoMode() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 85@n
- * **Test Case ID:** 332@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 016@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -410,10 +425,11 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetCurrentVideoMode (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Retrieve the current HDMI video mode without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
- * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |03|Retrieve the current HDMI video mode with NULL `resolution` pointer using dsHdmiInGetCurrentVideoMode() | dsERR_INVALID_PARAM | Should Pass |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Call dsHdmiInGetCurrentVideoMode() without initializing the HDMI input sub-system |dsVideoPortResolution_t*| dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|dsHdmiInGetCurrentVideoMode() with NULL `resolution` pointer |NULL} dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |05|Call dsHdmiInGetCurrentVideoMode() after terminating the HDMI input sub-system |dsVideoPortResolution_t*| dsERR_NOT_INITIALIZED | Should Pass |
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInGetCurrentVideoMode (void)
@@ -424,8 +440,8 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetCurrentVideoMode (void)
 /**
  * @brief Ensure dsHdmiInRegisterConnectCB() correctly registers a callback during positive scenarios.
  * 
- * **Test Group ID:** Basic: 86@n
- * **Test Case ID:** 333@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 017@n
  * 
  * **Dependencies:** HDMI input hardware is properly connected and functioning.@n
  *                   The HDMI input sub-system has been initialized using dsHdmiInInit().@n
@@ -434,10 +450,9 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetCurrentVideoMode (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |02|Register a valid HDMI input hot plug callback using dsHdmiInRegisterConnectCB() | dsERR_NONE | Callback should be registered |
- * |03|Trigger HDMI hot plug event and ensure registered callback gets called | - | Callback should execute |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Call dsHdmiInRegisterConnectCB() |dsHdmiInConnectCB_t| dsERR_NONE | Callback should be registered |
+ * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsHdmiInRegisterConnectCB (void)
@@ -448,8 +463,8 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterConnectCB (void)
 /**
  * @brief Ensure dsHdmiInRegisterConnectCB() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 86@n
- * **Test Case ID:** 334@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 018@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -457,10 +472,11 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterConnectCB (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Register a callback without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
- * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |03|Register NULL as HDMI input hot plug callback using dsHdmiInRegisterConnectCB() | dsERR_INVALID_PARAM | Should Pass |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01| Call dsHdmiInRegisterConnectCB() without initializing the HDMI input sub-system |dsHdmiInConnectCB_t| dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsHdmiInRegisterConnectCB() with invalid input |NULL| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |05| Call dsHdmiInRegisterConnectCB() after termination the HDMI input sub-system |dsHdmiInConnectCB_t| dsERR_NOT_INITIALIZED | Should Pass |
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInRegisterConnectCB (void)
@@ -471,8 +487,8 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterConnectCB (void)
 /**
  * @brief Ensure dsHdmiInRegisterSignalChangeCB() correctly registers a callback during positive scenarios.
  * 
- * **Test Group ID:** Basic: 87@n
- * **Test Case ID:** 335@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 019@n
  * 
  * **Dependencies:** HDMI input hardware is properly connected and functioning.@n
  *                   The HDMI input sub-system has been initialized using dsHdmiInInit().@n
@@ -481,10 +497,9 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterConnectCB (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |02|Register a valid HDMI input Signal change callback using dsHdmiInRegisterSignalChangeCB() | dsERR_NONE | Callback should be registered |
- * |03|Trigger HDMI Signal Change event and ensure registered callback gets called | - | Callback should execute |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Call dsHdmiInRegisterSignalChangeCB() |dsHdmiInSignalChangeCB_t| dsERR_NONE | Callback should be registered |
+ * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsHdmiInRegisterSignalChangeCB (void)
@@ -495,8 +510,8 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterSignalChangeCB (void)
 /**
  * @brief Ensure dsHdmiInRegisterSignalChangeCB() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 87@n
- * **Test Case ID:** 336@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 020@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -504,10 +519,11 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterSignalChangeCB (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Register a callback without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
- * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |03|Register NULL as HDMI input Signal change callback using dsHdmiInRegisterSignalChangeCB() | dsERR_INVALID_PARAM | Should Pass |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Call dsHdmiInRegisterSignalChangeCB() without initializing the HDMI input sub-system |dsHdmiInSignalChangeCB_t| dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsHdmiInRegisterSignalChangeCB() with invalid input |NULL| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |05|Call dsHdmiInRegisterSignalChangeCB() after terminating the HDMI input sub-system |dsHdmiInSignalChangeCB_t| dsERR_NOT_INITIALIZED | Should Pass |
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInRegisterSignalChangeCB (void)
@@ -518,8 +534,8 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterSignalChangeCB (void)
 /**
  * @brief Ensure dsHdmiInRegisterStatusChangeCB() correctly registers a callback during positive scenarios.
  * 
- * **Test Group ID:** Basic: 88@n
- * **Test Case ID:** 337@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 021@n
  * 
  * **Dependencies:** HDMI input hardware is properly connected and functioning.@n
  *                   The HDMI input sub-system has been initialized using dsHdmiInInit().@n
@@ -528,10 +544,9 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterSignalChangeCB (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |02|Register a valid HDMI input Status change callback using dsHdmiInRegisterStatusChangeCB() | dsERR_NONE | Callback should be registered |
- * |03|Trigger HDMI Status Change event and ensure registered callback gets called | - | Callback should execute |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Call dsHdmiInRegisterStatusChangeCB() with valid input |dsHdmiInStatusChangeCB_t| dsERR_NONE | Callback should be registered |
+ * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsHdmiInRegisterStatusChangeCB (void)
@@ -542,8 +557,8 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterStatusChangeCB (void)
 /**
  * @brief Ensure dsHdmiInRegisterStatusChangeCB() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 88@n
- * **Test Case ID:** 338@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 022@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -551,10 +566,11 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterStatusChangeCB (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Register a callback without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
- * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |03|Register NULL as HDMI input Status change callback using dsHdmiInRegisterStatusChangeCB() | dsERR_INVALID_PARAM | Should Pass |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Call dsHdmiInRegisterStatusChangeCB() without initializing the HDMI input sub-system |dsHdmiInStatusChangeCB_t| dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsHdmiInRegisterStatusChangeCB() with invalid input |NULL| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |05|Call dsHdmiInRegisterStatusChangeCB() after termination the HDMI input sub-system |dsHdmiInStatusChangeCB_t| dsERR_NOT_INITIALIZED | Should Pass |
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInRegisterStatusChangeCB (void)
@@ -565,8 +581,8 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterStatusChangeCB (void)
 /**
  * @brief Ensure dsHdmiInRegisterVideoModeUpdateCB() correctly registers a callback during positive scenarios.
  * 
- * **Test Group ID:** Basic: 89@n
- * **Test Case ID:** 339@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 023@n
  * 
  * **Dependencies:** HDMI input hardware is properly connected and functioning.@n
  *                   The HDMI input sub-system has been initialized using dsHdmiInInit().@n
@@ -575,10 +591,9 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterStatusChangeCB (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |02|Register a valid HDMI input video mode change callback using dsHdmiInRegisterVideoModeUpdateCB() | dsERR_NONE | Callback should be registered |
- * |03|Trigger HDMI video mode Change event by changing video resolution and ensure registered callback gets called | - | Callback should execute |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Call dsHdmiInRegisterVideoModeUpdateCB() with valid inputs |dsHdmiInVideoModeUpdateCB_t| dsERR_NONE | Callback should be registered |
+ * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsHdmiInRegisterVideoModeUpdateCB (void)
@@ -589,8 +604,8 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterVideoModeUpdateCB (void)
 /**
  * @brief Ensure dsHdmiInRegisterVideoModeUpdateCB() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 89@n
- * **Test Case ID:** 340@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 024@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -598,10 +613,11 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterVideoModeUpdateCB (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Register a callback without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
- * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |03|Register NULL as HDMI input video mode change callback using dsHdmiInRegisterVideoModeUpdateCB() | dsERR_INVALID_PARAM | Should Pass |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Call dsHdmiInRegisterVideoModeUpdateCB() without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsHdmiInRegisterVideoModeUpdateCB() with invalid input |NULL| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |05|Call dsHdmiInRegisterVideoModeUpdateCB() after terminating the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
  * 
  */
 
@@ -613,8 +629,8 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterVideoModeUpdateCB (void)
 /**
  * @brief Ensure dsHdmiInRegisterAllmChangeCB() correctly registers a callback during positive scenarios.
  * 
- * **Test Group ID:** Basic: 90@n
- * **Test Case ID:** 341@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 025@n
  * 
  * **Dependencies:** HDMI input hardware supports ALLM and is functioning properly.@n
  *                   The HDMI input sub-system has been initialized using dsHdmiInInit().@n
@@ -623,10 +639,9 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterVideoModeUpdateCB (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |02|Register a valid HDMI input ALLM Mode change callback using dsHdmiInRegisterAllmChangeCB() | dsERR_NONE | Callback should be registered |
- * |03|Trigger HDMI ALLM Mode Change event and ensure registered callback gets called | - | Callback should execute |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Call dsHdmiInRegisterAllmChangeCB() with valid input |dsHdmiInAllmChangeCB_t| dsERR_NONE | Callback should be registered |
+ * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAllmChangeCB (void)
@@ -637,8 +652,8 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAllmChangeCB (void)
 /**
  * @brief Ensure dsHdmiInRegisterAllmChangeCB() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 90@n
- * **Test Case ID:** 342@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 026@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -646,10 +661,11 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAllmChangeCB (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Register a callback without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
- * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |03|Register NULL as HDMI input ALLM Mode change callback using dsHdmiInRegisterAllmChangeCB() | dsERR_INVALID_PARAM | Should Pass |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Call dsHdmiInRegisterAllmChangeCB() without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsHdmiInRegisterAllmChangeCB() with invalid input |NULL| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |05|Call dsHdmiInRegisterAllmChangeCB() after terminating the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAllmChangeCB (void)
@@ -660,8 +676,8 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAllmChangeCB (void)
 /**
  * @brief Ensure dsHdmiInRegisterAVLatencyChangeCB() correctly registers a callback during positive scenarios.
  * 
- * **Test Group ID:** Basic: 91@n
- * **Test Case ID:** 343@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 027@n
  * 
  * **Dependencies:** HDMI input hardware supports AV Latency and is functioning properly.@n
  *                   The HDMI input sub-system has been initialized using dsHdmiInInit().@n
@@ -670,10 +686,9 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAllmChangeCB (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |02|Register a valid HDMI input AV Latency change callback using dsHdmiInRegisterAVLatencyChangeCB() | dsERR_NONE | Callback should be registered |
- * |03|Trigger HDMI AV Latency Change event and ensure registered callback gets called | - | Callback should execute |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Call dsHdmiInRegisterAVLatencyChangeCB() with valid input |dsAVLatencyChangeCB_t| dsERR_NONE | Callback should be registered |
+ * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAVLatencyChangeCB (void)
@@ -684,8 +699,8 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAVLatencyChangeCB (void)
 /**
  * @brief Ensure dsHdmiInRegisterAVLatencyChangeCB() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 91@n
- * **Test Case ID:** 344@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 028@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -693,10 +708,11 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAVLatencyChangeCB (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Register a callback without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
- * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |03|Register NULL as HDMI input AV Latency change callback using dsHdmiInRegisterAVLatencyChangeCB() | dsERR_INVALID_PARAM | Should Pass |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Call dsHdmiInRegisterAVLatencyChangeCB() without initializing the HDMI input sub-system |dsAVLatencyChangeCB_t| dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsHdmiInRegisterAVLatencyChangeCB() with invalid input |NULL| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |05|Call dsHdmiInRegisterAVLatencyChangeCB() after terminating the HDMI input sub-system |dsAVLatencyChangeCB_t| dsERR_NOT_INITIALIZED | Should Pass |
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAVLatencyChangeCB (void)
@@ -707,8 +723,8 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAVLatencyChangeCB (void)
 /**
  * @brief Ensure dsHdmiInRegisterAviContentTypeChangeCB() correctly registers a callback during positive scenarios.
  * 
- * **Test Group ID:** Basic: 92@n
- * **Test Case ID:** 345@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 029@n
  * 
  * **Dependencies:** HDMI input hardware supports AVI content type and is functioning properly.@n
  *                   The HDMI input sub-system has been initialized using dsHdmiInInit().@n
@@ -717,10 +733,9 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAVLatencyChangeCB (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |02|Register a valid HDMI input AVI Content type change callback using dsHdmiInRegisterAviContentTypeChangeCB() | dsERR_NONE | Callback should be registered |
- * |03|Trigger HDMI AVI Content Type Change event and ensure registered callback gets called | - | Callback should execute |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Call dsHdmiInRegisterAviContentTypeChangeCB() with valid input |dsHdmiInAviContentTypeChangeCB_t| dsERR_NONE | Callback should be registered |
+ * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAviContentTypeChangeCB (void)
@@ -731,8 +746,8 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAviContentTypeChangeCB (void)
 /**
  * @brief Ensure dsHdmiInRegisterAviContentTypeChangeCB() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 92@n
- * **Test Case ID:** 346@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 030@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -740,10 +755,11 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAviContentTypeChangeCB (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Register a callback without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
- * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |03|Register NULL as HDMI input AVI Content type change callback using dsHdmiInRegisterAviContentTypeChangeCB() | dsERR_INVALID_PARAM | Should Pass |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Call dsHdmiInRegisterAviContentTypeChangeCB() without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsHdmiInRegisterAviContentTypeChangeCB() with invalid input |NULL| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |05|Call dsHdmiInRegisterAviContentTypeChangeCB() after terminating the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAviContentTypeChangeCB (void)
@@ -754,8 +770,8 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAviContentTypeChangeCB (void)
 /**
  * @brief Ensure dsIsHdmiARCPort() correctly checks for an HDMI ARC port during positive scenarios.
  * 
- * **Test Group ID:** Basic: 93@n
- * **Test Case ID:** 347@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 031@n
  * 
  * **Dependencies:** The HDMI input sub-system has been initialized using dsHdmiInInit().@n
  * **User Interaction:** None
@@ -763,10 +779,13 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAviContentTypeChangeCB (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |02|Check if a valid HDMI port is an ARC port using dsIsHdmiARCPort() | dsERR_NONE | Should successfully check for ARC capability |
- * |03|Check the returned `isArcPort` value | - | Ensure it returns the correct status based on hardware setup |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Call dsIsHdmiARCPort() with valid input |dsHDMI_IN_PORT_0, bool*| dsERR_NONE | Should successfully check for ARC capability |
+ * |03|Call dsIsHdmiARCPort() with valid input |dsHDMI_IN_PORT_1, bool*| dsERR_NONE | Should successfully check for ARC capability |
+ * |04|Call dsIsHdmiARCPort() with valid input |dsHDMI_IN_PORT_2, bool*| dsERR_NONE | Should successfully check for ARC capability |
+ * |05|Call dsIsHdmiARCPort() with valid input |dsHDMI_IN_PORT_2, bool*| dsERR_NONE | Should successfully check for ARC capability |
+ * |06|Compare the values of steps 4 and 5 to make sure they equal one another || Success | The values should be equal |
+ * |07|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsIsHdmiARCPort (void)
@@ -777,8 +796,8 @@ void test_l1_dsHdmiIn_positive_dsIsHdmiARCPort (void)
 /**
  * @brief Ensure dsIsHdmiARCPort() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 93@n
- * **Test Case ID:** 348@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 032@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -786,11 +805,11 @@ void test_l1_dsHdmiIn_positive_dsIsHdmiARCPort (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Check if a port is an ARC port without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
- * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |03|Check with an invalid port value (e.g., negative or beyond max device-specific value) using dsIsHdmiARCPort() | dsERR_INVALID_PARAM | Should Pass |
- * |04|Pass NULL for the `isArcPort` parameter and check a valid port using dsIsHdmiARCPort() | dsERR_INVALID_PARAM | Should Pass |
- * |05|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Call dsIsHdmiARCPort() without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsIsHdmiARCPort() with invalid value |dsHDMI_IN_PORT_MAX, bool*| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsIsHdmiARCPort() with invalid value |dsHDMI_IN_PORT_0, NULL| dsERR_INVALID_PARAM | Should Pass |
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_negative_dsIsHdmiARCPort (void)
@@ -801,8 +820,8 @@ void test_l1_dsHdmiIn_negative_dsIsHdmiARCPort (void)
 /**
  * @brief Ensure dsGetEDIDBytesInfo() correctly retrieves the EDID bytes information during positive scenarios.
  * 
- * **Test Group ID:** Basic: 94@n
- * **Test Case ID:** 349@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 033@n
  * 
  * **Dependencies:** The HDMI input sub-system has been initialized using dsHdmiInInit().@n
  * **User Interaction:** None
@@ -810,11 +829,13 @@ void test_l1_dsHdmiIn_negative_dsIsHdmiARCPort (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |02|Retrieve EDID bytes information for a valid HDMI port using dsGetEDIDBytesInfo() | dsERR_NONE | Should return EDID bytes information successfully |
- * |03|Check the validity of returned `edid` bytes | - | `edid` bytes should be valid based on device configuration |
- * |04|Ensure the `length` matches the expected value | - | `length` should be within the range of 0 to 256 |
- * |05|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Call dsGetEDIDBytesInfo() with valid inputs |dsHDMI_IN_PORT_0, unsigned char**, int*| dsERR_NONE | Should return EDID bytes information successfully |
+ * |02|Call dsGetEDIDBytesInfo() with valid inputs |dsHDMI_IN_PORT_1, unsigned char**, int*| dsERR_NONE | Should return EDID bytes information successfully |
+ * |02|Call dsGetEDIDBytesInfo() with valid inputs |dsHDMI_IN_PORT_2, unsigned char**, int*| dsERR_NONE | Should return EDID bytes information successfully |
+ * |02|Call dsGetEDIDBytesInfo() with valid inputs |dsHDMI_IN_PORT_2, unsigned char**, int*| dsERR_NONE | Should return EDID bytes information successfully |
+ * |04|Compare the results and make sure they are the same | | Success | The values should be the same |
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo (void)
@@ -825,8 +846,8 @@ void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo (void)
 /**
  * @brief Ensure dsGetEDIDBytesInfo() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 94@n
- * **Test Case ID:** 350@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 034@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -834,11 +855,13 @@ void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Retrieve EDID bytes information without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
- * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |03|Pass NULL for the `edid` and `length` parameters and check using dsGetEDIDBytesInfo() | dsERR_INVALID_PARAM | Should Pass |
- * |04|Use an invalid HDMI port to retrieve EDID bytes information using dsGetEDIDBytesInfo() | dsERR_INVALID_PARAM | Should Pass |
- * |05|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Call dsGetEDIDBytesInfo() without initializing the HDMI input sub-system |dsHDMI_IN_PORT_0, unsigned char**, int*| dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsGetEDIDBytesInfo() with invalid value |dsHDMI_IN_PORT_MAX, unsigned char**, int*| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsGetEDIDBytesInfo() with invalid value |dsHDMI_IN_PORT_0, NULL, int*| dsERR_INVALID_PARAM | Should Pass |
+ * |05|Call dsGetEDIDBytesInfo() with invalid value |dsHDMI_IN_PORT_0, unsigned char**, NULL| dsERR_INVALID_PARAM | Should Pass |
+ * |06|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |07|Call dsGetEDIDBytesInfo() after termination the HDMI input sub-system |dsHDMI_IN_PORT_0, unsigned char**, int*| dsERR_NOT_INITIALIZED | Should Pass |
  * 
  */
 void test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo (void)
@@ -849,8 +872,8 @@ void test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo (void)
 /**
  * @brief Ensure dsGetHDMISPDInfo() correctly retrieves the HDMI SPD information during positive scenarios.
  * 
- * **Test Group ID:** Basic: 95@n
- * **Test Case ID:** 351@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 035@n
  * 
  * **Dependencies:** The HDMI input sub-system has been initialized using dsHdmiInInit().@n
  * **User Interaction:** None
@@ -858,11 +881,13 @@ void test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |02|Retrieve HDMI SPD information for a valid HDMI port using dsGetHDMISPDInfo() | dsERR_NONE | Should return HDMI SPD information successfully |
- * |03|Check the validity of the returned `data` | - | `data` bytes should be valid based on device configuration |
- * |04|Ensure the data size does not exceed sizeof(dsSpd_infoframe_st) | - | Data size should be within the expected range |
- * |05|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Call dsGetHDMISPDInfo() with valid input |dsHDMI_IN_PORT_0, unsigned char**| dsERR_NONE | Should return HDMI SPD information successfully |
+ * |03|Call dsGetHDMISPDInfo() with valid input |dsHDMI_IN_PORT_1, unsigned char**| dsERR_NONE | Should return HDMI SPD information successfully |
+ * |04|Call dsGetHDMISPDInfo() with valid input |dsHDMI_IN_PORT_2, unsigned char**| dsERR_NONE | Should return HDMI SPD information successfully |
+ * |05|Call dsGetHDMISPDInfo() with valid input |dsHDMI_IN_PORT_2, unsigned char**| dsERR_NONE | Should return HDMI SPD information successfully |
+ * |06|Compare values from step 4/5 and make sure they're the same || Success | The values should be the same |
+ * |07|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo (void)
@@ -873,8 +898,8 @@ void test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo (void)
 /**
  * @brief Ensure dsGetHDMISPDInfo() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 95@n
- * **Test Case ID:** 352@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 036@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -882,11 +907,12 @@ void test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Retrieve HDMI SPD information without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
- * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |03|Pass NULL for the `data` parameter and check using dsGetHDMISPDInfo() | dsERR_INVALID_PARAM | Should Pass |
- * |04|Use an invalid HDMI port to retrieve HDMI SPD information using dsGetHDMISPDInfo() | dsERR_INVALID_PARAM | Should Pass |
- * |05|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Call dsGetHDMISPDInfo() without initializing the HDMI input sub-system |dsHDMI_IN_PORT_0, unsigned char**| dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsGetHDMISPDInfo() with invalid values |dsHDMI_IN_PORT_MAX, unsigned char**| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsGetHDMISPDInfo() with invalid values |dsHDMI_IN_PORT_0, NULL| dsERR_INVALID_PARAM | Should Pass |
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |06|Call dsGetHDMISPDInfo() after terminating the HDMI input sub-system |dsHDMI_IN_PORT_0, unsigned char**| dsERR_NOT_INITIALIZED | Should Pass |
  * 
  */
 void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo (void)
@@ -897,8 +923,8 @@ void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo (void)
 /**
  * @brief Ensure dsSetEdidVersion() correctly sets the EDID version during positive scenarios.
  * 
- * **Test Group ID:** Basic: 96@n
- * **Test Case ID:** 353@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 037@n
  * 
  * **Dependencies:** The HDMI input sub-system has been initialized using dsHdmiInInit().@n
  * **User Interaction:** None
@@ -906,10 +932,12 @@ void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |02|Set EDID version for a valid HDMI port using dsSetEdidVersion() | dsERR_NONE | Should set EDID version successfully |
- * |03|Retrieve the EDID version for the same HDMI port using dsGetEdidVersion() | dsERR_NONE & matching EDID version | Should return the same EDID version as set in step 2 |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Call dsSetEdidVersion() with valid values |dsHDMI_IN_PORT_0, HDMI_EDID_VER_14| dsERR_NONE | Should set EDID version successfully |
+ * |03|Call dsSetEdidVersion() with valid values |dsHDMI_IN_PORT_0, HDMI_EDID_VER_20| dsERR_NONE | Should set EDID version successfully |
+ * |04|Call dsSetEdidVersion() with valid values |dsHDMI_IN_PORT_1, HDMI_EDID_VER_14| dsERR_NONE | Should set EDID version successfully |
+ * |05|Call dsSetEdidVersion() with valid values |dsHDMI_IN_PORT_2, HDMI_EDID_VER_14| dsERR_NONE | Should set EDID version successfully |
+ * |06|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsSetEdidVersion (void)
@@ -920,8 +948,8 @@ void test_l1_dsHdmiIn_positive_dsSetEdidVersion (void)
 /**
  * @brief Ensure dsSetEdidVersion() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 96@n
- * **Test Case ID:** 354@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 038@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -929,11 +957,12 @@ void test_l1_dsHdmiIn_positive_dsSetEdidVersion (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Set EDID version without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
- * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |03|Use an invalid HDMI port to set EDID version using dsSetEdidVersion() | dsERR_INVALID_PARAM | Should Pass |
- * |04|Use an invalid EDID version to set using dsSetEdidVersion() | dsERR_INVALID_PARAM | Should Pass |
- * |05|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Call dsSetEdidVersion() without initializing the HDMI input sub-system |dsHDMI_IN_PORT_0, HDMI_EDID_VER_14| dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsSetEdidVersion() with invalid inputs |dsHDMI_IN_PORT_MAX, HDMI_EDID_VER_14| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsSetEdidVersion() with invalid inputs |dsHDMI_IN_PORT_0, HDMI_EDID_VER_MAX| dsERR_INVALID_PARAM | Should Pass |
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |06|Call dsSetEdidVersion() without initializing the HDMI input sub-system |dsHDMI_IN_PORT_0, HDMI_EDID_VER_14| dsERR_NOT_INITIALIZED | Should Pass |
  * 
  */
 void test_l1_dsHdmiIn_negative_dsSetEdidVersion (void)
@@ -944,8 +973,8 @@ void test_l1_dsHdmiIn_negative_dsSetEdidVersion (void)
 /**
  * @brief Ensure dsGetEdidVersion() correctly retrieves the EDID version during positive scenarios.
  * 
- * **Test Group ID:** Basic: 97@n
- * **Test Case ID:** 355@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 039@n
  * 
  * **Dependencies:** The HDMI input sub-system has been initialized using dsHdmiInInit() and the EDID version has been set using dsSetEdidVersion().@n
  * **User Interaction:** None
@@ -953,10 +982,13 @@ void test_l1_dsHdmiIn_negative_dsSetEdidVersion (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |02|Set a known EDID version for a valid HDMI port using dsSetEdidVersion() | dsERR_NONE | Should Pass |
- * |03|Retrieve the EDID version for the same HDMI port using dsGetEdidVersion() | dsERR_NONE & matching EDID version | Should return the same EDID version as set in step 2 |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Call dsSetEdidVersion() with valid values |dsHDMI_IN_PORT_0, tv_hdmi_edid_version_t*| dsERR_NONE | Should Pass |
+ * |03|Call dsSetEdidVersion() with valid values |dsHDMI_IN_PORT_1, tv_hdmi_edid_version_t*| dsERR_NONE | Should Pass |
+ * |04|Call dsSetEdidVersion() with valid values |dsHDMI_IN_PORT_2, tv_hdmi_edid_version_t*| dsERR_NONE | Should Pass |
+ * |05|Call dsSetEdidVersion() with valid values |dsHDMI_IN_PORT_0, tv_hdmi_edid_version_t*| dsERR_NONE | Should Pass |
+ * |06|Compare the values from steps 4/5 and make sure they match || Success | The values should be the same |
+ * |07|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsGetEdidVersion (void)
@@ -967,8 +999,8 @@ void test_l1_dsHdmiIn_positive_dsGetEdidVersion (void)
 /**
  * @brief Ensure dsGetEdidVersion() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 97@n
- * **Test Case ID:** 356@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 040@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -976,11 +1008,12 @@ void test_l1_dsHdmiIn_positive_dsGetEdidVersion (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Retrieve EDID version without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
- * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |03|Use an invalid HDMI port to retrieve EDID version using dsGetEdidVersion() | dsERR_INVALID_PARAM | Should Pass |
- * |04|Use NULL for the `iEdidVersion` parameter and check using dsGetEdidVersion() | dsERR_INVALID_PARAM | Should Pass |
- * |05|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Call dsGetEdidVersion() without initializing the HDMI input sub-system |dsHDMI_IN_PORT_0, tv_hdmi_edid_version_t*| dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsGetEdidVersion() with invalid inputs |dsHDMI_IN_PORT_MAX, tv_hdmi_edid_version_t*| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsGetEdidVersion() with invalid inputs |dsHDMI_IN_PORT_0, NULL| dsERR_INVALID_PARAM | Should Pass |
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |06|Call dsGetEdidVersion() without initializing the HDMI input sub-system |dsHDMI_IN_PORT_0, tv_hdmi_edid_version_t*| dsERR_NOT_INITIALIZED | Should Pass |
  * 
  */
 void test_l1_dsHdmiIn_negative_dsGetEdidVersion (void)
@@ -991,8 +1024,8 @@ void test_l1_dsHdmiIn_negative_dsGetEdidVersion (void)
 /**
  * @brief Ensure dsGetAllmStatus() correctly retrieves the ALLM status during positive scenarios.
  * 
- * **Test Group ID:** Basic: 98@n
- * **Test Case ID:** 357@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 041@n
  * 
  * **Dependencies:** The HDMI input sub-system has been initialized using dsHdmiInInit().@n
  * **User Interaction:** None
@@ -1000,10 +1033,13 @@ void test_l1_dsHdmiIn_negative_dsGetEdidVersion (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |02|Retrieve the ALLM status for a valid HDMI port using dsGetAllmStatus() | dsERR_NONE | Should retrieve ALLM status successfully |
- * |03|Validate the returned status is either true or false | True or False | Ensure consistency |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Call dsGetAllmStatus() with valid inputs |dsHDMI_IN_PORT_0, bool*| dsERR_NONE | Should retrieve ALLM status successfully |
+ * |03|Call dsGetAllmStatus() with valid inputs |dsHDMI_IN_PORT_1, bool*| dsERR_NONE | Should retrieve ALLM status successfully |
+ * |04|Call dsGetAllmStatus() with valid inputs |dsHDMI_IN_PORT_2, bool*| dsERR_NONE | Should retrieve ALLM status successfully |
+ * |05|Call dsGetAllmStatus() with valid inputs |dsHDMI_IN_PORT_2, bool*| dsERR_NONE | Should retrieve ALLM status successfully |
+ * |06|Compare the results of steps 4/5 and make sure they are the same || Success | The returned values should be the same |
+ * |07|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsGetAllmStatus (void)
@@ -1014,8 +1050,8 @@ void test_l1_dsHdmiIn_positive_dsGetAllmStatus (void)
 /**
  * @brief Ensure dsGetAllmStatus() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 98@n
- * **Test Case ID:** 358@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 042@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1023,11 +1059,12 @@ void test_l1_dsHdmiIn_positive_dsGetAllmStatus (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Retrieve ALLM status without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
- * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |03|Use an invalid HDMI port to retrieve ALLM status using dsGetAllmStatus() | dsERR_INVALID_PARAM | Should Pass |
- * |04|Use NULL for the `allmStatus` parameter and check using dsGetAllmStatus() | dsERR_INVALID_PARAM | Should Pass |
- * |05|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Call dsGetAllmStatus() without initializing the HDMI input sub-system |dsHDMI_IN_PORT_0, bool*| dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsGetAllmStatus() without valid inputs |dsHDMI_IN_PORT_MAX, bool*| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsGetAllmStatus() without valid inputs |dsHDMI_IN_PORT_0, NULL| dsERR_INVALID_PARAM | Should Pass |
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |06|Call dsGetAllmStatus() after termination the HDMI input sub-system |dsHDMI_IN_PORT_0, bool*| dsERR_NOT_INITIALIZED | Should Pass |
  * 
  */
 void test_l1_dsHdmiIn_negative_dsGetAllmStatus (void)
@@ -1038,8 +1075,8 @@ void test_l1_dsHdmiIn_negative_dsGetAllmStatus (void)
 /**
  * @brief Ensure dsGetSupportedGameFeaturesList() correctly retrieves the list of supported game features during positive scenarios.
  * 
- * **Test Group ID:** Basic: 99@n
- * **Test Case ID:** 359@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 043@n
  * 
  * **Dependencies:** The HDMI input sub-system has been initialized using dsHdmiInInit().@n
  * **User Interaction:** None
@@ -1047,10 +1084,11 @@ void test_l1_dsHdmiIn_negative_dsGetAllmStatus (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |02|Retrieve the list of supported game features using dsGetSupportedGameFeaturesList() | dsERR_NONE | Should retrieve list successfully |
- * |03|Validate the returned list for its consistency and expected values | List contains expected features | Ensure features match documentation/specifications |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Call dsGetSupportedGameFeaturesList() with valid inputs |dsSupportedGameFeatureList_t*| dsERR_NONE | Should retrieve list successfully |
+ * |03|Call dsGetSupportedGameFeaturesList() with valid inputs |dsSupportedGameFeatureList_t*| dsERR_NONE | Should retrieve list successfully |
+ * |04|Compare the returns of steps 2/3 and make sure they compare || Success | Make sure the returned are values |
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsGetSupportedGameFeaturesList (void)
@@ -1061,8 +1099,8 @@ void test_l1_dsHdmiIn_positive_dsGetSupportedGameFeaturesList (void)
 /**
  * @brief Ensure dsGetSupportedGameFeaturesList() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 99@n
- * **Test Case ID:** 360@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 044@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1070,10 +1108,11 @@ void test_l1_dsHdmiIn_positive_dsGetSupportedGameFeaturesList (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Retrieve the list of supported game features without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
- * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |03|Use NULL for the `features` parameter and check using dsGetSupportedGameFeaturesList() | dsERR_INVALID_PARAM | Should Pass |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Call dsGetSupportedGameFeaturesList() without initializing the HDMI input sub-system |dsSupportedGameFeatureList_t*| dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsGetSupportedGameFeaturesList() with invalid input |NULL| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |05|Call dsGetSupportedGameFeaturesList() after termination the HDMI input sub-system |dsSupportedGameFeatureList_t*| dsERR_NOT_INITIALIZED | Should Pass |
  * 
  */
 void test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList (void)
@@ -1084,8 +1123,8 @@ void test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList (void)
 /**
  * @brief Ensure dsGetAVLatency() correctly retrieves the current AV latency during positive scenarios.
  * 
- * **Test Group ID:** Basic: 100@n
- * **Test Case ID:** 361@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 045@n
  * 
  * **Dependencies:** The HDMI input sub-system has been initialized using dsHdmiInInit().@n
  * **User Interaction:** None
@@ -1093,11 +1132,11 @@ void test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |02|Retrieve the current AV latency using dsGetAVLatency() | dsERR_NONE | Should retrieve AV latency values successfully |
- * |03|Validate the returned audio latency is within the range [0, 500ms] | 0ms <= audio_latency <= 500ms | Ensure consistency |
- * |04|Validate the returned video latency is within the range [0, 500ms] | 0ms <= video_latency <= 500ms | Ensure consistency |
- * |05|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Call dsGetAVLatency() with valid input |int*, int*| dsERR_NONE | Should retrieve AV latency values successfully |
+ * |03|Call dsGetAVLatency() with valid input |int*, int*| dsERR_NONE | Should retrieve AV latency values successfully |
+ * |04|Validate the returns of steps 2/3 and verify that they are the same| | Success | The same values should be the same. |
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsGetAVLatency (void)
@@ -1108,8 +1147,8 @@ void test_l1_dsHdmiIn_positive_dsGetAVLatency (void)
 /**
  * @brief Ensure dsGetAVLatency() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 100@n
- * **Test Case ID:** 362@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 046@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1117,12 +1156,12 @@ void test_l1_dsHdmiIn_positive_dsGetAVLatency (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Retrieve the current AV latency without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
- * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | dsERR_NONE | Should Pass |
- * |03|Use NULL for the `audio_latency` parameter and check using dsGetAVLatency() | dsERR_INVALID_PARAM | Should Pass |
- * |04|Use NULL for the `video_latency` parameter and check using dsGetAVLatency() | dsERR_INVALID_PARAM | Should Pass |
- * |05|Call dsGetAVLatency() with both parameters as NULL | dsERR_INVALID_PARAM | Should Pass |
- * |06|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after test |
+ * |01|Call dsGetAVLatency() without initializing the HDMI input sub-system |int*, int*| dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsGetAVLatency() with valid inputs |NULL, int*| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsGetAVLatency() with valid inputs |int*, NULL| dsERR_INVALID_PARAM | Should Pass |
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |06|Call dsGetAVLatency() after terminating the HDMI input sub-system |int*, int*| dsERR_NOT_INITIALIZED | Should Pass |
  * 
  */
 void test_l1_dsHdmiIn_negative_dsGetAVLatency (void)
