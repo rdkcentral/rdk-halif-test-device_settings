@@ -41,6 +41,11 @@
 /**
  * @brief Ensure dsHdmiInInit() correctly initializes the HDMI input sub-system during positive scenarios.
  * 
+ * @todo fix test group/test case
+ * @todo Update description (in test procedure)
+ * @todo Note retvals that cannot be tested easily in negative cases
+ * @todo make sure we call after termination
+ * 
  * **Test Group ID:** Basic: 74@n
  * **Test Case ID:** 306@n
  * 
@@ -56,7 +61,6 @@
  * |04|Call dsHdmiInTerm() to ensure deinitialization | dsERR_NONE | Clean up after initialization |
  * 
  */
-
 void test_l1_dsHdmiIn_positive_dsHdmiInInit (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
