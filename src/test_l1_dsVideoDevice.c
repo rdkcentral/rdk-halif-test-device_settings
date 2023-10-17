@@ -39,598 +39,611 @@
 #include <ut_log.h>
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsVideoDeviceInit() correctly initializes all video devices during positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 100@n
+ * **Test Case ID:** 363@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsVideoDeviceInit() to initialize all video devices | dsERR_NONE | Video devices should be initialized successfully |
+ * |02|De-initialize the video devices using dsVideoDeviceTerm() for cleanup | dsERR_NONE | Clean up after test |
+ * |03|Call dsVideoDeviceInit() to initialize all video devices | dsERR_NONE | Video devices should be initialized successfully |
+ * |04|De-initialize the video devices using dsVideoDeviceTerm() for cleanup | dsERR_NONE | Clean up after test |
+ * 
+ */
 void test_l1_dsVideoDevice_positive_dsVideoDeviceInit (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsVideoDeviceInit() returns correct error codes during negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 100@n
+ * **Test Case ID:** 364@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsVideoDeviceInit() to initialize all video devices | dsERR_NONE | Video devices should be initialized successfully |
+ * |02|Call dsVideoDeviceInit() again without terminating the previous initialization | dsERR_ALREADY_INITIALIZED | Should not allow double initialization |
+ * |03|De-initialize the video devices using dsVideoDeviceTerm() for cleanup | dsERR_NONE | Clean up after test |
+ * 
+ */
 void test_l1_dsVideoDevice_negative_dsVideoDeviceInit (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
-void test_l1_dsVideoDevice_positive_dsGetVideoDevice (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
-}
+ * @brief Ensure dsVideoDeviceTerm() correctly de-initializes all video devices during positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 100@n
+ * **Test Case ID:** 365@n
+ * 
+ * **Dependencies:** Video devices have been initialized using dsVideoDeviceInit().@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsVideoDeviceInit() to initialize all video devices | dsERR_NONE | Video devices should be initialized successfully |
+ * |02|De-initialize the video devices using dsVideoDeviceTerm() for cleanup | dsERR_NONE | Clean up after test |
+ * |03|Call dsVideoDeviceInit() to initialize all video devices | dsERR_NONE | Video devices should be initialized successfully |
+ * |04|De-initialize the video devices using dsVideoDeviceTerm() for cleanup | dsERR_NONE | Clean up after test |
+ * 
+ */
 
-/**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
-void test_l1_dsVideoDevice_negative_dsGetVideoDevice (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
-}
-
-/**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
-void test_l1_dsVideoDevice_positive_dsSetDFC (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
-}
-
-/**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
-void test_l1_dsVideoDevice_negative_dsSetDFC (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
-}
-
-/**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
-void test_l1_dsVideoDevice_positive_dsGetDFC (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
-}
-
-/**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
-void test_l1_dsVideoDevice_negative_dsGetDFC (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
-}
-
-/**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
 void test_l1_dsVideoDevice_positive_dsVideoDeviceTerm (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsVideoDeviceTerm() returns correct error codes during negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 100@n
+ * **Test Case ID:** 366@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsVideoDeviceTerm() without prior initialization of video devices | dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |02|Initialize video devices using dsVideoDeviceInit() | dsERR_NONE | Video devices should be initialized successfully |
+ * |03|Call dsVideoDeviceTerm() to de-initialize all video devices | dsERR_NONE | Video devices should be de-initialized successfully |
+ * |04|Call dsVideoDeviceTerm() again without re-initialization | dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * 
+ */
 void test_l1_dsVideoDevice_negative_dsVideoDeviceTerm (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Test guidance to ensure dsGetVideoDevice() correctly fetches the handle for the video device in positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 300@n
+ * **Test Case ID:** 605@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Initialize video devices using dsVideoDeviceInit() | dsERR_NONE | Video devices should be initialized successfully |
+ * |02|Call dsGetVideoDevice() using index as 0 and a pointer to retrieve the handle | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
+ * |03|De-initialize the video devices using dsVideoDeviceTerm() | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ * @note Index is always set to 0, due to devices only having a single video device.
+ */
+void test_l1_dsVideoDevice_positive_dsGetVideoDevice (void)
+{
+	UT_FAIL(This function needs to be implemented!); 
+}
+
+/**
+ * @brief Test guidance to ensure dsGetVideoDevice() returns correct error codes for negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 300@n
+ * **Test Case ID:** 606@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsGetVideoDevice() without prior initialization of video devices| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |02|Initialize video devices using dsVideoDeviceInit() | dsERR_NONE | Video devices should be initialized successfully |
+ * |03|Call dsGetVideoDevice() with index > 0 and a valid pointer to retrieve handle | dsERR_INVALID_PARAM | Should report invalid parameter since index should always be 0 |
+ * |04|De-initialize the video devices using dsVideoDeviceTerm() | dsERR_NONE | Video devices should be de-initialized successfully|
+ * |05|Initialize video devices using dsVideoDeviceInit() | dsERR_NONE | Video devices should be initialized successfully |
+ * |06|Call dsGetVideoDevice() with index set to 0 but a null pointer for handle | dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |07|De-initialize the video devices using dsVideoDeviceTerm() | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ */
+void test_l1_dsVideoDevice_negative_dsGetVideoDevice (void)
+{
+	UT_FAIL(This function needs to be implemented!); 
+}
+
+/**
+ * @brief Test guidance to ensure dsSetDFC() correctly sets the screen zoom mode in positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 400@n
+ * **Test Case ID:** 705@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Initialize video devices using dsVideoDeviceInit() | dsERR_NONE | Video devices should be initialized successfully |
+ * |02|Obtain video device handle using dsGetVideoDevice() | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
+ * |03|Set the DFC mode using dsSetDFC() with the obtained handle and a valid zoom mode | dsERR_NONE | Should successfully set the DFC mode |
+ * |04|De-initialize the video devices using dsVideoDeviceTerm() | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ */
+void test_l1_dsVideoDevice_positive_dsSetDFC (void)
+{
+	UT_FAIL(This function needs to be implemented!); 
+}
+
+/**
+ * @brief Test guidance to ensure dsSetDFC() returns correct error codes for negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 400@n
+ * **Test Case ID:** 706@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsSetDFC() without prior initialization of video devices | dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |02|Initialize video devices using dsVideoDeviceInit() | dsERR_NONE | Video devices should be initialized successfully |
+ * |03|Obtain video device handle using dsGetVideoDevice() | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
+ * |04|Call dsSetDFC() with an invalid handle | dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |05|De-initialize the video devices using dsVideoDeviceTerm() | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ */
+void test_l1_dsVideoDevice_negative_dsSetDFC (void)
+{
+	UT_FAIL(This function needs to be implemented!); 
+}
+
+/**
+ * @brief Test guidance to ensure dsGetDFC() correctly fetches the screen zoom mode in positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 500@n
+ * **Test Case ID:** 805@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Initialize video devices using dsVideoDeviceInit() | dsERR_NONE | Video devices should be initialized successfully |
+ * |02|Obtain video device handle using dsGetVideoDevice() | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
+ * |03|Get the DFC mode using dsGetDFC() with the obtained handle | dsERR_NONE | Should successfully fetch the DFC mode |
+ * |04|De-initialize the video devices using dsVideoDeviceTerm() | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ */
+void test_l1_dsVideoDevice_positive_dsGetDFC (void)
+{
+	UT_FAIL(This function needs to be implemented!); 
+}
+
+/**
+ * @brief Test guidance to ensure dsGetDFC() returns correct error codes for negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 500@n
+ * **Test Case ID:** 806@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsGetDFC() without prior initialization of video devices | dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |02|Initialize video devices using dsVideoDeviceInit() | dsERR_NONE | Video devices should be initialized successfully |
+ * |03|Obtain video device handle using dsGetVideoDevice() | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
+ * |04|Call dsGetDFC() with an invalid handle | dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |05|De-initialize the video devices using dsVideoDeviceTerm() | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ */
+void test_l1_dsVideoDevice_negative_dsGetDFC (void)
+{
+	UT_FAIL(This function needs to be implemented!); 
+}
+
+/**
+ * @brief Test guidance to ensure dsGetHDRCapabilities() correctly fetches the HDR capabilities in positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 600@n
+ * **Test Case ID:** 907@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Initialize video devices using dsVideoDeviceInit() | dsERR_NONE | Video devices should be initialized successfully |
+ * |02|Obtain video device handle using dsGetVideoDevice() | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
+ * |03|Get HDR capabilities using dsGetHDRCapabilities() with the obtained handle | dsERR_NONE | Should successfully fetch the HDR capabilities |
+ * |04|De-initialize the video devices using dsVideoDeviceTerm() | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ */
 void test_l1_dsVideoDevice_positive_dsGetHDRCapabilities (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Test guidance to ensure dsGetHDRCapabilities() returns correct error codes for negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 600@n
+ * **Test Case ID:** 908@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsGetHDRCapabilities() without prior initialization of video devices | dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |02|Initialize video devices using dsVideoDeviceInit() | dsERR_NONE | Video devices should be initialized successfully |
+ * |03|Obtain video device handle using dsGetVideoDevice() | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
+ * |04|Call dsGetHDRCapabilities() with an invalid handle | dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |05|De-initialize the video devices using dsVideoDeviceTerm() | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ */
 void test_l1_dsVideoDevice_negative_dsGetHDRCapabilities (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Test guidance to ensure dsGetSupportedVideoCodingFormats() correctly fetches supported video formats in positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 700@n
+ * **Test Case ID:** 1009@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Initialize video devices using dsVideoDeviceInit() | dsERR_NONE | Video devices should be initialized successfully |
+ * |02|Obtain video device handle using dsGetVideoDevice() | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
+ * |03|Get supported video formats using dsGetSupportedVideoCodingFormats() with the obtained handle | dsERR_NONE | Should successfully fetch the supported video formats |
+ * |04|De-initialize the video devices using dsVideoDeviceTerm() | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ */
 void test_l1_dsVideoDevice_positive_dsGetSupportedVideoCodingFormats (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Test guidance to ensure dsGetSupportedVideoCodingFormats() returns correct error codes for negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 700@n
+ * **Test Case ID:** 1010@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsGetSupportedVideoCodingFormats() without prior initialization of video devices | dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |02|Initialize video devices using dsVideoDeviceInit() | dsERR_NONE | Video devices should be initialized successfully |
+ * |03|Obtain video device handle using dsGetVideoDevice() | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
+ * |04|Call dsGetSupportedVideoCodingFormats() with an invalid handle | dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |05|De-initialize the video devices using dsVideoDeviceTerm() | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ */
 void test_l1_dsVideoDevice_negative_dsGetSupportedVideoCodingFormats (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Test guidance to ensure dsGetVideoCodecInfo() correctly fetches the video codec information in positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 800@n
+ * **Test Case ID:** 1101@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Initialize video devices using dsVideoDeviceInit() | dsERR_NONE | Video devices should be initialized successfully |
+ * |02|Obtain video device handle using dsGetVideoDevice() | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
+ * |03|Get video codec information using dsGetVideoCodecInfo() with the obtained handle and a valid codec | dsERR_NONE | Should successfully fetch the video codec information |
+ * |04|De-initialize the video devices using dsVideoDeviceTerm() | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ */
 void test_l1_dsVideoDevice_positive_dsGetVideoCodecInfo (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Test guidance to ensure dsGetVideoCodecInfo() returns correct error codes for negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 800@n
+ * **Test Case ID:** 1102@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsGetVideoCodecInfo() without prior initialization of video devices | dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |02|Initialize video devices using dsVideoDeviceInit() | dsERR_NONE | Video devices should be initialized successfully |
+ * |03|Obtain video device handle using dsGetVideoDevice() | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
+ * |04|Call dsGetVideoCodecInfo() with an invalid handle | dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |05|De-initialize the video devices using dsVideoDeviceTerm() | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ */
 void test_l1_dsVideoDevice_negative_dsGetVideoCodecInfo (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Test guidance to ensure dsForceDisableHDRSupport() correctly force disables the HDR support in positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 900@n
+ * **Test Case ID:** 1203@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Initialize video devices using dsVideoDeviceInit() | dsERR_NONE | Video devices should be initialized successfully |
+ * |02|Obtain video device handle using dsGetVideoDevice() | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
+ * |03|Force disable HDR support using dsForceDisableHDRSupport() with the obtained handle | dsERR_NONE | HDR support should be force disabled successfully |
+ * |04|De-initialize the video devices using dsVideoDeviceTerm() | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ */
 void test_l1_dsVideoDevice_positive_dsForceDisableHDRSupport (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Test guidance to ensure dsForceDisableHDRSupport() returns correct error codes for negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 900@n
+ * **Test Case ID:** 1204@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsForceDisableHDRSupport() without prior initialization of video devices | dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |02|Initialize video devices using dsVideoDeviceInit() | dsERR_NONE | Video devices should be initialized successfully |
+ * |03|Obtain video device handle using dsGetVideoDevice() | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
+ * |04|Call dsForceDisableHDRSupport() with an invalid handle | dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |05|De-initialize the video devices using dsVideoDeviceTerm() | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ */
 void test_l1_dsVideoDevice_negative_dsForceDisableHDRSupport (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Test guidance to ensure dsSetFRFMode() correctly sets the FRF mode of the device in positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 1000@n
+ * **Test Case ID:** 1301@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Initialize video devices using dsVideoDeviceInit() | dsERR_NONE | Video devices should be initialized successfully |
+ * |02|Obtain video device handle using dsGetVideoDevice() | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
+ * |03|Set the FRF mode using dsSetFRFMode() with the obtained handle and a valid framerate value | dsERR_NONE | FRF mode should be set successfully |
+ * |04|De-initialize the video devices using dsVideoDeviceTerm() | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ */
 void test_l1_dsVideoDevice_positive_dsSetFRFMode (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Test guidance to ensure dsSetFRFMode() returns correct error codes for negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 1000@n
+ * **Test Case ID:** 1302@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsSetFRFMode() without prior initialization of video devices | dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |02|Initialize video devices using dsVideoDeviceInit() | dsERR_NONE | Video devices should be initialized successfully |
+ * |03|Obtain video device handle using dsGetVideoDevice() | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
+ * |04|Call dsSetFRFMode() with an invalid handle | dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |05|De-initialize the video devices using dsVideoDeviceTerm() | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ */
 void test_l1_dsVideoDevice_negative_dsSetFRFMode (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Test guidance to ensure dsGetFRFMode() correctly fetches the FRF mode of the device in positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 1100@n
+ * **Test Case ID:** 1403@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Initialize video devices using dsVideoDeviceInit() | dsERR_NONE | Video devices should be initialized successfully |
+ * |02|Obtain video device handle using dsGetVideoDevice() | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
+ * |03|Get the FRF mode using dsGetFRFMode() with the obtained handle | dsERR_NONE | Should fetch the FRF mode successfully |
+ * |04|De-initialize the video devices using dsVideoDeviceTerm() | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ */
 void test_l1_dsVideoDevice_positive_dsGetFRFMode (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Test guidance to ensure dsGetFRFMode() returns correct error codes for negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 1100@n
+ * **Test Case ID:** 1404@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsGetFRFMode() without prior initialization of video devices | dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |02|Initialize video devices using dsVideoDeviceInit() | dsERR_NONE | Video devices should be initialized successfully |
+ * |03|Obtain video device handle using dsGetVideoDevice() | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
+ * |04|Call dsGetFRFMode() with an invalid handle | dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |05|De-initialize the video devices using dsVideoDeviceTerm() | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ */
 void test_l1_dsVideoDevice_negative_dsGetFRFMode (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Test guidance to ensure dsGetCurrentDisplayframerate() correctly fetches the current framerate of the device in positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 1200@n
+ * **Test Case ID:** 1501@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Initialize video devices using dsVideoDeviceInit() | dsERR_NONE | Video devices should be initialized successfully |
+ * |02|Obtain video device handle using dsGetVideoDevice() | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
+ * |03|Get the current display framerate using dsGetCurrentDisplayframerate() with the obtained handle | dsERR_NONE | Should fetch the current framerate successfully |
+ * |04|De-initialize the video devices using dsVideoDeviceTerm() | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ */
 void test_l1_dsVideoDevice_positive_dsGetCurrentDisplayframerate (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Test guidance to ensure dsGetCurrentDisplayframerate() returns correct error codes for negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 1200@n
+ * **Test Case ID:** 1502@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsGetCurrentDisplayframerate() without prior initialization of video devices | dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |02|Initialize video devices using dsVideoDeviceInit() | dsERR_NONE | Video devices should be initialized successfully |
+ * |03|Obtain video device handle using dsGetVideoDevice() | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
+ * |04|Call dsGetCurrentDisplayframerate() with an invalid handle | dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |05|De-initialize the video devices using dsVideoDeviceTerm() | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ */
 void test_l1_dsVideoDevice_negative_dsGetCurrentDisplayframerate (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Test guidance to ensure dsSetDisplayframerate() correctly sets the display framerate for the device in positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 1300@n
+ * **Test Case ID:** 1603@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Initialize video devices using dsVideoDeviceInit() | dsERR_NONE | Video devices should be initialized successfully |
+ * |02|Obtain video device handle using dsGetVideoDevice() | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
+ * |03|Set the display framerate using dsSetDisplayframerate() with the obtained handle and a valid framerate | dsERR_NONE | Display framerate should be set successfully |
+ * |04|De-initialize the video devices using dsVideoDeviceTerm() | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ */
 void test_l1_dsVideoDevice_positive_dsSetDisplayframerate (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Test guidance to ensure dsSetDisplayframerate() returns correct error codes for negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 1300@n
+ * **Test Case ID:** 1604@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsSetDisplayframerate() without prior initialization of video devices | dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |02|Initialize video devices using dsVideoDeviceInit() | dsERR_NONE | Video devices should be initialized successfully |
+ * |03|Obtain video device handle using dsGetVideoDevice() | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
+ * |04|Call dsSetDisplayframerate() with an invalid handle | dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |05|De-initialize the video devices using dsVideoDeviceTerm() | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ */
 void test_l1_dsVideoDevice_negative_dsSetDisplayframerate (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
@@ -654,14 +667,14 @@ int test_l1_dsVideoDevice_register ( void )
 
 	UT_add_test( pSuite, "dsVideoDeviceInit_L1_positive" ,test_l1_dsVideoDevice_positive_dsVideoDeviceInit );
 	UT_add_test( pSuite, "dsVideoDeviceInit_L1_negative" ,test_l1_dsVideoDevice_negative_dsVideoDeviceInit );
+    UT_add_test( pSuite, "dsVideoDeviceTerm_L1_positive" ,test_l1_dsVideoDevice_positive_dsVideoDeviceTerm );
+	UT_add_test( pSuite, "dsVideoDeviceTerm_L1_negative" ,test_l1_dsVideoDevice_negative_dsVideoDeviceTerm );
 	UT_add_test( pSuite, "dsGetVideoDevice_L1_positive" ,test_l1_dsVideoDevice_positive_dsGetVideoDevice );
 	UT_add_test( pSuite, "dsGetVideoDevice_L1_negative" ,test_l1_dsVideoDevice_negative_dsGetVideoDevice );
 	UT_add_test( pSuite, "dsSetDFC_L1_positive" ,test_l1_dsVideoDevice_positive_dsSetDFC );
 	UT_add_test( pSuite, "dsSetDFC_L1_negative" ,test_l1_dsVideoDevice_negative_dsSetDFC );
 	UT_add_test( pSuite, "dsGetDFC_L1_positive" ,test_l1_dsVideoDevice_positive_dsGetDFC );
 	UT_add_test( pSuite, "dsGetDFC_L1_negative" ,test_l1_dsVideoDevice_negative_dsGetDFC );
-	UT_add_test( pSuite, "dsVideoDeviceTerm_L1_positive" ,test_l1_dsVideoDevice_positive_dsVideoDeviceTerm );
-	UT_add_test( pSuite, "dsVideoDeviceTerm_L1_negative" ,test_l1_dsVideoDevice_negative_dsVideoDeviceTerm );
 	UT_add_test( pSuite, "dsGetHDRCapabilities_L1_positive" ,test_l1_dsVideoDevice_positive_dsGetHDRCapabilities );
 	UT_add_test( pSuite, "dsGetHDRCapabilities_L1_negative" ,test_l1_dsVideoDevice_negative_dsGetHDRCapabilities );
 	UT_add_test( pSuite, "dsGetSupportedVideoCodingFormats_L1_positive" ,test_l1_dsVideoDevice_positive_dsGetSupportedVideoCodingFormats );
