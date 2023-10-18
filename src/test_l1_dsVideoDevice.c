@@ -61,7 +61,8 @@
 
 /**
 * @file test_l1_dsVideoDevice.c
-* @page VIDEO_DEVICE_L1_Tests VIDEO_DEVICE Level 1 Tests
+* @page Device Settings
+* @subpage Video Device
 *
 * ## Module's Role
 * This module includes Level 1 functional tests (success and failure scenarios)
