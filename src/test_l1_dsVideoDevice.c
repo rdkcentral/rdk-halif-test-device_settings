@@ -18,18 +18,59 @@
 */
 
 /**
-* @file TODO: test_l1_dsVideoDevice.c
-* @page module_name TODO: Required field, name of the main module
-* @subpage sub_page_name TODO: Add a function group if relevant
+ * @addtogroup HPK Hardware Porting Kit
+ * @{
+ * @par The Hardware Porting Kit
+ * HPK is the next evolution of the well-defined Hardware Abstraction Layer
+ * (HAL), but augmented with more comprehensive documentation and test suites
+ * that OEM or SOC vendors can use to self-certify their ports before taking
+ * them to RDKM for validation or to an operator for final integration and
+ * deployment. The Hardware Porting Kit effectively enables an OEM and/or SOC
+ * vendor to self-certify their own Video Accelerator devices, with minimal RDKM
+ * assistance.
+ *
+ */
+
+/**
+ * @addtogroup Device_Settings Device Settings Module
+ * @{
+ */
+
+/**
+ * @addtogroup Device_Settings_HAL Device Settings HAL
+ * Describe the details about Device Settings HAL function specifications.
+ *  @{
+ */
+
+/**
+ * @defgroup dsVIDEODEVICE_HALTEST DS Video Device HAL
+ *  @{
+ * @par Application API Specification
+ * Described herein are the DeviceSettings HAL types and functions that are part of
+ * the Video Device subsystem. The Video Device subsystem manages system-specific HAL operations.
+ *
+ */
+
+/**
+ * @defgroup DS_VIDEODEVICE_HALTEST_L1 DS HAL Video Device HALTEST L1
+ * @par Application API Specification
+ * dsVideoDevice HAL provides an interface for managing the VideoDevice settings for the device settings module
+ *
+ *  @{
+ */
+
+/**
+* @file test_l1_dsVideoDevice.c
+* @page VIDEO_DEVICE_L1_Tests VIDEO_DEVICE Level 1 Tests
 *
 * ## Module's Role
-* TODO: Explain the module's role in the system in general
-* This is to ensure that the API meets the operational requirements of the module across all vendors.
+* This module includes Level 1 functional tests (success and failure scenarios)
+* This is to ensure that the API meets the operational requirements of the Power Manager across all vendors
 *
-* **Pre-Conditions:**  TODO: Add pre-conditions if any@n
-* **Dependencies:** TODO: Add dependencies if any@n
+* **Pre-Conditions:**  None@n
+* **Dependencies:** None@n
 *
-* Ref to API Definition specification documentation : [halSpec.md](../../../docs/halSpec.md)
+* Ref to API Definition specification documentation : [ds-video-device_halSpec.md](../../../docs/pages/ds-video-device_halSpec.md)
 */
 
 #include <string.h>
@@ -77,6 +118,8 @@ void test_l1_dsVideoDevice_positive_dsVideoDeviceInit (void)
  * |02|Call dsVideoDeviceInit() again without terminating the previous initialization | | dsERR_ALREADY_INITIALIZED | Should not allow double initialization |
  * |03|De-initialize the video devices using dsVideoDeviceTerm() for cleanup | | dsERR_NONE | Clean up after test |
  * 
+ * @note The return value dsERR_GENERAL may be difficult to test in a simulated environment
+ * 
  */
 void test_l1_dsVideoDevice_negative_dsVideoDeviceInit (void)
 {
@@ -123,6 +166,8 @@ void test_l1_dsVideoDevice_positive_dsVideoDeviceTerm (void)
  * |02|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
  * |03|Call dsVideoDeviceTerm() to de-initialize all video devices | | dsERR_NONE | Video devices should be de-initialized successfully |
  * |04|Call dsVideoDeviceTerm() again without re-initialization | | dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * 
+ * @note The return value dsERR_GENERAL may be difficult to test in a simulated environment
  * 
  */
 void test_l1_dsVideoDevice_negative_dsVideoDeviceTerm (void)
@@ -172,6 +217,8 @@ void test_l1_dsVideoDevice_positive_dsGetVideoDevice (void)
  * |05|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
  * |06|Call dsGetVideoDevice() after prior termination of video devices| int=index, int=*handle | dsERR_NOT_INITIALIZED | Should report module not initialized |
  *
+ * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
+ * 
  */
 void test_l1_dsVideoDevice_negative_dsGetVideoDevice (void)
 {
@@ -228,11 +275,13 @@ void test_l1_dsVideoDevice_positive_dsSetDFC (void)
  * |01|Call dsSetDFC() without prior initialization of video devices | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_NONE | dsERR_NOT_INITIALIZED | Should report module not initialized |
  * |02|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
  * |03|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
- * |04|Call dsSetDFC() with an invalid handle | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_MAX | dsERR_INVALID_PARAM | Should report invalid parameter |
  * |04|Call dsSetDFC() with an invalid handle | int=-1, dsVideoZoom_t=dsVIDEO_ZOOM_MAX | dsERR_INVALID_PARAM | Should report invalid parameter |
- * |05|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
- * |01|Call dsSetDFC() after termination of video devices | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_NONE | dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |05|Call dsSetDFC() with an invalid zoom mode | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_MAX | dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |06|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * |07|Call dsSetDFC() after termination of video devices | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_NONE | dsERR_NOT_INITIALIZED | Should report module not initialized |
  *
+ * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
+ * 
  */
 void test_l1_dsVideoDevice_negative_dsSetDFC (void)
 {
@@ -284,6 +333,8 @@ void test_l1_dsVideoDevice_positive_dsGetDFC (void)
  * |06|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
  * |07|Call dsGetDFC() after termination of video devices |int=handle, dsVideoZoom_t*| dsERR_NOT_INITIALIZED | Should report module not initialized |
  * 
+ * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
+ * 
  */
 void test_l1_dsVideoDevice_negative_dsGetDFC (void)
 {
@@ -331,9 +382,11 @@ void test_l1_dsVideoDevice_positive_dsGetHDRCapabilities (void)
  * |02|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
  * |03|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
  * |04|Call dsGetHDRCapabilities() with an invalid handle |int=-1, int*| dsERR_INVALID_PARAM | Should report invalid parameter |
- * |05|Call dsGetHDRCapabilities() with an null paramter |int=-1, NULL| dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |05|Call dsGetHDRCapabilities() with an null parameter |int=handle, NULL| dsERR_INVALID_PARAM | Should report invalid parameter |
  * |06|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
  * |07|Call dsGetHDRCapabilities() after termination of video devices |int=handle, int*| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * 
+ * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
  * 
  */
 void test_l1_dsVideoDevice_negative_dsGetHDRCapabilities (void)
@@ -382,9 +435,11 @@ void test_l1_dsVideoDevice_positive_dsGetSupportedVideoCodingFormats (void)
  * |02|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
  * |03|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
  * |04|Call dsGetSupportedVideoCodingFormats() with an invalid handle |int=-1, unsigned int*| dsERR_INVALID_PARAM | Should report invalid parameter |
- * |05|Call dsGetSupportedVideoCodingFormats() with an invalid handle |int=handle, NULL| dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |05|Call dsGetSupportedVideoCodingFormats() with null value |int=handle, NULL| dsERR_INVALID_PARAM | Should report invalid parameter |
  * |06|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
  * |07|Call dsGetSupportedVideoCodingFormats() after termination of video devices |int=handle, unsigned int*| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * 
+ * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
  * 
  */
 void test_l1_dsVideoDevice_negative_dsGetSupportedVideoCodingFormats (void)
@@ -410,7 +465,7 @@ void test_l1_dsVideoDevice_negative_dsGetSupportedVideoCodingFormats (void)
  * |04|Get video codec information using dsGetVideoCodecInfo() with the obtained handle | int=handle, dsVIDEO_CODEC_MPEG4PART10, dsVideoCodecInfo_t*| dsERR_NONE | Should successfully fetch the supported video formats |
  * |05|Get video codec information using dsGetVideoCodecInfo() with the obtained handle | int=handle, dsVIDEO_CODEC_MPEG2, dsVideoCodecInfo_t*| dsERR_NONE | Should successfully fetch the supported video formats |
  * |06|Get video codec information using dsGetVideoCodecInfo() with the obtained handle | int=handle, dsVIDEO_CODEC_MPEG2, dsVideoCodecInfo_t*| dsERR_NONE | Should successfully fetch the supported video formats |
- * |04|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * |07|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
  * 
  */
 void test_l1_dsVideoDevice_positive_dsGetVideoCodecInfo (void)
@@ -434,10 +489,12 @@ void test_l1_dsVideoDevice_positive_dsGetVideoCodecInfo (void)
  * |02|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
  * |03|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
  * |04|Call dsGetVideoCodecInfo() with an invalid handle | int=-1, dsVIDEO_CODEC_MPEGHPART2, dsVideoCodecInfo_t*| dsERR_INVALID_PARAM | Should report invalid parameter |
- * |05|Call dsGetVideoCodecInfo() with an invalid coding format | int=-1, dsVIDEO_CODEC_MAX, dsVideoCodecInfo_t*| dsERR_INVALID_PARAM | Should report invalid parameter |
- * |06|Call dsGetVideoCodecInfo() with null parameter | int=-1, dsVIDEO_CODEC_MAX, NULL| dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |05|Call dsGetVideoCodecInfo() with an invalid coding format | int=handle, dsVIDEO_CODEC_MAX, dsVideoCodecInfo_t*| dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |06|Call dsGetVideoCodecInfo() with null parameter | int=handle, dsVIDEO_CODEC_MPEGHPART2, NULL| dsERR_INVALID_PARAM | Should report invalid parameter |
  * |07|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
  * |08|Call dsGetVideoCodecInfo() without prior initialization of video devices | int=handle, dsVIDEO_CODEC_MPEGHPART2, dsVideoCodecInfo_t*| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * 
+ * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
  * 
  */
 void test_l1_dsVideoDevice_negative_dsGetVideoCodecInfo (void)
@@ -485,9 +542,10 @@ void test_l1_dsVideoDevice_positive_dsForceDisableHDRSupport (void)
  * |02|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
  * |03|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
  * |04|Call dsForceDisableHDRSupport() with an invalid handle |int=-1, bool=true| dsERR_INVALID_PARAM | Should report invalid parameter |
- * |05|Call dsForceDisableHDRSupport() with an invalid handle |int=index, bool=true| dsERR_INVALID_PARAM | Should report invalid parameter |
- * |06|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
- * |07|Call dsForceDisableHDRSupport() after termination of video devices |int=handle, bool=true| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |05|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * |06|Call dsForceDisableHDRSupport() after termination of video devices |int=handle, bool=true| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * 
+ * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
  * 
  */
 void test_l1_dsVideoDevice_negative_dsForceDisableHDRSupport (void)
@@ -534,9 +592,11 @@ void test_l1_dsVideoDevice_positive_dsSetFRFMode (void)
  * |02|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
  * |03|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
  * |04|Call dsSetFRFMode() with an invalid handle | int=-1, int| dsERR_INVALID_PARAM | Should report invalid parameter |
- * |05|Call dsSetFRFMode() with an invalid handle | int=handle, int=-1| dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |05|Call dsSetFRFMode() with an invalid framerate | int=handle, int=-1| dsERR_INVALID_PARAM | Should report invalid parameter |
  * |06|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
  * |07|Call dsSetFRFMode() after termination of video devices | int=handle, int| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * 
+ * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
  * 
  */
 void test_l1_dsVideoDevice_negative_dsSetFRFMode (void)
@@ -589,6 +649,8 @@ void test_l1_dsVideoDevice_positive_dsGetFRFMode (void)
  * |06|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
  * |07|Call dsGetFRFMode() after termination of video devices |int=handle,int*| dsERR_NOT_INITIALIZED | Should report module not initialized |
  * 
+ * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
+ * 
  */
 void test_l1_dsVideoDevice_negative_dsGetFRFMode (void)
 {
@@ -635,10 +697,12 @@ void test_l1_dsVideoDevice_positive_dsGetCurrentDisplayframerate (void)
  * |01|Call dsGetCurrentDisplayframerate() without prior initialization of video devices|int=handle,char*| dsERR_NOT_INITIALIZED | Should report module not initialized |
  * |02|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
  * |03|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
- * |04|Call dsGetCurrentDisplayframerate() with an invalid handle |int=-1,char* dsERR_INVALID_PARAM | Should report invalid parameter |
- * |05|Call dsGetCurrentDisplayframerate() with an invalid handle |int=handle,NULL dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |04|Call dsGetCurrentDisplayframerate() with an invalid handle |int=-1,char* |dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |05|Call dsGetCurrentDisplayframerate() with NULL value |int=handle, NULL |dsERR_INVALID_PARAM | Should report invalid parameter |
  * |06|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
  * |07|Call dsGetCurrentDisplayframerate() after termination of video devices|int=handle,char*| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * 
+ * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
  * 
  */
 void test_l1_dsVideoDevice_negative_dsGetCurrentDisplayframerate (void)
@@ -686,8 +750,11 @@ void test_l1_dsVideoDevice_positive_dsSetDisplayframerate (void)
  * |03|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle > 0) | Should obtain a valid handle successfully |
  * |04|Call dsSetDisplayframerate() with an invalid handle |int=-1,char*| dsERR_INVALID_PARAM | Should report invalid parameter |
  * |05|Call dsSetDisplayframerate() with an invalid handle |int=handle,NULL| dsERR_INVALID_PARAM | Should report invalid parameter |
- * |06|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
- * |07|Call dsSetDisplayframerate() after termination of video devices |int=handle,char*| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |06|Call dsSetDisplayframerate() with invalid char* |int=-1,char*="junk"| dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |07|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * |08|Call dsSetDisplayframerate() after termination of video devices |int=handle,char*| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * 
+ * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
  * 
  */
 void test_l1_dsVideoDevice_negative_dsSetDisplayframerate (void)
@@ -741,3 +808,10 @@ int test_l1_dsVideoDevice_register ( void )
 
 	return 0;
 } 
+
+
+/** @} */ // End of DSHAL_VIDEODEVICE_HALTEST_L1
+/** @} */ // End of DS Video Device HALTEST
+/** @} */ // End of Device Settings HAL
+/** @} */ // End of Device Settings Module
+/** @} */ // End of HPK
