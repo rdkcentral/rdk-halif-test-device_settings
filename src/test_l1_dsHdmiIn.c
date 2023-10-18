@@ -18,18 +18,57 @@
 */
 
 /**
+ * @addtogroup HPK Hardware Porting Kit
+ * @{
+ * @par The Hardware Porting Kit
+ * HPK is the next evolution of the well-defined Hardware Abstraction Layer
+ * (HAL), but augmented with more comprehensive documentation and test suites
+ * that OEM or SOC vendors can use to self-certify their ports before taking
+ * them to RDKM for validation or to an operator for final integration and
+ * deployment. The Hardware Porting Kit effectively enables an OEM and/or SOC
+ * vendor to self-certify their own Video Accelerator devices, with minimal RDKM
+ * assistance.
+ *
+ */
+
+/**
+ * @addtogroup Device_Settings Device Settings Module
+ * @{
+ */
+
+/**
+ * @addtogroup Device_Settings_HAL Device Settings HAL
+ * @par Application API Specification
+ * Described herein are the DeviceSettings HAL types and functions that are part of
+ * the HdmiIn subsystem. The HdmiIn subsystem manages system-specific HAL operations.
+ *  @{
+ */
+
+/**
+*   @defgroup dsHdmiIn_HALTEST DS HdmiIn HALTEST
+ *  @{
+ * @par Application API Specification
+ * dsHdmiIn HAL provides an interface for managing the HdmiIn settings for the device settings module
+ */
+
+/**
+ * @defgroup DSHAL_HDMI_IN_L1 DS HAL Hdmi Input L1 test cases
+ *  @{
+ */
+
+/**
 * @file test_l1_dsHdmiIn.c
 * @page Device Settings
 * @subpage HdmiIn
 *
 * ## Module's Role
-* TODO: Explain the module's role in the system in general
-* This is to ensure that the API meets the operational requirements of the module across all vendors.
+* This module includes Level 1 functional tests (success and failure scenarios)
+* This is to ensure that the API meets the operational requirements of the Power Manager across all vendors
 *
-* **Pre-Conditions:**  TODO: Add pre-conditions if any@n
-* **Dependencies:** TODO: Add dependencies if any@n
+* **Pre-Conditions:**  None@n
+* **Dependencies:** None@n
 *
-* Ref to API Definition specification documentation : [halSpec.md](../../../docs/halSpec.md)
+* Ref to API Definition specification documentation : [ds-hdmi-in_halSpec.md](../../../docs/pages/ds-hdmi-in_halSpec.md)
 */
 
 #include <string.h>
@@ -40,11 +79,6 @@
 
 /**
  * @brief Ensure dsHdmiInInit() correctly initializes the HDMI input sub-system during positive scenarios.
- * 
- * @todo fix test group/test case
- * @todo Update description (in test procedure)
- * @todo Note retvals that cannot be tested easily in negative cases
- * @todo make sure we call after termination
  * 
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 001@n
@@ -1279,3 +1313,9 @@ int test_l1_dsHdmiIn_register ( void )
 
 	return 0;
 } 
+
+/** @} */ // End of DS HAL Hdmi Input L1 tests
+/** @} */ // End of DS HdmiIn HALTEST
+/** @} */ // End of Device Settings HAL
+/** @} */ // End of Device Settings Module
+/** @} */ // End of HPK
