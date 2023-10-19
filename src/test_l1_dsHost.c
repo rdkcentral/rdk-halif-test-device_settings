@@ -146,8 +146,7 @@ void test_l1_dsHost_positive_dsHostInit(void) {
  * |02|Call dsHostInit() Attempt to initialize dsHost again | | dsERR_ALREADY_INITIALIZED | Initialization should fail as it's already initialized |
  * |03|Call dsHostTerm() Terminate dsHost| | dsERR_NONE | Should pass |
  * 
- * **Additional Notes:**
- * - Testing for dsERR_GENERAL might be challenging as it represents undefined platform errors. Such errors can be hard to simulate consistently in a controlled testing environment.
+ * @note Testing for dsERR_GENERAL might be challenging as it represents undefined platform errors. Such errors can be hard to simulate consistently in a controlled testing environment.
  */
 void test_l1_dsHost_negative_dsHostInit(void) {
     gTestID = 2;
@@ -237,8 +236,7 @@ void test_l1_dsHost_positive_dsHostTerm(void) {
  * |03|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful after initialization |
  * |04|dsHostTerm() Attempt to terminate dsHost | | dsERR_NOT_INITIALIZED | Termination should fail as module is not initialized |
  * 
- * **Additional Notes:**
- * - Testing for dsERR_GENERAL in dsHostTerm() might be challenging as it represents undefined platform errors. Such errors can be hard to simulate consistently in a controlled testing environment.
+ * @note Testing for dsERR_GENERAL in dsHostTerm() might be challenging as it represents undefined platform errors. Such errors can be hard to simulate consistently in a controlled testing environment.
  */
 void test_l1_dsHost_negative_dsHostTerm(void) {
     gTestID = 4;
@@ -336,8 +334,7 @@ void test_l1_dsHost_positive_dsGetCPUTemperature(void) {
  * |04|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful |
  * |05|dsGetCPUTemperature() Call after termination | Valid float pointer | dsERR_NOT_INITIALIZED | Fetching temperature should fail as module is terminated |
  * 
- * **Additional Notes:**
- * - Testing for dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED in dsGetCPUTemperature() might be challenging as these represent undefined platform errors or specific hardware constraints. Such errors can be hard to simulate consistently in a controlled testing environment.
+ * @note Testing for dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED in dsGetCPUTemperature() might be challenging as these represent undefined platform errors or specific hardware constraints. Such errors can be hard to simulate consistently in a controlled testing environment.
  */
 void test_l1_dsHost_negative_dsGetCPUTemperature(void) {
     gTestID = 6;
@@ -448,8 +445,7 @@ void test_l1_dsHost_positive_dsGetSocIDFromSDK(void) {
  * |04|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful |
  * |05|dsGetSocIDFromSDK() Call after termination | Valid char pointer (size of 8 bytes) | dsERR_NOT_INITIALIZED | Fetching SOC ID should fail as module is terminated |
  * 
- * **Additional Notes:**
- * - Testing for dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED in dsGetSocIDFromSDK() might be challenging as these represent undefined platform
+ * @note Testing for dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED in dsGetSocIDFromSDK() might be challenging as these represent undefined platform
  * 
  */
 void test_l1_dsHost_negative_dsGetSocIDFromSDK(void) {
@@ -564,8 +560,7 @@ void test_l1_dsHost_positive_dsGetHostEDID(void) {
  * |05|dsHostTerm() Terminate dsHost| | dsERR_NONE | Termination should be successful |
  * |06|dsGetHostEDID() Call after termination | Valid unsigned char pointer, valid int pointer | dsERR_NOT_INITIALIZED | Fetching EDID should fail as module is terminated |
  * 
- * **Additional Notes:**
- * - Testing for dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED in dsGetHostEDID() might be challenging as these represent undefined platform errors or specific hardware constraints. Such errors can be hard to simulate consistently in a controlled testing environment.
+ * @note Testing for dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED in dsGetHostEDID() might be challenging as these represent undefined platform errors or specific hardware constraints. Such errors can be hard to simulate consistently in a controlled testing environment.
  */
 void test_l1_dsHost_negative_dsGetHostEDID(void) {
     gTestID = 10;
