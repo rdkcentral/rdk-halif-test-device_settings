@@ -18,18 +18,18 @@
 */
 
 /**
-* @file TODO: test_l1_dsFPD.c
-* @page module_name TODO: Required field, name of the main module
-* @subpage sub_page_name TODO: Add a function group if relevant
+* @file test_l1_dsFPD.c
+* @page Device Settings
+* @subpage Front Panel Display
 *
 * ## Module's Role
-* TODO: Explain the module's role in the system in general
-* This is to ensure that the API meets the operational requirements of the module across all vendors.
+* This module includes Level 1 functional tests (success and failure scenarios)
+* This is to ensure that the API meets the operational requirements of the Power Manager across all vendors
 *
-* **Pre-Conditions:**  TODO: Add pre-conditions if any@n
-* **Dependencies:** TODO: Add dependencies if any@n
+* **Pre-Conditions:**  None@n
+* **Dependencies:** None@n
 *
-* Ref to API Definition specification documentation : [halSpec.md](../../../docs/halSpec.md)
+* Ref to API Definition specification documentation : [ds-front-panel-display_halSpec.md](../../../docs/pages/ds-front-panel-display_halSpec.md)
 */
 
 #include <string.h>
@@ -144,10 +144,6 @@ void test_l1_dsFPD_negative_dsFPTerm (void)
 /**
  * @brief Ensure dsSetFPState() correctly sets the Front Panel Display LED state
  * 
- * @todo loop through all possible valid indicators
- * 
- * @todo STOPPED HERE
- * 
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 005@n
  * 
@@ -165,6 +161,7 @@ void test_l1_dsFPD_negative_dsFPTerm (void)
  * |03|Call dsSetFPState() and loop through all valid indicators as specified in kIndicators from dsFPDSettings.h|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON|dsERR_NONE| |
  * |04|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
  * 
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsSetFPState (void)
 {
@@ -194,8 +191,7 @@ void test_l1_dsFPD_positive_dsSetFPState (void)
  * |05|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
  * |06|Call dsSetFPState() after termination|eIndicator: dsFPD_INDICATOR_POWER, state: dsFPD_STATE_OFF|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
- * **Notes:**@n
- * - [Valid Indicator], [Invalid Indicator], [Valid State], and [Invalid State] should be chosen based on platform specific context to ensure they are indeed valid/invalid in the given testing environment.
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsSetFPState (void)
 {
@@ -220,7 +216,7 @@ void test_l1_dsFPD_negative_dsSetFPState (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize with dsFPInit()| |dsERR_NONE|Ensure the system is initialized|
  * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
- * |03|Set a valid LED to blink and loop through all valid indicators from kIndicators in the settings file| eIndicator: [Valid Indicator], uBlinkDuration: 500, uBlinkIterations: 10 |dsERR_NONE|Should validate that the blink setup works correctly|
+ * |03|Call dsSetFPBlink() and loop through all valid indicators from kIndicators| eIndicator: [Valid Indicator], uBlinkDuration: 500, uBlinkIterations: 10 |dsERR_NONE|Should validate that the blink setup works correctly|
  * |04|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
  * 
  * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
@@ -250,14 +246,16 @@ void test_l1_dsFPD_positive_dsSetFPBlink (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsSetFPBlink() without calling dsFPInit() |eIndicator: dsFPD_INDICATOR_POWER, uBlinkDuration: 500, uBlinkIterations: 10 |dsERR_NOT_INITIALIZED|Should validate that the function handles call without initialization|
  * |02|Initialize with dsFPInit()| |dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |03|Pass an invalid eIndicator parameter to dsSetFPBlink() |eIndicator: dsFPD_INDICATOR_MAX, uBlinkDuration: 500, uBlinkIterations: 10 |dsERR_INVALID_PARAM|Should validate that the function handles invalid indicator gracefully|
  * |04|Pass an invalid uBlinkDuration parameter to dsSetFPBlink()|eIndicator: dsFPD_INDICATOR_POWER, uBlinkDuration: 20000, uBlinkIterations: 10 |dsERR_INVALID_PARAM|Should validate that the function handles invalid blink duration gracefully|
  * |05|Pass an invalid uBlinkIterations parameter to dsSetFPBlink()|eIndicator: dsFPD_INDICATOR_POWER, uBlinkDuration: 500, uBlinkIterations: 200 |dsERR_INVALID_PARAM|Should validate that the function handles invalid blink iterations gracefully|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF |dsERR_NONE|Ensure the system is initialized|
- * |06|Loop through dsSetFPBlink() with all dsFPDIndicator_t values|eIndicator: [Valid Indicator], uBlinkDuration: 500, uBlinkIterations: 10 |dsERR_OPERATION_NOT_SUPPORTED|Testing if function adheres to pre-condition of FP State being “ON”|
+ * |02|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF |dsERR_NONE|Ensure the system is initialized|
+ * |06|Call dsSetFPBlink() and loop through all valid indicators from kIndicators|eIndicator: [Valid Indicator], uBlinkDuration: 500, uBlinkIterations: 10 |dsERR_OPERATION_NOT_SUPPORTED|Testing if function adheres to pre-condition of FP State being “ON”|
  * |07|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
  * |08|Attempt to set blink pattern after dsFPTerm() has been called|eIndicator: dsFPD_INDICATOR_POWER, uBlinkDuration: 500, uBlinkIterations: 10 |dsERR_NOT_INITIALIZED|Should fail due to termination|
+ * 
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  * 
  */
 void test_l1_dsFPD_negative_dsSetFPBlink (void)
@@ -283,9 +281,11 @@ void test_l1_dsFPD_negative_dsSetFPBlink (void)
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize with dsFPInit()| |dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
- * |02|Set brightness of all valid indicators|eIndicator: [Valid Indicator], eBrightness: 50+5x|dsERR_NONE|Brightness is set without any issues|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |02|Call dsSetBrightness() and loop through all valid indicators from kIndicators|eIndicator: [Valid Indicator], eBrightness: 50+5x|dsERR_NONE|Brightness is set without any issues|
  * |03|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
+ * 
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  * 
  */
 void test_l1_dsFPD_positive_dsSetFPBrightness (void)
@@ -311,15 +311,17 @@ void test_l1_dsFPD_positive_dsSetFPBrightness (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsSetFPBrightness() without calling dsFPInit() |eIndicator: [Valid Indicator], eBrightness: 50 |dsERR_NOT_INITIALIZED|Should validate that the function handles call without initialization|
+ * |01|Call dsSetFPBrightness() without calling dsFPInit() |eIndicator: dsFPD_INDICATOR_POWER, eBrightness: 50 |dsERR_NOT_INITIALIZED|Should validate that the function handles call without initialization|
  * |02|Initialize with dsFPInit()| |dsERR_NONE|Ensure the system is initialized|
- * |03|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |03|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |04|Pass an invalid eIndicator parameter to dsSetFPBrightness() |eIndicator: [Invalid Indicator], eBrightness: 50 |dsERR_INVALID_PARAM|Should validate that the function handles invalid indicator gracefully|
- * |05|Pass an invalid eBrightness parameter to dsSetFPBrightness()|eIndicator: [Valid Indicator], eBrightness: [Invalid Brightness] |dsERR_INVALID_PARAM|Should validate that the function handles invalid brightness gracefully|
- * |06|Call dsSetFPState() and loop through all used indicators from kIndicators in the dsFPDSettings.h |eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF|dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
- * |07|Call dsSetFPBrightness() with FP State "OFF" for all indicators|eIndicator: [Valid Indicator], eBrightness: 50 |dsERR_OPERATION_NOT_SUPPORTED|Testing if function adheres to pre-condition of FP State being “ON”|
+ * |05|Pass an invalid eBrightness parameter to dsSetFPBrightness()|eIndicator: dsFPD_INDICATOR_POWER, eBrightness: [Invalid Brightness] |dsERR_INVALID_PARAM|Should validate that the function handles invalid brightness gracefully|
+ * |06|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF|dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
+ * |07|Call dsSetFPBrightness() and loop through all valid indicators from kIndicators|eIndicator: [Valid Indicator], eBrightness: 50 |dsERR_OPERATION_NOT_SUPPORTED|Testing if function adheres to pre-condition of FP State being “ON”|
  * |08|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
- * |09|Attempt to set brightness after dsFPTerm() has been called|eIndicator: [Valid Indicator], eBrightness: 50 |dsERR_NOT_INITIALIZED|Should fail due to termination|
+ * |09|Attempt to set brightness after dsFPTerm() has been called|eIndicator: dsFPD_INDICATOR_POWER, eBrightness: 50 |dsERR_NOT_INITIALIZED|Should fail due to termination|
+ * 
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  * 
  */
 void test_l1_dsFPD_negative_dsSetFPBrightness (void)
@@ -345,14 +347,14 @@ void test_l1_dsFPD_negative_dsSetFPBrightness (void)
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize with dsFPInit()| |dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
- * |02|Retrieve brightness of a specific valid indicator and store the value|eIndicator: [Valid Indicator]|dsERR_NONE|Brightness is retrieved without any issues|
- * |03|Retrieve brightness of the same indicator again and store the value|eIndicator: [Valid Indicator]|dsERR_NONE|Ensure consistent readings|
- * |04|Compare the two retrieved brightness values from step 02 and step 03||Brightness values should be equal|Ensuring consistency in retrieved brightness over consecutive calls|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |02|Call dsGetFPBrightness() with specific valid indicator and store the value|eIndicator: dsFPD_INDICATOR_POWER|dsERR_NONE|Brightness is retrieved without any issues|
+ * |03|Call dsGetFPBrightness() and loop through all valid indicators from kIndicators|eIndicator: [Valid Indicator]|dsERR_NONE|Ensure consistent readings|
+ * |04|Compare the two retrieved brightness values from step 02 and step 03 for dsFPD_INDICATOR_POWER||Brightness values should be equal|Ensuring consistency in retrieved brightness over consecutive calls|
  * |05|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
  * 
- * **Notes:**@n
- * In step 04, compare the brightness level retrieved in step 02 and step 03 to ensure consistency. It should be the same in both steps if there are no intervening calls or changes to the LED brightness.
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * 
  */
 void test_l1_dsFPD_positive_dsGetFPBrightness (void)
 {
@@ -374,18 +376,18 @@ void test_l1_dsFPD_positive_dsGetFPBrightness (void)
  * **Test Procedure:**@n
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsGetFPBrightness() without initializing (dsFPInit() not called)|eIndicator: [Valid Indicator], pBrightness: [Valid Pointer]|dsERR_NOT_INITIALIZED|Validate that the function checks for initialization|
+ * |01|Call dsGetFPBrightness() without initializing (dsFPInit() not called)|eIndicator: dsFPD_INDICATOR_POWER, pBrightness: [Valid Pointer]|dsERR_NOT_INITIALIZED|Validate that the function checks for initialization|
  * |02|Initialize with dsFPInit()| |dsERR_NONE|Ensure the system is initialized|
- * |03|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |03|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |04|Call dsGetFPBrightness() with an invalid eIndicator value|eIndicator: [Invalid Indicator], pBrightness: [Valid Pointer]|dsERR_INVALID_PARAM|Validate invalid parameter handling|
- * |05|Call dsGetFPBrightness() with an invalid pBrightness value (NULL)|eIndicator: [Valid Indicator], pBrightness: NULL|dsERR_INVALID_PARAM|Ensure it handles NULL pointer input for pBrightness|
- * |06|Call dsSetFPState() and loop through all used indicators from kIndicators in the dsFPDSettings.h |eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF|dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
- * |07|Set FP State to "OFF" and try to retrieve brightness level (if applicable) for all indicators|eIndicator: [Valid Indicator], pBrightness: [Valid Pointer]|dsERR_OPERATION_NOT_SUPPORTED|Ensure it checks for FP state and returns operation not supported when it is "OFF"|
+ * |05|Call dsGetFPBrightness() with an invalid pBrightness value (NULL)|eIndicator: dsFPD_INDICATOR_POWER, pBrightness: NULL|dsERR_INVALID_PARAM|Ensure it handles NULL pointer input for pBrightness|
+ * |06|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState() |eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF|dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
+ * |07|Call dsGetFPBrightness() and loop through all valid indicators from kIndicators|eIndicator: [Valid Indicator], pBrightness: [Valid Pointer]|dsERR_OPERATION_NOT_SUPPORTED|Ensure it checks for FP state and returns operation not supported when it is "OFF"|
  * |08|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
- * |09|Call dsGetFPBrightness() after termination|eIndicator: [Valid Indicator], pBrightness: [Valid Pointer]|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
+ * |09|Call dsGetFPBrightness() after termination|eIndicator: dsFPD_INDICATOR_POWER, pBrightness: [Valid Pointer]|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
- * **Notes:**@n
- * - The indicators used in steps involving valid or invalid indicators should be chosen based on the platform specific context to ensure they are truly valid or invalid in the given testing environment.
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * 
  */
 void test_l1_dsFPD_negative_dsGetFPBrightness (void)
 {
@@ -410,15 +412,13 @@ void test_l1_dsFPD_negative_dsGetFPBrightness (void)
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Call dsGetFPState() with valid eIndicator and state parameters|eIndicator: [Valid Indicator], state: [Valid Pointer]|dsERR_NONE|Ensure that the function can retrieve the state|
- * |03|Call dsGetFPState() once again and store results|eIndicator: [Valid Indicator], state: [Valid Pointer]|dsERR_NONE|Retrieve the state for comparison in next step|
- * |04|Call dsGetFPState() with all valid indicators as specified in kIndicators from the settings file|eIndicator: [Valid Indicator], state: [Valid Pointer]|dsERR_NONE|Ensure that the function can retrieve the state|
+ * |02|Call dsGetFPState() with valid eIndicator and state parameters|eIndicator: dsFPD_INDICATOR_POWER, state: [Valid Pointer]|dsERR_NONE|Ensure that the function can retrieve the state|
+ * |03|Call dsGetFPState() once again for all and store results|eIndicator: dsFPD_INDICATOR_POWER, state: [Valid Pointer]|dsERR_NONE|Retrieve the state for comparison in next step|
+ * |04|Call dsGetFPState() and loop through all valid indicators from kIndicators|eIndicator: [Valid Indicator], state: [Valid Pointer]|dsERR_NONE|Ensure that the function can retrieve the state|
  * |05|Compare the state retrieved in step 02 and 03||The states should be the same|Ensure that repeated calls provide consistent output|
  * |06|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
- * **Notes:**@n
- * - [Valid Indicator] should be chosen based on the platform specific context to ensure it is indeed valid in the given testing environment.
- * - [Valid Pointer] should be a valid memory location.
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsGetFPState (void)
 {
@@ -442,13 +442,15 @@ void test_l1_dsFPD_positive_dsGetFPState (void)
  * **Test Procedure:**@n
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsGetFPState() without initializing (dsFPInit() not called)|eIndicator: [Valid Indicator], state: [Valid Pointer]|dsERR_NOT_INITIALIZED|Validate that the function checks for initialization|
+ * |01|Call dsGetFPState() without initializing (dsFPInit() not called)|eIndicator: dsFPD_INDICATOR_POWER, state: [Valid Pointer]|dsERR_NOT_INITIALIZED|Validate that the function checks for initialization|
  * |02|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsGetFPState() with an invalid eIndicator value|eIndicator: [Invalid Indicator], state: [Valid Pointer]|dsERR_INVALID_PARAM|Validate invalid parameter handling for eIndicator|
  * |04|Call dsGetFPState() with an invalid state pointer|eIndicator: [Valid Indicator], state: NULL|dsERR_INVALID_PARAM|Validate invalid parameter handling for state|
- * |03|Call dsSetFPState() and loop through the indicators from the diff of kIndicators and dsFPDIndicator_t in the dsFPDSettings.h |eIndicator: dsFPD_INDICATOR_MAX, state: dsFPD_STATE_OFF|dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
+ * |03|Call dsSetFPState() and loop through the indicators from the diff of kIndicators and dsFPDIndicator_t |eIndicator: dsFPD_INDICATOR_MAX, state: dsFPD_STATE_OFF|dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
  * |05|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
- * |06|Call dsGetFPState() after termination|eIndicator: [Valid Indicator], state: [Valid Pointer]|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
+ * |06|Call dsGetFPState() after termination|eIndicator: dsFPD_INDICATOR_POWER, state: [Valid Pointer]|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
+ * 
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  * 
  */
 
@@ -473,12 +475,11 @@ void test_l1_dsFPD_negative_dsGetFPState (void)
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |02|Call dsSetFPColor() with all valid eIndicator and eColor parameters from kIndidicators|eIndicator: [Valid Indicator], eColor: [Valid Color]|dsERR_NONE|Ensure that the function can set the color|
  * |03|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
- * **Notes:**@n
- * - [Valid Indicator] and [Valid Color] should be chosen based on the platform specific context to ensure they are indeed valid in the given testing environment.
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsSetFPColor (void)
 {
@@ -500,20 +501,18 @@ void test_l1_dsFPD_positive_dsSetFPColor (void)
  * **Test Procedure:**@n
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsSetFPColor() without initializing (dsFPInit() not called)|eIndicator: [Valid Indicator], eColor: [Valid Color]|dsERR_NOT_INITIALIZED|Validate that the function checks for initialization|
+ * |01|Call dsSetFPColor() without initializing (dsFPInit() not called)|eIndicator: dsFPD_INDICATOR_POWER, eColor: [Valid Color]|dsERR_NOT_INITIALIZED|Validate that the function checks for initialization|
  * |02|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsSetFPColor() with an invalid eIndicator value|eIndicator: [Invalid Indicator], eColor: [Valid Color]|dsERR_INVALID_PARAM|Validate invalid parameter handling for eIndicator|
- * |04|Call dsSetFPColor() with an invalid eColor value|eIndicator: [Valid Indicator], eColor: [Invalid Color]|dsERR_INVALID_PARAM|Validate invalid parameter handling for eColor|
+ * |04|Call dsSetFPColor() with an invalid eColor value|eIndicator: dsFPD_INDICATOR_POWER, eColor: [Invalid Color]|dsERR_INVALID_PARAM|Validate invalid parameter handling for eColor|
  * |03|Call dsSetFPState() and loop through all non-used indicators from kIndicators in the dsFPDSettings.h |eIndicator: dsFPD_INDICATOR_MAX, state: dsFPD_STATE_OFF|dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
- * |05|Set FP state to "OFF" using dsSetFPState()|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Ensure the FPD state is set to OFF|
- * |06|Call dsSetFPColor() with FP state set to "OFF"|eIndicator: [Valid Indicator], eColor: [Valid Color]|dsERR_OPERATION_NOT_SUPPORTED|Validate that function checks if FPD state is OFF|
+ * |05|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Ensure the FPD state is set to OFF|
+ * |06|Call dsSetFPColor() with all indicators|eIndicator: [Valid Indicator], eColor: [Valid Color]|dsERR_OPERATION_NOT_SUPPORTED|Validate that function checks if FPD state is OFF|
  * |07|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
- * |08|Call dsSetFPColor() after termination|eIndicator: [Valid Indicator], eColor: [Valid Color]|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
+ * |08|Call dsSetFPColor() after termination|eIndicator: dsFPD_INDICATOR_POWER, eColor: [Valid Color]|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
- * **Notes:**@n
- * - [Valid Indicator], [Invalid Indicator], [Valid Color], and [Invalid Color] should be chosen based on the platform specific context to ensure they are indeed valid/invalid in the given testing environment.
- * - Ensure that dsSetFPState() is capable of setting the FPD state to OFF for the test. 
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsSetFPColor (void)
 {
@@ -522,6 +521,8 @@ void test_l1_dsFPD_negative_dsSetFPColor (void)
 
 /**
  * @brief Ensure dsGetFPColor() correctly retrieves the color of a Front Panel Display LED
+ * 
+ * @todo update with full loop for colors and indicators and call term at the end
  * 
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 017@n
@@ -536,14 +537,13 @@ void test_l1_dsFPD_negative_dsSetFPColor (void)
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |02|Call dsSetFPColor() to set a known color|eIndicator: [Valid Indicator], eColor: [Known Color]|dsERR_NONE|Store the known color for verification in later steps|
  * |03|Call dsGetFPColor() with valid parameters|eIndicator: [Valid Indicator], pColor: Pointing to valid memory|dsERR_NONE|Ensure the function can retrieve color|
  * |04|Verify that the color retrieved matches the known color set in Step 02|Color from Step 03: [Retrieved Color]|Colors should match|[Retrieved Color] should be [Known Color]|
  * |05|Call dsGetFPColor() again and compare results|eIndicator: [Valid Indicator], pColor: Pointing to valid memory|dsERR_NONE and same color as Step 04|Ensure consistency in repeated calls|
  * 
- * **Notes:**@n
- * - [Valid Indicator] and [Known Color] should be chosen based on platform specific context.
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsGetFPColor (void)
 {
@@ -565,20 +565,18 @@ void test_l1_dsFPD_positive_dsGetFPColor (void)
  * **Test Procedure:**@n
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsGetFPColor() without initializing (dsFPInit() not called)|eIndicator: [Valid Indicator], pColor: Pointing to valid memory|dsERR_NOT_INITIALIZED|Validate that the function checks for initialization|
+ * |01|Call dsGetFPColor() without initializing (dsFPInit() not called)|eIndicator: dsFPD_INDICATOR_POWER, pColor: Pointing to valid memory|dsERR_NOT_INITIALIZED|Validate that the function checks for initialization|
  * |02|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
- * |03|Call dsGetFPColor() with an invalid eIndicator value|eIndicator: [Invalid Indicator], pColor: Pointing to valid memory|dsERR_INVALID_PARAM|Validate invalid parameter handling for eIndicator|
- * |04|Call dsGetFPColor() with a null pointer for pColor|eIndicator: [Valid Indicator], pColor: NULL|dsERR_INVALID_PARAM|Validate invalid parameter handling for pColor|
- * |03|Call dsSetFPState() and loop through all non-used indicators from kIndicators in the dsFPDSettings.h |eIndicator: dsFPD_INDICATOR_MAX, state: dsFPD_STATE_OFF|dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
- * |05|Set FP state to "OFF" using dsSetFPState()|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Ensure the FPD state is set to OFF|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |03|Call dsGetFPColor() with an invalid eIndicator value|eIndicator: dsFPD_INDICATOR_MAX, pColor: Pointing to valid memory|dsERR_INVALID_PARAM|Validate invalid parameter handling for eIndicator|
+ * |04|Call dsGetFPColor() with a null pointer for pColor|eIndicator: dsFPD_INDICATOR_POWER, pColor: NULL|dsERR_INVALID_PARAM|Validate invalid parameter handling for pColor|
+ * |03|Call dsSetFPState() and loop through all non-used indicators from kIndicators in the dsFPDSettings.h |eIndicator: [Invalid Indicator], state: dsFPD_STATE_OFF|dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
+ * |05|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Ensure the FPD state is set to OFF|
  * |06|Call dsGetFPColor() with FP state set to "OFF"|eIndicator: [Valid Indicator], pColor: Pointing to valid memory|dsERR_OPERATION_NOT_SUPPORTED|Validate that function checks if FPD state is OFF|
  * |07|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
- * |08|Call dsGetFPColor() after termination|eIndicator: [Valid Indicator], pColor: Pointing to valid memory|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
+ * |08|Call dsGetFPColor() after termination|eIndicator: dsFPD_INDICATOR_POWER, pColor: Pointing to valid memory|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
- * **Notes:**@n
- * - [Valid Indicator], [Invalid Indicator] should be chosen based on the platform specific context to ensure they are indeed valid/invalid in the given testing environment.
- * - Ensure that dsSetFPState() is capable of setting the FPD state to OFF for the test. 
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsGetFPColor (void)
 {
@@ -601,14 +599,12 @@ void test_l1_dsFPD_negative_dsGetFPColor (void)
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |02|Call dsSetFPTime() with valid parameters for 24-hour format|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 14, uMinutes: 30|dsERR_NONE|Check the function in 24-hour format|
  * |03|Call dsSetFPTime() with valid parameters for 12-hour format|eTimeFormat: dsFPD_TIME_12_HOUR, uHour: 2, uMinutes: 30|dsERR_NONE|Check the function in 12-hour format|
  * |04|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
- * **Notes:**@n
- * - Ensure that the 7-Segment display LEDs and dsFPD_MODE_CLOCK are supported and available on the testing device.
- * - Appropriate methods or tools to validate the FP display should be implemented/used, as this depends on the test environment.
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsSetFPTime (void)
 {
@@ -635,15 +631,13 @@ void test_l1_dsFPD_positive_dsSetFPTime (void)
  * |03|Call dsSetFPTime() with an invalid hour value|eTimeFormat: 24hrs, uHour: 25, uMinutes: 30|dsERR_INVALID_PARAM|Validate invalid parameter handling for uHour|
  * |04|Call dsSetFPTime() with an invalid minute value|eTimeFormat: 24hrs, uHour: 14, uMinutes: 60|dsERR_INVALID_PARAM|Validate invalid parameter handling for uMinutes|
  * |05|Call dsSetFPTime() with 12hr format and hour value > 12|eTimeFormat: 12hrs, uHour: 14, uMinutes: 30|dsERR_INVALID_PARAM|Check the consistency between eTimeFormat and uHour|
- * |06|Set FP state to "OFF" using dsSetFPState()|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Ensure the FPD state is set to OFF|
+ * |06|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Ensure the FPD state is set to OFF|
  * |03|Call dsSetFPState() and loop through all non-used indicators from kIndicators in the dsFPDSettings.h |eIndicator: dsFPD_INDICATOR_MAX, state: dsFPD_STATE_OFF|dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
  * |07|Call dsSetFPTime() with FP state set to "OFF"|eTimeFormat: 24hrs, uHour: 14, uMinutes: 30|dsERR_OPERATION_NOT_SUPPORTED|Validate that function checks if FPD state is OFF|
  * |08|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |09|Call dsSetFPTime() after termination|eTimeFormat: 24hrs, uHour: 14, uMinutes: 30|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
- * **Notes:**@n
- * - [Valid Indicator] should be chosen based on the platform specific context to ensure it is indeed valid in the given testing environment.
- * - Ensure that dsSetFPState() is capable of setting the FPD state to OFF for the test. 
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsSetFPTime (void)
 {
@@ -666,13 +660,11 @@ void test_l1_dsFPD_negative_dsSetFPTime (void)
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |02|Call dsSetFPText() with valid text|pText: "HELLO"|dsERR_NONE|Check the function with valid text|
  * |03|Validate the FP display shows the correct text||"HELLO" is displayed|Use appropriate tools/methods for validation|
  * 
- * **Notes:**@n
- * - Ensure that the 7-Segment display LEDs and dsFPD_MODE_TEXT are supported and available on the testing device.
- * - Appropriate methods or tools to validate the FP display should be implemented/used, as this depends on the test environment.
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsSetFPText (void)
 {
@@ -696,18 +688,16 @@ void test_l1_dsFPD_positive_dsSetFPText (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsSetFPText() without initializing (dsFPInit() not called)|pText: "HELLO"|dsERR_NOT_INITIALIZED|Validate that the function checks for initialization|
  * |02|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsSetFPText() with NULL pointer|pText: NULL|dsERR_INVALID_PARAM|Validate invalid parameter handling for NULL pText|
  * |04|Call dsSetFPText() with text longer than 10 characters|pText: "LONGTEXTHERE"|dsERR_INVALID_PARAM|Validate invalid parameter handling for text length|
  * |03|Call dsSetFPState() and loop through all non-used indicators from kIndicators in the dsFPDSettings.h |eIndicator: dsFPD_INDICATOR_MAX, state: dsFPD_STATE_OFF|dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
- * |05|Set FP state to "OFF" using dsSetFPState()|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Ensure the FPD state is set to OFF|
+ * |05|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Ensure the FPD state is set to OFF|
  * |06|Call dsSetFPText() with FP state set to "OFF"|pText: "HELLO"|dsERR_OPERATION_NOT_SUPPORTED|Validate that function checks if FPD state is OFF|
  * |07|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |08|Call dsSetFPText() after termination|pText: "HELLO"|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
- * **Notes:**@n
- * - [Valid Indicator] should be chosen based on the platform specific context to ensure it is indeed valid in the given testing environment.
- * - Ensure that dsSetFPState() is capable of setting the FPD state to OFF for the test. 
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsSetFPText (void)
 {
@@ -730,14 +720,11 @@ void test_l1_dsFPD_negative_dsSetFPText (void)
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |02|Call dsSetFPTextBrightness() with valid eIndicator and eBrightness|eIndicator: [Valid Indicator], eBrightness: 70|dsERR_NONE|Check the function with valid parameters|
  * |03|Validate the FP display shows the correct brightness level||Brightness level 70 is set|Use appropriate tools/methods for validation|
  * 
- * **Notes:**@n
- * - Ensure that the 7-Segment display LEDs and dsFPD_MODE_TEXT are supported and available on the testing device.
- * - Appropriate methods or tools to validate the FP display should be implemented/used, as this depends on the test environment.
- * - [Valid Indicator] should be chosen based on the platform specific context to ensure it is indeed valid in the given testing environment.
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsSetFPTextBrightness (void)
 {
@@ -759,19 +746,17 @@ void test_l1_dsFPD_positive_dsSetFPTextBrightness (void)
  * **Test Procedure:**@n
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsSetFPTextBrightness() without initializing (dsFPInit() not called)|eIndicator: [Valid Indicator], eBrightness: 70|dsERR_NOT_INITIALIZED|Validate that the function checks for initialization|
+ * |01|Call dsSetFPTextBrightness() without initializing (dsFPInit() not called)|eIndicator: dsFPD_INDICATOR_POWER, eBrightness: 70|dsERR_NOT_INITIALIZED|Validate that the function checks for initialization|
  * |02|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
- * |03|Call dsSetFPTextBrightness() with invalid eBrightness (out of range)|eIndicator: [Valid Indicator], eBrightness: 110|dsERR_INVALID_PARAM|Validate invalid parameter handling for brightness level|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |03|Call dsSetFPTextBrightness() with invalid eBrightness (out of range)|eIndicator: dsFPD_INDICATOR_POWER, eBrightness: 110|dsERR_INVALID_PARAM|Validate invalid parameter handling for brightness level|
  * |03|Call dsSetFPState() and loop through all non-used indicators from kIndicators in the dsFPDSettings.h |eIndicator: dsFPD_INDICATOR_MAX, state: dsFPD_STATE_OFF|dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
- * |04|Set FP state to "OFF" using dsSetFPState()|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Ensure the FPD state is set to OFF|
+ * |04|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Ensure the FPD state is set to OFF|
  * |05|Call dsSetFPTextBrightness() with FP state set to "OFF"|eIndicator: [Valid Indicator], eBrightness: 70|dsERR_OPERATION_NOT_SUPPORTED|Validate that function checks if FPD state is OFF|
  * |06|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
- * |07|Call dsSetFPTextBrightness() after termination|eIndicator: [Valid Indicator], eBrightness: 70|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
+ * |07|Call dsSetFPTextBrightness() after termination|eIndicator: dsFPD_INDICATOR_POWER, eBrightness: 70|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
- * **Notes:**@n
- * - [Valid Indicator] should be chosen based on the platform specific context to ensure it is indeed valid in the given testing environment.
- * - Ensure that dsSetFPState() is capable of setting the FPD state to OFF for the test. 
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsSetFPTextBrightness (void)
 {
@@ -794,13 +779,11 @@ void test_l1_dsFPD_negative_dsSetFPTextBrightness (void)
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
- * |02|Set a known brightness level using dsSetFPTextBrightness()|eIndicator: [Valid Indicator], eBrightness: 70|dsERR_NONE|Set a reference brightness level|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |02|Set a known brightness level using dsSetFPTextBrightness() for all valid indicators|eIndicator: [Valid Indicator], eBrightness: 70|dsERR_NONE|Set a reference brightness level|
  * |03|Call dsGetFPTextBrightness() with valid eIndicator|eIndicator: [Valid Indicator], eBrightness: Pointer to brightness variable|dsERR_NONE and eBrightness is 70|Check function retrieves the correct brightness level|
  * 
- * **Notes:**@n
- * - Ensure that the 7-Segment display LEDs and dsFPD_MODE_TEXT are supported and available on the testing device.
- * - [Valid Indicator] should be chosen based on the platform specific context to ensure it is indeed valid in the given testing environment.
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsGetFPTextBrightness (void)
 {
@@ -822,19 +805,17 @@ void test_l1_dsFPD_positive_dsGetFPTextBrightness (void)
  * **Test Procedure:**@n
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsGetFPTextBrightness() without initializing (dsFPInit() not called)|eIndicator: [Valid Indicator], eBrightness: Pointer to brightness variable|dsERR_NOT_INITIALIZED|Validate that the function checks for initialization|
+ * |01|Call dsGetFPTextBrightness() without initializing (dsFPInit() not called)|eIndicator: dsFPD_INDICATOR_POWER, eBrightness: Pointer to brightness variable|dsERR_NOT_INITIALIZED|Validate that the function checks for initialization|
  * |02|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
- * |03|Call dsGetFPTextBrightness() with NULL for eBrightness|eIndicator: [Valid Indicator], eBrightness: NULL|dsERR_INVALID_PARAM|Check function detects NULL pointer parameter|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |03|Call dsGetFPTextBrightness() with NULL for eBrightness|eIndicator: dsFPD_INDICATOR_POWER, eBrightness: NULL|dsERR_INVALID_PARAM|Check function detects NULL pointer parameter|
  * |03|Call dsSetFPState() and loop through all non-used indicators from kIndicators in the dsFPDSettings.h |eIndicator: dsFPD_INDICATOR_MAX, state: dsFPD_STATE_OFF|dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
- * |04|Set FP state to "OFF" using dsSetFPState()|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Ensure the FPD state is set to OFF|
+ * |04|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Ensure the FPD state is set to OFF|
  * |05|Call dsGetFPTextBrightness() with FP state set to "OFF"|eIndicator: [Valid Indicator], eBrightness: Pointer to brightness variable|dsERR_OPERATION_NOT_SUPPORTED|Validate that function checks if FPD state is OFF|
  * |06|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
- * |07|Call dsGetFPTextBrightness() after termination|eIndicator: [Valid Indicator], eBrightness: Pointer to brightness variable|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
+ * |07|Call dsGetFPTextBrightness() after termination|eIndicator: dsFPD_INDICATOR_POWER, eBrightness: Pointer to brightness variable|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
- * **Notes:**@n
- * - [Valid Indicator] should be chosen based on the platform specific context to ensure it is indeed valid in the given testing environment.
- * - Ensure that dsSetFPState() is capable of setting the FPD state to OFF for the test.
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsGetFPTextBrightness (void)
 {
@@ -857,13 +838,11 @@ void test_l1_dsFPD_negative_dsGetFPTextBrightness (void)
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |02|Enable clock display using dsFPEnableClockDisplay()|enable: 1|dsERR_NONE|Validate that clock display can be enabled|
  * |03|Disable clock display using dsFPEnableClockDisplay()|enable: 0|dsERR_NONE|Validate that clock display can be disabled|
  * 
- * **Notes:**@n
- * - Ensure the testing device supports 7-Segment display LEDs and clock display.
- * - Validate visually if possible or use relevant interfaces to ensure that the display status is changed as expected.
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsFPEnableCLockDisplay (void)
 {
@@ -887,17 +866,15 @@ void test_l1_dsFPD_positive_dsFPEnableCLockDisplay (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsFPEnableClockDisplay() without initializing (dsFPInit() not called)|enable: 1|dsERR_NOT_INITIALIZED|Validate that the function checks for initialization|
  * |02|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsFPEnableClockDisplay() with invalid value for enable|enable: 2|dsERR_INVALID_PARAM|Check function detects invalid parameter|
  * |03|Call dsSetFPState() and loop through all non-used indicators from kIndicators in the dsFPDSettings.h |eIndicator: dsFPD_INDICATOR_MAX, state: dsFPD_STATE_OFF|dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
- * |04|Set FP State to "OFF"|Using a separate function or mechanism if available|dsERR_NONE|Simulate FP state being "OFF"|
+ * |04|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|Using a separate function or mechanism if available|dsERR_NONE|Simulate FP state being "OFF"|
  * |05|Attempt to enable clock display using dsFPEnableClockDisplay() with FP State "OFF"|enable: 1|dsERR_OPERATION_NOT_SUPPORTED|Check that operation is not supported when FP State is "OFF"|
  * |07|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |08|Call dsFPEnableClockDisplay() after termination|enable: 1|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
- * **Notes:**@n
- * - Ensure that the 7-Segment display LEDs and clock display are supported and available on the testing device.
- * - Step 04 and Step 06 might need to be adapted depending on how the FP state is handled within your system/test setup.
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsFPEnableCLockDisplay (void)
 {
@@ -920,7 +897,7 @@ void test_l1_dsFPD_negative_dsFPEnableCLockDisplay (void)
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|---------|---------------|-----|
  * |01|Initialize using dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |02|Set FP State to "ON" if applicable|Using a separate function or mechanism if available|dsERR_NONE|Ensure the FP state is "ON"|
  * |03|Call dsSetFPScroll() for horizontal scrolling with valid parameters|uScrollHoldOnDur: 1000@n uHorzScrollIterations: 5@n uVertScrollIterations: 0|dsERR_NONE|Horizontal scrolling should occur on the display. Observe for text movement from right to left|
  * |04|Wait for the duration of the scroll|||Allow time for the text to scroll horizontally|
@@ -930,11 +907,7 @@ void test_l1_dsFPD_negative_dsFPEnableCLockDisplay (void)
  * |08|Wait for the duration of the scroll|||Allow time for the quick scroll|
  * |09|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
- * **Notes:**@n
- * - Ensure that the 7-Segment display LEDs and scroll functionality are supported and available on the testing device.
- * - The "Observe the Front Panel Display LEDs" in steps 03, 05, and 07 is crucial to confirm the functionality visually. This observation may require a user or a camera system for verification.
- * - The scrolling duration in steps 04, 06, and 08 might need to be calculated based on uScrollHoldOnDur and iteration parameters or may simply be observed.
- * - Step 02 might need to be adapted depending on how the FP state is handled within your system/test setup.
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsSetFPScroll (void)
 {
@@ -958,18 +931,16 @@ void test_l1_dsFPD_positive_dsSetFPScroll (void)
  * |:--:|-----------|---------|---------------|-----|
  * |01|Call dsSetFPScroll() without initializing (dsFPInit() not called)|uScrollHoldOnDur: 1000@n uHorzScrollIterations: 5@n uVertScrollIterations: 5|dsERR_NOT_INITIALIZED|Validate that the function checks for initialization|
  * |02|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsSetFPScroll() with invalid value for uScrollHoldOnDur|uScrollHoldOnDur: 0@n uHorzScrollIterations: 5@n uVertScrollIterations: 5|dsERR_INVALID_PARAM|Check function detects invalid parameter|
  * |04|Call dsSetFPScroll() with both horizontal and vertical scroll iterations|uScrollHoldOnDur: 1000@n uHorzScrollIterations: 5@n uVertScrollIterations: 5|dsERR_INVALID_PARAM|Validate it detects conflicting scroll directions|
  * |03|Call dsSetFPState() and loop through all non-used indicators from kIndicators in the dsFPDSettings.h |eIndicator: dsFPD_INDICATOR_MAX, state: dsFPD_STATE_OFF|dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
- * |05|Set FP State to "OFF"|Using a separate function or mechanism if available|dsERR_NONE|Simulate FP state being "OFF"|
+ * |05|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|Using a separate function or mechanism if available|dsERR_NONE|Simulate FP state being "OFF"|
  * |06|Attempt to set scroll using dsSetFPScroll() with FP State "OFF"|uScrollHoldOnDur: 1000@n uHorzScrollIterations: 5@n uVertScrollIterations: 0|dsERR_OPERATION_NOT_SUPPORTED|Check that operation is not supported when FP State is "OFF"|
  * |08|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |09|Call dsSetFPScroll() after termination|uScrollHoldOnDur: 1000@n uHorzScrollIterations: 5@n uVertScrollIterations: 0|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
- * **Notes:**@n
- * - Ensure that the 7-Segment display LEDs and scroll functionality are supported and available on the testing device.
- * - Step 05 and Step 07 might need to be adapted depending on how the FP state is handled within your system/test setup.
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsSetFPScroll (void)
 {
@@ -992,14 +963,12 @@ void test_l1_dsFPD_negative_dsSetFPScroll (void)
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|---------|---------------|-----|
  * |01|Initialize using dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsSetFPTimeFormat() with a valid 12-hour format|eTimeFormat: 12_HOUR_FORMAT|dsERR_NONE|Attempt to set time in 12-hour format|
  * |04|Call dsSetFPTimeFormat() with a valid 24-hour format|eTimeFormat: 24_HOUR_FORMAT|dsERR_NONE|Attempt to set time in 24-hour format|
  * |05|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
- * **Notes:**@n
- * - Step 02 might need to be adapted depending on how the FP state is handled within your system/test setup.
- * - Definitions for 12_HOUR_FORMAT and 24_HOUR_FORMAT should be available in the implementation or through an associated header file.
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsSetFPTimeFormat (void)
 {
@@ -1023,17 +992,15 @@ void test_l1_dsFPD_positive_dsSetFPTimeFormat (void)
  * |:--:|-----------|---------|---------------|-----|
  * |01|Call dsSetFPTimeFormat() without initializing the system|eTimeFormat: 12_HOUR_FORMAT|dsERR_NOT_INITIALIZED|API should not work without initialization|
  * |02|Initialize using dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsSetFPTimeFormat() with an invalid time format|eTimeFormat: INVALID_FORMAT|dsERR_INVALID_PARAM|API should validate parameter|
  * |03|Call dsSetFPState() and loop through all non-used indicators from kIndicators in the dsFPDSettings.h |eIndicator: dsFPD_INDICATOR_MAX, state: dsFPD_STATE_OFF|dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
- * |04|Set FP State to "OFF" if applicable|Using a separate function or mechanism if available|dsERR_NONE|Ensure the FP state is "OFF"|
+ * |04|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState() if applicable|Using a separate function or mechanism if available|dsERR_NONE|Ensure the FP state is "OFF"|
  * |05|Call dsSetFPTimeFormat() while FP State is "OFF"|eTimeFormat: 12_HOUR_FORMAT|dsERR_OPERATION_NOT_SUPPORTED|API should not operate when FP state is "OFF"|
  * |07|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |08|Call dsSetFPTimeFormat() after termination|eTimeFormat: 24_HOUR_FORMAT|dsERR_NOT_INITIALIZED|API should not work after termination|
  * 
- * **Notes:**@n
- * - Step 03, 04, and 05 might need to be adapted depending on how the FP state and time format are handled within your system/test setup.
- * - Definitions for INVALID_FORMAT should be a value not expected or handled by the system.
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsSetFPTimeFormat (void)
 {
@@ -1056,15 +1023,14 @@ void test_l1_dsFPD_negative_dsSetFPTimeFormat (void)
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|---------|---------------|-----|
  * |01|Initialize using dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |02|Set time format to 24-hour using dsSetFPTimeFormat()|eTimeFormat: 24_HOUR_FORMAT|dsERR_NONE|Ensure the known state|
  * |03|Call dsGetFPTimeFormat() to retrieve the set time format||24_HOUR_FORMAT|Should get the previously set time format|
  * |04|Set time format to 12-hour using dsSetFPTimeFormat()|eTimeFormat: 12_HOUR_FORMAT|dsERR_NONE|Change the state|
  * |05|Call dsGetFPTimeFormat() to retrieve the new time format||12_HOUR_FORMAT|Should get the newly set time format|
  * |06|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
- * **Notes:**@n
- * - Ensure the system is in a known state at the start of each test case.
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsGetFPTimeFormat (void)
 {
@@ -1088,18 +1054,15 @@ void test_l1_dsFPD_positive_dsGetFPTimeFormat (void)
  * |:--:|-----------|---------|---------------|-----|
  * |01|Call dsGetFPTimeFormat() without initializing the system||dsERR_NOT_INITIALIZED|API should not work without initialization|
  * |02|Initialize using dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsGetFPTimeFormat() with NULL parameter|pTimeFormat: NULL|dsERR_INVALID_PARAM|API should validate parameter|
  * |03|Call dsSetFPState() and loop through all non-used indicators from kIndicators in the dsFPDSettings.h |eIndicator: dsFPD_INDICATOR_MAX, state: dsFPD_STATE_OFF|dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
- * |04|Set FP State to "OFF" if applicable|Using a separate function or mechanism if available|dsERR_NONE|Ensure the FP state is "OFF"|
+ * |04|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState() if applicable|Using a separate function or mechanism if available|dsERR_NONE|Ensure the FP state is "OFF"|
  * |05|Call dsGetFPTimeFormat() while FP State is "OFF"||dsERR_OPERATION_NOT_SUPPORTED|API should not operate when FP state is "OFF"|
  * |07|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |08|Call dsGetFPTimeFormat() after termination||dsERR_NOT_INITIALIZED|API should not work after termination|
  * 
- * **Notes:**@n
- * - Step 03, 04, and 05 might need to be adapted depending on how the FP state is handled within your system/test setup.
- * - Appropriate logging and system state checks might be beneficial during test execution to validate and record system states at different steps for post-analysis.
- * - Ensure each test case leaves the system in a clean, known state to avoid inter-test dependencies and issues.
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsGetFPTimeFormat (void)
 {
@@ -1122,16 +1085,14 @@ void test_l1_dsFPD_negative_dsGetFPTimeFormat (void)
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|---------|---------------|-----|
  * |01|Initialize using dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsSetFPDMode() with a valid parameter|eMode: Valid mode value 1|dsERR_NONE|API should set mode successfully|
  * |04|Verify the mode is set as per eMode value 1|Utilize any available mechanism or interface to confirm|Mode is as per eMode value 1|Ensure API applied the desired effect|
  * |05|Call dsSetFPDMode() with another valid parameter|eMode: Valid mode value 2|dsERR_NONE|API should set mode successfully|
  * |06|Verify the mode is set as per eMode value 2|Utilize any available mechanism or interface to confirm|Mode is as per eMode value 2|Ensure API applied the desired effect|
  * |07|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
- * **Notes:**@n
- * - Step 03 and 04, 05 and 06: These pairs of steps validate that dsSetFPDMode() successfully impacts system behavior by confirming that the mode changes as per the desired value.
- * - Ensure each test case leaves the system in a clean, known state to avoid inter-test dependencies and issues.
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsSetFPDMode (void)
 {
@@ -1155,17 +1116,15 @@ void test_l1_dsFPD_positive_dsSetFPDMode (void)
  * |:--:|-----------|---------|---------------|-----|
  * |01|Call dsSetFPDMode() without initializing the system|eMode: Valid mode value|dsERR_NOT_INITIALIZED|API should not work without initialization|
  * |02|Initialize using dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsSetFPDMode() with an invalid parameter|eMode: Invalid mode value|dsERR_INVALID_PARAM|API should validate parameter|
  * |03|Call dsSetFPState() and loop through all non-used indicators from kIndicators in the dsFPDSettings.h |eIndicator: dsFPD_INDICATOR_MAX, state: dsFPD_STATE_OFF|dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
- * |04|Set FP State to "OFF" if applicable|Using a separate function or mechanism if available|dsERR_NONE|Ensure the FP state is "OFF"|
+ * |04|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState() if applicable|Using a separate function or mechanism if available|dsERR_NONE|Ensure the FP state is "OFF"|
  * |05|Call dsSetFPDMode() while FP State is "OFF"|eMode: Valid mode value|dsERR_OPERATION_NOT_SUPPORTED|API should not operate when FP state is "OFF"|
  * |07|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |08|Call dsSetFPDMode() after termination|eMode: Valid mode value|dsERR_NOT_INITIALIZED|API should not work after termination|
  * 
- * **Notes:**@n
- * - Step 03, 04, and 05 might need to be adapted depending on how eMode is defined and how the FP state is handled within your system/test setup.
- * - Ensure each test case leaves the system in a clean, known state to avoid inter-test dependencies and issues.
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsSetFPDMode (void)
 {
@@ -1188,12 +1147,11 @@ void test_l1_dsFPD_negative_dsSetFPDMode (void)
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|---------|---------------|-----|
  * |01|Initialize using dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |02|Call dsFPGetLEDState() with a valid parameter|state: Valid pointer to dsFPDLedState_t variable|dsERR_NONE|API should retrieve the current state successfully|
  * |03|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
- * **Notes:**@n
- * - Ensure each test case leaves the system in a clean, known state to avoid inter-test dependencies and issues.
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsFPGetLEDState (void)
 {
@@ -1216,14 +1174,13 @@ void test_l1_dsFPD_positive_dsFPGetLEDState (void)
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|---------|---------------|-----|
  * |01|Call dsFPGetLEDState() before initialization|state: Valid pointer to dsFPDLedState_t variable|dsERR_NOT_INITIALIZED|API should not work without initialization|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |02|Initialize using dsFPInit()||dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsFPGetLEDState() with a NULL pointer|state: NULL|dsERR_INVALID_PARAM|API should not accept NULL pointer parameter|
  * |04|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |05|Call dsFPGetLEDState() after termination|state: Valid pointer to dsFPDLedState_t variable|dsERR_NOT_INITIALIZED|API should not work after termination|
  * 
- * **Notes:**@n
- * - Ensure each test case leaves the system in a clean, known state to avoid inter-test dependencies and issues.
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsFPGetLEDState (void)
 {
@@ -1246,12 +1203,11 @@ void test_l1_dsFPD_negative_dsFPGetLEDState (void)
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|---------|---------------|-----|
  * |01|Initialize using dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |02|Call dsFPSetLEDState() with a valid LED state|state: A valid dsFPDLedState_t value|dsERR_NONE|The LED state should be set successfully|
  * |03|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
- * **Notes:**@n
- * - Step 03 might require additional steps or methods depending on the system under test and its capabilities for state verification.
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsFPSetLEDState (void)
 {
@@ -1275,13 +1231,12 @@ void test_l1_dsFPD_positive_dsFPSetLEDState (void)
  * |:--:|-----------|---------|---------------|-----|
  * |01|Call dsFPSetLEDState() before initialization|state: A valid dsFPDLedState_t value|dsERR_NOT_INITIALIZED|API should not work without initialization|
  * |02|Initialize using dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Loop through all valid indicators from kIndicators in the settings file with dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsFPSetLEDState() with an invalid LED state|state: An invalid dsFPDLedState_t value|dsERR_INVALID_PARAM|API should validate the parameter and return an error for invalid input|
  * |04|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |05|Call dsFPSetLEDState() after termination|state: A valid dsFPDLedState_t value|dsERR_NOT_INITIALIZED|API should not work after termination|
  * 
- * **Notes:**@n
- * Ensure that test steps are adapted based on actual system capabilities and that subsequent tests or use-case scenarios are not inadvertently impacted.
+ * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsFPSetLEDState (void)
 {
