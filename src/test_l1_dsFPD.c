@@ -462,8 +462,8 @@ void test_l1_dsFPD_negative_dsGetFPState (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
  * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
- * |02|Call dsSetFPColor() with all valid eIndicator and all valid eColor parameters from kIndidicators|eIndicator: [Valid Indicator], eColor: [Valid Color]|dsERR_NONE|Ensure that the function can set the color|
- * |03|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
+ * |03|Call dsSetFPColor() with all valid eIndicator and all valid eColor parameters from kIndidicators|eIndicator: [Valid Indicator], eColor: [Valid Color]|dsERR_NONE|Ensure that the function can set the color|
+ * |04|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
  * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
@@ -474,6 +474,8 @@ void test_l1_dsFPD_positive_dsSetFPColor (void)
 
 /**
  * @brief Ensure dsSetFPColor() handles error scenarios correctly
+ * 
+ * @todo add case for LED max (and check all other calls)
  * 
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 016@n
@@ -490,7 +492,7 @@ void test_l1_dsFPD_positive_dsSetFPColor (void)
  * |01|Call dsSetFPColor() without initializing (dsFPInit() not called)|eIndicator: dsFPD_INDICATOR_POWER, eColor: [Valid Color]|dsERR_NOT_INITIALIZED|Validate that the function checks for initialization|
  * |02|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
  * |03|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
- * |04|Call dsSetFPColor() and loop through all invalid colors based on kIndicators|eIndicator: dsFPD_INDICATOR_POWER, eColor: [Invalid Color]|dsERR_INVALID_PARAM|Validate invalid parameter handling for eColor|
+ * |04|Call dsSetFPColor() and loop all valid indicators with all invalid colors based on kIndicators|eIndicator: [Valid Indicator], eColor: [Invalid Color]|dsERR_INVALID_PARAM|Validate invalid parameter handling for eColor|
  * |05|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Ensure the FPD state is set to OFF|
  * |06|Call dsSetFPColor() with all indicators|eIndicator: [Indicator], eColor: [Valid Color]|dsERR_OPERATION_NOT_SUPPORTED|Validate that function checks if FPD state is OFF|
  * |07|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
@@ -519,10 +521,11 @@ void test_l1_dsFPD_negative_dsSetFPColor (void)
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
- * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
- * |03|Call dsGetFPColor() with valid parameters|eIndicator: [Valid Indicator], pColor: dsFPDColor_t*|dsERR_NONE|Ensure the function can retrieve color|
+ * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState() and reading all the valid configurations|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |03|Call dsGetFPColor() with all valid indicators|eIndicator: [Valid Indicator], pColor: dsFPDColor_t*|dsERR_NONE|Ensure the function can retrieve color|
  * |04|Verify that the color retrieved matches the known color set in Step 02|Color from Step 03: [Retrieved Color]|Colors should match|[Retrieved Color] should be [Known Color]|
  * |05|Call dsGetFPColor() again and compare results|eIndicator: [Valid Indicator], pColor: dsFPDColor_t*|dsERR_NONE and same color as Step 04|Ensure consistency in repeated calls|
+ * |06|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
  * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
  */
@@ -552,7 +555,7 @@ void test_l1_dsFPD_positive_dsGetFPColor (void)
  * |03|Call dsGetFPColor() with an invalid eIndicator value|eIndicator: dsFPD_INDICATOR_MAX, pColor: dsFPDColor_t*|dsERR_INVALID_PARAM|Validate invalid parameter handling for eIndicator|
  * |04|Call dsGetFPColor() with a null pointer for pColor|eIndicator: dsFPD_INDICATOR_POWER, pColor: NULL|dsERR_INVALID_PARAM|Validate invalid parameter handling for pColor|
  * |05|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Ensure the FPD state is set to OFF|
- * |06|Call dsSetFPColor() with all indicators|eIndicator: [Indicator], pColor: dsFPDColor_t*|dsERR_OPERATION_NOT_SUPPORTED|Validate that function checks if FPD state is OFF|
+ * |06|Call dsGetFPColor() with all indicators|eIndicator: [Indicator], pColor: dsFPDColor_t*|dsERR_OPERATION_NOT_SUPPORTED|Validate that function checks if FPD state is OFF|
  * |07|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |08|Call dsGetFPColor() after termination|eIndicator: dsFPD_INDICATOR_POWER, pColor: dsFPDColor_t*|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
@@ -565,6 +568,8 @@ void test_l1_dsFPD_negative_dsGetFPColor (void)
 
 /**
  * @brief Ensure dsSetFPTime() correctly sets the time on 7-Segment Front Panel Display LEDs
+ * 
+ * @todo Add set mode to clock, and move setMode tests to above this one. Do this for all 7-segment LED tests based on what they need to use
  * 
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 019@n
@@ -594,6 +599,8 @@ void test_l1_dsFPD_positive_dsSetFPTime (void)
 /**
  * @brief Ensure dsSetFPTime() handles error scenarios correctly
  * 
+ * @todo add case for invalid FPDMode. Do this wherever applicable
+ * 
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 020@n
  * 
@@ -611,6 +618,7 @@ void test_l1_dsFPD_positive_dsSetFPTime (void)
  * |03|Call dsSetFPTime() with an invalid hour value|eTimeFormat: 24hrs, uHour: 25, uMinutes: 30|dsERR_INVALID_PARAM|Validate invalid parameter handling for uHour|
  * |04|Call dsSetFPTime() with an invalid minute value|eTimeFormat: 24hrs, uHour: 14, uMinutes: 60|dsERR_INVALID_PARAM|Validate invalid parameter handling for uMinutes|
  * |05|Call dsSetFPTime() with 12hr format and hour value > 12|eTimeFormat: 12hrs, uHour: 14, uMinutes: 30|dsERR_INVALID_PARAM|Check the consistency between eTimeFormat and uHour|
+ * |05|Call dsSetFPTime() with 12hr format with invalid minute value|eTimeFormat: 12hrs, uHour: 2, uMinutes: 60|dsERR_INVALID_PARAM|Check the consistency between eTimeFormat and uHour|
  * |06|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Ensure the FPD state is set to OFF|
  * |07|Call dsSetFPTime() with FP state set to "OFF"|eTimeFormat: 24hrs, uHour: 14, uMinutes: 30|dsERR_OPERATION_NOT_SUPPORTED|Validate that function checks if FPD state is OFF|
  * |08|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
@@ -1216,6 +1224,8 @@ static UT_test_suite_t * pSuite = NULL;
 
 /**
  * @brief Register the main test(s) for this module
+ * 
+ * @todo SPlit out all tests that use 7-segment displays into their own suite, and perform the check with kTextDisplays here to determine if we access that test suite.
  *
  * @return int - 0 on success, otherwise failure
  */
