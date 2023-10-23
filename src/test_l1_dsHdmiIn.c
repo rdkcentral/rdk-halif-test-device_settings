@@ -95,9 +95,18 @@
  * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after initialization |
  * 
  */
-void test_l1_dsHdmiIn_positive_dsHdmiInInit (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_positive_dsHdmiInInit(void) {
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 2: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInInit() again
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 4: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 }
 
 /**
@@ -119,9 +128,15 @@ void test_l1_dsHdmiIn_positive_dsHdmiInInit (void)
  * @note The return values dsERR_GENERAL may be difficult to test in a simulated environment
  * 
  */
-void test_l1_dsHdmiIn_negative_dsHdmiInInit (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_negative_dsHdmiInInit(void) {
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 2: Call dsHdmiInInit() again without terminating the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_ALREADY_INITIALIZED);
+
+    // Step 3: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 }
 
 /**
@@ -142,9 +157,18 @@ void test_l1_dsHdmiIn_negative_dsHdmiInInit (void)
  * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after initialization |
  * 
  */
-void test_l1_dsHdmiIn_positive_dsHdmiInTerm (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_positive_dsHdmiInTerm(void) {
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 2: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInInit() again
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 4: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 }
 
 /**
@@ -167,9 +191,18 @@ void test_l1_dsHdmiIn_positive_dsHdmiInTerm (void)
  * @note The return values dsERR_GENERAL may be difficult to test in a simulated environment
  * 
  */
-void test_l1_dsHdmiIn_negative_dsHdmiInTerm (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_negative_dsHdmiInTerm(void) {
+    // Step 1: Call dsHdmiInTerm() without initializing the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NOT_INITIALIZED);
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 4: Call dsHdmiInTerm() without initializing the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -191,9 +224,23 @@ void test_l1_dsHdmiIn_negative_dsHdmiInTerm (void)
  * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
-void test_l1_dsHdmiIn_positive_dsHdmiInGetNumberOfinputs (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_positive_dsHdmiInGetNumberOfinputs(void) {
+    uint8_t numInputs1, numInputs2;
+
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 2: Call dsHdmiInGetNumberOfinputs() to fetch the number of HDMI input ports
+    CU_ASSERT_EQUAL(dsHdmiInGetNumberOfinputs(&numInputs1), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInGetNumberOfinputs() again to fetch the number of HDMI input ports
+    CU_ASSERT_EQUAL(dsHdmiInGetNumberOfinputs(&numInputs2), dsERR_NONE);
+
+    // Step 4: Compare the results to make sure they are equal
+    CU_ASSERT_EQUAL(numInputs1, numInputs2);
+
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 }
 
 /**
@@ -217,10 +264,25 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetNumberOfinputs (void)
  * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
  * 
  */
-void test_l1_dsHdmiIn_negative_dsHdmiInGetNumberOfinputs (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_negative_dsHdmiInGetNumberOfinputs(void) {
+    uint8_t numInputs;
+
+    // Step 1: Call dsHdmiInGetNumberOfinputs() without initializing the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInGetNumberOfinputs(&numInputs), dsERR_NOT_INITIALIZED);
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInGetNumberOfinputs() with NULL as the parameter
+    CU_ASSERT_EQUAL(dsHdmiInGetNumberOfinputs(NULL), dsERR_INVALID_PARAM);
+
+    // Step 4: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 5: Call dsHdmiInGetNumberOfinputs() after termination of the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInGetNumberOfinputs(&numInputs), dsERR_NOT_INITIALIZED);
 }
+
 
 /**
  * @brief Ensure dsHdmiInGetStatus() correctly fetches the HDMI input port status during positive scenarios.
@@ -241,9 +303,27 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetNumberOfinputs (void)
  * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
-void test_l1_dsHdmiIn_positive_dsHdmiInGetStatus (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_positive_dsHdmiInGetStatus(void) {
+    dsHdmiInStatus_t status1, status2;
+
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 2: Allocate memory for dsHdmiInStatus_t and call dsHdmiInGetStatus()
+    CU_ASSERT_EQUAL(dsHdmiInGetStatus(&status1), dsERR_NONE);
+
+    // Step 3: Allocate memory for dsHdmiInStatus_t and call dsHdmiInGetStatus() again
+    CU_ASSERT_EQUAL(dsHdmiInGetStatus(&status2), dsERR_NONE);
+
+    // Step 4: Compare the returned values to make sure they are equal
+    CU_ASSERT_EQUAL(status1.isPresented, status2.isPresented);
+    CU_ASSERT_EQUAL(status1.activePort, status2.activePort);
+    for (int i = 0; i < dsHDMI_IN_PORT_MAX; i++) {
+        CU_ASSERT_EQUAL(status1.isPortConnected[i], status2.isPortConnected[i]);
+    }
+
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 }
 
 /**
@@ -267,9 +347,23 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetStatus (void)
  * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
  * 
  */
-void test_l1_dsHdmiIn_negative_dsHdmiInGetStatus (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_negative_dsHdmiInGetStatus(void) {
+    dsHdmiInStatus_t status;
+
+    // Step 1: Call dsHdmiInGetStatus() without initializing the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInGetStatus(&status), dsERR_NOT_INITIALIZED);
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInGetStatus() with NULL as the parameter
+    CU_ASSERT_EQUAL(dsHdmiInGetStatus(NULL), dsERR_INVALID_PARAM);
+
+    // Step 4: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 5: Call dsHdmiInGetStatus() after terminating the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInGetStatus(&status), dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -291,9 +385,21 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetStatus (void)
  * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
-void test_l1_dsHdmiIn_positive_dsHdmiInSelectPort (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_positive_dsHdmiInSelectPort(void) {
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 2: Call dsHdmiInSelectPort() to select Port 0
+    CU_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInSelectPort() to select Port 1
+    CU_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_1), dsERR_NONE);
+
+    // Step 4: Call dsHdmiInSelectPort() to select Port 2
+    CU_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_2), dsERR_NONE);
+
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 }
 
 /**
@@ -317,9 +423,21 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSelectPort (void)
  * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
  * 
  */
-void test_l1_dsHdmiIn_negative_dsHdmiInSelectPort (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_negative_dsHdmiInSelectPort(void) {
+    // Step 1: Call dsHdmiInSelectPort() without initializing the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0), dsERR_NOT_INITIALIZED);
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInSelectPort() with an invalid value
+    CU_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_MAX), dsERR_INVALID_PARAM);
+
+    // Step 4: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 5: Call dsHdmiInSelectPort() after terminating the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0), dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -341,9 +459,21 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectPort (void)
  * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
-void test_l1_dsHdmiIn_positive_dsHdmiInScaleVideo (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_positive_dsHdmiInScaleVideo(void) {
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 2: Scale HDMI input video (x=0, y=0, width=800, height=600)
+    CU_ASSERT_EQUAL(dsHdmiInScaleVideo(0, 0, 800, 600), dsERR_NONE);
+
+    // Step 3: Scale HDMI input video (x=10, y=10, width=1000, height=800)
+    CU_ASSERT_EQUAL(dsHdmiInScaleVideo(10, 10, 1000, 800), dsERR_NONE);
+
+    // Step 4: Scale HDMI input video (x=-10, y=-10, width=800, height=600)
+    CU_ASSERT_EQUAL(dsHdmiInScaleVideo(-10, -10, 800, 600), dsERR_NONE);
+
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 }
 
 /**
@@ -373,9 +503,39 @@ void test_l1_dsHdmiIn_positive_dsHdmiInScaleVideo (void)
  * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
  * 
  */
-void test_l1_dsHdmiIn_negative_dsHdmiInScaleVideo (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_negative_dsHdmiInScaleVideo(void) {
+    // Step 1: Call dsHdmiInScaleVideo() without initializing the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInScaleVideo(0, 0, 800, 600), dsERR_NOT_INITIALIZED);
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: dsHdmiInScaleVideo() with invalid parameters (x=0, y=0, width=2000, height=600)
+    CU_ASSERT_EQUAL(dsHdmiInScaleVideo(0, 0, 2000, 600), dsERR_INVALID_PARAM);
+
+    // Step 4: dsHdmiInScaleVideo() with out of bounds parameters (x=-1000, y=0, width=800, height=600)
+    CU_ASSERT_EQUAL(dsHdmiInScaleVideo(-1000, 0, 800, 600), dsERR_INVALID_PARAM);
+
+    // Step 5: dsHdmiInScaleVideo() with out of bounds parameters (x=0, y=0, width=-800, height=600)
+    CU_ASSERT_EQUAL(dsHdmiInScaleVideo(0, 0, -800, 600), dsERR_INVALID_PARAM);
+
+    // Step 6: dsHdmiInScaleVideo() with out of bounds parameters (x=0, y=0, width=800, height=-600)
+    CU_ASSERT_EQUAL(dsHdmiInScaleVideo(0, 0, 800, -600), dsERR_INVALID_PARAM);
+
+    // Step 7: dsHdmiInScaleVideo() with out of bounds parameters (x=0, y=-1000, width=800, height=600)
+    CU_ASSERT_EQUAL(dsHdmiInScaleVideo(0, -1000, 800, 600), dsERR_INVALID_PARAM);
+
+    // Step 8: dsHdmiInScaleVideo() with out of bounds parameters (x=0, y=20000, width=800, height=600)
+    CU_ASSERT_EQUAL(dsHdmiInScaleVideo(0, 20000, 800, 600), dsERR_INVALID_PARAM);
+
+    // Step 9: dsHdmiInScaleVideo() with out of bounds parameters (x=20000, y=0, width=800, height=600)
+    CU_ASSERT_EQUAL(dsHdmiInScaleVideo(20000, 0, 800, 600), dsERR_INVALID_PARAM);
+
+    // Step 10: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 11: dsHdmiInScaleVideo() after terminating the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInScaleVideo(0, 0, 800, 600), dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -406,10 +566,32 @@ void test_l1_dsHdmiIn_negative_dsHdmiInScaleVideo (void)
  * |14|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
+void test_l1_dsHdmiIn_positive_dsHdmiInSelectZoomMode(void) {
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
-void test_l1_dsHdmiIn_positive_dsHdmiInSelectZoomMode (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+    // Step 2: Loop through all dsVideoZoom_t values and call dsHdmiInSelectZoomMode()
+    dsVideoZoom_t zoomModes[] = {
+        dsVIDEO_ZOOM_NONE,
+        dsVIDEO_ZOOM_FULL,
+        dsVIDEO_ZOOM_LB_16_9,
+        dsVIDEO_ZOOM_LB_14_9,
+        dsVIDEO_ZOOM_CCO,
+        dsVIDEO_ZOOM_PAN_SCAN,
+        dsVIDEO_ZOOM_LB_2_21_1_ON_4_3,
+        dsVIDEO_ZOOM_LB_2_21_1_ON_16_9,
+        dsVIDEO_ZOOM_PLATFORM,
+        dsVIDEO_ZOOM_16_9_ZOOM,
+        dsVIDEO_ZOOM_PILLARBOX_4_3,
+        dsVIDEO_ZOOM_WIDE_4_3
+    };
+    
+    for (int i = 0; i < sizeof(zoomModes)); i++) {
+        CU_ASSERT_EQUAL(dsHdmiInSelectZoomMode(zoomModes[i]), dsERR_NONE);
+    }
+
+    // Step 3: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 }
 
 /**
@@ -433,9 +615,21 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSelectZoomMode (void)
  * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
  * 
  */
-void test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode(void) {
+    // Step 1: Call dsHdmiInSelectZoomMode() without initializing the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInSelectZoomMode(dsVIDEO_ZOOM_NONE), dsERR_NOT_INITIALIZED);
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInSelectZoomMode() with invalid value (dsVIDEO_ZOOM_MAX)
+    CU_ASSERT_EQUAL(dsHdmiInSelectZoomMode(dsVIDEO_ZOOM_MAX), dsERR_INVALID_PARAM);
+
+    // Step 4: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 5: Call dsHdmiInSelectZoomMode() without terminating the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInSelectZoomMode(dsVIDEO_ZOOM_NONE), dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -457,9 +651,21 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode (void)
  * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
-void test_l1_dsHdmiIn_positive_dsHdmiInGetCurrentVideoMode (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_positive_dsHdmiInGetCurrentVideoMode(void) {
+    dsVideoPortResolution_t resolution1;
+    dsVideoPortResolution_t resolution2;
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 2: Retrieve the current HDMI video mode using dsHdmiInGetCurrentVideoMode()
+    CU_ASSERT_EQUAL(dsHdmiInGetCurrentVideoMode(&resolution1), dsERR_NONE);
+    CU_ASSERT_EQUAL(dsHdmiInGetCurrentVideoMode(&resolution2), dsERR_NONE);
+
+    // Step 3: Ensure returned values are the same
+    CU_ASSERT_EQUAL(resolution1, resolution2);
+
+    // Step 4: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 }
 
 /**
@@ -483,9 +689,22 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetCurrentVideoMode (void)
  * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
  * 
  */
-void test_l1_dsHdmiIn_negative_dsHdmiInGetCurrentVideoMode (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_negative_dsHdmiInGetCurrentVideoMode(void) {
+    // Step 1: Call dsHdmiInGetCurrentVideoMode() without initializing the HDMI input sub-system
+    dsVideoPortResolution_t resolution;
+    CU_ASSERT_EQUAL(dsHdmiInGetCurrentVideoMode(&resolution), dsERR_NOT_INITIALIZED);
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: dsHdmiInGetCurrentVideoMode() with NULL `resolution` pointer
+    CU_ASSERT_EQUAL(dsHdmiInGetCurrentVideoMode(NULL), dsERR_INVALID_PARAM);
+
+    // Step 4: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 5: Call dsHdmiInGetCurrentVideoMode() after terminating the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInGetCurrentVideoMode(&resolution), dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -505,9 +724,15 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetCurrentVideoMode (void)
  * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
-void test_l1_dsHdmiIn_positive_dsHdmiInRegisterConnectCB (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_positive_dsHdmiInRegisterConnectCB(void) {
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 2: Call dsHdmiInRegisterConnectCB()
+    CU_ASSERT_EQUAL(dsHdmiInRegisterConnectCB(dsHdmiInConnectCB_t), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 }
 
 /**
@@ -531,9 +756,21 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterConnectCB (void)
  * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
  * 
  */
-void test_l1_dsHdmiIn_negative_dsHdmiInRegisterConnectCB (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_negative_dsHdmiInRegisterConnectCB(void) {
+    // Step 1: Call dsHdmiInRegisterConnectCB() without initializing the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInRegisterConnectCB(dsHdmiInConnectCB_t), dsERR_NOT_INITIALIZED);
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInRegisterConnectCB() with invalid input
+    CU_ASSERT_EQUAL(dsHdmiInRegisterConnectCB(NULL), dsERR_INVALID_PARAM);
+
+    // Step 4: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 5: Call dsHdmiInRegisterConnectCB() after termination the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInRegisterConnectCB(dsHdmiInConnectCB_t), dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -553,9 +790,15 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterConnectCB (void)
  * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
-void test_l1_dsHdmiIn_positive_dsHdmiInRegisterSignalChangeCB (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_positive_dsHdmiInRegisterSignalChangeCB(void) {
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 2: Call dsHdmiInRegisterSignalChangeCB()
+    CU_ASSERT_EQUAL(dsHdmiInRegisterSignalChangeCB(dsHdmiInSignalChangeCB_t), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 }
 
 /**
@@ -579,9 +822,21 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterSignalChangeCB (void)
  * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
  * 
  */
-void test_l1_dsHdmiIn_negative_dsHdmiInRegisterSignalChangeCB (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_negative_dsHdmiInRegisterSignalChangeCB(void) {
+    // Step 1: Call dsHdmiInRegisterSignalChangeCB() without initializing the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInRegisterSignalChangeCB(dsHdmiInSignalChangeCB_t), dsERR_NOT_INITIALIZED);
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInRegisterSignalChangeCB() with invalid input
+    CU_ASSERT_EQUAL(dsHdmiInRegisterSignalChangeCB(NULL), dsERR_INVALID_PARAM);
+
+    // Step 4: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 5: Call dsHdmiInRegisterSignalChangeCB() after terminating the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInRegisterSignalChangeCB(dsHdmiInSignalChangeCB_t), dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -601,9 +856,15 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterSignalChangeCB (void)
  * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
-void test_l1_dsHdmiIn_positive_dsHdmiInRegisterStatusChangeCB (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_positive_dsHdmiInRegisterStatusChangeCB(void) {
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 2: Call dsHdmiInRegisterStatusChangeCB()
+    CU_ASSERT_EQUAL(dsHdmiInRegisterStatusChangeCB(dsHdmiInStatusChangeCB_t), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 }
 
 /**
@@ -627,9 +888,21 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterStatusChangeCB (void)
  * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
  * 
  */
-void test_l1_dsHdmiIn_negative_dsHdmiInRegisterStatusChangeCB (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_negative_dsHdmiInRegisterStatusChangeCB(void) {
+    // Step 1: Call dsHdmiInRegisterStatusChangeCB() without initializing the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInRegisterStatusChangeCB(dsHdmiInStatusChangeCB_t), dsERR_NOT_INITIALIZED);
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInRegisterStatusChangeCB() with invalid input
+    CU_ASSERT_EQUAL(dsHdmiInRegisterStatusChangeCB(NULL), dsERR_INVALID_PARAM);
+
+    // Step 4: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 5: Call dsHdmiInRegisterStatusChangeCB() after terminating the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInRegisterStatusChangeCB(dsHdmiInStatusChangeCB_t), dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -649,9 +922,15 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterStatusChangeCB (void)
  * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
-void test_l1_dsHdmiIn_positive_dsHdmiInRegisterVideoModeUpdateCB (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_positive_dsHdmiInRegisterVideoModeUpdateCB(void) {
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 2: Call dsHdmiInRegisterVideoModeUpdateCB()
+    CU_ASSERT_EQUAL(dsHdmiInRegisterVideoModeUpdateCB(dsHdmiInVideoModeUpdateCB_t), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 }
 
 /**
@@ -675,10 +954,21 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterVideoModeUpdateCB (void)
  * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
  * 
  */
+void test_l1_dsHdmiIn_negative_dsHdmiInRegisterVideoModeUpdateCB(void) {
+    // Step 1: Call dsHdmiInRegisterVideoModeUpdateCB() without initializing the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInRegisterVideoModeUpdateCB(dsHdmiInVideoModeUpdateCB_t), dsERR_NOT_INITIALIZED);
 
-void test_l1_dsHdmiIn_negative_dsHdmiInRegisterVideoModeUpdateCB (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInRegisterVideoModeUpdateCB() with invalid input
+    CU_ASSERT_EQUAL(dsHdmiInRegisterVideoModeUpdateCB(NULL), dsERR_INVALID_PARAM);
+
+    // Step 4: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 5: Call dsHdmiInRegisterVideoModeUpdateCB() after terminating the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInRegisterVideoModeUpdateCB(dsHdmiInVideoModeUpdateCB_t), dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -698,9 +988,15 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterVideoModeUpdateCB (void)
  * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
-void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAllmChangeCB (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAllmChangeCB(void) {
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 2: Call dsHdmiInRegisterAllmChangeCB()
+    CU_ASSERT_EQUAL(dsHdmiInRegisterAllmChangeCB(dsHdmiInAllmChangeCB_t), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 }
 
 /**
@@ -724,9 +1020,21 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAllmChangeCB (void)
  * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL may be difficult to test in a simulated environment
  * 
  */
-void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAllmChangeCB (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAllmChangeCB(void) {
+    // Step 1: Call dsHdmiInRegisterAllmChangeCB() without initializing the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInRegisterAllmChangeCB(dsHdmiInAllmChangeCB_t), dsERR_NOT_INITIALIZED);
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInRegisterAllmChangeCB() with invalid input
+    CU_ASSERT_EQUAL(dsHdmiInRegisterAllmChangeCB(NULL), dsERR_INVALID_PARAM);
+
+    // Step 4: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 5: Call dsHdmiInRegisterAllmChangeCB() after terminating the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInRegisterAllmChangeCB(dsHdmiInAllmChangeCB_t), dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -746,9 +1054,15 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAllmChangeCB (void)
  * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
-void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAVLatencyChangeCB (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAVLatencyChangeCB(void) {
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 2: Call dsHdmiInRegisterAVLatencyChangeCB()
+    CU_ASSERT_EQUAL(dsHdmiInRegisterAVLatencyChangeCB(dsAVLatencyChangeCB_t), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 }
 
 /**
@@ -772,9 +1086,21 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAVLatencyChangeCB (void)
  * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL may be difficult to test in a simulated environment
  * 
  */
-void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAVLatencyChangeCB (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAVLatencyChangeCB(void) {
+    // Step 1: Call dsHdmiInRegisterAVLatencyChangeCB() without initializing the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInRegisterAVLatencyChangeCB(dsAVLatencyChangeCB_t), dsERR_NOT_INITIALIZED);
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInRegisterAVLatencyChangeCB() with invalid input
+    CU_ASSERT_EQUAL(dsHdmiInRegisterAVLatencyChangeCB(NULL), dsERR_INVALID_PARAM);
+
+    // Step 4: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 5: Call dsHdmiInRegisterAVLatencyChangeCB() after terminating the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInRegisterAVLatencyChangeCB(dsAVLatencyChangeCB_t), dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -794,9 +1120,15 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAVLatencyChangeCB (void)
  * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
-void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAviContentTypeChangeCB (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAviContentTypeChangeCB(void) {
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 2: Call dsHdmiInRegisterAviContentTypeChangeCB()
+    CU_ASSERT_EQUAL(dsHdmiInRegisterAviContentTypeChangeCB(dsHdmiInAviContentTypeChangeCB_t), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 }
 
 /**
@@ -820,9 +1152,21 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAviContentTypeChangeCB (void)
  * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
  * 
  */
-void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAviContentTypeChangeCB (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAviContentTypeChangeCB(void) {
+    // Step 1: Call dsHdmiInRegisterAviContentTypeChangeCB() without initializing the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInRegisterAviContentTypeChangeCB(dsHdmiInAviContentTypeChangeCB_t), dsERR_NOT_INITIALIZED);
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInRegisterAviContentTypeChangeCB() with invalid input
+    CU_ASSERT_EQUAL(dsHdmiInRegisterAviContentTypeChangeCB(NULL), dsERR_INVALID_PARAM);
+
+    // Step 4: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 5: Call dsHdmiInRegisterAviContentTypeChangeCB() after terminating the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsHdmiInRegisterAviContentTypeChangeCB(dsHdmiInAviContentTypeChangeCB_t), dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -846,9 +1190,33 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAviContentTypeChangeCB (void)
  * |07|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
-void test_l1_dsHdmiIn_positive_dsIsHdmiARCPort (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_positive_dsIsHdmiARCPort(void) {
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    bool isArcPort;
+
+    // Step 2: Call dsIsHdmiARCPort() with valid input (dsHDMI_IN_PORT_0)
+    CU_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_0, &isArcPort), dsERR_NONE);
+    CU_ASSERT_TRUE(isArcPort);
+
+    // Step 3: Call dsIsHdmiARCPort() with valid input (dsHDMI_IN_PORT_1)
+    CU_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_1, &isArcPort), dsERR_NONE);
+    CU_ASSERT_TRUE(isArcPort);
+
+    // Step 4: Call dsIsHdmiARCPort() with valid input (dsHDMI_IN_PORT_2)
+    CU_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_2, &isArcPort), dsERR_NONE);
+    CU_ASSERT_TRUE(isArcPort);
+
+    // Step 5: Call dsIsHdmiARCPort() with valid input (dsHDMI_IN_PORT_3)
+    CU_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_3, &isArcPort), dsERR_NONE);
+    CU_ASSERT_TRUE(isArcPort);
+
+    // Step 6: Compare the values of steps 4 and 5 to make sure they equal one another
+    CU_ASSERT_EQUAL(isArcPort, isArcPort);
+
+    // Step 7: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 }
 
 /**
@@ -873,9 +1241,26 @@ void test_l1_dsHdmiIn_positive_dsIsHdmiARCPort (void)
  * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
  * 
  */
-void test_l1_dsHdmiIn_negative_dsIsHdmiARCPort (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_negative_dsIsHdmiARCPort(void) {
+    // Step 1: Call dsIsHdmiARCPort() without initializing the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_0, NULL), dsERR_NOT_INITIALIZED);
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    bool isArcPort;
+
+    // Step 3: Call dsIsHdmiARCPort() with invalid value (dsHDMI_IN_PORT_MAX)
+    CU_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_MAX, &isArcPort), dsERR_INVALID_PARAM);
+
+    // Step 4: Call dsIsHdmiARCPort() with invalid value (dsHDMI_IN_PORT_0) and NULL pointer
+    CU_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_0, NULL), dsERR_INVALID_PARAM);
+
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 6: Call dsIsHdmiARCPort() after terminating the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_0, &isArcPort), dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -899,9 +1284,40 @@ void test_l1_dsHdmiIn_negative_dsIsHdmiARCPort (void)
  * |07|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
-void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo(void) {
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    unsigned char* edidBytes1;
+    unsigned char* edidBytes2;
+    unsigned char* edidBytes3;
+    unsigned char* edidBytes4;
+    int edidSize1;
+    int edidSize2;
+    int edidSize3;
+    int edidSize4;
+
+    // Step 2: Call dsGetEDIDBytesInfo() with valid input (dsHDMI_IN_PORT_0)
+    CU_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, &edidBytes1, &edidSize1), dsERR_NONE);
+
+    // Step 3: Call dsGetEDIDBytesInfo() with valid input (dsHDMI_IN_PORT_1)
+    CU_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_1, &edidBytes2, &edidSize2), dsERR_NONE);
+
+    // Step 4: Call dsGetEDIDBytesInfo() with valid input (dsHDMI_IN_PORT_2)
+    CU_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_2, &edidBytes3, &edidSize3), dsERR_NONE);
+
+    // Step 5: Call dsGetEDIDBytesInfo() with valid input (dsHDMI_IN_PORT_3)
+    CU_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_3, &edidBytes4, &edidSize4), dsERR_NONE);
+
+    // Step 6: Compare the results and make sure they are the same
+    CU_ASSERT_EQUAL(edidSize1, edidSize2);
+    CU_ASSERT_EQUAL(edidSize2, edidSize3);
+    CU_ASSERT_EQUAL(edidSize3, edidSize4);
+
+    // You may want to compare the contents of the edidBytes as well, depending on your use case.
+
+    // Step 7: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 }
 
 /**
@@ -927,9 +1343,27 @@ void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo (void)
  * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
  * 
  */
-void test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo(void) {
+    // Step 1: Call dsGetEDIDBytesInfo() without initializing the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, NULL, NULL), dsERR_NOT_INITIALIZED);
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: Call dsGetEDIDBytesInfo() with invalid value (dsHDMI_IN_PORT_MAX)
+    CU_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_MAX, NULL, NULL), dsERR_INVALID_PARAM);
+
+    // Step 4: Call dsGetEDIDBytesInfo() with invalid value (NULL pointer)
+    CU_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, NULL, NULL), dsERR_INVALID_PARAM);
+
+    // Step 5: Call dsGetEDIDBytesInfo() with invalid value (NULL pointer)
+    CU_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, NULL, NULL), dsERR_INVALID_PARAM);
+
+    // Step 6: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 7: Call dsGetEDIDBytesInfo() after terminating the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, NULL, NULL), dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -953,9 +1387,32 @@ void test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo (void)
  * |07|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
-void test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo(void) {
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    unsigned char* spdInfo1;
+    unsigned char* spdInfo2;
+    unsigned char* spdInfo3;
+    unsigned char* spdInfo4;
+
+    // Step 2: Call dsGetHDMISPDInfo() with valid input (dsHDMI_IN_PORT_0)
+    CU_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, &spdInfo1), dsERR_NONE);
+
+    // Step 3: Call dsGetHDMISPDInfo() with valid input (dsHDMI_IN_PORT_1)
+    CU_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_1, &spdInfo2), dsERR_NONE);
+
+    // Step 4: Call dsGetHDMISPDInfo() with valid input (dsHDMI_IN_PORT_2)
+    CU_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_2, &spdInfo3), dsERR_NONE);
+
+    // Step 5: Call dsGetHDMISPDInfo() with valid input (dsHDMI_IN_PORT_3)
+    CU_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_3, &spdInfo4), dsERR_NONE);
+
+    // Step 6: Compare the results and make sure they are the same
+    // You may want to compare the contents of spdInfo1, spdInfo2, spdInfo3, and spdInfo4 as well, depending on your use case.
+
+    // Step 7: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 }
 
 /**
@@ -980,9 +1437,24 @@ void test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo (void)
  * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
  * 
  */
-void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo(void) {
+    // Step 1: Call dsGetHDMISPDInfo() without initializing the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, NULL), dsERR_NOT_INITIALIZED);
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: Call dsGetHDMISPDInfo() with invalid values (dsHDMI_IN_PORT_MAX)
+    CU_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_MAX, NULL), dsERR_INVALID_PARAM);
+
+    // Step 4: Call dsGetHDMISPDInfo() with invalid values (NULL pointer)
+    CU_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, NULL), dsERR_INVALID_PARAM);
+
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 6: Call dsGetHDMISPDInfo() after terminating the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, NULL), dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -1005,9 +1477,24 @@ void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo (void)
  * |06|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
-void test_l1_dsHdmiIn_positive_dsSetEdidVersion (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_positive_dsSetEdidVersion(void) {
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 2: Call dsSetEdidVersion() with valid values (dsHDMI_IN_PORT_0, HDMI_EDID_VER_14)
+    CU_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_0, HDMI_EDID_VER_14), dsERR_NONE);
+
+    // Step 3: Call dsSetEdidVersion() with valid values (dsHDMI_IN_PORT_0, HDMI_EDID_VER_20)
+    CU_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_0, HDMI_EDID_VER_20), dsERR_NONE);
+
+    // Step 4: Call dsSetEdidVersion() with valid values (dsHDMI_IN_PORT_1, HDMI_EDID_VER_14)
+    CU_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_1, HDMI_EDID_VER_14), dsERR_NONE);
+
+    // Step 5: Call dsSetEdidVersion() with valid values (dsHDMI_IN_PORT_2, HDMI_EDID_VER_14)
+    CU_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_2, HDMI_EDID_VER_14), dsERR_NONE);
+
+    // Step 6: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 }
 
 /**
@@ -1032,9 +1519,24 @@ void test_l1_dsHdmiIn_positive_dsSetEdidVersion (void)
  * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
  * 
  */
-void test_l1_dsHdmiIn_negative_dsSetEdidVersion (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_negative_dsSetEdidVersion(void) {
+    // Step 1: Call dsSetEdidVersion() without initializing the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_0, HDMI_EDID_VER_14), dsERR_NOT_INITIALIZED);
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: Call dsSetEdidVersion() with invalid inputs (dsHDMI_IN_PORT_MAX)
+    CU_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_MAX, HDMI_EDID_VER_14), dsERR_INVALID_PARAM);
+
+    // Step 4: Call dsSetEdidVersion() with invalid inputs (HDMI_EDID_VER_MAX)
+    CU_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_0, HDMI_EDID_VER_MAX), dsERR_INVALID_PARAM);
+
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 6: Call dsSetEdidVersion() without initializing the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_0, HDMI_EDID_VER_14), dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -1058,9 +1560,28 @@ void test_l1_dsHdmiIn_negative_dsSetEdidVersion (void)
  * |07|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
-void test_l1_dsHdmiIn_positive_dsGetEdidVersion (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_positive_dsGetEdidVersion(void) {
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 2: Call dsSetEdidVersion() with valid values (dsHDMI_IN_PORT_0, tv_hdmi_edid_version_t*)
+    tv_hdmi_edid_version_t edid_version_1, edid_version_2;
+    CU_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_0, &edid_version_1), dsERR_NONE);
+
+    // Step 3: Call dsSetEdidVersion() with valid values (dsHDMI_IN_PORT_1, tv_hdmi_edid_version_t*)
+    CU_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_1, &edid_version_2), dsERR_NONE);
+
+    // Step 4: Call dsSetEdidVersion() with valid values (dsHDMI_IN_PORT_2, tv_hdmi_edid_version_t*)
+    CU_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_2, &edid_version_1), dsERR_NONE);
+
+    // Step 5: Call dsSetEdidVersion() with valid values (dsHDMI_IN_PORT_0, tv_hdmi_edid_version_t*)
+    CU_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_0, &edid_version_2), dsERR_NONE);
+
+    // Step 6: Compare the values from steps 4/5 and make sure they match
+    CU_ASSERT_EQUAL(edid_version_1, edid_version_2);
+
+    // Step 7: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 }
 
 /**
@@ -1085,9 +1606,25 @@ void test_l1_dsHdmiIn_positive_dsGetEdidVersion (void)
  * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
  * 
  */
-void test_l1_dsHdmiIn_negative_dsGetEdidVersion (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_negative_dsGetEdidVersion(void) {
+    // Step 1: Call dsGetEdidVersion() without initializing the HDMI input sub-system
+    tv_hdmi_edid_version_t edid_version;
+    CU_ASSERT_EQUAL(dsGetEdidVersion(dsHDMI_IN_PORT_0, &edid_version), dsERR_NOT_INITIALIZED);
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: Call dsGetEdidVersion() with invalid inputs (dsHDMI_IN_PORT_MAX)
+    CU_ASSERT_EQUAL(dsGetEdidVersion(dsHDMI_IN_PORT_MAX, &edid_version), dsERR_INVALID_PARAM);
+
+    // Step 4: Call dsGetEdidVersion() with invalid inputs (NULL)
+    CU_ASSERT_EQUAL(dsGetEdidVersion(dsHDMI_IN_PORT_0, NULL), dsERR_INVALID_PARAM);
+
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 6: Call dsGetEdidVersion() without initializing the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsGetEdidVersion(dsHDMI_IN_PORT_0, &edid_version), dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -1111,9 +1648,29 @@ void test_l1_dsHdmiIn_negative_dsGetEdidVersion (void)
  * |07|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
-void test_l1_dsHdmiIn_positive_dsGetAllmStatus (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_positive_dsGetAllmStatus(void) {
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 2: Call dsGetAllmStatus() with valid inputs (dsHDMI_IN_PORT_0, bool*)
+    bool allm_status_1, allm_status_2;
+    CU_ASSERT_EQUAL(dsGetAllmStatus(dsHDMI_IN_PORT_0, &allm_status_1), dsERR_NONE);
+
+    // Step 3: Call dsGetAllmStatus() with valid inputs (dsHDMI_IN_PORT_1, bool*)
+    CU_ASSERT_EQUAL(dsGetAllmStatus(dsHDMI_IN_PORT_1, &allm_status_2), dsERR_NONE);
+
+    // Step 4: Call dsGetAllmStatus() with valid inputs (dsHDMI_IN_PORT_2, bool*)
+    bool allm_status_3;
+    CU_ASSERT_EQUAL(dsGetAllmStatus(dsHDMI_IN_PORT_2, &allm_status_3), dsERR_NONE);
+
+    // Step 5: Call dsGetAllmStatus() with valid inputs (dsHDMI_IN_PORT_2, bool*)
+    CU_ASSERT_EQUAL(dsGetAllmStatus(dsHDMI_IN_PORT_2, &allm_status_1), dsERR_NONE);
+
+    // Step 6: Compare the results of steps 4/5 and make sure they are the same
+    CU_ASSERT_EQUAL(allm_status_1, allm_status_3);
+
+    // Step 7: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 }
 
 /**
@@ -1138,9 +1695,25 @@ void test_l1_dsHdmiIn_positive_dsGetAllmStatus (void)
  * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
  * 
  */
-void test_l1_dsHdmiIn_negative_dsGetAllmStatus (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_negative_dsGetAllmStatus(void) {
+    // Step 1: Call dsGetAllmStatus() without initializing the HDMI input sub-system
+    bool allm_status;
+    CU_ASSERT_EQUAL(dsGetAllmStatus(dsHDMI_IN_PORT_0, &allm_status), dsERR_NOT_INITIALIZED);
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: Call dsGetAllmStatus() without valid inputs (dsHDMI_IN_PORT_MAX)
+    CU_ASSERT_EQUAL(dsGetAllmStatus(dsHDMI_IN_PORT_MAX, &allm_status), dsERR_INVALID_PARAM);
+
+    // Step 4: Call dsGetAllmStatus() without valid inputs (NULL)
+    CU_ASSERT_EQUAL(dsGetAllmStatus(dsHDMI_IN_PORT_0, NULL), dsERR_INVALID_PARAM);
+
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 6: Call dsGetAllmStatus() after termination the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsGetAllmStatus(dsHDMI_IN_PORT_0, &allm_status), dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -1162,9 +1735,23 @@ void test_l1_dsHdmiIn_negative_dsGetAllmStatus (void)
  * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
-void test_l1_dsHdmiIn_positive_dsGetSupportedGameFeaturesList (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_positive_dsGetSupportedGameFeaturesList(void) {
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 2: Call dsGetSupportedGameFeaturesList() with valid inputs (dsSupportedGameFeatureList_t*)
+    dsSupportedGameFeatureList_t supported_features_1, supported_features_2;
+    CU_ASSERT_EQUAL(dsGetSupportedGameFeaturesList(&supported_features_1), dsERR_NONE);
+
+    // Step 3: Call dsGetSupportedGameFeaturesList() with valid inputs (dsSupportedGameFeatureList_t*)
+    CU_ASSERT_EQUAL(dsGetSupportedGameFeaturesList(&supported_features_2), dsERR_NONE);
+
+    // Step 4: Compare the returns of steps 2/3 and make sure they compare
+    // Note: You should implement a function to compare dsSupportedGameFeatureList_t objects
+    CU_ASSERT_TRUE(compareSupportedGameFeaturesLists(&supported_features_1, &supported_features_2));
+
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 }
 
 /**
@@ -1188,9 +1775,22 @@ void test_l1_dsHdmiIn_positive_dsGetSupportedGameFeaturesList (void)
  * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
  * 
  */
-void test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList(void) {
+    // Step 1: Call dsGetSupportedGameFeaturesList() without initializing the HDMI input sub-system
+    dsSupportedGameFeatureList_t supported_features;
+    CU_ASSERT_EQUAL(dsGetSupportedGameFeaturesList(&supported_features), dsERR_NOT_INITIALIZED);
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: Call dsGetSupportedGameFeaturesList() with invalid input (NULL)
+    CU_ASSERT_EQUAL(dsGetSupportedGameFeaturesList(NULL), dsERR_INVALID_PARAM);
+
+    // Step 4: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 5: Call dsGetSupportedGameFeaturesList() after terminating the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsGetSupportedGameFeaturesList(&supported_features), dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -1213,9 +1813,27 @@ void test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList (void)
  * |06|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
-void test_l1_dsHdmiIn_positive_dsGetAVLatency (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_positive_dsGetAVLatency(void) {
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 2: Call dsHdmiInSelectPort() to select Port 0
+    CU_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0), dsERR_NONE);
+
+    // Step 3: Call dsGetAVLatency() with valid inputs (int*, int*)
+    int audioLatency1, videoLatency1;
+    CU_ASSERT_EQUAL(dsGetAVLatency(&audioLatency1, &videoLatency1), dsERR_NONE);
+
+    // Step 4: Call dsGetAVLatency() with valid inputs (int*, int*)
+    int audioLatency2, videoLatency2;
+    CU_ASSERT_EQUAL(dsGetAVLatency(&audioLatency2, &videoLatency2), dsERR_NONE);
+
+    // Step 5: Validate the returns of steps 2/3 and verify that they are the same
+    CU_ASSERT_EQUAL(audioLatency1, audioLatency2);
+    CU_ASSERT_EQUAL(videoLatency1, videoLatency2);
+
+    // Step 6: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 }
 
 /**
@@ -1240,9 +1858,25 @@ void test_l1_dsHdmiIn_positive_dsGetAVLatency (void)
  * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
  * 
  */
-void test_l1_dsHdmiIn_negative_dsGetAVLatency (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
+void test_l1_dsHdmiIn_negative_dsGetAVLatency(void) {
+    // Step 1: Call dsGetAVLatency() without initializing the HDMI input sub-system
+    int audioLatency, videoLatency;
+    CU_ASSERT_EQUAL(dsGetAVLatency(&audioLatency, &videoLatency), dsERR_NOT_INITIALIZED);
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    CU_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: Call dsGetAVLatency() with valid inputs (NULL, int*)
+    CU_ASSERT_EQUAL(dsGetAVLatency(NULL, &videoLatency), dsERR_INVALID_PARAM);
+
+    // Step 4: Call dsGetAVLatency() with valid inputs (int*, NULL)
+    CU_ASSERT_EQUAL(dsGetAVLatency(&audioLatency, NULL), dsERR_INVALID_PARAM);
+
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
+    CU_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 6: Call dsGetAVLatency() after terminating the HDMI input sub-system
+    CU_ASSERT_EQUAL(dsGetAVLatency(&audioLatency, &videoLatency), dsERR_NOT_INITIALIZED);
 }
 
 static UT_test_suite_t * pSuite = NULL;
