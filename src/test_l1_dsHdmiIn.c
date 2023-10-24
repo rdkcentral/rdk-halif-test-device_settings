@@ -132,8 +132,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInInit(void) {
  * |02|Call dsHdmiInInit() again without terminating the HDMI input sub-system | | dsERR_ALREADY_INITIALIZED | Should Pass |
  * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
- * @note The return values dsERR_GENERAL may be difficult to test in a simulated environment
- * 
+ * @note Testing for the `dsERR_GENERAL` and `dsERR_RESOURCE_NOT_AVAILABLE` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInInit(void) {
     gTestID = 2;
@@ -203,7 +202,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInTerm(void) {
  * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after initialization |
  * |04|Call dsHdmiInTerm() without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note The return values dsERR_GENERAL may be difficult to test in a simulated environment
+ * @note Testing for the `dsERR_GENERAL` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInTerm(void) {
@@ -284,7 +283,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetNumberOfinputs(void) {
  * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |05|Call dsHdmiInGetNumberOfinputs() after termination of the HDMI input sub-system |pNumberOfinputs: uint8_t*| dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInGetNumberOfinputs(void) {
@@ -324,8 +323,8 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetNumberOfinputs(void) {
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Allocate memory for dsHdmiInStatus_t and call dsHdmiInGetStatus() |dsHdmiInStatus_t*| dsERR_NONE | Status information should be populated. Validate the output structure |
- * |03|Allocate memory for dsHdmiInStatus_t and call dsHdmiInGetStatus() |dsHdmiInStatus_t*| dsERR_NONE | Status information should be populated. Validate the output structure |
+ * |02|Call dsHdmiInGetStatus() with valid pointer |dsHdmiInStatus_t*| dsERR_NONE | Status information should be populated. Validate the output structure |
+ * |03|Call dsHdmiInGetStatus() with valid pointer |dsHdmiInStatus_t*| dsERR_NONE | Status information should be populated. Validate the output structure |
  * |04|Compare the returned values to make sure they are equal || Success | The values should be the same |
  * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
@@ -338,10 +337,10 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetStatus(void) {
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
-    // Step 2: Allocate memory for dsHdmiInStatus_t and call dsHdmiInGetStatus()
+    // Step 2: Call dsHdmiInGetStatus()
     UT_ASSERT_EQUAL(dsHdmiInGetStatus(&status1), dsERR_NONE);
 
-    // Step 3: Allocate memory for dsHdmiInStatus_t and call dsHdmiInGetStatus() again
+    // Step 3: Call dsHdmiInGetStatus() again
     UT_ASSERT_EQUAL(dsHdmiInGetStatus(&status2), dsERR_NONE);
 
     // Step 4: Compare the returned values to make sure they are equal
@@ -375,7 +374,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetStatus(void) {
  * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |05|Call dsHdmiInGetStatus() after terminating the HDMI input sub-system |dsHdmiInStatus_t*| dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInGetStatus(void) {
@@ -459,7 +458,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSelectPort(void) {
  * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |05|Call dsHdmiInSelectPort() after terminating the HDMI input sub-system |dsHDMI_IN_PORT_0| dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInSelectPort(void) {
@@ -547,7 +546,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInScaleVideo(void) {
  * |10|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |11|dsHdmiInScaleVideo() after terminating the HDMI input sub-system |x=0, y=0, width=800, height=600| dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInScaleVideo(void) {
@@ -667,7 +666,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSelectZoomMode(void) {
  * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |05|Call dsHdmiInSelectZoomMode() without terminating the HDMI input sub-system |dsVIDEO_ZOOM_NONE| dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode(void) {
@@ -723,7 +722,12 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetCurrentVideoMode(void) {
     UT_ASSERT_EQUAL(dsHdmiInGetCurrentVideoMode(&resolution2), dsERR_NONE);
 
     // Step 3: Ensure returned values are the same
-    UT_ASSERT_EQUAL(resolution1, resolution2);
+    UT_ASSERT_EQUAL(resolution1.name, resolution2.name);
+    UT_ASSERT_EQUAL(resolution1.pixelResolution, resolution2.pixelResolution);
+    UT_ASSERT_EQUAL(resolution1.aspectRatio, resolution2.aspectRatio);
+    UT_ASSERT_EQUAL(resolution1.stereoScopicMode, resolution2.stereoScopicMode);
+    UT_ASSERT_EQUAL(resolution1.frameRate, resolution2.frameRate);
+    UT_ASSERT_EQUAL(resolution1.interlaced, resolution2.interlaced);
 
     // Step 4: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
@@ -749,7 +753,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetCurrentVideoMode(void) {
  * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |05|Call dsHdmiInGetCurrentVideoMode() after terminating the HDMI input sub-system |dsVideoPortResolution_t*| dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInGetCurrentVideoMode(void) {
@@ -824,7 +828,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterConnectCB(void) {
  * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |05| Call dsHdmiInRegisterConnectCB() after termination the HDMI input sub-system |dsHdmiInConnectCB_t| dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInRegisterConnectCB(void) {
@@ -898,7 +902,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterSignalChangeCB(void) {
  * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |05|Call dsHdmiInRegisterSignalChangeCB() after terminating the HDMI input sub-system |dsHdmiInSignalChangeCB_t| dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInRegisterSignalChangeCB(void) {
@@ -972,7 +976,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterStatusChangeCB(void) {
  * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |05|Call dsHdmiInRegisterStatusChangeCB() after termination the HDMI input sub-system |dsHdmiInStatusChangeCB_t| dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInRegisterStatusChangeCB(void) {
@@ -1046,7 +1050,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterVideoModeUpdateCB(void) {
  * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |05|Call dsHdmiInRegisterVideoModeUpdateCB() after terminating the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInRegisterVideoModeUpdateCB(void) {
@@ -1267,7 +1271,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAviContentTypeChangeCB(void) {
  * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |05|Call dsHdmiInRegisterAviContentTypeChangeCB() after terminating the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAviContentTypeChangeCB(void) {
@@ -1364,7 +1368,7 @@ void test_l1_dsHdmiIn_positive_dsIsHdmiARCPort(void) {
  * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |06|Call dsIsHdmiARCPort() after terminating the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsIsHdmiARCPort(void) {
@@ -1474,7 +1478,7 @@ void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo(void) {
  * |06|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |07|Call dsGetEDIDBytesInfo() after termination the HDMI input sub-system |dsHDMI_IN_PORT_0, unsigned char**, int*| dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo(void) {
@@ -1576,7 +1580,7 @@ void test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo(void) {
  * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |06|Call dsGetHDMISPDInfo() after terminating the HDMI input sub-system |dsHDMI_IN_PORT_0, unsigned char**| dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo(void) {
@@ -1666,7 +1670,7 @@ void test_l1_dsHdmiIn_positive_dsSetEdidVersion(void) {
  * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |06|Call dsSetEdidVersion() without initializing the HDMI input sub-system |dsHDMI_IN_PORT_0, HDMI_EDID_VER_14| dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsSetEdidVersion(void) {
@@ -1761,7 +1765,7 @@ void test_l1_dsHdmiIn_positive_dsGetEdidVersion(void) {
  * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |06|Call dsGetEdidVersion() without initializing the HDMI input sub-system |dsHDMI_IN_PORT_0, tv_hdmi_edid_version_t*| dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsGetEdidVersion(void) {
@@ -1858,7 +1862,7 @@ void test_l1_dsHdmiIn_positive_dsGetAllmStatus(void) {
  * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |06|Call dsGetAllmStatus() after termination the HDMI input sub-system |dsHDMI_IN_PORT_0, bool*| dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsGetAllmStatus(void) {
@@ -1946,7 +1950,7 @@ void test_l1_dsHdmiIn_positive_dsGetSupportedGameFeaturesList(void) {
  * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |05|Call dsGetSupportedGameFeaturesList() after termination the HDMI input sub-system |dsSupportedGameFeatureList_t*| dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList(void) {
@@ -2037,7 +2041,7 @@ void test_l1_dsHdmiIn_positive_dsGetAVLatency(void) {
  * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |06|Call dsGetAVLatency() after terminating the HDMI input sub-system |int*, int*| dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_OPERATION_FAILED may be difficult to test in a simulated environment
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsGetAVLatency(void) {
