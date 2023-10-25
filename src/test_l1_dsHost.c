@@ -397,8 +397,8 @@ void test_l1_dsHost_positive_dsGetSocIDFromSDK(void) {
     gTestID = 7;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 	
-    char* socID1; 
-    char* socID2;
+    char* socID1 = ""; 
+    char* socID2 = "";
 
     // Step 01: dsHostInit() Initialize dsHost
     dsError_t result = dsHostInit();
@@ -454,7 +454,7 @@ void test_l1_dsHost_negative_dsGetSocIDFromSDK(void) {
     gTestID = 8;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 	
-    char socID[8];
+    char* socID = "";
 
     // Step 01: dsGetSocIDFromSDK() Call without prior initialization
     dsError_t result = dsGetSocIDFromSDK(socID);
@@ -587,7 +587,7 @@ void test_l1_dsHost_negative_dsGetHostEDID(void) {
     UT_LOG("Step 03: Fetch Host EDID with NULL pointers -> Expected: dsERR_INVALID_PARAM, Got: %d\n", result);
 
     // Step 04: dsGetHostEDID() Call with NULL pointers
-    result = dsGetHostEDID(NULL, length);
+    result = dsGetHostEDID(NULL, &length);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     UT_LOG("Step 03: Fetch Host EDID with NULL pointers -> Expected: dsERR_INVALID_PARAM, Got: %d\n", result);
 
