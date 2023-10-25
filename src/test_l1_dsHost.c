@@ -76,6 +76,8 @@
 
 #include <ut.h>
 #include <ut_log.h>
+#include "dsHost.h"
+#include "dsError.h"
 
 static int gTestGroup = 1;
 static int gTestID = 1;
