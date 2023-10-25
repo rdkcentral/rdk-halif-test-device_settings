@@ -161,7 +161,7 @@ void test_l1_dsFPD_negative_dsFPTerm (void)
  * |03|Call dsSetFPState() and loop through all valid indicators from kIndicators|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON|dsERR_NONE| |
  * |04|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsSetFPState (void)
 {
@@ -191,7 +191,7 @@ void test_l1_dsFPD_positive_dsSetFPState (void)
  * |05|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
  * |06|Call dsSetFPState() after termination|eIndicator: dsFPD_INDICATOR_POWER, state: dsFPD_STATE_OFF|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsSetFPState (void)
 {
@@ -218,7 +218,7 @@ void test_l1_dsFPD_negative_dsSetFPState (void)
  * |03|Call dsSetFPBlink() and loop through all valid indicators from kIndicators| eIndicator: [Valid Indicator], uBlinkDuration: 500, uBlinkIterations: 10 |dsERR_NONE|Should validate that the blink setup works correctly|
  * |04|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  * 
  */
 void test_l1_dsFPD_positive_dsSetFPBlink (void)
@@ -252,7 +252,7 @@ void test_l1_dsFPD_positive_dsSetFPBlink (void)
  * |07|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
  * |08|Attempt to set blink pattern after dsFPTerm() has been called|eIndicator: dsFPD_INDICATOR_POWER, uBlinkDuration: 500, uBlinkIterations: 10 |dsERR_NOT_INITIALIZED|Should fail due to termination|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  * 
  */
 void test_l1_dsFPD_negative_dsSetFPBlink (void)
@@ -280,7 +280,7 @@ void test_l1_dsFPD_negative_dsSetFPBlink (void)
  * |02|Call dsSetBrightness() and loop through all valid indicators from kIndicators|eIndicator: [Valid Indicator], eBrightness: 50+5x|dsERR_NONE|Brightness is set without any issues|
  * |03|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  * 
  */
 void test_l1_dsFPD_positive_dsSetFPBrightness (void)
@@ -313,7 +313,7 @@ void test_l1_dsFPD_positive_dsSetFPBrightness (void)
  * |08|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
  * |09|Attempt to set brightness after dsFPTerm() has been called|eIndicator: dsFPD_INDICATOR_POWER, eBrightness: 50 |dsERR_NOT_INITIALIZED|Should fail due to termination|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  * 
  */
 void test_l1_dsFPD_negative_dsSetFPBrightness (void)
@@ -343,7 +343,7 @@ void test_l1_dsFPD_negative_dsSetFPBrightness (void)
  * |04|Compare the two retrieved brightness values from step 02 and step 03 for dsFPD_INDICATOR_POWER||Brightness values should be equal|Ensuring consistency in retrieved brightness over consecutive calls|
  * |05|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  * 
  */
 void test_l1_dsFPD_positive_dsGetFPBrightness (void)
@@ -376,7 +376,7 @@ void test_l1_dsFPD_positive_dsGetFPBrightness (void)
  * |08|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
  * |09|Call dsGetFPBrightness() after termination|eIndicator: dsFPD_INDICATOR_POWER, pBrightness: dsFPDBrightness_t*|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  * 
  */
 void test_l1_dsFPD_negative_dsGetFPBrightness (void)
@@ -406,7 +406,7 @@ void test_l1_dsFPD_negative_dsGetFPBrightness (void)
  * |05|Compare the state retrieved in step 02 and 03||The states should be the same|Ensure that repeated calls provide consistent output|
  * |06|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsGetFPState (void)
 {
@@ -436,7 +436,7 @@ void test_l1_dsFPD_positive_dsGetFPState (void)
  * |05|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |06|Call dsGetFPState() after termination|eIndicator: dsFPD_INDICATOR_POWER, state: dsFPDState_t*|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  * 
  */
 
@@ -465,7 +465,7 @@ void test_l1_dsFPD_negative_dsGetFPState (void)
  * |03|Call dsSetFPColor() with all valid eIndicator and all valid eColor parameters from kIndidicators|eIndicator: [Valid Indicator], eColor: [Valid Color]|dsERR_NONE|Ensure that the function can set the color|
  * |04|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsSetFPColor (void)
 {
@@ -497,7 +497,7 @@ void test_l1_dsFPD_positive_dsSetFPColor (void)
  * |08|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |09|Call dsSetFPColor() after termination|eIndicator: dsFPD_INDICATOR_POWER, eColor: [Valid Color]|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsSetFPColor (void)
 {
@@ -526,7 +526,7 @@ void test_l1_dsFPD_negative_dsSetFPColor (void)
  * |05|Call dsGetFPColor() again and compare results|eIndicator: [Valid Indicator], pColor: dsFPDColor_t*|dsERR_NONE and same color as Step 04|Ensure consistency in repeated calls|
  * |06|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsGetFPColor (void)
 {
@@ -558,7 +558,7 @@ void test_l1_dsFPD_positive_dsGetFPColor (void)
  * |07|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |08|Call dsGetFPColor() after termination|eIndicator: dsFPD_INDICATOR_POWER, pColor: dsFPDColor_t*|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsGetFPColor (void)
 {
@@ -567,6 +567,8 @@ void test_l1_dsFPD_negative_dsGetFPColor (void)
 
 /**
  * @brief Validate the positive flow of dsSetFPDMode()
+ * 
+ * @todo loop through formate for positive and negative tests for these enums
  * 
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 19@n
@@ -587,7 +589,7 @@ void test_l1_dsFPD_negative_dsGetFPColor (void)
  * |05|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_CLOCK|dsERR_NONE|API should set mode successfully|
  * |06|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsSetFPDMode (void)
 {
@@ -613,12 +615,12 @@ void test_l1_dsFPD_positive_dsSetFPDMode (void)
  * |02|Initialize using dsFPInit()||dsERR_NONE|Ensure the system is initialized|
  * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsSetFPDMode() with an invalid parameter|eMode: dsFPD_MODE_MAX|dsERR_INVALID_PARAM|API should validate parameter|
- * |04|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState() if applicable|Using a separate function or mechanism if available|dsERR_NONE|Ensure the FP state is "OFF"|
+ * |04|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF|dsERR_NONE|Ensure the FP state is "OFF"|
  * |05|Call dsSetFPDMode() while FP State is "OFF"|eMode: dsFPD_MODE_ANY|dsERR_OPERATION_NOT_SUPPORTED|API should not operate when FP state is "OFF"|
  * |07|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |08|Call dsSetFPDMode() after termination|eMode: dsFPD_MODE_ANY|dsERR_NOT_INITIALIZED|API should not work after termination|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsSetFPDMode (void)
 {
@@ -627,6 +629,8 @@ void test_l1_dsFPD_negative_dsSetFPDMode (void)
 
 /**
  * @brief Ensure dsSetFPTime() correctly sets the time on 7-Segment Front Panel Display LEDs
+ * 
+ * @todo add case where we check for dsFPD_MODE_ANY works. Check all positive cases and negative
  * 
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 021@n
@@ -647,7 +651,7 @@ void test_l1_dsFPD_negative_dsSetFPDMode (void)
  * |05|Call dsSetFPTime() with valid parameters for 12-hour format|eTimeFormat: dsFPD_TIME_12_HOUR, uHour: 2, uMinutes: 30|dsERR_NONE|Check the function in 12-hour format|
  * |06|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsSetFPTime (void)
 {
@@ -656,6 +660,8 @@ void test_l1_dsFPD_positive_dsSetFPTime (void)
 
 /**
  * @brief Ensure dsSetFPTime() handles error scenarios correctly
+ * 
+ * @todo clean up the descriptions
  * 
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 022@n
@@ -669,23 +675,23 @@ void test_l1_dsFPD_positive_dsSetFPTime (void)
  * **Test Procedure:**@n
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsSetFPTime() without initializing (dsFPInit() not called)|eTimeFormat: 24hrs, uHour: 14, uMinutes: 30|dsERR_NOT_INITIALIZED|Validate that the function checks for initialization|
+ * |01|Call dsSetFPTime() without initializing (dsFPInit() not called)|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 14, uMinutes: 30|dsERR_NOT_INITIALIZED|Validate that the function checks for initialization|
  * |02|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
  * |03|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |04|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_CLOCK|dsERR_NONE|API should set mode successfully|
- * |05|Call dsSetFPTime() with an invalid hour value|eTimeFormat: 24hrs, uHour: 25, uMinutes: 30|dsERR_INVALID_PARAM|Validate invalid parameter handling for uHour|
- * |06|Call dsSetFPTime() with an invalid minute value|eTimeFormat: 24hrs, uHour: 14, uMinutes: 60|dsERR_INVALID_PARAM|Validate invalid parameter handling for uMinutes|
- * |07|Call dsSetFPTime() with 12hr format and hour value > 12|eTimeFormat: 12hrs, uHour: 14, uMinutes: 30|dsERR_INVALID_PARAM|Check the consistency between eTimeFormat and uHour|
- * |08|Call dsSetFPTime() with 12hr format with invalid minute value|eTimeFormat: 12hrs, uHour: 2, uMinutes: 60|dsERR_INVALID_PARAM|Check the consistency between eTimeFormat and uHour|
+ * |05|Call dsSetFPTime() with an invalid hour value|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 25, uMinutes: 30|dsERR_INVALID_PARAM|Validate invalid parameter handling for uHour|
+ * |06|Call dsSetFPTime() with an invalid minute value|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 14, uMinutes: 60|dsERR_INVALID_PARAM|Validate invalid parameter handling for uMinutes|
+ * |07|Call dsSetFPTime() with 12hr format and hour value > 12|eTimeFormat: dsFPD_TIME_12_HOUR, uHour: 14, uMinutes: 30|dsERR_INVALID_PARAM|Check the consistency between eTimeFormat and uHour|
+ * |08|Call dsSetFPTime() with 12hr format with invalid minute value|eTimeFormat: dsFPD_TIME_12_HOUR, uHour: 2, uMinutes: 60|dsERR_INVALID_PARAM|Check the consistency between eTimeFormat and uHour|
  * |09|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
  * |10|Call dsSetFPTime() with valid parameters for 24-hour format|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 14, uMinutes: 30|dsERR_OPERATION_NOT_SUPPORTED|Check the function in 24-hour format|
  * |11|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_CLOCK|dsERR_NONE|API should set mode successfully|
  * |12|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Ensure the FPD state is set to OFF|
- * |13|Call dsSetFPTime() with FP state set to "OFF"|eTimeFormat: 24hrs, uHour: 14, uMinutes: 30|dsERR_OPERATION_NOT_SUPPORTED|Validate that function checks if FPD state is OFF|
+ * |13|Call dsSetFPTime() with FP state set to "OFF"|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 14, uMinutes: 30|dsERR_OPERATION_NOT_SUPPORTED|Validate that function checks if FPD state is OFF|
  * |14|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
- * |15|Call dsSetFPTime() after termination|eTimeFormat: 24hrs, uHour: 14, uMinutes: 30|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
+ * |15|Call dsSetFPTime() after termination|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 14, uMinutes: 30|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsSetFPTime (void)
 {
@@ -711,9 +717,9 @@ void test_l1_dsFPD_negative_dsSetFPTime (void)
  * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
  * |04|Call dsSetFPText() with valid text|pText: "HELLO"|dsERR_NONE|Check the function with valid text|
- * |05|Validate the FP display shows the correct text||"HELLO" is displayed|Use appropriate tools/methods for validation|
+ * |05|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsSetFPText (void)
 {
@@ -740,7 +746,7 @@ void test_l1_dsFPD_positive_dsSetFPText (void)
  * |03|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |04|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
  * |05|Call dsSetFPText() with NULL pointer|pText: NULL|dsERR_INVALID_PARAM|Validate invalid parameter handling for NULL pText|
- * |06|Call dsSetFPText() with text longer than 10 characters|pText: "LONGTEXTHERE"|dsERR_INVALID_PARAM|Validate invalid parameter handling for text length|
+ * |06|Call dsSetFPText() with text longer than 10 characters|pText: "LONGTEXTHER"|dsERR_INVALID_PARAM|Validate invalid parameter handling for text length|
  * |07|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_CLOCK|dsERR_NONE|API should set mode successfully|
  * |08|Call dsSetFPText() with valid text|pText: "HELLO"|dsERR_OPERATION_NOT_SUPPORTED|Check the function with valid text|
  * |09|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
@@ -749,7 +755,7 @@ void test_l1_dsFPD_positive_dsSetFPText (void)
  * |12|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |13|Call dsSetFPText() after termination|pText: "HELLO"|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsSetFPText (void)
 {
@@ -777,7 +783,7 @@ void test_l1_dsFPD_negative_dsSetFPText (void)
  * |04|Call dsSetFPTextBrightness() with valid eIndicator and eBrightness|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: 70|dsERR_NONE|Check the function with valid parameters|
  * |05|Validate the FP display shows the correct brightness level||Brightness level 70 is set|Use appropriate tools/methods for validation|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsSetFPTextBrightness (void)
 {
@@ -813,7 +819,7 @@ void test_l1_dsFPD_positive_dsSetFPTextBrightness (void)
  * |12|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |13|Call dsSetFPTextBrightness() after termination|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: 70|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsSetFPTextBrightness (void)
 {
@@ -843,7 +849,7 @@ void test_l1_dsFPD_negative_dsSetFPTextBrightness (void)
  * |06|Compare the results from step 4/5 and make sure they're the same||Success|The values should be the same|
  * |07|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsGetFPTextBrightness (void)
 {
@@ -879,7 +885,7 @@ void test_l1_dsFPD_positive_dsGetFPTextBrightness (void)
  * |12|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |13|Call dsGetFPTextBrightness() after termination|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: Pointer to brightness variable|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsGetFPTextBrightness (void)
 {
@@ -907,7 +913,7 @@ void test_l1_dsFPD_negative_dsGetFPTextBrightness (void)
  * |04|Disable clock display using dsFPEnableClockDisplay()|enable: 0|dsERR_NONE|Validate that clock display can be disabled|
  * |05|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsFPEnableCLockDisplay (void)
 {
@@ -938,7 +944,7 @@ void test_l1_dsFPD_positive_dsFPEnableCLockDisplay (void)
  * |07|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |08|Call dsFPEnableClockDisplay() after termination|enable: 1|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsFPEnableCLockDisplay (void)
 {
@@ -971,7 +977,7 @@ void test_l1_dsFPD_negative_dsFPEnableCLockDisplay (void)
  * |08|Wait for the duration of the scroll|||Allow time for the quick scroll|
  * |09|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsSetFPScroll (void)
 {
@@ -1005,7 +1011,7 @@ void test_l1_dsFPD_positive_dsSetFPScroll (void)
  * |08|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |09|Call dsSetFPScroll() after termination|uScrollHoldOnDur: 1000, uHorzScrollIterations: 5, uVertScrollIterations: 0|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsSetFPScroll (void)
 {
@@ -1034,7 +1040,7 @@ void test_l1_dsFPD_negative_dsSetFPScroll (void)
  * |05|Call dsSetFPTimeFormat() with a valid 24-hour format|eTimeFormat: 24_HOUR_FORMAT|dsERR_NONE|Attempt to set time in 24-hour format|
  * |06|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsSetFPTimeFormat (void)
 {
@@ -1069,7 +1075,7 @@ void test_l1_dsFPD_positive_dsSetFPTimeFormat (void)
  * |11|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |12|Call dsSetFPTimeFormat() after termination|eTimeFormat: 24_HOUR_FORMAT|dsERR_NOT_INITIALIZED|API should not work after termination|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsSetFPTimeFormat (void)
 {
@@ -1099,7 +1105,7 @@ void test_l1_dsFPD_negative_dsSetFPTimeFormat (void)
  * |06|Compare the results to make sure the returned values are the same||Success|The values should be the same|
  * |07|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsGetFPTimeFormat (void)
 {
@@ -1134,7 +1140,7 @@ void test_l1_dsFPD_positive_dsGetFPTimeFormat (void)
  * |07|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |08|Call dsGetFPTimeFormat() after termination|dsFPDTimeFormat_t*|dsERR_NOT_INITIALIZED|API should not work after termination|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsGetFPTimeFormat (void)
 {
@@ -1165,7 +1171,7 @@ void test_l1_dsFPD_negative_dsGetFPTimeFormat (void)
  * |05|Compare the returned values from steps 3/4 ||Success|The values should be the same|
  * |06|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsFPGetLEDState (void)
 {
@@ -1194,7 +1200,7 @@ void test_l1_dsFPD_positive_dsFPGetLEDState (void)
  * |05|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |06|Call dsFPGetLEDState() after termination|state:dsFPDLedState_t*|dsERR_NOT_INITIALIZED|API should not work after termination|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsFPGetLEDState (void)
 {
@@ -1221,7 +1227,7 @@ void test_l1_dsFPD_negative_dsFPGetLEDState (void)
  * |02|Call dsFPSetLEDState() and loop through all LED states|state: A valid dsFPDLedState_t value|dsERR_NONE|The LED state should be set successfully|
  * |03|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsFPSetLEDState (void)
 {
@@ -1250,7 +1256,7 @@ void test_l1_dsFPD_positive_dsFPSetLEDState (void)
  * |04|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |05|Call dsFPSetLEDState() after termination|state: dsFPD_LED_DEVICE_ACTIVE|dsERR_NOT_INITIALIZED|API should not work after termination|
  * 
- * @note Valid indicators can retrieved from kIndicators in the dsFPDSettings.h file
+ * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsFPSetLEDState (void)
 {
