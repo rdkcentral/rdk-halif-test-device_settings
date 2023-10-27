@@ -1710,12 +1710,9 @@ void test_l1_dsHdmiIn_negative_dsSetEdidVersion(void) {
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Call dsSetEdidVersion() with valid values |dsHDMI_IN_PORT_0, tv_hdmi_edid_version_t*| dsERR_NONE | Should Pass |
- * |03|Call dsSetEdidVersion() with valid values |dsHDMI_IN_PORT_1, tv_hdmi_edid_version_t*| dsERR_NONE | Should Pass |
- * |04|Call dsSetEdidVersion() with valid values |dsHDMI_IN_PORT_2, tv_hdmi_edid_version_t*| dsERR_NONE | Should Pass |
- * |05|Call dsSetEdidVersion() with valid values |dsHDMI_IN_PORT_0, tv_hdmi_edid_version_t*| dsERR_NONE | Should Pass |
- * |06|Compare the values from steps 4/5 and make sure they match || Success | The values should be the same |
- * |07|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |02|Call dsSetEdidVersion() with all valid ports |[Valid Port], tv_hdmi_edid_version_t*| dsERR_NONE | Should Pass |
+ * |03|Compare the values from steps 4/5 and make sure they match || Success | The values should be the same |
+ * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsGetEdidVersion(void) {
@@ -1735,7 +1732,7 @@ void test_l1_dsHdmiIn_positive_dsGetEdidVersion(void) {
     UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_2, &edid_version_1), dsERR_NONE);
 
     // Step 5: Call dsSetEdidVersion() with valid values (dsHDMI_IN_PORT_0, tv_hdmi_edid_version_t*)
-    UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_0, &edid_version_2), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_2, &edid_version_2), dsERR_NONE);
 
     // Step 6: Compare the values from steps 4/5 and make sure they match
     UT_ASSERT_EQUAL(edid_version_1, edid_version_2);
@@ -1924,7 +1921,8 @@ void test_l1_dsHdmiIn_positive_dsGetSupportedGameFeaturesList(void) {
 
     // Step 4: Compare the returns of steps 2/3 and make sure they compare
     // Note: You should implement a function to compare dsSupportedGameFeatureList_t objects
-    CU_ASSERT_TRUE(compareSupportedGameFeaturesLists(&supported_features_1, &supported_features_2));
+    UT_ASSERT_EQUAL(supported_features_1.gameFeatureList, supported_features_2.gameFeatureList);
+    UT_ASSERT_EQUAL(supported_features_1.gameFeatureCount, supported_features_2.gameFeatureCount);
 
     // Step 5: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
