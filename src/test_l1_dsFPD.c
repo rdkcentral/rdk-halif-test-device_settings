@@ -568,8 +568,6 @@ void test_l1_dsFPD_negative_dsGetFPColor (void)
 /**
  * @brief Validate the positive flow of dsSetFPDMode()
  * 
- * @todo loop through formate for positive and negative tests for these enums
- * 
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 19@n
  * 
@@ -584,9 +582,7 @@ void test_l1_dsFPD_negative_dsGetFPColor (void)
  * |:--:|-----------|---------|---------------|-----|
  * |01|Initialize using dsFPInit()||dsERR_NONE|Ensure the system is initialized|
  * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
- * |03|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_ANY|dsERR_NONE|API should set mode successfully|
- * |04|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
- * |05|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_CLOCK|dsERR_NONE|API should set mode successfully|
+ * |03|Call dsSetFPDMode() and loop through all valid values in dsFPDMode_t|eMode: [Valid Mode]|dsERR_NONE|API should set mode successfully|
  * |06|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
@@ -630,8 +626,6 @@ void test_l1_dsFPD_negative_dsSetFPDMode (void)
 /**
  * @brief Ensure dsSetFPTime() correctly sets the time on 7-Segment Front Panel Display LEDs
  * 
- * @todo add case where we check for dsFPD_MODE_ANY works. Check all positive cases and negative
- * 
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 021@n
  * 
@@ -649,7 +643,10 @@ void test_l1_dsFPD_negative_dsSetFPDMode (void)
  * |03|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_CLOCK|dsERR_NONE|API should set mode successfully|
  * |04|Call dsSetFPTime() with valid parameters for 24-hour format|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 14, uMinutes: 30|dsERR_NONE|Check the function in 24-hour format|
  * |05|Call dsSetFPTime() with valid parameters for 12-hour format|eTimeFormat: dsFPD_TIME_12_HOUR, uHour: 2, uMinutes: 30|dsERR_NONE|Check the function in 12-hour format|
- * |06|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
+ * |06|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_ANY|dsERR_NONE|API should set mode successfully|
+ * |07|Call dsSetFPTime() with valid parameters for 24-hour format|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 14, uMinutes: 30|dsERR_NONE|Check the function in 24-hour format|
+ * |08|Call dsSetFPTime() with valid parameters for 12-hour format|eTimeFormat: dsFPD_TIME_12_HOUR, uHour: 2, uMinutes: 30|dsERR_NONE|Check the function in 12-hour format|
+ * |09|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
@@ -679,6 +676,11 @@ void test_l1_dsFPD_positive_dsSetFPTime (void)
  * |02|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
  * |03|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |04|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_CLOCK|dsERR_NONE|API should set mode successfully|
+ * |05|Call dsSetFPTime() with an invalid hour value|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 25, uMinutes: 30|dsERR_INVALID_PARAM|Validate invalid parameter handling for uHour|
+ * |06|Call dsSetFPTime() with an invalid minute value|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 14, uMinutes: 60|dsERR_INVALID_PARAM|Validate invalid parameter handling for uMinutes|
+ * |07|Call dsSetFPTime() with 12hr format and hour value > 12|eTimeFormat: dsFPD_TIME_12_HOUR, uHour: 14, uMinutes: 30|dsERR_INVALID_PARAM|Check the consistency between eTimeFormat and uHour|
+ * |08|Call dsSetFPTime() with 12hr format with invalid minute value|eTimeFormat: dsFPD_TIME_12_HOUR, uHour: 2, uMinutes: 60|dsERR_INVALID_PARAM|Check the consistency between eTimeFormat and uHour|
+ * |04|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_ANY|dsERR_NONE|API should set mode successfully|
  * |05|Call dsSetFPTime() with an invalid hour value|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 25, uMinutes: 30|dsERR_INVALID_PARAM|Validate invalid parameter handling for uHour|
  * |06|Call dsSetFPTime() with an invalid minute value|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 14, uMinutes: 60|dsERR_INVALID_PARAM|Validate invalid parameter handling for uMinutes|
  * |07|Call dsSetFPTime() with 12hr format and hour value > 12|eTimeFormat: dsFPD_TIME_12_HOUR, uHour: 14, uMinutes: 30|dsERR_INVALID_PARAM|Check the consistency between eTimeFormat and uHour|
@@ -717,6 +719,8 @@ void test_l1_dsFPD_negative_dsSetFPTime (void)
  * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
  * |04|Call dsSetFPText() with valid text|pText: "HELLO"|dsERR_NONE|Check the function with valid text|
+ * |03|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_ANY|dsERR_NONE|API should set mode successfully|
+ * |04|Call dsSetFPText() with valid text|pText: "HELLO"|dsERR_NONE|Check the function with valid text|
  * |05|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
@@ -745,6 +749,9 @@ void test_l1_dsFPD_positive_dsSetFPText (void)
  * |02|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
  * |03|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |04|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
+ * |05|Call dsSetFPText() with NULL pointer|pText: NULL|dsERR_INVALID_PARAM|Validate invalid parameter handling for NULL pText|
+ * |06|Call dsSetFPText() with text longer than 10 characters|pText: "LONGTEXTHER"|dsERR_INVALID_PARAM|Validate invalid parameter handling for text length|
+ * |04|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_ANY|dsERR_NONE|API should set mode successfully|
  * |05|Call dsSetFPText() with NULL pointer|pText: NULL|dsERR_INVALID_PARAM|Validate invalid parameter handling for NULL pText|
  * |06|Call dsSetFPText() with text longer than 10 characters|pText: "LONGTEXTHER"|dsERR_INVALID_PARAM|Validate invalid parameter handling for text length|
  * |07|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_CLOCK|dsERR_NONE|API should set mode successfully|
@@ -781,6 +788,8 @@ void test_l1_dsFPD_negative_dsSetFPText (void)
  * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
  * |04|Call dsSetFPTextBrightness() with valid eIndicator and eBrightness|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: 70|dsERR_NONE|Check the function with valid parameters|
+ * |03|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_ANY|dsERR_NONE|API should set mode successfully|
+ * |04|Call dsSetFPTextBrightness() with valid eIndicator and eBrightness|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: 70|dsERR_NONE|Check the function with valid parameters|
  * |05|Validate the FP display shows the correct brightness level||Brightness level 70 is set|Use appropriate tools/methods for validation|
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
@@ -811,6 +820,9 @@ void test_l1_dsFPD_positive_dsSetFPTextBrightness (void)
  * |04|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
  * |05|Call dsSetFPTextBrightness() with invalid eBrightness (out of range)|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: 110|dsERR_INVALID_PARAM|Validate invalid parameter handling for brightness level|
  * |06|Call dsSetFPTextBrightness() with invalid indicator|eIndicator: dsFPD_TEXTDISP_MAX, eBrightness: 110|dsERR_INVALID_PARAM|Validate invalid parameter handling for brightness level|
+ * |04|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_ANY|dsERR_NONE|API should set mode successfully|
+ * |05|Call dsSetFPTextBrightness() with invalid eBrightness (out of range)|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: 110|dsERR_INVALID_PARAM|Validate invalid parameter handling for brightness level|
+ * |06|Call dsSetFPTextBrightness() with invalid indicator|eIndicator: dsFPD_TEXTDISP_MAX, eBrightness: 110|dsERR_INVALID_PARAM|Validate invalid parameter handling for brightness level|
  * |07|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_CLOCK|dsERR_NONE|API should set mode successfully|
  * |08|Call dsSetFPTextBrightness() with valid eIndicator and eBrightness|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: 70|dsERR_OPERATION_NOT_SUPPORTED|Check the function with valid parameters|
  * |09|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
@@ -829,6 +841,8 @@ void test_l1_dsFPD_negative_dsSetFPTextBrightness (void)
 /**
  * @brief Ensure dsGetFPTextBrightness() correctly gets the brightness of 7-Segment Front Panel Display LEDs
  * 
+ * @todo Update set and get text brightness to remove the dependency on setFPDMode()
+ * 
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 027@n
  * 
@@ -844,6 +858,9 @@ void test_l1_dsFPD_negative_dsSetFPTextBrightness (void)
  * |01|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
  * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
+ * |04|Call dsGetFPTextBrightness() with valid eIndicator|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: Pointer to brightness variable|dsERR_NONE|Check function retrieves the correct brightness level|
+ * |05|Call dsGetFPTextBrightness() with valid eIndicator|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: Pointer to brightness variable|dsERR_NONE|Check function retrieves the correct brightness level|
+ * |03|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_ANY|dsERR_NONE|API should set mode successfully|
  * |04|Call dsGetFPTextBrightness() with valid eIndicator|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: Pointer to brightness variable|dsERR_NONE|Check function retrieves the correct brightness level|
  * |05|Call dsGetFPTextBrightness() with valid eIndicator|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: Pointer to brightness variable|dsERR_NONE|Check function retrieves the correct brightness level|
  * |06|Compare the results from step 4/5 and make sure they're the same||Success|The values should be the same|
@@ -877,6 +894,9 @@ void test_l1_dsFPD_positive_dsGetFPTextBrightness (void)
  * |04|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
  * |05|Call dsGetFPTextBrightness() with NULL for eBrightness|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: NULL|dsERR_INVALID_PARAM|Check function detects NULL pointer parameter|
  * |06|Call dsGetFPTextBrightness() with invalid indicator|eIndicator: dsFPD_TEXTDISP_MAX, eBrightness: NULL|dsERR_INVALID_PARAM|Check function detects NULL pointer parameter|
+ * |04|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_ANY|dsERR_NONE|API should set mode successfully|
+ * |05|Call dsGetFPTextBrightness() with NULL for eBrightness|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: NULL|dsERR_INVALID_PARAM|Check function detects NULL pointer parameter|
+ * |06|Call dsGetFPTextBrightness() with invalid indicator|eIndicator: dsFPD_TEXTDISP_MAX, eBrightness: NULL|dsERR_INVALID_PARAM|Check function detects NULL pointer parameter|
  * |07|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_CLOCK|dsERR_NONE|API should set mode successfully|
  * |08|Call dsGetFPTextBrightness() with valid eIndicator|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: Pointer to brightness variable|dsERR_OPERATION_NOT_SUPPORTED|Check function retrieves the correct brightness level|
  * |09|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
@@ -895,6 +915,8 @@ void test_l1_dsFPD_negative_dsGetFPTextBrightness (void)
 /**
  * @brief Ensure dsFPEnableClockDisplay() correctly enables/disables the clock display
  * 
+ * @todo Add dependency to setFPDMode for clock in the positive and negative cases
+ *  
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 029@n
  * 
@@ -922,6 +944,9 @@ void test_l1_dsFPD_positive_dsFPEnableCLockDisplay (void)
 
 /**
  * @brief Ensure dsFPEnableClockDisplay() handles error scenarios correctly
+ * 
+ * @todo remove unneeded line from step 5 (check all other test paramters for this)
+ * @todo check negative and values above 1 for negative cases
  * 
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 030@n
@@ -968,14 +993,11 @@ void test_l1_dsFPD_negative_dsFPEnableCLockDisplay (void)
  * |:--:|-----------|---------|---------------|-----|
  * |01|Initialize using dsFPInit()||dsERR_NONE|Ensure the system is initialized|
  * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
- * |02|Set FP State to "ON" if applicable|Using a separate function or mechanism if available|dsERR_NONE|Ensure the FP state is "ON"|
  * |03|Call dsSetFPScroll() for horizontal scrolling with valid parameters|uScrollHoldOnDur: 1000, uHorzScrollIterations: 5, uVertScrollIterations: 0|dsERR_NONE|Horizontal scrolling should occur on the display. Observe for text movement from right to left|
- * |04|Wait for the duration of the scroll|||Allow time for the text to scroll horizontally|
- * |05|Call dsSetFPScroll() for vertical scrolling with valid parameters|uScrollHoldOnDur: 1000, uHorzScrollIterations: 0, uVertScrollIterations: 5|dsERR_NONE|Vertical scrolling should occur on the display. Observe for text movement from bottom to top|
- * |06|Wait for the duration of the scroll|||Allow time for the text to scroll vertically|
- * |07|Call dsSetFPScroll() with minimum valid parameters for quick scrolling|uScrollHoldOnDur: 100, uHorzScrollIterations: 1, uVertScrollIterations: 0|dsERR_NONE|Quick horizontal scrolling should occur on the display|
- * |08|Wait for the duration of the scroll|||Allow time for the quick scroll|
- * |09|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
+ * |04|Call dsSetFPScroll() for vertical scrolling with valid parameters|uScrollHoldOnDur: 1000, uHorzScrollIterations: 0, uVertScrollIterations: 5|dsERR_NONE|Vertical scrolling should occur on the display. Observe for text movement from bottom to top|
+ * |05|Call dsSetFPScroll() with minimum valid parameters for quick scrolling|uScrollHoldOnDur: 100, uHorzScrollIterations: 1, uVertScrollIterations: 0|dsERR_NONE|Quick horizontal scrolling should occur on the display|
+ * |06|Call dsSetFPScroll() with minimum valid parameters for quick scrolling|uScrollHoldOnDur: 100, uHorzScrollIterations: 0, uVertScrollIterations: 1|dsERR_NONE|Quick horizontal scrolling should occur on the display|
+ * |07|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
@@ -1004,8 +1026,8 @@ void test_l1_dsFPD_positive_dsSetFPScroll (void)
  * |01|Call dsSetFPScroll() without initializing (dsFPInit() not called)|uScrollHoldOnDur: 1000, uHorzScrollIterations: 5, uVertScrollIterations: 5|dsERR_NOT_INITIALIZED|Validate that the function checks for initialization|
  * |02|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
  * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
- * |03|Call dsSetFPScroll() with invalid value for uScrollHoldOnDur|uScrollHoldOnDur: 0, uHorzScrollIterations: 5, uVertScrollIterations: 5|dsERR_INVALID_PARAM|Check function detects invalid parameter|
- * |04|Call dsSetFPScroll() with both horizontal and vertical scroll iterations|uScrollHoldOnDur: 1000, uHorzScrollIterations: 5, uVertScrollIterations: 5|dsERR_INVALID_PARAM|Validate it detects conflicting scroll directions|
+ * |03|Call dsSetFPScroll() with invalid value for uScrollHoldOnDur|uScrollHoldOnDur: 0, uHorzScrollIterations: 5, uVertScrollIterations: 0|dsERR_INVALID_PARAM|Check function detects invalid parameter|
+ * |04|Call dsSetFPScroll() with both horizontal and vertical scroll iterations|uScrollHoldOnDur: 1000, uHorzScrollIterations: 5, uVertScrollIterations: 5|dsERR_OPERATION_NOT_SUPPORTED|Validate it detects conflicting scroll directions|
  * |05|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|Using a separate function or mechanism if available|dsERR_NONE|Simulate FP state being "OFF"|
  * |06|Call dsSetFPScroll() with FP State "OFF"|uScrollHoldOnDur: 1000, uHorzScrollIterations: 5, uVertScrollIterations: 0|dsERR_OPERATION_NOT_SUPPORTED|Check that operation is not supported when FP State is "OFF"|
  * |08|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
@@ -1020,6 +1042,8 @@ void test_l1_dsFPD_negative_dsSetFPScroll (void)
 
 /**
  * @brief Ensure dsSetFPTimeFormat() successfully sets the time format on the 7-segment display
+ * 
+ * @todo add any case
  * 
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 033@n
@@ -1049,6 +1073,8 @@ void test_l1_dsFPD_positive_dsSetFPTimeFormat (void)
 
 /**
  * @brief Validate the robustness and boundary conditions of dsSetFPTimeFormat()
+ * 
+ * @todo change INVALID_FORMAT to MAX of the enums
  * 
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 034@n
@@ -1084,6 +1110,8 @@ void test_l1_dsFPD_negative_dsSetFPTimeFormat (void)
 
 /**
  * @brief Validate the functionality of dsGetFPTimeFormat()
+ * 
+ * @todo add set call
  * 
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 035@n
@@ -1150,7 +1178,9 @@ void test_l1_dsFPD_negative_dsGetFPTimeFormat (void)
 /**
  * @brief Validate the positive flow of dsFPGetLEDState()
  * 
- * @todo Do we need set dsSetFPState here?
+ * @todo Add dsSetFPState precondition to the actual function
+ * @todo discuss add an option for template file to speecify which dsFPDLedState_t are avaliable
+ * @todo set a specific set call getting the values
  * 
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 037@n
@@ -1278,6 +1308,10 @@ int test_l1_dsFPD_register ( void )
 	pSuite = UT_add_suite( "[L1 dsFPD]", NULL, NULL );
     pSuite7Segment = UT_add_suite( "[L1 dsFPD 7Segment]", NULL, NULL );
 	if ( NULL == pSuite )
+	{
+		return -1;
+	}	
+    if ( NULL == pSuite7Segment )
 	{
 		return -1;
 	}	
