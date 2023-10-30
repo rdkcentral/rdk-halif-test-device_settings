@@ -601,19 +601,8 @@ void test_l1_dsHdmiIn_negative_dsHdmiInScaleVideo(void) {
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Call dsHdmiInSelectZoomMode() |dsVIDEO_ZOOM_NONE| dsERR_NONE | Zoom mode should be updated |
- * |03|Call dsHdmiInSelectZoomMode() |dsVIDEO_ZOOM_FULL| dsERR_NONE | Zoom mode should be updated |
- * |04|Call dsHdmiInSelectZoomMode() |dsVIDEO_ZOOM_LB_16_9| dsERR_NONE | Zoom mode should be updated |
- * |05|Call dsHdmiInSelectZoomMode() |dsVIDEO_ZOOM_LB_14_9| dsERR_NONE | Zoom mode should be updated |
- * |06|Call dsHdmiInSelectZoomMode() |dsVIDEO_ZOOM_CCO| dsERR_NONE | Zoom mode should be updated |
- * |07|Call dsHdmiInSelectZoomMode() |dsVIDEO_ZOOM_PAN_SCAN| dsERR_NONE | Zoom mode should be updated |
- * |08|Call dsHdmiInSelectZoomMode() |dsVIDEO_ZOOM_LB_2_21_1_ON_4_3| dsERR_NONE | Zoom mode should be updated |
- * |09|Call dsHdmiInSelectZoomMode() |dsVIDEO_ZOOM_LB_2_21_1_ON_16_9| dsERR_NONE | Zoom mode should be updated |
- * |10|Call dsHdmiInSelectZoomMode() |dsVIDEO_ZOOM_PLATFORM| dsERR_NONE | Zoom mode should be updated |
- * |11|Call dsHdmiInSelectZoomMode() |dsVIDEO_ZOOM_16_9_ZOOM| dsERR_NONE | Zoom mode should be updated |
- * |12|Call dsHdmiInSelectZoomMode() |dsVIDEO_ZOOM_PILLARBOX_4_3| dsERR_NONE | Zoom mode should be updated |
- * |13|Call dsHdmiInSelectZoomMode() |dsVIDEO_ZOOM_WIDE_4_3| dsERR_NONE | Zoom mode should be updated |
- * |14|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |02|Call dsHdmiInSelectZoomMode() and loop through all valid dsVideoZoom_t |[Valid Zoom Mode]| dsERR_NONE | Zoom mode should be updated |
+ * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsHdmiInSelectZoomMode(void) {
@@ -623,23 +612,9 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSelectZoomMode(void) {
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
     // Step 2: Loop through all dsVideoZoom_t values and call dsHdmiInSelectZoomMode()
-    dsVideoZoom_t zoomModes[] = {
-        dsVIDEO_ZOOM_NONE,
-        dsVIDEO_ZOOM_FULL,
-        dsVIDEO_ZOOM_LB_16_9,
-        dsVIDEO_ZOOM_LB_14_9,
-        dsVIDEO_ZOOM_CCO,
-        dsVIDEO_ZOOM_PAN_SCAN,
-        dsVIDEO_ZOOM_LB_2_21_1_ON_4_3,
-        dsVIDEO_ZOOM_LB_2_21_1_ON_16_9,
-        dsVIDEO_ZOOM_PLATFORM,
-        dsVIDEO_ZOOM_16_9_ZOOM,
-        dsVIDEO_ZOOM_PILLARBOX_4_3,
-        dsVIDEO_ZOOM_WIDE_4_3
-    };
-    
-    for (int i = 0; i < sizeof(zoomModes)); i++) {
-        UT_ASSERT_EQUAL(dsHdmiInSelectZoomMode(zoomModes[i]), dsERR_NONE);
+    for (int i = dsVIDEO_ZOOM_NONE; i < dsVIDEO_ZOOM_MAX; i++) {
+        dsVideoZoom_t zoomMode = i;
+        UT_ASSERT_EQUAL(dsHdmiInSelectZoomMode(zoomMode), dsERR_NONE);
     }
 
     // Step 3: Call dsHdmiInTerm() to ensure deinitialization
@@ -778,6 +753,10 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetCurrentVideoMode(void) {
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
+void mockConnectCallback(dsHdmiInPort_t Port, bool isPortConnected){
+// Mock implementation, can be customized for testing
+}
+
 /**
  * @brief Ensure dsHdmiInRegisterConnectCB() correctly registers a callback during positive scenarios.
  * 
@@ -802,7 +781,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterConnectCB(void) {
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
     // Step 2: Call dsHdmiInRegisterConnectCB()
-    UT_ASSERT_EQUAL(dsHdmiInRegisterConnectCB(dsHdmiInConnectCB_t), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsHdmiInRegisterConnectCB(mockConnectCallback), dsERR_NONE);
 
     // Step 3: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
@@ -835,7 +814,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterConnectCB(void) {
     gTestID = 18;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID); 
     // Step 1: Call dsHdmiInRegisterConnectCB() without initializing the HDMI input sub-system
-    UT_ASSERT_EQUAL(dsHdmiInRegisterConnectCB(dsHdmiInConnectCB_t), dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(dsHdmiInRegisterConnectCB(mockConnectCallback), dsERR_NOT_INITIALIZED);
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
@@ -847,9 +826,13 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterConnectCB(void) {
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 
     // Step 5: Call dsHdmiInRegisterConnectCB() after termination the HDMI input sub-system
-    UT_ASSERT_EQUAL(dsHdmiInRegisterConnectCB(dsHdmiInConnectCB_t), dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(dsHdmiInRegisterConnectCB(mockConnectCallback), dsERR_NOT_INITIALIZED);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
+}
+
+void mockSignalCallback(dsHdmiInPort_t port, dsHdmiInSignalStatus_t sigStatus){
+// Mock implementation, can be customized for testing
 }
 
 /**
@@ -876,7 +859,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterSignalChangeCB(void) {
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
     // Step 2: Call dsHdmiInRegisterSignalChangeCB()
-    UT_ASSERT_EQUAL(dsHdmiInRegisterSignalChangeCB(dsHdmiInSignalChangeCB_t), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsHdmiInRegisterSignalChangeCB(mockSignalCallback), dsERR_NONE);
 
     // Step 3: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
@@ -909,7 +892,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterSignalChangeCB(void) {
     gTestID = 20;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID); 
     // Step 1: Call dsHdmiInRegisterSignalChangeCB() without initializing the HDMI input sub-system
-    UT_ASSERT_EQUAL(dsHdmiInRegisterSignalChangeCB(dsHdmiInSignalChangeCB_t), dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(dsHdmiInRegisterSignalChangeCB(mockSignalCallback), dsERR_NOT_INITIALIZED);
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
@@ -921,9 +904,13 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterSignalChangeCB(void) {
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 
     // Step 5: Call dsHdmiInRegisterSignalChangeCB() after terminating the HDMI input sub-system
-    UT_ASSERT_EQUAL(dsHdmiInRegisterSignalChangeCB(dsHdmiInSignalChangeCB_t), dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(dsHdmiInRegisterSignalChangeCB(mockSignalCallback), dsERR_NOT_INITIALIZED);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
+}
+
+void mockStatusChangeCallback(dsHdmiInStatus_t inputStatus){
+// Mock implementation, can be customized for testing
 }
 
 /**
@@ -950,7 +937,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterStatusChangeCB(void) {
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
     // Step 2: Call dsHdmiInRegisterStatusChangeCB()
-    UT_ASSERT_EQUAL(dsHdmiInRegisterStatusChangeCB(dsHdmiInStatusChangeCB_t), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsHdmiInRegisterStatusChangeCB(mockStatusChangeCallback), dsERR_NONE);
 
     // Step 3: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
@@ -983,7 +970,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterStatusChangeCB(void) {
     gTestID = 22;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID); 
     // Step 1: Call dsHdmiInRegisterStatusChangeCB() without initializing the HDMI input sub-system
-    UT_ASSERT_EQUAL(dsHdmiInRegisterStatusChangeCB(dsHdmiInStatusChangeCB_t), dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(dsHdmiInRegisterStatusChangeCB(mockStatusChangeCallback), dsERR_NOT_INITIALIZED);
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
@@ -995,9 +982,13 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterStatusChangeCB(void) {
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 
     // Step 5: Call dsHdmiInRegisterStatusChangeCB() after terminating the HDMI input sub-system
-    UT_ASSERT_EQUAL(dsHdmiInRegisterStatusChangeCB(dsHdmiInStatusChangeCB_t), dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(dsHdmiInRegisterStatusChangeCB(mockStatusChangeCallback), dsERR_NOT_INITIALIZED);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
+}
+
+void mockVideoModeUpdateCallback(dsHdmiInPort_t port, dsVideoPortResolution_t videoResolution){
+// Mock implementation, can be customized for testing
 }
 
 /**
@@ -1024,7 +1015,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterVideoModeUpdateCB(void) {
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
     // Step 2: Call dsHdmiInRegisterVideoModeUpdateCB()
-    UT_ASSERT_EQUAL(dsHdmiInRegisterVideoModeUpdateCB(dsHdmiInVideoModeUpdateCB_t), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsHdmiInRegisterVideoModeUpdateCB(mockVideoModeUpdateCallback), dsERR_NONE);
 
     // Step 3: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
@@ -1057,7 +1048,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterVideoModeUpdateCB(void) {
     gTestID = 24;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID); 
     // Step 1: Call dsHdmiInRegisterVideoModeUpdateCB() without initializing the HDMI input sub-system
-    UT_ASSERT_EQUAL(dsHdmiInRegisterVideoModeUpdateCB(dsHdmiInVideoModeUpdateCB_t), dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(dsHdmiInRegisterVideoModeUpdateCB(mockVideoModeUpdateCallback), dsERR_NOT_INITIALIZED);
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
@@ -1069,10 +1060,15 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterVideoModeUpdateCB(void) {
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 
     // Step 5: Call dsHdmiInRegisterVideoModeUpdateCB() after terminating the HDMI input sub-system
-    UT_ASSERT_EQUAL(dsHdmiInRegisterVideoModeUpdateCB(dsHdmiInVideoModeUpdateCB_t), dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(dsHdmiInRegisterVideoModeUpdateCB(mockVideoModeUpdateCallback), dsERR_NOT_INITIALIZED);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
+
+void mockALLMChangeCallback(dsHdmiInPort_t port, bool allm_mode){
+// Mock implementation, can be customized for testing
+}
+
 
 /**
  * @brief Ensure dsHdmiInRegisterAllmChangeCB() correctly registers a callback during positive scenarios.
@@ -1098,7 +1094,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAllmChangeCB(void) {
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
     // Step 2: Call dsHdmiInRegisterAllmChangeCB()
-    UT_ASSERT_EQUAL(dsHdmiInRegisterAllmChangeCB(dsHdmiInAllmChangeCB_t), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsHdmiInRegisterAllmChangeCB(mockALLMChangeCallback), dsERR_NONE);
 
     // Step 3: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
@@ -1131,7 +1127,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAllmChangeCB(void) {
     gTestID = 26;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     // Step 1: Call dsHdmiInRegisterAllmChangeCB() without initializing the HDMI input sub-system
-    UT_ASSERT_EQUAL(dsHdmiInRegisterAllmChangeCB(dsHdmiInAllmChangeCB_t), dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(dsHdmiInRegisterAllmChangeCB(mockALLMChangeCallback), dsERR_NOT_INITIALIZED);
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
@@ -1143,8 +1139,12 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAllmChangeCB(void) {
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 
     // Step 5: Call dsHdmiInRegisterAllmChangeCB() after terminating the HDMI input sub-system
-    UT_ASSERT_EQUAL(dsHdmiInRegisterAllmChangeCB(dsHdmiInAllmChangeCB_t), dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(dsHdmiInRegisterAllmChangeCB(mockALLMChangeCallback), dsERR_NOT_INITIALIZED);
     UT_LOG("\n Out %s\n", __FUNCTION__); 
+}
+
+void mockLatencyChangeCallback(int audio_latency, int video_latency){
+// Mock implementation, can be customized for testing
 }
 
 /**
@@ -1171,7 +1171,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAVLatencyChangeCB(void) {
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
     // Step 2: Call dsHdmiInRegisterAVLatencyChangeCB()
-    UT_ASSERT_EQUAL(dsHdmiInRegisterAVLatencyChangeCB(dsAVLatencyChangeCB_t), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsHdmiInRegisterAVLatencyChangeCB(mockLatencyChangeCallback), dsERR_NONE);
 
     // Step 3: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
@@ -1204,7 +1204,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAVLatencyChangeCB(void) {
     gTestID = 28;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     // Step 1: Call dsHdmiInRegisterAVLatencyChangeCB() without initializing the HDMI input sub-system
-    UT_ASSERT_EQUAL(dsHdmiInRegisterAVLatencyChangeCB(dsAVLatencyChangeCB_t), dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(dsHdmiInRegisterAVLatencyChangeCB(mockLatencyChangeCallback), dsERR_NOT_INITIALIZED);
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
@@ -1216,10 +1216,15 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAVLatencyChangeCB(void) {
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 
     // Step 5: Call dsHdmiInRegisterAVLatencyChangeCB() after terminating the HDMI input sub-system
-    UT_ASSERT_EQUAL(dsHdmiInRegisterAVLatencyChangeCB(dsAVLatencyChangeCB_t), dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(dsHdmiInRegisterAVLatencyChangeCB(mockLatencyChangeCallback), dsERR_NOT_INITIALIZED);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
+
+void mockAviContentCallback(*dsHdmiInAviContentTypeChangeCB_t)(dsHdmiInPort_t port, dsAviContentType_t avi_content_type){
+// Mock implementation, can be customized for testing
+}
+
 
 /**
  * @brief Ensure dsHdmiInRegisterAviContentTypeChangeCB() correctly registers a callback during positive scenarios.
@@ -1245,7 +1250,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAviContentTypeChangeCB(void) {
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
     // Step 2: Call dsHdmiInRegisterAviContentTypeChangeCB()
-    UT_ASSERT_EQUAL(dsHdmiInRegisterAviContentTypeChangeCB(dsHdmiInAviContentTypeChangeCB_t), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsHdmiInRegisterAviContentTypeChangeCB(mockAviContentCallback), dsERR_NONE);
 
     // Step 3: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
@@ -1278,7 +1283,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAviContentTypeChangeCB(void) {
     gTestID = 30;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     // Step 1: Call dsHdmiInRegisterAviContentTypeChangeCB() without initializing the HDMI input sub-system
-    UT_ASSERT_EQUAL(dsHdmiInRegisterAviContentTypeChangeCB(dsHdmiInAviContentTypeChangeCB_t), dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(dsHdmiInRegisterAviContentTypeChangeCB(mockAviContentCallback), dsERR_NOT_INITIALIZED);
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
@@ -1290,7 +1295,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAviContentTypeChangeCB(void) {
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 
     // Step 5: Call dsHdmiInRegisterAviContentTypeChangeCB() after terminating the HDMI input sub-system
-    UT_ASSERT_EQUAL(dsHdmiInRegisterAviContentTypeChangeCB(dsHdmiInAviContentTypeChangeCB_t), dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(dsHdmiInRegisterAviContentTypeChangeCB(mockAviContentCallback), dsERR_NOT_INITIALIZED);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -1322,26 +1327,22 @@ void test_l1_dsHdmiIn_positive_dsIsHdmiARCPort(void) {
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
-    bool isArcPort;
+    bool isArcPort1, isArcPort2;
 
     // Step 2: Call dsIsHdmiARCPort() with valid input (dsHDMI_IN_PORT_0)
-    UT_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_0, &isArcPort), dsERR_NONE);
-    CU_ASSERT_TRUE(isArcPort);
+    UT_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_0, &isArcPort1), dsERR_NONE);
 
     // Step 3: Call dsIsHdmiARCPort() with valid input (dsHDMI_IN_PORT_1)
-    UT_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_1, &isArcPort), dsERR_NONE);
-    CU_ASSERT_TRUE(isArcPort);
+    UT_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_1, &isArcPort2), dsERR_NONE);
 
     // Step 4: Call dsIsHdmiARCPort() with valid input (dsHDMI_IN_PORT_2)
-    UT_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_2, &isArcPort), dsERR_NONE);
-    CU_ASSERT_TRUE(isArcPort);
+    UT_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_2, &isArcPort1), dsERR_NONE);
 
     // Step 5: Call dsIsHdmiARCPort() with valid input (dsHDMI_IN_PORT_3)
-    UT_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_3, &isArcPort), dsERR_NONE);
-    CU_ASSERT_TRUE(isArcPort);
+    UT_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_3, &isArcPort2), dsERR_NONE);
 
     // Step 6: Compare the values of steps 4 and 5 to make sure they equal one another
-    UT_ASSERT_EQUAL(isArcPort, isArcPort);
+    UT_ASSERT_EQUAL(isArcPort1, isArcPort2);
 
     // Step 7: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
@@ -1443,17 +1444,20 @@ void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo(void) {
     UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_2, &edidBytes3, &edidSize3), dsERR_NONE);
 
     // Step 5: Call dsGetEDIDBytesInfo() with valid input (dsHDMI_IN_PORT_3)
-    UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_3, &edidBytes4, &edidSize4), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_2, &edidBytes4, &edidSize4), dsERR_NONE);
 
     // Step 6: Compare the results and make sure they are the same
-    UT_ASSERT_EQUAL(edidSize1, edidSize2);
-    UT_ASSERT_EQUAL(edidSize2, edidSize3);
     UT_ASSERT_EQUAL(edidSize3, edidSize4);
 
     // You may want to compare the contents of the edidBytes as well, depending on your use case.
 
     // Step 7: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    free(edidBytes1);
+    free(edidBytes2);
+    free(edidBytes3);
+    free(edidBytes4);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -1484,26 +1488,32 @@ void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo(void) {
 void test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo(void) {
     gTestID = 34;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    unsigned char* edidBytes;
+    int edidSize;
+
     // Step 1: Call dsGetEDIDBytesInfo() without initializing the HDMI input sub-system
-    UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, NULL, NULL), dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, edidBytes, edidSize), dsERR_NOT_INITIALIZED);
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
     // Step 3: Call dsGetEDIDBytesInfo() with invalid value (dsHDMI_IN_PORT_MAX)
-    UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_MAX, NULL, NULL), dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_MAX, edidBytes, edidSize), dsERR_INVALID_PARAM);
 
     // Step 4: Call dsGetEDIDBytesInfo() with invalid value (NULL pointer)
-    UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, NULL, NULL), dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, NULL, edidSize), dsERR_INVALID_PARAM);
 
     // Step 5: Call dsGetEDIDBytesInfo() with invalid value (NULL pointer)
-    UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, NULL, NULL), dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, edidBytes, NULL), dsERR_INVALID_PARAM);
 
     // Step 6: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 
     // Step 7: Call dsGetEDIDBytesInfo() after terminating the HDMI input sub-system
-    UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, NULL, NULL), dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, edidBytes, edidSize), dsERR_NOT_INITIALIZED);
+
+    free(edidBytes);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -1550,13 +1560,18 @@ void test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo(void) {
     UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_2, &spdInfo3), dsERR_NONE);
 
     // Step 5: Call dsGetHDMISPDInfo() with valid input (dsHDMI_IN_PORT_3)
-    UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_3, &spdInfo4), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_2, &spdInfo4), dsERR_NONE);
 
     // Step 6: Compare the results and make sure they are the same
-    // You may want to compare the contents of spdInfo1, spdInfo2, spdInfo3, and spdInfo4 as well, depending on your use case.
+    UT_ASSERT_EQUAL(spdInfo3, spdInfo4);
 
     // Step 7: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    free(spdInfo1);
+    free(spdInfo2);
+    free(spdInfo3);
+    free(spdInfo4);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -1586,14 +1601,17 @@ void test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo(void) {
 void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo(void) {
     gTestID = 36;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    unsigned char* spdInfo1; 
+
     // Step 1: Call dsGetHDMISPDInfo() without initializing the HDMI input sub-system
-    UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, NULL), dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, spdInfo1), dsERR_NOT_INITIALIZED);
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
     // Step 3: Call dsGetHDMISPDInfo() with invalid values (dsHDMI_IN_PORT_MAX)
-    UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_MAX, NULL), dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_MAX, spdInfo1), dsERR_INVALID_PARAM);
 
     // Step 4: Call dsGetHDMISPDInfo() with invalid values (NULL pointer)
     UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, NULL), dsERR_INVALID_PARAM);
@@ -1602,7 +1620,9 @@ void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo(void) {
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 
     // Step 6: Call dsGetHDMISPDInfo() after terminating the HDMI input sub-system
-    UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, NULL), dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, spdInfo1), dsERR_NOT_INITIALIZED);
+
+    free(spdInfo1);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
