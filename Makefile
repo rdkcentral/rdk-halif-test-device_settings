@@ -10,10 +10,9 @@
 #*   ** Project      : ut
 #*   ** @addtogroup  : ut
 #*   ** @file        : makefile
-#*   ** @author      : gerald.weatherup@sky.uk
 #*   ** @date        : 20/05/2022
 #*   **
-#*   ** @brief : Makefile for ut
+#*   ** @brief       : Makefile for ut
 #*   ** 
 #*
 #* ******************************************************************************
