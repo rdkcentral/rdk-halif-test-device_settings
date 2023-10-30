@@ -807,7 +807,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterConnectCB(void) {
  * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |05| Call dsHdmiInRegisterConnectCB() after termination the HDMI input sub-system |dsHdmiInConnectCB_t| dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInRegisterConnectCB(void) {
@@ -885,7 +885,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterSignalChangeCB(void) {
  * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |05|Call dsHdmiInRegisterSignalChangeCB() after terminating the HDMI input sub-system |dsHdmiInSignalChangeCB_t| dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInRegisterSignalChangeCB(void) {
@@ -963,7 +963,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterStatusChangeCB(void) {
  * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |05|Call dsHdmiInRegisterStatusChangeCB() after termination the HDMI input sub-system |dsHdmiInStatusChangeCB_t| dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInRegisterStatusChangeCB(void) {
@@ -1041,7 +1041,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterVideoModeUpdateCB(void) {
  * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |05|Call dsHdmiInRegisterVideoModeUpdateCB() after terminating the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInRegisterVideoModeUpdateCB(void) {
@@ -1120,7 +1120,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAllmChangeCB(void) {
  * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |05|Call dsHdmiInRegisterAllmChangeCB() after terminating the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note The return values dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL may be difficult to test in a simulated environment
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAllmChangeCB(void) {
@@ -1276,7 +1276,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAviContentTypeChangeCB(void) {
  * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |05|Call dsHdmiInRegisterAviContentTypeChangeCB() after terminating the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
  * 
- * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAviContentTypeChangeCB(void) {
