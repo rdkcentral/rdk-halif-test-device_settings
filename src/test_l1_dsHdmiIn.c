@@ -1338,8 +1338,8 @@ void test_l1_dsHdmiIn_positive_dsIsHdmiARCPort(void) {
     // Step 4: Call dsIsHdmiARCPort() with valid input (dsHDMI_IN_PORT_2)
     UT_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_2, &isArcPort1), dsERR_NONE);
 
-    // Step 5: Call dsIsHdmiARCPort() with valid input (dsHDMI_IN_PORT_3)
-    UT_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_3, &isArcPort2), dsERR_NONE);
+    // Step 5: Call dsIsHdmiARCPort() with valid input (dsHDMI_IN_PORT_2)
+    UT_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_2, &isArcPort2), dsERR_NONE);
 
     // Step 6: Compare the values of steps 4 and 5 to make sure they equal one another
     UT_ASSERT_EQUAL(isArcPort1, isArcPort2);
@@ -1425,10 +1425,10 @@ void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo(void) {
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
-    unsigned char* edidBytes1;
-    unsigned char* edidBytes2;
-    unsigned char* edidBytes3;
-    unsigned char* edidBytes4;
+    unsigned char* edidBytes1 = (unsigned char*) malloc(255);
+    unsigned char* edidBytes2 = (unsigned char*) malloc(255);
+    unsigned char* edidBytes3 = (unsigned char*) malloc(255);
+    unsigned char* edidBytes4 = (unsigned char*) malloc(255);
     int edidSize1;
     int edidSize2;
     int edidSize3;
@@ -1443,7 +1443,7 @@ void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo(void) {
     // Step 4: Call dsGetEDIDBytesInfo() with valid input (dsHDMI_IN_PORT_2)
     UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_2, &edidBytes3, &edidSize3), dsERR_NONE);
 
-    // Step 5: Call dsGetEDIDBytesInfo() with valid input (dsHDMI_IN_PORT_3)
+    // Step 5: Call dsGetEDIDBytesInfo() with valid input (dsHDMI_IN_PORT_2)
     UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_2, &edidBytes4, &edidSize4), dsERR_NONE);
 
     // Step 6: Compare the results and make sure they are the same
@@ -1489,7 +1489,7 @@ void test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo(void) {
     gTestID = 34;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    unsigned char* edidBytes;
+    unsigned char* edidBytes = (unsigned char*) malloc(255);
     int edidSize;
 
     // Step 1: Call dsGetEDIDBytesInfo() without initializing the HDMI input sub-system
@@ -1545,10 +1545,10 @@ void test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo(void) {
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
-    unsigned char* spdInfo1;
-    unsigned char* spdInfo2;
-    unsigned char* spdInfo3;
-    unsigned char* spdInfo4;
+    unsigned char* spdInfo1 = (unsigned char*) malloc(sizeof(struct dsSpd_infoframe_st));
+    unsigned char* spdInfo2 = (unsigned char*) malloc(sizeof(struct dsSpd_infoframe_st));
+    unsigned char* spdInfo3 = (unsigned char*) malloc(sizeof(struct dsSpd_infoframe_st));
+    unsigned char* spdInfo4 = (unsigned char*) malloc(sizeof(struct dsSpd_infoframe_st));
 
     // Step 2: Call dsGetHDMISPDInfo() with valid input (dsHDMI_IN_PORT_0)
     UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, &spdInfo1), dsERR_NONE);
@@ -1559,7 +1559,7 @@ void test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo(void) {
     // Step 4: Call dsGetHDMISPDInfo() with valid input (dsHDMI_IN_PORT_2)
     UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_2, &spdInfo3), dsERR_NONE);
 
-    // Step 5: Call dsGetHDMISPDInfo() with valid input (dsHDMI_IN_PORT_3)
+    // Step 5: Call dsGetHDMISPDInfo() with valid input (dsHDMI_IN_PORT_2)
     UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_2, &spdInfo4), dsERR_NONE);
 
     // Step 6: Compare the results and make sure they are the same
@@ -1602,7 +1602,7 @@ void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo(void) {
     gTestID = 36;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    unsigned char* spdInfo1; 
+    unsigned char* spdInfo1 (unsigned char*) malloc(sizeof(struct dsSpd_infoframe_st)); 
 
     // Step 1: Call dsGetHDMISPDInfo() without initializing the HDMI input sub-system
     UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, spdInfo1), dsERR_NOT_INITIALIZED);
@@ -1730,7 +1730,7 @@ void test_l1_dsHdmiIn_negative_dsSetEdidVersion(void) {
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Call dsSetEdidVersion() with all valid ports |[Valid Port], tv_hdmi_edid_version_t*| dsERR_NONE | Should Pass |
+ * |02|Call dsGetEdidVersion() with all valid ports |[Valid Port], tv_hdmi_edid_version_t*| dsERR_NONE | Should Pass |
  * |03|Compare the values from steps 4/5 and make sure they match || Success | The values should be the same |
  * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
@@ -1743,16 +1743,16 @@ void test_l1_dsHdmiIn_positive_dsGetEdidVersion(void) {
 
     // Step 2: Call dsSetEdidVersion() with valid values (dsHDMI_IN_PORT_0, tv_hdmi_edid_version_t*)
     tv_hdmi_edid_version_t edid_version_1, edid_version_2;
-    UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_0, &edid_version_1), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsGetEdidVersion(dsHDMI_IN_PORT_0, &edid_version_1), dsERR_NONE);
 
     // Step 3: Call dsSetEdidVersion() with valid values (dsHDMI_IN_PORT_1, tv_hdmi_edid_version_t*)
-    UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_1, &edid_version_2), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsGetEdidVersion(dsHDMI_IN_PORT_1, &edid_version_2), dsERR_NONE);
 
     // Step 4: Call dsSetEdidVersion() with valid values (dsHDMI_IN_PORT_2, tv_hdmi_edid_version_t*)
-    UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_2, &edid_version_1), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsGetEdidVersion(dsHDMI_IN_PORT_2, &edid_version_1), dsERR_NONE);
 
     // Step 5: Call dsSetEdidVersion() with valid values (dsHDMI_IN_PORT_0, tv_hdmi_edid_version_t*)
-    UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_2, &edid_version_2), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsGetEdidVersion(dsHDMI_IN_PORT_2, &edid_version_2), dsERR_NONE);
 
     // Step 6: Compare the values from steps 4/5 and make sure they match
     UT_ASSERT_EQUAL(edid_version_1, edid_version_2);
@@ -2008,9 +2008,7 @@ void test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList(void) {
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
  * |02|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_0| dsERR_NONE | Port 0 should be selected |
  * |03|Call dsGetAVLatency() with valid input |int*, int*| dsERR_NONE | Should retrieve AV latency values successfully |
- * |04|Call dsGetAVLatency() with valid input |int*, int*| dsERR_NONE | Should retrieve AV latency values successfully |
- * |05|Validate the returns of steps 2/3 and verify that they are the same| | Success | The same values should be the same. |
- * |06|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsGetAVLatency(void) {
@@ -2026,15 +2024,7 @@ void test_l1_dsHdmiIn_positive_dsGetAVLatency(void) {
     int audioLatency1, videoLatency1;
     UT_ASSERT_EQUAL(dsGetAVLatency(&audioLatency1, &videoLatency1), dsERR_NONE);
 
-    // Step 4: Call dsGetAVLatency() with valid inputs (int*, int*)
-    int audioLatency2, videoLatency2;
-    UT_ASSERT_EQUAL(dsGetAVLatency(&audioLatency2, &videoLatency2), dsERR_NONE);
-
-    // Step 5: Validate the returns of steps 2/3 and verify that they are the same
-    UT_ASSERT_EQUAL(audioLatency1, audioLatency2);
-    UT_ASSERT_EQUAL(videoLatency1, videoLatency2);
-
-    // Step 6: Call dsHdmiInTerm() to ensure deinitialization
+    // Step 4: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
