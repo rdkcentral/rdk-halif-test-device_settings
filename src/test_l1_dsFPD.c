@@ -61,8 +61,25 @@
  */
 void test_l1_dsFPD_positive_dsFPInit (void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsError_t result;
+
+    // Variation 01: Call dsFPInit() - initialize the interface for the first time
+    result = dsFPInit();
+    CU_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Variation 02: Call dsFPTerm() - terminate the interface
+    result = dsFPTerm();
+    CU_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Variation 03: Call dsFPInit() again - reinitialize the interface after termination
+    result = dsFPInit();
+    CU_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Variation 04: Call dsFPTerm() - terminate the interface once again
+    result = dsFPTerm();
+    CU_ASSERT_EQUAL(result, dsERR_NONE);
 }
+
 
 /**
  * @brief Ensure dsFPInit() handles error scenarios gracefully
@@ -84,10 +101,23 @@ void test_l1_dsFPD_positive_dsFPInit (void)
  * |03|Call dsFPTerm() - terminate the interface | | dsERR_NONE | Should Pass |
  * 
  */
-void test_l1_dsFPD_negative_dsFPInit (void)
+void test_l1_dsFPD_negative_dsFPInit(void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsError_t result;
+
+    // Variation 01: Call dsFPInit() - initialize the interface
+    result = dsFPInit();
+    CU_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Variation 02: Call dsFPInit() again - attempt to initialize an already initialized interface
+    result = dsFPInit();
+    CU_ASSERT_EQUAL(result, dsERR_ALREADY_INITIALIZED);
+
+    // Variation 03: Call dsFPTerm() - terminate the interface
+    result = dsFPTerm();
+    CU_ASSERT_EQUAL(result, dsERR_NONE);
 }
+
 
 /**
  * @brief Ensure dsFPTerm() returns correct error codes during positive scenarios
@@ -110,10 +140,27 @@ void test_l1_dsFPD_negative_dsFPInit (void)
  * |04|Call dsFPTerm() - terminate the interface once again | | dsERR_NONE | Should Pass |
  * 
  */
-void test_l1_dsFPD_positive_dsFPTerm (void)
+void test_l1_dsFPD_positive_dsFPTerm(void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsError_t result;
+
+    // Variation 01: Call dsFPInit() - initialize the interface
+    result = dsFPInit();
+    CU_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Variation 02: Call dsFPTerm() - terminate the interface
+    result = dsFPTerm();
+    CU_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Variation 03: Call dsFPInit() - reinitialize the interface
+    result = dsFPInit();
+    CU_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Variation 04: Call dsFPTerm() - terminate the interface once again
+    result = dsFPTerm();
+    CU_ASSERT_EQUAL(result, dsERR_NONE);
 }
+
 
 /**
  * @brief Ensure dsFPTerm() handles error scenarios gracefully
@@ -136,10 +183,27 @@ void test_l1_dsFPD_positive_dsFPTerm (void)
  * |04|Call dsFPTerm() again - attempt to terminate an already terminated interface | | dsERR_NOT_INITIALIZED | Should confirm the function handles double termination attempts gracefully |
  * 
  */
-void test_l1_dsFPD_negative_dsFPTerm (void)
+void test_l1_dsFPD_negative_dsFPTerm(void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsError_t result;
+
+    // Variation 01: Call dsFPTerm() - attempt to terminate without initializing the interface
+    result = dsFPTerm();
+    CU_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    // Variation 02: Call dsFPInit() - initialize the interface
+    result = dsFPInit();
+    CU_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Variation 03: Call dsFPTerm() - terminate the interface
+    result = dsFPTerm();
+    CU_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Variation 04: Call dsFPTerm() again - attempt to terminate an already terminated interface
+    result = dsFPTerm();
+    CU_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 }
+
 
 /**
  * @brief Ensure dsSetFPState() correctly sets the Front Panel Display LED state
@@ -165,7 +229,26 @@ void test_l1_dsFPD_negative_dsFPTerm (void)
  */
 void test_l1_dsFPD_positive_dsSetFPState (void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+
+    // Step 01: Initialize
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    
+    // Step 02: Call dsSetFPState() with valid inputs
+    result = dsSetFPState(dsFPD_INDICATOR_POWER, dsFPD_STATE_OFF);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    
+    // Step 03: Call dsSetFPState() and loop through all valid indicators from kIndicators
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+    
+    // Step 04: Terminate
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 }
 
 /**
@@ -195,7 +278,55 @@ void test_l1_dsFPD_positive_dsSetFPState (void)
  */
 void test_l1_dsFPD_negative_dsSetFPState (void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+
+    // Step 01: Call dsSetFPState() without initializing
+    result = dsSetFPState(dsFPD_INDICATOR_POWER, dsFPD_STATE_OFF);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    // Step 02: Initialize
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 03: Call dsSetFPState() with an invalid eIndicator value
+    result = dsSetFPState(dsFPD_INDICATOR_MAX, dsFPD_STATE_OFF);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+    
+    // Step 04: Loop through all valid indicators from kIndicators with an invalid state value
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_MAX);
+        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+    }
+
+    // Step 05: Loop through the indicators from the diff of kIndicators and dsFPDIndicator_t
+    // Note: This step is a bit complex. We assume that dsFPDIndicator_t is an enum and it has continuous values.
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        bool isIndicatorValid = false;
+        for (int j = 0; j < sizeof(kIndicators) / sizeof(kIndicators[0]); ++j)
+        {
+            if (kIndicators[j].id == i)
+            {
+                isIndicatorValid = true;
+                break;
+            }
+        }
+
+        if (!isIndicatorValid)
+        {
+            result = dsSetFPState((dsFPDIndicator_t)i, dsFPD_STATE_OFF);
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
+    }
+
+    // Step 06: Terminate
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    
+    // Step 07: Call dsSetFPState() after termination
+    result = dsSetFPState(dsFPD_INDICATOR_POWER, dsFPD_STATE_OFF);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -223,7 +354,29 @@ void test_l1_dsFPD_negative_dsSetFPState (void)
  */
 void test_l1_dsFPD_positive_dsSetFPBlink (void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+
+    // Step 01: Initialize with dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 03: Call dsSetFPBlink() and loop through all valid indicators from kIndicators
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
+    {
+        result = dsSetFPBlink(kIndicators[i].id, 500, 10);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 04: Terminate with dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 }
 
 /**
@@ -243,21 +396,70 @@ void test_l1_dsFPD_positive_dsSetFPBlink (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsSetFPBlink() without calling dsFPInit() |eIndicator: dsFPD_INDICATOR_POWER, uBlinkDuration: 500, uBlinkIterations: 10 |dsERR_NOT_INITIALIZED|Should validate that the function handles call without initialization|
  * |02|Initialize with dsFPInit()| |dsERR_NONE|Ensure the system is initialized|
- * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
- * |03|Pass an invalid eIndicator parameter to dsSetFPBlink() |eIndicator: dsFPD_INDICATOR_MAX, uBlinkDuration: 500, uBlinkIterations: 10 |dsERR_INVALID_PARAM|Should validate that the function handles invalid indicator gracefully|
- * |04|Pass an invalid uBlinkDuration parameter to dsSetFPBlink()|eIndicator: dsFPD_INDICATOR_POWER, uBlinkDuration: 20000, uBlinkIterations: 10 |dsERR_INVALID_PARAM|Should validate that the function handles invalid blink duration gracefully|
- * |05|Pass an invalid uBlinkIterations parameter to dsSetFPBlink()|eIndicator: dsFPD_INDICATOR_POWER, uBlinkDuration: 500, uBlinkIterations: 200 |dsERR_INVALID_PARAM|Should validate that the function handles invalid blink iterations gracefully|
- * |02|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF |dsERR_NONE|Ensure the system is initialized|
- * |06|Call dsSetFPBlink() and loop through all valid indicators from kIndicators|eIndicator: [Valid Indicator], uBlinkDuration: 500, uBlinkIterations: 10 |dsERR_OPERATION_NOT_SUPPORTED|Testing if function adheres to pre-condition of FP State being “ON”|
- * |07|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
- * |08|Attempt to set blink pattern after dsFPTerm() has been called|eIndicator: dsFPD_INDICATOR_POWER, uBlinkDuration: 500, uBlinkIterations: 10 |dsERR_NOT_INITIALIZED|Should fail due to termination|
+ * |03|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
+ * |04|Pass an invalid eIndicator parameter to dsSetFPBlink() |eIndicator: dsFPD_INDICATOR_MAX, uBlinkDuration: 500, uBlinkIterations: 10 |dsERR_INVALID_PARAM|Should validate that the function handles invalid indicator gracefully|
+ * |05|Pass an invalid uBlinkDuration parameter to dsSetFPBlink()|eIndicator: dsFPD_INDICATOR_POWER, uBlinkDuration: 20000, uBlinkIterations: 10 |dsERR_INVALID_PARAM|Should validate that the function handles invalid blink duration gracefully|
+ * |06|Pass an invalid uBlinkIterations parameter to dsSetFPBlink()|eIndicator: dsFPD_INDICATOR_POWER, uBlinkDuration: 500, uBlinkIterations: 200 |dsERR_INVALID_PARAM|Should validate that the function handles invalid blink iterations gracefully|
+ * |07|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF |dsERR_NONE|Ensure the system is initialized|
+ * |08|Call dsSetFPBlink() and loop through all valid indicators from kIndicators|eIndicator: [Valid Indicator], uBlinkDuration: 500, uBlinkIterations: 10 |dsERR_OPERATION_NOT_SUPPORTED|Testing if function adheres to pre-condition of FP State being “ON”|
+ * |09|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
+ * |10|Attempt to set blink pattern after dsFPTerm() has been called|eIndicator: dsFPD_INDICATOR_POWER, uBlinkDuration: 500, uBlinkIterations: 10 |dsERR_NOT_INITIALIZED|Should fail due to termination|
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  * 
  */
 void test_l1_dsFPD_negative_dsSetFPBlink (void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+
+    // Variation 01: Call dsSetFPBlink() without calling dsFPInit()
+    result = dsSetFPBlink(dsFPD_INDICATOR_POWER, 500, 10);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    // Variation 02: Initialize with dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Variation 03: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Variation 04: Pass an invalid eIndicator parameter to dsSetFPBlink()
+    result = dsSetFPBlink(dsFPD_INDICATOR_MAX, 500, 10);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Variation 05: Pass an invalid uBlinkDuration parameter to dsSetFPBlink()
+    result = dsSetFPBlink(dsFPD_INDICATOR_POWER, 20000, 10);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Variation 06: Pass an invalid uBlinkIterations parameter to dsSetFPBlink()
+    result = dsSetFPBlink(dsFPD_INDICATOR_POWER, 500, 200);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Variation 07: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_OFF);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Variation 08: Call dsSetFPBlink() and loop through all valid indicators from kIndicators
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
+    {
+        result = dsSetFPBlink(kIndicators[i].id, 500, 10);
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    }
+
+    // Variation 09: Terminate with dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Variation 10: Attempt to set blink pattern after dsFPTerm() has been called
+    result = dsSetFPBlink(dsFPD_INDICATOR_POWER, 500, 10);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -277,7 +479,7 @@ void test_l1_dsFPD_negative_dsSetFPBlink (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize with dsFPInit()| |dsERR_NONE|Ensure the system is initialized|
  * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
- * |02|Call dsSetBrightness() and loop through all valid indicators from kIndicators|eIndicator: [Valid Indicator], eBrightness: 50+5x|dsERR_NONE|Brightness is set without any issues|
+ * |02|Call dsSetBrightness() and loop through all valid indicators from kIndicators|eIndicator: [Valid Indicator], eBrightness: 20+5x|dsERR_NONE|Brightness is set without any issues|
  * |03|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
@@ -285,7 +487,30 @@ void test_l1_dsFPD_negative_dsSetFPBlink (void)
  */
 void test_l1_dsFPD_positive_dsSetFPBrightness (void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+
+    // Step 01: Initialize with dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 02: Call dsSetBrightness() and loop through all valid indicators from kIndicators
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
+    {
+        int eBrightness = 20 + 5 * i;
+        result = dsSetBrightness(kIndicators[i].id, eBrightness);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 03: Terminate with dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 }
 
 /**
@@ -318,7 +543,52 @@ void test_l1_dsFPD_positive_dsSetFPBrightness (void)
  */
 void test_l1_dsFPD_negative_dsSetFPBrightness (void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+
+    // Variation 01: Call dsSetFPBrightness() without calling dsFPInit()
+    result = dsSetFPBrightness(dsFPD_INDICATOR_POWER, 50);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    // Variation 02: Initialize with dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Variation 03: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Variation 04: Pass an invalid eIndicator parameter to dsSetFPBrightness()
+    result = dsSetFPBrightness(dsFPD_INDICATOR_MAX, 50);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Variation 05: Pass an invalid eBrightness parameter to dsSetFPBrightness()
+    result = dsSetFPBrightness(dsFPD_INDICATOR_POWER, 200);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Variation 06: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_OFF);
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    }
+
+    // Variation 07: Call dsSetFPBrightness() and loop through all valid indicators from kIndicators
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
+    {
+        result = dsSetFPBrightness(kIndicators[i].id, 50);
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    }
+
+    // Variation 08: Terminate with dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Variation 09: Attempt to set brightness after dsFPTerm() has been called
+    result = dsSetFPBrightness(dsFPD_INDICATOR_POWER, 50);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -348,7 +618,47 @@ void test_l1_dsFPD_negative_dsSetFPBrightness (void)
  */
 void test_l1_dsFPD_positive_dsGetFPBrightness (void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+    int brightness_power_indicator;
+    int brightness_all_indicators[sizeof(kIndicators) / sizeof(kIndicators[0])];
+
+    // Step 01: Initialize with dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 02: Call dsGetFPBrightness() with specific valid indicator and store the value
+    result = dsGetFPBrightness(dsFPD_INDICATOR_POWER, &brightness_power_indicator);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 03: Call dsGetFPBrightness() and loop through all valid indicators from kIndicators
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
+    {
+        result = dsGetFPBrightness(kIndicators[i].id, &brightness_all_indicators[i]);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 04: Compare the two retrieved brightness values from step 02 and step 03 for dsFPD_INDICATOR_POWER
+    int indicator_power_index = -1;
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
+    {
+        if (kIndicators[i].id == dsFPD_INDICATOR_POWER)
+        {
+            indicator_power_index = i;
+            break;
+        }
+    }
+    UT_ASSERT_EQUAL(brightness_power_indicator, brightness_all_indicators[indicator_power_index]);
+
+    // Step 05: Terminate with dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 }
 
 /**
@@ -381,7 +691,53 @@ void test_l1_dsFPD_positive_dsGetFPBrightness (void)
  */
 void test_l1_dsFPD_negative_dsGetFPBrightness (void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+    dsFPDBrightness_t brightness;
+
+    // Step 01: Call dsGetFPBrightness() without initializing
+    result = dsGetFPBrightness(dsFPD_INDICATOR_POWER, &brightness);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    // Step 02: Initialize with dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 03: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 04: Call dsGetFPBrightness() with an invalid eIndicator value
+    result = dsGetFPBrightness(dsFPD_INDICATOR_MAX, &brightness);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 05: Call dsGetFPBrightness() with an invalid pBrightness value (NULL)
+    result = dsGetFPBrightness(dsFPD_INDICATOR_POWER, NULL);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 06: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_OFF);
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    }
+
+    // Step 07: Call dsGetFPBrightness() and loop through all valid indicators
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
+    {
+        result = dsGetFPBrightness(kIndicators[i].id, &brightness);
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    }
+
+    // Step 08: Terminate with dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 09: Call dsGetFPBrightness() after termination
+    result = dsGetFPBrightness(dsFPD_INDICATOR_POWER, &brightness);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -410,7 +766,35 @@ void test_l1_dsFPD_negative_dsGetFPBrightness (void)
  */
 void test_l1_dsFPD_positive_dsGetFPState (void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+    dsFPDState_t stateForPower, stateForComparison;
+
+    // Step 01: Initialize with dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 02: Call dsGetFPState() with valid eIndicator and state parameters
+    result = dsGetFPState(dsFPD_INDICATOR_POWER, &stateForPower);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 03: Call dsGetFPState() once again for dsFPD_INDICATOR_POWER and store results
+    result = dsGetFPState(dsFPD_INDICATOR_POWER, &stateForComparison);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 04: Call dsGetFPState() and loop through all valid indicators from kIndicators
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
+    {
+        dsFPDState_t currentState;
+        result = dsGetFPState(kIndicators[i].id, &currentState);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 05: Compare the state retrieved in step 02 and 03
+    UT_ASSERT_EQUAL(stateForPower, stateForComparison);
+
+    // Step 06: Terminate with dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 }
 
 /**
@@ -432,17 +816,63 @@ void test_l1_dsFPD_positive_dsGetFPState (void)
  * |02|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsGetFPState() with an invalid eIndicator value|eIndicator: dsFPD_INDICATOR_MAX, state: dsFPDState_t*|dsERR_INVALID_PARAM|Validate invalid parameter handling for eIndicator|
  * |04|Call dsGetFPState() with an invalid state pointer|eIndicator: [Valid Indicator], state: NULL|dsERR_INVALID_PARAM|Validate invalid parameter handling for state|
- * |03|Call dsSetFPState() and loop through the indicators from the diff of kIndicators and dsFPDIndicator_t |eIndicator: dsFPD_INDICATOR_MAX, state: dsFPD_STATE_OFF|dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
- * |05|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
- * |06|Call dsGetFPState() after termination|eIndicator: dsFPD_INDICATOR_POWER, state: dsFPDState_t*|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
+ * |05|Call dsSetFPState() and loop through the indicators from the diff of kIndicators and dsFPDIndicator_t |eIndicator: [invalid indicator], state: dsFPD_STATE_OFF|dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
+ * |06|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
+ * |07|Call dsGetFPState() after termination|eIndicator: dsFPD_INDICATOR_POWER, state: dsFPDState_t*|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  * 
  */
-
 void test_l1_dsFPD_negative_dsGetFPState (void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+    dsFPDState_t state;
+
+    // Step 01: Call dsGetFPState() without initializing (dsFPInit() not called)
+    result = dsGetFPState(dsFPD_INDICATOR_POWER, &state);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    // Step 02: Initialize with dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 03: Call dsGetFPState() with an invalid eIndicator value
+    result = dsGetFPState(dsFPD_INDICATOR_MAX, &state);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 04: Call dsGetFPState() with an invalid state pointer
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
+    {
+        result = dsGetFPState(kIndicators[i].id, NULL);
+        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+    }
+
+    // Step 05: Call dsSetFPState() and loop through the indicators from the diff of kIndicators and dsFPDIndicator_t 
+    for (int i = dsFPD_INDICATOR_MESSAGE; i <= dsFPD_INDICATOR_MAX; ++i)
+    {
+        bool isValidIndicator = false;
+        for (int j = 0; j < sizeof(kIndicators) / sizeof(kIndicators[0]); ++j)
+        {
+            if (kIndicators[j].id == i)
+            {
+                isValidIndicator = true;
+                break;
+            }
+        }
+        if (!isValidIndicator)
+        {
+            result = dsSetFPState((dsFPDIndicator_t)i, dsFPD_STATE_OFF);
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
+    }
+
+    // Step 06: Terminate with dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 07: Call dsGetFPState() after termination
+    result = dsGetFPState(dsFPD_INDICATOR_POWER, &state);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -469,7 +899,35 @@ void test_l1_dsFPD_negative_dsGetFPState (void)
  */
 void test_l1_dsFPD_positive_dsSetFPColor (void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+
+    // Step 01: Initialize with dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 03: Call dsSetFPColor() with all valid eIndicator and all valid eColor parameters from kIndicators
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        dsFPDColorConfig_t *colors = kIndicators[i].supportedColors;
+
+        // Assuming that the last entry in supportedColors array will have an undefined or NULL color
+        for (int j = 0; colors[j].color; ++j) 
+        {
+            result = dsSetFPColor(kIndicators[i].id, colors[j].color);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+        }
+    }
+
+    // Step 04: Terminate with dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 }
 
 /**
@@ -501,8 +959,86 @@ void test_l1_dsFPD_positive_dsSetFPColor (void)
  */
 void test_l1_dsFPD_negative_dsSetFPColor (void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+
+    // List of all colors
+    int allColors[] = {
+        dsFPD_COLOR_BLUE,
+        dsFPD_COLOR_GREEN,
+        dsFPD_COLOR_RED,
+        dsFPD_COLOR_YELLOW,
+        dsFPD_COLOR_ORANGE,
+        dsFPD_COLOR_WHITE
+    };
+
+    // Step 01: Call dsSetFPColor() without initializing
+    result = dsSetFPColor(dsFPD_INDICATOR_POWER, allColors[0]);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    // Step 02: Initialize with dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 03: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 04: Call dsSetFPColor() with all valid indicators but invalid colors
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        dsFPDColorConfig_t *colors = kIndicators[i].supportedColors;
+        for (int j = 0; j < dsFPD_COLOR_MAX; ++j)
+        {
+            int isSupported = 0;
+            for (int k = 0; colors[k].color; ++k)
+            {
+                if (allColors[j] == colors[k].color)
+                {
+                    isSupported = 1;
+                    break;
+                }
+            }
+            if (!isSupported)
+            {
+                result = dsSetFPColor(kIndicators[i].id, allColors[j]);
+                UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+            }
+        }
+    }
+
+    // Step 05: Call dsSetFPColor() with an invalid indicator
+    result = dsSetFPColor(dsFPD_INDICATOR_MAX, allColors[0]);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 06: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_OFF);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 07: Call dsSetFPColor() with all indicators when FPD state is OFF
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        for (int j = 0; j < dsFPD_COLOR_MAX; ++j)
+        {
+            result = dsSetFPColor(kIndicators[i].id, allColors[j]);
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
+    }
+
+    // Step 08: Terminate with dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 09: Call dsSetFPColor() after termination
+    result = dsSetFPColor(dsFPD_INDICATOR_POWER, allColors[0]);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 }
+
 
 /**
  * @brief Ensure dsGetFPColor() correctly retrieves the color of a Front Panel Display LED
@@ -530,7 +1066,60 @@ void test_l1_dsFPD_negative_dsSetFPColor (void)
  */
 void test_l1_dsFPD_positive_dsGetFPColor (void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+    dsFPDColor_t retrievedColor, knownColor;
+
+    // Step 01: Initialize with dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState() 
+    // and reading all the valid configurations
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        dsFPDColorConfig_t *colors = kIndicators[i].supportedColors;
+        if (colors)
+        {
+            // Just picking the first color for simplicity; you could loop through all if necessary
+            knownColor = colors[0].color; 
+            result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON, knownColor);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+        }
+    }
+
+    // Step 03: Call dsGetFPColor() with all valid indicators
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsGetFPColor(kIndicators[i].id, &retrievedColor);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 04: Verify that the color retrieved matches the known color set in Step 02
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        dsFPDColorConfig_t *colors = kIndicators[i].supportedColors;
+        if (colors)
+        {
+            knownColor = colors[0].color;
+            result = dsGetFPColor(kIndicators[i].id, &retrievedColor);
+            UT_ASSERT_EQUAL(retrievedColor, knownColor);
+        }
+    }
+
+    // Step 05: Call dsGetFPColor() again and compare results
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        dsFPDColor_t previousColor;
+        result = dsGetFPColor(kIndicators[i].id, &previousColor);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+        result = dsGetFPColor(kIndicators[i].id, &retrievedColor);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_EQUAL(retrievedColor, previousColor);
+    }
+
+    // Step 06: Terminate with dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 }
 
 /**
@@ -562,7 +1151,53 @@ void test_l1_dsFPD_positive_dsGetFPColor (void)
  */
 void test_l1_dsFPD_negative_dsGetFPColor (void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+    dsFPDColor_t retrievedColor;
+
+    // Step 01: Call dsGetFPColor() without initializing (dsFPInit() not called)
+    result = dsGetFPColor(dsFPD_INDICATOR_POWER, &retrievedColor);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    // Step 02: Initialize with dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 03: Call dsGetFPColor() with an invalid eIndicator value
+    result = dsGetFPColor(dsFPD_INDICATOR_MAX, &retrievedColor);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 04: Call dsGetFPColor() with a null pointer for pColor
+    result = dsGetFPColor(dsFPD_INDICATOR_POWER, NULL);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 05: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_OFF);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 06: Call dsGetFPColor() with all indicators
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsGetFPColor(kIndicators[i].id, &retrievedColor);
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    }
+
+    // Step 07: Terminate with dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 08: Call dsGetFPColor() after termination
+    result = dsGetFPColor(dsFPD_INDICATOR_POWER, &retrievedColor);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -589,7 +1224,29 @@ void test_l1_dsFPD_negative_dsGetFPColor (void)
  */
 void test_l1_dsFPD_positive_dsSetFPDMode (void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+
+    // Step 01: Initialize using dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 03: Call dsSetFPDMode() and loop through all valid values in dsFPDMode_t
+    for (dsFPDMode_t mode = dsFPD_MODE_ANY; mode < dsFPD_MODE_MAX; ++mode)
+    {
+        result = dsSetFPDMode(mode);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 04: Terminate using dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 }
 
 /**
@@ -620,7 +1277,45 @@ void test_l1_dsFPD_positive_dsSetFPDMode (void)
  */
 void test_l1_dsFPD_negative_dsSetFPDMode (void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+
+    // Step 01: Call dsSetFPDMode() without initializing the system
+    result = dsSetFPDMode(dsFPD_MODE_ANY);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    // Step 02: Initialize using dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 03: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 04: Call dsSetFPDMode() with an invalid parameter
+    result = dsSetFPDMode(dsFPD_MODE_MAX);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 05: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_OFF);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 06: Call dsSetFPDMode() while FP State is "OFF"
+    result = dsSetFPDMode(dsFPD_MODE_ANY);
+    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+
+    // Step 07: Terminate using dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 08: Call dsSetFPDMode() after termination
+    result = dsSetFPDMode(dsFPD_MODE_ANY);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -652,7 +1347,46 @@ void test_l1_dsFPD_negative_dsSetFPDMode (void)
  */
 void test_l1_dsFPD_positive_dsSetFPTime (void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+
+    // Step 01: Initialize with dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 03: Call dsSetFPDMode() with a valid parameter
+    result = dsSetFPDMode(dsFPD_MODE_CLOCK);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 04: Call dsSetFPTime() with valid parameters for 24-hour format
+    result = dsSetFPTime(dsFPD_TIME_24_HOUR, 14, 30);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 05: Call dsSetFPTime() with valid parameters for 12-hour format
+    result = dsSetFPTime(dsFPD_TIME_12_HOUR, 2, 30);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 06: Call dsSetFPDMode() with a valid parameter
+    result = dsSetFPDMode(dsFPD_MODE_ANY);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 07: Call dsSetFPTime() with valid parameters for 24-hour format
+    result = dsSetFPTime(dsFPD_TIME_24_HOUR, 14, 30);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 08: Call dsSetFPTime() with valid parameters for 12-hour format
+    result = dsSetFPTime(dsFPD_TIME_12_HOUR, 2, 30);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 09: Terminate with dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 }
 
 /**
@@ -678,25 +1412,106 @@ void test_l1_dsFPD_positive_dsSetFPTime (void)
  * |06|Call dsSetFPTime() with an invalid minute value|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 14, uMinutes: 60|dsERR_INVALID_PARAM|Validate invalid parameter handling for uMinutes|
  * |07|Call dsSetFPTime() with 12hr format and with invalid hour value|eTimeFormat: dsFPD_TIME_12_HOUR, uHour: 14, uMinutes: 30|dsERR_INVALID_PARAM|Check the consistency between eTimeFormat and uHour|
  * |08|Call dsSetFPTime() with 12hr format with invalid minute value|eTimeFormat: dsFPD_TIME_12_HOUR, uHour: 2, uMinutes: 60|dsERR_INVALID_PARAM|Check the consistency between eTimeFormat and uHour|
- * |04|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_ANY|dsERR_NONE|API should set mode successfully|
- * |05|Call dsSetFPTime() with an invalid hour value|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 25, uMinutes: 30|dsERR_INVALID_PARAM|Validate invalid parameter handling for uHour|
- * |06|Call dsSetFPTime() with an invalid minute value|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 14, uMinutes: 60|dsERR_INVALID_PARAM|Validate invalid parameter handling for uMinutes|
- * |07|Call dsSetFPTime() with 12hr format and invalid hour value|eTimeFormat: dsFPD_TIME_12_HOUR, uHour: 14, uMinutes: 30|dsERR_INVALID_PARAM|Check the consistency between eTimeFormat and uHour|
- * |08|Call dsSetFPTime() with 12hr format with invalid minute value|eTimeFormat: dsFPD_TIME_12_HOUR, uHour: 2, uMinutes: 60|dsERR_INVALID_PARAM|Check the consistency between eTimeFormat and uHour|
- * |09|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
- * |10|Call dsSetFPTime() with valid parameters for 24-hour format|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 14, uMinutes: 30|dsERR_OPERATION_NOT_SUPPORTED|Check the function in 24-hour format|
- * |11|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_CLOCK|dsERR_NONE|API should set mode successfully|
- * |12|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Ensure the FPD state is set to OFF|
- * |13|Call dsSetFPTime() with FP state set to "OFF"|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 14, uMinutes: 30|dsERR_OPERATION_NOT_SUPPORTED|Validate that function checks if FPD state is OFF|
- * |14|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
- * |15|Call dsSetFPTime() after termination|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 14, uMinutes: 30|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
+ * |09|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_ANY|dsERR_NONE|API should set mode successfully|
+ * |10|Call dsSetFPTime() with an invalid hour value|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 25, uMinutes: 30|dsERR_INVALID_PARAM|Validate invalid parameter handling for uHour|
+ * |11|Call dsSetFPTime() with an invalid minute value|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 14, uMinutes: 60|dsERR_INVALID_PARAM|Validate invalid parameter handling for uMinutes|
+ * |12|Call dsSetFPTime() with 12hr format and invalid hour value|eTimeFormat: dsFPD_TIME_12_HOUR, uHour: 14, uMinutes: 30|dsERR_INVALID_PARAM|Check the consistency between eTimeFormat and uHour|
+ * |13|Call dsSetFPTime() with 12hr format with invalid minute value|eTimeFormat: dsFPD_TIME_12_HOUR, uHour: 2, uMinutes: 60|dsERR_INVALID_PARAM|Check the consistency between eTimeFormat and uHour|
+ * |14|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
+ * |15|Call dsSetFPTime() with valid parameters for 24-hour format|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 14, uMinutes: 30|dsERR_OPERATION_NOT_SUPPORTED|Check the function in 24-hour format|
+ * |16|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_CLOCK|dsERR_NONE|API should set mode successfully|
+ * |17|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Ensure the FPD state is set to OFF|
+ * |18|Call dsSetFPTime() with FP state set to "OFF"|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 14, uMinutes: 30|dsERR_OPERATION_NOT_SUPPORTED|Validate that function checks if FPD state is OFF|
+ * |19|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
+ * |20|Call dsSetFPTime() after termination|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 14, uMinutes: 30|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsSetFPTime (void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+
+    // Step 01: Call dsSetFPTime() without initializing (dsFPInit() not called)
+    result = dsSetFPTime(dsFPD_TIME_24_HOUR, 14, 30);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    // Step 02: Initialize with dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 03: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 04: Call dsSetFPDMode() with a valid parameter
+    result = dsSetFPDMode(dsFPD_MODE_CLOCK);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Steps 05-08: Validate invalid parameter handling
+    result = dsSetFPTime(dsFPD_TIME_24_HOUR, 25, 30);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    result = dsSetFPTime(dsFPD_TIME_24_HOUR, 14, 60);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    result = dsSetFPTime(dsFPD_TIME_12_HOUR, 14, 30);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    result = dsSetFPTime(dsFPD_TIME_12_HOUR, 2, 60);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 09: Call dsSetFPDMode() with a valid parameter
+    result = dsSetFPDMode(dsFPD_MODE_ANY);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Steps 10-13: Validate invalid parameter handling again
+    result = dsSetFPTime(dsFPD_TIME_24_HOUR, 25, 30);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    result = dsSetFPTime(dsFPD_TIME_24_HOUR, 14, 60);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    result = dsSetFPTime(dsFPD_TIME_12_HOUR, 14, 30);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    result = dsSetFPTime(dsFPD_TIME_12_HOUR, 2, 60);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 14: Call dsSetFPDMode() with a valid parameter
+    result = dsSetFPDMode(dsFPD_MODE_TEXT);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 15: Call dsSetFPTime() with valid parameters for 24-hour format
+    result = dsSetFPTime(dsFPD_TIME_24_HOUR, 14, 30);
+    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+
+    // Step 16: Call dsSetFPDMode() with a valid parameter
+    result = dsSetFPDMode(dsFPD_MODE_CLOCK);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 17: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_OFF);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 18: Call dsSetFPTime() with FP state set to "OFF"
+    result = dsSetFPTime(dsFPD_TIME_24_HOUR, 14, 30);
+    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+
+    // Step 19: Terminate with dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 20: Call dsSetFPTime() after termination
+    result = dsSetFPTime(dsFPD_TIME_24_HOUR, 14, 30);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 }
+
 
 /**
  * @brief Ensure dsSetFPText() correctly sets the text on 7-Segment Front Panel Display LEDs
@@ -725,7 +1540,38 @@ void test_l1_dsFPD_negative_dsSetFPTime (void)
  */
 void test_l1_dsFPD_positive_dsSetFPText (void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+
+    // Step 01: Initialize with dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 03: Call dsSetFPDMode() with a valid parameter for TEXT mode
+    result = dsSetFPDMode(dsFPD_MODE_TEXT);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 04: Call dsSetFPText() with valid text for TEXT mode
+    result = dsSetFPText("HELLO");
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 05: Call dsSetFPDMode() with a valid parameter for ANY mode
+    result = dsSetFPDMode(dsFPD_MODE_ANY);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 06: Call dsSetFPText() with valid text for ANY mode
+    result = dsSetFPText("HELLO");
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 07: Terminate with dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 }
 
 /**
@@ -749,22 +1595,92 @@ void test_l1_dsFPD_positive_dsSetFPText (void)
  * |04|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
  * |05|Call dsSetFPText() with NULL pointer|pText: NULL|dsERR_INVALID_PARAM|Validate invalid parameter handling for NULL pText|
  * |06|Call dsSetFPText() with text longer than 10 characters|pText: "LONGTEXTHER"|dsERR_INVALID_PARAM|Validate invalid parameter handling for text length|
- * |04|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_ANY|dsERR_NONE|API should set mode successfully|
- * |05|Call dsSetFPText() with NULL pointer|pText: NULL|dsERR_INVALID_PARAM|Validate invalid parameter handling for NULL pText|
- * |06|Call dsSetFPText() with text longer than 10 characters|pText: "LONGTEXTHER"|dsERR_INVALID_PARAM|Validate invalid parameter handling for text length|
- * |07|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_CLOCK|dsERR_NONE|API should set mode successfully|
- * |08|Call dsSetFPText() with valid text|pText: "HELLO"|dsERR_OPERATION_NOT_SUPPORTED|Check the function with valid text|
- * |09|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
- * |10|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Ensure the FPD state is set to OFF|
- * |11|Call dsSetFPText() with FP state set to "OFF"|pText: "HELLO"|dsERR_OPERATION_NOT_SUPPORTED|Validate that function checks if FPD state is OFF|
- * |12|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
- * |13|Call dsSetFPText() after termination|pText: "HELLO"|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
+ * |07|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_ANY|dsERR_NONE|API should set mode successfully|
+ * |08|Call dsSetFPText() with NULL pointer|pText: NULL|dsERR_INVALID_PARAM|Validate invalid parameter handling for NULL pText|
+ * |09|Call dsSetFPText() with text longer than 10 characters|pText: "LONGTEXTHER"|dsERR_INVALID_PARAM|Validate invalid parameter handling for text length|
+ * |10|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_CLOCK|dsERR_NONE|API should set mode successfully|
+ * |11|Call dsSetFPText() with valid text|pText: "HELLO"|dsERR_OPERATION_NOT_SUPPORTED|Check the function with valid text|
+ * |12|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
+ * |13|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Ensure the FPD state is set to OFF|
+ * |14|Call dsSetFPText() with FP state set to "OFF"|pText: "HELLO"|dsERR_OPERATION_NOT_SUPPORTED|Validate that function checks if FPD state is OFF|
+ * |15|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
+ * |16|Call dsSetFPText() after termination|pText: "HELLO"|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsSetFPText (void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+
+    // Step 01: Call dsSetFPText() without initializing
+    result = dsSetFPText("HELLO");
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    // Step 02: Initialize with dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 03: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 04: Call dsSetFPDMode() with TEXT mode
+    result = dsSetFPDMode(dsFPD_MODE_TEXT);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 05: Call dsSetFPText() with NULL pointer
+    result = dsSetFPText(NULL);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 06: Call dsSetFPText() with text longer than 10 characters
+    result = dsSetFPText("LONGTEXTHER");
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 07: Call dsSetFPDMode() with ANY mode
+    result = dsSetFPDMode(dsFPD_MODE_ANY);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 08: Call dsSetFPText() with NULL pointer in ANY mode
+    result = dsSetFPText(NULL);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 09: Call dsSetFPText() with text longer than 10 characters in ANY mode
+    result = dsSetFPText("LONGTEXTHER");
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 10: Call dsSetFPDMode() with CLOCK mode
+    result = dsSetFPDMode(dsFPD_MODE_CLOCK);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 11: Call dsSetFPText() with valid text in CLOCK mode
+    result = dsSetFPText("HELLO");
+    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+
+    // Step 12: Call dsSetFPDMode() back to TEXT mode
+    result = dsSetFPDMode(dsFPD_MODE_TEXT);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 13: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_OFF);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 14: Call dsSetFPText() with FP state set to "OFF"
+    result = dsSetFPText("HELLO");
+    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+
+    // Step 15: Terminate with dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 16: Call dsSetFPText() after termination
+    result = dsSetFPText("HELLO");
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -792,10 +1708,43 @@ void test_l1_dsFPD_negative_dsSetFPText (void)
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
-void test_l1_dsFPD_positive_dsSetFPTextBrightness (void)
+void test_l1_dsFPD_positive_dsSetFPTextBrightness(void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+
+    // Step 01: Initialize with dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 03: Call dsSetFPDMode() with TEXT mode
+    result = dsSetFPDMode(dsFPD_MODE_TEXT);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 04: Call dsSetFPTextBrightness() with valid eIndicator and eBrightness for TEXT mode
+    result = dsSetFPTextBrightness(dsFPD_TEXTDISP_TEXT, 70);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 05: Call dsSetFPDMode() with ANY mode
+    result = dsSetFPDMode(dsFPD_MODE_ANY);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 06: Call dsSetFPTextBrightness() with valid eIndicator and eBrightness for ANY mode
+    result = dsSetFPTextBrightness(dsFPD_TEXTDISP_TEXT, 70);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 07: Validate the FP display shows the correct brightness level
+    // Assuming a function called validateFPBrightness exists that returns true if brightness is set correctly.
+    bool isBrightnessSet = validateFPBrightness(70);
+    UT_ASSERT_TRUE(isBrightnessSet);
 }
+
 
 /**
  * @brief Ensure dsSetFPTextBrightness() handles error scenarios correctly
@@ -818,22 +1767,95 @@ void test_l1_dsFPD_positive_dsSetFPTextBrightness (void)
  * |04|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
  * |05|Call dsSetFPTextBrightness() with invalid eBrightness (out of range)|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: 110|dsERR_INVALID_PARAM|Validate invalid parameter handling for brightness level|
  * |06|Call dsSetFPTextBrightness() with invalid indicator|eIndicator: dsFPD_TEXTDISP_MAX, eBrightness: 110|dsERR_INVALID_PARAM|Validate invalid parameter handling for brightness level|
- * |04|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_ANY|dsERR_NONE|API should set mode successfully|
- * |05|Call dsSetFPTextBrightness() with invalid eBrightness (out of range)|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: 110|dsERR_INVALID_PARAM|Validate invalid parameter handling for brightness level|
- * |06|Call dsSetFPTextBrightness() with invalid indicator|eIndicator: dsFPD_TEXTDISP_MAX, eBrightness: 110|dsERR_INVALID_PARAM|Validate invalid parameter handling for brightness level|
- * |07|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_CLOCK|dsERR_NONE|API should set mode successfully|
- * |08|Call dsSetFPTextBrightness() with valid eIndicator and eBrightness|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: 70|dsERR_OPERATION_NOT_SUPPORTED|Check the function with valid parameters|
- * |09|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
- * |10|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Ensure the FPD state is set to OFF|
- * |11|Call dsSetFPTextBrightness() with all indicators|eIndicator: [Indicator], eBrightness: 70|dsERR_OPERATION_NOT_SUPPORTED|Validate that function checks if FPD state is OFF|
- * |12|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
- * |13|Call dsSetFPTextBrightness() after termination|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: 70|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
+ * |07|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_ANY|dsERR_NONE|API should set mode successfully|
+ * |08|Call dsSetFPTextBrightness() with invalid eBrightness (out of range)|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: 110|dsERR_INVALID_PARAM|Validate invalid parameter handling for brightness level|
+ * |09|Call dsSetFPTextBrightness() with invalid indicator|eIndicator: dsFPD_TEXTDISP_MAX, eBrightness: 110|dsERR_INVALID_PARAM|Validate invalid parameter handling for brightness level|
+ * |10|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_CLOCK|dsERR_NONE|API should set mode successfully|
+ * |11|Call dsSetFPTextBrightness() with valid eIndicator and eBrightness|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: 70|dsERR_OPERATION_NOT_SUPPORTED|Check the function with valid parameters|
+ * |12|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
+ * |13|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Ensure the FPD state is set to OFF|
+ * |14|Call dsSetFPTextBrightness() with all indicators|eIndicator: [Indicator], eBrightness: 70|dsERR_OPERATION_NOT_SUPPORTED|Validate that function checks if FPD state is OFF|
+ * |15|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
+ * |16|Call dsSetFPTextBrightness() after termination|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: 70|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
-void test_l1_dsFPD_negative_dsSetFPTextBrightness (void)
+void test_l1_dsFPD_negative_dsSetFPTextBrightness(void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+
+    // Step 01: Call dsSetFPTextBrightness() without initializing
+    result = dsSetFPTextBrightness(dsFPD_TEXTDISP_TEXT, 70);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    // Step 02: Initialize with dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 03: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 04: Call dsSetFPDMode() with TEXT mode
+    result = dsSetFPDMode(dsFPD_MODE_TEXT);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 05: Call dsSetFPTextBrightness() with invalid eBrightness (out of range)
+    result = dsSetFPTextBrightness(dsFPD_TEXTDISP_TEXT, 110);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 06: Call dsSetFPTextBrightness() with invalid indicator
+    result = dsSetFPTextBrightness(dsFPD_TEXTDISP_MAX, 110);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 07: Call dsSetFPDMode() with ANY mode
+    result = dsSetFPDMode(dsFPD_MODE_ANY);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 08: Call dsSetFPTextBrightness() with invalid eBrightness for ANY mode
+    result = dsSetFPTextBrightness(dsFPD_TEXTDISP_TEXT, 110);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 09: Call dsSetFPTextBrightness() with invalid indicator for ANY mode
+    result = dsSetFPTextBrightness(dsFPD_TEXTDISP_MAX, 110);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 10: Call dsSetFPDMode() with CLOCK mode
+    result = dsSetFPDMode(dsFPD_MODE_CLOCK);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 11: Call dsSetFPTextBrightness() with valid parameters for CLOCK mode
+    result = dsSetFPTextBrightness(dsFPD_TEXTDISP_TEXT, 70);
+    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+
+    // Step 12: Call dsSetFPDMode() with TEXT mode again
+    result = dsSetFPDMode(dsFPD_MODE_TEXT);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 13: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_OFF);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 14: Call dsSetFPTextBrightness() with all indicators when state is OFF
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPTextBrightness(kIndicators[i].id, 70);
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    }
+
+    // Step 15: Terminate with dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 16: Call dsSetFPTextBrightness() after termination
+    result = dsSetFPTextBrightness(dsFPD_TEXTDISP_TEXT, 70);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -860,9 +1882,37 @@ void test_l1_dsFPD_negative_dsSetFPTextBrightness (void)
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
-void test_l1_dsFPD_positive_dsGetFPTextBrightness (void)
+void test_l1_dsFPD_positive_dsGetFPTextBrightness(void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+    int brightness1 = 0;
+    int brightness2 = 0;
+
+    // Step 01: Initialize with dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 03: Call dsGetFPTextBrightness() with valid eIndicator
+    result = dsGetFPTextBrightness(dsFPD_TEXTDISP_TEXT, &brightness1);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 04: Call dsGetFPTextBrightness() with valid eIndicator again
+    result = dsGetFPTextBrightness(dsFPD_TEXTDISP_TEXT, &brightness2);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 05: Compare the results from step 3/4 and make sure they're the same
+    UT_ASSERT_EQUAL(brightness1, brightness2);
+
+    // Step 06: Terminate with dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 }
 
 /**
@@ -892,10 +1942,58 @@ void test_l1_dsFPD_positive_dsGetFPTextBrightness (void)
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
-void test_l1_dsFPD_negative_dsGetFPTextBrightness (void)
+void test_l1_dsFPD_negative_dsGetFPTextBrightness(void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+    int brightness;
+
+    // Step 01: Call dsGetFPTextBrightness() without initializing (dsFPInit() not called)
+    result = dsGetFPTextBrightness(dsFPD_TEXTDISP_TEXT, &brightness);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    // Step 02: Initialize with dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 03: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 04: Call dsGetFPTextBrightness() with NULL for eBrightness
+    result = dsGetFPTextBrightness(dsFPD_TEXTDISP_TEXT, NULL);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 05: Call dsGetFPTextBrightness() with invalid indicator
+    result = dsGetFPTextBrightness(dsFPD_TEXTDISP_MAX, NULL);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 06: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_OFF);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 07: Call dsGetFPTextBrightness() with all indicators
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsGetFPTextBrightness(kIndicators[i].id, &brightness);
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    }
+
+    // Step 08: Terminate with dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 09: Call dsGetFPTextBrightness() after termination
+    result = dsGetFPTextBrightness(dsFPD_TEXTDISP_TEXT, &brightness);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 }
+
+
 
 /**
  * @brief Ensure dsFPEnableClockDisplay() correctly enables/disables the clock display
@@ -924,9 +2022,48 @@ void test_l1_dsFPD_negative_dsGetFPTextBrightness (void)
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
-void test_l1_dsFPD_positive_dsFPEnableCLockDisplay (void)
+void test_l1_dsFPD_positive_dsFPEnableClockDisplay(void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+
+    // Step 01: Initialize with dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 03: Call dsSetFPDMode() with a valid parameter
+    result = dsSetFPDMode(dsFPD_MODE_CLOCK);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 04: Enable clock display using dsFPEnableClockDisplay()
+    result = dsFPEnableClockDisplay(1);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 05: Disable clock display using dsFPEnableClockDisplay()
+    result = dsFPEnableClockDisplay(0);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 06: Call dsSetFPDMode() with a valid parameter
+    result = dsSetFPDMode(dsFPD_MODE_ANY);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 07: Enable clock display using dsFPEnableClockDisplay()
+    result = dsFPEnableClockDisplay(1);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 08: Disable clock display using dsFPEnableClockDisplay()
+    result = dsFPEnableClockDisplay(0);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 09: Terminate with dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 }
 
 /**
@@ -963,9 +2100,75 @@ void test_l1_dsFPD_positive_dsFPEnableCLockDisplay (void)
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
-void test_l1_dsFPD_negative_dsFPEnableCLockDisplay (void)
+void test_l1_dsFPD_negative_dsFPEnableClockDisplay(void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+
+    // Step 01: Call dsFPEnableClockDisplay() without initializing
+    result = dsFPEnableClockDisplay(1);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    // Step 02: Initialize with dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 03: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 04: Call dsSetFPDMode() with a valid parameter
+    result = dsSetFPDMode(dsFPD_MODE_CLOCK);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 05: Call dsFPEnableClockDisplay() with invalid value for enable
+    result = dsFPEnableClockDisplay(2);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 06: Call dsFPEnableClockDisplay() with invalid value for enable
+    result = dsFPEnableClockDisplay(-1);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 07: Call dsSetFPDMode() with a valid parameter
+    result = dsSetFPDMode(dsFPD_MODE_ANY);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 08: Call dsFPEnableClockDisplay() with invalid value for enable
+    result = dsFPEnableClockDisplay(2);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 09: Call dsFPEnableClockDisplay() with invalid value for enable
+    result = dsFPEnableClockDisplay(-1);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 10: Call dsSetFPDMode() with a valid parameter
+    result = dsSetFPDMode(dsFPD_MODE_TEXT);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 11: Call dsFPEnableClockDisplay() with invalid value for enable
+    result = dsFPEnableClockDisplay(1);
+    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+
+    // Step 12: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_OFF);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 13: Call dsFPEnableClockDisplay() with FP State "OFF"
+    result = dsFPEnableClockDisplay(1);
+    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+
+    // Step 14: Terminate with dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 15: Call dsFPEnableClockDisplay() after termination
+    result = dsFPEnableClockDisplay(1);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -993,9 +2196,44 @@ void test_l1_dsFPD_negative_dsFPEnableCLockDisplay (void)
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
-void test_l1_dsFPD_positive_dsSetFPScroll (void)
+void test_l1_dsFPD_positive_dsSetFPScroll(void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+
+    // Step 01: Initialize using dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 03: Call dsSetFPScroll() for horizontal scrolling with valid parameters
+    result = dsSetFPScroll(1000, 5, 0);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    // Wait or observer function might be necessary to give testers time to see the display scrolling.
+
+    // Step 04: Call dsSetFPScroll() for vertical scrolling with valid parameters
+    result = dsSetFPScroll(1000, 0, 5);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    // Wait or observer function might be necessary to give testers time to see the display scrolling.
+
+    // Step 05: Call dsSetFPScroll() with minimum valid parameters for quick scrolling
+    result = dsSetFPScroll(100, 1, 0);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    // Wait or observer function might be necessary to give testers time to see the display scrolling.
+
+    // Step 06: Call dsSetFPScroll() with minimum valid parameters for quick scrolling
+    result = dsSetFPScroll(100, 0, 1);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    // Wait or observer function might be necessary to give testers time to see the display scrolling.
+
+    // Step 07: Terminate using dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 }
 
 /**
@@ -1025,9 +2263,51 @@ void test_l1_dsFPD_positive_dsSetFPScroll (void)
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
-void test_l1_dsFPD_negative_dsSetFPScroll (void)
+void test_l1_dsFPD_negative_dsSetFPScroll(void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+
+    // Step 01: Call dsSetFPScroll() without initializing (dsFPInit() not called)
+    result = dsSetFPScroll(1000, 5, 5);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    // Step 02: Initialize with dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 03: Call dsSetFPScroll() with invalid value for uScrollHoldOnDur
+    result = dsSetFPScroll(0, 5, 0);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 04: Call dsSetFPScroll() with both horizontal and vertical scroll iterations
+    result = dsSetFPScroll(1000, 5, 5);
+    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+
+    // Step 05: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_OFF);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 06: Call dsSetFPScroll() with FP State "OFF"
+    result = dsSetFPScroll(1000, 5, 0);
+    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+
+    // Step 08: Terminate with dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 09: Call dsSetFPScroll() after termination
+    result = dsSetFPScroll(1000, 5, 0);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -1057,9 +2337,48 @@ void test_l1_dsFPD_negative_dsSetFPScroll (void)
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
-void test_l1_dsFPD_positive_dsSetFPTimeFormat (void)
+void test_l1_dsFPD_positive_dsSetFPTimeFormat(void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+
+    // Step 01: Initialize using dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 03: Call dsSetFPDMode() with a valid parameter
+    result = dsSetFPDMode(dsFPD_MODE_CLOCK);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 04: Call dsSetFPTimeFormat() with a valid 12-hour format
+    result = dsSetFPTimeFormat(12_HOUR_FORMAT);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 05: Call dsSetFPTimeFormat() with a valid 24-hour format
+    result = dsSetFPTimeFormat(24_HOUR_FORMAT);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 06: Call dsSetFPDMode() with a valid parameter
+    result = dsSetFPDMode(dsFPD_MODE_ANY);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 07: Call dsSetFPTimeFormat() with a valid 12-hour format
+    result = dsSetFPTimeFormat(12_HOUR_FORMAT);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 08: Call dsSetFPTimeFormat() with a valid 24-hour format
+    result = dsSetFPTimeFormat(24_HOUR_FORMAT);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 09: Terminate using dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 }
 
 /**
@@ -1094,9 +2413,71 @@ void test_l1_dsFPD_positive_dsSetFPTimeFormat (void)
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
-void test_l1_dsFPD_negative_dsSetFPTimeFormat (void)
+void test_l1_dsFPD_negative_dsSetFPTimeFormat(void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+
+    // Step 01: Call dsSetFPTimeFormat() without initializing the system
+    result = dsSetFPTimeFormat(12_HOUR_FORMAT);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    // Step 02: Initialize using dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 03: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 04: Call dsSetFPDMode() with a valid parameter
+    result = dsSetFPDMode(dsFPD_MODE_CLOCK);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 05: Call dsSetFPTimeFormat() with an invalid time format
+    result = dsSetFPTimeFormat(dsFPD_TIME_MAX);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 06: Call dsSetFPDMode() with a valid parameter
+    result = dsSetFPDMode(dsFPD_MODE_ANY);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 07: Call dsSetFPTimeFormat() with an invalid time format
+    result = dsSetFPTimeFormat(dsFPD_TIME_MAX);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 08: Call dsSetFPDMode() with a valid parameter
+    result = dsSetFPDMode(dsFPD_MODE_TEXT);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 09: Call dsSetFPTimeFormat() with a valid 12-hour format
+    result = dsSetFPTimeFormat(12_HOUR_FORMAT);
+    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+
+    // Step 10: Call dsSetFPDMode() with a valid parameter
+    result = dsSetFPDMode(dsFPD_MODE_CLOCK);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 11: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState() if applicable
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_OFF);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 12: Call dsSetFPTimeFormat() while FP State is "OFF"
+    result = dsSetFPTimeFormat(12_HOUR_FORMAT);
+    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+
+    // Step 13: Terminate using dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 14: Call dsSetFPTimeFormat() after termination
+    result = dsSetFPTimeFormat(24_HOUR_FORMAT);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -1125,9 +2506,46 @@ void test_l1_dsFPD_negative_dsSetFPTimeFormat (void)
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
-void test_l1_dsFPD_positive_dsGetFPTimeFormat (void)
+void test_l1_dsFPD_positive_dsGetFPTimeFormat(void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+    dsFPDTimeFormat_t initialTimeFormat, setTimeFormat, retrievedTimeFormat;
+
+    // Step 01: Initialize using dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 03: Call dsSetFPDMode() with a valid parameter
+    result = dsSetFPDMode(dsFPD_MODE_CLOCK);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 04: Call dsSetFPTimeFormat() with a valid 12-hour format
+    setTimeFormat = 12_HOUR_FORMAT;
+    result = dsSetFPTimeFormat(setTimeFormat);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 05: Call dsGetFPTimeFormat() to retrieve the set time format
+    result = dsGetFPTimeFormat(&initialTimeFormat);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 06: Call dsGetFPTimeFormat() to retrieve the new time format
+    result = dsGetFPTimeFormat(&retrievedTimeFormat);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 07: Compare the results to make sure the returned values are the same
+    UT_ASSERT_EQUAL(initialTimeFormat, retrievedTimeFormat);
+    UT_ASSERT_EQUAL(setTimeFormat, retrievedTimeFormat);
+
+    // Step 08: Terminate using dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 }
 
 /**
@@ -1160,9 +2578,166 @@ void test_l1_dsFPD_positive_dsGetFPTimeFormat (void)
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
-void test_l1_dsFPD_negative_dsGetFPTimeFormat (void)
+void test_l1_dsFPD_negative_dsGetFPTimeFormat(void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+    dsFPDTimeFormat_t timeFormat;
+
+    // Step 01: Call dsGetFPTimeFormat() without initializing the system
+    result = dsGetFPTimeFormat(&timeFormat);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    // Step 02: Initialize using dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 03: Call dsSetFPDMode() with a valid parameter for CLOCK mode
+    result = dsSetFPDMode(dsFPD_MODE_CLOCK);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 03: Call dsGetFPTimeFormat() with NULL parameter
+    result = dsGetFPTimeFormat(NULL);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 03: Call dsSetFPDMode() with a valid parameter for TEXT mode
+    result = dsSetFPDMode(dsFPD_MODE_TEXT);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 04: Call dsGetFPTimeFormat() to retrieve the set time format in TEXT mode
+    result = dsGetFPTimeFormat(&timeFormat);
+    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+
+    // Step 03: Call dsSetFPDMode() with a valid parameter for CLOCK mode
+    result = dsSetFPDMode(dsFPD_MODE_CLOCK);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 04: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
+    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_OFF);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 05: Call dsGetFPTimeFormat() while FP State is "OFF"
+    result = dsGetFPTimeFormat(&timeFormat);
+    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+
+    // Step 07: Terminate using dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 08: Call dsGetFPTimeFormat() after termination
+    result = dsGetFPTimeFormat(&timeFormat);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+}
+
+/**
+ * @brief Validate the consistent retrieval of supported LED states using dsFPGetSupportedLEDStates()
+ * 
+ * **Test Group ID:** FPGetSupportedLEDStates: 01@n
+ * **Test Case ID:** 037@n
+ * 
+ * **Pre-Conditions:**@n
+ * None.
+ * 
+ * **Dependencies:** dsFPInit, dsFPTerm, dsFPGetSupportedLEDStates@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|---------|---------------|-----|
+ * |01|Initialize using dsFPInit()||dsERR_NONE|Ensure the system is initialized|
+ * |02|Retrieve the supported LED states for the first time using dsFPGetSupportedLEDStates()|states1: A valid pointer to an unsigned int|dsERR_NONE and states1 value should be set|First retrieval of supported LED states|
+ * |03|Retrieve the supported LED states for the second time using dsFPGetSupportedLEDStates()|states2: A valid pointer to an unsigned int|dsERR_NONE and states2 value should be set|Second retrieval of supported LED states|
+ * |04|Compare the values retrieved from states1 and states2||The values of states1 and states2 should be identical|Ensure consistent retrieval of supported LED states|
+ * |05|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
+ * 
+ * **Notes:**@n
+ * This test checks the consistent behavior of the dsFPGetSupportedLEDStates() function by ensuring it returns the same values on multiple calls.
+ */
+void test_l1_dsFPD_positive_dsFPGetSupportedLEDStates(void)
+{
+    dsErrorType result;
+    unsigned int states1 = 0;
+    unsigned int states2 = 0;
+
+    // Step 01: Initialize using dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 02: Retrieve the supported LED states for the first time using dsFPGetSupportedLEDStates()
+    result = dsFPGetSupportedLEDStates(&states1);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_NOT_EQUAL(states1, 0);  // assuming a value of 0 means the states were not set
+
+    // Step 03: Retrieve the supported LED states for the second time using dsFPGetSupportedLEDStates()
+    result = dsFPGetSupportedLEDStates(&states2);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_NOT_EQUAL(states2, 0);  // assuming a value of 0 means the states were not set
+
+    // Step 04: Compare the values retrieved from states1 and states2
+    UT_ASSERT_EQUAL(states1, states2);
+
+    // Step 05: Terminate using dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+}
+
+/**
+ * @brief Validate the negative scenarios of dsFPGetSupportedLEDStates()
+ * 
+ * **Test Group ID:** FPGetSupportedLEDStates: 02@n
+ * **Test Case ID:** 038@n
+ * 
+ * **Pre-Conditions:**@n
+ * None.
+ * 
+ * **Dependencies:** dsFPInit, dsFPTerm, dsFPGetSupportedLEDStates@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|---------|---------------|-----|
+ * |01|Call dsFPGetSupportedLEDStates() before initialization|states: A valid pointer to an unsigned int|dsERR_NOT_INITIALIZED|API should not work without initialization|
+ * |02|Initialize using dsFPInit()||dsERR_NONE|Ensure the system is initialized|
+ * |03|Call dsFPGetSupportedLEDStates() with a null pointer|states: NULL|dsERR_INVALID_PARAM|API should validate the parameter and return an error for invalid input|
+ * |04|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
+ * |05|Call dsFPGetSupportedLEDStates() after termination|states: A valid pointer to an unsigned int|dsERR_NOT_INITIALIZED|API should not work after termination|
+ * 
+ * **Notes:**@n
+ * Ensure that test steps are adapted based on actual system capabilities and that subsequent tests or use-case scenarios are not inadvertently impacted.
+ */
+void test_l1_dsFPD_negative_dsFPGetSupportedLEDStates(void)
+{
+    dsErrorType result;
+    unsigned int states;
+
+    // Step 01: Call dsFPGetSupportedLEDStates() before initialization
+    result = dsFPGetSupportedLEDStates(&states);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    // Step 02: Initialize using dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 03: Call dsFPGetSupportedLEDStates() with a null pointer
+    result = dsFPGetSupportedLEDStates(NULL);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 04: Terminate using dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 05: Call dsFPGetSupportedLEDStates() after termination
+    result = dsFPGetSupportedLEDStates(&states);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -1187,10 +2762,44 @@ void test_l1_dsFPD_negative_dsGetFPTimeFormat (void)
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
-void test_l1_dsFPD_positive_dsFPSetLEDState (void)
+void test_l1_dsFPD_positive_dsFPSetLEDState(void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+    unsigned int supportedLEDStates;
+    dsFPDLedState_t ledState;
+
+    // Step 01: Initialize using dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    // Assuming an array of valid indicators for simplicity. You might replace this with the actual mechanism to retrieve indicators.
+    dsFPDIndicator_t validIndicators[] = {/* List of valid indicators from kIndicators in dsFPDSettings.h */};
+    for (int i = 0; i < sizeof(validIndicators) / sizeof(validIndicators[0]); i++)
+    {
+        result = dsSetFPState(validIndicators[i], dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Retrieve supported LED states
+    result = dsFPGetSupportedLEDStates(&supportedLEDStates);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 02: Call dsFPSetLEDState() and loop through all supported LED states
+    for (ledState = 0; ledState < sizeof(unsigned int) * 8; ledState++) // Assuming max of 32 LED states represented in an unsigned int
+    {
+        if (supportedLEDStates & (1 << ledState)) // Check if the LED state is supported
+        {
+            result = dsFPSetLEDState(ledState);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+        }
+    }
+
+    // Step 03: Terminate using dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 }
+
 
 /**
  * @brief Validate the negative scenarios of dsFPSetLEDState()
@@ -1216,9 +2825,38 @@ void test_l1_dsFPD_positive_dsFPSetLEDState (void)
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
-void test_l1_dsFPD_negative_dsFPSetLEDState (void)
+void test_l1_dsFPD_negative_dsFPSetLEDState(void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+
+    // Step 01: Call dsFPSetLEDState() before initialization
+    result = dsFPSetLEDState(dsFPD_LED_DEVICE_ACTIVE);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    // Step 02: Initialize using dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    // Assuming an array of valid indicators for simplicity. You might replace this with the actual mechanism to retrieve indicators.
+    dsFPDIndicator_t validIndicators[] = {/* List of valid indicators from kIndicators in dsFPDSettings.h */};
+    for (int i = 0; i < sizeof(validIndicators) / sizeof(validIndicators[0]); i++)
+    {
+        result = dsSetFPState(validIndicators[i], dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 03: Call dsFPSetLEDState() with an invalid LED state
+    result = dsFPSetLEDState(dsFPD_LED_DEVICE_MAX);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 04: Terminate using dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 05: Call dsFPSetLEDState() after termination
+    result = dsFPSetLEDState(dsFPD_LED_DEVICE_ACTIVE);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 }
 
 /**
@@ -1227,7 +2865,7 @@ void test_l1_dsFPD_negative_dsFPSetLEDState (void)
  * @todo discuss add an option for template file to speecify which dsFPDLedState_t are avaliable
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 037@n
+ * **Test Case ID:** 041@n
  * 
  * **Pre-Conditions:**@n
  * None.
@@ -1248,16 +2886,50 @@ void test_l1_dsFPD_negative_dsFPSetLEDState (void)
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
-void test_l1_dsFPD_positive_dsFPGetLEDState (void)
+void test_l1_dsFPD_positive_dsFPGetLEDState(void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+    dsFPDLedState_t ledState1, ledState2;
+
+    // Step 01: Initialize using dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    // Assuming an array of valid indicators for simplicity. Replace with the actual mechanism to retrieve indicators.
+    dsFPDIndicator_t validIndicators[] = {/* List of valid indicators from kIndicators in dsFPDSettings.h */};
+    for (int i = 0; i < sizeof(validIndicators) / sizeof(validIndicators[0]); i++)
+    {
+        result = dsSetFPState(validIndicators[i], dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 02: Call dsFPSetLEDState() with a valid value
+    result = dsFPSetLEDState(dsFPD_LED_DEVICE_ACTIVE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 03: Call dsFPGetLEDState() with a valid parameter
+    result = dsFPGetLEDState(&ledState1);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 04: Call dsFPGetLEDState() with a valid parameter again
+    result = dsFPGetLEDState(&ledState2);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 05: Compare the returned values from steps 3/4
+    UT_ASSERT_EQUAL(ledState1, ledState2);
+
+    // Step 06: Terminate using dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 }
+
 
 /**
  * @brief Validate the negative scenarios of dsFPGetLEDState()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 038@n
+ * **Test Case ID:** 042@n
  * 
  * **Pre-Conditions:**@n
  * None.
@@ -1277,9 +2949,39 @@ void test_l1_dsFPD_positive_dsFPGetLEDState (void)
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
-void test_l1_dsFPD_negative_dsFPGetLEDState (void)
+void test_l1_dsFPD_negative_dsFPGetLEDState(void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    dsErrorType result;
+    dsFPDLedState_t ledState;
+
+    // Step 01: Call dsFPGetLEDState() before initialization
+    result = dsFPGetLEDState(&ledState);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    // Assuming an array of valid indicators for simplicity. Replace with the actual mechanism to retrieve indicators.
+    dsFPDIndicator_t validIndicators[] = {/* List of valid indicators from kIndicators in dsFPDSettings.h */};
+    for (int i = 0; i < sizeof(validIndicators) / sizeof(validIndicators[0]); i++)
+    {
+        result = dsSetFPState(validIndicators[i], dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 03: Initialize using dsFPInit()
+    result = dsFPInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 04: Call dsFPGetLEDState() with a NULL pointer
+    result = dsFPGetLEDState(NULL);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 05: Terminate using dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 06: Call dsFPGetLEDState() after termination
+    result = dsFPGetLEDState(&ledState);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 }
 
 static UT_test_suite_t * pSuite = NULL;
@@ -1324,6 +3026,8 @@ int test_l1_dsFPD_register ( void )
 	UT_add_test( pSuite, "dsGetFPColor_L1_positive" ,test_l1_dsFPD_positive_dsGetFPColor );
 	UT_add_test( pSuite, "dsGetFPColor_L1_negative" ,test_l1_dsFPD_negative_dsGetFPColor );
     UT_add_test( pSuite, "dsFPSetLEDState_L1_positive" ,test_l1_dsFPD_positive_dsFPSetLEDState );
+	UT_add_test( pSuite, "dsFPGetSupportedLEDStates_L1_positive" ,test_l1_dsFPD_positive_dsFPGetSupportedLEDStates );
+    UT_add_test( pSuite, "dsFPGetSupportedLEDStates_L1_negative" ,test_l1_dsFPD_negative_dsFPGetSupportedLEDStates );
 	UT_add_test( pSuite, "dsFPSetLEDState_L1_negative" ,test_l1_dsFPD_negative_dsFPSetLEDState );
 	UT_add_test( pSuite, "dsFPGetLEDState_L1_positive" ,test_l1_dsFPD_positive_dsFPGetLEDState );
 	UT_add_test( pSuite, "dsFPGetLEDState_L1_negative" ,test_l1_dsFPD_negative_dsFPGetLEDState );
