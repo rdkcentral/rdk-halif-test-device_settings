@@ -1741,17 +1741,17 @@ void test_l1_dsHdmiIn_positive_dsGetEdidVersion(void) {
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
-    // Step 2: Call dsSetEdidVersion() with valid values (dsHDMI_IN_PORT_0, tv_hdmi_edid_version_t*)
+    // Step 2: Call dsGetEdidVersion() with valid values (dsHDMI_IN_PORT_0, tv_hdmi_edid_version_t*)
     tv_hdmi_edid_version_t edid_version_1, edid_version_2;
     UT_ASSERT_EQUAL(dsGetEdidVersion(dsHDMI_IN_PORT_0, &edid_version_1), dsERR_NONE);
 
-    // Step 3: Call dsSetEdidVersion() with valid values (dsHDMI_IN_PORT_1, tv_hdmi_edid_version_t*)
+    // Step 3: Call dsGetEdidVersion() with valid values (dsHDMI_IN_PORT_1, tv_hdmi_edid_version_t*)
     UT_ASSERT_EQUAL(dsGetEdidVersion(dsHDMI_IN_PORT_1, &edid_version_2), dsERR_NONE);
 
-    // Step 4: Call dsSetEdidVersion() with valid values (dsHDMI_IN_PORT_2, tv_hdmi_edid_version_t*)
+    // Step 4: Call dsGetEdidVersion() with valid values (dsHDMI_IN_PORT_2, tv_hdmi_edid_version_t*)
     UT_ASSERT_EQUAL(dsGetEdidVersion(dsHDMI_IN_PORT_2, &edid_version_1), dsERR_NONE);
 
-    // Step 5: Call dsSetEdidVersion() with valid values (dsHDMI_IN_PORT_0, tv_hdmi_edid_version_t*)
+    // Step 5: Call dsGetEdidVersion() with valid values (dsHDMI_IN_PORT_0, tv_hdmi_edid_version_t*)
     UT_ASSERT_EQUAL(dsGetEdidVersion(dsHDMI_IN_PORT_2, &edid_version_2), dsERR_NONE);
 
     // Step 6: Compare the values from steps 4/5 and make sure they match
