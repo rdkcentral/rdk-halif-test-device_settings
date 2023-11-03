@@ -1452,7 +1452,7 @@ void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo(void) {
 
     // Step 6: Compare the results and make sure they are the same
     UT_ASSERT_EQUAL(edidSize3, edidSize4);
-    UT_ASSERT_TRUE(memcmp(edidSize3, edidSize4, 255));
+    UT_ASSERT_TRUE(memcmp(edidSize3, edidSize4, sizeof(edidSize3)),0);
 
     // You may want to compare the contents of the edidBytes as well, depending on your use case.
 
@@ -1568,7 +1568,7 @@ void test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo(void) {
     UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_2, spdInfo4), dsERR_NONE);
 
     // Step 6: Compare the results and make sure they are the same
-    UT_ASSERT_EQUAL(memcmp(spdInfo3, spdInfo4,sizeof(struct dsSpd_infoframe_st)));
+    UT_ASSERT_EQUAL(memcmp(spdInfo3, spdInfo4,sizeof(struct dsSpd_infoframe_st)),0);
 
     // Step 7: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
