@@ -79,6 +79,7 @@
 
 #include <ut.h>
 #include <ut_log.h>
+#include "dsVideoDevice.h"
 
 /**
  * @brief Ensure dsVideoDeviceInit() correctly initializes all video devices during positive scenarios.
@@ -390,16 +391,10 @@ void test_l1_dsVideoDevice_positive_dsSetDFC (void)
     UT_ASSERT_TRUE(handle > 0);
 
     // 03-15: Set DFC mode with various zoom modes
-    dsVideoZoom_t zoomModes[] = {
-        dsVIDEO_ZOOM_UNKNOWN, dsVIDEO_ZOOM_NONE, dsVIDEO_ZOOM_FULL, dsVIDEO_ZOOM_LB_16_9,
-        dsVIDEO_ZOOM_LB_14_9, dsVIDEO_ZOOM_CCO, dsVIDEO_ZOOM_PAN_SCAN, dsVIDEO_ZOOM_LB_2_21_1_ON_4_3,
-        dsVIDEO_ZOOM_LB_2_21_1_ON_16_9, dsVIDEO_ZOOM_PLATFORM, dsVIDEO_ZOOM_16_9_ZOOM,
-        dsVIDEO_ZOOM_PILLARBOX_4_3, dsVIDEO_ZOOM_WIDE_4_3
-    };
-
-    for (int i = 0; i < sizeof(zoomModes) / sizeof(dsVideoZoom_t); ++i) 
+    for (int i = 0; i < dsVIDEO_ZOOM_MAX; ++i) 
     {
-        result = dsSetDFC(handle, zoomModes[i]);
+        dsVideoZoom_t zoomMode = i;
+        result = dsSetDFC(handle, zoomMode);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
