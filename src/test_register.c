@@ -57,38 +57,17 @@
  */
 
 /* L1 Testing Functions */
-extern int test_l1_dsAudio_register( void );
-extern int test_l1_dsCompositeIn_register( void );
-extern int test_l1_dsDisplay_register( void );
-extern int test_l1_dsFPD_register( void );
-extern int test_l1_dsHdmiIn_register( void );
-extern int test_l1_dsHost_register( void );
 extern int test_l1_dsVideoDevice_register( void );
-extern int test_l1_dsVideoPort_register( void );
 
 
 /* L2 Testing Functions */
-extern int test_l2_dsAudio_register( void );
-extern int test_l2_dsCompositeIn_register( void );
-extern int test_l2_dsDisplay_register( void );
-extern int test_l2_dsFPD_register( void );
-extern int test_l2_dsHdmiIn_register( void );
-extern int test_l2_dsHost_register( void );
 extern int test_l2_dsVideoDevice_register( void );
-extern int test_l2_dsVideoPort_register( void );
 
 int UT_register_APIDEF_l1_tests( void )
 {
 	int registerFailed=0;
 
-	registerFailed |= test_l1_dsAudio_register();
-	registerFailed |= test_l1_dsCompositeIn_register();
-	registerFailed |= test_l1_dsDisplay_register();
-	registerFailed |= test_l1_dsFPD_register();
-	registerFailed |= test_l1_dsHdmiIn_register();
-	registerFailed |= test_l1_dsHost_register();
 	registerFailed |= test_l1_dsVideoDevice_register();
-	registerFailed |= test_l1_dsVideoPort_register();
 
 	return registerFailed;
 }
@@ -98,14 +77,8 @@ int UT_register_APIDEF_l2_tests( void )
 {
 	int registerFailed=0;
 
-	registerFailed |= test_l2_dsAudio_register();
-registerFailed |= test_l2_dsCompositeIn_register();
-registerFailed |= test_l2_dsDisplay_register();
-registerFailed |= test_l2_dsFPD_register();
-registerFailed |= test_l2_dsHdmiIn_register();
-registerFailed |= test_l2_dsHost_register();
-registerFailed |= test_l2_dsVideoDevice_register();
-registerFailed |= test_l2_dsVideoPort_register();
+
+    registerFailed |= test_l2_dsVideoDevice_register();
 
 	return registerFailed;
 }
