@@ -1226,7 +1226,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAVLatencyChangeCB(void) {
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
-void mockAviContentCallback(*dsHdmiInAviContentTypeChangeCB_t)(dsHdmiInPort_t port, dsAviContentType_t avi_content_type){
+void mockAviContentCallback(dsHdmiInPort_t port, dsAviContentType_t avi_content_type){
 // Mock implementation, can be customized for testing
 }
 
@@ -1453,7 +1453,7 @@ void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo(void) {
 
     // Step 6: Compare the results and make sure they are the same
     UT_ASSERT_EQUAL(edidSize3, edidSize4);
-    UT_ASSERT_TRUE(memcmp(edidSize3, edidSize4, sizeof(edidSize3)),0);
+    UT_ASSERT_EQUAL(memcmp(edidSize3, edidSize4, sizeof(edidSize3)),0);
 
     // You may want to compare the contents of the edidBytes as well, depending on your use case.
 
@@ -1608,7 +1608,7 @@ void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo(void) {
     gTestID = 36;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    unsigned char* spdInfo1 (unsigned char*) malloc(sizeof(struct dsSpd_infoframe_st)); 
+    unsigned char* spdInfo1 = (unsigned char*) malloc(sizeof(struct dsSpd_infoframe_st)); 
 
     // Step 1: Call dsGetHDMISPDInfo() without initializing the HDMI input sub-system
     UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, spdInfo1), dsERR_NOT_INITIALIZED);
