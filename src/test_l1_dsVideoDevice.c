@@ -168,7 +168,7 @@ void test_l1_dsVideoDevice_negative_dsVideoDeviceInit(void)
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 003@n
  * 
- * **Dependencies:** Video devices have been initialized using dsVideoDeviceInit().@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
