@@ -680,9 +680,10 @@ void test_l1_dsVideoDevice_negative_dsGetHDRCapabilities(void)
     int result;
     int index = 0;
     intptr_t handle;
+    int hdr_capabilities;
 
     // Step 01: Call dsGetHDRCapabilities() without prior initialization
-    result = dsGetHDRCapabilities(handle, &handle); // Note: using handle for HDR capabilities for this error case
+    result = dsGetHDRCapabilities(handle, &hdr_capabilities); // Note: using handle for HDR capabilities for this error case
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize video devices
@@ -695,7 +696,7 @@ void test_l1_dsVideoDevice_negative_dsGetHDRCapabilities(void)
     UT_ASSERT_EQUAL(handle > 0, true);
 
     // Step 04: Call dsGetHDRCapabilities() with an invalid handle
-    result = dsGetHDRCapabilities(-1, &handle);
+    result = dsGetHDRCapabilities(-1, &hdr_capabilities);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 05: Call dsGetHDRCapabilities() with a null parameter
@@ -707,7 +708,7 @@ void test_l1_dsVideoDevice_negative_dsGetHDRCapabilities(void)
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 07: Call dsGetHDRCapabilities() after termination
-    result = dsGetHDRCapabilities(handle, &handle);
+    result = dsGetHDRCapabilities(handle, &hdr_capabilities);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
