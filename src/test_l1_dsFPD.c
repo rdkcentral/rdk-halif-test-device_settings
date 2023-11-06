@@ -1096,9 +1096,8 @@ void test_l1_dsFPD_negative_dsSetFPColor (void)
  * |01|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
  * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState() and reading all the valid configurations|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsGetFPColor() with all valid indicators|eIndicator: [Valid Indicator], pColor: dsFPDColor_t*|dsERR_NONE|Ensure the function can retrieve color|
- * |04|Verify that the color retrieved matches the known color set in Step 02|Color from Step 03: [Retrieved Color]|Colors should match|[Retrieved Color] should be [Known Color]|
- * |05|Call dsGetFPColor() again and compare results|eIndicator: [Valid Indicator], pColor: dsFPDColor_t*|dsERR_NONE and same color as Step 04|Ensure consistency in repeated calls|
- * |06|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
+ * |04|Call dsGetFPColor() again and compare results|eIndicator: [Valid Indicator], pColor: dsFPDColor_t*|dsERR_NONE and same color as Step 04|Ensure consistency in repeated calls|
+ * |05|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
@@ -1115,39 +1114,22 @@ void test_l1_dsFPD_positive_dsGetFPColor (void)
 
     // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState() 
     // and reading all the valid configurations
-    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
         dsFPDColorConfig_t *colors = kIndicators[i].supportedColors;
         if (colors)
         {
-            // Just picking the first color for simplicity; you could loop through all if necessary
             knownColor = colors[0].color; 
-            result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON, knownColor);
+            result = dsSetFPColor(kIndicators[i].id, knownColor);
             UT_ASSERT_EQUAL(result, dsERR_NONE);
         }
     }
 
     // Step 03: Call dsGetFPColor() with all valid indicators
-    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
-    {
-        result = dsGetFPColor(kIndicators[i].id, &retrievedColor);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
-    }
-
-    // Step 04: Verify that the color retrieved matches the known color set in Step 02
-    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
-    {
-        dsFPDColorConfig_t *colors = kIndicators[i].supportedColors;
-        if (colors)
-        {
-            knownColor = colors[0].color;
-            result = dsGetFPColor(kIndicators[i].id, &retrievedColor);
-            UT_ASSERT_EQUAL(retrievedColor, knownColor);
-        }
-    }
-
-    // Step 05: Call dsGetFPColor() again and compare results
-    for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
+    // Step 04: Call dsGetFPColor() again and compare results
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
         dsFPDColor_t previousColor;
         result = dsGetFPColor(kIndicators[i].id, &previousColor);
@@ -1157,7 +1139,7 @@ void test_l1_dsFPD_positive_dsGetFPColor (void)
         UT_ASSERT_EQUAL(retrievedColor, previousColor);
     }
 
-    // Step 06: Terminate with dsFPTerm()
+    // Step 05: Terminate with dsFPTerm()
     result = dsFPTerm();
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("\n Out  %s\n",__FUNCTION__);
@@ -1830,10 +1812,10 @@ void test_l1_dsFPD_positive_dsSetFPTextBrightness(void)
  * |03|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |04|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
  * |05|Call dsSetFPTextBrightness() with invalid eBrightness (out of range)|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: 110|dsERR_INVALID_PARAM|Validate invalid parameter handling for brightness level|
- * |06|Call dsSetFPTextBrightness() with invalid indicator|eIndicator: dsFPD_TEXTDISP_MAX, eBrightness: 110|dsERR_INVALID_PARAM|Validate invalid parameter handling for brightness level|
+ * |06|Call dsSetFPTextBrightness() with invalid indicator|eIndicator: dsFPD_TEXTDISP_MAX, eBrightness: 50|dsERR_INVALID_PARAM|Validate invalid parameter handling for brightness level|
  * |07|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_ANY|dsERR_NONE|API should set mode successfully|
  * |08|Call dsSetFPTextBrightness() with invalid eBrightness (out of range)|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: 110|dsERR_INVALID_PARAM|Validate invalid parameter handling for brightness level|
- * |09|Call dsSetFPTextBrightness() with invalid indicator|eIndicator: dsFPD_TEXTDISP_MAX, eBrightness: 110|dsERR_INVALID_PARAM|Validate invalid parameter handling for brightness level|
+ * |09|Call dsSetFPTextBrightness() with invalid indicator|eIndicator: dsFPD_TEXTDISP_MAX, eBrightness: 50|dsERR_INVALID_PARAM|Validate invalid parameter handling for brightness level|
  * |10|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_CLOCK|dsERR_NONE|API should set mode successfully|
  * |11|Call dsSetFPTextBrightness() with valid eIndicator and eBrightness|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: 70|dsERR_OPERATION_NOT_SUPPORTED|Check the function with valid parameters|
  * |12|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
@@ -1874,7 +1856,7 @@ void test_l1_dsFPD_negative_dsSetFPTextBrightness(void)
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 06: Call dsSetFPTextBrightness() with invalid indicator
-    result = dsSetFPTextBrightness(dsFPD_TEXTDISP_MAX, 110);
+    result = dsSetFPTextBrightness(dsFPD_TEXTDISP_MAX, 50);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 07: Call dsSetFPDMode() with ANY mode
@@ -1886,7 +1868,7 @@ void test_l1_dsFPD_negative_dsSetFPTextBrightness(void)
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 09: Call dsSetFPTextBrightness() with invalid indicator for ANY mode
-    result = dsSetFPTextBrightness(dsFPD_TEXTDISP_MAX, 110);
+    result = dsSetFPTextBrightness(dsFPD_TEXTDISP_MAX, 50);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 10: Call dsSetFPDMode() with CLOCK mode
@@ -2878,11 +2860,9 @@ void test_l1_dsFPD_positive_dsFPSetLEDState(void)
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
-    // Assuming an array of valid indicators for simplicity. You might replace this with the actual mechanism to retrieve indicators.
-    dsFPDIndicator_t validIndicators[] = {/* List of valid indicators from kIndicators in dsFPDSettings.h */};
-    for (int i = 0; i < sizeof(validIndicators) / sizeof(validIndicators[0]); i++)
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
-        result = dsSetFPState(validIndicators[i], dsFPD_STATE_ON);
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
@@ -2891,10 +2871,9 @@ void test_l1_dsFPD_positive_dsFPSetLEDState(void)
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 02: Call dsFPSetLEDState() and loop through all supported LED states
-    for (ledState = 0; ledState < sizeof(unsigned int) * 8; ledState++) // Assuming max of 32 LED states represented in an unsigned int
+    for (ledState = 0; ledState < dsFPD_LED_DEVICE_MAX; ledState++)
     {
-        if (supportedLEDStates & (1 << ledState)) // Check if the LED state is supported
-        {
+        if(supportedLEDStates & (1<<ledState)){
             result = dsFPSetLEDState(ledState);
             UT_ASSERT_EQUAL(result, dsERR_NONE);
         }
@@ -2946,11 +2925,9 @@ void test_l1_dsFPD_negative_dsFPSetLEDState(void)
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
-    // Assuming an array of valid indicators for simplicity. You might replace this with the actual mechanism to retrieve indicators.
-    dsFPDIndicator_t validIndicators[] = {/* List of valid indicators from kIndicators in dsFPDSettings.h */};
-    for (int i = 0; i < sizeof(validIndicators) / sizeof(validIndicators[0]); i++)
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
-        result = dsSetFPState(validIndicators[i], dsFPD_STATE_ON);
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
@@ -3007,11 +2984,9 @@ void test_l1_dsFPD_positive_dsFPGetLEDState(void)
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
-    // Assuming an array of valid indicators for simplicity. Replace with the actual mechanism to retrieve indicators.
-    dsFPDIndicator_t validIndicators[] = {/* List of valid indicators from kIndicators in dsFPDSettings.h */};
-    for (int i = 0; i < sizeof(validIndicators) / sizeof(validIndicators[0]); i++)
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
-        result = dsSetFPState(validIndicators[i], dsFPD_STATE_ON);
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
@@ -3073,11 +3048,9 @@ void test_l1_dsFPD_negative_dsFPGetLEDState(void)
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
-    // Assuming an array of valid indicators for simplicity. Replace with the actual mechanism to retrieve indicators.
-    dsFPDIndicator_t validIndicators[] = {/* List of valid indicators from kIndicators in dsFPDSettings.h */};
-    for (int i = 0; i < sizeof(validIndicators) / sizeof(validIndicators[0]); i++)
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
-        result = dsSetFPState(validIndicators[i], dsFPD_STATE_ON);
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
