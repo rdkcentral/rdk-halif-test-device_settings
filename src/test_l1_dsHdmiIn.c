@@ -73,6 +73,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include "dsHdmiIn.h"
 
 #include <ut.h>
 #include <ut_log.h>
