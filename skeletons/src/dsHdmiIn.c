@@ -33,7 +33,7 @@ dsError_t dsHdmiInGetStatus(dsHdmiInStatus_t* pStatus)
 dsError_t dsHdmiInSelectPort(dsHdmiInPort_t Port, bool audioMix, dsVideoPlaneType_t evideoPlaneType)
 {
   /*TODO: Implement Me!*/
-  (void)ePort;
+  (void)Port;
   return (dsError_t)0;
 }
 
