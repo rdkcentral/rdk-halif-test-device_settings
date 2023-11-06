@@ -803,9 +803,10 @@ void test_l1_dsVideoDevice_negative_dsGetSupportedVideoCodingFormats(void)
     int result;
     int index = 0;
     intptr_t handle;
+    unsigned int supported_formats;
 
     // Step 01: Call dsGetSupportedVideoCodingFormats() without prior initialization
-    result = dsGetSupportedVideoCodingFormats(handle, &handle); // Note: using handle for supported formats for this error case
+    result = dsGetSupportedVideoCodingFormats(handle, &supported_formats); // Note: using handle for supported formats for this error case
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize video devices
@@ -818,7 +819,7 @@ void test_l1_dsVideoDevice_negative_dsGetSupportedVideoCodingFormats(void)
     UT_ASSERT_EQUAL(handle > 0, true);
 
     // Step 04: Call dsGetSupportedVideoCodingFormats() with an invalid handle
-    result = dsGetSupportedVideoCodingFormats(-1, &handle);
+    result = dsGetSupportedVideoCodingFormats(-1, &supported_formats);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 05: Call dsGetSupportedVideoCodingFormats() with a null value
@@ -830,7 +831,7 @@ void test_l1_dsVideoDevice_negative_dsGetSupportedVideoCodingFormats(void)
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 07: Call dsGetSupportedVideoCodingFormats() after termination
-    result = dsGetSupportedVideoCodingFormats(handle, &handle);
+    result = dsGetSupportedVideoCodingFormats(handle, &supported_formats);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
