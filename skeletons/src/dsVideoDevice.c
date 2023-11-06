@@ -10,7 +10,7 @@ dsError_t dsVideoDeviceInit(void)
   return (dsError_t)0;
 }
 
-dsError_t dsGetVideoDevice(int index, int* handle)
+dsError_t dsGetVideoDevice(int index, intptr_t *handle)
 {
   /*TODO: Implement Me!*/
   (void)index;
@@ -18,7 +18,7 @@ dsError_t dsGetVideoDevice(int index, int* handle)
   return (dsError_t)0;
 }
 
-dsError_t dsSetDFC(int handle, dsVideoZoom_t dfc)
+dsError_t dsSetDFC(intptr_t handle;, dsVideoZoom_t dfc)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -26,7 +26,7 @@ dsError_t dsSetDFC(int handle, dsVideoZoom_t dfc)
   return (dsError_t)0;
 }
 
-dsError_t dsGetDFC(int handle, dsVideoZoom_t* dfc)
+dsError_t dsGetDFC(intptr_t handle;, dsVideoZoom_t* dfc)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -40,7 +40,7 @@ dsError_t dsVideoDeviceTerm(void)
   return (dsError_t)0;
 }
 
-dsError_t dsGetHDRCapabilities(int handle, int* capabilities)
+dsError_t dsGetHDRCapabilities(intptr_t handle;, int* capabilities)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -48,7 +48,7 @@ dsError_t dsGetHDRCapabilities(int handle, int* capabilities)
   return (dsError_t)0;
 }
 
-dsError_t dsGetSupportedVideoCodingFormats(int handle, unsigned int* supported_formats)
+dsError_t dsGetSupportedVideoCodingFormats(intptr_t handle;, unsigned int* supported_formats)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -56,7 +56,7 @@ dsError_t dsGetSupportedVideoCodingFormats(int handle, unsigned int* supported_f
   return (dsError_t)0;
 }
 
-dsError_t dsGetVideoCodecInfo(int handle, dsVideoCodingFormat_t codec, dsVideoCodecInfo_t* info)
+dsError_t dsGetVideoCodecInfo(intptr_t handle;, dsVideoCodingFormat_t codec, dsVideoCodecInfo_t* info)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -65,7 +65,7 @@ dsError_t dsGetVideoCodecInfo(int handle, dsVideoCodingFormat_t codec, dsVideoCo
   return (dsError_t)0;
 }
 
-dsError_t dsForceDisableHDRSupport(int handle, bool disable)
+dsError_t dsForceDisableHDRSupport(intptr_t handle;, bool disable)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -73,7 +73,7 @@ dsError_t dsForceDisableHDRSupport(int handle, bool disable)
   return (dsError_t)0;
 }
 
-dsError_t dsSetFRFMode(int handle, int frfmode)
+dsError_t dsSetFRFMode(intptr_t handle;, int frfmode)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -81,7 +81,7 @@ dsError_t dsSetFRFMode(int handle, int frfmode)
   return (dsError_t)0;
 }
 
-dsError_t dsGetFRFMode(int handle, int* frfmode)
+dsError_t dsGetFRFMode(intptr_t handle;, int* frfmode)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -89,7 +89,7 @@ dsError_t dsGetFRFMode(int handle, int* frfmode)
   return (dsError_t)0;
 }
 
-dsError_t dsGetCurrentDisplayframerate(int handle, char* framerate)
+dsError_t dsGetCurrentDisplayframerate(intptr_t handle;, char* framerate)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -97,7 +97,7 @@ dsError_t dsGetCurrentDisplayframerate(int handle, char* framerate)
   return (dsError_t)0;
 }
 
-dsError_t dsSetDisplayframerate(int handle, char* framerate)
+dsError_t dsSetDisplayframerate(intptr_t handle;, char* framerate)
 {
   /*TODO: Implement Me!*/
   (void)handle;
