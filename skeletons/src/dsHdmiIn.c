@@ -30,7 +30,7 @@ dsError_t dsHdmiInGetStatus(dsHdmiInStatus_t* pStatus)
   return (dsError_t)0;
 }
 
-dsError_t dsHdmiInSelectPort(dsHdmiInPort_t ePort)
+dsError_t dsHdmiInSelectPort(dsHdmiInPort_t Port, bool audioMix, dsVideoPlaneType_t evideoPlaneType)
 {
   /*TODO: Implement Me!*/
   (void)ePort;
@@ -118,7 +118,7 @@ dsError_t dsIsHdmiARCPort(dsHdmiInPort_t iPort, bool* isArcPort)
   return (dsError_t)0;
 }
 
-dsError_t dsGetEDIDBytesInfo(dsHdmiInPort_t iHdmiPort, unsigned char** edid, int* length)
+dsError_t dsGetEDIDBytesInfo(dsHdmiInPort_t iHdmiPort, unsigned char* edid, int* length)
 {
   /*TODO: Implement Me!*/
   (void)iHdmiPort;
@@ -127,7 +127,7 @@ dsError_t dsGetEDIDBytesInfo(dsHdmiInPort_t iHdmiPort, unsigned char** edid, int
   return (dsError_t)0;
 }
 
-dsError_t dsGetHDMISPDInfo(dsHdmiInPort_t iHdmiPort, unsigned char** data)
+dsError_t dsGetHDMISPDInfo(dsHdmiInPort_t iHdmiPort, unsigned char* data)
 {
   /*TODO: Implement Me!*/
   (void)iHdmiPort;
