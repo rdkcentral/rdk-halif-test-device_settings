@@ -397,8 +397,8 @@ void test_l1_dsHost_positive_dsGetSocIDFromSDK(void) {
     gTestID = 7;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 	
-    char* socID1 = ""; 
-    char* socID2 = "";
+    char socID1[1024]= {0}; 
+    char socID2[1024]= {0};
 
     // Step 01: dsHostInit() Initialize dsHost
     dsError_t result = dsHostInit();
@@ -416,7 +416,7 @@ void test_l1_dsHost_positive_dsGetSocIDFromSDK(void) {
     UT_LOG("Step 03: Fetch SOC ID (2nd time) -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 04: Compare return values from step 2/3 to ensure they are the same
-    UT_ASSERT_EQUAL(socID1, socID2);
+    UT_ASSERT_EQUAL(strcmp(socID1, socID2),0);
     UT_LOG("Step 04: Compare SOC IDs from Step 2 and Step 3 -> Expected: Match, Result: Matched\n");
 
     // Step 05: dsHostTerm() Terminate dsHost
@@ -454,7 +454,7 @@ void test_l1_dsHost_negative_dsGetSocIDFromSDK(void) {
     gTestID = 8;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 	
-    char* socID = "";
+    char socID[1024] = {0};
 
     // Step 01: dsGetSocIDFromSDK() Call without prior initialization
     dsError_t result = dsGetSocIDFromSDK(socID);
@@ -509,9 +509,10 @@ void test_l1_dsHost_positive_dsGetHostEDID(void) {
     gTestID = 9;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 	
-    unsigned char edid1[512];  
-    unsigned char edid2[512];
-    int length1, length2;
+    unsigned char edid1[EDID_MAX_DATA_SIZE] = {0};  
+    unsigned char edid2[EDID_MAX_DATA_SIZE] = {0};
+    int length1 = 0;
+    int length2 = 0;
 
     // Step 01: dsHostInit() Initialize dsHost
     dsError_t result = dsHostInit();
@@ -568,7 +569,7 @@ void test_l1_dsHost_negative_dsGetHostEDID(void) {
     gTestID = 10;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 	
-    unsigned char edid[512];  // Making an assumption about maximum EDID size.
+    unsigned char edid[EDID_MAX_DATA_SIZE]= {0};  // Making an assumption about maximum EDID size.
     int length;
 
     // Step 01: dsGetHostEDID() Call without prior initialization
