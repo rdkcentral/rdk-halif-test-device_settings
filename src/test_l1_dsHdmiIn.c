@@ -87,7 +87,7 @@ static int gTestID = 1;
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 001@n
  * 
- * **Dependencies:** HDMI input hardware is properly connected and functioning.@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -317,7 +317,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetNumberOfInputs(void) {
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 007@n
  * 
- * **Dependencies:** None.@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -407,7 +407,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetStatus(void) {
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 009@n
  * 
- * **Dependencies:** None.@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -493,7 +493,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectPort(void) {
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 011@n
  * 
- * **Dependencies:** HDMI input hardware is properly connected and functioning.@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -533,7 +533,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInScaleVideo(void) {
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 012@n
  * 
- * **Dependencies:** HDMI input hardware is properly connected and functioning.@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -599,7 +599,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInScaleVideo(void) {
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 013@n
  * 
- * **Dependencies:** HDMI input hardware is properly connected and functioning.@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -676,7 +676,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode(void) {
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 015@n
  * 
- * **Dependencies:** HDMI input hardware is properly connected and functioning.@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -1816,7 +1816,7 @@ void test_l1_dsHdmiIn_negative_dsGetEdidVersion(void) {
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 041@n
  * 
- * **Dependencies:** None.@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -2083,7 +2083,7 @@ void test_l1_dsHdmiIn_negative_dsGetAVLatency(void) {
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 047@n
  * 
- * **Dependencies:** HDMI input device supporting EDID ALLM.@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -2163,7 +2163,7 @@ void test_l1_dsHdmiIn_negative_dsSetEdid2AllmSupport(void) {
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 049@n
  * 
- * **Dependencies:** HDMI input device supporting EDID ALLM.@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
