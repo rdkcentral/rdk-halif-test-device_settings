@@ -518,7 +518,7 @@ void test_l1_dsVideoDevice_positive_dsGetDFC(void)
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 05: Compare the results to make sure they match
-    UT_ASSERT_EQUAL(memcmp(&dfc_mode_1, &dfc_mode_2);
+    UT_ASSERT_EQUAL(memcmp(&dfc_mode_1, &dfc_mode_2),0);
 
     // Step 06: De-initialize the video devices
     result = dsVideoDeviceTerm();
