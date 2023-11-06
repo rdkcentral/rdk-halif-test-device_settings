@@ -81,6 +81,9 @@
 #include <ut_log.h>
 #include "dsVideoDevice.h"
 
+static int gTestGroup = 1;
+static int gTestID = 1;
+
 /**
  * @brief Ensure dsVideoDeviceInit() correctly initializes all video devices during positive scenarios.
  * 
@@ -276,7 +279,7 @@ void test_l1_dsVideoDevice_positive_dsGetVideoDevice(void)
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 02: Get the video device handle
-    int handle;
+    intptr_t handle;
     result = dsGetVideoDevice(0, &handle);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
     UT_ASSERT_TRUE(handle > 0);
@@ -316,7 +319,7 @@ void test_l1_dsVideoDevice_negative_dsGetVideoDevice(void)
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     // Step 01: Get the video device handle without prior initialization
-    int handle;
+    intptr_t handle;
     int result = dsGetVideoDevice(0, &handle);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
@@ -379,7 +382,7 @@ void test_l1_dsVideoDevice_positive_dsSetDFC (void)
     gTestID = 7;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsError_t result;
-    int handle;
+    intptr_t handle;
     
     // 01: Initialize video devices
     result = dsVideoDeviceInit();
@@ -432,7 +435,7 @@ void test_l1_dsVideoDevice_negative_dsSetDFC (void)
     gTestID = 8;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsError_t result;
-    int handle;
+    intptr_t handle;
     
     // 01: Call dsSetDFC() without initialization
     result = dsSetDFC(-1, dsVIDEO_ZOOM_NONE);
@@ -493,7 +496,7 @@ void test_l1_dsVideoDevice_positive_dsGetDFC(void)
     // Define variables
     int result;
     int index = 0;
-    int handle;
+    intptr_t handle;
     dsVideoZoom_t dfc_mode_1;
     dsVideoZoom_t dfc_mode_2;
 
@@ -554,7 +557,7 @@ void test_l1_dsVideoDevice_negative_dsGetDFC(void)
     // Define variables
     int result;
     int index = 0;
-    int handle;
+    intptr_t handle;
     dsVideoZoom_t dfc_mode;
 
     // Step 01: Call dsGetDFC() without prior initialization
@@ -615,7 +618,7 @@ void test_l1_dsVideoDevice_positive_dsGetHDRCapabilities(void)
     // Define variables
     int result;
     int index = 0;
-    int handle;
+    intptr_t handle;
     int hdr_capabilities_1;
     int hdr_capabilities_2;
 
@@ -676,7 +679,7 @@ void test_l1_dsVideoDevice_negative_dsGetHDRCapabilities(void)
     // Define variables
     int result;
     int index = 0;
-    int handle;
+    intptr_t handle;
 
     // Step 01: Call dsGetHDRCapabilities() without prior initialization
     result = dsGetHDRCapabilities(handle, &handle); // Note: using handle for HDR capabilities for this error case
@@ -737,7 +740,7 @@ void test_l1_dsVideoDevice_positive_dsGetSupportedVideoCodingFormats(void)
     // Define variables
     int result;
     int index = 0;
-    int handle;
+    intptr_t handle;
     unsigned int supported_formats_1;
     unsigned int supported_formats_2;
 
@@ -798,7 +801,7 @@ void test_l1_dsVideoDevice_negative_dsGetSupportedVideoCodingFormats(void)
     // Define variables
     int result;
     int index = 0;
-    int handle;
+    intptr_t handle;
 
     // Step 01: Call dsGetSupportedVideoCodingFormats() without prior initialization
     result = dsGetSupportedVideoCodingFormats(handle, &handle); // Note: using handle for supported formats for this error case
@@ -860,7 +863,7 @@ void test_l1_dsVideoDevice_positive_dsGetVideoCodecInfo(void)
     // Define variables
     int result;
     int index = 0;
-    int handle;
+    intptr_t handle;
     dsVideoCodecInfo_t codecInfo;
 
     // Step 01: Initialize video devices
@@ -927,7 +930,7 @@ void test_l1_dsVideoDevice_negative_dsGetVideoCodecInfo(void)
     // Define variables
     int result;
     int index = 0;
-    int handle;
+    intptr_t handle;
     dsVideoCodecInfo_t codecInfo;
 
     // Step 01: Call dsGetVideoCodecInfo() without prior initialization
@@ -993,7 +996,7 @@ void test_l1_dsVideoDevice_positive_dsForceDisableHDRSupport(void)
     // Define variables
     int result;
     int index = 0;
-    int handle;
+    intptr_t handle;
 
     // Step 01: Initialize video devices
     result = dsVideoDeviceInit();
@@ -1049,7 +1052,7 @@ void test_l1_dsVideoDevice_negative_dsForceDisableHDRSupport(void)
     // Define variables
     int result;
     int index = 0;
-    int handle;
+    intptr_t handle;
 
     // Step 01: Call dsForceDisableHDRSupport() without prior initialization
     result = dsForceDisableHDRSupport(handle, true); // Note: uninitialized 'handle' used here
@@ -1105,7 +1108,7 @@ void test_l1_dsVideoDevice_positive_dsSetFRFMode(void)
     // Define variables
     int result;
     int index = 0;
-    int handle;
+    intptr_t handle;
     int validFramerate = 60; // This is just a placeholder value; replace with an appropriate value as per your environment.
 
     // Step 01: Initialize video devices
@@ -1159,7 +1162,7 @@ void test_l1_dsVideoDevice_negative_dsSetFRFMode(void)
     // Define variables
     int result;
     int index = 0;
-    int handle;
+    intptr_t handle;
 
     // Step 01: Call dsSetFRFMode() without prior initialization
     result = dsSetFRFMode(handle, 60); // Note: uninitialized 'handle' used here
@@ -1221,7 +1224,7 @@ void test_l1_dsVideoDevice_positive_dsGetFRFMode(void)
     // Define variables
     int result;
     int index = 0;
-    int handle;
+    intptr_t handle;
     int fetchedFRFMode1;
     int fetchedFRFMode2;
 
@@ -1283,7 +1286,7 @@ void test_l1_dsVideoDevice_negative_dsGetFRFMode(void)
     // Define variables
     int result;
     int index = 0;
-    int handle;
+    intptr_t handle;
     int fetchedFRFMode;
 
     // Step 01: Call dsGetFRFMode() without prior initialization
@@ -1346,7 +1349,7 @@ void test_l1_dsVideoDevice_positive_dsGetCurrentDisplayframerate(void)
     // Define variables
     int result;
     int index = 0;
-    int handle;
+    intptr_t handle;
     char fetchedFramerate1[50]; // Assuming a buffer size, modify as necessary.
     char fetchedFramerate2[50]; // Assuming a buffer size, modify as necessary.
 
@@ -1408,7 +1411,7 @@ void test_l1_dsVideoDevice_negative_dsGetCurrentDisplayframerate(void)
     // Define variables
     int result;
     int index = 0;
-    int handle;
+    intptr_t handle;
     char fetchedFramerate[50]; // Assuming a buffer size, modify as necessary.
 
     // Step 01: Call dsGetCurrentDisplayframerate() without prior initialization
@@ -1469,7 +1472,7 @@ void test_l1_dsVideoDevice_positive_dsSetDisplayframerate(void)
     // Define variables
     int result;
     int index = 0;
-    int handle;
+    intptr_t handle;
     char desiredFramerate[] = "30fps"; // You can modify this value as necessary
 
     // Step 01: Initialize video devices
@@ -1524,7 +1527,7 @@ void test_l1_dsVideoDevice_negative_dsSetDisplayframerate(void)
     // Define variables
     int result;
     int index = 0;
-    int handle;
+    intptr_t handle;
 
     // Step 01: Call dsSetDisplayframerate() without prior initialization
     result = dsSetDisplayframerate(handle, "30fps"); // Note: uninitialized 'handle' used here
