@@ -16,7 +16,7 @@ dsError_t dsHdmiInTerm(void)
   return (dsError_t)0;
 }
 
-dsError_t dsHdmiInGetNumberOfinputs(uint8_t* pNumberOfinputs)
+dsError_t dsHdmiInGetNumberOfInputs(uint8_t* pNumberOfinputs)
 {
   /*TODO: Implement Me!*/
   (void)pNumberOfinputs;
@@ -171,6 +171,22 @@ dsError_t dsGetAVLatency(int* audio_latency, int* video_latency)
   /*TODO: Implement Me!*/
   (void)audio_latency;
   (void)video_latency;
+  return (dsError_t)0;
+}
+
+dsError_t dsSetEdid2AllmSupport(dsHdmiInPort_t iHdmiPort, bool allmSupport)
+{
+  /*TODO: Implement Me!*/
+  (void)iHdmiPort;
+  (void)allmSupport;
+  return (dsError_t)0;
+}
+
+dsError_t dsGetEdid2AllmSupport(dsHdmiInPort_t iHdmiPort, bool *allmSupport)
+{
+  /*TODO: Implement Me!*/
+  (void)iHdmiPort;
+  (void)allmSupport;
   return (dsError_t)0;
 }
 
