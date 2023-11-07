@@ -1453,7 +1453,7 @@ void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo(void) {
 
     // Step 6: Compare the results and make sure they are the same
     UT_ASSERT_EQUAL(edidSize3, edidSize4);
-    UT_ASSERT_EQUAL(memcmp(edidBytes3, edidBytes4, 255),0);
+    UT_ASSERT_EQUAL(memcmp(edidBytes3, edidBytes4, edidSize3),0);
 
     // You may want to compare the contents of the edidBytes as well, depending on your use case.
 
