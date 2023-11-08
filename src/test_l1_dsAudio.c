@@ -1091,10 +1091,7 @@ void test_l1_dsAudio_negative_dsSetBassEnhancer (void)
  * |:--:|-----------|----------|--------------|-----|
  * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
- * |03|Enable the Surround Decoder using dsEnableSurroundDecoder() | `handle`=acquired from previous step | dsERR_NONE | Ensure that the Surround Decoder is enabled |
- * |04|Retrieve the Surround Decoder status using the obtained handle | `handle`=acquired from previous step | Value of *enabled should be true | Verification step |
- * |05|Disable the Surround Decoder using dsEnableSurroundDecoder() | `handle`=acquired from previous step | dsERR_NONE | Ensure that the Surround Decoder is disabled |
- * |06|Retrieve the Surround Decoder status again using the obtained handle | `handle`=acquired from previous step | Value of *enabled should be false | Verification step |
+ * |03|Call dsEnableSurroundDecoder() by looping through the acquired port handles and vaild pointer | handle = [valid handle] , enabled = [valid pointer] | dsERR_NONE | Ensure that the Surround Decoder must return  the enabled or disaled for each port |
  * |07|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  * 
  */
@@ -1115,12 +1112,13 @@ void test_l1_dsAudio_positive_dsIsSurroundDecoderEnabled (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsIsSurroundDecoderEnabled() without initializing audio ports | `handle`=any value | dsERR_NOT_INITIALIZED | Should Pass |
+ * |01|Call dsIsSurroundDecoderEnabled()  with out Initilizing audio ports  | handle = [valid handle], enabled = [valid pointer] | dsERR_NOT_INITIALIZED |dsIsSurroundDecoderEnabled call  must fail as module is not initialized |
  * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
- * |03|Call dsIsSurroundDecoderEnabled() using an invalid handle | `handle`=invalid value | dsERR_INVALID_PARAM | Should Pass |
+ * |03|Call dsIsSurroundDecoderEnabled() using an invalid handle and valid pointer | handle = [invalid handle] , enabled = [valid pointer] | dsERR_INVALID_PARAM | Invalid parameter must be returned |
  * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|Call dsIsSurroundDecoderEnabled()  by looping through acquired port handles but with a null pointer |handle = [valid handle] , enabled = [NULL] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
  * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
- * |06|Call dsIsSurroundDecoderEnabled() again after terminating audio ports | `handle`=valid handle from step 04 | dsERR_NOT_INITIALIZED | Should Pass |
+ * |06|Call dsIsSurroundDecoderEnabled() after terminating audio ports | handle: [ valid handle from step 04 ] , enabled = [ valid pointer ] | dsERR_NOT_INITIALIZED | dsIsSurroundDecoderEnabled call must fail as module is not initialized |
  * 
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
@@ -1143,11 +1141,8 @@ void test_l1_dsAudio_negative_dsIsSurroundDecoderEnabled (void)
  * |:--:|-----------|----------|--------------|-----|
  * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
- * |03|Enable the Surround Decoder using the obtained handle | `handle`=acquired from previous step, `enabled`=true | dsERR_NONE | Ensure that the Surround Decoder is enabled |
- * |04|Retrieve the Surround Decoder status using dsIsSurroundDecoderEnabled() | `handle`=acquired from previous step | Value of *enabled should be true | Verification step |
- * |05|Disable the Surround Decoder using the obtained handle | `handle`=acquired from previous step, `enabled`=false | dsERR_NONE | Ensure that the Surround Decoder is disabled |
- * |06|Retrieve the Surround Decoder status using dsIsSurroundDecoderEnabled() | `handle`=acquired from previous step | Value of *enabled should be false | Verification step |
- * |07|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |03|Call dsEnableSurroundDecoder() by looping through the acquired port handles and vaild value(i.e TRUE / FALSE) | handle = [valid handle] , enabled = [valid value] | dsERR_NONE | Ensure that the Surround Decoder enabled or disabled |
+ * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  * 
  */
 void test_l1_dsAudio_positive_dsEnableSurroundDecoder (void)
@@ -1167,12 +1162,13 @@ void test_l1_dsAudio_positive_dsEnableSurroundDecoder (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsEnableSurroundDecoder() without initializing audio ports | `handle`=any value, `enabled`=true | dsERR_NOT_INITIALIZED | Should Pass |
+ * |01|Call dsEnableSurroundDecoder() without initializing audio ports | handle = [valid handle] , enabled = [valid value] | dsERR_NOT_INITIALIZED |dsEnableSurroundDecoder call must fail as module is not initialized |
  * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
- * |03|Call dsEnableSurroundDecoder() using an invalid handle | `handle`=invalid value, `enabled`=true | dsERR_INVALID_PARAM | Should Pass |
+ * |03|Call dsEnableSurroundDecoder() using an invalid handle and valid value (.ie TRUE or FALSE) | handle = [invalid handle], enabled = [valid value] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
  * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
  * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
- * |06|Call dsEnableSurroundDecoder() again after terminating audio ports | `handle`=valid handle from step 04, `enabled`=true | dsERR_NOT_INITIALIZED | Should Pass |
+ * |06|Call dsEnableSurroundDecoder() after terminating audio ports | handle = [valid handle from step 04], enabled = [valid value] | dsERR_NOT_INITIALIZED |dsEnableSurroundDecoder call must fail as module is not initialized |
+ *
  * 
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
@@ -1195,7 +1191,7 @@ void test_l1_dsAudio_negative_dsEnableSurroundDecoder (void)
  * |:--:|-----------|----------|--------------|-----|
  * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
- * |03|Call dsGetDRCMode() by looping through the acquired port handles to get the DRC mode of each port | handle: [ loop through valid handles ] , mode: [pointer to hold the DRC mode] | dsERR_NONE | A valid DRC mode must be returned |
+ * |03|Call dsGetDRCMode() by looping through the acquired port handles and valid pointer to get the DRC mode of each port | handle: [ valid handles ] , mode: [valid pointer] | dsERR_NONE | A valid DRC mode must be returned |
  * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  * 
  */
@@ -1216,12 +1212,13 @@ void test_l1_dsAudio_positive_dsGetDRCMode (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsGetDRCMode() without initializing audio ports | `handle`=any value | dsERR_NOT_INITIALIZED | Should Pass |
+ * |01|Call dsGetDRCMode() without initializing audio ports | handle = [valid handle] , mode = [valid pointer] | dsERR_NOT_INITIALIZED | dsGetDRCMode call must failas module not initialized|
  * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
- * |03|Call dsGetDRCMode() using an invalid handle | `handle`=invalid value | dsERR_INVALID_PARAM | Should Pass |
+ * |03|Call dsGetDRCMode() using an invalid handle and valid pointer |handle: [ invalid handle ] , mode : [ valid pointer ] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
  * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
- * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
- * |06|Call dsGetDRCMode() again after terminating audio ports | `handle`=valid handle from step 04 | dsERR_NOT_INITIALIZED | Should Pass |
+ * |05|Call dsGetDRCMode() using an valid handle and invalid pointer |handle: [ invalid handle ] , mode : [ invalid pointer ] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |07|Call dsGetDRCMode() again after terminating audio ports | handle = [valid handle from step 04] , mode = [valid pointer] | dsERR_NOT_INITIALIZED | dsGetDRCMode call must fail as module not initialized|
  * 
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
@@ -1244,11 +1241,8 @@ void test_l1_dsAudio_negative_dsGetDRCMode (void)
  * |:--:|-----------|----------|--------------|-----|
  * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
- * |03|Set the DRC Mode to DRC line mode using dsSetDRCMode() | `handle`=acquired from previous step, `mode`=0 | dsERR_NONE | Ensure that the DRC Mode is set to DRC line mode |
- * |04|Retrieve the DRC Mode using dsGetDRCMode() to verify | `handle`=acquired from previous step | Value of *mode should be 0 | Verification step |
- * |05|Set the DRC Mode to DRC RF mode using dsSetDRCMode() | `handle`=acquired from previous step, `mode`=1 | dsERR_NONE | Ensure that the DRC Mode is set to DRC RF mode |
- * |06|Retrieve the DRC Mode using dsGetDRCMode() to verify | `handle`=acquired from previous step | Value of *mode should be 1 | Verification step |
- * |07|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |03|Call dsSetDRCMode() by looping through the acquired port handled and valid value (i.e 0 or 1) | handle = [valid handle] , mode = [valid value] | dsERR_NONE | Ensure that the DRC Mode is properly set |
+ * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  * 
  */
 void test_l1_dsAudio_positive_dsSetDRCMode (void)
@@ -1268,13 +1262,13 @@ void test_l1_dsAudio_positive_dsSetDRCMode (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsSetDRCMode() without initializing audio ports | `handle`=any value, `mode`=any value | dsERR_NOT_INITIALIZED | Should Pass |
+ * |01|Call dsSetDRCMode() without initializing audio ports | handle = [valid handle] , mode = [valid value] | dsERR_NOT_INITIALIZED | dsSetDRCMode call must fail as module not initialized |
  * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
- * |03|Call dsSetDRCMode() using an invalid handle | `handle`=invalid value, `mode`=0 | dsERR_INVALID_PARAM | Should Pass |
- * |04|Call dsSetDRCMode() using invalid mode values (not 0 or 1) | `handle`=valid handle, `mode`=any value not in [0,1] | dsERR_INVALID_PARAM | Should Pass |
- * |05|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
- * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
- * |07|Call dsSetDRCMode() again after terminating audio ports | `handle`=valid handle from step 05, `mode`=0 | dsERR_NOT_INITIALIZED | Should Pass |
+ * |03|Call dsSetDRCMode() using an invalid handle and valid value (i.e 0 or 1) | handle = [invalid handle],  mode = [valid value] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|Call dsSetDRCMode() by looping through valid handle and invalid mode values (i.e < 0 or > 1) | handle = [valid handle] , mode = [invalid value] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |07|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |08|Call dsSetDRCMode() again after terminating audio ports attempt to set DRC mode | handle = [valid handle from step 04] , mode =[valid value] | dsERR_NOT_INITIALIZED | dsSetDRCMode call must fail as module not initialized |
  * 
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
@@ -1297,9 +1291,8 @@ void test_l1_dsAudio_negative_dsSetDRCMode (void)
  * |:--:|-----------|----------|--------------|-----|
  * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
- * |03|Set a known Surround Virtualizer level using dsSetSurroundVirtualizer() | `handle`=acquired from previous step, `virtualizer`=a known setting | dsERR_NONE | Prep step to ensure a known state |
- * |04|Retrieve the Surround Virtualizer level using dsGetSurroundVirtualizer() | `handle`=acquired from previous step | Value of *virtualizer should match the known setting | Verification step |
- * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |03|Call dsGetSurroundVirtualizer() Loop through the acquired port handles with valid pointer | handle = [valid handle] , virtualizer = [valid pointer] | dsERR_NONE | dsGetSurroundVirtualizer must return valid values  |
+ * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  * 
  */
 void test_l1_dsAudio_positive_dsGetSurroundVirtualizer (void)
@@ -1319,13 +1312,13 @@ void test_l1_dsAudio_positive_dsGetSurroundVirtualizer (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsGetSurroundVirtualizer() without initializing audio ports | `handle`=any value, `virtualizer`=NULL or any pointer | dsERR_NOT_INITIALIZED | Should Pass |
+ * |01|Call dsGetSurroundVirtualizer() without initializing audio ports | handle = [valid handle] , virtualizer = [valid pointer] | dsERR_NOT_INITIALIZED |dsGetSurroundVirtualizer must fail as module is not initialized |
  * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
- * |03|Call dsGetSurroundVirtualizer() using an invalid handle | `handle`=invalid value, `virtualizer`=any pointer | dsERR_INVALID_PARAM | Should Pass |
- * |04|Call dsGetSurroundVirtualizer() using NULL for `virtualizer` | `handle`=valid handle, `virtualizer`=NULL | dsERR_INVALID_PARAM | Should Pass |
- * |05|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |03|Call dsGetSurroundVirtualizer() using an invalid handle and valid pointer | handle = [invalid handle] , virtualizer = [valid pointer] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|Call dsGetSurroundVirtualizer() by looping through the acquired port handled but with invalid pointer | handle = [valid handle ] , virtualizer = [invalid pointer] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
  * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
- * |07|Call dsGetSurroundVirtualizer() again after terminating audio ports | `handle`=valid handle from step 05, `virtualizer`=any pointer | dsERR_NOT_INITIALIZED | Should Pass |
+ * |07|Call dsGetSurroundVirtualizer() again after terminating audio ports  | handle = [valid handle from step 04] , virtualizer = [valid pointer] | dsERR_NOT_INITIALIZED | dsGetSurroundVirtualizer must fail as module is not initialized |
  * 
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
@@ -1348,8 +1341,7 @@ void test_l1_dsAudio_negative_dsGetSurroundVirtualizer (void)
  * |:--:|-----------|----------|--------------|-----|
  * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
- * |03|Set a known Surround Virtualizer level using dsSetSurroundVirtualizer() | `handle`=acquired from previous step, `virtualizer`=a known setting | dsERR_NONE | Verification step |
- * |04|Retrieve the Surround Virtualizer level using dsGetSurroundVirtualizer() | `handle`=acquired from previous step | Value of *virtualizer should match the known setting | Cross verification step |
+ * |03|Call dsSetSurroundVirtualizer() by looping through acquired handle with valid virtualizer values(i.e mode (0 to 2) and boost (0 to 96)) | handle = [valid handles] , virtualizer = [valid mode and boost values] | dsERR_NONE | dsSetSurroundVirtualizer must set the valid values |
  * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  * 
  */
@@ -1370,12 +1362,13 @@ void test_l1_dsAudio_positive_dsSetSurroundVirtualizer (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsSetSurroundVirtualizer() without initializing audio ports | `handle`=any value, `virtualizer`=a valid value | dsERR_NOT_INITIALIZED | Should Pass |
+ * |01|Call dsSetSurroundVirtualizer() without initializing audio ports | handle = [valid handle] , virtualizer = [valid values | dsERR_NOT_INITIALIZED | dsSetSurroundVirtualizer call must fail as module not initialized |
  * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
- * |03|Call dsSetSurroundVirtualizer() using an invalid handle | `handle`=invalid value, `virtualizer`=a valid value | dsERR_INVALID_PARAM | Should Pass |
+ * |03|Call dsSetSurroundVirtualizer() using an invalid handle and valid virtualizer values (i.e mode (0 to 2) and boost (0 to 96))  | handle = [invalid handle] , virtualizer = [valid values] | dsERR_INVALID_PARAM | Invalid parameter should be returned |
  * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
- * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
- * |06|Call dsSetSurroundVirtualizer() again after terminating audio ports | `handle`=valid handle from step 04, `virtualizer`=a valid value | dsERR_NOT_INITIALIZED | Should Pass |
+ * |05|Call dsSetSurroundVirtualizer() by looping through valid handles and invalid virtualizer values (i.e mode (< 0 or > 2) and boost (< 0 or > 96))  | handle = [valid handle] , virtualizer = [invalid values] | dsERR_INVALID_PARAM | Invalid parameter should be returned |
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |07|Call dsSetSurroundVirtualizer() again after terminating audio ports | handle = [valid handle from step 04] , virtualizer = [valid values] | dsERR_NOT_INITIALIZED | dsSetSurroundVirtualizer call must fail as module not initialized |
  * 
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
@@ -1398,7 +1391,7 @@ void test_l1_dsAudio_negative_dsSetSurroundVirtualizer (void)
  * |:--:|-----------|----------|--------------|-----|
  * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
- * |03|Call dsGetAudioEncoding() by looping through the acquired port handles to get the Media Intelligent Steering of each port | handle: [ loop through valid handles ] , enabled: [pointer to hold the MI Steering enabled/disabled value] | dsERR_NONE | MI Steering enabled/disabled status must be returned |
+ * |03|Call dsGetMISteering() by looping through the acquired port handles to get the Media Intelligent Steering of each port | handle: [ loop through valid handles ] , enabled: [pointer to hold the MI Steering enabled/disabled value] | dsERR_NONE | MI Steering enabled/disabled status must be returned |
  * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  * 
  */
@@ -1419,12 +1412,13 @@ void test_l1_dsAudio_positive_dsGetMISteering (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsGetMISteering() without initializing audio ports | `handle`=any value | dsERR_NOT_INITIALIZED | Should Pass |
+ * |01|Call dsGetMISteering() without initializing audio ports | handle = [valid handle] , enabled = [valid pointer] | dsERR_NOT_INITIALIZED | dsGetMISteering call must fail as module is not initialized |
  * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
- * |03|Call dsGetMISteering() using an invalid handle | `handle`=invalid value | dsERR_INVALID_PARAM | Should Pass |
+ * |03|Call dsGetMISteering() using an invalid handle but with valid pointer | handle = [invalid handle] , enabled = [valid pointer] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
  * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|Call dsGetMISteering() using an valid handle but with invalid pointer | handle = [invalid handle] , enabled = [invalid pointer] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
  * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
- * |06|Call dsGetMISteering() again after terminating audio ports | `handle`=valid handle from step 04 | dsERR_NOT_INITIALIZED | Should Pass |
+ * |06|Call dsGetMISteering() again after terminating audio ports | handle = [valid handle from step 04] , enabled = [valid pointer] | dsERR_NOT_INITIALIZED | dsGetMISteering call must fail as module is not initialized |
  * 
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
@@ -1441,17 +1435,14 @@ void test_l1_dsAudio_negative_dsGetMISteering (void)
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
- * 
+ *
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
- * |03|Enable MI Steering using dsSetMISteering() | `handle`=acquired from previous step, `enabled`=true | dsERR_NONE | |
- * |04|Retrieve the MI Steering status using dsGetMISteering() | `handle`=acquired from previous step | Value of *enabled should be true | Cross verification step |
- * |05|Disable MI Steering using dsSetMISteering() | `handle`=acquired from previous step, `enabled`=false | dsERR_NONE | |
- * |06|Retrieve the MI Steering status again using dsGetMISteering() | `handle`=acquired from previous step | Value of *enabled should be false | Cross verification step |
- * |07|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |03|Call dsSetMISteering() by looping through the acquired port handles and vaild value(i.e TRUE / FALSE) | handle = [valid handle] , enabled = [valid value] | dsERR_NONE | Ensure that the MI steering sets properly enabled or disabled |
+ * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful | 
  * 
  */
 void test_l1_dsAudio_positive_dsSetMISteering (void)
@@ -1471,12 +1462,12 @@ void test_l1_dsAudio_positive_dsSetMISteering (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsSetMISteering() without initializing audio ports | `handle`=any value, `enabled`=true | dsERR_NOT_INITIALIZED | Should Pass |
+ * |01|Call dsSetMISteering() without initializing audio ports | handle = [valid handle] , enabled = [valid value] | dsERR_NOT_INITIALIZED |dsSetMISteering call must fail as module is not initialized |
  * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
- * |03|Call dsSetMISteering() using an invalid handle | `handle`=invalid value, `enabled`=true | dsERR_INVALID_PARAM | Should Pass |
+ * |03|Call dsSetMISteering() using an invalid handle and valid value (.ie TRUE or FALSE) | handle = [invalid handle], enabled = [valid value] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
  * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
  * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
- * |06|Call dsSetMISteering() again after terminating audio ports | `handle`=valid handle from step 04, `enabled`=true | dsERR_NOT_INITIALIZED | Should Pass |
+ * |06|Call dsSetMISteering() after terminating audio ports | handle = [valid handle from step 04], enabled = [valid value] | dsERR_NOT_INITIALIZED | dsSetMISteering call must fail as module is not initialized |
  * 
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
