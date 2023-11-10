@@ -1183,7 +1183,7 @@ void test_l1_dsVideoPort_negative_dsRegisterHdcpStatusCallback (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetHDCPStatus() by looping through the acquired port handles and valid pointer to retrieve the HDCP status of a video port | handle  = [loop through valid handles] status = [valid pointer] | dsERR_NONE | The status should be successfully fetched and stored in the given pointer|
+ * |03|Call dsGetHDCPStatus() by looping through the acquired port handles and valid pointer to retrieve HDCP status | handle  = [valid handles] status = [valid pointer] | dsERR_NONE | The HDCP status should be successfully fetched and stored in the given pointer|
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  * **Additional Notes:**@n
@@ -1209,7 +1209,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPStatus (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsGetHDCPStatus() Attempt to get the HDCP status  with out initializing video ports| handle = [valid handle] , status = [valid pointer]| dsERR_NOT_INITIALIZED| dsGetHDCPStatus call should fail as module is not initialized |
+ * |01|Call dsGetHDCPStatus() Attempt to get the HDCP status  with out initializing video ports| handle = [invalid handle] , status = [valid pointer]| dsERR_NOT_INITIALIZED| dsGetHDCPStatus call should fail as module is not initialized |
  * |02|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |03|Call dsGetHDCPStatus() Using an invalid handle but with valid status pointer | handle = [invalid handle], status = [valid pointer] | dsERR_INVALID_PARAM | Invalid paramerter must be returned |
  * |04|Call dsGetVideoPort() - Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports|
@@ -1218,7 +1218,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPStatus (void)
  * |06|Call dsGetHDCPStatus() Again after terminating video ports attempt to get the status of video ports | handle= [valid handle from step 04 ] , status = [valid pointer] | dsERR_NOT_INITIALIZED | dsGetHDCPStatus call should fail as module is not initialized |
  * 
  * **Additional Notes:**@n
- * - Handle validation, NULL pointer checks, and module initialization checks are crucial for the robustness of the API.
+ * - Handle validation , NULL pointer checks, and module initialization checks are crucial for the robustness of the API.
  * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_negative_dsGetHDCPStatus (void)
@@ -1571,13 +1571,12 @@ void test_l1_dsVideoPort_positive_dsSetForceDisable4KSupport (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsSetForceDisable4KSupport() Attempt to disable or not to disable 4K support with out initializing video ports| handle = [valid handle] , disable = [valid value]| dsERR_NOT_INITIALIZED| dsSetForceDisable4KSupport call should fail as module is not initialized |
+ * |01|Call dsSetForceDisable4KSupport() Attempt to disable or not to disable 4K support with out initializing video ports| handle = [invalid handle] , disable = [valid value]| dsERR_NOT_INITIALIZED| dsSetForceDisable4KSupport call should fail as module is not initialized |
  * |02|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |03|Call dsSetForceDisable4KSupport() Using an invalid handle but with valid disable parameter value | handle = [invalid handle], disable = [valid value] | dsERR_INVALID_PARAM | Invalid paramerter must be returned |
  * |04|Call dsGetVideoPort() Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports |
- * |05|Call dsSetForceDisable4KSupport() By looping through acquired port handles but with a invalid value | handle = [valid handle], disable = [invalid value] | dsERR_INVALID_PARAM | Invalid paramerter must be returned |
- * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
- * |07|Call dsSetForceDisable4KSupport() Again after terminating video ports attempt to disable or not to disable 4k support of video ports | handle= [valid handle from step 04 ] , disable = [valid value] | dsERR_NOT_INITIALIZED | dsSetForceDisable4KSupport call should fail as module is not initialized |
+ * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |06|Call dsSetForceDisable4KSupport() Again after terminating video ports attempt to disable or not to disable 4k support of video ports | handle= [valid handle from step 04 ] , disable = [valid value] | dsERR_NOT_INITIALIZED | dsSetForceDisable4KSupport call should fail as module is not initialized |
  * 
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
@@ -2259,12 +2258,8 @@ void test_l1_dsVideoPort_negative_dsGetHdmiPreference (void)
  * **Test Case ID:** 106@p
  * 
  * **Pre-Conditions:**@n
- * - Video port system is successfully initialized via dsVideoPortInit().
- * - A valid video port handle is acquired via dsGetVideoPort().
  * 
  * **Dependencies:**@n
- * - dsVideoPortInit()
- * - dsGetVideoPort()
  * 
  * **User Interaction:** None
  * 
@@ -2273,7 +2268,7 @@ void test_l1_dsVideoPort_negative_dsGetHdmiPreference (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Get IgnoreEDID status using dsGetIgnoreEDIDStatus()| |A status value of either true or false|Should successfully get the IgnoreEDID status|
+ * |03|Call dsGetIgnoreEDIDStatus() by looping through acquired handles and valid pointer to get IgnoreEDID status |handle=[valid handle] ,status=[valid pointer] |dsERR_NONE | Should successfully get the IgnoreEDID status|
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  * **Additional Notes:**@n
@@ -2299,11 +2294,13 @@ void test_l1_dsVideoPort_positive_dsGetIgnoreEDIDStatus (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsGetIgnoreEDIDStatus() without prior initialization||dsERR_NOT_INITIALIZED|Should Fail|
+ * |01|Call dsGetIgnoreEDIDStatus() without prior initialization of video ports|handle=[invalid handle] ,status=[valid pointer]|dsERR_NOT_INITIALIZED|call must be fail as module is not initialzed|
  * |02|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
- * |03|Get IgnoreEDID status using dsGetIgnoreEDIDStatus() with an invalid handle|Invalid handle|dsERR_INVALID_PARAM|Should Fail|
- * |04|Get IgnoreEDID status using dsGetIgnoreEDIDStatus() with a NULL status pointer|NULL pointer|dsERR_INVALID_PARAM|Should Fail|
- * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |03|Call dsGetIgnoreEDIDStatus() with an invalid handle but with valid pointer|handle=[invalid handle] ,status=[valid pointer]|dsERR_INVALID_PARAM|Invalid parameter must be returned|
+ * |04|Call dsGetVideoPort() Get the port handle for all supported video ports on the platform  |type , index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports |
+ * |05|Call dsGetIgnoreEDIDStatus() by looping through valid handles with a NULL status pointer | handle=[valid handle] , status=[NULL pointer]|dsERR_INVALID_PARAM|Invalid parameter must be returned|
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |07|Call dsGetIgnoreEDIDStatus()  Again after terminating video ports | handle=[valid handle from step 04 ] , status=[valid pointer] | dsERR_NOT_INITIALIZED | call should fail as module is not initialized |
  * 
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
@@ -2321,12 +2318,8 @@ void test_l1_dsVideoPort_negative_dsGetIgnoreEDIDStatus (void)
  * **Test Case ID:** 107@p
  * 
  * **Pre-Conditions:**@n
- * - Video port system is successfully initialized via dsVideoPortInit().
- * - A valid video port handle is acquired via dsGetVideoPort().
  * 
  * **Dependencies:**@n
- * - dsVideoPortInit()
- * - dsGetVideoPort()
  * 
  * **User Interaction:** None
  * 
@@ -2335,7 +2328,7 @@ void test_l1_dsVideoPort_negative_dsGetIgnoreEDIDStatus (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Set background color using dsSetBackgroundColor()|Valid color value|dsERR_NONE|Background color should be set successfully|
+ * |03|Call dsSetBackgroundColor by looping through the acquired prots and valid color values| handle=[Valid handle], color=[valid values] | dsERR_NONE|Background color should be set successfully|
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  * **Additional Notes:**@n
@@ -2362,12 +2355,14 @@ void test_l1_dsVideoPort_positive_dsSetBackgroundColor (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsSetBackgroundColor() without prior initialization||dsERR_NOT_INITIALIZED|Should Fail|
+ * |01|Call dsSetBackgroundColor() without prior initialization of video ports|handle=[inValid handle], color=[valid values]|dsERR_NOT_INITIALIZED|call must fail as module not initialized|
  * |02|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
- * |03|Set background color using dsSetBackgroundColor() with an invalid handle|Invalid handle|dsERR_INVALID_PARAM|Should Fail|
- * |04|Set background color using dsSetBackgroundColor() with an invalid color value|Invalid color value|dsERR_INVALID_PARAM|Should Fail|
- * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
- * 
+ * |03|Call dsSetBackgroundColor()  with an invalid handle and valid color values |handle=[inValid handle], color=[valid values]|dsERR_INVALID_PARAM|Invalid parameter must return |
+ * |04|Call dsGetVideoPort() Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports |
+ * |05|Call dsSetBackgroundColor() by looping through acquired handles and invalid color value|handle=[valid handle], color=[Invalid color value|dsERR_INVALID_PARAM|Invalid parameter must return|
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |07|Call dsSetBackgroundColor() after termination video ports |handle= [valid handle from step 04 ] , color= [valid values] | dsERR_NOT_INITIALIZED | call should fail as module is not initialized |
+ *
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
  * - dsVideoPortTerm() should always be called to ensure that the video port system is properly shut down and all resources are released.
@@ -2384,12 +2379,8 @@ void test_l1_dsVideoPort_negative_dsSetBackgroundColor (void)
  * **Test Case ID:** 109@p
  * 
  * **Pre-Conditions:**@n
- * - Video port system is successfully initialized via dsVideoPortInit().
- * - A valid video port handle is acquired via dsGetVideoPort().
  * 
  * **Dependencies:**@n
- * - dsVideoPortInit()
- * - dsGetVideoPort()
  * 
  * **User Interaction:** None
  * 
@@ -2398,7 +2389,7 @@ void test_l1_dsVideoPort_negative_dsSetBackgroundColor (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Set HDR mode using dsSetForceHDRMode()|Valid HDR mode|dsERR_NONE|HDR mode should be set successfully|
+ * |03|Call dsSetForceHDRMode() by looping through acquired handles and valid mode values|handle=[valid handle], mode=[valid values]|dsERR_NONE|HDR mode should be set successfully|
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  * **Additional Notes:**@n
@@ -2425,11 +2416,13 @@ void test_l1_dsVideoPort_positive_dsSetForceHDRMode (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsSetForceHDRMode() without prior initialization||dsERR_NOT_INITIALIZED|Should Fail|
+ * |01|Call dsSetForceHDRMode() without prior initialization of video ports|handle=[inValid handle], mode=[valid values]|dsERR_NOT_INITIALIZED|call must fail as module not initialized|
  * |02|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
- * |03|Set HDR mode using dsSetForceHDRMode() with an invalid handle|Invalid handle|dsERR_INVALID_PARAM|Should Fail|
- * |04|Set HDR mode using dsSetForceHDRMode() with an invalid HDR mode|Invalid HDR mode|dsERR_INVALID_PARAM|Should Fail|
- * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |03|Call dsSetForceHDRMode() with an invalid handle and valid mode values|handle=[inValid handle], mode=[valid values]|dsERR_INVALID_PARAM|Invalid parameter must return|
+ * |04|Call dsGetVideoPort() Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports |
+ * |05|Call dsSetForceHDRMode() by looping through acquired handles and valid mode values|handle=[Valid handle], mode=[invalid values]|dsERR_INVALID_PARAM|Invalid parameter must return|
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |07|Call dsSetForceHDRMode() after termination video ports |handle=[valid handle from step 04 ] , mode=[valid values] | dsERR_NOT_INITIALIZED | call should fail as module is not initialized |
  * 
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
@@ -2447,12 +2440,8 @@ void test_l1_dsVideoPort_negative_dsSetForceHDRMode (void)
  * **Test Case ID:** 110@p
  * 
  * **Pre-Conditions:**@n
- * - Video port system is successfully initialized via dsVideoPortInit().
- * - A valid video port handle is acquired via dsGetVideoPort().
  * 
  * **Dependencies:**@n
- * - dsVideoPortInit()
- * - dsGetVideoPort()
  * 
  * **User Interaction:** None
  * 
@@ -2461,7 +2450,7 @@ void test_l1_dsVideoPort_negative_dsSetForceHDRMode (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Get color depth capabilities using dsColorDepthCapabilities()| |dsERR_NONE and valid OR-ed colorDepthCapability value|Color depth capabilities should be retrieved successfully|
+ * |03|Call dsColorDepthCapabilities() by looping through the acquired ports and valid pointer|handle=[vallid handle], colorDepthCapability=[valid pointer] |dsERR_NONE  Color depth capabilities should be retrieved successfully|
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  * **Additional Notes:**@n
@@ -2488,11 +2477,13 @@ void test_l1_dsVideoPort_positive_dsColorDepthCapabilities (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsColorDepthCapabilities() without prior initialization||dsERR_NOT_INITIALIZED|Should Fail|
+ * |01|Call dsColorDepthCapabilities() without prior initialization of video ports|handle=[inValid handle], colorDepthCapability=[valid pointer]|dsERR_NOT_INITIALIZED|call must fail as module not initialized|
  * |02|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
- * |03|Get color depth capabilities using dsColorDepthCapabilities() with an invalid handle|Invalid handle|dsERR_INVALID_PARAM|Should Fail|
- * |04|Get color depth capabilities using dsColorDepthCapabilities() with a NULL pointer for colorDepthCapability|NULL|dsERR_INVALID_PARAM|Should Fail|
+ * |03|Call dsColorDepthCapabilities() with an invalid handle and valid pointer |handle=[valid handle], colorDepthCapability=[valid pointer] |dsERR_INVALID_PARAM|Invalid parameter must be returned |
+ * |04|Call dsGetVideoPort() Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports |
+ * |04|Call dsColorDepthCapabilities() by looping through acquired handles and invalid pointer | handle=[valid handle], colorDepthCapability=[Invalid pointer]|dsERR_INVALID_PARAM|Invalid parameter must return|
  * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |06|Call dsColorDepthCapabilities() after terminating videop ports |handle= [valid handle from step 04 ] , colorDepthCapability= [valid pointer] | dsERR_NOT_INITIALIZED|call must fail as module not initialized |
  * 
  * **Additional Notes:**@n
  * - Handle validation, module initialization checks, and null pointer checks are crucial for the robustness of the API.
@@ -2510,13 +2501,8 @@ void test_l1_dsVideoPort_negative_dsColorDepthCapabilities (void)
  * **Test Case ID:** 130@p
  * 
  * **Pre-Conditions:**@n
- * - Video port system is successfully initialized via dsVideoPortInit().
- * - A valid video port handle is acquired via dsGetVideoPort().
  * 
  * **Dependencies:**@n
- * - dsVideoPortInit()
- * - dsGetVideoPort()
- * - dsSetPreferredColorDepth()
  * 
  * **User Interaction:** None
  * 
@@ -2525,9 +2511,8 @@ void test_l1_dsVideoPort_negative_dsColorDepthCapabilities (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Set a known color depth using dsSetPreferredColorDepth()|A valid colorDepth|dsERR_NONE|Color depth should be set successfully|
- * |04|Retrieve the color depth using dsGetPreferredColorDepth()| |The same colorDepth value set in step 03|Should match the set value|
- * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |03|Call dsGetPreferredColorDepth by looping through acquired handles and valid pointer |handle=[valid handle] , colorDepth=[valid pointer]|dsERR_NONE|Preferred Color depth should be retrieved successfully|
+ * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  * **Additional Notes:**@n
  * - Depending on the platform and hardware, certain color depths might not be supported. Always validate against the expected capabilities of the tested platform.
@@ -2553,11 +2538,14 @@ void test_l1_dsVideoPort_positive_dsGetPreferredColorDepth (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsGetPreferredColorDepth() without prior initialization||dsERR_NOT_INITIALIZED|Should Fail|
+ * |01|Call dsGetPreferredColorDepth() without prior initialization of video ports|handle=[invalid handle] , colorDepth=[valid pointer]|dsERR_NOT_INITIALIZED|call must fail as module is not initialized|
  * |02|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
- * |03|Retrieve the color depth using dsGetPreferredColorDepth() with an invalid handle|Invalid handle|dsERR_INVALID_PARAM|Should Fail|
- * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
- * 
+ * |03|Call dsGetPreferredColorDepth() with an invalid handle and with valid pointer|handle=[invalid handle] , colorDepth=[valid pointer]|dsERR_INVALID_PARAM|Invalid parameter must be returned|
+ * |04|Call dsGetVideoPort() Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports |
+ * |05|Call dsGetPreferredColorDepth() by looping through valid handes and with invalid pointer|handle=[valid handle] , colorDepth=[invalid pointer]|dsERR_INVALID_PARAM|Invalid parameter must be returned|
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |07|Call dsGetPreferredColorDepth() after terminating video ports |handle=[valid handle] , colorDepth=[valid pointer] |dsERR_NOT_INITIALIZED|call must fail as module is not initialized|
+ *
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
  * - dsVideoPortTerm() should always be called to ensure that the video port system is properly shut down and all resources are released.
@@ -2578,8 +2566,6 @@ void test_l1_dsVideoPort_negative_dsGetPreferredColorDepth (void)
  * - A valid video port handle is acquired via dsGetVideoPort().
  * 
  * **Dependencies:**@n
- * - dsVideoPortInit()
- * - dsGetVideoPort()
  * 
  * **User Interaction:** None
  * 
@@ -2588,8 +2574,7 @@ void test_l1_dsVideoPort_negative_dsGetPreferredColorDepth (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Set preferred color depth using dsSetPreferredColorDepth()|Valid colorDepth|dsERR_NONE|Color depth should be set successfully|
- * |04|Verify the set value using dsGetPreferredColorDepth()| |The same colorDepth value set in step 03|Should match the set value|
+ * |03|Call dsSetPreferredColorDepth() by looping through the acquired handles and Valid colorDepth values|handle=[invalid handle] , colorDepth=[valid values] |dsERR_NONE|Color depth should be set successfully|
  * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  * **Additional Notes:**@n
@@ -2610,17 +2595,19 @@ void test_l1_dsVideoPort_positive_dsSetPreferredColorDepth (void)
  * **Pre-Conditions:**@n
  * Varying depending on the specific test.
  * 
- * **Dependencies:** dsVideoPortInit()@n
+ * **Dependencies:**@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsSetPreferredColorDepth() without prior initialization||dsERR_NOT_INITIALIZED|Should Fail|
+ * |01|Call dsSetPreferredColorDepth() without prior initialization of video ports|handle=[invalid handle] , colorDepth=[valid values]|dsERR_NOT_INITIALIZED|call should fail as module not initialized|
  * |02|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
- * |03|Set preferred color depth using dsSetPreferredColorDepth() with an invalid handle|Invalid handle|dsERR_INVALID_PARAM|Should Fail|
- * |04|Set preferred color depth using dsSetPreferredColorDepth() with an unsupported colorDepth value|Unsupported colorDepth value|dsERR_OPERATION_NOT_SUPPORTED|Should Fail|
- * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |03|Call dsSetPreferredColorDepth() with an invalid handle with valid color depth values|handle=[Invalid handle],colorDepth=[valid values]|dsERR_INVALID_PARAM|Invalid parameter should be return|
+ * |04|Call dsGetVideoPort() Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports |
+ * |05|Call dsSetPreferredColorDepth() by looping through valid handles  with an unsupported colorDepth value|handle=[valid handle],colorDepth=[invalid values]|dsERR_OPERATION_NOT_SUPPORTED|Invalid parameter should be return|
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |07|Call dsSetPreferredColorDepth() after terminating video ports|handle=[valid handle] , colorDepth=[valid values]|dsERR_NOT_INITIALIZED|call should fail as module not initialized|
  * 
  * **Additional Notes:**@n
  * - Handle validation, module initialization checks, and support checks for color depths are crucial for the robustness of the API.
