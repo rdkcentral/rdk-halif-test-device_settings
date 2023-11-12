@@ -605,6 +605,7 @@ void test_l1_dsHost_negative_dsGetHostEDID(void) {
 }
 
 static UT_test_suite_t * pSuite = NULL;
+static UT_test_suite_t * pSuite2 = NULL;
 
 /**
  * @brief Register the main test(s) for this module
@@ -615,7 +616,12 @@ int test_l1_dsHost_register ( void )
 {
 	/* add a suite to the registry */
 	pSuite = UT_add_suite( "[L1 dsHost]", NULL, NULL );
+    pSuite2 = UT_add_suite( "[L1 dsHost -- advanced]", NULL, NULL );
 	if ( NULL == pSuite )
+	{
+		return -1;
+	}	
+    if ( NULL == pSuite2 )
 	{
 		return -1;
 	}	
@@ -625,11 +631,14 @@ int test_l1_dsHost_register ( void )
 	UT_add_test( pSuite, "dsHostTerm_L1_positive" ,test_l1_dsHost_positive_dsHostTerm );
 	UT_add_test( pSuite, "dsHostTerm_L1_negative" ,test_l1_dsHost_negative_dsHostTerm );
 	UT_add_test( pSuite, "dsGetCPUTemperature_L1_positive" ,test_l1_dsHost_positive_dsGetCPUTemperature );
-	UT_add_test( pSuite, "dsGetCPUTemperature_L1_negative" ,test_l1_dsHost_negative_dsGetCPUTemperature );
 	UT_add_test( pSuite, "dsGetSocIDFromSDK_L1_positive" ,test_l1_dsHost_positive_dsGetSocIDFromSDK );
-	UT_add_test( pSuite, "dsGetSocIDFromSDK_L1_negative" ,test_l1_dsHost_negative_dsGetSocIDFromSDK );
-	UT_add_test( pSuite, "dsGetHostEDID_L1_positive" ,test_l1_dsHost_positive_dsGetHostEDID );
-	UT_add_test( pSuite, "dsGetHostEDID_L1_negative" ,test_l1_dsHost_negative_dsGetHostEDID );
+
+    UT_add_test( pSuite, "dsGetSocIDFromSDK_L1_negative" ,test_l1_dsHost_negative_dsGetSocIDFromSDK );
+    UT_add_test( pSuite, "dsGetCPUTemperature_L1_negative" ,test_l1_dsHost_negative_dsGetCPUTemperature );
+
+
+    UT_add_test( pSuite2, "dsGetHostEDID_L1_positive" ,test_l1_dsHost_positive_dsGetHostEDID );
+    UT_add_test( pSuite2, "dsGetHostEDID_L1_negative" ,test_l1_dsHost_negative_dsGetHostEDID );
 	
 
 	return 0;
