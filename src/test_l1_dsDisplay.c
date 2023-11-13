@@ -39,322 +39,385 @@
 #include <ut_log.h>
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsDisplayInit() initializes the DS Display sub-system correctly during positive scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 001@n
+ * 
+ * **Pre-Conditions:**@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Call dsDisplayInit() for the first time | | dsERR_NONE | Initialization should succeed |
+ * |02|Terminate the DS Display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
+ * |03|Call dsDisplayInit() for the first time | | dsERR_NONE | Initialization should succeed |
+ * |04|Terminate the DS Display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
+ * 
+ * @note This sequence tests the basic initialization and reinitialization capabilities of dsDisplayInit().
+ */
 void test_l1_dsDisplay_positive_dsDisplayInit (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsDisplayInit() returns correct error codes during negative scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 002@n
+ * 
+ * **Pre-Conditions:**@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Initialize the module with dsDisplayInit() | | dsERR_NONE | Initialization should succeed |
+ * |02|Call dsDisplayInit() again to check if it returns an error when the module is already initialized | | dsERR_ALREADY_INITIALIZED | Should return error indicating the module is already initialized |
+ * |03|Terminate the module with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
+ * 
+ * @note Scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL are not included in this test plan due to the challenges in realistic simulation. Each test case is functionally independent with proper initialization and termination steps.
+ */
 void test_l1_dsDisplay_negative_dsDisplayInit (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
-void test_l1_dsDisplay_positive_dsGetDisplay (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
-}
-
-/**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
-void test_l1_dsDisplay_negative_dsGetDisplay (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
-}
-
-/**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
-void test_l1_dsDisplay_positive_dsGetEDID (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
-}
-
-/**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
-void test_l1_dsDisplay_negative_dsGetEDID (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
-}
-
-/**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
-void test_l1_dsDisplay_positive_dsGetEDIDBytes (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
-}
-
-/**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
-void test_l1_dsDisplay_negative_dsGetEDIDBytes (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
-}
-
-/**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
-void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
-}
-
-/**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
-void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
-}
-
-/**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsDisplayTerm() terminates the display sub-system correctly during positive scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 003@n
+ * 
+ * **Pre-Conditions:**@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Initialize the display sub-system with dsDisplayInit() | | dsERR_NONE | Initialization should succeed |
+ * |02|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
+ * |03|Reinitialize the display sub-system with dsDisplayInit() to check for reinitialization capability | | dsERR_NONE | Reinitialization should succeed |
+ * |04|Terminate the display sub-system again with dsDisplayTerm() to confirm termination capability | | dsERR_NONE | Termination should succeed again |
+ * 
+ * @note This sequence tests the ability of dsDisplayTerm() to terminate the display sub-system and its reinitialization and retermination capabilities.
+ */
 void test_l1_dsDisplay_positive_dsDisplayTerm (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsDisplayTerm() returns correct error codes during negative scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 004@n
+ * 
+ * **Pre-Conditions:**@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Call dsDisplayTerm() without initializing the display sub-system | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |02|Initialize the display sub-system with dsDisplayInit() | | dsERR_NONE | Initialization should succeed |
+ * |03|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
+ * |04|Call dsDisplayTerm() again after termination | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * 
+ * @note The ability to test scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might require specific setup or environment configuration.
+ */
 void test_l1_dsDisplay_negative_dsDisplayTerm (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
+
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsGetDisplay() retrieves the handle of the connected display device correctly during positive scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 005@n
+ * 
+ * **Pre-Conditions:**@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Initialize the display sub-system with dsDisplayInit() | | dsERR_NONE | Initialization should succeed |
+ * |02|Call dsGetDisplay() Loop through all dsVideoPortType_t |vType: [Valid Port Type], int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
+ * |03|Call a the last value again, and compare the results |  |Success | The values should be the same |
+ * |04|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
+ * 
+ * @note This sequence tests the ability of dsGetDisplay() to retrieve handles for connected display devices across various video ports.
+ */
+void test_l1_dsDisplay_positive_dsGetDisplay (void)
+{
+	UT_FAIL(This function needs to be implemented!); 
+}
+
+/**
+ * @brief Ensure dsGetDisplay() returns correct error codes during negative scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 006@n
+ * 
+ * **Pre-Conditions:**@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Call dsGetDisplay() without initializing the display sub-system | vType: dsVIDEOPORT_TYPE_HDMI, int=1, intptr_t* | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |02|Initialize the display sub-system with dsDisplayInit() | | dsERR_NONE | Initialization should succeed |
+ * |03|Call dsGetDisplay() with invalid parameter video type | vType: dsVIDEOPORT_TYPE_MAX, int=1, intptr_t* | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
+ * |04|Call dsGetDisplay() with invalid index | vType: dsVIDEOPORT_TYPE_HDMI, int=-1, intptr_t* | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
+ * |05|Call dsGetDisplay() with NULL | vType:dsVIDEOPORT_TYPE_HDMI, int=1, NULL | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
+ * |06|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
+ * |07|Call dsGetDisplay() without initializing the display sub-system |vType: dsVIDEOPORT_TYPE_HDMI, int=1, intptr_t* | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * 
+ * @note The ability to test scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might require specific setup or environment configuration.
+ */
+void test_l1_dsDisplay_negative_dsGetDisplay (void)
+{
+	UT_FAIL(This function needs to be implemented!); 
+}
+
+/**
+ * @brief Ensure dsGetEDID() retrieves the EDID information correctly during positive scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 007@n
+ * 
+ * **Pre-Conditions:**@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Initialize the display sub-system and get a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
+ * |02|Call dsGetDisplay() Loop through all dsVideoPortType_t |vType: dsVIDEOPORT_TYPE_HDMI_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
+ * |03|Call dsGetEDID() with the obtained display device handle | intptr_t handle, dsDisplayEDID_t *edid | dsERR_NONE and valid EDID info | EDID information should be retrieved successfully |
+ * |04|Call dsGetEDID() with the obtained display device handle | intptr_t handle, dsDisplayEDID_t *edid | dsERR_NONE and valid EDID info | EDID information should be retrieved successfully |
+ * |05|Compare the returned results |  | Success | The values should be the same |
+ * |06|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
+ * 
+ * @note This sequence tests the ability of dsGetEDID() to retrieve EDID information for different display devices.
+ */
+void test_l1_dsDisplay_positive_dsGetEDID (void)
+{
+	UT_FAIL(This function needs to be implemented!); 
+}
+
+/**
+ * @brief Ensure dsGetEDID() returns correct error codes during negative scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 008@n
+ * 
+ * **Pre-Conditions:**@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Call dsGetEDID() without initializing the display sub-system or obtaining a handle | intptr_t handle, dsDisplayEDID_t *edid | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |02|Initialize the display sub-system and obtain a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
+ * |03|Call dsGetDisplay() Loop through all dsVideoPortType_t |vType: dsVIDEOPORT_TYPE_HDMI_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
+ * |04|Call dsGetEDID() with an invalid or NULL handle | intptr_t -1, dsDisplayEDID_t *edid | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
+ * |05|Call dsGetEDID() with an invalid or NULL handle | intptr_t handle, NULL | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
+ * |06|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
+ * |07|Call dsGetEDID() without initializing the display sub-system or obtaining a handle | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * 
+ * @note The ability to test scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might require specific setup or environment configuration.
+ */
+void test_l1_dsDisplay_negative_dsGetEDID (void)
+{
+	UT_FAIL(This function needs to be implemented!); 
+}
+
+/**
+ * @brief Ensure dsGetEDIDBytes() retrieves the EDID buffer and length correctly during positive scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 009@n
+ * 
+ * **Pre-Conditions:**@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Initialize the display sub-system and get a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
+ * |02|Call dsGetDisplay() Loop through all dsVideoPortType_t |vType: dsVIDEOPORT_TYPE_HDMI_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
+ * |03|Allocate memory for the EDID buffer and call dsGetEDIDBytes() with the obtained handle | intptr_t handle, unsigned char **edid, int *length | dsERR_NONE, valid EDID data, and length | EDID buffer and length should be retrieved successfully |
+ * |04|Allocate memory for the EDID buffer and call dsGetEDIDBytes() with the obtained handle | intptr_t handle, unsigned char **edid, int *length | dsERR_NONE, valid EDID data, and length | EDID buffer and length should be retrieved successfully |
+ * |05|Verify that the return results are the same |  | Success | The results should be the same  |
+ * |06|Free the allocated EDID buffer and terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Memory deallocation and termination should succeed |
+ * 
+ * @note This sequence tests the ability of dsGetEDIDBytes() to retrieve EDID buffer and length for different display devices. Ensure memory is allocated and freed properly.
+ */
+void test_l1_dsDisplay_positive_dsGetEDIDBytes (void)
+{
+	UT_FAIL(This function needs to be implemented!); 
+}
+
+/**
+ * @brief Ensure dsGetEDIDBytes() returns correct error codes during negative scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 010@n
+ * 
+ * **Pre-Conditions:**@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Call dsGetEDIDBytes() without initializing the display sub-system or obtaining a handle | intptr_t handle, unsigned char **edid, int *length | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |02|Initialize the display sub-system and obtain a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
+ * |03|Call dsGetDisplay() Loop through all dsVideoPortType_t |vType: dsVIDEOPORT_TYPE_HDMI_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
+ * |04|Call dsGetEDIDBytes() with an invalid handle | intptr_t -1, unsigned char **edid, int *length | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
+ * |05|Call dsGetEDIDBytes() with null edid | intptr_t -1, NULL, int *length | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
+ * |06|Call dsGetEDIDBytes() with null length | intptr_t -1, unsigned char **edid, NULL | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
+ * |07|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
+ * |08|Call dsGetEDIDBytes() without initializing the display sub-system or obtaining a handle | intptr_t handle, unsigned char **edid, int *length | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * 
+ * @note The ability to test scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might require specific setup or environment configuration. Ensure proper memory management in the test setup.
+ */
+void test_l1_dsDisplay_negative_dsGetEDIDBytes (void)
+{
+	UT_FAIL(This function needs to be implemented!); 
+}
+
+/**
+ * @brief Ensure dsGetDisplayAspectRatio() retrieves the aspect ratio correctly during positive scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 011@n
+ * 
+ * **Pre-Conditions:**@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Initialize the display sub-system and get a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
+ * |02|Call dsGetDisplay() Loop through all dsVideoPortType_t |vType: dsVIDEOPORT_TYPE_HDMI_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
+ * |03|Call dsGetDisplayAspectRatio() with the obtained display device handle | intptr_t handle, dsVideoAspectRatio_t *aspectRatio | dsERR_NONE and valid aspect ratio | Aspect ratio of the display device should be retrieved successfully |
+ * |04|Call dsGetDisplayAspectRatio() with the obtained display device handle | intptr_t handle, dsVideoAspectRatio_t *aspectRatio | dsERR_NONE and valid aspect ratio | Aspect ratio of the display device should be retrieved successfully |
+ * |05|Compare the results, and make sure the returned values are the same |  | Success | The values should be the same |
+ * |06|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
+ * 
+ * @note This sequence tests the ability of dsGetDisplayAspectRatio() to retrieve aspect ratios for different display devices.
+ */
+void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio (void)
+{
+	UT_FAIL(This function needs to be implemented!); 
+}
+
+/**
+ * @brief Ensure dsGetDisplayAspectRatio() returns correct error codes during negative scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 012@n
+ * 
+ * **Pre-Conditions:**@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Call dsGetDisplayAspectRatio() without initializing the display sub-system or obtaining a handle | intptr_t handle, dsVideoAspectRatio_t *aspectRatio | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |02|Initialize the display sub-system and obtain a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
+ * |03|Call dsGetDisplay() Loop through all dsVideoPortType_t |vType: dsVIDEOPORT_TYPE_HDMI_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
+ * |04|Call dsGetDisplayAspectRatio() with an invalid handle| NULL, dsVideoAspectRatio_t *aspectRatio | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
+ * |05|Call dsGetDisplayAspectRatio() with an invalid or NULL handle | intptr_t handle, NULL | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
+ * |06|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
+ * |07|Call dsGetDisplayAspectRatio() without initializing the display sub-system or obtaining a handle | intptr_t handle, dsVideoAspectRatio_t *aspectRatio  | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * 
+ * @note The ability to test scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might require specific setup or environment configuration.
+ */
+void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio (void)
+{
+	UT_FAIL(This function needs to be implemented!); 
+}
+
+/**
+ * @brief Ensure dsRegisterDisplayEventCallback() registers the callback correctly during positive scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 013@n
+ * 
+ * **Pre-Conditions:**@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Initialize the display sub-system and get a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
+ * |02|Call dsRegisterDisplayEventCallback() with the obtained display device handle and a valid callback function | Valid handle and callback function | dsERR_NONE | Callback registration should succeed |
+ * |03|Verify if the callback is triggered on relevant display events | Simulate relevant display events | Callback is triggered | Ensures the callback functionality |
+ * |04|Repeat registration for different display device handles if available | Different valid handles and callback functions | dsERR_NONE | Callbacks for each handle should be registered successfully |
+ * |05|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
+ * 
+ * @note This sequence tests the ability of dsRegisterDisplayEventCallback() to register and respond to display events for different display devices.
+ */
 void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsRegisterDisplayEventCallback() returns correct error codes during negative scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 014@n
+ * 
+ * **Pre-Conditions:**@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Call dsRegisterDisplayEventCallback() without initializing the display sub-system or obtaining a handle | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |02|Initialize the display sub-system and obtain a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
+ * |03|Call dsRegisterDisplayEventCallback() with an invalid or NULL handle, or NULL callback function | Invalid/NULL handle, NULL callback function | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
+ * |04|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
+ * |05|Call dsRegisterDisplayEventCallback() without initializing the display sub-system or obtaining a handle | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * 
+ * @note The ability to test scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might require specific setup or environment configuration.
+ */
 void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
@@ -378,6 +441,8 @@ int test_l1_dsDisplay_register ( void )
 
 	UT_add_test( pSuite, "dsDisplayInit_L1_positive" ,test_l1_dsDisplay_positive_dsDisplayInit );
 	UT_add_test( pSuite, "dsDisplayInit_L1_negative" ,test_l1_dsDisplay_negative_dsDisplayInit );
+	UT_add_test( pSuite, "dsDisplayTerm_L1_positive" ,test_l1_dsDisplay_positive_dsDisplayTerm );
+	UT_add_test( pSuite, "dsDisplayTerm_L1_negative" ,test_l1_dsDisplay_negative_dsDisplayTerm );
 	UT_add_test( pSuite, "dsGetDisplay_L1_positive" ,test_l1_dsDisplay_positive_dsGetDisplay );
 	UT_add_test( pSuite, "dsGetDisplay_L1_negative" ,test_l1_dsDisplay_negative_dsGetDisplay );
 	UT_add_test( pSuite, "dsGetEDID_L1_positive" ,test_l1_dsDisplay_positive_dsGetEDID );
@@ -386,8 +451,6 @@ int test_l1_dsDisplay_register ( void )
 	UT_add_test( pSuite, "dsGetEDIDBytes_L1_negative" ,test_l1_dsDisplay_negative_dsGetEDIDBytes );
 	UT_add_test( pSuite, "dsGetDisplayAspectRatio_L1_positive" ,test_l1_dsDisplay_positive_dsGetDisplayAspectRatio );
 	UT_add_test( pSuite, "dsGetDisplayAspectRatio_L1_negative" ,test_l1_dsDisplay_negative_dsGetDisplayAspectRatio );
-	UT_add_test( pSuite, "dsDisplayTerm_L1_positive" ,test_l1_dsDisplay_positive_dsDisplayTerm );
-	UT_add_test( pSuite, "dsDisplayTerm_L1_negative" ,test_l1_dsDisplay_negative_dsDisplayTerm );
 	UT_add_test( pSuite, "dsRegisterDisplayEventCallback_L1_positive" ,test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback );
 	UT_add_test( pSuite, "dsRegisterDisplayEventCallback_L1_negative" ,test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback );
 	
