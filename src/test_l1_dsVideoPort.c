@@ -18,6 +18,20 @@
 */
 
 /**
+ * @addtogroup HPK Hardware Porting Kit
+ * @{
+ * @par The Hardware Porting Kit
+ * HPK is the next evolution of the well-defined Hardware Abstraction Layer
+ * (HAL), but augmented with more comprehensive documentation and test suites
+ * that OEM or SOC vendors can use to self-certify their ports before taking
+ * them to RDKM for validation or to an operator for final integration and
+ * deployment. The Hardware Porting Kit effectively enables an OEM and/or SOC
+ * vendor to self-certify their own Video Accelerator devices, with minimal RDKM
+ * assistance.
+ *
+ */
+
+/**
  * @addtogroup Device_Settings Device Settings Module
  * @{
  */
@@ -59,6 +73,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include "dsVideoPort.h"
 
 #include <ut.h>
 #include <ut_log.h>
@@ -69,10 +84,10 @@
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 001@n
  * 
- * **Pre-Conditions:**@n
- * dsVideoPort system has not been initialized.
+ * **Pre-Conditions:** None@n
  * 
  * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -95,10 +110,10 @@ void test_l1_dsVideoPort_positive_dsVideoPortInit (void)
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 002@n
  * 
- * **Pre-Conditions:**@n
- * Varying depending on the specific test.
+ * **Pre-Conditions:** None@n
  * 
  * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -109,8 +124,7 @@ void test_l1_dsVideoPort_positive_dsVideoPortInit (void)
  * |03|Call dsVideoPortTerm()  - Terminate video port system | | dsERR_NONE | Termination must be successful |
  * 
  * **Additional Notes:**@n
- * - Simulating `dsERR_RESOURCE_NOT_AVAILABLE` might be challenging in a controlled environment as it involves controlling the system's available resources.
- * - Simulating `dsERR_GENERAL` can also be difficult because it's an undefined platform error. The specifics might vary depending on the platform and the exact nature of the error.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsVideoPortInit (void)
 {
@@ -123,10 +137,10 @@ void test_l1_dsVideoPort_negative_dsVideoPortInit (void)
  * **Test Group ID:** Basic: 02@n
  * **Test Case ID:** 001@n
  * 
- * **Pre-Conditions:**@n
- * dsVideoPort system has been initialized.
+ * **Pre-Conditions:**None@n
  * 
- * **Dependencies:** dsVideoPortInit()@n
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -149,10 +163,10 @@ void test_l1_dsVideoPort_positive_dsVideoPortTerm (void)
  * **Test Group ID:** Basic: 02@n
  * **Test Case ID:** 002@n
  * 
- * **Pre-Conditions:**@n
- * Varying depending on the specific test.
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** dsVideoPortInit()@n
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -177,10 +191,10 @@ void test_l1_dsVideoPort_negative_dsVideoPortTerm (void)
  * **Test Group ID:** Basic: 01@p
  * **Test Case ID:** 001@p
  * 
- * **Pre-Conditions:**@n
- * - System should be initialized properly.
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** dsVideoPortInit()@n
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -191,8 +205,6 @@ void test_l1_dsVideoPort_negative_dsVideoPortTerm (void)
  * |03|Get the video port handle for last element , store it in a new variable and compare it with previous step | | dsERR_NONE | Port handle obtained from previous step must be equal to handle obtained in this step
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - Only loop up to dsVIDEOPORT_TYPE_INTERNAL and not till dsVIDEOPORT_TYPE_MAX as the latter is out of range.
  */
 void test_l1_dsVideoPort_positive_dsGetVideoPort (void)
 {
@@ -205,10 +217,10 @@ void test_l1_dsVideoPort_positive_dsGetVideoPort (void)
  * **Test Group ID:** Basic: 02@n
  * **Test Case ID:** 002@n
  * 
- * **Pre-Conditions:**@n
- * Varying depending on the specific test.
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** dsVideoPortInit()@n
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -216,7 +228,7 @@ void test_l1_dsVideoPort_positive_dsGetVideoPort (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsGetVideoPort() - Attempt to get the Video Port handle without initializing video ports | `type`,`index`= kPorts[0], `handle`= valid handle | dsERR_NOT_INITIALIZED | Get Video Port Handle must fail as module is not initialized |
  * |02|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
- * |03|Call dsGetVideoPort() - by looping through valid port indexes but with invalid type  | type = [not in kPorts] , index = [ loop through kPorts ], handle = [ valid handle ] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |03|Call dsGetVideoPort() - by looping through valid port indexes but with invalid type  | type = [not in kPorts] , index = [ loop through kPorts ], handle = [ valid handle ] | dsERR_OPERATION_NOT_SUPPORTED | Operation not supported error must be returned |
  * |04|Call dsGetVideoPort() - by looping through valid types but with invalid index | type = [loop through types in kPorts], index = [ invalid index which is not in kPorts ], handle: [ valid handle ] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
  * |05|Call dsGetVideoPort() - by looping through valid types and index but with a NULL handle | type, index: [ loop through kPorts ], handle: [ NULL pointer ] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
@@ -237,10 +249,10 @@ void test_l1_dsVideoPort_negative_dsGetVideoPort (void)
  * **Test Group ID:** Basic: 03@p
  * **Test Case ID:** 003@p
  * 
- * **Pre-Conditions:**@n
- * - System should be initialized properly.
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** dsVideoPortInit(), dsGetVideoPort()@n
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -251,8 +263,6 @@ void test_l1_dsVideoPort_negative_dsGetVideoPort (void)
  * |03|Call dsIsVideoPortEnabled - by looping through the acquired port handles to check if a video port is enabled or not | handle: [valid handle], enabled: [pointer to hold the enabled/disabled status of video port] | dsERR_NONE | Flag which holds the enabled status of Video Port must be returned |
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - Only loop up to dsVIDEOPORT_TYPE_INTERNAL and not till dsVIDEOPORT_TYPE_MAX as the latter is out of range.
  */
 void test_l1_dsVideoPort_positive_dsIsVideoPortEnabled (void)
 {
@@ -265,10 +275,10 @@ void test_l1_dsVideoPort_positive_dsIsVideoPortEnabled (void)
  * **Test Group ID:** Basic: 03@n
  * **Test Case ID:** 003@n
  * 
- * **Pre-Conditions:**@n
- * - System should be initialized properly.
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** dsVideoPortInit(), dsGetVideoPort()@n
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -284,6 +294,7 @@ void test_l1_dsVideoPort_positive_dsIsVideoPortEnabled (void)
  * 
  * **Additional Notes:**@n
  * - The test should be careful while handling null pointers and invalid handles.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsIsVideoPortEnabled (void)
 {
@@ -297,9 +308,9 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortEnabled (void)
  * **Test Case ID:** 004@n
  * 
  * **Pre-Conditions:**@n
- * - System should be initialized properly.
  * 
- * **Dependencies:** dsVideoPortInit(), dsGetVideoPort()@n
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -310,8 +321,6 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortEnabled (void)
  * |03|Call dsIsDisplayConnected() - by looping through the acquired port handles to check if video port is connected to a display or not | handle: [ loop through valid handles ] , connected: [pointer to hold the connection status of Video Port] | dsERR_NONE | Flag which holds the connection status of Video Port must be returned |
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - Depending on the setup, the function might return either `true` or `false` for the `connected` flag, both are valid.
  */
 void test_l1_dsVideoPort_positive_dsIsDisplayConnected (void)
 {
@@ -324,10 +333,10 @@ void test_l1_dsVideoPort_positive_dsIsDisplayConnected (void)
  * **Test Group ID:** Basic: 05@n
  * **Test Case ID:** 005@n
  * 
- * **Pre-Conditions:**@n
- * - System should be initialized properly.
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** dsVideoPortInit(), dsGetVideoPort()@n
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -343,6 +352,7 @@ void test_l1_dsVideoPort_positive_dsIsDisplayConnected (void)
  * 
  * **Additional Notes:**@n
  * - The test should be careful while handling null pointers and invalid handles.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsIsDisplayConnected (void)
 {
@@ -355,13 +365,9 @@ void test_l1_dsVideoPort_negative_dsIsDisplayConnected (void)
  * **Test Group ID:** Basic: 02@p
  * **Test Case ID:** 002@p
  * 
- * **Pre-Conditions:**@n
- * - Video port system is successfully initialized via dsVideoPortInit().
- * - A valid video port handle is obtained via dsGetVideoPort().
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
- * - dsVideoPortInit()
- * - dsGetVideoPort()
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -373,9 +379,6 @@ void test_l1_dsVideoPort_negative_dsIsDisplayConnected (void)
  * |03|Call dsIsDisplaySurround() - by looping through the acquired port handles to check if display connected to video port supports the audio surround | handle: [ loop through valid handles ] , surround: [pointer to hold the audio surround support] | dsERR_NONE | Audio surround support of Video Port must be returned |
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - The results from dsIsDisplaySurround() should remain consistent across multiple calls for the same video port.
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsIsDisplaySurround (void)
 {
@@ -389,9 +392,9 @@ void test_l1_dsVideoPort_positive_dsIsDisplaySurround (void)
  * **Test Case ID:** 007@n
  * 
  * **Pre-Conditions:**@n
- * - System should be initialized properly.
  * 
- * **Dependencies:** dsVideoPortInit(), dsGetVideoPort()@n
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -407,6 +410,7 @@ void test_l1_dsVideoPort_positive_dsIsDisplaySurround (void)
  * 
  * **Additional Notes:**@n
  * - The test should be careful while handling null pointers and invalid handles.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsIsDisplaySurround (void)
 {
@@ -419,13 +423,9 @@ void test_l1_dsVideoPort_negative_dsIsDisplaySurround (void)
  * **Test Group ID:** Basic: 03@p
  * **Test Case ID:** 003@p
  * 
- * **Pre-Conditions:**@n
- * - Video port system is successfully initialized via dsVideoPortInit().
- * - A valid video port handle is obtained via dsGetVideoPort().
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
- * - dsVideoPortInit()
- * - dsGetVideoPort()
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -437,9 +437,6 @@ void test_l1_dsVideoPort_negative_dsIsDisplaySurround (void)
  * |03|Call dsGetSurroundMode() - by looping through the acquired port handles to get the surround mode of each video port | handle: [ loop through valid handles ] , surround: [pointer to hold the Surround mode] | dsERR_NONE | Surround mode (dsSURROUNDMode_t)of Video Port must be returned |
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - The surround mode results from dsGetSurroundMode() should remain consistent across multiple calls for the same video port.
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsGetSurroundMode (void)
 {
@@ -452,10 +449,10 @@ void test_l1_dsVideoPort_positive_dsGetSurroundMode (void)
  * **Test Group ID:** Basic: 03@n
  * **Test Case ID:** 003@n
  * 
- * **Pre-Conditions:**@n
- * Varying depending on the specific test.
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** dsVideoPortInit() and dsGetVideoPort()@n
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -472,6 +469,7 @@ void test_l1_dsVideoPort_positive_dsGetSurroundMode (void)
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
  * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsGetSurroundMode (void)
 {
@@ -484,12 +482,9 @@ void test_l1_dsVideoPort_negative_dsGetSurroundMode (void)
  * **Test Group ID:** Basic: 05@p
  * **Test Case ID:** 005@p
  * 
- * **Pre-Conditions:**@n
- * - Video port system is successfully initialized via dsVideoPortInit().
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
- * - dsVideoPortInit()
- * - dsGetVideoPort()
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -501,8 +496,6 @@ void test_l1_dsVideoPort_negative_dsGetSurroundMode (void)
  * |03|Call dsIsVideoPortActive() - by looping through the acquired port handles to check whether a video port is active or not for each port | handle: [ loop through valid handles ] , active: [pointer to hold the active status] | dsERR_NONE | Active Status(A Video port is active if it is connected to the active port of sink device) of Video Port must be returned |
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsIsVideoPortActive (void)
 {
@@ -515,10 +508,10 @@ void test_l1_dsVideoPort_positive_dsIsVideoPortActive (void)
  * **Test Group ID:** Basic: 05@n
  * **Test Case ID:** 005@n
  * 
- * **Pre-Conditions:**@n
- * Varying depending on the specific test.
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** dsVideoPortInit(), dsGetVideoPort()@n
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -535,6 +528,7 @@ void test_l1_dsVideoPort_positive_dsIsVideoPortActive (void)
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
  * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsIsVideoPortActive (void)
 {
@@ -547,13 +541,9 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortActive (void)
  * **Test Group ID:** Basic: 06@p
  * **Test Case ID:** 006@p
  * 
- * **Pre-Conditions:**@n
- * - Video port system is successfully initialized via dsVideoPortInit().
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
- * - dsVideoPortInit()
- * - dsGetVideoPort()
- * - dsIsDTCPEnabled()
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -568,9 +558,6 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortActive (void)
  * |06|Call dsIsDTCPEnabled() - by looping through the acquired port handles to check if DTCP is disabled (ports which support DTCP)|handle: [ loop through valid handles ], pContentProtected: [ pointer to hold DTCP status ]| dsERR_NONE | DTCP must be disabled |
  * |08|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - Step 03 and 05 might fail with dsERR_OPERATION_NOT_SUPPORTED if the connected video port doesn't support DTCP. The subsequent verification step should be skipped in such a case.
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsEnableDTCP (void)
 {
@@ -583,10 +570,10 @@ void test_l1_dsVideoPort_positive_dsEnableDTCP (void)
  * **Test Group ID:** Basic: 06@n
  * **Test Case ID:** 006@n
  * 
- * **Pre-Conditions:**@n
- * Varying depending on the specific test.
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** dsVideoPortInit(), dsGetVideoPort()@n
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -601,6 +588,7 @@ void test_l1_dsVideoPort_positive_dsEnableDTCP (void)
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
  * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsEnableDTCP (void)
 {
@@ -613,9 +601,9 @@ void test_l1_dsVideoPort_negative_dsEnableDTCP (void)
  * **Test Group ID:** Basic: 07@p
  * **Test Case ID:** 007@p
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -630,9 +618,6 @@ void test_l1_dsVideoPort_negative_dsEnableDTCP (void)
  * |06|Call dsIsHDCPEnabled() - by looping through the acquired port handles to check if HDCP is disabled (ports which support HDCP)|handle: [ loop through valid handles ], pContentProtected: [ pointer to hold HDCP status ]| dsERR_NONE | HDCP must be disabled |
  * |08|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - Step 03 and 05 might fail with dsERR_OPERATION_NOT_SUPPORTED if the connected video port doesn't support HDCP. The subsequent verification step should be skipped in such a case.
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsEnableHDCP (void)
 {
@@ -645,10 +630,10 @@ void test_l1_dsVideoPort_positive_dsEnableHDCP (void)
  * **Test Group ID:** Basic: 07@n
  * **Test Case ID:** 007@n
  * 
- * **Pre-Conditions:**@n
- * Varying depending on the specific test.
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** dsVideoPortInit(), dsGetVideoPort()@n
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -656,15 +641,17 @@ void test_l1_dsVideoPort_positive_dsEnableHDCP (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsEnableHDCP() - Attempt to enable DTCP without initializing the video ports | handle: [ valid handle ], contentProtect: [true = enable/ false = disable], hdcpKey: [valid hdcp key], keySize: [valid key size]| dsERR_NOT_INITIALIZED | Enable HDCP must fail as module is not initialized |
  * |02|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
- * |03|Call dsEnableHDCP() - Attempt to enable HDCP with an invalid handle |handle: [ invalid handle ], contentProtect: [true = enable/ false = disable], hdcpKey: [valid hdcp key], keySize: [valid key size (HDCP_KEY_MAX_SIZE)]|dsERR_INVALID_PARAM| Invalid Parameter error must be returned |
+ * |03|Call dsEnableHDCP() - Attempt to enable HDCP with an invalid handle |handle: [ invalid handle ], contentProtect: [true = enable/ false = disable], hdcpKey: [valid hdcp key], keySize: [valid key size (HDCP_KEY_MAX_SIZE)]| dsERR_INVALID_PARAM | Invalid Parameter error must be returned |
  * |04|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |05|Call dsEnableHDCP() with an invalid HDCP key size |handle: [ valid handle ], contentProtect: [true = enable/ false = disable], hdcpKey: [valid hdcp key], keySize: [valid key size (> HDCP_KEY_MAX_SIZE)|dsERR_INVALID_PARAM| Invalid Parameter error must be returned |
+ * |05|Call dsEnableHDCP() by looping through acquired port handles with an invalid HDCP key size |handle: [ valid handle ], contentProtect: [true = enable/ false = disable], hdcpKey: [valid hdcp key], keySize: [valid key size (> HDCP_KEY_MAX_SIZE)| dsERR_INVALID_PARAM | Invalid Parameter error must be returned |
+ * |05|Call dsEnableHDCP() by looping through acquired port handles with an NULL hdcpKey pointer |handle: [ valid handle ], contentProtect: [true = enable/ false = disable], hdcpKey: [NULL], keySize: [valid key size (> HDCP_KEY_MAX_SIZE)| dsERR_INVALID_PARAM | Invalid Parameter error must be returned |
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * |07|Call dsEnableHDCP() Attempt to enable DTCP without initializing the video ports | handle: [ valid handle ], contentProtect: [true = enable/ false = disable], hdcpKey: [valid hdcp key], keySize: [valid key size] | dsERR_NOT_INITIALIZED | Enable HDCP must fail as module is not initialized |
  * 
  * **Additional Notes:**@n
  * - Handle validation, module initialization checks, and key size validation are crucial for the robustness of the API.
  * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsEnableHDCP (void)
 {
@@ -677,13 +664,9 @@ void test_l1_dsVideoPort_negative_dsEnableHDCP (void)
  * **Test Group ID:** Basic: 08@p
  * **Test Case ID:** 008@p
  *
- * **Pre-Conditions:**@n
- * - Video port system is successfully initialized via dsVideoPortInit().
+ * **Pre-Conditions:** None@n
  *
- * **Dependencies:**@n
- * - dsVideoPortInit()
- * - dsGetVideoPort()
- * - dsVideoPortTerm()
+ * **Dependencies:** None@n
  *
  * **User Interaction:** None
  *
@@ -695,8 +678,6 @@ void test_l1_dsVideoPort_negative_dsEnableHDCP (void)
  * |03|Call dsIsDTCPEnabled() by looping through the acquired port handles  and valid pointer to check whether DTCP enabled or not(.ie TRUE / FALSE) | handle : [loop through valid handles] , pContentProtected = [pointer to hold data ]|dsERR_NONE |dsIsDTCPEnabled should return a valid value|
  * |04|Call dsVideoPortTerm() - Terminate the video ports of a system| |dsERR_NONE|Termination must be successful|
  *
- * **Additional Notes:**@n
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsIsDTCPEnabled (void)
 {
@@ -709,10 +690,9 @@ void test_l1_dsVideoPort_positive_dsIsDTCPEnabled (void)
  * **Test Group ID:** Basic: 08@n
  * **Test Case ID:** 008@n
  *
- * **Pre-Conditions:**@n
- * Varying depending on the specific test.
+ * **Pre-Conditions:** None@n
  *
- * **Dependencies:** dsVideoPortInit(), dsGetVideoPort()@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  *
  * **Test Procedure:**@n
@@ -729,6 +709,7 @@ void test_l1_dsVideoPort_positive_dsIsDTCPEnabled (void)
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
  * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsIsDTCPEnabled (void)
 {
@@ -741,13 +722,9 @@ void test_l1_dsVideoPort_negative_dsIsDTCPEnabled (void)
  * **Test Group ID:** Basic: 09@p
  * **Test Case ID:** 009@p
  * 
- * **Pre-Conditions:**@n
- * - Video port system is successfully initialized via dsVideoPortInit().
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
- * - dsVideoPortInit()
- * - dsGetVideoPort()
- * - dsVideoPortTerm()
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -759,8 +736,6 @@ void test_l1_dsVideoPort_negative_dsIsDTCPEnabled (void)
  * |03|Call dsIsHDCPEnabled() by looping through the acquired port handles  and checks whether HDCP enabled or not(.ie TRUE / FALSE) | handle : [loop through valid handles] , pContentProtected = [pointer to hold data ] | dsERR_NONE | dsIsHDCPEnabled should return a valid value|
  * |04|Call dsVideoPortTerm() - Terminate the video ports of a system| |dsERR_NONE|Termination must be successful|
  * 
- * **Additional Notes:**@n
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsIsHDCPEnabled (void)
 {
@@ -773,10 +748,10 @@ void test_l1_dsVideoPort_positive_dsIsHDCPEnabled (void)
  * **Test Group ID:** Basic: 09@n
  * **Test Case ID:** 009@n
  * 
- * **Pre-Conditions:**@n
- * Varying depending on the specific test.
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** dsVideoPortInit(), dsGetVideoPort()@n
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -793,6 +768,7 @@ void test_l1_dsVideoPort_positive_dsIsHDCPEnabled (void)
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
  * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsIsHDCPEnabled (void)
 {
@@ -805,13 +781,9 @@ void test_l1_dsVideoPort_negative_dsIsHDCPEnabled (void)
  * **Test Group ID:** Basic: 10@p
  * **Test Case ID:** 010@p
  * 
- * **Pre-Conditions:**@n
- * - Video port system is successfully initialized via dsVideoPortInit().
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
- * - dsVideoPortInit()
- * - dsGetVideoPort()
- * - dsIsVideoPortEnabled()
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -819,12 +791,10 @@ void test_l1_dsVideoPort_negative_dsIsHDCPEnabled (void)
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video ports of a system | |dsERR_NONE| Initialization must be successful |
- * |02|Call dsGetVideoPort() - Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports|
- * |03|Call dsEnableVideoPort() by looping through the acquired port handles and valid enabled parameter value (i.e TRUE/FALSE) it enables or disable the video port | handle  = [loop through valid handles] , enabled = [valid bool value] | dsERR_NONE |dsEnableVideoPort should return a valid value|
+ * |02|Call dsGetVideoPort() - Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] | dsERR_NONE | Valid port handle must be returned for all supported video ports|
+ * |03|Call dsEnableVideoPort() by looping through the acquired port handles and valid enabled parameter value (i.e TRUE/FALSE) to enable or disable a video port | handle  = [loop through valid handles] , enabled = [valid bool value] | dsERR_NONE | dsEnableVideoPort should return a valid value|
  * |04|Call dsVideoPortTerm() - Terminate the video ports of a system| |dsERR_NONE|Termination must be successful|
  * 
- * **Additional Notes:**@n
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsEnableVideoPort (void)
 {
@@ -837,10 +807,10 @@ void test_l1_dsVideoPort_positive_dsEnableVideoPort (void)
  * **Test Group ID:** Basic: 10@n
  * **Test Case ID:** 010@n
  * 
- * **Pre-Conditions:**@n
- * Varying depending on the specific test.
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** dsVideoPortInit(), dsGetVideoPort()@n
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -850,13 +820,13 @@ void test_l1_dsVideoPort_positive_dsEnableVideoPort (void)
  * |02|Call dsVideoPortInit() - Initialize video ports of a system | |dsERR_NONE| Initialization must be successful |
  * |03|Call dsEnableVideoPort() - Using an invalid handle but with valid enabled value(i.e TRUE/FALSE) | handle = [invalid handle], enabled = [valid bool value] | dsERR_INVALID_PARAM | Invalid paramerter must be returned |
  * |04|Call dsGetVideoPort()  - Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports |
- * |05|Call dsEnableVideoPort() - By looping through acquired port handles but with a invalid enabled param | handle = [valid handle], enabled = [invalid bool value] | dsERR_INVALID_PARAM | Invalid paramerter must be returned |
- * |06|Call dsVideoPortTerm() - Terminate the video ports of a system | | dsERR_NONE | Termination must be successful |
- * |07|Call dsEnableVideoPort() - Again after terminating video ports attempt to enable or disable video port | handle= [valid handle from step 04 ] , enabled = [valid bool value] | dsERR_NOT_INITIALIZED | dsEnableVideoPort call should fail as module is not initialized |
+ * |05|Call dsVideoPortTerm() - Terminate the video ports of a system | | dsERR_NONE | Termination must be successful |
+ * |06|Call dsEnableVideoPort() - Again after terminating video ports attempt to enable or disable video port | handle = [valid handle from step 04 ] , enabled = [valid bool value] | dsERR_NOT_INITIALIZED | dsEnableVideoPort call should fail as module is not initialized |
  * 
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
  * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsEnableVideoPort (void)
 {
@@ -869,9 +839,9 @@ void test_l1_dsVideoPort_negative_dsEnableVideoPort (void)
  * **Test Group ID:** Basic: 11@p
  * **Test Case ID:** 011@p
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -883,9 +853,6 @@ void test_l1_dsVideoPort_negative_dsEnableVideoPort (void)
  * |03|Call dsGetVideoPort() by looping through the acquired port handles and valid resolution pointer to Set the video port resolution |handle  = [loop through valid handles] , resolution = [valid pointer]|dsERR_NONE|Resolution should be set successfully|
  * |04|Call dsVideoPortTerm() - Terminate the video ports of a system| |dsERR_NONE|Termination must be successful|
  * 
- * **Additional Notes:**@n
- * - It might be helpful to include a set of valid resolutions to use for step 03.
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsSetResolution (void)
 {
@@ -898,10 +865,10 @@ void test_l1_dsVideoPort_positive_dsSetResolution (void)
  * **Test Group ID:** Basic: 11@n
  * **Test Case ID:** 011@n
  * 
- * **Pre-Conditions:**@n
- * Varying depending on the specific test.
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** None
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -918,6 +885,7 @@ void test_l1_dsVideoPort_positive_dsSetResolution (void)
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
  * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsSetResolution (void)
 {
@@ -930,9 +898,9 @@ void test_l1_dsVideoPort_negative_dsSetResolution (void)
  * **Test Group ID:** Basic: 12@p
  * **Test Case ID:** 012@p
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -941,12 +909,9 @@ void test_l1_dsVideoPort_negative_dsSetResolution (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video ports of a system | |dsERR_NONE| Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports|
- * |03|Call dsSetResolution() by looping through the acquired port handles and valid resolution pointer to retrieve the resolution of a video port |handle  = [loop through valid handles] , resolution = [valid pointer] |dsERR_NONE|Resolution should be set successfully|
+ * |03|Call dsGetResolution() by looping through the acquired port handles and valid resolution pointer to retrieve the resolution of a video port | handle  = [loop through valid handles] , resolution = [valid pointer] |dsERR_NONE|Resolution should be set successfully|
  * |06|Call dsVideoPortTerm() - Terminate the video ports of a system| |dsERR_NONE|Termination must be successful|
  * 
- * **Additional Notes:**@n
- * - Step 03 can be repeated with various resolutions to ensure different settings are correctly fetched.
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsGetResolution (void)
 {
@@ -959,25 +924,27 @@ void test_l1_dsVideoPort_positive_dsGetResolution (void)
  * **Test Group ID:** Basic: 12@n
  * **Test Case ID:** 012@n
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** None
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsGetResolution() - Attempt to get the resolution with out initializing video ports| handle = [valid handle] , resolution = [valid pointer]| dsERR_NOT_INITIALIZED| dsGetResolution call should fail as module is not initialized |
+ * |01|Call dsGetResolution() - Attempt to get the resolution without initializing video ports| handle = [valid handle] , resolution = [valid pointer]| dsERR_NOT_INITIALIZED| Get Resolution call must fail as module is not initialized |
  * |02|dsVideoPortInit() - Initialize video ports of a system | |dsERR_NONE| Initialization must be successful |
  * |03|Call dsGetResolution() - Using an invalid handle but with valid resolution pointer | handle = [invalid handle], resolution = [valid pointer] | dsERR_INVALID_PARAM | Invalid paramerter must be returned |
- * |04|Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports |
+ * |04|Call dsGetVideoPort() - Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports |
  * |04|Call dsGetResolution() - By looping through acquired port handles but with a invalid pointer | handle = [valid handle], resolution = [invalid pointer] | dsERR_INVALID_PARAM | Invalid paramerter must be returned |
  * |05|Call dsVideoPortTerm() - Terminate the video ports of a system | | dsERR_NONE | Termination must be successful |
- * |06|Call dsGetResolution() - Again after terminating video ports attempt to get the resolution of video ports | handle= [valid handle from step 04 ] , resolution = [valid pointer] | dsERR_NOT_INITIALIZED | dsGetResolution call should fail as module is not initialized |
+ * |06|Call dsGetResolution() - Again after terminating video ports attempt to get the resolution of video ports | handle = [valid handle] , resolution = [valid pointer] | dsERR_NOT_INITIALIZED | Get Resolution call must fail as module is not initialized |
  * 
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
  * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsGetResolution (void)
 {
@@ -990,9 +957,9 @@ void test_l1_dsVideoPort_negative_dsGetResolution (void)
  * **Test Group ID:** Basic: 13@p
  * **Test Case ID:** 013@p
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -1004,9 +971,6 @@ void test_l1_dsVideoPort_negative_dsGetResolution (void)
  * |03|Call dsSetActiveSource() by looping through the acquired port handles and set the video port as active source | handle  = [loop through valid handles] |dsERR_NONE|The video port should be set as the active source successfully|
  * |04|dsVideoPortTerm() - Terminate the video ports of a system| |dsERR_NONE|Termination must be successful|
  * 
- * **Additional Notes:**@n
- * - Step 03 can be expanded to test multiple video ports if available.
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsSetActiveSource (void)
 {
@@ -1019,9 +983,10 @@ void test_l1_dsVideoPort_positive_dsSetActiveSource (void)
  * **Test Group ID:** Basic: 13@n
  * **Test Case ID:** 013@n
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** None
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -1037,6 +1002,7 @@ void test_l1_dsVideoPort_positive_dsSetActiveSource (void)
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
  * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsSetActiveSource (void)
 {
@@ -1049,9 +1015,9 @@ void test_l1_dsVideoPort_negative_dsSetActiveSource (void)
  * **Test Group ID:** Basic: 04@p
  * **Test Case ID:** 004@p
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -1061,8 +1027,6 @@ void test_l1_dsVideoPort_negative_dsSetActiveSource (void)
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsVideoFormatUpdateRegisterCB() - Register a valid Video Format update callback | cb = [valid callback function] | dsERR_NONE | Video Format Update callback registration must be successful |
  * |03|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
- * 
- * **Additional Notes:** None
  * 
  */
 void test_l1_dsVideoPort_positive_dsVideoFormatUpdateRegisterCB (void)
@@ -1076,9 +1040,10 @@ void test_l1_dsVideoPort_positive_dsVideoFormatUpdateRegisterCB (void)
  * **Test Group ID:** Basic: 04@n
  * **Test Case ID:** 004@n
  * 
- * **Pre-Conditions:** None
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** None
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -1091,7 +1056,7 @@ void test_l1_dsVideoPort_positive_dsVideoFormatUpdateRegisterCB (void)
  * |05|Call dsVideoFormatUpdateRegisterCB() - Attempt to register for video format update callback without initializing the video ports | cb = [valid callback function ] | dsERR_NOT_INITIALIZED | Callback registration must fail as module is not initialized |
  * 
  * **Additional Notes:** None
- * 
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsVideoFormatUpdateRegisterCB (void)
 {
@@ -1104,9 +1069,9 @@ void test_l1_dsVideoPort_negative_dsVideoFormatUpdateRegisterCB (void)
  * **Test Group ID:** Basic: 14@p
  * **Test Case ID:** 014@p
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -1118,8 +1083,6 @@ void test_l1_dsVideoPort_negative_dsVideoFormatUpdateRegisterCB (void)
  * |03|Call dsRegisterHdcpStatusCallback() - Register a valid HDCP status change callback |handle = [valid handle], cb = [Callback function] | dsERR_NONE | Callback must be registered successfully |
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:** None
- *
  */
 void test_l1_dsVideoPort_positive_dsRegisterHdcpStatusCallback (void)
 {
@@ -1132,9 +1095,10 @@ void test_l1_dsVideoPort_positive_dsRegisterHdcpStatusCallback (void)
  * **Test Group ID:** Basic: 14@n
  * **Test Case ID:** 014@n
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** None
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -1148,7 +1112,7 @@ void test_l1_dsVideoPort_positive_dsRegisterHdcpStatusCallback (void)
  * |06|Call dsRegisterHdcpStatusCallback() - Attempt to register HDCP status change callback without initializing the video ports | handle= [valid handle], cb = [valid callback function] | dsERR_NOT_INITIALIZED | Callback Registration for HDCP status change must fail as module is not initialized |
  * 
  * **Additional Notes:** None
- * 
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsRegisterHdcpStatusCallback (void)
 {
@@ -1161,9 +1125,9 @@ void test_l1_dsVideoPort_negative_dsRegisterHdcpStatusCallback (void)
  * **Test Group ID:** Basic: 15@p
  * **Test Case ID:** 015@p
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -1175,9 +1139,6 @@ void test_l1_dsVideoPort_negative_dsRegisterHdcpStatusCallback (void)
  * |03|Call dsGetHDCPStatus() by looping through the acquired port handles and valid pointer to retrieve HDCP status | handle  = [valid handles] status = [valid pointer] | dsERR_NONE | The HDCP status should be successfully fetched and stored in the given pointer|
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - A valid HDCP status pointer can be a simple pointer pointing to an HDCP status variable.
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsGetHDCPStatus (void)
 {
@@ -1187,12 +1148,13 @@ void test_l1_dsVideoPort_positive_dsGetHDCPStatus (void)
 /**
  * @brief Negative Test Scenarios for dsGetHDCPStatus()
  * 
- * **Test Group ID:** Basic: 15@n
+ * **Test Group ID:** Basc: 15@n
  * **Test Case ID:** 015@n
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** None
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -1210,6 +1172,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPStatus (void)
  * - Handle validation , NULL pointer checks, and module initialization checks are crucial for the robustness of the API.
  * - Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsGetHDCPStatus (void)
 {
@@ -1222,9 +1185,9 @@ void test_l1_dsVideoPort_negative_dsGetHDCPStatus (void)
  * **Test Group ID:** Basic: 16@p
  * **Test Case ID:** 016@p
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -1236,9 +1199,6 @@ void test_l1_dsVideoPort_negative_dsGetHDCPStatus (void)
  * |03|Call dsGetHDCPProtocol() by looping through the acquired suported port handles and valid pointer to retrieve the protocol version  of a video port |handle  = [valid handles] , protocolVersion = [valid pointer] |dsERR_NONE|The HDCP protocol version should be successfully fetched |
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - A valid HDCP protocol version pointer can be a simple pointer pointing to an HDCP protocol version variable.
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsGetHDCPProtocol (void)
 {
@@ -1251,9 +1211,10 @@ void test_l1_dsVideoPort_positive_dsGetHDCPProtocol (void)
  * **Test Group ID:** Basic: 16@n
  * **Test Case ID:** 016@n
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** None
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -1271,6 +1232,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPProtocol (void)
  * - Handle validation, NULL pointer checks, and module initialization checks are crucial for the robustness of the API.
  * - @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsGetHDCPProtocol (void)
 {
@@ -1283,9 +1245,9 @@ void test_l1_dsVideoPort_negative_dsGetHDCPProtocol (void)
  * **Test Group ID:** Basic: 17@p
  * **Test Case ID:** 017@p
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  *
@@ -1297,9 +1259,6 @@ void test_l1_dsVideoPort_negative_dsGetHDCPProtocol (void)
  * |03|Call dsGetHDCPReceiverProtocol() by looping through the acquired supported port handles and valid pointer to retrieve the sink device protocol version  of a video port |handle  = [loop through valid handles] , protocolVersion = [valid pointer] |dsERR_NONE|The Receiver HDCP protocol version should be successfully fetched and stored in the given pointer|
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - A valid HDCP protocol version pointer can be a simple pointer pointing to an HDCP protocol version variable.
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsGetHDCPReceiverProtocol (void)
 {
@@ -1312,9 +1271,10 @@ void test_l1_dsVideoPort_positive_dsGetHDCPReceiverProtocol (void)
  * **Test Group ID:** Basic: 17@n
  * **Test Case ID:** 017@n
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** None
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  *
  * **Test Procedure:**@n
@@ -1332,6 +1292,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPReceiverProtocol (void)
  * - Handle validation, NULL pointer checks, and module initialization checks are crucial for the robustness of the API.
  * - @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsGetHDCPReceiverProtocol (void)
 {
@@ -1344,9 +1305,9 @@ void test_l1_dsVideoPort_negative_dsGetHDCPReceiverProtocol (void)
  * **Test Group ID:** Basic: 18@p
  * **Test Case ID:** 018@p
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  *
@@ -1358,9 +1319,6 @@ void test_l1_dsVideoPort_negative_dsGetHDCPReceiverProtocol (void)
  * |03|Call dsGetHDCPCurrentProtocol() by looping through the acquired supported port handles and valid pointer to retrieve the current negotiated protocol version  of a video port |handle  = [valid handles] , protocolVersion = [valid pointer] |dsERR_NONE|The current HDCP protocol version should be successfully fetched |
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - A valid HDCP protocol version pointer can be a simple pointer pointing to an HDCP protocol version variable.
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsGetHDCPCurrentProtocol (void)
 {
@@ -1373,9 +1331,10 @@ void test_l1_dsVideoPort_positive_dsGetHDCPCurrentProtocol (void)
  * **Test Group ID:** Basic: 18@n
  * **Test Case ID:** 018@n
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** None
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  *
  * **Test Procedure:**@n
@@ -1394,6 +1353,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPCurrentProtocol (void)
  * - Handle validation, NULL pointer checks, and module initialization checks are crucial for the robustness of the API.
  * - @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsGetHDCPCurrentProtocol (void)
 {
@@ -1406,9 +1366,9 @@ void test_l1_dsVideoPort_negative_dsGetHDCPCurrentProtocol (void)
  * **Test Group ID:** Basic: 20@p
  * **Test Case ID:** 020@p
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -1420,9 +1380,6 @@ void test_l1_dsVideoPort_negative_dsGetHDCPCurrentProtocol (void)
  * |03|Call dsGetTVHDRCapabilities() by looping through the acquired port handles and valid pointer to retrieve the HDR capabilities of a video port | handle  = [loop through valid handles] , capabilities = [valid pointer] |dsERR_NONE|The HDR capabilities should be successfully fetched and stored in the given pointer|
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - A valid HDR capabilities pointer can be a simple pointer pointing to an integer variable.
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsGetTVHDRCapabilities (void)
 {
@@ -1435,9 +1392,10 @@ void test_l1_dsVideoPort_positive_dsGetTVHDRCapabilities (void)
  * **Test Group ID:** Basic: 20@n
  * **Test Case ID:** 020@n
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** None
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -1455,6 +1413,7 @@ void test_l1_dsVideoPort_positive_dsGetTVHDRCapabilities (void)
  * - Handle validation, NULL pointer checks, and module initialization checks are crucial for the robustness of the API.
  * - @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsGetTVHDRCapabilities (void)
 {
@@ -1467,12 +1426,10 @@ void test_l1_dsVideoPort_negative_dsGetTVHDRCapabilities (void)
  * **Test Group ID:** Basic: 30@p
  * **Test Case ID:** 030@p
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
  * 
- * **User Interaction:** None
- *
  * **User Interaction:** None
  *
  * **Test Procedure:**@n
@@ -1483,9 +1440,6 @@ void test_l1_dsVideoPort_negative_dsGetTVHDRCapabilities (void)
  * |03|Call dsSupportedTvResolutions() by looping through the acquired port handles and valid pointer to retrieve the resolutions of a video port |handle  = [loop through valid handles] , resolutions = [valid pointer] |dsERR_NONE|Resolutions should be set successfully|
  * |06|Call dsVideoPortTerm() - Terminate the video ports of a system| |dsERR_NONE|Termination must be successful|
  * 
- * **Additional Notes:**@n
- * - A valid resolutions pointer can be a simple pointer pointing to an integer variable.
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsSupportedTvResolutions (void)
 {
@@ -1498,9 +1452,10 @@ void test_l1_dsVideoPort_positive_dsSupportedTvResolutions (void)
  * **Test Group ID:** Basic: 30@n
  * **Test Case ID:** 030@n
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** None
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  *
  * **Test Procedure:**@n
@@ -1518,6 +1473,7 @@ void test_l1_dsVideoPort_positive_dsSupportedTvResolutions (void)
  * - Handle validation, NULL pointer checks, and module initialization checks are crucial for the robustness of the API.
  * - @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsSupportedTvResolutions (void)
 {
@@ -1530,9 +1486,9 @@ void test_l1_dsVideoPort_negative_dsSupportedTvResolutions (void)
  * **Test Group ID:** Basic: 40@p
  * **Test Case ID:** 040@p
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -1544,8 +1500,6 @@ void test_l1_dsVideoPort_negative_dsSupportedTvResolutions (void)
  * |03|Call  dsSetForceDisable4KSupport() by looping through the acquired port handles and valid value to Set the 4K support to be forcefully disabled or not | handle  = [loop through valid handles] , disable= [valid value] | dsERR_NONE | The 4K support should be successfully disabled or not |
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsSetForceDisable4KSupport (void)
 {
@@ -1558,9 +1512,10 @@ void test_l1_dsVideoPort_positive_dsSetForceDisable4KSupport (void)
  * **Test Group ID:** Basic: 40@n
  * **Test Case ID:** 040@n
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** None
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -1577,6 +1532,7 @@ void test_l1_dsVideoPort_positive_dsSetForceDisable4KSupport (void)
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
  * - @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsSetForceDisable4KSupport (void)
 {
@@ -1589,9 +1545,9 @@ void test_l1_dsVideoPort_negative_dsSetForceDisable4KSupport (void)
  * **Test Group ID:** Basic: 50@p
  * **Test Case ID:** 050@p
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  *
@@ -1603,8 +1559,6 @@ void test_l1_dsVideoPort_negative_dsSetForceDisable4KSupport (void)
  * |03|Call  dsGetForceDisable4KSupport() by looping through the acquired port handles and valid pointer to get the 4K support disabled or not | handle  = [loop through valid handles] , disable= [valid pointer] | dsERR_NONE | The 4K support disabled or not should be successfully retrieved |
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful | 
  * 
- * **Additional Notes:**@n
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsGetForceDisable4KSupport (void)
 {
@@ -1617,9 +1571,10 @@ void test_l1_dsVideoPort_positive_dsGetForceDisable4KSupport (void)
  * **Test Group ID:** Basic: 50@n
  * **Test Case ID:** 050@n
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** None
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  *
  * **Test Procedure:**@n
@@ -1637,6 +1592,7 @@ void test_l1_dsVideoPort_positive_dsGetForceDisable4KSupport (void)
  * - Handle validation, pointer validation, and module initialization checks are crucial for the robustness of the API.
  * - @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsGetForceDisable4KSupport (void)
 {
@@ -1649,9 +1605,9 @@ void test_l1_dsVideoPort_negative_dsGetForceDisable4KSupport (void)
  * **Test Group ID:** Basic: 60@p
  * **Test Case ID:** 060@p
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -1663,8 +1619,6 @@ void test_l1_dsVideoPort_negative_dsGetForceDisable4KSupport (void)
  * |03|Call dsGetVideoEOTF() by looping through the acquired port handles and valid pointer Retrieve the current Electro-Optical Transfer Function (EOTF) value | handle = [loop through ports] , video_eotf = [valid pointer] |dsERR_NONE | Valid EOTF value Should return a valid EOTF value of the specified video port|
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsGetVideoEOTF (void)
 {
@@ -1677,9 +1631,10 @@ void test_l1_dsVideoPort_positive_dsGetVideoEOTF (void)
  * **Test Group ID:** Basic: 60@n
  * **Test Case ID:** 060@n
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** None
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -1697,6 +1652,7 @@ void test_l1_dsVideoPort_positive_dsGetVideoEOTF (void)
  * - Handle validation, pointer validation, and module initialization checks are crucial for the robustness of the API.
  * - @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsGetVideoEOTF (void)
 {
@@ -1709,9 +1665,9 @@ void test_l1_dsVideoPort_negative_dsGetVideoEOTF (void)
  * **Test Group ID:** Basic: 70@p
  * **Test Case ID:** 070@p
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -1723,8 +1679,6 @@ void test_l1_dsVideoPort_negative_dsGetVideoEOTF (void)
  * |03|Call dsGetMatrixCoefficients() by looping through the acquired port handles and valid resolution pointer to Retrieve the current matrix coefficients of a specified port |handle  = [loop through valid handles] , matrix_coefficients = [valid pointer] |dsERR_NONE|Should return a valid matrix coefficient value of the specified video port|
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsGetMatrixCoefficients (void)
 {
@@ -1737,9 +1691,10 @@ void test_l1_dsVideoPort_positive_dsGetMatrixCoefficients (void)
  * **Test Group ID:** Basic: 70@n
  * **Test Case ID:** 070@n
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** None
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -1757,6 +1712,7 @@ void test_l1_dsVideoPort_positive_dsGetMatrixCoefficients (void)
  * - Handle validation, pointer validation, and module initialization checks are crucial for the robustness of the API.
  * - @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsGetMatrixCoefficients (void)
 {
@@ -1769,9 +1725,9 @@ void test_l1_dsVideoPort_negative_dsGetMatrixCoefficients (void)
  * **Test Group ID:** Basic: 80@p
  * **Test Case ID:** 080@p
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -1783,8 +1739,6 @@ void test_l1_dsVideoPort_negative_dsGetMatrixCoefficients (void)
  * |03|Call dsGetColorDepth() by looping through the acquired port handles and valid pointer to retrieve the current color depth  | handle  = [loop through valid handles] , color_depth = [valid pointer] | dsERR_NONE | Should return a valid color depth value of the specified video port|
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsGetColorDepth (void)
 {
@@ -1797,9 +1751,10 @@ void test_l1_dsVideoPort_positive_dsGetColorDepth (void)
  * **Test Group ID:** Basic: 80@n
  * **Test Case ID:** 080@n
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** None
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -1817,6 +1772,7 @@ void test_l1_dsVideoPort_positive_dsGetColorDepth (void)
  * - Handle validation, pointer validation, and module initialization checks are crucial for the robustness of the API.
  * - @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsGetColorDepth (void)
 {
@@ -1829,9 +1785,9 @@ void test_l1_dsVideoPort_negative_dsGetColorDepth (void)
  * **Test Group ID:** Basic: 90@p
  * **Test Case ID:** 090@p
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -1843,8 +1799,6 @@ void test_l1_dsVideoPort_negative_dsGetColorDepth (void)
  * |03|Call dsGetColorSpace() by looping through the acquired port handles and valid pointer to retrieve the current color space setting of video port |handle  = [loop through valid handles] , color_space = [valid pointer] |Valid color space value|Should return a valid color space setting of the specified video port|
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsGetColorSpace (void)
 {
@@ -1857,9 +1811,10 @@ void test_l1_dsVideoPort_positive_dsGetColorSpace (void)
  * **Test Group ID:** Basic: 90@n
  * **Test Case ID:** 090@n
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** None
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -1877,6 +1832,7 @@ void test_l1_dsVideoPort_positive_dsGetColorSpace (void)
  * - Handle validation, pointer validation, and module initialization checks are crucial for the robustness of the API.
  * - @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsGetColorSpace (void)
 {
@@ -1889,9 +1845,9 @@ void test_l1_dsVideoPort_negative_dsGetColorSpace (void)
  * **Test Group ID:** Basic: 100@p
  * **Test Case ID:** 100@p
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -1903,8 +1859,6 @@ void test_l1_dsVideoPort_negative_dsGetColorSpace (void)
  * |03|Call dsGetQuantizationRange() by looping through the acquired port handles and valid pointer to retrieve the current quantization range |handle  = [loop through valid handles] , quantization_range = [valid pointer] |dsERR_NONE | Should return a valid quantization range of the specified video port|
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsGetQuantizationRange (void)
 {
@@ -1917,9 +1871,10 @@ void test_l1_dsVideoPort_positive_dsGetQuantizationRange (void)
  * **Test Group ID:** Basic: 100@n
  * **Test Case ID:** 100@n
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** None
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -1937,6 +1892,7 @@ void test_l1_dsVideoPort_positive_dsGetQuantizationRange (void)
  * - Handle validation, pointer validation, and module initialization checks are crucial for the robustness of the API.
  * - @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsGetQuantizationRange (void)
 {
@@ -1949,9 +1905,9 @@ void test_l1_dsVideoPort_negative_dsGetQuantizationRange (void)
  * **Test Group ID:** Basic: 101@p
  * **Test Case ID:** 101@p
  * 
- * **Pre-Conditions:** None
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** None
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -1963,8 +1919,6 @@ void test_l1_dsVideoPort_negative_dsGetQuantizationRange (void)
  * |03|Call dsGetCurrentOutputSettings() by looping through the acquired port handles and valid pointer to retrieve the current output settings | handle= [loop through valid handles] , video_eotf = [valid EOTF pointer], matrix_coefficients = = [valid matrix coefficient pointer], color_space = [valid color space pointer], color_depth = [valid color depth pointer], quantization_range = [valid quantization range pointer]| dsERR_NONE and valid settings| All the output settings for the specified video port must be returned |
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsGetCurrentOutputSettings (void)
 {
@@ -1977,10 +1931,10 @@ void test_l1_dsVideoPort_positive_dsGetCurrentOutputSettings (void)
  * **Test Group ID:** Basic: 101@n
  * **Test Case ID:** 101@n
  * 
- * **Pre-Conditions:**@n
- * Varying depending on the specific test.
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** None
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -1993,7 +1947,8 @@ void test_l1_dsVideoPort_positive_dsGetCurrentOutputSettings (void)
  * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * |06|Call dsGetCurrentOutputSettings() - Attempt to get the current output settings without initializing the video ports | handle = [valid handle],  video_eotf = [valid EOTF pointer], matrix_coefficients = = [valid matrix coefficient pointer], color_space = [valid color space pointer], color_depth = [valid color depth pointer], quantization_range = [valid quantization range pointer] | dsERR_NOT_INITIALIZED | Get Output settings must fail as module is not initialized|
  * 
- * **Additional Notes:** None
+ * **Additional Notes:** 
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsGetCurrentOutputSettings (void)
 {
@@ -2006,9 +1961,9 @@ void test_l1_dsVideoPort_negative_dsGetCurrentOutputSettings (void)
  * **Test Group ID:** Basic: 102@p
  * **Test Case ID:** 102@p
  * 
- * **Pre-Conditions:** None
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** None
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -2020,7 +1975,6 @@ void test_l1_dsVideoPort_negative_dsGetCurrentOutputSettings (void)
  * |03|Call dsIsOutputHDR() - by looping through acquired port handles to check if the video output is HDR or not |  handle = [valid handle], hdr = [valid pointer to hold hdr status value](true = HDR) | dsERR_NONE | Flag which holds the HDR status( @a true if Video Output is HDR and @a false otherwise ) of Video Port must be returned |
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:** None
  * 
  */
 void test_l1_dsVideoPort_positive_dsIsOutputHDR (void)
@@ -2034,9 +1988,10 @@ void test_l1_dsVideoPort_positive_dsIsOutputHDR (void)
  * **Test Group ID:** Basic: 102@n
  * **Test Case ID:** 102@n
  * 
- * **Pre-Conditions:** None
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** None
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -2050,7 +2005,8 @@ void test_l1_dsVideoPort_positive_dsIsOutputHDR (void)
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * |07|Call dsIsOutputHDR() - Attempt to check if video output is HDR or not without initializing video ports | handle: [ valid handle ], hdr: [ pointer to hold HDR status] | dsERR_NOT_INITIALIZED | Call to check if video output is HDR or not must fail as module is not initialized |
  * 
- * **Additional Notes:** None
+ * **Additional Notes:** 
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsIsOutputHDR (void)
 {
@@ -2063,11 +2019,9 @@ void test_l1_dsVideoPort_negative_dsIsOutputHDR (void)
  * **Test Group ID:** Basic: 103@p
  * **Test Case ID:** 103@p
  * 
- * **Pre-Conditions:**@n
- * - Video port system is successfully initialized via dsVideoPortInit().
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
- * - dsVideoPortInit()
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -2078,7 +2032,6 @@ void test_l1_dsVideoPort_negative_dsIsOutputHDR (void)
  * |02|dsResetOutputToSDR() - To reset the video output to SDR | | dsERR_NONE | Video Output must be resetted to SDR |
  * |03|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:** None
  * 
  */
 void test_l1_dsVideoPort_positive_dsResetOutputToSDR (void)
@@ -2092,10 +2045,10 @@ void test_l1_dsVideoPort_positive_dsResetOutputToSDR (void)
  * **Test Group ID:** Basic: 103@n
  * **Test Case ID:** 103@n
  * 
- * **Pre-Conditions:**@n
- * Varying depending on the specific test.
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** dsVideoPortInit()@n
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -2106,7 +2059,8 @@ void test_l1_dsVideoPort_positive_dsResetOutputToSDR (void)
  * |03|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * |04|Call dsResetOutputToSDR() - Again attempt to reset the video output to SDR after terminating the video ports | dsERR_NOT_INITIALIZED| Reset Video output to SDR must fail as video port is not initialized |
  * 
- * **Additional Notes:** None
+ * **Additional Notes:** 
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsResetOutputToSDR (void)
 {
@@ -2119,14 +2073,9 @@ void test_l1_dsVideoPort_negative_dsResetOutputToSDR (void)
  * **Test Group ID:** Basic: 104@p
  * **Test Case ID:** 104@p
  * 
- * **Pre-Conditions:**@n
- * - Video port system is successfully initialized via dsVideoPortInit().
- * - A valid video port handle is acquired via dsGetVideoPort().
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
- * - dsVideoPortInit()
- * - dsGetVideoPort()
- * - dsGetHdmiPreference()
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -2138,8 +2087,6 @@ void test_l1_dsVideoPort_negative_dsResetOutputToSDR (void)
  * |03|Call dsSetHdmiPreference() - by looping through the acquired port handles and set the HDMI preference from dsHdcpProtocolVersion_t | handle = [Valid handle], hdcpCurrentProtocol=[valid HDCP Protocol] | dsERR_NONE | HDMI Preference should be set successfully |
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsSetHdmiPreference (void)
 {
@@ -2152,10 +2099,10 @@ void test_l1_dsVideoPort_positive_dsSetHdmiPreference (void)
  * **Test Group ID:** Basic: 104@n
  * **Test Case ID:** 104@n
  * 
- * **Pre-Conditions:**@n
- * Varying depending on the specific test.
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** dsVideoPortInit()@n
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -2171,6 +2118,7 @@ void test_l1_dsVideoPort_positive_dsSetHdmiPreference (void)
  * 
  * **Additional Notes:**@n
  * - dsVideoPortTerm() should always be called to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsSetHdmiPreference (void)
 {
@@ -2183,14 +2131,9 @@ void test_l1_dsVideoPort_negative_dsSetHdmiPreference (void)
  * **Test Group ID:** Basic: 105@p
  * **Test Case ID:** 105@p
  * 
- * **Pre-Conditions:**@n
- * - Video port system is successfully initialized via dsVideoPortInit().
- * - A valid video port handle is acquired via dsGetVideoPort().
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
- * - dsVideoPortInit()
- * - dsGetVideoPort()
- * - dsSetHdmiPreference()
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -2202,8 +2145,6 @@ void test_l1_dsVideoPort_negative_dsSetHdmiPreference (void)
  * |03|Call dsGetHdmiPreference() - by looping through the acquired port handles to get the HDMI Preference of each video ports which supports HDCP | handle = [valid handle], hdcpCurrentProtocol = [valid pointer] | dsERR_NONE |  The Current HDMI Preference must be returned |
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsGetHdmiPreference (void)
 {
@@ -2216,10 +2157,10 @@ void test_l1_dsVideoPort_positive_dsGetHdmiPreference (void)
  * **Test Group ID:** Basic: 105@n
  * **Test Case ID:** 105@n
  * 
- * **Pre-Conditions:**@n
- * Varying depending on the specific test.
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:** dsVideoPortInit()@n
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -2236,6 +2177,7 @@ void test_l1_dsVideoPort_positive_dsGetHdmiPreference (void)
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
  * - dsVideoPortTerm() should always be called to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsGetHdmiPreference (void)
 {
@@ -2248,9 +2190,9 @@ void test_l1_dsVideoPort_negative_dsGetHdmiPreference (void)
  * **Test Group ID:** Basic: 106@p
  * **Test Case ID:** 106@p
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -2262,8 +2204,6 @@ void test_l1_dsVideoPort_negative_dsGetHdmiPreference (void)
  * |03|Call dsGetIgnoreEDIDStatus() by looping through acquired handles and valid pointer to get IgnoreEDID status |handle=[valid handle] ,status=[valid pointer] |dsERR_NONE | Should successfully get the IgnoreEDID status|
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsGetIgnoreEDIDStatus (void)
 {
@@ -2276,9 +2216,10 @@ void test_l1_dsVideoPort_positive_dsGetIgnoreEDIDStatus (void)
  * **Test Group ID:** Basic: 106@n
  * **Test Case ID:** 106@n
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -2296,6 +2237,7 @@ void test_l1_dsVideoPort_positive_dsGetIgnoreEDIDStatus (void)
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
  * - @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  * - dsVideoPortTerm() should always be called to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsGetIgnoreEDIDStatus (void)
 {
@@ -2308,9 +2250,9 @@ void test_l1_dsVideoPort_negative_dsGetIgnoreEDIDStatus (void)
  * **Test Group ID:** Basic: 107@p
  * **Test Case ID:** 107@p
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -2322,8 +2264,6 @@ void test_l1_dsVideoPort_negative_dsGetIgnoreEDIDStatus (void)
  * |03|Call dsSetBackgroundColor by looping through the acquired prots and valid color values| handle=[Valid handle], color=[valid values] | dsERR_NONE|Background color should be set successfully|
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsSetBackgroundColor (void)
 {
@@ -2336,9 +2276,10 @@ void test_l1_dsVideoPort_positive_dsSetBackgroundColor (void)
  * **Test Group ID:** Basic: 107@n
  * **Test Case ID:** 107@n
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -2356,6 +2297,7 @@ void test_l1_dsVideoPort_positive_dsSetBackgroundColor (void)
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
  * - @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  * - dsVideoPortTerm() should always be called to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsSetBackgroundColor (void)
 {
@@ -2368,9 +2310,9 @@ void test_l1_dsVideoPort_negative_dsSetBackgroundColor (void)
  * **Test Group ID:** Basic: 109@p
  * **Test Case ID:** 109@p
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -2382,8 +2324,6 @@ void test_l1_dsVideoPort_negative_dsSetBackgroundColor (void)
  * |03|Call dsSetForceHDRMode() by looping through acquired handles and valid mode values|handle=[valid handle], mode=[valid values]|dsERR_NONE|HDR mode should be set successfully|
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsSetForceHDRMode (void)
 {
@@ -2396,9 +2336,10 @@ void test_l1_dsVideoPort_positive_dsSetForceHDRMode (void)
  * **Test Group ID:** Basic: 109@n
  * **Test Case ID:** 109@n
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -2416,6 +2357,7 @@ void test_l1_dsVideoPort_positive_dsSetForceHDRMode (void)
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
  * - @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  * - dsVideoPortTerm() should always be called to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsSetForceHDRMode (void)
 {
@@ -2428,9 +2370,9 @@ void test_l1_dsVideoPort_negative_dsSetForceHDRMode (void)
  * **Test Group ID:** Basic: 110@p
  * **Test Case ID:** 110@p
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -2442,9 +2384,6 @@ void test_l1_dsVideoPort_negative_dsSetForceHDRMode (void)
  * |03|Call dsColorDepthCapabilities() by looping through the acquired ports and valid pointer|handle=[vallid handle], colorDepthCapability=[valid pointer] |dsERR_NONE  Color depth capabilities should be retrieved successfully|
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - Depending on the platform, different color depth capabilities might be returned. It's essential to validate the result against the expected capabilities of the tested platform.
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsColorDepthCapabilities (void)
 {
@@ -2457,9 +2396,10 @@ void test_l1_dsVideoPort_positive_dsColorDepthCapabilities (void)
  * **Test Group ID:** Basic: 110@n
  * **Test Case ID:** 110@n
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -2477,6 +2417,7 @@ void test_l1_dsVideoPort_positive_dsColorDepthCapabilities (void)
  * - Handle validation, module initialization checks, and null pointer checks are crucial for the robustness of the API.
  * - @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  * - dsVideoPortTerm() should always be called to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsColorDepthCapabilities (void)
 {
@@ -2489,9 +2430,9 @@ void test_l1_dsVideoPort_negative_dsColorDepthCapabilities (void)
  * **Test Group ID:** Basic: 130@p
  * **Test Case ID:** 130@p
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -2503,9 +2444,6 @@ void test_l1_dsVideoPort_negative_dsColorDepthCapabilities (void)
  * |03|Call dsGetPreferredColorDepth by looping through acquired handles and valid pointer |handle=[valid handle] , colorDepth=[valid pointer]|dsERR_NONE|Preferred Color depth should be retrieved successfully|
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - Depending on the platform and hardware, certain color depths might not be supported. Always validate against the expected capabilities of the tested platform.
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsGetPreferredColorDepth (void)
 {
@@ -2518,9 +2456,10 @@ void test_l1_dsVideoPort_positive_dsGetPreferredColorDepth (void)
  * **Test Group ID:** Basic: 130@n
  * **Test Case ID:** 130@n
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -2538,6 +2477,7 @@ void test_l1_dsVideoPort_positive_dsGetPreferredColorDepth (void)
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
  * - @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  * - dsVideoPortTerm() should always be called to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsGetPreferredColorDepth (void)
 {
@@ -2550,9 +2490,9 @@ void test_l1_dsVideoPort_negative_dsGetPreferredColorDepth (void)
  * **Test Group ID:** Basic: 120@p
  * **Test Case ID:** 120@p
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
  * 
  * **User Interaction:** None
  * 
@@ -2564,9 +2504,6 @@ void test_l1_dsVideoPort_negative_dsGetPreferredColorDepth (void)
  * |03|Call dsSetPreferredColorDepth() by looping through the acquired handles and Valid colorDepth values|handle=[invalid handle] , colorDepth=[valid values] |dsERR_NONE|Color depth should be set successfully|
  * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
- * **Additional Notes:**@n
- * - Depending on the platform and hardware, certain color depths might not be supported. Always validate against the expected capabilities of the tested platform.
- * - dsVideoPortTerm() should always be called at the end of the test to ensure that the video port system is properly shut down and all resources are released.
  */
 void test_l1_dsVideoPort_positive_dsSetPreferredColorDepth (void)
 {
@@ -2579,9 +2516,10 @@ void test_l1_dsVideoPort_positive_dsSetPreferredColorDepth (void)
  * **Test Group ID:** Basic: 120@n
  * **Test Case ID:** 120@n
  * 
- * **Pre-Conditions:**@n
+ * **Pre-Conditions:** None@n
  * 
- * **Dependencies:**@n
+ * **Dependencies:** None@n
+ * 
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -2599,6 +2537,7 @@ void test_l1_dsVideoPort_positive_dsSetPreferredColorDepth (void)
  * - Handle validation, module initialization checks, and support checks for color depths are crucial for the robustness of the API.
  * - @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  * - dsVideoPortTerm() should always be called to ensure that the video port system is properly shut down and all resources are released.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  */
 void test_l1_dsVideoPort_negative_dsSetPreferredColorDepth (void)
 {
@@ -2714,3 +2653,4 @@ int test_l1_dsVideoPort_register ( void )
 /** @} */ // End of DS Video Port HALTEST
 /** @} */ // End of Device Settings HAL
 /** @} */ // End of Device Settings Module
+/** @} */ // End of HPK
