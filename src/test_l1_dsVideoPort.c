@@ -260,8 +260,10 @@ void test_l1_dsVideoPort_negative_dsGetVideoPort (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the port handle for all supported video ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported video ports |
- * |03|Call dsIsVideoPortEnabled - by looping through the acquired port handles to check if a video port is enabled or not | handle: [valid handle], enabled: [pointer to hold the enabled/disabled status of video port] | dsERR_NONE | Flag which holds the enabled status of Video Port must be returned |
- * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |03|Call dsIsVideoPortEnabled - by looping through the acquired port handles to check if a video port is enabled or not and store the values in an array | handle: [valid handle], enabled: [pointer to hold the enabled/disabled status of video port] | dsERR_NONE | Flag which holds the enabled status of Video Port must be returned |
+ * |04|Call dsIsVideoPortEnabled - Again by looping through the acquired port handles to check if a video port is enabled or not and store the values in a new array | handle: [valid handle], enabled: [pointer to hold the enabled/disabled status of video port] | dsERR_NONE | Flag which holds the enabled status of Video Port must be returned |
+ * |05|Compare the array values and make sure they are equal| | dsERR_NONE | The values must be equal |
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsIsVideoPortEnabled (void)
@@ -293,7 +295,6 @@ void test_l1_dsVideoPort_positive_dsIsVideoPortEnabled (void)
  * |07|Call dsIsVideoPortEnabled() - Attempt to check if video port is enabled or not without initializing video ports| handle: [ valid handle ], connected: [ pointer to hold enabled status] | dsERR_NOT_INITIALIZED | Call to check if video port is enabled or not must fail as module is not initialized |
  * 
  * **Additional Notes:**@n
- * - The test must be careful while handling null pointers and invalid handles.
  * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsIsVideoPortEnabled (void)
@@ -318,8 +319,10 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortEnabled (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsIsDisplayConnected() - by looping through the acquired port handles to check if video port is connected to a display or not | handle: [ loop through valid handles ] , connected: [pointer to hold the connection status of Video Port] | dsERR_NONE | Flag which holds the connection status of Video Port must be returned |
- * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |03|Call dsIsDisplayConnected() - by looping through the acquired port handles to check if video port is connected to a display or not and store it in an array| handle: [ loop through valid handles ] , connected: [pointer to hold the connection status of Video Port] | dsERR_NONE | Flag which holds the connection status of Video Port must be returned |
+ * |04|Call dsIsDisplayConnected() - Again by looping through the acquired port handles to check if video port is connected to a display or not and store it in a new array | handle: [ loop through valid handles ] , connected: [pointer to hold the connection status of Video Port] | dsERR_NONE | Flag which holds the connection status of Video Port must be returned |
+ * |05|Compare the array values and make sure they are equal| | dsERR_NONE | The values must be equal |
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsIsDisplayConnected (void)
@@ -351,7 +354,6 @@ void test_l1_dsVideoPort_positive_dsIsDisplayConnected (void)
  * |07|Call dsIsDisplayConnected() - Attempt to check if video port is connected without initializing video ports|  handle: [ valid handle ], connected: [ pointer to hold connection status] | dsERR_NOT_INITIALIZED | Call to check if display is connected to video port must fail as module is not initialized |
  * 
  * **Additional Notes:**@n
- * - The test must be careful while handling null pointers and invalid handles.
  * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsIsDisplayConnected (void)
@@ -376,8 +378,10 @@ void test_l1_dsVideoPort_negative_dsIsDisplayConnected (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsIsDisplaySurround() - by looping through the acquired port handles to check if display connected to video port supports the audio surround | handle: [ loop through valid handles ] , surround: [pointer to hold the audio surround support] | dsERR_NONE | Audio surround support of Video Port must be returned |
- * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |03|Call dsIsDisplaySurround() - by looping through the acquired port handles to check if display connected to video port supports the audio surround and store it an array | handle: [ loop through valid handles ] , surround: [pointer to hold the audio surround support] | dsERR_NONE | Audio surround support of Video Port must be returned |
+ * |04|Call dsIsDisplaySurround() - Again by looping through the acquired port handles to check if display connected to video port supports the audio surround and store it in a new array| handle: [ loop through valid handles ] , surround: [pointer to hold the audio surround support] | dsERR_NONE | Audio surround support of Video Port must be returned |
+ * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsIsDisplaySurround (void)
@@ -434,8 +438,10 @@ void test_l1_dsVideoPort_negative_dsIsDisplaySurround (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetSurroundMode() - by looping through the acquired port handles to get the surround mode of each video port | handle: [ loop through valid handles ] , surround: [pointer to hold the Surround mode] | dsERR_NONE | Surround mode (dsSURROUNDMode_t)of Video Port must be returned |
- * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |03|Call dsGetSurroundMode() - by looping through the acquired port handles to get the surround mode of each video port and store it in an array | handle: [ loop through valid handles ] , surround: [pointer to hold the Surround mode] | dsERR_NONE | Surround mode (dsSURROUNDMode_t)of Video Port must be returned |
+ * |04|Call dsGetSurroundMode() - Again by looping through the acquired port handles to get the surround mode of each video port and store it in a new array | handle: [ loop through valid handles ] , surround: [pointer to hold the Surround mode] | dsERR_NONE | Surround mode (dsSURROUNDMode_t)of Video Port must be returned |
+ * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetSurroundMode (void)
@@ -492,8 +498,10 @@ void test_l1_dsVideoPort_negative_dsGetSurroundMode (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsIsVideoPortActive() - by looping through the acquired port handles to check whether a video port is active or not for each port | handle: [ loop through valid handles ] , active: [pointer to hold the active status] | dsERR_NONE | Active Status(A Video port is active if it is connected to the active port of sink device) of Video Port must be returned |
- * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |03|Call dsIsVideoPortActive() - by looping through the acquired port handles to check whether a video port is active or not for each port and store it in an array| handle: [ loop through valid handles ] , active: [pointer to hold the active status] | dsERR_NONE | Active Status(A Video port is active if it is connected to the active port of sink device) of Video Port must be returned |
+ * |04|Call dsIsVideoPortActive() - by looping through the acquired port handles to check whether a video port is active or not for each port and store it in a new array | handle: [ loop through valid handles ] , active: [pointer to hold the active status] | dsERR_NONE | Active Status(A Video port is active if it is connected to the active port of sink device) of Video Port must be returned |
+ * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsIsVideoPortActive (void)
@@ -671,8 +679,10 @@ void test_l1_dsVideoPort_negative_dsEnableHDCP (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video ports of a system | |dsERR_NONE| Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports|
- * |03|Call dsIsDTCPEnabled() by looping through the acquired port handles  and valid pointer to check whether DTCP enabled or not(.ie TRUE / FALSE) | handle : [loop through valid handles] , pContentProtected = [pointer to hold data ]|dsERR_NONE |dsIsDTCPEnabled must return a valid value|
- * |04|Call dsVideoPortTerm() - Terminate the video ports of a system| |dsERR_NONE|Termination must be successful|
+ * |03|Call dsIsDTCPEnabled() by looping through the acquired port handles  and valid pointer to check whether DTCP enabled or not(.ie TRUE / FALSE) and store it in an array | handle : [loop through valid handles] , pContentProtected = [pointer to hold data ]|dsERR_NONE |dsIsDTCPEnabled must return a valid value|
+ * |03|Call dsIsDTCPEnabled() by looping through the acquired port handles  and valid pointer to check whether DTCP enabled or not(.ie TRUE / FALSE) and store it in a new array | handle : [loop through valid handles] , pContentProtected = [pointer to hold data ]|dsERR_NONE |dsIsDTCPEnabled must return a valid value|
+ * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |06|Call dsVideoPortTerm() - Terminate the video ports of a system| |dsERR_NONE|Termination must be successful|
  *
  */
 void test_l1_dsVideoPort_positive_dsIsDTCPEnabled (void)
@@ -728,8 +738,10 @@ void test_l1_dsVideoPort_negative_dsIsDTCPEnabled (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video ports of a system | |dsERR_NONE| Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports|
- * |03|Call dsIsHDCPEnabled() by looping through the acquired port handles  and checks whether HDCP enabled or not(.ie TRUE / FALSE) | handle : [loop through valid handles] , pContentProtected = [pointer to hold data ] | dsERR_NONE | dsIsHDCPEnabled must return a valid value|
- * |04|Call dsVideoPortTerm() - Terminate the video ports of a system| |dsERR_NONE|Termination must be successful|
+ * |03|Call dsIsHDCPEnabled() by looping through the acquired port handles  and checks whether HDCP enabled or not(.ie TRUE / FALSE) and store it in an array | handle : [loop through valid handles] , pContentProtected = [pointer to hold data ] | dsERR_NONE | dsIsHDCPEnabled must return a valid value|
+ * |04|Call dsIsHDCPEnabled() by looping through the acquired port handles  and checks whether HDCP enabled or not(.ie TRUE / FALSE) and store it in a new array | handle : [loop through valid handles] , pContentProtected = [pointer to hold data ] | dsERR_NONE | dsIsHDCPEnabled must return a valid value|
+ * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |06|Call dsVideoPortTerm() - Terminate the video ports of a system| |dsERR_NONE|Termination must be successful|
  * 
  */
 void test_l1_dsVideoPort_positive_dsIsHDCPEnabled (void)
@@ -786,8 +798,11 @@ void test_l1_dsVideoPort_negative_dsIsHDCPEnabled (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video ports of a system | |dsERR_NONE| Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] | dsERR_NONE | Valid port handle must be returned for all supported video ports|
- * |03|Call dsEnableVideoPort() by looping through the acquired port handles and valid enabled parameter value (i.e TRUE/FALSE) to enable or disable a video port | handle  = [loop through valid handles] , enabled = [valid bool value] | dsERR_NONE | dsEnableVideoPort must return a valid value|
- * |04|Call dsVideoPortTerm() - Terminate the video ports of a system| |dsERR_NONE|Termination must be successful|
+ * |03|Call dsEnableVideoPort() by looping through the acquired port handles to enable video ports | handle  = [loop through valid handles] , enabled = [TRUE] | dsERR_NONE | Video ports must be enabled |
+ * |04|Call dsIsVideoPortEnabled() by looping through the acquired port handles and check if video ports(supported by platform) are enabled | dsERR_NONE | Supported video ports must be enabled |
+ * |05|Call dsEnableVideoPort() by looping through the acquired port handles to disable a video ports | handle  = [loop through valid handles] , enabled = [TRUE] | dsERR_NONE | Video ports must be enabled |
+ * |06|Call dsIsVideoPortEnabled() by looping through the acquired port handles and check if video ports(supported by platform) are disabled | dsERR_NONE | Supported video ports must be disabled |
+ * |07|Call dsVideoPortTerm() - Terminate the video ports of a system| |dsERR_NONE|Termination must be successful|
  * 
  */
 void test_l1_dsVideoPort_positive_dsEnableVideoPort (void)
@@ -901,7 +916,9 @@ void test_l1_dsVideoPort_negative_dsSetResolution (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video ports of a system | |dsERR_NONE| Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports|
- * |03|Call dsGetResolution() by looping through the acquired port handles and valid resolution pointer to retrieve the resolution of a video port | handle  = [loop through valid handles] , resolution = [valid pointer] |dsERR_NONE|Resolution must be set successfully|
+ * |03|Call dsGetResolution() by looping through the acquired port handles and valid resolution pointer to retrieve the resolution of a video port and store it in an array | handle  = [loop through valid handles] , resolution = [valid pointer] |dsERR_NONE|Resolution must be retrieved successfully|
+ * |04|Call dsGetResolution() Again by looping through the acquired port handles and valid resolution pointer to retrieve the resolution of a video port and store it in a new array | handle  = [loop through valid handles] , resolution = [valid pointer] |dsERR_NONE|Resolution must be retrieved successfully|
+ * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
  * |06|Call dsVideoPortTerm() - Terminate the video ports of a system| |dsERR_NONE|Termination must be successful|
  * 
  */
@@ -1127,8 +1144,10 @@ void test_l1_dsVideoPort_negative_dsRegisterHdcpStatusCallback (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetHDCPStatus() by looping through the acquired port handles and valid pointer to retrieve HDCP status | handle  = [valid handles] status = [valid pointer] | dsERR_NONE | The HDCP status must be successfully fetched and stored in the given pointer|
- * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |03|Call dsGetHDCPStatus() by looping through the acquired port handles and valid pointer to retrieve HDCP status and store it in an array | handle  = [valid handles] status = [valid pointer] | dsERR_NONE | The HDCP status must be successfully fetched and stored in the given pointer|
+ * |04|Call dsGetHDCPStatus() - Again by looping through the acquired port handles and valid pointer to retrieve HDCP status and  store it in a new array | handle  = [valid handles] status = [valid pointer] | dsERR_NONE | The HDCP status must be successfully fetched and stored in the given pointer|
+ * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetHDCPStatus (void)
@@ -1160,7 +1179,6 @@ void test_l1_dsVideoPort_positive_dsGetHDCPStatus (void)
  * |06|Call dsGetHDCPStatus() Again after terminating video ports attempt to get the status of video ports | handle= [valid handle ] , status = [valid pointer] | dsERR_NOT_INITIALIZED | dsGetHDCPStatus call must fail as module is not initialized |
  * 
  * **Additional Notes:**@n
- * - Handle validation , NULL pointer checks, and module initialization checks are crucial for the robustness of the API.
  * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetHDCPStatus (void)
@@ -1185,8 +1203,10 @@ void test_l1_dsVideoPort_negative_dsGetHDCPStatus (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetHDCPProtocol() by looping through the acquired suported port handles and valid pointer to retrieve the protocol version  of a video port |handle  = [valid handles] , protocolVersion = [valid pointer] |dsERR_NONE|The HDCP protocol version must be successfully fetched |
- * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |03|Call dsGetHDCPProtocol() by looping through the acquired suported port handles and valid pointer to retrieve the protocol version  of a video port and store it in an array |handle  = [valid handles] , protocolVersion = [valid pointer] |dsERR_NONE|The HDCP protocol version must be successfully fetched |
+ * |04|Call dsGetHDCPProtocol() -Again by looping through the acquired suported port handles and valid pointer to retrieve the protocol version  of a video port and store it in a new array |handle  = [valid handles] , protocolVersion = [valid pointer] |dsERR_NONE|The HDCP protocol version must be successfully fetched |
+ * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetHDCPProtocol (void)
@@ -1243,8 +1263,10 @@ void test_l1_dsVideoPort_negative_dsGetHDCPProtocol (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetHDCPReceiverProtocol() by looping through the acquired supported port handles and valid pointer to retrieve the sink device protocol version  of a video port |handle  = [loop through valid handles] , protocolVersion = [valid pointer] |dsERR_NONE|The Receiver HDCP protocol version must be successfully fetched and stored in the given pointer|
- * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |03|Call dsGetHDCPReceiverProtocol() by looping through the acquired supported port handles and valid pointer to retrieve the sink device protocol version of a video port and store it in an array |handle  = [loop through valid handles] , protocolVersion = [valid pointer] |dsERR_NONE|The Receiver HDCP protocol version must be successfully fetched and stored in the given pointer|
+ * |04|Call dsGetHDCPReceiverProtocol() - Again by looping through the acquired supported port handles and valid pointer to retrieve the sink device protocol version of a video port and store it in a new array |handle  = [loop through valid handles] , protocolVersion = [valid pointer] |dsERR_NONE|The Receiver HDCP protocol version must be successfully fetched and stored in the given pointer|
+ * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetHDCPReceiverProtocol (void)
@@ -1301,7 +1323,9 @@ void test_l1_dsVideoPort_negative_dsGetHDCPReceiverProtocol (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetHDCPCurrentProtocol() by looping through the acquired supported port handles and valid pointer to retrieve the current negotiated protocol version  of a video port |handle  = [valid handles] , protocolVersion = [valid pointer] |dsERR_NONE|The current HDCP protocol version must be successfully fetched |
+ * |03|Call dsGetHDCPCurrentProtocol() by looping through the acquired supported port handles and valid pointer to retrieve the current negotiated protocol version  of a video port and store it in an array |handle  = [valid handles] , protocolVersion = [valid pointer] |dsERR_NONE|The current HDCP protocol version must be successfully fetched |
+ * |04|Call dsGetHDCPCurrentProtocol() -Again by looping through the acquired supported port handles and valid pointer to retrieve the current negotiated protocol version of a video port and store it in a new array |handle  = [valid handles] , protocolVersion = [valid pointer] |dsERR_NONE|The current HDCP protocol version must be successfully fetched |
+ * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
@@ -1360,8 +1384,10 @@ void test_l1_dsVideoPort_negative_dsGetHDCPCurrentProtocol (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video ports of a system | |dsERR_NONE| Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports|
- * |03|Call dsGetTVHDRCapabilities() by looping through the acquired port handles and valid pointer to retrieve the HDR capabilities of a video port | handle  = [loop through valid handles] , capabilities = [valid pointer] |dsERR_NONE|The HDR capabilities must be successfully fetched and stored in the given pointer|
- * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |03|Call dsGetTVHDRCapabilities() by looping through the acquired port handles and valid pointer to retrieve the HDR capabilities of a video port and store it in an array | handle  = [loop through valid handles] , capabilities = [valid pointer] |dsERR_NONE|The HDR capabilities must be successfully fetched and stored in the given pointer|
+ * |04|Call dsGetTVHDRCapabilities() -Again by looping through the acquired port handles and valid pointer to retrieve the HDR capabilities of a video port and store it in a new array | handle  = [loop through valid handles] , capabilities = [valid pointer] |dsERR_NONE|The HDR capabilities must be successfully fetched and stored in the given pointer|
+ * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetTVHDRCapabilities (void)
@@ -1393,7 +1419,6 @@ void test_l1_dsVideoPort_positive_dsGetTVHDRCapabilities (void)
  * |06|Call dsGetTVHDRCapabilities() Again after terminating video ports attempt to get the HDR capabilites of video ports | handle= [valid handle ] , capabilities = [valid pointer] | dsERR_NOT_INITIALIZED | dsGetTVHDRCapabilities call must fail as module is not initialized |
  * 
  * **Additional Notes:**@n
- * - Handle validation, NULL pointer checks, and module initialization checks are crucial for the robustness of the API.
  * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetTVHDRCapabilities (void)
@@ -1418,7 +1443,9 @@ void test_l1_dsVideoPort_negative_dsGetTVHDRCapabilities (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video ports of a system | |dsERR_NONE| Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports|
- * |03|Call dsSupportedTvResolutions() by looping through the acquired port handles and valid pointer to retrieve the resolutions of a video port |handle  = [loop through valid handles] , resolutions = [valid pointer] |dsERR_NONE|Resolutions must be set successfully|
+ * |03|Call dsSupportedTvResolutions() by looping through the acquired port handles and valid pointer to retrieve the resolutions of a video port and store it in an array |handle  = [loop through valid handles] , resolutions = [valid pointer] |dsERR_NONE|Resolutions must be set successfully|
+ * |04|Call dsSupportedTvResolutions() -Again by looping through the acquired port handles and valid pointer to retrieve the resolutions of a video port and store it in a new array |handle  = [loop through valid handles] , resolutions = [valid pointer] |dsERR_NONE|Resolutions must be set successfully|
+ * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
  * |06|Call dsVideoPortTerm() - Terminate the video ports of a system| |dsERR_NONE|Termination must be successful|
  * 
  */
@@ -1533,8 +1560,10 @@ void test_l1_dsVideoPort_negative_dsSetForceDisable4KSupport (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call  dsGetForceDisable4KSupport() by looping through the acquired port handles and valid pointer to get the 4K support disabled or not | handle  = [loop through valid handles] , disable= [valid pointer] | dsERR_NONE | The 4K support disabled or not must be successfully retrieved |
- * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful | 
+ * |03|Call  dsGetForceDisable4KSupport() by looping through the acquired port handles and valid pointer to get the 4K support disabled or not and store it in an array | handle  = [loop through valid handles] , disable= [valid pointer] | dsERR_NONE | The 4K support disabled or not must be successfully retrieved |
+ * |04|Call  dsGetForceDisable4KSupport() -Again by looping through the acquired port handles and valid pointer to get the 4K support disabled or not and store it in a new array | handle  = [loop through valid handles] , disable= [valid pointer] | dsERR_NONE | The 4K support disabled or not must be successfully retrieved |
+ * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful | 
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetForceDisable4KSupport (void)
@@ -1591,8 +1620,10 @@ void test_l1_dsVideoPort_negative_dsGetForceDisable4KSupport (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetVideoEOTF() by looping through the acquired port handles and valid pointer Retrieve the current Electro-Optical Transfer Function (EOTF) value | handle = [loop through ports] , video_eotf = [valid pointer] |dsERR_NONE | Valid EOTF value must return a valid EOTF value of the specified video port|
- * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |03|Call dsGetVideoEOTF() by looping through the acquired port handles and valid pointer to retrieve the current Electro-Optical Transfer Function (EOTF) value and store it in an array | handle = [loop through ports] , video_eotf = [valid pointer] |dsERR_NONE | Valid EOTF value must return a valid EOTF value of the specified video port|
+ * |04|Call dsGetVideoEOTF() -Again by looping through the acquired port handles and valid pointer to retrieve the current Electro-Optical Transfer Function (EOTF) value and store it in a new array | handle = [loop through ports] , video_eotf = [valid pointer] |dsERR_NONE | Valid EOTF value must return a valid EOTF value of the specified video port|
+ * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetVideoEOTF (void)
@@ -1624,7 +1655,6 @@ void test_l1_dsVideoPort_positive_dsGetVideoEOTF (void)
  * |07|Call dsGetVideoEOTF() Again after terminating video ports attempt to get the EOTF of video ports | handle= [invalid handle ] , video_eotf = [valid pointer] | dsERR_NOT_INITIALIZED | dsGetVideoEOTF call must fail as module is not initialized |
  * 
  * **Additional Notes:**@n
- * - Handle validation, pointer validation, and module initialization checks are crucial for the robustness of the API. 
  * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetVideoEOTF (void)
@@ -1649,8 +1679,10 @@ void test_l1_dsVideoPort_negative_dsGetVideoEOTF (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetMatrixCoefficients() by looping through the acquired port handles and valid resolution pointer to Retrieve the current matrix coefficients of a specified port |handle  = [loop through valid handles] , matrix_coefficients = [valid pointer] |dsERR_NONE|must return a valid matrix coefficient value of the specified video port|
- * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |03|Call dsGetMatrixCoefficients() by looping through the acquired port handles and valid resolution pointer to retrieve the current matrix coefficients of a specified port  and store it in an array |handle  = [loop through valid handles] , matrix_coefficients = [valid pointer] |dsERR_NONE|must return a valid matrix coefficient value of the specified video port|
+ * |04|Call dsGetMatrixCoefficients() -Again by looping through the acquired port handles and valid resolution pointer to retrieve the current matrix coefficients of a specified port and store it in a new array |handle  = [loop through valid handles] , matrix_coefficients = [valid pointer] |dsERR_NONE|must return a valid matrix coefficient value of the specified video port|
+ * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetMatrixCoefficients (void)
@@ -1707,8 +1739,10 @@ void test_l1_dsVideoPort_negative_dsGetMatrixCoefficients (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetColorDepth() by looping through the acquired port handles and valid pointer to retrieve the current color depth  | handle  = [loop through valid handles] , color_depth = [valid pointer] | dsERR_NONE | must return a valid color depth value of the specified video port|
- * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |03|Call dsGetColorDepth() by looping through the acquired port handles and valid pointer to retrieve the current color depth  & store in an array | handle  = [loop through valid handles] , color_depth = [valid pointer] | dsERR_NONE | must return a valid color depth value of the specified video port|
+ * |04|Call dsGetColorDepth() -Again by looping through the acquired port handles and valid pointer to retrieve the current color depth & store it in a new array | handle  = [loop through valid handles] , color_depth = [valid pointer] | dsERR_NONE | must return a valid color depth value of the specified video port|
+ * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetColorDepth (void)
@@ -1740,7 +1774,6 @@ void test_l1_dsVideoPort_positive_dsGetColorDepth (void)
  * |07|Call dsGetColorDepth() Again after terminating video ports attempt to get the color depth of video ports | handle= [invalid handle] , color_depth = [valid pointer] | dsERR_NOT_INITIALIZED | dsGetColorDepth call must fail as module is not initialized |
  * 
  * **Additional Notes:**@n
- * - Handle validation, pointer validation, and module initialization checks are crucial for the robustness of the API. 
  * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetColorDepth (void)
@@ -1765,8 +1798,10 @@ void test_l1_dsVideoPort_negative_dsGetColorDepth (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetColorSpace() by looping through the acquired port handles and valid pointer to retrieve the current color space setting of video port |handle  = [loop through valid handles] , color_space = [valid pointer] |Valid color space value|must return a valid color space setting of the specified video port|
- * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |03|Call dsGetColorSpace() by looping through the acquired port handles and valid pointer to retrieve the current color space setting of video port & store it in an array |handle  = [loop through valid handles] , color_space = [valid pointer] |Valid color space value|must return a valid color space setting of the specified video port|
+ * |04|Call dsGetColorSpace() -Again by looping through the acquired port handles and valid pointer to retrieve the current color space setting of video port & store it in a new array |handle  = [loop through valid handles] , color_space = [valid pointer] |Valid color space value|must return a valid color space setting of the specified video port|
+ * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetColorSpace (void)
@@ -1823,8 +1858,10 @@ void test_l1_dsVideoPort_negative_dsGetColorSpace (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetQuantizationRange() by looping through the acquired port handles and valid pointer to retrieve the current quantization range |handle  = [loop through valid handles] , quantization_range = [valid pointer] |dsERR_NONE | must return a valid quantization range of the specified video port|
- * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |03|Call dsGetQuantizationRange() by looping through the acquired port handles and valid pointer to retrieve the current quantization range & store it in an array |handle  = [loop through valid handles] , quantization_range = [valid pointer] |dsERR_NONE | must return a valid quantization range of the specified video port|
+ * |04|Call dsGetQuantizationRange() -Again by looping through the acquired port handles and valid pointer to retrieve the current quantization range & store it in a new array |handle  = [loop through valid handles] , quantization_range = [valid pointer] |dsERR_NONE | must return a valid quantization range of the specified video port|
+ * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetQuantizationRange (void)
@@ -1856,7 +1893,6 @@ void test_l1_dsVideoPort_positive_dsGetQuantizationRange (void)
  * |07|Call dsGetQuantizationRange() Again after terminating video ports attempt to get the quantization of video ports | handle= [valid handle from step 04 ] , quantization_range = [valid pointer] | dsERR_NOT_INITIALIZED | dsGetQuantizationRange call must fail as module is not initialized |
  * 
  * **Additional Notes:**@n
- * - Handle validation, pointer validation, and module initialization checks are crucial for the robustness of the API.
  * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetQuantizationRange (void)
@@ -1881,8 +1917,10 @@ void test_l1_dsVideoPort_negative_dsGetQuantizationRange (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetCurrentOutputSettings() by looping through the acquired port handles and valid pointer to retrieve the current output settings | handle= [loop through valid handles] , video_eotf = [valid EOTF pointer], matrix_coefficients = = [valid matrix coefficient pointer], color_space = [valid color space pointer], color_depth = [valid color depth pointer], quantization_range = [valid quantization range pointer]| dsERR_NONE and valid settings| All the output settings for the specified video port must be returned |
- * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |03|Call dsGetCurrentOutputSettings() by looping through the acquired port handles and valid pointer to retrieve the current output settings and store it in an array | handle= [loop through valid handles] , video_eotf = [valid EOTF pointer], matrix_coefficients = = [valid matrix coefficient pointer], color_space = [valid color space pointer], color_depth = [valid color depth pointer], quantization_range = [valid quantization range pointer]| dsERR_NONE and valid settings| All the output settings for the specified video port must be returned |
+ * |04|Call dsGetCurrentOutputSettings() -Again by looping through the acquired port handles and valid pointer to retrieve the current output settings and store it in a new array | handle= [loop through valid handles] , video_eotf = [valid EOTF pointer], matrix_coefficients = = [valid matrix coefficient pointer], color_space = [valid color space pointer], color_depth = [valid color depth pointer], quantization_range = [valid quantization range pointer]| dsERR_NONE and valid settings| All the output settings for the specified video port must be returned |
+ * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetCurrentOutputSettings (void)
@@ -1937,8 +1975,10 @@ void test_l1_dsVideoPort_negative_dsGetCurrentOutputSettings (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsIsOutputHDR() - by looping through acquired port handles to check if the video output is HDR or not |  handle = [valid handle], hdr = [valid pointer to hold hdr status value](true = HDR) | dsERR_NONE | Flag which holds the HDR status( @a true if Video Output is HDR and @a false otherwise ) of Video Port must be returned |
- * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |03|Call dsIsOutputHDR() - by looping through acquired port handles to check if the video output is HDR or not & store it in an array |  handle = [valid handle], hdr = [valid pointer to hold hdr status value](true = HDR) | dsERR_NONE | Flag which holds the HDR status( @a true if Video Output is HDR and @a false otherwise ) of Video Port must be returned |
+ * |04|Call dsIsOutputHDR() - Again by looping through acquired port handles to check if the video output is HDR or not & store it in a new array |  handle = [valid handle], hdr = [valid pointer to hold hdr status value](true = HDR) | dsERR_NONE | Flag which holds the HDR status( @a true if Video Output is HDR and @a false otherwise ) of Video Port must be returned |
+ * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  * 
  */
@@ -2107,8 +2147,10 @@ void test_l1_dsVideoPort_negative_dsSetHdmiPreference (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetHdmiPreference() - by looping through the acquired port handles to get the HDMI Preference of each video ports which supports HDCP | handle = [valid handle], hdcpCurrentProtocol = [valid pointer] | dsERR_NONE |  The Current HDMI Preference must be returned |
- * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |03|Call dsGetHdmiPreference() - by looping through the acquired port handles to get the HDMI Preference of each video ports which supports HDCP & store it in an array | handle = [valid handle], hdcpCurrentProtocol = [valid pointer] | dsERR_NONE |  The Current HDMI Preference must be returned |
+ * |04|Call dsGetHdmiPreference() - Again by looping through the acquired port handles to get the HDMI Preference of each video ports which supports HDCP & store it in a new array | handle = [valid handle], hdcpCurrentProtocol = [valid pointer] | dsERR_NONE |  The Current HDMI Preference must be returned |
+ * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetHdmiPreference (void)
@@ -2166,8 +2208,10 @@ void test_l1_dsVideoPort_negative_dsGetHdmiPreference (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetIgnoreEDIDStatus() by looping through acquired handles and valid pointer to get IgnoreEDID status |handle=[valid handle] ,status=[valid pointer] |dsERR_NONE | must successfully get the IgnoreEDID status|
- * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |03|Call dsGetIgnoreEDIDStatus() by looping through acquired handles and valid pointer to get IgnoreEDID status & store it in an array |handle=[valid handle] ,status=[valid pointer] |dsERR_NONE | must successfully get the IgnoreEDID status|
+ * |04|Call dsGetIgnoreEDIDStatus() - Again by looping through acquired handles and valid pointer to get IgnoreEDID status & store it in a new array |handle=[valid handle] ,status=[valid pointer] |dsERR_NONE | must successfully get the IgnoreEDID status|
+ * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetIgnoreEDIDStatus (void)
@@ -2343,8 +2387,10 @@ void test_l1_dsVideoPort_negative_dsSetForceHDRMode (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsColorDepthCapabilities() by looping through the acquired ports and valid pointer|handle=[vallid handle], colorDepthCapability=[valid pointer] |dsERR_NONE  Color depth capabilities must be retrieved successfully|
- * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |03|Call dsColorDepthCapabilities() by looping through the acquired ports and valid pointer to get the color depth capabilities & store it in an array |handle=[vallid handle], colorDepthCapability=[valid pointer] |dsERR_NONE  Color depth capabilities must be retrieved successfully|
+ * |04|Call dsColorDepthCapabilities() -Again by looping through the acquired ports and valid pointer to get the color depth capabilities & store it in a new array |handle=[vallid handle], colorDepthCapability=[valid pointer] |dsERR_NONE  Color depth capabilities must be retrieved successfully|
+ * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsColorDepthCapabilities (void)
@@ -2376,8 +2422,6 @@ void test_l1_dsVideoPort_positive_dsColorDepthCapabilities (void)
  * |06|Call dsColorDepthCapabilities() after terminating videop ports |handle= [valid handle from step 04 ] , colorDepthCapability= [valid pointer] | dsERR_NOT_INITIALIZED|call must fail as module not initialized |
  * 
  * **Additional Notes:**@n
- * - Handle validation, module initialization checks, and null pointer checks are crucial for the robustness of the API.
- * - dsVideoPortTerm() must always be called to ensure that the video port system is properly shut down and all resources are released.
  * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsColorDepthCapabilities (void)
@@ -2402,8 +2446,10 @@ void test_l1_dsVideoPort_negative_dsColorDepthCapabilities (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetPreferredColorDepth by looping through acquired handles and valid pointer |handle=[valid handle] , colorDepth=[valid pointer]|dsERR_NONE|Preferred Color depth must be retrieved successfully|
- * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |03|Call dsGetPreferredColorDepth by looping through acquired handles and valid pointer to get the preferred color depth of each port & store it in an array |handle=[valid handle] , colorDepth=[valid pointer]|dsERR_NONE|Preferred Color depth must be retrieved successfully|
+ * |04|Call dsGetPreferredColorDepth - Again by looping through acquired handles and valid pointer to get the preferred color depth of each port & store it in a new array |handle=[valid handle] , colorDepth=[valid pointer]|dsERR_NONE|Preferred Color depth must be retrieved successfully|
+ * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetPreferredColorDepth (void)
@@ -2435,8 +2481,6 @@ void test_l1_dsVideoPort_positive_dsGetPreferredColorDepth (void)
  * |07|Call dsGetPreferredColorDepth() after terminating video ports |handle=[valid handle] , colorDepth=[valid pointer] |dsERR_NOT_INITIALIZED|call must fail as module is not initialized|
  *
  * **Additional Notes:**@n
- * - Handle validation and module initialization checks are crucial for the robustness of the API.
- * - dsVideoPortTerm() must always be called to ensure that the video port system is properly shut down and all resources are released.
  * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetPreferredColorDepth (void)
