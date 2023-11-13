@@ -275,6 +275,7 @@ void test_l1_dsFPD_positive_dsSetFPState (void)
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
         result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
         result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_OFF);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
