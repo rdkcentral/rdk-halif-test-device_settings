@@ -37,416 +37,497 @@
 
 #include <ut.h>
 #include <ut_log.h>
+#include "dsCompositeIn.h"
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsCompositeInInit() returns correct error codes during basic positive scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 001@n
+ * 
+ * **Pre-Conditions:**@n
+ * The module is not initialized.
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Call dsCompositeInInit() for the first time | | dsERR_NONE | First-time initialization should succeed |
+ * |02|Call dsCompositeInTerm() to terminate the module | | dsERR_NONE | Termination should succeed |
+ * |03|Call dsCompositeInInit() again after termination | | dsERR_NONE | Re-initialization should succeed |
+ * |04|Call dsCompositeInTerm() again to terminate the module | | dsERR_NONE | Termination should succeed |
+ * 
+ * @note This test sequence checks the basic functionality of initializing and terminating the module without considering the state of any subsystems.
+ */
 void test_l1_dsCompositeIn_positive_dsCompositeInInit (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsCompositeInInit() returns correct error codes during negative scenarios with proper initialization and termination
+ * 
+ * **Test Group ID:** Basic: 02@n
+ * **Test Case ID:** 002@n
+ * 
+ * **Pre-Conditions:**@n
+ * None.
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Call dsCompositeInInit() to initialize the module for the first time | | dsERR_NONE | Initialization should succeed |
+ * |02|Call dsCompositeInInit() again to check if it returns an error when the module is already initialized | | dsERR_ALREADY_INITIALIZED | Should return error indicating the module is already initialized |
+ * |03|Terminate the module with dsCompositeInTerm() after the second initialization attempt | | dsERR_NONE | Termination should succeed |
+ * 
+ * @note The ability to simulate specific conditions like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might require specific setup or environment configuration. These cases are not included in this test plan due to the challenges in realistic simulation.
+ */
 void test_l1_dsCompositeIn_negative_dsCompositeInInit (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsCompositeInTerm() returns correct error codes during positive scenarios
+ * 
+ * **Test Group ID:** Basic: 03@n
+ * **Test Case ID:** 003@n
+ * 
+ * **Pre-Conditions:**@n
+ * None.
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Initialize the module with dsCompositeInInit() | | dsERR_NONE | Initialization should succeed |
+ * |02|Terminate the module with dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * |03|Initialize the module with dsCompositeInInit() | | dsERR_NONE | Initialization should succeed |
+ * |04|Terminate the module with dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * 
+ * @note This sequence ensures that dsCompositeInTerm() functions correctly after initialization.
+ * 
+ */
 void test_l1_dsCompositeIn_positive_dsCompositeInTerm (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsCompositeInTerm() returns correct error codes during negative scenarios
+ * 
+ * **Test Group ID:** Basic: 04@n
+ * **Test Case ID:** 004@n
+ * 
+ * **Pre-Conditions:**@n
+ * None.
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Call dsCompositeInTerm() without initializing the module | | dsERR_NOT_INITIALIZED | Termination should fail due to the module not being initialized |
+ * |02|Initialize the module with dsCompositeInInit() | | dsERR_NONE | Initialization should succeed |
+ * |03|Terminate the module with dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * |04|Call dsCompositeInTerm() again after proper termination | | dsERR_NOT_INITIALIZED | Termination should fail, indicating the module is already terminated |
+ * 
+ * @note These scenarios test the behavior of dsCompositeInTerm() when the module is not initialized or already terminated.
+ */
 void test_l1_dsCompositeIn_negative_dsCompositeInTerm (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsCompositeInGetNumberOfInputs() returns consistent error codes and output during positive scenarios
+ * 
+ * **Test Group ID:** Basic: 05@n
+ * **Test Case ID:** 005@n
+ * 
+ * **Pre-Conditions:**@n
+ * The module is initialized.
+ * 
+ * **Dependencies:** dsCompositeInInit()@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Initialize the module with dsCompositeInInit() | | dsERR_NONE | Initialization should succeed |
+ * |02|Call dsCompositeInGetNumberOfInputs() for the first time with a valid pointer | Valid pointer | dsERR_NONE and a valid number of inputs | Number of inputs should be returned correctly |
+ * |03|Call dsCompositeInGetNumberOfInputs() for the second time with a valid pointer | Valid pointer | dsERR_NONE and a valid number of inputs | Number of inputs should be consistent with the first call |
+ * |04|Compare the results of both calls to ensure consistency | Results of first and second calls | Consistent number of inputs | The number of inputs returned should be the same in both calls |
+ * |05|Terminate the module with dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * 
+ * @note This sequence tests the consistency of the output from dsCompositeInGetNumberOfInputs() across multiple calls.
+ */
 void test_l1_dsCompositeIn_positive_dsCompositeInGetNumberOfInputs (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsCompositeInGetNumberOfInputs() returns correct error codes during negative scenarios
+ * 
+ * **Test Group ID:** Basic: 06@n
+ * **Test Case ID:** 006@n
+ * 
+ * **Pre-Conditions:**@n
+ * Varied as per test case.
+ * 
+ * **Dependencies:** dsCompositeInInit()@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Call dsCompositeInGetNumberOfInputs() without initializing the module | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |02|Initialize the module with dsCompositeInInit() | | dsERR_NONE | Initialization should succeed |
+ * |03|Call dsCompositeInGetNumberOfInputs() with a NULL pointer | NULL pointer | dsERR_INVALID_PARAM | Should return error indicating invalid parameter |
+ * |04|Terminate the module with dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * |05|Call dsCompositeInGetNumberOfInputs() after terminating the module | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * 
+ * @note Scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL are not included in this test plan due to the challenges in realistic simulation.
+ */
 void test_l1_dsCompositeIn_negative_dsCompositeInGetNumberOfInputs (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsCompositeInGetStatus() returns correct status and error codes during positive scenarios
+ * 
+ * **Test Group ID:** Basic: 07@n
+ * **Test Case ID:** 007@n
+ * 
+ * **Pre-Conditions:**@n
+ * The module is initialized.
+ * 
+ * **Dependencies:** dsCompositeInInit()@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Initialize the module with dsCompositeInInit() | | dsERR_NONE | Initialization should succeed |
+ * |02|Call dsCompositeInGetStatus() with a valid pointer | Valid pointer | dsERR_NONE and valid status | Status should be retrieved correctly |
+ * |03|Verify the retrieved status is within the valid range | Retrieved status | Status is within the defined enum range | Ensures the status is valid |
+ * |04|Terminate the module with dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * 
+ * @note This sequence tests the functionality of getting the COMPOSITE Input Status correctly.
+ */
 void test_l1_dsCompositeIn_positive_dsCompositeInGetStatus (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsCompositeInGetStatus() returns correct error codes during negative scenarios
+ * 
+ * **Test Group ID:** Basic: 08@n
+ * **Test Case ID:** 008@n
+ * 
+ * **Pre-Conditions:**@n
+ * Varied as per test case.
+ * 
+ * **Dependencies:** dsCompositeInInit()@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Call dsCompositeInGetStatus() without initializing the module | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |02|Initialize the module with dsCompositeInInit() | | dsERR_NONE | Initialization should succeed |
+ * |03|Call dsCompositeInGetStatus() with a NULL pointer | NULL pointer | dsERR_INVALID_PARAM | Should return error indicating invalid parameter |
+ * |04|Terminate the module with dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * |05|Call dsCompositeInGetStatus() after terminating the module | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * 
+ * @note Scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL are not included due to challenges in realistic simulation.
+ */
 void test_l1_dsCompositeIn_negative_dsCompositeInGetStatus (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsCompositeInSelectPort() sets the COMPOSITE Input port correctly during positive scenarios
+ * 
+ * **Test Group ID:** Basic: 09@n
+ * **Test Case ID:** 009@n
+ * 
+ * **Pre-Conditions:**@n
+ * The module is initialized.
+ * 
+ * **Dependencies:** dsCompositeInInit()@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Initialize the module with dsCompositeInInit() | | dsERR_NONE | Initialization should succeed |
+ * |02|Call dsCompositeInSelectPort() with a valid port number | dsCOMPOSITE_IN_PORT_0 | dsERR_NONE | Port should be set correctly |
+ * |03|Call dsCompositeInSelectPort() with another valid port number | dsCOMPOSITE_IN_PORT_1 | dsERR_NONE | Port should be switched correctly |
+ * |04|Terminate the module with dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * 
+ * @note This sequence tests the ability of dsCompositeInSelectPort() to set and switch COMPOSITE Input ports.
+ */
 void test_l1_dsCompositeIn_positive_dsCompositeInSelectPort (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsCompositeInSelectPort() returns correct error codes during negative scenarios
+ * 
+ * **Test Group ID:** Basic: 10@n
+ * **Test Case ID:** 010@n
+ * 
+ * **Pre-Conditions:**@n
+ * Varied as per test case.
+ * 
+ * **Dependencies:** dsCompositeInInit()@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Call dsCompositeInSelectPort() without initializing the module | Port value | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |02|Initialize the module with dsCompositeInInit() | | dsERR_NONE | Initialization should succeed |
+ * |03|Call dsCompositeInSelectPort() with an invalid port number (out of range) | dsCOMPOSITE_IN_PORT_MAX or a value not in enum | dsERR_INVALID_PARAM | Should return error indicating invalid port number |
+ * |04|Terminate the module with dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * |05|Call dsCompositeInSelectPort() without initializing the module | Port value | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * 
+ * @note Scenarios like dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED are not included due to challenges in realistic simulation.
+ */
 void test_l1_dsCompositeIn_negative_dsCompositeInSelectPort (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsCompositeInScaleVideo() scales the COMPOSITE In video correctly during positive scenarios
+ * 
+ * **Test Group ID:** Basic: 11@n
+ * **Test Case ID:** 011@n
+ * 
+ * **Pre-Conditions:**@n
+ * The module is initialized, and a valid COMPOSITE input port is selected.
+ * 
+ * **Dependencies:** dsCompositeInInit(), dsCompositeInSelectPort()@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Initialize the module and select a COMPOSITE input port | | dsERR_NONE | Initialization and port selection should succeed |
+ * |02|Call dsCompositeInScaleVideo() with valid parameters within current resolution | x, y, width, height within device resolution | dsERR_NONE | Video scaling should succeed |
+ * |03|Call dsCompositeInScaleVideo() with different valid parameters to verify flexibility | Different x, y, width, height within device resolution | dsERR_NONE | Video should be scaled correctly with different parameters |
+ * |04|Terminate the module with dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * 
+ * @note This sequence tests the functionality of dsCompositeInScaleVideo() in scaling video based on various valid input parameters.
+ */
 void test_l1_dsCompositeIn_positive_dsCompositeInScaleVideo (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsCompositeInScaleVideo() returns correct error codes during negative scenarios
+ * 
+ * **Test Group ID:** Basic: 12@n
+ * **Test Case ID:** 012@n
+ * 
+ * **Pre-Conditions:**@n
+ * Varied as per test case.
+ * 
+ * **Dependencies:** dsCompositeInInit(), dsCompositeInSelectPort()@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Call dsCompositeInScaleVideo() without initializing the module or selecting a port | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |02|Initialize the module and select a COMPOSITE input port | | dsERR_NONE | Initialization and port selection should succeed |
+ * |03|Call dsCompositeInScaleVideo() with parameters out of current resolution | x=-1, y, width, height | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
+ * |04|Call dsCompositeInScaleVideo() with parameters out of current resolution | x, y=-1, width, height | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
+ * |05|Call dsCompositeInScaleVideo() with parameters out of current resolution | x, y, width=-1, height | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
+ * |06|Call dsCompositeInScaleVideo() with parameters out of current resolution | x, y, width, height=-1 | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
+ * |07|Terminate the module with dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * |08|Call dsCompositeInScaleVideo() without initializing the module or selecting a port | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * 
+ * @note Scenarios like dsERR_GENERAL, and dsERR_OPERATION_NOT_SUPPORTED are not included due to challenges in realistic simulation.
+ */
 void test_l1_dsCompositeIn_negative_dsCompositeInScaleVideo (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsCompositeInRegisterConnectCB() registers the COMPOSITE Input hot plug event correctly during positive scenarios
+ * 
+ * **Test Group ID:** Basic: 13@n
+ * **Test Case ID:** 013@n
+ * 
+ * **Pre-Conditions:**@n
+ * The module is initialized.
+ * 
+ * **Dependencies:** dsCompositeInInit()@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Initialize the module with dsCompositeInInit() | | dsERR_NONE | Initialization should succeed |
+ * |02|Call dsCompositeInRegisterConnectCB() with a valid callback function | Valid callback function | dsERR_NONE | Callback registration should succeed |
+ * |03|Terminate the module with dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * 
+ * @note This sequence tests the ability of dsCompositeInRegisterConnectCB() to register and respond to COMPOSITE Input hot plug events.
+ */
 void test_l1_dsCompositeIn_positive_dsCompositeInRegisterConnectCB (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsCompositeInRegisterConnectCB() returns correct error codes during negative scenarios
+ * 
+ * **Test Group ID:** Basic: 14@n
+ * **Test Case ID:** 014@n
+ * 
+ * **Pre-Conditions:**@n
+ * Varied as per test case.
+ * 
+ * **Dependencies:** dsCompositeInInit()@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Call dsCompositeInRegisterConnectCB() without initializing the module | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |02|Initialize the module with dsCompositeInInit() | | dsERR_NONE | Initialization should succeed |
+ * |03|Call dsCompositeInRegisterConnectCB() with a NULL or invalid callback function | NULL or invalid callback | dsERR_INVALID_PARAM | Should return error indicating invalid parameter |
+ * |04|Terminate the module with dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * |05|Call dsCompositeInRegisterConnectCB() without initializing the module | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * 
+ * @note Scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL are not included due to challenges in realistic simulation.
+ */
 void test_l1_dsCompositeIn_negative_dsCompositeInRegisterConnectCB (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsCompositeInRegisterSignalChangeCB() registers the Composite Input Signal Change event correctly during positive scenarios
+ * 
+ * **Test Group ID:** Basic: 15@n
+ * **Test Case ID:** 015@n
+ * 
+ * **Pre-Conditions:**@n
+ * The module is initialized.
+ * 
+ * **Dependencies:** dsCompositeInInit()@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Initialize the module with dsCompositeInInit() | | dsERR_NONE | Initialization should succeed |
+ * |02|Call dsCompositeInRegisterSignalChangeCB() with a valid callback function | Valid callback function | dsERR_NONE | Callback registration should succeed |
+ * |03|Terminate the module with dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * 
+ * @note This sequence tests the ability of dsCompositeInRegisterSignalChangeCB() to register and respond to Composite Input Signal Change events.
+ */
 void test_l1_dsCompositeIn_positive_dsCompositeInRegisterSignalChangeCB (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsCompositeInRegisterSignalChangeCB() returns correct error codes during negative scenarios
+ * 
+ * **Test Group ID:** Basic: 16@n
+ * **Test Case ID:** 016@n
+ * 
+ * **Pre-Conditions:**@n
+ * Varied as per test case.
+ * 
+ * **Dependencies:** dsCompositeInInit()@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Call dsCompositeInRegisterSignalChangeCB() without initializing the module | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |02|Initialize the module with dsCompositeInInit() | | dsERR_NONE | Initialization should succeed |
+ * |03|Call dsCompositeInRegisterSignalChangeCB() with a NULL or invalid callback function | NULL or invalid callback | dsERR_INVALID_PARAM | Should return error indicating invalid parameter |
+ * |04|Terminate the module with dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * |05|Call dsCompositeInRegisterSignalChangeCB() without initializing the module | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * 
+ * @note Scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL are not included due to challenges in realistic simulation.
+ */
 void test_l1_dsCompositeIn_negative_dsCompositeInRegisterSignalChangeCB (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsCompositeInRegisterStatusChangeCB() registers the Composite Input Status Change event correctly during positive scenarios
+ * 
+ * **Test Group ID:** Basic: 17@n
+ * **Test Case ID:** 017@n
+ * 
+ * **Pre-Conditions:**@n
+ * The module is initialized.
+ * 
+ * **Dependencies:** dsCompositeInInit()@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Initialize the module with dsCompositeInInit() | | dsERR_NONE | Initialization should succeed |
+ * |02|Call dsCompositeInRegisterStatusChangeCB() with a valid callback function | Valid callback function | dsERR_NONE | Callback registration should succeed |
+ * |03|Terminate the module with dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * 
+ * @note This sequence tests the ability of dsCompositeInRegisterStatusChangeCB() to register and respond to Composite Input Status Change events.
+ */
 void test_l1_dsCompositeIn_positive_dsCompositeInRegisterStatusChangeCB (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief TODO: Describe the objective of the test
-*
-* TODO: Add the description of what is tested and why in this test@n
-*
-* **Test Group ID:** TODO: Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-* @n
-* **Pre-Conditions:** TODO: Add pre-conditions, if any@n
-* **Dependencies:** TODO: Add dependencies for this test, if any@n
-* **User Interaction:** TODO: Add any user interactions required during this test, if any
-* @n
-* **Test Procedure:**@n
-* TODO: Add the steps to run this test and add a line in the below table for each input variation tried in this function.@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | First set of conditions | What is input data to be tested | How to gauge success, is it a success variable? | Should be successful |
-*/
+ * @brief Ensure dsCompositeInRegisterStatusChangeCB() returns correct error codes during negative scenarios
+ * 
+ * **Test Group ID:** Basic: 18@n
+ * **Test Case ID:** 018@n
+ * 
+ * **Pre-Conditions:**@n
+ * Varied as per test case.
+ * 
+ * **Dependencies:** dsCompositeInInit()@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Call dsCompositeInRegisterStatusChangeCB() without initializing the module | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |02|Initialize the module with dsCompositeInInit() | | dsERR_NONE | Initialization should succeed |
+ * |03|Call dsCompositeInRegisterStatusChangeCB() with a NULL or invalid callback function | NULL or invalid callback | dsERR_INVALID_PARAM | Should return error indicating invalid parameter |
+ * |04|Terminate the module with dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * |05|Call dsCompositeInRegisterStatusChangeCB() without initializing the module | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * 
+ * @note Scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL are not included due to challenges in realistic simulation.
+ */
 void test_l1_dsCompositeIn_negative_dsCompositeInRegisterStatusChangeCB (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
