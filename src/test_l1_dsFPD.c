@@ -546,9 +546,9 @@ void test_l1_dsFPD_positive_dsSetFPBrightness (void)
     {
         result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        int eBrightness = 20 + 5 * i;
-        result = dsSetBrightness(kIndicators[i].id, eBrightness);
+        
         result = dsSetBrightness(kIndicators[i].id, 0);
+        result = dsSetBrightness(kIndicators[i].id, 50);
         result = dsSetBrightness(kIndicators[i].id, 100);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
