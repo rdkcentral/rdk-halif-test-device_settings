@@ -38,6 +38,7 @@
 #include <ut.h>
 #include <ut_log.h>
 #include "dsFPD.h"
+#include "dsFPDSettings.h"
 
 static int gTestGroup = 1;
 static int gTestID = 1;
