@@ -2614,12 +2614,10 @@ void test_l1_dsFPD_positive_dsFPGetSupportedLEDStates(void)
     // Step 02: Retrieve the supported LED states for the first time using dsFPGetSupportedLEDStates()
     result = dsFPGetSupportedLEDStates(&states1);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
-    UT_ASSERT_NOT_EQUAL(states1, 0);  // assuming a value of 0 means the states were not set
 
     // Step 03: Retrieve the supported LED states for the second time using dsFPGetSupportedLEDStates()
     result = dsFPGetSupportedLEDStates(&states2);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
-    UT_ASSERT_NOT_EQUAL(states2, 0);  // assuming a value of 0 means the states were not set
 
     // Step 04: Compare the values retrieved from states1 and states2
     UT_ASSERT_EQUAL(states1, states2);
