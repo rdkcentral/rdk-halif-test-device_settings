@@ -1893,8 +1893,8 @@ void test_l1_dsFPD_positive_dsGetFPTextBrightness(void)
     gTestID = 27;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsError_t result;
-    int brightness1 = 0;
-    int brightness2 = 0;
+    dsFPDBrightness_t brightness1 = 0;
+    dsFPDBrightness_t brightness2 = 0;
 
     // Step 01: Initialize with dsFPInit()
     result = dsFPInit();
