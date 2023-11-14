@@ -37,6 +37,7 @@
 
 #include <ut.h>
 #include <ut_log.h>
+#include "dsFPD.h"
 
 static int gTestGroup = 1;
 static int gTestID = 1;
@@ -1985,7 +1986,7 @@ void test_l1_dsFPD_negative_dsGetFPTextBrightness(void)
 
 
 /**
- * @brief Ensure dsFPEnableClockDisplay() correctly enables/disables the clock display
+ * @brief Ensure dsFPEnableCLockDisplay() correctly enables/disables the clock display
  *  
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 029@n
@@ -2001,16 +2002,16 @@ void test_l1_dsFPD_negative_dsGetFPTextBrightness(void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
  * |02|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_CLOCK|dsERR_NONE|API should set mode successfully|
- * |03|Enable clock display using dsFPEnableClockDisplay()|enable: 1|dsERR_NONE|Validate that clock display can be enabled|
- * |04|Disable clock display using dsFPEnableClockDisplay()|enable: 0|dsERR_NONE|Validate that clock display can be disabled|
+ * |03|Enable clock display using dsFPEnableCLockDisplay()|enable: 1|dsERR_NONE|Validate that clock display can be enabled|
+ * |04|Disable clock display using dsFPEnableCLockDisplay()|enable: 0|dsERR_NONE|Validate that clock display can be disabled|
  * |05|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_ANY|dsERR_NONE|API should set mode successfully|
- * |06|Enable clock display using dsFPEnableClockDisplay()|enable: 1|dsERR_NONE|Validate that clock display can be enabled|
- * |07|Disable clock display using dsFPEnableClockDisplay()|enable: 0|dsERR_NONE|Validate that clock display can be disabled|
+ * |06|Enable clock display using dsFPEnableCLockDisplay()|enable: 1|dsERR_NONE|Validate that clock display can be enabled|
+ * |07|Disable clock display using dsFPEnableCLockDisplay()|enable: 0|dsERR_NONE|Validate that clock display can be disabled|
  * |08|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
-void test_l1_dsFPD_positive_dsFPEnableClockDisplay(void)
+void test_l1_dsFPD_positive_dsFPEnableCLockDisplay(void)
 {
     gTestID = 29;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -2024,24 +2025,24 @@ void test_l1_dsFPD_positive_dsFPEnableClockDisplay(void)
     result = dsSetFPDMode(dsFPD_MODE_CLOCK);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-    // Step 03: Enable clock display using dsFPEnableClockDisplay()
-    result = dsFPEnableClockDisplay(1);
+    // Step 03: Enable clock display using dsFPEnableCLockDisplay()
+    result = dsFPEnableCLockDisplay(1);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-    // Step 04: Disable clock display using dsFPEnableClockDisplay()
-    result = dsFPEnableClockDisplay(0);
+    // Step 04: Disable clock display using dsFPEnableCLockDisplay()
+    result = dsFPEnableCLockDisplay(0);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 05: Call dsSetFPDMode() with a valid parameter
     result = dsSetFPDMode(dsFPD_MODE_ANY);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-    // Step 06: Enable clock display using dsFPEnableClockDisplay()
-    result = dsFPEnableClockDisplay(1);
+    // Step 06: Enable clock display using dsFPEnableCLockDisplay()
+    result = dsFPEnableCLockDisplay(1);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-    // Step 07: Disable clock display using dsFPEnableClockDisplay()
-    result = dsFPEnableClockDisplay(0);
+    // Step 07: Disable clock display using dsFPEnableCLockDisplay()
+    result = dsFPEnableCLockDisplay(0);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 08: Terminate with dsFPTerm()
@@ -2051,7 +2052,7 @@ void test_l1_dsFPD_positive_dsFPEnableClockDisplay(void)
 }
 
 /**
- * @brief Ensure dsFPEnableClockDisplay() handles error scenarios correctly
+ * @brief Ensure dsFPEnableCLockDisplay() handles error scenarios correctly
  * 
  * 
  * **Test Group ID:** Basic: 01@n
@@ -2066,31 +2067,31 @@ void test_l1_dsFPD_positive_dsFPEnableClockDisplay(void)
  * **Test Procedure:**@n
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsFPEnableClockDisplay() without initializing (dsFPInit() not called)|enable: 1|dsERR_NOT_INITIALIZED|Validate that the function checks for initialization|
+ * |01|Call dsFPEnableCLockDisplay() without initializing (dsFPInit() not called)|enable: 1|dsERR_NOT_INITIALIZED|Validate that the function checks for initialization|
  * |02|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_CLOCK|dsERR_NONE|API should set mode successfully|
- * |04|Call dsFPEnableClockDisplay() with invalid value for enable|enable: 2|dsERR_INVALID_PARAM|Check function detects invalid parameter|
- * |05|Call dsFPEnableClockDisplay() with invalid value for enable|enable: -1|dsERR_INVALID_PARAM|Check function detects invalid parameter|
+ * |04|Call dsFPEnableCLockDisplay() with invalid value for enable|enable: 2|dsERR_INVALID_PARAM|Check function detects invalid parameter|
+ * |05|Call dsFPEnableCLockDisplay() with invalid value for enable|enable: -1|dsERR_INVALID_PARAM|Check function detects invalid parameter|
  * |06|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_ANY|dsERR_NONE|API should set mode successfully|
- * |07|Call dsFPEnableClockDisplay() with invalid value for enable|enable: 2|dsERR_INVALID_PARAM|Check function detects invalid parameter|
- * |08|Call dsFPEnableClockDisplay() with invalid value for enable|enable: -1|dsERR_INVALID_PARAM|Check function detects invalid parameter|
+ * |07|Call dsFPEnableCLockDisplay() with invalid value for enable|enable: 2|dsERR_INVALID_PARAM|Check function detects invalid parameter|
+ * |08|Call dsFPEnableCLockDisplay() with invalid value for enable|enable: -1|dsERR_INVALID_PARAM|Check function detects invalid parameter|
  * |09|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
- * |10|Call dsFPEnableClockDisplay() with invalid value for enable|enable: 1|dsERR_OPERATION_NOT_SUPPORTED|Check function detects invalid parameter|
+ * |10|Call dsFPEnableCLockDisplay() with invalid value for enable|enable: 1|dsERR_OPERATION_NOT_SUPPORTED|Check function detects invalid parameter|
  * |11|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Simulate FP state being "OFF"|
- * |12|Call dsFPEnableClockDisplay() with FP State "OFF"|enable: 1|dsERR_OPERATION_NOT_SUPPORTED|Check that operation is not supported when FP State is "OFF"|
+ * |12|Call dsFPEnableCLockDisplay() with FP State "OFF"|enable: 1|dsERR_OPERATION_NOT_SUPPORTED|Check that operation is not supported when FP State is "OFF"|
  * |13|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
- * |14|Call dsFPEnableClockDisplay() after termination|enable: 1|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
+ * |14|Call dsFPEnableCLockDisplay() after termination|enable: 1|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
-void test_l1_dsFPD_negative_dsFPEnableClockDisplay(void)
+void test_l1_dsFPD_negative_dsFPEnableCLockDisplay(void)
 {
     gTestID = 30;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsErrorType result;
 
-    // Step 01: Call dsFPEnableClockDisplay() without initializing
-    result = dsFPEnableClockDisplay(1);
+    // Step 01: Call dsFPEnableCLockDisplay() without initializing
+    result = dsFPEnableCLockDisplay(1);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize with dsFPInit()
@@ -2101,47 +2102,47 @@ void test_l1_dsFPD_negative_dsFPEnableClockDisplay(void)
     result = dsSetFPDMode(dsFPD_MODE_CLOCK);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-    // Step 04: Call dsFPEnableClockDisplay() with invalid value for enable
-    result = dsFPEnableClockDisplay(2);
+    // Step 04: Call dsFPEnableCLockDisplay() with invalid value for enable
+    result = dsFPEnableCLockDisplay(2);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
-    // Step 05: Call dsFPEnableClockDisplay() with invalid value for enable
-    result = dsFPEnableClockDisplay(-1);
+    // Step 05: Call dsFPEnableCLockDisplay() with invalid value for enable
+    result = dsFPEnableCLockDisplay(-1);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 06: Call dsSetFPDMode() with a valid parameter
     result = dsSetFPDMode(dsFPD_MODE_ANY);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-    // Step 07: Call dsFPEnableClockDisplay() with invalid value for enable
-    result = dsFPEnableClockDisplay(2);
+    // Step 07: Call dsFPEnableCLockDisplay() with invalid value for enable
+    result = dsFPEnableCLockDisplay(2);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
-    // Step 08: Call dsFPEnableClockDisplay() with invalid value for enable
-    result = dsFPEnableClockDisplay(-1);
+    // Step 08: Call dsFPEnableCLockDisplay() with invalid value for enable
+    result = dsFPEnableCLockDisplay(-1);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 09: Call dsSetFPDMode() with a valid parameter
     result = dsSetFPDMode(dsFPD_MODE_TEXT);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-    // Step 10: Call dsFPEnableClockDisplay() with invalid value for enable
-    result = dsFPEnableClockDisplay(1);
+    // Step 10: Call dsFPEnableCLockDisplay() with invalid value for enable
+    result = dsFPEnableCLockDisplay(1);
     UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
 
     // Step 11: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
     disableFPDIndicators();
 
-    // Step 12: Call dsFPEnableClockDisplay() with FP State "OFF"
-    result = dsFPEnableClockDisplay(1);
+    // Step 12: Call dsFPEnableCLockDisplay() with FP State "OFF"
+    result = dsFPEnableCLockDisplay(1);
     UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
 
     // Step 13: Terminate with dsFPTerm()
     result = dsFPTerm();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-    // Step 14: Call dsFPEnableClockDisplay() after termination
-    result = dsFPEnableClockDisplay(1);
+    // Step 14: Call dsFPEnableCLockDisplay() after termination
+    result = dsFPEnableCLockDisplay(1);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
