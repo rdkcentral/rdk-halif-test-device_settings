@@ -18,18 +18,18 @@
 */
 
 /**
-* @file TODO: test_l1_dsCompositeIn.c
-* @page module_name TODO: Required field, name of the main module
-* @subpage sub_page_name TODO: Add a function group if relevant
+* @file test_l1_dsCompositeIn.c
+* @page Device Settings
+* @subpage dsCompositeIn
 *
 * ## Module's Role
-* TODO: Explain the module's role in the system in general
-* This is to ensure that the API meets the operational requirements of the module across all vendors.
+* This module includes Level 1 functional tests (success and failure scenarios)
+* This is to ensure that the API meets the operational requirements of the dsHost across all vendors
 *
-* **Pre-Conditions:**  TODO: Add pre-conditions if any@n
-* **Dependencies:** TODO: Add dependencies if any@n
+* **Pre-Conditions:**  None
+* **Dependencies:** None
 *
-* Ref to API Definition specification documentation : [halSpec.md](../../../docs/halSpec.md)
+* Ref to API Definition specification documentation : [ds-composite-in_halSpec.md](../../../docs/ds-composite-in_halSpec.md)
 */
 
 #include <string.h>
