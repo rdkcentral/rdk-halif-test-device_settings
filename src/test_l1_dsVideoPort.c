@@ -124,7 +124,7 @@ void test_l1_dsVideoPort_positive_dsVideoPortInit (void)
  * |03|Call dsVideoPortTerm()  - Terminate video port system | | dsERR_NONE | Termination must be successful |
  * 
  * **Additional Notes:**@n
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsVideoPortInit (void)
 {
@@ -295,7 +295,7 @@ void test_l1_dsVideoPort_positive_dsIsVideoPortEnabled (void)
  * |07|Call dsIsVideoPortEnabled() - Attempt to check if video port is enabled or not without initializing video ports| handle: [ valid handle ], connected: [ pointer to hold enabled status] | dsERR_NOT_INITIALIZED | Call to check if video port is enabled or not must fail as module is not initialized |
  * 
  * **Additional Notes:**@n
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsIsVideoPortEnabled (void)
 {
@@ -354,7 +354,7 @@ void test_l1_dsVideoPort_positive_dsIsDisplayConnected (void)
  * |07|Call dsIsDisplayConnected() - Attempt to check if video port is connected without initializing video ports|  handle: [ valid handle ], connected: [ pointer to hold connection status] | dsERR_NOT_INITIALIZED | Call to check if display is connected to video port must fail as module is not initialized |
  * 
  * **Additional Notes:**@n
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsIsDisplayConnected (void)
 {
@@ -414,7 +414,7 @@ void test_l1_dsVideoPort_positive_dsIsDisplaySurround (void)
  * 
  * **Additional Notes:**@n
  * - The test must be careful while handling null pointers and invalid handles.
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsIsDisplaySurround (void)
 {
@@ -474,7 +474,7 @@ void test_l1_dsVideoPort_positive_dsGetSurroundMode (void)
  * 
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetSurroundMode (void)
 {
@@ -534,7 +534,7 @@ void test_l1_dsVideoPort_positive_dsIsVideoPortActive (void)
  * 
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsIsVideoPortActive (void)
 {
@@ -593,7 +593,7 @@ void test_l1_dsVideoPort_positive_dsEnableDTCP (void)
  * 
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsEnableDTCP (void)
 {
@@ -655,7 +655,7 @@ void test_l1_dsVideoPort_positive_dsEnableHDCP (void)
  * 
  * **Additional Notes:**@n
  * - Handle validation, module initialization checks, and key size validation are crucial for the robustness of the API.
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsEnableHDCP (void)
 {
@@ -714,7 +714,7 @@ void test_l1_dsVideoPort_positive_dsIsDTCPEnabled (void)
  *
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsIsDTCPEnabled (void)
 {
@@ -774,7 +774,7 @@ void test_l1_dsVideoPort_positive_dsIsHDCPEnabled (void)
  *
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API. 
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsIsHDCPEnabled (void)
 {
@@ -834,7 +834,7 @@ void test_l1_dsVideoPort_positive_dsEnableVideoPort (void)
  * 
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsEnableVideoPort (void)
 {
@@ -892,7 +892,7 @@ void test_l1_dsVideoPort_positive_dsSetResolution (void)
  * 
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSetResolution (void)
 {
@@ -952,7 +952,7 @@ void test_l1_dsVideoPort_positive_dsGetResolution (void)
  * 
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetResolution (void)
 {
@@ -1009,7 +1009,7 @@ void test_l1_dsVideoPort_positive_dsSetActiveSource (void)
  * 
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSetActiveSource (void)
 {
@@ -1063,7 +1063,7 @@ void test_l1_dsVideoPort_positive_dsVideoFormatUpdateRegisterCB (void)
  * |05|Call dsVideoFormatUpdateRegisterCB() - Attempt to register for video format update callback without initializing the video ports | cb = [valid callback function ] | dsERR_NOT_INITIALIZED | Callback registration must fail as module is not initialized |
  * 
  * **Additional Notes:** None
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsVideoFormatUpdateRegisterCB (void)
 {
@@ -1120,7 +1120,7 @@ void test_l1_dsVideoPort_positive_dsRegisterHdcpStatusCallback (void)
  * |06|Call dsRegisterHdcpStatusCallback() - Attempt to register HDCP status change callback without initializing the video ports | handle= [valid handle], cb = [valid callback function] | dsERR_NOT_INITIALIZED | Callback Registration for HDCP status change must fail as module is not initialized |
  * 
  * **Additional Notes:** None
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsRegisterHdcpStatusCallback (void)
 {
@@ -1179,7 +1179,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPStatus (void)
  * |06|Call dsGetHDCPStatus() Again after terminating video ports attempt to get the status of video ports | handle= [valid handle ] , status = [valid pointer] | dsERR_NOT_INITIALIZED | dsGetHDCPStatus call must fail as module is not initialized |
  * 
  * **Additional Notes:**@n
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetHDCPStatus (void)
 {
@@ -1239,7 +1239,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPProtocol (void)
  * 
  * **Additional Notes:**@n
  * - Handle validation, NULL pointer checks, and module initialization checks are crucial for the robustness of the API.
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetHDCPProtocol (void)
 {
@@ -1299,7 +1299,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPReceiverProtocol (void)
  * 
  * **Additional Notes:**@n
  * - Handle validation, NULL pointer checks, and module initialization checks are crucial for the robustness of the API.
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetHDCPReceiverProtocol (void)
 {
@@ -1360,7 +1360,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPCurrentProtocol (void)
  * 
  * **Additional Notes:**@n
  * - Handle validation, NULL pointer checks, and module initialization checks are crucial for the robustness of the API.
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetHDCPCurrentProtocol (void)
 {
@@ -1419,7 +1419,7 @@ void test_l1_dsVideoPort_positive_dsGetTVHDRCapabilities (void)
  * |06|Call dsGetTVHDRCapabilities() Again after terminating video ports attempt to get the HDR capabilites of video ports | handle= [valid handle ] , capabilities = [valid pointer] | dsERR_NOT_INITIALIZED | dsGetTVHDRCapabilities call must fail as module is not initialized |
  * 
  * **Additional Notes:**@n
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetTVHDRCapabilities (void)
 {
@@ -1479,7 +1479,7 @@ void test_l1_dsVideoPort_positive_dsSupportedTvResolutions (void)
  * 
  * **Additional Notes:**@n
  * - Handle validation, NULL pointer checks, and module initialization checks are crucial for the robustness of the API.
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSupportedTvResolutions (void)
 {
@@ -1536,7 +1536,7 @@ void test_l1_dsVideoPort_positive_dsSetForceDisable4KSupport (void)
  * 
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSetForceDisable4KSupport (void)
 {
@@ -1596,7 +1596,7 @@ void test_l1_dsVideoPort_positive_dsGetForceDisable4KSupport (void)
  * 
  * **Additional Notes:**@n
  * - Handle validation, pointer validation, and module initialization checks are crucial for the robustness of the API.
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetForceDisable4KSupport (void)
 {
@@ -1655,7 +1655,7 @@ void test_l1_dsVideoPort_positive_dsGetVideoEOTF (void)
  * |07|Call dsGetVideoEOTF() Again after terminating video ports attempt to get the EOTF of video ports | handle= [invalid handle ] , video_eotf = [valid pointer] | dsERR_NOT_INITIALIZED | dsGetVideoEOTF call must fail as module is not initialized |
  * 
  * **Additional Notes:**@n
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetVideoEOTF (void)
 {
@@ -1715,7 +1715,7 @@ void test_l1_dsVideoPort_positive_dsGetMatrixCoefficients (void)
  * 
  * **Additional Notes:**@n
  * - Handle validation, pointer validation, and module initialization checks are crucial for the robustness of the API.
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetMatrixCoefficients (void)
 {
@@ -1774,7 +1774,7 @@ void test_l1_dsVideoPort_positive_dsGetColorDepth (void)
  * |07|Call dsGetColorDepth() Again after terminating video ports attempt to get the color depth of video ports | handle= [invalid handle] , color_depth = [valid pointer] | dsERR_NOT_INITIALIZED | dsGetColorDepth call must fail as module is not initialized |
  * 
  * **Additional Notes:**@n
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetColorDepth (void)
 {
@@ -1834,7 +1834,7 @@ void test_l1_dsVideoPort_positive_dsGetColorSpace (void)
  * 
  * **Additional Notes:**@n
  * - Handle validation, pointer validation, and module initialization checks are crucial for the robustness of the API.
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetColorSpace (void)
 {
@@ -1893,7 +1893,7 @@ void test_l1_dsVideoPort_positive_dsGetQuantizationRange (void)
  * |07|Call dsGetQuantizationRange() Again after terminating video ports attempt to get the quantization of video ports | handle= [valid handle from step 04 ] , quantization_range = [valid pointer] | dsERR_NOT_INITIALIZED | dsGetQuantizationRange call must fail as module is not initialized |
  * 
  * **Additional Notes:**@n
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetQuantizationRange (void)
 {
@@ -1951,7 +1951,7 @@ void test_l1_dsVideoPort_positive_dsGetCurrentOutputSettings (void)
  * |06|Call dsGetCurrentOutputSettings() - Attempt to get the current output settings without initializing the video ports | handle = [valid handle],  video_eotf = [valid EOTF pointer], matrix_coefficients = = [valid matrix coefficient pointer], color_space = [valid color space pointer], color_depth = [valid color depth pointer], quantization_range = [valid quantization range pointer] | dsERR_NOT_INITIALIZED | Get Output settings must fail as module is not initialized|
  * 
  * **Additional Notes:** 
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetCurrentOutputSettings (void)
 {
@@ -2011,7 +2011,7 @@ void test_l1_dsVideoPort_positive_dsIsOutputHDR (void)
  * |07|Call dsIsOutputHDR() - Attempt to check if video output is HDR or not without initializing video ports | handle: [ valid handle ], hdr: [ pointer to hold HDR status] | dsERR_NOT_INITIALIZED | Call to check if video output is HDR or not must fail as module is not initialized |
  * 
  * **Additional Notes:** 
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsIsOutputHDR (void)
 {
@@ -2065,7 +2065,7 @@ void test_l1_dsVideoPort_positive_dsResetOutputToSDR (void)
  * |04|Call dsResetOutputToSDR() - Again attempt to reset the video output to SDR after terminating the video ports | dsERR_NOT_INITIALIZED| Reset Video output to SDR must fail as video port is not initialized |
  * 
  * **Additional Notes:** 
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsResetOutputToSDR (void)
 {
@@ -2123,7 +2123,7 @@ void test_l1_dsVideoPort_positive_dsSetHdmiPreference (void)
  * 
  * **Additional Notes:**@n
  * - dsVideoPortTerm() must always be called to ensure that the video port system is properly shut down and all resources are released.
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSetHdmiPreference (void)
 {
@@ -2184,7 +2184,7 @@ void test_l1_dsVideoPort_positive_dsGetHdmiPreference (void)
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
  * - dsVideoPortTerm() must always be called to ensure that the video port system is properly shut down and all resources are released.
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetHdmiPreference (void)
 {
@@ -2245,7 +2245,7 @@ void test_l1_dsVideoPort_positive_dsGetIgnoreEDIDStatus (void)
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
  * - dsVideoPortTerm() must always be called to ensure that the video port system is properly shut down and all resources are released.
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetIgnoreEDIDStatus (void)
 {
@@ -2304,7 +2304,7 @@ void test_l1_dsVideoPort_positive_dsSetBackgroundColor (void)
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
  * - dsVideoPortTerm() must always be called to ensure that the video port system is properly shut down and all resources are released.
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSetBackgroundColor (void)
 {
@@ -2363,7 +2363,7 @@ void test_l1_dsVideoPort_positive_dsSetForceHDRMode (void)
  * **Additional Notes:**@n
  * - Handle validation and module initialization checks are crucial for the robustness of the API.
  * - dsVideoPortTerm() must always be called to ensure that the video port system is properly shut down and all resources are released.
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSetForceHDRMode (void)
 {
@@ -2422,7 +2422,7 @@ void test_l1_dsVideoPort_positive_dsColorDepthCapabilities (void)
  * |06|Call dsColorDepthCapabilities() after terminating videop ports |handle= [valid handle from step 04 ] , colorDepthCapability= [valid pointer] | dsERR_NOT_INITIALIZED|call must fail as module not initialized |
  * 
  * **Additional Notes:**@n
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsColorDepthCapabilities (void)
 {
@@ -2481,7 +2481,7 @@ void test_l1_dsVideoPort_positive_dsGetPreferredColorDepth (void)
  * |07|Call dsGetPreferredColorDepth() after terminating video ports |handle=[valid handle] , colorDepth=[valid pointer] |dsERR_NOT_INITIALIZED|call must fail as module is not initialized|
  *
  * **Additional Notes:**@n
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetPreferredColorDepth (void)
 {
@@ -2540,7 +2540,7 @@ void test_l1_dsVideoPort_positive_dsSetPreferredColorDepth (void)
  * **Additional Notes:**@n
  * - Handle validation, module initialization checks, and support checks for color depths are crucial for the robustness of the API.
  * - dsVideoPortTerm() must always be called to ensure that the video port system is properly shut down and all resources are released.
- * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_NONE` might be challenging since it requires a specific scenarios.
+ * - Testing for the `dsERR_OPERATION_NOT_SUPPORTED`, `dsERR_OPERATION_FAILED`, `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSetPreferredColorDepth (void)
 {
