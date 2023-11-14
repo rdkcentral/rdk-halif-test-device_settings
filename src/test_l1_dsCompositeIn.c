@@ -323,7 +323,7 @@ void test_l1_dsCompositeIn_negative_dsCompositeInSelectPort (void)
  * **Pre-Conditions:**@n
  * The module is initialized, and a valid COMPOSITE input port is selected.
  * 
- * **Dependencies:** dsCompositeInInit(), dsCompositeInSelectPort()@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -351,7 +351,7 @@ void test_l1_dsCompositeIn_positive_dsCompositeInScaleVideo (void)
  * **Pre-Conditions:**@n
  * None.
  * 
- * **Dependencies:** dsCompositeInInit(), dsCompositeInSelectPort()@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
