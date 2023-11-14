@@ -1,5 +1,5 @@
 /**
-*  If not stated otherwise in this file or this component's Licenses.txt
+*  If not stated otherwise in this file or this component's LICENSE
 *  file the following copyright and licenses apply:
 *
 *  Copyright 2022 RDK Management
@@ -275,8 +275,8 @@ void test_l1_dsCompositeIn_negative_dsCompositeInGetStatus (void)
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsCompositeInInit() and initialize the module | | dsERR_NONE | Initialization should succeed |
- * |02|Call dsCompositeInSelectPort() with a valid port number | dsCOMPOSITE_IN_PORT_0 | dsERR_NONE | Port should be set correctly |
- * |03|Call dsCompositeInSelectPort() with another valid port number | dsCOMPOSITE_IN_PORT_1 | dsERR_NONE | Port should be switched correctly |
+ * |02|Call dsCompositeInGetNumberOfInputs() with a valid pointer | uint8_t *pNumberOfInputs | dsERR_NONE and a valid number of inputs | Number of inputs should be returned correctly |
+ * |03|Call dsCompositeInSelectPort() and loop through all valid ports(based on the number of ports) | dsCOMPOSITE_IN_PORT_0 | dsERR_NONE | Port should be set correctly |
  * |04|Call dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
  * 
  * @note This sequence tests the ability of dsCompositeInSelectPort() to set and switch COMPOSITE Input ports.
