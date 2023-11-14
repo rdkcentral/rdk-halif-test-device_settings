@@ -46,7 +46,7 @@
  * **Test Case ID:** 001@n
  * 
  * **Pre-Conditions:**@n
- * The module is not initialized.
+ * None.
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -154,9 +154,9 @@ void test_l1_dsCompositeIn_negative_dsCompositeInTerm (void)
  * **Test Case ID:** 005@n
  * 
  * **Pre-Conditions:**@n
- * The module is initialized.
+ * None.
  * 
- * **Dependencies:** dsCompositeInInit()@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -182,9 +182,9 @@ void test_l1_dsCompositeIn_positive_dsCompositeInGetNumberOfInputs (void)
  * **Test Case ID:** 006@n
  * 
  * **Pre-Conditions:**@n
- * Varied as per test case.
+ * None.
  * 
- * **Dependencies:** dsCompositeInInit()@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -210,9 +210,9 @@ void test_l1_dsCompositeIn_negative_dsCompositeInGetNumberOfInputs (void)
  * **Test Case ID:** 007@n
  * 
  * **Pre-Conditions:**@n
- * The module is initialized.
+ * None.
  * 
- * **Dependencies:** dsCompositeInInit()@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -238,9 +238,9 @@ void test_l1_dsCompositeIn_positive_dsCompositeInGetStatus (void)
  * **Test Case ID:** 008@n
  * 
  * **Pre-Conditions:**@n
- * Varied as per test case.
+ * None.
  * 
- * **Dependencies:** dsCompositeInInit()@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -266,9 +266,9 @@ void test_l1_dsCompositeIn_negative_dsCompositeInGetStatus (void)
  * **Test Case ID:** 009@n
  * 
  * **Pre-Conditions:**@n
- * The module is initialized.
+ * None.
  * 
- * **Dependencies:** dsCompositeInInit()@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -293,9 +293,9 @@ void test_l1_dsCompositeIn_positive_dsCompositeInSelectPort (void)
  * **Test Case ID:** 010@n
  * 
  * **Pre-Conditions:**@n
- * Varied as per test case.
+ * None.
  * 
- * **Dependencies:** dsCompositeInInit()@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -349,7 +349,7 @@ void test_l1_dsCompositeIn_positive_dsCompositeInScaleVideo (void)
  * **Test Case ID:** 012@n
  * 
  * **Pre-Conditions:**@n
- * Varied as per test case.
+ * None.
  * 
  * **Dependencies:** dsCompositeInInit(), dsCompositeInSelectPort()@n
  * **User Interaction:** None
@@ -380,9 +380,9 @@ void test_l1_dsCompositeIn_negative_dsCompositeInScaleVideo (void)
  * **Test Case ID:** 013@n
  * 
  * **Pre-Conditions:**@n
- * The module is initialized.
+ * None.
  * 
- * **Dependencies:** dsCompositeInInit()@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -406,9 +406,9 @@ void test_l1_dsCompositeIn_positive_dsCompositeInRegisterConnectCB (void)
  * **Test Case ID:** 014@n
  * 
  * **Pre-Conditions:**@n
- * Varied as per test case.
+ * None.
  * 
- * **Dependencies:** dsCompositeInInit()@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -434,9 +434,9 @@ void test_l1_dsCompositeIn_negative_dsCompositeInRegisterConnectCB (void)
  * **Test Case ID:** 015@n
  * 
  * **Pre-Conditions:**@n
- * The module is initialized.
+ * None.
  * 
- * **Dependencies:** dsCompositeInInit()@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -460,9 +460,9 @@ void test_l1_dsCompositeIn_positive_dsCompositeInRegisterSignalChangeCB (void)
  * **Test Case ID:** 016@n
  * 
  * **Pre-Conditions:**@n
- * Varied as per test case.
+ * None.
  * 
- * **Dependencies:** dsCompositeInInit()@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -488,9 +488,9 @@ void test_l1_dsCompositeIn_negative_dsCompositeInRegisterSignalChangeCB (void)
  * **Test Case ID:** 017@n
  * 
  * **Pre-Conditions:**@n
- * The module is initialized.
+ * None.
  * 
- * **Dependencies:** dsCompositeInInit()@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -514,9 +514,9 @@ void test_l1_dsCompositeIn_positive_dsCompositeInRegisterStatusChangeCB (void)
  * **Test Case ID:** 018@n
  * 
  * **Pre-Conditions:**@n
- * Varied as per test case.
+ * None.
  * 
- * **Dependencies:** dsCompositeInInit()@n
+ * **Dependencies:** None@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
