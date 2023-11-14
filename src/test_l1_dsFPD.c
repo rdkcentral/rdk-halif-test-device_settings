@@ -2289,11 +2289,11 @@ void test_l1_dsFPD_negative_dsSetFPScroll(void)
  * |:--:|-----------|---------|---------------|-----|
  * |01|Initialize using dsFPInit()||dsERR_NONE|Ensure the system is initialized|
  * |02|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_CLOCK|dsERR_NONE|API should set mode successfully|
- * |03|Call dsSetFPTimeFormat() with a valid 12-hour format|eTimeFormat: 12_HOUR_FORMAT|dsERR_NONE|Attempt to set time in 12-hour format|
- * |04|Call dsSetFPTimeFormat() with a valid 24-hour format|eTimeFormat: 24_HOUR_FORMAT|dsERR_NONE|Attempt to set time in 24-hour format|
+ * |03|Call dsSetFPTimeFormat() with a valid 12-hour format|eTimeFormat: dsFPD_TIME_12_HOUR|dsERR_NONE|Attempt to set time in 12-hour format|
+ * |04|Call dsSetFPTimeFormat() with a valid 24-hour format|eTimeFormat: dsFPD_TIME_24_HOUR|dsERR_NONE|Attempt to set time in 24-hour format|
  * |05|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_ANY|dsERR_NONE|API should set mode successfully|
- * |06|Call dsSetFPTimeFormat() with a valid 12-hour format|eTimeFormat: 12_HOUR_FORMAT|dsERR_NONE|Attempt to set time in 12-hour format|
- * |07|Call dsSetFPTimeFormat() with a valid 24-hour format|eTimeFormat: 24_HOUR_FORMAT|dsERR_NONE|Attempt to set time in 24-hour format|
+ * |06|Call dsSetFPTimeFormat() with a valid 12-hour format|eTimeFormat: dsFPD_TIME_12_HOUR|dsERR_NONE|Attempt to set time in 12-hour format|
+ * |07|Call dsSetFPTimeFormat() with a valid 24-hour format|eTimeFormat: dsFPD_TIME_24_HOUR|dsERR_NONE|Attempt to set time in 24-hour format|
  * |08|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
@@ -2313,11 +2313,11 @@ void test_l1_dsFPD_positive_dsSetFPTimeFormat(void)
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 03: Call dsSetFPTimeFormat() with a valid 12-hour format
-    result = dsSetFPTimeFormat(12_HOUR_FORMAT);
+    result = dsSetFPTimeFormat(dsFPD_TIME_12_HOUR);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 04: Call dsSetFPTimeFormat() with a valid 24-hour format
-    result = dsSetFPTimeFormat(24_HOUR_FORMAT);
+    result = dsSetFPTimeFormat(dsFPD_TIME_24_HOUR);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 05: Call dsSetFPDMode() with a valid parameter
@@ -2325,11 +2325,11 @@ void test_l1_dsFPD_positive_dsSetFPTimeFormat(void)
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 06: Call dsSetFPTimeFormat() with a valid 12-hour format
-    result = dsSetFPTimeFormat(12_HOUR_FORMAT);
+    result = dsSetFPTimeFormat(dsFPD_TIME_12_HOUR);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 07: Call dsSetFPTimeFormat() with a valid 24-hour format
-    result = dsSetFPTimeFormat(24_HOUR_FORMAT);
+    result = dsSetFPTimeFormat(dsFPD_TIME_24_HOUR);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 08: Terminate using dsFPTerm()
@@ -2353,19 +2353,19 @@ void test_l1_dsFPD_positive_dsSetFPTimeFormat(void)
  * **Test Procedure:**@n
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|---------|---------------|-----|
- * |01|Call dsSetFPTimeFormat() without initializing the system|eTimeFormat: 12_HOUR_FORMAT|dsERR_NOT_INITIALIZED|API should not work without initialization|
+ * |01|Call dsSetFPTimeFormat() without initializing the system|eTimeFormat: dsFPD_TIME_12_HOUR|dsERR_NOT_INITIALIZED|API should not work without initialization|
  * |02|Initialize using dsFPInit()||dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_CLOCK|dsERR_NONE|API should set mode successfully|
  * |04|Call dsSetFPTimeFormat() with an invalid time format|eTimeFormat: dsFPD_TIME_MAX|dsERR_INVALID_PARAM|API should validate parameter|
  * |05|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_ANY|dsERR_NONE|API should set mode successfully|
  * |06|Call dsSetFPTimeFormat() with an invalid time format|eTimeFormat: dsFPD_TIME_MAX|dsERR_INVALID_PARAM|API should validate parameter|
  * |07|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
- * |08|Call dsSetFPTimeFormat() with a valid 12-hour format|eTimeFormat: 12_HOUR_FORMAT|dsERR_OPERATION_NOT_SUPPORTED|Attempt to set time in 12-hour format|
+ * |08|Call dsSetFPTimeFormat() with a valid 12-hour format|eTimeFormat: dsFPD_TIME_12_HOUR|dsERR_OPERATION_NOT_SUPPORTED|Attempt to set time in 12-hour format|
  * |09|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_CLOCK|dsERR_NONE|API should set mode successfully|
  * |10|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState() if applicable|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Ensure the FP state is "OFF"|
- * |11|Call dsSetFPTimeFormat() while FP State is "OFF"|eTimeFormat: 12_HOUR_FORMAT|dsERR_OPERATION_NOT_SUPPORTED|API should not operate when FP state is "OFF"|
+ * |11|Call dsSetFPTimeFormat() while FP State is "OFF"|eTimeFormat: dsFPD_TIME_12_HOUR|dsERR_OPERATION_NOT_SUPPORTED|API should not operate when FP state is "OFF"|
  * |12|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
- * |13|Call dsSetFPTimeFormat() after termination|eTimeFormat: 24_HOUR_FORMAT|dsERR_NOT_INITIALIZED|API should not work after termination|
+ * |13|Call dsSetFPTimeFormat() after termination|eTimeFormat: dsFPD_TIME_24_HOUR|dsERR_NOT_INITIALIZED|API should not work after termination|
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
@@ -2376,7 +2376,7 @@ void test_l1_dsFPD_negative_dsSetFPTimeFormat(void)
     dsError_t result;
 
     // Step 01: Call dsSetFPTimeFormat() without initializing the system
-    result = dsSetFPTimeFormat(12_HOUR_FORMAT);
+    result = dsSetFPTimeFormat(dsFPD_TIME_12_HOUR);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize using dsFPInit()
@@ -2404,7 +2404,7 @@ void test_l1_dsFPD_negative_dsSetFPTimeFormat(void)
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 08: Call dsSetFPTimeFormat() with a valid 12-hour format
-    result = dsSetFPTimeFormat(12_HOUR_FORMAT);
+    result = dsSetFPTimeFormat(dsFPD_TIME_12_HOUR);
     UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
 
     // Step 09: Call dsSetFPDMode() with a valid parameter
@@ -2415,7 +2415,7 @@ void test_l1_dsFPD_negative_dsSetFPTimeFormat(void)
     disableFPDIndicators();
 
     // Step 11: Call dsSetFPTimeFormat() while FP State is "OFF"
-    result = dsSetFPTimeFormat(12_HOUR_FORMAT);
+    result = dsSetFPTimeFormat(dsFPD_TIME_12_HOUR);
     UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
 
     // Step 12: Terminate using dsFPTerm()
@@ -2423,7 +2423,7 @@ void test_l1_dsFPD_negative_dsSetFPTimeFormat(void)
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 13: Call dsSetFPTimeFormat() after termination
-    result = dsSetFPTimeFormat(24_HOUR_FORMAT);
+    result = dsSetFPTimeFormat(dsFPD_TIME_24_HOUR);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
@@ -2445,7 +2445,7 @@ void test_l1_dsFPD_negative_dsSetFPTimeFormat(void)
  * |:--:|-----------|---------|---------------|-----|
  * |01|Initialize using dsFPInit()||dsERR_NONE|Ensure the system is initialized|
  * |02|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_CLOCK|dsERR_NONE|API should set mode successfully|
- * |03|Call dsSetFPTimeFormat() with a valid 12-hour format|eTimeFormat: 12_HOUR_FORMAT|dsERR_NONE|Attempt to set time in 12-hour format|
+ * |03|Call dsSetFPTimeFormat() with a valid 12-hour format|eTimeFormat: dsFPD_TIME_12_HOUR|dsERR_NONE|Attempt to set time in 12-hour format|
  * |04|Call dsGetFPTimeFormat() to retrieve the set time format|dsFPDTimeFormat_t*|dsERR_NONE|Should get the previously set time format|
  * |05|Call dsGetFPTimeFormat() to retrieve the new time format|dsFPDTimeFormat_t*|dsERR_NONE|Should get the newly set time format|
  * |06|Compare the results to make sure the returned values are the same||Success|The values should be the same|
@@ -2469,7 +2469,7 @@ void test_l1_dsFPD_positive_dsGetFPTimeFormat(void)
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 03: Call dsSetFPTimeFormat() with a valid 12-hour format
-    setTimeFormat = 12_HOUR_FORMAT;
+    setTimeFormat = dsFPD_TIME_12_HOUR;
     result = dsSetFPTimeFormat(setTimeFormat);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
