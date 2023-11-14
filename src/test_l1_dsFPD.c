@@ -262,7 +262,7 @@ void test_l1_dsFPD_positive_dsSetFPState (void)
 {
     gTestID = 5;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
 
     // Step 01: Initialize
     result = dsFPInit();
@@ -316,7 +316,7 @@ void test_l1_dsFPD_negative_dsSetFPState (void)
 {
     gTestID = 6;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
 
     // Step 01: Call dsSetFPState() without initializing
     result = dsSetFPState(dsFPD_INDICATOR_POWER, dsFPD_STATE_OFF);
@@ -394,7 +394,7 @@ void test_l1_dsFPD_positive_dsSetFPBlink (void)
 {
     gTestID = 7;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
 
     // Step 01: Initialize with dsFPInit()
     result = dsFPInit();
@@ -450,7 +450,7 @@ void test_l1_dsFPD_negative_dsSetFPBlink (void)
 {
     gTestID = 8;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
 
     // Variation 01: Call dsSetFPBlink() without calling dsFPInit()
     result = dsSetFPBlink(dsFPD_INDICATOR_POWER, 500, 10);
@@ -535,7 +535,7 @@ void test_l1_dsFPD_positive_dsSetFPBrightness (void)
 {
     gTestID = 9;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
 
     // Step 01: Initialize with dsFPInit()
     result = dsFPInit();
@@ -592,7 +592,7 @@ void test_l1_dsFPD_negative_dsSetFPBrightness (void)
 {
     gTestID = 10;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
 
     // Variation 01: Call dsSetFPBrightness() without calling dsFPInit()
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
@@ -676,7 +676,7 @@ void test_l1_dsFPD_positive_dsGetFPBrightness (void)
 {
     gTestID = 11;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
     int brightness_power_indicator;
     int brightness_all_indicators[sizeof(kIndicators) / sizeof(kIndicators[0])];
     int indicator_power_index = -1;
@@ -745,7 +745,7 @@ void test_l1_dsFPD_negative_dsGetFPBrightness (void)
 {
     gTestID = 12;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
     dsFPDBrightness_t brightness;
 
     // Step 01: Call dsGetFPBrightness() without initializing
@@ -832,7 +832,7 @@ void test_l1_dsFPD_positive_dsGetFPState (void)
 {
     gTestID = 13;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
     dsFPDState_t stateForPower, stateForComparison;
 
     // Step 01: Initialize with dsFPInit()
@@ -894,7 +894,7 @@ void test_l1_dsFPD_negative_dsGetFPState (void)
 {
     gTestID = 14;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
     dsFPDState_t state;
 
     // Step 01: Call dsGetFPState() without initializing (dsFPInit() not called)
@@ -979,7 +979,7 @@ void test_l1_dsFPD_positive_dsSetFPColor (void)
 {
     gTestID = 15;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
 
     // Step 01: Initialize with dsFPInit()
     result = dsFPInit();
@@ -1039,7 +1039,7 @@ void test_l1_dsFPD_negative_dsSetFPColor (void)
 {
     gTestID = 16;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
 
     // List of all colors
     int allColors[] = {
@@ -1151,7 +1151,7 @@ void test_l1_dsFPD_positive_dsGetFPColor (void)
 {
     gTestID = 17;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
     dsFPDColor_t retrievedColor, knownColor;
 
     // Step 01: Initialize with dsFPInit()
@@ -1210,7 +1210,7 @@ void test_l1_dsFPD_negative_dsGetFPColor (void)
 {
     gTestID = 18;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
     dsFPDColor_t retrievedColor;
 
     // Step 01: Call dsGetFPColor() without initializing (dsFPInit() not called)
@@ -1286,7 +1286,7 @@ void test_l1_dsFPD_positive_dsSetFPDMode (void)
 {
     gTestID = 19;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
 
     // Step 01: Initialize using dsFPInit()
     result = dsFPInit();
@@ -1334,7 +1334,7 @@ void test_l1_dsFPD_negative_dsSetFPDMode (void)
 {
     gTestID = 20;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
 
     // Step 01: Call dsSetFPDMode() without initializing the system
     result = dsSetFPDMode(dsFPD_MODE_ANY);
@@ -1395,7 +1395,7 @@ void test_l1_dsFPD_positive_dsSetFPTime (void)
 {
     gTestID = 21;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
 
     // Step 01: Initialize with dsFPInit()
     result = dsFPInit();
@@ -1472,7 +1472,7 @@ void test_l1_dsFPD_negative_dsSetFPTime (void)
 {
     gTestID = 22;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
 
     // Step 01: Call dsSetFPTime() without initializing (dsFPInit() not called)
     result = dsSetFPTime(dsFPD_TIME_24_HOUR, 14, 30);
@@ -1574,7 +1574,7 @@ void test_l1_dsFPD_positive_dsSetFPText (void)
 {
     gTestID = 23;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
 
     // Step 01: Initialize with dsFPInit()
     result = dsFPInit();
@@ -1639,7 +1639,7 @@ void test_l1_dsFPD_negative_dsSetFPText (void)
 {
     gTestID = 24;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
 
     // Step 01: Call dsSetFPText() without initializing
     result = dsSetFPText("HELLO");
@@ -1730,7 +1730,7 @@ void test_l1_dsFPD_positive_dsSetFPTextBrightness(void)
 {
     gTestID = 25;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
 
     // Step 01: Initialize with dsFPInit()
     result = dsFPInit();
@@ -1796,7 +1796,7 @@ void test_l1_dsFPD_negative_dsSetFPTextBrightness(void)
 {
     gTestID = 26;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
 
     // Step 01: Call dsSetFPTextBrightness() without initializing
     result = dsSetFPTextBrightness(dsFPD_TEXTDISP_TEXT, 70);
@@ -1889,7 +1889,7 @@ void test_l1_dsFPD_positive_dsGetFPTextBrightness(void)
 {
     gTestID = 27;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
     int brightness1 = 0;
     int brightness2 = 0;
 
@@ -1944,7 +1944,7 @@ void test_l1_dsFPD_negative_dsGetFPTextBrightness(void)
 {
     gTestID = 28;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
     int brightness;
 
     // Step 01: Call dsGetFPTextBrightness() without initializing (dsFPInit() not called)
@@ -2015,7 +2015,7 @@ void test_l1_dsFPD_positive_dsFPEnableCLockDisplay(void)
 {
     gTestID = 29;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
 
     // Step 01: Initialize with dsFPInit()
     result = dsFPInit();
@@ -2088,7 +2088,7 @@ void test_l1_dsFPD_negative_dsFPEnableCLockDisplay(void)
 {
     gTestID = 30;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
 
     // Step 01: Call dsFPEnableCLockDisplay() without initializing
     result = dsFPEnableCLockDisplay(1);
@@ -2175,7 +2175,7 @@ void test_l1_dsFPD_positive_dsSetFPScroll(void)
 {
     gTestID = 31;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
 
     // Step 01: Initialize using dsFPInit()
     result = dsFPInit();
@@ -2237,7 +2237,7 @@ void test_l1_dsFPD_negative_dsSetFPScroll(void)
 {
     gTestID = 32;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
 
     // Step 01: Call dsSetFPScroll() without initializing (dsFPInit() not called)
     result = dsSetFPScroll(1000, 5, 5);
@@ -2302,7 +2302,7 @@ void test_l1_dsFPD_positive_dsSetFPTimeFormat(void)
 {
     gTestID = 33;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
 
     // Step 01: Initialize using dsFPInit()
     result = dsFPInit();
@@ -2373,7 +2373,7 @@ void test_l1_dsFPD_negative_dsSetFPTimeFormat(void)
 {
     gTestID = 34;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
 
     // Step 01: Call dsSetFPTimeFormat() without initializing the system
     result = dsSetFPTimeFormat(12_HOUR_FORMAT);
@@ -2457,7 +2457,7 @@ void test_l1_dsFPD_positive_dsGetFPTimeFormat(void)
 {
     gTestID = 35;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
     dsFPDTimeFormat_t initialTimeFormat, setTimeFormat, retrievedTimeFormat;
 
     // Step 01: Initialize using dsFPInit()
@@ -2524,7 +2524,7 @@ void test_l1_dsFPD_negative_dsGetFPTimeFormat(void)
 {
     gTestID = 36;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
     dsFPDTimeFormat_t timeFormat;
 
     // Step 01: Call dsGetFPTimeFormat() without initializing the system
@@ -2600,7 +2600,7 @@ void test_l1_dsFPD_positive_dsFPGetSupportedLEDStates(void)
 {
     gTestID = 37;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
     unsigned int states1 = 0;
     unsigned int states2 = 0;
 
@@ -2655,7 +2655,7 @@ void test_l1_dsFPD_negative_dsFPGetSupportedLEDStates(void)
 {
     gTestID = 38;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
     unsigned int states;
 
     // Step 01: Call dsFPGetSupportedLEDStates() before initialization
@@ -2706,7 +2706,7 @@ void test_l1_dsFPD_positive_dsFPSetLEDState(void)
 {
     gTestID = 39;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
     unsigned int supportedLEDStates;
     dsFPDLedState_t ledState;
 
@@ -2765,7 +2765,7 @@ void test_l1_dsFPD_negative_dsFPSetLEDState(void)
 {
     gTestID = 40;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
 
     // Step 01: Call dsFPSetLEDState() before initialization
     result = dsFPSetLEDState(dsFPD_LED_DEVICE_ACTIVE);
@@ -2823,7 +2823,7 @@ void test_l1_dsFPD_positive_dsFPGetLEDState(void)
 {
     gTestID = 41;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
     dsFPDLedState_t ledState1, ledState2;
 
     // Step 01: Initialize using dsFPInit()
@@ -2883,7 +2883,7 @@ void test_l1_dsFPD_negative_dsFPGetLEDState(void)
 {
     gTestID = 42;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsErrorType result;
+    dsError_t result;
     dsFPDLedState_t ledState;
 
     // Step 01: Call dsFPGetLEDState() before initialization
