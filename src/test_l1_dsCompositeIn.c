@@ -320,8 +320,7 @@ void test_l1_dsCompositeIn_negative_dsCompositeInSelectPort (void)
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 011@n
  * 
- * **Pre-Conditions:**@n
- * The module is initialized, and a valid COMPOSITE input port is selected.
+ * **Pre-Conditions:**None@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
