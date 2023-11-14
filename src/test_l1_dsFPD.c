@@ -681,8 +681,8 @@ void test_l1_dsFPD_positive_dsGetFPBrightness (void)
     gTestID = 11;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsError_t result;
-    int brightness_power_indicator;
-    int brightness_all_indicators[sizeof(kIndicators) / sizeof(kIndicators[0])];
+    dsFPDBrightness_t brightness_power_indicator;
+    dsFPDBrightness_t brightness_all_indicators[sizeof(kIndicators) / sizeof(kIndicators[0])];
     int indicator_power_index = -1;
 
     // Step 01: Initialize with dsFPInit()
@@ -1948,7 +1948,7 @@ void test_l1_dsFPD_negative_dsGetFPTextBrightness(void)
     gTestID = 28;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsError_t result;
-    int brightness;
+    dsFPDBrightness_t brightness;
 
     // Step 01: Call dsGetFPTextBrightness() without initializing (dsFPInit() not called)
     result = dsGetFPTextBrightness(dsFPD_TEXTDISP_TEXT, &brightness);
