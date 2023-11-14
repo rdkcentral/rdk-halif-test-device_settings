@@ -156,3 +156,10 @@ dsError_t dsFPSetLEDState(dsFPDLedState_t state)
   return (dsError_t)0;
 }
 
+dsError_t dsFPGetSupportedLEDStates(unsigned int* states)
+{
+  /*TODO: Implement Me!*/
+  (void)states;
+  return (dsError_t)0;
+}
+

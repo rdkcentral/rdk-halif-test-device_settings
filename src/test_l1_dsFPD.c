@@ -1156,7 +1156,7 @@ void test_l1_dsFPD_positive_dsGetFPColor (void)
     gTestID = 17;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsError_t result;
-    dsFPDColor_t retrievedColor, knownColor;
+    dsFPDColor_t retrievedColor;
 
     // Step 01: Initialize with dsFPInit()
     result = dsFPInit();
