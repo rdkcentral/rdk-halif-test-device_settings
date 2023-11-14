@@ -63,7 +63,7 @@
 
 #warning "CONFIGURING PLATFORM FRONT PANEL SETTINGS"
 
-#include "include/dsFPDTypes.h"
+#include "dsFPDTypes.h"
 
 #ifdef __cplusplus
 extern "C" {
