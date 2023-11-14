@@ -45,6 +45,7 @@ static int gTestGroup = 1;
 static int gTestID = 1;
 
 void enableFPDIndicators(){
+    dsError_t result;
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
         result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
@@ -52,6 +53,7 @@ void enableFPDIndicators(){
     }
 }
 void disableFPDIndicators(){
+    dsError_t result;
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
         result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_OFF);

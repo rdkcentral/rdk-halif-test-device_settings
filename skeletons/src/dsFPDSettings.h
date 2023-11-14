@@ -175,7 +175,7 @@ const dsFPDTextDisplayConfig_t  kTextDisplays[] = {
 	{
 		dsFPD_TEXTDISP_TEXT,		/**< id	*/
 		"Text",				/**< name */
-		kIndicatorColors,		/**< supportedColors */
+		kIndicatorColors_1,		/**< supportedColors */
 		_MAX_BRIGHTNESS,		/**< maxBrightness */
 		_MAX_CYCLERATE,			/**< maxCycleRate */
 		"ABCDEFG",			/**< supportedCharacters (all alpha-numric characters except special characters)*/
