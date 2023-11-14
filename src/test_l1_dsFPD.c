@@ -39,6 +39,7 @@
 #include <ut_log.h>
 #include "dsFPD.h"
 #include "dsFPDSettings.h"
+#include "stdbool.h"
 
 static int gTestGroup = 1;
 static int gTestID = 1;
@@ -458,7 +459,7 @@ void test_l1_dsFPD_negative_dsSetFPBlink (void)
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
-        result = dsSetFPBlink(kIndicators.id, 500, 10);
+        result = dsSetFPBlink(kIndicators[i].id, 500, 10);
         UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     }
 
@@ -503,7 +504,7 @@ void test_l1_dsFPD_negative_dsSetFPBlink (void)
     // Variation 10: Attempt to set blink pattern after dsFPTerm() has been called
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
-        result = dsSetFPBlink(kIndicators.id, 500, 10);
+        result = dsSetFPBlink(kIndicators[i].id, 500, 10);
         UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     }
     UT_LOG("\n Out  %s\n",__FUNCTION__);
@@ -598,7 +599,7 @@ void test_l1_dsFPD_negative_dsSetFPBrightness (void)
     // Variation 01: Call dsSetFPBrightness() without calling dsFPInit()
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
-        result = dsSetFPBrightness(kIndicators.id, 50);
+        result = dsSetFPBrightness(kIndicators[i].id, 50);
         UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     }
 
@@ -642,7 +643,7 @@ void test_l1_dsFPD_negative_dsSetFPBrightness (void)
     // Variation 09: Attempt to set brightness after dsFPTerm() has been called
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
-        result = dsSetFPBrightness(kIndicators.id, 50);
+        result = dsSetFPBrightness(kIndicators[i].id, 50);
         UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     }
     UT_LOG("\n Out  %s\n",__FUNCTION__);
@@ -754,7 +755,7 @@ void test_l1_dsFPD_negative_dsGetFPBrightness (void)
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
-         result = dsGetFPBrightness(kIndicators.id, &brightness);
+         result = dsGetFPBrightness(kIndicators[i].id, &brightness);
         UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     }
 
@@ -799,7 +800,7 @@ void test_l1_dsFPD_negative_dsGetFPBrightness (void)
     // Step 09: Call dsGetFPBrightness() after termination
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
-        result = dsGetFPBrightness(kIndicators.id, &brightness);
+        result = dsGetFPBrightness(kIndicators[i].id, &brightness);
         UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     }
     UT_LOG("\n Out  %s\n",__FUNCTION__);
@@ -903,7 +904,7 @@ void test_l1_dsFPD_negative_dsGetFPState (void)
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
-        result = dsGetFPState(kIndicators.id, &state);
+        result = dsGetFPState(kIndicators[i].id, &state);
         UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     }
 
@@ -948,7 +949,7 @@ void test_l1_dsFPD_negative_dsGetFPState (void)
     // Step 07: Call dsGetFPState() after termination
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
-        result = dsGetFPState(kIndicators.id, &state);
+        result = dsGetFPState(kIndicators[i].id, &state);
         UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     }
     UT_LOG("\n Out  %s\n",__FUNCTION__);
@@ -1056,7 +1057,7 @@ void test_l1_dsFPD_negative_dsSetFPColor (void)
     // Step 01: Call dsSetFPColor() without initializing
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
-        result = dsSetFPColor(kIndicators.id, dsFPD_COLOR_WHITE);
+        result = dsSetFPColor(kIndicators[i].id, dsFPD_COLOR_WHITE);
         UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     }
 
@@ -1118,7 +1119,7 @@ void test_l1_dsFPD_negative_dsSetFPColor (void)
     // Step 09: Call dsSetFPColor() after termination
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
-        result = dsSetFPColor(kIndicators.id, dsFPD_COLOR_WHITE);
+        result = dsSetFPColor(kIndicators[i].id, dsFPD_COLOR_WHITE);
         UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     }
     UT_LOG("\n Out  %s\n",__FUNCTION__);
@@ -1217,7 +1218,7 @@ void test_l1_dsFPD_negative_dsGetFPColor (void)
     // Step 01: Call dsGetFPColor() without initializing (dsFPInit() not called)
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
-        result = dsGetFPColor(kIndicators.id, &retrievedColor);
+        result = dsGetFPColor(kIndicators[i].id, &retrievedColor);
         UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     }
 
@@ -1256,7 +1257,7 @@ void test_l1_dsFPD_negative_dsGetFPColor (void)
     // Step 09: Call dsGetFPColor() after termination
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
-        result = dsGetFPColor(kIndicators.id, &retrievedColor);
+        result = dsGetFPColor(kIndicators[i].id, &retrievedColor);
         UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     }
     UT_LOG("\n Out  %s\n",__FUNCTION__);
