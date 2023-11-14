@@ -1726,7 +1726,7 @@ void test_l1_dsFPD_negative_dsSetFPText (void)
  * |03|Call dsSetFPTextBrightness() with valid eIndicator and eBrightness|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: 70|dsERR_NONE|Check the function with valid parameters|
  * |04|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_ANY|dsERR_NONE|API should set mode successfully|
  * |05|Call dsSetFPTextBrightness() with valid eIndicator and eBrightness|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: 70|dsERR_NONE|Check the function with valid parameters|
- * |06|Validate the FP display shows the correct brightness level||Brightness level 70 is set|Use appropriate tools/methods for validation|
+ * |06|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
@@ -1756,10 +1756,9 @@ void test_l1_dsFPD_positive_dsSetFPTextBrightness(void)
     result = dsSetFPTextBrightness(dsFPD_TEXTDISP_TEXT, 70);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-    // Step 06: Validate the FP display shows the correct brightness level
-    // Assuming a function called validateFPBrightness exists that returns true if brightness is set correctly.
-    bool isBrightnessSet = validateFPBrightness(70);
-    UT_ASSERT_TRUE(isBrightnessSet);
+    // Step 06: Terminate with dsFPTerm()
+    result = dsFPTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 }
 
 
