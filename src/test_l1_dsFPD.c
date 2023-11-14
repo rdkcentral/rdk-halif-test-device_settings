@@ -529,7 +529,7 @@ void test_l1_dsFPD_negative_dsSetFPBlink (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize with dsFPInit()| |dsERR_NONE|Ensure the system is initialized|
  * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
- * |03|Call dsSetBrightness() and loop through all valid indicators from kIndicators|eIndicator: [Valid Indicator], eBrightness: 20+5x|dsERR_NONE|Brightness is set without any issues|
+ * |03|Call dsSetFPBrightness() and loop through all valid indicators from kIndicators|eIndicator: [Valid Indicator], eBrightness: 20+5x|dsERR_NONE|Brightness is set without any issues|
  * |04|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
@@ -546,15 +546,15 @@ void test_l1_dsFPD_positive_dsSetFPBrightness (void)
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
-    // Step 03: Call dsSetBrightness() and loop through all valid indicators from kIndicators
+    // Step 03: Call dsSetFPBrightness() and loop through all valid indicators from kIndicators
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
         result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         
-        result = dsSetBrightness(kIndicators[i].id, 0);
-        result = dsSetBrightness(kIndicators[i].id, 50);
-        result = dsSetBrightness(kIndicators[i].id, 100);
+        result = dsSetFPBrightness(kIndicators[i].id, 0);
+        result = dsSetFPBrightness(kIndicators[i].id, 50);
+        result = dsSetFPBrightness(kIndicators[i].id, 100);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
