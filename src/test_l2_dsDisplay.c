@@ -39,6 +39,31 @@
 #include <ut_log.h>
 
 /**
+ * @addtogroup Device_Settings Device Settings Module
+ * @{
+ */
+
+/**
+ * @addtogroup Device_Settings_HAL Device Settings HAL
+ * @par Application API Specification
+ * Described herein are the DeviceSettings HAL types and functions that are part of
+ * the Display subsystem. The Display subsystem manages system-specific HAL operations.
+ *  @{
+ */
+
+/**
+*   @defgroup dsDisplay_HALTEST DS Display HALTEST
+ *  @{
+ * @par Application API Specification
+ * dsDisplay HAL provides an interface for managing the Display settings for the device settings module
+ */
+
+/**
+ * @defgroup DSHAL_DISPLAY_L2 DS HAL Display L2 test cases
+ *  @{
+ */
+
+/**
 * @brief TODO: Describe the object of the test
 *
 * TODO: Add the description of what is tested and why in this test
@@ -75,3 +100,10 @@ int test_l2_dsDisplay_register ( void )
 
 	return 0;
 } 
+
+
+/** @} */ // End of DS HAL Display L2 tests
+/** @} */ // End of DS Display HALTEST
+/** @} */ // End of Device Settings HAL
+/** @} */ // End of Device Settings Module
+/** @} */ // End of HPK

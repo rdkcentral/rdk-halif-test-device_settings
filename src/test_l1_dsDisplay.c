@@ -1,5 +1,5 @@
 /**
-*  If not stated otherwise in this file or this component's Licenses.txt
+*  If not stated otherwise in this file or this component's LICENSE
 *  file the following copyright and licenses apply:
 *
 *  Copyright 2022 RDK Management
@@ -18,19 +18,59 @@
 */
 
 /**
+ * @addtogroup HPK Hardware Porting Kit
+ * @{
+ * @par The Hardware Porting Kit
+ * HPK is the next evolution of the well-defined Hardware Abstraction Layer
+ * (HAL), but augmented with more comprehensive documentation and test suites
+ * that OEM or SOC vendors can use to self-certify their ports before taking
+ * them to RDKM for validation or to an operator for final integration and
+ * deployment. The Hardware Porting Kit effectively enables an OEM and/or SOC
+ * vendor to self-certify their own Video Accelerator devices, with minimal RDKM
+ * assistance.
+ *
+ */
+
+/**
+ * @addtogroup Device_Settings Device Settings Module
+ * @{
+ */
+
+/**
+ * @addtogroup Device_Settings_HAL Device Settings HAL
+ * @par Application API Specification
+ * Described herein are the DeviceSettings HAL types and functions that are part of
+ * the Display subsystem. The Display subsystem manages system-specific HAL operations.
+ *  @{
+ */
+
+/**
+*   @defgroup dsDisplay_HALTEST DS Display HALTEST
+ *  @{
+ * @par Application API Specification
+ * dsDisplay HAL provides an interface for managing the Display settings for the device settings module
+ */
+
+/**
+ * @defgroup DSHAL_DISPLAY_L1 DS HAL Display L1 test cases
+ *  @{
+ */
+
+/**
 * @file TODO: test_l1_dsDisplay.c
-* @page module_name TODO: Required field, name of the main module
-* @subpage sub_page_name TODO: Add a function group if relevant
+* @page Device Settings
+* @subpage Display
 *
 * ## Module's Role
-* TODO: Explain the module's role in the system in general
-* This is to ensure that the API meets the operational requirements of the module across all vendors.
+* This module includes Level 1 functional tests (success and failure scenarios)
+* This is to ensure that the API meets the operational requirements of the Power Manager across all vendors
 *
-* **Pre-Conditions:**  TODO: Add pre-conditions if any@n
-* **Dependencies:** TODO: Add dependencies if any@n
+* **Pre-Conditions:**  None@n
+* **Dependencies:** None@n
 *
-* Ref to API Definition specification documentation : [halSpec.md](../../../docs/halSpec.md)
+* Ref to API Definition specification documentation : [ds-display_halSpec.md](../../../docs/pages/ds-display_halSpec.md)
 */
+
 
 #include <string.h>
 #include <stdlib.h>
@@ -57,7 +97,6 @@
  * |03|Call dsDisplayInit() for the first time | | dsERR_NONE | Initialization should succeed |
  * |04|Terminate the DS Display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
  * 
- * @note This sequence tests the basic initialization and reinitialization capabilities of dsDisplayInit().
  */
 void test_l1_dsDisplay_positive_dsDisplayInit (void)
 {
@@ -82,7 +121,7 @@ void test_l1_dsDisplay_positive_dsDisplayInit (void)
  * |02|Call dsDisplayInit() again to check if it returns an error when the module is already initialized | | dsERR_ALREADY_INITIALIZED | Should return error indicating the module is already initialized |
  * |03|Terminate the module with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
  * 
- * @note Scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL are not included in this test plan due to the challenges in realistic simulation. Each test case is functionally independent with proper initialization and termination steps.
+ * @note Scenarios like dsERR_GENERAL are not included in this test plan due to the challenges in realistic simulation. Each test case is functionally independent with proper initialization and termination steps.
  */
 void test_l1_dsDisplay_negative_dsDisplayInit (void)
 {
@@ -108,7 +147,6 @@ void test_l1_dsDisplay_negative_dsDisplayInit (void)
  * |03|Reinitialize the display sub-system with dsDisplayInit() to check for reinitialization capability | | dsERR_NONE | Reinitialization should succeed |
  * |04|Terminate the display sub-system again with dsDisplayTerm() to confirm termination capability | | dsERR_NONE | Termination should succeed again |
  * 
- * @note This sequence tests the ability of dsDisplayTerm() to terminate the display sub-system and its reinitialization and retermination capabilities.
  */
 void test_l1_dsDisplay_positive_dsDisplayTerm (void)
 {
@@ -161,7 +199,6 @@ void test_l1_dsDisplay_negative_dsDisplayTerm (void)
  * |03|Call a the last value again, and compare the results |  |Success | The values should be the same |
  * |04|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
  * 
- * @note This sequence tests the ability of dsGetDisplay() to retrieve handles for connected display devices across various video ports.
  */
 void test_l1_dsDisplay_positive_dsGetDisplay (void)
 {
@@ -218,7 +255,6 @@ void test_l1_dsDisplay_negative_dsGetDisplay (void)
  * |05|Compare the returned results |  | Success | The values should be the same |
  * |06|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
  * 
- * @note This sequence tests the ability of dsGetEDID() to retrieve EDID information for different display devices.
  */
 void test_l1_dsDisplay_positive_dsGetEDID (void)
 {
@@ -270,12 +306,11 @@ void test_l1_dsDisplay_negative_dsGetEDID (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize the display sub-system and get a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
  * |02|Call dsGetDisplay() Loop through all dsVideoPortType_t |vType: dsVIDEOPORT_TYPE_HDMI_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
- * |03|Allocate memory for the EDID buffer and call dsGetEDIDBytes() with the obtained handle | intptr_t handle, unsigned char **edid, int *length | dsERR_NONE, valid EDID data, and length | EDID buffer and length should be retrieved successfully |
- * |04|Allocate memory for the EDID buffer and call dsGetEDIDBytes() with the obtained handle | intptr_t handle, unsigned char **edid, int *length | dsERR_NONE, valid EDID data, and length | EDID buffer and length should be retrieved successfully |
+ * |03|Allocate memory for the EDID buffer and call dsGetEDIDBytes() with the obtained handle | intptr_t handle, unsigned char *edid, int *length | dsERR_NONE, valid EDID data, and length | EDID buffer and length should be retrieved successfully |
+ * |04|Allocate memory for the EDID buffer and call dsGetEDIDBytes() with the obtained handle | intptr_t handle, unsigned char *edid, int *length | dsERR_NONE, valid EDID data, and length | EDID buffer and length should be retrieved successfully |
  * |05|Verify that the return results are the same |  | Success | The results should be the same  |
  * |06|Free the allocated EDID buffer and terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Memory deallocation and termination should succeed |
  * 
- * @note This sequence tests the ability of dsGetEDIDBytes() to retrieve EDID buffer and length for different display devices. Ensure memory is allocated and freed properly.
  */
 void test_l1_dsDisplay_positive_dsGetEDIDBytes (void)
 {
@@ -296,14 +331,14 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsGetEDIDBytes() without initializing the display sub-system or obtaining a handle | intptr_t handle, unsigned char **edid, int *length | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |01|Call dsGetEDIDBytes() without initializing the display sub-system or obtaining a handle | intptr_t handle, unsigned char *edid, int *length | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * |02|Initialize the display sub-system and obtain a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
  * |03|Call dsGetDisplay() Loop through all dsVideoPortType_t |vType: dsVIDEOPORT_TYPE_HDMI_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
- * |04|Call dsGetEDIDBytes() with an invalid handle | intptr_t -1, unsigned char **edid, int *length | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
+ * |04|Call dsGetEDIDBytes() with an invalid handle | intptr_t -1, unsigned char *edid, int *length | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
  * |05|Call dsGetEDIDBytes() with null edid | intptr_t -1, NULL, int *length | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
- * |06|Call dsGetEDIDBytes() with null length | intptr_t -1, unsigned char **edid, NULL | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
+ * |06|Call dsGetEDIDBytes() with null length | intptr_t -1, unsigned char *edid, NULL | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
  * |07|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
- * |08|Call dsGetEDIDBytes() without initializing the display sub-system or obtaining a handle | intptr_t handle, unsigned char **edid, int *length | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |08|Call dsGetEDIDBytes() without initializing the display sub-system or obtaining a handle | intptr_t handle, unsigned char *edid, int *length | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * 
  * @note The ability to test scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might require specific setup or environment configuration. Ensure proper memory management in the test setup.
  */
@@ -333,7 +368,6 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes (void)
  * |05|Compare the results, and make sure the returned values are the same |  | Success | The values should be the same |
  * |06|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
  * 
- * @note This sequence tests the ability of dsGetDisplayAspectRatio() to retrieve aspect ratios for different display devices.
  */
 void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio (void)
 {
@@ -358,7 +392,7 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio (void)
  * |02|Initialize the display sub-system and obtain a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
  * |03|Call dsGetDisplay() Loop through all dsVideoPortType_t |vType: dsVIDEOPORT_TYPE_HDMI_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
  * |04|Call dsGetDisplayAspectRatio() with an invalid handle| NULL, dsVideoAspectRatio_t *aspectRatio | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
- * |05|Call dsGetDisplayAspectRatio() with an invalid or NULL handle | intptr_t handle, NULL | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
+ * |05|Call dsGetDisplayAspectRatio() with an iNULL aspectRatio | intptr_t handle, NULL | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
  * |06|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
  * |07|Call dsGetDisplayAspectRatio() without initializing the display sub-system or obtaining a handle | intptr_t handle, dsVideoAspectRatio_t *aspectRatio  | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * 
@@ -384,12 +418,11 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio (void)
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize the display sub-system and get a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
- * |02|Call dsRegisterDisplayEventCallback() with the obtained display device handle and a valid callback function | Valid handle and callback function | dsERR_NONE | Callback registration should succeed |
- * |03|Verify if the callback is triggered on relevant display events | Simulate relevant display events | Callback is triggered | Ensures the callback functionality |
+ * |02|Call dsGetDisplay() Loop through all dsVideoPortType_t |vType: dsVIDEOPORT_TYPE_HDMI_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
+ * |03|Call dsRegisterDisplayEventCallback() with the obtained display device handle and a valid callback function | Valid handle and callback function | dsERR_NONE | Callback registration should succeed |
  * |04|Repeat registration for different display device handles if available | Different valid handles and callback functions | dsERR_NONE | Callbacks for each handle should be registered successfully |
  * |05|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
  * 
- * @note This sequence tests the ability of dsRegisterDisplayEventCallback() to register and respond to display events for different display devices.
  */
 void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback (void)
 {
@@ -410,11 +443,13 @@ void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsRegisterDisplayEventCallback() without initializing the display sub-system or obtaining a handle | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |01|Call dsRegisterDisplayEventCallback() without initializing the display sub-system or obtaining a handle |Valid handle and callback function | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * |02|Initialize the display sub-system and obtain a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
- * |03|Call dsRegisterDisplayEventCallback() with an invalid or NULL handle, or NULL callback function | Invalid/NULL handle, NULL callback function | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
- * |04|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
- * |05|Call dsRegisterDisplayEventCallback() without initializing the display sub-system or obtaining a handle | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |03|Call dsGetDisplay() Loop through all dsVideoPortType_t |vType: dsVIDEOPORT_TYPE_HDMI_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
+ * |04|Call dsRegisterDisplayEventCallback() with an NULL handle | NULL, callback function | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
+ * |04|Call dsRegisterDisplayEventCallback() with an NULL callback function | Valid handle,  NULL | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
+ * |05|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
+ * |06|Call dsRegisterDisplayEventCallback() without initializing the display sub-system or obtaining a handle | Valid handle and callback function| dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * 
  * @note The ability to test scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might require specific setup or environment configuration.
  */
@@ -457,3 +492,10 @@ int test_l1_dsDisplay_register ( void )
 
 	return 0;
 } 
+
+
+/** @} */ // End of DS HAL Display L1 tests
+/** @} */ // End of DS Display HALTEST
+/** @} */ // End of Device Settings HAL
+/** @} */ // End of Device Settings Module
+/** @} */ // End of HPK
