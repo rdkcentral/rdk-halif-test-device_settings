@@ -223,7 +223,7 @@ void test_l1_dsFPD_negative_dsFPTerm(void)
 
     // Variation 01: Call dsFPTerm() - attempt to terminate without initializing the interface
     result = dsFPTerm();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Variation 02: Call dsFPInit() - initialize the interface
     result = dsFPInit();
@@ -235,7 +235,7 @@ void test_l1_dsFPD_negative_dsFPTerm(void)
 
     // Variation 04: Call dsFPTerm() again - attempt to terminate an already terminated interface
     result = dsFPTerm();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
