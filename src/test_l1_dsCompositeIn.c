@@ -54,12 +54,11 @@
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsCompositeInInit() | | dsERR_NONE | First-time initialization should succeed |
+ * |01|Call dsCompositeInInit() to initialize the module | | dsERR_NONE | First-time initialization should succeed |
  * |02|Call dsCompositeInTerm() to terminate the module | | dsERR_NONE | Termination should succeed |
- * |03|Call dsCompositeInInit() again after termination | | dsERR_NONE | Re-initialization should succeed |
+ * |03|Call dsCompositeInInit() again initialize after termination | | dsERR_NONE | Re-initialization should succeed |
  * |04|Call dsCompositeInTerm() again to terminate the module | | dsERR_NONE | Termination should succeed |
  * 
- * @note This test sequence checks the basic functionality of initializing and terminating the module without considering the state of any subsystems.
  */
 void test_l1_dsCompositeIn_positive_dsCompositeInInit (void)
 {
@@ -83,7 +82,7 @@ void test_l1_dsCompositeIn_positive_dsCompositeInInit (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsCompositeInInit() to initialize the module | | dsERR_NONE | Initialization should succeed |
  * |02|Call dsCompositeInInit() again while already initialized | | dsERR_ALREADY_INITIALIZED | Should return error indicating the module is already initialized |
- * |03|Call dsCompositeInTerm() again | | dsERR_NONE | Termination should succeed |
+ * |03|Call dsCompositeInTerm() again to terminate the module | | dsERR_NONE | Termination should succeed |
  * 
  * @note The ability to simulate specific conditions like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might require specific setup or environment configuration. These cases are not included in this test plan due to the challenges in realistic simulation.
  */
@@ -108,11 +107,10 @@ void test_l1_dsCompositeIn_negative_dsCompositeInInit (void)
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsCompositeInInit() and initialize the module | | dsERR_NONE | Initialization should succeed |
- * |02|Call dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * |02|Call dsCompositeInTerm() to terminate the module| | dsERR_NONE | Termination should succeed |
  * |03|Call dsCompositeInInit() and initialize the module | | dsERR_NONE | Initialization should succeed |
- * |04|Call dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * |04|Call dsCompositeInTerm() to terminate the module| | dsERR_NONE | Termination should succeed |
  * 
- * @note This sequence ensures that dsCompositeInTerm() functions correctly after initialization.
  * 
  */
 void test_l1_dsCompositeIn_positive_dsCompositeInTerm (void)
@@ -137,10 +135,10 @@ void test_l1_dsCompositeIn_positive_dsCompositeInTerm (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsCompositeInTerm() without initializing the module | | dsERR_NOT_INITIALIZED | Termination should fail due to the module not being initialized |
  * |02|Call dsCompositeInInit() and initialize the module | | dsERR_NONE | Initialization should succeed |
- * |03|Call dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * |03|Call dsCompositeInTerm() to terminate the module| | dsERR_NONE | Termination should succeed |
  * |04|Call dsCompositeInTerm() again after proper termination | | dsERR_NOT_INITIALIZED | Termination should fail, indicating the module is already terminated |
  * 
- * @note These scenarios test the behavior of dsCompositeInTerm() when the module is not initialized or already terminated.
+ * @note The ability to simulate specific conditions like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might require specific setup or environment configuration. These cases are not included in this test plan due to the challenges in realistic simulation.
  */
 void test_l1_dsCompositeIn_negative_dsCompositeInTerm (void)
 {
@@ -166,9 +164,8 @@ void test_l1_dsCompositeIn_negative_dsCompositeInTerm (void)
  * |02|Call dsCompositeInGetNumberOfInputs() with a valid pointer | uint8_t *pNumberOfInputs | dsERR_NONE and a valid number of inputs | Number of inputs should be returned correctly |
  * |03|Call dsCompositeInGetNumberOfInputs() with a valid pointer | uint8_t *pNumberOfInputs | dsERR_NONE and a valid number of inputs | Number of inputs should be consistent with the first call |
  * |04|Compare the results of both calls to ensure consistency | Results of first and second calls | Consistent number of inputs | The number of inputs returned should be the same in both calls |
- * |05|Call dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * |05|Call dsCompositeInTerm() to terminate the module| | dsERR_NONE | Termination should succeed |
  * 
- * @note This sequence tests the consistency of the output from dsCompositeInGetNumberOfInputs() across multiple calls.
  */
 void test_l1_dsCompositeIn_positive_dsCompositeInGetNumberOfInputs (void)
 {
@@ -193,7 +190,7 @@ void test_l1_dsCompositeIn_positive_dsCompositeInGetNumberOfInputs (void)
  * |01|Call dsCompositeInGetNumberOfInputs() without initializing the module | uint8_t *pNumberOfInputs | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * |02|Call dsCompositeInInit() and initialize the module | | dsERR_NONE | Initialization should succeed |
  * |03|Call dsCompositeInGetNumberOfInputs() with a NULL pointer | NULL pointer | dsERR_INVALID_PARAM | Should return error indicating invalid parameter |
- * |04|Call dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * |04|Call dsCompositeInTerm() to terminate the module| | dsERR_NONE | Termination should succeed |
  * |05|Call dsCompositeInGetNumberOfInputs() after terminating the module | uint8_t *pNumberOfInputs | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * 
  * @note Scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL are not included in this test plan due to the challenges in realistic simulation.
@@ -222,9 +219,8 @@ void test_l1_dsCompositeIn_negative_dsCompositeInGetNumberOfInputs (void)
  * |02|Call dsCompositeInGetStatus() with a valid pointer | dsCompositeInStatus_t *pStatus | dsERR_NONE and valid status | Status should be retrieved correctly |
  * |03|Call dsCompositeInGetStatus() with a valid pointer | dsCompositeInStatus_t *pStatus | dsERR_NONE and valid status | Status should be retrieved correctly |
  * |04|Verify the retrieved statuses are the same |  | Success | Ensures the statuses are equal|
- * |05|Call dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * |05|Call dsCompositeInTerm() to terminate the module| | dsERR_NONE | Termination should succeed |
  * 
- * @note This sequence tests the functionality of getting the COMPOSITE Input Status correctly.
  */
 void test_l1_dsCompositeIn_positive_dsCompositeInGetStatus (void)
 {
@@ -249,7 +245,7 @@ void test_l1_dsCompositeIn_positive_dsCompositeInGetStatus (void)
  * |01|Call dsCompositeInGetStatus() without initializing the module | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * |02|Call dsCompositeInInit() and initialize the module | | dsERR_NONE | Initialization should succeed |
  * |03|Call dsCompositeInGetStatus() with a NULL pointer | NULL pointer | dsERR_INVALID_PARAM | Should return error indicating invalid parameter |
- * |04|Call dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * |04|Call dsCompositeInTerm() to terminate the module| | dsERR_NONE | Termination should succeed |
  * |05|Call dsCompositeInGetStatus() after terminating the module | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * 
  * @note Scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL are not included due to challenges in realistic simulation.
@@ -277,9 +273,8 @@ void test_l1_dsCompositeIn_negative_dsCompositeInGetStatus (void)
  * |01|Call dsCompositeInInit() and initialize the module | | dsERR_NONE | Initialization should succeed |
  * |02|Call dsCompositeInGetNumberOfInputs() with a valid pointer | uint8_t *pNumberOfInputs | dsERR_NONE and a valid number of inputs | Number of inputs should be returned correctly |
  * |03|Call dsCompositeInSelectPort() and loop through all valid ports(based on the number of ports) | dsCOMPOSITE_IN_PORT_0 | dsERR_NONE | Port should be set correctly |
- * |04|Call dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * |04|Call dsCompositeInTerm() to terminate the module| | dsERR_NONE | Termination should succeed |
  * 
- * @note This sequence tests the ability of dsCompositeInSelectPort() to set and switch COMPOSITE Input ports.
  */
 void test_l1_dsCompositeIn_positive_dsCompositeInSelectPort (void)
 {
@@ -303,9 +298,11 @@ void test_l1_dsCompositeIn_positive_dsCompositeInSelectPort (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsCompositeInSelectPort() without initializing the module | Port value | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * |02|Call dsCompositeInInit() and initialize the module | | dsERR_NONE | Initialization should succeed |
- * |03|Call dsCompositeInSelectPort() with an invalid port number (out of range) | dsCOMPOSITE_IN_PORT_MAX or a value not in enum | dsERR_INVALID_PARAM | Should return error indicating invalid port number |
- * |04|Call dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
- * |05|Call dsCompositeInSelectPort() without initializing the module | Port value | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |03|Call dsCompositeInGetNumberOfInputs() with a valid pointer | uint8_t *pNumberOfInputs | dsERR_NONE and a valid number of inputs | Number of inputs should be returned correctly |
+ * |04|Call dsCompositeInSelectPort() with an invalid port number (out of range) | dsCOMPOSITE_IN_PORT_MAX| dsERR_INVALID_PARAM | Should return error indicating invalid port number |
+ * |05|Call dsCompositeInSelectPort() with an invalid port number (pNumberOfInputs +1) | [Invalid port number] dsERR_INVALID_PARAM | Should return error indicating invalid port number |
+ * |06|Call dsCompositeInTerm() to terminate the module| | dsERR_NONE | Termination should succeed |
+ * |07|Call dsCompositeInSelectPort() without initializing the module | Port value | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * 
  * @note Scenarios like dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED are not included due to challenges in realistic simulation.
  */
@@ -332,9 +329,8 @@ void test_l1_dsCompositeIn_negative_dsCompositeInSelectPort (void)
  * |02|Call dsCompositeInSelectPort() with a valid port number | dsCOMPOSITE_IN_PORT_0 | dsERR_NONE | Port should be set correctly |
  * |03|Call dsCompositeInScaleVideo() with valid parameters within current resolution | x=10, y=10, width=800, height=800 | dsERR_NONE | Video scaling should succeed |
  * |04|Call dsCompositeInScaleVideo() with different valid parameters to verify flexibility | Different x=50, y=50, width=600, height=600 | dsERR_NONE | Video should be scaled correctly with different parameters |
- * |05|Call dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * |05|Call dsCompositeInTerm() to terminate the module| | dsERR_NONE | Termination should succeed |
  * 
- * @note This sequence tests the functionality of dsCompositeInScaleVideo() in scaling video based on various valid input parameters.
  */
 void test_l1_dsCompositeIn_positive_dsCompositeInScaleVideo (void)
 {
@@ -362,7 +358,7 @@ void test_l1_dsCompositeIn_positive_dsCompositeInScaleVideo (void)
  * |04|Call dsCompositeInScaleVideo() with parameters out of current resolution | x=10, y=-1, width=10, height=10 | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
  * |05|Call dsCompositeInScaleVideo() with parameters out of current resolution | x=10, y=10, width=-1, height=10 | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
  * |06|Call dsCompositeInScaleVideo() with parameters out of current resolution | x=10, y=10, width=10, height=-1 | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
- * |07|Call dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * |07|Call dsCompositeInTerm() to terminate the module| | dsERR_NONE | Termination should succeed |
  * |08|Call dsCompositeInScaleVideo() without initializing the module or selecting a port | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * 
  * @note Scenarios like dsERR_GENERAL, and dsERR_OPERATION_NOT_SUPPORTED are not included due to challenges in realistic simulation.
@@ -389,9 +385,8 @@ void test_l1_dsCompositeIn_negative_dsCompositeInScaleVideo (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsCompositeInInit() and initialize the module | | dsERR_NONE | Initialization should succeed |
  * |02|Call dsCompositeInRegisterConnectCB() with a valid callback function | dsCompositeInConnectCB_t CBFunc | dsERR_NONE | Callback registration should succeed |
- * |03|Call dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * |03|Call dsCompositeInTerm() to terminate the module| | dsERR_NONE | Termination should succeed |
  * 
- * @note This sequence tests the ability of dsCompositeInRegisterConnectCB() to register and respond to COMPOSITE Input hot plug events.
  */
 void test_l1_dsCompositeIn_positive_dsCompositeInRegisterConnectCB (void)
 {
@@ -416,7 +411,7 @@ void test_l1_dsCompositeIn_positive_dsCompositeInRegisterConnectCB (void)
  * |01|Call dsCompositeInRegisterConnectCB() without initializing the module | dsCompositeInConnectCB_t CBFunc| dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * |02|Call dsCompositeInInit() and initialize the module | | dsERR_NONE | Initialization should succeed |
  * |03|Call dsCompositeInRegisterConnectCB() with a NULL or invalid callback function | NULL or invalid callback | dsERR_INVALID_PARAM | Should return error indicating invalid parameter |
- * |04|Call dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * |04|Call dsCompositeInTerm() to terminate the module| | dsERR_NONE | Termination should succeed |
  * |05|Call dsCompositeInRegisterConnectCB() without initializing the module | dsCompositeInConnectCB_t CBFunc | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * 
  * @note Scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL are not included due to challenges in realistic simulation.
@@ -443,9 +438,8 @@ void test_l1_dsCompositeIn_negative_dsCompositeInRegisterConnectCB (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsCompositeInInit() and initialize the module | | dsERR_NONE | Initialization should succeed |
  * |02|Call dsCompositeInRegisterSignalChangeCB() with a valid callback function | dsCompositeInSignalChangeCB_t CBFunc | dsERR_NONE | Callback registration should succeed |
- * |03|Call dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * |03|Call dsCompositeInTerm() to terminate the module| | dsERR_NONE | Termination should succeed |
  * 
- * @note This sequence tests the ability of dsCompositeInRegisterSignalChangeCB() to register and respond to Composite Input Signal Change events.
  */
 void test_l1_dsCompositeIn_positive_dsCompositeInRegisterSignalChangeCB (void)
 {
@@ -470,7 +464,7 @@ void test_l1_dsCompositeIn_positive_dsCompositeInRegisterSignalChangeCB (void)
  * |01|Call dsCompositeInRegisterSignalChangeCB() without initializing the module | dsCompositeInSignalChangeCB_t CBFunc | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * |02|Call dsCompositeInInit() and initialize the module | | dsERR_NONE | Initialization should succeed |
  * |03|Call dsCompositeInRegisterSignalChangeCB() with a NULL or invalid callback function | NULL or invalid callback | dsERR_INVALID_PARAM | Should return error indicating invalid parameter |
- * |04|Call dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * |04|Call dsCompositeInTerm() to terminate the module| | dsERR_NONE | Termination should succeed |
  * |05|Call dsCompositeInRegisterSignalChangeCB() without initializing the module | dsCompositeInSignalChangeCB_t CBFunc | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * 
  * @note Scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL are not included due to challenges in realistic simulation.
@@ -497,9 +491,8 @@ void test_l1_dsCompositeIn_negative_dsCompositeInRegisterSignalChangeCB (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsCompositeInInit() and initialize the module | | dsERR_NONE | Initialization should succeed |
  * |02|Call dsCompositeInRegisterStatusChangeCB() with a valid callback function | dsCompositeInStatusChangeCB_t CBFunc | dsERR_NONE | Callback registration should succeed |
- * |03|Call dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * |03|Call dsCompositeInTerm() to terminate the module| | dsERR_NONE | Termination should succeed |
  * 
- * @note This sequence tests the ability of dsCompositeInRegisterStatusChangeCB() to register and respond to Composite Input Status Change events.
  */
 void test_l1_dsCompositeIn_positive_dsCompositeInRegisterStatusChangeCB (void)
 {
@@ -524,7 +517,7 @@ void test_l1_dsCompositeIn_positive_dsCompositeInRegisterStatusChangeCB (void)
  * |01|Call dsCompositeInRegisterStatusChangeCB() without initializing the module | dsCompositeInStatusChangeCB_t CBFunc | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * |02|Call dsCompositeInInit() and initialize the module | | dsERR_NONE | Initialization should succeed |
  * |03|Call dsCompositeInRegisterStatusChangeCB() with a NULL or invalid callback function | NULL or invalid callback | dsERR_INVALID_PARAM | Should return error indicating invalid parameter |
- * |04|Call dsCompositeInTerm() | | dsERR_NONE | Termination should succeed |
+ * |04|Call dsCompositeInTerm() to terminate the module| | dsERR_NONE | Termination should succeed |
  * |05|Call dsCompositeInRegisterStatusChangeCB() without initializing the module | dsCompositeInStatusChangeCB_t CBFunc | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * 
  * @note Scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL are not included due to challenges in realistic simulation.
