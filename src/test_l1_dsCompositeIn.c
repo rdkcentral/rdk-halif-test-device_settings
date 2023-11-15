@@ -326,10 +326,11 @@ void test_l1_dsCompositeIn_negative_dsCompositeInSelectPort (void)
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize the module and select a COMPOSITE input port | | dsERR_NONE | Initialization and port selection should succeed |
- * |02|Call dsCompositeInSelectPort() with a valid port number | dsCOMPOSITE_IN_PORT_0 | dsERR_NONE | Port should be set correctly |
- * |03|Call dsCompositeInScaleVideo() with valid parameters within current resolution | x=10, y=10, width=800, height=800 | dsERR_NONE | Video scaling should succeed |
- * |04|Call dsCompositeInScaleVideo() with different valid parameters to verify flexibility | Different x=50, y=50, width=600, height=600 | dsERR_NONE | Video should be scaled correctly with different parameters |
- * |05|Call dsCompositeInTerm() to terminate the module| | dsERR_NONE | Termination should succeed |
+ * |02|Call dsCompositeInGetNumberOfInputs() with a valid pointer | uint8_t *pNumberOfInputs | dsERR_NONE and a valid number of inputs | Number of inputs should be returned correctly |
+ * |03|Call dsCompositeInSelectPort() with a valid port number based on pNumberOfInputs | dsCOMPOSITE_IN_PORT_0 | dsERR_NONE | Port should be set correctly |
+ * |04|Call dsCompositeInScaleVideo() with valid parameters within current resolution | x=10, y=10, width=800, height=800 | dsERR_NONE | Video scaling should succeed |
+ * |05|Call dsCompositeInScaleVideo() with different valid parameters to verify flexibility | Different x=50, y=50, width=600, height=600 | dsERR_NONE | Video should be scaled correctly with different parameters |
+ * |06|Call dsCompositeInTerm() to terminate the module| | dsERR_NONE | Termination should succeed |
  * 
  */
 void test_l1_dsCompositeIn_positive_dsCompositeInScaleVideo (void)
