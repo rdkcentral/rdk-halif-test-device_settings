@@ -34,6 +34,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include <ut.h>
 #include <ut_log.h>
