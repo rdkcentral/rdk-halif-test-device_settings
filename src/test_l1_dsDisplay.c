@@ -57,7 +57,7 @@
  */
 
 /**
-* @file TODO: test_l1_dsDisplay.c
+* @file test_l1_dsDisplay.c
 * @page Device Settings
 * @subpage Display
 *
@@ -92,9 +92,9 @@
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsDisplayInit() for the first time | | dsERR_NONE | Initialization should succeed |
+ * |01|Call dsDisplayInit() to initialize the module| | dsERR_NONE | Initialization should succeed |
  * |02|Terminate the DS Display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
- * |03|Call dsDisplayInit() for the first time | | dsERR_NONE | Initialization should succeed |
+ * |03|Call dsDisplayInit() to initialize the module| | dsERR_NONE | Initialization should succeed |
  * |04|Terminate the DS Display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
  * 
  */
@@ -195,10 +195,11 @@ void test_l1_dsDisplay_negative_dsDisplayTerm (void)
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize the display sub-system with dsDisplayInit() | | dsERR_NONE | Initialization should succeed |
- * |02|Call dsGetDisplay() Loop through all dsVideoPortType_t |vType: [Valid Port Type], int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
+ * |02|Call dsGetDisplay() Loop through all based on kPorts |vType: [Valid Port Type], int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
  * |03|Call a the last value again, and compare the results |  |Success | The values should be the same |
  * |04|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
  * 
+ * @note valid ports can be retrieved from kPorts which can be retrieved from dsVideoPortSettings.
  */
 void test_l1_dsDisplay_positive_dsGetDisplay (void)
 {
@@ -219,15 +220,16 @@ void test_l1_dsDisplay_positive_dsGetDisplay (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsGetDisplay() without initializing the display sub-system | vType: dsVIDEOPORT_TYPE_HDMI, int=1, intptr_t* | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |01|Call dsGetDisplay() without initializing the display sub-system | vType: [Valid Port Type], int=1, intptr_t* | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * |02|Initialize the display sub-system with dsDisplayInit() | | dsERR_NONE | Initialization should succeed |
  * |03|Call dsGetDisplay() with invalid parameter video type | vType: dsVIDEOPORT_TYPE_MAX, int=1, intptr_t* | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
- * |04|Call dsGetDisplay() with invalid index | vType: dsVIDEOPORT_TYPE_HDMI, int=-1, intptr_t* | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
+ * |04|Call dsGetDisplay() with invalid index | vType: [Valid Port Type], int=-1, intptr_t* | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
  * |05|Call dsGetDisplay() with NULL | vType:dsVIDEOPORT_TYPE_HDMI, int=1, NULL | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
  * |06|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
- * |07|Call dsGetDisplay() without initializing the display sub-system |vType: dsVIDEOPORT_TYPE_HDMI, int=1, intptr_t* | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |07|Call dsGetDisplay() without initializing the display sub-system |vType: [Valid Port Type], int=1, intptr_t* | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * 
  * @note The ability to test scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might require specific setup or environment configuration.
+ * @note valid ports can be retrieved from kPorts which can be retrieved from dsVideoPortSettings.
  */
 void test_l1_dsDisplay_negative_dsGetDisplay (void)
 {
@@ -249,11 +251,13 @@ void test_l1_dsDisplay_negative_dsGetDisplay (void)
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize the display sub-system and get a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
- * |02|Call dsGetDisplay() Loop through all dsVideoPortType_t |vType: dsVIDEOPORT_TYPE_HDMI_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
+ * |02|Call dsGetDisplay() Loop through all valid ports in kPorts[]|vType: [Valid Port Type]_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
  * |03|Call dsGetEDID() with the obtained display device handle | intptr_t handle, dsDisplayEDID_t *edid | dsERR_NONE and valid EDID info | EDID information should be retrieved successfully |
  * |04|Call dsGetEDID() with the obtained display device handle | intptr_t handle, dsDisplayEDID_t *edid | dsERR_NONE and valid EDID info | EDID information should be retrieved successfully |
  * |05|Compare the returned results |  | Success | The values should be the same |
  * |06|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
+ * 
+ * @note valid ports can be retrieved from kPorts which can be retrieved from dsVideoPortSettings.
  * 
  */
 void test_l1_dsDisplay_positive_dsGetEDID (void)
@@ -277,13 +281,15 @@ void test_l1_dsDisplay_positive_dsGetEDID (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsGetEDID() without initializing the display sub-system or obtaining a handle | intptr_t handle, dsDisplayEDID_t *edid | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * |02|Initialize the display sub-system and obtain a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
- * |03|Call dsGetDisplay() Loop through all dsVideoPortType_t |vType: dsVIDEOPORT_TYPE_HDMI_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
- * |04|Call dsGetEDID() with an invalid or NULL handle | intptr_t -1, dsDisplayEDID_t *edid | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
- * |05|Call dsGetEDID() with an invalid or NULL handle | intptr_t handle, NULL | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
+ * |03|Call dsGetDisplay() Loop through all valid ports in kPorts[]|vType: [Valid Port Type]_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
+ * |04|Call dsGetEDID() with an invalid handle | intptr_t -1, dsDisplayEDID_t *edid | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
+ * |05|Call dsGetEDID() with a NULL dsDisplayEDID_t | intptr_t handle, NULL | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
  * |06|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
  * |07|Call dsGetEDID() without initializing the display sub-system or obtaining a handle | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * 
  * @note The ability to test scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might require specific setup or environment configuration.
+ * @note valid ports can be retrieved from kPorts which can be retrieved from dsVideoPortSettings.
+ * 
  */
 void test_l1_dsDisplay_negative_dsGetEDID (void)
 {
@@ -305,11 +311,13 @@ void test_l1_dsDisplay_negative_dsGetEDID (void)
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize the display sub-system and get a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
- * |02|Call dsGetDisplay() Loop through all dsVideoPortType_t |vType: dsVIDEOPORT_TYPE_HDMI_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
+ * |02|Call dsGetDisplay() Loop through all valid ports in kPorts[]|vType: [Valid Port Type]_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
  * |03|Allocate memory for the EDID buffer and call dsGetEDIDBytes() with the obtained handle | intptr_t handle, unsigned char *edid, int *length | dsERR_NONE, valid EDID data, and length | EDID buffer and length should be retrieved successfully |
  * |04|Allocate memory for the EDID buffer and call dsGetEDIDBytes() with the obtained handle | intptr_t handle, unsigned char *edid, int *length | dsERR_NONE, valid EDID data, and length | EDID buffer and length should be retrieved successfully |
  * |05|Verify that the return results are the same |  | Success | The results should be the same  |
  * |06|Free the allocated EDID buffer and terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Memory deallocation and termination should succeed |
+ * 
+ * @note valid ports can be retrieved from kPorts which can be retrieved from dsVideoPortSettings.
  * 
  */
 void test_l1_dsDisplay_positive_dsGetEDIDBytes (void)
@@ -333,7 +341,7 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsGetEDIDBytes() without initializing the display sub-system or obtaining a handle | intptr_t handle, unsigned char *edid, int *length | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * |02|Initialize the display sub-system and obtain a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
- * |03|Call dsGetDisplay() Loop through all dsVideoPortType_t |vType: dsVIDEOPORT_TYPE_HDMI_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
+ * |03|Call dsGetDisplay() Loop through all valid ports in kPorts[]|vType: [Valid Port Type]_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
  * |04|Call dsGetEDIDBytes() with an invalid handle | intptr_t -1, unsigned char *edid, int *length | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
  * |05|Call dsGetEDIDBytes() with null edid | intptr_t -1, NULL, int *length | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
  * |06|Call dsGetEDIDBytes() with null length | intptr_t -1, unsigned char *edid, NULL | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
@@ -341,6 +349,8 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes (void)
  * |08|Call dsGetEDIDBytes() without initializing the display sub-system or obtaining a handle | intptr_t handle, unsigned char *edid, int *length | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * 
  * @note The ability to test scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might require specific setup or environment configuration. Ensure proper memory management in the test setup.
+ * @note valid ports can be retrieved from kPorts which can be retrieved from dsVideoPortSettings.
+ * 
  */
 void test_l1_dsDisplay_negative_dsGetEDIDBytes (void)
 {
@@ -362,11 +372,13 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes (void)
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize the display sub-system and get a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
- * |02|Call dsGetDisplay() Loop through all dsVideoPortType_t |vType: dsVIDEOPORT_TYPE_HDMI_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
+ * |02|Call dsGetDisplay() Loop through all valid ports in kPorts[]|vType: [Valid Port Type]_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
  * |03|Call dsGetDisplayAspectRatio() with the obtained display device handle | intptr_t handle, dsVideoAspectRatio_t *aspectRatio | dsERR_NONE and valid aspect ratio | Aspect ratio of the display device should be retrieved successfully |
  * |04|Call dsGetDisplayAspectRatio() with the obtained display device handle | intptr_t handle, dsVideoAspectRatio_t *aspectRatio | dsERR_NONE and valid aspect ratio | Aspect ratio of the display device should be retrieved successfully |
  * |05|Compare the results, and make sure the returned values are the same |  | Success | The values should be the same |
  * |06|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
+ * 
+ * @note valid ports can be retrieved from kPorts which can be retrieved from dsVideoPortSettings.
  * 
  */
 void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio (void)
@@ -390,13 +402,15 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsGetDisplayAspectRatio() without initializing the display sub-system or obtaining a handle | intptr_t handle, dsVideoAspectRatio_t *aspectRatio | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * |02|Initialize the display sub-system and obtain a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
- * |03|Call dsGetDisplay() Loop through all dsVideoPortType_t |vType: dsVIDEOPORT_TYPE_HDMI_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
+ * |03|Call dsGetDisplay() Loop through all valid ports in kPorts[]|vType: [Valid Port Type]_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
  * |04|Call dsGetDisplayAspectRatio() with an invalid handle| NULL, dsVideoAspectRatio_t *aspectRatio | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
  * |05|Call dsGetDisplayAspectRatio() with an iNULL aspectRatio | intptr_t handle, NULL | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
  * |06|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
  * |07|Call dsGetDisplayAspectRatio() without initializing the display sub-system or obtaining a handle | intptr_t handle, dsVideoAspectRatio_t *aspectRatio  | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * 
  * @note The ability to test scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might require specific setup or environment configuration.
+ * @note valid ports can be retrieved from kPorts which can be retrieved from dsVideoPortSettings.
+ * 
  */
 void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio (void)
 {
@@ -418,10 +432,12 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio (void)
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize the display sub-system and get a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
- * |02|Call dsGetDisplay() Loop through all dsVideoPortType_t |vType: dsVIDEOPORT_TYPE_HDMI_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
+ * |02|Call dsGetDisplay() Loop through all valid ports in kPorts[]|vType: [Valid Port Type]_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
  * |03|Call dsRegisterDisplayEventCallback() with the obtained display device handle and a valid callback function | Valid handle and callback function | dsERR_NONE | Callback registration should succeed |
  * |04|Repeat registration for different display device handles if available | Different valid handles and callback functions | dsERR_NONE | Callbacks for each handle should be registered successfully |
  * |05|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
+ * 
+ * @note valid ports can be retrieved from kPorts which can be retrieved from dsVideoPortSettings.
  * 
  */
 void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback (void)
@@ -445,7 +461,7 @@ void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback (void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsRegisterDisplayEventCallback() without initializing the display sub-system or obtaining a handle |Valid handle and callback function | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * |02|Initialize the display sub-system and obtain a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
- * |03|Call dsGetDisplay() Loop through all dsVideoPortType_t |vType: dsVIDEOPORT_TYPE_HDMI_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
+ * |03|Call dsGetDisplay() Loop through all valid ports in kPorts[]|vType: [Valid Port Type]_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
  * |04|Call dsRegisterDisplayEventCallback() with an NULL handle | NULL, callback function | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
  * |04|Call dsRegisterDisplayEventCallback() with an NULL callback function | Valid handle,  NULL | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
  * |05|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
