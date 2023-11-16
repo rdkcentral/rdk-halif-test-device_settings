@@ -18,18 +18,56 @@
 */
 
 /**
-* @file TODO: test_l2_dsFPD.c
-* @page module_name TODO: Required field, name of the main module
-* @subpage sub_page_name TODO: Add a function group if relevant
+ * @addtogroup HPK Hardware Porting Kit
+ * @{
+ * @par The Hardware Porting Kit
+ * HPK is the next evolution of the well-defined Hardware Abstraction Layer
+ * (HAL), but augmented with more comprehensive documentation and test suites
+ * that OEM or SOC vendors can use to self-certify their ports before taking
+ * them to RDKM for validation or to an operator for final integration and
+ * deployment. The Hardware Porting Kit effectively enables an OEM and/or SOC
+ * vendor to self-certify their own Video Accelerator devices, with minimal RDKM
+ * assistance.
+ *
+ */
+
+/**
+ * @addtogroup Device_Settings Device Settings Module
+ * @{
+ */
+
+/**
+ * @defgroup Device_Settings_HALTEST Device Settings HALTEST
+ * @par Application API Specification
+ * Described herein are the DeviceSettings HAL types and functions that are part of
+ * the FPD subsystem. The FPD subsystem manages system-specific HAL operations.
+ *  @{
+ */
+
+/**
+ * @defgroup dsFPD_HALTEST Device Settings FPD HALTEST
+ *  @{
+ * @par Application API Specification
+ * dsFPD HAL provides an interface for managing the FPD settings for the device settings module
+ */
+
+/**
+ * @defgroup DSHAL_FPD_HALTEST_L1 Device Settings HAL FPD Public API
+ *  @{
+ */
+
+/**
+* @file test_l2_dsFPD.c
+* @page Device Settings
+* @subpage Front Panel Display
 *
 * ## Module's Role
-* TODO: Explain the module's role in the system in general
-* This is to ensure that the API meets the operational requirements of the module across all vendors.
+* 
 *
-* **Pre-Conditions:**  TODO: Add pre-conditions if any@n
-* **Dependencies:** TODO: Add dependencies if any@n
+* **Pre-Conditions:**  None@n
+* **Dependencies:** None@n
 *
-* Ref to API Definition specification documentation : [halSpec.md](../../../docs/halSpec.md)
+* Ref to API Definition specification documentation : [ds-front-panel-display_halSpec.md](../../../docs/pages/ds-front-panel-display_halSpec.md)
 */
 
 #include <string.h>
@@ -75,3 +113,9 @@ int test_l2_dsFPD_register ( void )
 
 	return 0;
 } 
+
+/** @} */ // End of DSHAL_FPD_HALTEST_L2 doxygen group 
+/** @} */ // End of DS FPD HALTEST
+/** @} */ // End of Device Settings HALTEST
+/** @} */ // End of Device Settings Module
+/** @} */ // End of HPK
