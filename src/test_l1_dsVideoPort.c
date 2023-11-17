@@ -266,60 +266,37 @@ void test_l1_dsVideoPort_negative_dsVideoPortTerm(void) {
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
-//void test_l1_dsVideoPort_positive_dsGetVideoPort(void) {
-//    dsError_t status;
-//    VideoPortHandle handle;
-//    VideoPortHandle lastHandle;
-//    int kPorts[] = {/* Array of valid port indexes */};
-  //  int portType = /* Valid port type */;
-
-    // Variation 01: Initialize video port system
-  //  status = dsVideoPortInit();
-  //  UT_ASSERT_EQUAL(status, dsERR_NONE);
-
-    // Variation 02: Get the video port handle for valid video port type and index
-   // for (int i = 0; i < sizeof(kPorts) / sizeof(kPorts[0]); i++) {
-   //     status = dsGetVideoPort(portType, kPorts[i], &handle);
-   //     UT_ASSERT_EQUAL(status, dsERR_NONE);
-        // Store the last handle for comparison in the next step
-   //     lastHandle = handle;
-   // }
-
-    // Variation 03: Compare with the last handle
-  //  UT_ASSERT_EQUAL(handle, lastHandle);
-
-    // Variation 04: Terminate the video port system
-  //  status = dsVideoPortTerm();
-  //  UT_ASSERT_EQUAL(status, dsERR_NONE);
-//}
-
 void test_l1_dsVideoPort_positive_dsGetVideoPort(void) {
     dsError_t status;
-    int handle[kSupportedPortTypes];
-    int lastHandle[kSupportedPortTypes];
-    int new_handle[kSupportedPortTypes];
- 
+    int  numports;
+
+    numports= (sizeof(kPorts)/sizeof(kPorts[0]));
+
+    int handle[numports];
+    int lastHandle[numports];
+    int new_handle[numports];
+
     // Variation 01: Initialize video port system
     status = dsVideoPortInit();
     UT_ASSERT_EQUAL(status, dsERR_NONE);
- 
+
     // Variation 02: Get the video port handle for valid video port type and index
-    for (int i = 0; i < kSupportedPortTypes ; i++) {
+    for (int i = 0; i < numports ; i++) {
         status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
         UT_ASSERT_EQUAL(status, dsERR_NONE);
-        if(i == kSupportedPortTypes-1)
+        if(i == numports-1)
         {
-            lasthandle = handle[i];
+            lastHandle = handle[i];
         }
     }
- 
+
     // Variation 03: Compare with the last handle
-    status = dsGetVideoPort(kPorts[kSupportedPortTypes-1].id.type, kPorts[kSupportedPortTypes-1].id.index, &(handle[kSupportedPortTypes-1]));
-    new_handle = handle[kSupportedPortTypes-1];
- 
-    if(lasthandle == new_handle){
+    status = dsGetVideoPort(kPorts[numports-1].id.type, kPorts[numports-1].id.index, &(handle[numports-1]));
+    new_handle = handle[numports-1];
+
+    if(lastHandle == new_handle){
     UT_ASSERT_EQUAL(status, dsERR_NONE);
- 
+
     // Variation 04: Terminate the video port system
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL(status, dsERR_NONE);
