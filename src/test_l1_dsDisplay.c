@@ -94,7 +94,7 @@
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsDisplayInit() to initialize the module| | dsERR_NONE | Initialization should succeed |
  * |02|Terminate the DS Display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
- * |03|Call dsDisplayInit() to reinitialize the module| | dsERR_NONE | Initialization should succeed |
+ * |03|Reinitialize the display sub-system with dsDisplayInit() to check for reinitialization capability| | dsERR_NONE | Initialization should succeed |
  * |04|Terminate the DS Display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
  * 
  */
