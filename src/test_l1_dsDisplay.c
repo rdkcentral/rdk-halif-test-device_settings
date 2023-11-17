@@ -52,7 +52,7 @@
  */
 
 /**
- * @defgroup DSHAL_DISPLAY_L1 DS HAL Display L1 test cases
+ * @defgroup dsDisplay_HALTESTS_L1 DS Display HAL Tests L1 File
  *  @{
  */
 
@@ -404,7 +404,7 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio (void)
  * |02|Initialize the display sub-system and obtain a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
  * |03|Call dsGetDisplay() Loop through all valid ports in kPorts[]|vType: [Valid Port Type]_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
  * |04|Call dsGetDisplayAspectRatio() with an invalid handle| NULL, dsVideoAspectRatio_t *aspectRatio | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
- * |05|Call dsGetDisplayAspectRatio() with an iNULL aspectRatio | intptr_t handle, NULL | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
+ * |05|Call dsGetDisplayAspectRatio() with an NULL aspectRatio | intptr_t handle, NULL | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
  * |06|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
  * |07|Call dsGetDisplayAspectRatio() without initializing the display sub-system or obtaining a handle | intptr_t handle, dsVideoAspectRatio_t *aspectRatio  | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * 
@@ -434,8 +434,7 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio (void)
  * |01|Initialize the display sub-system and get a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
  * |02|Call dsGetDisplay() Loop through all valid ports in kPorts[]|vType: [Valid Port Type]_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
  * |03|Call dsRegisterDisplayEventCallback() with the obtained display device handle and a valid callback function | Valid handle and callback function | dsERR_NONE | Callback registration should succeed |
- * |04|Repeat registration for different display device handles if available | Different valid handles and callback functions | dsERR_NONE | Callbacks for each handle should be registered successfully |
- * |05|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
+ * |04|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
  * 
  * @note valid ports can be retrieved from kPorts which can be retrieved from dsVideoPortSettings.
  * 
@@ -510,7 +509,7 @@ int test_l1_dsDisplay_register ( void )
 } 
 
 
-/** @} */ // End of DS HAL Display L1 tests
+/** @} */ // End of DS Display HAL Tests L1 File
 /** @} */ // End of DS Display HALTEST
 /** @} */ // End of Device Settings HAL
 /** @} */ // End of Device Settings Module
