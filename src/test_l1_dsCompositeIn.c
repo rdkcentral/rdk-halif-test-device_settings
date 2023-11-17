@@ -469,8 +469,9 @@ void test_l1_dsCompositeIn_positive_dsCompositeInSelectPort(void)
 
     // Step 03: Loop through all valid ports and set them
     for (int i = 0; i < numberOfInputs; ++i) {
-        UT_ASSERT_EQUAL(dsCompositeInSelectPort(i), dsERR_NONE);
+        UT_ASSERT_EQUAL(dsCompositeInSelectPort((dsCompositeInPort_t)(i)), dsERR_NONE);
     }
+    
 
     // Step 04: Terminate the module
     UT_ASSERT_EQUAL(dsCompositeInTerm(), dsERR_NONE);
@@ -573,13 +574,13 @@ void test_l1_dsCompositeIn_positive_dsCompositeInScaleVideo(void)
     // Step 03: Select a valid port number
     for(int x = 0; x < numberOfInputs; x++){
         UT_ASSERT_EQUAL(dsCompositeInSelectPort((dsCompositeInPort_t)(x)), dsERR_NONE);
+
+         // Step 04: Scale video with first set of parameters
+        UT_ASSERT_EQUAL(dsCompositeInScaleVideo(10, 10, 800, 800), dsERR_NONE);
+    
+        // Step 05: Scale video with a different set of parameters
+        UT_ASSERT_EQUAL(dsCompositeInScaleVideo(50, 50, 600, 600), dsERR_NONE);
     }
-
-    // Step 04: Scale video with first set of parameters
-    UT_ASSERT_EQUAL(dsCompositeInScaleVideo(10, 10, 800, 800), dsERR_NONE);
-
-    // Step 05: Scale video with a different set of parameters
-    UT_ASSERT_EQUAL(dsCompositeInScaleVideo(50, 50, 600, 600), dsERR_NONE);
 
     // Step 06: Terminate the module
     UT_ASSERT_EQUAL(dsCompositeInTerm(), dsERR_NONE);
