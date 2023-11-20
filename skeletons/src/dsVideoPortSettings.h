@@ -47,7 +47,7 @@ static const dsVideoPortTypeConfig_t kConfigs[]= {
 		},
 };
 
-static const dsVideoPortConfig_t kPorts[] = {
+static const dsVideoPortPortConfig_t kPorts[] = {
 
 #ifdef  HAS_SPDIF_SUPPORT
         {
