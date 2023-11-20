@@ -361,7 +361,7 @@ void test_l1_dsVideoPort_negative_dsGetVideoPort(void) {
     
     dsError_t status;
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
+    sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
 
@@ -433,7 +433,7 @@ void test_l1_dsVideoPort_positive_dsIsVideoPortEnabled(void) {
     
     dsError_t status;
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
+    sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
 
@@ -507,7 +507,7 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortEnabled(void) {
 
     dsError_t status;
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
+    sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
 
@@ -578,7 +578,7 @@ void test_l1_dsVideoPort_positive_dsIsDisplayConnected(void) {
 
     dsError_t status;
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
+    sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
 
@@ -652,7 +652,7 @@ void test_l1_dsVideoPort_negative_dsIsDisplayConnected(void) {
 
     dsError_t status;
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]);
+    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
 
@@ -723,7 +723,7 @@ void test_l1_dsVideoPort_positive_dsIsDisplaySurround(void) {
 
     dsError_t status;
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]);
+    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
 
@@ -795,7 +795,7 @@ void test_l1_dsVideoPort_negative_dsIsDisplaySurround(void) {
 
     dsError_t status;
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]);
+    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
 
@@ -867,7 +867,7 @@ void test_l1_dsVideoPort_positive_dsGetSurroundMode(void) {
 
     dsError_t status;
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]);
+    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
 
@@ -941,7 +941,7 @@ void test_l1_dsVideoPort_negative_dsGetSurroundMode(void) {
     
     dsError_t status;
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]);
+    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
 
@@ -1012,7 +1012,7 @@ void test_l1_dsVideoPort_positive_dsIsVideoPortActive(void) {
     
     dsError_t status;
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]);
+    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
     bool isActiveArray1[num_of_ports];
@@ -1084,7 +1084,7 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortActive(void) {
     
     dsError_t status;
     nt num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]);
+    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
     bool active[num_of_ports];
@@ -1154,7 +1154,7 @@ void test_l1_dsVideoPort_positive_dsEnableDTCP(void) {
     dsError_t status;
     sError_t status;
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]);
+    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
     bool enableDTCP = true;
 
     intptr_t handle[num_of_ports];
@@ -1214,7 +1214,7 @@ void test_l1_dsVideoPort_negative_dsEnableDTCP(void) {
     
     dsError_t status;
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]);
+    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
     bool enableDTCP = true; // Flag to enable/disable DTCP
@@ -1275,7 +1275,7 @@ void test_l1_dsVideoPort_positive_dsEnableHDCP(void) {
     
     dsError_t status;
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]);
+    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
     bool enableHDCP = true;
@@ -1339,7 +1339,7 @@ void test_l1_dsVideoPort_negative_dsEnableHDCP(void) {
     
     dsError_t status;
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]);
+    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
     bool enableHDCP = true;
@@ -3060,7 +3060,7 @@ void test_l1_dsVideoPort_positive_dsGetTVHDRCapabilities(void) {
     dsError_t status;
     
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]);
+    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
     int* capabilitiesArray1[num_of_ports];
@@ -3133,7 +3133,7 @@ void test_l1_dsVideoPort_negative_dsGetTVHDRCapabilities(void) {
     
     dsError_t status;
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]);
+    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
     int* capabilities; 
@@ -3203,7 +3203,7 @@ void test_l1_dsVideoPort_positive_dsSupportedTvResolutions(void) {
     
     dsError_t status;
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]);
+    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];    
 
@@ -3277,7 +3277,7 @@ void test_l1_dsVideoPort_negative_dsSupportedTvResolutions(void) {
     
     dsError_t status;
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]);
+    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
     int* resolutions[num_of_ports];
@@ -3345,7 +3345,7 @@ void test_l1_dsVideoPort_positive_dsSetForceDisable4KSupport(void) {
     
     dsError_t status;
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]);
+    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
     
@@ -3406,7 +3406,7 @@ void test_l1_dsVideoPort_negative_dsSetForceDisable4KSupport(void) {
     
     dsError_t status;
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]);
+    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
 
@@ -3471,7 +3471,7 @@ void test_l1_dsVideoPort_positive_dsGetForceDisable4KSupport(void) {
     
     dsError_t status;
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]);
+    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
 
@@ -3545,7 +3545,7 @@ void test_l1_dsVideoPort_negative_dsGetForceDisable4KSupport(void) {
     
     dsError_t status;
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]);
+    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
     bool disable4K[num_of_ports]; 
@@ -3615,7 +3615,7 @@ void test_l1_dsVideoPort_positive_dsGetVideoEOTF(void) {
     
     dsError_t status;
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]);
+    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
     dsHDRStandard_t* eotfArray1[num_of_ports];
@@ -3688,7 +3688,7 @@ void test_l1_dsVideoPort_negative_dsGetVideoEOTF(void) {
     
     dsError_t status;
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]);
+    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
     dsHDRStandard_t* eotf[num_of_ports];
@@ -3758,7 +3758,7 @@ void test_l1_dsVideoPort_positive_dsGetMatrixCoefficients(void) {
     
     dsError_t status;
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]);
+    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
 
@@ -3832,7 +3832,7 @@ void test_l1_dsVideoPort_negative_dsGetMatrixCoefficients(void) {
     
     dsError_t status;
     int num_of_ports = 0;
-    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]);
+    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
 
