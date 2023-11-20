@@ -16,6 +16,24 @@
 *  See the License for the specific language governing permissions and
 *  limitations under the License.
 */
+/**
+ * @addtogroup HPK HPK
+ * @{
+ *
+ */
+
+/**
+ * @addtogroup Device_Settings Device Settings Module
+ * @{
+ *
+ */
+
+/**
+ * @defgroup  dsVideoPort_HALTEST Device Settings Video Port HALTEST
+ * @{
+ * @par
+ * Unit Testing Suite for Device Settings Video Port HAL
+ */
 
 /**
 * @file main.c
@@ -66,3 +84,7 @@ int main(int argc, char** argv)
 	return 0;
 
 }
+
+/** @} */ // End of DS HAL Video Port L1 tests
+/** @} */ // End of Device Settings Module
+/** @} */ // End of HPK
