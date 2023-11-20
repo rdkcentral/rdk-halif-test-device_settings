@@ -77,7 +77,7 @@
 
 #include <ut.h>
 #include <ut_log.h>
-#include "stdint.h
+#include "stdint.h"
 #include "dsDisplay.h"
 
 static int gTestGroup = 1;
@@ -573,8 +573,8 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
         UT_ASSERT_NOT_NULL(displayHandle);
 
         // Step 03 and 04: Allocate memory for the EDID buffer and call dsGetEDIDBytes() twice
-        edid1 = (unsigned char *)malloc(sizeof(unsigned char) * EDID_BUFFER_SIZE); // Assuming EDID_BUFFER_SIZE is defined
-        edid2 = (unsigned char *)malloc(sizeof(unsigned char) * EDID_BUFFER_SIZE);
+        edid1 = (unsigned char *)malloc(256); // Assuming EDID_BUFFER_SIZE is defined
+        edid2 = (unsigned char *)malloc(256);
         result = dsGetEDIDBytes(displayHandle, edid1, &length1);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         result = dsGetEDIDBytes(displayHandle, edid2, &length2);
