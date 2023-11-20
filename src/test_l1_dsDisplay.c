@@ -77,6 +77,8 @@
 
 #include <ut.h>
 #include <ut_log.h>
+#include "stdint.h
+#include "dsDisplay.h"
 
 static int gTestGroup = 1;
 static int gTestID = 1;
