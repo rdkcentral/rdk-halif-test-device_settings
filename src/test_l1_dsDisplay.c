@@ -78,6 +78,9 @@
 #include <ut.h>
 #include <ut_log.h>
 
+static int gTestGroup = 1;
+static int gTestID = 1;
+
 /**
  * @brief Ensure dsDisplayInit() initializes the DS Display sub-system correctly during positive scenarios
  * 
