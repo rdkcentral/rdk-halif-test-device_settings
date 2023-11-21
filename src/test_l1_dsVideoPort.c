@@ -1654,7 +1654,7 @@ void test_l1_dsVideoPort_negative_dsIsHDCPEnabled(void) {
     // Step 04: Get the video port handle for supported video ports
      for (int i = 0; i < num_of_ports; i++) {
         status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        sUT_ASSERT_EQUAL(status, dsERR_NONE);
+        UT_ASSERT_EQUAL(status, dsERR_NONE);
 	}
 	
     // Step 05: Get HDCP status with invalid pointer
