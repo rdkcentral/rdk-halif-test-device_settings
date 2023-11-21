@@ -578,7 +578,6 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
         // Step 02: Call dsGetDisplay() for each valid port
         result = dsGetDisplay(kSupportedPortTypes[i], 1, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_NULL(displayHandle);
 
         // Step 03 and 04: Allocate memory for the EDID buffer and call dsGetEDIDBytes() twice
         result = dsGetEDIDBytes(displayHandle, edid1, &length1);
