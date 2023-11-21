@@ -390,7 +390,7 @@ void test_l1_dsDisplay_negative_dsGetDisplay(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 07: Call dsGetDisplay() again after termination
-    result = dsGetDisplay(kSupportedPortTypes[i], 1, &displayHandle);
+    result = dsGetDisplay(kSupportedPortTypes[0], 1, &displayHandle);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // End of the test
@@ -900,11 +900,11 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
-    intptr_t displayHandle;
+    intptr_t displayHandle =0;
     const int portCount = sizeof(kSupportedPortTypes) / sizeof(kSupportedPortTypes[0]);
 
     // Step 01: Call dsRegisterDisplayEventCallback() without initializing the display sub-system
-    result = dsRegisterDisplayEventCallback(VALID_HANDLE, testDisplayCallback);
+    result = dsRegisterDisplayEventCallback(displayHandle, testDisplayCallback);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize the display sub-system
@@ -931,21 +931,13 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 06: Call dsRegisterDisplayEventCallback() without reinitializing the display sub-system
-    result = dsRegisterDisplayEventCallback(VALID_HANDLE, testDisplayCallback);
+    result = dsRegisterDisplayEventCallback(displayHandle, testDisplayCallback);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
-// Note: Replace UT_LOG and UT_ASSERT_EQUAL with your actual logging and assertion methods.
-// Note: VALID_HANDLE should be a valid handle for a display device, which is typically obtained from a successful call to dsGetDisplay().
-// Note: Ensure proper setup of test environment and handle values.
-// Note: Ensure that testDisplayCallback is defined in your test suite.
-
-// Note: Replace UT_LOG and UT_ASSERT_EQUAL with your actual logging and assertion methods.
-// Note: VALID_HANDLE should be a valid handle for a display device, which is typically obtained from a successful call to dsGetDisplay().
-// Note: Ensure proper setup of test environment and handle values.
 
 static UT_test_suite_t * pSuite = NULL;
 
