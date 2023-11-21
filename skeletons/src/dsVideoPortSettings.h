@@ -75,7 +75,6 @@
 
 #include "dsAVDTypes.h"
 #include "dsUtl.h"
-#include "dsVideoResolutionSettings_template.h"
 
 #ifdef __cplusplus
 extern "C" {
