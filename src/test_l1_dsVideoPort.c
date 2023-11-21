@@ -872,8 +872,8 @@ void test_l1_dsVideoPort_positive_dsGetSurroundMode(void) {
 
     intptr_t handle[num_of_ports];
 
-    int* surroundModeArray1[num_of_ports];
-    int* surroundModeArray2[num_of_ports];
+    int surroundModeArray1[num_of_ports];
+    int surroundModeArray2[num_of_ports];
     
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -946,7 +946,7 @@ void test_l1_dsVideoPort_negative_dsGetSurroundMode(void) {
 
     intptr_t handle[num_of_ports];
 
-    int* surroundMode[num_of_ports];
+    int surroundMode[num_of_ports];
     
     // Step 01: Attempt to get surround mode without initialization
     status = dsGetSurroundMode(-1, &surroundMode[0]);
@@ -1968,8 +1968,8 @@ void test_l1_dsVideoPort_positive_dsGetResolution(void) {
     
     intptr_t handle[num_of_ports]; 
 
-    dsVideoPortResolution_t* resolutionArray1[num_of_ports];
-    dsVideoPortResolution_t* resolutionArray2[num_of_ports];
+    dsVideoPortResolution_t resolutionArray1[num_of_ports];
+    dsVideoPortResolution_t resolutionArray2[num_of_ports];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -2043,7 +2043,7 @@ void test_l1_dsVideoPort_negative_dsGetResolution(void) {
     num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
  
     intptr_t handle[num_of_ports];
-    dsVideoPortResolution_t* resolution[num_of_ports];
+    dsVideoPortResolution_t resolution[num_of_ports];
 
     // Step 01: Attempt to get resolution without initialization
     status = dsGetResolution(-1, &(resolution[0]));
@@ -2461,8 +2461,8 @@ void test_l1_dsVideoPort_positive_dsGetHDCPStatus(void) {
     num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
-    dsHdcpStatus_t* hdcpStatusArray1[num_of_ports];
-    dsHdcpStatus_t* hdcpStatusArray2[num_of_ports];
+    dsHdcpStatus_t hdcpStatusArray1[num_of_ports];
+    dsHdcpStatus_t hdcpStatusArray2[num_of_ports];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -2535,7 +2535,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPStatus(void) {
    num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
    intptr_t handle[num_of_ports];          
-   dsHdcpStatus_t* hdcpStatus[num_of_ports];
+   dsHdcpStatus_t hdcpStatus[num_of_ports];
 
     // Step 01: Attempt to get HDCP status without initialization
     status = dsGetHDCPStatus(-1, &(hdcpStatus[0]));
@@ -2607,8 +2607,8 @@ void test_l1_dsVideoPort_positive_dsGetHDCPProtocol(void) {
     num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
-    dsHdcpProtocolVersion_t* protocolVersionArray1[num_of_ports];
-    dsHdcpProtocolVersion_t* protocolVersionArray2[num_of_ports];
+    dsHdcpProtocolVersion_t protocolVersionArray1[num_of_ports];
+    dsHdcpProtocolVersion_t protocolVersionArray2[num_of_ports];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -2680,7 +2680,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPProtocol(void) {
     num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
-    dsHdcpProtocolVersion_t* protocolVersion[num_of_ports];
+    dsHdcpProtocolVersion_t protocolVersion[num_of_ports];
 
     // Step 01: Attempt to get HDCP protocol without initialization
     status = dsGetHDCPProtocol(-1, &(protocolVersion[0]));
@@ -2751,8 +2751,8 @@ void test_l1_dsVideoPort_positive_dsGetHDCPReceiverProtocol(void) {
     num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t  handle[num_of_ports];
-    dsHdcpProtocolVersion_t* protocolVersionArray1[num_of_ports];
-    dsHdcpProtocolVersion_t* protocolVersionArray2[num_of_ports];
+    dsHdcpProtocolVersion_t protocolVersionArray1[num_of_ports];
+    dsHdcpProtocolVersion_t protocolVersionArray2[num_of_ports];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -2825,7 +2825,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPReceiverProtocol(void) {
     num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];            /* Initialize with invalid handle */;
-    dsHdcpProtocolVersion_t* receiverProtocolVersion[num_of_ports];                  // Assume HDCPProtocol_t is defined
+    dsHdcpProtocolVersion_t receiverProtocolVersion[num_of_ports];                  // Assume HDCPProtocol_t is defined
 
     // Step 01: Attempt to get Receiver HDCP protocol without initialization
     status = dsGetHDCPReceiverProtocol(-1, &receiverProtocolVersion[0]);
@@ -2896,8 +2896,8 @@ void test_l1_dsVideoPort_positive_dsGetHDCPCurrentProtocol(void) {
     num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t  handle[num_of_ports];
-    dsHdcpProtocolVersion_t* currentProtocolArray1[num_of_ports];
-    dsHdcpProtocolVersion_t* currentProtocolArray2[num_of_ports];
+    dsHdcpProtocolVersion_t currentProtocolArray1[num_of_ports];
+    dsHdcpProtocolVersion_t currentProtocolArray2[num_of_ports];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -2970,7 +2970,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPCurrentProtocol(void) {
     num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t  handle[num_of_ports];
-    dsHdcpProtocolVersion_t* currentProtocolVersion[num_of_ports];
+    dsHdcpProtocolVersion_t currentProtocolVersion[num_of_ports];
 
     // Step 01: Attempt to get current negotiated HDCP protocol without initialization
     status = dsGetHDCPCurrentProtocol(-1, &currentProtocolVersion[0]);
@@ -3041,8 +3041,8 @@ void test_l1_dsVideoPort_positive_dsGetTVHDRCapabilities(void) {
     num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
-    int* capabilitiesArray1[num_of_ports];
-    int* capabilitiesArray2[num_of_ports];
+    int capabilitiesArray1[num_of_ports];
+    int capabilitiesArray2[num_of_ports];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -3114,7 +3114,7 @@ void test_l1_dsVideoPort_negative_dsGetTVHDRCapabilities(void) {
     num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
-    int* capabilities; 
+    int capabilities; 
 
     // Step 01: Attempt to get HDR capabilities without initialization
     status = dsGetTVHDRCapabilities(-1, &capabilities[0]);
@@ -3185,8 +3185,8 @@ void test_l1_dsVideoPort_positive_dsSupportedTvResolutions(void) {
 
     intptr_t handle[num_of_ports];    
 
-    int* resolutionsArray1[num_of_ports];
-    int* resolutionsArray2[num_of_ports];
+    int resolutionsArray1[num_of_ports];
+    int resolutionsArray2[num_of_ports];
     
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -3258,7 +3258,7 @@ void test_l1_dsVideoPort_negative_dsSupportedTvResolutions(void) {
     num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
-    int* resolutions[num_of_ports];
+    int resolutions[num_of_ports];
 
     // Step 01: Attempt to get supported resolutions without initialization
     status = dsSupportedTvResolutions(-1, &resolutions[0]);
@@ -3596,8 +3596,8 @@ void test_l1_dsVideoPort_positive_dsGetVideoEOTF(void) {
     num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
-    dsHDRStandard_t* eotfArray1[num_of_ports];
-    dsHDRStandard_t* eotfArray2[num_of_ports];
+    dsHDRStandard_t eotfArray1[num_of_ports];
+    dsHDRStandard_t eotfArray2[num_of_ports];
     
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -3669,7 +3669,7 @@ void test_l1_dsVideoPort_negative_dsGetVideoEOTF(void) {
     num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
-    dsHDRStandard_t* eotf[num_of_ports];
+    dsHDRStandard_t eotf[num_of_ports];
 
     // Step 01: Attempt to get EOTF without initialization
     status = dsGetVideoEOTF(-1, &eotf[0]);
@@ -3740,8 +3740,8 @@ void test_l1_dsVideoPort_positive_dsGetMatrixCoefficients(void) {
 
     intptr_t handle[num_of_ports];
 
-    dsDisplayMatrixCoefficients_t* matrixCoefficientsArray1[num_of_ports];
-    dsDisplayMatrixCoefficients_t* matrixCoefficientsArray2[num_of_ports];
+    dsDisplayMatrixCoefficients_t matrixCoefficientsArray1[num_of_ports];
+    dsDisplayMatrixCoefficients_t matrixCoefficientsArray2[num_of_ports];
     
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -3814,7 +3814,7 @@ void test_l1_dsVideoPort_negative_dsGetMatrixCoefficients(void) {
 
     intptr_t handle[num_of_ports];
 
-    dsDisplayMatrixCoefficients_t* matrixCoefficients[num_of_ports];
+    dsDisplayMatrixCoefficients_t matrixCoefficients[num_of_ports];
 
     // Step 01: Attempt to get matrix coefficients without initialization
     status = dsGetMatrixCoefficients(-1, &matrixCoefficients[0]);
@@ -3885,8 +3885,8 @@ void test_l1_dsVideoPort_positive_dsGetColorDepth(void) {
 
     intptr_t handle[num_of_ports];
 
-    unsigned int* colorDepthArray1[num_of_ports];
-    unsigned int* colorDepthArray2[num_of_ports];
+    unsigned int colorDepthArray1[num_of_ports];
+    unsigned int colorDepthArray2[num_of_ports];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -3958,7 +3958,7 @@ void test_l1_dsVideoPort_negative_dsGetColorDepth(void) {
     num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
-    unsigned int* colorDepth; // To store the color depth
+    unsigned int colorDepth; // To store the color depth
 
     // Step 01: Attempt to get color depth without initialization
     status = dsGetColorDepth(-1, &colorDepth[0]);
@@ -4028,8 +4028,8 @@ void test_l1_dsVideoPort_positive_dsGetColorSpace(void) {
     num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
-    dsDisplayColorSpace_t* colorSpaceArray1[num_of_ports];
-    dsDisplayColorSpace_t* colorSpaceArray2[num_of_ports];
+    dsDisplayColorSpace_t colorSpaceArray1[num_of_ports];
+    dsDisplayColorSpace_t colorSpaceArray2[num_of_ports];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -4100,7 +4100,7 @@ void test_l1_dsVideoPort_negative_dsGetColorSpace(void) {
     num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
-    dsDisplayColorSpace_t* colorSpace[num_of_ports];
+    dsDisplayColorSpace_t colorSpace[num_of_ports];
 
     // Step 01: Attempt to get color space without initialization
     status = dsGetColorSpace(-1, &colorSpace[0]);
@@ -4169,8 +4169,8 @@ void test_l1_dsVideoPort_positive_dsGetQuantizationRange(void) {
     num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
-    dsDisplayQuantizationRange_t* quantizationRangeArray1[num_of_ports];
-    dsDisplayQuantizationRange_t* quantizationRangeArray2[num_of_ports];
+    dsDisplayQuantizationRange_t quantizationRangeArray1[num_of_ports];
+    dsDisplayQuantizationRange_t quantizationRangeArray2[num_of_ports];
     
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -4241,7 +4241,7 @@ void test_l1_dsVideoPort_negative_dsGetQuantizationRange(void) {
     num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
-    dsDisplayQuantizationRange_t* quantizationRange[num_of_ports];
+    dsDisplayQuantizationRange_t quantizationRange[num_of_ports];
 
     // Step 01: Attempt to get quantization range without initialization
     status = dsGetQuantizationRange(-1, &quantizationRange[0]);
@@ -4812,8 +4812,8 @@ void test_l1_dsVideoPort_positive_dsGetHdmiPreference(void) {
     num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
-    dsHdcpProtocolVersion_t * hdcpCurrentProtocol1[num_of_ports];
-    dsHdcpProtocolVersion_t* hdcpCurrentProtocol2[num_of_ports];
+    dsHdcpProtocolVersion_t  hdcpCurrentProtocol1[num_of_ports];
+    dsHdcpProtocolVersion_t hdcpCurrentProtocol2[num_of_ports];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -4886,7 +4886,7 @@ void test_l1_dsVideoPort_negative_dsGetHdmiPreference(void) {
 
     intptr_t handle[num_of_ports];
 
-    dsHdcpProtocolVersion_t* hdcpCurrentProtocol[num_of_ports];
+    dsHdcpProtocolVersion_t hdcpCurrentProtocol[num_of_ports];
 
     // Step 01: Attempt to get HDMI preference without initialization
     status = dsGetHdmiPreference(-1, &hdcpCurrentProtocol[0]);
@@ -4956,8 +4956,8 @@ void test_l1_dsVideoPort_positive_dsGetIgnoreEDIDStatus(void) {
     num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
-    bool* ignoreEDIDStatus1[num_of_ports];
-    bool* ignoreEDIDStatus2[num_of_ports];
+    bool ignoreEDIDStatus1[num_of_ports];
+    bool ignoreEDIDStatus2[num_of_ports];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -5029,7 +5029,7 @@ void test_l1_dsVideoPort_negative_dsGetIgnoreEDIDStatus(void) {
     num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
-    bool* ignoreEDIDStatus[num_of_ports];
+    bool ignoreEDIDStatus[num_of_ports];
     
     // Step 01: Attempt to get IgnoreEDID status without initialization
     status = dsGetIgnoreEDIDStatus(-1, &ignoreEDIDStatus[0]);
@@ -5357,8 +5357,8 @@ void test_l1_dsVideoPort_positive_dsColorDepthCapabilities(void) {
     num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
-    unsigned int* colorDepthCapability1[num_of_ports];
-    unsigned int* colorDepthCapability2[num_of_ports];
+    unsigned int colorDepthCapability1[num_of_ports];
+    unsigned int colorDepthCapability2[num_of_ports];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -5430,7 +5430,7 @@ void test_l1_dsVideoPort_negative_dsColorDepthCapabilities(void) {
     num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
-    unsigned int * colorDepthCapability[num_of_ports];
+    unsigned int  colorDepthCapability[num_of_ports];
 
     // Step 01: Attempt to get capabilities without initialization
     
@@ -5501,8 +5501,8 @@ void test_l1_dsVideoPort_positive_dsGetPreferredColorDepth(void) {
     num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
-    dsDisplayColorDepth_t* colorDepth1[num_of_ports];
-    dsDisplayColorDepth_t* colorDepth2[num_of_ports];
+    dsDisplayColorDepth_t colorDepth1[num_of_ports];
+    dsDisplayColorDepth_t colorDepth2[num_of_ports];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -5574,7 +5574,7 @@ void test_l1_dsVideoPort_negative_dsGetPreferredColorDepth(void) {
     num_of_ports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     intptr_t handle[num_of_ports];
-    dsDisplayColorDepth_t* colorDepth[num_of_ports];
+    dsDisplayColorDepth_t colorDepth[num_of_ports];
 
     // Step 01: Attempt to get color depth without initialization
     status = dsGetPreferredColorDepth(-1, &colorDepth[0]);
