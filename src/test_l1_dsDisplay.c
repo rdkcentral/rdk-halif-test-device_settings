@@ -495,7 +495,7 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
-    intptr_t displayHandle=0;
+    intptr_t displayHandle=-1;
     dsDisplayEDID_t *edid = NULL;
 
     // Step 01: Call dsGetEDID() without initializing the display sub-system
@@ -636,12 +636,12 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
-    intptr_t displayHandle;
+    intptr_t displayHandle =-1;
     unsigned char *edid = NULL;
     int length = 0;
 
     // Step 01: Call dsGetEDIDBytes() without initializing or obtaining a handle
-    result = dsGetEDIDBytes((intptr_t)0, edid, &length);
+    result = dsGetEDIDBytes(displayHandle, edid, &length);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize the display sub-system
@@ -773,11 +773,11 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
-    intptr_t displayHandle;
+    intptr_t displayHandle =-1;
     dsVideoAspectRatio_t aspectRatio;
 
     // Step 01: Call dsGetDisplayAspectRatio() without initializing the display sub-system
-    result = dsGetDisplayAspectRatio(NULL, &aspectRatio);
+    result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize the display sub-system
@@ -899,7 +899,7 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
-    intptr_t displayHandle =0;
+    intptr_t displayHandle =-1;
     const int portCount = sizeof(kSupportedPortTypes) / sizeof(kSupportedPortTypes[0]);
 
     // Step 01: Call dsRegisterDisplayEventCallback() without initializing the display sub-system
