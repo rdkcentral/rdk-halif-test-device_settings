@@ -366,7 +366,7 @@ void test_l1_dsDisplay_negative_dsGetDisplay(void) {
     intptr_t displayHandle;
 
     // Step 01: Call dsGetDisplay() without initializing the display sub-system
-    result = dsGetDisplay(kSupportedPortTypes[i], 1, &displayHandle);
+    result = dsGetDisplay(kSupportedPortTypes[0], 1, &displayHandle);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize the display sub-system
@@ -378,11 +378,11 @@ void test_l1_dsDisplay_negative_dsGetDisplay(void) {
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 04: Call dsGetDisplay() with invalid index
-    result = dsGetDisplay(kSupportedPortTypes[i], -1, &displayHandle);
+    result = dsGetDisplay(kSupportedPortTypes[0], -1, &displayHandle);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 05: Call dsGetDisplay() with NULL handle
-    result = dsGetDisplay(kSupportedPortTypes[i], 1, NULL);
+    result = dsGetDisplay(kSupportedPortTypes[0], 1, NULL);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 06: Terminate the display sub-system
@@ -566,7 +566,8 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
     intptr_t displayHandle;
     unsigned char *edid1 = (unsigned char *)malloc(256);
     unsigned char *edid2 = (unsigned char *)malloc(256);
-    int length = 0;
+    int length1 = 0;
+    int length2 = 0;
 
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
