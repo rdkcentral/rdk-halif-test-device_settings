@@ -1,7 +1,7 @@
 #* ******************************************************************************
 #* Copyright (C) 2022 Sky group of companies, All Rights Reserved
 #* * --------------------------------------------------------------------------
-#* * THIS SOFTWARE CONTRIBUTION IS PROVIDED ON BEHALF OF SKY PLC. 
+#* * THIS SOFTWARE CONTRIBUTION IS PROVIDED ON BEHALF OF SKY PLC.
 #* * BY THE CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,
 #* * BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
 #* * A PARTICULAR PURPOSE ARE DISCLAIMED
@@ -14,7 +14,7 @@
 #*   ** @date        : 20/05/2022
 #*   **
 #*   ** @brief : Makefile for ut
-#*   ** 
+#*   **
 #*
 #* ******************************************************************************
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
@@ -56,21 +56,21 @@ export HAL_LIB_DIR
 .PHONY: clean list build
 
 build: $(SETUP_SKELETON_LIBS)
-	@echo UT [$@]
-	make -C ./ut-core
+        @echo UT [$@]
+        make -C ./ut-core
 
 #Build against the real library leads to the SOC library dependency also.SOC lib dependency cannot be specified in the ut Makefile, since it is supposed to be common across may platforms. So in order to over come this situation, creating a template skelton library with empty templates so that the template library wont have any other Soc dependency. And in the real platform mount copy bind with the actual library will work fine.
 skeleton:
-	echo $(CC)
-	$(CC) -fPIC -shared -I$(ROOT_DIR)/../include $(SKELTON_SRCS) -o lib$(HAL_LIB).so
-	mkdir -p $(HAL_LIB_DIR)
-	cp $(ROOT_DIR)/lib$(HAL_LIB).so $(HAL_LIB_DIR)
+        echo $(CC)
+        $(CC) -fPIC -shared -I$(ROOT_DIR)/../include $(SKELTON_SRCS) -o lib$(HAL_LIB).so
+        mkdir -p $(HAL_LIB_DIR)
+        cp $(ROOT_DIR)/lib$(HAL_LIB).so $(HAL_LIB_DIR)
 
 
 list:
-	@echo UT [$@]
-	make -C ./ut-core list
+        @echo UT [$@]
+        make -C ./ut-core list
 
 clean:
-	@echo UT [$@]
-	make -C ./ut-core clean
+        @echo UT [$@]
+        make -C ./ut-core clean
