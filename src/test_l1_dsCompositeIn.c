@@ -603,14 +603,16 @@ void test_l1_dsCompositeIn_positive_dsCompositeInScaleVideo(void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsCompositeInScaleVideo() without initializing the module or selecting a port | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |01|Call dsCompositeInScaleVideo() without initializing the module or selecting a port | x=10, y=10, width=800, height=800  | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * |02|Initialize the module and select a COMPOSITE input port | | dsERR_NONE | Initialization and port selection should succeed |
- * |03|Call dsCompositeInScaleVideo() with parameters out of current resolution | x=-1, y=10, width=10, height=10 | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
- * |04|Call dsCompositeInScaleVideo() with parameters out of current resolution | x=10, y=-1, width=10, height=10 | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
- * |05|Call dsCompositeInScaleVideo() with parameters out of current resolution | x=10, y=10, width=-1, height=10 | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
- * |06|Call dsCompositeInScaleVideo() with parameters out of current resolution | x=10, y=10, width=10, height=-1 | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
- * |07|Call dsCompositeInTerm() to terminate the module| | dsERR_NONE | Termination should succeed |
- * |08|Call dsCompositeInScaleVideo() without initializing the module or selecting a port | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |03|Call dsCompositeInScaleVideo() without selecting a port | x=10, y=10, width=800, height=800 | dsERR_OPERATION_NOT_SUPPORTED | Should return an error based on new valid screen being connected |
+ * |04|Call dsCompositeInSelectPort() with a valid port number based on pNumberOfInputs | dsCOMPOSITE_IN_PORT_0 | dsERR_NONE | Port should be set correctly |
+ * |05|Call dsCompositeInScaleVideo() with parameters out of current resolution | x=-1, y=10, width=10, height=10 | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
+ * |06|Call dsCompositeInScaleVideo() with parameters out of current resolution | x=10, y=-1, width=10, height=10 | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
+ * |07|Call dsCompositeInScaleVideo() with parameters out of current resolution | x=10, y=10, width=-1, height=10 | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
+ * |08|Call dsCompositeInScaleVideo() with parameters out of current resolution | x=10, y=10, width=10, height=-1 | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
+ * |09|Call dsCompositeInTerm() to terminate the module| | dsERR_NONE | Termination should succeed |
+ * |10|Call dsCompositeInScaleVideo() without initializing the module or selecting a port | | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * 
  * @note Scenarios like dsERR_GENERAL, and dsERR_OPERATION_NOT_SUPPORTED are not included due to challenges in realistic simulation.
  */
@@ -623,18 +625,23 @@ void test_l1_dsCompositeIn_negative_dsCompositeInScaleVideo(void)
 
     // Step 02: Initialize the module and select a port
     UT_ASSERT_EQUAL(dsCompositeInInit(), dsERR_NONE);
+
+    // Step 03: Initialize the module and select a port
+    UT_ASSERT_EQUAL(dsCompositeInScaleVideo(10, 10, 800, 800), dsERR_OPERATION_NOT_SUPPORTED);
+
+    // Step 04: Initialize the module and select a port
     UT_ASSERT_EQUAL(dsCompositeInSelectPort(dsCOMPOSITE_IN_PORT_0), dsERR_NONE);
 
-    // Step 03 to 06: Test ScaleVideo with invalid parameters
+    // Step 05 to 08: Test ScaleVideo with invalid parameters
     UT_ASSERT_EQUAL(dsCompositeInScaleVideo(-1, 10, 10, 10), dsERR_INVALID_PARAM);
     UT_ASSERT_EQUAL(dsCompositeInScaleVideo(10, -1, 10, 10), dsERR_INVALID_PARAM);
     UT_ASSERT_EQUAL(dsCompositeInScaleVideo(10, 10, -1, 10), dsERR_INVALID_PARAM);
     UT_ASSERT_EQUAL(dsCompositeInScaleVideo(10, 10, 10, -1), dsERR_INVALID_PARAM);
 
-    // Step 07: Terminate the module
+    // Step 09: Terminate the module
     UT_ASSERT_EQUAL(dsCompositeInTerm(), dsERR_NONE);
 
-    // Step 08: Call ScaleVideo without initialization or port selection
+    // Step 10: Call ScaleVideo without initialization or port selection
     UT_ASSERT_EQUAL(dsCompositeInScaleVideo(10, 10, 800, 800), dsERR_NOT_INITIALIZED);
 
     UT_LOG("\n Out  %s\n",__FUNCTION__);
