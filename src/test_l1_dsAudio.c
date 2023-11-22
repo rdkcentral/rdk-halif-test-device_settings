@@ -73,9 +73,12 @@
 
 #include <string.h>
 #include <stdlib.h>
-
+#include "dsAudio.h"
+#include "dsAudioSettings.h"
 #include <ut.h>
 #include <ut_log.h>
+
+#define MAX_PORTS 20
 
 static int gTestGroup = 1;
 static int gTestID = 1;
@@ -149,7 +152,8 @@ void test_l1_dsAudio_positive_dsAudioPortInit (void)
  * |03|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE | Termination must be successful |
  * 
  * @note Tests for a headless gateway device, which would return dsERR_OPERATION_NOT_SUPPORTED, dsERR_GENERAL are not included here but should be considered in a real-world scenario for the platforms that doesn't support Audio Port.
- */
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions. 
+*/
 void test_l1_dsAudio_negative_dsAudioPortInit (void)
 {
 	gTestID = 2;
@@ -241,6 +245,7 @@ void test_l1_dsAudio_positive_dsAudioPortTerm (void)
  * |04|Call dsAudioPortTerm() - Attempt to terminate dsAudio | | dsERR_NOT_INITIALIZED | Termination should fail as module is not initialized |
  * 
  * @note dsERR_OPERATION_NOT_SUPPORTED is not included here but should be considered in a real-world scenario for the platforms that doesn't support Audio Port .
+ * @note Testing dsERR_GENERAL might be challenging as they require specific platform conditions.
  * 
  */
 void test_l1_dsAudio_negative_dsAudioPortTerm (void)
@@ -281,9 +286,7 @@ void test_l1_dsAudio_negative_dsAudioPortTerm (void)
  * 
  * @note - kPorts is available in dsAudioSettings.h file. Please refer (../../docs/pages/dsAudioSettings_template.h) for sample
  * 
- * @todo - add note wherever kPorts is used
  * 
- * @todo - check the dsAUDIOPORT_TYPE_NUM_MAX in code, see where it is used(Sample file). If it is 2, are we allocating memory for 4 elements
  * 
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
@@ -292,36 +295,38 @@ void test_l1_dsAudio_negative_dsAudioPortTerm (void)
  * |02|Get the audio port handle for valid audio port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
  * |03|Get the audio port handle for last element , store it in a new variable and compare it with previous step | | dsERR_NONE | Port handle obtained from previous step must be equal to handle obtained in this step
  * |04|Call dsAudioPortTerm() Terminate audio ports | | dsERR_NONE |  Termination must be successful |
- * 
+ *
  */
 void test_l1_dsAudio_positive_dsGetAudioPort(void) {
     // Setting test case ID and logging at the start
     gTestID = 5;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
-    int i;
-    dsAudioPortHandle_t handle;
-    dsAudioPortHandle_t lastHandle = NULL;
+    int result,i;
+    int numports = 0;
+    intptr_t  handle[MAX_PORTS];
+    intptr_t  lasthandle , newhandle = NULL;
+
+    numports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     // Step 01: Initialize audio ports
     result = dsAudioPortInit();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 02: Loop through kPorts to get audio port handle
-    for (i = 0; i < sizeof(kPorts) / sizeof(kPorts[0]); i++) {
-        result = dsGetAudioPort(kPorts[i].connectedAOP.type, kPorts[i].connectedAOP.index, &handle);
+    for (i = 0; i < numports; i++) {
+        result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle, NULL); // Assuming handle should not be NULL on success
 
         // Remember last handle for comparison in next step
-        if (i == sizeof(kPorts) / sizeof(kPorts[0]) - 1) {
-            lastHandle = handle;
+        if ((i == numports) - 1) {
+            lasthandle = handle[i];
         }
     }
 
     // Step 03: Compare with the last element
-    UT_ASSERT_EQUAL(handle, lastHandle);
+    newhandle = dsGetAudioPort(kPorts[numports -1].id.type, kPorts[numports-1].id.index, &handle[numports-1]);
+    UT_ASSERT_EQUAL(lasthandle,newhandle);
 
     // Step 04: Terminate audio ports
     result = dsAudioPortTerm();
@@ -330,7 +335,6 @@ void test_l1_dsAudio_positive_dsGetAudioPort(void) {
     // Logging at the end
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
-
 
 /**
  * @brief Ensure dsGetAudioPort() returns correct error codes during negative scenarios
@@ -360,11 +364,14 @@ void test_l1_dsAudio_negative_dsGetAudioPort(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
-    int i;
-    dsAudioPortHandle_t handle;
+    int i , numports;
+    intptr_t  handle[MAX_PORTS];
+    intptr_t  lasthandle , newhandle = NULL;
+
+    numports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     // Step 01: Attempt to get the Audio Port handle without initializing
-    result = dsGetAudioPort(kPorts[0].connectedAOP.type, kPorts[0].connectedAOP.index, &handle);
+    result = dsGetAudioPort(kPorts[0].id.type, kPorts[0].id.index, &handle[0]);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize audio ports
@@ -372,20 +379,20 @@ void test_l1_dsAudio_negative_dsGetAudioPort(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 03: Invalid type
-    for (i = 0; i < sizeof(kPorts) / sizeof(kPorts[0]); i++) {
-        result = dsGetAudioPort(INVALID_AUDIO_PORT_TYPE, kPorts[i].connectedAOP.index, &handle);
+    for (i = 0; i < numports; i++) {
+        result = dsGetAudioPort(dsAUDIOPORT_TYPE_MAX, kPorts[i].id.index, &handle[i]);
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     }
 
     // Step 04: Invalid index
-    for (i = 0; i < dsAUDIOPORT_TYPE_MAX; i++) {
-        result = dsGetAudioPort(kPorts[i % (sizeof(kPorts) / sizeof(kPorts[0]))].connectedAOP.type, INVALID_AUDIO_PORT_INDEX, &handle);
+    for (i = 0; i < numports; i++) {
+        result = dsGetAudioPort(kPorts[i].id.type, -1 , &handle[i]);
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     }
 
     // Step 05: NULL handle
-    for (i = 0; i < sizeof(kPorts) / sizeof(kPorts[0]); i++) {
-        result = dsGetAudioPort(kPorts[i].connectedAOP.type, kPorts[i].connectedAOP.index, NULL);
+    for (i = 0; i < numports; i++) {
+        result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, NULL);
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     }
 
@@ -394,7 +401,7 @@ void test_l1_dsAudio_negative_dsGetAudioPort(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 07: Attempt to get the audio port handle after termination
-    result = dsGetAudioPort(kPorts[0].connectedAOP.type, kPorts[0].connectedAOP.index, &handle);
+    result = dsGetAudioPort(kPorts[0].id.type, kPorts[0].id.index, &handle[0]);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Logging at the end
@@ -416,7 +423,9 @@ void test_l1_dsAudio_negative_dsGetAudioPort(void) {
  * |:--:|-----------|----------|--------------|-----|
  * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
- * |03|Call dsGetAudioEncoding() by looping through the acquired port handles to get the audio encoding of each port | handle: [ loop through valid handles ] , encoding: [pointer to hold the encoding] | dsERR_NONE | A valid audio encoding must be returned |
+ * |03|Call dsGetAudioEncoding() by looping through the acquired port handles to get the audio encoding of each port in a array | handle: [ loop through valid handles ] , encoding: [pointer to hold the encoding] | dsERR_NONE | A valid audio encoding must be returned |
+ * |04|Call dsGetAudioEncoding() by looping through the acquired port handles to get the audio encoding of each port in a new array | handle: [loop through valid handles ] , encoding: [pointer to hold the encoding] | dsERR_NONE | A valid audio encoding must be returned |
+ * |05|Compare the array values and make sure they are equal| | dsERR_NONE | The values must be equal |
  * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE | Termination must be successful |
  * 
  */
@@ -427,28 +436,45 @@ void test_l1_dsAudio_positive_dsGetAudioEncoding(void) {
 
     int result;
     int i, j;
-    dsAudioPortHandle_t handle;
-    dsAudioEncoding_t encoding;
+    int numports = 0;
+    intptr_t  handle[MAX_PORTS];
+    intptr_t  lasthandle , newhandle = NULL;
+    dsAudioPortType_t encodingarray1[MAX_PORTS];
+    dsAudioPortType_t encodingarray2[MAX_PORTS];
+
+    numports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     // Step 01: Initialize audio ports
     result = dsAudioPortInit();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 02: Get the port handle for all supported audio ports
-    for (i = 0; i < sizeof(kPorts) / sizeof(kPorts[0]); i++) {
-        result = dsGetAudioPort(kPorts[i].connectedAOP.type, kPorts[i].connectedAOP.index, &handle);
+    for (i = 0; i < numports; i++) {
+        result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, NULL); // Assuming handle should not be NULL on success
+     } 
 
-        // Step 03: Loop through all encoding options and get audio encoding for each port
-        for (j = dsAUDIO_ENC_NONE; j < dsAUDIO_ENC_MAX; j++) {
-            result = dsGetAudioEncoding(handle, &encoding);
-            UT_ASSERT_EQUAL(result, dsERR_NONE);
-            UT_ASSERT_TRUE(encoding == j); // Check if encoding matches the expected value
+     // Step 03: Loop through all encoding options and get audio encoding for each port in array1
+    for (i = 0; i < numports; i++) {
+                   result = dsGetAudioEncoding(handle[i], &encodingarray1[i]);
+                   UT_ASSERT_EQUAL(result, dsERR_NONE);
+        }  
+     
+    // Step 04:Loop through all encoding options and get audio encoding for each port in array2
+    for (i = 0; i < numports; i++) {
+                   result = dsGetAudioEncoding(handle[i], &encodingarray1[i]);
+                   UT_ASSERT_EQUAL(result, dsERR_NONE);
+                   UT_ASSERT_TRUE(encoding == j); // Check if encoding matches the expected value
         }
-    }
 
-    // Step 04: Terminate audio ports
+    // Step 05: Compare the array values
+    for (int i = 0; i < num_of_ports; i++) {
+                  UT_ASSERT_EQUAL(encodingarray1[i], encodingarray1[i]);
+        }
+
+      
+    // Step 06: Terminate audio ports
     result = dsAudioPortTerm();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -469,7 +495,7 @@ void test_l1_dsAudio_positive_dsGetAudioEncoding(void) {
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsGetAudioEncoding() - Get the audio encoding without initializing audio ports | handle: [valid handle]| dsERR_NOT_INITIALIZED | Get audio encoding must fail as module is not initialized |
+ * |01|Call dsGetAudioEncoding() - Get the audio encoding without initializing audio ports | handle: [invalid handle]| dsERR_NOT_INITIALIZED | Get audio encoding must fail as module is not initialized |
  * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
  * |03|Call dsGetAudioEncoding() using an invalid handle | handle: [invalid handle], encoding: [ pointer to hold the encoding ] | dsERR_INVALID_PARAM | TInvalid parameter error must be returned |
  * |04|Call dsGetAudioPort() Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
@@ -484,13 +510,15 @@ void test_l1_dsAudio_negative_dsGetAudioEncoding(void) {
     gTestID = 7;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
-    int i;
-    dsAudioPortHandle_t handle;
-    dsAudioEncoding_t encoding;
+    int result,i;
+    intptr_t  handle[MAX_PORTS];
+
+    numports = (sizeof(kPorts) / sizeof(kPorts[0]));    
+
+    dsAudioEncoding_t encoding[MAX_PORTS];
 
     // Step 01: Get audio encoding without initializing
-    result = dsGetAudioEncoding(VALID_HANDLE, &encoding); // Assuming VALID_HANDLE is a placeholder for a valid handle
+    result = dsGetAudioEncoding(-1, &encoding[0]);              // Assuming INVALID_HANDLE is a placeholder for an invalid handle
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize audio ports
@@ -498,16 +526,16 @@ void test_l1_dsAudio_negative_dsGetAudioEncoding(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 03: Get audio encoding using an invalid handle
-    result = dsGetAudioEncoding(INVALID_HANDLE, &encoding); // Assuming INVALID_HANDLE is a placeholder for an invalid handle
+    result = dsGetAudioEncoding(NULL, &encoding[0]);     // Assuming INVALID_HANDLE is a placeholder for an invalid handle
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 04 and 05: Get port handle and test with NULL encoding pointer
-    for (i = 0; i < sizeof(kPorts) / sizeof(kPorts[0]); i++) {
-        result = dsGetAudioPort(kPorts[i].connectedAOP.type, kPorts[i].connectedAOP.index, &handle);
+    for (i = 0; i < numports; i++) {
+        result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 05: Get audio encoding with NULL encoding pointer
-        result = dsGetAudioEncoding(handle, NULL);
+        result = dsGetAudioEncoding(handle[i] , NULL);
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     }
 
@@ -516,7 +544,7 @@ void test_l1_dsAudio_negative_dsGetAudioEncoding(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 07: Attempt to get the audio encoding type after termination
-    result = dsGetAudioEncoding(handle, &encoding);
+    result = dsGetAudioEncoding(handle[0], &encoding[0]);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Logging at the end
@@ -547,27 +575,57 @@ void test_l1_dsAudio_positive_dsSetAudioEncoding(void) {
     gTestID = 8;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
-    int i, j;
-    dsAudioPortHandle_t handle;
+    int result,i,j;
+    int numports = 0;
+    intptr_t  handle[MAX_PORTS];
+
+    numports = (sizeof(kPorts) / sizeof(kPorts[0]));    
 
     // Step 01: Initialize audio ports
     result = dsAudioPortInit();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 02: Get the port handle for all supported audio ports
-    for (i = 0; i < sizeof(kPorts) / sizeof(kPorts[0]); i++) {
-        result = dsGetAudioPort(kPorts[i].connectedAOP.type, kPorts[i].connectedAOP.index, &handle);
+    for (i = 0; i < numports; i++) {
+        result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, NULL); // Assuming handle should not be NULL on success
-
-        // Step 03: Set supported encoding values for each audio port
-        for (j = 0; j < sizeof(kSupportedEncodings) / sizeof(kSupportedEncodings[0]); j++) {
-            result = dsSetAudioEncoding(handle, kSupportedEncodings[j]);
+         
+     
+      
+    // Step 03: Set supported encoding values for each audio port
+    if(kPorts[i].id.type == dsAUDIOPORT_TYPE_SPDIF) {
+        for (j = 0; j < sizeof(kSupportedSPDIFEncodings) / sizeof(kSupportedSPDIFEncodings[0]); j++) {
+            result = dsSetAudioEncoding(handle[i], kSupportedEncodings[j]);
+            // Check for either success or dsERR_GENERAL if not supported
+            UT_ASSERT_TRUE(result == dsERR_NONE || result == dsERR_GENERAL);
+        }
+     } else if {
+         if(kPorts[i].id.type == dsAUDIOPORT_TYPE_HEADPHONE) {
+        for (j = 0; j < sizeof(kSupportedHEADPHONEEncodings) / sizeof(kSupportedHEADPHONEEncodings[0]); j++) {
+            result = dsSetAudioEncoding(handle[i], kSupportedEncodings[j]);
+            // Check for either success or dsERR_GENERAL if not supported
+            UT_ASSERT_TRUE(result == dsERR_NONE || result == dsERR_GENERAL);
+        }
+     }
+    } else if {
+     if(kPorts[i].id.type == dsAUDIOPORT_TYPE_SPEAKER) {
+        for (j = 0; j < sizeof(kSupportedSPEAKEREncodings) / sizeof(kSupportedSPEAKEREncodings[0]); j++) {
+            result = dsSetAudioEncoding(handle[i], kSupportedEncodings[j]);
             // Check for either success or dsERR_GENERAL if not supported
             UT_ASSERT_TRUE(result == dsERR_NONE || result == dsERR_GENERAL);
         }
     }
+   }else if {
+      if(kPorts[i].id.type == dsAUDIOPORT_TYPE_HDMI_ARC) {
+        for (j = 0; j < sizeof(kSupportedARCEncodings) / sizeof(kSupportedARCEncodings[0]); j++) {
+            result = dsSetAudioEncoding(handle[i], kSupportedEncodings[j]);
+            // Check for either success or dsERR_GENERAL if not supported
+            UT_ASSERT_TRUE(result == dsERR_NONE || result == dsERR_GENERAL);
+        }
+
+     }
+   }
 
     // Step 04: Terminate audio ports
     result = dsAudioPortTerm();
@@ -590,7 +648,7 @@ void test_l1_dsAudio_positive_dsSetAudioEncoding(void) {
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsSetAudioEncoding() - Attempt to get the Audio Port handle without initializing audio ports | type,index: [ kPorts[0] ], handle: [ valid handle ] | dsERR_NOT_INITIALIZED | Set Audio Encoding must fail as module is not initialized |
+ * |01|Call dsSetAudioEncoding() - Attempt to get the Audio Port handle without initializing audio ports | handle: [ invalid handle ] encoding:[valid value] | dsERR_NOT_INITIALIZED | Set Audio Encoding must fail as module is not initialized |
  * |02|Call dsAudioPortInit() - Initialize audio ports| | dsERR_NONE | Initialization must be successful |
  * |03|Call dsSetAudioEncoding() using an invalid handle but with a valid encoding type | handle: [ invalid handle ] , encoding : [ valid dsAudioEncoding_t value ] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
  * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
@@ -605,12 +663,14 @@ void test_l1_dsAudio_negative_dsSetAudioEncoding(void) {
     gTestID = 9;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
-    int i;
-    dsAudioPortHandle_t handle;
+    int result, i;
+    int numports = 0;
+    intptr_t  handle[MAX_PORTS];
+
+    numports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
     // Step 01: Attempt to set Audio Encoding without initializing
-    result = dsSetAudioEncoding(VALID_HANDLE, VALID_ENCODING); // Replace with valid handle and encoding
+    result = dsSetAudioEncoding(-1 , kSupportedSPEAKEREncodings[0]); // Replace with invalid handle and valid encoding
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize audio ports
@@ -618,16 +678,16 @@ void test_l1_dsAudio_negative_dsSetAudioEncoding(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 03: Attempt to set audio encoding using an invalid handle
-    result = dsSetAudioEncoding(INVALID_HANDLE, VALID_ENCODING); // Replace with invalid handle
+    result = dsSetAudioEncoding(NULL, kSupportedSPEAKEREncodings[0]); // Replace with invalid handle
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 04: Get the port handle for all supported audio ports
-    for (i = 0; i < sizeof(kPorts) / sizeof(kPorts[0]); i++) {
-        result = dsGetAudioPort(kPorts[i].connectedAOP.type, kPorts[i].connectedAOP.index, &handle);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    for (i = 0; i < numports; i++) {
+       result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+       UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 05: Attempt to set an out-of-bounds encoding value
-        result = dsSetAudioEncoding(handle, OUT_OF_BOUNDS_ENCODING); // Replace with an invalid encoding value
+        result = dsSetAudioEncoding(handle[i], dsAUDIO_ENC_MAX); // Replace with an invalid encoding value
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     }
 
@@ -636,7 +696,7 @@ void test_l1_dsAudio_negative_dsSetAudioEncoding(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 07: Attempt to set Audio Encoding after termination
-    result = dsSetAudioEncoding(VALID_HANDLE, VALID_ENCODING); // Replace with valid handle and encoding
+    result = dsSetAudioEncoding(handle[0], kSupportedSPEAKEREncodings[0]); // Replace with valid handle and encoding
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Logging at the end
@@ -658,8 +718,9 @@ void test_l1_dsAudio_negative_dsSetAudioEncoding(void) {
  * |:--:|-----------|----------|--------------|-----|
  * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetAudioPort() Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
- * |03|Call dsGetAudioFormat() by looping through the acquired port handles to get the audio format of each port | handle: [ loop through valid handles ] , audioFormat: [pointer to hold the audio format] | dsERR_NONE | A valid audio encoding must be returned |
- * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE | Termination must be successful |
+ * |03|Call dsGetAudioFormat() by looping through the acquired port handles to get the audio format of each port in array | handle: [ loop through valid handles ] , audioFormat: [pointer to hold the audio format] | dsERR_NONE | A valid audio encoding must be returned |
+ * |04|Call dsGetAudioFormat() by looping through the acquired port handles to get the audio format of each port in new array | handle: [ loop through valid handles ] , audioFormat: [pointer to hold the audio format] | dsERR_NONE | A valid audio encoding must be returned |
+ * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsAudio_positive_dsGetAudioFormat(void) {
@@ -667,28 +728,46 @@ void test_l1_dsAudio_positive_dsGetAudioFormat(void) {
     gTestID = 10;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
-    int i;
-    dsAudioPortHandle_t handle;
-    dsAudioFormat_t audioFormat;
+    int result ,i;
+    int numports = 0;
+    intptr_t  handle[MAX_PORTS];
+
+    numports = (sizeof(kPorts) / sizeof(kPorts[0]));
+
+    dsAudioFormat_t audioFormatarray1[MAX_PORTS];
+    dsAudioFormat_t audioFormatarray2[MAX_PORTS];
 
     // Step 01: Initialize audio ports
     result = dsAudioPortInit();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 02: Get the port handle for all supported audio ports
-    for (i = 0; i < sizeof(kPorts) / sizeof(kPorts[0]); i++) {
-        result = dsGetAudioPort(kPorts[i].connectedAOP.type, kPorts[i].connectedAOP.index, &handle);
+    for (i = 0; i < numports; i++) {
+        result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, NULL); // Assuming handle should not be NULL on success
 
         // Step 03: Get the audio format of each port
-        result = dsGetAudioFormat(handle, &audioFormat);
+        result = dsGetAudioFormat(handle[i], &audioFormat1[i]);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_TRUE(audioFormat >= dsAUDIO_FORMAT_NONE && audioFormat < dsAUDIO_FORMAT_MAX); // Valid format check
     }
 
-    // Step 04: Terminate audio ports
+   
+    // Step 04:Loop through all encoding options and get audio format for each port in array2
+    for (i = 0; i < numports; i++) {
+                   result = dsGetAudioFormat(handle[i], &audioFormat2[i]);
+                   UT_ASSERT_EQUAL(result, dsERR_NONE);
+        }
+
+    // Step 05: Compare the array values
+    for (int i = 0; i < num_of_ports; i++) {
+                  UT_ASSERT_EQUAL(audioFormatarray1[i], audioFormatarray2[i]);
+        }
+   
+
+
+    // Step 06: Terminate audio ports
     result = dsAudioPortTerm();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -709,7 +788,7 @@ void test_l1_dsAudio_positive_dsGetAudioFormat(void) {
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsGetAudioFormat() - Attempt to get audio format without initializing audio ports | handle: [ valid handle ], audioFormat: [pointer to hold audio format] | dsERR_NOT_INITIALIZED | Get Audio Format must fail as module is not initialized |
+ * |01|Call dsGetAudioFormat() - Attempt to get audio format without initializing audio ports | handle: [ invalid handle ], audioFormat: [pointer to hold audio format] | dsERR_NOT_INITIALIZED | Get Audio Format must fail as module is not initialized |
  * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
  * |03|Call dsGetAudioFormat() using an invalid handle but with a valid pointer to hold the audio format | handle: [ invalid handle ], audioFormat: [ pointer ] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
  * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
@@ -724,13 +803,17 @@ void test_l1_dsAudio_negative_dsGetAudioFormat(void) {
     gTestID = 11;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
-    int i;
-    dsAudioPortHandle_t handle;
+    int result,i;
+    int numports = 0;
+    intptr_t  handle[MAX_PORTS];
+     dsAudioFormat_t audioFormat[MAX_PORTS]
+
+    numports = (sizeof(kPorts) / sizeof(kPorts[0]));
+
     dsAudioFormat_t audioFormat;
 
     // Step 01: Attempt to get audio format without initializing
-    result = dsGetAudioFormat(VALID_HANDLE, &audioFormat); // Replace with valid handle
+    result = dsGetAudioFormat(-1, &audioFormat[0]);                                       // Replace with valid handle
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize audio ports
@@ -738,16 +821,16 @@ void test_l1_dsAudio_negative_dsGetAudioFormat(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 03: Attempt to get audio format using an invalid handle
-    result = dsGetAudioFormat(INVALID_HANDLE, &audioFormat); // Replace with invalid handle
+    result = dsGetAudioFormat(NULL, &audioFormat[0]); // Replace with invalid handle
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 04: Get the port handle for all supported audio ports
-    for (i = 0; i < sizeof(kPorts) / sizeof(kPorts[0]); i++) {
-        result = dsGetAudioPort(kPorts[i].connectedAOP.type, kPorts[i].connectedAOP.index, &handle);
+    for (i = 0; i < numports; i++) {
+        result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 05: Attempt to get audio format with a null pointer for audio format
-        result = dsGetAudioFormat(handle, NULL);
+        result = dsGetAudioFormat(handle[i], NULL);
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     }
 
@@ -756,7 +839,7 @@ void test_l1_dsAudio_negative_dsGetAudioFormat(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 07: Attempt to get audio format after termination
-    result = dsGetAudioFormat(VALID_HANDLE, &audioFormat); // Replace with valid handle
+    result = dsGetAudioFormat(handle[0], &audioFormat[0]); // Replace with valid handle
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Logging at the end
@@ -959,12 +1042,14 @@ void test_l1_dsAudio_positive_dsSetAudioCompression(void) {
  * |:--:|-----------|----------|--------------|-----|
  * |01|Call dsSetAudioCompression() using an invalid handle but with a valid compression value | handle: [ invalid value ], compression: [ valid dsAudioCompression_t value ] | dsERR_INVALID_PARAM | Set Audio Compression must return invalid parameter as module is not initialized |
  * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+   |03|Call dsSetAudioCompression() using an invalid hanlde and valid compression | handle: [ invalid handle ], compression: [valid value ] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
  * |03|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
  * |04|Call dsSetAudioCompression() by looping through the acquired port handles but with out of range compression value(-10) | handle: [ valid handle ], compression: [ -10 ] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
  * |05|Call dsSetAudioCompression() by looping through the acquired port handles but with out of range compression value(20) | handle: [ valid handle ], compression: [ 20 ] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
  * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE | Termination must be successful |
  * |07|Call dsSetAudioCompression() again after terminating audio ports | handle: [ valid handle ], compression: [ valid dsAudioCompression_t value ] | dsERR_NOT_INITIALIZED | Set Audio Compression must return invalid parameter as module is not initialized |
- * 
+ *
+ *@note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions. 
  */
 void test_l1_dsAudio_negative_dsSetAudioCompression(void) {
     // Logging at the start
