@@ -808,7 +808,7 @@ void test_l1_dsAudio_negative_dsGetAudioFormat(void) {
  * @brief Ensure dsGetAudioCompression() retrieves the audio compression level correctly during positive scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 012@n
+ * **Test Case ID:** 013@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -824,7 +824,7 @@ void test_l1_dsAudio_negative_dsGetAudioFormat(void) {
  */
 void test_l1_dsAudio_positive_dsGetAudioCompression(void) {
     // Logging at the start
-    gTestID = 12;
+    gTestID = 13;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError result;
@@ -859,7 +859,7 @@ void test_l1_dsAudio_positive_dsGetAudioCompression(void) {
  * @brief Ensure dsGetAudioCompression() returns correct error codes during negative scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 013@n
+ * **Test Case ID:** 014@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -879,7 +879,7 @@ void test_l1_dsAudio_positive_dsGetAudioCompression(void) {
  */
 void test_l1_dsAudio_negative_dsGetAudioCompression(void) {
     // Logging at the start
-    gTestID = 13;
+    gTestID = 14;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t result;
@@ -926,7 +926,7 @@ void test_l1_dsAudio_negative_dsGetAudioCompression(void) {
  * @brief Ensure dsSetAudioCompression() sets the audio compression level correctly during positive scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 014@n
+ * **Test Case ID:** 015@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -944,7 +944,7 @@ void test_l1_dsAudio_negative_dsGetAudioCompression(void) {
  */
 void test_l1_dsAudio_positive_dsSetAudioCompression(void) {
     // Logging at the start
-    gTestID = 14;
+    gTestID = 15;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t result;
@@ -987,7 +987,7 @@ void test_l1_dsAudio_positive_dsSetAudioCompression(void) {
  * @brief Ensure dsSetAudioCompression() returns the correct error codes during negative scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 014@n
+ * **Test Case ID:** 016@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1008,7 +1008,7 @@ void test_l1_dsAudio_positive_dsSetAudioCompression(void) {
  */
 void test_l1_dsAudio_negative_dsSetAudioCompression(void) {
     // Logging at the start
-    gTestID = 15;
+    gTestID = 16;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t result;
@@ -1055,7 +1055,7 @@ void test_l1_dsAudio_negative_dsSetAudioCompression(void) {
  * @brief Ensure dsGetDialogEnhancement() returns correct Dialog enhancement levels during positive scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 015@n
+ * **Test Case ID:** 017@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1072,7 +1072,7 @@ void test_l1_dsAudio_negative_dsSetAudioCompression(void) {
  */
 void test_l1_dsAudio_positive_dsGetDialogEnhancement(void) {
     // Logging at the start
-    gTestID = 15;
+    gTestID = 17;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t result;
@@ -1108,7 +1108,7 @@ void test_l1_dsAudio_positive_dsGetDialogEnhancement(void) {
  * @brief Ensure dsGetDialogEnhancement() returns correct error codes during negative scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 015@n
+ * **Test Case ID:** 018@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1128,7 +1128,7 @@ void test_l1_dsAudio_positive_dsGetDialogEnhancement(void) {
  */
 void test_l1_dsAudio_negative_dsGetDialogEnhancement(void) {
     // Logging at the start
-    gTestID = 16;
+    gTestID = 18;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t result;
@@ -1175,7 +1175,7 @@ void test_l1_dsAudio_negative_dsGetDialogEnhancement(void) {
  * @brief Ensure dsSetDialogEnhancement retrieves the Dialog Enhancement level correctly during positive scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 016@n
+ * **Test Case ID:** 019@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1193,7 +1193,7 @@ void test_l1_dsAudio_negative_dsGetDialogEnhancement(void) {
  */
 void test_l1_dsAudio_positive_dsSetDialogEnhancement(void) {
     // Logging at the start
-    gTestID = 16;
+    gTestID = 19;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t result;
@@ -1237,7 +1237,7 @@ void test_l1_dsAudio_positive_dsSetDialogEnhancement(void) {
  * @brief Ensure dsSetDialogEnhancement() returns correct error codes during negative scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 017@n
+ * **Test Case ID:** 020@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1258,7 +1258,7 @@ void test_l1_dsAudio_positive_dsSetDialogEnhancement(void) {
  */
 void test_l1_dsAudio_negative_dsSetDialogEnhancement(void) {
     // Logging at the start
-    gTestID = 17;
+    gTestID = 20;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t result;
@@ -1309,7 +1309,7 @@ void test_l1_dsAudio_negative_dsSetDialogEnhancement(void) {
  * @brief Ensure dsGetDolbyVolumeMode() retrieves the Dolby Volume Mode status correctly during positive scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 020@n
+ * **Test Case ID:** 021@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1325,29 +1325,27 @@ void test_l1_dsAudio_negative_dsSetDialogEnhancement(void) {
  */
 void test_l1_dsAudio_positive_dsGetDolbyVolumeMode(void) {
     // Logging at the start
-    gTestID = 20;
+    gTestID = 21;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
-    int i;
-    dsAudioPortHandle_t handle;
-    bool dolbyVolumeMode;
+    dsError_t  result;
+    intptr_t handle[NUM_OF_PORTS];
+
+    bool dolbyVolumeMode[NUM_OF_PORTS];
 
     // Step 01: Initialize audio ports
     result = dsAudioPortInit();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 02: Get the port handle for all supported audio ports
-    for (i = 0; i < sizeof(kPorts) / sizeof(kPorts[0]); i++) {
-        result = dsGetAudioPort(kPorts[i].connectedAOP.type, kPorts[i].connectedAOP.index, &handle);
+    for (int i = 0; i < NUM_OF_PORTS; i++) {
+        result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle[i], NULL); // Assuming handle should not be NULL on success
+        UT_ASSERT_NOT_EQUAL(handle[i], NULL); // Handle should not be NULL on success
 
         // Step 03: Get the Dolby Volume mode for each port
-        result = dsGetDolbyVolumeMode(handle, &dolbyVolumeMode);
-        UT_ASSERT_EQUAL(result, dsERR_NONE); // Validate retrieval success
-
-        // Additional checks can be added here if there are specific expectations for the dolbyVolumeMode values
+        result = dsGetDolbyVolumeMode(handle[i], &dolbyVolumeMode[i]);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
     // Step 04: Terminate audio ports
@@ -1363,7 +1361,7 @@ void test_l1_dsAudio_positive_dsGetDolbyVolumeMode(void) {
  * @brief Ensure dsGetDolbyVolumeMode() returns correct error codes during negative scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 021@n
+ * **Test Case ID:** 022@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1383,16 +1381,16 @@ void test_l1_dsAudio_positive_dsGetDolbyVolumeMode(void) {
  */
 void test_l1_dsAudio_negative_dsGetDolbyVolumeMode(void) {
     // Logging at the start
-    gTestID = 21;
+    gTestID = 22;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
-    int i;
-    dsAudioPortHandle_t handle;
-    bool dolbyVolumeMode;
+    dsError_t result;
+    intptr_t handle[NUM_OF_PORTS];
+    
+    bool dolbyVolumeMode[NUM_OF_PORTS];
 
     // Step 01: Attempt to get Dolby Volume mode without initializing
-    result = dsGetDolbyVolumeMode(INVALID_HANDLE, &dolbyVolumeMode); // Assume INVALID_HANDLE is an invalid handle
+    result = dsGetDolbyVolumeMode(-1, &dolbyVolumeMode[0]);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize audio ports
@@ -1400,16 +1398,17 @@ void test_l1_dsAudio_negative_dsGetDolbyVolumeMode(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 03: Attempt to get Dolby Volume mode using an invalid handle
-    result = dsGetDolbyVolumeMode(INVALID_HANDLE, &dolbyVolumeMode);
+    result = dsGetDolbyVolumeMode(NULL, &dolbyVolumeMode[0]);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 04: Get the port handle for all supported audio ports
-    for (i = 0; i < sizeof(kPorts) / sizeof(kPorts[0]); i++) {
-        result = dsGetAudioPort(kPorts[i].connectedAOP.type, kPorts[i].connectedAOP.index, &handle);
+    for (i = 0; i < NUM_OF_PORTS; i++) {
+        result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_NOT_EQUAL(handle[i], NULL); // Handle should not be NULL on success
 
         // Step 05: Attempt to get Dolby Volume mode with a null pointer
-        result = dsGetDolbyVolumeMode(handle, NULL);
+        result = dsGetDolbyVolumeMode(handle[i], NULL);
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     }
 
@@ -1418,7 +1417,7 @@ void test_l1_dsAudio_negative_dsGetDolbyVolumeMode(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 07: Attempt to get Dolby Volume mode after termination
-    result = dsGetDolbyVolumeMode(VALID_HANDLE, &dolbyVolumeMode); // Assume VALID_HANDLE is a valid handle
+    result = dsGetDolbyVolumeMode(handle[0], &dolbyVolumeMode[0]);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Logging at the end
@@ -1430,7 +1429,7 @@ void test_l1_dsAudio_negative_dsGetDolbyVolumeMode(void) {
  * @brief Ensure dsSetDolbyVolumeMode() sets the Dolby Volume Mode status correctly during positive scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 030@n
+ * **Test Case ID:** 023@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1447,29 +1446,26 @@ void test_l1_dsAudio_negative_dsGetDolbyVolumeMode(void) {
  */
 void test_l1_dsAudio_positive_dsSetDolbyVolumeMode(void) {
     // Logging at the start
-    gTestID = 30;
+    gTestID = 23;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
-    int i;
-    dsAudioPortHandle_t handle;
-    bool modes[] = {true, false}; // Array of valid modes
+    dsError_t result;
+    intptr_t handle[NUM_OF_PORTS];
+    bool mode = true;
 
     // Step 01: Initialize audio ports
     result = dsAudioPortInit();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 02: Get the port handle for all supported audio ports
-    for (i = 0; i < sizeof(kPorts) / sizeof(kPorts[0]); i++) {
-        result = dsGetAudioPort(kPorts[i].connectedAOP.type, kPorts[i].connectedAOP.index, &handle);
+    for (int i = 0; i < NUM_OF_PORTS; i++) {
+        result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle[i], NULL); // Assuming handle should not be NULL on success
+        UT_ASSERT_NOT_EQUAL(handle[i], NULL); // Handle should not be NULL on success
 
         // Step 03: Set Dolby Volume Mode for each port and for each valid mode
-        for (int j = 0; j < sizeof(modes)/sizeof(modes[0]); j++) {
-            result = dsSetDolbyVolumeMode(handle, modes[j]);
-            UT_ASSERT_EQUAL(result, dsERR_NONE);
-        }
+        result = dsSetDolbyVolumeMode(handle[i], mode);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
     // Step 04: Terminate audio ports
@@ -1485,7 +1481,7 @@ void test_l1_dsAudio_positive_dsSetDolbyVolumeMode(void) {
  * @brief Ensure dsSetDolbyVolumeMode() returns correct error codes during negative scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 031@n
+ * **Test Case ID:** 024@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1495,25 +1491,24 @@ void test_l1_dsAudio_positive_dsSetDolbyVolumeMode(void) {
  * |:--:|-----------|----------|--------------|-----|
  * |01|Call dsSetDolbyVolumeMode() - Attempt to set the Dolby Volume Mode without initializing audio ports | handle=[any value], mode=[0/1] (OFF/ON) | dsERR_NOT_INITIALIZED | Should Pass |
  * |02|Call dsAudioPortInit() -Initialize audio ports | | dsERR_NONE | Initialization must be successful |
- * |03|Call dsSetDolbyVolumeMode() -using an invalid handle with valid mode(i.e TRUE or FALSE)| handle = [invalid hanlde], mode = [valid mode] | dsERR_INVALID_PARAM | Should Pass |
+ * |03|Call dsSetDolbyVolumeMode() - using an invalid handle with valid mode(i.e TRUE or FALSE)| handle = [invalid hanlde], mode = [valid mode] | dsERR_INVALID_PARAM | Should Pass |
    |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
- * |07|Call dsAudioPortTerm() to terminate audio ports | | dsERR_NONE | Should Pass |
- * |08|Call dsSetDolbyVolumeMode() again after terminating audio ports attempt to set Dolby Volume Mode  | handle = [valid handle] , mode = [valid mode](True/FALSE) | dsERR_NOT_INITIALIZED | Should Pass |
+ * |05|Call dsAudioPortTerm() to terminate audio ports | | dsERR_NONE | Should Pass |
+ * |06|Call dsSetDolbyVolumeMode() again after terminating audio ports attempt to set Dolby Volume Mode  | handle = [valid handle] , mode = [valid mode](True/FALSE) | dsERR_NOT_INITIALIZED | Should Pass |
  *
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
 void test_l1_dsAudio_negative_dsSetDolbyVolumeMode(void) {
     // Logging at the start
-    gTestID = 31;
+    gTestID = 24;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
-    int i;
-    dsAudioPortHandle_t handle;
+    dsError_t result;
+    intptr_t handle[NUM_OF_PORTS];
     bool validMode = true; // Assuming 'true' as a valid mode
 
     // Step 01: Attempt to set the Dolby Volume Mode without initializing
-    result = dsSetDolbyVolumeMode(INVALID_HANDLE, validMode); // Assume INVALID_HANDLE is an invalid handle
+    result = dsSetDolbyVolumeMode(-1, validMode);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize audio ports
@@ -1521,21 +1516,21 @@ void test_l1_dsAudio_negative_dsSetDolbyVolumeMode(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 03: Attempt to set Dolby Volume Mode using an invalid handle
-    result = dsSetDolbyVolumeMode(INVALID_HANDLE, validMode);
+    result = dsSetDolbyVolumeMode(NULL, validMode);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 04: Get the port handle for all supported audio ports
-    for (i = 0; i < sizeof(kPorts) / sizeof(kPorts[0]); i++) {
-        result = dsGetAudioPort(kPorts[i].connectedAOP.type, kPorts[i].connectedAOP.index, &handle);
+    for (int i = 0; i < NUM_OF_PORTS; i++) {
+        result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
-    // Step 07: Terminate audio ports
+    // Step 05: Terminate audio ports
     result = dsAudioPortTerm();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-    // Step 08: Attempt to set Dolby Volume Mode after termination
-    result = dsSetDolbyVolumeMode(VALID_HANDLE, validMode); // Assume VALID_HANDLE is a valid handle
+    // Step 06: Attempt to set Dolby Volume Mode after termination
+    result = dsSetDolbyVolumeMode(handle[0], validMode);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Logging at the end
@@ -1547,7 +1542,7 @@ void test_l1_dsAudio_negative_dsSetDolbyVolumeMode(void) {
  * @brief Ensure dsGetIntelligentEqualizerMode() retrieves the Intelligent Equalizer Mode correctly during positive scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 032@n
+ * **Test Case ID:** 025@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1563,28 +1558,27 @@ void test_l1_dsAudio_negative_dsSetDolbyVolumeMode(void) {
  */
 void test_l1_dsAudio_positive_dsGetIntelligentEqualizerMode(void) {
     // Logging at the start
-    gTestID = 32;
+    gTestID = 25;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
-    int i;
-    dsAudioPortHandle_t handle;
-    int intelligentEqualizerMode;
+    dsError_t result;
+    intptr_t handle[NUM_OF_PORTS];
+    int intelligentEqualizerMode[NUM_OF_PORTS];
 
     // Step 01: Initialize audio ports
     result = dsAudioPortInit();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 02: Get the port handle for all supported audio ports
-    for (i = 0; i < sizeof(kPorts) / sizeof(kPorts[0]); i++) {
-        result = dsGetAudioPort(kPorts[i].connectedAOP.type, kPorts[i].connectedAOP.index, &handle);
+    for (int i = 0; i < NUM_OF_PORTS; i++) {
+        result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle[i], NULL); // Assuming handle should not be NULL on success
+        UT_ASSERT_NOT_EQUAL(handle[i], NULL); // Handle should not be NULL on success
 
         // Step 03: Get the Intelligent Equalizer Mode for each port
-        result = dsGetIntelligentEqualizerMode(handle, &intelligentEqualizerMode);
+        result = dsGetIntelligentEqualizerMode(handle[i], &intelligentEqualizerMode[i]);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_TRUE(intelligentEqualizerMode >= 0 && intelligentEqualizerMode <= 6); // Valid mode range check
+        UT_ASSERT_TRUE(intelligentEqualizerMode[i] >= 0 && intelligentEqualizerMode[i] <= 6); // Valid mode range check
     }
 
     // Step 04: Terminate audio ports
@@ -1600,7 +1594,7 @@ void test_l1_dsAudio_positive_dsGetIntelligentEqualizerMode(void) {
  * @brief Ensure dsGetIntelligentEqualizerMode() returns correct error codes during negative scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 033@n
+ * **Test Case ID:** 026@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1620,16 +1614,15 @@ void test_l1_dsAudio_positive_dsGetIntelligentEqualizerMode(void) {
  */
 void test_l1_dsAudio_negative_dsGetIntelligentEqualizerMode(void) {
     // Logging at the start
-    gTestID = 33;
+    gTestID = 26;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
-    int i;
-    dsAudioPortHandle_t handle;
-    int intelligentEqualizerMode;
+    dsError_t result;
+    intptr_t handle[NUM_OF_PORTS];
+    int intelligentEqualizerMode[NUM_OF_PORTS];
 
     // Step 01: Attempt to get Intelligent Equalizer Mode without initializing
-    result = dsGetIntelligentEqualizerMode(INVALID_HANDLE, &intelligentEqualizerMode); // Assume INVALID_HANDLE is an invalid handle
+    result = dsGetIntelligentEqualizerMode(-1, &intelligentEqualizerMode[0]);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize audio ports
@@ -1637,16 +1630,17 @@ void test_l1_dsAudio_negative_dsGetIntelligentEqualizerMode(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 03: Attempt to get Intelligent Equalizer Mode using an invalid handle
-    result = dsGetIntelligentEqualizerMode(INVALID_HANDLE, &intelligentEqualizerMode);
+    result = dsGetIntelligentEqualizerMode(NULL, &intelligentEqualizerMode[0]);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 04: Get the port handle for all supported audio ports
-    for (i = 0; i < sizeof(kPorts) / sizeof(kPorts[0]); i++) {
-        result = dsGetAudioPort(kPorts[i].connectedAOP.type, kPorts[i].connectedAOP.index, &handle);
+    for (int i = 0; i < NUM_OF_PORTS; i++) {
+        result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_NOT_EQUAL(handle[i], NULL); // Handle should not be NULL on success
 
         // Step 05: Attempt to get Intelligent Equalizer Mode with a null pointer
-        result = dsGetIntelligentEqualizerMode(handle, NULL);
+        result = dsGetIntelligentEqualizerMode(handle[i], NULL);
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     }
 
@@ -1655,7 +1649,7 @@ void test_l1_dsAudio_negative_dsGetIntelligentEqualizerMode(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 07: Attempt to get Intelligent Equalizer Mode after termination
-    result = dsGetIntelligentEqualizerMode(VALID_HANDLE, &intelligentEqualizerMode); // Assume VALID_HANDLE is a valid handle
+    result = dsGetIntelligentEqualizerMode(handle[0], &intelligentEqualizerMode[0]);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Logging at the end
@@ -1667,7 +1661,7 @@ void test_l1_dsAudio_negative_dsGetIntelligentEqualizerMode(void) {
  * @brief Ensure dsSetIntelligentEqualizerMode() sets the Intelligent Equalizer Mode correctly during positive scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 032@n
+ * **Test Case ID:** 027@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1683,26 +1677,25 @@ void test_l1_dsAudio_negative_dsGetIntelligentEqualizerMode(void) {
  */
 void test_l1_dsAudio_positive_dsSetIntelligentEqualizerMode(void) {
     // Logging at the start
-    gTestID = 32;
+    gTestID = 27;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
-    int i, mode;
-    dsAudioPortHandle_t handle;
+    dsError_t  result;
+    dsAudioPortHandle_t handle[NUM_OF_PORTS];
 
     // Step 01: Initialize audio ports
     result = dsAudioPortInit();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 02: Get the port handle for all supported audio ports
-    for (i = 0; i < sizeof(kPorts) / sizeof(kPorts[0]); i++) {
-        result = dsGetAudioPort(kPorts[i].connectedAOP.type, kPorts[i].connectedAOP.index, &handle);
+    for (int i = 0; i < NUM_OF_PORTS; i++) {
+        result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle[i], NULL); // Assuming handle should not be NULL on success
+        UT_ASSERT_NOT_EQUAL(handle[i], NULL); // Handle should not be NULL on success
 
         // Step 03: Set Intelligent Equalizer Mode for each port with a valid mode (0 to 6)
-        for (mode = 0; mode <= 6; mode++) {
-            result = dsSetIntelligentEqualizerMode(handle, mode);
+        for (int mode = 0; mode <= 6; mode++) {
+            result = dsSetIntelligentEqualizerMode(handle[i], mode);
             UT_ASSERT_EQUAL(result, dsERR_NONE);
         }
     }
@@ -1720,7 +1713,7 @@ void test_l1_dsAudio_positive_dsSetIntelligentEqualizerMode(void) {
  * @brief Ensure dsSetIntelligentEqualizerMode() returns correct error codes during negative scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 033@n
+ * **Test Case ID:** 028@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1740,16 +1733,15 @@ void test_l1_dsAudio_positive_dsSetIntelligentEqualizerMode(void) {
  */
 void test_l1_dsAudio_negative_dsSetIntelligentEqualizerMode(void) {
     // Logging at the start
-    gTestID = 33;
+    gTestID = 28;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
-    int i;
-    dsAudioPortHandle_t handle;
-    int invalidMode = -1; // Assuming -1 is an invalid mode
+    dsError_t result;
+    intptr_t handle[NUM_OF_PORTS];
+    int valid_mode = 0, invalid_mode = -1; 
 
     // Step 01: Attempt to set Intelligent Equalizer Mode without initializing
-    result = dsSetIntelligentEqualizerMode(INVALID_HANDLE, 0); // Assume INVALID_HANDLE is an invalid handle
+    result = dsSetIntelligentEqualizerMode(-1, valid_mode);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize audio ports
@@ -1757,16 +1749,16 @@ void test_l1_dsAudio_negative_dsSetIntelligentEqualizerMode(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 03: Attempt to set Intelligent Equalizer Mode using an invalid handle
-    result = dsSetIntelligentEqualizerMode(INVALID_HANDLE, 0);
+    result = dsSetIntelligentEqualizerMode(NULL, valid_mode);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 04: Get the port handle for all supported audio ports
-    for (i = 0; i < sizeof(kPorts) / sizeof(kPorts[0]); i++) {
-        result = dsGetAudioPort(kPorts[i].connectedAOP.type, kPorts[i].connectedAOP.index, &handle);
+    for (i = 0; i < NUM_OF_PORTS; i++) {
+        result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 05: Attempt to set Intelligent Equalizer Mode with an invalid mode value
-        result = dsSetIntelligentEqualizerMode(handle, invalidMode);
+        result = dsSetIntelligentEqualizerMode(handle[i], invalidMode);
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     }
 
