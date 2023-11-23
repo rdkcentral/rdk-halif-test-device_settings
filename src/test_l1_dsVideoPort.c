@@ -297,7 +297,7 @@ void test_l1_dsVideoPort_positive_dsGetVideoPort(void) {
     
     dsError_t status;
  
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
     intptr_t lastHandle;
     intptr_t newHandle;
 
@@ -358,7 +358,7 @@ void test_l1_dsVideoPort_negative_dsGetVideoPort(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
     // Step 01: Attempt to get the Video Port handle without initializing
     status = dsGetVideoPort(kPorts[0].id.type, kPorts[0].id.index, &(handle[0]));
@@ -426,10 +426,10 @@ void test_l1_dsVideoPort_positive_dsIsVideoPortEnabled(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    bool isEnabledArray1[dsVIDEOPORT_TYPE_MAX];
-    bool isEnabledArray2[dsVIDEOPORT_TYPE_MAX];
+    bool isEnabledArray1[NUM_OF_PORTS];
+    bool isEnabledArray2[NUM_OF_PORTS];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -497,9 +497,9 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortEnabled(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    bool enabled[dsVIDEOPORT_TYPE_MAX];
+    bool enabled[NUM_OF_PORTS];
 
     // Step 01: Attempt to check enabled status without initialization
     status = dsIsVideoPortEnabled(-1, &enabled[0]);
@@ -565,10 +565,10 @@ void test_l1_dsVideoPort_positive_dsIsDisplayConnected(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    bool isConnectedArray1[dsVIDEOPORT_TYPE_MAX];
-    bool isConnectedArray2[dsVIDEOPORT_TYPE_MAX];
+    bool isConnectedArray1[NUM_OF_PORTS];
+    bool isConnectedArray2[NUM_OF_PORTS];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -636,9 +636,9 @@ void test_l1_dsVideoPort_negative_dsIsDisplayConnected(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    bool connected[dsVIDEOPORT_TYPE_MAX];
+    bool connected[NUM_OF_PORTS];
     
     // Step 01: Attempt to check connection status without initialization
     status = dsIsDisplayConnected(-1 , &(connected[0]));
@@ -704,10 +704,10 @@ void test_l1_dsVideoPort_positive_dsIsDisplaySurround(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    bool isSurroundArray1[dsVIDEOPORT_TYPE_MAX];
-    bool isSurroundArray2[dsVIDEOPORT_TYPE_MAX];
+    bool isSurroundArray1[NUM_OF_PORTS];
+    bool isSurroundArray2[NUM_OF_PORTS];
     
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -773,9 +773,9 @@ void test_l1_dsVideoPort_negative_dsIsDisplaySurround(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    bool surround[dsVIDEOPORT_TYPE_MAX];
+    bool surround[NUM_OF_PORTS];
 
     // Step 01: Attempt to check audio surround support without initialization
     status = dsIsDisplaySurround(-1, &surround[0]);
@@ -841,10 +841,10 @@ void test_l1_dsVideoPort_positive_dsGetSurroundMode(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    int surroundModeArray1[dsVIDEOPORT_TYPE_MAX];
-    int surroundModeArray2[dsVIDEOPORT_TYPE_MAX];
+    int surroundModeArray1[NUM_OF_PORTS];
+    int surroundModeArray2[NUM_OF_PORTS];
     
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -912,9 +912,9 @@ void test_l1_dsVideoPort_negative_dsGetSurroundMode(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    int surroundMode[dsVIDEOPORT_TYPE_MAX];
+    int surroundMode[NUM_OF_PORTS];
     
     // Step 01: Attempt to get surround mode without initialization
     status = dsGetSurroundMode(-1, &surroundMode[0]);
@@ -981,10 +981,10 @@ void test_l1_dsVideoPort_positive_dsIsVideoPortActive(void) {
     
     dsError_t status;
 
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    bool isActiveArray1[dsVIDEOPORT_TYPE_MAX];
-    bool isActiveArray2[dsVIDEOPORT_TYPE_MAX];
+    bool isActiveArray1[NUM_OF_PORTS];
+    bool isActiveArray2[NUM_OF_PORTS];
     
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -1052,9 +1052,9 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortActive(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    bool active[dsVIDEOPORT_TYPE_MAX];
+    bool active[NUM_OF_PORTS];
     
     // Step 01: Attempt to check active status without initialization
     status = dsIsVideoPortActive(-1, &active[0]);
@@ -1118,7 +1118,7 @@ void test_l1_dsVideoPort_positive_dsEnableDTCP(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
     bool enableDTCP = true;
     
@@ -1176,7 +1176,7 @@ void test_l1_dsVideoPort_negative_dsEnableDTCP(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
     bool enableDTCP = true; // Flag to enable/disable DTCP
 
@@ -1236,7 +1236,7 @@ void test_l1_dsVideoPort_positive_dsEnableHDCP(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
     bool enableHDCP = true;
     char hdcpKey[HDCP_KEY_MAX_SIZE] = "ADEF";
@@ -1297,7 +1297,7 @@ void test_l1_dsVideoPort_negative_dsEnableHDCP(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
     bool enableHDCP = true;
     char hdcpKey[HDCP_KEY_MAX_SIZE] = "ADEF";
@@ -1369,10 +1369,10 @@ void test_l1_dsVideoPort_positive_dsIsDTCPEnabled(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    bool isDTCPEnabledArray1[dsVIDEOPORT_TYPE_MAX];
-    bool isDTCPEnabledArray2[dsVIDEOPORT_TYPE_MAX];
+    bool isDTCPEnabledArray1[NUM_OF_PORTS];
+    bool isDTCPEnabledArray2[NUM_OF_PORTS];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -1439,9 +1439,9 @@ void test_l1_dsVideoPort_negative_dsIsDTCPEnabled(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    bool isDTCPEnabled[dsVIDEOPORT_TYPE_MAX];
+    bool isDTCPEnabled[NUM_OF_PORTS];
 
     // Step 01: Attempt to get DTCP status without initialization
     status = dsIsDTCPEnabled(-1, &isDTCPEnabled[0]);
@@ -1507,10 +1507,10 @@ void test_l1_dsVideoPort_positive_dsIsHDCPEnabled(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    bool isHDCPEnabledArray1[dsVIDEOPORT_TYPE_MAX];
-    bool isHDCPEnabledArray2[dsVIDEOPORT_TYPE_MAX];
+    bool isHDCPEnabledArray1[NUM_OF_PORTS];
+    bool isHDCPEnabledArray2[NUM_OF_PORTS];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -1577,9 +1577,9 @@ void test_l1_dsVideoPort_negative_dsIsHDCPEnabled(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    bool contentProtected[dsVIDEOPORT_TYPE_MAX];
+    bool contentProtected[NUM_OF_PORTS];
 
     // Step 01: Attempt to get HDCP status without initialization
     status = dsIsHDCPEnabled(-1, &(contentProtected[0]));
@@ -1643,9 +1643,9 @@ void test_l1_dsVideoPort_positive_dsEnableVideoPort(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    bool isVideoPortEnabled[dsVIDEOPORT_TYPE_MAX];
+    bool isVideoPortEnabled[NUM_OF_PORTS];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -1704,7 +1704,7 @@ void test_l1_dsVideoPort_negative_dsEnableVideoPort(void) {
 
     
 
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
     bool enabled = true; // Example value for enabling/disabling the port
 
     // Step 01: Attempt to enable/disable video port without initialization
@@ -1763,9 +1763,9 @@ void test_l1_dsVideoPort_positive_dsSetResolution(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    dsVideoPortResolution_t resolution[dsVIDEOPORT_TYPE_MAX];
+    dsVideoPortResolution_t resolution[NUM_OF_PORTS];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -1822,9 +1822,9 @@ void test_l1_dsVideoPort_negative_dsSetResolution(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    dsVideoPortResolution_t resolution[dsVIDEOPORT_TYPE_MAX];
+    dsVideoPortResolution_t resolution[NUM_OF_PORTS];
 
     // Step 01: Attempt to set resolution without initialization
     status = dsSetResolution(-1, &(resolution[0]));
@@ -1890,10 +1890,10 @@ void test_l1_dsVideoPort_positive_dsGetResolution(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX]; 
+    intptr_t handle[NUM_OF_PORTS]; 
 
-    dsVideoPortResolution_t resolutionArray1[dsVIDEOPORT_TYPE_MAX];
-    dsVideoPortResolution_t resolutionArray2[dsVIDEOPORT_TYPE_MAX];
+    dsVideoPortResolution_t resolutionArray1[NUM_OF_PORTS];
+    dsVideoPortResolution_t resolutionArray2[NUM_OF_PORTS];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -1961,9 +1961,9 @@ void test_l1_dsVideoPort_negative_dsGetResolution(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    dsVideoPortResolution_t resolution[dsVIDEOPORT_TYPE_MAX];
+    dsVideoPortResolution_t resolution[NUM_OF_PORTS];
 
     // Step 01: Attempt to get resolution without initialization
     status = dsGetResolution(-1, &(resolution[0]));
@@ -2027,7 +2027,7 @@ void test_l1_dsVideoPort_positive_dsSetActiveSource(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -2083,7 +2083,7 @@ void test_l1_dsVideoPort_negative_dsSetActiveSource(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle [dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle [NUM_OF_PORTS];
 
     // Step 01: Attempt to set active source without initialization
     status = dsSetActiveSource(-1);
@@ -2368,10 +2368,10 @@ void test_l1_dsVideoPort_positive_dsGetHDCPStatus(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID); 
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    dsHdcpStatus_t hdcpStatusArray1[dsVIDEOPORT_TYPE_MAX];
-    dsHdcpStatus_t hdcpStatusArray2[dsVIDEOPORT_TYPE_MAX];
+    dsHdcpStatus_t hdcpStatusArray1[NUM_OF_PORTS];
+    dsHdcpStatus_t hdcpStatusArray2[NUM_OF_PORTS];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -2440,8 +2440,8 @@ void test_l1_dsVideoPort_negative_dsGetHDCPStatus(void) {
     
     dsError_t status;
 
-   intptr_t handle[dsVIDEOPORT_TYPE_MAX];          
-   dsHdcpStatus_t hdcpStatus[dsVIDEOPORT_TYPE_MAX];
+   intptr_t handle[NUM_OF_PORTS];          
+   dsHdcpStatus_t hdcpStatus[NUM_OF_PORTS];
 
     // Step 01: Attempt to get HDCP status without initialization
     status = dsGetHDCPStatus(-1, &(hdcpStatus[0]));
@@ -2508,10 +2508,10 @@ void test_l1_dsVideoPort_positive_dsGetHDCPProtocol(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    dsHdcpProtocolVersion_t protocolVersionArray1[dsVIDEOPORT_TYPE_MAX];
-    dsHdcpProtocolVersion_t protocolVersionArray2[dsVIDEOPORT_TYPE_MAX];
+    dsHdcpProtocolVersion_t protocolVersionArray1[NUM_OF_PORTS];
+    dsHdcpProtocolVersion_t protocolVersionArray2[NUM_OF_PORTS];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -2578,9 +2578,9 @@ void test_l1_dsVideoPort_negative_dsGetHDCPProtocol(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    dsHdcpProtocolVersion_t protocolVersion[dsVIDEOPORT_TYPE_MAX];
+    dsHdcpProtocolVersion_t protocolVersion[NUM_OF_PORTS];
 
     // Step 01: Attempt to get HDCP protocol without initialization
     status = dsGetHDCPProtocol(-1, &(protocolVersion[0]));
@@ -2647,10 +2647,10 @@ void test_l1_dsVideoPort_positive_dsGetHDCPReceiverProtocol(void) {
     
     dsError_t status;
 
-    intptr_t  handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t  handle[NUM_OF_PORTS];
 
-    dsHdcpProtocolVersion_t protocolVersionArray1[dsVIDEOPORT_TYPE_MAX];
-    dsHdcpProtocolVersion_t protocolVersionArray2[dsVIDEOPORT_TYPE_MAX];
+    dsHdcpProtocolVersion_t protocolVersionArray1[NUM_OF_PORTS];
+    dsHdcpProtocolVersion_t protocolVersionArray2[NUM_OF_PORTS];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -2718,9 +2718,9 @@ void test_l1_dsVideoPort_negative_dsGetHDCPReceiverProtocol(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    dsHdcpProtocolVersion_t receiverProtocolVersion[dsVIDEOPORT_TYPE_MAX];
+    dsHdcpProtocolVersion_t receiverProtocolVersion[NUM_OF_PORTS];
 
     // Step 01: Attempt to get Receiver HDCP protocol without initialization
     status = dsGetHDCPReceiverProtocol(-1, &receiverProtocolVersion[0]);
@@ -2786,10 +2786,10 @@ void test_l1_dsVideoPort_positive_dsGetHDCPCurrentProtocol(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t  handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t  handle[NUM_OF_PORTS];
 
-    dsHdcpProtocolVersion_t currentProtocolArray1[dsVIDEOPORT_TYPE_MAX];
-    dsHdcpProtocolVersion_t currentProtocolArray2[dsVIDEOPORT_TYPE_MAX];
+    dsHdcpProtocolVersion_t currentProtocolArray1[NUM_OF_PORTS];
+    dsHdcpProtocolVersion_t currentProtocolArray2[NUM_OF_PORTS];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -2857,9 +2857,9 @@ void test_l1_dsVideoPort_negative_dsGetHDCPCurrentProtocol(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t  handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t  handle[NUM_OF_PORTS];
 
-    dsHdcpProtocolVersion_t currentProtocolVersion[dsVIDEOPORT_TYPE_MAX];
+    dsHdcpProtocolVersion_t currentProtocolVersion[NUM_OF_PORTS];
 
     // Step 01: Attempt to get current negotiated HDCP protocol without initialization
     status = dsGetHDCPCurrentProtocol(-1, &currentProtocolVersion[0]);
@@ -2925,10 +2925,10 @@ void test_l1_dsVideoPort_positive_dsGetTVHDRCapabilities(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    int capabilitiesArray1[dsVIDEOPORT_TYPE_MAX];
-    int capabilitiesArray2[dsVIDEOPORT_TYPE_MAX];
+    int capabilitiesArray1[NUM_OF_PORTS];
+    int capabilitiesArray2[NUM_OF_PORTS];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -2996,9 +2996,9 @@ void test_l1_dsVideoPort_negative_dsGetTVHDRCapabilities(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    int capabilities[dsVIDEOPORT_TYPE_MAX]; 
+    int capabilities[NUM_OF_PORTS]; 
 
     // Step 01: Attempt to get HDR capabilities without initialization
     status = dsGetTVHDRCapabilities(-1, &capabilities[0]);
@@ -3064,10 +3064,10 @@ void test_l1_dsVideoPort_positive_dsSupportedTvResolutions(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];    
+    intptr_t handle[NUM_OF_PORTS];    
 
-    int resolutionsArray1[dsVIDEOPORT_TYPE_MAX];
-    int resolutionsArray2[dsVIDEOPORT_TYPE_MAX];
+    int resolutionsArray1[NUM_OF_PORTS];
+    int resolutionsArray2[NUM_OF_PORTS];
     
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -3135,9 +3135,9 @@ void test_l1_dsVideoPort_negative_dsSupportedTvResolutions(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    int resolutions[dsVIDEOPORT_TYPE_MAX];
+    int resolutions[NUM_OF_PORTS];
 
     // Step 01: Attempt to get supported resolutions without initialization
     status = dsSupportedTvResolutions(-1, &resolutions[0]);
@@ -3201,7 +3201,7 @@ void test_l1_dsVideoPort_positive_dsSetForceDisable4KSupport(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
     bool disable4K = true;
 
@@ -3259,7 +3259,7 @@ void test_l1_dsVideoPort_negative_dsSetForceDisable4KSupport(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
     bool disable4K = true;
 
@@ -3321,10 +3321,10 @@ void test_l1_dsVideoPort_positive_dsGetForceDisable4KSupport(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    bool disable4KArray1[dsVIDEOPORT_TYPE_MAX];
-    bool disable4KArray2[dsVIDEOPORT_TYPE_MAX];
+    bool disable4KArray1[NUM_OF_PORTS];
+    bool disable4KArray2[NUM_OF_PORTS];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -3392,9 +3392,9 @@ void test_l1_dsVideoPort_negative_dsGetForceDisable4KSupport(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    bool disable4K[dsVIDEOPORT_TYPE_MAX]; 
+    bool disable4K[NUM_OF_PORTS]; 
 
     // Step 01: Attempt to get 4K support status without initialization
     status = dsGetForceDisable4KSupport(-1, &disable4K[0]);
@@ -3460,10 +3460,10 @@ void test_l1_dsVideoPort_positive_dsGetVideoEOTF(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    dsHDRStandard_t eotfArray1[dsVIDEOPORT_TYPE_MAX];
-    dsHDRStandard_t eotfArray2[dsVIDEOPORT_TYPE_MAX];
+    dsHDRStandard_t eotfArray1[NUM_OF_PORTS];
+    dsHDRStandard_t eotfArray2[NUM_OF_PORTS];
     
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -3531,9 +3531,9 @@ void test_l1_dsVideoPort_negative_dsGetVideoEOTF(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    dsHDRStandard_t eotf[dsVIDEOPORT_TYPE_MAX];
+    dsHDRStandard_t eotf[NUM_OF_PORTS];
 
     // Step 01: Attempt to get EOTF without initialization
     status = dsGetVideoEOTF(-1, &eotf[0]);
@@ -3599,10 +3599,10 @@ void test_l1_dsVideoPort_positive_dsGetMatrixCoefficients(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    dsDisplayMatrixCoefficients_t matrixCoefficientsArray1[dsVIDEOPORT_TYPE_MAX];
-    dsDisplayMatrixCoefficients_t matrixCoefficientsArray2[dsVIDEOPORT_TYPE_MAX];
+    dsDisplayMatrixCoefficients_t matrixCoefficientsArray1[NUM_OF_PORTS];
+    dsDisplayMatrixCoefficients_t matrixCoefficientsArray2[NUM_OF_PORTS];
     
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -3670,9 +3670,9 @@ void test_l1_dsVideoPort_negative_dsGetMatrixCoefficients(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    dsDisplayMatrixCoefficients_t matrixCoefficients[dsVIDEOPORT_TYPE_MAX];
+    dsDisplayMatrixCoefficients_t matrixCoefficients[NUM_OF_PORTS];
 
     // Step 01: Attempt to get matrix coefficients without initialization
     status = dsGetMatrixCoefficients(-1, &matrixCoefficients[0]);
@@ -3738,10 +3738,10 @@ void test_l1_dsVideoPort_positive_dsGetColorDepth(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    unsigned int colorDepthArray1[dsVIDEOPORT_TYPE_MAX];
-    unsigned int colorDepthArray2[dsVIDEOPORT_TYPE_MAX];
+    unsigned int colorDepthArray1[NUM_OF_PORTS];
+    unsigned int colorDepthArray2[NUM_OF_PORTS];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -3809,7 +3809,7 @@ void test_l1_dsVideoPort_negative_dsGetColorDepth(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
     unsigned int colorDepth; // To store the color depth
 
@@ -3877,10 +3877,10 @@ void test_l1_dsVideoPort_positive_dsGetColorSpace(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    dsDisplayColorSpace_t colorSpaceArray1[dsVIDEOPORT_TYPE_MAX];
-    dsDisplayColorSpace_t colorSpaceArray2[dsVIDEOPORT_TYPE_MAX];
+    dsDisplayColorSpace_t colorSpaceArray1[NUM_OF_PORTS];
+    dsDisplayColorSpace_t colorSpaceArray2[NUM_OF_PORTS];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -3947,9 +3947,9 @@ void test_l1_dsVideoPort_negative_dsGetColorSpace(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    dsDisplayColorSpace_t colorSpace[dsVIDEOPORT_TYPE_MAX];
+    dsDisplayColorSpace_t colorSpace[NUM_OF_PORTS];
 
     // Step 01: Attempt to get color space without initialization
     status = dsGetColorSpace(-1, &colorSpace[0]);
@@ -4014,10 +4014,10 @@ void test_l1_dsVideoPort_positive_dsGetQuantizationRange(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    dsDisplayQuantizationRange_t quantizationRangeArray1[dsVIDEOPORT_TYPE_MAX];
-    dsDisplayQuantizationRange_t quantizationRangeArray2[dsVIDEOPORT_TYPE_MAX];
+    dsDisplayQuantizationRange_t quantizationRangeArray1[NUM_OF_PORTS];
+    dsDisplayQuantizationRange_t quantizationRangeArray2[NUM_OF_PORTS];
     
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -4084,9 +4084,9 @@ void test_l1_dsVideoPort_negative_dsGetQuantizationRange(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    dsDisplayQuantizationRange_t quantizationRange[dsVIDEOPORT_TYPE_MAX];
+    dsDisplayQuantizationRange_t quantizationRange[NUM_OF_PORTS];
 
     // Step 01: Attempt to get quantization range without initialization
     status = dsGetQuantizationRange(-1, &quantizationRange[0]);
@@ -4287,10 +4287,10 @@ void test_l1_dsVideoPort_positive_dsIsOutputHDR(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    bool hdrArray1[dsVIDEOPORT_TYPE_MAX];
-    bool hdrArray2[dsVIDEOPORT_TYPE_MAX];
+    bool hdrArray1[NUM_OF_PORTS];
+    bool hdrArray2[NUM_OF_PORTS];
     
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -4358,9 +4358,9 @@ void test_l1_dsVideoPort_negative_dsIsOutputHDR(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    bool hdrStatus[dsVIDEOPORT_TYPE_MAX];
+    bool hdrStatus[NUM_OF_PORTS];
 
     // Step 01: Attempt to check HDR status without initialization
     status = dsIsOutputHDR(-1, &hdrStatus[0]);
@@ -4516,7 +4516,7 @@ void test_l1_dsVideoPort_positive_dsSetHdmiPreference(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -4577,7 +4577,7 @@ void test_l1_dsVideoPort_negative_dsSetHdmiPreference(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
     // Step 01: Attempt set HDMI preference without initialization
     status = dsSetHdmiPreference(-1, dsHDCP_VERSION_1X);
@@ -4643,10 +4643,10 @@ void test_l1_dsVideoPort_positive_dsGetHdmiPreference(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    dsHdcpProtocolVersion_t  hdcpCurrentProtocol1[dsVIDEOPORT_TYPE_MAX];
-    dsHdcpProtocolVersion_t hdcpCurrentProtocol2[dsVIDEOPORT_TYPE_MAX];
+    dsHdcpProtocolVersion_t  hdcpCurrentProtocol1[NUM_OF_PORTS];
+    dsHdcpProtocolVersion_t hdcpCurrentProtocol2[NUM_OF_PORTS];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -4714,9 +4714,9 @@ void test_l1_dsVideoPort_negative_dsGetHdmiPreference(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    dsHdcpProtocolVersion_t hdcpCurrentProtocol[dsVIDEOPORT_TYPE_MAX];
+    dsHdcpProtocolVersion_t hdcpCurrentProtocol[NUM_OF_PORTS];
 
     // Step 01: Attempt to get HDMI preference without initialization
     status = dsGetHdmiPreference(-1, &hdcpCurrentProtocol[0]);
@@ -4782,10 +4782,10 @@ void test_l1_dsVideoPort_positive_dsGetIgnoreEDIDStatus(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    bool ignoreEDIDStatus1[dsVIDEOPORT_TYPE_MAX];
-    bool ignoreEDIDStatus2[dsVIDEOPORT_TYPE_MAX];
+    bool ignoreEDIDStatus1[NUM_OF_PORTS];
+    bool ignoreEDIDStatus2[NUM_OF_PORTS];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -4853,9 +4853,9 @@ void test_l1_dsVideoPort_negative_dsGetIgnoreEDIDStatus(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    bool ignoreEDIDStatus[dsVIDEOPORT_TYPE_MAX];
+    bool ignoreEDIDStatus[NUM_OF_PORTS];
     
     // Step 01: Attempt to get IgnoreEDID status without initialization
     status = dsGetIgnoreEDIDStatus(-1, &ignoreEDIDStatus[0]);
@@ -4919,7 +4919,7 @@ void test_l1_dsVideoPort_positive_dsSetBackgroundColor(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -4978,7 +4978,7 @@ void test_l1_dsVideoPort_negative_dsSetBackgroundColor(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
     // Step 01: Attempt to set background color without initialization
     status = dsSetBackgroundColor(-1, dsVIDEO_BGCOLOR_BLUE);
@@ -5042,7 +5042,7 @@ void test_l1_dsVideoPort_positive_dsSetForceHDRMode(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -5101,7 +5101,7 @@ void test_l1_dsVideoPort_negative_dsSetForceHDRMode(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
     // Step 01: Attempt to set HDR mode without initialization
     status = dsSetForceHDRMode(-1, dsHDRSTANDARD_HDR10 );
@@ -5167,10 +5167,10 @@ void test_l1_dsVideoPort_positive_dsColorDepthCapabilities(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    unsigned int colorDepthCapability1[dsVIDEOPORT_TYPE_MAX];
-    unsigned int colorDepthCapability2[dsVIDEOPORT_TYPE_MAX];
+    unsigned int colorDepthCapability1[NUM_OF_PORTS];
+    unsigned int colorDepthCapability2[NUM_OF_PORTS];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -5238,9 +5238,9 @@ void test_l1_dsVideoPort_negative_dsColorDepthCapabilities(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    unsigned int  colorDepthCapability[dsVIDEOPORT_TYPE_MAX];
+    unsigned int  colorDepthCapability[NUM_OF_PORTS];
 
     // Step 01: Attempt to get capabilities without initialization
     status = dsColorDepthCapabilities(-1, &colorDepthCapability[0]);
@@ -5306,10 +5306,10 @@ void test_l1_dsVideoPort_positive_dsGetPreferredColorDepth(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    dsDisplayColorDepth_t colorDepth1[dsVIDEOPORT_TYPE_MAX];
-    dsDisplayColorDepth_t colorDepth2[dsVIDEOPORT_TYPE_MAX];
+    dsDisplayColorDepth_t colorDepth1[NUM_OF_PORTS];
+    dsDisplayColorDepth_t colorDepth2[NUM_OF_PORTS];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -5377,9 +5377,9 @@ void test_l1_dsVideoPort_negative_dsGetPreferredColorDepth(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
-    dsDisplayColorDepth_t colorDepth[dsVIDEOPORT_TYPE_MAX];
+    dsDisplayColorDepth_t colorDepth[NUM_OF_PORTS];
 
     // Step 01: Attempt to get color depth without initialization
     status = dsGetPreferredColorDepth(-1, &colorDepth[0]);
@@ -5443,7 +5443,7 @@ void test_l1_dsVideoPort_positive_dsSetPreferredColorDepth(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -5502,7 +5502,7 @@ void test_l1_dsVideoPort_negative_dsSetPreferredColorDepth(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    intptr_t handle[dsVIDEOPORT_TYPE_MAX];
+    intptr_t handle[NUM_OF_PORTS];
 
     // Step 01: Attempt to set color depth without initialization
     status = dsSetPreferredColorDepth(-1, dsDISPLAY_COLORDEPTH_8BIT );
