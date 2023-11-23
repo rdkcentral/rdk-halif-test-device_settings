@@ -151,7 +151,6 @@ void test_l1_dsAudio_positive_dsAudioPortInit (void)
  * |02|Call dsAudioPortInit() - Attempt to initialize audio ports again without terminating the previous initialization | | dsERR_ALREADY_INITIALIZED | Initialization must fail as it is already initialized |
  * |03|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE | Termination must be successful |
  * 
- * @note Tests for a headless gateway device, which would return dsERR_OPERATION_NOT_SUPPORTED, dsERR_GENERAL are not included here but should be considered in a real-world scenario for the platforms that doesn't support Audio Port.
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions. 
 */
 void test_l1_dsAudio_negative_dsAudioPortInit (void)
@@ -244,8 +243,7 @@ void test_l1_dsAudio_positive_dsAudioPortTerm (void)
  * |03|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE | Termination should be successful after initialization |
  * |04|Call dsAudioPortTerm() - Attempt to terminate dsAudio | | dsERR_NOT_INITIALIZED | Termination should fail as module is not initialized |
  * 
- * @note dsERR_OPERATION_NOT_SUPPORTED is not included here but should be considered in a real-world scenario for the platforms that doesn't support Audio Port .
- * @note Testing dsERR_GENERAL might be challenging as they require specific platform conditions.
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED and  dsERR_GENERAL might be challenging as they require specific platform conditions.
  * 
  */
 void test_l1_dsAudio_negative_dsAudioPortTerm (void)
@@ -304,8 +302,8 @@ void test_l1_dsAudio_positive_dsGetAudioPort(void) {
 
     int result,i;
     int numports = 0;
-    intptr_t  handle[MAX_PORTS];
-    intptr_t  lasthandle , newhandle = NULL;
+    intptr_t  handle[MAX_PORTS]={NULL};
+    intptr_t  lasthandle=NULL , newhandle=NULL;
 
     numports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
@@ -319,13 +317,13 @@ void test_l1_dsAudio_positive_dsGetAudioPort(void) {
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Remember last handle for comparison in next step
-        if ((i == numports) - 1) {
+        if (i== (numports- 1)) {
             lasthandle = handle[i];
         }
     }
 
     // Step 03: Compare with the last element
-    newhandle = dsGetAudioPort(kPorts[numports -1].id.type, kPorts[numports-1].id.index, &handle[numports-1]);
+    result = dsGetAudioPort(kPorts[numports -1].id.type, kPorts[numports-1].id.index, &newhandle);
     UT_ASSERT_EQUAL(lasthandle,newhandle);
 
     // Step 04: Terminate audio ports
@@ -340,7 +338,7 @@ void test_l1_dsAudio_positive_dsGetAudioPort(void) {
  * @brief Ensure dsGetAudioPort() returns correct error codes during negative scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 010@n
+ * **Test Case ID:** 006@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -360,13 +358,12 @@ void test_l1_dsAudio_positive_dsGetAudioPort(void) {
  */
 void test_l1_dsAudio_negative_dsGetAudioPort(void) {
     // Logging at the start
-    gTestID = 10;
+    gTestID = 6;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
-    int i , numports;
-    intptr_t  handle[MAX_PORTS];
-    intptr_t  lasthandle , newhandle = NULL;
+    int i , numports=0;
+    intptr_t  handle[MAX_PORTS]={NULL};
 
     numports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
@@ -413,7 +410,7 @@ void test_l1_dsAudio_negative_dsGetAudioPort(void) {
  * @brief Ensure dsGetAudioEncoding() returns correct audio encoding during positive scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 006@n
+ * **Test Case ID:** 007@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -431,14 +428,13 @@ void test_l1_dsAudio_negative_dsGetAudioPort(void) {
  */
 void test_l1_dsAudio_positive_dsGetAudioEncoding(void) {
     // Logging at the start
-    gTestID = 6;
+    gTestID = 7;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
     int i, j;
-    int numports = 0;
-    intptr_t  handle[MAX_PORTS];
-    intptr_t  lasthandle , newhandle = NULL;
+    int numports=0;
+    intptr_t  handle[MAX_PORTS]={NULL};
     dsAudioPortType_t encodingarray1[MAX_PORTS];
     dsAudioPortType_t encodingarray2[MAX_PORTS];
 
@@ -452,10 +448,10 @@ void test_l1_dsAudio_positive_dsGetAudioEncoding(void) {
     for (i = 0; i < numports; i++) {
         result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle, NULL); // Assuming handle should not be NULL on success
+        UT_ASSERT_NOT_EQUAL(handle[i], NULL); // Assuming handle should not be NULL on success
      } 
 
-     // Step 03: Loop through all encoding options and get audio encoding for each port in array1
+    // Step 03: Loop through all encoding options and get audio encoding for each port in array1
     for (i = 0; i < numports; i++) {
                    result = dsGetAudioEncoding(handle[i], &encodingarray1[i]);
                    UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -463,9 +459,8 @@ void test_l1_dsAudio_positive_dsGetAudioEncoding(void) {
      
     // Step 04:Loop through all encoding options and get audio encoding for each port in array2
     for (i = 0; i < numports; i++) {
-                   result = dsGetAudioEncoding(handle[i], &encodingarray1[i]);
+                   result = dsGetAudioEncoding(handle[i], &encodingarray2[i]);
                    UT_ASSERT_EQUAL(result, dsERR_NONE);
-                   UT_ASSERT_TRUE(encoding == j); // Check if encoding matches the expected value
         }
 
     // Step 05: Compare the array values
@@ -487,7 +482,7 @@ void test_l1_dsAudio_positive_dsGetAudioEncoding(void) {
  * @brief Ensure dsGetAudioEncoding() returns correct error codes during negative scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 007@n
+ * **Test Case ID:** 008@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -507,11 +502,12 @@ void test_l1_dsAudio_positive_dsGetAudioEncoding(void) {
  */
 void test_l1_dsAudio_negative_dsGetAudioEncoding(void) {
     // Logging at the start
-    gTestID = 7;
+    gTestID = 8;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result,i;
-    intptr_t  handle[MAX_PORTS];
+    int numports=0;
+    intptr_t  handle[MAX_PORTS]={NULL};
 
     numports = (sizeof(kPorts) / sizeof(kPorts[0]));    
 
@@ -556,7 +552,7 @@ void test_l1_dsAudio_negative_dsGetAudioEncoding(void) {
  * @brief Ensure dsSetAudioEncoding() sets the audio encoding correctly for all valid enum values during positive scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 008@n
+ * **Test Case ID:** 009@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -572,12 +568,12 @@ void test_l1_dsAudio_negative_dsGetAudioEncoding(void) {
  */
 void test_l1_dsAudio_positive_dsSetAudioEncoding(void) {
     // Logging at the start
-    gTestID = 8;
+    gTestID = 9;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result,i,j;
     int numports = 0;
-    intptr_t  handle[MAX_PORTS];
+    intptr_t  handle[MAX_PORTS]={NULL};
 
     numports = (sizeof(kPorts) / sizeof(kPorts[0]));    
 
@@ -587,9 +583,9 @@ void test_l1_dsAudio_positive_dsSetAudioEncoding(void) {
 
     // Step 02: Get the port handle for all supported audio ports
     for (i = 0; i < numports; i++) {
-        result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle, NULL); // Assuming handle should not be NULL on success
+    result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_NOT_EQUAL(handle, NULL); // Assuming handle should not be NULL on success
          
      
       
@@ -599,34 +595,34 @@ void test_l1_dsAudio_positive_dsSetAudioEncoding(void) {
             result = dsSetAudioEncoding(handle[i], kSupportedEncodings[j]);
             // Check for either success or dsERR_GENERAL if not supported
             UT_ASSERT_TRUE(result == dsERR_NONE || result == dsERR_GENERAL);
-        }
-     } else if {
-         if(kPorts[i].id.type == dsAUDIOPORT_TYPE_HEADPHONE) {
-        for (j = 0; j < sizeof(kSupportedHEADPHONEEncodings) / sizeof(kSupportedHEADPHONEEncodings[0]); j++) {
-            result = dsSetAudioEncoding(handle[i], kSupportedEncodings[j]);
-            // Check for either success or dsERR_GENERAL if not supported
-            UT_ASSERT_TRUE(result == dsERR_NONE || result == dsERR_GENERAL);
-        }
-     }
+        }//end of j for loop
     } else if {
-     if(kPorts[i].id.type == dsAUDIOPORT_TYPE_SPEAKER) {
-        for (j = 0; j < sizeof(kSupportedSPEAKEREncodings) / sizeof(kSupportedSPEAKEREncodings[0]); j++) {
+         if(kPorts[i].id.type == dsAUDIOPORT_TYPE_HEADPHONE) {
+            for (j = 0; j < sizeof(kSupportedHEADPHONEEncodings) / sizeof(kSupportedHEADPHONEEncodings[0]); j++) {
             result = dsSetAudioEncoding(handle[i], kSupportedEncodings[j]);
             // Check for either success or dsERR_GENERAL if not supported
             UT_ASSERT_TRUE(result == dsERR_NONE || result == dsERR_GENERAL);
-        }
-    }
-   }else if {
-      if(kPorts[i].id.type == dsAUDIOPORT_TYPE_HDMI_ARC) {
-        for (j = 0; j < sizeof(kSupportedARCEncodings) / sizeof(kSupportedARCEncodings[0]); j++) {
+        }//end of j for loop
+      }
+    } else if {
+         if(kPorts[i].id.type == dsAUDIOPORT_TYPE_SPEAKER) {
+            for (j = 0; j < sizeof(kSupportedSPEAKEREncodings) / sizeof(kSupportedSPEAKEREncodings[0]); j++) {
             result = dsSetAudioEncoding(handle[i], kSupportedEncodings[j]);
             // Check for either success or dsERR_GENERAL if not supported
             UT_ASSERT_TRUE(result == dsERR_NONE || result == dsERR_GENERAL);
-        }
-
+        }//end of j for loop
+      }
+    }else if {
+        if(kPorts[i].id.type == dsAUDIOPORT_TYPE_HDMI_ARC) {
+           for (j = 0; j < sizeof(kSupportedARCEncodings) / sizeof(kSupportedARCEncodings[0]); j++) {
+           result = dsSetAudioEncoding(handle[i], kSupportedEncodings[j]);
+           // Check for either success or dsERR_GENERAL if not supported
+           UT_ASSERT_TRUE(result == dsERR_NONE || result == dsERR_GENERAL);
+        }//end of j for loop
+      }
      }
-   }
-
+    }//end of i for loop
+  
     // Step 04: Terminate audio ports
     result = dsAudioPortTerm();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -640,7 +636,7 @@ void test_l1_dsAudio_positive_dsSetAudioEncoding(void) {
  * @brief Ensure dsSetAudioEncoding() returns correct error codes during negative scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 009@n
+ * **Test Case ID:** 010@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -660,12 +656,12 @@ void test_l1_dsAudio_positive_dsSetAudioEncoding(void) {
  */
 void test_l1_dsAudio_negative_dsSetAudioEncoding(void) {
     // Logging at the start
-    gTestID = 9;
+    gTestID = 10;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result, i;
     int numports = 0;
-    intptr_t  handle[MAX_PORTS];
+    intptr_t  handle[MAX_PORTS]={NULL};
 
     numports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
@@ -708,7 +704,7 @@ void test_l1_dsAudio_negative_dsSetAudioEncoding(void) {
  * @brief Ensure dsGetAudioFormat() retrieves the audio format correctly during positive scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 010@n
+ * **Test Case ID:** 011@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -725,12 +721,12 @@ void test_l1_dsAudio_negative_dsSetAudioEncoding(void) {
  */
 void test_l1_dsAudio_positive_dsGetAudioFormat(void) {
     // Logging at the start
-    gTestID = 10;
+    gTestID = 11;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result ,i;
     int numports = 0;
-    intptr_t  handle[MAX_PORTS];
+    intptr_t  handle[MAX_PORTS]={NULL};
 
     numports = (sizeof(kPorts) / sizeof(kPorts[0]));
 
@@ -780,7 +776,7 @@ void test_l1_dsAudio_positive_dsGetAudioFormat(void) {
  * @brief Ensure dsGetAudioFormat() returns correct error codes during negative scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 011@n
+ * **Test Case ID:** 012@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -800,12 +796,12 @@ void test_l1_dsAudio_positive_dsGetAudioFormat(void) {
  */
 void test_l1_dsAudio_negative_dsGetAudioFormat(void) {
     // Logging at the start
-    gTestID = 11;
+    gTestID = 12;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result,i;
     int numports = 0;
-    intptr_t  handle[MAX_PORTS];
+    intptr_t  handle[MAX_PORTS]={NULL};
      dsAudioFormat_t audioFormat[MAX_PORTS]
 
     numports = (sizeof(kPorts) / sizeof(kPorts[0]));
@@ -6865,8 +6861,9 @@ void test_l1_dsAudio_positive_dsEnableLEConfig(void) {
  * |01|Call dsEnableLEConfig() - Attempt to enable LE without initializing audio ports | handle = [invalid handle],  enable = [TRUE] | dsERR_NOT_INITIALIZED | Call to dsEnableLEConfig() must fail as module is not initialized |
  * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
  * |03|Call dsEnableLEConfig() using an invalid handle but with a valid enable parameter | handle = [invalid handle], enable = [TRUE] | dsERR_INVALID_PARAM | Invalid Parameter error must be returned |
- * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE | Termination must be successful |
- * |05|Call dsEnableLEConfig() - Attempt to enable LE again after terminating audio ports | handle = [valid handle from previous step], enable = [FALSE] | dsERR_NOT_INITIALIZED | Call to dsEnableLEConfig() must fail as module is not initialized |
+ * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE | Termination must be successful |
+ * |06|Call dsEnableLEConfig() - Attempt to enable LE again after terminating audio ports | handle = [valid handle from previous step], enable = [FALSE] | dsERR_NOT_INITIALIZED | Call to dsEnableLEConfig() must fail as module is not initialized |
  * 
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
