@@ -1767,7 +1767,7 @@ void test_l1_dsAudio_negative_dsSetIntelligentEqualizerMode(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 07: Attempt to set Intelligent Equalizer Mode after termination
-    result = dsSetIntelligentEqualizerMode(VALID_HANDLE, 0); // Assume VALID_HANDLE is a valid handle
+    result = dsSetIntelligentEqualizerMode(handle[0], valid_mode);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Logging at the end
