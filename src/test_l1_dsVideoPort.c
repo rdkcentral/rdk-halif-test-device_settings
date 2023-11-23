@@ -370,7 +370,7 @@ void test_l1_dsVideoPort_negative_dsGetVideoPort(void) {
 
     // Step 03: Attempt to get the Video Port handle with invalid port type
     for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(NUM_OF_PORTS, kPorts[i].id.index, &(handle[i]));
+        status = dsGetVideoPort(dsVIDEOPORT_TYPE_MAX, kPorts[i].id.index, &(handle[i]));
         UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
     }
 
