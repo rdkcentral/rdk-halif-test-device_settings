@@ -29,7 +29,8 @@ namespace  {
 #include "dsUtl.h"
 #include "dsTypes.h"
 
-
+#define HAS_SPDIF_SUPPORT
+#define HAS_HEADPHONE_SUPPORT
 
 /*
  * Setup the supported configurations here.

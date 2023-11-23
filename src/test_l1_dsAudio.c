@@ -464,8 +464,8 @@ void test_l1_dsAudio_positive_dsGetAudioEncoding(void) {
         }
 
     // Step 05: Compare the array values
-    for (int i = 0; i < num_of_ports; i++) {
-                  UT_ASSERT_EQUAL(encodingarray1[i], encodingarray1[i]);
+    for (int i = 0; i < numports; i++) {
+                  UT_ASSERT_EQUAL(encodingarray1[i], encodingarray2[i]);
         }
 
       
@@ -592,35 +592,29 @@ void test_l1_dsAudio_positive_dsSetAudioEncoding(void) {
     // Step 03: Set supported encoding values for each audio port
     if(kPorts[i].id.type == dsAUDIOPORT_TYPE_SPDIF) {
         for (j = 0; j < sizeof(kSupportedSPDIFEncodings) / sizeof(kSupportedSPDIFEncodings[0]); j++) {
-            result = dsSetAudioEncoding(handle[i], kSupportedEncodings[j]);
+            result = dsSetAudioEncoding(handle[i],kSupportedSPDIFEncodings[j]);
             // Check for either success or dsERR_GENERAL if not supported
             UT_ASSERT_TRUE(result == dsERR_NONE || result == dsERR_GENERAL);
         }//end of j for loop
-    } else if {
-         if(kPorts[i].id.type == dsAUDIOPORT_TYPE_HEADPHONE) {
+    } else if(kPorts[i].id.type == dsAUDIOPORT_TYPE_HEADPHONE) {
             for (j = 0; j < sizeof(kSupportedHEADPHONEEncodings) / sizeof(kSupportedHEADPHONEEncodings[0]); j++) {
-            result = dsSetAudioEncoding(handle[i], kSupportedEncodings[j]);
+            result = dsSetAudioEncoding(handle[i], kSupportedHEADPHONEEncodings[j]);
             // Check for either success or dsERR_GENERAL if not supported
             UT_ASSERT_TRUE(result == dsERR_NONE || result == dsERR_GENERAL);
         }//end of j for loop
-      }
-    } else if {
-         if(kPorts[i].id.type == dsAUDIOPORT_TYPE_SPEAKER) {
+    } else if(kPorts[i].id.type == dsAUDIOPORT_TYPE_SPEAKER) {
             for (j = 0; j < sizeof(kSupportedSPEAKEREncodings) / sizeof(kSupportedSPEAKEREncodings[0]); j++) {
-            result = dsSetAudioEncoding(handle[i], kSupportedEncodings[j]);
+            result = dsSetAudioEncoding(handle[i], kSupportedHEADPHONEEncodings[j]);
             // Check for either success or dsERR_GENERAL if not supported
             UT_ASSERT_TRUE(result == dsERR_NONE || result == dsERR_GENERAL);
         }//end of j for loop
-      }
-    }else if {
-        if(kPorts[i].id.type == dsAUDIOPORT_TYPE_HDMI_ARC) {
+    }else if(kPorts[i].id.type == dsAUDIOPORT_TYPE_HDMI_ARC) {
            for (j = 0; j < sizeof(kSupportedARCEncodings) / sizeof(kSupportedARCEncodings[0]); j++) {
-           result = dsSetAudioEncoding(handle[i], kSupportedEncodings[j]);
+           result = dsSetAudioEncoding(handle[i], kSupportedHEADPHONEEncodings[j]);
            // Check for either success or dsERR_GENERAL if not supported
            UT_ASSERT_TRUE(result == dsERR_NONE || result == dsERR_GENERAL);
         }//end of j for loop
       }
-     }
     }//end of i for loop
   
     // Step 04: Terminate audio ports
@@ -744,20 +738,20 @@ void test_l1_dsAudio_positive_dsGetAudioFormat(void) {
         UT_ASSERT_NOT_EQUAL(handle, NULL); // Assuming handle should not be NULL on success
 
         // Step 03: Get the audio format of each port
-        result = dsGetAudioFormat(handle[i], &audioFormat1[i]);
+        result = dsGetAudioFormat(handle[i], &audioFormatarray1[i]);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_TRUE(audioFormat >= dsAUDIO_FORMAT_NONE && audioFormat < dsAUDIO_FORMAT_MAX); // Valid format check
+        UT_ASSERT_TRUE(audioFormatarray1[i] >= dsAUDIO_FORMAT_NONE && audioFormatarray1[i] < dsAUDIO_FORMAT_MAX); // Valid format check
     }
 
    
     // Step 04:Loop through all encoding options and get audio format for each port in array2
     for (i = 0; i < numports; i++) {
-                   result = dsGetAudioFormat(handle[i], &audioFormat2[i]);
+                   result = dsGetAudioFormat(handle[i], &audioFormatarray2[i]);
                    UT_ASSERT_EQUAL(result, dsERR_NONE);
         }
 
     // Step 05: Compare the array values
-    for (int i = 0; i < num_of_ports; i++) {
+    for (int i = 0; i < numports; i++) {
                   UT_ASSERT_EQUAL(audioFormatarray1[i], audioFormatarray2[i]);
         }
    
@@ -802,11 +796,9 @@ void test_l1_dsAudio_negative_dsGetAudioFormat(void) {
     int result,i;
     int numports = 0;
     intptr_t  handle[MAX_PORTS]={NULL};
-     dsAudioFormat_t audioFormat[MAX_PORTS]
+     dsAudioFormat_t audioFormat[MAX_PORTS];
 
     numports = (sizeof(kPorts) / sizeof(kPorts[0]));
-
-    dsAudioFormat_t audioFormat;
 
     // Step 01: Attempt to get audio format without initializing
     result = dsGetAudioFormat(-1, &audioFormat[0]);                                       // Replace with valid handle
