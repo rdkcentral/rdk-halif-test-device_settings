@@ -25,8 +25,8 @@ SRC_DIRS = $(ROOT_DIR)/src
 INC_DIRS := $(ROOT_DIR)/../include
 HAL_LIB := dshal
 SKELTON_SRCS := $(ROOT_DIR)/skeletons/src/dsDisplay.c
-SKELTON_SRCS_VIDEO_SETTINGS := $(ROOT_DIR)/skeletons/src/dsVideoPortSettings.c
-SKELTON_SRCS_RESOLUTION_SETTINGS := $(ROOT_DIR)/skeletons/src/dsVideoResolutionSettings.c
+SKELTON_SRCS_VIDEO_SETTINGS := $(ROOT_DIR)/skeletons/src/dsVideoPortSettings.h
+SKELTON_SRCS_RESOLUTION_SETTINGS := $(ROOT_DIR)/skeletons/src/dsVideoResolutionSettings.h
 
 ifeq ($(TARGET),)
 $(info TARGET NOT SET )
