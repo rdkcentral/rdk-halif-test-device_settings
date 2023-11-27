@@ -25,8 +25,6 @@ SRC_DIRS = $(ROOT_DIR)/src
 INC_DIRS := $(ROOT_DIR)/../include
 HAL_LIB := dshal
 SKELTON_SRCS := $(ROOT_DIR)/skeletons/src/dsDisplay.c
-SKELTON_SRCS_VIDEO_SETTINGS := $(ROOT_DIR)/skeletons/src/dsVideoPortSettings.h
-SKELTON_SRCS_RESOLUTION_SETTINGS := $(ROOT_DIR)/skeletons/src/dsVideoResolutionSettings.h
 
 ifeq ($(TARGET),)
 $(info TARGET NOT SET )
@@ -65,8 +63,6 @@ build: $(SETUP_SKELETON_LIBS)
 skeleton:
 	echo $(CC)
 	$(CC) -fPIC -shared -I$(ROOT_DIR)/../include $(SKELTON_SRCS) -o lib$(HAL_LIB).so
-	$(CC) -fPIC -shared -I$(ROOT_DIR)/../include $(SKELTON_SRCS_VIDEO_SETTINGS) -o lib$(HAL_LIB).so
-	$(CC) -fPIC -shared -I$(ROOT_DIR)/../include $(SKELTON_SRCS_RESOLUTION_SETTINGS) -o lib$(HAL_LIB).so
 	mkdir -p $(HAL_LIB_DIR)
 	cp $(ROOT_DIR)/lib$(HAL_LIB).so $(HAL_LIB_DIR)
 
