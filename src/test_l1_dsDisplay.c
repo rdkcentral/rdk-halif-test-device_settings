@@ -113,18 +113,22 @@ void test_l1_dsDisplay_positive_dsDisplayInit(void) {
 
     // Step 01: Initialize the display module
     result = dsDisplayInit();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 02: Terminate the display module
     result = dsDisplayTerm();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 03: Reinitialize the display module to check for reinitialization capability
     result = dsDisplayInit();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 04: Terminate the display module again
     result = dsDisplayTerm();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // End of the test
@@ -161,14 +165,17 @@ void test_l1_dsDisplay_negative_dsDisplayInit(void) {
 
     // Step 01: Initialize the display module
     result = dsDisplayInit();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 02: Attempt to initialize the display module again
     result = dsDisplayInit();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_ALREADY_INITIALIZED);
 
     // Step 03: Terminate the display module
     result = dsDisplayTerm();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // End of the test
@@ -205,18 +212,22 @@ void test_l1_dsDisplay_positive_dsDisplayTerm(void) {
 
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 02: Terminate the display sub-system
     result = dsDisplayTerm();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 03: Reinitialize the display sub-system to check for reinitialization
     result = dsDisplayInit();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 04: Terminate the display sub-system again to confirm termination capability
     result = dsDisplayTerm();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // End of the test
@@ -253,18 +264,22 @@ void test_l1_dsDisplay_negative_dsDisplayTerm(void) {
 
     // Step 01: Call dsDisplayTerm() without initializing the display sub-system
     result = dsDisplayTerm();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 03: Terminate the display sub-system
     result = dsDisplayTerm();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 04: Call dsDisplayTerm() again after termination
     result = dsDisplayTerm();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // End of the test
@@ -305,6 +320,7 @@ void test_l1_dsDisplay_positive_dsGetDisplay(void) {
 
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     for (size_t i = 0; i < numPorts; i++) {
@@ -324,6 +340,7 @@ void test_l1_dsDisplay_positive_dsGetDisplay(void) {
 
     // Step 04: Terminate the display sub-system
     result = dsDisplayTerm();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // End of the test
@@ -367,30 +384,37 @@ void test_l1_dsDisplay_negative_dsGetDisplay(void) {
 
     // Step 01: Call dsGetDisplay() without initializing the display sub-system
     result = dsGetDisplay(kSupportedPortTypes[0], 1, &displayHandle);
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 03: Call dsGetDisplay() with invalid video type
     result = dsGetDisplay(dsVIDEOPORT_TYPE_MAX, 1, &displayHandle);
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 04: Call dsGetDisplay() with invalid index
     result = dsGetDisplay(kSupportedPortTypes[0], -1, &displayHandle);
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 05: Call dsGetDisplay() with NULL handle
     result = dsGetDisplay(kSupportedPortTypes[0], 1, NULL);
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 06: Terminate the display sub-system
     result = dsDisplayTerm();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 07: Call dsGetDisplay() again after termination
     result = dsGetDisplay(kSupportedPortTypes[0], 1, &displayHandle);
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // End of the test
@@ -433,6 +457,7 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
 
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Loop through all valid ports
@@ -458,6 +483,7 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
 
     // Step 06: Terminate the display sub-system
     result = dsDisplayTerm();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // End of the test
@@ -503,10 +529,12 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
 
     // Step 01: Call dsGetEDID() without initializing the display sub-system
     result = dsGetEDID(displayHandle, &edid);
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 03: Obtain a display device handle
@@ -525,10 +553,12 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
 
     // Step 06: Terminate the display sub-system
     result = dsDisplayTerm();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 07: Call dsGetEDID() without initializing the display sub-system
     result = dsGetEDID(displayHandle, &edid);
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // End of the test
@@ -574,6 +604,7 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
 
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Loop through all valid ports
@@ -600,6 +631,7 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
 
     // Step 06: Terminate the display sub-system
     result = dsDisplayTerm();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // End of the test
@@ -645,10 +677,12 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
 
     // Step 01: Call dsGetEDIDBytes() without initializing or obtaining a handle
     result = dsGetEDIDBytes(displayHandle, edid, &length);
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 03: Loop through all valid ports
@@ -671,10 +705,12 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
 
     // Step 07: Terminate the display sub-system
     result = dsDisplayTerm();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 08: Call dsGetEDIDBytes() without initializing or obtaining a handle
     result = dsGetEDIDBytes(displayHandle, edid, &length);
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // End of the test
@@ -716,6 +752,7 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
 
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 02: Loop through all valid ports in kSupportedPortTypes
@@ -737,6 +774,7 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
 
     // Step 06: Terminate the display sub-system
     result = dsDisplayTerm();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // End of the test
@@ -781,10 +819,12 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
 
     // Step 01: Call dsGetDisplayAspectRatio() without initializing the display sub-system
     result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio);
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 03: Loop through all valid ports in kSupportedPortTypes
@@ -803,10 +843,12 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
 
     // Step 06: Terminate the display sub-system
     result = dsDisplayTerm();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 07: Call dsGetDisplayAspectRatio() without initializing the display sub-system
     result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio);
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // End of the test
@@ -850,6 +892,7 @@ void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback(void) {
 
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 02: Loop through all valid ports in kSupportedPortTypes
@@ -864,6 +907,7 @@ void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback(void) {
 
     // Step 04: Terminate the display sub-system
     result = dsDisplayTerm();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // End of the test
@@ -907,10 +951,12 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
 
     // Step 01: Call dsRegisterDisplayEventCallback() without initializing the display sub-system
     result = dsRegisterDisplayEventCallback(displayHandle, testDisplayCallback);
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Loop through all valid ports in kSupportedPortTypes[]
@@ -930,10 +976,12 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
 
     // Step 05: Terminate the display sub-system
     result = dsDisplayTerm();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 06: Call dsRegisterDisplayEventCallback() without reinitializing the display sub-system
     result = dsRegisterDisplayEventCallback(displayHandle, testDisplayCallback);
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // End of the test
