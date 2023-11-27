@@ -325,18 +325,18 @@ void test_l1_dsDisplay_positive_dsGetDisplay(void) {
 
     for (size_t i = 0; i < numPorts; i++) {
         dsVideoPortType_t vType = kSupportedPortTypes[i];
-
+        UT_LOG("\n In %s Port Type: [%d]\n", __FUNCTION__, vType);
         // Step 02: Call dsGetDisplay() for each valid port
-        result = dsGetDisplay(vType, 1, &displayHandle1);
-         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
+        result = dsGetDisplay(vType, i, &displayHandle1);
+        UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_LOG("Display handle for port type %d: %ld\n", vType, (long)displayHandle1);
 
         // Step 03: Call the last value again, and compare the results
-        result = dsGetDisplay(vType, 1, &displayHandle2);
-         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, displayHandle1, displayHandle2);
+        result = dsGetDisplay(vType, i, &displayHandle2);
+        UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, displayHandle1, displayHandle2);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-         UT_LOG("\n In %s Comparison: [%d = %d]\n", __FUNCTION__, result);
+        UT_LOG("\n In %s Comparison: [%d = %d]\n", __FUNCTION__, result);
         UT_ASSERT_EQUAL(displayHandle1, displayHandle2);
         UT_LOG("Repeated display handle for port type %d: %ld\n", vType, (long)displayHandle2);
     }
@@ -386,7 +386,7 @@ void test_l1_dsDisplay_negative_dsGetDisplay(void) {
     intptr_t displayHandle;
 
     // Step 01: Call dsGetDisplay() without initializing the display sub-system
-    result = dsGetDisplay(kSupportedPortTypes[0], 1, &displayHandle);
+    result = dsGetDisplay(kSupportedPortTypes[0], 0, &displayHandle);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
@@ -396,7 +396,7 @@ void test_l1_dsDisplay_negative_dsGetDisplay(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 03: Call dsGetDisplay() with invalid video type
-    result = dsGetDisplay(dsVIDEOPORT_TYPE_MAX, 1, &displayHandle);
+    result = dsGetDisplay(dsVIDEOPORT_TYPE_MAX, (int)dsVIDEOPORT_TYPE_MAX, &displayHandle);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
@@ -406,7 +406,7 @@ void test_l1_dsDisplay_negative_dsGetDisplay(void) {
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 05: Call dsGetDisplay() with NULL handle
-    result = dsGetDisplay(kSupportedPortTypes[0], 1, NULL);
+    result = dsGetDisplay(kSupportedPortTypes[0], 0, NULL);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
@@ -416,7 +416,7 @@ void test_l1_dsDisplay_negative_dsGetDisplay(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 07: Call dsGetDisplay() again after termination
-    result = dsGetDisplay(kSupportedPortTypes[0], 1, &displayHandle);
+    result = dsGetDisplay(kSupportedPortTypes[0], 0, &displayHandle);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
