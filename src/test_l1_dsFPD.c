@@ -1119,15 +1119,18 @@ void test_l1_dsFPD_negative_dsSetFPColor (void)
             int isSupported = 0;
             for (int k = 0; colors[k].color != dsFPD_COLOR_MAX; ++k)
             {
+
                 if (allColors[j] == colors[k].color)
                 {
                     isSupported = 1;
+                    break;
                 }
-                if (!isSupported)
-                {
-                    result = dsSetFPColor(kIndicators[i].id, allColors[j]);
-                    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
-                }
+                
+            }
+            if (!isSupported)
+            {
+                result = dsSetFPColor(kIndicators[i].id, allColors[j]);
+                UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
             }
             
         }
