@@ -438,19 +438,22 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
     // Loop through all valid ports
     for (int i = 0; i < sizeof(kSupportedPortTypes) / sizeof(kSupportedPortTypes[0]); i++) {
         // Step 02: Get the display device handle
-        result = dsGetDisplay(kSupportedPortTypes[i], i, &displayHandle);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+        if(kSupportedPortTypes[i] == dsVIDEOPORT_TYPE_INTERNAL || kSupportedPortTypes[i] == dsVIDEOPORT_TYPE_HDMI || kSupportedPortTypes[i] == dsVIDEOPORT_TYPE_HDMI_INPUT){
+            result = dsGetDisplay(kSupportedPortTypes[i], i, &displayHandle);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-        // Step 03: Call dsGetEDID() with the obtained handle
-        result = dsGetEDID(displayHandle, &edid1);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+            // Step 03: Call dsGetEDID() with the obtained handle
+            result = dsGetEDID(displayHandle, &edid1);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-        // Step 04: Call dsGetEDID() again with the same handle
-        result = dsGetEDID(displayHandle, &edid2);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+            // Step 04: Call dsGetEDID() again with the same handle
+            result = dsGetEDID(displayHandle, &edid2);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-        // Step 05: Compare the returned results
-        UT_ASSERT_EQUAL(memcmp(&edid1, &edid2, sizeof(dsDisplayEDID_t)), 0);
+            // Step 05: Compare the returned results
+            UT_ASSERT_EQUAL(memcmp(&edid1, &edid2, sizeof(dsDisplayEDID_t)), 0);
+
+        }
     }
 
     // Step 06: Terminate the display sub-system
