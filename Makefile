@@ -23,6 +23,7 @@ TOP_DIR := $(ROOT_DIR)
 
 SRC_DIRS = $(ROOT_DIR)/src
 INC_DIRS := $(ROOT_DIR)/../include
+INC_DIRS += $(ROOT_DIR)/skeletons/src/
 HAL_LIB := ds-hal
 SKELTON_SRCS := $(ROOT_DIR)/skeletons/src/dsVideoPort.c
 

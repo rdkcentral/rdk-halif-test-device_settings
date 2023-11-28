@@ -128,6 +128,49 @@ static dsVideoPortResolution_t kResolutions[] = {
 #endif
 };
 
+static dsVideoPortResolution_t invalid_kRes[] = {
+                {   /*480i*/
+                        /*.name = */                                    "NULL",
+                        /*.pixelResolution = */                 dsVIDEO_PIXELRES_720x480,
+                        /*.aspectRatio = */                             dsVIDEO_ASPECT_RATIO_4x3,
+                        /*.stereoscopicMode = */                dsVIDEO_SSMODE_2D,
+                        /*.frameRate = */                               dsVIDEO_FRAMERATE_29dot97,
+                        /*.interlaced = */                              _INTERLACED,
+                },
+                {   /*480p*/
+                        /*.name = */                                    "480p",
+                        /*.pixelResolution = */                 dsVIDEO_PIXELRES_MAX,
+                        /*.aspectRatio = */                             dsVIDEO_ASPECT_RATIO_4x3,
+                        /*.stereoscopicMode = */                dsVIDEO_SSMODE_2D,
+                        /*.frameRate = */                               dsVIDEO_FRAMERATE_59dot94,
+                        /*.interlaced = */                              _PROGRESSIVE,
+                },
+                {   /*576p*/
+                        /*.name = */                                    "576p50",
+                        /*.pixelResolution = */                 dsVIDEO_PIXELRES_720x576,
+                        /*.aspectRatio = */                             dsVIDEO_ASPECT_RATIO_MAX,
+                        /*.stereoscopicMode = */                dsVIDEO_SSMODE_2D,
+                        /*.frameRate = */                               dsVIDEO_FRAMERATE_50,
+                        /*.interlaced = */                              _PROGRESSIVE,
+                },
+                {   /*720p - Default - AutoSelect */
+                        /*.name = */                                    "720p",
+                        /*.pixelResolution = */                 dsVIDEO_PIXELRES_1280x720,
+                        /*.aspectRatio = */                             dsVIDEO_ASPECT_RATIO_16x9,
+                        /*.stereoscopicMode = */                dsVIDEO_SSMODE_MAX,
+                        /*.frameRate = */                               dsVIDEO_FRAMERATE_59dot94,
+                        /*.interlaced = */                              _PROGRESSIVE,
+                },
+                {   /*720p - Default - AutoSelect */
+                        /*.name = */                                    "720p50",
+                        /*.pixelResolution = */                 dsVIDEO_PIXELRES_1280x720,
+                        /*.aspectRatio = */                             dsVIDEO_ASPECT_RATIO_16x9,
+                        /*.stereoscopicMode = */                dsVIDEO_SSMODE_2D,
+                        /*.frameRate = */                               dsVIDEO_FRAMERATE_MAX,
+                        /*.interlaced = */                              _PROGRESSIVE,
+                },
+};
+
 static const int kDefaultResIndex = 7; //Pick one resolution from kResolutions[] as default
 
 #ifdef __cplusplus
