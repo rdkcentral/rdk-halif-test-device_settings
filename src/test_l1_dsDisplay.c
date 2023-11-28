@@ -84,6 +84,22 @@
 static int gTestGroup = 1;
 static int gTestID = 1;
 
+#define DS_ASSERT_AUTO_TERM_NUMERICAL(value, comparison){\
+    if(value != comparison){\
+        UT_LOG("\n In %s Comparison: [%d = %d]\n", __FUNCTION__, value, comparison);\
+        dsDisplayTerm();\
+        UT_FAIL();\
+    }\
+}\
+
+#define DS_ASSERT_AUTO_TERM_STRING(value, comparison){\
+    if(strcmp(value, comparison) != 0){\
+        UT_LOG("\n In %s Comparison: [%s = %s]\n", __FUNCTION__, value, comparison);\
+        dsDisplayTerm();\
+        UT_FAIL();\
+    }\
+}\
+
 /**
  * @brief Ensure dsDisplayInit() initializes the DS Display sub-system correctly during positive scenarios
  * 
@@ -171,7 +187,7 @@ void test_l1_dsDisplay_negative_dsDisplayInit(void) {
     // Step 02: Attempt to initialize the display module again
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_ALREADY_INITIALIZED);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_ALREADY_INITIALIZED);
 
     // Step 03: Terminate the display module
     result = dsDisplayTerm();
@@ -181,6 +197,7 @@ void test_l1_dsDisplay_negative_dsDisplayInit(void) {
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
+
 
 
 /**
@@ -329,15 +346,15 @@ void test_l1_dsDisplay_positive_dsGetDisplay(void) {
         // Step 02: Call dsGetDisplay() for each valid port
         result = dsGetDisplay(vType, i, &displayHandle1);
         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
         UT_LOG("Display handle for port type %d: %ld\n", vType, (long)displayHandle1);
 
         // Step 03: Call the last value again, and compare the results
         result = dsGetDisplay(vType, i, &displayHandle2);
         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, displayHandle1, displayHandle2);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
         UT_LOG("\n In %s Comparison: [%d = %d]\n", __FUNCTION__, result);
-        UT_ASSERT_EQUAL(displayHandle1, displayHandle2);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(displayHandle1, displayHandle2);
         UT_LOG("Repeated display handle for port type %d: %ld\n", vType, (long)displayHandle2);
     }
 
@@ -398,17 +415,17 @@ void test_l1_dsDisplay_negative_dsGetDisplay(void) {
     // Step 03: Call dsGetDisplay() with invalid video type
     result = dsGetDisplay(dsVIDEOPORT_TYPE_MAX, (int)dsVIDEOPORT_TYPE_MAX, &displayHandle);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 
     // Step 04: Call dsGetDisplay() with invalid index
     result = dsGetDisplay(kSupportedPortTypes[0], -1, &displayHandle);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 
     // Step 05: Call dsGetDisplay() with NULL handle
     result = dsGetDisplay(kSupportedPortTypes[0], 0, NULL);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 
     // Step 06: Terminate the display sub-system
     result = dsDisplayTerm();
@@ -456,7 +473,7 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
 
     int result;
     intptr_t displayHandle;
-    dsDisplayEDID_t edid1, edid2;
+    dsDisplayEDID_t edid1, edid2 = {0};
 
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
@@ -468,18 +485,29 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
         // Step 02: Get the display device handle
         if(kSupportedPortTypes[i] == dsVIDEOPORT_TYPE_INTERNAL || kSupportedPortTypes[i] == dsVIDEOPORT_TYPE_HDMI || kSupportedPortTypes[i] == dsVIDEOPORT_TYPE_HDMI_INPUT){
             result = dsGetDisplay(kSupportedPortTypes[i], i, &displayHandle);
-            UT_ASSERT_EQUAL(result, dsERR_NONE);
+            DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
             // Step 03: Call dsGetEDID() with the obtained handle
             result = dsGetEDID(displayHandle, &edid1);
-            UT_ASSERT_EQUAL(result, dsERR_NONE);
+            DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
             // Step 04: Call dsGetEDID() again with the same handle
             result = dsGetEDID(displayHandle, &edid2);
-            UT_ASSERT_EQUAL(result, dsERR_NONE);
+            DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
             // Step 05: Compare the returned results
-            UT_ASSERT_EQUAL(memcmp(&edid1, &edid2, sizeof(dsDisplayEDID_t)), 0);
+            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1.productCode , edid2.productCode);
+            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1.serialNumber , edid2.serialNumber);
+            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1.manufactureYear , edid2.manufactureYear);
+            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1.manufactureWeek , edid2.manufactureWeek);
+            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1.hdmiDeviceType , edid2.hdmiDeviceType);
+            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1.isRepeater , edid2.isRepeater);
+            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1.physicalAddressA , edid2.physicalAddressA);
+            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1.physicalAddressB , edid2.physicalAddressB);
+            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1.physicalAddressC , edid2.physicalAddressC);
+            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1.physicalAddressD , edid2.physicalAddressD);
+            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1.numOfSupportedResolution , edid2.numOfSupportedResolution);
+            DS_ASSERT_AUTO_TERM_STRING(edid2.monitorName, edid2.monitorName)
 
         }
     }
@@ -543,15 +571,15 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
     // Step 03: Obtain a display device handle
     for (int i = 0; i < sizeof(kSupportedPortTypes) / sizeof(kSupportedPortTypes[0]); i++) {
         result = dsGetDisplay(kSupportedPortTypes[i], i, &displayHandle);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
         // Step 04: Call dsGetEDID() with an invalid handle
         result = dsGetEDID(NULL, &edid);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 
         // Step 05: Call dsGetEDID() with a NULL dsDisplayEDID_t
         result = dsGetEDID(displayHandle, NULL);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
     }
 
     // Step 06: Terminate the display sub-system
@@ -600,8 +628,8 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
 
     int result;
     intptr_t displayHandle;
-    unsigned char *edid1 = (unsigned char *)malloc(256);
-    unsigned char *edid2 = (unsigned char *)malloc(256);
+    unsigned char *edid1 = (unsigned char *)malloc(512);
+    unsigned char *edid2 = (unsigned char *)malloc(512);
     int length1 = 0;
     int length2 = 0;
 
@@ -613,18 +641,20 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
     // Loop through all valid ports
     for (int i = 0; i < sizeof(kSupportedPortTypes) / sizeof(kSupportedPortTypes[0]); i++) {
         // Step 02: Call dsGetDisplay() for each valid port
-        result = dsGetDisplay(kSupportedPortTypes[i], 1, &displayHandle);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+        result = dsGetDisplay(kSupportedPortTypes[i], i, &displayHandle);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
         // Step 03 and 04: Allocate memory for the EDID buffer and call dsGetEDIDBytes() twice
         result = dsGetEDIDBytes(displayHandle, edid1, &length1);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
         result = dsGetEDIDBytes(displayHandle, edid2, &length2);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
         // Step 05: Verify that the return results are the same
-        UT_ASSERT_EQUAL(length1, length2);
-        UT_ASSERT_EQUAL(memcmp(edid1, edid2, length1), 0);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(length1, length2);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(memcmp(edid1, edid2, length1), 0);
 
         // Free the allocated memory
         
@@ -691,19 +721,19 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
     // Step 03: Loop through all valid ports
     for (int i = 0; i < sizeof(kSupportedPortTypes) / sizeof(kSupportedPortTypes[0]); i++) {
         result = dsGetDisplay(kSupportedPortTypes[i], i, &displayHandle);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
         // Step 04: Call dsGetEDIDBytes() with an invalid handle
         result = dsGetEDIDBytes(NULL, edid, &length);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 
         // Step 05: Call dsGetEDIDBytes() with null edid
         result = dsGetEDIDBytes(displayHandle, NULL, &length);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 
         // Step 06: Call dsGetEDIDBytes() with null length
         result = dsGetEDIDBytes(displayHandle, edid, NULL);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
     }
 
     // Step 07: Terminate the display sub-system
@@ -751,7 +781,8 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
 
     int result;
     intptr_t displayHandle;
-    dsVideoAspectRatio_t aspectRatio1, aspectRatio2;
+    dsVideoAspectRatio_t aspectRatio1 = dsVIDEO_ASPECT_RATIO_MAX;
+    dsVideoAspectRatio_t aspectRatio2 = dsVIDEO_ASPECT_RATIO_MAX;
 
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
@@ -761,18 +792,18 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
     // Step 02: Loop through all valid ports in kSupportedPortTypes
     for (int i = 0; i < sizeof(kSupportedPortTypes) / sizeof(kSupportedPortTypes[0]); i++) {
         result = dsGetDisplay(kSupportedPortTypes[i], i, &displayHandle);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
         // Step 03: Call dsGetDisplayAspectRatio() with the obtained handle
         result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio1);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
         // Step 04: Call dsGetDisplayAspectRatio() again with the same handle
         result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio2);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
         // Step 05: Compare the results
-        UT_ASSERT_EQUAL(aspectRatio1, aspectRatio2);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(aspectRatio1, aspectRatio2);
     }
 
     // Step 06: Terminate the display sub-system
@@ -833,15 +864,15 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
     // Step 03: Loop through all valid ports in kSupportedPortTypes
     for (int i = 0; i < sizeof(kSupportedPortTypes) / sizeof(kSupportedPortTypes[0]); i++) {
         result = dsGetDisplay(kSupportedPortTypes[i], i, &displayHandle);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
         // Step 04: Call dsGetDisplayAspectRatio() with an invalid handle
         result = dsGetDisplayAspectRatio(NULL, &aspectRatio);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 
         // Step 05: Call dsGetDisplayAspectRatio() with a NULL aspectRatio
         result = dsGetDisplayAspectRatio(displayHandle, NULL);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
     }
 
     // Step 06: Terminate the display sub-system
@@ -901,11 +932,11 @@ void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback(void) {
     // Step 02: Loop through all valid ports in kSupportedPortTypes
     for (int i = 0; i < sizeof(kSupportedPortTypes) / sizeof(kSupportedPortTypes[0]); i++) {
         result = dsGetDisplay(kSupportedPortTypes[i], i, &displayHandle);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
         // Step 03: Call dsRegisterDisplayEventCallback() with the obtained handle and a valid callback function
         result = dsRegisterDisplayEventCallback(displayHandle, testDisplayCallback);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
     }
 
     // Step 04: Terminate the display sub-system
@@ -966,15 +997,15 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
     for (int i = 0; i < portCount; ++i) {
         // Obtain a display device handle
         result = dsGetDisplay(kSupportedPortTypes[i], i, &displayHandle);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
         // Call dsRegisterDisplayEventCallback() with a NULL handle
         result = dsRegisterDisplayEventCallback(NULL, testDisplayCallback);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 
         // Call dsRegisterDisplayEventCallback() with a NULL callback function
         result = dsRegisterDisplayEventCallback(displayHandle, NULL);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
     }
 
     // Step 05: Terminate the display sub-system
@@ -993,6 +1024,7 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
 
 
 static UT_test_suite_t * pSuite = NULL;
+static UT_test_suite_t * pSuite2 = NULL;
 
 /**
  * @brief Register the main test(s) for this module
@@ -1003,7 +1035,8 @@ int test_l1_dsDisplay_register ( void )
 {
 	/* add a suite to the registry */
 	pSuite = UT_add_suite( "[L1 dsDisplay]", NULL, NULL );
-	if ( NULL == pSuite )
+    pSuite2 = UT_add_suite( "[L1 dsDisplay -- advanced]", NULL, NULL );
+	if ( NULL == pSuite || NULL == pSuite2 )
 	{
 		return -1;
 	}	
@@ -1016,7 +1049,7 @@ int test_l1_dsDisplay_register ( void )
 	UT_add_test( pSuite, "dsGetDisplay_L1_negative" ,test_l1_dsDisplay_negative_dsGetDisplay );
 	UT_add_test( pSuite, "dsGetEDID_L1_positive" ,test_l1_dsDisplay_positive_dsGetEDID );
 	UT_add_test( pSuite, "dsGetEDID_L1_negative" ,test_l1_dsDisplay_negative_dsGetEDID );
-	UT_add_test( pSuite, "dsGetEDIDBytes_L1_positive" ,test_l1_dsDisplay_positive_dsGetEDIDBytes );
+	UT_add_test( pSuite2, "dsGetEDIDBytes_L1_positive" ,test_l1_dsDisplay_positive_dsGetEDIDBytes );
 	UT_add_test( pSuite, "dsGetEDIDBytes_L1_negative" ,test_l1_dsDisplay_negative_dsGetEDIDBytes );
 	UT_add_test( pSuite, "dsGetDisplayAspectRatio_L1_positive" ,test_l1_dsDisplay_positive_dsGetDisplayAspectRatio );
 	UT_add_test( pSuite, "dsGetDisplayAspectRatio_L1_negative" ,test_l1_dsDisplay_negative_dsGetDisplayAspectRatio );
