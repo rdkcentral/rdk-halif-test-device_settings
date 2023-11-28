@@ -1764,7 +1764,6 @@ void test_l1_dsVideoPort_positive_dsSetResolution(void) {
     dsError_t status;
     intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    dsVideoPortResolution_t resolution[NUM_OF_PORTS];
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -1778,8 +1777,10 @@ void test_l1_dsVideoPort_positive_dsSetResolution(void) {
 
     // Step 03: Set the resolution for the video port
     for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsSetResolution(handle[i], &resolution[i]);
+        for(int j =0; j < (sizeof(kResolutions)/sizeof(kResolutions[0])); j++) {
+        status = dsSetResolution(handle[i], &kResolutions[j]);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
+      }
     }
 
     // Step 04: Terminate the video port system
@@ -1810,8 +1811,9 @@ void test_l1_dsVideoPort_positive_dsSetResolution(void) {
  * |03|Call dsSetResolution() - Using an invalid handle but with valid resolution pointer | handle = [invalid handle], resolution = [valid pointer] | dsERR_INVALID_PARAM | Invalid paramerter must be returned |
  * |04|Call dsGetVideoPort() - Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports |
  * |05|Call dsSetResolution() - By looping through acquired port handles but with a invalid pointer | handle = [valid handle], resolution = [invalid pointer] | dsERR_INVALID_PARAM | Invalid paramerter must be returned |
- * |06|Call dsVideoPortTerm() - Terminate the video ports of a system | | dsERR_NONE | Termination must be successful |
- * |07|Call dsSetResolution() - Again after terminating video ports attempt to set the resolution | handle= [valid handle from step 04 ] , resolution = [valid pointer] | dsERR_NOT_INITIALIZED | dsSetResolution call must fail as module is not initialized |
+ * |06|Call dsSetResolution() - By looping through acquired port handles but with a out of range resolution paramerters | handle = [valid handle], resolution = [invalid pointer] | dsERR_INVALID_PARAM | Invalid paramerter must be returned |
+ * |07|Call dsVideoPortTerm() - Terminate the video ports of a system | | dsERR_NONE | Termination must be successful |
+ * |08|Call dsSetResolution() - Again after terminating video ports attempt to set the resolution | handle= [valid handle from step 04 ] , resolution = [valid pointer] | dsERR_NOT_INITIALIZED | dsSetResolution call must fail as module is not initialized |
  * 
  * 
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
@@ -1823,10 +1825,10 @@ void test_l1_dsVideoPort_negative_dsSetResolution(void) {
     dsError_t status;
     intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    dsVideoPortResolution_t resolution[NUM_OF_PORTS];
+        
 
     // Step 01: Attempt to set resolution without initialization
-    status = dsSetResolution(-1, &(resolution[0]));
+    status = dsSetResolution(-1, &(kResolutions[0]));
     UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize video port system
@@ -1834,7 +1836,7 @@ void test_l1_dsVideoPort_negative_dsSetResolution(void) {
     UT_ASSERT_EQUAL(status, dsERR_NONE);
 
     // Step 03: Invalid handle check
-    status = dsSetResolution(handle[0], &(resolution[0]));
+    status = dsSetResolution(handle[0], &(kResolutions[0]));
     UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
 
     // Step 04: Get valid video port handle
@@ -1849,12 +1851,19 @@ void test_l1_dsVideoPort_negative_dsSetResolution(void) {
     UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
     }
 
-    // Step 06: Terminate the video port system
+    // Step 06: Set resolution with invalid resolution parameters
+    for (int i = 0; i < NUM_OF_PORTS; i++) {
+        for (int j = 0; j < (sizeof(invalid_kRes)/sizeof(invalid_kRes[0])); j++) {
+    status = dsSetResolution(handle[i], &invalid_kRes[j]);
+    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+      }
+    }
+    // Step 07: Terminate the video port system
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 07: Attempt to set resolution after termination
-    status = dsSetResolution(handle[0], &(resolution[0]));
+    // Step 08: Attempt to set resolution after termination
+    status = dsSetResolution(handle[0], &(kResolutions[0]));
     UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
@@ -4156,42 +4165,55 @@ void test_l1_dsVideoPort_negative_dsGetQuantizationRange(void) {
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
-/*void test_l1_dsVideoPort_positive_dsGetCurrentOutputSettings(void) {
+void test_l1_dsVideoPort_positive_dsGetCurrentOutputSettings(void) {
     gTestID = 63;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status;
-    VideoPortHandle handle;*/
-//    OutputSettings settingsArray1[/* Size matching kPorts array */];
-//    OutputSettings settingsArray2[/* Size matching kPorts array */];
-//    int kPorts[] = {/* Array of valid port indexes */};
-//    int portType = /* Valid port type */;
-
+    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+    dsHDRStandard_t hdrstandardarray1[NUM_OF_PORTS];
+    dsDisplayMatrixCoefficients_t matrixcoefarray1[NUM_OF_PORTS];
+    dsDisplayColorSpace_t colorspacearray1[NUM_OF_PORTS];
+    unsigned int colordeptharray1[NUM_OF_PORTS];
+    dsDisplayQuantizationRange_t quant_rangearray1[NUM_OF_PORTS]; 
+   
+    dsHDRStandard_t hdrstandardarray2[NUM_OF_PORTS];
+    dsDisplayMatrixCoefficients_t matrixcoefarray2[NUM_OF_PORTS];
+    dsDisplayColorSpace_t colorspacearray2[NUM_OF_PORTS];
+    unsigned int colordeptharray2[NUM_OF_PORTS];
+    dsDisplayQuantizationRange_t quant_rangearray2[NUM_OF_PORTS]; 
+    
     // Assume OutputSettings is a struct that includes EOTF, matrix coefficients, color space, color depth, and quantization range
 
     // Step 01: Initialize video port system
-/*    status = dsVideoPortInit();
+    status = dsVideoPortInit();
     UT_ASSERT_EQUAL(status, dsERR_NONE);
 
     // Step 02: Get the video port handle
-    for (int i = 0; i < sizeof(kPorts) / sizeof(kPorts[0]); i++) {
-        status = dsGetVideoPort(portType, kPorts[i], &handle);
+    for (int i = 0; i < NUM_OF_PORTS; i++) {
+        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
 
         // Step 03: Retrieve the current output settings
-        status = dsGetCurrentOutputSettings(handle, &settingsArray1[i]);
+        status = dsGetCurrentOutputSettings(handle[i], &hdrstandardarray1[i] ,&matrixcoefarray1[i], &colorspacearray1[i],\
+        &colordeptharray1[i], &quant_rangearray1[i]);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
     }
 
     // Step 04: Repeat the retrieval of output settings
-    for (int i = 0; i < sizeof(kPorts) / sizeof(kPorts[0]); i++) {
-        status = dsGetCurrentOutputSettings(handle, &settingsArray2[i]);
+    for (int i = 0; i < NUM_OF_PORTS; i++) {
+        status = dsGetCurrentOutputSettings(handle[i], &hdrstandardarray2[i] ,&matrixcoefarray2[i], &colorspacearray2[i],\
+        &colordeptharray2[i], &quant_rangearray2[i]);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
     }
 
     // Step 05: Compare the array values
-    for (int i = 0; i < sizeof(kPorts) / sizeof(kPorts[0]); i++) {
-        UT_ASSERT_TRUE(compareOutputSettings(settingsArray1[i], settingsArray2[i])); // Assume compareOutputSettings is defined
+    for (int i = 0; i < NUM_OF_PORTS; i++) {
+        UT_ASSERT_EQUAL(hdrstandardarray1[i], hdrstandardarray2[i]);
+        UT_ASSERT_EQUAL(matrixcoefarray1[i], matrixcoefarray2[i]);
+        UT_ASSERT_EQUAL(colorspacearray1[i], colorspacearray2[i]);
+        UT_ASSERT_EQUAL(colordeptharray1[i], colordeptharray2[i]);
+        UT_ASSERT_EQUAL(quant_rangearray1[i], quant_rangearray2[i]);
     }
 
     // Step 06: Terminate the video port system
@@ -4199,7 +4221,7 @@ void test_l1_dsVideoPort_negative_dsGetQuantizationRange(void) {
     UT_ASSERT_EQUAL(status, dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
-}*/
+}
 
 
 /**
@@ -4219,24 +4241,34 @@ void test_l1_dsVideoPort_negative_dsGetQuantizationRange(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsGetCurrentOutputSettings() - Attempt to get the current output settings without initializing the video ports | handle = [invalid handle],  video_eotf = [valid EOTF pointer], matrix_coefficients = = [valid matrix coefficient pointer], color_space = [valid color space pointer], color_depth = [valid color depth pointer], quantization_range = [valid quantization range pointer] | dsERR_NOT_INITIALIZED | Get Output settings must fail as module is not initialized|
  * |02|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
- * |03|Call dsGetCurrentOutputSettings() with an invalid handle but with valid pointers for output settings |handle = [valid handle], video_eotf = [valid EOTF pointer], matrix_coefficients = = [valid matrix coefficient pointer], color_space = [valid color space pointer], color_depth = [valid color depth pointer], quantization_range = [valid quantization range pointer] |dsERR_INVALID_PARAM| Invalid parameter error must be returned |
- * |04|Call dsGetCurrentOutputSettings() with an valid handle but invalid pointer for parameters | handle = [valid handle], NULL pointers for some or all parameters|dsERR_INVALID_PARAM| Invalid parameter error must be returned |
- * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
- * |06|Call dsGetCurrentOutputSettings() - Attempt to get the current output settings without initializing the video ports | handle = [valid handle],  video_eotf = [valid EOTF pointer], matrix_coefficients = = [valid matrix coefficient pointer], color_space = [valid color space pointer], color_depth = [valid color depth pointer], quantization_range = [valid quantization range pointer] | dsERR_NOT_INITIALIZED | Get Output settings must fail as module is not initialized|
+ * |03|Call dsGetCurrentOutputSettings() with an invalid handle but with valid pointers for output settings |handle = [valid handle], video_eotf = [valid EOTF pointer], matrix_coefficients = [valid matrix coefficient pointer], color_space = [valid color space pointer], color_depth = [valid color depth pointer], quantization_range = [valid quantization range pointer] |dsERR_INVALID_PARAM| Invalid parameter error must be returned |
+ * |04|Call dsGetVideoPort() Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports |
+ * |05|Call dsGetCurrentOutputSettings() by looping through valid handles but invalid pointer for parameters | handle = [valid handle], video_eotf = [invalid EOTF pointer], matrix_coefficients =[valid matrix coefficient pointer], color_space = [valid color space pointer], color_depth = [valid color depth pointer], quantization_range = [valid quantization range pointer] |dsERR_INVALID_PARAM| Invalid parameter error must be returned |
+ * |06|Call dsGetCurrentOutputSettings() by looping through valid handles but invalid pointer for parameters | handle = [valid handle], video_eotf = [valid EOTF pointer], matrix_coefficients = [invalid matrix coefficient pointer], color_space = [valid color space pointer], color_depth = [valid color depth pointer], quantization_range = [valid quantization range pointer] |dsERR_INVALID_PARAM| Invalid parameter error must be returned |
+ * |07|Call dsGetCurrentOutputSettings() by looping through valid handles but invalid pointer for parameters | handle = [valid handle], video_eotf = [valid EOTF pointer], matrix_coefficients = [valid matrix coefficient pointer], color_space = [invalid color space pointer], color_depth = [valid color depth pointer], quantization_range = [valid quantization range pointer] |dsERR_INVALID_PARAM| Invalid parameter error must be returned |
+ * |08|Call dsGetCurrentOutputSettings() by looping through valid handles but invalid pointer for parameters | handle = [valid handle], video_eotf = [valid EOTF pointer], matrix_coefficients = [valid matrix coefficient pointer], color_space = [valid color space pointer], color_depth = [invalid color depth pointer], quantization_range = [valid quantization range pointer] |dsERR_INVALID_PARAM| Invalid parameter error must be returned |
+ * |09|Call dsGetCurrentOutputSettings() by looping through valid handles but invalid pointer for parameters | handle = [valid handle], video_eotf = [valid EOTF pointer], matrix_coefficients = = [valid matrix coefficient pointer], color_space = [valid color space pointer], color_depth = [valid color depth pointer], quantization_range = [invalid quantization range pointer] |dsERR_INVALID_PARAM| Invalid parameter error must be returned |
+ * |10|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |11|Call dsGetCurrentOutputSettings() - Attempt to get the current output settings without initializing the video ports | handle = [valid handle],  video_eotf = [valid EOTF pointer], matrix_coefficients = = [valid matrix coefficient pointer], color_space = [valid color space pointer], color_depth = [valid color depth pointer], quantization_range = [valid quantization range pointer] | dsERR_NOT_INITIALIZED | Get Output settings must fail as module is not initialized|
  * 
  * 
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
-/*void test_l1_dsVideoPort_negative_dsGetCurrentOutputSettings(void) {
+void test_l1_dsVideoPort_negative_dsGetCurrentOutputSettings(void) {
     gTestID = 64;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     
     dsError_t status; 
-//    VideoPortHandle handle =*/ /* Initialize with invalid handle */;
-/*    OutputSettings settings; // To store the output settings
-
+    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+    dsHDRStandard_t hdrstandardarray[NUM_OF_PORTS];
+    dsDisplayMatrixCoefficients_t matrixcoefarray[NUM_OF_PORTS];
+    dsDisplayColorSpace_t colorspacearray[NUM_OF_PORTS];
+    unsigned int colordeptharray[NUM_OF_PORTS];
+    dsDisplayQuantizationRange_t quant_rangearray[NUM_OF_PORTS];
+    
     // Step 01: Attempt to get output settings without initialization
-    status = dsGetCurrentOutputSettings(handle, &settings);
+    status = dsGetCurrentOutputSettings(-1, &hdrstandardarray[0], &matrixcoefarray[0], &colorspacearray[0],\
+    &colordeptharray[0], &quant_rangearray[0]);
     UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize video port system
@@ -4244,27 +4276,62 @@ void test_l1_dsVideoPort_negative_dsGetQuantizationRange(void) {
     UT_ASSERT_EQUAL(status, dsERR_NONE);
 
     // Step 03: Invalid handle check
-    status = dsGetCurrentOutputSettings(-1, &settings);
+    status = dsGetCurrentOutputSettings(handle[0], &hdrstandardarray[0], &matrixcoefarray[0], &colorspacearray[0],\
+    &colordeptharray[0], &quant_rangearray[0]);
     UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
 
     // Step 04: Get valid video port handle*/
-//    status = dsGetVideoPort(/* valid port type */, /* valid port index */, &handle);
-/*    UT_ASSERT_EQUAL(status, dsERR_NONE);
+    for (int i = 0; i < NUM_OF_PORTS; i++) {
+        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+        UT_ASSERT_EQUAL(status, dsERR_NONE);
+    }
 
     // Step 05: Get output settings with invalid pointer
-    status = dsGetCurrentOutputSettings(handle, NULL); // Assumed that all pointers are NULL
+    for (int i = 0; i < NUM_OF_PORTS; i++) {
+    status = dsGetCurrentOutputSettings(handle[i], NULL, &matrixcoefarray[i], &colorspacearray[i],\
+    &colordeptharray[i], &quant_rangearray[i]);
     UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    }
 
-    // Step 06: Terminate the video port system
+    // Step 06: Get output settings with invalid pointer
+    for (int i = 0; i < NUM_OF_PORTS; i++) {
+    status = dsGetCurrentOutputSettings(handle[i], &hdrstandardarray[i], NULL, &colorspacearray[i],\
+    &colordeptharray[i], &quant_rangearray[i]);
+    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    }
+
+    // Step 07: Get output settings with invalid pointer
+    for (int i = 0; i < NUM_OF_PORTS; i++) {
+    status = dsGetCurrentOutputSettings(handle[i], &hdrstandardarray[i], &matrixcoefarray[i], NULL,\
+    &colordeptharray[i], &quant_rangearray[i]);
+    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    }
+
+    // Step 08: Get output settings with invalid pointer
+    for (int i = 0; i < NUM_OF_PORTS; i++) {
+    status = dsGetCurrentOutputSettings(handle[i], &hdrstandardarray[i], &matrixcoefarray[i], &colorspacearray[i],\
+    NULL, &quant_rangearray[i]);
+    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    }
+
+    // Step 09: Get output settings with invalid pointer
+    for (int i = 0; i < NUM_OF_PORTS; i++) {
+    status = dsGetCurrentOutputSettings(handle[i], &hdrstandardarray[i], &matrixcoefarray[i], &colorspacearray[i],\
+    &colordeptharray[i], NULL);
+    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    }
+
+    // Step 10: Terminate the video port system
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 07: Attempt to get output settings after termination
-    status = dsGetCurrentOutputSettings(handle, &settings);
+    // Step 11: Attempt to get output settings after termination
+    status = dsGetCurrentOutputSettings(handle[0], &hdrstandardarray[0], &matrixcoefarray[0], &colorspacearray[0],\
+    &colordeptharray[0], &quant_rangearray[0]);
     UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
-}*/
+}
 
 
 /**
@@ -5629,8 +5696,8 @@ int test_l1_dsVideoPort_register ( void )
 	UT_add_test( pSuite, "dsGetColorSpace_L1_negative" ,test_l1_dsVideoPort_negative_dsGetColorSpace );
 	UT_add_test( pSuite, "dsGetQuantizationRange_L1_positive" ,test_l1_dsVideoPort_positive_dsGetQuantizationRange );
 	UT_add_test( pSuite, "dsGetQuantizationRange_L1_negative" ,test_l1_dsVideoPort_negative_dsGetQuantizationRange );
-//	UT_add_test( pSuite, "dsGetCurrentOutputSettings_L1_positive" ,test_l1_dsVideoPort_positive_dsGetCurrentOutputSettings );
-//	UT_add_test( pSuite, "dsGetCurrentOutputSettings_L1_negative" ,test_l1_dsVideoPort_negative_dsGetCurrentOutputSettings );
+	UT_add_test( pSuite, "dsGetCurrentOutputSettings_L1_positive" ,test_l1_dsVideoPort_positive_dsGetCurrentOutputSettings );
+	UT_add_test( pSuite, "dsGetCurrentOutputSettings_L1_negative" ,test_l1_dsVideoPort_negative_dsGetCurrentOutputSettings );
 	UT_add_test( pSuite, "dsIsOutputHDR_L1_positive" ,test_l1_dsVideoPort_positive_dsIsOutputHDR );
 	UT_add_test( pSuite, "dsIsOutputHDR_L1_negative" ,test_l1_dsVideoPort_negative_dsIsOutputHDR );
 	UT_add_test( pSuite, "dsResetOutputToSDR_L1_positive" ,test_l1_dsVideoPort_positive_dsResetOutputToSDR );
