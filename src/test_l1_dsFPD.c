@@ -77,7 +77,7 @@
 #include <ut.h>
 #include <ut_log.h>
 #include "dsFPD.h"
-#include "dsFPDSettings.h"
+#include "frontPanelSettings.hpp"
 #include "stdbool.h"
 
 static int gTestGroup = 1;
