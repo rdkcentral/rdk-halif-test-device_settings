@@ -130,19 +130,19 @@ void test_l1_dsVideoPort_positive_dsVideoPortInit(void) {
 
     // Step 01: Initialize the video port system
     status = dsVideoPortInit();
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+    UT_ASSERT_EQUAL(status, dsERR_NONE);
 
     // Step 02: Terminate the video port system
     status = dsVideoPortTerm();
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+    UT_ASSERT_EQUAL(status, dsERR_NONE);
 
     // Step 03: Reinitialize the video port system
     status = dsVideoPortInit();
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+    UT_ASSERT_EQUAL(status, dsERR_NONE);
 
     // Step 04: Re-terminate the video port system
     status = dsVideoPortTerm();
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+    UT_ASSERT_EQUAL(status, dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -177,15 +177,15 @@ void test_l1_dsVideoPort_negative_dsVideoPortInit(void) {
 
     // Step 01: Initialize the video port system
     status = dsVideoPortInit();
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+    UT_ASSERT_EQUAL(status, dsERR_NONE);
 
     // Step 02: Attempt to initialize again without terminating the first initialization
     status = dsVideoPortInit();
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_ALREADY_INITIALIZED);
+    UT_ASSERT_EQUAL(status, dsERR_ALREADY_INITIALIZED);
 
     // Step 03: Terminate video port system
     status = dsVideoPortTerm();
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+    UT_ASSERT_EQUAL(status, dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -220,19 +220,19 @@ void test_l1_dsVideoPort_positive_dsVideoPortTerm(void) {
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+    UT_ASSERT_EQUAL(status, dsERR_NONE);
 
     // Step 02: Terminate video port system
     status = dsVideoPortTerm();
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+    UT_ASSERT_EQUAL(status, dsERR_NONE);
 
     // Step 03: Reinitialize video port system
     status = dsVideoPortInit();
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+    UT_ASSERT_EQUAL(status, dsERR_NONE);
 
     // Step 04: Re-terminate video port system
     status = dsVideoPortTerm();
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+    UT_ASSERT_EQUAL(status, dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -269,19 +269,19 @@ void test_l1_dsVideoPort_negative_dsVideoPortTerm(void) {
 
     // Step 01: Attempt to terminate the video port without prior initialization
     status = dsVideoPortTerm();
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize the video port system
     status = dsVideoPortInit();
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+    UT_ASSERT_EQUAL(status, dsERR_NONE);
 
     // Step 03: Terminate the video port system
     status = dsVideoPortTerm();
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+    UT_ASSERT_EQUAL(status, dsERR_NONE);
 
     // Step 04: Attempt to terminate the video port again after termination
     status = dsVideoPortTerm();
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
