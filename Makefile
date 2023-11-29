@@ -24,7 +24,7 @@ TOP_DIR := $(ROOT_DIR)
 SRC_DIRS = $(ROOT_DIR)/src
 INC_DIRS := $(ROOT_DIR)/../include
 INC_DIRS += $(ROOT_DIR)/skeletons/src/
-HAL_LIB := ds-hal
+HAL_LIB := dshal
 SKELTON_SRCS := $(ROOT_DIR)/skeletons/src/dsVideoPort.c
 
 ifeq ($(TARGET),)
@@ -68,7 +68,7 @@ skeleton:
 	$(CC) -fPIC -shared -I$(ROOT_DIR)/../include $(SKELTON_SRCS) -o lib$(HAL_LIB).so
 	mkdir -p $(HAL_LIB_DIR)
 	cp $(ROOT_DIR)/lib$(HAL_LIB).so $(HAL_LIB_DIR)
-
+	rm -rf $(ROOT_DIR)/lib$(HAL_LIB).so
 
 list:
 	@echo UT [$@]
