@@ -644,10 +644,8 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
         result = dsGetDisplay(kSupportedPortTypes[i], i, &displayHandle);
         if(result != dsERR_NONE)
         {
-            free(edid1);
-            free(edid2);
-            dsDisplayTerm();
-            UT_FAIL();
+            UT_FAIL_NOT_FATAL("Failed to get display handle");
+            break;
         }
 
         // Step 03 and 04: Allocate memory for the EDID buffer and call dsGetEDIDBytes() twice
@@ -655,40 +653,30 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
         if(result != dsERR_NONE)
         {
-            free(edid1);
-            free(edid2);
-            dsDisplayTerm();
-            UT_FAIL();
+           UT_FAIL_NOT_FATAL("Failed to get EDID Bytes");
+            break;
         }
         result = dsGetEDIDBytes(displayHandle, edid2, &length2);
         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
         if(result != dsERR_NONE)
         {
-            free(edid1);
-            free(edid2);
-            dsDisplayTerm();
-            UT_FAIL();
+            UT_FAIL_NOT_FATAL("Failed to get EDID Bytes");
+            break;
         }
 
         // Step 05: Verify that the return results are the same
         UT_ASSERT_EQUAL(length1, length2);
         if(length1 != length2)
         {
-            free(edid1);
-            free(edid2);
-            dsDisplayTerm();
-            UT_FAIL();
+            UT_FAIL_NOT_FATAL("Invalid EDID Bytes");
+            break;
         }
         UT_ASSERT_EQUAL(memcmp(edid1, edid2, length1), 0);
         if(memcmp(edid1, edid2, length1) != 0)
         {
-            free(edid1);
-            free(edid2);
-            dsDisplayTerm();
-            UT_FAIL();
-        }
-        // Free the allocated memory
-        
+            UT_FAIL_NOT_FATAL("Invalid EDID Bytes");
+            break;
+        }  
     }
     free(edid1);
     free(edid2);
