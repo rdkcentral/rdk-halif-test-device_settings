@@ -2017,7 +2017,7 @@ void test_l1_dsFPD_negative_dsGetFPTextBrightness(void)
 
     // Step 02: Initialize with dsFPInit()
     result = dsFPInit();
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 03: Call dsGetFPTextBrightness() with NULL for eBrightness
     result = dsGetFPTextBrightness(dsFPD_TEXTDISP_TEXT, NULL);
