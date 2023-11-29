@@ -101,22 +101,22 @@ static int gTestID = 1;
 }\
 
 
-void enableFPDIndicators(){
-    dsError_t result;
-    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
-    {
-        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-    }
-}
-void disableFPDIndicators(){
-    dsError_t result;
-    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
-    {
-        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_OFF);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-    }
-}
+#define enableFPDIndicators(){\
+    dsError_t result;\
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)\
+    {\
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);\
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);\
+    }\
+}\
+#define disableFPDIndicators(){\
+    dsError_t result;\
+    for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)\
+    {\
+        result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_OFF);\
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);\
+    }\
+}\
 
 /**
  * @brief Ensure dsFPInit() returns correct error codes during positive scenarios
@@ -1974,7 +1974,7 @@ void test_l1_dsFPD_positive_dsGetFPTextBrightness(void)
 
     // Step 05: Terminate with dsFPTerm()
     result = dsFPTerm();
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -2013,7 +2013,7 @@ void test_l1_dsFPD_negative_dsGetFPTextBrightness(void)
 
     // Step 01: Call dsGetFPTextBrightness() without initializing (dsFPInit() not called)
     result = dsGetFPTextBrightness(dsFPD_TEXTDISP_TEXT, &brightness);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize with dsFPInit()
     result = dsFPInit();
@@ -2932,8 +2932,8 @@ void test_l1_dsFPD_positive_dsFPGetLEDState(void)
  * |Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|---------|---------------|-----|
  * |01|Call dsFPGetLEDState() before initialization|state: dsFPDLedState_t*|dsERR_NOT_INITIALIZED|API should not work without initialization|
- * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
- * |03|Initialize using dsFPInit()||dsERR_NONE|Ensure the system is initialized|
+ * |02|Initialize using dsFPInit()||dsERR_NONE|Ensure the system is initialized|
+ * |03|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |04|Call dsFPGetLEDState() with a NULL pointer|state: NULL|dsERR_INVALID_PARAM|API should not accept NULL pointer parameter|
  * |05|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |06|Call dsFPGetLEDState() after termination|state:dsFPDLedState_t*|dsERR_NOT_INITIALIZED|API should not work after termination|
@@ -2951,12 +2951,12 @@ void test_l1_dsFPD_negative_dsFPGetLEDState(void)
     result = dsFPGetLEDState(&ledState);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
-    // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
-    enableFPDIndicators();
-
-    // Step 03: Initialize using dsFPInit()
+    // Step 02: Initialize using dsFPInit()
     result = dsFPInit();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 03: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
+    enableFPDIndicators();
 
     // Step 04: Call dsFPGetLEDState() with a NULL pointer
     result = dsFPGetLEDState(NULL);
