@@ -2031,7 +2031,7 @@ void test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_0, bool: false, dsVideoPlane_PRIMARY| dsERR_NONE | Port 0 should be selected |
+ * |02|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_0, bool: false, dsVideoPlane_PRIMARY, bool: false| dsERR_NONE | Port 0 should be selected |
  * |03|Call dsGetAVLatency() with valid input |int*, int*| dsERR_NONE | Should retrieve AV latency values successfully |
  * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
@@ -2043,7 +2043,7 @@ void test_l1_dsHdmiIn_positive_dsGetAVLatency(void) {
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
     // Step 2: Call dsHdmiInSelectPort() to select Port 0
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY), dsERR_NONE);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
 
     // Step 3: Call dsGetAVLatency() with valid inputs (int*, int*)
     int audioLatency1, videoLatency1;
