@@ -433,9 +433,9 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetStatus(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_0, bool: false, dsVideoPlane_PRIMARY| dsERR_NONE | Port 0 should be selected |
- * |03|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_1, bool: true, dsVideoPlane_SECONDARY| dsERR_NONE | Port 1 should be selected |
- * |04|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_2, bool: false, dsVideoPlane_PRIMARY| dsERR_NONE | Port 2 should be selected |
+ * |02|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_0, bool: false, dsVideoPlane_PRIMARY, bool false| dsERR_NONE | Port 0 should be selected |
+ * |03|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_1, bool: true, dsVideoPlane_SECONDARY, bool true| dsERR_NONE | Port 1 should be selected |
+ * |04|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_2, bool: false, dsVideoPlane_PRIMARY, bool false| dsERR_NONE | Port 2 should be selected |
  * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
@@ -446,13 +446,13 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSelectPort(void) {
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
     // Step 2: Call dsHdmiInSelectPort() to select Port 0
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY), dsERR_NONE);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
 
     // Step 3: Call dsHdmiInSelectPort() to select Port 1
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_1, true, dsVideoPlane_SECONDARY), dsERR_NONE);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_1, true, dsVideoPlane_SECONDARY, true), dsERR_NONE);
 
     // Step 4: Call dsHdmiInSelectPort() to select Port 2
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_2, false, dsVideoPlane_PRIMARY), dsERR_NONE);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_2, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
 
     // Step 5: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
@@ -472,12 +472,12 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSelectPort(void) {
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsHdmiInSelectPort() without initializing the HDMI input sub-system |dsHDMI_IN_PORT_0, bool: false, dsVideoPlane_PRIMARY| dsERR_NOT_INITIALIZED | Should Pass |
+ * |01|Call dsHdmiInSelectPort() without initializing the HDMI input sub-system |dsHDMI_IN_PORT_0, bool: false, dsVideoPlane_PRIMARY, bool: false| dsERR_NOT_INITIALIZED | Should Pass |
  * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |03|Call dsHdmiInSelectPort() with invalid value |dsHDMI_IN_PORT_MAX, bool: false, dsVideoPlane_PRIMARY| dsERR_INVALID_PARAM | Should Pass |
- * |04|Call dsHdmiInSelectPort() with invalid plane value |dsHDMI_IN_PORT_0, bool: false, dsVideoPlane_MAX| dsERR_INVALID_PARAM | Should Pass |
+ * |03|Call dsHdmiInSelectPort() with invalid value |dsHDMI_IN_PORT_MAX, bool: false, dsVideoPlane_PRIMARY, bool: false| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsHdmiInSelectPort() with invalid plane value |dsHDMI_IN_PORT_0, bool: false, dsVideoPlane_MAX, bool: true| dsERR_INVALID_PARAM | Should Pass |
  * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
- * |06|Call dsHdmiInSelectPort() after terminating the HDMI input sub-system |dsHDMI_IN_PORT_0, bool: false, dsVideoPlane_PRIMARY| dsERR_NOT_INITIALIZED | Should Pass |
+ * |06|Call dsHdmiInSelectPort() after terminating the HDMI input sub-system |dsHDMI_IN_PORT_0, bool: false, dsVideoPlane_PRIMARY, bool: false| dsERR_NOT_INITIALIZED | Should Pass |
  * 
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
@@ -486,22 +486,22 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectPort(void) {
     gTestID = 10;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID); 
     // Step 1: Call dsHdmiInSelectPort() without initializing the HDMI input sub-system
-    UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY), dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false), dsERR_NOT_INITIALIZED);
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
     // Step 3: Call dsHdmiInSelectPort() with an invalid value
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_MAX, false, dsVideoPlane_PRIMARY), dsERR_INVALID_PARAM);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_MAX, false, dsVideoPlane_PRIMARY, false), dsERR_INVALID_PARAM);
 
     // Step 4: Call dsHdmiInSelectPort() with an invalid plane value
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_MAX), dsERR_INVALID_PARAM);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_MAX, false), dsERR_INVALID_PARAM);
 
     // Step 5: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 
     // Step 6: Call dsHdmiInSelectPort() after terminating the HDMI input sub-system
-    UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY), dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false), dsERR_NOT_INITIALIZED);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
