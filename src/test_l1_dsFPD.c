@@ -88,7 +88,7 @@ static int gTestID = 1;
     if(value != comparison){\
         UT_LOG("\n In %s Comparison: [%d = %d]\n", __FUNCTION__, value, comparison);\
         dsFPTerm();\
-        UT_FAIL();\
+        UT_ASSERT_EQUAL(value, comparison);\
     }\
 }\
 
@@ -96,7 +96,7 @@ static int gTestID = 1;
     if(strcmp(value, comparison) != 0){\
         UT_LOG("\n In %s Comparison: [%s = %s]\n", __FUNCTION__, value, comparison);\
         dsFPTerm();\
-        UT_FAIL();\
+        UT_ASSERT_EQUAL(value, comparison);\
     }\
 }\
 
