@@ -105,6 +105,7 @@ static int gTestID = 1;
     dsError_t result;\
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)\
     {\
+        UT_LOG("\n In %s , Indicator: [%d]\n", __FUNCTION__, kIndicators[i].id);\
         result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);\
         DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);\
     }\
@@ -337,6 +338,7 @@ void test_l1_dsFPD_positive_dsSetFPState (void)
     // Step 03: Call dsSetFPState() and loop through all valid indicators from kIndicators
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
+        UT_LOG("\n In %s , Indicator: [%d]\n", __FUNCTION__, kIndicators[i].id);
         result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
         DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
         result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_OFF);
@@ -466,6 +468,7 @@ void test_l1_dsFPD_positive_dsSetFPBlink (void)
     // Step 03: Call dsSetFPBlink() and loop through all valid indicators from kIndicators
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
+        UT_LOG("\n In %s , Indicator: [%d]\n", __FUNCTION__, kIndicators[i].id);
         result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
         DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
         result = dsSetFPBlink(kIndicators[i].id, 500, 10);
@@ -532,6 +535,7 @@ void test_l1_dsFPD_negative_dsSetFPBlink (void)
     // Variation 05: Pass an invalid uBlinkIterations parameter to dsSetFPBlink()
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
+        UT_LOG("\n In %s , Indicator: [%d]\n", __FUNCTION__, kIndicators[i].id);
         result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
         DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
@@ -607,6 +611,7 @@ void test_l1_dsFPD_positive_dsSetFPBrightness (void)
     // Step 03: Call dsSetFPBrightness() and loop through all valid indicators from kIndicators
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
+        UT_LOG("\n In %s , Indicator: [%d]\n", __FUNCTION__, kIndicators[i].id);
         result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
         DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
         
@@ -673,6 +678,7 @@ void test_l1_dsFPD_negative_dsSetFPBrightness (void)
     // Variation 04: Pass an invalid eBrightness parameter to dsSetFPBrightness()
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
+        UT_LOG("\n In %s , Indicator: [%d]\n", __FUNCTION__, kIndicators[i].id);
         result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
         DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
         result = dsSetFPBrightness(kIndicators[i].id, 200);
@@ -829,6 +835,7 @@ void test_l1_dsFPD_negative_dsGetFPBrightness (void)
     // Step 04: Call dsGetFPBrightness() with an invalid pBrightness value (NULL)
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
+        UT_LOG("\n In %s , Indicator: [%d]\n", __FUNCTION__, kIndicators[i].id);
         result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
         DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
@@ -1053,6 +1060,7 @@ void test_l1_dsFPD_positive_dsSetFPColor (void)
     // Step 03: Call dsSetFPColor() with all valid eIndicator and all valid eColor parameters from kIndicators
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
+        UT_LOG("\n In %s , Indicator: [%d]\n", __FUNCTION__, kIndicators[i].id);
         result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
         DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
@@ -1131,6 +1139,7 @@ void test_l1_dsFPD_negative_dsSetFPColor (void)
     // Step 04: Call dsSetFPColor() with all valid indicators but invalid colors
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
+        UT_LOG("\n In %s , Indicator: [%d]\n", __FUNCTION__, kIndicators[i].id);
         result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
         DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
@@ -1229,6 +1238,7 @@ void test_l1_dsFPD_positive_dsGetFPColor (void)
     // Step 04: Call dsGetFPColor() again and compare results
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
+        UT_LOG("\n In %s , Indicator: [%d]\n", __FUNCTION__, kIndicators[i].id);
         result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
         DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
         dsFPDColor_t previousColor;
@@ -1294,6 +1304,7 @@ void test_l1_dsFPD_negative_dsGetFPColor (void)
     // Step 04: Call dsGetFPColor() with a null pointer for pColor
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
+        UT_LOG("\n In %s , Indicator: [%d]\n", __FUNCTION__, kIndicators[i].id);
         result = dsSetFPState(kIndicators[i].id, dsFPD_STATE_ON);
         DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
         result = dsGetFPColor(kIndicators[i].id, NULL);
