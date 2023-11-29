@@ -101,7 +101,7 @@ static int gTestID = 1;
 }\
 
 
-#define enableFPDIndicators(){\
+#define enableFPDIndicators{\
     dsError_t result;\
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)\
     {\
@@ -109,7 +109,7 @@ static int gTestID = 1;
         DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);\
     }\
 }\
-#define disableFPDIndicators(){\
+#define disableFPDIndicators{\
     dsError_t result;\
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)\
     {\
@@ -547,7 +547,7 @@ void test_l1_dsFPD_negative_dsSetFPBlink (void)
 
 
     // Variation 07: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
-    disableFPDIndicators();
+    disableFPDIndicators;
 
     // Variation 08: Call dsSetFPBlink() and loop through all valid indicators from kIndicators
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
@@ -749,7 +749,7 @@ void test_l1_dsFPD_positive_dsGetFPBrightness (void)
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
-    enableFPDIndicators();
+    enableFPDIndicators;
 
     // Step 03: Call dsGetFPBrightness() with specific valid indicator and store the value
     result = dsGetFPBrightness(dsFPD_INDICATOR_POWER, &brightness_power_indicator);
@@ -1304,7 +1304,7 @@ void test_l1_dsFPD_negative_dsGetFPColor (void)
     DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 
     // Step 06: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
-    disableFPDIndicators();
+    disableFPDIndicators;
 
     // Step 07: Call dsGetFPColor() with all indicators
     for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
@@ -1414,7 +1414,7 @@ void test_l1_dsFPD_negative_dsSetFPDMode (void)
     DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 
     // Step 04: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
-    disableFPDIndicators();
+    disableFPDIndicators;
 
     // Step 05: Call dsSetFPDMode() while FP State is "OFF"
     result = dsSetFPDMode(dsFPD_MODE_ANY);
@@ -1594,7 +1594,7 @@ void test_l1_dsFPD_negative_dsSetFPTime (void)
     DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
     // Step 17: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
-    disableFPDIndicators();
+    disableFPDIndicators;
 
     // Step 18: Call dsSetFPTime() with FP state set to "OFF"
     result = dsSetFPTime(dsFPD_TIME_24_HOUR, 14, 30);
@@ -1751,7 +1751,7 @@ void test_l1_dsFPD_negative_dsSetFPText (void)
     DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
     // Step 12: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
-    disableFPDIndicators();
+    disableFPDIndicators;
 
     // Step 13: Call dsSetFPText() with FP state set to "OFF"
     result = dsSetFPText("HELLO");
@@ -1907,7 +1907,7 @@ void test_l1_dsFPD_negative_dsSetFPTextBrightness(void)
     DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
     // Step 12: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
-    disableFPDIndicators();
+    disableFPDIndicators;
 
     // Step 13: Call dsSetFPTextBrightness() with all indicators when state is OFF
     for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
@@ -2028,7 +2028,7 @@ void test_l1_dsFPD_negative_dsGetFPTextBrightness(void)
     DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 
     // Step 05: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
-    disableFPDIndicators();
+    disableFPDIndicators;
 
     // Step 06: Call dsGetFPTextBrightness() with all indicators
     for (int i = 0; i < dsFPD_INDICATOR_MAX; ++i)
@@ -2195,7 +2195,7 @@ void test_l1_dsFPD_negative_dsFPEnableCLockDisplay(void)
     DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_OPERATION_NOT_SUPPORTED);
 
     // Step 11: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
-    disableFPDIndicators();
+    disableFPDIndicators;
 
     // Step 12: Call dsFPEnableCLockDisplay() with FP State "OFF"
     result = dsFPEnableCLockDisplay(1);
@@ -2320,7 +2320,7 @@ void test_l1_dsFPD_negative_dsSetFPScroll(void)
     DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_OPERATION_NOT_SUPPORTED);
 
     // Step 05: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
-    disableFPDIndicators();
+    disableFPDIndicators;
 
     // Step 06: Call dsSetFPScroll() with FP State "OFF"
     result = dsSetFPScroll(1000, 5, 0);
@@ -2476,7 +2476,7 @@ void test_l1_dsFPD_negative_dsSetFPTimeFormat(void)
     DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
     // Step 10: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState() if applicable
-    disableFPDIndicators();
+    disableFPDIndicators;
 
     // Step 11: Call dsSetFPTimeFormat() while FP State is "OFF"
     result = dsSetFPTimeFormat(dsFPD_TIME_12_HOUR);
@@ -2620,7 +2620,7 @@ void test_l1_dsFPD_negative_dsGetFPTimeFormat(void)
     DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
     // Step 08: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
-    disableFPDIndicators();
+    disableFPDIndicators;
 
     // Step 09: Call dsGetFPTimeFormat() while FP State is "OFF"
     result = dsGetFPTimeFormat(&timeFormat);
@@ -2777,7 +2777,7 @@ void test_l1_dsFPD_positive_dsFPSetLEDState(void)
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
-    enableFPDIndicators();
+    enableFPDIndicators;
 
     // Retrieve supported LED states
     result = dsFPGetSupportedLEDStates(&supportedLEDStates);
@@ -2838,7 +2838,7 @@ void test_l1_dsFPD_negative_dsFPSetLEDState(void)
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 03: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
-    enableFPDIndicators();
+    enableFPDIndicators;
 
     // Step 04: Call dsFPSetLEDState() with an invalid LED state
     result = dsFPSetLEDState(dsFPD_LED_DEVICE_MAX);
@@ -2892,7 +2892,7 @@ void test_l1_dsFPD_positive_dsFPGetLEDState(void)
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
-    enableFPDIndicators();
+    enableFPDIndicators;
 
     // Step 03: Call dsFPSetLEDState() with a valid value
     result = dsFPSetLEDState(dsFPD_LED_DEVICE_ACTIVE);
@@ -2956,7 +2956,7 @@ void test_l1_dsFPD_negative_dsFPGetLEDState(void)
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 03: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
-    enableFPDIndicators();
+    enableFPDIndicators;
 
     // Step 04: Call dsFPGetLEDState() with a NULL pointer
     result = dsFPGetLEDState(NULL);
