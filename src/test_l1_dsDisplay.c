@@ -642,20 +642,46 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
     for (int i = 0; i < sizeof(kSupportedPortTypes) / sizeof(kSupportedPortTypes[0]); i++) {
         // Step 02: Call dsGetDisplay() for each valid port
         result = dsGetDisplay(kSupportedPortTypes[i], i, &displayHandle);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+        if(result != dsERR_NONE)
+        {
+            free(edid1);
+            free(edid2);
+            UT_FAIL();
+        }
 
         // Step 03 and 04: Allocate memory for the EDID buffer and call dsGetEDIDBytes() twice
         result = dsGetEDIDBytes(displayHandle, edid1, &length1);
         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+        if(result != dsERR_NONE)
+        {
+            free(edid1);
+            free(edid2);
+            UT_FAIL();
+        }
         result = dsGetEDIDBytes(displayHandle, edid2, &length2);
         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+        if(result != dsERR_NONE)
+        {
+            free(edid1);
+            free(edid2);
+            UT_FAIL();
+        }
 
         // Step 05: Verify that the return results are the same
-        DS_ASSERT_AUTO_TERM_NUMERICAL(length1, length2);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(memcmp(edid1, edid2, length1), 0);
-
+        UT_ASSERT_EQUAL(length1, length2);
+        if(length1 != length2)
+        {
+            free(edid1);
+            free(edid2);
+            UT_FAIL();
+        }
+        UT_ASSERT_EQUAL(memcmp(edid1, edid2, length1), 0);
+        if(memcmp(edid1, edid2, length1) != 0)
+        {
+            free(edid1);
+            free(edid2);
+            UT_FAIL();
+        }
         // Free the allocated memory
         
     }
