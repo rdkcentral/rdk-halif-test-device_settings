@@ -646,6 +646,7 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
         {
             free(edid1);
             free(edid2);
+            dsDisplayTerm();
             UT_FAIL();
         }
 
@@ -656,6 +657,7 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
         {
             free(edid1);
             free(edid2);
+            dsDisplayTerm();
             UT_FAIL();
         }
         result = dsGetEDIDBytes(displayHandle, edid2, &length2);
@@ -664,6 +666,7 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
         {
             free(edid1);
             free(edid2);
+            dsDisplayTerm();
             UT_FAIL();
         }
 
@@ -673,6 +676,7 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
         {
             free(edid1);
             free(edid2);
+            dsDisplayTerm();
             UT_FAIL();
         }
         UT_ASSERT_EQUAL(memcmp(edid1, edid2, length1), 0);
@@ -680,6 +684,7 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
         {
             free(edid1);
             free(edid2);
+            dsDisplayTerm();
             UT_FAIL();
         }
         // Free the allocated memory
