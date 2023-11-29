@@ -140,32 +140,14 @@ dsFPDColorConfig_t  kIndicatorColors_3[] = {
  */
 const dsFPDIndicatorConfig_t kIndicators[] = {
 	{
-		dsFPD_INDICATOR_MESSAGE,	/**< id */
+		dsFPD_INDICATOR_POWER,	/**< id */
 		kIndicatorColors_1,		/**< supportedColors */
 		_MAX_BRIGHTNESS,		/**< maxBrightness */
 		_MAX_CYCLERATE,			/**< maxCycleRate */
 		_MIN_BRIGHTNESS,		/**< minBrightness */
 		_DEFAULT_LEVELS,		/**< default brightness levels */
 		_DEFAULT_COLOR_MODE,		/**< colorMode */
-	},
-	{
-		dsFPD_INDICATOR_POWER,		/**< id */
-		kIndicatorColors_2,		/**< supportedColors */
-		_MAX_BRIGHTNESS,		/**< maxBrightness */
-		_MAX_CYCLERATE,			/**< maxCycleRate */
-		_MIN_BRIGHTNESS,		/**< minBrightness */
-		_DEFAULT_LEVELS,		/**< default brightness levels */
-		_DEFAULT_COLOR_MODE,		/**< colorMode */
-	},
-	{
-		dsFPD_INDICATOR_RECORD,		/**< id */
-		kIndicatorColors_3,		/**< supportedColors */
-		_MAX_BRIGHTNESS,		/**< maxBrightness */
-		_MAX_CYCLERATE,			/**< maxCycleRate  */
-		_MIN_BRIGHTNESS,		/**< minBrightness */
-		_DEFAULT_LEVELS,		/**< default brightness levels */
-		_DEFAULT_COLOR_MODE,		/**< colorMode */
-	},
+	}
 };
 
 /**
