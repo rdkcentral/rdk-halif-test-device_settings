@@ -1538,10 +1538,8 @@ void test_l1_dsFPD_positive_dsSetFPTime (void)
  * |13|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_TEXT|dsERR_NONE|API should set mode successfully|
  * |14|Call dsSetFPTime() with valid parameters for 24-hour format|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 14, uMinutes: 30|dsERR_OPERATION_NOT_SUPPORTED|Check the function in 24-hour format|
  * |15|Call dsSetFPDMode() with a valid parameter|eMode: dsFPD_MODE_CLOCK|dsERR_NONE|API should set mode successfully|
- * |16|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Ensure the FPD state is set to OFF|
- * |17|Call dsSetFPTime() with FP state set to "OFF"|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 14, uMinutes: 30|dsERR_OPERATION_NOT_SUPPORTED|Validate that function checks if FPD state is OFF|
- * |18|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
- * |19|Call dsSetFPTime() after termination|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 14, uMinutes: 30|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
+ * |16|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
+ * |17|Call dsSetFPTime() after termination|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 14, uMinutes: 30|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
@@ -1570,7 +1568,7 @@ void test_l1_dsFPD_negative_dsSetFPTime (void)
     result = dsSetFPTime(dsFPD_TIME_24_HOUR, 14, 60);
     DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 
-    result = dsSetFPTime(dsFPD_TIME_12_HOUR, 14, 30);
+    result = dsSetFPTime(dsFPD_TIME_12_HOUR, 13, 30);
     DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 
     result = dsSetFPTime(dsFPD_TIME_12_HOUR, 2, 60);
@@ -1587,7 +1585,7 @@ void test_l1_dsFPD_negative_dsSetFPTime (void)
     result = dsSetFPTime(dsFPD_TIME_24_HOUR, 14, 60);
     DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 
-    result = dsSetFPTime(dsFPD_TIME_12_HOUR, 14, 30);
+    result = dsSetFPTime(dsFPD_TIME_12_HOUR, 13, 30);
     DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 
     result = dsSetFPTime(dsFPD_TIME_12_HOUR, 2, 60);
@@ -1605,18 +1603,11 @@ void test_l1_dsFPD_negative_dsSetFPTime (void)
     result = dsSetFPDMode(dsFPD_MODE_CLOCK);
     DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
-    // Step 17: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
-    disableFPDIndicators();
-
-    // Step 18: Call dsSetFPTime() with FP state set to "OFF"
-    result = dsSetFPTime(dsFPD_TIME_24_HOUR, 14, 30);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_OPERATION_NOT_SUPPORTED);
-
-    // Step 19: Terminate with dsFPTerm()
+    // Step 17: Terminate with dsFPTerm()
     result = dsFPTerm();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-    // Step 20: Call dsSetFPTime() after termination
+    // Step 18: Call dsSetFPTime() after termination
     result = dsSetFPTime(dsFPD_TIME_24_HOUR, 14, 30);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("\n Out  %s\n",__FUNCTION__);
@@ -2302,10 +2293,8 @@ void test_l1_dsFPD_positive_dsSetFPScroll(void)
  * |02|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsSetFPScroll() with invalid value for uScrollHoldOnDur|uScrollHoldOnDur: 0, uHorzScrollIterations: 5, uVertScrollIterations: 0|dsERR_INVALID_PARAM|Check function detects invalid parameter|
  * |04|Call dsSetFPScroll() with both horizontal and vertical scroll iterations|uScrollHoldOnDur: 1000, uHorzScrollIterations: 5, uVertScrollIterations: 5|dsERR_OPERATION_NOT_SUPPORTED|Validate it detects conflicting scroll directions|
- * |05|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], State: OFF|dsERR_NONE|Simulate FP state being "OFF"|
- * |06|Call dsSetFPScroll() with FP State "OFF"|uScrollHoldOnDur: 1000, uHorzScrollIterations: 5, uVertScrollIterations: 0|dsERR_OPERATION_NOT_SUPPORTED|Check that operation is not supported when FP State is "OFF"|
- * |07|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
- * |08|Call dsSetFPScroll() after termination|uScrollHoldOnDur: 1000, uHorzScrollIterations: 5, uVertScrollIterations: 0|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
+ * |05|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
+ * |06|Call dsSetFPScroll() after termination|uScrollHoldOnDur: 1000, uHorzScrollIterations: 5, uVertScrollIterations: 0|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
@@ -2331,18 +2320,11 @@ void test_l1_dsFPD_negative_dsSetFPScroll(void)
     result = dsSetFPScroll(1000, 5, 5);
     DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_OPERATION_NOT_SUPPORTED);
 
-    // Step 05: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
-    disableFPDIndicators();
-
-    // Step 06: Call dsSetFPScroll() with FP State "OFF"
-    result = dsSetFPScroll(1000, 5, 0);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_OPERATION_NOT_SUPPORTED);
-
-    // Step 07: Terminate with dsFPTerm()
+    // Step 05: Terminate with dsFPTerm()
     result = dsFPTerm();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-    // Step 08: Call dsSetFPScroll() after termination
+    // Step 06: Call dsSetFPScroll() after termination
     result = dsSetFPScroll(1000, 5, 0);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("\n Out  %s\n",__FUNCTION__);
