@@ -1,21 +1,21 @@
 /**
-*  If not stated otherwise in this file or this component's LICENSE
-*  file the following copyright and licenses apply:
-*
-*  Copyright 2022 RDK Management
-*
-*  Licensed under the Apache License, Version 2.0 (the License);
-*  you may not use this file except in compliance with the License.
-*  You may obtain a copy of the License at
-*
-*  http://www.apache.org/licenses/LICENSE-2.0
-*
-*  Unless required by applicable law or agreed to in writing, software
-*  distributed under the License is distributed on an AS IS BASIS,
-*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-*  See the License for the specific language governing permissions and
-*  limitations under the License.
-*/
+ *  If not stated otherwise in this file or this component's LICENSE
+ *  file the following copyright and licenses apply:
+ *
+ *  Copyright 2022 RDK Management
+ *
+ *  Licensed under the Apache License, Version 2.0 (the License);
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an AS IS BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 /**
  * @addtogroup HPK Hardware Porting Kit
@@ -57,19 +57,19 @@
  */
 
 /**
-* @file test_l1_dsVideoPort.c
-* @page Device Settings
-* @subpage dsVideoPort
-*
-* ## Module's Role
-* This module includes Level 1 functional tests (success and failure scenarios)
-* This is to ensure that the API meets the operational requirements of the module across all vendors
-*
-* **Pre-Conditions:**  None
-* **Dependencies:** None
-*
-* Ref to API Definition specification documentation : [ds-video-port_halSpec.md](../../../docs/ds-video-port_halSpec.md)
-*/
+ * @file test_l1_dsVideoPort.c
+ * @page Device Settings
+ * @subpage dsVideoPort
+ *
+ * ## Module's Role
+ * This module includes Level 1 functional tests (success and failure scenarios)
+ * This is to ensure that the API meets the operational requirements of the module across all vendors
+ *
+ * **Pre-Conditions:**  None
+ * **Dependencies:** None
+ *
+ * Ref to API Definition specification documentation : [ds-video-port_halSpec.md](../../../docs/ds-video-port_halSpec.md)
+ */
 
 #include <string.h>
 #include <stdlib.h>
@@ -86,19 +86,11 @@ static int gTestID = 1;
 #define HANDLE_ARRAY_INIT 0
 
 #define DS_ASSERT_AUTO_TERM_NUMERICAL(value, comparison){\
-    if(value != comparison){\
-        UT_LOG("\n In %s Comparison: [%d = %d]\n", __FUNCTION__, value, comparison);\
-        dsVideoPortTerm();\
-        UT_FAIL();\
-    }\
-}\
-
-#define DS_ASSERT_AUTO_TERM_STRING(value, comparison){\
-    if(strcmp(value , comparison)){\
-        UT_LOG("\n In %s Comparison: [%s = %s]\n", __FUNCTION__, value, comparison);\
-        dsVideoPortTerm();\
-        UT_FAIL();\
-    }\
+	if(value != comparison){\
+		UT_LOG("\n In %s Comparison: [%d = %d]\n", __FUNCTION__, value, comparison);\
+		dsVideoPortTerm();\
+		UT_FAIL();\
+	}\
 }\
 
 /**
@@ -123,28 +115,28 @@ static int gTestID = 1;
  * 
  */
 void test_l1_dsVideoPort_positive_dsVideoPortInit(void) {
-    gTestID = 1;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	gTestID = 1;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t status;
+	dsError_t status;
 
-    // Step 01: Initialize the video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Initialize the video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 02: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 02: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 03: Reinitialize the video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 03: Reinitialize the video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Re-terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 04: Re-terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 /**
@@ -170,24 +162,24 @@ void test_l1_dsVideoPort_positive_dsVideoPortInit(void) {
  * @note Testing for the `dsERR_RESOURCE_NOT_AVAILABLE` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsVideoPortInit(void) {
-    gTestID = 2;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	gTestID = 2;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t status;
+	dsError_t status;
 
-    // Step 01: Initialize the video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Initialize the video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 02: Attempt to initialize again without terminating the first initialization
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_ALREADY_INITIALIZED);
+	// Step 02: Attempt to initialize again without terminating the first initialization
+	status = dsVideoPortInit();
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_ALREADY_INITIALIZED);
 
-    // Step 03: Terminate video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 03: Terminate video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -213,28 +205,28 @@ void test_l1_dsVideoPort_negative_dsVideoPortInit(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsVideoPortTerm(void) {
-    gTestID = 3;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	gTestID = 3;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t status;
+	dsError_t status;
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 02: Terminate video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 02: Terminate video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 03: Reinitialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 03: Reinitialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Re-terminate video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 04: Re-terminate video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -262,28 +254,28 @@ void test_l1_dsVideoPort_positive_dsVideoPortTerm(void) {
  * @note Testing for the `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsVideoPortTerm(void) {
-    gTestID = 4;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	gTestID = 4;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t status;
+	dsError_t status;
 
-    // Step 01: Attempt to terminate the video port without prior initialization
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 01: Attempt to terminate the video port without prior initialization
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 02: Initialize the video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 02: Initialize the video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 03: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 03: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Attempt to terminate the video port again after termination
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 04: Attempt to terminate the video port again after termination
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -309,39 +301,42 @@ void test_l1_dsVideoPort_negative_dsVideoPortTerm(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetVideoPort(void) {
-    gTestID = 5;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
- 
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
-    intptr_t lastHandle;
-    intptr_t newHandle;
+	gTestID = 5;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
- 
-    // Step 02: Get the video port handle for valid video port type and index
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-        if(i == NUM_OF_PORTS-1)
-        {
-            lastHandle = handle[i];
-        }
-    }
- 
-    // Step 03: Compare with the last handle
-    status = dsGetVideoPort(kPorts[NUM_OF_PORTS-1].id.type, kPorts[NUM_OF_PORTS-1].id.index, &(handle[NUM_OF_PORTS-1]));
-    newHandle = handle[NUM_OF_PORTS-1];
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	dsError_t status;
 
-    // Step 04: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	intptr_t lastHandle;
+	intptr_t newHandle;
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	// Step 02: Get the video port handle for valid video port type and index
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+		if(i == NUM_OF_PORTS-1)
+		{
+			lastHandle = handle[i];
+		}
+	}
+
+	// Step 03: Compare with the last handle
+	status = dsGetVideoPort(kPorts[NUM_OF_PORTS-1].id.type, kPorts[NUM_OF_PORTS-1].id.index, &(handle[NUM_OF_PORTS-1]));
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+
+	//getting last handle in to new handle for comparision
+	newHandle = handle[NUM_OF_PORTS-1];
+	DS_ASSERT_AUTO_TERM_NUMERICAL(lastHandle , newHandle);
+
+	// Step 04: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 /**
@@ -371,47 +366,47 @@ void test_l1_dsVideoPort_positive_dsGetVideoPort(void) {
  * @note Testing for `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetVideoPort(void) {
-    gTestID = 6;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 6;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    // Step 01: Attempt to get the Video Port handle without initializing
-    status = dsGetVideoPort(kPorts[0].id.type, kPorts[0].id.index, &(handle[0]));
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to get the Video Port handle without initializing
+	status = dsGetVideoPort(kPorts[0].id.type, kPorts[0].id.index, &(handle[0]));
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Attempt to get the Video Port handle with invalid port type
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(dsVIDEOPORT_TYPE_MAX, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_OPERATION_NOT_SUPPORTED);
-    }
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Attempt to get the Video Port handle invalid port index
-    for (int i = 0; i < NUM_OF_PORTS ; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, -1 , &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 03: Attempt to get the Video Port handle with invalid port type
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(dsVIDEOPORT_TYPE_MAX, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+	}
 
-    // Step 05: NULL handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index ,  NULL);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 04: Attempt to get the Video Port handle invalid port index
+	for (int i = 0; i < NUM_OF_PORTS ; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, -1 , &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: NULL handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index ,  NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 07: Attempt to get the video port handle again after termination
-    status = dsGetVideoPort(kPorts[0].id.type, kPorts[0].id.index, &(handle[0]));
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 07: Attempt to get the video port handle again after termination
+	status = dsGetVideoPort(kPorts[0].id.type, kPorts[0].id.index, &(handle[0]));
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -439,47 +434,47 @@ void test_l1_dsVideoPort_negative_dsGetVideoPort(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsIsVideoPortEnabled(void) {
-    gTestID = 7;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 7;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    bool isEnabledArray1[NUM_OF_PORTS];
-    bool isEnabledArray2[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	bool isEnabledArray1[NUM_OF_PORTS];
+	bool isEnabledArray2[NUM_OF_PORTS];
 
-    // Step 02: Get the port handle for all supported video ports
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
-        
-    // Step 03: Check if video port is enabled or not
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsIsVideoPortEnabled(handle[i], &isEnabledArray1[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Repeat the check for enabled status
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsIsVideoPortEnabled(handle[i], &isEnabledArray2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the port handle for all supported video ports
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 05: Compare the array values
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(isEnabledArray1[i], isEnabledArray2[i]);
-    }
+	// Step 03: Check if video port is enabled or not
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsIsVideoPortEnabled(handle[i], &isEnabledArray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 04: Repeat the check for enabled status
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsIsVideoPortEnabled(handle[i], &isEnabledArray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 05: Compare the array values
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(isEnabledArray1[i], isEnabledArray2[i]);
+	}
+
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -510,48 +505,48 @@ void test_l1_dsVideoPort_positive_dsIsVideoPortEnabled(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsIsVideoPortEnabled(void) {
-    gTestID = 8;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	gTestID = 8;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    bool enabled[NUM_OF_PORTS];
+	bool enabled[NUM_OF_PORTS];
 
-    // Step 01: Attempt to check enabled status without initialization
-    status = dsIsVideoPortEnabled(-1, &enabled[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 01: Attempt to check enabled status without initialization
+	status = dsIsVideoPortEnabled(-1, &enabled[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 03: Invalid handle check
-    status = dsIsVideoPortEnabled(handle[0], &enabled[0]);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 03: Invalid handle check
+	status = dsIsVideoPortEnabled(handle[0], &enabled[0]);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 04: Get valid video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 04: Get valid video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 05: Check enabled status with null pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsIsVideoPortEnabled(handle[i], NULL);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 05: Check enabled status with null pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsIsVideoPortEnabled(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 06: Terminate the video port system
-    
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 06: Terminate the video port system
 
-    // Step 07: Check enabled status after termination
-    status = dsIsVideoPortEnabled(handle[0], &enabled[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 07: Check enabled status after termination
+	status = dsIsVideoPortEnabled(handle[0], &enabled[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 /**
@@ -578,47 +573,47 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortEnabled(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsIsDisplayConnected(void) {
-    gTestID = 9;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	gTestID = 9;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    bool isConnectedArray1[NUM_OF_PORTS];
-    bool isConnectedArray2[NUM_OF_PORTS];
+	bool isConnectedArray1[NUM_OF_PORTS];
+	bool isConnectedArray2[NUM_OF_PORTS];
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS ; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS ; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 03: Check if video port is connected
-    for (int i = 0; i < NUM_OF_PORTS ; i++) {
-        status = dsIsDisplayConnected(handle[i], &isConnectedArray1[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Check if video port is connected
+	for (int i = 0; i < NUM_OF_PORTS ; i++) {
+		status = dsIsDisplayConnected(handle[i], &isConnectedArray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 04: Repeat the check for connection status
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsIsDisplayConnected(handle[i], &isConnectedArray2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 04: Repeat the check for connection status
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsIsDisplayConnected(handle[i], &isConnectedArray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 05: Compare the array values
-    for (int i = 0; i < NUM_OF_PORTS ; i++) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(isConnectedArray1[i], isConnectedArray2[i]);
-    }
+	// Step 05: Compare the array values
+	for (int i = 0; i < NUM_OF_PORTS ; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(isConnectedArray1[i], isConnectedArray2[i]);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -649,47 +644,47 @@ void test_l1_dsVideoPort_positive_dsIsDisplayConnected(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsIsDisplayConnected(void) {
-    gTestID = 10;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	gTestID = 10;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    bool connected[NUM_OF_PORTS];
-    
-    // Step 01: Attempt to check connection status without initialization
-    status = dsIsDisplayConnected(-1 , &(connected[0]));
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	bool connected[NUM_OF_PORTS];
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to check connection status without initialization
+	status = dsIsDisplayConnected(-1 , &(connected[0]));
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Invalid handle check
-    status = dsIsDisplayConnected(handle[0], &connected[0]);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get valid video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Invalid handle check
+	status = dsIsDisplayConnected(handle[0], &connected[0]);
+	UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
 
-    // Step 05: Check connection status with null pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsIsDisplayConnected(handle[i], NULL);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 04: Get valid video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Check connection status with null pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsIsDisplayConnected(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 07: Check connection status after termination
-    status = dsIsDisplayConnected(handle[0], &connected[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 07: Check connection status after termination
+	status = dsIsDisplayConnected(handle[0], &connected[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -717,45 +712,45 @@ void test_l1_dsVideoPort_negative_dsIsDisplayConnected(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsIsDisplaySurround(void) {
-    gTestID = 11;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	gTestID = 11;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    bool isSurroundArray1[NUM_OF_PORTS];
-    bool isSurroundArray2[NUM_OF_PORTS];
-    
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	bool isSurroundArray1[NUM_OF_PORTS];
+	bool isSurroundArray2[NUM_OF_PORTS];
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-        // Step 03: Check if the connected display supports audio surround
-        status = dsIsDisplaySurround(handle[i], &isSurroundArray1[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
 
-    // Step 04: Repeat the check for audio surround support
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsIsDisplaySurround(handle[i], &isSurroundArray2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+		// Step 03: Check if the connected display supports audio surround
+		status = dsIsDisplaySurround(handle[i], &isSurroundArray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 05: Compare the array values
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(isSurroundArray1[i], isSurroundArray2[i]);
-    }
+	// Step 04: Repeat the check for audio surround support
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsIsDisplaySurround(handle[i], &isSurroundArray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Compare the array values
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(isSurroundArray1[i], isSurroundArray2[i]);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -786,47 +781,47 @@ void test_l1_dsVideoPort_positive_dsIsDisplaySurround(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsIsDisplaySurround(void) {
-    gTestID = 12;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	gTestID = 12;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    bool surround[NUM_OF_PORTS];
+	bool surround[NUM_OF_PORTS];
 
-    // Step 01: Attempt to check audio surround support without initialization
-    status = dsIsDisplaySurround(-1, &surround[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 01: Attempt to check audio surround support without initialization
+	status = dsIsDisplaySurround(-1, &surround[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 03: Invalid handle check
-    status = dsIsDisplaySurround(handle[0], &surround[0]);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 03: Invalid handle check
+	status = dsIsDisplaySurround(handle[0], &surround[0]);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 04: Get valid video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 04: Get valid video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 05: Check audio surround support with null pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsIsDisplaySurround(handle[i], NULL);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 05: Check audio surround support with null pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsIsDisplaySurround(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 07: Check audio surround support after termination
-    status = dsIsDisplaySurround(handle[0], &surround[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 07: Check audio surround support after termination
+	status = dsIsDisplaySurround(handle[0], &surround[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -854,47 +849,47 @@ void test_l1_dsVideoPort_negative_dsIsDisplaySurround(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetSurroundMode(void) {
-    gTestID = 13;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	gTestID = 13;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    int surroundModeArray1[NUM_OF_PORTS];
-    int surroundModeArray2[NUM_OF_PORTS];
-    
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	int surroundModeArray1[NUM_OF_PORTS];
+	int surroundModeArray2[NUM_OF_PORTS];
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        // Step 03: Get the surround mode of each video port
-        status = dsGetSurroundMode(handle[i], &surroundModeArray1[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 04: Repeat the retrieval of surround mode
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetSurroundMode(handle[i], &surroundModeArray2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		// Step 03: Get the surround mode of each video port
+		status = dsGetSurroundMode(handle[i], &surroundModeArray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 05: Compare the array values
-    for (int i = 0; i < NUM_OF_PORTS  ; i++) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(surroundModeArray1[i], surroundModeArray2[i]);
-    }
+	// Step 04: Repeat the retrieval of surround mode
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetSurroundMode(handle[i], &surroundModeArray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Compare the array values
+	for (int i = 0; i < NUM_OF_PORTS  ; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(surroundModeArray1[i], surroundModeArray2[i]);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -925,47 +920,47 @@ void test_l1_dsVideoPort_positive_dsGetSurroundMode(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetSurroundMode(void) {
-    gTestID = 14;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 14;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int surroundMode[NUM_OF_PORTS];
-    
-    // Step 01: Attempt to get surround mode without initialization
-    status = dsGetSurroundMode(-1, &surroundMode[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	int surroundMode[NUM_OF_PORTS];
 
-    // Step 03: Invalid handle check
-    status = dsGetSurroundMode(handle[0], &surroundMode[0]);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 01: Attempt to get surround mode without initialization
+	status = dsGetSurroundMode(-1, &surroundMode[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 04: Get valid video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 05: Check surround mode with null pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetSurroundMode(handle[i], NULL);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 03: Invalid handle check
+	status = dsGetSurroundMode(handle[0], &surroundMode[0]);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 04: Get valid video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 07: Attempt to get surround mode after termination
-    status = dsGetSurroundMode(handle[0], &surroundMode[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 05: Check surround mode with null pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetSurroundMode(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	// Step 07: Attempt to get surround mode after termination
+	status = dsGetSurroundMode(handle[0], &surroundMode[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -993,48 +988,48 @@ void test_l1_dsVideoPort_negative_dsGetSurroundMode(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsIsVideoPortActive(void) {
-    gTestID = 15;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
+	gTestID = 15;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	dsError_t status;
 
-    bool isActiveArray1[NUM_OF_PORTS];
-    bool isActiveArray2[NUM_OF_PORTS];
-    
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	bool isActiveArray1[NUM_OF_PORTS];
+	bool isActiveArray2[NUM_OF_PORTS];
 
-    // Step 03: Check whether each video port is active
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsIsVideoPortActive(handle[i], &isActiveArray1[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Repeat the active status check
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsIsVideoPortActive(handle[i], &isActiveArray2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 05: Compare the array values
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(isActiveArray1[i], isActiveArray2[i]);
-    }
+	// Step 03: Check whether each video port is active
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsIsVideoPortActive(handle[i], &isActiveArray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 04: Repeat the active status check
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsIsVideoPortActive(handle[i], &isActiveArray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 05: Compare the array values
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(isActiveArray1[i], isActiveArray2[i]);
+	}
+
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -1065,47 +1060,47 @@ void test_l1_dsVideoPort_positive_dsIsVideoPortActive(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsIsVideoPortActive(void) {
-    gTestID = 16;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 16;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    bool active[NUM_OF_PORTS];
-    
-    // Step 01: Attempt to check active status without initialization
-    status = dsIsVideoPortActive(-1, &active[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	bool active[NUM_OF_PORTS];
 
-    // Step 03: Invalid handle check
-    status = dsIsVideoPortActive(handle[0], &active[0]);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 01: Attempt to check active status without initialization
+	status = dsIsVideoPortActive(-1, &active[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 04: Get valid video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 05: Check active status with null pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsIsVideoPortActive(handle[i], NULL);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 03: Invalid handle check
+	status = dsIsVideoPortActive(handle[0], &active[0]);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 04: Get valid video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 07: Attempt to check active status after termination
-    status = dsIsVideoPortActive(handle[0], &active[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 05: Check active status with null pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsIsVideoPortActive(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	// Step 07: Attempt to check active status after termination
+	status = dsIsVideoPortActive(handle[0], &active[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -1131,35 +1126,35 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortActive(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsEnableDTCP(void) {
-    gTestID = 17;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 17;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    bool enableDTCP = true;
-    
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS ; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
-   
-    // Step 03: Enable DTCP
-    for (int i = 0; i < NUM_OF_PORTS ; i++) {
-        status = dsEnableDTCP(handle[i], enableDTCP);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	bool enableDTCP = true;
 
-    // Step 04: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS ; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
+
+	// Step 03: Enable DTCP
+	for (int i = 0; i < NUM_OF_PORTS ; i++) {
+		status = dsEnableDTCP(handle[i], enableDTCP);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
+
+	// Step 04: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -1189,41 +1184,41 @@ void test_l1_dsVideoPort_positive_dsEnableDTCP(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsEnableDTCP(void) {
-    gTestID = 18;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 18;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    bool enableDTCP = true; // Flag to enable/disable DTCP
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Attempt to enable DTCP without initialization
-    status = dsEnableDTCP(-1, enableDTCP);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	bool enableDTCP = true; // Flag to enable/disable DTCP
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to enable DTCP without initialization
+	status = dsEnableDTCP(-1, enableDTCP);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Invalid handle check
-    status = dsEnableDTCP(handle[0], enableDTCP);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get the Video Port handle
-    for (int i = 0; i < NUM_OF_PORTS ; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Invalid handle check
+	status = dsEnableDTCP(handle[0], enableDTCP);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 05: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 04: Get the Video Port handle
+	for (int i = 0; i < NUM_OF_PORTS ; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Attempt to enable DTCP after termination
-    status = dsEnableDTCP(handle[0], enableDTCP);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 05: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 06: Attempt to enable DTCP after termination
+	status = dsEnableDTCP(handle[0], enableDTCP);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -1249,36 +1244,36 @@ void test_l1_dsVideoPort_negative_dsEnableDTCP(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsEnableHDCP(void) {
-    gTestID = 19;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 19;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    bool enableHDCP = true;
-    char hdcpKey[HDCP_KEY_MAX_SIZE] = "ADEF";
-    int keySize = HDCP_KEY_MAX_SIZE;
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	bool enableHDCP = true;
+	char hdcpKey[HDCP_KEY_MAX_SIZE] = "ADEF";
+	int keySize = HDCP_KEY_MAX_SIZE;
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-        // Step 03: Enable HDCP
-        status = dsEnableHDCP(handle[i], enableHDCP, hdcpKey, keySize);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
 
-    }
+		// Step 03: Enable HDCP
+		status = dsEnableHDCP(handle[i], enableHDCP, hdcpKey, keySize);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
 
-    // Step 04: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 04: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -1310,56 +1305,56 @@ void test_l1_dsVideoPort_positive_dsEnableHDCP(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsEnableHDCP(void) {
-    gTestID = 20;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 20;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    bool enableHDCP = true;
-    char hdcpKey[HDCP_KEY_MAX_SIZE] = "ADEF";
-    int keySize = HDCP_KEY_MAX_SIZE;
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Attempt to enable HDCP without initialization
-    status = dsEnableHDCP(-1, enableHDCP, hdcpKey, keySize);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	bool enableHDCP = true;
+	char hdcpKey[HDCP_KEY_MAX_SIZE] = "ADEF";
+	int keySize = HDCP_KEY_MAX_SIZE;
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to enable HDCP without initialization
+	status = dsEnableHDCP(-1, enableHDCP, hdcpKey, keySize);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Attempt to enable HDCP with an invalid handle
-    status = dsEnableHDCP(handle[0], enableHDCP, hdcpKey, keySize);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get the video port handle for supported video ports
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	// Step 03: Attempt to enable HDCP with an invalid handle
+	status = dsEnableHDCP(handle[0], enableHDCP, hdcpKey, keySize);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-        // Step 05: Enable HDCP with invalid key size
-        status = dsEnableHDCP(handle[i],enableHDCP, hdcpKey, HDCP_KEY_MAX_SIZE+1);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	// Step 04: Get the video port handle for supported video ports
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
 
-        // Step 06: Enable HDCP with NULL hdcpKey pointer
-        status = dsEnableHDCP(handle[i], enableHDCP, NULL, keySize);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+		// Step 05: Enable HDCP with invalid key size
+		status = dsEnableHDCP(handle[i],enableHDCP, hdcpKey, HDCP_KEY_MAX_SIZE+1);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 07: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+		// Step 06: Enable HDCP with NULL hdcpKey pointer
+		status = dsEnableHDCP(handle[i], enableHDCP, NULL, keySize);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 08: Attempt to enable HDCP after termination
-    status = dsEnableHDCP(handle[0], enableHDCP, hdcpKey, keySize);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 07: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 08: Attempt to enable HDCP after termination
+	status = dsEnableHDCP(handle[0], enableHDCP, hdcpKey, keySize);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
 /**
-* @brief Positive Test Scenarios for dsIsDTCPEnabled()
+ * @brief Positive Test Scenarios for dsIsDTCPEnabled()
  *
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 021@p
@@ -1382,47 +1377,47 @@ void test_l1_dsVideoPort_negative_dsEnableHDCP(void) {
  *
  */
 void test_l1_dsVideoPort_positive_dsIsDTCPEnabled(void) {
-    gTestID = 21;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 21;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    bool isDTCPEnabledArray1[NUM_OF_PORTS];
-    bool isDTCPEnabledArray2[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	bool isDTCPEnabledArray1[NUM_OF_PORTS];
+	bool isDTCPEnabledArray2[NUM_OF_PORTS];
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-   // Step 03: Check if DTCP is enabled
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsIsDTCPEnabled(handle[i], &isDTCPEnabledArray1[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 04: Repeat the check for DTCP status
-    for (int i = 0; i < NUM_OF_PORTS; i++){
-        status = dsIsDTCPEnabled(handle[i], &isDTCPEnabledArray2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Check if DTCP is enabled
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsIsDTCPEnabled(handle[i], &isDTCPEnabledArray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 05: Compare the array values
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(isDTCPEnabledArray1[i], isDTCPEnabledArray2[i]);
-    }
+	// Step 04: Repeat the check for DTCP status
+	for (int i = 0; i < NUM_OF_PORTS; i++){
+		status = dsIsDTCPEnabled(handle[i], &isDTCPEnabledArray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Compare the array values
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(isDTCPEnabledArray1[i], isDTCPEnabledArray2[i]);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -1452,47 +1447,47 @@ void test_l1_dsVideoPort_positive_dsIsDTCPEnabled(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsIsDTCPEnabled(void) {
-    gTestID = 22;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 22;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    bool isDTCPEnabled[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Attempt to get DTCP status without initialization
-    status = dsIsDTCPEnabled(-1, &isDTCPEnabled[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	bool isDTCPEnabled[NUM_OF_PORTS];
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to get DTCP status without initialization
+	status = dsIsDTCPEnabled(-1, &isDTCPEnabled[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Invalid handle check
-    status = dsIsDTCPEnabled(handle[0], &isDTCPEnabled[0]);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get valid video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Invalid handle check
+	status = dsIsDTCPEnabled(handle[0], &isDTCPEnabled[0]);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 05: Check DTCP status with invalid pointer
-        for (int i = 0; i < NUM_OF_PORTS; i++){
-        status = dsIsDTCPEnabled(handle[i], NULL);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 04: Get valid video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Check DTCP status with invalid pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++){
+		status = dsIsDTCPEnabled(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 07: Attempt to get DTCP status after termination
-    status = dsIsDTCPEnabled(handle[0], &isDTCPEnabled[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 07: Attempt to get DTCP status after termination
+	status = dsIsDTCPEnabled(handle[0], &isDTCPEnabled[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -1520,46 +1515,46 @@ void test_l1_dsVideoPort_negative_dsIsDTCPEnabled(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsIsHDCPEnabled(void) {
-    gTestID = 23;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 23;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    bool isHDCPEnabledArray1[NUM_OF_PORTS];
-    bool isHDCPEnabledArray2[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	bool isHDCPEnabledArray1[NUM_OF_PORTS];
+	bool isHDCPEnabledArray2[NUM_OF_PORTS];
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
-        // Step 03: Check if HDCP is enabled
-     for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsIsHDCPEnabled(handle[i], &isHDCPEnabledArray1[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Repeat the check for HDCP status
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsIsHDCPEnabled(handle[i], &isHDCPEnabledArray2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
+	// Step 03: Check if HDCP is enabled
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsIsHDCPEnabled(handle[i], &isHDCPEnabledArray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 05: Compare the array values
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(isHDCPEnabledArray1[i], isHDCPEnabledArray2[i]);
-    }
+	// Step 04: Repeat the check for HDCP status
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsIsHDCPEnabled(handle[i], &isHDCPEnabledArray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Compare the array values
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(isHDCPEnabledArray1[i], isHDCPEnabledArray2[i]);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -1590,47 +1585,47 @@ void test_l1_dsVideoPort_positive_dsIsHDCPEnabled(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsIsHDCPEnabled(void) {
-    gTestID = 24;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 24;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    bool contentProtected[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Attempt to get HDCP status without initialization
-    status = dsIsHDCPEnabled(-1, &(contentProtected[0]));
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	bool contentProtected[NUM_OF_PORTS];
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to get HDCP status without initialization
+	status = dsIsHDCPEnabled(-1, &(contentProtected[0]));
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Attempt to get HDCP status with an invalid handle
-    status = dsIsHDCPEnabled(handle[0], &(contentProtected[0]));
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get the video port handle for supported video ports
-     for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-	}
-	
-    // Step 05: Get HDCP status with invalid pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsIsHDCPEnabled(handle[i], NULL);
+	// Step 03: Attempt to get HDCP status with an invalid handle
+	status = dsIsHDCPEnabled(handle[0], &(contentProtected[0]));
 	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 04: Get the video port handle for supported video ports
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 07: Attempt to get HDCP status after termination
-    status = dsIsHDCPEnabled(handle[0], &(contentProtected[0]));
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 05: Get HDCP status with invalid pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsIsHDCPEnabled(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	// Step 07: Attempt to get HDCP status after termination
+	status = dsIsHDCPEnabled(handle[0], &(contentProtected[0]));
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -1656,35 +1651,35 @@ void test_l1_dsVideoPort_negative_dsIsHDCPEnabled(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsEnableVideoPort(void) {
-    gTestID = 25;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 25;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    bool isVideoPortEnabled[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	bool isVideoPortEnabled[NUM_OF_PORTS];
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-       status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 03: Enable the video port
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsEnableVideoPort(handle[i], true);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 04: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 03: Enable the video port
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsEnableVideoPort(handle[i], true);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 04: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -1714,41 +1709,41 @@ void test_l1_dsVideoPort_positive_dsEnableVideoPort(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsEnableVideoPort(void) {
-    gTestID = 26;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
+	gTestID = 26;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
-    bool enabled = true; // Example value for enabling/disabling the port
+	dsError_t status;
 
-    // Step 01: Attempt to enable/disable video port without initialization
-    status = dsEnableVideoPort(-1, enabled);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	bool enabled = true; // Example value for enabling/disabling the port
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to enable/disable video port without initialization
+	status = dsEnableVideoPort(-1, enabled);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Invalid handle check
-    status = dsEnableVideoPort(handle[0], enabled);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get valid video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Invalid handle check
+	status = dsEnableVideoPort(handle[0], enabled);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 05: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 04: Get valid video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Attempt to enable/disable video port after termination
-    status = dsEnableVideoPort(handle[0], enabled);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 05: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 06: Attempt to enable/disable video port after termination
+	status = dsEnableVideoPort(handle[0], enabled);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -1774,36 +1769,36 @@ void test_l1_dsVideoPort_negative_dsEnableVideoPort(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsSetResolution(void) {
-    gTestID = 27;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 27;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 03: Set the resolution for the video port
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        for(int j =0; j < (sizeof(kResolutions)/sizeof(kResolutions[0])); j++) {
-        status = dsSetResolution(handle[i], &kResolutions[j]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-      }
-    }
+	// Step 03: Set the resolution for the video port
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		for(int j =0; j < (sizeof(kResolutions)/sizeof(kResolutions[0])); j++) {
+			status = dsSetResolution(handle[i], &kResolutions[j]);
+			DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+		}
+	}
 
-    // Step 04: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 04: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -1835,54 +1830,54 @@ void test_l1_dsVideoPort_positive_dsSetResolution(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSetResolution(void) {
-    gTestID = 28;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 28;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-        
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Attempt to set resolution without initialization
-    status = dsSetResolution(-1, &(kResolutions[0]));
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 03: Invalid handle check
-    status = dsSetResolution(handle[0], &(kResolutions[0]));
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 01: Attempt to set resolution without initialization
+	status = dsSetResolution(-1, &(kResolutions[0]));
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 04: Get valid video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 05: Set resolution with invalid pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-    status = dsSetResolution(handle[i], NULL);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 03: Invalid handle check
+	status = dsSetResolution(handle[0], &(kResolutions[0]));
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 06: Set resolution with invalid resolution parameters
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        for (int j = 0; j < (sizeof(invalid_kRes)/sizeof(invalid_kRes[0])); j++) {
-    status = dsSetResolution(handle[i], &invalid_kRes[j]);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-      }
-    }
-    // Step 07: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 04: Get valid video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 08: Attempt to set resolution after termination
-    status = dsSetResolution(handle[0], &(kResolutions[0]));
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 05: Set resolution with invalid pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsSetResolution(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 06: Set resolution with invalid resolution parameters
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		for (int j = 0; j < (sizeof(invalid_kRes)/sizeof(invalid_kRes[0])); j++) {
+			status = dsSetResolution(handle[i], &invalid_kRes[j]);
+			DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+		}
+	}
+	// Step 07: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	// Step 08: Attempt to set resolution after termination
+	status = dsSetResolution(handle[0], &(kResolutions[0]));
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -1910,51 +1905,51 @@ void test_l1_dsVideoPort_negative_dsSetResolution(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetResolution(void) {
-    gTestID = 29;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT}; 
+	gTestID = 29;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsVideoPortResolution_t resolutionArray1[NUM_OF_PORTS];
-    dsVideoPortResolution_t resolutionArray2[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT}; 
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	dsVideoPortResolution_t resolutionArray1[NUM_OF_PORTS];
+	dsVideoPortResolution_t resolutionArray2[NUM_OF_PORTS];
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-          status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 03: Retrieve the resolution of the video port
-        for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetResolution(handle[i], &(resolutionArray1[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
-   
-    // Step 04: Repeat the retrieval of resolution
-        for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetResolution(handle[i] , &resolutionArray2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 05: Compare the array values
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(resolutionArray1[i].pixelResolution, resolutionArray2[i].pixelResolution);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(resolutionArray1[i].aspectRatio, resolutionArray2[i].aspectRatio);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(resolutionArray1[i].stereoScopicMode, resolutionArray2[i].stereoScopicMode);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(resolutionArray1[i].frameRate, resolutionArray2[i].frameRate);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(resolutionArray1[i].interlaced, resolutionArray2[i].interlaced);
-    }
+	// Step 03: Retrieve the resolution of the video port
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetResolution(handle[i], &(resolutionArray1[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 04: Repeat the retrieval of resolution
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetResolution(handle[i] , &resolutionArray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 05: Compare the array values
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(resolutionArray1[i].pixelResolution, resolutionArray2[i].pixelResolution);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(resolutionArray1[i].aspectRatio, resolutionArray2[i].aspectRatio);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(resolutionArray1[i].stereoScopicMode, resolutionArray2[i].stereoScopicMode);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(resolutionArray1[i].frameRate, resolutionArray2[i].frameRate);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(resolutionArray1[i].interlaced, resolutionArray2[i].interlaced);
+	}
+
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -1985,47 +1980,47 @@ void test_l1_dsVideoPort_positive_dsGetResolution(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetResolution(void) {
-    gTestID = 30;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 30;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsVideoPortResolution_t resolution[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Attempt to get resolution without initialization
-    status = dsGetResolution(-1, &(resolution[0]));
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	dsVideoPortResolution_t resolution[NUM_OF_PORTS];
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to get resolution without initialization
+	status = dsGetResolution(-1, &(resolution[0]));
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Invalid handle check
-    status = dsGetResolution( handle[0] , &(resolution[0]));
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get valid video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Invalid handle check
+	status = dsGetResolution( handle[0] , &(resolution[0]));
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 05: Get resolution with invalid pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetResolution(handle[i], NULL);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 04: Get valid video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Get resolution with invalid pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetResolution(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 07: Attempt to get resolution after termination
-    status = dsGetResolution(handle[0], &(resolution[0]));
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 07: Attempt to get resolution after termination
+	status = dsGetResolution(handle[0], &(resolution[0]));
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -2051,33 +2046,33 @@ void test_l1_dsVideoPort_negative_dsGetResolution(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsSetActiveSource(void) {
-    gTestID = 31;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 31;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 03: Set the video port as the active source
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsSetActiveSource(handle[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 04: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 03: Set the video port as the active source
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsSetActiveSource(handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 04: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -2107,39 +2102,39 @@ void test_l1_dsVideoPort_positive_dsSetActiveSource(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSetActiveSource(void) {
-    gTestID = 32;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle [NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 32;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    // Step 01: Attempt to set active source without initialization
-    status = dsSetActiveSource(-1);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	dsError_t status;
+	intptr_t handle [NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to set active source without initialization
+	status = dsSetActiveSource(-1);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Invalid handle check
-    status = dsSetActiveSource(handle[0]);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get valid video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Invalid handle check
+	status = dsSetActiveSource(handle[0]);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 05: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 04: Get valid video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Attempt to set active source after termination
-    status = dsSetActiveSource(handle[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 05: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 06: Attempt to set active source after termination
+	status = dsSetActiveSource(handle[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 /**
@@ -2162,34 +2157,34 @@ void test_l1_dsVideoPort_negative_dsSetActiveSource(void) {
  * |03|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  *
  */
- 
- /*callback*/
+
+/*callback*/
 void mockVideoFormatCallback(dsHDRStandard_t videoFormat){
-    // Mock implementation, can be customized for testing
+	// Mock implementation, can be customized for testing
 }
- 
+
 void test_l1_dsVideoPort_positive_dsVideoFormatUpdateRegisterCB(void) {
-    gTestID = 33;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-   
-    dsError_t status;
- 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
- 
-    // Step 02: Register a valid Video Format update callback
-    status = dsVideoFormatUpdateRegisterCB(mockVideoFormatCallback);
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
- 
-    // Step 03: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
- 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+	gTestID = 33;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	dsError_t status;
+
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	// Step 02: Register a valid Video Format update callback
+	status = dsVideoFormatUpdateRegisterCB(mockVideoFormatCallback);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+
+	// Step 03: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
- 
- 
+
+
 /**
  * @brief Negative Test Scenarios for dsVideoFormatUpdateRegisterCB()
  *
@@ -2215,32 +2210,32 @@ void test_l1_dsVideoPort_positive_dsVideoFormatUpdateRegisterCB(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsVideoFormatUpdateRegisterCB(void) {
-    gTestID = 34;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-   
-    dsError_t status;
- 
-    // Step 01: Attempt to register callback without initialization
-    status = dsVideoFormatUpdateRegisterCB(mockVideoFormatCallback);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
- 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
- 
-    // Step 03: Register with invalid callback (NULL)
-    status = dsVideoFormatUpdateRegisterCB(NULL);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
- 
-    // Step 04: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
- 
-    // Step 05: Attempt to register callback after termination
-    status = dsVideoFormatUpdateRegisterCB(mockVideoFormatCallback);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
- 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+	gTestID = 34;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	dsError_t status;
+
+	// Step 01: Attempt to register callback without initialization
+	status = dsVideoFormatUpdateRegisterCB(mockVideoFormatCallback);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	// Step 03: Register with invalid callback (NULL)
+	status = dsVideoFormatUpdateRegisterCB(NULL);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+
+	// Step 04: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	// Step 05: Attempt to register callback after termination
+	status = dsVideoFormatUpdateRegisterCB(mockVideoFormatCallback);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 /**
@@ -2265,41 +2260,41 @@ void test_l1_dsVideoPort_negative_dsVideoFormatUpdateRegisterCB(void) {
  * 
  */
 
- /*callback */
+/*callback */
 void myHdcpStatusCallbackFunction(intptr_t handle, dsHdcpStatus_t status)
-    {
-      /*stub callback*/
-    }
+{
+	/*stub callback*/
+}
 
 void test_l1_dsVideoPort_positive_dsRegisterHdcpStatusCallback(void) {
-    gTestID = 35;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 35;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    // Assume dsHdcpStatusCallback_t is defined and a valid callback function is implemented
-    dsHDCPStatusCallback_t validHdcpStatusCallback = myHdcpStatusCallbackFunction;
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Assume dsHdcpStatusCallback_t is defined and a valid callback function is implemented
+	dsHDCPStatusCallback_t validHdcpStatusCallback = myHdcpStatusCallbackFunction;
 
-    // Step 02: Get the video port handle and register HDCP status callback
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-        // Step 03: Register HDCP status change callback
-        status = dsRegisterHdcpStatusCallback(handle[i], validHdcpStatusCallback);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the video port handle and register HDCP status callback
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
 
-    // Step 04: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+		// Step 03: Register HDCP status change callback
+		status = dsRegisterHdcpStatusCallback(handle[i], validHdcpStatusCallback);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 04: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -2330,47 +2325,47 @@ void test_l1_dsVideoPort_positive_dsRegisterHdcpStatusCallback(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsRegisterHdcpStatusCallback(void) {
-    gTestID = 36;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS] = {HANDLE_ARRAY_INIT} /* Initialize with invalid handle */;
+	gTestID = 36;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    // Assume dsHdcpStatusCallback_t is defined
-     dsHDCPStatusCallback_t validHdcpStatusCallback = myHdcpStatusCallbackFunction;
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS] = {HANDLE_ARRAY_INIT} /* Initialize with invalid handle */;
 
-    // Step 01: Attempt to register HDCP status callback without initialization
-    status = dsRegisterHdcpStatusCallback(-1, validHdcpStatusCallback);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Assume dsHdcpStatusCallback_t is defined
+	dsHDCPStatusCallback_t validHdcpStatusCallback = myHdcpStatusCallbackFunction;
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to register HDCP status callback without initialization
+	status = dsRegisterHdcpStatusCallback(-1, validHdcpStatusCallback);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Invalid handle check
-    status = dsRegisterHdcpStatusCallback(handle[0], validHdcpStatusCallback);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get valid video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-    status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
-    // Step 05: Register HDCP status callback with NULL callback function
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-    status = dsRegisterHdcpStatusCallback(handle[i], NULL);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 03: Invalid handle check
+	status = dsRegisterHdcpStatusCallback(handle[0], validHdcpStatusCallback);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 04: Get valid video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
+	// Step 05: Register HDCP status callback with NULL callback function
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsRegisterHdcpStatusCallback(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 07: Attempt to register HDCP status callback after termination
-    status = dsRegisterHdcpStatusCallback(handle[0], validHdcpStatusCallback);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 07: Attempt to register HDCP status callback after termination
+	status = dsRegisterHdcpStatusCallback(handle[0], validHdcpStatusCallback);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -2398,47 +2393,47 @@ void test_l1_dsVideoPort_negative_dsRegisterHdcpStatusCallback(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetHDCPStatus(void) {
-    gTestID = 37;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID); 
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 37;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID); 
 
-    dsHdcpStatus_t hdcpStatusArray1[NUM_OF_PORTS];
-    dsHdcpStatus_t hdcpStatusArray2[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	dsHdcpStatus_t hdcpStatusArray1[NUM_OF_PORTS];
+	dsHdcpStatus_t hdcpStatusArray2[NUM_OF_PORTS];
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-          status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-          DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
-       
-    // Step 03: Retrieve the HDCP status
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetHDCPStatus(handle[i], &(hdcpStatusArray1[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
-    
-    // Step 04: Repeat the retrieval of HDCP status
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetHDCPStatus(handle[i], &(hdcpStatusArray2[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 05: Compare the array values
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(hdcpStatusArray1[i], hdcpStatusArray2[i]);
-    }
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 03: Retrieve the HDCP status
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetHDCPStatus(handle[i], &(hdcpStatusArray1[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 04: Repeat the retrieval of HDCP status
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetHDCPStatus(handle[i], &(hdcpStatusArray2[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
+
+	// Step 05: Compare the array values
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(hdcpStatusArray1[i], hdcpStatusArray2[i]);
+	}
+
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -2469,47 +2464,47 @@ void test_l1_dsVideoPort_positive_dsGetHDCPStatus(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetHDCPStatus(void) {
-    gTestID = 38;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
+	gTestID = 38;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-   intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};          
-   dsHdcpStatus_t hdcpStatus[NUM_OF_PORTS];
+	dsError_t status;
 
-    // Step 01: Attempt to get HDCP status without initialization
-    status = dsGetHDCPStatus(-1, &(hdcpStatus[0]));
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};          
+	dsHdcpStatus_t hdcpStatus[NUM_OF_PORTS];
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to get HDCP status without initialization
+	status = dsGetHDCPStatus(-1, &(hdcpStatus[0]));
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Invalid handle check
-    status = dsGetHDCPStatus(handle[0], &(hdcpStatus[0]));
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get valid video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-          status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-          DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Invalid handle check
+	status = dsGetHDCPStatus(handle[0], &(hdcpStatus[0]));
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 05: Get HDCP status with invalid pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-    status = dsGetHDCPStatus(handle[i] , NULL);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 04: Get valid video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Get HDCP status with invalid pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetHDCPStatus(handle[i] , NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 07: Attempt to get HDCP status after termination
-    status = dsGetHDCPStatus(handle[0], &(hdcpStatus[0]));
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 07: Attempt to get HDCP status after termination
+	status = dsGetHDCPStatus(handle[0], &(hdcpStatus[0]));
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -2538,47 +2533,47 @@ void test_l1_dsVideoPort_negative_dsGetHDCPStatus(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetHDCPProtocol(void) {
-    gTestID = 39;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 39;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsHdcpProtocolVersion_t protocolVersionArray1[NUM_OF_PORTS];
-    dsHdcpProtocolVersion_t protocolVersionArray2[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	dsHdcpProtocolVersion_t protocolVersionArray1[NUM_OF_PORTS];
+	dsHdcpProtocolVersion_t protocolVersionArray2[NUM_OF_PORTS];
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-          status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-          DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-       }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 03: Retrieve the HDCP protocol version
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetHDCPProtocol(handle[i], &(protocolVersionArray1[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 04: Repeat the retrieval of HDCP protocol version
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetHDCPProtocol(handle[i], &(protocolVersionArray2[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Retrieve the HDCP protocol version
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetHDCPProtocol(handle[i], &(protocolVersionArray1[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 05: Compare the array values
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(protocolVersionArray1[i], protocolVersionArray2[i]);
-    }
+	// Step 04: Repeat the retrieval of HDCP protocol version
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetHDCPProtocol(handle[i], &(protocolVersionArray2[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Compare the array values
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(protocolVersionArray1[i], protocolVersionArray2[i]);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 /**
@@ -2608,47 +2603,47 @@ void test_l1_dsVideoPort_positive_dsGetHDCPProtocol(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetHDCPProtocol(void) {
-    gTestID = 40;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 40;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsHdcpProtocolVersion_t protocolVersion[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Attempt to get HDCP protocol without initialization
-    status = dsGetHDCPProtocol(-1, &(protocolVersion[0]));
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	dsHdcpProtocolVersion_t protocolVersion[NUM_OF_PORTS];
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to get HDCP protocol without initialization
+	status = dsGetHDCPProtocol(-1, &(protocolVersion[0]));
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Invalid handle check
-    status = dsGetHDCPProtocol(handle[0], &(protocolVersion[0]));
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get valid video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-          status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-          DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Invalid handle check
+	status = dsGetHDCPProtocol(handle[0], &(protocolVersion[0]));
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 05: Get HDCP protocol with invalid pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-    status = dsGetHDCPProtocol(handle[i], NULL);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 04: Get valid video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Get HDCP protocol with invalid pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetHDCPProtocol(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 07: Attempt to get HDCP protocol after termination
-    status = dsGetHDCPProtocol(handle[0], &protocolVersion[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 07: Attempt to get HDCP protocol after termination
+	status = dsGetHDCPProtocol(handle[0], &protocolVersion[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -2676,48 +2671,48 @@ void test_l1_dsVideoPort_negative_dsGetHDCPProtocol(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetHDCPReceiverProtocol(void) {
-    gTestID = 41;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
+	gTestID = 41;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    intptr_t  handle[NUM_OF_PORTS];
+	dsError_t status;
 
-    dsHdcpProtocolVersion_t protocolVersionArray1[NUM_OF_PORTS];
-    dsHdcpProtocolVersion_t protocolVersionArray2[NUM_OF_PORTS];
+	intptr_t  handle[NUM_OF_PORTS];
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	dsHdcpProtocolVersion_t protocolVersionArray1[NUM_OF_PORTS];
+	dsHdcpProtocolVersion_t protocolVersionArray2[NUM_OF_PORTS];
 
-    // Step 02: Get the video port handle
-     for (int i = 0; i < NUM_OF_PORTS; i++) {
-          status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-          DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-       }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 03: Retrieve the Receiver HDCP protocol version
-     for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetHDCPReceiverProtocol(handle[i], &(protocolVersionArray1[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-     }
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 04: Repeat the retrieval of Receiver HDCP protocol version
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetHDCPReceiverProtocol(handle[i], &(protocolVersionArray2[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Retrieve the Receiver HDCP protocol version
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetHDCPReceiverProtocol(handle[i], &(protocolVersionArray1[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 05: Compare the array values
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(protocolVersionArray1[i], protocolVersionArray2[i]);
-    }
+	// Step 04: Repeat the retrieval of Receiver HDCP protocol version
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetHDCPReceiverProtocol(handle[i], &(protocolVersionArray2[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Compare the array values
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(protocolVersionArray1[i], protocolVersionArray2[i]);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -2748,47 +2743,47 @@ void test_l1_dsVideoPort_positive_dsGetHDCPReceiverProtocol(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetHDCPReceiverProtocol(void) {
-    gTestID = 42;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 42;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsHdcpProtocolVersion_t receiverProtocolVersion[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Attempt to get Receiver HDCP protocol without initialization
-    status = dsGetHDCPReceiverProtocol(-1, &receiverProtocolVersion[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	dsHdcpProtocolVersion_t receiverProtocolVersion[NUM_OF_PORTS];
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to get Receiver HDCP protocol without initialization
+	status = dsGetHDCPReceiverProtocol(-1, &receiverProtocolVersion[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Invalid handle check
-    status = dsGetHDCPReceiverProtocol(handle[0], &receiverProtocolVersion[0]);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get valid video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Invalid handle check
+	status = dsGetHDCPReceiverProtocol(handle[0], &receiverProtocolVersion[0]);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 05: Get Receiver HDCP protocol with invalid pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-    status = dsGetHDCPReceiverProtocol(handle[i], NULL);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 04: Get valid video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Get Receiver HDCP protocol with invalid pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetHDCPReceiverProtocol(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 07: Attempt to get Receiver HDCP protocol after termination
-    status = dsGetHDCPReceiverProtocol(handle[0], &receiverProtocolVersion[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 07: Attempt to get Receiver HDCP protocol after termination
+	status = dsGetHDCPReceiverProtocol(handle[0], &receiverProtocolVersion[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -2816,47 +2811,47 @@ void test_l1_dsVideoPort_negative_dsGetHDCPReceiverProtocol(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetHDCPCurrentProtocol(void) {
-    gTestID = 43;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t  handle[NUM_OF_PORTS];
+	gTestID = 43;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsHdcpProtocolVersion_t currentProtocolArray1[NUM_OF_PORTS];
-    dsHdcpProtocolVersion_t currentProtocolArray2[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t  handle[NUM_OF_PORTS];
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	dsHdcpProtocolVersion_t currentProtocolArray1[NUM_OF_PORTS];
+	dsHdcpProtocolVersion_t currentProtocolArray2[NUM_OF_PORTS];
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-     }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 03: Retrieve the current negotiated HDCP protocol version
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetHDCPCurrentProtocol(handle[i], &currentProtocolArray1[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 04: Repeat the retrieval of current HDCP protocol version
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetHDCPCurrentProtocol(handle[i], &currentProtocolArray2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Retrieve the current negotiated HDCP protocol version
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetHDCPCurrentProtocol(handle[i], &currentProtocolArray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 05: Compare the array values
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(currentProtocolArray1[i], currentProtocolArray2[i]);
-    }
+	// Step 04: Repeat the retrieval of current HDCP protocol version
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetHDCPCurrentProtocol(handle[i], &currentProtocolArray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Compare the array values
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(currentProtocolArray1[i], currentProtocolArray2[i]);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -2887,47 +2882,47 @@ void test_l1_dsVideoPort_positive_dsGetHDCPCurrentProtocol(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetHDCPCurrentProtocol(void) {
-    gTestID = 44;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t  handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 44;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsHdcpProtocolVersion_t currentProtocolVersion[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t  handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Attempt to get current negotiated HDCP protocol without initialization
-    status = dsGetHDCPCurrentProtocol(-1, &currentProtocolVersion[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	dsHdcpProtocolVersion_t currentProtocolVersion[NUM_OF_PORTS];
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to get current negotiated HDCP protocol without initialization
+	status = dsGetHDCPCurrentProtocol(-1, &currentProtocolVersion[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Invalid handle check
-    status = dsGetHDCPCurrentProtocol(handle[0], &currentProtocolVersion[0]);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get valid video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-          status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-          DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Invalid handle check
+	status = dsGetHDCPCurrentProtocol(handle[0], &currentProtocolVersion[0]);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 05: Get current HDCP protocol with invalid pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-    status = dsGetHDCPCurrentProtocol(handle[i] , NULL);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 04: Get valid video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Get current HDCP protocol with invalid pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetHDCPCurrentProtocol(handle[i] , NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 07: Attempt to get current negotiated HDCP protocol after termination
-    status = dsGetHDCPCurrentProtocol(handle[0], &currentProtocolVersion[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 07: Attempt to get current negotiated HDCP protocol after termination
+	status = dsGetHDCPCurrentProtocol(handle[0], &currentProtocolVersion[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -2955,47 +2950,47 @@ void test_l1_dsVideoPort_negative_dsGetHDCPCurrentProtocol(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetTVHDRCapabilities(void) {
-    gTestID = 45;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 45;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int capabilitiesArray1[NUM_OF_PORTS];
-    int capabilitiesArray2[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	int capabilitiesArray1[NUM_OF_PORTS];
+	int capabilitiesArray2[NUM_OF_PORTS];
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
-        
-    // Step 03: Retrieve the HDR capabilities
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetTVHDRCapabilities(handle[i], &capabilitiesArray1[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Repeat the retrieval of HDR capabilities
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetTVHDRCapabilities(handle[i], &capabilitiesArray2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 05: Compare the array values
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(capabilitiesArray1[i], capabilitiesArray2[i]);
-    }
+	// Step 03: Retrieve the HDR capabilities
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetTVHDRCapabilities(handle[i], &capabilitiesArray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 04: Repeat the retrieval of HDR capabilities
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetTVHDRCapabilities(handle[i], &capabilitiesArray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 05: Compare the array values
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(capabilitiesArray1[i], capabilitiesArray2[i]);
+	}
+
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -3026,47 +3021,47 @@ void test_l1_dsVideoPort_positive_dsGetTVHDRCapabilities(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetTVHDRCapabilities(void) {
-    gTestID = 46;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 46;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int capabilities[NUM_OF_PORTS]; 
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Attempt to get HDR capabilities without initialization
-    status = dsGetTVHDRCapabilities(-1, &capabilities[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	int capabilities[NUM_OF_PORTS]; 
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to get HDR capabilities without initialization
+	status = dsGetTVHDRCapabilities(-1, &capabilities[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Invalid handle check
-    status = dsGetTVHDRCapabilities(handle[0], &capabilities[0]);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get valid video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Invalid handle check
+	status = dsGetTVHDRCapabilities(handle[0], &capabilities[0]);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        // Step 05: Get HDR capabilities with invalid pointer
-        status = dsGetTVHDRCapabilities(handle[i], NULL);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 04: Get valid video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		// Step 05: Get HDR capabilities with invalid pointer
+		status = dsGetTVHDRCapabilities(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 07: Attempt to get HDR capabilities after termination
-    status = dsGetTVHDRCapabilities(handle[0], &capabilities[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 07: Attempt to get HDR capabilities after termination
+	status = dsGetTVHDRCapabilities(handle[0], &capabilities[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -3094,47 +3089,47 @@ void test_l1_dsVideoPort_negative_dsGetTVHDRCapabilities(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsSupportedTvResolutions(void) {
-    gTestID = 47;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};    
+	gTestID = 47;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int resolutionsArray1[NUM_OF_PORTS];
-    int resolutionsArray2[NUM_OF_PORTS];
-    
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};    
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
-        
-    // Step 03: Retrieve the supported TV resolutions
-    for (int i = 0; i < NUM_OF_PORTS; i++) { 
-        status = dsSupportedTvResolutions(handle[i], &resolutionsArray1[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	int resolutionsArray1[NUM_OF_PORTS];
+	int resolutionsArray2[NUM_OF_PORTS];
 
-    // Step 04: Repeat the retrieval of supported TV resolutions
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsSupportedTvResolutions(handle[i], &resolutionsArray2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 05: Compare the array values
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(resolutionsArray1[i], resolutionsArray2[i]);
-    }
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 03: Retrieve the supported TV resolutions
+	for (int i = 0; i < NUM_OF_PORTS; i++) { 
+		status = dsSupportedTvResolutions(handle[i], &resolutionsArray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 04: Repeat the retrieval of supported TV resolutions
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsSupportedTvResolutions(handle[i], &resolutionsArray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
+
+	// Step 05: Compare the array values
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(resolutionsArray1[i], resolutionsArray2[i]);
+	}
+
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -3165,47 +3160,47 @@ void test_l1_dsVideoPort_positive_dsSupportedTvResolutions(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSupportedTvResolutions(void) {
-    gTestID = 48;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 48;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int resolutions[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Attempt to get supported resolutions without initialization
-    status = dsSupportedTvResolutions(-1, &resolutions[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	int resolutions[NUM_OF_PORTS];
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to get supported resolutions without initialization
+	status = dsSupportedTvResolutions(-1, &resolutions[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Invalid handle check
-    status = dsSupportedTvResolutions(handle[0], &resolutions[0]);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get valid video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Invalid handle check
+	status = dsSupportedTvResolutions(handle[0], &resolutions[0]);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 05: Get supported resolutions with invalid pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsSupportedTvResolutions(handle[i], NULL);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 04: Get valid video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Get supported resolutions with invalid pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsSupportedTvResolutions(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 07: Attempt to get supported resolutions after termination
-    status = dsSupportedTvResolutions(handle[0], &resolutions[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 07: Attempt to get supported resolutions after termination
+	status = dsSupportedTvResolutions(handle[0], &resolutions[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -3231,35 +3226,35 @@ void test_l1_dsVideoPort_negative_dsSupportedTvResolutions(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsSetForceDisable4KSupport(void) {
-    gTestID = 49;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 49;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    bool disable4K = true;
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	bool disable4K = true;
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-    // Step 03: Set force disable 4K support
-        status = dsSetForceDisable4KSupport(handle[i], disable4K);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 04: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		// Step 03: Set force disable 4K support
+		status = dsSetForceDisable4KSupport(handle[i], disable4K);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 04: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -3289,41 +3284,41 @@ void test_l1_dsVideoPort_positive_dsSetForceDisable4KSupport(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSetForceDisable4KSupport(void) {
-    gTestID = 50;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 50;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    bool disable4K = true;
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Attempt to set force disable 4K support without initialization
-    status = dsSetForceDisable4KSupport(-1, disable4K);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	bool disable4K = true;
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to set force disable 4K support without initialization
+	status = dsSetForceDisable4KSupport(-1, disable4K);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Invalid handle check
-    status = dsSetForceDisable4KSupport(handle[0], disable4K);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
-    
-    // Step 04: Get valid video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 05: Terminate the video port system
-    status = dsVideoPortTerm();
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	// Step 03: Invalid handle check
+	status = dsSetForceDisable4KSupport(handle[0], disable4K);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 06: Attempt to set force disable 4K support after termination
-    status = dsSetForceDisable4KSupport(handle[0], disable4K);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 04: Get valid video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 05: Terminate the video port system
+	status = dsVideoPortTerm();
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+
+	// Step 06: Attempt to set force disable 4K support after termination
+	status = dsSetForceDisable4KSupport(handle[0], disable4K);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -3351,47 +3346,47 @@ void test_l1_dsVideoPort_negative_dsSetForceDisable4KSupport(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetForceDisable4KSupport(void) {
-    gTestID = 51;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 51;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    bool disable4KArray1[NUM_OF_PORTS];
-    bool disable4KArray2[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	bool disable4KArray1[NUM_OF_PORTS];
+	bool disable4KArray2[NUM_OF_PORTS];
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 03: Retrieve whether 4K support is disabled
-    for (int i = 0; i < NUM_OF_PORTS; i++) {  
-        status = dsGetForceDisable4KSupport(handle[i], &disable4KArray1[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 04: Repeat the retrieval
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetForceDisable4KSupport(handle[i], &disable4KArray2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Retrieve whether 4K support is disabled
+	for (int i = 0; i < NUM_OF_PORTS; i++) {  
+		status = dsGetForceDisable4KSupport(handle[i], &disable4KArray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 05: Compare the array values
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(disable4KArray1[i], disable4KArray2[i]);
-    }
+	// Step 04: Repeat the retrieval
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetForceDisable4KSupport(handle[i], &disable4KArray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Compare the array values
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(disable4KArray1[i], disable4KArray2[i]);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -3422,47 +3417,47 @@ void test_l1_dsVideoPort_positive_dsGetForceDisable4KSupport(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetForceDisable4KSupport(void) {
-    gTestID = 52;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 52;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    bool disable4K[NUM_OF_PORTS]; 
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Attempt to get 4K support status without initialization
-    status = dsGetForceDisable4KSupport(-1, &disable4K[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	bool disable4K[NUM_OF_PORTS]; 
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to get 4K support status without initialization
+	status = dsGetForceDisable4KSupport(-1, &disable4K[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Invalid handle check
-    status = dsGetForceDisable4KSupport(handle[0], &disable4K[0]);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get valid video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Invalid handle check
+	status = dsGetForceDisable4KSupport(handle[0], &disable4K[0]);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 05: Get 4K support status with invalid pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetForceDisable4KSupport(handle[i], NULL);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 04: Get valid video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Get 4K support status with invalid pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetForceDisable4KSupport(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 07: Attempt to get 4K support status after termination
-    status = dsGetForceDisable4KSupport(handle[0], &disable4K[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 07: Attempt to get 4K support status after termination
+	status = dsGetForceDisable4KSupport(handle[0], &disable4K[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -3490,47 +3485,47 @@ void test_l1_dsVideoPort_negative_dsGetForceDisable4KSupport(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetVideoEOTF(void) {
-    gTestID = 53;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 53;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsHDRStandard_t eotfArray1[NUM_OF_PORTS];
-    dsHDRStandard_t eotfArray2[NUM_OF_PORTS];
-    
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
-    
-    // Step 03: Retrieve the EOTF value
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoEOTF(handle[i], &eotfArray1[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	dsHDRStandard_t eotfArray1[NUM_OF_PORTS];
+	dsHDRStandard_t eotfArray2[NUM_OF_PORTS];
 
-    // Step 04: Repeat the retrieval of EOTF value
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoEOTF(handle[i], &eotfArray2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 05: Compare the array values
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(eotfArray1[i], eotfArray2[i]);
-    }
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 03: Retrieve the EOTF value
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoEOTF(handle[i], &eotfArray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 04: Repeat the retrieval of EOTF value
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoEOTF(handle[i], &eotfArray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
+
+	// Step 05: Compare the array values
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(eotfArray1[i], eotfArray2[i]);
+	}
+
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -3561,47 +3556,47 @@ void test_l1_dsVideoPort_positive_dsGetVideoEOTF(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetVideoEOTF(void) {
-    gTestID = 54;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 54;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsHDRStandard_t eotf[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Attempt to get EOTF without initialization
-    status = dsGetVideoEOTF(-1, &eotf[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	dsHDRStandard_t eotf[NUM_OF_PORTS];
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to get EOTF without initialization
+	status = dsGetVideoEOTF(-1, &eotf[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Invalid handle check
-    status = dsGetVideoEOTF(handle[0], &eotf[0]);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get valid video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Invalid handle check
+	status = dsGetVideoEOTF(handle[0], &eotf[0]);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 05: Get EOTF value with invalid pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoEOTF(handle[i], NULL);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 04: Get valid video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Get EOTF value with invalid pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoEOTF(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 07: Attempt to get EOTF after termination
-    status = dsGetVideoEOTF(handle[0], &eotf[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 07: Attempt to get EOTF after termination
+	status = dsGetVideoEOTF(handle[0], &eotf[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -3629,47 +3624,47 @@ void test_l1_dsVideoPort_negative_dsGetVideoEOTF(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetMatrixCoefficients(void) {
-    gTestID = 55;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 55;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsDisplayMatrixCoefficients_t matrixCoefficientsArray1[NUM_OF_PORTS];
-    dsDisplayMatrixCoefficients_t matrixCoefficientsArray2[NUM_OF_PORTS];
-    
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	dsDisplayMatrixCoefficients_t matrixCoefficientsArray1[NUM_OF_PORTS];
+	dsDisplayMatrixCoefficients_t matrixCoefficientsArray2[NUM_OF_PORTS];
 
-    for (int i = 0; i < NUM_OF_PORTS; i++) { 
-        // Step 03: Retrieve the matrix coefficients
-        status = dsGetMatrixCoefficients(handle[i], &matrixCoefficientsArray1[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Repeat the retrieval of matrix coefficients
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetMatrixCoefficients(handle[i], &matrixCoefficientsArray2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 05: Compare the array values
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(matrixCoefficientsArray1[i], matrixCoefficientsArray2[i]);
-    }
+	for (int i = 0; i < NUM_OF_PORTS; i++) { 
+		// Step 03: Retrieve the matrix coefficients
+		status = dsGetMatrixCoefficients(handle[i], &matrixCoefficientsArray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 04: Repeat the retrieval of matrix coefficients
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetMatrixCoefficients(handle[i], &matrixCoefficientsArray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 05: Compare the array values
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(matrixCoefficientsArray1[i], matrixCoefficientsArray2[i]);
+	}
+
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -3700,47 +3695,47 @@ void test_l1_dsVideoPort_positive_dsGetMatrixCoefficients(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetMatrixCoefficients(void) {
-    gTestID = 56;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 56;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsDisplayMatrixCoefficients_t matrixCoefficients[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Attempt to get matrix coefficients without initialization
-    status = dsGetMatrixCoefficients(-1, &matrixCoefficients[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	dsDisplayMatrixCoefficients_t matrixCoefficients[NUM_OF_PORTS];
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to get matrix coefficients without initialization
+	status = dsGetMatrixCoefficients(-1, &matrixCoefficients[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Invalid handle check
-    status = dsGetMatrixCoefficients(handle[0], &matrixCoefficients[0]);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get valid video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Invalid handle check
+	status = dsGetMatrixCoefficients(handle[0], &matrixCoefficients[0]);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 05: Get matrix coefficients with invalid pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetMatrixCoefficients(handle[i], NULL);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 04: Get valid video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Get matrix coefficients with invalid pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetMatrixCoefficients(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 07: Attempt to get matrix coefficients after termination
-    status = dsGetMatrixCoefficients(handle[0], &matrixCoefficients[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 07: Attempt to get matrix coefficients after termination
+	status = dsGetMatrixCoefficients(handle[0], &matrixCoefficients[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -3768,47 +3763,47 @@ void test_l1_dsVideoPort_negative_dsGetMatrixCoefficients(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetColorDepth(void) {
-    gTestID = 57;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 57;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    unsigned int colorDepthArray1[NUM_OF_PORTS];
-    unsigned int colorDepthArray2[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	unsigned int colorDepthArray1[NUM_OF_PORTS];
+	unsigned int colorDepthArray2[NUM_OF_PORTS];
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
-        
-    // Step 03: Retrieve the color depth
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetColorDepth(handle[i], &colorDepthArray1[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Repeat the retrieval of color depth
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetColorDepth(handle[i], &colorDepthArray2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 05: Compare the array values
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(colorDepthArray1[i], colorDepthArray2[i]);
-    }
+	// Step 03: Retrieve the color depth
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetColorDepth(handle[i], &colorDepthArray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 04: Repeat the retrieval of color depth
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetColorDepth(handle[i], &colorDepthArray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 05: Compare the array values
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(colorDepthArray1[i], colorDepthArray2[i]);
+	}
+
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -3839,47 +3834,47 @@ void test_l1_dsVideoPort_positive_dsGetColorDepth(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetColorDepth(void) {
-    gTestID = 58;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 58;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    unsigned int colorDepth[NUM_OF_PORTS]; // To store the color depth
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Attempt to get color depth without initialization
-    status = dsGetColorDepth(-1, &colorDepth[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	unsigned int colorDepth[NUM_OF_PORTS]; // To store the color depth
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to get color depth without initialization
+	status = dsGetColorDepth(-1, &colorDepth[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Invalid handle check
-    status = dsGetColorDepth(handle[0], &colorDepth[0]);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get valid video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Invalid handle check
+	status = dsGetColorDepth(handle[0], &colorDepth[0]);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 05: Get color depth with invalid pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetColorDepth(handle[i], NULL);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 04: Get valid video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Get color depth with invalid pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetColorDepth(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 07: Attempt to get color depth after termination
-    status = dsGetColorDepth(handle[0], &colorDepth[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 07: Attempt to get color depth after termination
+	status = dsGetColorDepth(handle[0], &colorDepth[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -3907,47 +3902,47 @@ void test_l1_dsVideoPort_negative_dsGetColorDepth(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetColorSpace(void) {
-    gTestID = 59;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 59;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsDisplayColorSpace_t colorSpaceArray1[NUM_OF_PORTS];
-    dsDisplayColorSpace_t colorSpaceArray2[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	dsDisplayColorSpace_t colorSpaceArray1[NUM_OF_PORTS];
+	dsDisplayColorSpace_t colorSpaceArray2[NUM_OF_PORTS];
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
-    
-    // Step 03: Retrieve the color space
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetColorSpace(handle[i], &colorSpaceArray1[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Repeat the retrieval of color space
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetColorSpace(handle[i], &colorSpaceArray2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 05: Compare the array values
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(colorSpaceArray1[i], colorSpaceArray2[i]);
-    }
+	// Step 03: Retrieve the color space
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetColorSpace(handle[i], &colorSpaceArray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 04: Repeat the retrieval of color space
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetColorSpace(handle[i], &colorSpaceArray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 05: Compare the array values
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(colorSpaceArray1[i], colorSpaceArray2[i]);
+	}
+
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 /**
@@ -3977,47 +3972,47 @@ void test_l1_dsVideoPort_positive_dsGetColorSpace(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetColorSpace(void) {
-    gTestID = 60;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 60;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsDisplayColorSpace_t colorSpace[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Attempt to get color space without initialization
-    status = dsGetColorSpace(-1, &colorSpace[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	dsDisplayColorSpace_t colorSpace[NUM_OF_PORTS];
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to get color space without initialization
+	status = dsGetColorSpace(-1, &colorSpace[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Invalid handle check
-    status = dsGetColorSpace(handle[0], &colorSpace[0]);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get valid video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Invalid handle check
+	status = dsGetColorSpace(handle[0], &colorSpace[0]);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 05: Get color space with invalid pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetColorSpace(handle[i], NULL);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 04: Get valid video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Get color space with invalid pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetColorSpace(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 07: Attempt to get color space after termination
-    status = dsGetColorSpace(handle[0], &colorSpace[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 07: Attempt to get color space after termination
+	status = dsGetColorSpace(handle[0], &colorSpace[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 /**
@@ -4044,47 +4039,47 @@ void test_l1_dsVideoPort_negative_dsGetColorSpace(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetQuantizationRange(void) {
-    gTestID = 61;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 61;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsDisplayQuantizationRange_t quantizationRangeArray1[NUM_OF_PORTS];
-    dsDisplayQuantizationRange_t quantizationRangeArray2[NUM_OF_PORTS];
-    
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	dsDisplayQuantizationRange_t quantizationRangeArray1[NUM_OF_PORTS];
+	dsDisplayQuantizationRange_t quantizationRangeArray2[NUM_OF_PORTS];
 
-    // Step 03: Retrieve the quantization range
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetQuantizationRange(handle[i], &quantizationRangeArray1[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Repeat the retrieval of quantization range
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetQuantizationRange(handle[i], &quantizationRangeArray2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 05: Compare the array values
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(quantizationRangeArray1[i], quantizationRangeArray2[i]);
-    }
+	// Step 03: Retrieve the quantization range
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetQuantizationRange(handle[i], &quantizationRangeArray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 04: Repeat the retrieval of quantization range
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetQuantizationRange(handle[i], &quantizationRangeArray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 05: Compare the array values
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(quantizationRangeArray1[i], quantizationRangeArray2[i]);
+	}
+
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 /**
@@ -4114,47 +4109,47 @@ void test_l1_dsVideoPort_positive_dsGetQuantizationRange(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetQuantizationRange(void) {
-    gTestID = 62;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 62;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsDisplayQuantizationRange_t quantizationRange[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Attempt to get quantization range without initialization
-    status = dsGetQuantizationRange(-1, &quantizationRange[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	dsDisplayQuantizationRange_t quantizationRange[NUM_OF_PORTS];
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to get quantization range without initialization
+	status = dsGetQuantizationRange(-1, &quantizationRange[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Invalid handle check
-    status = dsGetQuantizationRange(handle[0], &quantizationRange[0]);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get valid video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Invalid handle check
+	status = dsGetQuantizationRange(handle[0], &quantizationRange[0]);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 05: Get quantization range with invalid pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetQuantizationRange(handle[i], NULL);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 04: Get valid video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Get quantization range with invalid pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetQuantizationRange(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 07: Attempt to get quantization range after termination
-    status = dsGetQuantizationRange(handle[0], &quantizationRange[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 07: Attempt to get quantization range after termination
+	status = dsGetQuantizationRange(handle[0], &quantizationRange[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -4182,61 +4177,61 @@ void test_l1_dsVideoPort_negative_dsGetQuantizationRange(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetCurrentOutputSettings(void) {
-    gTestID = 63;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
-    dsHDRStandard_t hdrstandardarray1[NUM_OF_PORTS];
-    dsDisplayMatrixCoefficients_t matrixcoefarray1[NUM_OF_PORTS];
-    dsDisplayColorSpace_t colorspacearray1[NUM_OF_PORTS];
-    unsigned int colordeptharray1[NUM_OF_PORTS];
-    dsDisplayQuantizationRange_t quant_rangearray1[NUM_OF_PORTS]; 
-   
-    dsHDRStandard_t hdrstandardarray2[NUM_OF_PORTS];
-    dsDisplayMatrixCoefficients_t matrixcoefarray2[NUM_OF_PORTS];
-    dsDisplayColorSpace_t colorspacearray2[NUM_OF_PORTS];
-    unsigned int colordeptharray2[NUM_OF_PORTS];
-    dsDisplayQuantizationRange_t quant_rangearray2[NUM_OF_PORTS]; 
-    
-    // Assume OutputSettings is a struct that includes EOTF, matrix coefficients, color space, color depth, and quantization range
+	gTestID = 63;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	dsHDRStandard_t hdrstandardarray1[NUM_OF_PORTS];
+	dsDisplayMatrixCoefficients_t matrixcoefarray1[NUM_OF_PORTS];
+	dsDisplayColorSpace_t colorspacearray1[NUM_OF_PORTS];
+	unsigned int colordeptharray1[NUM_OF_PORTS];
+	dsDisplayQuantizationRange_t quant_rangearray1[NUM_OF_PORTS]; 
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	dsHDRStandard_t hdrstandardarray2[NUM_OF_PORTS];
+	dsDisplayMatrixCoefficients_t matrixcoefarray2[NUM_OF_PORTS];
+	dsDisplayColorSpace_t colorspacearray2[NUM_OF_PORTS];
+	unsigned int colordeptharray2[NUM_OF_PORTS];
+	dsDisplayQuantizationRange_t quant_rangearray2[NUM_OF_PORTS]; 
 
-        // Step 03: Retrieve the current output settings
-        status = dsGetCurrentOutputSettings(handle[i], &hdrstandardarray1[i] ,&matrixcoefarray1[i], &colorspacearray1[i],\
-        &colordeptharray1[i], &quant_rangearray1[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Assume OutputSettings is a struct that includes EOTF, matrix coefficients, color space, color depth, and quantization range
 
-    // Step 04: Repeat the retrieval of output settings
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetCurrentOutputSettings(handle[i], &hdrstandardarray2[i] ,&matrixcoefarray2[i], &colorspacearray2[i],\
-        &colordeptharray2[i], &quant_rangearray2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 05: Compare the array values
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(hdrstandardarray1[i], hdrstandardarray2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(matrixcoefarray1[i], matrixcoefarray2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(colorspacearray1[i], colorspacearray2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(colordeptharray1[i], colordeptharray2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(quant_rangearray1[i], quant_rangearray2[i]);
-    }
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+		// Step 03: Retrieve the current output settings
+		status = dsGetCurrentOutputSettings(handle[i], &hdrstandardarray1[i] ,&matrixcoefarray1[i], &colorspacearray1[i],\
+				&colordeptharray1[i], &quant_rangearray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 04: Repeat the retrieval of output settings
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetCurrentOutputSettings(handle[i], &hdrstandardarray2[i] ,&matrixcoefarray2[i], &colorspacearray2[i],\
+				&colordeptharray2[i], &quant_rangearray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
+
+	// Step 05: Compare the array values
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(hdrstandardarray1[i], hdrstandardarray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(matrixcoefarray1[i], matrixcoefarray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(colorspacearray1[i], colorspacearray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(colordeptharray1[i], colordeptharray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(quant_rangearray1[i], quant_rangearray2[i]);
+	}
+
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -4271,82 +4266,82 @@ void test_l1_dsVideoPort_positive_dsGetCurrentOutputSettings(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetCurrentOutputSettings(void) {
-    gTestID = 64;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status; 
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
-    dsHDRStandard_t hdrstandardarray[NUM_OF_PORTS];
-    dsDisplayMatrixCoefficients_t matrixcoefarray[NUM_OF_PORTS];
-    dsDisplayColorSpace_t colorspacearray[NUM_OF_PORTS];
-    unsigned int colordeptharray[NUM_OF_PORTS];
-    dsDisplayQuantizationRange_t quant_rangearray[NUM_OF_PORTS];
-    
-    // Step 01: Attempt to get output settings without initialization
-    status = dsGetCurrentOutputSettings(-1, &hdrstandardarray[0], &matrixcoefarray[0], &colorspacearray[0],\
-    &colordeptharray[0], &quant_rangearray[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	gTestID = 64;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	dsError_t status; 
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	dsHDRStandard_t hdrstandardarray[NUM_OF_PORTS];
+	dsDisplayMatrixCoefficients_t matrixcoefarray[NUM_OF_PORTS];
+	dsDisplayColorSpace_t colorspacearray[NUM_OF_PORTS];
+	unsigned int colordeptharray[NUM_OF_PORTS];
+	dsDisplayQuantizationRange_t quant_rangearray[NUM_OF_PORTS];
 
-    // Step 03: Invalid handle check
-    status = dsGetCurrentOutputSettings(handle[0], &hdrstandardarray[0], &matrixcoefarray[0], &colorspacearray[0],\
-    &colordeptharray[0], &quant_rangearray[0]);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 01: Attempt to get output settings without initialization
+	status = dsGetCurrentOutputSettings(-1, &hdrstandardarray[0], &matrixcoefarray[0], &colorspacearray[0],\
+			&colordeptharray[0], &quant_rangearray[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 04: Get valid video port handle*/
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 05: Get output settings with invalid pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-    status = dsGetCurrentOutputSettings(handle[i], NULL, &matrixcoefarray[i], &colorspacearray[i],\
-    &colordeptharray[i], &quant_rangearray[i]);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 03: Invalid handle check
+	status = dsGetCurrentOutputSettings(handle[0], &hdrstandardarray[0], &matrixcoefarray[0], &colorspacearray[0],\
+			&colordeptharray[0], &quant_rangearray[0]);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 06: Get output settings with invalid pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-    status = dsGetCurrentOutputSettings(handle[i], &hdrstandardarray[i], NULL, &colorspacearray[i],\
-    &colordeptharray[i], &quant_rangearray[i]);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 04: Get valid video port handle*/
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 07: Get output settings with invalid pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-    status = dsGetCurrentOutputSettings(handle[i], &hdrstandardarray[i], &matrixcoefarray[i], NULL,\
-    &colordeptharray[i], &quant_rangearray[i]);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 05: Get output settings with invalid pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetCurrentOutputSettings(handle[i], NULL, &matrixcoefarray[i], &colorspacearray[i],\
+				&colordeptharray[i], &quant_rangearray[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 08: Get output settings with invalid pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-    status = dsGetCurrentOutputSettings(handle[i], &hdrstandardarray[i], &matrixcoefarray[i], &colorspacearray[i],\
-    NULL, &quant_rangearray[i]);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 06: Get output settings with invalid pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetCurrentOutputSettings(handle[i], &hdrstandardarray[i], NULL, &colorspacearray[i],\
+				&colordeptharray[i], &quant_rangearray[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 09: Get output settings with invalid pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-    status = dsGetCurrentOutputSettings(handle[i], &hdrstandardarray[i], &matrixcoefarray[i], &colorspacearray[i],\
-    &colordeptharray[i], NULL);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 07: Get output settings with invalid pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetCurrentOutputSettings(handle[i], &hdrstandardarray[i], &matrixcoefarray[i], NULL,\
+				&colordeptharray[i], &quant_rangearray[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 10: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 08: Get output settings with invalid pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetCurrentOutputSettings(handle[i], &hdrstandardarray[i], &matrixcoefarray[i], &colorspacearray[i],\
+				NULL, &quant_rangearray[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 11: Attempt to get output settings after termination
-    status = dsGetCurrentOutputSettings(handle[0], &hdrstandardarray[0], &matrixcoefarray[0], &colorspacearray[0],\
-    &colordeptharray[0], &quant_rangearray[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 09: Get output settings with invalid pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetCurrentOutputSettings(handle[i], &hdrstandardarray[i], &matrixcoefarray[i], &colorspacearray[i],\
+				&colordeptharray[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 10: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	// Step 11: Attempt to get output settings after termination
+	status = dsGetCurrentOutputSettings(handle[0], &hdrstandardarray[0], &matrixcoefarray[0], &colorspacearray[0],\
+			&colordeptharray[0], &quant_rangearray[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -4375,47 +4370,47 @@ void test_l1_dsVideoPort_negative_dsGetCurrentOutputSettings(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsIsOutputHDR(void) {
-    gTestID = 65;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 65;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    bool hdrArray1[NUM_OF_PORTS];
-    bool hdrArray2[NUM_OF_PORTS];
-    
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 02: Get the video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	bool hdrArray1[NUM_OF_PORTS];
+	bool hdrArray2[NUM_OF_PORTS];
 
-    // Step 03: Check HDR status
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsIsOutputHDR(handle[i], &hdrArray1[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Repeat the HDR status check
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsIsOutputHDR(handle[i], &hdrArray2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 05: Compare the array values
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(hdrArray1[i], hdrArray2[i]);
-    }
+	// Step 03: Check HDR status
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsIsOutputHDR(handle[i], &hdrArray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 04: Repeat the HDR status check
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsIsOutputHDR(handle[i], &hdrArray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 05: Compare the array values
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(hdrArray1[i], hdrArray2[i]);
+	}
+
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -4446,47 +4441,47 @@ void test_l1_dsVideoPort_positive_dsIsOutputHDR(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsIsOutputHDR(void) {
-    gTestID = 66;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 66;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    bool hdrStatus[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Attempt to check HDR status without initialization
-    status = dsIsOutputHDR(-1, &hdrStatus[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	bool hdrStatus[NUM_OF_PORTS];
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to check HDR status without initialization
+	status = dsIsOutputHDR(-1, &hdrStatus[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Invalid handle check
-    status = dsIsOutputHDR(handle[0], &hdrStatus[0]);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get valid video port handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Invalid handle check
+	status = dsIsOutputHDR(handle[0], &hdrStatus[0]);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 05: Check HDR status with null pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsIsOutputHDR(handle[i], NULL);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 04: Get valid video port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Check HDR status with null pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsIsOutputHDR(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 07: Attempt to check HDR status after termination
-    status = dsIsOutputHDR(handle[0], &hdrStatus[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 07: Attempt to check HDR status after termination
+	status = dsIsOutputHDR(handle[0], &hdrStatus[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -4512,24 +4507,24 @@ void test_l1_dsVideoPort_negative_dsIsOutputHDR(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsResetOutputToSDR(void) {
-    gTestID = 67;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
+	gTestID = 67;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	dsError_t status;
 
-    // Step 02: Reset video output to SDR
-    status = dsResetOutputToSDR();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 03: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 02: Reset video output to SDR
+	status = dsResetOutputToSDR();
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 03: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -4557,28 +4552,28 @@ void test_l1_dsVideoPort_positive_dsResetOutputToSDR(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsResetOutputToSDR(void) {
-    gTestID = 68;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
+	gTestID = 68;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    // Step 01: Attempt reset without initialization
-    status = dsResetOutputToSDR();
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	dsError_t status;
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt reset without initialization
+	status = dsResetOutputToSDR();
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Attempt reset after termination
-    status = dsResetOutputToSDR();
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 03: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 04: Attempt reset after termination
+	status = dsResetOutputToSDR();
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -4604,37 +4599,37 @@ void test_l1_dsVideoPort_negative_dsResetOutputToSDR(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsSetHdmiPreference(void) {
-    gTestID = 69;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 69;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 02: Get the port handle for all supported video ports
-    // Loop through kPorts to get each handle
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 03: Set the HDMI preference
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        for(dsHdcpProtocolVersion_t hdcpCurrentProtocol = dsHDCP_VERSION_1X ; hdcpCurrentProtocol < dsHDCP_VERSION_MAX; hdcpCurrentProtocol++)
-        {
-            status = dsSetHdmiPreference(handle[i], &hdcpCurrentProtocol);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-        }
-    }
+	// Step 02: Get the port handle for all supported video ports
+	// Loop through kPorts to get each handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 04: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 03: Set the HDMI preference
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		for(dsHdcpProtocolVersion_t hdcpCurrentProtocol = dsHDCP_VERSION_1X ; hdcpCurrentProtocol < dsHDCP_VERSION_MAX; hdcpCurrentProtocol++)
+		{
+			status = dsSetHdmiPreference(handle[i], &hdcpCurrentProtocol);
+			DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+		}
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 04: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -4665,47 +4660,47 @@ void test_l1_dsVideoPort_positive_dsSetHdmiPreference(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSetHdmiPreference(void) {
-    gTestID = 70;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
-  
-    dsHdcpProtocolVersion_t in_range = dsHDCP_VERSION_1X , out_range = dsHDCP_VERSION_MAX; 
+	gTestID = 70;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    // Step 01: Attempt set HDMI preference without initialization
-    status = dsSetHdmiPreference(-1, &in_range);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	dsHdcpProtocolVersion_t in_range = dsHDCP_VERSION_1X , out_range = dsHDCP_VERSION_MAX; 
 
-    // Step 03: Set HDMI preference with invalid handle
-    status = dsSetHdmiPreference(handle[0], &in_range);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 01: Attempt set HDMI preference without initialization
+	status = dsSetHdmiPreference(-1, &in_range);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 04: Get the port handle for all supported video ports
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 05: Set HDMI preference with valid handle and invalid HDCP protocol
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsSetHdmiPreference(handle[i], &out_range);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 03: Set HDMI preference with invalid handle
+	status = dsSetHdmiPreference(handle[0], &in_range);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 04: Get the port handle for all supported video ports
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 07: Attempt set HDMI preference after termination
-    status = dsSetHdmiPreference(handle[0], &in_range);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 05: Set HDMI preference with valid handle and invalid HDCP protocol
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsSetHdmiPreference(handle[i], &out_range);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	// Step 07: Attempt set HDMI preference after termination
+	status = dsSetHdmiPreference(handle[0], &in_range);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -4733,47 +4728,47 @@ void test_l1_dsVideoPort_negative_dsSetHdmiPreference(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetHdmiPreference(void) {
-    gTestID = 71;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 71;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsHdcpProtocolVersion_t  hdcpCurrentProtocol1[NUM_OF_PORTS];
-    dsHdcpProtocolVersion_t hdcpCurrentProtocol2[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	dsHdcpProtocolVersion_t  hdcpCurrentProtocol1[NUM_OF_PORTS];
+	dsHdcpProtocolVersion_t hdcpCurrentProtocol2[NUM_OF_PORTS];
 
-    // Step 02: Get the port handle for all supported video ports
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 03: Get the HDMI preference
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetHdmiPreference(handle[i], &hdcpCurrentProtocol1[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the port handle for all supported video ports
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-        // Step 04: Repeat getting HDMI preference
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetHdmiPreference(handle[i], &hdcpCurrentProtocol2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Get the HDMI preference
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetHdmiPreference(handle[i], &hdcpCurrentProtocol1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 05: Compare the array values and make sure they are equal
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(hdcpCurrentProtocol1[i], hdcpCurrentProtocol2[i]);
-    }
+	// Step 04: Repeat getting HDMI preference
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetHdmiPreference(handle[i], &hdcpCurrentProtocol2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Compare the array values and make sure they are equal
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(hdcpCurrentProtocol1[i], hdcpCurrentProtocol2[i]);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -4804,47 +4799,47 @@ void test_l1_dsVideoPort_positive_dsGetHdmiPreference(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetHdmiPreference(void) {
-    gTestID = 72;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 72;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsHdcpProtocolVersion_t hdcpCurrentProtocol[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Attempt to get HDMI preference without initialization
-    status = dsGetHdmiPreference(-1, &hdcpCurrentProtocol[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	dsHdcpProtocolVersion_t hdcpCurrentProtocol[NUM_OF_PORTS];
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to get HDMI preference without initialization
+	status = dsGetHdmiPreference(-1, &hdcpCurrentProtocol[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Get HDMI preference with invalid handle
-    status = dsGetHdmiPreference(handle[0], &hdcpCurrentProtocol[0]);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get the port handle for all supported video ports
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Get HDMI preference with invalid handle
+	status = dsGetHdmiPreference(handle[0], &hdcpCurrentProtocol[0]);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 05: Get HDMI preference with valid handle but with NULL pointer for HDMI Preference
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetHdmiPreference(handle[i], NULL);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 04: Get the port handle for all supported video ports
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Get HDMI preference with valid handle but with NULL pointer for HDMI Preference
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetHdmiPreference(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 07: Attempt to get HDMI preference after termination
-    status = dsGetHdmiPreference(handle[0], &hdcpCurrentProtocol[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 07: Attempt to get HDMI preference after termination
+	status = dsGetHdmiPreference(handle[0], &hdcpCurrentProtocol[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -4872,47 +4867,47 @@ void test_l1_dsVideoPort_negative_dsGetHdmiPreference(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetIgnoreEDIDStatus(void) {
-    gTestID = 73;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 73;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    bool ignoreEDIDStatus1[NUM_OF_PORTS];
-    bool ignoreEDIDStatus2[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	bool ignoreEDIDStatus1[NUM_OF_PORTS];
+	bool ignoreEDIDStatus2[NUM_OF_PORTS];
 
-    // Step 02: Get the port handle for supported video ports
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 03: Get IgnoreEDID status
-    for (int i = 0; i < NUM_OF_PORTS; i++) {   
-        status = dsGetIgnoreEDIDStatus(handle[i], &ignoreEDIDStatus1[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
-    
-    // Step 04: Repeat getting IgnoreEDID status
-    for (int i = 0; i < NUM_OF_PORTS; i++) {   
-        status = dsGetIgnoreEDIDStatus(handle[i], &ignoreEDIDStatus2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the port handle for supported video ports
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 05: Compare the array values and make sure they are equal
-    for (int i = 0; i < NUM_OF_PORTS; i++) {   
-        DS_ASSERT_AUTO_TERM_NUMERICAL(ignoreEDIDStatus1[i], ignoreEDIDStatus2[i]);
-    }
+	// Step 03: Get IgnoreEDID status
+	for (int i = 0; i < NUM_OF_PORTS; i++) {   
+		status = dsGetIgnoreEDIDStatus(handle[i], &ignoreEDIDStatus1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 04: Repeat getting IgnoreEDID status
+	for (int i = 0; i < NUM_OF_PORTS; i++) {   
+		status = dsGetIgnoreEDIDStatus(handle[i], &ignoreEDIDStatus2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 05: Compare the array values and make sure they are equal
+	for (int i = 0; i < NUM_OF_PORTS; i++) {   
+		DS_ASSERT_AUTO_TERM_NUMERICAL(ignoreEDIDStatus1[i], ignoreEDIDStatus2[i]);
+	}
+
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -4943,47 +4938,47 @@ void test_l1_dsVideoPort_positive_dsGetIgnoreEDIDStatus(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetIgnoreEDIDStatus(void) {
-    gTestID = 74;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 74;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    bool ignoreEDIDStatus[NUM_OF_PORTS];
-    
-    // Step 01: Attempt to get IgnoreEDID status without initialization
-    status = dsGetIgnoreEDIDStatus(-1, &ignoreEDIDStatus[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	bool ignoreEDIDStatus[NUM_OF_PORTS];
 
-    // Step 03: Get IgnoreEDID status with invalid handle
-    status = dsGetIgnoreEDIDStatus(handle[0], &ignoreEDIDStatus[0]);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 01: Attempt to get IgnoreEDID status without initialization
+	status = dsGetIgnoreEDIDStatus(-1, &ignoreEDIDStatus[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 04: Get the port handle for supported video ports
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 05: Get IgnoreEDID status with valid handle but null pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetIgnoreEDIDStatus(handle[i], NULL);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 03: Get IgnoreEDID status with invalid handle
+	status = dsGetIgnoreEDIDStatus(handle[0], &ignoreEDIDStatus[0]);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 04: Get the port handle for supported video ports
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 07: Attempt to get IgnoreEDID status after termination
-    status = dsGetIgnoreEDIDStatus(handle[0], &ignoreEDIDStatus[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 05: Get IgnoreEDID status with valid handle but null pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetIgnoreEDIDStatus(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	// Step 07: Attempt to get IgnoreEDID status after termination
+	status = dsGetIgnoreEDIDStatus(handle[0], &ignoreEDIDStatus[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -5009,35 +5004,35 @@ void test_l1_dsVideoPort_negative_dsGetIgnoreEDIDStatus(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsSetBackgroundColor(void) {
-    gTestID = 75;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 75;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 02: Get the port handle for supported video ports
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
-    
-    // Step 03: Set background color for each port by looping through dsVideoBackgroundColor_t enum
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        for(dsVideoBackgroundColor_t color = dsVIDEO_BGCOLOR_BLUE; color < dsVIDEO_BGCOLOR_MAX ; color++){
-            status = dsSetBackgroundColor(handle[i], color);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-        }
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 02: Get the port handle for supported video ports
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 03: Set background color for each port by looping through dsVideoBackgroundColor_t enum
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		for(dsVideoBackgroundColor_t color = dsVIDEO_BGCOLOR_BLUE; color < dsVIDEO_BGCOLOR_MAX ; color++){
+			status = dsSetBackgroundColor(handle[i], color);
+			DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+		}
+	}
+
+	// Step 04: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -5068,45 +5063,45 @@ void test_l1_dsVideoPort_positive_dsSetBackgroundColor(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSetBackgroundColor(void) {
-    gTestID = 76;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 76;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    // Step 01: Attempt to set background color without initialization
-    status = dsSetBackgroundColor(-1, dsVIDEO_BGCOLOR_BLUE);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to set background color without initialization
+	status = dsSetBackgroundColor(-1, dsVIDEO_BGCOLOR_BLUE);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Set background color with invalid handle
-    status = dsSetBackgroundColor(handle[0], dsVIDEO_BGCOLOR_BLUE);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get the port handle for supported video ports
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Set background color with invalid handle
+	status = dsSetBackgroundColor(handle[0], dsVIDEO_BGCOLOR_BLUE);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 05: Set background color with valid handle but invalid color
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsSetBackgroundColor(handle[i], dsVIDEO_BGCOLOR_MAX);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 04: Get the port handle for supported video ports
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Set background color with valid handle but invalid color
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsSetBackgroundColor(handle[i], dsVIDEO_BGCOLOR_MAX);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 07: Attempt to set background color after termination
-    status = dsSetBackgroundColor(handle[0], dsVIDEO_BGCOLOR_BLACK);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 07: Attempt to set background color after termination
+	status = dsSetBackgroundColor(handle[0], dsVIDEO_BGCOLOR_BLACK);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -5132,35 +5127,35 @@ void test_l1_dsVideoPort_negative_dsSetBackgroundColor(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsSetForceHDRMode(void) {
-    gTestID = 77;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 77;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 02: Get the port handle for supported video ports
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 03: Set HDR mode
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        for(dsHDRStandard_t mode = dsHDRSTANDARD_NONE; mode < dsHDRSTANDARD_Invalid ; mode++ ) {
-            status = dsSetForceHDRMode(handle[i], mode);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-        }
-    }
+	// Step 02: Get the port handle for supported video ports
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 04: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 03: Set HDR mode
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		for(dsHDRStandard_t mode = dsHDRSTANDARD_NONE; mode < dsHDRSTANDARD_Invalid ; mode++ ) {
+			status = dsSetForceHDRMode(handle[i], mode);
+			DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+		}
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 04: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -5191,45 +5186,45 @@ void test_l1_dsVideoPort_positive_dsSetForceHDRMode(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSetForceHDRMode(void) {
-    gTestID = 78;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 78;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    // Step 01: Attempt to set HDR mode without initialization
-    status = dsSetForceHDRMode(-1, dsHDRSTANDARD_HDR10 );
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to set HDR mode without initialization
+	status = dsSetForceHDRMode(-1, dsHDRSTANDARD_HDR10 );
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Set HDR mode with invalid handle
-    status = dsSetForceHDRMode(handle[0],dsHDRSTANDARD_HDR10 );
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get the port handle for supported video ports
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Set HDR mode with invalid handle
+	status = dsSetForceHDRMode(handle[0],dsHDRSTANDARD_HDR10 );
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 05: Set HDR mode with invalid mode values
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsSetForceHDRMode(handle[i], dsHDRSTANDARD_Invalid );
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 04: Get the port handle for supported video ports
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Set HDR mode with invalid mode values
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsSetForceHDRMode(handle[i], dsHDRSTANDARD_Invalid );
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 07: Attempt to set HDR mode after termination
-    status = dsSetForceHDRMode(handle[0], dsHDRSTANDARD_HDR10);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 07: Attempt to set HDR mode after termination
+	status = dsSetForceHDRMode(handle[0], dsHDRSTANDARD_HDR10);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -5257,47 +5252,47 @@ void test_l1_dsVideoPort_negative_dsSetForceHDRMode(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsColorDepthCapabilities(void) {
-    gTestID = 79;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 79;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    unsigned int colorDepthCapability1[NUM_OF_PORTS];
-    unsigned int colorDepthCapability2[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	unsigned int colorDepthCapability1[NUM_OF_PORTS];
+	unsigned int colorDepthCapability2[NUM_OF_PORTS];
 
-    // Step 02: Get the port handle for supported video ports
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 03: Get color depth capabilities
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsColorDepthCapabilities(handle[i], &colorDepthCapability1[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the port handle for supported video ports
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 04: Repeating to get capabilities for new array
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsColorDepthCapabilities(handle[i], &colorDepthCapability2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Get color depth capabilities
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsColorDepthCapabilities(handle[i], &colorDepthCapability1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 05: Compare array values
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(colorDepthCapability1[i], colorDepthCapability2[i]);
-    }
+	// Step 04: Repeating to get capabilities for new array
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsColorDepthCapabilities(handle[i], &colorDepthCapability2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Compare array values
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(colorDepthCapability1[i], colorDepthCapability2[i]);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -5328,47 +5323,47 @@ void test_l1_dsVideoPort_positive_dsColorDepthCapabilities(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsColorDepthCapabilities(void) {
-    gTestID = 80;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 80;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    unsigned int  colorDepthCapability[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Attempt to get capabilities without initialization
-    status = dsColorDepthCapabilities(-1, &colorDepthCapability[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	unsigned int  colorDepthCapability[NUM_OF_PORTS];
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to get capabilities without initialization
+	status = dsColorDepthCapabilities(-1, &colorDepthCapability[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Get capabilities with invalid handle
-    status = dsColorDepthCapabilities(handle[0], &colorDepthCapability[0]);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get the port handle for supported video ports
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Get capabilities with invalid handle
+	status = dsColorDepthCapabilities(handle[0], &colorDepthCapability[0]);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
-    // Step 05: Get capabilities with invalid pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsColorDepthCapabilities(handle[i], NULL);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 04: Get the port handle for supported video ports
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Get capabilities with invalid pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsColorDepthCapabilities(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 07: Attempt to get capabilities after termination
-    status = dsColorDepthCapabilities(handle[0], &colorDepthCapability[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 07: Attempt to get capabilities after termination
+	status = dsColorDepthCapabilities(handle[0], &colorDepthCapability[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -5396,47 +5391,47 @@ void test_l1_dsVideoPort_negative_dsColorDepthCapabilities(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetPreferredColorDepth(void) {
-    gTestID = 81;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 81;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsDisplayColorDepth_t colorDepth1[NUM_OF_PORTS];
-    dsDisplayColorDepth_t colorDepth2[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	dsDisplayColorDepth_t colorDepth1[NUM_OF_PORTS];
+	dsDisplayColorDepth_t colorDepth2[NUM_OF_PORTS];
 
-    // Step 02: Get the port handle for all supported video ports
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 03: Get preferred color depth
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetPreferredColorDepth(handle[i], &colorDepth1[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 02: Get the port handle for all supported video ports
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 04: Repeat to get color depth for new array
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetPreferredColorDepth(handle[i], &colorDepth2[i]);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Get preferred color depth
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetPreferredColorDepth(handle[i], &colorDepth1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 05: Compare array values
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(colorDepth1[i], colorDepth2[i]);
-    }
+	// Step 04: Repeat to get color depth for new array
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetPreferredColorDepth(handle[i], &colorDepth2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Compare array values
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(colorDepth1[i], colorDepth2[i]);
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -5467,47 +5462,47 @@ void test_l1_dsVideoPort_positive_dsGetPreferredColorDepth(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetPreferredColorDepth(void) {
-    gTestID = 82;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 82;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsDisplayColorDepth_t colorDepth[NUM_OF_PORTS];
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 01: Attempt to get color depth without initialization
-    status = dsGetPreferredColorDepth(-1, &colorDepth[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	dsDisplayColorDepth_t colorDepth[NUM_OF_PORTS];
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to get color depth without initialization
+	status = dsGetPreferredColorDepth(-1, &colorDepth[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Get color depth with invalid handle
-    status = dsGetPreferredColorDepth(handle[0], &colorDepth[0]);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get the port handle for supported video ports
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Get color depth with invalid handle
+	status = dsGetPreferredColorDepth(handle[0], &colorDepth[0]);
+	UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
 
-    // Step 05: Get color depth with invalid pointer
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetPreferredColorDepth(handle[i], NULL);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-    }
+	// Step 04: Get the port handle for supported video ports
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Get color depth with invalid pointer
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetPreferredColorDepth(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+	}
 
-    // Step 07: Attempt to get color depth after termination
-    status = dsGetPreferredColorDepth(handle[0], &colorDepth[0]);
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 07: Attempt to get color depth after termination
+	status = dsGetPreferredColorDepth(handle[0], &colorDepth[0]);
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -5533,35 +5528,35 @@ void test_l1_dsVideoPort_negative_dsGetPreferredColorDepth(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsSetPreferredColorDepth(void) {
-    gTestID = 83;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 83;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 02: Get the port handle for supported video ports
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 01: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 03: Set preferred color depth
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        for (dsDisplayColorDepth_t colorDepth = dsDISPLAY_COLORDEPTH_UNKNOWN; colorDepth <= dsDISPLAY_COLORDEPTH_AUTO; colorDepth++ ) {
-            status = dsSetPreferredColorDepth(handle[i], colorDepth);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-        }
-    }
+	// Step 02: Get the port handle for supported video ports
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 05: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 03: Set preferred color depth
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		for (dsDisplayColorDepth_t colorDepth = dsDISPLAY_COLORDEPTH_UNKNOWN; colorDepth <= dsDISPLAY_COLORDEPTH_AUTO; colorDepth++ ) {
+			status = dsSetPreferredColorDepth(handle[i], colorDepth);
+			DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+		}
+	}
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 05: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -5592,45 +5587,45 @@ void test_l1_dsVideoPort_positive_dsSetPreferredColorDepth(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSetPreferredColorDepth(void) {
-    gTestID = 84;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    
-    dsError_t status;
-    intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	gTestID = 84;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    // Step 01: Attempt to set color depth without initialization
-    status = dsSetPreferredColorDepth(-1, dsDISPLAY_COLORDEPTH_8BIT );
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	dsError_t status;
+	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
-    // Step 02: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 01: Attempt to set color depth without initialization
+	status = dsSetPreferredColorDepth(-1, dsDISPLAY_COLORDEPTH_8BIT );
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
 
-    // Step 03: Set color depth with invalid handle
-    status = dsSetPreferredColorDepth(handle[0], dsDISPLAY_COLORDEPTH_8BIT );
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	// Step 02: Initialize video port system
+	status = dsVideoPortInit();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    // Step 04: Get the port handle for supported video ports
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-    }
+	// Step 03: Set color depth with invalid handle
+	status = dsSetPreferredColorDepth(handle[0], dsDISPLAY_COLORDEPTH_8BIT );
+	UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
 
-    // Step 05: Set unsupported color depth
-    for (int i = 0; i < NUM_OF_PORTS; i++) {
-        status = dsSetPreferredColorDepth(handle[i], 0x60);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_OPERATION_NOT_SUPPORTED);
-    }
+	// Step 04: Get the port handle for supported video ports
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
+	}
 
-    // Step 06: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+	// Step 05: Set unsupported color depth
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		status = dsSetPreferredColorDepth(handle[i], 0x60);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+	}
 
-    // Step 07: Attempt to set color depth after termination
-    status = dsSetPreferredColorDepth(handle[0], dsDISPLAY_COLORDEPTH_12BIT );
-    UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	// Step 06: Terminate the video port system
+	status = dsVideoPortTerm();
+	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+	// Step 07: Attempt to set color depth after termination
+	status = dsSetPreferredColorDepth(handle[0], dsDISPLAY_COLORDEPTH_12BIT );
+	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+
+	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 
@@ -5734,7 +5729,7 @@ int test_l1_dsVideoPort_register ( void )
 	UT_add_test( pSuite, "dsGetPreferredColorDepth_L1_negative" ,test_l1_dsVideoPort_negative_dsGetPreferredColorDepth );
 	UT_add_test( pSuite, "dsSetPreferredColorDepth_L1_positive" ,test_l1_dsVideoPort_positive_dsSetPreferredColorDepth );
 	UT_add_test( pSuite, "dsSetPreferredColorDepth_L1_negative" ,test_l1_dsVideoPort_negative_dsSetPreferredColorDepth );
-	
+
 
 	return 0;
 } 
