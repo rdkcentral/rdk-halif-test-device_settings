@@ -662,7 +662,7 @@ void test_l1_dsVideoPort_negative_dsIsDisplayConnected(void) {
 
 	// Step 03: Invalid handle check
 	status = dsIsDisplayConnected(handle[0], &connected[0]);
-	UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
 	// Step 04: Get valid video port handle
 	for (int i = 0; i < NUM_OF_PORTS; i++) {
