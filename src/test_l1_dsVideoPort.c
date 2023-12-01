@@ -5480,7 +5480,7 @@ void test_l1_dsVideoPort_negative_dsGetPreferredColorDepth(void) {
 
 	// Step 03: Get color depth with invalid handle
 	status = dsGetPreferredColorDepth(handle[0], &colorDepth[0]);
-	UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
 	// Step 04: Get the port handle for supported video ports
 	for (int i = 0; i < NUM_OF_PORTS; i++) {
@@ -5603,7 +5603,7 @@ void test_l1_dsVideoPort_negative_dsSetPreferredColorDepth(void) {
 
 	// Step 03: Set color depth with invalid handle
 	status = dsSetPreferredColorDepth(handle[0], dsDISPLAY_COLORDEPTH_8BIT );
-	UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
 
 	// Step 04: Get the port handle for supported video ports
 	for (int i = 0; i < NUM_OF_PORTS; i++) {
