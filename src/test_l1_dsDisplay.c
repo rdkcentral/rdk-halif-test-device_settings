@@ -473,7 +473,8 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
 
     int result;
     intptr_t displayHandle;
-    dsDisplayEDID_t edid1, edid2 = {0};
+    dsDisplayEDID_t *edid1 = {0};
+    dsDisplayEDID_t *edid2 = {0};
 
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
@@ -488,11 +489,11 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
             DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
             // Step 03: Call dsGetEDID() with the obtained handle
-            result = dsGetEDID(displayHandle, &edid1);
+            result = dsGetEDID(displayHandle, edid1);
             DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
             // Step 04: Call dsGetEDID() again with the same handle
-            result = dsGetEDID(displayHandle, &edid2);
+            result = dsGetEDID(displayHandle, edid2);
             DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
             // Step 05: Compare the returned results
@@ -556,10 +557,10 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
 
     int result;
     intptr_t displayHandle=-1;
-    dsDisplayEDID_t *edid = NULL;
+    dsDisplayEDID_t *edid;
 
     // Step 01: Call dsGetEDID() without initializing the display sub-system
-    result = dsGetEDID(displayHandle, &edid);
+    result = dsGetEDID(displayHandle, edid);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
@@ -574,7 +575,7 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
         DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
         // Step 04: Call dsGetEDID() with an invalid handle
-        result = dsGetEDID(NULL, &edid);
+        result = dsGetEDID((intptr_t)NULL, edid);
         DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 
         // Step 05: Call dsGetEDID() with a NULL dsDisplayEDID_t
@@ -588,7 +589,7 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 07: Call dsGetEDID() without initializing the display sub-system
-    result = dsGetEDID(displayHandle, &edid);
+    result = dsGetEDID(displayHandle, edid);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
@@ -724,7 +725,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
 
     int result;
     intptr_t displayHandle =-1;
-    unsigned char *edid = NULL;
+    unsigned char *edid;
     int length = 0;
 
     // Step 01: Call dsGetEDIDBytes() without initializing or obtaining a handle
@@ -743,7 +744,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
         DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
         // Step 04: Call dsGetEDIDBytes() with an invalid handle
-        result = dsGetEDIDBytes(NULL, edid, &length);
+        result = dsGetEDIDBytes((intptr_t)NULL, edid, &length);
         DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 
         // Step 05: Call dsGetEDIDBytes() with null edid
@@ -886,7 +887,7 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
         DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
         // Step 04: Call dsGetDisplayAspectRatio() with an invalid handle
-        result = dsGetDisplayAspectRatio(NULL, &aspectRatio);
+        result = dsGetDisplayAspectRatio((intptr_t)NULL, &aspectRatio);
         DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 
         // Step 05: Call dsGetDisplayAspectRatio() with a NULL aspectRatio
