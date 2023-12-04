@@ -51,7 +51,8 @@
 */
 void test_l2_dsHost (void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+    //This function needs to be implemented!
+    UT_FAIL(); 
 }
 
 static UT_test_suite_t * pSuite = NULL;
