@@ -1018,12 +1018,12 @@ void test_l1_dsAudio_positive_dsSetAudioCompression(void) {
  * |:--:|-----------|----------|--------------|-----|
  * |01|Call dsSetAudioCompression() using an invalid handle but with a valid compression value | handle: [ invalid value ], compression: [ valid dsAudioCompression_t value ] | dsERR_NOT_INITIALIZED | Set Audio Compression must return invalid parameter as module is not initialized |
  * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
- |03|Call dsSetAudioCompression() using an invalid hanlde and valid compression | handle: [ invalid handle ], compression: [valid value ] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
- * |03|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
- * |04|Call dsSetAudioCompression() by looping through the acquired port handles but with out of range compression value(-10) | handle: [ valid handle ], compression: [ -10 ] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
- * |05|Call dsSetAudioCompression() by looping through the acquired port handles but with out of range compression value(20) | handle: [ valid handle ], compression: [ 20 ] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
- * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE | Termination must be successful |
- * |07|Call dsSetAudioCompression() again after terminating audio ports | handle: [ valid handle ], compression: [ valid dsAudioCompression_t value ] | dsERR_NOT_INITIALIZED | Set Audio Compression must return invalid parameter as module is not initialized |
+ * |03|Call dsSetAudioCompression() using an invalid hanlde and valid compression | handle: [ invalid handle ], compression: [valid value ] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|Call dsSetAudioCompression() by looping through the acquired port handles but with out of range compression value(-10) | handle: [ valid handle ], compression: [ -10 ] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |06|Call dsSetAudioCompression() by looping through the acquired port handles but with out of range compression value(20) | handle: [ valid handle ], compression: [ 20 ] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |07|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE | Termination must be successful |
+ * |08|Call dsSetAudioCompression() again after terminating audio ports | handle: [ valid handle ], compression: [ valid dsAudioCompression_t value ] | dsERR_NOT_INITIALIZED | Set Audio Compression must return invalid parameter as module is not initialized |
  *
  *@note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions. 
  */
@@ -1048,26 +1048,26 @@ void test_l1_dsAudio_negative_dsSetAudioCompression(void) {
 	result = dsSetAudioCompression(handle[0], max_compression);
 	DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 
-	// Step 03: Get the port handle for all supported audio ports
+	// Step 04: Get the port handle for all supported audio ports
 	for (int i = 0; i < NUM_OF_PORTS; i++) {
 		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
 		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
 
-		// Step 04: Set out of range compression value (-10)
+		// Step 05: Set out of range compression value (-10)
 		result = dsSetAudioCompression(handle[i], out_of_range_neg);
 		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 
-		// Step 05: Set out of range compression value (20)
+		// Step 06: Set out of range compression value (20)
 		result = dsSetAudioCompression(handle[i], out_of_range_pos);
 		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 	}
 
-	// Step 06: Terminate audio ports
+	// Step 07: Terminate audio ports
 	result = dsAudioPortTerm();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-	// Step 07: Attempt to set audio compression after termination
+	// Step 08: Attempt to set audio compression after termination
 	result = dsSetAudioCompression(handle[0], max_compression);
 	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
@@ -1093,7 +1093,6 @@ void test_l1_dsAudio_negative_dsSetAudioCompression(void) {
  * |03|Call dsGetDialogEnhancement() by looping through the acquired port handles to get the dialog enhancement levels for each port | handle: [ valid handle ], level: [ pointer to hold dialog enhancement level ] | dsERR_NONE and value of `level` in the range [0,16] | Dialog Enhancement level should be retrieved correctly |
  * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE | Termination must be successful |
  * 
- * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
 void test_l1_dsAudio_positive_dsGetDialogEnhancement(void) {
 	// Logging at the start
@@ -1996,9 +1995,10 @@ void test_l1_dsAudio_positive_dsSetVolumeLeveller(void) {
  * |02|Call dsAudioPortInit() Initialize audio ports | | dsERR_NONE | Initialization must be successful |
  * |03|Call dsSetVolumeLeveller() using an invalid handle but with valid volLeveller values (i.e valid mode is 0 to 2 and valid level is 0 to 10) | handle = [invalid handle], volLeveller = [valid mode and level] | dsERR_INVALID_PARAM | Invalid paramerter must be returned |
  * |04|Call dsGetAudioPort() Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
- * |05|Call dsSetVolumeLeveller() by looping through acquired port handles but with a invalid Volume Leveller settings (i.e invalid mode < 0 or > 2 invalid level < 0 or >12 | handle = [valid handle from step 04], volLeveller = [invalid mode and level] | dsERR_INVALID_PARAM | Invalid paramerter must be returned |
- * |06|Call dsAudioPortTerm() to terminate audio ports | | dsERR_NONE | Termination must be successful |
- * |07|Call dsSetVolumeLeveller() again after terminating audio ports attempt to set the Volume Leveller settings | handle= [valid handle from step 04 ] , volLeveller = [valid mode and level] | dsERR_NOT_INITIALIZED | set Volume Leveller must fail as module is not initialized |
+ * |05|Call dsSetVolumeLeveller() by looping through acquired port handles but with a invalid mode of Volume Leveller settings (i.e invalid mode < 0 or > 2 valid level(0 to 12) | handle = [valid handle from step 04], volLeveller = [invalid mode and level] | dsERR_INVALID_PARAM | Invalid paramerter must be returned |
+ * |06|Call dsSetVolumeLeveller() by looping through acquired port handles but with a invalid level of Volume Leveller settings (i.e valid mode (0 to 2) invalid level < 0 or >12 | handle = [valid handle from step 04], volLeveller = [invalid mode and level] | dsERR_INVALID_PARAM | Invalid paramerter must be returned |
+ * |07|Call dsAudioPortTerm() to terminate audio ports | | dsERR_NONE | Termination must be successful |
+ * |08|Call dsSetVolumeLeveller() again after terminating audio ports attempt to set the Volume Leveller settings | handle= [valid handle from step 04 ] , volLeveller = [valid mode and level] | dsERR_NOT_INITIALIZED | set Volume Leveller must fail as module is not initialized |
  *
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
@@ -2033,19 +2033,28 @@ void test_l1_dsAudio_negative_dsSetVolumeLeveller(void) {
 		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
 	}
 
-	// Step 05: Attempt to set Volume Leveller with an invalid setting
+	// Step 05: Attempt to set Volume Leveller with a invalid mode
 	volLeveller.mode = invalid_mode;
+	volLeveller.level = valid_level;
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsSetVolumeLeveller(handle[i], volLeveller);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+	}
+
+
+	// Step 06: Attempt to set Volume Leveller with a invalid level
+	volLeveller.mode = valid_mode;
 	volLeveller.level = invalid_level;
 	for (int i = 0; i < NUM_OF_PORTS; i++) {
 		result = dsSetVolumeLeveller(handle[i], volLeveller);
 		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 	}
 
-	// Step 06: Terminate audio ports
+	// Step 07: Terminate audio ports
 	result = dsAudioPortTerm();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-	// Step 07: Attempt to set Volume Leveller after termination
+	// Step 08: Attempt to set Volume Leveller after termination
 	volLeveller.mode = valid_mode;
 	volLeveller.level = valid_level;
 	result = dsSetVolumeLeveller(handle[0],volLeveller);
@@ -2365,7 +2374,7 @@ void test_l1_dsAudio_positive_dsIsSurroundDecoderEnabled(void) {
 /**
  * @brief Ensure dsIsSurroundDecoderEnabled() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 07@n
+ * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 038@n
  * 
  * **Dependencies:** None@n
@@ -4283,8 +4292,9 @@ void test_l1_dsAudio_positive_dsSetStereoAuto(void) {
  * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
  * |03|Call dsSetStereoAuto() using an invalid handle but with valid autoMode value(i.e TRUE/FALSE) | handle=[invalid handle], autoMode=[valid value] | dsERR_INVALID_PARAM | Invalid parameter must be returned |
  * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
- * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
- * |06|Call dsSetStereoAuto() again after terminating audio ports | handle=[valid handle], autoMode=[valid value]| dsERR_NOT_INITIALIZED |call must fail as module is not initialized|
+ * |05|Call dsSetStereoAuto() using an valid handle but with invalid autoMode value(-1) | handle=[valid handle], autoMode=[invalid value] | dsERR_INVALID_PARAM | Invalid parameter must be returned |
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |07|Call dsSetStereoAuto() again after terminating audio ports | handle=[valid handle], autoMode=[valid value]| dsERR_NOT_INITIALIZED |call must fail as module is not initialized|
  * 
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
@@ -4416,7 +4426,6 @@ void test_l1_dsAudio_positive_dsGetAudioGain(void) {
  * |07|Call dsGetAudioGain() again after terminating audio ports |handle=[valid handle], gain=[pointer] | dsERR_NOT_INITIALIZED |call must fail as module is not initialized |
  * 
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
- * @note Testing the actual range values of gain might require an additional procedure, once the spec for the range is defined by Amit/Deekshit.
  */
 void test_l1_dsAudio_negative_dsGetAudioGain(void) {
 	// Logging at the start
@@ -4910,2253 +4919,2235 @@ void test_l1_dsAudio_positive_dsGetAudioLevel(void) {
 		// End of the test
 		UT_LOG("\n Out %s\n", __FUNCTION__);
 	}
+}
 
+/**
+ * @brief Ensure dsGetAudioLevel() returns correct error codes during negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 078@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsGetAudioLevel() without initializing audio ports | handle=[invalid handle], level=[pointer] | dsERR_NOT_INITIALIZED |call must fail as module is not initialized |
+ * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |03|Call dsGetAudioLevel() using an invalid handle and valid pointer |handle=[invalid hanlde], level=[pointer] | dsERR_INVALID_PARAM |Invalid parameter error must be returned|
+ * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|CalldsGetAudioLevel() by looping through the acquired valid handle with a NULL gain pointer |handle=[valid handle], level=[NULL] | dsERR_INVALID_PARAM |Invalid parameter error must be returned|
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |07|Call dsGetAudioLevel() again after terminating audio ports |handle=[valid handle], level=[pointer] | dsERR_NOT_INITIALIZED |call must fail as module is not initialized|
+ * 
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
+ */
+void test_l1_dsAudio_negative_dsGetAudioLevel(void) {
+	// Start of the test
+	gTestID = 78;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-	/**
-	 * @brief Ensure dsGetAudioLevel() returns correct error codes during negative scenarios.
-	 * 
-	 * **Test Group ID:** Basic: 01@n
-	 * **Test Case ID:** 078@n
-	 * 
-	 * **Dependencies:** None@n
-	 * **User Interaction:** None
-	 * 
-	 * **Test Procedure:**@n
-	 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-	 * |:--:|-----------|----------|----------|--------------|-----|
-	 * |01|Call dsGetAudioLevel() without initializing audio ports | handle=[invalid handle], level=[pointer] | dsERR_NOT_INITIALIZED |call must fail as module is not initialized |
-	 * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-	 * |03|Call dsGetAudioLevel() using an invalid handle and valid pointer |handle=[invalid hanlde], level=[pointer] | dsERR_INVALID_PARAM |Invalid parameter error must be returned|
-	 * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-	 * |05|CalldsGetAudioLevel() by looping through the acquired valid handle with a NULL gain pointer |handle=[valid handle], level=[NULL] | dsERR_INVALID_PARAM |Invalid parameter error must be returned|
-	 * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-	 * |07|Call dsGetAudioLevel() again after terminating audio ports |handle=[valid handle], level=[pointer] | dsERR_NOT_INITIALIZED |call must fail as module is not initialized|
-	 * 
-	 * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
-	 */
-	void test_l1_dsAudio_negative_dsGetAudioLevel(void) {
-		// Start of the test
-		gTestID = 78;
-		UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	dsError_t result;
+	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
 
-		dsError_t result;
-		intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	float audioLevel;
 
-		float audioLevel;
+	// Step 01: Attempt to get audio level without initializing audio ports
+	result = dsGetAudioLevel(-1, &audioLevel);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
-		// Step 01: Attempt to get audio level without initializing audio ports
-		result = dsGetAudioLevel(-1, &audioLevel);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+	// Step 02: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-		// Step 02: Initialize audio ports
-		result = dsAudioPortInit();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
+	// Step 03: Attempt to get audio level with invalid handle
+	result = dsGetAudioLevel(handle[0], &audioLevel);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 
-		// Step 03: Attempt to get audio level with invalid handle
-		result = dsGetAudioLevel(handle[0], &audioLevel);
+	// Step 04 : Get a valid handle 
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		// Step 05: Attempt to get audio level with NULL pointer     
+		result = dsGetAudioLevel(handle[i], NULL);
 		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-
-		// Step 04 : Get a valid handle 
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-			// Step 05: Attempt to get audio level with NULL pointer     
-			result = dsGetAudioLevel(handle[i], NULL);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-		}
-
-		// Step 06: Terminate audio ports
-		result = dsAudioPortTerm();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 07: Attempt to get audio level after terminating audio ports
-		result = dsGetAudioLevel(handle[0], &audioLevel);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-		// End of the test
-		UT_LOG("\n Out %s\n", __FUNCTION__);
 	}
 
+	// Step 06: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-	/**
-	 * @brief Ensure dsSetAudioLevel() sets the audio volume level correctly during positive scenarios.
-	 * 
-	 * **Test Group ID:** Basic: 01@n
-	 * **Test Case ID:** 079@n
-	 * 
-	 * **Dependencies:** Audio device should be connected and working properly.@n
-	 * **User Interaction:** None
-	 * 
-	 * **Test Procedure:**@n
-	 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-	 * |:--:|-----------|----------|----------|--------------|-----|
-	 * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-	 * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-	 * |03|Call dsSetAudioLevel() by looping through the acquired port handles and valid value(i.e 0 to 100) | handle=[valid handle], level=[valid value] | dsERR_NONE | Volume level should be set successfully |
-	 * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-	 * 
-	 */
-	void test_l1_dsAudio_positive_dsSetAudioLevel(void) {
-		// Start of the test
-		gTestID = 79;
-		UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	// Step 07: Attempt to get audio level after terminating audio ports
+	result = dsGetAudioLevel(handle[0], &audioLevel);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
-		dsError_t result;
-		intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-		float minAudioLevel = 0, maxAudioLevel = 100, midAudioLevel = 50; 
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
 
-		// Step 01: Initialize audio ports
-		result = dsAudioPortInit();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-		// Step 02 and 03: Get port handles and set audio levels
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+/**
+ * @brief Ensure dsSetAudioLevel() sets the audio volume level correctly during positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 079@n
+ * 
+ * **Dependencies:** Audio device should be connected and working properly.@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |03|Call dsSetAudioLevel() by looping through the acquired port handles and valid value(i.e 0 to 100) | handle=[valid handle], level=[valid value] | dsERR_NONE | Volume level should be set successfully |
+ * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * 
+ */
+void test_l1_dsAudio_positive_dsSetAudioLevel(void) {
+	// Start of the test
+	gTestID = 79;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-			result = dsSetAudioLevel(handle[i], minAudioLevel);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+	dsError_t result;
+	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	float minAudioLevel = 0, maxAudioLevel = 100, midAudioLevel = 50; 
 
-			result = dsSetAudioLevel(handle[i], maxAudioLevel);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+	// Step 01: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-			result = dsSetAudioLevel(handle[i], midAudioLevel);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-		}
+	// Step 02 and 03: Get port handles and set audio levels
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		result = dsSetAudioLevel(handle[i], minAudioLevel);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+
+		result = dsSetAudioLevel(handle[i], maxAudioLevel);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+
+		result = dsSetAudioLevel(handle[i], midAudioLevel);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+	}
+
+	// Step 04: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsSetAudioLevel() returns correct error codes during negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 080@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsSetAudioLevel() without initializing audio ports | handle=[invalid handle], level=[valid value] | dsERR_NOT_INITIALIZED |call must fail as module not initialized |
+ * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |03|Call dsSetAudioLevel() using an invalid handle with valid level value | handle=[invalid handle], level=[valid value] |dsERR_INVALID_PARAM |Invalid parameter must return |
+ * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|Call dsSetAudioLevel() by looping through acquired handles with an out of range level value(i.e <0 or >100)) | handle=[valid handle], level=[invalid value] | dsERR_INVALID_PARAM| Invalid parameter must return|
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |07|Call dsSetAudioLevel() again after terminating audio ports | handle=[valid handle], level=[valid value] | dsERR_NOT_INITIALIZED |call must fail as module not initialized |
+ * 
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
+ */
+void test_l1_dsAudio_negative_dsSetAudioLevel(void) {
+	// Start of the test
+	gTestID = 80;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	dsError_t result;
+	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	float audio_level = 50, invalid_audio_level_neg = -10, invalid_audio_level_pos = 120;
+
+	// Step 01: Attempt to set audio level without initializing audio ports
+	result = dsSetAudioLevel(-1, audio_level);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// Step 02: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 03: Attempt to set audio level with invalid handle
+	result = dsSetAudioLevel(handle[0], audio_level);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+
+	// Step 04 : Get a valid handle 
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		// Step 05 : Attempt to set Audio level with invalid values
+		result = dsSetAudioLevel(handle[i], invalid_audio_level_neg); 
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+
+		result = dsSetAudioLevel(handle[i], invalid_audio_level_pos); 
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+	}
+
+	// Step 06: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 07: Attempt to set audio level after terminating audio ports
+	result = dsSetAudioLevel(handle[0], audio_level);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsGetAudioMaxDB() retrieves the maximum audio dB level correctly during positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 81@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |03|Call dsGetAudioMaxDB() by looping through the acquired port handles to get the maximum audio dB of each port in array| handle: [ loop through valid handles ] , maxDb: [pointer to hold the maximum audio dB value] | dsERR_NONE | A valid maximum audio dB value(maximum value can be 180 dB) must be returned |
+ * |04|Call dsGetAudioMaxDB() by looping through the acquired port handles to get the maximum audio dB of each port in new  array| handle: [ loop through valid handles ] , maxDb: [pointer to hold the maximum audio dB value] | dsERR_NONE | A valid maximum audio dB value(maximum value can be 180 dB) must be returned |
+ * |05|Compare the values and make sure they are equal| | dsERR_NONE | The values must be equal |
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * 
+ */
+void test_l1_dsAudio_positive_dsGetAudioMaxDB(void) {
+	// Start of the test
+	gTestID = 81;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	dsError_t result;
+	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	float maxDbArray1[NUM_OF_PORTS]; 
+	float maxDbArray2[NUM_OF_PORTS]; 
+
+	// Step 01: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 02 and 03: Get port handles and retrieve max dB values
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		result = dsGetAudioMaxDB(handle[i], &maxDbArray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		UT_ASSERT_TRUE(maxDbArray1[i] <= 180); // Checks whether max dB value is not beyond 180
+
+		result = dsGetAudioMaxDB(handle[i], &maxDbArray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		UT_ASSERT_TRUE(maxDbArray2[i] <= 180); // Checks whether max dB value is not beyond 180
+	}
+
+	// Step 05: Compare the values from both arrays
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		DS_ASSERT_AUTO_TERM_NUMERICAL(maxDbArray1[i], maxDbArray2[i]);
+	}
+
+	// Step 06: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsGetAudioMaxDB() returns correct error codes during negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 082@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsGetAudioMaxDB() without initializing audio ports | handle=[invalid handle], maxDb=[pointer] | dsERR_NOT_INITIALIZED |call must fail as module is not initialized |
+ * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |03|Call dsGetAudioMaxDB() using an invalid handle and valid pointer |handle=[invalid hanlde], maxDb=[pointer] | dsERR_INVALID_PARAM |Invalid parameter error must be returned|
+ * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|Call dsGetAudioMaxDB() by looping through the acquired valid handle with a NULL gain pointer |handle=[valid handle], maxDb=[NULL] | dsERR_INVALID_PARAM |Invalid parameter error must be returned|
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |07|Call dsGetAudioMaxDB() again after terminating audio ports |handle=[valid handle], maxDb=[pointer] | dsERR_NOT_INITIALIZED |call must fail as module is not initialized|
+ * 
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
+ */
+void test_l1_dsAudio_negative_dsGetAudioMaxDB(void) {
+	// Start of the test
+	gTestID = 82;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	dsError_t result;
+	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	float maxDb;
+
+	// Step 01: Attempt to get max dB without initializing audio ports
+	result = dsGetAudioMaxDB(-1, &maxDb);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// Step 02: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 03: Attempt to get max dB with invalid handle
+	result = dsGetAudioMaxDB(handle[0], &maxDb);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+
+	// Step 04: Get a valid handle 
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		// Step 05 : Attempt to get Audio Max dB with a NULL pointer
+		result = dsGetAudioMaxDB(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+	}
+
+	// Step 06: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 07: Attempt to get max dB after terminating audio ports
+	result = dsGetAudioMaxDB(handle[0], &maxDb);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsGetAudioMinDB() retrieves the minimum audio dB level correctly during positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 083@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |03|Call dsGetAudioMinDB() by looping through the acquired port handles to get the minimum audio dB of each port in array| handle: [ loop through valid handles ] , minDb: [pointer to hold the minimum audio dB value] | dsERR_NONE | A valid minimum audio dB value(minimum value can be -1450 dB) must be returned |
+ * |04|Call dsGetAudioMinDB() by looping through the acquired port handles to get the minimum audio dB of each port in new array| handle: [ loop through valid handles ] , minDb: [pointer to hold the minimum audio dB value] | dsERR_NONE | A valid minimum audio dB value(minimum value can be -1450 dB) must be returned |
+ * |05|Compare the values and make sure they are equal| | dsERR_NONE | The values must be equal |
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * 
+ */
+void test_l1_dsAudio_positive_dsGetAudioMinDB(void) {
+	// Start of the test
+	gTestID = 83;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	dsError_t result;
+	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	float minDbArray1[NUM_OF_PORTS]; // First array for min dB values
+	float minDbArray2[NUM_OF_PORTS]; // Second array for min dB values
+
+	// Step 01: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 02 : Get port handles
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		// Step 03: Retrieve min dB values
+		result = dsGetAudioMinDB(handle[i], &minDbArray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		UT_ASSERT_TRUE(minDbArray1[i] >= -1450);
+
+		// Step 04: Retrieve min dB values again and store it in a new array
+		result = dsGetAudioMinDB(handle[i], &minDbArray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		UT_ASSERT_TRUE(minDbArray2[i] >= -1450);
+
+		// Step 05: Compare the values
+		UT_ASSERT_EQUAL(minDbArray1[i], minDbArray2[i]);
+	}
+
+	// Step 06: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsGetAudioMinDB() returns correct error codes during negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 084@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsGetAudioMinDB() without initializing audio ports | handle=[invalid handle], minDb=[pointer] | dsERR_NOT_INITIALIZED |call must fail as module is not initialized |
+ * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |03|Call dsGetAudioMinDB() using an invalid handle and valid pointer |handle=[invalid hanlde], minDb=[pointer] | dsERR_INVALID_PARAM |Invalid parameter error must be returned|
+ * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|Call dsGetAudioMinDB() by looping through the acquired valid handle with a NULL gain pointer |handle=[valid handle], minDb=[NULL] | dsERR_INVALID_PARAM |Invalid parameter error must be returned|
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |07|Call dsGetAudioMinDB() again after terminating audio ports |handle=[valid handle], minDb=[pointer] | dsERR_NOT_INITIALIZED |call must fail as module is not initialized|
+ * 
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
+ */
+void test_l1_dsAudio_negative_dsGetAudioMinDB(void) {
+	// Start of the test
+	gTestID = 84;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	dsError_t result;
+	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	float minDb;
+
+	// Step 01: Attempt to get min dB without initializing audio ports
+	result = dsGetAudioMinDB(-1, &minDb);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// Step 02: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 03: Attempt to get min dB with invalid handle
+	result = dsGetAudioMinDB(handle[0], &minDb);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+
+	// Step 04: Get a valid handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		// Step 05: Attempt to get Audio Min dB with a NULL pointer
+		result = dsGetAudioMinDB(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+	}
+
+	// Step 06: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 07: Attempt to get min dB after terminating audio ports
+	result = dsGetAudioMinDB(handle[0], &minDb);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsGetAudioOptimalLevel() retrieves the optimal audio level correctly during positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 085@n
+ * 
+ * **Dependencies:** Audio device should be connected and working properly.@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |03|Call dsGetAudioOptimalLevel() by looping through the acquired port handles to get the optimal audio level (dB) of each port in array| handle: [ loop through valid handles ] , optimalLevel: [pointer to hold the optimal audio level] | dsERR_NONE | A valid optimum audio dB value( -1450 dB to 180 dB) must be returned - platform specific |
+ * |04|Call dsGetAudioOptimalLevel() by looping through the acquired port handles to get the optimal audio level (dB) of each port in new array| handle: [ loop through valid handles ] , optimalLevel: [pointer to hold the optimal audio level] | dsERR_NONE | A valid optimum audio dB value( -1450 dB to 180 dB) must be returned - platform specific |
+ * |05|Compare the values and make sure they are equal| | dsERR_NONE | The values must be equal |
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * 
+ */
+void test_l1_dsAudio_positive_dsGetAudioOptimalLevel(void) {
+	// Start of the test
+	gTestID = 85;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	dsError_t result;
+	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	float optimalLevelArray1[NUM_OF_PORTS];
+	float optimalLevelArray2[NUM_OF_PORTS];
+
+	// Step 01: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 02 : Get port handles 
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		// Step 03: Retrieve optimal dB levels
+		result = dsGetAudioOptimalLevel(handle[i], &optimalLevelArray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+
+		// Step 04: Retrieve optimal dB levels and store it in a new array
+		result = dsGetAudioOptimalLevel(handle[i], &optimalLevelArray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+
+		// Step 05: Compare the values
+		DS_ASSERT_AUTO_TERM_NUMERICAL(optimalLevelArray1[i], optimalLevelArray2[i]);
+	}
+
+	// Step 06: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsGetAudioOptimalLevel() returns correct error codes during negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 086@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsGetAudioOptimalLevel() without initializing audio ports|handle=[invalid handle], optimalLevel=[pointer]|dsERR_NOT_INITIALIZED |call must fail as module is not initialized |
+ * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |03|Call dsGetAudioOptimalLevel() using an invalid handle and valid pointer |handle=[invalid hanlde], optimalLevel=[pointer] | dsERR_INVALID_PARAM |Invalid parameter error must be returned|
+ * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|Call dsGetAudioOptimalLevel() by looping through the acquired valid handle with a NULL gain pointer |handle=[valid handle], optimalLevel=[NULL] | dsERR_INVALID_PARAM |Invalid parameter error must be returned|
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |07|Call dsGetAudioOptimalLevel() again after terminating audio ports |handle=[valid handle], optimalLevel=[pointer] | dsERR_NOT_INITIALIZED |call must fail as module is not initialized|
+ * 
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
+ */
+void test_l1_dsAudio_negative_dsGetAudioOptimalLevel(void) {
+	// Start of the test
+	gTestID = 86;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	dsError_t result;
+	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	float optimalLevel;
+
+	// Step 01: Attempt to get optimal dB without initializing audio ports
+	result = dsGetAudioOptimalLevel(-1, &optimalLevel);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// Step 02: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 03: Attempt to get optimal dB with invalid handle
+	result = dsGetAudioOptimalLevel(handle[0], &optimalLevel);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+
+	// Step 04: Get a valid handle 
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		// Step 05 :Attempt to get optimal level with a NULL pointer
+		result = dsGetAudioOptimalLevel(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+	}
+
+	// Step 06: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 07: Attempt to get optimal dB after terminating audio ports
+	result = dsGetAudioOptimalLevel(handle[0], &optimalLevel);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsGetAudioDelay() retrieves the audio delay correctly during positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 087@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |03|Call dsGetAudioDelay() by looping through the acquired port handles to get the audio audio delay (in ms) of each port in array | handle: [ loop through valid handles ] , audioDelayMs: [ pointer to hold the audio delay ] | dsERR_NONE | A valid audio delay value(0 to 200 ms) must be returned |
+ * |04|Call dsGetAudioDelay() by looping through the acquired port handles to get the audio audio delay (in ms) of each port in new array | handle: [ loop through valid handles ] , audioDelayMs: [ pointer to hold the audio delay ] | dsERR_NONE | A valid audio delay value(0 to 200 ms) must be returned |
+ * |05|Compare the values and make sure they are equal| | dsERR_NONE | The values must be equal |
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * 
+ */
+void test_l1_dsAudio_positive_dsGetAudioDelay(void) {
+	// Start of the test
+	gTestID = 87;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	dsError_t result;
+	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	uint32_t audioDelayArray1[NUM_OF_PORTS];
+	uint32_t audioDelayArray2[NUM_OF_PORTS];
+
+	// Step 01: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 02 : Get port handles
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		// Step 03 : Retrieve audio delay
+		result = dsGetAudioDelay(handle[i], &audioDelayArray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		UT_ASSERT_TRUE(audioDelayArray1[i] >= 0 && audioDelayArray1[i] <= 200);
+
+		// Step 04 : Retrieve audio delay and store it in a new array
+		result = dsGetAudioDelay(handle[i], &audioDelayArray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		UT_ASSERT_TRUE(audioDelayArray2[i] >= 0 && audioDelayArray2[i] <= 200);
+
+		// Step 05: Compare the values
+		DS_ASSERT_AUTO_TERM_NUMERICAL(audioDelayArray1[i], audioDelayArray2[i]);
+	}
+
+	// Step 06: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsGetAudioDelay() returns correct error codes during negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 088@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsGetAudioDelay() without initializing audio ports | handle=[invalid handle], audioDelayMs=[pointer] | dsERR_NOT_INITIALIZED |call must fail as module is not initialized |
+ * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |03|Call dsGetAudioDelay() using an invalid handle and valid pointer |handle=[invalid hanlde], audioDelayMs=[pointer] | dsERR_INVALID_PARAM |Invalid parameter error must be returned|
+ * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|Call dsGetAudioDelay() by looping through the acquired valid handle with a NULL gain pointer |handle=[valid handle], audioDelayMs=[NULL] | dsERR_INVALID_PARAM |Invalid parameter error must be returned|
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |07|Call dsGetAudioDelay() again after terminating audio ports |handle=[valid handle], audioDelayMs=[pointer] | dsERR_NOT_INITIALIZED |call must fail as module is not initialized|
+ * 
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
+ */
+void test_l1_dsAudio_negative_dsGetAudioDelay(void) {
+	// Start of the test
+	gTestID = 88;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	dsError_t result;
+	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	uint32_t audioDelay;
+
+	// Step 01: Attempt to get audio delay without initializing audio ports
+	result = dsGetAudioDelay(-1, &audioDelay);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// Step 02: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 03: Attempt to get audio delay with invalid handle
+	result = dsGetAudioDelay(handle[0], &audioDelay);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+
+	// Step 04: Get Valid port handles
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		// Step 05: Attempt to get Audio delay with NULL param
+		result = dsGetAudioDelay(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+	}
+
+	// Step 06: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 07: Attempt to get audio delay after terminating audio ports
+	result = dsGetAudioDelay(handle[0], &audioDelay);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsSetAudioDelay() sets the audio delay correctly during positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 089@n
+ * 
+ * **Dependencies:**@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |03|Call dsSetAudioDelay() by looping through the acquired port handle and valid audio delay value(.ie value in milliseconds) | handle=[valid handle], audioDelayMs=[valid value] | dsERR_NONE | call should set audio delay successfully |
+ * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * 
+ */
+void test_l1_dsAudio_positive_dsSetAudioDelay(void) {
+	// Start of the test
+	gTestID = 89;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	dsError_t result;
+	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	uint32_t audio_delay_min = 0, audio_delay_mid = 100, audio_delay_max = 200;
+
+	// Step 01: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 02 : Get port handles 
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		// Step 03: Set audio delay
+		result = dsSetAudioDelay(handle[i], audio_delay_min);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+
+		result = dsSetAudioDelay(handle[i], audio_delay_mid);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+
+		result = dsSetAudioDelay(handle[i], audio_delay_max);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+	}
+
+	// Step 04: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsSetAudioDelay() returns correct error codes during negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 090@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsSetAudioDelay() without initializing audio ports | handle=[invalid handle], audioDelayMs=[valid value] | dsERR_NOT_INITIALIZED |call must fail as module not initialized |
+ * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |03|Call dsSetAudioDelay() using an invalid handle with valid audio delay value(i.e milliseconds) | handle=[invalid handle], audioDelayMs=[valid value] |dsERR_INVALID_PARAM |Invalid parameter must return |
+ * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |06|Call dsSetAudioDelay() using a valid handle but with invalid audio delay values(i.e milliseconds) | handle=[valid handle], audioDelayMs=[invalid value] |dsERR_INVALID_PARAM |Invalid parameter must return |
+ * |07|Call dsSetAudioDelay() again after terminating audio ports | handle=[valid handle], audioDelayMs=[valid value] | dsERR_NOT_INITIALIZED |call must fail as module not initialized |
+ * 
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
+ */
+void test_l1_dsAudio_negative_dsSetAudioDelay(void) {
+	// Start of the test
+	gTestID = 90;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	dsError_t result;
+	intptr_t handle[NUM_OF_PORTS];
+	uint32_t audio_delay = 100, invalid_audio_delay = 300;
+
+	// Step 01: Attempt to set audio delay without initializing audio ports
+	result = dsSetAudioDelay(-1, audio_delay);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// Step 02: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 03: Attempt to set audio delay 
+	result = dsSetAudioDelay(handle[0], audio_delay);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+
+	// Step 04 : Get port handles 
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		// Step 05: Attempt to set invalid audio delay 
+		result = dsSetAudioDelay(handle[i], invalid_audio_delay);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 
 		// Step 04: Terminate audio ports
 		result = dsAudioPortTerm();
 		UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-		// End of the test
-		UT_LOG("\n Out %s\n", __FUNCTION__);
-	}
-
-	/**
-	 * @brief Ensure dsSetAudioLevel() returns correct error codes during negative scenarios.
-	 * 
-	 * **Test Group ID:** Basic: 01@n
-	 * **Test Case ID:** 080@n
-	 * 
-	 * **Dependencies:** None@n
-	 * **User Interaction:** None
-	 * 
-	 * **Test Procedure:**@n
-	 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-	 * |:--:|-----------|----------|----------|--------------|-----|
-	 * |01|Call dsSetAudioLevel() without initializing audio ports | handle=[invalid handle], level=[valid value] | dsERR_NOT_INITIALIZED |call must fail as module not initialized |
-	 * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-	 * |03|Call dsSetAudioLevel() using an invalid handle with valid level value | handle=[invalid handle], level=[valid value] |dsERR_INVALID_PARAM |Invalid parameter must return |
-	 * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-	 * |05|Call dsSetAudioLevel() by looping through acquired handles with an out of range level value(i.e <0 or >100)) | handle=[valid handle], level=[invalid value] | dsERR_INVALID_PARAM| Invalid parameter must return|
-	 * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-	 * |07|Call dsSetAudioLevel() again after terminating audio ports | handle=[valid handle], level=[valid value] | dsERR_NOT_INITIALIZED |call must fail as module not initialized |
-	 * 
-	 * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
-	 */
-	void test_l1_dsAudio_negative_dsSetAudioLevel(void) {
-		// Start of the test
-		gTestID = 80;
-		UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-		dsError_t result;
-		intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-		float audio_level = 50, invalid_audio_level_neg = -10, invalid_audio_level_pos = 120;
-
-		// Step 01: Attempt to set audio level without initializing audio ports
-		result = dsSetAudioLevel(-1, audio_level);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-		// Step 02: Initialize audio ports
-		result = dsAudioPortInit();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 03: Attempt to set audio level with invalid handle
-		result = dsSetAudioLevel(handle[0], audio_level);
-		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-
-		// Step 04 : Get a valid handle 
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-			// Step 05 : Attempt to set Audio level with invalid values
-			result = dsSetAudioLevel(handle[i], invalid_audio_level_neg); 
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-
-			result = dsSetAudioLevel(handle[i], invalid_audio_level_pos); 
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-		}
-
-		// Step 06: Terminate audio ports
-		result = dsAudioPortTerm();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 07: Attempt to set audio level after terminating audio ports
-		result = dsSetAudioLevel(handle[0], audio_level);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-		// End of the test
-		UT_LOG("\n Out %s\n", __FUNCTION__);
-	}
-
-
-	/**
-	 * @brief Ensure dsGetAudioMaxDB() retrieves the maximum audio dB level correctly during positive scenarios.
-	 * 
-	 * **Test Group ID:** Basic: 01@n
-	 * **Test Case ID:** 81@n
-	 * 
-	 * **Dependencies:** None@n
-	 * **User Interaction:** None
-	 * 
-	 * **Test Procedure:**@n
-	 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-	 * |:--:|-----------|----------|----------|--------------|-----|
-	 * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-	 * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-	 * |03|Call dsGetAudioMaxDB() by looping through the acquired port handles to get the maximum audio dB of each port in array| handle: [ loop through valid handles ] , maxDb: [pointer to hold the maximum audio dB value] | dsERR_NONE | A valid maximum audio dB value(maximum value can be 180 dB) must be returned |
-	 * |04|Call dsGetAudioMaxDB() by looping through the acquired port handles to get the maximum audio dB of each port in new  array| handle: [ loop through valid handles ] , maxDb: [pointer to hold the maximum audio dB value] | dsERR_NONE | A valid maximum audio dB value(maximum value can be 180 dB) must be returned |
-	 * |05|Compare the values and make sure they are equal| | dsERR_NONE | The values must be equal |
-	 * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-	 * 
-	 */
-	void test_l1_dsAudio_positive_dsGetAudioMaxDB(void) {
-		// Start of the test
-		gTestID = 81;
-		UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-		dsError_t result;
-		intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-		float maxDbArray1[NUM_OF_PORTS]; 
-		float maxDbArray2[NUM_OF_PORTS]; 
-
-		// Step 01: Initialize audio ports
-		result = dsAudioPortInit();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 02 and 03: Get port handles and retrieve max dB values
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-			result = dsGetAudioMaxDB(handle[i], &maxDbArray1[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			UT_ASSERT_TRUE(maxDbArray1[i] <= 180); // Checks whether max dB value is not beyond 180
-
-			result = dsGetAudioMaxDB(handle[i], &maxDbArray2[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			UT_ASSERT_TRUE(maxDbArray2[i] <= 180); // Checks whether max dB value is not beyond 180
-		}
-
-		// Step 05: Compare the values from both arrays
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			DS_ASSERT_AUTO_TERM_NUMERICAL(maxDbArray1[i], maxDbArray2[i]);
-		}
-
-		// Step 06: Terminate audio ports
-		result = dsAudioPortTerm();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// End of the test
-		UT_LOG("\n Out %s\n", __FUNCTION__);
-	}
-
-
-	/**
-	 * @brief Ensure dsGetAudioMaxDB() returns correct error codes during negative scenarios.
-	 * 
-	 * **Test Group ID:** Basic: 01@n
-	 * **Test Case ID:** 082@n
-	 * 
-	 * **Dependencies:** None@n
-	 * **User Interaction:** None
-	 * 
-	 * **Test Procedure:**@n
-	 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-	 * |:--:|-----------|----------|----------|--------------|-----|
-	 * |01|Call dsGetAudioMaxDB() without initializing audio ports | handle=[invalid handle], maxDb=[pointer] | dsERR_NOT_INITIALIZED |call must fail as module is not initialized |
-	 * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-	 * |03|Call dsGetAudioMaxDB() using an invalid handle and valid pointer |handle=[invalid hanlde], maxDb=[pointer] | dsERR_INVALID_PARAM |Invalid parameter error must be returned|
-	 * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-	 * |05|Call dsGetAudioPort() by looping through the acquired valid handle with a NULL gain pointer |handle=[valid handle], maxDb=[NULL] | dsERR_INVALID_PARAM |Invalid parameter error must be returned|
-	 * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-	 * |07|Call dsGetAudioMaxDB() again after terminating audio ports |handle=[valid handle], maxDb=[pointer] | dsERR_NOT_INITIALIZED |call must fail as module is not initialized|
-	 * 
-	 * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
-	 */
-	void test_l1_dsAudio_negative_dsGetAudioMaxDB(void) {
-		// Start of the test
-		gTestID = 82;
-		UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-		dsError_t result;
-		intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-		float maxDb;
-
-		// Step 01: Attempt to get max dB without initializing audio ports
-		result = dsGetAudioMaxDB(-1, &maxDb);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-		// Step 02: Initialize audio ports
-		result = dsAudioPortInit();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 03: Attempt to get max dB with invalid handle
-		result = dsGetAudioMaxDB(handle[0], &maxDb);
-		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-
-		// Step 04: Get a valid handle 
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-			// Step 05 : Attempt to get Audio Max dB with a NULL pointer
-			result = dsGetAudioMaxDB(handle[i], NULL);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-		}
-
-		// Step 06: Terminate audio ports
-		result = dsAudioPortTerm();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 07: Attempt to get max dB after terminating audio ports
-		result = dsGetAudioMaxDB(handle[0], &maxDb);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-		// End of the test
-		UT_LOG("\n Out %s\n", __FUNCTION__);
-	}
-
-
-	/**
-	 * @brief Ensure dsGetAudioMinDB() retrieves the minimum audio dB level correctly during positive scenarios.
-	 * 
-	 * **Test Group ID:** Basic: 01@n
-	 * **Test Case ID:** 083@n
-	 * 
-	 * **Dependencies:** None@n
-	 * **User Interaction:** None
-	 * 
-	 * **Test Procedure:**@n
-	 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-	 * |:--:|-----------|----------|----------|--------------|-----|
-	 * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-	 * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-	 * |03|Call dsGetAudioMinDB() by looping through the acquired port handles to get the minimum audio dB of each port in array| handle: [ loop through valid handles ] , minDb: [pointer to hold the minimum audio dB value] | dsERR_NONE | A valid minimum audio dB value(minimum value can be -1450 dB) must be returned |
-	 * |04|Call dsGetAudioMinDB() by looping through the acquired port handles to get the minimum audio dB of each port in new array| handle: [ loop through valid handles ] , minDb: [pointer to hold the minimum audio dB value] | dsERR_NONE | A valid minimum audio dB value(minimum value can be -1450 dB) must be returned |
-	 * |05|Compare the values and make sure they are equal| | dsERR_NONE | The values must be equal |
-	 * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-	 * 
-	 */
-	void test_l1_dsAudio_positive_dsGetAudioMinDB(void) {
-		// Start of the test
-		gTestID = 83;
-		UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-		dsError_t result;
-		intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-		float minDbArray1[NUM_OF_PORTS]; // First array for min dB values
-		float minDbArray2[NUM_OF_PORTS]; // Second array for min dB values
-
-		// Step 01: Initialize audio ports
-		result = dsAudioPortInit();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 02 : Get port handles
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-			// Step 03: Retrieve min dB values
-			result = dsGetAudioMinDB(handle[i], &minDbArray1[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			UT_ASSERT_TRUE(minDbArray1[i] >= -1450);
-
-			// Step 04: Retrieve min dB values again and store it in a new array
-			result = dsGetAudioMinDB(handle[i], &minDbArray2[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			UT_ASSERT_TRUE(minDbArray2[i] >= -1450);
-
-			// Step 05: Compare the values
-			UT_ASSERT_EQUAL(minDbArray1[i], minDbArray2[i]);
-		}
-
-		// Step 06: Terminate audio ports
-		result = dsAudioPortTerm();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// End of the test
-		UT_LOG("\n Out %s\n", __FUNCTION__);
-	}
-
-
-	/**
-	 * @brief Ensure dsGetAudioMinDB() returns correct error codes during negative scenarios.
-	 * 
-	 * **Test Group ID:** Basic: 01@n
-	 * **Test Case ID:** 084@n
-	 * 
-	 * **Dependencies:** None@n
-	 * **User Interaction:** None
-	 * 
-	 * **Test Procedure:**@n
-	 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-	 * |:--:|-----------|----------|----------|--------------|-----|
-	 * |01|Call dsGetAudioMinDB() without initializing audio ports | handle=[invalid handle], minDb=[pointer] | dsERR_NOT_INITIALIZED |call must fail as module is not initialized |
-	 * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-	 * |03|Call dsGetAudioMinDB() using an invalid handle and valid pointer |handle=[invalid hanlde], minDb=[pointer] | dsERR_INVALID_PARAM |Invalid parameter error must be returned|
-	 * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-	 * |05|Call dsGetAudioMinDB() by looping through the acquired valid handle with a NULL gain pointer |handle=[valid handle], minDb=[NULL] | dsERR_INVALID_PARAM |Invalid parameter error must be returned|
-	 * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-	 * |07|Call dsGetAudioMinDB() again after terminating audio ports |handle=[valid handle], minDb=[pointer] | dsERR_NOT_INITIALIZED |call must fail as module is not initialized|
-	 * 
-	 * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
-	 */
-	void test_l1_dsAudio_negative_dsGetAudioMinDB(void) {
-		// Start of the test
-		gTestID = 84;
-		UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-		dsError_t result;
-		intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-		float minDb;
-
-		// Step 01: Attempt to get min dB without initializing audio ports
-		result = dsGetAudioMinDB(-1, &minDb);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-		// Step 02: Initialize audio ports
-		result = dsAudioPortInit();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 03: Attempt to get min dB with invalid handle
-		result = dsGetAudioMinDB(handle[0], &minDb);
-		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-
-		// Step 04: Get a valid handle
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-			// Step 05: Attempt to get Audio Min dB with a NULL pointer
-			result = dsGetAudioMinDB(handle[i], NULL);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-		}
-
-		// Step 06: Terminate audio ports
-		result = dsAudioPortTerm();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 07: Attempt to get min dB after terminating audio ports
-		result = dsGetAudioMinDB(handle[0], &minDb);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-		// End of the test
-		UT_LOG("\n Out %s\n", __FUNCTION__);
-	}
-
-
-	/**
-	 * @brief Ensure dsGetAudioOptimalLevel() retrieves the optimal audio level correctly during positive scenarios.
-	 * 
-	 * **Test Group ID:** Basic: 01@n
-	 * **Test Case ID:** 085@n
-	 * 
-	 * **Dependencies:** Audio device should be connected and working properly.@n
-	 * **User Interaction:** None
-	 * 
-	 * **Test Procedure:**@n
-	 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-	 * |:--:|-----------|----------|----------|--------------|-----|
-	 * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-	 * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-	 * |03|Call dsGetAudioOptimalLevel() by looping through the acquired port handles to get the optimal audio level (dB) of each port in array| handle: [ loop through valid handles ] , optimalLevel: [pointer to hold the optimal audio level] | dsERR_NONE | A valid optimum audio dB value( -1450 dB to 180 dB) must be returned - platform specific |
-	 * |04|Call dsGetAudioOptimalLevel() by looping through the acquired port handles to get the optimal audio level (dB) of each port in new array| handle: [ loop through valid handles ] , optimalLevel: [pointer to hold the optimal audio level] | dsERR_NONE | A valid optimum audio dB value( -1450 dB to 180 dB) must be returned - platform specific |
-	 * |05|Compare the values and make sure they are equal| | dsERR_NONE | The values must be equal |
-	 * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-	 * 
-	 */
-	void test_l1_dsAudio_positive_dsGetAudioOptimalLevel(void) {
-		// Start of the test
-		gTestID = 85;
-		UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-		dsError_t result;
-		intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-		float optimalLevelArray1[NUM_OF_PORTS];
-		float optimalLevelArray2[NUM_OF_PORTS];
-
-		// Step 01: Initialize audio ports
-		result = dsAudioPortInit();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 02 : Get port handles 
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-			// Step 03: Retrieve optimal dB levels
-			result = dsGetAudioOptimalLevel(handle[i], &optimalLevelArray1[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-
-			// Step 04: Retrieve optimal dB levels and store it in a new array
-			result = dsGetAudioOptimalLevel(handle[i], &optimalLevelArray2[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-
-			// Step 05: Compare the values
-			DS_ASSERT_AUTO_TERM_NUMERICAL(optimalLevelArray1[i], optimalLevelArray2[i]);
-		}
-
-		// Step 06: Terminate audio ports
-		result = dsAudioPortTerm();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// End of the test
-		UT_LOG("\n Out %s\n", __FUNCTION__);
-	}
-
-
-	/**
-	 * @brief Ensure dsGetAudioOptimalLevel() returns correct error codes during negative scenarios.
-	 * 
-	 * **Test Group ID:** Basic: 01@n
-	 * **Test Case ID:** 086@n
-	 * 
-	 * **Dependencies:** None@n
-	 * **User Interaction:** None
-	 * 
-	 * **Test Procedure:**@n
-	 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-	 * |:--:|-----------|----------|----------|--------------|-----|
-	 * |01|Call dsGetAudioOptimalLevel() without initializing audio ports|handle=[invalid handle], optimalLevel=[pointer]|dsERR_NOT_INITIALIZED |call must fail as module is not initialized |
-	 * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-	 * |03|Call dsGetAudioOptimalLevel() using an invalid handle and valid pointer |handle=[invalid hanlde], optimalLevel=[pointer] | dsERR_INVALID_PARAM |Invalid parameter error must be returned|
-	 * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-	 * |05|Call dsGetAudioOptimalLevel() by looping through the acquired valid handle with a NULL gain pointer |handle=[valid handle], optimalLevel=[NULL] | dsERR_INVALID_PARAM |Invalid parameter error must be returned|
-	 * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-	 * |07|Call dsGetAudioOptimalLevel() again after terminating audio ports |handle=[valid handle], optimalLevel=[pointer] | dsERR_NOT_INITIALIZED |call must fail as module is not initialized|
-	 * 
-	 * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
-	 */
-	void test_l1_dsAudio_negative_dsGetAudioOptimalLevel(void) {
-		// Start of the test
-		gTestID = 86;
-		UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-		dsError_t result;
-		intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-		float optimalLevel;
-
-		// Step 01: Attempt to get optimal dB without initializing audio ports
-		result = dsGetAudioOptimalLevel(-1, &optimalLevel);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-		// Step 02: Initialize audio ports
-		result = dsAudioPortInit();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 03: Attempt to get optimal dB with invalid handle
-		result = dsGetAudioOptimalLevel(handle[0], &optimalLevel);
-		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-
-		// Step 04: Get a valid handle 
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-			// Step 05 :Attempt to get optimal level with a NULL pointer
-			result = dsGetAudioOptimalLevel(handle[i], NULL);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-		}
-
-		// Step 06: Terminate audio ports
-		result = dsAudioPortTerm();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 07: Attempt to get optimal dB after terminating audio ports
-		result = dsGetAudioOptimalLevel(handle[0], &optimalLevel);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-		// End of the test
-		UT_LOG("\n Out %s\n", __FUNCTION__);
-	}
-
-
-	/**
-	 * @brief Ensure dsGetAudioDelay() retrieves the audio delay correctly during positive scenarios.
-	 * 
-	 * **Test Group ID:** Basic: 01@n
-	 * **Test Case ID:** 087@n
-	 * 
-	 * **Dependencies:** None@n
-	 * **User Interaction:** None
-	 * 
-	 * **Test Procedure:**@n
-	 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-	 * |:--:|-----------|----------|----------|--------------|-----|
-	 * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-	 * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-	 * |03|Call dsGetAudioDelay() by looping through the acquired port handles to get the audio audio delay (in ms) of each port in array | handle: [ loop through valid handles ] , audioDelayMs: [ pointer to hold the audio delay ] | dsERR_NONE | A valid audio delay value(0 to 200 ms) must be returned |
-	 * |04|Call dsGetAudioDelay() by looping through the acquired port handles to get the audio audio delay (in ms) of each port in new array | handle: [ loop through valid handles ] , audioDelayMs: [ pointer to hold the audio delay ] | dsERR_NONE | A valid audio delay value(0 to 200 ms) must be returned |
-	 * |05|Compare the values and make sure they are equal| | dsERR_NONE | The values must be equal |
-	 * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-	 * 
-	 */
-	void test_l1_dsAudio_positive_dsGetAudioDelay(void) {
-		// Start of the test
-		gTestID = 87;
-		UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-		dsError_t result;
-		intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-		uint32_t audioDelayArray1[NUM_OF_PORTS];
-		uint32_t audioDelayArray2[NUM_OF_PORTS];
-
-		// Step 01: Initialize audio ports
-		result = dsAudioPortInit();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 02 : Get port handles
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-			// Step 03 : Retrieve audio delay
-			result = dsGetAudioDelay(handle[i], &audioDelayArray1[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			UT_ASSERT_TRUE(audioDelayArray1[i] >= 0 && audioDelayArray1[i] <= 200);
-
-			// Step 04 : Retrieve audio delay and store it in a new array
-			result = dsGetAudioDelay(handle[i], &audioDelayArray2[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			UT_ASSERT_TRUE(audioDelayArray2[i] >= 0 && audioDelayArray2[i] <= 200);
-
-			// Step 05: Compare the values
-			DS_ASSERT_AUTO_TERM_NUMERICAL(audioDelayArray1[i], audioDelayArray2[i]);
-		}
-
-		// Step 06: Terminate audio ports
-		result = dsAudioPortTerm();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// End of the test
-		UT_LOG("\n Out %s\n", __FUNCTION__);
-	}
-
-
-	/**
-	 * @brief Ensure dsGetAudioDelay() returns correct error codes during negative scenarios.
-	 * 
-	 * **Test Group ID:** Basic: 01@n
-	 * **Test Case ID:** 088@n
-	 * 
-	 * **Dependencies:** None@n
-	 * **User Interaction:** None
-	 * 
-	 * **Test Procedure:**@n
-	 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-	 * |:--:|-----------|----------|----------|--------------|-----|
-	 * |01|Call dsGetAudioDelay() without initializing audio ports | handle=[invalid handle], audioDelayMs=[pointer] | dsERR_NOT_INITIALIZED |call must fail as module is not initialized |
-	 * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-	 * |03|Call dsGetAudioDelay() using an invalid handle and valid pointer |handle=[invalid hanlde], audioDelayMs=[pointer] | dsERR_INVALID_PARAM |Invalid parameter error must be returned|
-	 * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-	 * |05|Call dsGetAudioDelay() by looping through the acquired valid handle with a NULL gain pointer |handle=[valid handle], audioDelayMs=[NULL] | dsERR_INVALID_PARAM |Invalid parameter error must be returned|
-	 * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-	 * |07|Call dsGetAudioDelay() again after terminating audio ports |handle=[valid handle], audioDelayMs=[pointer] | dsERR_NOT_INITIALIZED |call must fail as module is not initialized|
-	 * 
-	 * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
-	 */
-	void test_l1_dsAudio_negative_dsGetAudioDelay(void) {
-		// Start of the test
-		gTestID = 88;
-		UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-		dsError_t result;
-		intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-		uint32_t audioDelay;
-
-		// Step 01: Attempt to get audio delay without initializing audio ports
-		result = dsGetAudioDelay(-1, &audioDelay);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-		// Step 02: Initialize audio ports
-		result = dsAudioPortInit();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 03: Attempt to get audio delay with invalid handle
-		result = dsGetAudioDelay(handle[0], &audioDelay);
-		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-
-		// Step 04: Get Valid port handles
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-			// Step 05: Attempt to get Audio delay with NULL param
-			result = dsGetAudioDelay(handle[i], NULL);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-		}
-
-		// Step 06: Terminate audio ports
-		result = dsAudioPortTerm();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 07: Attempt to get audio delay after terminating audio ports
-		result = dsGetAudioDelay(handle[0], &audioDelay);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-		// End of the test
-		UT_LOG("\n Out %s\n", __FUNCTION__);
-	}
-
-
-	/**
-	 * @brief Ensure dsSetAudioDelay() sets the audio delay correctly during positive scenarios.
-	 * 
-	 * **Test Group ID:** Basic: 01@n
-	 * **Test Case ID:** 089@n
-	 * 
-	 * **Dependencies:**@n
-	 * **User Interaction:** None
-	 * 
-	 * **Test Procedure:**@n
-	 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-	 * |:--:|-----------|----------|----------|--------------|-----|
-	 * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-	 * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-	 * |03|Call dsSetAudioDelay() by looping through the acquired port handle and valid audio delay value(.ie value in milliseconds) | handle=[valid handle], audioDelayMs=[valid value] | dsERR_NONE | call should set audio delay successfully |
-	 * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-	 * 
-	 */
-	void test_l1_dsAudio_positive_dsSetAudioDelay(void) {
-		// Start of the test
-		gTestID = 89;
-		UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-		dsError_t result;
-		intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-		uint32_t audio_delay_min = 0, audio_delay_mid = 100, audio_delay_max = 200;
-
-		// Step 01: Initialize audio ports
-		result = dsAudioPortInit();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 02 : Get port handles 
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-			// Step 03: Set audio delay
-			result = dsSetAudioDelay(handle[i], audio_delay_min);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-
-			result = dsSetAudioDelay(handle[i], audio_delay_mid);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-
-			result = dsSetAudioDelay(handle[i], audio_delay_max);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-		}
-
-		// Step 04: Terminate audio ports
-		result = dsAudioPortTerm();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// End of the test
-		UT_LOG("\n Out %s\n", __FUNCTION__);
-	}
-
-
-	/**
-	 * @brief Ensure dsSetAudioDelay() returns correct error codes during negative scenarios.
-	 * 
-	 * **Test Group ID:** Basic: 01@n
-	 * **Test Case ID:** 090@n
-	 * 
-	 * **Dependencies:** None@n
-	 * **User Interaction:** None
-	 * 
-	 * **Test Procedure:**@n
-	 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-	 * |:--:|-----------|----------|----------|--------------|-----|
-	 * |01|Call dsSetAudioDelay() without initializing audio ports | handle=[invalid handle], audioDelayMs=[valid value] | dsERR_NOT_INITIALIZED |call must fail as module not initialized |
-	 * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-	 * |03|Call dsSetAudioDelay() using an invalid handle with valid audio delay value(i.e milliseconds) | handle=[invalid handle], audioDelayMs=[valid value] |dsERR_INVALID_PARAM |Invalid parameter must return |
-	 * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-	 * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-	 * |06|Call dsSetAudioDelay() using a valid handle but with invalid audio delay values(i.e milliseconds) | handle=[valid handle], audioDelayMs=[invalid value] |dsERR_INVALID_PARAM |Invalid parameter must return |
-	 * |07|Call dsSetAudioDelay() again after terminating audio ports | handle=[valid handle], audioDelayMs=[valid value] | dsERR_NOT_INITIALIZED |call must fail as module not initialized |
-	 * 
-	 * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
-	 */
-	void test_l1_dsAudio_negative_dsSetAudioDelay(void) {
-		// Start of the test
-		gTestID = 90;
-		UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-		dsError_t result;
-		intptr_t handle[NUM_OF_PORTS];
-		uint32_t audio_delay = 100, invalid_audio_delay = 300;
-
-		// Step 01: Attempt to set audio delay without initializing audio ports
-		result = dsSetAudioDelay(-1, audio_delay);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-		// Step 02: Initialize audio ports
-		result = dsAudioPortInit();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 03: Attempt to set audio delay 
+		// Step 05: Attempt to set audio delay after terminating audio ports
 		result = dsSetAudioDelay(handle[0], audio_delay);
+		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+		// End of the test
+		UT_LOG("\n Out %s\n", __FUNCTION__);
+	}
+}
+
+/**
+ * @brief Ensure dsGetAudioDelayOffset() retrieves the audio delay offset correctly during positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 091@n
+ * 
+ * **Dependencies:**@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |03|Call dsGetAudioDelayOffset() by looping through the acquired port handles to get the audio audio delay offset(in milliseconds) of each port | handle: [valid handles] , audioDelayOffsetMs:[valid pointer ] | dsERR_NONE | A valid audio delay offset value must be returned |
+ * |04||03|Call dsGetAudioDelayOffset() by looping through the acquired port handles to get the audio audio delay offset(in milliseconds) of each port  and store it in a new array | handle: [valid handles] , audioDelayOffsetMs:[valid pointer ] | dsERR_NONE | A valid audio delay offset value must be returned |
+ * |05|Compare the values and make sure they are equal| | dsERR_NONE | The values must be equal |
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * 
+ */
+void test_l1_dsAudio_positive_dsGetAudioDelayOffset(void) {
+	// Start of the test
+	gTestID = 91;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	dsError_t result;
+	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	uint32_t audioDelayOffsetMs1[NUM_OF_PORTS];
+	uint32_t audioDelayOffsetMs2[NUM_OF_PORTS];
+
+	// Step 01: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 02 : Get port handles 
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		// Step 03: Retrieve audio delay offset    
+		result = dsGetAudioDelayOffset(handle[i], &audioDelayOffsetMs1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+
+		// Step 04: Retrieve audio delay offset    
+		result = dsGetAudioDelayOffset(handle[i], &audioDelayOffsetMs2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+
+		// Step 05: Compare the values
+		DS_ASSERT_AUTO_TERM_NUMERICAL(audioDelayOffsetMs1[i], audioDelayOffsetMs2[i]);
+	}
+
+	// Step 06: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsGetAudioDelayOffset() returns correct error codes during negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 092@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsGetAudioDelayOffset() without initializing audio ports | handle=[invalid handle], audioDelayOffsetMs=[valid pointer] | dsERR_NOT_INITIALIZED |call must fail as module not initialized |
+ * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |03|Call dsGetAudioDelayOffset() using an invalid handle with valid delay offset value | handle=[invalid handle], audioDelayOffsetMs=[valid pointer] |dsERR_INVALID_PARAM |Invalid parameter must return |
+ * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|Call dsGetAudioDelayOffset() by looping through the acquired valid handle with a NULL delay offset pointer |handle=[valid handle], audioDelayOffsetMs=[NULL] | dsERR_INVALID_PARAM |Invalid parameter error must be returned|
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |07|Call dsGetAudioDelayOffset() again after terminating audio ports |handle=[valid handle], audioDelayOffsetMs=[pointer] | dsERR_NOT_INITIALIZED |call must fail as module is not initialized|
+ * 
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
+ */
+void test_l1_dsAudio_negative_dsGetAudioDelayOffset(void) {
+	// Start of the test
+	gTestID = 92;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	dsError_t result;
+	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	uint32_t audioDelayOffsetMs;
+
+	// Step 01: Attempt to retrieve audio delay offset without initializing audio ports
+	result = dsGetAudioDelayOffset(-1, &audioDelayOffsetMs);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// Step 02: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 03: Attempt to retrieve audio delay offset with invalid handle
+	result = dsGetAudioDelayOffset(handle[0], &audioDelayOffsetMs);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+
+	// Step 04 : Get the port handles
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		// Step 05: Attempt to retrieve audio delay offset using NULL pointer
+		result = dsGetAudioDelayOffset(handle[i], NULL);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NOT_INITIALIZED);
+	}
+
+	// Step 06: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 07: Attempt to retrieve audio delay offset after terminating audio ports
+	result = dsGetAudioDelayOffset(handle[0], &audioDelayOffsetMs);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsSetAudioDelayOffset() sets the audio delay offset correctly during positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 093@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |03|Call dsSetAudioDelayOffset() by looping through acquired port handles and valid audio delay offset value(i.e milliseconds) | handle=[valid handle], audioDelayOffsetMs=[valid value] | dsERR_NONE | audio delay offset should be successfully set |
+ * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * 
+ */
+void test_l1_dsAudio_positive_dsSetAudioDelayOffset(void) {
+	// Start of the test
+	gTestID = 93;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	dsError_t result;
+	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	uint32_t audioDelayOffsetMs = 200;
+
+	// Step 01: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 02 : Get port handles 
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		// Step 03 : set audio delay offset
+		result = dsSetAudioDelayOffset(handle[i], audioDelayOffsetMs);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+	}
+
+	// Step 04: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsSetAudioDelayOffset() returns correct error codes during negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 094@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsSetAudioDelayOffset() without initializing audio ports | handle=[invalid handle], audioDelayOffsetMs=[valid value] | dsERR_NOT_INITIALIZED |call must fail as module not initialized |
+ * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |03|Call dsSetAudioDelayOffset() using an invalid handle with valid audio delay offset value(i.e milliseconds) | handle=[invalid handle], audioDelayOffsetMs=[valid value] |dsERR_INVALID_PARAM |Invalid parameter must return |
+ * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|Call dsSetAudioDelayOffset() using an valid handle with invalid audio delay offset value(i.e milliseconds) | handle=[valid handle], audioDelayOffsetMs=[invalid value] |dsERR_INVALID_PARAM |Invalid parameter must return |
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |07|Call dsSetAudioDelayOffset() again after terminating audio ports | handle=[valid handle], audioDelayOffsetMs=[valid value] | dsERR_NOT_INITIALIZED |call must fail as module not initialized |
+ * 
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
+ */
+void test_l1_dsAudio_negative_dsSetAudioDelayOffset(void) {
+	// Start of the test
+	gTestID = 94;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	dsError_t result;
+	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	uint32_t audio_delay_offset = 200 , invalid_audio_delay_offset= 300; 
+
+	// Step 01: Attempt to set audio delay offset without initializing audio ports
+	result = dsSetAudioDelayOffset(-1, audio_delay_offset);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// Step 02: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 03: Attempt to set audio delay offset with invalid handle
+	result = dsSetAudioDelayOffset(handle[0], audio_delay_offset);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+
+	// Step 04: Get the port handles
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		// Step 05 : Set audio delay offset with invalid audio delay offset values
+		result = dsSetAudioDelayOffset(handle[i], invalid_audio_delay_offset);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+	}
+
+	// Step 06: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 07: Attempt to set audio delay offset after terminating audio ports
+	result = dsSetAudioDelayOffset(handle[0], audio_delay_offset);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsSetAudioAtmosOutputMode() sets the Audio ATMOS output mode correctly during positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 95@n
+ * 
+ * **Dependencies:** Audio device should be connected and working properly.@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |03|Call dsSetAudioAtmosOutputMode() - by looping through the acquired port handles to enable Audio ATMOS output mode | handle = [valid handle], enable = [TRUE] | dsERR_NONE | Atmos mode must be enabled for all supported audio ports |
+ * |04|Call dsSetAudioAtmosOutputMode() - by looping through the acquired port handles to disable Audio ATMOS output mode | handle = [valid handle], enable = [FALSE] | dsERR_NONE | Atmos mode must be enabled for all supported audio ports |
+ * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * 
+ */
+void test_l1_dsAudio_positive_dsSetAudioAtmosOutputMode(void) {
+	// Start of the test
+	gTestID = 95; // Assuming Test Case ID is 238
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	int result;
+	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	bool enable = true , disable = false;
+
+	// Step 01: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 02, 03 and 04: Get port handles and set ATMOS Output mode
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		// Enable ATMOS Output mode
+		result = dsSetAudioAtmosOutputMode(handle[i], enable);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+
+		// Disable ATMOS Output mode
+		result = dsSetAudioAtmosOutputMode(handle[i], disable);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+	}
+
+	// Step 05: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsSetAudioAtmosOutputMode() returns correct error codes during negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 96@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsSetAudioAtmosOutputMode() - Attempt to set the audio ATMOS output mode without initializing audio ports | handle = [invalid handle], enable = [TRUE] | dsERR_NOT_INITIALIZED | Set ATMOS Output mode must fail as module is not initialized |
+ * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |03|Call dsSetAudioAtmosOutputMode() using an invalid handle with valid value| handle = [invalid handle], enable = [TRUE] | dsERR_INVALID_PARAM | Invalid parameter error must be returned  |
+ * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |06|Call dsSetAudioAtmosOutputMode() - Again attempt to set the audio ATMOS output mode without initializing audio ports | handle = [valid handle], enable = [TRUE] | dsERR_NOT_INITIALIZED | Set ATMOS Output mode must fail as module is not initialized |
+ * 
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED, dsERR_GENERAL and  might be challenging as they require specific platform conditions.
+ */
+void test_l1_dsAudio_negative_dsSetAudioAtmosOutputMode(void) {
+	// Start of the test
+	gTestID = 96;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	int result;
+	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	bool valid_value = true;
+
+	// Step 01: Attempt to set ATMOS Output mode without initializing audio ports
+	result = dsSetAudioAtmosOutputMode(-1, valid_value);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// Step 02: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 03: Attempt to set ATMOS Output mode with invalid handle
+	result = dsSetAudioAtmosOutputMode(handle[0], valid_value);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+
+	//Step 04 : Get audio port handles
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+	}
+
+	// Step 05: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 06: Attempt to set ATMOS Output mode after terminating audio ports
+	result = dsSetAudioAtmosOutputMode(handle[0], valid_value);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsGetSinkDeviceAtmosCapability() retrieves the ATMOS capability correctly during positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 97@n
+ * 
+ * **Dependencies:**@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |03|Call dsGetSinkDeviceAtmosCapability() by looping through the acquired port handles to get the  ATMOS capability of sink device connected to each port in array | handle: [ valid handles ] , capability: [vaild pointer to hold the ATMOS capability] | dsERR_NONE | A valid ATMOS capability of sink device must be returned |
+ * |04|Call dsGetSinkDeviceAtmosCapability() by looping through the acquired port handles to get the  ATMOS capability of sink device connected to each port in new array | handle: [valid handles ] , capability: [pointer to hold the ATMOS capability] | dsERR_NONE | A valid ATMOS capability of sink device must be returned |
+ * |05|Compare the array values and make sure they are equal| | dsERR_NONE | The values must be equal |
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * 
+ */
+void test_l1_dsAudio_positive_dsGetSinkDeviceAtmosCapability(void) {
+	// Start of the test
+	gTestID = 97; // Assuming Test Case ID is 240
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	int result;
+	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	dsATMOSCapability_t atmosCapability[NUM_OF_PORTS];
+	dsATMOSCapability_t atmosCapability1[NUM_OF_PORTS];
+
+	// Step 01: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 02 Get audio port handles
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		//Step 03 : Get ATMOS capability of ports in array
+		result = dsGetSinkDeviceAtmosCapability(handle[i], &atmosCapability[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+
+		//Step 04 : Get ATMOS capability of ports in new array
+		result = dsGetSinkDeviceAtmosCapability(handle[i], &atmosCapability1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+
+		//Step 05 : compare the atomos capability of arrays
+		DS_ASSERT_AUTO_TERM_NUMERICAL(atmosCapability[i], atmosCapability1[i]);
+	}
+
+	// Step 06: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsGetSinkDeviceAtmosCapability() returns correct error codes during negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 98@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsGetSinkDeviceAtmosCapability() - Attempt to get the ATMOS capability of sink device without initializing audio ports | handle = [ invalid handle], capability = [valid pointer to hold the ATMOS capability] | dsERR_NOT_INITIALIZED | Get Atmos capability of sink device must fail as module is not initialized |
+ * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |03|Call dsGetSinkDeviceAtmosCapability() using an invalid handle | handle = [invalid handle], capability = [valid pointer to hold ATMOS capability] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|Call dsGetSinkDeviceAtmosCapability() - by looping through acquired port handles with NULL pointer for ATMOS capability | handle = [loop through valid handles], capability = [NULL] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |06|Call dsGetSinkDeviceAtmosCapability() - Again attempt to get the ATMOS capability of sink device after terminating audio ports | handle = [valid handle], capability = [valid pointer to hold the ATMOS capability] | dsERR_NOT_INITIALIZED | Get Atmos capability of sink device must fail as module is not initialized |
+ * 
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
+ */
+void test_l1_dsAudio_negative_dsGetSinkDeviceAtmosCapability(void) {
+	// Start of the test
+	gTestID = 98;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	int result;
+	intptr_t handle [NUM_OF_PORTS] = {NUM_OF_PORTS};
+	dsATMOSCapability_t atmosCapability;
+
+	// Step 01: Attempt to get ATMOS capability without initializing audio ports
+	result = dsGetSinkDeviceAtmosCapability(-1, &atmosCapability);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// Step 02: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 03: Attempt to get ATMOS capability with invalid handle
+	result = dsGetSinkDeviceAtmosCapability(handle[0], &atmosCapability);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+
+	// Step 04: Get audio ports handles
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+	}    
+
+	// Step 05: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 06: Attempt to get ATMOS capability after terminating audio ports
+	result = dsGetSinkDeviceAtmosCapability(handle[0], &atmosCapability);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsIsAudioLoopThru() retrieves the loop-through status correctly during positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 99@n
+ * 
+ * **Dependencies:** Audio device should be connected and working properly.@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ], handle = [valid handle]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |03|Call dsIsAudioLoopThru() by looping through the acquired port handles to check if the audio port is configured for loop-through or not & store it in an array | handle: [ loop through valid handles ] , loopThru: [pointer to hold the status of loop-through feature] | dsERR_NONE | Status of loop-through feature for the specified audio port must be returned |
+ * |04|Call dsIsAudioLoopThru() Again by looping through the acquired port handles to check if the audio port is configured for loop-through or not & store it in a new array | handle: [ loop through valid handles ] , loopThru: [pointer to hold the status of loop-through feature] | dsERR_NONE | Status of loop-through feature for the specified audio port must be returned |
+ * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ *
+ */
+void test_l1_dsAudio_positive_dsIsAudioLoopThru(void) {
+	// Start of the test
+	gTestID = 99; // Assuming Test Case ID is 99
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	int result;
+	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	bool loopThruArray1[NUM_OF_PORTS], loopThruArray2[NUM_OF_PORTS];
+
+	// Step 01: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 02 and 03: Get port handles and check Loop-Thru status
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		// Check Loop-Thru status
+		result = dsIsAudioLoopThru(handle[i], &loopThruArray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+	}
+
+	// Step 04: Check Loop-Thru status again
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsIsAudioLoopThru(handle[i], &loopThruArray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		// Step 05: Compare the values
+		DS_ASSERT_AUTO_TERM_NUMERICAL(loopThruArray1[i], loopThruArray2[i]);
+	}
+
+	// Step 06: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsIsAudioLoopThru() returns correct error codes during negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 100@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsIsAudioLoopThru() - Attempt to check if audio port is configured for loop through without initializing audio ports | handle = [invalid handle], loopThru: [pointer to hold the status of loop-through feature] | dsERR_NOT_INITIALIZED | Call to check if Loop through is enabled must fail as module is not initialized |
+ * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |03|Call dsIsAudioLoopThru() using an invalid handle | handle = [invalid handle], loopThru: [pointer to hold the status of loop-through feature] | dsERR_INVALID_PARAM | Invalid Parameter error must be returned |
+ * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|Call dsIsAudioLoopThru() - by looping through the acquired port handles but with a NULL pointer for loopThru param | handle = [Loop through valid handles], loopThru: [NULL] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |07|Call dsIsAudioLoopThru() - Attempt to check if audio port is configured for loop through again after terminating audio ports | handle = [valid handle], loopThru: [pointer to hold the status of loop-through feature] | dsERR_NOT_INITIALIZED | Call to check if Loop through is enabled must fail as module is not initialized |
+ * 
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
+ */
+void test_l1_dsAudio_negative_dsIsAudioLoopThru(void) {
+	// Start of the test
+	gTestID = 100; // Assuming Test Case ID is 100
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	int result;
+	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	bool loopThru;
+
+	// Step 01: Attempt to check Loop-Thru status without initializing audio ports
+	result = dsIsAudioLoopThru(-1, &loopThru);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// Step 02: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 03: Attempt to check Loop-Thru status with invalid handle
+	result = dsIsAudioLoopThru(handle[0], &loopThru);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+
+	// Step 04: Loop through kPorts to get audio port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+	}
+
+	// Step 05: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 07: Attempt to check Loop-Thru status after terminating audio ports
+	result = dsIsAudioLoopThru(handle[0], &loopThru);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsIsAudioMute() retrieves the mute status correctly during positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 101@n
+ * 
+ * **Dependencies:** Audio device should be connected and working properly.@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |03|Call dsIsAudioMute() by looping through the acquired port handles to check if the audio is muted or not on each port & store the values in an array | handle: [ loop through valid handles ] , muted: [pointer to hold the mute status](TRUE/FALSE) | dsERR_NONE | Mute status of the specified audio port must be returned |
+ * |04|Call dsIsAudioMute() - Again by looping through the acquired port handles to check if the audio is muted or not on each port & store the values in a new array | handle: [ loop through valid handles ] , muted: [pointer to hold the mute status] | dsERR_NONE | Mute status of the specified audio port must be returned |
+ * |05|Compare the array values and make sure they are equal| | dsERR_NONE | The values must be equal |
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * 
+ */
+void test_l1_dsAudio_positive_dsIsAudioMute(void) {
+	// Start of the test
+	gTestID = 101; // Assuming Test Case ID is 101
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	int result;
+	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	bool muteStatusArray1[NUM_OF_PORTS], muteStatusArray2[NUM_OF_PORTS];
+
+	// Step 01: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 02:Get port handles and check Mute status
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		// Step 03:Get  Mute status in array
+		result = dsIsAudioMute(handle[i], &muteStatusArray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+
+		// Step 04:Get  Mute status in array
+		result = dsIsAudioMute(handle[i], &muteStatusArray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+
+		// Step 05:Compare Mute status in arrays
+		DS_ASSERT_AUTO_TERM_NUMERICAL(muteStatusArray1[i], muteStatusArray1[i]);
+	}
+
+	// Step 06: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsIsAudioMute() returns correct error codes during negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 102@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsIsAudioMute() - Attempt to get the mute status of Audio ports without initializing audio ports | handle = [invalid handle], muted = [valid pointer to hold the mute status](TRUE/FALSE) | dsERR_NOT_INITIALIZED | Call to check if audio port is muted or not must fail as module is not initialized |
+ * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |03|Call dsIsAudioMute() using an invalid handle but with a valid pointer to mute status | handle = [invalid handle], muted = [pointer to hold the mute status] | dsERR_INVALID_PARAM | Invalid Parameter error must be returned |
+ * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|Call dsIsAudioMute() by looping through the acquired port handles with a NULL pointer for mute status | handle = [valid handle], muted = [NULL pointer] | dsERR_INVALID_PARAM | Invalid Parameter error must be returned | 
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful | 
+ * |07|Call dsIsAudioMute() again after terminating audio ports | handle = [valid handle from previous step], muted = [pointer to hold the mute status] | dsERR_NOT_INITIALIZED | Call to check if audio port is muted or not must fail as module is not initialized |
+ * 
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
+ */
+void test_l1_dsAudio_negative_dsIsAudioMute(void) {
+	// Start of the test
+	gTestID = 102; // Assuming Test Case ID is 102
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	int result;
+	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	bool muted;
+
+	// Step 01: Attempt to check Mute status without initializing audio ports
+	result = dsIsAudioMute(-1, &muted);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// Step 02: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 03: Attempt to check Mute status with invalid handle
+	result = dsIsAudioMute(handle[0], &muted);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+
+	// Step 02: Loop through kPorts to get audio port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+	}
+
+	// Step 05: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 07: Attempt to check Mute status after terminating audio ports
+	result = dsIsAudioMute(handle[0], &muted);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsIsAudioPortEnabled() retrieves the enable status correctly during positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 103@n
+ * 
+ * **Dependencies:** Audio device should be connected and working properly.@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ], handle = [valid handle]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |03|Call dsIsAudioPortEnabled() by looping through the acquired port handles to check if the corresponding audio port is enabled or not & store the values in an array | handle: [ loop through valid handles ] , enabled: [ pointer to hold the audio port enabled / disabled state(TRUE/FALSE)] | dsERR_NONE | Audio port enabled(TRUE)/disabled(FALSE) state must be returned |
+ * |04|Call dsIsAudioPortEnabled() - Again by looping through the acquired port handles to check if the corresponding audio port is enabled or not & store the values in a new array | handle: [ loop through valid handles ] , enabled: [ pointer to hold the audio port enabled / disabled state(TRUE/FALSE)] | dsERR_NONE | Audio port enabled(TRUE)/disabled(FALSE) state must be returned |
+ * |05|Compare the array values and make sure they are equal| | dsERR_NONE | The values must be equal |
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * 
+ */
+void test_l1_dsAudio_positive_dsIsAudioPortEnabled(void) {
+	// Start of the test
+	gTestID = 103; // Assuming Test Case ID is 103
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	int result;
+	intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	bool enabledStatusArray1[NUM_OF_PORTS], enabledStatusArray2[NUM_OF_PORTS];
+
+	// Step 01: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 02 and 03: Get port handles and check Enabled status
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		// Step 03: Get Enabled status in array
+		result = dsIsAudioPortEnabled(handle[i], &enabledStatusArray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+	}
+
+	// Step 04: Check Enabled status again
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsIsAudioPortEnabled(handle[i], &enabledStatusArray2[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		// Step 05: Compare the values
+		DS_ASSERT_AUTO_TERM_NUMERICAL(enabledStatusArray1[i], enabledStatusArray2[i]);
+	}
+
+	// Step 06: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsIsAudioPortEnabled() returns correct error codes during negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 104@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsIsAudioPortEnabled() - Attempt to check if Audio port is enabled or not without initializing audio ports | handle = [invalid handle], enabled: [ valid pointer to hold the audio port enabled / disabled state] | dsERR_NOT_INITIALIZED | Call to check if Audio Port is enabled or not must fail as module is not initialized |
+ * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |03|Call dsIsAudioPortEnabled() using an invalid handle but with a valid pointer to hold the enabled status | handle = [invalid handle],  enabled: [ valid pointer to hold the audio port enabled / disabled state] | dsERR_INVALID_PARAM | Invalid Parameter error must be returned |
+ * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ], handle = [valid handle]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|Call dsIsAudioPortEnabled() using an valid handle but with a NULL pointer to hold the enabled status | handle = [valid handle],  enabled: [ NULL pointer] | dsERR_INVALID_PARAM | Invalid Parameter error must be returned |
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |07|Call dsIsAudioPortEnabled() - Attempt to check if Audio port is enabled or not again after terminating audio ports | handle = [invalid handle], enabled: [ valid pointer to hold the audio port enabled / disabled state] | dsERR_NOT_INITIALIZED | Call to check if Audio Port is enabled or not must fail as module is not initialized |
+ * 
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
+ */
+void test_l1_dsAudio_negative_dsIsAudioPortEnabled(void) {
+	// Start of the test
+	gTestID = 104; // Assuming Test Case ID is 104
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	int result;
+	intptr_t handle[NUM_OF_PORTS] =  {INT_ARRAY_INIT};
+	bool isEnabled;
+
+	// Step 01: Attempt to check Enabled status without initializing audio ports
+	result = dsIsAudioPortEnabled(-1, &isEnabled);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// Step 02: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 03: Attempt to check Enabled status with invalid handle
+	result = dsIsAudioPortEnabled(handle[0], &isEnabled);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+
+	// Step 04: Loop through kPorts to get audio port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+	}
+
+	// Step 05: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 07: Attempt to check Enabled status after terminating audio ports
+	result = dsIsAudioPortEnabled(handle[0], &isEnabled);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsEnableAudioPort() sets the audio port state correctly during positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 105@n
+ * 
+ * **Dependencies:** Audio device should be connected and working properly.@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |03|Call dsEnableAudioPort() by looping through the acquired port handles to enable audio port | handle: [ loop through valid handles ] , enable: [TRUE] | dsERR_NONE | Supported audio ports must be enabled |
+ * |04|Call dsEnableAudioPort() by looping through the acquired port handles to disable audio port | handle: [ loop through valid handles ] , enable: [FALSE] | dsERR_NONE | Supported audio ports must be disabled |
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * 
+ */
+void test_l1_dsAudio_positive_dsEnableAudioPort(void) {
+	// Start of the test
+	gTestID = 105; // Assuming Test Case ID is 105
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	int result;
+	intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	bool enabledStatus;
+
+	// Step 01: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 02, 03, and 04: Get port handles, enable them, and verify
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		result = dsEnableAudioPort(handle[i], true);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+
+		// Verify enable status
+		result = dsIsAudioPortEnabled(handle[i], &enabledStatus);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		UT_ASSERT_TRUE(enabledStatus);
+	}
+
+	// Step 05 and 06: Disable audio ports and verify
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsEnableAudioPort(handle[i], false);
+		UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+		// Verify disable status
+		result = dsIsAudioPortEnabled(handle[i], &enabledStatus);
+		UT_ASSERT_EQUAL(result, dsERR_NONE);
+		UT_ASSERT_FALSE(enabledStatus);
+	}
+
+	// Step 07: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsEnableAudioPort() returns correct error codes during negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 106@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsEnableAudioPort() - Attempt to enable/disable audio ports without initializing audio ports | handle = [invalid handle] , enabled = [TRUE] | dsERR_NOT_INITIALIZED | Call to Enable / Disable the Audio Ports must fail as module is not initialized |
+ * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |03|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |04|Call dsEnableAudioPort() using an invalid handle but with a valid enable | handle = [invalid handle], enabled = [TRUE] | dsERR_INVALID_PARAM | Invalid Parameter error must be returned |
+ * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |06|Call dsEnableAudioPort() - Attempt to enable/disable audio ports again after terminating audio ports | handle = [invalid handle] , enabled = [TRUE] | dsERR_NOT_INITIALIZED | Call to Enable / Disable the Audio Ports must fail as module is not initialized |
+ * 
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
+ */
+void test_l1_dsAudio_negative_dsEnableAudioPort(void) {
+	// Start of the test
+	gTestID = 106; // Assuming Test Case ID is 106
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	int result;
+	intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+
+	// Step 01: Attempt to enable/disable audio ports without initializing
+	result = dsEnableAudioPort(-1, true);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// Step 02: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 03: Attempt to enable/disable with invalid handle
+	result = dsEnableAudioPort(handle[0], true);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+
+	// Step 04: Loop through kPorts to get audio port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+	}
+
+	// Step 05: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 06: Attempt to enable/disable after terminating
+	result = dsEnableAudioPort(handle[0], true);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsEnableMS12Config() sets the MS12 features correctly during positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 107@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ], handle = [valid handle]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |03|Call dsEnableMS12Config() by looping through the acquired port handles and enable MS12 configs(from dsMS12FEATURE_t) for each port| handle = [loop through valid handles], feature = [ loop through dsMS12FEATURE_t] , enable = [TRUE] | dsERR_NONE | All MS12 Features must be enabled for all supported audio ports |
+ * |04|Call dsEnableMS12Config() by looping through the acquired port handles and disable MS12 configs(from dsMS12FEATURE_t) for each port| handle = [loop through valid handles], feature = [ loop through dsMS12FEATURE_t] , enable = [FALSE] | dsERR_NONE | All MS12 Features must be disabled for all supported audio ports |
+ * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * 
+ */
+void test_l1_dsAudio_positive_dsEnableMS12Config(void) {
+	// Start of the test
+	gTestID = 107; // Assuming Test Case ID is 107
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	int result;
+	intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+
+	// Step 01: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Steps 02 to 04: Enable and disable MS12 Config for each port
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		// Loop through all MS12 features
+		for (dsMS12FEATURE_t feature = dsMS12FEATURE_DAPV2; feature <= dsMS12FEATURE_MAX ; feature++) {
+			// Enable MS12 Config
+			result = dsEnableMS12Config(handle[i], feature, true);
+			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+
+			// Disable MS12 Config
+			result = dsEnableMS12Config(handle[i], feature, false);
+			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		}
+	}
+
+	// Step 05: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsEnableMS12Config() returns correct error codes during negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 108@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsEnableMS12Config() - Attempt to enable MS12 Configs without initializing audio ports | handle = [invalid handle], feature = [loop through dsMS12FEATURE_t], enable = [TRUE] | dsERR_NOT_INITIALIZED | Enable MS12 Configs must fail as module is not initialized |
+ * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |03|Call dsEnableMS12Config() using an invalid handle | handle = [invalid handle], feature = [loop through dsMS12FEATURE_t], enable = [TRUE] | dsERR_INVALID_PARAM | Invalid Parameter error must be returned |
+ * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ], handle = [valid handle]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|Call dsEnableMS12Config() using an unsupported MS12 feature  | handle = [valid value], feature = [invalid MS12 feature(which are not in dsMS12FEATURE_t)], enable = [TRUE] | dsERR_OPERATION_NOT_SUPPORTED | Operation not supported error must be returned |
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |07|Call dsEnableMS12Config() - Attempt to enable MS12 Configs again after terminating audio ports | handle = [valid handle from previous step], feature = [loop through dsMS12FEATURE_t], enable = [TRUE] | dsERR_NOT_INITIALIZED | Enable MS12 Configs must fail as module is not initialized |
+ * 
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
+ */
+void test_l1_dsAudio_negative_dsEnableMS12Config(void) {
+	// Start of the test
+	gTestID = 108; // Assuming Test Case ID is 108
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	int result;
+	intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+
+	// Step 01: Attempt to enable MS12 Configs without initializing
+	result = dsEnableMS12Config(-1, dsMS12FEATURE_DAPV2 , true);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// Step 02: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 03: Attempt to enable with invalid handle
+	result = dsEnableMS12Config(handle[0], dsMS12FEATURE_DAPV2, true);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+
+	// Step 04: Loop through kPorts to get audio port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		// Step 05: Attempt to enable an unsupported MS12 feature
+		result = dsEnableMS12Config(handle[i], dsMS12FEATURE_MAX , true); // Assuming UNSUPPORTED_MS12_FEATURE is defined
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+	}
+
+	// Step 06: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 07: Attempt to enable MS12 Configs after terminating
+	result = dsEnableMS12Config(handle[0], dsMS12FEATURE_DAPV2, true);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsEnableLEConfig() sets the Loudness Equivalence (LE) feature correctly during positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 109@n
+ * 
+ * **Dependencies:** Audio device should be connected and working properly.@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |03|Call dsEnableLEConfig() by looping through the acquired port handles to enable the LE feature | handle = [loop through valid handles], enable = [TRUE] | dsERR_NONE | Loudness Equivalence must be enabled for all supported audio ports |
+ * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * 
+ */
+void test_l1_dsAudio_positive_dsEnableLEConfig(void) {
+	// Start of the test
+	gTestID = 109; // Assuming Test Case ID is 109
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	int result;
+	intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	bool enabled;
+
+	// Step 01: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Steps 02 to 03: Enable, verify, disable, and verify LE Config for each port
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		// Enable LE Config
+		result = dsEnableLEConfig(handle[i], true);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+
+	}
+
+	// Step 04: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsEnableLEConfig() returns correct error codes during negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 110@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsEnableLEConfig() - Attempt to enable LE without initializing audio ports | handle = [invalid handle],  enable = [TRUE] | dsERR_NOT_INITIALIZED | Call to dsEnableLEConfig() must fail as module is not initialized |
+ * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |03|Call dsEnableLEConfig() using an invalid handle but with a valid enable parameter | handle = [invalid handle], enable = [TRUE] | dsERR_INVALID_PARAM | Invalid Parameter error must be returned |
+ * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE | Termination must be successful |
+ * |06|Call dsEnableLEConfig() - Attempt to enable LE again after terminating audio ports | handle = [valid handle from previous step], enable = [FALSE] | dsERR_NOT_INITIALIZED | Call to dsEnableLEConfig() must fail as module is not initialized |
+ * 
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
+ */
+void test_l1_dsAudio_negative_dsEnableLEConfig(void) {
+	// Start of the test
+	gTestID = 110; // Assuming Test Case ID is 110
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	int result;
+	intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+
+	// Step 01: Attempt to enable LE without initializing
+	result = dsEnableLEConfig(-1, true);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// Step 02: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 03: Attempt to enable with invalid handle
+	result = dsEnableLEConfig(handle[0], true);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+
+	// Step 04: Loop through kPorts to get audio port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+	}
+
+	// Step 05: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 06: Attempt to enable LE after terminating
+	result = dsEnableLEConfig(handle[0], false);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsGetLEConfig() retrieves the Loudness Equivalence (LE) feature status correctly during positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 111@n
+ * 
+ * **Dependencies:** Audio device should be connected and LE features are supported.@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |03|Call dsGetLEConfig() by looping through the acquired port handles to get the Loudness Equivalence feature of each port in array| handle: [ loop through valid handles ] , enable: [ pointer to hold the status of LE feature(enabled/disabled) ] | dsERR_NONE | Loudness Equivalence enabled/disabled status must be returned |
+ * |04|Call dsGetLEConfig() by looping through the acquired port handles to get the Loudness Equivalence feature of each port in new array | handle: [ valid handles ] , enable: [ pointer to hold the status of LE feature(enabled/disabled) ] | dsERR_NONE | Loudness Equivalence enabled/disabled status must be returned |
+ * |05|Compare the array values and make sure they are equal| | dsERR_NONE | The values must be equal |
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * 
+ */
+void test_l1_dsAudio_positive_dsGetLEConfig(void) {
+	// Start of the test
+	gTestID = 111; // Assuming Test Case ID is 111
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	int result;
+	intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	bool leconfigarray[NUM_OF_PORTS];
+	bool leconfigarray1[NUM_OF_PORTS];
+
+	// Step 01: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Steps 02: Get audio port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		// Step 03: Retrieve LE Config
+		result = dsGetLEConfig(handle[i], &leconfigarray[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+
+		// Step 04: Retrieve LE Config
+		result = dsGetLEConfig(handle[i], &leconfigarray1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+
+		// Step 05: compare leconfigarray array values
+		DS_ASSERT_AUTO_TERM_NUMERICAL(leconfigarray[i], leconfigarray1[i]);
+	}
+
+	// Step 06: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsGetLEConfig() returns correct error codes during negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 112@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsGetLEConfig() - Attempt to get the LE Config of audio ports without initializing audio ports | handle = [invalid handle], enable: [ pointer to hold the status of LE feature]  | dsERR_NOT_INITIALIZED | Get LE Config must fail as module is not initialized |
+ * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |03|Call dsGetLEConfig() using an invalid handle | handle = [invalid handle], enable: [ pointer to hold the status of LE feature] | dsERR_INVALID_PARAM | Invalid Parameter error must be returned |
+ * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|Call dsGetLEConfig() by looping through acquired port handles but with NULL pointer for enabled param | handle = [invalid handle], enable = [NULL] | dsERR_INVALID_PARAM | Invalid Parameter error must be returned |
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |07|Call dsGetLEConfig() - Attempt to get the LE Config of audio ports again after terminating audio ports | handle = [valid handle from previous step], enable = [ pointer to hold the status of LE feature]  | dsERR_NOT_INITIALIZED | Get LE Config must fail as module is not initialized |
+ * 
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
+ */
+void test_l1_dsAudio_negative_dsGetLEConfig(void) {
+	// Start of the test
+	gTestID = 112; // Assuming Test Case ID is 112
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	int result;
+	intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	bool enable;
+
+	// Step 01: Attempt to get LE Config without initializing
+	result = dsGetLEConfig(-1, &enable);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// Step 02: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 03: Attempt to get LE Config with invalid handle
+	result = dsGetLEConfig(handle[0], &enable);
+	DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+
+	// Step 04: Loop through kPorts to get audio port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+		//Setp 05:Attempt to get LE Config with NULL pointer
+		result = dsGetLEConfig(handle[i], NULL);
 		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-
-		// Step 04 : Get port handles 
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-			// Step 05: Attempt to set invalid audio delay 
-			result = dsSetAudioDelay(handle[i], invalid_audio_delay);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-
-			// Step 04: Terminate audio ports
-			result = dsAudioPortTerm();
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-			// Step 05: Attempt to set audio delay after terminating audio ports
-			result = dsSetAudioDelay(handle[0], audio_delay);
-			UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-			// End of the test
-			UT_LOG("\n Out %s\n", __FUNCTION__);
-		}
-
-
-		/**
-		 * @brief Ensure dsGetAudioDelayOffset() retrieves the audio delay offset correctly during positive scenarios.
-		 * 
-		 * **Test Group ID:** Basic: 01@n
-		 * **Test Case ID:** 091@n
-		 * 
-		 * **Dependencies:**@n
-		 * **User Interaction:** None
-		 * 
-		 * **Test Procedure:**@n
-		 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-		 * |:--:|-----------|----------|----------|--------------|-----|
-		 * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-		 * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-		 * |03|Call dsGetAudioDelayOffset() by looping through the acquired port handles to get the audio audio delay offset(in milliseconds) of each port | handle: [valid handles] , audioDelayOffsetMs:[valid pointer ] | dsERR_NONE | A valid audio delay offset value must be returned |
-		 * |04||03|Call dsGetAudioDelayOffset() by looping through the acquired port handles to get the audio audio delay offset(in milliseconds) of each port  and store it in a new array | handle: [valid handles] , audioDelayOffsetMs:[valid pointer ] | dsERR_NONE | A valid audio delay offset value must be returned |
-		 * |05|Compare the values and make sure they are equal| | dsERR_NONE | The values must be equal |
-		 * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-		 * 
-		 */
-		void test_l1_dsAudio_positive_dsGetAudioDelayOffset(void) {
-			// Start of the test
-			gTestID = 91;
-			UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-			dsError_t result;
-			intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-			uint32_t audioDelayOffsetMs1[NUM_OF_PORTS];
-			uint32_t audioDelayOffsetMs2[NUM_OF_PORTS];
-
-			// Step 01: Initialize audio ports
-			result = dsAudioPortInit();
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-			// Step 02 : Get port handles 
-			for (int i = 0; i < NUM_OF_PORTS; i++) {
-				result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-				DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-				// Step 03: Retrieve audio delay offset    
-				result = dsGetAudioDelayOffset(handle[i], &audioDelayOffsetMs1[i]);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-
-				// Step 04: Retrieve audio delay offset    
-				result = dsGetAudioDelayOffset(handle[i], &audioDelayOffsetMs2[i]);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-
-				// Step 05: Compare the values
-				DS_ASSERT_AUTO_TERM_NUMERICAL(audioDelayOffsetMs1[i], audioDelayOffsetMs2[i]);
-			}
-
-			// Step 06: Terminate audio ports
-			result = dsAudioPortTerm();
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-			// End of the test
-			UT_LOG("\n Out %s\n", __FUNCTION__);
-		}
-
-
-		/**
-		 * @brief Ensure dsGetAudioDelayOffset() returns correct error codes during negative scenarios.
-		 * 
-		 * **Test Group ID:** Basic: 01@n
-		 * **Test Case ID:** 092@n
-		 * 
-		 * **Dependencies:** None@n
-		 * **User Interaction:** None
-		 * 
-		 * **Test Procedure:**@n
-		 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-		 * |:--:|-----------|----------|----------|--------------|-----|
-		 * |01|Call dsGetAudioDelayOffset() without initializing audio ports | handle=[invalid handle], audioDelayOffsetMs=[valid pointer] | dsERR_NOT_INITIALIZED |call must fail as module not initialized |
-		 * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-		 * |03|Call dsGetAudioDelayOffset() using an invalid handle with valid delay offset value | handle=[invalid handle], audioDelayOffsetMs=[valid pointer] |dsERR_INVALID_PARAM |Invalid parameter must return |
-		 * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-		 * |05|Call dsGetAudioDelayOffset() by looping through the acquired valid handle with a NULL delay offset pointer |handle=[valid handle], audioDelayOffsetMs=[NULL] | dsERR_INVALID_PARAM |Invalid parameter error must be returned|
-		 * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-		 * |07|Call dsGetAudioDelayOffset() again after terminating audio ports |handle=[valid handle], audioDelayOffsetMs=[pointer] | dsERR_NOT_INITIALIZED |call must fail as module is not initialized|
-		 * 
-		 * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
-		 */
-		void test_l1_dsAudio_negative_dsGetAudioDelayOffset(void) {
-			// Start of the test
-			gTestID = 92;
-			UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-			dsError_t result;
-			intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-			uint32_t audioDelayOffsetMs;
-
-			// Step 01: Attempt to retrieve audio delay offset without initializing audio ports
-			result = dsGetAudioDelayOffset(-1, &audioDelayOffsetMs);
-			UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-			// Step 02: Initialize audio ports
-			result = dsAudioPortInit();
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-			// Step 03: Attempt to retrieve audio delay offset with invalid handle
-			result = dsGetAudioDelayOffset(handle[0], &audioDelayOffsetMs);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-
-			// Step 04 : Get the port handles
-			for (int i = 0; i < NUM_OF_PORTS; i++) {
-				result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-				DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-				// Step 05: Attempt to retrieve audio delay offset using NULL pointer
-				result = dsGetAudioDelayOffset(handle[i], NULL);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NOT_INITIALIZED);
-			}
-
-			// Step 06: Terminate audio ports
-			result = dsAudioPortTerm();
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-			// Step 07: Attempt to retrieve audio delay offset after terminating audio ports
-			result = dsGetAudioDelayOffset(handle[0], &audioDelayOffsetMs);
-			UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-			// End of the test
-			UT_LOG("\n Out %s\n", __FUNCTION__);
-		}
-
-		/**
-		 * @brief Ensure dsSetAudioDelayOffset() sets the audio delay offset correctly during positive scenarios.
-		 * 
-		 * **Test Group ID:** Basic: 01@n
-		 * **Test Case ID:** 093@n
-		 * 
-		 * **Dependencies:** None@n
-		 * **User Interaction:** None
-		 * 
-		 * **Test Procedure:**@n
-		 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-		 * |:--:|-----------|----------|----------|--------------|-----|
-		 * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-		 * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-		 * |03|Call dsSetAudioDelayOffset() by looping through acquired port handles and valid audio delay offset value(i.e milliseconds) | handle=[valid handle], audioDelayOffsetMs=[valid value] | dsERR_NONE | audio delay offset should be successfully set |
-		 * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-		 * 
-		 */
-		void test_l1_dsAudio_positive_dsSetAudioDelayOffset(void) {
-			// Start of the test
-			gTestID = 93;
-			UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-			dsError_t result;
-			intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-			uint32_t audioDelayOffsetMs = 200;
-
-			// Step 01: Initialize audio ports
-			result = dsAudioPortInit();
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-			// Step 02 : Get port handles 
-			for (int i = 0; i < NUM_OF_PORTS; i++) {
-				result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-				DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-				// Step 03 : set audio delay offset
-				result = dsSetAudioDelayOffset(handle[i], audioDelayOffsetMs);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			}
-
-			// Step 04: Terminate audio ports
-			result = dsAudioPortTerm();
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-			// End of the test
-			UT_LOG("\n Out %s\n", __FUNCTION__);
-		}
-
-
-		/**
-		 * @brief Ensure dsSetAudioDelayOffset() returns correct error codes during negative scenarios.
-		 * 
-		 * **Test Group ID:** Basic: 01@n
-		 * **Test Case ID:** 094@n
-		 * 
-		 * **Dependencies:** None@n
-		 * **User Interaction:** None
-		 * 
-		 * **Test Procedure:**@n
-		 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-		 * |:--:|-----------|----------|----------|--------------|-----|
-		 * |01|Call dsSetAudioDelayOffset() without initializing audio ports | handle=[invalid handle], audioDelayOffsetMs=[valid value] | dsERR_NOT_INITIALIZED |call must fail as module not initialized |
-		 * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-		 * |03|Call dsSetAudioDelayOffset() using an invalid handle with valid audio delay offset value(i.e milliseconds) | handle=[invalid handle], audioDelayOffsetMs=[valid value] |dsERR_INVALID_PARAM |Invalid parameter must return |
-		 * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-		 * |05|Call dsSetAudioDelayOffset() using an valid handle with invalid audio delay offset value(i.e milliseconds) | handle=[valid handle], audioDelayOffsetMs=[invalid value] |dsERR_INVALID_PARAM |Invalid parameter must return |
-		 * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-		 * |07|Call dsSetAudioDelayOffset() again after terminating audio ports | handle=[valid handle], audioDelayOffsetMs=[valid value] | dsERR_NOT_INITIALIZED |call must fail as module not initialized |
-		 * 
-		 * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
-		 */
-		void test_l1_dsAudio_negative_dsSetAudioDelayOffset(void) {
-			// Start of the test
-			gTestID = 94;
-			UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-			dsError_t result;
-			intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-			uint32_t audio_delay_offset = 200 , invalid_audio_delay_offset= 300; 
-
-			// Step 01: Attempt to set audio delay offset without initializing audio ports
-			result = dsSetAudioDelayOffset(-1, audio_delay_offset);
-			UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-			// Step 02: Initialize audio ports
-			result = dsAudioPortInit();
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-			// Step 03: Attempt to set audio delay offset with invalid handle
-			result = dsSetAudioDelayOffset(handle[0], audio_delay_offset);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-
-			// Step 04: Get the port handles
-			for (int i = 0; i < NUM_OF_PORTS; i++) {
-				result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-				DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-				// Step 05 : Set audio delay offset with invalid audio delay offset values
-				result = dsSetAudioDelayOffset(handle[i], invalid_audio_delay_offset);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			}
-
-			// Step 06: Terminate audio ports
-			result = dsAudioPortTerm();
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-			// Step 07: Attempt to set audio delay offset after terminating audio ports
-			result = dsSetAudioDelayOffset(handle[0], audio_delay_offset);
-			UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-			// End of the test
-			UT_LOG("\n Out %s\n", __FUNCTION__);
-		}
-
-		/**
-		 * @brief Ensure dsSetAudioAtmosOutputMode() sets the Audio ATMOS output mode correctly during positive scenarios.
-		 * 
-		 * **Test Group ID:** Basic: 40@n
-		 * **Test Case ID:** 238@n
-		 * 
-		 * **Dependencies:** Audio device should be connected and working properly.@n
-		 * **User Interaction:** None
-		 * 
-		 * **Test Procedure:**@n
-		 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-		 * |:--:|-----------|----------|----------|--------------|-----|
-		 * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-		 * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-		 * |03|Call dsSetAudioAtmosOutputMode() - by looping through the acquired port handles to enable Audio ATMOS output mode | handle = [valid handle], enable = [TRUE] | dsERR_NONE | Atmos mode must be enabled for all supported audio ports |
-		 * |04|Call dsSetAudioAtmosOutputMode() - by looping through the acquired port handles to disable Audio ATMOS output mode | handle = [valid handle], enable = [FALSE] | dsERR_NONE | Atmos mode must be enabled for all supported audio ports |
-		 * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-		 * 
-		 */
-		void test_l1_dsAudio_positive_dsSetAudioAtmosOutputMode(void) {
-			// Start of the test
-			gTestID = 238; // Assuming Test Case ID is 238
-			UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-			int result;
-			intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-			bool enable = true , disable = false;
-
-			// Step 01: Initialize audio ports
-			result = dsAudioPortInit();
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-			// Step 02, 03 and 04: Get port handles and set ATMOS Output mode
-			for (int i = 0; i < NUM_OF_PORTS; i++) {
-				result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-				DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-				// Enable ATMOS Output mode
-				result = dsSetAudioAtmosOutputMode(handle[i], enable);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-
-				// Disable ATMOS Output mode
-				result = dsSetAudioAtmosOutputMode(handle[i], disable);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			}
-
-			// Step 05: Terminate audio ports
-			result = dsAudioPortTerm();
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-			// End of the test
-			UT_LOG("\n Out %s\n", __FUNCTION__);
-		}
-
-
-		/**
-		 * @brief Ensure dsSetAudioAtmosOutputMode() returns correct error codes during negative scenarios.
-		 * 
-		 * **Test Group ID:** Basic: 40@n
-		 * **Test Case ID:** 239@n
-		 * 
-		 * **Dependencies:** None@n
-		 * **User Interaction:** None
-		 * 
-		 * **Test Procedure:**@n
-		 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-		 * |:--:|-----------|----------|----------|--------------|-----|
-		 * |01|Call dsSetAudioAtmosOutputMode() - Attempt to set the audio ATMOS output mode without initializing audio ports | handle = [invalid handle], enable = [TRUE] | dsERR_NOT_INITIALIZED | Set ATMOS Output mode must fail as module is not initialized |
-		 * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-		 * |03|Call dsSetAudioAtmosOutputMode() using an invalid handle with valid value| handle = [invalid handle], enable = [TRUE] | dsERR_INVALID_PARAM | Invalid parameter error must be returned  |
-		 * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-		 * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-		 * |06|Call dsSetAudioAtmosOutputMode() - Again attempt to set the audio ATMOS output mode without initializing audio ports | handle = [valid handle], enable = [TRUE] | dsERR_NOT_INITIALIZED | Set ATMOS Output mode must fail as module is not initialized |
-		 * 
-		 * @note Testing dsERR_OPERATION_NOT_SUPPORTED, dsERR_GENERAL and  might be challenging as they require specific platform conditions.
-		 */
-		void test_l1_dsAudio_negative_dsSetAudioAtmosOutputMode(void) {
-			// Start of the test
-			gTestID = 239; // Assuming Test Case ID is 239
-			UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-			int result;
-			intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-			bool valid_value = true;
-
-			// Step 01: Attempt to set ATMOS Output mode without initializing audio ports
-			result = dsSetAudioAtmosOutputMode(-1, valid_value);
-			UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-			// Step 02: Initialize audio ports
-			result = dsAudioPortInit();
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-			// Step 03: Attempt to set ATMOS Output mode with invalid handle
-			result = dsSetAudioAtmosOutputMode(handle[0], valid_value);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-
-			//Step 04 : Get audio port handles
-			for (int i = 0; i < NUM_OF_PORTS; i++) {
-				result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-				DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-			}
-
-			// Step 05: Terminate audio ports
-			result = dsAudioPortTerm();
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-			// Step 06: Attempt to set ATMOS Output mode after terminating audio ports
-			result = dsSetAudioAtmosOutputMode(handle[0], valid_value);
-			UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-			// End of the test
-			UT_LOG("\n Out %s\n", __FUNCTION__);
-		}
-
-
-		/**
-		 * @brief Ensure dsGetSinkDeviceAtmosCapability() retrieves the ATMOS capability correctly during positive scenarios.
-		 * 
-		 * **Test Group ID:** Basic: 41@n
-		 * **Test Case ID:** 240@n
-		 * 
-		 * **Dependencies:**@n
-		 * **User Interaction:** None
-		 * 
-		 * **Test Procedure:**@n
-		 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-		 * |:--:|-----------|----------|----------|--------------|-----|
-		 * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-		 * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-		 * |03|Call dsGetSinkDeviceAtmosCapability() by looping through the acquired port handles to get the  ATMOS capability of sink device connected to each port in array | handle: [ valid handles ] , capability: [vaild pointer to hold the ATMOS capability] | dsERR_NONE | A valid ATMOS capability of sink device must be returned |
-		 * |04|Call dsGetSinkDeviceAtmosCapability() by looping through the acquired port handles to get the  ATMOS capability of sink device connected to each port in new array | handle: [valid handles ] , capability: [pointer to hold the ATMOS capability] | dsERR_NONE | A valid ATMOS capability of sink device must be returned |
-		 * |05|Compare the array values and make sure they are equal| | dsERR_NONE | The values must be equal |
-		 * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-		 * 
-		 */
-		void test_l1_dsAudio_positive_dsGetSinkDeviceAtmosCapability(void) {
-			// Start of the test
-			gTestID = 240; // Assuming Test Case ID is 240
-			UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-			int result;
-			intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-			dsATMOSCapability_t atmosCapability[NUM_OF_PORTS];
-			dsATMOSCapability_t atmosCapability1[NUM_OF_PORTS];
-
-			// Step 01: Initialize audio ports
-			result = dsAudioPortInit();
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-			// Step 02 Get audio port handles
-			for (int i = 0; i < NUM_OF_PORTS; i++) {
-				result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-				DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-				//Step 03 : Get ATMOS capability of ports in array
-				result = dsGetSinkDeviceAtmosCapability(handle[i], &atmosCapability[i]);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-
-				//Step 04 : Get ATMOS capability of ports in new array
-				result = dsGetSinkDeviceAtmosCapability(handle[i], &atmosCapability1[i]);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-
-				//Step 05 : compare the atomos capability of arrays
-				DS_ASSERT_AUTO_TERM_NUMERICAL(atmosCapability[i], atmosCapability1[i]);
-			}
-
-			// Step 06: Terminate audio ports
-			result = dsAudioPortTerm();
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-			// End of the test
-			UT_LOG("\n Out %s\n", __FUNCTION__);
-		}
-
-
-		/**
-		 * @brief Ensure dsGetSinkDeviceAtmosCapability() returns correct error codes during negative scenarios.
-		 * 
-		 * **Test Group ID:** Basic: 41@n
-		 * **Test Case ID:** 241@n
-		 * 
-		 * **Dependencies:** None@n
-		 * **User Interaction:** None
-		 * 
-		 * **Test Procedure:**@n
-		 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-		 * |:--:|-----------|----------|----------|--------------|-----|
-		 * |01|Call dsGetSinkDeviceAtmosCapability() - Attempt to get the ATMOS capability of sink device without initializing audio ports | handle = [ invalid handle], capability = [valid pointer to hold the ATMOS capability] | dsERR_NOT_INITIALIZED | Get Atmos capability of sink device must fail as module is not initialized |
-		 * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-		 * |03|Call dsGetSinkDeviceAtmosCapability() using an invalid handle | handle = [invalid handle], capability = [valid pointer to hold ATMOS capability] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
-		 * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-		 * |05|Call dsGetSinkDeviceAtmosCapability() - by looping through acquired port handles with NULL pointer for ATMOS capability | handle = [loop through valid handles], capability = [NULL] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
-		 * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-		 * |06|Call dsGetSinkDeviceAtmosCapability() - Again attempt to get the ATMOS capability of sink device after terminating audio ports | handle = [valid handle], capability = [valid pointer to hold the ATMOS capability] | dsERR_NOT_INITIALIZED | Get Atmos capability of sink device must fail as module is not initialized |
-		 * 
-		 * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
-		 */
-		void test_l1_dsAudio_negative_dsGetSinkDeviceAtmosCapability(void) {
-			// Start of the test
-			gTestID = 241; // Assuming Test Case ID is 241
-			UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-			int result;
-			intptr_t handle [NUM_OF_PORTS] = {NUM_OF_PORTS};
-			dsATMOSCapability_t atmosCapability;
-
-			// Step 01: Attempt to get ATMOS capability without initializing audio ports
-			result = dsGetSinkDeviceAtmosCapability(-1, &atmosCapability);
-			UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-			// Step 02: Initialize audio ports
-			result = dsAudioPortInit();
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-			// Step 03: Attempt to get ATMOS capability with invalid handle
-			result = dsGetSinkDeviceAtmosCapability(handle[0], &atmosCapability);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-
-			// Step 04: Get audio ports handles
-			for (int i = 0; i < NUM_OF_PORTS; i++) {
-				result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-				DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-			}    
-
-			// Step 05: Terminate audio ports
-			result = dsAudioPortTerm();
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-			// Step 06: Attempt to get ATMOS capability after terminating audio ports
-			result = dsGetSinkDeviceAtmosCapability(handle[0], &atmosCapability);
-			UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-			// End of the test
-			UT_LOG("\n Out %s\n", __FUNCTION__);
-		}
-
-
-		/**
-		 * @brief Ensure dsIsAudioLoopThru() retrieves the loop-through status correctly during positive scenarios.
-		 * 
-		 * **Test Group ID:** Basic: 42@n
-		 * **Test Case ID:** 242@n
-		 * 
-		 * **Dependencies:** Audio device should be connected and working properly.@n
-		 * **User Interaction:** None
-		 * 
-		 * **Test Procedure:**@n
-		 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-		 * |:--:|-----------|----------|----------|--------------|-----|
-		 * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-		 * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ], handle = [valid handle]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-		 * |03|Call dsIsAudioLoopThru() by looping through the acquired port handles to check if the audio port is configured for loop-through or not & store it in an array | handle: [ loop through valid handles ] , loopThru: [pointer to hold the status of loop-through feature] | dsERR_NONE | Status of loop-through feature for the specified audio port must be returned |
-		 * |04|Call dsIsAudioLoopThru() Again by looping through the acquired port handles to check if the audio port is configured for loop-through or not & store it in a new array | handle: [ loop through valid handles ] , loopThru: [pointer to hold the status of loop-through feature] | dsERR_NONE | Status of loop-through feature for the specified audio port must be returned |
-		 * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
-		 * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-		 *
-		 */
-		void test_l1_dsAudio_positive_dsIsAudioLoopThru(void) {
-			// Start of the test
-			gTestID = 242; // Assuming Test Case ID is 242
-			UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-			int result;
-			intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-			bool loopThruArray1[NUM_OF_PORTS], loopThruArray2[NUM_OF_PORTS];
-
-			// Step 01: Initialize audio ports
-			result = dsAudioPortInit();
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-			// Step 02 and 03: Get port handles and check Loop-Thru status
-			for (int i = 0; i < NUM_OF_PORTS; i++) {
-				result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-				DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-				// Check Loop-Thru status
-				result = dsIsAudioLoopThru(handle[i], &loopThruArray1[i]);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			}
-
-			// Step 04: Check Loop-Thru status again
-			for (int i = 0; i < NUM_OF_PORTS; i++) {
-				result = dsIsAudioLoopThru(handle[i], &loopThruArray2[i]);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-				// Step 05: Compare the values
-				DS_ASSERT_AUTO_TERM_NUMERICAL(loopThruArray1[i], loopThruArray2[i]);
-			}
-
-			// Step 06: Terminate audio ports
-			result = dsAudioPortTerm();
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-			// End of the test
-			UT_LOG("\n Out %s\n", __FUNCTION__);
-		}
-
-
-		/**
-		 * @brief Ensure dsIsAudioLoopThru() returns correct error codes during negative scenarios.
-		 * 
-		 * **Test Group ID:** Basic: 42@n
-		 * **Test Case ID:** 243@n
-		 * 
-		 * **Dependencies:** None@n
-		 * **User Interaction:** None
-		 * 
-		 * **Test Procedure:**@n
-		 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-		 * |:--:|-----------|----------|----------|--------------|-----|
-		 * |01|Call dsIsAudioLoopThru() - Attempt to check if audio port is configured for loop through without initializing audio ports | handle = [invalid handle], loopThru: [pointer to hold the status of loop-through feature] | dsERR_NOT_INITIALIZED | Call to check if Loop through is enabled must fail as module is not initialized |
-		 * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-		 * |03|Call dsIsAudioLoopThru() using an invalid handle | handle = [invalid handle], loopThru: [pointer to hold the status of loop-through feature] | dsERR_INVALID_PARAM | Invalid Parameter error must be returned |
-		 * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-		 * |05|Call dsIsAudioLoopThru() - by looping through the acquired port handles but with a NULL pointer for loopThru param | handle = [Loop through valid handles], loopThru: [NULL] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
-		 * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-		 * |07|Call dsIsAudioLoopThru() - Attempt to check if audio port is configured for loop through again after terminating audio ports | handle = [valid handle], loopThru: [pointer to hold the status of loop-through feature] | dsERR_NOT_INITIALIZED | Call to check if Loop through is enabled must fail as module is not initialized |
-		 * 
-		 * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
-		 */
-		void test_l1_dsAudio_negative_dsIsAudioLoopThru(void) {
-			// Start of the test
-			gTestID = 243; // Assuming Test Case ID is 243
-			UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-			int result;
-			intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-			bool loopThru;
-
-			// Step 01: Attempt to check Loop-Thru status without initializing audio ports
-			result = dsIsAudioLoopThru(-1, &loopThru);
-			UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-			// Step 02: Initialize audio ports
-			result = dsAudioPortInit();
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-			// Step 03: Attempt to check Loop-Thru status with invalid handle
-			result = dsIsAudioLoopThru(handle[0], &loopThru);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-
-			// Step 04: Loop through kPorts to get audio port handle
-			for (int i = 0; i < NUM_OF_PORTS; i++) {
-				result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-				DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-			}
-
-			// Step 05: Terminate audio ports
-			result = dsAudioPortTerm();
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-			// Step 07: Attempt to check Loop-Thru status after terminating audio ports
-			result = dsIsAudioLoopThru(handle[0], &loopThru);
-			UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-			// End of the test
-			UT_LOG("\n Out %s\n", __FUNCTION__);
-		}
-
-
-		/**
-		 * @brief Ensure dsIsAudioMute() retrieves the mute status correctly during positive scenarios.
-		 * 
-		 * **Test Group ID:** Basic: 43@n
-		 * **Test Case ID:** 244@n
-		 * 
-		 * **Dependencies:** Audio device should be connected and working properly.@n
-		 * **User Interaction:** None
-		 * 
-		 * **Test Procedure:**@n
-		 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-		 * |:--:|-----------|----------|----------|--------------|-----|
-		 * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-		 * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-		 * |03|Call dsIsAudioMute() by looping through the acquired port handles to check if the audio is muted or not on each port & store the values in an array | handle: [ loop through valid handles ] , muted: [pointer to hold the mute status](TRUE/FALSE) | dsERR_NONE | Mute status of the specified audio port must be returned |
-		 * |04|Call dsIsAudioMute() - Again by looping through the acquired port handles to check if the audio is muted or not on each port & store the values in a new array | handle: [ loop through valid handles ] , muted: [pointer to hold the mute status] | dsERR_NONE | Mute status of the specified audio port must be returned |
-		 * |05|Compare the array values and make sure they are equal| | dsERR_NONE | The values must be equal |
-		 * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-		 * 
-		 */
-		void test_l1_dsAudio_positive_dsIsAudioMute(void) {
-			// Start of the test
-			gTestID = 244; // Assuming Test Case ID is 244
-			UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-			int result;
-			intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-			bool muteStatusArray1[NUM_OF_PORTS], muteStatusArray2[NUM_OF_PORTS];
-
-			// Step 01: Initialize audio ports
-			result = dsAudioPortInit();
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-			// Step 02:Get port handles and check Mute status
-			for (int i = 0; i < NUM_OF_PORTS; i++) {
-				result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-				DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-				// Step 03:Get  Mute status in array
-				result = dsIsAudioMute(handle[i], &muteStatusArray1[i]);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-
-				// Step 04:Get  Mute status in array
-				result = dsIsAudioMute(handle[i], &muteStatusArray2[i]);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-
-				// Step 05:Compare Mute status in arrays
-				DS_ASSERT_AUTO_TERM_NUMERICAL(muteStatusArray1[i], muteStatusArray1[i]);
-			}
-		}
-
-		// Step 06: Terminate audio ports
-		result = dsAudioPortTerm();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// End of the test
-		UT_LOG("\n Out %s\n", __FUNCTION__);
 	}
 
-
-	/**
-	 * @brief Ensure dsIsAudioMute() returns correct error codes during negative scenarios.
-	 * 
-	 * **Test Group ID:** Basic: 43@n
-	 * **Test Case ID:** 245@n
-	 * 
-	 * **Dependencies:** None@n
-	 * **User Interaction:** None
-	 * 
-	 * **Test Procedure:**@n
-	 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-	 * |:--:|-----------|----------|----------|--------------|-----|
-	 * |01|Call dsIsAudioMute() - Attempt to get the mute status of Audio ports without initializing audio ports | handle = [invalid handle], muted = [valid pointer to hold the mute status](TRUE/FALSE) | dsERR_NOT_INITIALIZED | Call to check if audio port is muted or not must fail as module is not initialized |
-	 * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-	 * |03|Call dsIsAudioMute() using an invalid handle but with a valid pointer to mute status | handle = [invalid handle], muted = [pointer to hold the mute status] | dsERR_INVALID_PARAM | Invalid Parameter error must be returned |
-	 * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-	 * |05|Call dsIsAudioMute() by looping through the acquired port handles with a NULL pointer for mute status | handle = [valid handle], muted = [NULL pointer] | dsERR_INVALID_PARAM | Invalid Parameter error must be returned | 
-	 * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful | 
-	 * |07|Call dsIsAudioMute() again after terminating audio ports | handle = [valid handle from previous step], muted = [pointer to hold the mute status] | dsERR_NOT_INITIALIZED | Call to check if audio port is muted or not must fail as module is not initialized |
-	 * 
-	 * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
-	 */
-	void test_l1_dsAudio_negative_dsIsAudioMute(void) {
-		// Start of the test
-		gTestID = 245; // Assuming Test Case ID is 245
-		UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-		int result;
-		intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-		bool muted;
-
-		// Step 01: Attempt to check Mute status without initializing audio ports
-		result = dsIsAudioMute(-1, &muted);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-		// Step 02: Initialize audio ports
-		result = dsAudioPortInit();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 03: Attempt to check Mute status with invalid handle
-		result = dsIsAudioMute(handle[0], &muted);
-		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-
-		// Step 02: Loop through kPorts to get audio port handle
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-		}
-
-		// Step 05: Terminate audio ports
-		result = dsAudioPortTerm();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 07: Attempt to check Mute status after terminating audio ports
-		result = dsIsAudioMute(handle[0], &muted);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-		// End of the test
-		UT_LOG("\n Out %s\n", __FUNCTION__);
-	}
-
-
-	/**
-	 * @brief Ensure dsIsAudioPortEnabled() retrieves the enable status correctly during positive scenarios.
-	 * 
-	 * **Test Group ID:** Basic: 44@n
-	 * **Test Case ID:** 246@n
-	 * 
-	 * **Dependencies:** Audio device should be connected and working properly.@n
-	 * **User Interaction:** None
-	 * 
-	 * **Test Procedure:**@n
-	 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-	 * |:--:|-----------|----------|----------|--------------|-----|
-	 * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-	 * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ], handle = [valid handle]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-	 * |03|Call dsIsAudioPortEnabled() by looping through the acquired port handles to check if the corresponding audio port is enabled or not & store the values in an array | handle: [ loop through valid handles ] , enabled: [ pointer to hold the audio port enabled / disabled state(TRUE/FALSE)] | dsERR_NONE | Audio port enabled(TRUE)/disabled(FALSE) state must be returned |
-	 * |04|Call dsIsAudioPortEnabled() - Again by looping through the acquired port handles to check if the corresponding audio port is enabled or not & store the values in a new array | handle: [ loop through valid handles ] , enabled: [ pointer to hold the audio port enabled / disabled state(TRUE/FALSE)] | dsERR_NONE | Audio port enabled(TRUE)/disabled(FALSE) state must be returned |
-	 * |05|Compare the array values and make sure they are equal| | dsERR_NONE | The values must be equal |
-	 * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-	 * 
-	 */
-	void test_l1_dsAudio_positive_dsIsAudioPortEnabled(void) {
-		// Start of the test
-		gTestID = 246; // Assuming Test Case ID is 246
-		UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-		int result;
-		intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-		bool enabledStatusArray1[NUM_OF_PORTS], enabledStatusArray2[NUM_OF_PORTS];
-
-		// Step 01: Initialize audio ports
-		result = dsAudioPortInit();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 02 and 03: Get port handles and check Enabled status
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-			// Step 03: Get Enabled status in array
-			result = dsIsAudioPortEnabled(handle[i], &enabledStatusArray1[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-		}
-
-		// Step 04: Check Enabled status again
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsIsAudioPortEnabled(handle[i], &enabledStatusArray2[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			// Step 05: Compare the values
-			DS_ASSERT_AUTO_TERM_NUMERICAL(enabledStatusArray1[i], enabledStatusArray2[i]);
-		}
-
-		// Step 06: Terminate audio ports
-		result = dsAudioPortTerm();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// End of the test
-		UT_LOG("\n Out %s\n", __FUNCTION__);
-	}
-
-
-	/**
-	 * @brief Ensure dsIsAudioPortEnabled() returns correct error codes during negative scenarios.
-	 * 
-	 * **Test Group ID:** Basic: 44@n
-	 * **Test Case ID:** 247@n
-	 * 
-	 * **Dependencies:** None@n
-	 * **User Interaction:** None
-	 * 
-	 * **Test Procedure:**@n
-	 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-	 * |:--:|-----------|----------|----------|--------------|-----|
-	 * |01|Call dsIsAudioPortEnabled() - Attempt to check if Audio port is enabled or not without initializing audio ports | handle = [invalid handle], enabled: [ valid pointer to hold the audio port enabled / disabled state] | dsERR_NOT_INITIALIZED | Call to check if Audio Port is enabled or not must fail as module is not initialized |
-	 * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-	 * |03|Call dsIsAudioPortEnabled() using an invalid handle but with a valid pointer to hold the enabled status | handle = [invalid handle],  enabled: [ valid pointer to hold the audio port enabled / disabled state] | dsERR_INVALID_PARAM | Invalid Parameter error must be returned |
-	 * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ], handle = [valid handle]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-	 * |05|Call dsIsAudioPortEnabled() using an valid handle but with a NULL pointer to hold the enabled status | handle = [valid handle],  enabled: [ NULL pointer] | dsERR_INVALID_PARAM | Invalid Parameter error must be returned |
-	 * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-	 * |07|Call dsIsAudioPortEnabled() - Attempt to check if Audio port is enabled or not again after terminating audio ports | handle = [invalid handle], enabled: [ valid pointer to hold the audio port enabled / disabled state] | dsERR_NOT_INITIALIZED | Call to check if Audio Port is enabled or not must fail as module is not initialized |
-	 * 
-	 * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
-	 */
-	void test_l1_dsAudio_negative_dsIsAudioPortEnabled(void) {
-		// Start of the test
-		gTestID = 247; // Assuming Test Case ID is 247
-		UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-		int result;
-		intptr_t handle[NUM_OF_PORTS] =  {INT_ARRAY_INIT};
-		bool isEnabled;
-
-		// Step 01: Attempt to check Enabled status without initializing audio ports
-		result = dsIsAudioPortEnabled(-1, &isEnabled);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-		// Step 02: Initialize audio ports
-		result = dsAudioPortInit();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 03: Attempt to check Enabled status with invalid handle
-		result = dsIsAudioPortEnabled(handle[0], &isEnabled);
-		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-
-		// Step 04: Loop through kPorts to get audio port handle
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-		}
-
-		// Step 05: Terminate audio ports
-		result = dsAudioPortTerm();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 07: Attempt to check Enabled status after terminating audio ports
-		result = dsIsAudioPortEnabled(handle[0], &isEnabled);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-		// End of the test
-		UT_LOG("\n Out %s\n", __FUNCTION__);
-	}
-
-
-	/**
-	 * @brief Ensure dsEnableAudioPort() sets the audio port state correctly during positive scenarios.
-	 * 
-	 * **Test Group ID:** Basic: 45@n
-	 * **Test Case ID:** 248@n
-	 * 
-	 * **Dependencies:** Audio device should be connected and working properly.@n
-	 * **User Interaction:** None
-	 * 
-	 * **Test Procedure:**@n
-	 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-	 * |:--:|-----------|----------|----------|--------------|-----|
-	 * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-	 * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-	 * |03|Call dsEnableAudioPort() by looping through the acquired port handles to enable audio port | handle: [ loop through valid handles ] , enable: [TRUE] | dsERR_NONE | Supported audio ports must be enabled |
-	 * |04|Call dsEnableAudioPort() by looping through the acquired port handles to disable audio port | handle: [ loop through valid handles ] , enable: [FALSE] | dsERR_NONE | Supported audio ports must be disabled |
-	 * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-	 * 
-	 */
-	void test_l1_dsAudio_positive_dsEnableAudioPort(void) {
-		// Start of the test
-		gTestID = 248; // Assuming Test Case ID is 248
-		UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-		int result;
-		intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-		bool enabledStatus;
-
-		// Step 01: Initialize audio ports
-		result = dsAudioPortInit();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 02, 03, and 04: Get port handles, enable them, and verify
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-			result = dsEnableAudioPort(handle[i], true);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-
-			// Verify enable status
-			result = dsIsAudioPortEnabled(handle[i], &enabledStatus);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			UT_ASSERT_TRUE(enabledStatus);
-		}
-
-		// Step 05 and 06: Disable audio ports and verify
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsEnableAudioPort(handle[i], false);
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-			// Verify disable status
-			result = dsIsAudioPortEnabled(handle[i], &enabledStatus);
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-			UT_ASSERT_FALSE(enabledStatus);
-		}
-
-		// Step 07: Terminate audio ports
-		result = dsAudioPortTerm();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// End of the test
-		UT_LOG("\n Out %s\n", __FUNCTION__);
-	}
-
-
-	/**
-	 * @brief Ensure dsEnableAudioPort() returns correct error codes during negative scenarios.
-	 * 
-	 * **Test Group ID:** Basic: 45@n
-	 * **Test Case ID:** 249@n
-	 * 
-	 * **Dependencies:** None@n
-	 * **User Interaction:** None
-	 * 
-	 * **Test Procedure:**@n
-	 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-	 * |:--:|-----------|----------|----------|--------------|-----|
-	 * |01|Call dsEnableAudioPort() - Attempt to enable/disable audio ports without initializing audio ports | handle = [invalid handle] , enabled = [TRUE] | dsERR_NOT_INITIALIZED | Call to Enable / Disable the Audio Ports must fail as module is not initialized |
-	 * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-	 * |03|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-	 * |04|Call dsEnableAudioPort() using an invalid handle but with a valid enable | handle = [invalid handle], enabled = [TRUE] | dsERR_INVALID_PARAM | Invalid Parameter error must be returned |
-	 * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-	 * |06|Call dsEnableAudioPort() - Attempt to enable/disable audio ports again after terminating audio ports | handle = [invalid handle] , enabled = [TRUE] | dsERR_NOT_INITIALIZED | Call to Enable / Disable the Audio Ports must fail as module is not initialized |
-	 * 
-	 * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
-	 */
-	void test_l1_dsAudio_negative_dsEnableAudioPort(void) {
-		// Start of the test
-		gTestID = 249; // Assuming Test Case ID is 249
-		UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-		int result;
-		intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-
-		// Step 01: Attempt to enable/disable audio ports without initializing
-		result = dsEnableAudioPort(-1, true);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-		// Step 02: Initialize audio ports
-		result = dsAudioPortInit();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 03: Attempt to enable/disable with invalid handle
-		result = dsEnableAudioPort(handle[0], true);
-		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-
-		// Step 04: Loop through kPorts to get audio port handle
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-		}
-
-		// Step 05: Terminate audio ports
-		result = dsAudioPortTerm();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 06: Attempt to enable/disable after terminating
-		result = dsEnableAudioPort(handle[0], true);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-		// End of the test
-		UT_LOG("\n Out %s\n", __FUNCTION__);
-	}
-
-
-	/**
-	 * @brief Ensure dsEnableMS12Config() sets the MS12 features correctly during positive scenarios.
-	 * 
-	 * **Test Group ID:** Basic: 46@n
-	 * **Test Case ID:** 250@n
-	 * 
-	 * **Dependencies:** None@n
-	 * **User Interaction:** None
-	 * 
-	 * **Test Procedure:**@n
-	 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-	 * |:--:|-----------|----------|----------|--------------|-----|
-	 * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-	 * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ], handle = [valid handle]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-	 * |03|Call dsEnableMS12Config() by looping through the acquired port handles and enable MS12 configs(from dsMS12FEATURE_t) for each port| handle = [loop through valid handles], feature = [ loop through dsMS12FEATURE_t] , enable = [TRUE] | dsERR_NONE | All MS12 Features must be enabled for all supported audio ports |
-	 * |04|Call dsEnableMS12Config() by looping through the acquired port handles and disable MS12 configs(from dsMS12FEATURE_t) for each port| handle = [loop through valid handles], feature = [ loop through dsMS12FEATURE_t] , enable = [FALSE] | dsERR_NONE | All MS12 Features must be disabled for all supported audio ports |
-	 * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-	 * 
-	 */
-	void test_l1_dsAudio_positive_dsEnableMS12Config(void) {
-		// Start of the test
-		gTestID = 250; // Assuming Test Case ID is 250
-		UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-		int result;
-		intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-
-		// Step 01: Initialize audio ports
-		result = dsAudioPortInit();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Steps 02 to 04: Enable and disable MS12 Config for each port
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-			// Loop through all MS12 features
-			for (dsMS12FEATURE_t feature = dsMS12FEATURE_DAPV2; feature <= dsMS12FEATURE_MAX ; feature++) {
-				// Enable MS12 Config
-				result = dsEnableMS12Config(handle[i], feature, true);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-
-				// Disable MS12 Config
-				result = dsEnableMS12Config(handle[i], feature, false);
-				DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			}
-		}
-
-		// Step 05: Terminate audio ports
-		result = dsAudioPortTerm();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// End of the test
-		UT_LOG("\n Out %s\n", __FUNCTION__);
-	}
-
-
-	/**
-	 * @brief Ensure dsEnableMS12Config() returns correct error codes during negative scenarios.
-	 * 
-	 * **Test Group ID:** Basic: 46@n
-	 * **Test Case ID:** 251@n
-	 * 
-	 * **Dependencies:** None@n
-	 * **User Interaction:** None
-	 * 
-	 * **Test Procedure:**@n
-	 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-	 * |:--:|-----------|----------|----------|--------------|-----|
-	 * |01|Call dsEnableMS12Config() - Attempt to enable MS12 Configs without initializing audio ports | handle = [invalid handle], feature = [loop through dsMS12FEATURE_t], enable = [TRUE] | dsERR_NOT_INITIALIZED | Enable MS12 Configs must fail as module is not initialized |
-	 * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-	 * |03|Call dsEnableMS12Config() using an invalid handle | handle = [invalid handle], feature = [loop through dsMS12FEATURE_t], enable = [TRUE] | dsERR_INVALID_PARAM | Invalid Parameter error must be returned |
-	 * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ], handle = [valid handle]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-	 * |05|Call dsEnableMS12Config() using an unsupported MS12 feature  | handle = [valid value], feature = [invalid MS12 feature(which are not in dsMS12FEATURE_t)], enable = [TRUE] | dsERR_OPERATION_NOT_SUPPORTED | Operation not supported error must be returned |
-	 * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-	 * |07|Call dsEnableMS12Config() - Attempt to enable MS12 Configs again after terminating audio ports | handle = [valid handle from previous step], feature = [loop through dsMS12FEATURE_t], enable = [TRUE] | dsERR_NOT_INITIALIZED | Enable MS12 Configs must fail as module is not initialized |
-	 * 
-	 * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
-	 */
-	void test_l1_dsAudio_negative_dsEnableMS12Config(void) {
-		// Start of the test
-		gTestID = 251; // Assuming Test Case ID is 251
-		UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-		int result;
-		intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-
-		// Step 01: Attempt to enable MS12 Configs without initializing
-		result = dsEnableMS12Config(-1, dsMS12FEATURE_DAPV2 , true);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-		// Step 02: Initialize audio ports
-		result = dsAudioPortInit();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 03: Attempt to enable with invalid handle
-		result = dsEnableMS12Config(handle[0], dsMS12FEATURE_DAPV2, true);
-		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-
-		// Step 04: Loop through kPorts to get audio port handle
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-			// Step 05: Attempt to enable an unsupported MS12 feature
-			result = dsEnableMS12Config(handle[i], dsMS12FEATURE_MAX , true); // Assuming UNSUPPORTED_MS12_FEATURE is defined
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_OPERATION_NOT_SUPPORTED);
-		}
-
-		// Step 06: Terminate audio ports
-		result = dsAudioPortTerm();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 07: Attempt to enable MS12 Configs after terminating
-		result = dsEnableMS12Config(handle[0], dsMS12FEATURE_DAPV2, true);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-		// End of the test
-		UT_LOG("\n Out %s\n", __FUNCTION__);
-	}
-
-
-	/**
-	 * @brief Ensure dsEnableLEConfig() sets the Loudness Equivalence (LE) feature correctly during positive scenarios.
-	 * 
-	 * **Test Group ID:** Basic: 47@n
-	 * **Test Case ID:** 252@n
-	 * 
-	 * **Dependencies:** Audio device should be connected and working properly.@n
-	 * **User Interaction:** None
-	 * 
-	 * **Test Procedure:**@n
-	 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-	 * |:--:|-----------|----------|----------|--------------|-----|
-	 * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-	 * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-	 * |03|Call dsEnableLEConfig() by looping through the acquired port handles to enable the LE feature | handle = [loop through valid handles], enable = [TRUE] | dsERR_NONE | Loudness Equivalence must be enabled for all supported audio ports |
-	 * |04|Call dsGetLEConfig() by looping through the acquired port handles and verify if LE feature is enabled in all supported audio ports | handle = [loop through valid handles], enabled = [pointer to hold LE enabled status] | Loudness Equivalence must be enabled for all supported audio ports |
-	 * |05|Call dsEnableLEConfig() by looping through the acquired port handles to disable the LE feature | handle = [loop through valid handles], enable = [FALSE] | dsERR_NONE | Loudness Equivalence must be disabled for all supported audio ports |
-	 * |06|Call dsGetLEConfig() by looping through the acquired port handles and verify if LE feature is disabled in all supported audio ports | handle = [loop through valid handles], enabled = [pointer to hold LE enabled status] | Loudness Equivalence must be disabled for all supported audio ports |
-	 * |07|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-	 * 
-	 */
-	void test_l1_dsAudio_positive_dsEnableLEConfig(void) {
-		// Start of the test
-		gTestID = 252; // Assuming Test Case ID is 252
-		UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-		int result;
-		intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-		bool enabled;
-
-		// Step 01: Initialize audio ports
-		result = dsAudioPortInit();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Steps 02 to 06: Enable, verify, disable, and verify LE Config for each port
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-			// Enable LE Config
-			result = dsEnableLEConfig(handle[i], true);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-
-			// Verify LE Config is enabled
-			result = dsGetLEConfig(handle[i], &enabled);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			UT_ASSERT_TRUE(enabled);
-
-			// Disable LE Config
-			result = dsEnableLEConfig(handle[i], false);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-
-			// Verify LE Config is disabled
-			result = dsGetLEConfig(handle[i], &enabled);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			UT_ASSERT_FALSE(enabled);
-		}
-
-		// Step 07: Terminate audio ports
-		result = dsAudioPortTerm();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// End of the test
-		UT_LOG("\n Out %s\n", __FUNCTION__);
-	}
-
-
-	/**
-	 * @brief Ensure dsEnableLEConfig() returns correct error codes during negative scenarios.
-	 * 
-	 * **Test Group ID:** Basic: 47@n
-	 * **Test Case ID:** 253@n
-	 * 
-	 * **Dependencies:** None@n
-	 * **User Interaction:** None
-	 * 
-	 * **Test Procedure:**@n
-	 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-	 * |:--:|-----------|----------|----------|--------------|-----|
-	 * |01|Call dsEnableLEConfig() - Attempt to enable LE without initializing audio ports | handle = [invalid handle],  enable = [TRUE] | dsERR_NOT_INITIALIZED | Call to dsEnableLEConfig() must fail as module is not initialized |
-	 * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-	 * |03|Call dsEnableLEConfig() using an invalid handle but with a valid enable parameter | handle = [invalid handle], enable = [TRUE] | dsERR_INVALID_PARAM | Invalid Parameter error must be returned |
-	 * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-	 * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE | Termination must be successful |
-	 * |06|Call dsEnableLEConfig() - Attempt to enable LE again after terminating audio ports | handle = [valid handle from previous step], enable = [FALSE] | dsERR_NOT_INITIALIZED | Call to dsEnableLEConfig() must fail as module is not initialized |
-	 * 
-	 * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
-	 */
-	void test_l1_dsAudio_negative_dsEnableLEConfig(void) {
-		// Start of the test
-		gTestID = 253; // Assuming Test Case ID is 253
-		UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-		int result;
-		intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-
-		// Step 01: Attempt to enable LE without initializing
-		result = dsEnableLEConfig(-1, true);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-		// Step 02: Initialize audio ports
-		result = dsAudioPortInit();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 03: Attempt to enable with invalid handle
-		result = dsEnableLEConfig(handle[0], true);
-		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-
-		// Step 04: Loop through kPorts to get audio port handle
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-		}
-
-		// Step 05: Terminate audio ports
-		result = dsAudioPortTerm();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 06: Attempt to enable LE after terminating
-		result = dsEnableLEConfig(handle[0], false);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-		// End of the test
-		UT_LOG("\n Out %s\n", __FUNCTION__);
-	}
-
-
-	/**
-	 * @brief Ensure dsGetLEConfig() retrieves the Loudness Equivalence (LE) feature status correctly during positive scenarios.
-	 * 
-	 * **Test Group ID:** Basic: 48@n
-	 * **Test Case ID:** 254@n
-	 * 
-	 * **Dependencies:** Audio device should be connected and LE features are supported.@n
-	 * **User Interaction:** None
-	 * 
-	 * **Test Procedure:**@n
-	 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-	 * |:--:|-----------|----------|----------|--------------|-----|
-	 * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-	 * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-	 * |03|Call dsGetLEConfig() by looping through the acquired port handles to get the Loudness Equivalence feature of each port in array| handle: [ loop through valid handles ] , enable: [ pointer to hold the status of LE feature(enabled/disabled) ] | dsERR_NONE | Loudness Equivalence enabled/disabled status must be returned |
-	 * |04|Call dsGetLEConfig() by looping through the acquired port handles to get the Loudness Equivalence feature of each port in new array | handle: [ valid handles ] , enable: [ pointer to hold the status of LE feature(enabled/disabled) ] | dsERR_NONE | Loudness Equivalence enabled/disabled status must be returned |
-	 * |05|Compare the array values and make sure they are equal| | dsERR_NONE | The values must be equal |
-	 * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-	 * 
-	 */
-	void test_l1_dsAudio_positive_dsGetLEConfig(void) {
-		// Start of the test
-		gTestID = 254; // Assuming Test Case ID is 254
-		UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-		int result;
-		intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-		bool leconfigarray[NUM_OF_PORTS];
-		bool leconfigarray1[NUM_OF_PORTS];
-
-		// Step 01: Initialize audio ports
-		result = dsAudioPortInit();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Steps 02: Get audio port handle
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-			// Step 03: Retrieve LE Config
-			result = dsGetLEConfig(handle[i], &leconfigarray[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-
-			// Step 04: Retrieve LE Config
-			result = dsGetLEConfig(handle[i], &leconfigarray1[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-
-			// Step 05: compare leconfigarray array values
-			DS_ASSERT_AUTO_TERM_NUMERICAL(leconfigarray[i], leconfigarray1[i]);
-		}
-
-		// Step 06: Terminate audio ports
-		result = dsAudioPortTerm();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// End of the test
-		UT_LOG("\n Out %s\n", __FUNCTION__);
-	}
-
-
-	/**
-	 * @brief Ensure dsGetLEConfig() returns correct error codes during negative scenarios.
-	 * 
-	 * **Test Group ID:** Basic: 48@n
-	 * **Test Case ID:** 255@n
-	 * 
-	 * **Dependencies:** None@n
-	 * **User Interaction:** None
-	 * 
-	 * **Test Procedure:**@n
-	 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-	 * |:--:|-----------|----------|----------|--------------|-----|
-	 * |01|Call dsGetLEConfig() - Attempt to get the LE Config of audio ports without initializing audio ports | handle = [invalid handle], enable: [ pointer to hold the status of LE feature]  | dsERR_NOT_INITIALIZED | Get LE Config must fail as module is not initialized |
-	 * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-	 * |03|Call dsGetLEConfig() using an invalid handle | handle = [invalid handle], enable: [ pointer to hold the status of LE feature] | dsERR_INVALID_PARAM | Invalid Parameter error must be returned |
-	 * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-	 * |05|Call dsGetLEConfig() by looping through acquired port handles but with NULL pointer for enabled param | handle = [invalid handle], enable = [NULL] | dsERR_INVALID_PARAM | Invalid Parameter error must be returned |
-	 * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-	 * |07|Call dsGetLEConfig() - Attempt to get the LE Config of audio ports again after terminating audio ports | handle = [valid handle from previous step], enable = [ pointer to hold the status of LE feature]  | dsERR_NOT_INITIALIZED | Get LE Config must fail as module is not initialized |
-	 * 
-	 * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
-	 */
-	void test_l1_dsAudio_negative_dsGetLEConfig(void) {
-		// Start of the test
-		gTestID = 255; // Assuming Test Case ID is 255
-		UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-		int result;
-		intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-		bool enable;
-
-		// Step 01: Attempt to get LE Config without initializing
-		result = dsGetLEConfig(-1, &enable);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-		// Step 02: Initialize audio ports
-		result = dsAudioPortInit();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 03: Attempt to get LE Config with invalid handle
-		result = dsGetLEConfig(handle[0], &enable);
-		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-
-		// Step 04: Loop through kPorts to get audio port handle
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-			//Setp 05:Attempt to get LE Config with NULL pointer
-			result = dsGetLEConfig(handle[i], NULL);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-		}
-
-		// Step 06: Terminate audio ports
-		result = dsAudioPortTerm();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Step 07: Attempt to get LE Config after terminating
-		result = dsGetLEConfig(handle[0], &enable);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
-		// End of the test
-		UT_LOG("\n Out %s\n", __FUNCTION__);
-	}
-
-
-	/**
-	 * @brief Ensure dsSetMS12AudioProfile() sets the MS12 audio profile correctly during positive scenarios.
-	 * 
-	 * **Test Group ID:** Basic: 49@n
-	 * **Test Case ID:** 256@n
-	 * 
-	 * **Dependencies:** None@n
-	 * **User Interaction:** None
-	 * 
-	 * **Test Procedure:**@n
-	 * |Variation / Step|Description|Test Data|Expected Result|Notes|
-	 * |:--:|-----------|----------|----------|--------------|-----|
-	 * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
-	 * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
-	 * |03|Call dsSetMS12AudioProfile() - by looping through the acquired handles and set a valid MS12 audio profile | handle = [loop through valid handles], profile = [valid profile from _dsMS12AudioProfileList_t] | dsERR_NONE | MS12 Audio Profile must be set properly for all supported audio ports |
-	 * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
-	 * 
-	 */
-	void test_l1_dsAudio_positive_dsSetMS12AudioProfile(void) {
-		// Start of the test
-		gTestID = 256; // Assuming Test Case ID is 256
-		UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-		int result;
-		intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-		char *validProfile = "YourValidMS12Profile"; // Replace with a valid profile from _dsMS12AudioProfileList_t
-
-		// Step 01: Initialize audio ports
-		result = dsAudioPortInit();
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-		// Steps 02 and 03: Get port handle and set MS12 audio profile for each port
-		for (int i = 0; i < NUM_OF_PORTS; i++) {
-			result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-			DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
-
-
-			// Set MS12 Audio Profile
-			result = dsSetMS12AudioProfile(handle[i], validProfile);
-			DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-
-			// Add additional logging or checks if needed
-		}
+	// Step 06: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 07: Attempt to get LE Config after terminating
+	result = dsGetLEConfig(handle[0], &enable);
+	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsSetMS12AudioProfile() sets the MS12 audio profile correctly during positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 113@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |03|Call dsSetMS12AudioProfile() - by looping through the acquired handles and set a valid MS12 audio profile | handle = [loop through valid handles], profile = [valid profile from _dsMS12AudioProfileList_t] | dsERR_NONE | MS12 Audio Profile must be set properly for all supported audio ports |
+ * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * 
+ */
+void test_l1_dsAudio_positive_dsSetMS12AudioProfile(void) {
+	// Start of the test
+	gTestID = 113; // Assuming Test Case ID is 113
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	int result;
+	intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	char *validProfile = "YourValidMS12Profile"; // Replace with a valid profile from _dsMS12AudioProfileList_t
+
+	// Step 01: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Steps 02 and 03: Get port handle and set MS12 audio profile for each port
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+
+
+		// Set MS12 Audio Profile
+		result = dsSetMS12AudioProfile(handle[i], validProfile);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+
+		// Add additional logging or checks if needed
 	}
 
 	// Step 04: Terminate audio ports
@@ -7171,8 +7162,8 @@ void test_l1_dsAudio_positive_dsGetAudioLevel(void) {
 /**
  * @brief Ensure dsSetMS12AudioProfile() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 49@n
- * **Test Case ID:** 257@n
+ * **Test Group ID:** Basic: 114@n
+ * **Test Case ID:** 114@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -7191,7 +7182,7 @@ void test_l1_dsAudio_positive_dsGetAudioLevel(void) {
  */
 void test_l1_dsAudio_negative_dsSetMS12AudioProfile(void) {
 	// Start of the test
-	gTestID = 257; // Assuming Test Case ID is 257
+	gTestID = 114; // Assuming Test Case ID is 114
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -7237,8 +7228,8 @@ void test_l1_dsAudio_negative_dsSetMS12AudioProfile(void) {
 /**
  * @brief Ensure dsSetAudioDucking() sets the audio ducking level correctly during positive scenarios.
  * 
- * **Test Group ID:** Basic: 50@n
- * **Test Case ID:** 258@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 115@n
  * 
  * **Dependencies:**.@n
  * **User Interaction:** None
@@ -7254,7 +7245,7 @@ void test_l1_dsAudio_negative_dsSetMS12AudioProfile(void) {
  */
 void test_l1_dsAudio_positive_dsSetAudioDucking(void) {
 	// Start of the test
-	gTestID = 258; // Assuming Test Case ID is 258
+	gTestID = 115; // Assuming Test Case ID is 115
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -7295,8 +7286,8 @@ void test_l1_dsAudio_positive_dsSetAudioDucking(void) {
 /**
  * @brief Ensure dsSetAudioDucking() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 50@n
- * **Test Case ID:** 259@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 116@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -7318,7 +7309,7 @@ void test_l1_dsAudio_positive_dsSetAudioDucking(void) {
  */
 void test_l1_dsAudio_negative_dsSetAudioDucking(void) {
 	// Start of the test
-	gTestID = 259; // Assuming Test Case ID is 259
+	gTestID = 116; // Assuming Test Case ID is 116
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -7380,8 +7371,8 @@ void test_l1_dsAudio_negative_dsSetAudioDucking(void) {
 /**
  * @brief Ensure dsEnableLoopThru() sets loop-through mode correctly during positive scenarios.
  * 
- * **Test Group ID:** Basic: 51@n
- * **Test Case ID:** 260@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 117@n
  * 
  * **Dependencies:** Audio device should be connected and loop-through features are supported.@n
  * **User Interaction:** None
@@ -7398,7 +7389,7 @@ void test_l1_dsAudio_negative_dsSetAudioDucking(void) {
  */
 void test_l1_dsAudio_positive_dsEnableLoopThru(void) {
 	// Start of the test
-	gTestID = 260; // Assuming Test Case ID is 260
+	gTestID = 117; // Assuming Test Case ID is 117
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -7437,8 +7428,8 @@ void test_l1_dsAudio_positive_dsEnableLoopThru(void) {
 /**
  * @brief Ensure dsEnableLoopThru() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 51@n
- * **Test Case ID:** 261@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 118@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -7457,7 +7448,7 @@ void test_l1_dsAudio_positive_dsEnableLoopThru(void) {
  */
 void test_l1_dsAudio_negative_dsEnableLoopThru(void) {
 	// Start of the test
-	gTestID = 261; // Assuming Test Case ID is 261
+	gTestID = 118; // Assuming Test Case ID is 118
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -7498,8 +7489,8 @@ void test_l1_dsAudio_negative_dsEnableLoopThru(void) {
 /**
  * @brief Ensure dsSetAudioMute() mutes or un-mutes an audio port correctly during positive scenarios.
  * 
- * **Test Group ID:** Basic: 52@n
- * **Test Case ID:** 262@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 119@n
  * 
  * **Dependencies:** Audio device should be connected.@n
  * **User Interaction:** None
@@ -7515,7 +7506,7 @@ void test_l1_dsAudio_negative_dsEnableLoopThru(void) {
  */
 void test_l1_dsAudio_positive_dsSetAudioMute(void) {
 	// Start of the test
-	gTestID = 262; // Assuming Test Case ID is 262
+	gTestID = 119; // Assuming Test Case ID is 119
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -7555,8 +7546,8 @@ void test_l1_dsAudio_positive_dsSetAudioMute(void) {
 /**
  * @brief Ensure dsSetAudioMute() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 52@n
- * **Test Case ID:** 263@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 120@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -7575,7 +7566,7 @@ void test_l1_dsAudio_positive_dsSetAudioMute(void) {
  */
 void test_l1_dsAudio_negative_dsSetAudioMute(void) {
 	// Start of the test
-	gTestID = 263; // Assuming Test Case ID is 263
+	gTestID = 120; // Assuming Test Case ID is 120
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -7617,8 +7608,8 @@ void test_l1_dsAudio_negative_dsSetAudioMute(void) {
 /**
  * @brief Ensure dsIsAudioMSDecode() correctly checks for Dolby MS11 Multistream Decode support during positive scenarios.
  * 
- * **Test Group ID:** Basic: 53@n
- * **Test Case ID:** 264@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 121@n
  * 
  * **Dependencies:**@n
  * **User Interaction:** None
@@ -7634,7 +7625,7 @@ void test_l1_dsAudio_negative_dsSetAudioMute(void) {
  */
 void test_l1_dsAudio_positive_dsIsAudioMSDecode(void) {
 	// Start of the test
-	gTestID = 264; // Assuming Test Case ID is 264
+	gTestID = 121; // Assuming Test Case ID is 121
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -7668,8 +7659,8 @@ void test_l1_dsAudio_positive_dsIsAudioMSDecode(void) {
 /**
  * @brief Ensure dsIsAudioMSDecode() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 53@n
- * **Test Case ID:** 265@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 122@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -7689,7 +7680,7 @@ void test_l1_dsAudio_positive_dsIsAudioMSDecode(void) {
  */
 void test_l1_dsAudio_negative_dsIsAudioMSDecode(void) {
 	// Start of the test
-	gTestID = 265; // Assuming Test Case ID is 265
+	gTestID = 122; // Assuming Test Case ID is 122
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -7736,8 +7727,8 @@ void test_l1_dsAudio_negative_dsIsAudioMSDecode(void) {
 /**
  * @brief Ensure dsIsAudioMS12Decode() correctly checks for Dolby MS12 Multistream Decode support during positive scenarios.
  * 
- * **Test Group ID:** Basic: 54@n
- * **Test Case ID:** 266@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 123@n
  * 
  * **Dependencies:**@n
  * **User Interaction:** None
@@ -7753,7 +7744,7 @@ void test_l1_dsAudio_negative_dsIsAudioMSDecode(void) {
  */
 void test_l1_dsAudio_positive_dsIsAudioMS12Decode(void) {
 	// Start of the test
-	gTestID = 266; // Assuming Test Case ID is 266
+	gTestID = 123; // Assuming Test Case ID is 123
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -7787,8 +7778,8 @@ void test_l1_dsAudio_positive_dsIsAudioMS12Decode(void) {
 /**
  * @brief Ensure dsIsAudioMS12Decode() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 54@n
- * **Test Case ID:** 267@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 124@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -7808,7 +7799,7 @@ void test_l1_dsAudio_positive_dsIsAudioMS12Decode(void) {
  */
 void test_l1_dsAudio_negative_dsIsAudioMS12Decode(void) {
 	// Start of the test
-	gTestID = 267; // Assuming Test Case ID is 267
+	gTestID = 124; // Assuming Test Case ID is 124
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -7854,8 +7845,8 @@ void test_l1_dsAudio_negative_dsIsAudioMS12Decode(void) {
 /**
  * @brief Ensure dsAudioOutIsConnected() correctly checks for audio output port connection during positive scenarios.
  * 
- * **Test Group ID:** Basic: 55@n
- * **Test Case ID:** 268@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 125@n
  * 
  * **Dependencies:**@n
  * **User Interaction:** None
@@ -7871,7 +7862,7 @@ void test_l1_dsAudio_negative_dsIsAudioMS12Decode(void) {
  */
 void test_l1_dsAudio_positive_dsAudioOutIsConnected(void) {
 	// Start of the test
-	gTestID = 268; // Assuming Test Case ID is 268
+	gTestID = 125; // Assuming Test Case ID is 125
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -7905,8 +7896,8 @@ void test_l1_dsAudio_positive_dsAudioOutIsConnected(void) {
 /**
  * @brief Ensure dsAudioOutIsConnected() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 55@n
- * **Test Case ID:** 269@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 126@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -7926,7 +7917,7 @@ void test_l1_dsAudio_positive_dsAudioOutIsConnected(void) {
  */
 void test_l1_dsAudio_negative_dsAudioOutIsConnected(void) {
 	// Start of the test
-	gTestID = 269; // Assuming Test Case ID is 269
+	gTestID = 126; // Assuming Test Case ID is 126
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -7972,8 +7963,8 @@ void test_l1_dsAudio_negative_dsAudioOutIsConnected(void) {
 /**
  * @brief Ensure dsAudioOutRegisterConnectCB() correctly registers for the audio output connect event during positive scenarios.
  * 
- * **Test Group ID:** Basic: 56@n
- * **Test Case ID:** 270@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 127@n
  * 
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
@@ -7992,7 +7983,7 @@ void testAudioOutConnectCallbackFunction(dsAudioPortType_t type, int index, bool
 
 void test_l1_dsAudio_positive_dsAudioOutRegisterConnectCB(void) {
 	// Start of the test
-	gTestID = 270; // Assuming Test Case ID is 270
+	gTestID = 127; // Assuming Test Case ID is 127
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -8017,8 +8008,8 @@ void test_l1_dsAudio_positive_dsAudioOutRegisterConnectCB(void) {
 /**
  * @brief Ensure dsAudioOutRegisterConnectCB() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 56@n
- * **Test Case ID:** 271@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 128@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -8034,7 +8025,7 @@ void test_l1_dsAudio_positive_dsAudioOutRegisterConnectCB(void) {
  */
 void test_l1_dsAudio_negative_dsAudioOutRegisterConnectCB(void) {
 	// Start of the test
-	gTestID = 271; // Assuming Test Case ID is 271
+	gTestID = 128; // Assuming Test Case ID is 128
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -8063,8 +8054,8 @@ void test_l1_dsAudio_negative_dsAudioOutRegisterConnectCB(void) {
 /**
  * @brief Ensure dsAudioFormatUpdateRegisterCB() correctly registers for the audio format update event during positive scenarios.
  * 
- * **Test Group ID:** Basic: 57@n
- * **Test Case ID:** 272@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 129@n
  * 
  * 
  * **Test Procedure:**@n
@@ -8084,7 +8075,7 @@ void testAudioFormatUpdateCallbackFunction(dsAudioPortType_t type, int index, ds
 
 void test_l1_dsAudio_positive_dsAudioFormatUpdateRegisterCB(void) {
 	// Start of the test
-	gTestID = 272; // Assuming Test Case ID is 272
+	gTestID = 129; // Assuming Test Case ID is 129
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -8109,8 +8100,8 @@ void test_l1_dsAudio_positive_dsAudioFormatUpdateRegisterCB(void) {
 /**
  * @brief Ensure dsAudioFormatUpdateRegisterCB() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 57@n
- * **Test Case ID:** 273@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 130@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -8126,7 +8117,7 @@ void test_l1_dsAudio_positive_dsAudioFormatUpdateRegisterCB(void) {
  */
 void test_l1_dsAudio_negative_dsAudioFormatUpdateRegisterCB(void) {
 	// Start of the test
-	gTestID = 273; // Assuming Test Case ID is 273
+	gTestID = 130; // Assuming Test Case ID is 130
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -8154,8 +8145,8 @@ void test_l1_dsAudio_negative_dsAudioFormatUpdateRegisterCB(void) {
 /**
  * @brief Ensure dsGetAudioCapabilities() correctly fetches the supported audio capabilities during positive scenarios.
  * 
- * **Test Group ID:** Basic: 58@n
- * **Test Case ID:** 274@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 131@n
  * 
  * **User Interaction:** None
  * 
@@ -8172,7 +8163,7 @@ void test_l1_dsAudio_negative_dsAudioFormatUpdateRegisterCB(void) {
  */
 void test_l1_dsAudio_positive_dsGetAudioCapabilities(void) {
 	// Start of the test
-	gTestID = 274; // Assuming Test Case ID is 274
+	gTestID = 131; // Assuming Test Case ID is 131
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -8215,8 +8206,8 @@ void test_l1_dsAudio_positive_dsGetAudioCapabilities(void) {
 /**
  * @brief Ensure dsGetAudioCapabilities() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 58@n
- * **Test Case ID:** 275@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 132@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -8236,7 +8227,7 @@ void test_l1_dsAudio_positive_dsGetAudioCapabilities(void) {
  */
 void test_l1_dsAudio_negative_dsGetAudioCapabilities(void) {
 	// Start of the test
-	gTestID = 275; // Assuming Test Case ID is 275
+	gTestID = 132; // Assuming Test Case ID is 275
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -8282,8 +8273,8 @@ void test_l1_dsAudio_negative_dsGetAudioCapabilities(void) {
 /**
  * @brief Ensure dsGetMS12Capabilities() correctly fetches the supported MS12 capabilities during positive scenarios.
  * 
- * **Test Group ID:** Basic: 59@n
- * **Test Case ID:** 276@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 133@n
  * 
  * **Dependencies:** Audio device should be connected and should have known MS12 capabilities.@n
  * **User Interaction:** None
@@ -8301,7 +8292,7 @@ void test_l1_dsAudio_negative_dsGetAudioCapabilities(void) {
  */
 void test_l1_dsAudio_positive_dsGetMS12Capabilities(void) {
 	// Start of the test
-	gTestID = 276; // Assuming Test Case ID is 276
+	gTestID = 133; // Assuming Test Case ID is 133
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -8344,8 +8335,8 @@ void test_l1_dsAudio_positive_dsGetMS12Capabilities(void) {
 /**
  * @brief Ensure dsGetMS12Capabilities() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 59@n
- * **Test Case ID:** 277@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 134@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -8365,7 +8356,7 @@ void test_l1_dsAudio_positive_dsGetMS12Capabilities(void) {
  */
 void test_l1_dsAudio_negative_dsGetMS12Capabilities(void) {
 	// Start of the test
-	gTestID = 277; // Assuming Test Case ID is 277
+	gTestID = 134; // Assuming Test Case ID is 134
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -8410,8 +8401,8 @@ void test_l1_dsAudio_negative_dsGetMS12Capabilities(void) {
 /**
  * @brief Ensure dsResetDialogEnhancement() correctly resets the dialog enhancement to platform-specific default value during positive scenarios.
  * 
- * **Test Group ID:** Basic: 60@n
- * **Test Case ID:** 278@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 135@n
  * 
  * **Dependencies:**@n
  * **User Interaction:** None
@@ -8427,7 +8418,7 @@ void test_l1_dsAudio_negative_dsGetMS12Capabilities(void) {
  */
 void test_l1_dsAudio_positive_dsResetDialogEnhancement(void) {
 	// Start of the test
-	gTestID = 278; // Assuming Test Case ID is 278
+	gTestID = 135; // Assuming Test Case ID is 135
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -8461,8 +8452,8 @@ void test_l1_dsAudio_positive_dsResetDialogEnhancement(void) {
 /**
  * @brief Ensure dsResetDialogEnhancement() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 60@n
- * **Test Case ID:** 279@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 136@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -8481,7 +8472,7 @@ void test_l1_dsAudio_positive_dsResetDialogEnhancement(void) {
  */
 void test_l1_dsAudio_negative_dsResetDialogEnhancement(void) {
 	// Start of the test
-	gTestID = 279; // Assuming Test Case ID is 279
+	gTestID = 136; // Assuming Test Case ID is 136
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -8523,8 +8514,8 @@ void test_l1_dsAudio_negative_dsResetDialogEnhancement(void) {
 /**
  * @brief Ensure dsResetBassEnhancer() correctly resets the bass enhancer to platform-specific default value during positive scenarios.
  * 
- * **Test Group ID:** Basic: 61@n
- * **Test Case ID:** 280@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 137@n
  * 
  * **User Interaction:** None
  * 
@@ -8539,7 +8530,7 @@ void test_l1_dsAudio_negative_dsResetDialogEnhancement(void) {
  */
 void test_l1_dsAudio_positive_dsResetBassEnhancer(void) {
 	// Start of the test
-	gTestID = 280; // Assuming Test Case ID is 280
+	gTestID = 137; // Assuming Test Case ID is 137
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -8574,8 +8565,8 @@ void test_l1_dsAudio_positive_dsResetBassEnhancer(void) {
 /**
  * @brief Ensure dsResetBassEnhancer() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 61@n
- * **Test Case ID:** 281@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 138@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -8594,7 +8585,7 @@ void test_l1_dsAudio_positive_dsResetBassEnhancer(void) {
  */
 void test_l1_dsAudio_negative_dsResetBassEnhancer(void) {
 	// Start of the test
-	gTestID = 281; // Assuming Test Case ID is 281
+	gTestID = 138; // Assuming Test Case ID is 138
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -8634,8 +8625,8 @@ void test_l1_dsAudio_negative_dsResetBassEnhancer(void) {
 /**
  * @brief Ensure dsResetSurroundVirtualizer() correctly resets the surround virtualizer to platform-specific default value during positive scenarios.
  * 
- * **Test Group ID:** Basic: 62@n
- * **Test Case ID:** 282@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 139@n
  * 
  * **User Interaction:** None
  * 
@@ -8650,7 +8641,7 @@ void test_l1_dsAudio_negative_dsResetBassEnhancer(void) {
  */
 void test_l1_dsAudio_positive_dsResetSurroundVirtualizer(void) {
 	// Start of the test
-	gTestID = 282; // Assuming Test Case ID is 282
+	gTestID = 139; // Assuming Test Case ID is 139
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -8684,8 +8675,8 @@ void test_l1_dsAudio_positive_dsResetSurroundVirtualizer(void) {
 /**
  * @brief Ensure dsResetSurroundVirtualizer() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 62@n
- * **Test Case ID:** 283@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 140@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -8704,7 +8695,7 @@ void test_l1_dsAudio_positive_dsResetSurroundVirtualizer(void) {
  */
 void test_l1_dsAudio_negative_dsResetSurroundVirtualizer(void) {
 	// Start of the test
-	gTestID = 283; // Assuming Test Case ID is 283
+	gTestID = 140; // Assuming Test Case ID is 140
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -8744,10 +8735,9 @@ void test_l1_dsAudio_negative_dsResetSurroundVirtualizer(void) {
 /**
  * @brief Ensure dsResetVolumeLeveller() correctly resets the Dolby volume leveller to platform-specific default volume level during positive scenarios.
  * 
- * **Test Group ID:** Basic: 63@n
- * **Test Case ID:** 284@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 141@n
  * 
- * **Dependencies:** Audio device should be connected and support Dolby volume levelling functionalities.@n
  * **User Interaction:** None
  * 
  * **Test Procedure:**@n
@@ -8761,7 +8751,7 @@ void test_l1_dsAudio_negative_dsResetSurroundVirtualizer(void) {
  */
 void test_l1_dsAudio_positive_dsResetVolumeLeveller(void) {
 	// Start of the test
-	gTestID = 284; // Assuming Test Case ID is 284
+	gTestID = 141; // Assuming Test Case ID is 141
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -8796,8 +8786,8 @@ void test_l1_dsAudio_positive_dsResetVolumeLeveller(void) {
 /**
  * @brief Ensure dsResetVolumeLeveller() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 63@n
- * **Test Case ID:** 285@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 142@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -8816,7 +8806,7 @@ void test_l1_dsAudio_positive_dsResetVolumeLeveller(void) {
  */
 void test_l1_dsAudio_negative_dsResetVolumeLeveller(void) {
 	// Start of the test
-	gTestID = 285; // Assuming Test Case ID is 285
+	gTestID = 142; // Assuming Test Case ID is 142
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -8853,11 +8843,11 @@ void test_l1_dsAudio_negative_dsResetVolumeLeveller(void) {
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
-
 /**
+ * @brief Ensure dsSetMS12AudioProfileSetttingsOverride() returns correct MS12AudioProfileSetttings during positive scenarios.
  * 
- * **Test Group ID:** Basic: 64@n
- * **Test Case ID:** 286@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 143@n
  * 
  * **Dependencies:** Audio device should be connected and support MS12 audio profiles.@n
  * **User Interaction:** None
@@ -8873,7 +8863,7 @@ void test_l1_dsAudio_negative_dsResetVolumeLeveller(void) {
  */
 void test_l1_dsAudio_positive_dsSetMS12AudioProfileSetttingsOverride(void) {
 	// Start of the test
-	gTestID = 286; // Assuming Test Case ID is 286
+	gTestID = 143; // Assuming Test Case ID is 143
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -8908,8 +8898,8 @@ void test_l1_dsAudio_positive_dsSetMS12AudioProfileSetttingsOverride(void) {
 /**
  * @brief Ensure dsSetMS12AudioProfileSetttingsOverride() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 64@n
- * **Test Case ID:** 287@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 144@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -8932,7 +8922,7 @@ void test_l1_dsAudio_positive_dsSetMS12AudioProfileSetttingsOverride(void) {
  */
 void test_l1_dsAudio_negative_dsSetMS12AudioProfileSetttingsOverride(void) {
 	// Start of the test
-	gTestID = 287; // Assuming Test Case ID is 287
+	gTestID = 144; // Assuming Test Case ID is 144
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -8995,8 +8985,8 @@ void test_l1_dsAudio_negative_dsSetMS12AudioProfileSetttingsOverride(void) {
 /**
  * @brief Ensure dsSetAssociatedAudioMixing() correctly enables/disables the associated audio mixing feature during positive scenarios.
  * 
- * **Test Group ID:** Basic: 65@n
- * **Test Case ID:** 288@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 145@n
  * 
  * **Dependencies:** Audio device should be connected.@n
  * **User Interaction:** None
@@ -9013,7 +9003,7 @@ void test_l1_dsAudio_negative_dsSetMS12AudioProfileSetttingsOverride(void) {
  */
 void test_l1_dsAudio_positive_dsSetAssociatedAudioMixing(void) {
 	// Start of the test
-	gTestID = 288; // Assuming Test Case ID is 288
+	gTestID = 145; // Assuming Test Case ID is 145
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -9050,8 +9040,8 @@ void test_l1_dsAudio_positive_dsSetAssociatedAudioMixing(void) {
 /**
  * @brief Ensure dsSetAssociatedAudioMixing() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 65@n
- * **Test Case ID:** 289@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 146@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -9070,7 +9060,7 @@ void test_l1_dsAudio_positive_dsSetAssociatedAudioMixing(void) {
  */
 void test_l1_dsAudio_negative_dsSetAssociatedAudioMixing(void) {
 	// Start of the test
-	gTestID = 289; // Assuming Test Case ID is 289
+	gTestID = 146; // Assuming Test Case ID is 146
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -9111,8 +9101,8 @@ void test_l1_dsAudio_negative_dsSetAssociatedAudioMixing(void) {
 /**
  * @brief Ensure dsGetAssociatedAudioMixing() correctly fetches the status of the associated audio mixing feature during positive scenarios.
  * 
- * **Test Group ID:** Basic: 66@n
- * **Test Case ID:** 290@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 147@n
  * 
  * **Dependencies:**@n
  * **User Interaction:** None
@@ -9130,7 +9120,7 @@ void test_l1_dsAudio_negative_dsSetAssociatedAudioMixing(void) {
  */
 void test_l1_dsAudio_positive_dsGetAssociatedAudioMixing(void) {
 	// Start of the test
-	gTestID = 290; // Assuming Test Case ID is 290
+	gTestID = 147; // Assuming Test Case ID is 147
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -9172,8 +9162,8 @@ void test_l1_dsAudio_positive_dsGetAssociatedAudioMixing(void) {
 /**
  * @brief Ensure dsGetAssociatedAudioMixing() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 66@n
- * **Test Case ID:** 291@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 148@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -9193,7 +9183,7 @@ void test_l1_dsAudio_positive_dsGetAssociatedAudioMixing(void) {
  */
 void test_l1_dsAudio_negative_dsGetAssociatedAudioMixing(void) {
 	// Start of the test
-	gTestID = 291; // Assuming Test Case ID is 291
+	gTestID = 148; // Assuming Test Case ID is 148
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -9238,8 +9228,8 @@ void test_l1_dsAudio_negative_dsGetAssociatedAudioMixing(void) {
 /**
  * @brief Ensure dsSetFaderControl() correctly sets the mixer balance between main and associated audio during positive scenarios.
  * 
- * **Test Group ID:** Basic: 67@n
- * **Test Case ID:** 292@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 149@n
  * 
  * **Dependencies:**@n
  * **User Interaction:** None
@@ -9256,7 +9246,7 @@ void test_l1_dsAudio_negative_dsGetAssociatedAudioMixing(void) {
  */
 void test_l1_dsAudio_positive_dsSetFaderControl(void) {
 	// Start of the test
-	gTestID = 292; // Assuming Test Case ID is 292
+	gTestID = 149; // Assuming Test Case ID is 149
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -9297,8 +9287,8 @@ void test_l1_dsAudio_positive_dsSetFaderControl(void) {
 /**
  * @brief Ensure dsSetFaderControl() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 67@n
- * **Test Case ID:** 293@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 150@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -9318,7 +9308,7 @@ void test_l1_dsAudio_positive_dsSetFaderControl(void) {
  */
 void test_l1_dsAudio_negative_dsSetFaderControl(void) {
 	// Start of the test
-	gTestID = 293; // Assuming Test Case ID is 293
+	gTestID = 150; // Assuming Test Case ID is 150
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -9365,8 +9355,8 @@ void test_l1_dsAudio_negative_dsSetFaderControl(void) {
 /**
  * @brief Ensure dsGetFaderControl() correctly fetches the mixer balance between main and associated audio during positive scenarios.
  * 
- * **Test Group ID:** Basic: 68@n
- * **Test Case ID:** 294@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 151@n
  * 
  * **Dependencies:**@n
  * **User Interaction:** None
@@ -9384,7 +9374,7 @@ void test_l1_dsAudio_negative_dsSetFaderControl(void) {
  */
 void test_l1_dsAudio_positive_dsGetFaderControl(void) {
 	// Start of the test
-	gTestID = 294; // Assuming Test Case ID is 294
+	gTestID = 151; // Assuming Test Case ID is 151
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -9426,8 +9416,8 @@ void test_l1_dsAudio_positive_dsGetFaderControl(void) {
 /**
  * @brief Ensure dsGetFaderControl() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 68@n
- * **Test Case ID:** 295@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 152@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -9447,7 +9437,7 @@ void test_l1_dsAudio_positive_dsGetFaderControl(void) {
  */
 void test_l1_dsAudio_negative_dsGetFaderControl(void) {
 	// Start of the test
-	gTestID = 295; // Assuming Test Case ID is 295
+	gTestID = 152; // Assuming Test Case ID is 152
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -9493,8 +9483,8 @@ void test_l1_dsAudio_negative_dsGetFaderControl(void) {
 /**
  * @brief Ensure dsSetPrimaryLanguage() correctly sets the AC4 Primary language during positive scenarios.
  * 
- * **Test Group ID:** Basic: 69@n
- * **Test Case ID:** 296@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 153@n
  * 
  * **Dependencies:** Audio device should be connected.@n
  * **User Interaction:** None
@@ -9510,7 +9500,7 @@ void test_l1_dsAudio_negative_dsGetFaderControl(void) {
  */
 void test_l1_dsAudio_positive_dsSetPrimaryLanguage(void) {
 	// Start of the test
-	gTestID = 296; // Assuming Test Case ID is 296
+	gTestID = 153; // Assuming Test Case ID is 153
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -9544,8 +9534,8 @@ void test_l1_dsAudio_positive_dsSetPrimaryLanguage(void) {
 /**
  * @brief Ensure dsSetPrimaryLanguage() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 69@n
- * **Test Case ID:** 297@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 154@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -9566,7 +9556,7 @@ void test_l1_dsAudio_positive_dsSetPrimaryLanguage(void) {
  */
 void test_l1_dsAudio_negative_dsSetPrimaryLanguage(void) {
 	// Start of the test
-	gTestID = 297; // Assuming Test Case ID is 297
+	gTestID = 154; // Assuming Test Case ID is 154
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -9616,8 +9606,8 @@ void test_l1_dsAudio_negative_dsSetPrimaryLanguage(void) {
 /**
  * @brief Ensure dsGetPrimaryLanguage() correctly fetches the AC4 Primary language during positive scenarios.
  * 
- * **Test Group ID:** Basic: 70@n
- * **Test Case ID:** 298@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 155@n
  * 
  * **Dependencies:**@n
  * **User Interaction:** None
@@ -9635,7 +9625,7 @@ void test_l1_dsAudio_negative_dsSetPrimaryLanguage(void) {
  */
 void test_l1_dsAudio_positive_dsGetPrimaryLanguage(void) {
 	// Start of the test
-	gTestID = 298; // Assuming Test Case ID is 298
+	gTestID = 155; // Assuming Test Case ID is 155
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int array_size = (NUM_OF_PORTS*4); // Assuming 3 letter language code plus null terminator
@@ -9678,8 +9668,8 @@ void test_l1_dsAudio_positive_dsGetPrimaryLanguage(void) {
 /**
  * @brief Ensure dsGetPrimaryLanguage() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 70@n
- * **Test Case ID:** 299@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 156@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -9699,7 +9689,7 @@ void test_l1_dsAudio_positive_dsGetPrimaryLanguage(void) {
  */
 void test_l1_dsAudio_negative_dsGetPrimaryLanguage(void) {
 	// Start of the test
-	gTestID = 299; // Assuming Test Case ID is 299
+	gTestID = 156; // Assuming Test Case ID is 156
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -9745,8 +9735,8 @@ void test_l1_dsAudio_negative_dsGetPrimaryLanguage(void) {
 /**
  * @brief Ensure dsSetSecondaryLanguage() correctly sets the AC4 Secondary language during positive scenarios.
  * 
- * **Test Group ID:** Basic: 71@n
- * **Test Case ID:** 300@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 157@n
  * 
  * **Dependencies:**@n
  * **User Interaction:** None
@@ -9762,7 +9752,7 @@ void test_l1_dsAudio_negative_dsGetPrimaryLanguage(void) {
  */
 void test_l1_dsAudio_positive_dsSetSecondaryLanguage(void) {
 	// Start of the test
-	gTestID = 300; // Assuming Test Case ID is 300
+	gTestID = 157; // Assuming Test Case ID is 157
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -9795,8 +9785,8 @@ void test_l1_dsAudio_positive_dsSetSecondaryLanguage(void) {
 /**
  * @brief Ensure dsSetSecondaryLanguage() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 71@n
- * **Test Case ID:** 301@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 158@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -9817,7 +9807,7 @@ void test_l1_dsAudio_positive_dsSetSecondaryLanguage(void) {
  */
 void test_l1_dsAudio_negative_dsSetSecondaryLanguage(void) {
 	// Start of the test
-	gTestID = 301; // Assuming Test Case ID is 301
+	gTestID = 158; // Assuming Test Case ID is 158
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -9866,8 +9856,8 @@ void test_l1_dsAudio_negative_dsSetSecondaryLanguage(void) {
 /**
  * @brief Ensure dsGetSecondaryLanguage() correctly fetches the AC4 Secondary language during positive scenarios.
  * 
- * **Test Group ID:** Basic: 72@n
- * **Test Case ID:** 302@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 159@n
  * 
  * **Dependencies:**@n
  * **User Interaction:** None
@@ -9885,7 +9875,7 @@ void test_l1_dsAudio_negative_dsSetSecondaryLanguage(void) {
  */
 void test_l1_dsAudio_positive_dsGetSecondaryLanguage(void) {
 	// Start of the test
-	gTestID = 302; // Assuming Test Case ID is 302
+	gTestID = 159; // Assuming Test Case ID is 159
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 
@@ -9928,8 +9918,8 @@ void test_l1_dsAudio_positive_dsGetSecondaryLanguage(void) {
 /**
  * @brief Ensure dsGetSecondaryLanguage() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 72@n
- * **Test Case ID:** 303@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 160@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -9949,7 +9939,7 @@ void test_l1_dsAudio_positive_dsGetSecondaryLanguage(void) {
  */
 void test_l1_dsAudio_negative_dsGetSecondaryLanguage(void) {
 	// Start of the test
-	gTestID = 303; // Assuming Test Case ID is 303
+	gTestID = 160; // Assuming Test Case ID is 160
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -9995,8 +9985,8 @@ void test_l1_dsAudio_negative_dsGetSecondaryLanguage(void) {
 /**
  * @brief Ensure dsGetHDMIARCPortId() correctly fetches the audio HDMI ARC port ID during positive scenarios.
  * 
- * **Test Group ID:** Basic: 73@n
- * **Test Case ID:** 304@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 161@n
  * 
  * **Dependencies:** HDMI device should be connected and supports ARC.@n
  * **User Interaction:** None
@@ -10011,7 +10001,7 @@ void test_l1_dsAudio_negative_dsGetSecondaryLanguage(void) {
  */
 void test_l1_dsAudio_positive_dsGetHDMIARCPortId(void) {
 	// Start of the test
-	gTestID = 304; // Assuming Test Case ID is 304
+	gTestID = 161; // Assuming Test Case ID is 161
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -10038,8 +10028,8 @@ void test_l1_dsAudio_positive_dsGetHDMIARCPortId(void) {
 /**
  * @brief Ensure dsGetHDMIARCPortId() returns correct error codes during negative scenarios.
  * 
- * **Test Group ID:** Basic: 73@n
- * **Test Case ID:** 305@n
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 162@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -10056,7 +10046,7 @@ void test_l1_dsAudio_positive_dsGetHDMIARCPortId(void) {
  */
 void test_l1_dsAudio_negative_dsGetHDMIARCPortId(void) {
 	// Start of the test
-	gTestID = 305; // Assuming Test Case ID is 305
+	gTestID = 162; // Assuming Test Case ID is 162
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -10162,12 +10152,12 @@ int test_l1_dsAudio_register ( void )
 	UT_add_test( pSuite, "dsGetMS12AudioProfileList_L1_negative" ,test_l1_dsAudio_negative_dsGetMS12AudioProfileList );
 	UT_add_test( pSuite, "dsGetMS12AudioProfile_L1_positive" ,test_l1_dsAudio_positive_dsGetMS12AudioProfile );
 	UT_add_test( pSuite, "dsGetMS12AudioProfile_L1_negative" ,test_l1_dsAudio_negative_dsGetMS12AudioProfile );
-	UT_add_test( pSuite, "dsGetSupportedARCTypes_L1_positive" ,test_l1_dsAudio_positive_dsGetSupportedARCTypes );
-	UT_add_test( pSuite, "dsGetSupportedARCTypes_L1_negative" ,test_l1_dsAudio_negative_dsGetSupportedARCTypes );
-	UT_add_test( pSuite, "dsAudioSetSAD_L1_positive" ,test_l1_dsAudio_positive_dsAudioSetSAD );
-	UT_add_test( pSuite, "dsAudioSetSAD_L1_negative" ,test_l1_dsAudio_negative_dsAudioSetSAD );
-	UT_add_test( pSuite, "dsAudioEnableARC_L1_positive" ,test_l1_dsAudio_positive_dsAudioEnableARC );
-	UT_add_test( pSuite, "dsAudioEnableARC_L1_negative" ,test_l1_dsAudio_negative_dsAudioEnableARC );
+//	UT_add_test( pSuite, "dsGetSupportedARCTypes_L1_positive" ,test_l1_dsAudio_positive_dsGetSupportedARCTypes );
+//	UT_add_test( pSuite, "dsGetSupportedARCTypes_L1_negative" ,test_l1_dsAudio_negative_dsGetSupportedARCTypes );
+//	UT_add_test( pSuite, "dsAudioSetSAD_L1_positive" ,test_l1_dsAudio_positive_dsAudioSetSAD );
+//	UT_add_test( pSuite, "dsAudioSetSAD_L1_negative" ,test_l1_dsAudio_negative_dsAudioSetSAD );
+//	UT_add_test( pSuite, "dsAudioEnableARC_L1_positive" ,test_l1_dsAudio_positive_dsAudioEnableARC );
+//	UT_add_test( pSuite, "dsAudioEnableARC_L1_negative" ,test_l1_dsAudio_negative_dsAudioEnableARC );
 	UT_add_test( pSuite, "dsGetStereoMode_L1_positive" ,test_l1_dsAudio_positive_dsGetStereoMode );
 	UT_add_test( pSuite, "dsGetStereoMode_L1_negative" ,test_l1_dsAudio_negative_dsGetStereoMode );
 	UT_add_test( pSuite, "dsSetStereoMode_L1_positive" ,test_l1_dsAudio_positive_dsSetStereoMode );
