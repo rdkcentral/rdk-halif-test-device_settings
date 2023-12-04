@@ -61,8 +61,6 @@
 #ifndef __DS_FPD_SETTINGS_H__
 #define __DS_FPD_SETTINGS_H__
 
-#warning "CONFIGURING PLATFORM FRONT PANEL SETTINGS"
-
 #include "dsFPDTypes.h"
 
 #ifdef __cplusplus
