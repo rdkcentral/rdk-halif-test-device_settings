@@ -47,7 +47,7 @@ dsError_t dsGetEDID(intptr_t handle, dsDisplayEDID_t* edid)
   return (dsError_t)0;
 }
 
-dsError_t dsGetEDIDBytes(intptr_t handle, unsigned char** edid, int* length)
+dsError_t dsGetEDIDBytes(intptr_t handle, unsigned char* edid, int* length)
 {
   /*TODO: Implement Me!*/
   (void)handle;
