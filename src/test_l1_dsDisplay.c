@@ -497,18 +497,18 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
             DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
             // Step 05: Compare the returned results
-            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1.productCode , edid2.productCode);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1.serialNumber , edid2.serialNumber);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1.manufactureYear , edid2.manufactureYear);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1.manufactureWeek , edid2.manufactureWeek);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1.hdmiDeviceType , edid2.hdmiDeviceType);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1.isRepeater , edid2.isRepeater);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1.physicalAddressA , edid2.physicalAddressA);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1.physicalAddressB , edid2.physicalAddressB);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1.physicalAddressC , edid2.physicalAddressC);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1.physicalAddressD , edid2.physicalAddressD);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1.numOfSupportedResolution , edid2.numOfSupportedResolution);
-            DS_ASSERT_AUTO_TERM_STRING(edid2.monitorName, edid2.monitorName)
+            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1->productCode , edid2->productCode);
+            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1->serialNumber , edid2->serialNumber);
+            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1->manufactureYear , edid2->manufactureYear);
+            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1->manufactureWeek , edid2->manufactureWeek);
+            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1->hdmiDeviceType , edid2->hdmiDeviceType);
+            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1->isRepeater , edid2->isRepeater);
+            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1->physicalAddressA , edid2->physicalAddressA);
+            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1->physicalAddressB , edid2->physicalAddressB);
+            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1->physicalAddressC , edid2->physicalAddressC);
+            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1->physicalAddressD , edid2->physicalAddressD);
+            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1->numOfSupportedResolution , edid2->numOfSupportedResolution);
+            DS_ASSERT_AUTO_TERM_STRING(edid2->monitorName, edid2->monitorName)
 
         }
     }
