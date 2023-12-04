@@ -557,7 +557,7 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
 
     int result;
     intptr_t displayHandle=-1;
-    dsDisplayEDID_t *edid;
+    dsDisplayEDID_t *edid = {0};
 
     // Step 01: Call dsGetEDID() without initializing the display sub-system
     result = dsGetEDID(displayHandle, edid);
@@ -725,47 +725,86 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
 
     int result;
     intptr_t displayHandle =-1;
-    unsigned char *edid;
+    unsigned char *edid = (unsigned char *)malloc(512);
     int length = 0;
 
     // Step 01: Call dsGetEDIDBytes() without initializing or obtaining a handle
     result = dsGetEDIDBytes(displayHandle, edid, &length);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    if(result != dsERR_NOT_INITIALIZED)
+    {
+        UT_FAIL_NOT_FATAL("Incorrect error return");
+        free(edid);
+        return;
+    }
 
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    if(result != dsERR_NONE)
+    {
+        UT_FAIL_NOT_FATAL("Init has failed");
+        free(edid);
+        return;
+    }
 
     // Step 03: Loop through all valid ports
     for (int i = 0; i < sizeof(kSupportedPortTypes) / sizeof(kSupportedPortTypes[0]); i++) {
         result = dsGetDisplay(kSupportedPortTypes[i], i, &displayHandle);
         DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+        if(result != dsERR_NONE)
+        {
+            UT_FAIL_NOT_FATAL("Failed to get displayHandle");
+            break;
+        }
 
         // Step 04: Call dsGetEDIDBytes() with an invalid handle
         result = dsGetEDIDBytes((intptr_t)NULL, edid, &length);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+        if(result != dsERR_INVALID_PARAM)
+        {
+            UT_FAIL_NOT_FATAL("Incorrect error return");
+            break;
+        }
 
         // Step 05: Call dsGetEDIDBytes() with null edid
         result = dsGetEDIDBytes(displayHandle, NULL, &length);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+        if(result != dsERR_INVALID_PARAM)
+        {
+            UT_FAIL_NOT_FATAL("Incorrect error return");
+            break;
+        }
 
         // Step 06: Call dsGetEDIDBytes() with null length
         result = dsGetEDIDBytes(displayHandle, edid, NULL);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+        if(result != dsERR_INVALID_PARAM)
+        {
+            UT_FAIL_NOT_FATAL("Incorrect error return");
+            break;
+        }
     }
 
     // Step 07: Terminate the display sub-system
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    if(result != dsERR_NONE)
+    {
+        UT_FAIL_NOT_FATAL("Term has failed");
+        free(edid);
+        return;
+    }
 
     // Step 08: Call dsGetEDIDBytes() without initializing or obtaining a handle
     result = dsGetEDIDBytes(displayHandle, edid, &length);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    if(result != dsERR_NOT_INITIALIZED)
+    {
+        UT_FAIL_NOT_FATAL("ncorrect error return");
+        free(edid);
+        return;
+    }
 
+    free(edid);
+    
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -1020,7 +1059,7 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
         DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 
         // Call dsRegisterDisplayEventCallback() with a NULL handle
-        result = dsRegisterDisplayEventCallback(NULL, testDisplayCallback);
+        result = dsRegisterDisplayEventCallback((intptr_t)NULL, testDisplayCallback);
         DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 
         // Call dsRegisterDisplayEventCallback() with a NULL callback function
