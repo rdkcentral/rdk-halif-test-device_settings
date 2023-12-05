@@ -84,7 +84,7 @@
 
 #define DS_ASSERT_AUTO_TERM_NUMERICAL(value, comparison){\
 	if(value != comparison){\
-		UT_LOG("\n In %s Comparison: [%d = %d]\n", __FUNCTION__, value, comparison);\
+		UT_LOG("\n In %s Comparison: [%s = %s]\n", __FUNCTION__, value, comparison);\
 		dsAudioPortTerm();\
 		UT_FAIL();\
 	}\
@@ -92,7 +92,7 @@
 
 #define DS_ASSERT_AUTO_TERM_NOT_EQUAL(value, comparison){\
 	if(value == comparison){\
-		UT_LOG("\n In %s Comparison: [%d = %d]\n", __FUNCTION__, value, comparison);\
+		UT_LOG("\n In %s Comparison: [%s = %s]\n", __FUNCTION__, value, comparison);\
 		dsAudioPortTerm();\
 		UT_FAIL();\
 	}\
@@ -337,6 +337,8 @@ void test_l1_dsAudio_positive_dsGetAudioPort(void) {
 	// Step 03: Compare with the last element
 	result = dsGetAudioPort(kPorts[NUM_OF_PORTS-1].id.type, kPorts[NUM_OF_PORTS-1].id.index, &newHandle);
 	DS_ASSERT_AUTO_TERM_NUMERICAL(result,dsERR_NONE);
+	// previous handle comparison
+	DS_ASSERT_AUTO_TERM_NUMERICAL(lastHandle, newHandle);
 
 	// Step 04: Terminate audio ports
 	result = dsAudioPortTerm();
@@ -840,7 +842,9 @@ void test_l1_dsAudio_negative_dsGetAudioFormat(void) {
  * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetAudioPort() Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
  * |03|Call dsGetAudioCompression() by looping through the acquired port handles to get the audio compression level of each port | handle: [ loop through valid handles ], compression: [ pointer to hold the audio compression level ] | dsERR_NONE and compression value in range [0,10] | Audio compression should be retrieved correctly |
- * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE | Should Pass |
+ * |04|Call dsGetAudioCompression() by looping through the acquired port handles to get the audio compression level of each port in new array | handle: [ loop through valid handles ], compression: [ pointer to hold the audio compression level ] | dsERR_NONE and compression value in range [0,10] | Audio compression should be retrieved correctly |
+ * |05|Compare the array values and make sure they are equal| | dsERR_NONE | The values must be equal |
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE | Should Pass |
  * 
  */
 void test_l1_dsAudio_positive_dsGetAudioCompression(void) {
@@ -851,6 +855,7 @@ void test_l1_dsAudio_positive_dsGetAudioCompression(void) {
 	dsError_t result;
 	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
 	int  compression[NUM_OF_PORTS];
+	int  compression1[NUM_OF_PORTS];
 
 	// Step 01: Initialize audio ports
 	result = dsAudioPortInit();
@@ -865,9 +870,16 @@ void test_l1_dsAudio_positive_dsGetAudioCompression(void) {
 		// Step 03: Get the audio compression level of each port
 		result = dsGetAudioCompression(handle[i], &compression[i]);
 		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+
+		//Step 04: Get the audio compression level of each port	in new array
+		result = dsGetAudioCompression(handle[i], &compression1[i]);
+		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+
+		//Step 05: Compare the compression levels of arrays
+		DS_ASSERT_AUTO_TERM_NUMERICAL(compression[i], compression1[i]);
 	}
 
-	// Step 04: Terminate audio ports
+	// Step 06: Terminate audio ports
 	result = dsAudioPortTerm();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -924,8 +936,10 @@ void test_l1_dsAudio_negative_dsGetAudioCompression(void) {
 		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
 		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+	}
 
-		// Step 05: Attempt to get audio compression with a null pointer for audio compression
+	// Step 05: Attempt to get audio compression with a null pointer for audio compression
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
 		result = dsGetAudioCompression(handle[i], NULL);
 		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
 	}
@@ -1112,8 +1126,10 @@ void test_l1_dsAudio_positive_dsGetDialogEnhancement(void) {
 		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
 		UT_ASSERT_EQUAL(result, dsERR_NONE);
 		DS_ASSERT_AUTO_TERM_NOT_EQUAL(handle[i], null_handle);
+	}
 
-		// Step 03: Get the dialog enhancement levels for each port
+	// Step 03: Get the dialog enhancement levels for each port
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
 		result = dsGetDialogEnhancement(handle[i], &dialogEnhancementLevel[i]);
 		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
 		UT_ASSERT_TRUE(dialogEnhancementLevel[i] >= 0 && dialogEnhancementLevel[i] <= 16); // Valid level range check
@@ -6907,7 +6923,7 @@ void test_l1_dsAudio_positive_dsEnableLEConfig(void) {
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-	// Steps 02 to 03: Enable, verify, disable, and verify LE Config for each port
+	// Steps 02 to 03: Enable LE Config for each port
 	for (int i = 0; i < NUM_OF_PORTS; i++) {
 		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
 		DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
