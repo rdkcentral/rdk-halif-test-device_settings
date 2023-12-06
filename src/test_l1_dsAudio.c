@@ -86,7 +86,7 @@
 	if(value != comparison){\
 		UT_LOG("\n In %s Comparison: [%s = %s]\n", __FUNCTION__, value, comparison);\
 		dsAudioPortTerm();\
-		UT_FAIL();\
+		UT_FAIL_FATAL();\
 	}\
 }\
 
@@ -94,7 +94,7 @@
 	if(value == comparison){\
 		UT_LOG("\n In %s Comparison: [%s = %s]\n", __FUNCTION__, value, comparison);\
 		dsAudioPortTerm();\
-		UT_FAIL();\
+		UT_FAIL_FATAL();\
 	}\
 }\
 
@@ -102,7 +102,7 @@
 	if(value != comparison){\
 		UT_LOG("\n In %s Comparison: [%s = %s]\n", __FUNCTION__, value, comparison);\
 		dsAudioPortTerm();\
-		UT_FAIL();\
+		UT_FAIL_FATAL();\
 	}\
 }\
 
