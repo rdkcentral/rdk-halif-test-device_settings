@@ -50,7 +50,7 @@ dsError_t dsVideoPortTerm(void)
   return (dsError_t)0;
 }
 
-dsError_t dsGetVideoPort(dsVideoPortType_t type, int index, int* handle)
+dsError_t dsGetVideoPort(dsVideoPortType_t type, int index, intptr_t *handle)
 {
   /*TODO: Implement Me!*/
   (void)type;
@@ -59,7 +59,7 @@ dsError_t dsGetVideoPort(dsVideoPortType_t type, int index, int* handle)
   return (dsError_t)0;
 }
 
-dsError_t dsIsVideoPortEnabled(int handle, bool* enabled)
+dsError_t dsIsVideoPortEnabled(intptr_t handle, bool* enabled)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -67,7 +67,7 @@ dsError_t dsIsVideoPortEnabled(int handle, bool* enabled)
   return (dsError_t)0;
 }
 
-dsError_t dsIsDisplayConnected(int handle, bool* connected)
+dsError_t dsIsDisplayConnected(intptr_t handle, bool* connected)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -75,7 +75,7 @@ dsError_t dsIsDisplayConnected(int handle, bool* connected)
   return (dsError_t)0;
 }
 
-dsError_t dsIsDisplaySurround(int handle, bool* surround)
+dsError_t dsIsDisplaySurround(intptr_t handle, bool* surround)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -83,7 +83,7 @@ dsError_t dsIsDisplaySurround(int handle, bool* surround)
   return (dsError_t)0;
 }
 
-dsError_t dsGetSurroundMode(int handle, int* surround)
+dsError_t dsGetSurroundMode(intptr_t handle, int* surround)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -98,7 +98,7 @@ dsError_t dsVideoFormatUpdateRegisterCB(dsVideoFormatUpdateCB_t cb)
   return (dsError_t)0;
 }
 
-dsError_t dsIsVideoPortActive(int handle, bool* active)
+dsError_t dsIsVideoPortActive(intptr_t handle, bool* active)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -106,7 +106,7 @@ dsError_t dsIsVideoPortActive(int handle, bool* active)
   return (dsError_t)0;
 }
 
-dsError_t dsEnableDTCP(int handle, bool contentProtect)
+dsError_t dsEnableDTCP(intptr_t handle, bool contentProtect)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -114,7 +114,7 @@ dsError_t dsEnableDTCP(int handle, bool contentProtect)
   return (dsError_t)0;
 }
 
-dsError_t dsEnableHDCP(int handle, bool contentProtect, char* hdcpKey, size_t keySize)
+dsError_t dsEnableHDCP(intptr_t handle, bool contentProtect, char* hdcpKey, size_t keySize)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -124,7 +124,7 @@ dsError_t dsEnableHDCP(int handle, bool contentProtect, char* hdcpKey, size_t ke
   return (dsError_t)0;
 }
 
-dsError_t dsIsDTCPEnabled(int handle, bool* pContentProtected)
+dsError_t dsIsDTCPEnabled(intptr_t handle, bool* pContentProtected)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -132,7 +132,7 @@ dsError_t dsIsDTCPEnabled(int handle, bool* pContentProtected)
   return (dsError_t)0;
 }
 
-dsError_t dsIsHDCPEnabled(int handle, bool* pContentProtected)
+dsError_t dsIsHDCPEnabled(intptr_t handle, bool* pContentProtected)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -140,7 +140,7 @@ dsError_t dsIsHDCPEnabled(int handle, bool* pContentProtected)
   return (dsError_t)0;
 }
 
-dsError_t dsEnableVideoPort(int handle, bool enabled)
+dsError_t dsEnableVideoPort(intptr_t handle, bool enabled)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -148,7 +148,7 @@ dsError_t dsEnableVideoPort(int handle, bool enabled)
   return (dsError_t)0;
 }
 
-dsError_t dsSetResolution(int handle, dsVideoPortResolution_t* resolution)
+dsError_t dsSetResolution(intptr_t handle, dsVideoPortResolution_t* resolution)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -156,7 +156,7 @@ dsError_t dsSetResolution(int handle, dsVideoPortResolution_t* resolution)
   return (dsError_t)0;
 }
 
-dsError_t dsGetResolution(int handle, dsVideoPortResolution_t* resolution)
+dsError_t dsGetResolution(intptr_t handle, dsVideoPortResolution_t* resolution)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -164,14 +164,14 @@ dsError_t dsGetResolution(int handle, dsVideoPortResolution_t* resolution)
   return (dsError_t)0;
 }
 
-dsError_t dsSetActiveSource(int handle)
+dsError_t dsSetActiveSource(intptr_t handle)
 {
   /*TODO: Implement Me!*/
   (void)handle;
   return (dsError_t)0;
 }
 
-dsError_t dsRegisterHdcpStatusCallback(int handle, dsHDCPStatusCallback_t cb)
+dsError_t dsRegisterHdcpStatusCallback(intptr_t handle, dsHDCPStatusCallback_t cb)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -179,7 +179,7 @@ dsError_t dsRegisterHdcpStatusCallback(int handle, dsHDCPStatusCallback_t cb)
   return (dsError_t)0;
 }
 
-dsError_t dsGetHDCPStatus(int handle, dsHdcpStatus_t* status)
+dsError_t dsGetHDCPStatus(intptr_t handle, dsHdcpStatus_t* status)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -187,7 +187,7 @@ dsError_t dsGetHDCPStatus(int handle, dsHdcpStatus_t* status)
   return (dsError_t)0;
 }
 
-dsError_t dsGetHDCPProtocol(int handle, dsHdcpProtocolVersion_t* protocolVersion)
+dsError_t dsGetHDCPProtocol(intptr_t handle, dsHdcpProtocolVersion_t* protocolVersion)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -195,7 +195,7 @@ dsError_t dsGetHDCPProtocol(int handle, dsHdcpProtocolVersion_t* protocolVersion
   return (dsError_t)0;
 }
 
-dsError_t dsGetHDCPReceiverProtocol(int handle, dsHdcpProtocolVersion_t* protocolVersion)
+dsError_t dsGetHDCPReceiverProtocol(intptr_t handle, dsHdcpProtocolVersion_t* protocolVersion)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -203,7 +203,7 @@ dsError_t dsGetHDCPReceiverProtocol(int handle, dsHdcpProtocolVersion_t* protoco
   return (dsError_t)0;
 }
 
-dsError_t dsGetHDCPCurrentProtocol(int handle, dsHdcpProtocolVersion_t* protocolVersion)
+dsError_t dsGetHDCPCurrentProtocol(intptr_t handle, dsHdcpProtocolVersion_t* protocolVersion)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -211,7 +211,7 @@ dsError_t dsGetHDCPCurrentProtocol(int handle, dsHdcpProtocolVersion_t* protocol
   return (dsError_t)0;
 }
 
-dsError_t dsGetTVHDRCapabilities(int handle, int* capabilities)
+dsError_t dsGetTVHDRCapabilities(intptr_t handle, int* capabilities)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -219,7 +219,7 @@ dsError_t dsGetTVHDRCapabilities(int handle, int* capabilities)
   return (dsError_t)0;
 }
 
-dsError_t dsSupportedTvResolutions(int handle, int* resolutions)
+dsError_t dsSupportedTvResolutions(intptr_t handle, int* resolutions)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -227,7 +227,7 @@ dsError_t dsSupportedTvResolutions(int handle, int* resolutions)
   return (dsError_t)0;
 }
 
-dsError_t dsSetForceDisable4KSupport(int handle, bool disable)
+dsError_t dsSetForceDisable4KSupport(intptr_t handle, bool disable)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -235,7 +235,7 @@ dsError_t dsSetForceDisable4KSupport(int handle, bool disable)
   return (dsError_t)0;
 }
 
-dsError_t dsGetForceDisable4KSupport(int handle, bool* disable)
+dsError_t dsGetForceDisable4KSupport(intptr_t handle, bool* disable)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -243,7 +243,7 @@ dsError_t dsGetForceDisable4KSupport(int handle, bool* disable)
   return (dsError_t)0;
 }
 
-dsError_t dsGetVideoEOTF(int handle, dsHDRStandard_t* video_eotf)
+dsError_t dsGetVideoEOTF(intptr_t handle, dsHDRStandard_t* video_eotf)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -251,7 +251,7 @@ dsError_t dsGetVideoEOTF(int handle, dsHDRStandard_t* video_eotf)
   return (dsError_t)0;
 }
 
-dsError_t dsGetMatrixCoefficients(int handle, dsDisplayMatrixCoefficients_t* matrix_coefficients)
+dsError_t dsGetMatrixCoefficients(intptr_t handle, dsDisplayMatrixCoefficients_t* matrix_coefficients)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -259,7 +259,7 @@ dsError_t dsGetMatrixCoefficients(int handle, dsDisplayMatrixCoefficients_t* mat
   return (dsError_t)0;
 }
 
-dsError_t dsGetColorDepth(int handle, unsigned int* color_depth)
+dsError_t dsGetColorDepth(intptr_t handle, unsigned int* color_depth)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -267,7 +267,7 @@ dsError_t dsGetColorDepth(int handle, unsigned int* color_depth)
   return (dsError_t)0;
 }
 
-dsError_t dsGetColorSpace(int handle, dsDisplayColorSpace_t* color_space)
+dsError_t dsGetColorSpace(intptr_t handle, dsDisplayColorSpace_t* color_space)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -275,7 +275,7 @@ dsError_t dsGetColorSpace(int handle, dsDisplayColorSpace_t* color_space)
   return (dsError_t)0;
 }
 
-dsError_t dsGetQuantizationRange(int handle, dsDisplayQuantizationRange_t* quantization_range)
+dsError_t dsGetQuantizationRange(intptr_t handle, dsDisplayQuantizationRange_t* quantization_range)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -283,7 +283,7 @@ dsError_t dsGetQuantizationRange(int handle, dsDisplayQuantizationRange_t* quant
   return (dsError_t)0;
 }
 
-dsError_t dsGetCurrentOutputSettings(int handle, dsHDRStandard_t* video_eotf, dsDisplayMatrixCoefficients_t* matrix_coefficients, dsDisplayColorSpace_t* color_space, unsigned int* color_depth, dsDisplayQuantizationRange_t* quantization_range)
+dsError_t dsGetCurrentOutputSettings(intptr_t handle, dsHDRStandard_t* video_eotf, dsDisplayMatrixCoefficients_t* matrix_coefficients, dsDisplayColorSpace_t* color_space, unsigned int* color_depth, dsDisplayQuantizationRange_t* quantization_range)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -295,7 +295,7 @@ dsError_t dsGetCurrentOutputSettings(int handle, dsHDRStandard_t* video_eotf, ds
   return (dsError_t)0;
 }
 
-dsError_t dsIsOutputHDR(int handle, bool* hdr)
+dsError_t dsIsOutputHDR(intptr_t handle, bool* hdr)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -309,7 +309,7 @@ dsError_t dsResetOutputToSDR(void)
   return (dsError_t)0;
 }
 
-dsError_t dsSetHdmiPreference(int handle, dsHdcpProtocolVersion_t* hdcpCurrentProtocol)
+dsError_t dsSetHdmiPreference(intptr_t handle, dsHdcpProtocolVersion_t* hdcpCurrentProtocol)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -317,7 +317,7 @@ dsError_t dsSetHdmiPreference(int handle, dsHdcpProtocolVersion_t* hdcpCurrentPr
   return (dsError_t)0;
 }
 
-dsError_t dsGetHdmiPreference(int handle, dsHdcpProtocolVersion_t* hdcpCurrentProtocol)
+dsError_t dsGetHdmiPreference(intptr_t handle, dsHdcpProtocolVersion_t* hdcpCurrentProtocol)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -325,7 +325,7 @@ dsError_t dsGetHdmiPreference(int handle, dsHdcpProtocolVersion_t* hdcpCurrentPr
   return (dsError_t)0;
 }
 
-dsError_t dsGetIgnoreEDIDStatus(int handle, bool* status)
+dsError_t dsGetIgnoreEDIDStatus(intptr_t handle, bool* status)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -333,7 +333,7 @@ dsError_t dsGetIgnoreEDIDStatus(int handle, bool* status)
   return (dsError_t)0;
 }
 
-dsError_t dsSetBackgroundColor(int handle, dsVideoBackgroundColor_t color)
+dsError_t dsSetBackgroundColor(intptr_t handle, dsVideoBackgroundColor_t color)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -341,7 +341,7 @@ dsError_t dsSetBackgroundColor(int handle, dsVideoBackgroundColor_t color)
   return (dsError_t)0;
 }
 
-dsError_t dsSetForceHDRMode(int handle, dsHDRStandard_t mode)
+dsError_t dsSetForceHDRMode(intptr_t handle, dsHDRStandard_t mode)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -349,7 +349,7 @@ dsError_t dsSetForceHDRMode(int handle, dsHDRStandard_t mode)
   return (dsError_t)0;
 }
 
-dsError_t dsColorDepthCapabilities(int handle, unsigned int* colorDepthCapability)
+dsError_t dsColorDepthCapabilities(intptr_t handle, unsigned int* colorDepthCapability)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -357,7 +357,7 @@ dsError_t dsColorDepthCapabilities(int handle, unsigned int* colorDepthCapabilit
   return (dsError_t)0;
 }
 
-dsError_t dsGetPreferredColorDepth(int handle, dsDisplayColorDepth_t* colorDepth)
+dsError_t dsGetPreferredColorDepth(intptr_t handle, dsDisplayColorDepth_t* colorDepth)
 {
   /*TODO: Implement Me!*/
   (void)handle;
@@ -365,7 +365,7 @@ dsError_t dsGetPreferredColorDepth(int handle, dsDisplayColorDepth_t* colorDepth
   return (dsError_t)0;
 }
 
-dsError_t dsSetPreferredColorDepth(int handle, dsDisplayColorDepth_t colorDepth)
+dsError_t dsSetPreferredColorDepth(intptr_t handle, dsDisplayColorDepth_t colorDepth)
 {
   /*TODO: Implement Me!*/
   (void)handle;
