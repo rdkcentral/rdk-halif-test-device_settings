@@ -1656,9 +1656,7 @@ void test_l1_dsVideoPort_positive_dsEnableVideoPort(void) {
 
 	dsError_t status;
 	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
-
-	bool isVideoPortEnabled[NUM_OF_PORTS];
-
+    
 	// Step 01: Initialize video port system
 	status = dsVideoPortInit();
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
