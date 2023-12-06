@@ -29,8 +29,6 @@ namespace  {
 #include "dsUtl.h"
 #include "dsTypes.h"
 
-#define HAS_SPDIF_SUPPORT
-#define HAS_HEADPHONE_SUPPORT
 
 /*
  * Setup the supported configurations here.
@@ -40,16 +38,12 @@ static const dsAudioPortType_t 			kSupportedPortTypes[] 				= { dsAUDIOPORT_TYPE
 #else
 static const dsAudioPortType_t                  kSupportedPortTypes[]                           = { dsAUDIOPORT_TYPE_SPEAKER, dsAUDIOPORT_TYPE_HDMI_ARC };
 #endif
-#ifdef HAS_SPDIF_SUPPORT
 static const dsAudioEncoding_t          kSupportedSPDIFEncodings[]                      = { dsAUDIO_ENC_PCM, dsAUDIO_ENC_AC3, };
 static const dsAudioCompression_t       kSupportedSPDIFCompressions[]           = { dsAUDIO_CMP_NONE, dsAUDIO_CMP_LIGHT, dsAUDIO_CMP_MEDIUM, dsAUDIO_CMP_HEAVY, };
 static const dsAudioStereoMode_t        kSupportedSPDIFStereoModes[]            = { dsAUDIO_STEREO_STEREO, dsAUDIO_STEREO_SURROUND, dsAUDIO_STEREO_PASSTHRU };
-#endif
-#ifdef HAS_HEADPHONE_SUPPORT
 static const dsAudioEncoding_t          kSupportedHEADPHONEEncodings[]                      = { dsAUDIO_ENC_PCM, };
 static const dsAudioCompression_t       kSupportedHEADPHONECompressions[]           = { dsAUDIO_CMP_NONE, dsAUDIO_CMP_LIGHT, dsAUDIO_CMP_MEDIUM, dsAUDIO_CMP_HEAVY, };
 static const dsAudioStereoMode_t        kSupportedHEADPHONEStereoModes[]            = { dsAUDIO_STEREO_STEREO, dsAUDIO_STEREO_SURROUND, };
-#endif
 static const dsAudioEncoding_t          kSupportedSPEAKEREncodings[]                      = { dsAUDIO_ENC_PCM, dsAUDIO_ENC_AC3, };
 static const dsAudioCompression_t       kSupportedSPEAKERCompressions[]           = { dsAUDIO_CMP_NONE, dsAUDIO_CMP_LIGHT, dsAUDIO_CMP_MEDIUM, dsAUDIO_CMP_HEAVY, };
 static const dsAudioStereoMode_t        kSupportedSPEAKERStereoModes[]            = { dsAUDIO_STEREO_STEREO, dsAUDIO_STEREO_SURROUND, };
