@@ -83,6 +83,11 @@
 static int gTestGroup = 1;
 static int gTestID = 1;
 
+#define INDICATOR_COLORS_SIZE_1 (sizeof(kIndicatorColors_1)/sizeof(dsFPDColorConfig_t))
+#define INDICATOR_COLORS_SIZE_2 (sizeof(kIndicatorColors_2)/sizeof(dsFPDColorConfig_t))
+#define INDICATOR_COLORS_SIZE_3 (sizeof(kIndicatorColors_3)/sizeof(dsFPDColorConfig_t))
+
+#define INDICATOR_COLORS_SIZE INDICATOR_COLORS_SIZE_1
 
 #define DS_ASSERT_AUTO_TERM_NUMERICAL(value, comparison){\
     if(value != comparison){\
@@ -1147,7 +1152,7 @@ void test_l1_dsFPD_negative_dsSetFPColor (void)
         for (int j = 0; j < sizeof(allColors)/sizeof(allColors[0]); ++j)
         {
             int isSupported = 0;
-            for (int k = 0; k < sizeof(colors)/sizeof(colors[0]); ++k)
+            for (int k = 0; k < INDICATOR_COLORS_SIZE; ++k)
             {
 
                 if (allColors[j] == colors[k].color)
