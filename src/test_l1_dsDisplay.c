@@ -645,7 +645,7 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
         result = dsGetDisplay(kSupportedPortTypes[i], i, &displayHandle);
         if(result != dsERR_NONE)
         {
-            UT_FAIL_NOT_FATAL("Failed to get display handle");
+            UT_FAIL("Failed to get display handle");
             break;
         }
 
@@ -654,14 +654,14 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
         if(result != dsERR_NONE)
         {
-           UT_FAIL_NOT_FATAL("Failed to get EDID Bytes");
+           UT_FAIL("Failed to get EDID Bytes");
             break;
         }
         result = dsGetEDIDBytes(displayHandle, edid2, &length2);
         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
         if(result != dsERR_NONE)
         {
-            UT_FAIL_NOT_FATAL("Failed to get EDID Bytes");
+            UT_FAIL("Failed to get EDID Bytes");
             break;
         }
 
@@ -669,13 +669,13 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
         UT_ASSERT_EQUAL(length1, length2);
         if(length1 != length2)
         {
-            UT_FAIL_NOT_FATAL("Invalid EDID Bytes");
+            UT_FAIL("Invalid EDID Bytes");
             break;
         }
         UT_ASSERT_EQUAL(memcmp(edid1, edid2, length1), 0);
         if(memcmp(edid1, edid2, length1) != 0)
         {
-            UT_FAIL_NOT_FATAL("Invalid EDID Bytes");
+            UT_FAIL("Invalid EDID Bytes");
             break;
         }  
     }
@@ -733,7 +733,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     if(result != dsERR_NOT_INITIALIZED)
     {
-        UT_FAIL_NOT_FATAL("Incorrect error return");
+        UT_FAIL("Incorrect error return");
         free(edid);
         return;
     }
@@ -743,7 +743,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     if(result != dsERR_NONE)
     {
-        UT_FAIL_NOT_FATAL("Init has failed");
+        UT_FAIL("Init has failed");
         free(edid);
         return;
     }
@@ -754,7 +754,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
         DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
         if(result != dsERR_NONE)
         {
-            UT_FAIL_NOT_FATAL("Failed to get displayHandle");
+            UT_FAIL("Failed to get displayHandle");
             break;
         }
 
@@ -762,7 +762,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
         result = dsGetEDIDBytes((intptr_t)NULL, edid, &length);
         if(result != dsERR_INVALID_PARAM)
         {
-            UT_FAIL_NOT_FATAL("Incorrect error return");
+            UT_FAIL("Incorrect error return");
             break;
         }
 
@@ -770,7 +770,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
         result = dsGetEDIDBytes(displayHandle, NULL, &length);
         if(result != dsERR_INVALID_PARAM)
         {
-            UT_FAIL_NOT_FATAL("Incorrect error return");
+            UT_FAIL("Incorrect error return");
             break;
         }
 
@@ -778,7 +778,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
         result = dsGetEDIDBytes(displayHandle, edid, NULL);
         if(result != dsERR_INVALID_PARAM)
         {
-            UT_FAIL_NOT_FATAL("Incorrect error return");
+            UT_FAIL("Incorrect error return");
             break;
         }
     }
@@ -788,7 +788,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     if(result != dsERR_NONE)
     {
-        UT_FAIL_NOT_FATAL("Term has failed");
+        UT_FAIL("Term has failed");
         free(edid);
         return;
     }
@@ -798,7 +798,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     if(result != dsERR_NOT_INITIALIZED)
     {
-        UT_FAIL_NOT_FATAL("ncorrect error return");
+        UT_FAIL("ncorrect error return");
         free(edid);
         return;
     }
