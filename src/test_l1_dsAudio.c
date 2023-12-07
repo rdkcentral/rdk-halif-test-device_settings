@@ -2234,7 +2234,7 @@ void test_l1_dsAudio_positive_dsSetBassEnhancer(void) {
 
 	dsError_t result;
 	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-	int boost, min_boost = 0, max_boost = 100, mid_boost = 50;
+	int min_boost = 0, max_boost = 100, mid_boost = 50;
 
 	// Step 01: Initialize audio ports
 	result = dsAudioPortInit();
@@ -6917,7 +6917,6 @@ void test_l1_dsAudio_positive_dsEnableLEConfig(void) {
 
 	int result;
 	intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
-	bool enabled;
 
 	// Step 01: Initialize audio ports
 	result = dsAudioPortInit();
@@ -7346,10 +7345,8 @@ void test_l1_dsAudio_negative_dsSetAudioDucking(void) {
 	dsAudioDuckingAction_t  invalid_action = dsAudio_DUCKINGACTION_MAX;
 
 	dsAudioDuckingType_t vaild_type = dsAUDIO_DUCKINGTYPE_ABSOLUTE;
-	dsAudioDuckingType_t invaild_type = dsAudio_DUCKINGTYPE_MAX;
 
 	unsigned char valid_level = 100;
-	unsigned char invalid_level = 110;
 
 	// Step 01: Attempt to set Audio Ducking without initializing
 	result = dsSetAudioDucking(-1, valid_action, vaild_type, valid_level);
