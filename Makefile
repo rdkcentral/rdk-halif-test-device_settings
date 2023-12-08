@@ -25,14 +25,15 @@ TOP_DIR := $(ROOT_DIR)
 
 SRC_DIRS = $(ROOT_DIR)/src
 INC_DIRS := $(ROOT_DIR)/../include
+INC_DIRS += $(ROOT_DIR)/profiles/include
 HAL_LIB := dshal
-SKELETON_SRCS := $(ROOT_DIR)/skeletons/src/
+SKELETON_SRCS := $(ROOT_DIR)/skeletons/src/*
 
 ifeq ($(TARGET),)
 $(info TARGET NOT SET )
 $(info TARGET FORCED TO Linux)
 TARGET=linux
-SRC_DIRS += $(SKELETON_SRCS)
+SRC_DIRS += $(ROOT_DIR)/skeletons/src
 endif
 
 $(info TARGET [$(TARGET)])
