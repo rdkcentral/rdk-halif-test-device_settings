@@ -37,38 +37,37 @@
  */
 
 /**
- * @defgroup Device_Settings_HALTEST Device Settings HALTEST
- * @par Application API Specification
- * Described herein are the DeviceSettings HAL types and functions that are part of
- * the FPD subsystem. The FPD subsystem manages system-specific HAL operations.
- *  @{
+ * @addtogroup Device_Settings_HALTEST Device Settings HAL Tests
+ * @{
  */
 
 /**
- * @defgroup dsFPD_HALTEST Device Settings FPD HALTEST
- *  @{
- * @par Application API Specification
- * dsFPD HAL provides an interface for managing the FPD settings for the device settings module
+ * @addtogroup DS_FPD_HALTEST Device Settings Front Panel Display HAL Tests
+ * @{
  */
 
 /**
- * @defgroup DSHAL_FPD_HALTEST_L1 Device Settings HAL FPD Public API
- *  @{
+ * @defgroup DS_FPD_HALTEST_L2 Device Settings Front Panel Display HAL Tests L2 File
+ * @{
+ * @parblock
+ *
+ * ### L2 Tests for DS Front Panel Display HAL :
+ *
+ * Level 2 unit test cases for all APIs of Device Settings Front Panel Display HAL
+ *
+ * **Pre-Conditions:**  None@n
+ * **Dependencies:** None@n
+ *
+ * TODO: Refer to L2 Specification documentation : [l2_module_test_specification_template.md](../docs/pages/l2_module_test_specification_template.md)
+ *
+ * @endparblock
  */
 
+
 /**
-* @file test_l2_dsFPD.c
-* @page Device Settings
-* @subpage Front Panel Display
-*
-* ## Module's Role
-* 
-*
-* **Pre-Conditions:**  None@n
-* **Dependencies:** None@n
-*
-* Ref to API Definition specification documentation : [ds-front-panel-display_halSpec.md](../../../docs/pages/ds-front-panel-display_halSpec.md)
-*/
+ * @file test_l2_dsFPD.c
+ *
+ */
 
 #include <string.h>
 #include <stdlib.h>
@@ -85,7 +84,7 @@
 * **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [l2_module_test_specification.md](l2_module_test_specification.md)
+* TODO: Refer to L2 Specification documentation : [l2_module_test_specification_template.md](../docs/pages/l2_module_test_specification_template.md)
 */
 void test_l2_dsFPD (void)
 {
@@ -112,10 +111,10 @@ int test_l2_dsFPD_register ( void )
 	UT_add_test( pSuite, "test_l2_dsFPD" ,test_l2_dsFPD );
 
 	return 0;
-} 
+}
 
-/** @} */ // End of DSHAL_FPD_HALTEST_L2 doxygen group 
-/** @} */ // End of DS FPD HALTEST
-/** @} */ // End of Device Settings HALTEST
-/** @} */ // End of Device Settings Module
+/** @} */ // End of DS_FPD_HALTEST_L2
+/** @} */ // End of DS_FPD_HALTEST
+/** @} */ // End of Device_Settings_HALTEST
+/** @} */ // End of Device_Settings
 /** @} */ // End of HPK

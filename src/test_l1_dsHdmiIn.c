@@ -37,39 +37,36 @@
  */
 
 /**
- * @addtogroup Device_Settings_HAL Device Settings HAL
- * @par Application API Specification
- * Described herein are the DeviceSettings HAL types and functions that are part of
- * the HdmiIn subsystem. The HdmiIn subsystem manages system-specific HAL operations.
- *  @{
+ * @addtogroup Device_Settings_HALTEST Device Settings HAL Tests
+ * @{
  */
 
 /**
-*   @defgroup dsHdmiIn_HALTEST DS HdmiIn HALTEST
- *  @{
- * @par Application API Specification
- * dsHdmiIn HAL provides an interface for managing the HdmiIn settings for the device settings module
+ * @defgroup DS_HDMIIn_HALTEST Device Settings HDMI Input HAL Tests
+ * @{
  */
 
 /**
- * @defgroup DSHAL_HDMI_IN_L1 DS HAL Hdmi Input L1 test cases
- *  @{
+ * @defgroup DS_HDMIIn_HALTEST_L1 Device Settings HDMI Input HAL Tests L1 File
+ * @{
+ * @parblock
+ *
+ * ### L1 Tests for DS HDMI Input HAL :
+ *
+ * Level 1 unit test cases for all APIs of Device Settings HDMI Input HAL
+ *
+ * **Pre-Conditions:**  None@n
+ * **Dependencies:** None@n
+ *
+ * Refer to API Definition specification documentation : [ds-hdmi-in_halSpec.md](../../docs/pages/ds-hdmi-in_halSpec.md)
+ * @endparblock
  */
 
+
 /**
-* @file test_l1_dsHdmiIn.c
-* @page Device Settings
-* @subpage HdmiIn
-*
-* ## Module's Role
-* This module includes Level 1 functional tests (success and failure scenarios)
-* This is to ensure that the API meets the operational requirements of the Power Manager across all vendors
-*
-* **Pre-Conditions:**  None@n
-* **Dependencies:** None@n
-*
-* Ref to API Definition specification documentation : [ds-hdmi-in_halSpec.md](../../../docs/pages/ds-hdmi-in_halSpec.md)
-*/
+ * @file test_l1_dsHdmiIn.c
+ *
+ */
 
 #include <string.h>
 #include <stdlib.h>
@@ -2349,8 +2346,8 @@ int test_l1_dsHdmiIn_register ( void )
 	return 0;
 } 
 
-/** @} */ // End of DS HAL Hdmi Input L1 tests
-/** @} */ // End of DS HdmiIn HALTEST
-/** @} */ // End of Device Settings HAL
-/** @} */ // End of Device Settings Module
+/** @} */ // End of DS_HDMIIn_HALTEST_L1
+/** @} */ // End of DS_HDMIIn_HALTEST
+/** @} */ // End of Device_Settings_HALTEST
+/** @} */ // End of Device_Settings
 /** @} */ // End of HPK

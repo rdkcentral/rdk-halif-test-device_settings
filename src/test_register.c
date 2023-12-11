@@ -37,17 +37,32 @@
  */
 
 /**
- * @addtogroup Device_Settings_HAL Device Settings HAL
- * Describe the details about Device Settings HAL function specifications.
- *  @{
+ * @addtogroup Device_Settings_HALTEST Device Settings HAL Tests
+ * @{
  */
 
 /**
- * @defgroup dsDEVICESETTINGS_REGISTER DS Register
- *  @{
- * @par Application API Specification
+ * @defgroup Device_Settings_REGISTER Device Settings HAL Tests Register File
+ * @{
+ * @parblock
+ *
+ * ### Registration of tests for Device Settings HAL :
+ *
+ * This is to ensure that the APIs meets the operational requirements of the module across all vendors.
+ *
+ * **Pre-Conditions:**  None @n
+ * **Dependencies:** None @n
+ *
+ * Refer to Device Settings HAL Documentation Guide : [README.md](../../docs/pages/README.md)
+ *
+ * @endparblock
  *
  */
+
+/**
+* @file test_register.c
+*
+*/
 
 #include <ut.h>
 
@@ -109,7 +124,7 @@ int UT_register_APIDEF_l2_tests( void )
 	return registerFailed;
 }
 
-/** @} */ // End of DS REGISTER
-/** @} */ // End of Device Settings HAL
-/** @} */ // End of Device Settings Module
+/** @} */ // End of Device_Settings_REGISTER
+/** @} */ // End of Device_Settings_HALTEST
+/** @} */ // End of Device_Settings
 /** @} */ // End of HPK

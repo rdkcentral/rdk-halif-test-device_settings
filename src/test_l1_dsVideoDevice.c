@@ -37,42 +37,37 @@
  */
 
 /**
- * @addtogroup Device_Settings_HAL Device Settings HAL
- * Describe the details about Device Settings HAL function specifications.
- *  @{
+ * @addtogroup Device_Settings_HALTEST Device Settings HAL Tests
+ * @{
  */
 
 /**
- * @defgroup dsVIDEODEVICE_HALTEST DS Video Device HAL
- *  @{
- * @par Application API Specification
- * Described herein are the DeviceSettings HAL types and functions that are part of
- * the Video Device subsystem. The Video Device subsystem manages system-specific HAL operations.
+ * @defgroup DS_VideoDevice_HALTEST Device Settings Video Device HAL Tests
+ * @{
+ */
+
+/**
+ * @defgroup DS_VideoDevice_HALTEST_L1 Device Settings Video Device HAL Tests L1 File
+ * @{
+ * @parblock
+ *
+ * ### L1 Tests for DS Video Device HAL :
+ *
+ * Level 1 unit test cases for all APIs of Device Settings Video Device HAL
+ *
+ * **Pre-Conditions:**  None@n
+ * **Dependencies:** None@n
+ *
+ * Refer to API Definition specification documentation : [ds-video-device_halSpec.md](../../docs/pages/ds-video-device_halSpec.md)
+ *
+ * @endparblock
+ */
+
+/**
+ * @file test_l1_dsVideoDevice.c
  *
  */
 
-/**
- * @defgroup DS_VIDEODEVICE_HALTEST_L1 DS HAL Video Device HALTEST L1
- * @par Application API Specification
- * dsVideoDevice HAL provides an interface for managing the VideoDevice settings for the device settings module
- *
- *  @{
- */
-
-/**
-* @file test_l1_dsVideoDevice.c
-* @page Device Settings
-* @subpage Video Device
-*
-* ## Module's Role
-* This module includes Level 1 functional tests (success and failure scenarios)
-* This is to ensure that the API meets the operational requirements of the Power Manager across all vendors
-*
-* **Pre-Conditions:**  None@n
-* **Dependencies:** None@n
-*
-* Ref to API Definition specification documentation : [ds-video-device_halSpec.md](../../../docs/pages/ds-video-device_halSpec.md)
-*/
 
 #include <string.h>
 #include <stdlib.h>
@@ -1642,8 +1637,8 @@ int test_l1_dsVideoDevice_register ( void )
 } 
 
 
-/** @} */ // End of DSHAL_VIDEODEVICE_HALTEST_L1
-/** @} */ // End of DS Video Device HALTEST
-/** @} */ // End of Device Settings HAL
-/** @} */ // End of Device Settings Module
+/** @} */ // End of DS_VideoDevice_HALTEST_L1
+/** @} */ // End of DS_VideoDevice_HALTEST
+/** @} */ // End of Device_Settings_HALTEST
+/** @} */ // End of Device_Settings
 /** @} */ // End of HPK

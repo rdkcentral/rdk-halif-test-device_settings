@@ -37,38 +37,36 @@
  */
 
 /**
- * @addtogroup Device_Settings_HALTEST Device Settings HALTEST
- * @par Application API Specification
- * Described herein are the DeviceSettings HAL types and functions that are part of
- * the Video Port subsystem. The Video Port subsystem manages system-specific HAL operations.
- *  @{
+ * @addtogroup Device_Settings_HALTEST Device Settings HAL Tests
+ * @{
  */
 
 /**
- * @defgroup dsVideoPort_HALTEST Device Settings Video Port HALTEST
- *  @{
- * @par Application API Specification
- * dsVideoPort HAL provides an interface for managing the video port settings for the device settings module.
+ * @defgroup DS_VideoPort_HALTEST Device Settings Video Port HAL Tests
+ * @{
  */
 
 /**
- * @defgroup DSHAL_VIDEO_HALTEST_L1 Device Settings HAL Video Port L1 test cases
- *  @{
+ * @defgroup DS_VideoPort_HALTEST_L1 Device Settings Video Port HAL Tests L1 File
+ * @{
+ * @parblock
+ *
+ * ### L1 Tests for DS Video Port HAL :
+ *
+ * Level 1 unit test cases for all APIs of Device Settings Video Port HAL
+ *
+ * **Pre-Conditions:**  None@n
+ * **Dependencies:** None@n
+ *
+ * Refer to API Definition specification documentation : [ds-video-port_halSpec.md](../../docs/pages/ds-video-port_halSpec.md)
+ *
+ * @endparblock
  */
+
 
 /**
  * @file test_l1_dsVideoPort.c
- * @page Device Settings
- * @subpage dsVideoPort
  *
- * ## Module's Role
- * This module includes Level 1 functional tests (success and failure scenarios)
- * This is to ensure that the API meets the operational requirements of the module across all vendors
- *
- * **Pre-Conditions:**  None
- * **Dependencies:** None
- *
- * Ref to API Definition specification documentation : [ds-video-port_halSpec.md](../../../docs/ds-video-port_halSpec.md)
  */
 
 #include <string.h>
@@ -282,8 +280,8 @@ void test_l1_dsVideoPort_negative_dsVideoPortTerm(void) {
 /**
  * @brief Ensure dsGetVideoPort() returns correct handles for the available video ports
  * 
- * **Test Group ID:** Basic: 01@p
- * **Test Case ID:** 005@p
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 005@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -413,8 +411,8 @@ void test_l1_dsVideoPort_negative_dsGetVideoPort(void) {
 /**
  * @brief Ensure dsIsVideoPortEnabled() correctly indicates the enabled status of a video port
  * 
- * **Test Group ID:** Basic: 01@p
- * **Test Case ID:** 007@p
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 007@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -692,7 +690,7 @@ void test_l1_dsVideoPort_negative_dsIsDisplayConnected(void) {
  * @brief Positive Test Scenarios for dsIsDisplaySurround()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 011@p
+ * **Test Case ID:** 011@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -829,7 +827,7 @@ void test_l1_dsVideoPort_negative_dsIsDisplaySurround(void) {
  * @brief Positive Test Scenarios for dsGetSurroundMode()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 013@p
+ * **Test Case ID:** 013@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -968,7 +966,7 @@ void test_l1_dsVideoPort_negative_dsGetSurroundMode(void) {
  * @brief Positive Test Scenarios for dsIsVideoPortActive()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 015@p
+ * **Test Case ID:** 015@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -1226,7 +1224,7 @@ void test_l1_dsVideoPort_negative_dsEnableDTCP(void) {
  * @brief Positive Test Scenarios for dsEnableHDCP()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 019@p
+ * **Test Case ID:** 019@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -1357,7 +1355,7 @@ void test_l1_dsVideoPort_negative_dsEnableHDCP(void) {
  * @brief Positive Test Scenarios for dsIsDTCPEnabled()
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 021@p
+ * **Test Case ID:** 021@n
  *
  * **Pre-Conditions:** None@n
  *
@@ -1495,7 +1493,7 @@ void test_l1_dsVideoPort_negative_dsIsDTCPEnabled(void) {
  * @brief Positive Test Scenarios for dsIsHDCPEnabled()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 023@p
+ * **Test Case ID:** 023@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -1633,7 +1631,7 @@ void test_l1_dsVideoPort_negative_dsIsHDCPEnabled(void) {
  * @brief Positive Test Scenarios for dsEnableVideoPort()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 025@p
+ * **Test Case ID:** 025@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -1749,7 +1747,7 @@ void test_l1_dsVideoPort_negative_dsEnableVideoPort(void) {
  * @brief Positive Test Scenarios for dsSetResolution()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 027@p
+ * **Test Case ID:** 027@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -1883,7 +1881,7 @@ void test_l1_dsVideoPort_negative_dsSetResolution(void) {
  * @brief Positive Test Scenarios for dsGetResolution()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 029@p
+ * **Test Case ID:** 029@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -2026,7 +2024,7 @@ void test_l1_dsVideoPort_negative_dsGetResolution(void) {
  * @brief Positive Test Scenarios for dsSetActiveSource()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 031@p
+ * **Test Case ID:** 031@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -2139,7 +2137,7 @@ void test_l1_dsVideoPort_negative_dsSetActiveSource(void) {
  * @brief Positive Test Scenarios for dsVideoFormatUpdateRegisterCB()
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 033@p
+ * **Test Case ID:** 033@n
  *
  * **Pre-Conditions:** None@n
  *
@@ -2240,7 +2238,7 @@ void test_l1_dsVideoPort_negative_dsVideoFormatUpdateRegisterCB(void) {
  * @brief Positive Test Scenarios for dsRegisterHdcpStatusCallback()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 035@p
+ * **Test Case ID:** 035@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -2371,7 +2369,7 @@ void test_l1_dsVideoPort_negative_dsRegisterHdcpStatusCallback(void) {
  * @brief Positive Test Scenarios for dsGetHDCPStatus()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 037@p
+ * **Test Case ID:** 037@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -2511,7 +2509,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPStatus(void) {
  * @brief Positive Test Scenarios for dsGetHDCPProtocol()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 039@p
+ * **Test Case ID:** 039@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -2649,7 +2647,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPProtocol(void) {
  * @brief Positive Test Scenarios for dsGetHDCPReceiverProtocol()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 041@p
+ * **Test Case ID:** 041@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -2789,7 +2787,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPReceiverProtocol(void) {
  * @brief Positive Test Scenarios for dsGetHDCPCurrentProtocol()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 043@p
+ * **Test Case ID:** 043@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -2928,7 +2926,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPCurrentProtocol(void) {
  * @brief Positive Test Scenarios for dsGetTVHDRCapabilities()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 045@p
+ * **Test Case ID:** 045@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -3067,7 +3065,7 @@ void test_l1_dsVideoPort_negative_dsGetTVHDRCapabilities(void) {
  * @brief Positive Test Scenarios for dsSupportedTvResolutions()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 047@p
+ * **Test Case ID:** 047@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -3206,7 +3204,7 @@ void test_l1_dsVideoPort_negative_dsSupportedTvResolutions(void) {
  * @brief Positive Test Scenarios for dsSetForceDisable4KSupport()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 049@p
+ * **Test Case ID:** 049@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -3324,7 +3322,7 @@ void test_l1_dsVideoPort_negative_dsSetForceDisable4KSupport(void) {
  * @brief Positive Test Scenarios for dsGetForceDisable4KSupport()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 051@p
+ * **Test Case ID:** 051@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -3463,7 +3461,7 @@ void test_l1_dsVideoPort_negative_dsGetForceDisable4KSupport(void) {
  * @brief Positive Test Scenarios for dsGetVideoEOTF()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 053@p
+ * **Test Case ID:** 053@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -3602,7 +3600,7 @@ void test_l1_dsVideoPort_negative_dsGetVideoEOTF(void) {
  * @brief Positive Test Scenarios for dsGetMatrixCoefficients()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 055@p
+ * **Test Case ID:** 055@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -3741,7 +3739,7 @@ void test_l1_dsVideoPort_negative_dsGetMatrixCoefficients(void) {
  * @brief Positive Test Scenarios for dsGetColorDepth()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 057@p
+ * **Test Case ID:** 057@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -3880,7 +3878,7 @@ void test_l1_dsVideoPort_negative_dsGetColorDepth(void) {
  * @brief Positive Test Scenarios for dsGetColorSpace()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 059@p
+ * **Test Case ID:** 059@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -4017,7 +4015,7 @@ void test_l1_dsVideoPort_negative_dsGetColorSpace(void) {
  * @brief Positive Test Scenarios for dsGetQuantizationRange()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 061@p
+ * **Test Case ID:** 061@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -4155,7 +4153,7 @@ void test_l1_dsVideoPort_negative_dsGetQuantizationRange(void) {
  * @brief Positive Test Scenarios for dsGetCurrentOutputSettings()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 063@p
+ * **Test Case ID:** 063@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -4347,7 +4345,7 @@ void test_l1_dsVideoPort_negative_dsGetCurrentOutputSettings(void) {
  * @brief Positive Test Scenarios for dsIsOutputHDR()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 065@p
+ * **Test Case ID:** 065@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -4487,7 +4485,7 @@ void test_l1_dsVideoPort_negative_dsIsOutputHDR(void) {
  * @brief Positive Test Scenarios for dsResetOutputToSDR()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 067@p
+ * **Test Case ID:** 067@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -4579,7 +4577,7 @@ void test_l1_dsVideoPort_negative_dsResetOutputToSDR(void) {
  * @brief Positive Test Scenarios for dsSetHdmiPreference()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 069@p
+ * **Test Case ID:** 069@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -4706,7 +4704,7 @@ void test_l1_dsVideoPort_negative_dsSetHdmiPreference(void) {
  * @brief Positive Test Scenarios for dsGetHdmiPreference()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 071@p
+ * **Test Case ID:** 071@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -4845,7 +4843,7 @@ void test_l1_dsVideoPort_negative_dsGetHdmiPreference(void) {
  * @brief Positive Test Scenarios for dsGetIgnoreEDIDStatus()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 073@p
+ * **Test Case ID:** 073@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -4984,7 +4982,7 @@ void test_l1_dsVideoPort_negative_dsGetIgnoreEDIDStatus(void) {
  * @brief Positive Test Scenarios for dsSetBackgroundColor()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 075@p
+ * **Test Case ID:** 075@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -5107,7 +5105,7 @@ void test_l1_dsVideoPort_negative_dsSetBackgroundColor(void) {
  * @brief Positive Test Scenarios for dsSetForceHDRMode()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 077@p
+ * **Test Case ID:** 077@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -5230,7 +5228,7 @@ void test_l1_dsVideoPort_negative_dsSetForceHDRMode(void) {
  * @brief Positive Test Scenarios for dsColorDepthCapabilities()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 079@p
+ * **Test Case ID:** 079@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -5369,7 +5367,7 @@ void test_l1_dsVideoPort_negative_dsColorDepthCapabilities(void) {
  * @brief Positive Test Scenarios for dsGetPreferredColorDepth()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 081@p
+ * **Test Case ID:** 081@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -5508,7 +5506,7 @@ void test_l1_dsVideoPort_negative_dsGetPreferredColorDepth(void) {
  * @brief Positive Test Scenarios for dsSetPreferredColorDepth()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 083@p
+ * **Test Case ID:** 083@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -5732,8 +5730,8 @@ int test_l1_dsVideoPort_register ( void )
 	return 0;
 } 
 
-/** @} */ // End of DS HAL Video Port L1 tests
-/** @} */ // End of DS Video Port HALTEST
-/** @} */ // End of Device Settings HAL
-/** @} */ // End of Device Settings Module
+/** @} */ // End of DS_VideoPort_HALTEST_L1
+/** @} */ // End of DS_VideoPort_HALTEST
+/** @} */ // End of Device_Settings_HALTEST
+/** @} */ // End of Device_Settings
 /** @} */ // End of HPK

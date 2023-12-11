@@ -37,32 +37,31 @@
  */
 
 /**
- * @addtogroup Device_Settings_HAL Device Settings HAL
- * Describe the details about Device Settings HAL function specifications.
- *  @{
+ * @defgroup Device_Settings_HALTEST Device Settings HAL Tests
+ * @{
  */
 
 /**
- * @defgroup dsDEVICESETTINGS_MAIN DS Main
+ * @defgroup Device_Settings_MAIN Device Settings HAL Tests Main File
  *  @{
- * @par Application API Specification
+ * @parblock
  *
+ * ### Tests for Device Settings HAL :
+ *
+ * This is to ensure that the API meets the operational requirements of the module across all vendors.
+ *
+ * **Pre-Conditions:** None @n
+ * **Dependencies:** None @n
+ *
+ * Refer to Device Settings HAL Documentation Guide : [README.md](../../docs/pages/README.md)
+ *
+ * @endparblock
  */
 
 
 /**
-* @file TODO: main.c
-* @page module_name TODO: Required field, name of the main module
-* @subpage sub_page_name TODO: Add a function group if relevant
+* @file main.c
 *
-* ## Module's Role
-* TODO: Explain the module's role in the system in general
-* This is to ensure that the API meets the operational requirements of the module across all vendors.
-*
-* **Pre-Conditions:**  TODO: Add pre-conditions if any@n
-* **Dependencies:** TODO: Add dependencies if any@n
-*
-* Ref to API Definition specification documentation : [halSpec.md](../../../docs/halSpec.md)
 */
 
 #include <ut.h>
@@ -99,7 +98,7 @@ int main(int argc, char** argv)
 	return 0;
 
 }
-/** @} */ // End of DS MAIN
-/** @} */ // End of Device Settings HAL
-/** @} */ // End of Device Settings Module
+/** @} */ // End of Device_Settings_MAIN
+/** @} */ // End of Device_Settings_HALTEST
+/** @} */ // End of Device_Settings
 /** @} */ // End of HPK

@@ -18,25 +18,18 @@
 */
 
 /**
-* @file TODO: test_l2_dsDisplay.c
-* @page module_name TODO: Required field, name of the main module
-* @subpage sub_page_name TODO: Add a function group if relevant
-*
-* ## Module's Role
-* TODO: Explain the module's role in the system in general
-* This is to ensure that the API meets the operational requirements of the module across all vendors.
-*
-* **Pre-Conditions:**  TODO: Add pre-conditions if any@n
-* **Dependencies:** TODO: Add dependencies if any@n
-*
-* Ref to API Definition specification documentation : [halSpec.md](../../../docs/halSpec.md)
-*/
-
-#include <string.h>
-#include <stdlib.h>
-
-#include <ut.h>
-#include <ut_log.h>
+ * @addtogroup HPK Hardware Porting Kit
+ * @{
+ * @par The Hardware Porting Kit
+ * HPK is the next evolution of the well-defined Hardware Abstraction Layer
+ * (HAL), but augmented with more comprehensive documentation and test suites
+ * that OEM or SOC vendors can use to self-certify their ports before taking
+ * them to RDKM for validation or to an operator for final integration and
+ * deployment. The Hardware Porting Kit effectively enables an OEM and/or SOC
+ * vendor to self-certify their own Video Accelerator devices, with minimal RDKM
+ * assistance.
+ *
+ */
 
 /**
  * @addtogroup Device_Settings Device Settings Module
@@ -44,24 +37,43 @@
  */
 
 /**
- * @addtogroup Device_Settings_HAL Device Settings HAL
- * @par Application API Specification
- * Described herein are the DeviceSettings HAL types and functions that are part of
- * the Display subsystem. The Display subsystem manages system-specific HAL operations.
- *  @{
+ * @addtogroup Device_Settings_HALTEST Device Settings HAL Tests
+ * @{
  */
 
 /**
-*   @defgroup dsDisplay_HALTEST DS Display HALTEST
- *  @{
- * @par Application API Specification
- * dsDisplay HAL provides an interface for managing the Display settings for the device settings module
+ * @addtogroup DS_Display_HALTEST Device Settings Display HAL Tests
+ * @{
  */
 
 /**
- * @defgroup DSHAL_DISPLAY_L2 DS HAL Display L2 test cases
- *  @{
+ * @defgroup DS_Display_HALTEST_L2 Device Settings Display HAL Tests L2 File
+ * @{
+ * @parblock
+ *
+ * ### L2 Tests for DS Display HAL :
+ *
+ * Level 2 unit test cases for all APIs of Device Settings Display HAL
+ *
+ * **Pre-Conditions:**  None@n
+ * **Dependencies:** None@n
+ *
+ * TODO: Refer to L2 Specification documentation : [l2_module_test_specification_template.md](../docs/pages/l2_module_test_specification_template.md)
+ *
+ * @endparblock
  */
+
+
+/**
+ * @file test_l2_dsDisplay.c
+ *
+ */
+
+#include <string.h>
+#include <stdlib.h>
+
+#include <ut.h>
+#include <ut_log.h>
 
 /**
 * @brief TODO: Describe the object of the test
@@ -72,7 +84,7 @@
 * **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [l2_module_test_specification.md](l2_module_test_specification.md)
+* TODO: Refer to L2 Specification documentation : [l2_module_test_specification_template.md](../docs/pages/l2_module_test_specification_template.md)
 */
 void test_l2_dsDisplay (void)
 {
@@ -102,8 +114,8 @@ int test_l2_dsDisplay_register ( void )
 } 
 
 
-/** @} */ // End of DS HAL Display L2 tests
-/** @} */ // End of DS Display HALTEST
-/** @} */ // End of Device Settings HAL
-/** @} */ // End of Device Settings Module
+/** @} */ // End of DS_Display_HALTEST_L2
+/** @} */ // End of DS_Display_HALTEST
+/** @} */ // End of Device_Settings_HALTEST
+/** @} */ // End of Device_Settings
 /** @} */ // End of HPK

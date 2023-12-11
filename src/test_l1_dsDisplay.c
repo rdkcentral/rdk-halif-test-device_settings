@@ -37,39 +37,37 @@
  */
 
 /**
- * @addtogroup Device_Settings_HAL Device Settings HAL
- * @par Application API Specification
- * Described herein are the DeviceSettings HAL types and functions that are part of
- * the Display subsystem. The Display subsystem manages system-specific HAL operations.
- *  @{
+ * @addtogroup Device_Settings_HALTEST Device Settings HAL Tests
+ * @{
  */
 
 /**
-*   @defgroup dsDisplay_HALTEST DS Display HALTEST
- *  @{
- * @par Application API Specification
- * dsDisplay HAL provides an interface for managing the Display settings for the device settings module
+ * @defgroup DS_Display_HALTEST Device Settings Display HAL Tests
+ * @{
  */
 
 /**
- * @defgroup dsDisplay_HALTESTS_L1 DS Display HAL Tests L1 File
- *  @{
+ * @defgroup DS_Display_HALTEST_L1 Device Settings Display HAL Tests L1 File
+ * @{
+ * @parblock
+ *
+ * ### L1 Tests for DS Display HAL :
+ *
+ * Level 1 unit test cases for all APIs of Device Settings Display HAL
+ *
+ * **Pre-Conditions:**  None@n
+ * **Dependencies:** None@n
+ *
+ * Refer to API Definition specification documentation : [ds-display_halSpec.md](../../docs/pages/ds-display_halSpec.md)
+ *
+ * @endparblock
  */
 
+
 /**
-* @file test_l1_dsDisplay.c
-* @page Device Settings
-* @subpage Display
-*
-* ## Module's Role
-* This module includes Level 1 functional tests (success and failure scenarios)
-* This is to ensure that the API meets the operational requirements of the Power Manager across all vendors
-*
-* **Pre-Conditions:**  None@n
-* **Dependencies:** None@n
-*
-* Ref to API Definition specification documentation : [ds-display_halSpec.md](../../../docs/pages/ds-display_halSpec.md)
-*/
+ * @file test_l1_dsDisplay.c
+ *
+ */
 
 
 #include <string.h>
@@ -1120,8 +1118,8 @@ int test_l1_dsDisplay_register ( void )
 } 
 
 
-/** @} */ // End of DS Display HAL Tests L1 File
-/** @} */ // End of DS Display HALTEST
-/** @} */ // End of Device Settings HAL
-/** @} */ // End of Device Settings Module
+/** @} */ // End of DS_Display_HALTEST_L1
+/** @} */ // End of DS_Display_HALTEST
+/** @} */ // End of Device_Settings_HALTEST
+/** @} */ // End of Device_Settings
 /** @} */ // End of HPK

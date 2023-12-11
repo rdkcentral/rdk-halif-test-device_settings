@@ -37,40 +37,36 @@
  */
 
 /**
- * @defgroup Device_Settings_HALTEST Device Settings HALTEST
- * @par Application API Specification
- * Described herein are the DeviceSettings HAL types and functions that are part of
- * the CompositeIn subsystem. The CompositeIn subsystem manages system-specific HAL operations.
- *  @{
+ * @addtogroup Device_Settings_HALTEST Device Settings HAL Tests
+ * @{
  */
 
 /**
- * @defgroup dsCOMPOSITEIN_HALTEST Device Settings CompositeIn HALTEST
- *  @{
- * @par Application API Specification
- * dsCompositeIn HAL provides an interface for managing the CompositeIn settings for the device settings module
+ * @addtogroup DS_CompositeIn_HALTEST Device Settings Composite Input HAL Tests
+ * @{
  */
 
 /**
- * @defgroup DSHAL_COMPOSITE_HALTEST_L2 Device Settings HAL Composite In Public API
- *  @{
+ * @defgroup DS_CompositeIn_HALTEST_L2 Device Settings Composite Input HAL Tests L2 File
+ * @{
+ * @parblock
+ *
+ * ### L2 Tests for DS Composite Input HAL :
+ *
+ * Level 2 unit test cases for all APIs of Device Settings Composite Input HAL
+ *
+ * **Pre-Conditions:**  None@n
+ * **Dependencies:** None@n
+ *
+ * TODO: Refer to L2 Specification documentation : [l2_module_test_specification_template.md](../docs/pages/l2_module_test_specification_template.md)
+ *
+ * @endparblock
  */
 
-
 /**
-* @file TODO: test_l2_dsCompositeIn.c
-* @page module_name TODO: Required field, name of the main module
-* @subpage sub_page_name TODO: Add a function group if relevant
-*
-* ## Module's Role
-* TODO: Explain the module's role in the system in general
-* This is to ensure that the API meets the operational requirements of the module across all vendors.
-*
-* **Pre-Conditions:**  TODO: Add pre-conditions if any@n
-* **Dependencies:** TODO: Add dependencies if any@n
-*
-* Ref to API Definition specification documentation : [halSpec.md](../../../docs/halSpec.md)
-*/
+ * @file test_l2_dsCompositeIn.c
+ *
+ */
 
 #include <string.h>
 #include <stdlib.h>
@@ -87,7 +83,7 @@
 * **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [l2_module_test_specification.md](l2_module_test_specification.md)
+* TODO: Refer to L2 Specification documentation : [l2_module_test_specification_template.md](../docs/pages/l2_module_test_specification_template.md)
 */
 void test_l2_dsCompositeIn (void)
 {
@@ -116,8 +112,8 @@ int test_l2_dsCompositeIn_register ( void )
 	return 0;
 } 
 
-/** @} */ // End of DSHAL_COMPOSITEIN_HALTEST_L2 doxygen group 
-/** @} */ // End of DS CompositeIn HALTEST
-/** @} */ // End of Device Settings HALTEST
-/** @} */ // End of Device Settings Module
+/** @} */ // End of DS_CompositeIn_HALTEST_L2
+/** @} */ // End of DS_CompositeIn_HALTEST
+/** @} */ // End of Device_Settings_HALTEST
+/** @} */ // End of Device_Settings
 /** @} */ // End of HPK

@@ -18,19 +18,55 @@
 */
 
 /**
-* @file TODO: test_l2_dsHdmiIn.c
-* @page module_name TODO: Required field, name of the main module
-* @subpage sub_page_name TODO: Add a function group if relevant
-*
-* ## Module's Role
-* TODO: Explain the module's role in the system in general
-* This is to ensure that the API meets the operational requirements of the module across all vendors.
-*
-* **Pre-Conditions:**  TODO: Add pre-conditions if any@n
-* **Dependencies:** TODO: Add dependencies if any@n
-*
-* Ref to API Definition specification documentation : [halSpec.md](../../../docs/halSpec.md)
-*/
+ * @addtogroup HPK Hardware Porting Kit
+ * @{
+ * @par The Hardware Porting Kit
+ * HPK is the next evolution of the well-defined Hardware Abstraction Layer
+ * (HAL), but augmented with more comprehensive documentation and test suites
+ * that OEM or SOC vendors can use to self-certify their ports before taking
+ * them to RDKM for validation or to an operator for final integration and
+ * deployment. The Hardware Porting Kit effectively enables an OEM and/or SOC
+ * vendor to self-certify their own Video Accelerator devices, with minimal RDKM
+ * assistance.
+ *
+ */
+
+/**
+ * @addtogroup Device_Settings Device Settings Module
+ * @{
+ */
+
+/**
+ * @addtogroup Device_Settings_HALTEST Device Settings HAL Tests
+ * @{
+ */
+
+/**
+ * @addtogroup DS_HDMIIn_HALTEST Device Settings HDMI Input HAL Tests
+ * @{
+ */
+
+/**
+ * @defgroup DS_HDMIIn_HALTEST_L2 Device Settings HDMI Input HAL Tests L2 File
+ * @{
+ * @parblock
+ *
+ * ### L2 Tests for DS HDMI Input HAL :
+ *
+ * Level 2 unit test cases for all APIs of Device Settings HDMI Input HAL
+ *
+ * **Pre-Conditions:**  None@n
+ * **Dependencies:** None@n
+ *
+ * TODO: Refer to L2 Specification documentation : [l2_module_test_specification_template.md](../docs/pages/l2_module_test_specification_template.md)
+ * @endparblock
+ */
+
+
+/**
+ * @file test_l2_dsHdmiIn.c
+ *
+ */
 
 #include <string.h>
 #include <stdlib.h>
@@ -47,7 +83,7 @@
 * **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [l2_module_test_specification.md](l2_module_test_specification.md)
+* TODO: Refer to L2 Specification documentation : [l2_module_test_specification_template.md](../docs/pages/l2_module_test_specification_template.md)
 */
 void test_l2_dsHdmiIn (void)
 {
@@ -75,3 +111,9 @@ int test_l2_dsHdmiIn_register ( void )
 
 	return 0;
 } 
+
+/** @} */ // End of DS_HDMIIn_HALTEST_L2
+/** @} */ // End of DS_HDMIIn_HALTEST
+/** @} */ // End of Device_Settings_HALTEST
+/** @} */ // End of Device_Settings
+/** @} */ // End of HPK

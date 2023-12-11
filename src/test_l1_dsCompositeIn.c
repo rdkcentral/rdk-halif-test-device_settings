@@ -37,39 +37,37 @@
  */
 
 /**
- * @defgroup Device_Settings_HALTEST Device Settings HALTEST
- * @par Application API Specification
- * Described herein are the DeviceSettings HAL types and functions that are part of
- * the CompositeIn subsystem. The CompositeIn subsystem manages system-specific HAL operations.
- *  @{
+ * @addtogroup Device_Settings_HALTEST Device Settings HAL Tests
+ * @{
  */
 
 /**
- * @defgroup dsCOMPOSITEIN_HALTEST Device Settings CompositeIn HALTEST
- *  @{
- * @par Application API Specification
- * dsCompositeIn HAL provides an interface for managing the CompositeIn settings for the device settings module
+ * @defgroup DS_CompositeIn_HALTEST Device Settings Composite Input HAL Tests
+ * @{
  */
 
 /**
- * @defgroup DSHAL_COMPOSITE_HALTEST_L1 Device Settings HAL Composite In Public API
- *  @{
+ * @defgroup DS_CompositeIn_HALTEST_L1 Device Settings Composite Input HAL Tests L1 File
+ * @{
+ * @parblock
+ *
+ * ### L1 Tests for DS Composite Input HAL :
+ *
+ * Level 1 unit test cases for all APIs of Device Settings Composite Input HAL
+ *
+ * **Pre-Conditions:**  None@n
+ * **Dependencies:** None@n
+ *
+ * Refer to API Definition specification documentation : [ds-composite-in_halSpec.md](../../docs/pages/ds-composite-in_halSpec.md)
+ *
+ * @endparblock
  */
 
+
 /**
-* @file test_l1_dsCompositeIn.c
-* @page Device Settings
-* @subpage dsCompositeIn
-*
-* ## Module's Role
-* This module includes Level 1 functional tests (success and failure scenarios)
-* This is to ensure that the API meets the operational requirements of the dsCompositeIn across all vendors
-*
-* **Pre-Conditions:**  None
-* **Dependencies:** None
-*
-* Ref to API Definition specification documentation : [ds-composite-in_halSpec.md](../../../docs/ds-composite-in_halSpec.md)
-*/
+ * @file test_l1_dsCompositeIn.c
+ *
+ */
 
 #include <string.h>
 #include <stdlib.h>
@@ -966,8 +964,8 @@ int test_l1_dsCompositeIn_register ( void )
 	return 0;
 } 
 
-/** @} */ // End of DSHAL_COMPOSITEIN_HALTEST_L1 doxygen group 
-/** @} */ // End of DS CompositeIn HALTEST
-/** @} */ // End of Device Settings HALTEST
-/** @} */ // End of Device Settings Module
+/** @} */ // End of DS_CompositeIn_HALTEST_L1
+/** @} */ // End of DS_CompositeIn_HALTEST
+/** @} */ // End of Device_Settings_HALTEST
+/** @} */ // End of Device_Settings
 /** @} */ // End of HPK

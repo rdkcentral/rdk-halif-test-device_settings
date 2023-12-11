@@ -37,39 +37,36 @@
  */
 
 /**
- * @defgroup Device_Settings_HALTEST Device Settings HALTEST
- * @par Application API Specification
- * Described herein are the DeviceSettings HAL types and functions that are part of
- * the Host subsystem. The Host subsystem manages system-specific HAL operations.
- *  @{
+ * @addtogroup Device_Settings_HALTEST Device Settings HAL Tests
+ * @{
  */
 
 /**
- * @defgroup dsHOST_HALTEST Device Settings Host HALTEST
- *  @{
- * @par Application API Specification
- * dsHost HAL provides an interface for managing the host settings for the device settings module
+ * @defgroup DS_Host_HALTEST Device Settings Host HAL Tests
+ * @{
  */
 
 /**
- * @defgroup DSHAL_HOST_HALTEST_L1 Device Settings HAL Host Public API
- *  @{
+ * @defgroup DS_Host_HALTEST_L1 Device Settings Host HAL Tests L1 File
+ * @{
+ * @parblock
+ *
+ * ### L1 Tests for DS Host HAL :
+ *
+ * Level 1 unit test cases for all APIs of Device Settings Host HAL
+ *
+ * **Pre-Conditions:**  None@n
+ * **Dependencies:** None@n
+ *
+ * Refer to API Definition specification documentation : [ds-host_halSpec.md](../../docs/pages/ds-host_halSpec.md)
+ * @endparblock
  */
 
+
 /**
-* @file test_l1_dsHost.c
-* @page Device Settings
-* @subpage dsHost
-*
-* ## Module's Role
-* This module includes Level 1 functional tests (success and failure scenarios)
-* This is to ensure that the API meets the operational requirements of the dsHost across all vendors
-*
-* **Pre-Conditions:**  None
-* **Dependencies:** None
-*
-* Ref to API Definition specification documentation : [ds-host_halSpec.md](../../../docs/ds-host_halSpec.md)
-*/
+ * @file test_l1_dsHost.c
+ *
+ */
 
 #include <string.h>
 #include <stdlib.h>
@@ -660,8 +657,8 @@ int test_l1_dsHost_register ( void )
 	return 0;
 } 
 
-/** @} */ // End of DSHAL_HOST_HALTEST_L1 doxygen group 
-/** @} */ // End of DS Host HALTEST
-/** @} */ // End of Device Settings HALTEST
-/** @} */ // End of Device Settings Module
+/** @} */ // End of DS_Host_HALTEST_L1
+/** @} */ // End of DS_Host_HALTEST
+/** @} */ // End of Device_Settings_HALTEST
+/** @} */ // End of Device_Settings
 /** @} */ // End of HPK
