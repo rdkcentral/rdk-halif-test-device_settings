@@ -1,7 +1,6 @@
 # Folders
 ut-core
 obj
-profiles/include/
 
 # Prerequisites
 *.d
