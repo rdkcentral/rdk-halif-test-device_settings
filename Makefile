@@ -75,3 +75,5 @@ list:
 clean:
 	@echo UT [$@]
 	make -C ./ut-core clean
+	rm -rf $(BIN_DIR)/lib$(HAL_LIB).so
+	rm -rf $(ROOT_DIR)/libs/lib$(HAL_LIB).so
