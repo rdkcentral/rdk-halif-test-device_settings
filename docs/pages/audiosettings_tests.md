@@ -56,6 +56,8 @@ The Audio device setting interface provides control to enable or disable Audio O
 |01|[Set And Get Audio Encoding](#set-and-get-audio-encoding)|Audio Settting Module should set the encoding type for all the supported ports and same should be retrived|
 |02|[Test Audio Encoding](#test-audio-encoding)|Audio Settting Module should set the encoding type and analyze the data from the port with analyzer for verification|
 |03|[Set and Get Dialog Enhancement](#set-and-get-dialog-enhancement)|Audio Settting Module should set the dialog enhancement and same should be retrived|
+|04|[Set and Get Dolby Volume Mode](#set-and-get-dolby-volume-mode)|Audio Settting Module should set the Dolby Volume Mode and same should be retrived|
+|05|[Set and Get Intelligent Equalizer Mode](#set-and-get-intelligent-equalizer-mode)|Audio Settting Module should set the Intelligent Equalizer Mode and same should be retrived|
 
 ## Emulator Requirements
 
@@ -121,5 +123,41 @@ Boot configuration: Various Audio ports and audio formats supported by device an
 [Emulator Requirements](#emulator-requirements)
 
 ### Control Plane Requirements - Set and Get Dialog Enhancement
+
+`NA`
+
+## Set and Get Dolby Volume Mode
+
+|Description|L2|L3|Control plane requirements|
+|-----------|--|--|--------------------------|
+|Set Dolby Volume Mode for supported ports and retrive it for verification|`Y`|`NA`|`NA`|
+
+### Test Startup Requirement - Dolby Volume Mode
+
+`NA`
+
+### Emulator Requirements - Dolby Volume Mode
+
+[Emulator Requirements](#emulator-requirements)
+
+### Control Plane Requirements - Dolby Volume Mode
+
+`NA`
+
+## Set and Get Intelligent Equalizer Mode
+
+|Description|L2|L3|Control plane requirements|
+|-----------|--|--|--------------------------|
+|Set Intelligent Equalizer Mode for supported ports and retrive it for verification|`Y`|`NA`|`NA`|
+
+### Test Startup Requirement - Intelligent Equalizer Mode
+
+`NA`
+
+### Emulator Requirements - Intelligent Equalizer Mode
+
+[Emulator Requirements](#emulator-requirements)
+
+### Control Plane Requirements - Intelligent Equalizer Mode
 
 `NA`
