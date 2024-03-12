@@ -53,11 +53,20 @@ The Audio device setting interface provides control to enable or disable Audio O
 
 |#|Test Functionality|Description|
 |-|------------------|-----------|
-|01|[Set And Get Audio Encoding](#set-and-get-audio-encoding)|Audio Setting Module should set the encoding type for all the supported ports and same should be retrieved|
-|02|[Test Audio Encoding](#test-audio-encoding)|Audio Setting Module should set the encoding type and analyze the data from the port with analyzer for verification|
-|03|[Set and Get Dialog Enhancement](#set-and-get-dialog-enhancement)|Audio Setting Module should set the dialog enhancement and same should be retrieved|
-|04|[Set and Get Dolby Volume Mode](#set-and-get-dolby-volume-mode)|Audio Setting Module should set the Dolby Volume Mode and same should be retrieved|
-|05|[Set and Get Intelligent Equalizer Mode](#set-and-get-intelligent-equalizer-mode)|Audio Setting Module should set the Intelligent Equalizer Mode and same should be retrieved|
+|01|[Test Audio Encoding Mode](#test-audio-encoding-mode)|Test for Audio Encoding Mode|
+|02|[Set and Get Dialog Enhancement](#set-and-get-dialog-enhancement)|Audio Setting Module should set the dialog enhancement and same should be retrieved|
+|03|[Set and Get Dolby Volume Mode](#set-and-get-dolby-volume-mode)|Audio Setting Module should set the Dolby Volume Mode and same should be retrieved|
+|04|[Set and Get Intelligent Equalizer Mode](#set-and-get-intelligent-equalizer-mode)|Audio Setting Module should set the Intelligent Equalizer Mode and same should be retrieved|
+|05|[Set and Get Bass Enhancer](#set-and-get-bass-enhancer)|Audio Setting Module should set the Bass Enhancer and same should be retrieved|
+|06|[Set and Get Surround Decoder](#set-and-get-surround-decoder)|Audio Setting Module should set the Surround Decoder and same should be retrieved|
+|07|[Set and Get `DRC` Mode](#set-and-get-drc-mode)|Audio Setting Module should set the `DRC` Mode and same should be retrieved|
+|08|[Set and Get Surround Virtualizer](#set-and-get-surround-virtualizer)|Audio Setting Module should set the Surround Virtualizer and same should be retrieved|
+|09|[Set and Get MI Steering](#set-and-get-mi-steering)|Audio Setting Module should set the MI Steering and same should be retrieved|
+|10|[Set and Get Graphic Equalizer](#set-and-get-graphic-equalizer)|Audio Setting Module should set the Graphic Equalizer and same should be retrieved|
+|11|[`ARC`Type Support - Sink Device](#arctype-support---sink-device)|Audio Setting Module should set the MI Steering and same should be retrieved|
+|12|[Stereo Mode Support](#stereo-mode-support)|Test for Stereo mode configurations|
+|13|[Audio Gain](#audio-gain)|Test for audio gain configurations|
+|14|[Audio Level](#audio-level)|Test for audio level configurations|
 
 ## Emulator Requirements
 
@@ -72,39 +81,22 @@ Boot configuration: Various Audio ports and audio formats supported by device an
 - `ARC`/`eARC` `HDMI`
 - Headphone Jack
 
-## Set And Get Audio Encoding
+## Test Audio Encoding Mode
 
 |Description|L2|L3|Control plane requirements|
 |-----------|--|--|--------------------------|
 |Set various encoding types for supported ports and retrieve it for verification|Y|`NA`|`NA`|
-
-### Test Startup Requirement - Set And Get Audio Encoding
-
-`NA`
-
-### Emulator Requirements - Set And Get Audio Encoding
-
-[Emulator Requirements](#emulator-requirements)
-
-### Control Plane Requirements - Set And Get Audio Encoding
-
-`NA`
-
-## Test Audio Encoding
-
-|Description|L2|L3|Control plane requirements|
-|-----------|--|--|--------------------------|
 |Set various encoding types for all supported ports and verify using the analyzers to check the port output|`NA`|Y|`NA`|
 
-### Test Startup Requirement - Test Audio Encoding
+### Test Startup Requirement - Test Audio Encoding Mode
 
 `NA`
 
-### Emulator Requirements - Test Audio Encoding
+### Emulator Requirements - Test Audio Encoding Mode
 
 [Emulator Requirements](#emulator-requirements)
 
-### Control Plane Requirements - Test Audio Encoding
+### Control Plane Requirements - Test Audio Encoding Mode
 
 `NA`
 
@@ -159,5 +151,211 @@ Boot configuration: Various Audio ports and audio formats supported by device an
 [Emulator Requirements](#emulator-requirements)
 
 ### Control Plane Requirements - Intelligent Equalizer Mode
+
+`NA`
+
+## Set and Get Volume leveller
+
+|Description|L2|L3|Control plane requirements|
+|-----------|--|--|--------------------------|
+|Set Volume leveller for supported ports and retrieve it for verification|`Y`|`NA`|`NA`|
+
+### Test Startup Requirement - Volume leveller
+
+`NA`
+
+### Emulator Requirements - Volume leveller
+
+[Emulator Requirements](#emulator-requirements)
+
+### Control Plane Requirements - Volume leveller
+
+`NA`
+
+## Set and Get Bass Enhancer
+
+|Description|L2|L3|Control plane requirements|
+|-----------|--|--|--------------------------|
+|Set Bass Enhancer for supported ports and retrieve it for verification|`Y`|`NA`|`NA`|
+
+### Test Startup Requirement - Bass Enhancer
+
+`NA`
+
+### Emulator Requirements - Bass Enhancer
+
+[Emulator Requirements](#emulator-requirements)
+
+### Control Plane Requirements - Bass Enhancer
+
+`NA`
+
+## Set and Get Surround Decoder
+
+|Description|L2|L3|Control plane requirements|
+|-----------|--|--|--------------------------|
+|Set Surround Decoder for supported ports and retrieve it for verification|`Y`|`NA`|`NA`|
+
+### Test Startup Requirement - Surround Decoder
+
+`NA`
+
+### Emulator Requirements - Surround Decoder
+
+[Emulator Requirements](#emulator-requirements)
+
+### Control Plane Requirements - Surround Decoder
+
+`NA`
+
+## Set and Get `DRC` Mode
+
+|Description|L2|L3|Control plane requirements|
+|-----------|--|--|--------------------------|
+|Set `DRC` Mode for supported ports and retrieve it for verification|`Y`|`NA`|`NA`|
+
+### Test Startup Requirement - `DRC` Mode
+
+`NA`
+
+### Emulator Requirements - `DRC` Mode
+
+[Emulator Requirements](#emulator-requirements)
+
+### Control Plane Requirements - `DRC` Mode
+
+`NA`
+
+## Set and Get Surround Virtualizer
+
+|Description|L2|L3|Control plane requirements|
+|-----------|--|--|--------------------------|
+|Set Surround Virtualizer for supported ports and retrieve it for verification|`Y`|`NA`|`NA`|
+
+### Test Startup Requirement - Surround Virtualizer
+
+`NA`
+
+### Emulator Requirements - Surround Virtualizer
+
+[Emulator Requirements](#emulator-requirements)
+
+### Control Plane Requirements - Surround Virtualizer
+
+`NA`
+
+## Set and Get `MI` Steering
+
+|Description|L2|L3|Control plane requirements|
+|-----------|--|--|--------------------------|
+|Set `MI` Steering for supported ports and retrieve it for verification|`Y`|`NA`|`NA`|
+
+### Test Startup Requirement - `MI` Steering
+
+`NA`
+
+### Emulator Requirements - `MI` Steering
+
+[Emulator Requirements](#emulator-requirements)
+
+### Control Plane Requirements - `MI` Steering
+
+`NA`
+
+## Set and Get Graphic Equalizer
+
+|Description|L2|L3|Control plane requirements|
+|-----------|--|--|--------------------------|
+|Set Graphic Equalizer for supported ports and retrieve it for verification|`Y`|`NA`|`NA`|
+
+### Test Startup Requirement - Graphic Equalizer
+
+`NA`
+
+### Emulator Requirements - Graphic Equalizer
+
+[Emulator Requirements](#emulator-requirements)
+
+### Control Plane Requirements - Graphic Equalizer
+
+`NA`
+
+## `ARC`Type Support - Sink Device
+
+|Description|L2|L3|Control plane requirements|
+|-----------|--|--|--------------------------|
+|Validate the `ARC` port supported|`Y`|`NA`|`NA`|
+|Enable the `ARC` Port and check if the audio routed to `ARC` port using external analyzers|`NA`|`Y`|`NA`|
+
+### Test Startup Requirement - `ARC`Type Support
+
+`NA`
+
+### Emulator Requirements - `ARC`Type Support
+
+[Emulator Requirements](#emulator-requirements)
+
+### Control Plane Requirements - `ARC`Type Support
+
+`NA`
+
+## Stereo Mode Support
+
+|Description|L2|L3|Control plane requirements|
+|-----------|--|--|--------------------------|
+|Set Stereo mode for supported ports and retrieve it for verification|`Y`|`NA`|`NA`|
+|Set various stereo modes for all supported ports and verify using the analyzers to check the port output|`NA`|`Y`|`NA`|
+|Set Stereo Auto mode for supported ports and retrieve it for verification|`Y`|`NA`|`NA`|
+|Set Auto Stereo mode for all supported ports and verify using the analyzers to check the port output|`NA`|`Y`|`NA`|
+
+### Test Startup Requirement - Stereo Mode Support
+
+`NA`
+
+### Emulator Requirements - Stereo Mode Support
+
+[Emulator Requirements](#emulator-requirements)
+
+### Control Plane Requirements - Stereo Mode Support
+
+`NA`
+
+## Audio Gain
+
+|Description|L2|L3|Control plane requirements|
+|-----------|--|--|--------------------------|
+|Set Linear Audio Gain Values for supported ports and retrieve it for verification|`Y`|`NA`|`NA`|
+|Set Linear Audio Gain Values for all supported ports and verify dB levels using the analyzers|`NA`|`Y`|`NA`|
+|Set Audio Gain in dB for supported ports and retrieve it for verification|`Y`|`NA`|`NA`|
+|Set Audio Gain in dB for all supported ports and verify dB levels using the analyzers|`NA`|`Y`|`NA`|
+
+### Test Startup Requirement - Audio Gain
+
+`NA`
+
+### Emulator Requirements - Audio Gain
+
+[Emulator Requirements](#emulator-requirements)
+
+### Control Plane Requirements - Audio Gain
+
+`NA`
+
+## Audio Level
+
+|Description|L2|L3|Control plane requirements|
+|-----------|--|--|--------------------------|
+|Set Audio Level for supported ports and retrieve it for verification|`Y`|`NA`|`NA`|
+|Set Audio Gain in dB for all supported ports and verify dB levels using the analyzers|`NA`|`Y`|`NA`|
+
+### Test Startup Requirement - Audio Level
+
+`NA`
+
+### Emulator Requirements - Audio Level
+
+[Emulator Requirements](#emulator-requirements)
+
+### Control Plane Requirements - Audio Level
 
 `NA`
