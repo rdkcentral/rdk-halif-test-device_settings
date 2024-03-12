@@ -53,11 +53,11 @@ The Audio device setting interface provides control to enable or disable Audio O
 
 |#|Test Functionality|Description|
 |-|------------------|-----------|
-|01|[Set And Get Audio Encoding](#set-and-get-audio-encoding)|Audio Settting Module should set the encoding type for all the supported ports and same should be retrived|
-|02|[Test Audio Encoding](#test-audio-encoding)|Audio Settting Module should set the encoding type and analyze the data from the port with analyzer for verification|
-|03|[Set and Get Dialog Enhancement](#set-and-get-dialog-enhancement)|Audio Settting Module should set the dialog enhancement and same should be retrived|
-|04|[Set and Get Dolby Volume Mode](#set-and-get-dolby-volume-mode)|Audio Settting Module should set the Dolby Volume Mode and same should be retrived|
-|05|[Set and Get Intelligent Equalizer Mode](#set-and-get-intelligent-equalizer-mode)|Audio Settting Module should set the Intelligent Equalizer Mode and same should be retrived|
+|01|[Set And Get Audio Encoding](#set-and-get-audio-encoding)|Audio Setting Module should set the encoding type for all the supported ports and same should be retrieved|
+|02|[Test Audio Encoding](#test-audio-encoding)|Audio Setting Module should set the encoding type and analyze the data from the port with analyzer for verification|
+|03|[Set and Get Dialog Enhancement](#set-and-get-dialog-enhancement)|Audio Setting Module should set the dialog enhancement and same should be retrieved|
+|04|[Set and Get Dolby Volume Mode](#set-and-get-dolby-volume-mode)|Audio Setting Module should set the Dolby Volume Mode and same should be retrieved|
+|05|[Set and Get Intelligent Equalizer Mode](#set-and-get-intelligent-equalizer-mode)|Audio Setting Module should set the Intelligent Equalizer Mode and same should be retrieved|
 
 ## Emulator Requirements
 
@@ -76,7 +76,7 @@ Boot configuration: Various Audio ports and audio formats supported by device an
 
 |Description|L2|L3|Control plane requirements|
 |-----------|--|--|--------------------------|
-|Set various encoding types for supported ports and retrive it for verification|Y|`NA`|`NA`|
+|Set various encoding types for supported ports and retrieve it for verification|Y|`NA`|`NA`|
 
 ### Test Startup Requirement - Set And Get Audio Encoding
 
@@ -112,7 +112,7 @@ Boot configuration: Various Audio ports and audio formats supported by device an
 
 |Description|L2|L3|Control plane requirements|
 |-----------|--|--|--------------------------|
-|Set Dialog Enancement for supported ports and retrive it for verification|`Y`|`NA`|`NA`|
+|Set Dialog Enhancement for supported ports and retrieve it for verification|`Y`|`NA`|`NA`|
 
 ### Test Startup Requirement - Set and Get Dialog Enhancement
 
@@ -130,7 +130,7 @@ Boot configuration: Various Audio ports and audio formats supported by device an
 
 |Description|L2|L3|Control plane requirements|
 |-----------|--|--|--------------------------|
-|Set Dolby Volume Mode for supported ports and retrive it for verification|`Y`|`NA`|`NA`|
+|Set Dolby Volume Mode for supported ports and retrieve it for verification|`Y`|`NA`|`NA`|
 
 ### Test Startup Requirement - Dolby Volume Mode
 
@@ -148,7 +148,7 @@ Boot configuration: Various Audio ports and audio formats supported by device an
 
 |Description|L2|L3|Control plane requirements|
 |-----------|--|--|--------------------------|
-|Set Intelligent Equalizer Mode for supported ports and retrive it for verification|`Y`|`NA`|`NA`|
+|Set Intelligent Equalizer Mode for supported ports and retrieve it for verification|`Y`|`NA`|`NA`|
 
 ### Test Startup Requirement - Intelligent Equalizer Mode
 
