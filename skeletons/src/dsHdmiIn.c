@@ -209,3 +209,10 @@ dsError_t dsGetEdid2AllmSupport(dsHdmiInPort_t iHdmiPort, bool *allmSupport)
   return (dsError_t)0;
 }
 
+dsError_t dsSetAudioMixerLevels(dsAudioInput_t aInput, int volume)
+{
+  /*TODO: Implement Me!*/
+  (void)aInput;
+  (void)volume;
+  return (dsError_t)0;
+}

@@ -2268,6 +2268,85 @@ void test_l1_dsHdmiIn_negative_dsGetEdid2AllmSupport(void) {
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
+/**
+* @brief Ensure dsSetAudioMixerLevels() sets the audio mixer levels of primary/system input
+*
+* **Test Group ID:** Basic: 01@n
+* **Test Case ID:** 049@n
+*
+* **Dependencies:** None@n
+* **User Interaction:** None
+*
+* **Test Procedure:**@n
+* |Variation / Step|Description|Test Data|Expected Result|Notes|
+* |:--:|-----------|----------|--------------|-----|
+* |01|Initialize HDMI input using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+* |02|Call dsSetAudioMixerLevels() with primary audio inputs | aInput: dsAudioInputPrimary, volume: 75 | dsERR_NONE | Should Pass |
+* |03|Call dsSetAudioMixerLevels() with system audio inputs | aInput: dsAudioInputSystem, volume: 75 | dsERR_NONE | Should Pass |
+* |04|Terminate the HDMI input using dsHdmiInTerm() | | dsERR_NONE | Clean up after test |
+*
+*/
+void test_l1_dsHdmiIn_positive_dsSetAudioMixerLevels(void) {
+    gTestID = 49;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    // Step 1: Initialize HDMI input using dsHdmiInInit()
+    UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 2: Call dsSetAudioMixerLevels() with primary audio inputs
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsSetAudioMixerLevels(dsAudioInputPrimary, 75), dsERR_NONE);
+
+    // Step 3: Call dsSetAudioMixerLevels() with system audio input
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsSetAudioMixerLevels(dsAudioInputSystem, 75), dsERR_NONE);
+
+    // Step 4: Terminate the HDMI input using dsHdmiInTerm()
+    UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+* @brief Ensure dsSetAudioMixerLevels() returns correct error codes during negative scenarios.
+*
+* **Test Group ID:** Basic: 01@n
+* **Test Case ID:** 050@n
+*
+* **Dependencies:** None@n
+* **User Interaction:** None
+*
+* **Test Procedure:**@n
+* |Variation / Step|Description|Test Data|Expected Result|Notes|
+* |:--:|-----------|----------|--------------|-----|
+* |01|Call dsSetAudioMixerLevels() without prior initialization of HDMI input | aInput: dsAudioInputPrimary, volume: 75 | dsERR_NOT_INITIALIZED | Should Pass |
+* |02|Initialize HDMI input using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+* |03|Call dsSetAudioMixerLevels() with an invalid Input | aInput: dsAudioInputMax, volume: 75 | dsERR_INVALID_PARAM | Should Pass |
+* |04|Terminate the HDMI input using dsHdmiInTerm() | | dsERR_NONE | Clean up after test |
+* |05|Call dsSetAudioMixerLevels() after termination | aInput: dsAudioInputMax, volume: 75 | dsERR_NOT_INITIALIZED | Should Pass |
+*
+* @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported or has failed respectively.
+*
+*/
+void test_l1_dsHdmiIn_negative_dsSetAudioMixerLevels(void) {
+    gTestID = 50;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    // Step 1: Call dsSetAudioMixerLevels() without prior initialization of HDMI input
+    UT_ASSERT_EQUAL(dsSetAudioMixerLevels(dsAudioInputPrimary, 75), dsERR_NOT_INITIALIZED);
+
+    // Step 2: Initialize HDMI input using dsHdmiInInit()
+    UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: Call dsSetAudioMixerLevels() with an invalid Input
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsSetAudioMixerLevels(dsAudioInputMax, 75), dsERR_INVALID_PARAM);
+
+    // Step 4: Terminate the HDMI input using dsHdmiInTerm()
+    UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 5: Call dsSetAudioMixerLevels() after termination
+    UT_ASSERT_EQUAL(dsSetAudioMixerLevels(dsAudioInputMax, 75), dsERR_NOT_INITIALIZED);
+
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
 static UT_test_suite_t * pSuite = NULL;
 static UT_test_suite_t * pSuite2 = NULL;
 
@@ -2309,6 +2388,7 @@ int test_l1_dsHdmiIn_register ( void )
         UT_add_test( pSuite, "dsGetSupportedGameFeaturesList_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetSupportedGameFeaturesList );
         UT_add_test( pSuite, "dsGetAVLatency_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetAVLatency );
         UT_add_test( pSuite, "dsSetEdid2AllmSupport_l1_positive" ,test_l1_dsHdmiIn_positive_dsSetEdid2AllmSupport );
+	UT_add_test( pSuite, "dsSetAudioMixerLevels_l1_positive" ,test_l1_dsHdmiIn_positive_dsSetAudioMixerLevels );
     
 
         
@@ -2334,6 +2414,7 @@ int test_l1_dsHdmiIn_register ( void )
 		UT_add_test( pSuite, "dsGetSupportedGameFeaturesList_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList );
 		UT_add_test( pSuite, "dsGetAVLatency_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetAVLatency );
 	    UT_add_test( pSuite, "dsSetEdid2AllmSupport_l1_negative" ,test_l1_dsHdmiIn_negative_dsSetEdid2AllmSupport );
+	    UT_add_test( pSuite, "dsSetAudioMixerLevels_l1_negative" ,test_l1_dsHdmiIn_negative_dsSetAudioMixerLevels );
 
 
         UT_add_test( pSuite2, "dsGetEdid2AllmSupport_l1_positive" ,test_l1_dsHdmiIn_positive_dsGetEdid2AllmSupport );
