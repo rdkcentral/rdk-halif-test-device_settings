@@ -10046,7 +10046,7 @@ void test_l1_dsAudio_negative_dsSetAudioMixerLevels(void) {
 	}
 
 	// Step 08: Terminate the Audio Port using dsAudioPortTerm()
-	result = dsHdmiInTerm();
+	result = dsAudioPortTerm();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
 
 	// Step 09: Call dsSetAudioMixerLevels() after termination
