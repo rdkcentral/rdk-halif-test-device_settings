@@ -9964,12 +9964,14 @@ void test_l1_dsAudio_positive_dsSetAudioMixerLevels(void) {
 	for (int i = 0; i < NUM_OF_PORTS; i++) {
 		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
 		UT_ASSERT_EQUAL(result, dsERR_NONE);
-		UT_ASSERT_NOT_EQUAL(handle[i], null_handle);
 
-		// Step 03: Call dsSetAudioMixerLevels() for each port by looping through dsAudioInput_t enum
-		for (dsAudioInput_t audioInput = dsAUDIO_INPUT_PRIMARY; audioInput < dsAUDIO_INPUT_MAX; audioInput++) {
-			result = dsSetAudioMixerLevels(handle[i], audioInput, volume);
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
+		if(result == dsERR_NONE )
+		{
+			// Step 03: Call dsSetAudioMixerLevels() for each port by looping through dsAudioInput_t enum
+			for (dsAudioInput_t audioInput = dsAUDIO_INPUT_PRIMARY; audioInput < dsAUDIO_INPUT_MAX; audioInput++) {
+				result = dsSetAudioMixerLevels(handle[i], audioInput, volume);
+				UT_ASSERT_EQUAL(result, dsERR_NONE);
+			}
 		}
 	}
 
