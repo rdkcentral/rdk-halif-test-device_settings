@@ -3642,7 +3642,7 @@ void test_l1_dsAudio_positive_dsGetMS12AudioProfileList(void) {
 	//Step 07: compare the values of profileList arrays
 	for (int i = 0; i < NUM_OF_PORTS; i++) {
 
-		UT_ASSERT_STRING(profileListarray1[i].audioProfileList, profileListarray2[i].audioProfileList);
+		UT_ASSERT_STRING_EQUAL(profileListarray1[i].audioProfileList, profileListarray2[i].audioProfileList);
 		UT_ASSERT_EQUAL(profileListarray1[i].audioProfileCount, profileListarray2[i].audioProfileCount);
 	}
 
