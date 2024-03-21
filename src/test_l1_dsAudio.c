@@ -9944,7 +9944,7 @@ void test_l1_dsAudio_negative_dsGetHDMIARCPortId(void) {
 * |:--:|-----------|----------|--------------|-----|
 * |01|Initialize Audio Ports using dsAudioPortInit() | | dsERR_NONE | Should Pass |
 * |02|Get the audio port handle for valid audio port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
-* |03|Call dsSetAudioMixerLevels() by looping through the primary audio inputs | handle = [valid handle], aInput = dsAudioInputPrimary , volume: 75 | dsERR_NONE | Should Pass |
+* |03|Call dsSetAudioMixerLevels() by looping through the primary audio inputs | handle = [valid handle], aInput = dsAUDIO_INPUT_PRIMARY , volume: 75 | dsERR_NONE | Should Pass |
 * |04|Terminate the Audio Port using dsAudioPortTerm() | | dsERR_NONE | Clean up after test |
 *
 */
@@ -9967,7 +9967,7 @@ void test_l1_dsAudio_positive_dsSetAudioMixerLevels(void) {
 		UT_ASSERT_NOT_EQUAL(handle[i], null_handle);
 
 		// Step 03: Call dsSetAudioMixerLevels() for each port by looping through dsAudioInput_t enum
-		for (dsAudioInput_t audioInput = dsAudioInputPrimary; audioInput < dsAudioInputMax; audioInput++) {
+		for (dsAudioInput_t audioInput = dsAUDIO_INPUT_PRIMARY; audioInput < dsAUDIO_INPUT_MAX; audioInput++) {
 			result = dsSetAudioMixerLevels(handle[i], audioInput, volume);
 			UT_ASSERT_EQUAL(result, dsERR_NONE);
 		}
@@ -9993,15 +9993,15 @@ void test_l1_dsAudio_positive_dsSetAudioMixerLevels(void) {
 * **Test Procedure:**@n
 * |Variation / Step|Description|Test Data|Expected Result|Notes|
 * |:--:|-----------|----------|--------------|-----|
-* |01|Call dsSetAudioMixerLevels() without prior initialization of Audio Ports | handle = [inValid handle], aInput = dsAudioInputPrimary, volume= 75 | dsERR_NOT_INITIALIZED | Should Pass |
+* |01|Call dsSetAudioMixerLevels() without prior initialization of Audio Ports | handle = [inValid handle], aInput = dsAUDIO_INPUT_PRIMARY, volume= 75 | dsERR_NOT_INITIALIZED | Should Pass |
 * |02|Initialize Audio Ports using dsAudioPortInit() | | dsERR_NONE | Should Pass |
-* |03|Call dsSetAudioMixerLevels() with an invalid handle but with valid audioInput and volume level | handle = [inValid handle], aInput = dsAudioInputPrimary, volume = 75 | dsERR_INVALID_PARAM | Should Pass |
+* |03|Call dsSetAudioMixerLevels() with an invalid handle but with valid audioInput and volume level | handle = [inValid handle], aInput = dsAUDIO_INPUT_PRIMARY, volume = 75 | dsERR_INVALID_PARAM | Should Pass |
 * |04|Get the audio port handle for valid audio port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
-* |05|Call dsSetAudioMixerLevels() by looping through acquired handles with invalid audioInput and valid volumelevels | handle = [valid handle], aInput = dsAudioInputMax , volume: 75 | dsERR_INVALID_PARAM | Should Pass |
-* |06|Call dsSetAudioMixerLevels() by looping through acquired handles with valid audioInput and invalid volumelevels beyond the upper limit | handle = [valid handle], aInput = dsAudioInputPrimary , volume: 105 | dsERR_INVALID_PARAM | Should Pass |
-* |07|Call dsSetAudioMixerLevels() by looping through acquired handles with valid audioInput and invalid volumelevels below the lower lomit | handle = [valid handle], aInput = dsAudioInputPrimary , volume: -5 | dsERR_INVALID_PARAM | Should Pass |
+* |05|Call dsSetAudioMixerLevels() by looping through acquired handles with invalid audioInput and valid volumelevels | handle = [valid handle], aInput = dsAUDIO_INPUT_MAX , volume: 75 | dsERR_INVALID_PARAM | Should Pass |
+* |06|Call dsSetAudioMixerLevels() by looping through acquired handles with valid audioInput and invalid volumelevels beyond the upper limit | handle = [valid handle], aInput = dsAUDIO_INPUT_PRIMARY , volume: 105 | dsERR_INVALID_PARAM | Should Pass |
+* |07|Call dsSetAudioMixerLevels() by looping through acquired handles with valid audioInput and invalid volumelevels below the lower limit | handle = [valid handle], aInput = dsAUDIO_INPUT_PRIMARY , volume: -5 | dsERR_INVALID_PARAM | Should Pass |
 * |08|Terminate the Audio Port using dsAudioPortTerm() | | dsERR_NONE | Clean up after test |
-* |09|Call dsSetAudioMixerLevels() after termination | handle= [valid handle], aInput= dsAudioInputMax, volume= 75 | dsERR_NOT_INITIALIZED | Should Pass |
+* |09|Call dsSetAudioMixerLevels() after termination | handle= [valid handle], aInput= dsAUDIO_INPUT_MAX, volume= 75 | dsERR_NOT_INITIALIZED | Should Pass |
 *
 * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions
 *
@@ -10011,11 +10011,11 @@ void test_l1_dsAudio_negative_dsSetAudioMixerLevels(void) {
 	gTestID = 164; // Assuming Test Case ID is 164
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-	int result, invalid_vol_level_pos = 105, invalid_vol_level_neg = -5, valid_vol_level = 75;
+	int result, invalid_vol_level_pos = 105, invalid_vol_level_neg = -5, valid_vol_level = 75, volume =75;
 	intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
 
 	// Step 01: Call dsSetAudioMixerLevels() without prior initialization of Audio Port
-	result = dsSetAudioMixerLevels(-1, dsAudioInputPrimary, valid_vol_level);
+	result = dsSetAudioMixerLevels(-1, dsAUDIO_INPUT_PRIMARY, valid_vol_level);
 	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
 	// Step 02: Initialize Audio Port using dsAudioPortInit()
@@ -10023,7 +10023,7 @@ void test_l1_dsAudio_negative_dsSetAudioMixerLevels(void) {
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
 
 	// Step 03: Call dsSetAudioMixerLevels() with an invalid port handle
-	result = dsSetAudioMixerLevels(handle[0], dsAudioInputPrimary, valid_vol_level);
+	result = dsSetAudioMixerLevels(handle[0], dsAUDIO_INPUT_PRIMARY , valid_vol_level);
 	UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
 	// Step 04: Get the port handle for all supported audio ports
@@ -10033,15 +10033,15 @@ void test_l1_dsAudio_negative_dsSetAudioMixerLevels(void) {
 		UT_ASSERT_NOT_EQUAL(handle[i], null_handle);
 
 		// Step 05: Set Audio Mixer level for Invalid Audio Input(dsAudioInputMax)
-		result = dsSetAudioMixerLevels(handle[i], dsAudioInputMax, volume);
+		result = dsSetAudioMixerLevels(handle[i], dsAUDIO_INPUT_MAX, volume);
 		UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
 		// Step 06: Set Audio Mixer level for Invalid Volume Level above the upper limit(105)
-		result = dsSetAudioMixerLevels(handle[i], dsAudioInputPrimary, invalid_vol_level_pos);
+		result = dsSetAudioMixerLevels(handle[i], dsAUDIO_INPUT_PRIMARY, invalid_vol_level_pos);
 		UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
 		// Step 07: Set Audio Mixer level for Invalid Volume Level below the lower limit(-5)
-		result = dsSetAudioMixerLevels(handle[i], dsAudioInputPrimary, invalid_vol_level_neg);
+		result = dsSetAudioMixerLevels(handle[i], dsAUDIO_INPUT_PRIMARY, invalid_vol_level_neg);
 		UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 	}
 
@@ -10050,7 +10050,7 @@ void test_l1_dsAudio_negative_dsSetAudioMixerLevels(void) {
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
 
 	// Step 09: Call dsSetAudioMixerLevels() after termination
-	result = dsSetAudioMixerLevels(handle[0], dsAudioInputPrimary, valid_vol_level);
+	result = dsSetAudioMixerLevels(handle[0], dsAUDIO_INPUT_PRIMARY, valid_vol_level);
 	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
 	// End of the test
