@@ -9944,7 +9944,7 @@ void test_l1_dsAudio_negative_dsGetHDMIARCPortId(void) {
 * |:--:|-----------|----------|--------------|-----|
 * |01|Initialize Audio Ports using dsAudioPortInit() | | dsERR_NONE | Should Pass |
 * |02|Get the audio port handle for valid audio port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
-* |03|Call dsSetAudioMixerLevels() by looping through the primary audio inputs | handle = [valid handle], aInput = dsAUDIO_INPUT_PRIMARY , volume: 75 | dsERR_NONE | Should Pass |
+* |03|Call dsSetAudioMixerLevels() by looping through the audio inputs(Primary and System Audio Input) | handle = [valid handle], aInput = dsAUDIO_INPUT_PRIMARY/dsAUDIO_INPUT_SYSTEM , volume: 75 | dsERR_NONE | Should Pass |
 * |04|Terminate the Audio Port using dsAudioPortTerm() | | dsERR_NONE | Clean up after test |
 *
 */
