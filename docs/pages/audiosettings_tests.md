@@ -22,7 +22,7 @@
 - `NA`     - Not Applicable
 - `DS`     - Device Settings
 - `Caller` - Any user of the interface via the `APIs`
-- `CB`     - Callback function (suffix)
+- `CB`     - Call-back function (suffix)
 - `ARC`    - Audio Return Channel
 - `eARC`   - Enhanced Audio Return Channel
 - `SAD`    - Short Audio Descriptor
@@ -44,8 +44,8 @@
 - `RCA`    - Radio Corporation of America
 - `WMA`    - Windows Media Audio
 - `AAC`    - Advanced Audio coding
-- `DD`     - Dolby Digital
-- `DDPLUS` - Dolby Digital Plus
+- `DD`     - DOLBY Digital
+- `DDPLUS` - DOLBY Digital Plus
 
 ## Introduction
 
@@ -55,7 +55,7 @@ Interface of the test is available here: [Audio Settings HAL header](https://git
 
 ## Module Description
 
-The Audio device setting interface provides control to enable or disable Audio Output ports like TV Internal Speakers, `ARC`/`eARC`, Headphones, `SPDIF` and allows `caller` to configure or retrieve various audio parameters like audio encoding, audio compression, dialog enhancement, dolby volume mode, intelligent equalizer, volume leveller, bass enhancer, `DRC` mode, surround virtualizer, `MI` steering, graphic equalizer, `MS12` audio profile, stereo mode, audio gain, audio `dB`, audio level, audio max and min `dB`, audio delay, fader control, primary language and secondary language. It also provides `APIs` to  enable loop through, set audio ducking, enable `LE`, get the Atmos capability of sink device
+The Audio device setting interface provides control to enable or disable Audio Output ports like TV Internal Speakers, `ARC`/`eARC`, Headphones, `SPDIF` and allows `caller` to configure or retrieve various audio parameters like audio encoding, audio compression, dialog enhancement, DOLBY volume mode, intelligent equalizer, volume leveller, bass enhancer, `DRC` mode, surround virtualizer, `MI` steering, graphic equalizer, `MS12` audio profile, stereo mode, audio gain, audio `dB`, audio level, audio max and min `dB`, audio delay, fader control, primary language and secondary language. It also provides `APIs` to  enable loop through, set audio ducking, enable `LE`, get the Atmos capability of sink device
 
 ## Testing Scope
 
@@ -64,7 +64,7 @@ The Audio device setting interface provides control to enable or disable Audio O
 |01|[Test Audio Encoding Mode](#test-audio-encoding-mode)|Test for Audio Encoding Mode|
 |02|[Set and Get Audio Compression Levels](#set-and-get-audio-compression-levels)|Audio Setting Module should set the compression levels and same should be retrieved|
 |03|[Set and Get Dialog Enhancement](#set-and-get-dialog-enhancement)|Audio Setting Module should set the dialog enhancement and same should be retrieved|
-|04|[Set and Get Dolby Volume Mode](#set-and-get-dolby-volume-mode)|Audio Setting Module should set the Dolby Volume Mode and same should be retrieved|
+|04|[Set and Get DOLBY Volume Mode](#set-and-get-dolby-volume-mode)|Audio Setting Module should set the DOLBY Volume Mode and same should be retrieved|
 |05|[Set and Get Intelligent Equalizer Mode](#set-and-get-intelligent-equalizer-mode)|Audio Setting Module should set the Intelligent Equalizer Mode and same should be retrieved|
 |06|[Set and Get Bass Enhancer](#set-and-get-bass-enhancer)|Audio Setting Module should set the Bass Enhancer and same should be retrieved|
 |07|[Set and Get Surround Decoder](#set-and-get-surround-decoder)|Audio Setting Module should set the Surround Decoder and same should be retrieved|
@@ -80,8 +80,11 @@ The Audio device setting interface provides control to enable or disable Audio O
 |17|[Audio Mute Tests](#audio-mute-tests)|Test for audio mute configuration|
 |18|[Audio Port Tests](#audio-port-tests)|Test for audio port configuration|
 |19|[Audio Loop through Test](#audio-loop-through-test)|Test for audio loop through configuration|
-|20|[Loudness Equivalence Test](#audio-loop-through-test)|Test for Loudness Equivalence |
-
+|20|[Loudness Equivalence Test](#audio-loop-through-test)|Test for Loudness Equivalence|
+|21|[MS12 Test](#ms12-test)|Test for MS12 configurations |
+|22|[Associated Audio Mixing Test](#associated-audio-mixing-test)|Test for Associated Audio Mixing|
+|23|[Fader Control Test](#fader-control-test)|Test for Fader Control|
+|23|[Language Test](#language-test)|Test for primary/secondary language configuration|
 
 ## Emulator Requirements
 
@@ -99,14 +102,14 @@ Boot configuration: Various Audio ports and audio formats supported by device an
 **Audio Formats:**
 
 - `PCM`
-- Dolby `AC3`
-- Dolby `EAC3`
-- Dolby `AC4`
-- Dolby `MAT`
-- Dolby TRUEHD
-- Dolby `EAC3` Atmos
-- Dolby TRUEHD Atmos
-- Dolby AC4 Atmos
+- DOLBY `AC3`
+- DOLBY `EAC3`
+- DOLBY `AC4`
+- DOLBY `MAT`
+- DOLBY TRUEHD
+- DOLBY `EAC3` Atmos
+- DOLBY TRUEHD Atmos
+- DOLBY AC4 Atmos
 - `AAC`
 - VORBIS
 - `WMA`
@@ -132,7 +135,7 @@ Boot configuration: Various Audio ports and audio formats supported by device an
 |Set various encoding types for supported ports and retrieve it for verification|Y|`NA`|`NA`|
 |Set various encoding types for all supported ports and verify using the analyzers to check the port output|`NA`|Y|Control the external analyzer|
 |Get the audio format of stream played and verify|`NA`|Y|`NA`|
-|Change the audio format and check for callback|`NA`|Y|`NA`|
+|Change the audio format and check for call-back|`NA`|Y|`NA`|
 
 ### Test Startup Requirement - Test Audio Encoding Mode
 
@@ -183,21 +186,21 @@ Control the external analyzer
 
 `NA`
 
-## Set and Get Dolby Volume Mode
+## Set and Get DOLBY Volume Mode
 
 |Description|L2|L3|Control plane requirements|
 |-----------|--|--|--------------------------|
-|Set Dolby Volume Mode for supported ports and retrieve it for verification|`Y`|`NA`|`NA`|
+|Set DOLBY Volume Mode for supported ports and retrieve it for verification|`Y`|`NA`|`NA`|
 
-### Test Startup Requirement - Dolby Volume Mode
+### Test Startup Requirement - DOLBY Volume Mode
 
 `NA`
 
-### Emulator Requirements - Dolby Volume Mode
+### Emulator Requirements - DOLBY Volume Mode
 
 [Emulator Requirements](#emulator-requirements)
 
-### Control Plane Requirements - Dolby Volume Mode
+### Control Plane Requirements - DOLBY Volume Mode
 
 `NA`
 
@@ -483,7 +486,7 @@ Control the external analyzer
 |Enable/disable audio ports and verify using external analyzer|`NA`|`Y`|Control the external analyzer|
 |Check the connection status and verify|`Y`|`NA`|`NA`|
 |Check the connection status by connecting/disconnecting the port|`NA`|`Y`|Control the port connections|
-|Check the connection status with callback function by connecting/disconnecting the port|`NA`|`Y`|Control the port connections|
+|Check the connection status with call-back function by connecting/disconnecting the port|`NA`|`Y`|Control the port connections|
 
 ### Test Startup Requirement - Audio Port Tests
 
@@ -520,16 +523,90 @@ Playback of stream is required for the L3 testcase
 
 |Description|L2|L3|Control plane requirements|
 |-----------|--|--|--------------------------|
-|Enable/disable audio loudness equivalance and retrieve status for verification|`Y`|`NA`|`NA`|
+|Enable/disable audio loudness equivalence and retrieve status for verification|`Y`|`NA`|`NA`|
 
-### Test Startup Requirement - Audio Loop through Test
+### Test Startup Requirement - Loudness Equivalence Test
 
 `NA`
 
-### Emulator Requirements - Audio Loop through Test
+### Emulator Requirements - Loudness Equivalence Test
 
 [Emulator Requirements](#emulator-requirements)
 
-### Control Plane Requirements - Audio Loop through Test
+### Control Plane Requirements - Loudness Equivalence Test
+
+`NA`
+
+## MS12 Test
+
+|Description|L2|L3|Control plane requirements|
+|-----------|--|--|--------------------------|
+|Enable/disable MS12 configurations and retrieve for verification|`Y`|`NA`|`NA`|
+|Enable/disable MS12 configurations and verify with external analyzer|`NA|`Y`|Control the external analyzer|
+
+### Test Startup Requirement - MS12 Test
+
+Playback of stream is required for the L3 testcase
+
+### Emulator Requirements - MS12 Test
+
+[Emulator Requirements](#emulator-requirements)
+
+### Control Plane Requirements - MS12 Test
+
+Control the external analyzer
+
+## Associated Audio Mixing Test
+
+|Description|L2|L3|Control plane requirements|
+|-----------|--|--|--------------------------|
+|Set Associated Audio Mixing for supported ports and retrieve it for verification|`Y`|`NA`|`NA`|
+
+### Test Startup Requirement - Associated Audio Mixing Test
+
+`NA`
+
+### Emulator Requirements - Associated Audio Mixing Test
+
+[Emulator Requirements](#emulator-requirements)
+
+### Control Plane Requirements - Associated Audio Mixing Test
+
+`NA`
+
+## Fader Control Test
+
+|Description|L2|L3|Control plane requirements|
+|-----------|--|--|--------------------------|
+|Set Fader Control for supported ports and retrieve it for verification|`Y`|`NA`|`NA`|
+
+### Test Startup Requirement - Fader Control Test
+
+`NA`
+
+### Emulator Requirements - Fader Control Test
+
+[Emulator Requirements](#emulator-requirements)
+
+### Control Plane Requirements - Fader Control Test
+
+`NA`
+
+## Language Test
+
+|Description|L2|L3|Control plane requirements|
+|-----------|--|--|--------------------------|
+|Set Primary Language and retrieve it for verification|`Y`|`NA`|`NA`|
+|Set Secondary Language and retrieve it for verification|`Y`|`NA`|`NA`|
+
+### Test Startup Requirement - Language Test
+
+`NA`
+
+### Emulator Requirements - Language Test
+
+[Emulator Requirements](#emulator-requirements)
+
+### Control Plane Requirements - Language Test
 
 `NA`
