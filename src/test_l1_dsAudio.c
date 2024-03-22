@@ -9978,7 +9978,7 @@ void test_l1_dsAudio_positive_dsSetAudioMixerLevels(void) {
 
         // Step 04: Call dsSetAudioMixerLevels() with global port handle(NULL) for each of the audio inputs by looping through dsAudioInput_t enum
         for (dsAudioInput_t audioInput = dsAUDIO_INPUT_PRIMARY; audioInput < dsAUDIO_INPUT_MAX; audioInput++) {
-                result = dsSetAudioMixerLevels(NULL, audioInput, volume);
+                result = dsSetAudioMixerLevels((intptr_t)NULL, audioInput, volume);
 		UT_ASSERT_EQUAL(result, dsERR_NONE);
         }
 
@@ -10023,7 +10023,7 @@ void test_l1_dsAudio_negative_dsSetAudioMixerLevels(void) {
         intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
 
         // Step 01: Call dsSetAudioMixerLevels() without prior initialization of Audio Port
-        result = dsSetAudioMixerLevels(NULL, dsAUDIO_INPUT_PRIMARY, valid_vol_level);
+        result = dsSetAudioMixerLevels((intptr_t)NULL, dsAUDIO_INPUT_PRIMARY, valid_vol_level);
         UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
         // Step 02: Initialize Audio Port using dsAudioPortInit()
