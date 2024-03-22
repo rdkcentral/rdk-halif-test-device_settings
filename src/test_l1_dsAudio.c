@@ -10002,7 +10002,7 @@ void test_l1_dsAudio_positive_dsSetAudioMixerLevels(void) {
 * **Test Procedure:**@n
 * |Variation / Step|Description|Test Data|Expected Result|Notes|
 * |:--:|-----------|----------|--------------|-----|
-* |01|Call dsSetAudioMixerLevels() without prior initialization of Audio Ports | handle = [inValid handle], aInput = dsAUDIO_INPUT_PRIMARY, volume= 75 | dsERR_NOT_INITIALIZED | Should Pass |
+* |01|Call dsSetAudioMixerLevels() without prior initialization of Audio Ports | handle = [NULL], aInput = dsAUDIO_INPUT_PRIMARY, volume= 75 | dsERR_NOT_INITIALIZED | Should Pass |
 * |02|Initialize Audio Ports using dsAudioPortInit() | | dsERR_NONE | Should Pass |
 * |03|Get the audio port handle for valid audio port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
 * |04|Call dsSetAudioMixerLevels() by looping through acquired handles with invalid audioInput and valid volumelevels | handle = [valid handle], aInput = dsAUDIO_INPUT_MAX , volume: 75 | dsERR_INVALID_PARAM | Should Pass |
@@ -10019,7 +10019,7 @@ void test_l1_dsAudio_negative_dsSetAudioMixerLevels(void) {
         gTestID = 164; // Assuming Test Case ID is 164
         UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-        int result, invalid_vol_level_pos = 105, invalid_vol_level_neg = -5, valid_vol_level = 75, volume =75;
+        int result, invalid_vol_level_pos = 105, invalid_vol_level_neg = -5, valid_vol_level = 75;
         intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
 
         // Step 01: Call dsSetAudioMixerLevels() without prior initialization of Audio Port
@@ -10038,7 +10038,7 @@ void test_l1_dsAudio_negative_dsSetAudioMixerLevels(void) {
 
 		if(result == dsERR_NONE ) {
 			// Step 04: Set Audio Mixer level for Invalid Audio Input(dsAudioInputMax)
-			result = dsSetAudioMixerLevels(handle[i], dsAUDIO_INPUT_MAX, volume);
+			result = dsSetAudioMixerLevels(handle[i], dsAUDIO_INPUT_MAX, valid_vol_level);
 			UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
 			// Step 05: Set Audio Mixer level for Invalid Volume Level above the upper limit(105)
