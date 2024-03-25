@@ -51,8 +51,8 @@ High level overview:
 
 ## Discrete `LED` Brightness Control
 
-|Description|L2|L3|
-|-----------|--|--|
+|Description|L2|L3|Control Plane|
+|-----------|--|--|-------------|
 |Verify the Discrete `LED`s Brightness using Set and Get functions.|Y|Y|Read the `LED` Brightness
 
 ### Test Startup Requirement 
