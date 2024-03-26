@@ -33,20 +33,20 @@ Interface of the test is available in this link -  [https://github.com/rdkcentra
 
 High level overview:
 
-- `dsFPD` provides a set of APIs to control the `FP`.discrete `LED`s and 7-segment `LED`s existing on a platform.
+- `dsFPD` provides a set of APIs to control the `FP`discrete `LED`s and 7-segment `LED`s existing on a platform.
 - It facilitates the communication to `FP` `LED`s, aiding in their configuration and utilization within the system. The `LED`s is controlled by the caller based on the platform requirements. 
 
 ## Testing Scope
 
 |#|Test Functionality|Test Description|
 |-|------------------|----------------|
-|1|[Discrete `LED` Brightness Control](#discrete_led_brightness_control)|The test aims to set and verify Brightness of the discrete LEDs supported on the platform.|
-|2|[Discrete `LED` Blink Control](#discrete_led_blink_control)|The test aims to set and verify the blink activity of the discrete LEDs supported on the platform|
-|3|[Discrete `LED` Color Control](#discrete_led_color_control)|The test aims to set and verify the color control activities of the discrete LEDs supported on the platform|
+|1|[Discrete `LED` Brightness Control](#discrete_led_brightness_control)|The test aims to set and verify Brightness of the discrete `LED`s supported on the platform.|
+|2|[Discrete `LED` Blink Control](#discrete_led_blink_control)|The test aims to set and verify the blink activity of the discrete `LED`s supported on the platform|
+|3|[Discrete `LED` Color Control](#discrete_led_color_control)|The test aims to set and verify the color control activities of the discrete `LED`s supported on the platform|
 |4|[Discrete Power `LED` Control](#discrete_power_led_control)|The test aims to set and verify the discrete Power `LED` supported on the platform|
-|5|[`FPD` Text Display Control](#fpd_text_display_control)|The test aims to set and verify the text display and its brightness on the 7-Segment LED Display supported on the platform|
+|5|[`FPD` Text Display Control](#fpd_text_display_control)|The test aims to set and verify the text display and its brightness on the 7-Segment `LED` Display supported on the platform|
 |6|[`FPD` Text Mode and Scroll control](#fpd_text_mode_and_scroll_control)|The test aims to verify the `FPD` Mode control (Text/Time) and scroll control)|
-|7|[`FPD` Clock/Time display control ](#fpd_clock_display_control)|The test aims to set and verify the time display, Clock Display and set the Timer format on the 7-Segment LED Display supported on the platform|
+|7|[`FPD` Clock/Time display control ](#fpd_clock_display_control)|The test aims to set and verify the time display, Clock Display and set the Timer format on the 7-Segment `LED` Display supported on the platform|
 -----------
 
 ## Discrete `LED` Brightness Control
@@ -56,8 +56,8 @@ High level overview:
 |Verify the Discrete `LED`s Brightness using Set and Get functions.|Y|Y|Read the `LED` Brightness
 
 ### Test Startup Requirement 
-Prior to commencing the test, it is necessary for the Test to initialize all FP LEDs.
-Before the test begins, the Test must ensure that the state of all FP LEDs is set to ON.
+
+NA
 
 ### Emulator Requirement
 
@@ -76,12 +76,14 @@ Read the brightness intensity of the `LED` when set to a different level and com
 |Validate the blink functionality of discrete `LED` available on the platform |N|Y| Read the `LED` blink rate
 
 ### Test Startup Requirement
-Prior to commencing the test, it is necessary for the Test to initialize all FP LEDs.
-Before the test begins, the Test must ensure that the state of all FP LEDs is set to ON.
+
+NA
 
 ### Emulator Requirement
 
-Emulator should able to emulate the blink property of the discrete`LED`s available on the platform.
+Emulator will boot with the `LED` configurations that should include
+1. Number of discrete `LED`s, available
+
 
 ### Control Plane Requirement
 
@@ -95,19 +97,18 @@ Read the Blink interval from the `LED` detector device.
 
 ### Test Startup Requirement 
 
-Prior to commencing the test, it is necessary for the Test to initialize all FP LEDs.
-
-Before the test begins, the Test must ensure that the state of all FP LEDs is set to ON.
-
-The supported discrete `LED` colors should be read from the setting files to set and get during the validation.
+NA
 
 ### Emulator Requirement
 
-Emulator shall be capable of setting different `LED` colors to perform this test.
+Emulator will boot with the `LED` configurations that should include
+1. Number of discrete `LED`s, available
+2. Supported colors for each `LED`
+
 
 ### Control Plane Requirement 
 
-The control panel should able to read the color of the LED through the specialised devices that shall identify the `LED` color and shall provide the same information to the control panel.
+The control panel should able to read the color of the `LED` through the specialised devices that shall identify the `LED` color and shall provide the same information to the control panel.
 
 ## Discrete Power `LED` control
 
@@ -117,15 +118,12 @@ The control panel should able to read the color of the LED through the specialis
 
 ### Test Startup Requirement 
 
-Prior to commencing the test, it is necessary for the Test to initialize all FP LEDs.
-
-Prior to the test, the test shall get the supported LED states on the platform using the `API` dsFPGetSupportedLEDStates()
-
-Note: The behavior of `LED` is platform dependent and it is defined as part of platform requirement. 
+NA
 
 ### Emulator Requirement
 
-Due to the platform specific requirement of `LED` behaviour, Emulator may not be required in this case.
+Emulator will boot with the `LED` configurations that should include
+1. Provide the configuration of Power `LED` states supported.
 
 ### Control Plane Requirement 
 
@@ -141,19 +139,16 @@ Due to platform specific requirement, it may not be possible to capture the `LED
 
 ### Test Startup Requirement 
 
-Prior to commencing the test, it is necessary for the Test to initialize all FP LEDs.
-
-Before the test begins, the Test must ensure that the `FPD` mode is set correctly.
-
-The supported `FPD` configurations shall be read from the settings files to set and get during the validation.
+NA
 
 ### Emulator Requirement 
+Emulator will boot with the configurations that should include
+1. 7-seg `FPD` Text/Clock mode, Brighness, cyclerate, supported characters, Rows, columns, and Vertical/Horizontal scroll supported on the platform.
 
-Emulator will support the 7-Segment display and shall control the brightness
 
 ### Control Plane Requirement 
 
-Control Panel should able read the data from the tool that shall recorgnize the text display and brightness level. This data should be validated to declare the test result.
+Control Panel should able read the data from the tool that shall recognize the text display and brightness level. This data should be validated to declare the test result.
 
 ## Frontpanel Display Text Mode and Scroll control
 
@@ -165,19 +160,16 @@ Control Panel should able read the data from the tool that shall recorgnize the 
 
 ### Test Startup Requirement 
 
-Prior to commencing the test, it is necessary for the Test to initialize all FP LEDs.
-
-Before the test begins, the Test must ensure that the `FPD` mode is set correctly.
-
-The supported `FPD` configurations shall be read from the settings file.
+NA
 
 ### Emulator Requirement 
 
-Emulator will support the 7-Segment display and shall support the "Text" scroll activity.
+Emulator will boot with the configurations that should include
+1. 7-seg `FPD` Text/Clock mode, Brighness, cyclerate, supported characters, Rows, columns, and Vertical/Horizontal scroll supported on the platform.
 
 ### Control Plane Requirement 
 
-Control Panel should able read the data from the tool that shall recorgnize the text display and validate the scroll activity. This data should be validated to declare the test result.
+Control Panel should able read the data from the tool that shall recognize the text display and validate the scroll activity. This data should be validated to declare the test result.
 
 ## Frontpanel Display Clock/Time Control
 
@@ -190,15 +182,12 @@ Control Panel should able read the data from the tool that shall recorgnize the 
 
 ### Test Startup Requirement 
 
-Prior to commencing the test, it is necessary for the Test to initialize all FP LEDs.
-
-Before the test begins, the Test must ensure that the `FPD` mode is set correctly.
-
-The supported `FPD` configurations shall be read from the settings file.
+NA
 
 ### Emulator Requirement 
 
-Emulator will support the 7-Segment display and shall support the "Time" display.
+Emulator will boot with the configurations that should include
+1. 7-seg `FPD` Text/Clock mode, Brighness, cyclerate, supported characters, Rows, columns, and Vertical/Horizontal scroll supported on the platform.
 
 ### Control Plane Requirement 
 
