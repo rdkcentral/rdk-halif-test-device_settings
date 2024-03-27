@@ -64,27 +64,27 @@ The Audio device setting interface provides control to enable or disable Audio O
 |01|[Test Audio Encoding Mode](#test-audio-encoding-mode)|Test for Audio Encoding Mode|
 |02|[Set and Get Audio Compression Levels](#set-and-get-audio-compression-levels)|Audio Setting Module should set the compression levels and same should be retrieved|
 |03|[Set and Get Dialog Enhancement](#set-and-get-dialog-enhancement)|Audio Setting Module should set the dialog enhancement and same should be retrieved|
-|04|[Set and Get DOLBY Volume Mode](#set-and-get-dolby-volume-mode)|Audio Setting Module should set the DOLBY Volume Mode and same should be retrieved|
+|04|[DOLBY Volume Mode Test](#dolby-volume-mode-test)|Audio Setting Module should set the DOLBY Volume Mode and same should be retrieved|
 |05|[Set and Get Intelligent Equalizer Mode](#set-and-get-intelligent-equalizer-mode)|Audio Setting Module should set the Intelligent Equalizer Mode and same should be retrieved|
 |06|[Set and Get Bass Enhancer](#set-and-get-bass-enhancer)|Audio Setting Module should set the Bass Enhancer and same should be retrieved|
 |07|[Set and Get Surround Decoder](#set-and-get-surround-decoder)|Audio Setting Module should set the Surround Decoder and same should be retrieved|
 |08|[Set and Get `DRC` Mode](#set-and-get-drc-mode)|Audio Setting Module should set the `DRC` Mode and same should be retrieved|
 |09|[Set and Get Surround Virtualizer](#set-and-get-surround-virtualizer)|Audio Setting Module should set the Surround Virtualizer and same should be retrieved|
-|10|[Set and Get MI Steering](#set-and-get-mi-steering)|Audio Setting Module should set the MI Steering and same should be retrieved|
+|10|[Set and Get `MI` Steering](#set-and-get-mi-steering)|Audio Setting Module should set the `MI` Steering and same should be retrieved|
 |11|[Set and Get Graphic Equalizer](#set-and-get-graphic-equalizer)|Audio Setting Module should set the Graphic Equalizer and same should be retrieved|
-|12|[`ARC`Type Support - Sink Device](#arctype-support---sink-device)|Audio Setting Module should set the MI Steering and same should be retrieved|
+|12|[`ARC`Type Support - Sink Device](#arctype-support---sink-device)|Test for `ARC` devices|
 |13|[Stereo Mode Support](#stereo-mode-support)|Test for Stereo mode configurations|
 |14|[Audio Gain and Level](#audio-gain-and-level)|Test for audio gain and level configurations|
 |15|[Audio Delay](#audio-delay)|Test for audio delay configuration|
-|16|[Atmos Capabilities](#atmos-capabilities)|Test for audio atmos capabilities|
+|16|[Atmos Tests](#atmos-tests)|Test for audio atmos capabilities|
 |17|[Audio Mute Tests](#audio-mute-tests)|Test for audio mute configuration|
 |18|[Audio Port Tests](#audio-port-tests)|Test for audio port configuration|
 |19|[Audio Loop through Test](#audio-loop-through-test)|Test for audio loop through configuration|
 |20|[Loudness Equivalence Test](#audio-loop-through-test)|Test for Loudness Equivalence|
-|21|[MS12 Test](#ms12-test)|Test for MS12 configurations |
+|21|[`MS12` Test](#ms12-test)|Test for `MS12` configurations |
 |22|[Associated Audio Mixing Test](#associated-audio-mixing-test)|Test for Associated Audio Mixing|
 |23|[Fader Control Test](#fader-control-test)|Test for Fader Control|
-|23|[Language Test](#language-test)|Test for primary/secondary language configuration|
+|24|[Language Test](#language-test)|Test for primary/secondary language configuration|
 
 ## Emulator Requirements
 
@@ -139,7 +139,7 @@ Boot configuration: Various Audio ports and audio formats supported by device an
 
 ### Test Startup Requirement - Test Audio Encoding Mode
 
-Playback of stream is required for the L3 testcase
+Playback of different audio formats ([Audio Formats](#emulator-requirements)) supported by the platform is required for the L3 testcase
 
 ### Emulator Requirements - Test Audio Encoding Mode
 
@@ -186,15 +186,16 @@ Control the external analyzer
 
 `NA`
 
-## Set and Get DOLBY Volume Mode
+## DOLBY Volume Mode Test
 
 |Description|L2|L3|Control plane requirements|
 |-----------|--|--|--------------------------|
 |Set DOLBY Volume Mode for supported ports and retrieve it for verification|`Y`|`NA`|`NA`|
+|Set DOLBY Volume Mode for supported ports and verify using the analyzers|`NA`|Y|Control the external analyzer|
 
 ### Test Startup Requirement - DOLBY Volume Mode
 
-`NA`
+Playback of different audio formats ([Audio Formats](#emulator-requirements)) supported by the platform is required for the L3 testcase
 
 ### Emulator Requirements - DOLBY Volume Mode
 
@@ -202,7 +203,7 @@ Control the external analyzer
 
 ### Control Plane Requirements - DOLBY Volume Mode
 
-`NA`
+Control the external analyzer
 
 ## Set and Get Intelligent Equalizer Mode
 
@@ -361,7 +362,7 @@ Control the external analyzer
 
 ### Test Startup Requirement - `ARC`Type Support
 
-Playback of stream is required for the L3 testcase
+Playback of different audio formats ([Audio Formats](#emulator-requirements)) supported by the platform is required for the L3 testcase
 
 ### Emulator Requirements - `ARC`Type Support
 
@@ -382,7 +383,7 @@ Control the external analyzer
 
 ### Test Startup Requirement - Stereo Mode Support
 
-`NA`
+Playback of different audio formats ([Audio Formats](#emulator-requirements)) supported by the platform is required for the L3 testcase
 
 ### Emulator Requirements - Stereo Mode Support
 
@@ -397,19 +398,19 @@ Control the external analyzer
 |Description|L2|L3|Control plane requirements|
 |-----------|--|--|--------------------------|
 |Set Linear Audio Gain Values for supported ports and retrieve it for verification|`Y`|`NA`|`NA`|
-|Set Linear Audio Gain Values for all supported ports and verify dB levels using the analyzers|`NA`|`Y`|Control the external analyzer|
-|Set Audio Gain in dB for supported ports and retrieve it for verification|`Y`|`NA`|`NA`|
-|Set Audio Gain in dB for all supported ports and verify dB levels using the analyzers|`NA`|`Y`|Control the external analyzer|
+|Set Linear Audio Gain Values for all supported ports and verify levels using the analyzers|`NA`|`Y`|Control the external analyzer|
+|Set Audio Level in `dB` for supported ports and retrieve it for verification|`Y`|`NA`|`NA`|
+|Set Audio Level in `dB` for all supported ports and verify `dB` levels using the analyzers|`NA`|`Y`|Control the external analyzer|
 |Set Audio Level for supported ports and retrieve it for verification|`Y`|`NA`|`NA`|
-|Set Audio Gain in dB for all supported ports and verify dB levels using the analyzers|`NA`|`Y`|Control the external analyzer|
+|Set Audio Level for all supported ports and verify using the analyzers|`NA`|`Y`|Control the external analyzer|
 |Get Supported Max and Min Audio Levels, set the level and retrieve it for verification|`Y`|`NA`|`NA`|
-|Get Supported Max and Min Audio Levels for all supported ports, set the levels and verify dB levels using the analyzers|`NA`|`Y`|Control the external analyzer|
+|Get Supported Max and Min Audio Levels for all supported ports, set the levels and verify `dB` levels using the analyzers|`NA`|`Y`|Control the external analyzer|
 |Get Supported Optimal Audio Level, set the level and retrieve it for verification|`Y`|`NA`|`NA`|
-|Get Supported Optimal Audio Level, set the level and verify dB levels using the analyzers|`NA`|`Y`|Control the external analyzer|
+|Get Supported Optimal Audio Level, set the level and verify `dB` levels using the analyzers|`NA`|`Y`|Control the external analyzer|
 
 ### Test Startup Requirement - Audio Gain and Level
 
-Playback of stream is required for the L3 testcase
+Playback of different audio formats ([Audio Formats](#emulator-requirements)) supported by the platform is required for the L3 testcase
 
 ### Emulator Requirements - Audio Gain and Level
 
@@ -439,12 +440,11 @@ Playback of stream is required for the L3 testcase
 
 Control the external analyzer
 
-## Atmos Capabilities
+## Atmos Tests
 
 |Description|L2|L3|Control plane requirements|
 |-----------|--|--|--------------------------|
-|Enable Audio Atmos for supported ports and retrieve capabilities for verification|`Y`|`NA`|`NA`|
-|Get the ATMOS capabilities of connected devices and verify|`NA`|`Y`|Get the ATMOS capabilities of connected devices|
+|Enable Audio Atmos for supported ports and analyze with external device|`NA`|`Y`|Controls the external analyzer|
 |Get the ATMOS capabilities of connected devices and verify|`NA`|`Y`|Get the ATMOS capabilities of connected devices|
 
 ### Test Startup Requirement - Atmos Capabilities
@@ -457,7 +457,8 @@ Control the external analyzer
 
 ### Control Plane Requirements - Atmos Capabilities
 
-Get the ATMOS capabilities of connected devices
+- Get the ATMOS capabilities of connected devices
+- Controls the external analyzer
 
 ## Audio Mute Tests
 
@@ -537,22 +538,22 @@ Playback of stream is required for the L3 testcase
 
 `NA`
 
-## MS12 Test
+## `MS12` Test
 
 |Description|L2|L3|Control plane requirements|
 |-----------|--|--|--------------------------|
-|Enable/disable MS12 configurations and retrieve for verification|`Y`|`NA`|`NA`|
-|Enable/disable MS12 configurations and verify with external analyzer|`NA|`Y`|Control the external analyzer|
+|Enable/disable `MS12` configurations and retrieve for verification|`Y`|`NA`|`NA`|
+|Enable/disable `MS12` configurations and verify with external analyzer|`NA|`Y`|Control the external analyzer|
 
-### Test Startup Requirement - MS12 Test
+### Test Startup Requirement - `MS12` Test
 
 Playback of stream is required for the L3 testcase
 
-### Emulator Requirements - MS12 Test
+### Emulator Requirements - `MS12` Test
 
 [Emulator Requirements](#emulator-requirements)
 
-### Control Plane Requirements - MS12 Test
+### Control Plane Requirements - `MS12` Test
 
 Control the external analyzer
 
