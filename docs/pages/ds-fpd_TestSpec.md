@@ -67,7 +67,7 @@ Emulator will boot with the `LED` configurations that should include
 3. Default brightness of each discrete `LED`
 
 ### Control Plane Requirement 
-Read the brightness intensity of the `LED` when set to a different level and compare with the previous intensity value.
+Read the brightness intensity of the `LED` when set to a different level and compare with the previous intensity value using a `LED` detector device.
 
 ## Discrete `LED` blink control
 
@@ -143,7 +143,7 @@ NA
 
 ### Emulator Requirement 
 Emulator will boot with the configurations that should include
-1. 7-seg `FPD` Text/Clock mode, Brighness, cyclerate, supported characters, Rows, columns, and Vertical/Horizontal scroll supported on the platform.
+1. 7-seg `FPD` Text/Clock mode, Brightness, cyclerate, supported characters, Rows, columns, and Vertical/Horizontal scroll supported on the platform.
 
 
 ### Control Plane Requirement 
