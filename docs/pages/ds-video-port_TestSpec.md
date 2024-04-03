@@ -117,8 +117,8 @@ Check the port output resolutions and HDR with analyzer
 
 |Test Functionality|Description|L2|L3|Source|Sink|
 |------------------|-----------|--|--|------|----|
-|Check Resolution with/without playback|Set/Get Video properties like pixel resolution, Aspect ratio, Stereo Scopic modes, frame rates and scan modes|Y|Y|Y|Y|
-||Check Video properties with external Analyzer|`NA`|Y|Y|`NA`|
+|Check Resolution with/without playback|Set/Get Video port properties like pixel resolution, Aspect ratio, Stereo Scopic modes, frame rates and scan modes|Y|Y|Y|Y|
+||Check Video port properties with external Analyzer|`NA`|Y|Y|`NA`|
 
 #### Test Startup Requirement-Check Video Resolution
 
