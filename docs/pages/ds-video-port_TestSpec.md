@@ -136,11 +136,11 @@ Verify the AspectRatio,video Stereo Scopic modes,video Frame rates,interlaced/pr
 
 |Test Functionality|Description|L2|L3|Source|Sink|
 |------------------|-----------|--|--|------|----|
-|Check HDCP and DTCP Management|Check enable/disable the DTCP/HDCP for the specified video port|Y|Y|Y|Y|
-||Check DTCP/HDCP status for valid port|Y|Y|Y|Y|
-||Check HDCP protocol status|Y|Y|Y|Y|
-||Check EDID status|Y|Y|Y|Y|
-||Notify event if the HDCP status change|`NA`|Y|Y|Y|
+|Check HDCP and DTCP Management|Check enable/disable the DTCP/HDCP for the specified video port|Y|Y|Y|`NA`|
+||Check DTCP/HDCP status for valid port|Y|Y|Y|`NA`|
+||Check HDCP protocol status|Y|Y|Y|`NA`|
+||Check EDID status|Y|Y|Y|`NA`|
+||Notify event if the HDCP status change|`NA`|Y|Y|`NA`|
 ||Check HDCP/DTCP status with external analyzer|`NA`|Y|Y|`NA`|
 
 #### Test Startup Requirement-HDCP and DTCP Management
