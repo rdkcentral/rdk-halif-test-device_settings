@@ -70,12 +70,13 @@ Supported Display QuantizationRange [dsDisplayQuantizationRange_t link](https://
 
 ### Check the video port status
 
-|Test Functionality|Description|L2|L3|
-|------------------|-----------|--|--|
-|Check the video port status|Get the video port handle,check the Video Port enable/disable|Y|`NA`|
-||Verify display connected/disconnected status with/without video port connect|Y|Y|
-||Verify the surround mode status and Capability with/without playback|Y|Y|
-||Verify the Video port status(i.e. active or not)  with/without video port connect|Y|Y|
+|Test Functionality|Description|L2|L3|Source|Sink|
+|------------------|-----------|--|--|------|----|
+|Check the video port status|Get the video port handle,check the Video Port enable/disable|Y|`NA`|Y|Y|
+||Verify display connected/disconnected status without video port connected|Y|`NA`|Y|Y|
+||Verify display connected/disconnected status by connecting/disconnecting video port|`NA`|Y|Y|`NA`|
+||Verify the surround mode capabilities with/without playback|Y|Y|Y|Y|
+||Verify the surround mode capabilities of connected display with/without playback|Y|Y|Y|`NA`|
 
 #### Test Startup Requirement-Check the video port status
 
@@ -91,13 +92,14 @@ Unplug the Video port,Verify the surround mode
 
 ### Check Video Content Format and HDR Capability
 
-|Test Functionality|Description|L2|L3|
-|------------------|-----------|--|--|
-|Check Video Format Content and HDR Capability|Notify an event when the list of video Format changes|`NA`|Y|
-||Get the HDR capabilities and status|Y|`NA`|
-||Set/Get Force Disable 4KSupport with/without playback|Y|Y|
-||Reset the video output to SDR with/without playback|`NA`|Y|
-||Check Video`EOTF` status|Y|Y|
+|Test Functionality|Description|L2|L3|Source|Sink|
+|------------------|-----------|--|--|------|----|
+|Check Video Format Content and HDR Capability|Notify an event when the list of video Format changes|`NA`|Y|Y|Y|
+||Get the HDR capabilities and status|Y|`NA`|Y|Y|
+||Set/Get Force Disable 4KSupport with/without playback|Y|Y|Y|Y|
+||Disable 4KSupport with external analyzer|`NA`|Y|Y|`NA`|
+||Reset the video output to SDR with/without playback|`NA`|Y|Y|Y|
+||Reset the video output to SDR with external analyzer|`NA`|Y|Y|`NA`|
 
 #### Test Startup Requirement-Check Video Content Format and HDR Capability
 
@@ -109,17 +111,14 @@ Playback the pre-define streams
 
 #### Control Plane Requirements-Check Video Content Format and HDR Capability
 
-Trigger an event for list of video format change and Verify the video profile formats
+Check the port output resolutions and HDR with analyzer
 
 ### Check Video Resolution
 
-|Test Functionality|Description|L2|L3|
-|------------------|-----------|--|--|
-|Check Resolution with/without playback|set/get pixel resolution|Y|Y|
-||set/get AspectRatio|Y|Y|
-||set/get video Stereo Scopic modes|Y|Y|
-||set/get video Frame rates|Y|Y|
-||set/get interlaced/progressive|Y|Y|
+|Test Functionality|Description|L2|L3|Source|Sink|
+|------------------|-----------|--|--|------|----|
+|Check Resolution with/without playback|Set/Get Video properties like pixel resolution, Aspect ratio, Stereo Scopic modes, frame rates and scan modes|Y|Y|Y|Y|
+||Check Video properties with external Analyzer|`NA`|Y|Y|`NA`|
 
 #### Test Startup Requirement-Check Video Resolution
 
@@ -135,13 +134,14 @@ Verify the AspectRatio,video Stereo Scopic modes,video Frame rates,interlaced/pr
 
 ### HDCP and DTCP Management
 
-|Test Functionality|Description|L2|L3|
-|------------------|-----------|--|--|
-|Check HDCP and DTCP Management|Check enable/disable the DTCP/HDCP for the specified video port|Y|Y|
-||Check DTCP/HDCP status for valid port|Y|Y|
-||Check HDCP protocol status|Y|Y|
-||Check EDID status|Y|Y|
-||Notify event if the HDCP status change|`NA`|Y|
+|Test Functionality|Description|L2|L3|Source|Sink|
+|------------------|-----------|--|--|------|----|
+|Check HDCP and DTCP Management|Check enable/disable the DTCP/HDCP for the specified video port|Y|Y|Y|Y|
+||Check DTCP/HDCP status for valid port|Y|Y|Y|Y|
+||Check HDCP protocol status|Y|Y|Y|Y|
+||Check EDID status|Y|Y|Y|Y|
+||Notify event if the HDCP status change|`NA`|Y|Y|Y|
+||Check HDCP/DTCP status with external analyzer|`NA`|Y|Y|`NA`|
 
 #### Test Startup Requirement-HDCP and DTCP Management
 
@@ -153,18 +153,18 @@ Playback the pre-define streams
 
 #### Control Plane Requirements-HDCP and DTCP Management
 
-Trigger an event HDCP status change.
+Check the HDCP/DTCP status with external analyzer
 
 ### Color Capabilities
 
-|Test Functionality|Description|L2|L3|
-|------------------|-----------|--|--|
-|Check Color Capabilities|Set/Get Color Space|Y|Y|
-||Set/Get Color Depth Capabilities |Y|Y|
-||Check QuantizationRange status|Y|Y|
-||Check MatrixCoefficients status|Y|Y|
-||Set Background Color|Y|Y|
-||Get Current OutputSettings|Y|Y|
+|Test Functionality|Description|L2|L3|Source|Sink|
+|------------------|-----------|--|--|------|----|
+|Check Color Capabilities|Set/Get Color Space|Y|Y|Y|Y|
+||Set/Get Color Depth Capabilities |Y|Y|Y|Y|
+||Check QuantizationRange status|Y|Y|Y|Y|
+||Check MatrixCoefficients status|Y|Y|Y|Y|
+||Set Background Color|Y|Y|Y|Y|
+||Check the color space capabilities with analyzer|`NA`|Y|Y|`NA`|
 
 #### Test Startup Requirement-Color Capabilities
 
