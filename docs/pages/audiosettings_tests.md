@@ -17,8 +17,8 @@
 
 - `HAL`    - Hardware Abstraction Layer
 - `API`    - Application Programming Interface
-- `L2`     - Level 2 Testing ()
-- `L3`     - Level 3 Testing ()
+- `L2`     - Level 2 Testing
+- `L3`     - Level 3 Testing
 - `NA`     - Not Applicable
 - `DS`     - Device Settings
 - `Caller` - Any user of the interface via the `APIs`
