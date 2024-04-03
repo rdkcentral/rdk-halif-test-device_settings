@@ -57,9 +57,9 @@ Supported zoom modes [dsVideoZoom_t link](https://github.com/rdkcentral/rdk-hali
 
 ### Check the Zoom Control
 
-|Test Functionality|Description|L2|L3|
-|------------------|-----------|--|--|
-|Check the zoom mode status|Ensure that the video device can be retrieved and the zoom mode can be set, retrieved and verify successfully with/without Video playback |Y|Y|
+|Test Functionality|Description|L2|L3|Source|Sink|
+|------------------|-----------|--|--|------|----|
+|Check the zoom mode status|Ensure that the video device can be retrieved and the zoom mode can be set, retrieved and verify successfully with/without Video playback |Y|Y|Y|`NA`|
 
 #### Test Startup Requirement-Check the Zoom Control
 
@@ -71,14 +71,14 @@ Playback the pre-define streams
 
 #### Control Plane Requirements-Check the Zoom Control
 
-Set the supported zoom modes and verify the applied zoom mode during playback.
+Verify the applied zoom mode during playback with analyzer.
 
 ### Check the HDR Capability
 
-|Test Functionality|Description|L2|L3|
-|------------------|-----------|--|--|
-|Check `HDR` Capability|Get the `HDR` capabilities and status|Y|`NA`|
-||Set/Get force `HDR` disable with/without Video playback|Y|Y|
+|Test Functionality|Description|L2|L3|Source|Sink|
+|------------------|-----------|--|--|------|----|
+|Check `HDR` Capability|Get the `HDR` capabilities and status|Y|`NA`|Y|Y|
+||Force `HDR` disable with/without Video playback and verify|Y|Y|Y|`NA`|
 
 #### Test Startup Requirement-Check the HDR Capability
 
@@ -90,14 +90,14 @@ Playback the pre-define streams
 
 #### Control Plane Requirements-Check the HDR Capability
 
-Disable `HDR` and playback the `HDR` stream and verify status.
+Verify the `HDR` status with analyzer.
 
 ### Check Video codec and Formats
 
-|Test Functionality|Description|L2|L3|
-|------------------|-----------|--|--|
-|Check Video codec and Formats|Check the supported Video coding format |Y|`NA`|
-||Gets the video codec information with/without Video playback|Y|Y|
+|Test Functionality|Description|L2|L3|Source|Sink|
+|------------------|-----------|--|--|------|----|
+|Check Video codec Formats and information|Check the supported Video coding format |Y|`NA`|Y|Y|
+||Verify video codec format and information with/without Video playback using analyzer|`NA`|Y|Y|`NA`|
 
 #### Test Startup Requirement-Check Video codec and Formats
 
@@ -109,15 +109,15 @@ Playback the pre-define streams
 
 #### Control Plane Requirements-Check Video codec and Formats
 
-Play back the different HEVC profiles and verify.
+Verify the codec formats with analyzer.
 
 ### Check the Display frame rate Capability
 
-|Test Functionality|Description|L2|L3|
-|------------------|-----------|--|--|
-|Check the Display frame rate Capability|set, retrieved and verify the display framerate successfully|Y|`NA`|
-||Check Display framerate pre change event|`NA`|Y|
-||Check Display framerate post change event|`NA`|Y|
+|Test Functionality|Description|L2|L3|Source|Sink|
+|------------------|-----------|--|--|------|----|
+|Check the Display frame rate Capability|set, retrieved and verify the display framerate successfully|Y|`NA`|Y|Y|
+||Set the frame rate and check if callbacks are triggered|`NA`|Y|Y|Y|
+||Set the frame rate and verify with analyzer|`NA`|Y|Y|`NA`|
 
 #### Test Startup Requirement-Check the Display frame rate Capability
 
@@ -129,4 +129,4 @@ Playback the pre-define streams
 
 #### Control Plane Requirements-Check the Display frame rate Capability
 
-Trigger an event for Display framerate change.
+Verify the frame rate with analyzer
