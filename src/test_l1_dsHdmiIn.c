@@ -1574,6 +1574,7 @@ void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int i = 0;
+    dsError_t ret = dsERR_NONE;
 
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
@@ -1644,9 +1645,8 @@ void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo(void) {
  * |03|Call dsGetEDIDBytesInfo() with invalid value |dsHDMI_IN_PORT_MAX, unsigned char*, int| dsERR_INVALID_PARAM | Should Pass |
  * |04|Call dsGetEDIDBytesInfo() with invalid value |dsHDMI_IN_PORT_0, NULL, int| dsERR_INVALID_PARAM | Should Pass |
  * |05|Call dsGetEDIDBytesInfo() with invalid value |dsHDMI_IN_PORT_0, unsigned char*, edidSize<0| dsERR_INVALID_PARAM | Should Pass |
- * |06|Call dsGetEDIDBytesInfo() with invalid value |dsHDMI_IN_PORT_0, unsigned char*, edidSize>dsGetEDIDBytesMaxSize()| dsERR_INVALID_PARAM | Should Pass |
- * |07|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
- * |08|Call dsGetEDIDBytesInfo() after termination the HDMI input sub-system |dsHDMI_IN_PORT_0, unsigned char*, int| dsERR_NOT_INITIALIZED | Should Pass |
+ * |06|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |07|Call dsGetEDIDBytesInfo() after termination the HDMI input sub-system |dsHDMI_IN_PORT_0, unsigned char*, int| dsERR_NOT_INITIALIZED | Should Pass |
  * 
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
@@ -1657,6 +1657,7 @@ void test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo(void) {
 
     unsigned char* edidBytes = NULL;
     int edidSize = 0;
+    dsError_t ret = dsERR_NONE;
 
     // Step 1: Call dsGetEDIDBytesInfo() without initializing the HDMI input sub-system
     UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, edidBytes, edidSize), dsERR_NOT_INITIALIZED);
@@ -1693,19 +1694,13 @@ void test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo(void) {
         UT_FAIL("Failed to return valid error code");
     }
 
-    // Step 6: Call dsGetEDIDBytesInfo() with invalid value (greater than dsGetEDIDBytesMaxSize())
-    ret = dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, edidBytes, edidSize+10);
-    if(ret != dsERR_INVALID_PARAM) {
-        UT_FAIL("Failed to return valid error code");
-    }
-
-    // Step 7: Call dsHdmiInTerm() to ensure deinitialization
+    // Step 6: Call dsHdmiInTerm() to ensure deinitialization
     ret = dsHdmiInTerm();
     if(ret != dsERR_NONE) {
         UT_FAIL("Failed to deinitialization");
     }
 
-    // Step 8: Call dsGetEDIDBytesInfo() after terminating the HDMI input sub-system
+    // Step 7: Call dsGetEDIDBytesInfo() after terminating the HDMI input sub-system
     ret = dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, edidBytes, edidSize);
     if(ret != dsERR_NOT_INITIALIZED) {
         UT_FAIL("Failed to return valid error code");
@@ -1729,47 +1724,58 @@ void test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Call dsGetHDMISPDInfo() with valid input |dsHDMI_IN_PORT_0, unsigned char*| dsERR_NONE | Should return HDMI SPD information successfully |
- * |03|Call dsGetHDMISPDInfo() with valid input |dsHDMI_IN_PORT_1, unsigned char*| dsERR_NONE | Should return HDMI SPD information successfully |
- * |04|Call dsGetHDMISPDInfo() with valid input |dsHDMI_IN_PORT_2, unsigned char*| dsERR_NONE | Should return HDMI SPD information successfully |
- * |05|Call dsGetHDMISPDInfo() with valid input |dsHDMI_IN_PORT_2, unsigned char*| dsERR_NONE | Should return HDMI SPD information successfully |
- * |06|Compare values from step 4/5 and make sure they're the same || Success | The values should be the same |
- * |07|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |02|Call dsGetHDMISPDInfo() with valid inputs |iHdmiPort = [loop through all valid ports], unsigned char*, int| dsERR_NONE | Should return EDID bytes information successfully |
+ * |03|Call again dsGetHDMISPDInfo() with valid inputs |iHdmiPort = [loop through all valid ports], unsigned char*, int| dsERR_NONE | Should return EDID bytes information successfully |
+ * |04|Compare values from step 2/3 and make sure they're the same || Success | The values should be the same |
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
 void test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo(void) {
     gTestID = 37;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
-    unsigned char* spdInfo1 = (unsigned char*) malloc(sizeof(struct dsSpd_infoframe_st));
-    unsigned char* spdInfo2 = (unsigned char*) malloc(sizeof(struct dsSpd_infoframe_st));
-    unsigned char* spdInfo3 = (unsigned char*) malloc(sizeof(struct dsSpd_infoframe_st));
-    unsigned char* spdInfo4 = (unsigned char*) malloc(sizeof(struct dsSpd_infoframe_st));
+    int i = 0;
+    dsError_t ret = dsERR_NONE;
+    unsigned char* spdInfo = NULL;
+    unsigned char* spdInfo1 = NULL;
+    int spdSize = sizeof(struct dsSpd_infoframe_st);
 
-    // Step 2: Call dsGetHDMISPDInfo() with valid input (dsHDMI_IN_PORT_0)
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, spdInfo1), dsERR_NONE);
+    for(i = dsHDMI_IN_PORT_0; i < dsHDMI_IN_PORT_MAX; i++) {
+        spdInfo = (unsigned char*) malloc(spdSize);
+        if(spdInfo == NULL) {
+            UT_FAIL("Failed to allocate memory for spd buffer");
+            continue;
+        }
+        spdInfo1 = (unsigned char*) malloc(spdSize);
+        if(spdInfo1 == NULL) {
+            free(spdInfo);
+            UT_FAIL("Failed to allocate memory for spd buffer");
+            continue;
+        }
+        // Step 2: Call dsGetHDMISPDInfo() with valid inputs
+        ret = dsGetHDMISPDInfo(i, spdInfo, spdSize);
+        if(ret != dsERR_NONE) {
+            UT_FAIL("Failed to get EDID bytes");
+        }
+        // Step 3: Call again dsGetHDMISPDInfo() with valid inputs
+        ret = dsGetHDMISPDInfo(i, spdInfo1, spdSize);
+        if(ret != dsERR_NONE) {
+            UT_FAIL("Failed to get EDID bytes");
+        }
+        // Step 4: Compare the results and make sure they are the same
+        if(memcmp(spdInfo, spdInfo1, edidSize)) {
+            UT_FAIL("Failed EDID bytes comparison");
+        }
 
-    // Step 3: Call dsGetHDMISPDInfo() with valid input (dsHDMI_IN_PORT_1)
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_1, spdInfo2), dsERR_NONE);
+        free(spdInfo);
+        free(spdInfo1);
+    }
 
-    // Step 4: Call dsGetHDMISPDInfo() with valid input (dsHDMI_IN_PORT_2)
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_2, spdInfo3), dsERR_NONE);
-
-    // Step 5: Call dsGetHDMISPDInfo() with valid input (dsHDMI_IN_PORT_2)
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_2, spdInfo4), dsERR_NONE);
-
-    // Step 6: Compare the results and make sure they are the same
-    DS_ASSERT_AUTO_TERM_NUMERICAL(memcmp(spdInfo3, spdInfo4,sizeof(struct dsSpd_infoframe_st)),0);
-
-    // Step 7: Call dsHdmiInTerm() to ensure deinitialization
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
-
-    free(spdInfo1);
-    free(spdInfo2);
-    free(spdInfo3);
-    free(spdInfo4);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -1788,10 +1794,11 @@ void test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo(void) {
  * |:--:|-----------|----------|--------------|-----|
  * |01|Call dsGetHDMISPDInfo() without initializing the HDMI input sub-system |dsHDMI_IN_PORT_0, unsigned char*| dsERR_NOT_INITIALIZED | Should Pass |
  * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |03|Call dsGetHDMISPDInfo() with invalid values |dsHDMI_IN_PORT_MAX, unsigned char*| dsERR_INVALID_PARAM | Should Pass |
- * |04|Call dsGetHDMISPDInfo() with invalid values |dsHDMI_IN_PORT_0, NULL| dsERR_INVALID_PARAM | Should Pass |
- * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
- * |06|Call dsGetHDMISPDInfo() after terminating the HDMI input sub-system |dsHDMI_IN_PORT_0, unsigned char*| dsERR_NOT_INITIALIZED | Should Pass |
+ * |03|Call dsGetHDMISPDInfo() with invalid values |dsHDMI_IN_PORT_MAX, unsigned char*, int| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsGetHDMISPDInfo() with invalid values |dsHDMI_IN_PORT_0, NULL, int| dsERR_INVALID_PARAM | Should Pass |
+ * |05|Call dsGetHDMISPDInfo() with invalid values |dsHDMI_IN_PORT_0, unsigned char*, spdSize <= 0| dsERR_INVALID_PARAM | Should Pass |
+ * |06|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |07|Call dsGetHDMISPDInfo() after terminating the HDMI input sub-system |dsHDMI_IN_PORT_0, unsigned char*, int| dsERR_NOT_INITIALIZED | Should Pass |
  * 
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
@@ -1800,27 +1807,31 @@ void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo(void) {
     gTestID = 38;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    unsigned char* spdInfo1 = (unsigned char*) malloc(sizeof(struct dsSpd_infoframe_st)); 
+    unsigned char* spdInfo = (unsigned char*) malloc(sizeof(struct dsSpd_infoframe_st)); 
+    int spdSize = sizeof(struct dsSpd_infoframe_st);
 
     // Step 1: Call dsGetHDMISPDInfo() without initializing the HDMI input sub-system
-    UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, spdInfo1), dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, spdInfo, spdSize), dsERR_NOT_INITIALIZED);
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
     // Step 3: Call dsGetHDMISPDInfo() with invalid values (dsHDMI_IN_PORT_MAX)
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_MAX, spdInfo1), dsERR_INVALID_PARAM);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_MAX, spdInfo, spdSize), dsERR_INVALID_PARAM);
 
     // Step 4: Call dsGetHDMISPDInfo() with invalid values (NULL pointer)
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, NULL), dsERR_INVALID_PARAM);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, NULL, spdSize), dsERR_INVALID_PARAM);
 
-    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
+    // Step 5: Call dsGetHDMISPDInfo() with invalid values (spdSize less than zero)
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, NULL, -1), dsERR_INVALID_PARAM);
+
+    // Step 6: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 
-    // Step 6: Call dsGetHDMISPDInfo() after terminating the HDMI input sub-system
-    UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, spdInfo1), dsERR_NOT_INITIALIZED);
+    // Step 7: Call dsGetHDMISPDInfo() after terminating the HDMI input sub-system
+    UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, spdInfo, spdSize), dsERR_NOT_INITIALIZED);
 
-    free(spdInfo1);
+    free(spdInfo);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
