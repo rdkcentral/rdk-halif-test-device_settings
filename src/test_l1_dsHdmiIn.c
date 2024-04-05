@@ -1426,7 +1426,7 @@ void test_l1_dsHdmiIn_negative_dsIsHdmiARCPort(void) {
 }
 
 /**
- * @brief Ensure dsGetEDIDBytesInfo() correctly retrieves the EDID bytes information during positive scenarios.
+ * @brief Ensure dsGetEDIDBytesMaxSize () correctly retrieves the maximum EDID bytes size during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 033@n
@@ -1438,60 +1438,57 @@ void test_l1_dsHdmiIn_negative_dsIsHdmiARCPort(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Call dsGetEDIDBytesInfo() with valid inputs |dsHDMI_IN_PORT_0, unsigned char*, int*| dsERR_NONE | Should return EDID bytes information successfully |
- * |03|Call dsGetEDIDBytesInfo() with valid inputs |dsHDMI_IN_PORT_1, unsigned char*, int*| dsERR_NONE | Should return EDID bytes information successfully |
- * |04|Call dsGetEDIDBytesInfo() with valid inputs |dsHDMI_IN_PORT_2, unsigned char*, int*| dsERR_NONE | Should return EDID bytes information successfully |
- * |05|Call dsGetEDIDBytesInfo() with valid inputs |dsHDMI_IN_PORT_2, unsigned char*, int*| dsERR_NONE | Should return EDID bytes information successfully |
- * |06|Compare the results and make sure they are the same | | Success | The values should be the same |
- * |07|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |02|Call dsGetEDIDBytesMaxSize() with valid inputs |iHdmiPort = [loop through all valid ports], int*| dsERR_NONE | Should return maximum size of EDID bytes successfully |
+ * |03|Call again dsGetEDIDBytesMaxSize() with valid inputs |iHdmiPort = [loop through all valid ports], int*| dsERR_NONE | Should return maximum size of EDID bytes successfully |
+ * |04|Compare the results from step 2 and step 3and make sure they are the same | | Success | The values should be the same |
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * 
  */
-void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo(void) {
+void test_l1_dsHdmiIn_positive_dsGetEDIDBytesMaxSize(void) {
     gTestID = 33;
+    int maxEDIDSize[dsHDMI_IN_PORT_MAX];
+    int maxEDIDSize1[dsHDMI_IN_PORT_MAX];
+    int i = 0;
+    dsError_t ret = dsERR_NONE;
+
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
-    unsigned char* edidBytes1 = (unsigned char*) malloc(255);
-    unsigned char* edidBytes2 = (unsigned char*) malloc(255);
-    unsigned char* edidBytes3 = (unsigned char*) malloc(255);
-    unsigned char* edidBytes4 = (unsigned char*) malloc(255);
-    int edidSize1;
-    int edidSize2;
-    int edidSize3;
-    int edidSize4;
+    // Step 2: Call dsGetEDIDBytesMaxSize() with valid inputs
+    for(i = dsHDMI_IN_PORT_0; i < dsHDMI_IN_PORT_MAX; i++) {
+        maxEDIDSize[i] = 0;
+        ret = dsGetEDIDBytesMaxSize(i, &maxEDIDSize[i]);
+        if(ret != dsERR_NONE || maxEDIDSize[i] <= 0) {
+            UT_FAIL("Failed to get the maximum size of EDID bytes");
+        }
+    }
 
-    // Step 2: Call dsGetEDIDBytesInfo() with valid input (dsHDMI_IN_PORT_0)
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, edidBytes1, &edidSize1), dsERR_NONE);
+    // Step 3: Call again dsGetEDIDBytesMaxSize() with valid inputs
+    for(i = dsHDMI_IN_PORT_0; i < dsHDMI_IN_PORT_MAX; i++) {
+        maxEDIDSize1[i] = 0;
+        ret = dsGetEDIDBytesMaxSize(i, &maxEDIDSize1[i]);
+        if(ret != dsERR_NONE || maxEDIDSize1[i] <= 0) {
+            UT_FAIL("Failed to get the maximum size of EDID bytes");
+        }
+    }
 
-    // Step 3: Call dsGetEDIDBytesInfo() with valid input (dsHDMI_IN_PORT_1)
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_1, edidBytes2, &edidSize2), dsERR_NONE);
+    // Step 4: Compare the results from step 2 and step 3and make sure they are the same
+    for(i = dsHDMI_IN_PORT_0; i < dsHDMI_IN_PORT_MAX; i++) {
+        if(maxEDIDSize1[i] != maxEDIDSize[i]) {
+            UT_FAIL("comparison of Max EDID sizes failed Port:%d Size1: %d Size2: %d", i, maxEDIDSize1[i], maxEDIDSize[i]);
+        }
+    }
 
-    // Step 4: Call dsGetEDIDBytesInfo() with valid input (dsHDMI_IN_PORT_2)
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_2, edidBytes3, &edidSize3), dsERR_NONE);
-
-    // Step 5: Call dsGetEDIDBytesInfo() with valid input (dsHDMI_IN_PORT_2)
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_2, edidBytes4, &edidSize4), dsERR_NONE);
-
-    // Step 6: Compare the results and make sure they are the same
-    DS_ASSERT_AUTO_TERM_NUMERICAL(edidSize3, edidSize4);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(memcmp(edidBytes3, edidBytes4, edidSize3),0);
-
-    // You may want to compare the contents of the edidBytes as well, depending on your use case.
-
-    // Step 7: Call dsHdmiInTerm() to ensure deinitialization
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
-
-    free(edidBytes1);
-    free(edidBytes2);
-    free(edidBytes3);
-    free(edidBytes4);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
 /**
- * @brief Ensure dsGetEDIDBytesInfo() returns correct error codes during negative scenarios.
+ * @brief Ensure dsGetEDIDBytesMaxSize () returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 034@n
@@ -1502,44 +1499,217 @@ void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo(void) {
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsGetEDIDBytesMaxSize() without initializing the HDMI input sub-system |dsHDMI_IN_PORT_0, int*| dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsGetEDIDBytesMaxSize() with invalid value |dsHDMI_IN_PORT_MAX, int*| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsGetEDIDBytesMaxSize() with invalid value |dsHDMI_IN_PORT_0, NULL| dsERR_INVALID_PARAM | Should Pass |
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |06|Call dsGetEDIDBytesMaxSize() after termination the HDMI input sub-system |dsHDMI_IN_PORT_0, int*| dsERR_NOT_INITIALIZED | Should Pass |
+ * 
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
+ * 
+ */
+void test_l1_dsHdmiIn_negative_dsGetEDIDBytesMaxSize(void) {
+    gTestID = 34;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    int maxEDIDSize = 0;
+    dsError_t ret = dsERR_NONE;
+
+    // Step 1: Call dsGetEDIDBytesMaxSize() without initializing the HDMI input sub-system
+    ret = dsGetEDIDBytesMaxSize(i, &maxEDIDSize[i]);
+    if(ret != dsERR_NOT_INITIALIZED) {
+        UT_FAIL("Failed to return valid error code");
+    }
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: Call dsGetEDIDBytesMaxSize() with invalid value
+    ret = dsGetEDIDBytesMaxSize(dsHDMI_IN_PORT_MAX, &maxEDIDSize);
+    if(ret != dsERR_INVALID_PARAM) {
+        UT_FAIL("Failed to return valid error code");
+    }
+
+    // Step 4: Call dsGetEDIDBytesMaxSize() with invalid value
+    ret = dsGetEDIDBytesMaxSize(dsHDMI_IN_PORT_0, NULL);
+    if(ret != dsERR_INVALID_PARAM) {
+        UT_FAIL("Failed to return valid error code");
+    }
+
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
+    UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 6: Call dsGetEDIDBytesMaxSize() after termination the HDMI input sub-system
+    ret = dsGetEDIDBytesMaxSize(dsHDMI_IN_PORT_0, &maxEDIDSize);
+    if(ret != dsERR_NOT_INITIALIZED) {
+        UT_FAIL("Failed to return valid error code");
+    }
+
+    UT_LOG("\n Out %s\n", __FUNCTION__); 
+}
+
+/**
+ * @brief Ensure dsGetEDIDBytesInfo() correctly retrieves the EDID bytes information during positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 035@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Call dsGetEDIDBytesMaxSize() with valid inputs |iHdmiPort = [loop through all valid ports], int*| dsERR_NONE | Should return maximum size of EDID bytes successfully |
+ * |03|Call dsGetEDIDBytesInfo() with valid inputs |iHdmiPort = [loop through all valid ports], unsigned char*, int| dsERR_NONE | Should return EDID bytes information successfully |
+ * |04|Call again dsGetEDIDBytesInfo() with valid inputs |iHdmiPort = [loop through all valid ports], unsigned char*, int| dsERR_NONE | Should return EDID bytes information successfully |
+ * |05|Compare the results and make sure they are the same | | Success | The values should be the same |
+ * |06|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * 
+ */
+void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo(void) {
+    gTestID = 35;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    int i = 0;
+
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+
+    unsigned char* edidBytes  = NULL;
+    unsigned char* edidBytes1 = NULL;
+    int edidSize = 0;
+
+    for(i = dsHDMI_IN_PORT_0; i < dsHDMI_IN_PORT_MAX; i++) {
+        edidSize = 0;
+        ret = dsGetEDIDBytesMaxSize(i, &edidSize);
+        if(ret != dsERR_NONE || edidSize <= 0) {
+            UT_FAIL("Failed to get the maximum size of EDID bytes");
+            continue;
+        }
+        edidBytes = (unsigned char*) malloc(edidSize);
+        if(edidBytes == NULL) {
+            UT_FAIL("Failed to allocate memory for EDID bytes");
+            continue;
+        }
+        edidBytes1 = (unsigned char*) malloc(edidSize);
+        if(edidBytes1 == NULL) {
+            UT_FAIL("Failed to allocate memory for EDID bytes");
+            free(edidBytes);
+            edidBytes = NULL;
+            continue;
+        }
+        // Step 3: Call dsGetEDIDBytesMaxSize() with valid inputs
+        ret = dsGetEDIDBytesInfo(i, edidBytes, edidSize);
+        if(ret != dsERR_NONE) {
+            UT_FAIL("Failed to get EDID bytes");
+        }
+        // Step 4: Call dsGetEDIDBytesMaxSize() with valid inputs
+        ret = dsGetEDIDBytesInfo(i, edidBytes1, edidSize);
+        if(ret != dsERR_NONE) {
+            UT_FAIL("Failed to get EDID bytes");
+        }
+
+        // Step 5: Compare the results and make sure they are the same
+        if(memcmp(edidBytes, edidBytes1, edidSize)) {
+            UT_FAIL("Failed EDID bytes comparison");
+        }
+
+        free(edidBytes);
+        free(edidBytes1);
+    }
+
+    // Step 6: Call dsHdmiInTerm() to ensure deinitialization
+    UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+
+    UT_LOG("\n Out %s\n", __FUNCTION__); 
+}
+
+/**
+ * @brief Ensure dsGetEDIDBytesInfo() returns correct error codes during negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 036@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
  * |01|Call dsGetEDIDBytesInfo() without initializing the HDMI input sub-system |dsHDMI_IN_PORT_0, unsigned char*, int*| dsERR_NOT_INITIALIZED | Should Pass |
  * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |03|Call dsGetEDIDBytesInfo() with invalid value |dsHDMI_IN_PORT_MAX, unsigned char*, int*| dsERR_INVALID_PARAM | Should Pass |
- * |04|Call dsGetEDIDBytesInfo() with invalid value |dsHDMI_IN_PORT_0, NULL, int*| dsERR_INVALID_PARAM | Should Pass |
- * |05|Call dsGetEDIDBytesInfo() with invalid value |dsHDMI_IN_PORT_0, unsigned char*, NULL| dsERR_INVALID_PARAM | Should Pass |
- * |06|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
- * |07|Call dsGetEDIDBytesInfo() after termination the HDMI input sub-system |dsHDMI_IN_PORT_0, unsigned char*, int*| dsERR_NOT_INITIALIZED | Should Pass |
+ * |03|Call dsGetEDIDBytesInfo() with invalid value |dsHDMI_IN_PORT_MAX, unsigned char*, int| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsGetEDIDBytesInfo() with invalid value |dsHDMI_IN_PORT_0, NULL, int| dsERR_INVALID_PARAM | Should Pass |
+ * |05|Call dsGetEDIDBytesInfo() with invalid value |dsHDMI_IN_PORT_0, unsigned char*, edidSize<0| dsERR_INVALID_PARAM | Should Pass |
+ * |06|Call dsGetEDIDBytesInfo() with invalid value |dsHDMI_IN_PORT_0, unsigned char*, edidSize>dsGetEDIDBytesMaxSize()| dsERR_INVALID_PARAM | Should Pass |
+ * |07|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |08|Call dsGetEDIDBytesInfo() after termination the HDMI input sub-system |dsHDMI_IN_PORT_0, unsigned char*, int| dsERR_NOT_INITIALIZED | Should Pass |
  * 
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  * 
  */
 void test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo(void) {
-    gTestID = 34;
+    gTestID = 36;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    unsigned char* edidBytes = (unsigned char*) malloc(255);
-    int edidSize;
+    unsigned char* edidBytes = NULL;
+    int edidSize = 0;
 
     // Step 1: Call dsGetEDIDBytesInfo() without initializing the HDMI input sub-system
-    UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, edidBytes, &edidSize), dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, edidBytes, edidSize), dsERR_NOT_INITIALIZED);
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
+    ret = dsGetEDIDBytesMaxSize(dsHDMI_IN_PORT_0, &edidSize);
+    if(ret != dsERR_NONE || edidSize <= 0) {
+        UT_FAIL("Failed to get the maximum size of EDID bytes");
+        UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+    }
+
+    edidBytes = (unsigned char*) malloc(edidSize);
+    if(edidBytes == NULL) {
+        UT_FAIL("Failed to allocate memory for EDID bytes");
+    }
+
     // Step 3: Call dsGetEDIDBytesInfo() with invalid value (dsHDMI_IN_PORT_MAX)
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_MAX, edidBytes, &edidSize), dsERR_INVALID_PARAM);
+    ret = dsGetEDIDBytesInfo(dsHDMI_IN_PORT_MAX, edidBytes, edidSize);
+    if(ret != dsERR_INVALID_PARAM) {
+        UT_FAIL("Failed to return valid error code");
+    }
 
     // Step 4: Call dsGetEDIDBytesInfo() with invalid value (NULL pointer)
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, NULL, &edidSize), dsERR_INVALID_PARAM);
+    ret = dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, NULL, edidSize);
+    if(ret != dsERR_INVALID_PARAM) {
+        UT_FAIL("Failed to return valid error code");
+    }
 
-    // Step 5: Call dsGetEDIDBytesInfo() with invalid value (NULL pointer)
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, edidBytes, NULL), dsERR_INVALID_PARAM);
+    // Step 5: Call dsGetEDIDBytesInfo() with invalid value (less than zero)
+    ret = dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, edidBytes, -1);
+    if(ret != dsERR_INVALID_PARAM) {
+        UT_FAIL("Failed to return valid error code");
+    }
 
-    // Step 6: Call dsHdmiInTerm() to ensure deinitialization
-    UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+    // Step 6: Call dsGetEDIDBytesInfo() with invalid value (greater than dsGetEDIDBytesMaxSize())
+    ret = dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, edidBytes, edidSize+10);
+    if(ret != dsERR_INVALID_PARAM) {
+        UT_FAIL("Failed to return valid error code");
+    }
 
-    // Step 7: Call dsGetEDIDBytesInfo() after terminating the HDMI input sub-system
-    UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, edidBytes, &edidSize), dsERR_NOT_INITIALIZED);
+    // Step 7: Call dsHdmiInTerm() to ensure deinitialization
+    ret = dsHdmiInTerm();
+    if(ret != dsERR_NONE) {
+        UT_FAIL("Failed to deinitialization");
+    }
+
+    // Step 8: Call dsGetEDIDBytesInfo() after terminating the HDMI input sub-system
+    ret = dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, edidBytes, edidSize);
+    if(ret != dsERR_NOT_INITIALIZED) {
+        UT_FAIL("Failed to return valid error code");
+    }
 
     free(edidBytes);
 
@@ -1550,7 +1720,7 @@ void test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo(void) {
  * @brief Ensure dsGetHDMISPDInfo() correctly retrieves the HDMI SPD information during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 035@n
+ * **Test Case ID:** 037@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1568,7 +1738,7 @@ void test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo(void) {
  * 
  */
 void test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo(void) {
-    gTestID = 35;
+    gTestID = 37;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
@@ -1608,7 +1778,7 @@ void test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo(void) {
  * @brief Ensure dsGetHDMISPDInfo() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 036@n
+ * **Test Case ID:** 038@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1627,7 +1797,7 @@ void test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo(void) {
  * 
  */
 void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo(void) {
-    gTestID = 36;
+    gTestID = 38;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     unsigned char* spdInfo1 = (unsigned char*) malloc(sizeof(struct dsSpd_infoframe_st)); 
@@ -1659,7 +1829,7 @@ void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo(void) {
  * @brief Ensure dsSetEdidVersion() correctly sets the EDID version during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 037@n
+ * **Test Case ID:** 039@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1676,7 +1846,7 @@ void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo(void) {
  * 
  */
 void test_l1_dsHdmiIn_positive_dsSetEdidVersion(void) {
-    gTestID = 37;
+    gTestID = 39;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
@@ -1703,7 +1873,7 @@ void test_l1_dsHdmiIn_positive_dsSetEdidVersion(void) {
  * @brief Ensure dsSetEdidVersion() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 038@n
+ * **Test Case ID:** 040@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1722,7 +1892,7 @@ void test_l1_dsHdmiIn_positive_dsSetEdidVersion(void) {
  * 
  */
 void test_l1_dsHdmiIn_negative_dsSetEdidVersion(void) {
-    gTestID = 38;
+    gTestID = 40;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     // Step 1: Call dsSetEdidVersion() without initializing the HDMI input sub-system
     UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_0, HDMI_EDID_VER_14), dsERR_NOT_INITIALIZED);
@@ -1749,7 +1919,7 @@ void test_l1_dsHdmiIn_negative_dsSetEdidVersion(void) {
  * @brief Ensure dsGetEdidVersion() correctly retrieves the EDID version during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 039@n
+ * **Test Case ID:** 041@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1764,7 +1934,7 @@ void test_l1_dsHdmiIn_negative_dsSetEdidVersion(void) {
  * 
  */
 void test_l1_dsHdmiIn_positive_dsGetEdidVersion(void) {
-    gTestID = 39;
+    gTestID = 41;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
@@ -1789,7 +1959,7 @@ void test_l1_dsHdmiIn_positive_dsGetEdidVersion(void) {
  * @brief Ensure dsGetEdidVersion() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 040@n
+ * **Test Case ID:** 042@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1808,7 +1978,7 @@ void test_l1_dsHdmiIn_positive_dsGetEdidVersion(void) {
  * 
  */
 void test_l1_dsHdmiIn_negative_dsGetEdidVersion(void) {
-    gTestID = 40;
+    gTestID = 42;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     // Step 1: Call dsGetEdidVersion() without initializing the HDMI input sub-system
     tv_hdmi_edid_version_t edid_version;
@@ -1836,7 +2006,7 @@ void test_l1_dsHdmiIn_negative_dsGetEdidVersion(void) {
  * @brief Ensure dsGetAllmStatus() correctly retrieves the ALLM status during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 041@n
+ * **Test Case ID:** 043@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1854,7 +2024,7 @@ void test_l1_dsHdmiIn_negative_dsGetEdidVersion(void) {
  * 
  */
 void test_l1_dsHdmiIn_positive_dsGetAllmStatus(void) {
-    gTestID = 41;
+    gTestID = 43;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
@@ -1886,7 +2056,7 @@ void test_l1_dsHdmiIn_positive_dsGetAllmStatus(void) {
  * @brief Ensure dsGetAllmStatus() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 042@n
+ * **Test Case ID:** 044@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1905,7 +2075,7 @@ void test_l1_dsHdmiIn_positive_dsGetAllmStatus(void) {
  * 
  */
 void test_l1_dsHdmiIn_negative_dsGetAllmStatus(void) {
-    gTestID = 42;
+    gTestID = 44;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     // Step 1: Call dsGetAllmStatus() without initializing the HDMI input sub-system
     bool allm_status;
@@ -1933,7 +2103,7 @@ void test_l1_dsHdmiIn_negative_dsGetAllmStatus(void) {
  * @brief Ensure dsGetSupportedGameFeaturesList() correctly retrieves the list of supported game features during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 043@n
+ * **Test Case ID:** 045@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1949,7 +2119,7 @@ void test_l1_dsHdmiIn_negative_dsGetAllmStatus(void) {
  * 
  */
 void test_l1_dsHdmiIn_positive_dsGetSupportedGameFeaturesList(void) {
-    gTestID = 43;
+    gTestID = 45;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
@@ -1976,7 +2146,7 @@ void test_l1_dsHdmiIn_positive_dsGetSupportedGameFeaturesList(void) {
  * @brief Ensure dsGetSupportedGameFeaturesList() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 044@n
+ * **Test Case ID:** 046@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1994,7 +2164,7 @@ void test_l1_dsHdmiIn_positive_dsGetSupportedGameFeaturesList(void) {
  * 
  */
 void test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList(void) {
-    gTestID = 44;
+    gTestID = 46;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     // Step 1: Call dsGetSupportedGameFeaturesList() without initializing the HDMI input sub-system
     dsSupportedGameFeatureList_t supported_features;
@@ -2019,7 +2189,7 @@ void test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList(void) {
  * @brief Ensure dsGetAVLatency() correctly retrieves the current AV latency during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 045@n
+ * **Test Case ID:** 047@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2034,7 +2204,7 @@ void test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList(void) {
  * 
  */
 void test_l1_dsHdmiIn_positive_dsGetAVLatency(void) {
-    gTestID = 45;
+    gTestID = 47;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
@@ -2056,7 +2226,7 @@ void test_l1_dsHdmiIn_positive_dsGetAVLatency(void) {
  * @brief Ensure dsGetAVLatency() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 046@n
+ * **Test Case ID:** 048@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2075,7 +2245,7 @@ void test_l1_dsHdmiIn_positive_dsGetAVLatency(void) {
  * 
  */
 void test_l1_dsHdmiIn_negative_dsGetAVLatency(void) {
-    gTestID = 46;
+    gTestID = 48;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     // Step 1: Call dsGetAVLatency() without initializing the HDMI input sub-system
     int audioLatency, videoLatency;
@@ -2103,7 +2273,7 @@ void test_l1_dsHdmiIn_negative_dsGetAVLatency(void) {
  * @brief Ensure dsSetEdid2AllmSupport() sets the EDID ALLM support correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 047@n
+ * **Test Case ID:** 049@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2118,7 +2288,7 @@ void test_l1_dsHdmiIn_negative_dsGetAVLatency(void) {
  * 
  */
 void test_l1_dsHdmiIn_positive_dsSetEdid2AllmSupport(void) {
-    gTestID = 47;
+    gTestID = 49;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     // Step 1: Initialize HDMI input using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
@@ -2141,7 +2311,7 @@ void test_l1_dsHdmiIn_positive_dsSetEdid2AllmSupport(void) {
  * @brief Ensure dsSetEdid2AllmSupport() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 048@n
+ * **Test Case ID:** 050@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2159,7 +2329,7 @@ void test_l1_dsHdmiIn_positive_dsSetEdid2AllmSupport(void) {
  * 
  */
 void test_l1_dsHdmiIn_negative_dsSetEdid2AllmSupport(void) {
-    gTestID = 48;
+    gTestID = 50;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     // Step 1: Call dsSetEdid2AllmSupport() without prior initialization of HDMI input
     UT_ASSERT_EQUAL(dsSetEdid2AllmSupport(dsHDMI_IN_PORT_0, true), dsERR_NOT_INITIALIZED);
@@ -2183,7 +2353,7 @@ void test_l1_dsHdmiIn_negative_dsSetEdid2AllmSupport(void) {
  * @brief Ensure dsGetEdid2AllmSupport() gets the EDID ALLM support correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 049@n
+ * **Test Case ID:** 051@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2200,7 +2370,7 @@ void test_l1_dsHdmiIn_negative_dsSetEdid2AllmSupport(void) {
  * 
  */
 void test_l1_dsHdmiIn_positive_dsGetEdid2AllmSupport(void) {
-    gTestID = 49;
+    gTestID = 51;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     // Step 1: Initialize HDMI input using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
@@ -2226,7 +2396,7 @@ void test_l1_dsHdmiIn_positive_dsGetEdid2AllmSupport(void) {
  * @brief Ensure dsGetEdid2AllmSupport() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 050@n
+ * **Test Case ID:** 052@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2245,7 +2415,7 @@ void test_l1_dsHdmiIn_positive_dsGetEdid2AllmSupport(void) {
  * 
  */
 void test_l1_dsHdmiIn_negative_dsGetEdid2AllmSupport(void) {
-    gTestID = 50;
+    gTestID = 52;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     bool allmSupport;
     UT_ASSERT_EQUAL(dsGetEdid2AllmSupport(dsHDMI_IN_PORT_0, &allmSupport), dsERR_NOT_INITIALIZED);
@@ -2301,6 +2471,7 @@ int test_l1_dsHdmiIn_register ( void )
         UT_add_test( pSuite, "dsHdmiInRegisterAVLatencyChangeCB_L1_positive" ,test_l1_dsHdmiIn_positive_dsHdmiInRegisterAVLatencyChangeCB );
         UT_add_test( pSuite, "dsHdmiInRegisterAviContentTypeChangeCB_L1_positive" ,test_l1_dsHdmiIn_positive_dsHdmiInRegisterAviContentTypeChangeCB );
         UT_add_test( pSuite, "dsIsHdmiARCPort_L1_positive" ,test_l1_dsHdmiIn_positive_dsIsHdmiARCPort );
+        UT_add_test( pSuite, "dsGetEDIDBytesMaxSize_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetEDIDBytesMaxSize );
         UT_add_test( pSuite, "dsGetEDIDBytesInfo_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo );
         UT_add_test( pSuite, "dsGetHDMISPDInfo_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo );
         UT_add_test( pSuite, "dsSetEdidVersion_L1_positive" ,test_l1_dsHdmiIn_positive_dsSetEdidVersion );
@@ -2326,7 +2497,8 @@ int test_l1_dsHdmiIn_register ( void )
 		UT_add_test( pSuite, "dsHdmiInRegisterAllmChangeCB_L1_negative" ,test_l1_dsHdmiIn_negative_dsHdmiInRegisterAllmChangeCB );
 		UT_add_test( pSuite, "dsHdmiInRegisterAVLatencyChangeCB_L1_negative" ,test_l1_dsHdmiIn_negative_dsHdmiInRegisterAVLatencyChangeCB );
 		UT_add_test( pSuite, "dsHdmiInRegisterAviContentTypeChangeCB_L1_negative" ,test_l1_dsHdmiIn_negative_dsHdmiInRegisterAviContentTypeChangeCB );
-		UT_add_test( pSuite, "dsGetEDIDBytesInfo_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo );
+		UT_add_test( pSuite, "dsGetEDIDBytesMaxSize_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetEDIDBytesMaxSize );
+        UT_add_test( pSuite, "dsGetEDIDBytesInfo_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo );
 		UT_add_test( pSuite, "dsGetHDMISPDInfo_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo );
 		UT_add_test( pSuite, "dsSetEdidVersion_L1_negative" ,test_l1_dsHdmiIn_negative_dsSetEdidVersion );
 		UT_add_test( pSuite, "dsGetEdidVersion_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetEdidVersion );
