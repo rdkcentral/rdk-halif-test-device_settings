@@ -1449,42 +1449,35 @@ void test_l1_dsHdmiIn_positive_dsGetEDIDBytesMaxSize(void) {
     int maxEDIDSize[dsHDMI_IN_PORT_MAX];
     int maxEDIDSize1[dsHDMI_IN_PORT_MAX];
     int i = 0;
-    dsError_t ret = dsERR_NONE;
 
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
-    UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
     // Step 2: Call dsGetEDIDBytesMaxSize() with valid inputs
     for(i = dsHDMI_IN_PORT_0; i < dsHDMI_IN_PORT_MAX; i++) {
         maxEDIDSize[i] = 0;
-        ret = dsGetEDIDBytesMaxSize(i, &maxEDIDSize[i]);
-        if(ret != dsERR_NONE || maxEDIDSize[i] <= 0) {
-            UT_FAIL("Failed to get the maximum size of EDID bytes");
-        }
+        UT_ASSERT_EQUAL(dsGetEDIDBytesMaxSize(i, &maxEDIDSize[i]), dsERR_NONE);
+        UT_ASSERT_TRUE(maxEDIDSize[i] > 0);
     }
 
     // Step 3: Call again dsGetEDIDBytesMaxSize() with valid inputs
     for(i = dsHDMI_IN_PORT_0; i < dsHDMI_IN_PORT_MAX; i++) {
         maxEDIDSize1[i] = 0;
-        ret = dsGetEDIDBytesMaxSize(i, &maxEDIDSize1[i]);
-        if(ret != dsERR_NONE || maxEDIDSize1[i] <= 0) {
-            UT_FAIL("Failed to get the maximum size of EDID bytes");
-        }
+        UT_ASSERT_EQUAL(dsGetEDIDBytesMaxSize(i, &maxEDIDSize1[i]), dsERR_NONE);
+        UT_ASSERT_TRUE(maxEDIDSize1[i] > 0);
     }
 
     // Step 4: Compare the results from step 2 and step 3and make sure they are the same
     for(i = dsHDMI_IN_PORT_0; i < dsHDMI_IN_PORT_MAX; i++) {
-        if(maxEDIDSize1[i] != maxEDIDSize[i]) {
-            UT_FAIL("comparison of Max EDID sizes failed Port:%d Size1: %d Size2: %d", i, maxEDIDSize1[i], maxEDIDSize[i]);
-        }
+        UT_ASSERT_EQUAL(maxEDIDSize[i], maxEDIDSize1[i]);
     }
 
     // Step 5: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 /**
@@ -1514,37 +1507,24 @@ void test_l1_dsHdmiIn_negative_dsGetEDIDBytesMaxSize(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int maxEDIDSize = 0;
-    dsError_t ret = dsERR_NONE;
 
     // Step 1: Call dsGetEDIDBytesMaxSize() without initializing the HDMI input sub-system
-    ret = dsGetEDIDBytesMaxSize(i, &maxEDIDSize[i]);
-    if(ret != dsERR_NOT_INITIALIZED) {
-        UT_FAIL("Failed to return valid error code");
-    }
+    UT_ASSERT_EQUAL(dsGetEDIDBytesMaxSize(dsHDMI_IN_PORT_0, &maxEDIDSize), dsERR_NOT_INITIALIZED);
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
-    UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
     // Step 3: Call dsGetEDIDBytesMaxSize() with invalid value
-    ret = dsGetEDIDBytesMaxSize(dsHDMI_IN_PORT_MAX, &maxEDIDSize);
-    if(ret != dsERR_INVALID_PARAM) {
-        UT_FAIL("Failed to return valid error code");
-    }
+    UT_ASSERT_EQUAL(dsGetEDIDBytesMaxSize(dsHDMI_IN_PORT_MAX, &maxEDIDSize), dsERR_INVALID_PARAM);
 
     // Step 4: Call dsGetEDIDBytesMaxSize() with invalid value
-    ret = dsGetEDIDBytesMaxSize(dsHDMI_IN_PORT_0, NULL);
-    if(ret != dsERR_INVALID_PARAM) {
-        UT_FAIL("Failed to return valid error code");
-    }
+    UT_ASSERT_EQUAL(dsGetEDIDBytesMaxSize(dsHDMI_IN_PORT_0, NULL), dsERR_INVALID_PARAM);
 
     // Step 5: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 
     // Step 6: Call dsGetEDIDBytesMaxSize() after termination the HDMI input sub-system
-    ret = dsGetEDIDBytesMaxSize(dsHDMI_IN_PORT_0, &maxEDIDSize);
-    if(ret != dsERR_NOT_INITIALIZED) {
-        UT_FAIL("Failed to return valid error code");
-    }
+    UT_ASSERT_EQUAL(dsGetEDIDBytesMaxSize(dsHDMI_IN_PORT_0, &maxEDIDSize), dsERR_NOT_INITIALIZED);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -1577,7 +1557,7 @@ void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo(void) {
     dsError_t ret = dsERR_NONE;
 
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
-    UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
     unsigned char* edidBytes  = NULL;
     unsigned char* edidBytes1 = NULL;
@@ -1587,36 +1567,29 @@ void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo(void) {
         edidSize = 0;
         ret = dsGetEDIDBytesMaxSize(i, &edidSize);
         if(ret != dsERR_NONE || edidSize <= 0) {
-            UT_FAIL("Failed to get the maximum size of EDID bytes");
+            UT_FAIL();
             continue;
         }
         edidBytes = (unsigned char*) malloc(edidSize);
         if(edidBytes == NULL) {
-            UT_FAIL("Failed to allocate memory for EDID bytes");
+            UT_FAIL();
             continue;
         }
         edidBytes1 = (unsigned char*) malloc(edidSize);
         if(edidBytes1 == NULL) {
-            UT_FAIL("Failed to allocate memory for EDID bytes");
+            UT_FAIL();
             free(edidBytes);
             edidBytes = NULL;
             continue;
         }
         // Step 3: Call dsGetEDIDBytesMaxSize() with valid inputs
-        ret = dsGetEDIDBytesInfo(i, edidBytes, edidSize);
-        if(ret != dsERR_NONE) {
-            UT_FAIL("Failed to get EDID bytes");
-        }
+        UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(i, edidBytes, edidSize), dsERR_NONE);
+
         // Step 4: Call dsGetEDIDBytesMaxSize() with valid inputs
-        ret = dsGetEDIDBytesInfo(i, edidBytes1, edidSize);
-        if(ret != dsERR_NONE) {
-            UT_FAIL("Failed to get EDID bytes");
-        }
+        UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(i, edidBytes1, edidSize), dsERR_NONE);
 
         // Step 5: Compare the results and make sure they are the same
-        if(memcmp(edidBytes, edidBytes1, edidSize)) {
-            UT_FAIL("Failed EDID bytes comparison");
-        }
+        UT_ASSERT_EQUAL(memcmp(edidBytes, edidBytes1, edidSize), 0);
 
         free(edidBytes);
         free(edidBytes1);
@@ -1667,44 +1640,29 @@ void test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo(void) {
 
     ret = dsGetEDIDBytesMaxSize(dsHDMI_IN_PORT_0, &edidSize);
     if(ret != dsERR_NONE || edidSize <= 0) {
-        UT_FAIL("Failed to get the maximum size of EDID bytes");
-        UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
+        UT_FAIL();
+        edidSize = 255;
     }
 
     edidBytes = (unsigned char*) malloc(edidSize);
     if(edidBytes == NULL) {
-        UT_FAIL("Failed to allocate memory for EDID bytes");
+        UT_FAIL();
     }
 
     // Step 3: Call dsGetEDIDBytesInfo() with invalid value (dsHDMI_IN_PORT_MAX)
-    ret = dsGetEDIDBytesInfo(dsHDMI_IN_PORT_MAX, edidBytes, edidSize);
-    if(ret != dsERR_INVALID_PARAM) {
-        UT_FAIL("Failed to return valid error code");
-    }
+    UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_MAX, edidBytes, edidSize), dsERR_INVALID_PARAM);
 
     // Step 4: Call dsGetEDIDBytesInfo() with invalid value (NULL pointer)
-    ret = dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, NULL, edidSize);
-    if(ret != dsERR_INVALID_PARAM) {
-        UT_FAIL("Failed to return valid error code");
-    }
+    UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, NULL, edidSize), dsERR_INVALID_PARAM);
 
     // Step 5: Call dsGetEDIDBytesInfo() with invalid value (less than zero)
-    ret = dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, edidBytes, -1);
-    if(ret != dsERR_INVALID_PARAM) {
-        UT_FAIL("Failed to return valid error code");
-    }
+    UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, edidBytes, -1), dsERR_INVALID_PARAM);
 
     // Step 6: Call dsHdmiInTerm() to ensure deinitialization
-    ret = dsHdmiInTerm();
-    if(ret != dsERR_NONE) {
-        UT_FAIL("Failed to deinitialization");
-    }
+    UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 
     // Step 7: Call dsGetEDIDBytesInfo() after terminating the HDMI input sub-system
-    ret = dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, edidBytes, edidSize);
-    if(ret != dsERR_NOT_INITIALIZED) {
-        UT_FAIL("Failed to return valid error code");
-    }
+    UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, edidBytes, edidSize), dsERR_NOT_INITIALIZED);
 
     free(edidBytes);
 
@@ -1738,7 +1696,7 @@ void test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo(void) {
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
     int i = 0;
-    dsError_t ret = dsERR_NONE;
+
     unsigned char* spdInfo = NULL;
     unsigned char* spdInfo1 = NULL;
     int spdSize = sizeof(struct dsSpd_infoframe_st);
@@ -1746,29 +1704,23 @@ void test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo(void) {
     for(i = dsHDMI_IN_PORT_0; i < dsHDMI_IN_PORT_MAX; i++) {
         spdInfo = (unsigned char*) malloc(spdSize);
         if(spdInfo == NULL) {
-            UT_FAIL("Failed to allocate memory for spd buffer");
+            UT_FAIL();
             continue;
         }
         spdInfo1 = (unsigned char*) malloc(spdSize);
         if(spdInfo1 == NULL) {
             free(spdInfo);
-            UT_FAIL("Failed to allocate memory for spd buffer");
+            UT_FAIL();
             continue;
         }
         // Step 2: Call dsGetHDMISPDInfo() with valid inputs
-        ret = dsGetHDMISPDInfo(i, spdInfo, spdSize);
-        if(ret != dsERR_NONE) {
-            UT_FAIL("Failed to get EDID bytes");
-        }
+        UT_ASSERT_EQUAL(dsGetHDMISPDInfo(i, spdInfo, spdSize), dsERR_NONE);
+
         // Step 3: Call again dsGetHDMISPDInfo() with valid inputs
-        ret = dsGetHDMISPDInfo(i, spdInfo1, spdSize);
-        if(ret != dsERR_NONE) {
-            UT_FAIL("Failed to get EDID bytes");
-        }
+        UT_ASSERT_EQUAL(dsGetHDMISPDInfo(i, spdInfo1, spdSize), dsERR_NONE);
+
         // Step 4: Compare the results and make sure they are the same
-        if(memcmp(spdInfo, spdInfo1, edidSize)) {
-            UT_FAIL("Failed EDID bytes comparison");
-        }
+        UT_ASSERT_EQUAL(memcmp(spdInfo, spdInfo1, spdSize), 0)
 
         free(spdInfo);
         free(spdInfo1);
