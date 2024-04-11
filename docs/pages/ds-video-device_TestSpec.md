@@ -21,6 +21,8 @@
 - `FPS`  - Frames Per Second.
 - `FRF`  - Frame Rate Frequency
 - `HEVC` - High Efficiency Video Coding
+- `NA`   - Not Applicable
+- `Y`    - Yes
 
 ## Introduction
 
@@ -59,7 +61,7 @@ Supported zoom modes [dsVideoZoom_t link](https://github.com/rdkcentral/rdk-hali
 
 |Test Functionality|Description|L2|L3|Source|Sink|
 |------------------|-----------|--|--|------|----|
-|Check the zoom mode status|Ensure that the video device can be retrieved and the zoom mode can be set, retrieved and verify successfully with/without Video playback |Y|Y|Y|`NA`|
+|Check the zoom mode status|Ensure that the video device can be retrieved and the zoom mode can be set, retrieved and verify successfully with/without Video playback |`Y`|`Y`|`Y`|`NA`|
 
 #### Test Startup Requirement-Check the Zoom Control
 
@@ -77,8 +79,8 @@ Verify the applied zoom mode during playback with analyzer.
 
 |Test Functionality|Description|L2|L3|Source|Sink|
 |------------------|-----------|--|--|------|----|
-|Check `HDR` Capability|Get the `HDR` capabilities and status|Y|`NA`|Y|Y|
-||Force `HDR` disable with/without Video playback and verify|Y|Y|Y|`NA`|
+|Check `HDR` Capability|Get the `HDR` capabilities and status|`Y`|`NA`|`Y`|`Y`|
+||Force `HDR` disable with/without Video playback and verify|`Y`|`Y`|`Y`|`NA`|
 
 #### Test Startup Requirement-Check the HDR Capability
 
@@ -96,8 +98,8 @@ Verify the `HDR` status with analyzer.
 
 |Test Functionality|Description|L2|L3|Source|Sink|
 |------------------|-----------|--|--|------|----|
-|Check Video codec Formats and information|Check the supported Video coding format |Y|`NA`|Y|Y|
-||Verify video codec format and information with/without Video playback using analyzer|`NA`|Y|Y|`NA`|
+|Check Video codec Formats and information|Check the supported Video coding format |`Y`|`NA`|`Y`|`Y`|
+||Verify video codec format and information with/without Video playback using analyzer|`NA`|`Y`|`Y`|`NA`|
 
 #### Test Startup Requirement-Check Video codec and Formats
 
@@ -115,9 +117,8 @@ Verify the codec formats with analyzer.
 
 |Test Functionality|Description|L2|L3|Source|Sink|
 |------------------|-----------|--|--|------|----|
-|Check the Display frame rate Capability|set, retrieved and verify the display framerate successfully|Y|`NA`|Y|Y|
-||Set the frame rate and check if callbacks are triggered|`NA`|Y|Y|Y|
-||Set the frame rate and verify with analyzer|`NA`|Y|Y|`NA`|
+|Check the Display frame rate Capability|set, retrieved and verify the display framerate successfully|`Y`|`NA`|`NA`|Y|
+||Set the frame rate and check if callbacks are triggered|`NA`|`Y`|`NA`|`Y`|
 
 #### Test Startup Requirement-Check the Display frame rate Capability
 
