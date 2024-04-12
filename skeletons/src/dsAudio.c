@@ -691,3 +691,11 @@ dsError_t dsGetHDMIARCPortId(int* portId)
   return (dsError_t)0;
 }
 
+dsError_t dsSetAudioMixerLevels(intptr_t handle,dsAudioInput_t aInput, int volume)
+{
+  /*TODO: Implement Me!*/
+  (void)handle;
+  (void)aInput;
+  (void)volume;
+  return (dsError_t)0;
+}
