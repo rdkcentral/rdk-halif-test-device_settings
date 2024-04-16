@@ -99,8 +99,8 @@ Maintains the configuration of various aspect ratios and provides them whenever 
 
 ## Callback Registration for Display Related Events
 
-|Description|L2|L3|HAL APIs|Source|Sink|
-|-----------|--|--|--------|------|----|
+|Description|HAL APIs|L2|L3|Source|Sink|
+|-----------|--------|--|--|------|----|
 |Test the 'Display connected' event. Upon connecting the display device, the callback should trigger the event|dsRegisterDisplayEventCallback|N|Y|Y|Y|
 |Test the 'Display disconnected' event. Upon disconnecting the display device, the callback should trigger the event|dsRegisterDisplayEventCallback|N|Y|Y|N|
 |Test the 'Rx Sense ON' event by verifying the presence of a signal from the receiving device; the callback should be triggered when the signal is detected|dsRegisterDisplayEventCallback|N|Y|Y|N|
