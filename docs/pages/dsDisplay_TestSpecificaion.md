@@ -56,7 +56,7 @@ High level overview:
 
 |Description|HAL APIs|L2|L3|Source|Sink|
 |-----------|--------|--|--|------|----|
-|The Get EDID Information test aims to verify the functionality of the display device module's dsGetEDID and dsGetEDIDBytes functions, which are responsible for retrieving the Extended Display Identification Data (EDID) from connected display devices. This test ensures that the module can accurately retrieve and interpret EDID information, providing essential data about the display's capabilities and characteristics.|dsGetEDID,dsGetEDIDBytes|N|Y|Y|Y|
+|The Get EDID Information test aims to verify the functionality of the display device module's dsGetEDID and dsGetEDIDBytes functions, which are responsible for retrieving the Extended Display Identification Data (EDID) from connected display devices. This test ensures that the module can accurately retrieve and interpret EDID information, providing essential data about the display's capabilities and characteristics.|dsGetEDID, dsGetEDIDBytes|N|Y|Y|Y|
 |For sink devices, validate the predefined the EDID value coming from the TV HDMI port1 EDID |dsGetEDID, dsGetEDIDBytes|Y|N|Y|Y|
 
 ### Test Startup Requirement - Get EDID Information
