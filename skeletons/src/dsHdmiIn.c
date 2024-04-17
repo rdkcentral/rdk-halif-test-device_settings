@@ -137,7 +137,7 @@ dsError_t dsIsHdmiARCPort(dsHdmiInPort_t iPort, bool* isArcPort)
   return (dsError_t)0;
 }
 
-dsError_t dsGetEDIDBytesMaxSize (dsHdmiInPort_t iHdmiPort, int *pMaxEDIDSize)
+dsError_t dsGetEDIDBytesMaxSize (dsHdmiInPort_t iHdmiPort, unsigned int *pMaxEDIDSize)
 {
     /*TODO: Implement Me!*/
     (void)iHdmiPort;
@@ -145,7 +145,7 @@ dsError_t dsGetEDIDBytesMaxSize (dsHdmiInPort_t iHdmiPort, int *pMaxEDIDSize)
     return (dsError_t)0;
 }
 
-dsError_t dsGetEDIDBytesInfo(dsHdmiInPort_t iHdmiPort, unsigned char* edid, int length)
+dsError_t dsGetEDIDBytesInfo(dsHdmiInPort_t iHdmiPort, unsigned char* edid, unsigned int length)
 {
   /*TODO: Implement Me!*/
   (void)iHdmiPort;
@@ -154,7 +154,7 @@ dsError_t dsGetEDIDBytesInfo(dsHdmiInPort_t iHdmiPort, unsigned char* edid, int 
   return (dsError_t)0;
 }
 
-dsError_t dsGetHDMISPDInfo(dsHdmiInPort_t iHdmiPort, unsigned char* data, int spdSize)
+dsError_t dsGetHDMISPDInfo(dsHdmiInPort_t iHdmiPort, unsigned char* data, unsigned int spdSize)
 {
   /*TODO: Implement Me!*/
   (void)iHdmiPort;
