@@ -98,7 +98,7 @@ Unplug the Video port,Verify the surround mode
 |------------------|-----------|--|--|------|----|
 |Check Video Format Content and HDR Capability|Notify an event when the list of video Format changes|`NA`|`Y`|`Y`|`Y`|
 ||Get the HDR capabilities and status|Y|`NA`|`Y`|`Y`|
-||Set/Get Force Disable 4KSupport with/without playback|`Y`|`Y`|`Y`|`Y`|
+||Set Force Disable 4KSupport with/without playback|`Y`|`Y`|`Y`|`Y`|
 ||Disable 4KSupport with external analyzer|`NA`|`Y`|`Y`|`NA`|
 ||Reset the video output to SDR with/without playback|`NA`|`Y`|`Y`|`Y`|
 ||Reset the video output to SDR with external analyzer|`NA`|`Y`|`Y`|`NA`|
@@ -142,7 +142,7 @@ Verify the AspectRatio,video Stereo Scopic modes,video Frame rates,interlaced/pr
 |Check HDCP and DTCP Management|Check enable/disable the DTCP/HDCP for the specified video port|`Y`|`Y`|`Y`|`NA`|
 ||Check DTCP/HDCP status for valid port|`Y`|`Y`|`Y`|`Y`|
 ||Check HDCP protocol status|`Y`|`Y`|`Y`|`Y`|
-||Check EDID status|`Y`|`Y`|`Y`|`Y`|
+||Ignore EDID status|`N`|`Y`|`Y`|`NA`|
 ||Notify event if the HDCP status change|`NA`|`Y`|`Y`|`NA`|
 ||Check HDCP/DTCP status with external analyzer|`NA`|`Y`|`Y`|`NA`|
 
@@ -162,11 +162,11 @@ Check the HDCP/DTCP status with external analyzer
 
 |Test Functionality|Description|L2|L3|Source|Sink|
 |------------------|-----------|--|--|------|----|
-|Check Color Capabilities|Set/Get Color Space|`Y`|`Y`|`Y`|`Y`|
-||Set/Get Color Depth Capabilities |`Y`|`Y`|`Y`|`Y`|
+|Check Color Capabilities|Set/Get Color Space and compare with the configuration file|`Y`|`Y`|`Y`|`Y`|
+||Set/Get Color Depth Capabilities and compare with the configuration file|`Y`|`Y`|`Y`|`Y`|
 ||Check QuantizationRange status|`Y`|`Y`|`Y`|`Y`|
 ||Check MatrixCoefficients status|`Y`|`Y`|`Y`|`Y`|
-||Set Background Color|`Y`|`Y`|`Y`|`NA`|
+||Set Background Color|`N`|`Y`|`Y`|`NA`|
 ||Check the color space capabilities with analyzer|`NA`|Y|Y|`NA`|
 
 #### Test Startup Requirement-Color Capabilities
