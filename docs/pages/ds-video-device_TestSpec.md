@@ -80,7 +80,6 @@ Verify the applied zoom mode during playback with analyzer.
 |Test Functionality|Description|L2|L3|Source|Sink|
 |------------------|-----------|--|--|------|----|
 |Check `HDR` Capability|Get the `HDR` capabilities and status|`Y`|`NA`|`Y`|`Y`|
-||Force `HDR` disable with/without Video playback and verify|`Y`|`Y`|`Y`|`NA`|
 
 #### Test Startup Requirement-Check the HDR Capability
 
@@ -99,7 +98,6 @@ Verify the `HDR` status with analyzer.
 |Test Functionality|Description|L2|L3|Source|Sink|
 |------------------|-----------|--|--|------|----|
 |Check Video codec Formats and information|Check the supported Video coding format |`Y`|`NA`|`Y`|`Y`|
-||Verify video codec format and information with/without Video playback using analyzer|`NA`|`Y`|`Y`|`NA`|
 
 #### Test Startup Requirement-Check Video codec and Formats
 
@@ -111,7 +109,7 @@ Playback the pre-define streams
 
 #### Control Plane Requirements-Check Video codec and Formats
 
-Verify the codec formats with analyzer.
+None
 
 ### Check the Display frame rate Capability
 
