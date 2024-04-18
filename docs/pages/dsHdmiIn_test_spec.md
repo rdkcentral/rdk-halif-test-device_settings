@@ -328,8 +328,8 @@ Changing of the port with `HDMI` ARC by control Plane.
 
 |Description|L2|L3|Source|Sink|
 |-----------|--|--|------|----|
-|Setting the `EDID` version for a given port|Y|Y|N|Y|
-|Get the `EDID` version and length for a given port and compare with the Set value|Y|Y|N|Y|
+|Setting the `EDID` version for a given port|Y|N|N|Y|
+|Get the `EDID` version and length for a given port and compare with the Set value|Y|N|N|Y|
 |This test ensures that the module can accurately retrieve and interpret `EDID` information, providing essential data about the display's capabilities and characteristics.|N|Y|N|Y|
 
 ### Test Startup Requirement - Set and Get `EDID` Information
