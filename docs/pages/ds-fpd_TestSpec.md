@@ -20,7 +20,7 @@
 - `FP`       - Front Panel
 - `FPD`     - Front Panel Display
 - `ds`       - Device Settings.
-- `LED`     - Light Emiting Devices
+- `LED`     - Light Emitting Devices
 - `dsFPD` - Device Settings Front Panel Display
 
 ## Introduction
@@ -40,13 +40,13 @@ High-level overview:
 
 |#|Test Functionality|Test Description|
 |-|------------------|----------------|
-|1|[Discrete `LED` Brightness Control](#discrete-leds-brightness-control)|The test aims to set and verify the Brightness of the discrete `LED`s supported on the platform.|
+|1|[Discrete `LED` Brightness Control](#discrete-led-brightness-control)|The test aims to set and verify the Brightness of the discrete `LED`s supported on the platform.|
 |2|[Discrete `LED` Blink Control](#discrete-led-blink-control)|The test aims to set and verify the blink activity of the discrete `LED`s supported on the platform|
 |3|[Discrete `LED` Color Control](#discrete-led-color-control)|The test aims to set and verify the color control activities of the discrete `LED`s supported on the platform|
 |4|[Discrete Power `LED` Control](#discrete-power-led-control)|The test aims to set and verify the discrete Power `LED` supported on the platform|
-|5|[`FPD` Text Display Control](#fpd-text-display-control)|The test aims to set and verify the text display and its brightness on the 7-Segment `LED` Display supported on the platform|
-|6|[`FPD` Text Mode and Scroll control](#fpd-text-mode-and-scroll-control)|The test aims to verify the `FPD` Mode control (Text/Time) and scroll control)|
-|7|[`FPD` Clock/Time display control ](#fpd-clock-display-control)|The test aims to set and verify the time display, Clock Display and set the Timer format on the 7-Segment `LED` Display supported on the platform|
+|5|[FrontPanel Text  and Brightness Display Control](#frontpanel-text-and-brightness-display-control)|The test aims to set and verify the text display and its brightness on the 7-Segment `LED` Display supported on the platform|
+|6|[FrontPanel Display Text Mode and Scroll control](#frontpanel-display-text-mode-and-scroll-control)|The test aims to verify the `FPD` Mode control (Text/Time) and scroll control)|
+|7|[FrontPanel Clock display control ](#frontpanel-clock-display-control)|The test aims to set and verify the time display, Clock Display and set the Timer format on the 7-Segment `LED` Display supported on the platform|
 -----------
 
 ## Discrete `LED` Brightness Control
@@ -127,9 +127,9 @@ The emulator will boot with the `LED` configurations that should include
 
 ### Control Plane Requirement 
 
-Due to platform-specific requirements, it may not be possible to capture the `LED` behavior is each state.
+Due to platform-specific requirements, it may not be possible to capture the `LED` behavior in each state.
 
-## Frontpanel Display Text Display and Brightness Control
+## Frontpanel Text and Brightness Display Control
 
 |Description|L2|L3|Control Plane|
 |-----------|--|--|-------------|
@@ -148,7 +148,7 @@ The emulator will boot with the configurations that should include
 
 ### Control Plane Requirement 
 
-The control Panel should be able to read the data from the tool that can recognizes the text display and brightness level. This data should be validated to declare the test result.
+The control Panel should be able to read the data from the tool that can recognize the text display and brightness level. This data should be validated to declare the test result.
 
 ## Frontpanel Display Text Mode and Scroll control
 
@@ -171,7 +171,7 @@ The emulator will boot with the configurations that should include
 
 The control Panel should be able to read the data from the tool that shall recognize the text display and validate the scroll activity. This data should be validated to declare the test result.
 
-## Frontpanel Display Clock/Time Control
+## Frontpanel Clock Display Control
 
 |Description|L2|L3|Control Plane|
 |-----------|--|--|-------------|
