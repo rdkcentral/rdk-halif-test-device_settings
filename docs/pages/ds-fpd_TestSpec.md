@@ -40,7 +40,7 @@ High level overview:
 
 |#|Test Functionality|Test Description|
 |-|------------------|----------------|
-|1|[Discrete `LED` Brightness Control](#discrete_led_brightness_control)|The test aims to set and verify Brightness of the discrete `LED`s supported on the platform.|
+|1|[Discrete LED Brightness Control](#discrete_led_brightness_control)|The test aims to set and verify the Brightness of the discrete `LED`s supported on the platform.|
 |2|[Discrete `LED` Blink Control](#discrete_led_blink_control)|The test aims to set and verify the blink activity of the discrete `LED`s supported on the platform|
 |3|[Discrete `LED` Color Control](#discrete_led_color_control)|The test aims to set and verify the color control activities of the discrete `LED`s supported on the platform|
 |4|[Discrete Power `LED` Control](#discrete_power_led_control)|The test aims to set and verify the discrete Power `LED` supported on the platform|
