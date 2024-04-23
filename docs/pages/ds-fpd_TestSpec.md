@@ -31,7 +31,7 @@ The interface of the test is available at this link -  [https://github.com/rdkce
 
 ## Module Description
 
-High level overview:
+High-level overview:
 
 - `dsFPD` provides a set of APIs to control the `FP`discrete `LED`s and 7-segment `LED`s existing on a platform.
 - It facilitates the communication to `FP` `LED`s, aiding in their configuration and utilization within the system. The `LED`s is controlled by the caller based on the platform requirements. 
@@ -40,16 +40,16 @@ High level overview:
 
 |#|Test Functionality|Test Description|
 |-|------------------|----------------|
-|1|[Discrete LED Brightness Control](#discrete_led_brightness_control)|The test aims to set and verify the Brightness of the discrete `LED`s supported on the platform.|
-|2|[Discrete `LED` Blink Control](#discrete_led_blink_control)|The test aims to set and verify the blink activity of the discrete `LED`s supported on the platform|
-|3|[Discrete `LED` Color Control](#discrete_led_color_control)|The test aims to set and verify the color control activities of the discrete `LED`s supported on the platform|
-|4|[Discrete Power `LED` Control](#discrete_power_led_control)|The test aims to set and verify the discrete Power `LED` supported on the platform|
-|5|[`FPD` Text Display Control](#fpd_text_display_control)|The test aims to set and verify the text display and its brightness on the 7-Segment `LED` Display supported on the platform|
-|6|[`FPD` Text Mode and Scroll control](#fpd_text_mode_and_scroll_control)|The test aims to verify the `FPD` Mode control (Text/Time) and scroll control)|
-|7|[`FPD` Clock/Time display control ](#fpd_clock_display_control)|The test aims to set and verify the time display, Clock Display and set the Timer format on the 7-Segment `LED` Display supported on the platform|
+|1|[Discrete `LED` Brightness Control](#discrete-leds-brightness-control)|The test aims to set and verify the Brightness of the discrete `LED`s supported on the platform.|
+|2|[Discrete `LED` Blink Control](#discrete-led-blink-control)|The test aims to set and verify the blink activity of the discrete `LED`s supported on the platform|
+|3|[Discrete `LED` Color Control](#discrete-led-color-control)|The test aims to set and verify the color control activities of the discrete `LED`s supported on the platform|
+|4|[Discrete Power `LED` Control](#discrete-power-led-control)|The test aims to set and verify the discrete Power `LED` supported on the platform|
+|5|[`FPD` Text Display Control](#fpd-text-display-control)|The test aims to set and verify the text display and its brightness on the 7-Segment `LED` Display supported on the platform|
+|6|[`FPD` Text Mode and Scroll control](#fpd-text-mode-and-scroll-control)|The test aims to verify the `FPD` Mode control (Text/Time) and scroll control)|
+|7|[`FPD` Clock/Time display control ](#fpd-clock-display-control)|The test aims to set and verify the time display, Clock Display and set the Timer format on the 7-Segment `LED` Display supported on the platform|
 -----------
 
-## Discrete LED Brightness Control
+## Discrete `LED` Brightness Control
 
 |Description|L2|L3|Control Plane|
 |-----------|--|--|-------------|
