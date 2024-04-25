@@ -52,9 +52,9 @@ High level overview:
 
 ## Get Number of Inputs
 
-|Description|L2|L3|
-|-----------|--|--|
-|Verify that the function returns the expected COMPOSITE Input ports.|Y|N|
+|Description|HAL APIs|L2|L3|
+|-----------|--------|--|--|
+|Verify that the function returns the expected COMPOSITE Input ports.|dsCompositeInGetNumberOfInputs|Y|N|
 
 ### Test Startup Requirement - Get Number of Inputs
 
@@ -70,10 +70,10 @@ None
 
 ## Get the Input Status
 
-|Description|L2|L3|
-|-----------|--|--|
-|Verify the status of the Composite Input by ensuring it is in disable status.|Y|N|
-|Verify the status of the Composite Input by ensuring it is enabled, connected to the source, and that the composite input port is active.|N|Y|
+|Description|HAL APIs|L2|L3|
+|-----------|--------|--|--|
+|Verify the status of the Composite Input by ensuring it is in disable status.|dsCompositeInGetStatus|Y|N|
+|Verify the status of the Composite Input by ensuring it is enabled, connected to the source, and that the composite input port is active.|dsCompositeInGetStatus|N|Y|
 
 ### Test Startup Requirement - Get the Input Status
 
@@ -89,10 +89,10 @@ The handling of connecting and disconnecting source devices in the CompositeIn w
 
 ## Set the Composite port
 
-|Description|L2|L3|
-|-----------|--|--|
-|verify that the function successfully sets the specified COMPOSITE Input port as active for presentation and check the port information using "Get status".|Y|Y|
-|Evaluate the function's response when called with a port ID that is already selected as active, ensuring it does not introduce any unintended changes.|N|Y|
+|Description|HAL APIs|L2|L3|
+|-----------|--------|--|--|
+|verify that the function successfully sets the specified COMPOSITE Input port as active for presentation and check the port information using "Get status".|dsCompositeInSelectPort|Y|Y|
+|Evaluate the function's response when called with a port ID that is already selected as active, ensuring it does not introduce any unintended changes.|dsCompositeInSelectPort|N|Y|
 
 ### Test Startup Requirement - Set the Composite port
 
@@ -108,13 +108,13 @@ The Control Plane must monitor the external device (Video analyzer) to detect an
 
 ## Scale the Composite Input Video
 
-|Description|L2|L3|
-|-----------|--|--|
-|Verify that the function successfully scales the COMPOSITE input video when valid coordinates and dimensions are provided within the current resolution limits. Based on video resolution need to check whether the coordinates are in range|N|Y|
+|Description|HAL APIs|L2|L3|
+|-----------|--------|--|--|
+|Verify that the function successfully scales the COMPOSITE input video when valid coordinates and dimensions are provided within the current resolution limits. Based on video resolution need to check whether the coordinates are in range|dsCompositeInScaleVideo|N|Y|
 
 ### Test Startup Requirement - Scale the Composite Input Video
 
-The test begins by setting up the video analyzer, and the video should be played. 
+The test begins by setting up the video analyzer, and the video should be played.
 
 ### Emulator Requirement - Scale the Composite Input Video
 
@@ -126,11 +126,11 @@ The handling of connecting and disconnecting source devices in the CompositeIn w
 
 ## Callback for connection Status
 
-|Description|L2|L3|
-|-----------|--|--|
-|Verify that the callback function properly notifies the application when a COMPOSITE Input port is connected or disconnected.|N|Y|
-|Validate that the callback function updates the isPortConnected status correctly based on the connection state provided.|N|Y|
-|Verify that the callback function properly updates the isPresented status in ::dsCompositeInStatus_t if the connected port is active and presents video after being connected.|N|Y|
+|Description|HAL APIs|L2|L3|
+|-----------|--------|--|--|
+|Verify that the callback function properly notifies the application when a COMPOSITE Input port is connected or disconnected.|dsCompositeInRegisterConnectCB|N|Y|
+|Validate that the callback function updates the isPortConnected status correctly based on the connection state provided.|dsCompositeInRegisterConnectCB|N|Y|
+|Verify that the callback function properly updates the isPresented status in ::dsCompositeInStatus_t if the connected port is active and presents video after being connected.|dsCompositeInRegisterConnectCB|N|Y|
 
 ### Test Startup Requirement - Callback for connection Status
 
@@ -146,10 +146,10 @@ The handling of connecting and disconnecting source devices in the CompositeIn w
 
 ## Callback for Signal Change
 
-|Description|L2|L3|
-|-----------|--|--|
-|Verify that the callback function properly handles different signal statuses (e.g., NoSignal, UnstableSignal, NotSupportedSignal, StableSignal) and updates the application accordingly.|N|Y|
-|Validate that the callback function updates the sigStatus parameter correctly based on the signal status provided.|N|Y|
+|Description|HAL APIs|L2|L3|
+|-----------|--------|--|--|
+|Verify that the callback function properly handles different signal statuses (e.g., NoSignal, UnstableSignal, NotSupportedSignal, StableSignal) and updates the application accordingly.|dsCompositeInRegisterSignalChangeCB|N|Y|
+|Validate that the callback function updates the sigStatus parameter correctly based on the signal status provided.|dsCompositeInRegisterSignalChangeCB|N|Y|
 
 ### Test Startup Requirement - Callback for Signal Change
 
@@ -166,11 +166,11 @@ Provide resolution changes or configurations changes on the connected device tha
 
 ## Callback for Status Change
 
-|Description|L2|L3|
-|-----------|--|--|
-|Verify that the callback function properly notifies the application of the Composite Input status change event.|N|Y|
-|Validate that the callback function updates the inputStatus parameter correctly based on the status change provided.|N|Y|
-|Verify that the callback function properly triggers whenever the dsCompositeInStatus_t is updated|N|Y|
+|Description|HAL APIs|L2|L3|
+|-----------|--------|--|--|
+|Verify that the callback function properly notifies the application of the Composite Input status change event.|dsCompositeInRegisterStatusChangeCB|N|Y|
+|Validate that the callback function updates the inputStatus parameter correctly based on the status change provided.|dsCompositeInRegisterStatusChangeCB|N|Y|
+|Verify that the callback function properly triggers whenever the dsCompositeInStatus_t is updated|dsCompositeInRegisterStatusChangeCB|N|Y|
 
 ### Test Startup Requirement - Callback for Status Change
 

@@ -54,10 +54,10 @@ High level overview:
 
 ## Get EDID Information
 
-|Description|L2|L3|Source|Sink|
-|-----------|--|--|------|----|
-|The Get EDID Information test aims to verify the functionality of the display device module's dsGetEDID and dsGetEDIDBytes functions, which are responsible for retrieving the Extended Display Identification Data (EDID) from connected display devices. This test ensures that the module can accurately retrieve and interpret EDID information, providing essential data about the display's capabilities and characteristics.|N|Y|Y|Y|
-|For sink devices, validate the predefined the EDID value coming from the TV HDMI port1 EDID |Y|N|Y|Y|
+|Description|HAL APIs|L2|L3|Source|Sink|
+|-----------|--------|--|--|------|----|
+|The Get EDID Information test aims to verify the functionality of the display device module's dsGetEDID and dsGetEDIDBytes functions, which are responsible for retrieving the Extended Display Identification Data (EDID) from connected display devices. This test ensures that the module can accurately retrieve and interpret EDID information, providing essential data about the display's capabilities and characteristics.|dsGetEDID, dsGetEDIDBytes|N|Y|Y|Y|
+|For sink devices, validate the predefined the EDID value coming from the TV HDMI port1 EDID |dsGetEDID, dsGetEDIDBytes|Y|N|Y|Y|
 
 ### Test Startup Requirement - Get EDID Information
 
@@ -80,10 +80,10 @@ None
 
 ## Get Aspect Ratio
 
-|Description|L2|L3|Source|Sink|
-|-----------|--|--|------|----|
-|Test the aspect ratio returned by the dsGetDisplayAspectRatio() function for the specified display device handle.|N|Y|Y|N
-|Adjust and test the aspect ratio to ensure it is providing the expected aspect ratio.|N|Y|Y|N|
+|Description|HAL APIs|L2|L3|Source|Sink|
+|-----------|--------|--|--|------|----|
+|Test the aspect ratio returned by the dsGetDisplayAspectRatio() function for the specified display device handle.|dsGetDisplayAspectRatio|N|Y|Y|N
+|Adjust and test the aspect ratio to ensure it is providing the expected aspect ratio.|dsGetDisplayAspectRatio|N|Y|Y|N|
 
 ### Test Startup Requirement - Get Aspect Ratio
 
@@ -99,13 +99,13 @@ Maintains the configuration of various aspect ratios and provides them whenever 
 
 ## Callback Registration for Display Related Events
 
-|Description|L2|L3|Source|Sink|
-|-----------|--|--|------|----|
-|Test the 'Display connected' event. Upon connecting the display device, the callback should trigger the event|N|Y|Y|Y|
-|Test the 'Display disconnected' event. Upon disconnecting the display device, the callback should trigger the event|N|Y|Y|N|
-|Test the 'Rx Sense ON' event by verifying the presence of a signal from the receiving device; the callback should be triggered when the signal is detected|N|Y|Y|N|
-|Test the 'Rx Sense OFF' event by verifying the absense of a signal from the receiving device; the callback should be triggered when the signal is detected|N|Y|Y|N|
-|Test the 'HDCP protocol version change' event by verifying if there is a change in the HDCP protocol version used for content protection; the callback should be triggered upon detection of the protocol change.|N|Y|Y|N|
+|Description|HAL APIs|L2|L3|Source|Sink|
+|-----------|--------|--|--|------|----|
+|Test the 'Display connected' event. Upon connecting the display device, the callback should trigger the event|dsRegisterDisplayEventCallback|N|Y|Y|Y|
+|Test the 'Display disconnected' event. Upon disconnecting the display device, the callback should trigger the event|dsRegisterDisplayEventCallback|N|Y|Y|N|
+|Test the 'Rx Sense ON' event by verifying the presence of a signal from the receiving device; the callback should be triggered when the signal is detected|dsRegisterDisplayEventCallback|N|Y|Y|N|
+|Test the 'Rx Sense OFF' event by verifying the absense of a signal from the receiving device; the callback should be triggered when the signal is detected|dsRegisterDisplayEventCallback|N|Y|Y|N|
+|Test the 'HDCP protocol version change' event by verifying if there is a change in the HDCP protocol version used for content protection; the callback should be triggered upon detection of the protocol change|dsRegisterDisplayEventCallback|N|Y|Y|N|
 
 
 ### Test Startup Requirement -Callback Registration for Display Related Events
