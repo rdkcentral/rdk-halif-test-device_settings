@@ -51,7 +51,7 @@ dsError_t dsGetEDIDBytesSize(intptr_t handle, unsigned int *pMaxEDIDSize)
 {
   /*TODO: Implement Me!*/
   (void)handle;
-  (void)length;
+  (void)pMaxEDIDSize;
   return (dsError_t)0;
 }
 

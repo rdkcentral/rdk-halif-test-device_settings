@@ -712,7 +712,6 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytesSize(void) {
     if(result != dsERR_NOT_INITIALIZED)
     {
         UT_FAIL("Incorrect error return");
-        free(edid);
         return;
     }
 
@@ -722,7 +721,6 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytesSize(void) {
     if(result != dsERR_NONE)
     {
         UT_FAIL("Init has failed");
-        free(edid);
         return;
     }
 
@@ -759,7 +757,6 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytesSize(void) {
     if(result != dsERR_NONE)
     {
         UT_FAIL("Term has failed");
-        free(edid);
         return;
     }
 
@@ -769,7 +766,6 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytesSize(void) {
     if(result != dsERR_NOT_INITIALIZED)
     {
         UT_FAIL("Incorrect error return");
-        free(edid);
         return;
     }
     
