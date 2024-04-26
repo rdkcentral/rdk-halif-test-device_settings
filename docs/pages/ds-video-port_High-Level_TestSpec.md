@@ -1,4 +1,4 @@
-# Device Settings Video Port Test Specification Documentation
+# Device Settings Video Port High Level Test Specification Documentation
 
 ## Table of Contents
 
@@ -9,8 +9,8 @@
   - [Emulator Requirements](#emulator-requirements)
   - [Check the Video port status](#check-the-video-port-status)
   - [Check Video Content Format and HDR Capability](#check-video-content-format-and-hdr-capability)
-  - [Check Video Resolution and HDMI Status](#check-video-resolution-and-hdmi-status)
-  - [HDCP and DTCP Management](#hdcp-and-dtcp-management)
+  - [Check Video Resolution](#check-video-resolution)
+  - [HDCP Management](#hdcp-management)
   - [Color Capabilities](#color-capabilities)
 
 ## Acronyms, Terms and Abbreviations
@@ -19,7 +19,6 @@
 - `API`    - Caller Programming Interface
 - `DS`     - Device Settings
 - `HDMI`   - High-Definition Multimedia Interface
-- `DTCP`   - Digital Transmission Content Protection
 - `HDCP`   - High-bandwidth Digital Content Protection
 - `HDR`    - High Dynamic Range
 - `SDR`    - Standard Dynamic Range
@@ -30,13 +29,15 @@
 
 ## Introduction
 
-This document provides an overview of the testing requirements for the Device Settings Video Port module. It outlines the scope of testing, objectives, testing levels and approaches, specific test requirements, and expected deliverables.
+This document provides an overview of the High Level testing requirements for the Device Settings Video Port module. It outlines the scope of testing, objectives, testing levels and approaches, specific test requirements, and expected deliverables.
 
-Interface of the test is available here: [dsVideoPort HAL header](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsVideoPort.h)
+Interface header is available here: [dsVideoPort HAL header](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsVideoPort.h)
 
 ## Module Description
 
-`DS` Video Port `HAL` provides a set of `APIs` to initialize, query and set information about the Video ports like getting  video port handle, fetching connected display information such as color depth, color space, matrix coefficients, quantization range, supported video resolutions using the video port handle. It also provides `APIs` to enable or disable content protection like `HDCP` and `DTCP`, to set the background color and preferred color depth of the video port.
+`DS` Video Port `HAL` provides a set of `APIs` to initialize, query and set information about the Video ports like getting  video port handle, fetching connected display information such as color depth, color space, matrix coefficients, quantization range, supported video resolutions using the video port handle. It also provides `APIs` to enable or disable content protection like `HDCP`, to set the background color and preferred color depth of the video port.
+
+Interface specification is available here: [dsVideoPort HAL Spec](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/docs/pages/ds-video-port_halSpec.md)
 
 ## Testing Scope
 
@@ -45,7 +46,7 @@ Interface of the test is available here: [dsVideoPort HAL header](https://github
 |1|[Check the Video port status](#check-the-video-port-status)|Check the Video Port Access and Status |
 |2|[Check Video Content Format and HDR Capability](#check-video-content-format-and-hdr-capability)|Check Video content Format and `HDR` Capability|
 |3|[Check Video Resolution](#check-video-resolution)|Check Video resolution|
-|4|[HDCP and DTCP Management](#hdcp-and-dtcp-management)|Check `HDCP` and `DTCP` Status|
+|4|[HDCP Management](#hdcp-management)|Check `HDCP` Status|
 |5|[Color Capabilities](#color-capabilities)|Check the color capabilities|
 
 ### Emulator Requirements
@@ -74,7 +75,7 @@ Supported Display QuantizationRange [dsDisplayQuantizationRange_t link](https://
 
 |Test Functionality|Description|L2|L3|Source|Sink|
 |------------------|-----------|--|--|------|----|
-|Check the video port status|Get the video port handle,check the Video Port enable/disable|`Y`|`NA`|`Y`|`Y`|
+|Check the video port status|Get the video port handle,check the Video Port enable/disable|`Y`|`Y`|`Y`|`Y`|
 ||Verify display connected/disconnected status without video port connected|`Y`|`NA`|`Y`|`Y`|
 ||Verify display connected/disconnected status by connecting/disconnecting video port|`NA`|`Y`|`Y`|`NA`|
 ||Verify the surround mode capabilities with/without playback|`Y`|`Y`|`Y`|`Y`|
@@ -135,37 +136,37 @@ Playback the pre-define streams
 
 Verify the AspectRatio,video Stereo Scopic modes,video Frame rates,interlaced/progressive.
 
-### HDCP and DTCP Management
+### HDCP Management
 
 |Test Functionality|Description|L2|L3|Source|Sink|
 |------------------|-----------|--|--|------|----|
-|Check HDCP and DTCP Management|Check enable/disable the DTCP/HDCP for the specified video port|`Y`|`Y`|`Y`|`NA`|
-||Check DTCP/HDCP status for valid port|`Y`|`Y`|`Y`|`Y`|
+|Check HDCP status|Check enable/disable the HDCP for the specified video port|`Y`|`Y`|`Y`|`NA`|
+||Check HDCP status for valid port|`Y`|`Y`|`Y`|`Y`|
 ||Check HDCP protocol status|`Y`|`Y`|`Y`|`Y`|
 ||Ignore EDID status|`N`|`Y`|`Y`|`NA`|
 ||Notify event if the HDCP status change|`NA`|`Y`|`Y`|`NA`|
-||Check HDCP/DTCP status with external analyzer|`NA`|`Y`|`Y`|`NA`|
+||Check HDCP status with external analyzer|`NA`|`Y`|`Y`|`NA`|
 
-#### Test Startup Requirement-HDCP and DTCP Management
+#### Test Startup Requirement-HDCP Management
 
 Playback the pre-define streams
 
-#### Emulator Requirements-HDCP and DTCP Management
+#### Emulator Requirements-HDCP Management
 
 [Emulator Requirements](#emulator-requirements)
 
-#### Control Plane Requirements-HDCP and DTCP Management
+#### Control Plane Requirements-HDCP Management
 
-Check the HDCP/DTCP status with external analyzer
+Check the HDCP status with external analyzer
 
 ### Color Capabilities
 
 |Test Functionality|Description|L2|L3|Source|Sink|
 |------------------|-----------|--|--|------|----|
-|Check Color Capabilities|Set/Get Color Space and compare with the configuration file|`Y`|`Y`|`Y`|`Y`|
-||Set/Get Color Depth Capabilities and compare with the configuration file|`Y`|`Y`|`Y`|`Y`|
+|Check Color Capabilities|Get Color Space, compare with the configuration file and with/without video|`Y`|`Y`|`Y`|`Y`|
+||Set/Get Color Depth Capabilities, compare with the configuration file and with/without video|`Y`|`Y`|`Y`|`Y`|
 ||Check QuantizationRange status|`Y`|`Y`|`Y`|`Y`|
-||Check MatrixCoefficients status|`Y`|`Y`|`Y`|`Y`|
+||Check MatrixCoefficients status with/without video |`Y`|`Y`|`Y`|`Y`|
 ||Set Background Color|`N`|`Y`|`Y`|`NA`|
 ||Check the color space capabilities with analyzer|`NA`|Y|Y|`NA`|
 
