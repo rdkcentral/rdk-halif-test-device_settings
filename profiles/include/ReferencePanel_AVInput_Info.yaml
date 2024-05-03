@@ -1,0 +1,9 @@
+compositeInputPort:
+  numberOfPorts: 1
+HdmiInputPort:
+  numberOfPorts: 3
+HdmiArcPort:
+  portNumber: 2
+gameFeatures:
+  - feature: "allm"
+    count: 1

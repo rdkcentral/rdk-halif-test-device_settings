@@ -1,0 +1,46 @@
+EDID_Reference_Data:
+  productCode: HEC
+  serialNumber: 16843009
+  manufactureYear: 2021
+  manufactureWeek: 25
+  hdmiDeviceType: true
+  isRepeater: false
+  physicalAddressA: 1
+  physicalAddressB: 0
+  physicalAddressC: 0
+  physicalAddressD: 0
+  numOfSupportedResolution: 4
+  suppResolutionList:
+    - Resolution: "1920x1080"
+      SupportedModes:
+        - Mode: "Progressive"
+        - Mode: "Interlaced"
+    - Resolution: "1280x720"
+      SupportedModes:
+        - Mode: "Progressive"
+    - Resolution: "3840x2160"
+      SupportedModes:
+        - Mode: "Progressive"
+    - Resolution: "2560x1440"
+      SupportedModes:
+        - Mode: "Progressive"
+  monitorName: "A6GX"
+  edidBytes: |
+    00 ff ff ff ff ff ff 00 20 a3 01 00 01 01 01 01
+    ff 1f 01 03 80 5e 36 78 0a ee 91 a3 54 4c 99 26
+    0f 50 54 a1 08 00 31 40 45 40 61 40 71 40 81 80
+    01 01 01 01 01 01 08 e8 00 30 f2 70 5a 80 b0 58
+    8a 00 40 84 63 00 00 1e 02 3a 80 18 71 38 2d 40
+    58 2c 45 00 40 84 63 00 00 1e 00 00 00 fd 00 17
+    3e 1e 88 3c 00 0a 20 20 20 20 20 20 00 00 00 fc
+    00 41 36 47 58 0a 20 20 20 20 20 20 20 20 01 14
+
+    02 03 59 f1 53 61 60 10 1f 04 13 05 14 03 02 12
+    20 21 22 15 01 5d 5e 5f 2c 09 57 03 15 07 50 57
+    07 00 67 7e 00 67 03 0c 00 10 00 38 3c 68 d8 5d
+    c4 01 78 88 03 02 e2 00 cf e3 05 c0 00 e3 06 0d
+    01 e4 0f 03 00 00 eb 01 46 d0 00 4a 67 32 a2 3c
+    26 ce e6 11 46 d0 00 00 00 66 21 50 b0 51 00 1b
+    30 40 70 36 00 40 84 63 00 00 1e 00 00 00 00 00
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 9d
+  edidBytesLength: 272
