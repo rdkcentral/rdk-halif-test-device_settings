@@ -42,10 +42,24 @@ dsError_t __attribute__((weak)) dsGetCPUTemperature(float* cpuTemperature)
   return (dsError_t)0;
 }
 
+dsError_t __attribute__((weak)) dsGetSocIDLength(unsigned int *pSocIDLength)
+{
+  /*TODO: Implement Me!*/
+  (void)pSocIDLength;
+  return (dsError_t)0;
+}
+
 dsError_t __attribute__((weak)) dsGetSocIDFromSDK(char* socID)
 {
   /*TODO: Implement Me!*/
   (void)socID;
+  return (dsError_t)0;
+}
+
+dsError_t __attribute__((weak)) dsError_t dsGetHostEDIDSize(unsigned int *pMaxEDIDLength)
+{
+  /*TODO: Implement Me!*/
+  (void)pMaxEDIDLength;
   return (dsError_t)0;
 }
 

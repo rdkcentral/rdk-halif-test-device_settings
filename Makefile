@@ -26,7 +26,7 @@ TOP_DIR := $(ROOT_DIR)
 SRC_DIRS = $(ROOT_DIR)/src
 INC_DIRS := $(ROOT_DIR)/../include
 INC_DIRS += $(ROOT_DIR)/profiles/include
-HAL_LIB := dshal
+HAL_LIB := ds-hal_client
 SKELETON_SRCS := $(ROOT_DIR)/skeletons/src/*
 
 ifeq ($(TARGET),)

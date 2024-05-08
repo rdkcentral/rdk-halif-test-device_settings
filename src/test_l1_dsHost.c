@@ -385,10 +385,122 @@ void test_l1_dsHost_negative_dsGetCPUTemperature(void) {
 }
 
 /**
- * @brief Ensure dsGetSocIDFromSDK() returns correct error codes during positive scenarios
+ * @brief Ensure dsGetSocIDLength() returns correct error codes during positive scenarios
  * 
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 007@n
+ * 
+ * **Pre-Conditions:**@n
+ * None.
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|dsHostInit() Initialize dsHost | | dsERR_NONE | Initialization should pass |
+ * |02|dsGetSocIDLength() Call with a valid pointer to get SOC ID length | Valid unsigned int pointer | dsERR_NONE | SOC ID length should be fetched successfully |
+ * |03|dsGetSocIDLength() Call with a valid pointer to get SOC ID length | Valid unsigned int pointer | dsERR_NONE | SOC ID length should be fetched successfully |
+ * |04|Compare return values from step 2/3 to ensure that they are the same |  |  | Success |
+ * |05|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful |
+ * 
+ */
+void test_l1_dsHost_positive_dsGetSocIDLength(void) {
+    gTestID = 7;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	
+    unsigned int socIDLength1 = 0;
+    unsigned int socIDLength2 = 0;
+
+    // Step 01: dsHostInit() Initialize dsHost
+    dsError_t result = dsHostInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 01: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 02: dsGetSocIDLength() Call with a valid pointer to store the SOC ID
+    result = dsGetSocIDLength(&socIDLength1);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_LOG("Step 02: Fetch SOC ID Length (1st time) -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 03: dsGetSocIDLength() Call with a valid pointer to store the SOC ID again
+    result = dsGetSocIDLength(&socIDLength2);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_LOG("Step 03: Fetch SOC ID Length (2nd time) -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 04: Compare return values from step 2/3 to ensure they are the same
+    DS_ASSERT_AUTO_TERM_NUMERICAL(socIDLength1, socIDLength2);
+    UT_LOG("Step 04: Compare SOC IDs Lengths from Step 2 and Step 3 -> Expected: Match, Result: Matched\n");
+
+    // Step 05: dsHostTerm() Terminate dsHost
+    result = dsHostTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 05: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+    UT_LOG("\n Out  %s\n",__FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsGetSocIDLength() returns correct error codes during negative scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 008@n
+ * 
+ * **Pre-Conditions:**@n
+ * None.
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|dsGetSocIDLength() Call without prior initialization | Valid char pointer (size of 8 bytes) | dsERR_NOT_INITIALIZED | Fetching SOC ID Length should fail as module is not initialized |
+ * |02|dsHostInit() Initialize dsHost | | dsERR_NONE | Initialization should pass |
+ * |03|dsGetSocIDLength() Call with NULL pointer | NULL | dsERR_INVALID_PARAM | Should return invalid parameter error |
+ * |04|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful |
+ * |05|dsGetSocIDLength() Call after termination | Valid char pointer | dsERR_NOT_INITIALIZED | Fetching SOC ID Length should fail as module is terminated |
+ * 
+ * @note Testing for dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED in dsGetSocIDLength() might be challenging as these represent undefined platform
+ * 
+ */
+void test_l1_dsHost_negative_dsGetSocIDLength(void) {
+    gTestID = 8;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	
+    unsigned int socIDLength = 0;
+
+    // Step 01: dsGetSocIDLength() Call without prior initialization
+    dsError_t result = dsGetSocIDLength(&socIDLength);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    UT_LOG("Step 01: Fetch SOC ID Length without initialization -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+
+    // Step 02: dsHostInit() Initialize dsHost
+    result = dsHostInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 02: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 03: dsGetSocIDLength() Call with NULL pointer
+    result = dsGetSocIDLength(NULL);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_LOG("Step 03: Fetch SOC ID Length with NULL pointer -> Expected: dsERR_INVALID_PARAM, Got: %d\n", result);
+
+    // Step 04: dsHostTerm() Terminate dsHost
+    result = dsHostTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 04: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 05: dsGetSocIDLength() Call after termination
+    result = dsGetSocIDLength(&socIDLength);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    UT_LOG("Step 05: Fetch SOC ID Length after termination -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+    UT_LOG("\n Out  %s\n",__FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsGetSocIDFromSDK() returns correct error codes during positive scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 009@n
  * 
  * **Pre-Conditions:**@n
  * None.
@@ -407,7 +519,7 @@ void test_l1_dsHost_negative_dsGetCPUTemperature(void) {
  * 
  */
 void test_l1_dsHost_positive_dsGetSocIDFromSDK(void) {
-    gTestID = 7;
+    gTestID = 9;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 	
     char socID1[1024]= {0}; 
@@ -443,7 +555,7 @@ void test_l1_dsHost_positive_dsGetSocIDFromSDK(void) {
  * @brief Ensure dsGetSocIDFromSDK() returns correct error codes during negative scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 008@n
+ * **Test Case ID:** 010@n
  * 
  * **Pre-Conditions:**@n
  * None.
@@ -464,7 +576,7 @@ void test_l1_dsHost_positive_dsGetSocIDFromSDK(void) {
  * 
  */
 void test_l1_dsHost_negative_dsGetSocIDFromSDK(void) {
-    gTestID = 8;
+    gTestID = 10;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 	
     char socID[1024] = {0};
@@ -497,10 +609,121 @@ void test_l1_dsHost_negative_dsGetSocIDFromSDK(void) {
 }
 
 /**
+ * @brief Ensure dsGetHostEDIDSize() returns correct error codes during positive scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 011@n
+ * 
+ * **Pre-Conditions:**@n
+ * None.
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|dsHostInit() Initialize dsHost | | dsERR_NONE | Initialization should pass |
+ * |02|dsGetHostEDIDSize() Call with valid pointers for edid length | Valid unsigned int pointer | dsERR_NONE | EDID length should be fetched successfully |
+ * |03|dsGetHostEDIDSize() Call with valid pointers for edid length | Valid unsigned int pointer | dsERR_NONE | EDID length should be fetched successfully |
+ * |04|Compare returns from step 2/3 and verify they are the same| |  | Should succeed |
+ * |05|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful |
+ * 
+ */
+void test_l1_dsHost_positive_dsGetHostEDIDSize(void) {
+    gTestID = 11;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	
+    unsigned int maxEDIDLength1 = 0;
+    unsigned int maxEDIDLength2 = 0; 
+
+    // Step 01: dsHostInit() Initialize dsHost
+    dsError_t result = dsHostInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 01: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 02: dsGetHostEDIDSize() Call with valid pointers for edid length
+    result = dsGetHostEDIDSize(&maxEDIDLength1);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_LOG("Step 02: Fetch Host EDID (1st time) -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 03: dsGetHostEDIDSize() Call with valid pointers for edid length again
+    result = dsGetHostEDIDSize(&maxEDIDLength2);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_LOG("Step 03: Fetch Host EDID (2nd time) -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 04: Compare EDIDs from step 2/3 and verify they are the same
+    DS_ASSERT_AUTO_TERM_NUMERICAL(maxEDIDLength1, maxEDIDLength2);
+    UT_LOG("Step 04: Compare EDID lengths from Step 2 and Step 3 -> Expected: Match, Result: Matched\n");
+
+    // Step 05: dsHostTerm() Terminate dsHost
+    result = dsHostTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 05: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+    UT_LOG("\n Out  %s\n",__FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsGetHostEDIDSize() returns correct error codes during negative scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 012@n
+ * 
+ * **Pre-Conditions:**@n
+ * None.
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|dsGetHostEDIDSize() Call without prior initialization | Valid unsigned int pointer | dsERR_NOT_INITIALIZED | Fetching EDID length should fail as module is not initialized |
+ * |02|dsHostInit() Initialize dsHost| | dsERR_NONE | Initialization should pass |
+ * |03|dsGetHostEDIDSize() Call with NULL pointers | NULL pointer | dsERR_INVALID_PARAM | Should return invalid parameter error |
+ * |04|dsHostTerm() Terminate dsHost| | dsERR_NONE | Termination should be successful |
+ * |05|dsGetHostEDIDSize() Call after termination | Valid unsigned int pointer | dsERR_NOT_INITIALIZED | Fetching EDID length should fail as module is terminated |
+ * 
+ * @note Testing for dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED in dsGetHostEDIDSize() might be challenging as these represent undefined platform errors or specific hardware constraints. Such errors can be hard to simulate consistently in a controlled testing environment.
+ */
+void test_l1_dsHost_negative_dsGetHostEDIDSize(void) {
+    gTestID = 12;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+	
+    unsigned int maxEDIDLength = 0;
+
+    // Step 01: dsGetHostEDIDSize() Call without prior initialization
+    dsError_t result = dsGetHostEDIDSize(&maxEDIDLength);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    UT_LOG("Step 01: Fetch Host EDID length without initialization -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+
+    // Step 02: dsHostInit() Initialize dsHost
+    result = dsHostInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 02: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 03: dsGetHostEDIDSize() Call with NULL pointers
+    result = dsGetHostEDIDSize(NULL);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_LOG("Step 03: Fetch Host EDID length with NULL pointers -> Expected: dsERR_INVALID_PARAM, Got: %d\n", result);
+
+    // Step 04: dsHostTerm() Terminate dsHost
+    result = dsHostTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_LOG("Step 04: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 05: dsGetHostEDIDSize() Call after termination
+    result = dsGetHostEDIDSize(&maxEDIDLength);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    UT_LOG("Step 05: Fetch Host EDID length after termination -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+    UT_LOG("\n Out  %s\n",__FUNCTION__);
+}
+
+/**
  * @brief Ensure dsGetHostEDID() returns correct error codes during positive scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 009@n
+ * **Test Case ID:** 013@n
  * 
  * **Pre-Conditions:**@n
  * None.
@@ -519,7 +742,7 @@ void test_l1_dsHost_negative_dsGetSocIDFromSDK(void) {
  * 
  */
 void test_l1_dsHost_positive_dsGetHostEDID(void) {
-    gTestID = 9;
+    gTestID = 13;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 	
     unsigned char edid1[EDID_MAX_DATA_SIZE] = {0};  
@@ -558,7 +781,7 @@ void test_l1_dsHost_positive_dsGetHostEDID(void) {
  * @brief Ensure dsGetHostEDID() returns correct error codes during negative scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 010@n
+ * **Test Case ID:** 014@n
  * 
  * **Pre-Conditions:**@n
  * None.
@@ -579,7 +802,7 @@ void test_l1_dsHost_positive_dsGetHostEDID(void) {
  * @note Testing for dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED in dsGetHostEDID() might be challenging as these represent undefined platform errors or specific hardware constraints. Such errors can be hard to simulate consistently in a controlled testing environment.
  */
 void test_l1_dsHost_negative_dsGetHostEDID(void) {
-    gTestID = 10;
+    gTestID = 14;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 	
     unsigned char edid[EDID_MAX_DATA_SIZE]= {0};  // Making an assumption about maximum EDID size.
@@ -644,12 +867,13 @@ int test_l1_dsHost_register ( void )
 	UT_add_test( pSuite, "dsHostTerm_L1_positive" ,test_l1_dsHost_positive_dsHostTerm );
 	UT_add_test( pSuite, "dsHostTerm_L1_negative" ,test_l1_dsHost_negative_dsHostTerm );
 	UT_add_test( pSuite, "dsGetCPUTemperature_L1_positive" ,test_l1_dsHost_positive_dsGetCPUTemperature );
-	UT_add_test( pSuite, "dsGetSocIDFromSDK_L1_positive" ,test_l1_dsHost_positive_dsGetSocIDFromSDK );
-
-    UT_add_test( pSuite, "dsGetSocIDFromSDK_L1_negative" ,test_l1_dsHost_negative_dsGetSocIDFromSDK );
     UT_add_test( pSuite, "dsGetCPUTemperature_L1_negative" ,test_l1_dsHost_negative_dsGetCPUTemperature );
-
-
+	UT_add_test( pSuite, "dsGetSocIDLength_L1_positive" ,test_l1_dsHost_positive_dsGetSocIDLength );
+    UT_add_test( pSuite, "dsGetSocIDLength_L1_negative" ,test_l1_dsHost_negative_dsGetSocIDLength );
+	UT_add_test( pSuite, "dsGetSocIDFromSDK_L1_positive" ,test_l1_dsHost_positive_dsGetSocIDFromSDK );
+    UT_add_test( pSuite, "dsGetSocIDFromSDK_L1_negative" ,test_l1_dsHost_negative_dsGetSocIDFromSDK );
+    UT_add_test( pSuite2, "dsGetHostEDIDSize_L1_positive" ,test_l1_dsHost_positive_dsGetHostEDIDSize );
+    UT_add_test( pSuite2, "dsGetHostEDIDSize_L1_negative" ,test_l1_dsHost_negative_dsGetHostEDIDSize );
     UT_add_test( pSuite2, "dsGetHostEDID_L1_positive" ,test_l1_dsHost_positive_dsGetHostEDID );
     UT_add_test( pSuite2, "dsGetHostEDID_L1_negative" ,test_l1_dsHost_negative_dsGetHostEDID );
 	

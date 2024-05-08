@@ -595,12 +595,189 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
+/**
+ * @brief Ensure dsGetEDIDBytesSize() retrieves the EDID buffer maximum length correctly during positive scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 009@n
+ * 
+ * **Pre-Conditions:**@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Initialize the display sub-system and get a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
+ * |02|Call dsGetDisplay() Loop through all valid ports in kSupportedPortTypes[]|vType: [ValCall dsGetEDIDid Port Type]_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
+ * |03|Call dsGetEDIDBytesSize() to get the maximum EDID buffer size with the obtained handle | intptr_t handle, unsigned int *length | dsERR_NONE, and length | EDID buffer length should be retrieved successfully |
+ * |04|Call dsGetEDIDBytesSize() again to get the maximum EDID buffer size with the obtained handle | intptr_t handle, unsigned int *length | dsERR_NONE, and length | EDID buffer length should be retrieved successfully |
+ * |05|Verify that the return results are the same |  | Success | The results should be the same  |
+ * |06|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Memory deallocation and termination should succeed |
+ * 
+ * @note valid ports can be retrieved from kSupportedPortTypes which can be retrieved from dsVideoPortSettings.
+ * 
+ */
+void test_l1_dsDisplay_positive_dsGetEDIDBytesSize(void) {
+    // Start of the test
+    gTestID = 9;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    int result;
+    intptr_t displayHandle;
+    unsigned int length1 = 0;
+    unsigned int length2 = 0;
+
+    // Step 01: Initialize the display sub-system
+    result = dsDisplayInit();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
+
+    // Loop through all valid ports
+    for (int i = 0; i < sizeof(kSupportedPortTypes) / sizeof(kSupportedPortTypes[0]); i++) {
+        // Step 02: Call dsGetDisplay() for each valid port
+        result = dsGetDisplay(kSupportedPortTypes[i], i, &displayHandle);
+        if(result != dsERR_NONE)
+        {
+            UT_FAIL("Failed to get display handle");
+            break;
+        }
+
+        result = dsGetEDIDBytesSize(displayHandle, &length1);
+        if(result != dsERR_NONE)
+        {
+            UT_FAIL("Failed to get EDID Bytes Length");
+            continue;
+        }
+
+        result = dsGetEDIDBytesSize(displayHandle, &length2);
+        if(result != dsERR_NONE)
+        {
+            UT_FAIL("Failed to get EDID Bytes Length");
+            continue;
+        }
+
+        // Step 05: Verify that the return results are the same
+        UT_ASSERT_EQUAL(length1, length2);
+    }
+
+    // Step 06: Terminate the display sub-system
+    result = dsDisplayTerm();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // End of the test
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsGetEDIDBytesSize() returns correct error codes during negative scenarios
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 010@n
+ * 
+ * **Pre-Conditions:**@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|---------|----------|--------------|-----|
+ * |01|Call dsGetEDIDBytesSize() without initializing the display sub-system or obtaining a handle | intptr_t handle, unsigned int *length | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |02|Initialize the display sub-system and obtain a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
+ * |03|Call dsGetDisplay() Loop through all valid ports in kSupportedPortTypes[]|vType: [Valid Port Type]_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
+ * |04|Call dsGetEDIDBytesSize() with an invalid handle | intptr_t NULL, unsigned int *length | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
+ * |05|Call dsGetEDIDBytesSize() with null length | intptr_t, NULL| dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
+ * |06|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
+ * |07|Call dsGetEDIDBytesSize() without initializing the display sub-system or obtaining a handle | intptr_t handle, unsigned int *length | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * 
+ * @note The ability to test scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might require specific setup or environment configuration. Ensure proper memory management in the test setup.
+ * @note valid ports can be retrieved from kSupportedPortTypes which can be retrieved from dsVideoPortSettings.
+ * 
+ */
+void test_l1_dsDisplay_negative_dsGetEDIDBytesSize(void) {
+    // Start of the test
+    gTestID = 10;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    int result;
+    intptr_t displayHandle =-1;
+    unsigned int length = 0;
+
+    // Step 01: Call dsGetEDIDBytesSize() without initializing or obtaining a handle
+    result = dsGetEDIDBytesSize(displayHandle, &length);
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
+    if(result != dsERR_NOT_INITIALIZED)
+    {
+        UT_FAIL("Incorrect error return");
+        return;
+    }
+
+    // Step 02: Initialize the display sub-system
+    result = dsDisplayInit();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
+    if(result != dsERR_NONE)
+    {
+        UT_FAIL("Init has failed");
+        return;
+    }
+
+    // Step 03: Loop through all valid ports
+    for (int i = 0; i < sizeof(kSupportedPortTypes) / sizeof(kSupportedPortTypes[0]); i++) {
+        result = dsGetDisplay(kSupportedPortTypes[i], i, &displayHandle);
+        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+        if(result != dsERR_NONE)
+        {
+            UT_FAIL("Failed to get displayHandle");
+            break;
+        }
+
+        // Step 04: Call dsGetEDIDBytesSize() with an invalid handle
+        result = dsGetEDIDBytesSize((intptr_t)NULL, &length);
+        if(result != dsERR_INVALID_PARAM)
+        {
+            UT_FAIL("Incorrect error return");
+            break;
+        }
+
+        // Step 05: Call dsGetEDIDBytesSize() with an invalid length
+        result = dsGetEDIDBytesSize(displayHandle, NULL);
+        if(result != dsERR_INVALID_PARAM)
+        {
+            UT_FAIL("Incorrect error return");
+            break;
+        }
+    }
+
+    // Step 06: Terminate the display sub-system
+    result = dsDisplayTerm();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
+    if(result != dsERR_NONE)
+    {
+        UT_FAIL("Term has failed");
+        return;
+    }
+
+    // Step 07: Call dsGetEDIDBytes() without initializing or obtaining a handle
+    result = dsGetEDIDBytesSize(displayHandle, length);
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
+    if(result != dsERR_NOT_INITIALIZED)
+    {
+        UT_FAIL("Incorrect error return");
+        return;
+    }
+    
+    // End of the test
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
 
 /**
  * @brief Ensure dsGetEDIDBytes() retrieves the EDID buffer and length correctly during positive scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 009@n
+ * **Test Case ID:** 011@n
  * 
  * **Pre-Conditions:**@n
  * 
@@ -622,20 +799,19 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
  */
 void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
     // Start of the test
-    gTestID = 9;
+    gTestID = 11;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
     intptr_t displayHandle;
-    unsigned char *edid1 = (unsigned char *)malloc(512);
-    unsigned char *edid2 = (unsigned char *)malloc(512);
-    int length1 = 0;
-    int length2 = 0;
+    unsigned char *edid1 = NULL;
+    unsigned char *edid2 = NULL;
+    int length = 0;
 
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Loop through all valid ports
     for (int i = 0; i < sizeof(kSupportedPortTypes) / sizeof(kSupportedPortTypes[0]); i++) {
@@ -647,38 +823,52 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
             break;
         }
 
-        // Step 03 and 04: Allocate memory for the EDID buffer and call dsGetEDIDBytes() twice
-        result = dsGetEDIDBytes(displayHandle, edid1, &length1);
-        UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
+        result = dsGetEDIDBytesSize(displayHandle, &length);
         if(result != dsERR_NONE)
         {
-           UT_FAIL("Failed to get EDID Bytes");
+            UT_FAIL("Failed to get EDID Bytes Length");
+            continue;
+        }
+
+        edid1 = malloc(length);
+        if(edid1 == NULL) {
+            UT_FAIL("Failed to allocate buffer");
             break;
         }
-        result = dsGetEDIDBytes(displayHandle, edid2, &length2);
+
+        edid2 = malloc(length);
+        if(edid2 == NULL) {
+            UT_FAIL("Failed to allocate buffer");
+            free(edid1);
+            edid1 = NULL;
+            break;
+        }
+        // Step 03 and 04: Allocate memory for the EDID buffer and call dsGetEDIDBytes() twice
+        result = dsGetEDIDBytes(displayHandle, edid1, length);
         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
         if(result != dsERR_NONE)
         {
             UT_FAIL("Failed to get EDID Bytes");
-            break;
+            free(edid1);
+            free(edid2);
+            continue;
+        }
+        result = dsGetEDIDBytes(displayHandle, edid2, length);
+        UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
+        if(result != dsERR_NONE)
+        {
+            UT_FAIL("Failed to get EDID Bytes");
+            free(edid1);
+            free(edid2);
+            continue;
         }
 
         // Step 05: Verify that the return results are the same
-        UT_ASSERT_EQUAL(length1, length2);
-        if(length1 != length2)
-        {
-            UT_FAIL("Invalid EDID Bytes");
-            break;
-        }
-        UT_ASSERT_EQUAL(memcmp(edid1, edid2, length1), 0);
-        if(memcmp(edid1, edid2, length1) != 0)
-        {
-            UT_FAIL("Invalid EDID Bytes");
-            break;
-        }  
+        UT_ASSERT_EQUAL(memcmp(edid1, edid2, length), 0);
+
+        free(edid1);
+        free(edid2);
     }
-    free(edid1);
-    free(edid2);
 
     // Step 06: Terminate the display sub-system
     result = dsDisplayTerm();
@@ -693,7 +883,7 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
  * @brief Ensure dsGetEDIDBytes() returns correct error codes during negative scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 010@n
+ * **Test Case ID:** 012@n
  * 
  * **Pre-Conditions:**@n
  * 
@@ -708,7 +898,7 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
  * |03|Call dsGetDisplay() Loop through all valid ports in kSupportedPortTypes[]|vType: [Valid Port Type]_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
  * |04|Call dsGetEDIDBytes() with an invalid handle | intptr_t NULL, unsigned char *edid, int *length | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
  * |05|Call dsGetEDIDBytes() with null edid | intptr_t, NULL, int *length | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
- * |06|Call dsGetEDIDBytes() with null length | intptr_t, unsigned char *edid, NULL | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
+ * |06|Call dsGetEDIDBytes() with invalid length | intptr_t, unsigned char *edid, 0 | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
  * |07|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
  * |08|Call dsGetEDIDBytes() without initializing the display sub-system or obtaining a handle | intptr_t handle, unsigned char *edid, int *length | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * 
@@ -718,16 +908,16 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
  */
 void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
     // Start of the test
-    gTestID = 10;
+    gTestID = 12;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
     intptr_t displayHandle =-1;
     unsigned char *edid = (unsigned char *)malloc(512);
-    int length = 0;
+    unsigned int length = 0;
 
     // Step 01: Call dsGetEDIDBytes() without initializing or obtaining a handle
-    result = dsGetEDIDBytes(displayHandle, edid, &length);
+    result = dsGetEDIDBytes(displayHandle, edid, length);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     if(result != dsERR_NOT_INITIALIZED)
     {
@@ -757,7 +947,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
         }
 
         // Step 04: Call dsGetEDIDBytes() with an invalid handle
-        result = dsGetEDIDBytes((intptr_t)NULL, edid, &length);
+        result = dsGetEDIDBytes((intptr_t)NULL, edid, length);
         if(result != dsERR_INVALID_PARAM)
         {
             UT_FAIL("Incorrect error return");
@@ -765,15 +955,15 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
         }
 
         // Step 05: Call dsGetEDIDBytes() with null edid
-        result = dsGetEDIDBytes(displayHandle, NULL, &length);
+        result = dsGetEDIDBytes(displayHandle, NULL, length);
         if(result != dsERR_INVALID_PARAM)
         {
             UT_FAIL("Incorrect error return");
             break;
         }
 
-        // Step 06: Call dsGetEDIDBytes() with null length
-        result = dsGetEDIDBytes(displayHandle, edid, NULL);
+        // Step 06: Call dsGetEDIDBytes() with invalid length
+        result = dsGetEDIDBytes(displayHandle, edid, 0);
         if(result != dsERR_INVALID_PARAM)
         {
             UT_FAIL("Incorrect error return");
@@ -792,7 +982,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
     }
 
     // Step 08: Call dsGetEDIDBytes() without initializing or obtaining a handle
-    result = dsGetEDIDBytes(displayHandle, edid, &length);
+    result = dsGetEDIDBytes(displayHandle, edid, length);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     if(result != dsERR_NOT_INITIALIZED)
     {
@@ -811,7 +1001,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
  * @brief Ensure dsGetDisplayAspectRatio() retrieves the aspect ratio correctly during positive scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 011@n
+ * **Test Case ID:** 013@n
  * 
  * **Pre-Conditions:**@n
  * 
@@ -833,7 +1023,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
  */
 void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
     // Start of the test
-    gTestID = 11;
+    gTestID = 13;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
@@ -877,7 +1067,7 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
  * @brief Ensure dsGetDisplayAspectRatio() returns correct error codes during negative scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 012@n
+ * **Test Case ID:** 014@n
  * 
  * **Pre-Conditions:**@n
  * 
@@ -901,7 +1091,7 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
  */
 void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
     // Start of the test
-    gTestID = 12;
+    gTestID = 14;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
@@ -950,7 +1140,7 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
  * @brief Ensure dsRegisterDisplayEventCallback() registers the callback correctly during positive scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 013@n
+ * **Test Case ID:** 015@n
  * 
  * **Pre-Conditions:**@n
  * 
@@ -975,7 +1165,7 @@ void testDisplayCallback(int handle, dsDisplayEvent_t event,void* eventData) {
 
 void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback(void) {
  // Start of the test
-    gTestID = 13;
+    gTestID = 15;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
@@ -1009,7 +1199,7 @@ void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback(void) {
  * @brief Ensure dsRegisterDisplayEventCallback() returns correct error codes during negative scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 014@n
+ * **Test Case ID:** 016@n
  * 
  * **Pre-Conditions:**@n
  * 
@@ -1033,7 +1223,7 @@ void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback(void) {
 
 void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
     // Start of the test
-    gTestID = 14;
+    gTestID = 16;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
