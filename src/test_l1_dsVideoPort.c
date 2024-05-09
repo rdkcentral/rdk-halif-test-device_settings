@@ -170,8 +170,10 @@ void test_l1_dsVideoPort_negative_dsVideoPortInit(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 02: Attempt to initialize again without terminating the first initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsVideoPortInit();
 	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_ALREADY_INITIALIZED);
+	#endif
 
 	// Step 03: Terminate video port system
 	status = dsVideoPortTerm();
@@ -258,8 +260,10 @@ void test_l1_dsVideoPort_negative_dsVideoPortTerm(void) {
 	dsError_t status;
 
 	// Step 01: Attempt to terminate the video port without prior initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsVideoPortTerm();
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize the video port system
 	status = dsVideoPortInit();
@@ -270,8 +274,10 @@ void test_l1_dsVideoPort_negative_dsVideoPortTerm(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 04: Attempt to terminate the video port again after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsVideoPortTerm();
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -371,8 +377,10 @@ void test_l1_dsVideoPort_negative_dsGetVideoPort(void) {
 	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
 	// Step 01: Attempt to get the Video Port handle without initializing
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetVideoPort(kPorts[0].id.type, kPorts[0].id.index, &(handle[0]));
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -381,7 +389,11 @@ void test_l1_dsVideoPort_negative_dsGetVideoPort(void) {
 	// Step 03: Attempt to get the Video Port handle with invalid port type
 	for (int i = 0; i < NUM_OF_PORTS; i++) {
 		status = dsGetVideoPort(dsVIDEOPORT_TYPE_MAX, kPorts[i].id.index, &(handle[i]));
+		#ifdef ENABLE_ENHANCED_ERROR_CODE
 		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+		#else
+		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
+		#endif
 	}
 
 	// Step 04: Attempt to get the Video Port handle invalid port index
@@ -401,8 +413,10 @@ void test_l1_dsVideoPort_negative_dsGetVideoPort(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 07: Attempt to get the video port handle again after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetVideoPort(kPorts[0].id.type, kPorts[0].id.index, &(handle[0]));
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -512,8 +526,10 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortEnabled(void) {
 	bool enabled[NUM_OF_PORTS];
 
 	// Step 01: Attempt to check enabled status without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsIsVideoPortEnabled(-1, &enabled[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -541,8 +557,10 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortEnabled(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 07: Check enabled status after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsIsVideoPortEnabled(handle[0], &enabled[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -651,8 +669,10 @@ void test_l1_dsVideoPort_negative_dsIsDisplayConnected(void) {
 	bool connected[NUM_OF_PORTS];
 
 	// Step 01: Attempt to check connection status without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsIsDisplayConnected(-1 , &(connected[0]));
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -679,8 +699,10 @@ void test_l1_dsVideoPort_negative_dsIsDisplayConnected(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 07: Check connection status after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsIsDisplayConnected(handle[0], &connected[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -816,8 +838,10 @@ void test_l1_dsVideoPort_negative_dsIsDisplaySurround(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 07: Check audio surround support after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsIsDisplaySurround(handle[0], &surround[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -927,8 +951,10 @@ void test_l1_dsVideoPort_negative_dsGetSurroundMode(void) {
 	int surroundMode[NUM_OF_PORTS];
 
 	// Step 01: Attempt to get surround mode without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetSurroundMode(-1, &surroundMode[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -955,8 +981,10 @@ void test_l1_dsVideoPort_negative_dsGetSurroundMode(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 07: Attempt to get surround mode after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetSurroundMode(handle[0], &surroundMode[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -1067,8 +1095,10 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortActive(void) {
 	bool active[NUM_OF_PORTS];
 
 	// Step 01: Attempt to check active status without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsIsVideoPortActive(-1, &active[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -1095,8 +1125,10 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortActive(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 07: Attempt to check active status after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsIsVideoPortActive(handle[0], &active[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -1191,8 +1223,10 @@ void test_l1_dsVideoPort_negative_dsEnableDTCP(void) {
 	bool enableDTCP = true; // Flag to enable/disable DTCP
 
 	// Step 01: Attempt to enable DTCP without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsEnableDTCP(-1, enableDTCP);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -1213,8 +1247,10 @@ void test_l1_dsVideoPort_negative_dsEnableDTCP(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 06: Attempt to enable DTCP after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsEnableDTCP(handle[0], enableDTCP);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -1314,8 +1350,10 @@ void test_l1_dsVideoPort_negative_dsEnableHDCP(void) {
 	int keySize = HDCP_KEY_MAX_SIZE;
 
 	// Step 01: Attempt to enable HDCP without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsEnableHDCP(-1, enableHDCP, hdcpKey, keySize);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -1344,8 +1382,10 @@ void test_l1_dsVideoPort_negative_dsEnableHDCP(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 08: Attempt to enable HDCP after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsEnableHDCP(handle[0], enableHDCP, hdcpKey, keySize);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -1454,8 +1494,10 @@ void test_l1_dsVideoPort_negative_dsIsDTCPEnabled(void) {
 	bool isDTCPEnabled[NUM_OF_PORTS];
 
 	// Step 01: Attempt to get DTCP status without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsIsDTCPEnabled(-1, &isDTCPEnabled[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -1482,8 +1524,10 @@ void test_l1_dsVideoPort_negative_dsIsDTCPEnabled(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 07: Attempt to get DTCP status after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsIsDTCPEnabled(handle[0], &isDTCPEnabled[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -1592,8 +1636,10 @@ void test_l1_dsVideoPort_negative_dsIsHDCPEnabled(void) {
 	bool contentProtected[NUM_OF_PORTS];
 
 	// Step 01: Attempt to get HDCP status without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsIsHDCPEnabled(-1, &(contentProtected[0]));
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -1620,8 +1666,10 @@ void test_l1_dsVideoPort_negative_dsIsHDCPEnabled(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 07: Attempt to get HDCP status after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsIsHDCPEnabled(handle[0], &(contentProtected[0]));
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -1714,8 +1762,10 @@ void test_l1_dsVideoPort_negative_dsEnableVideoPort(void) {
 	bool enabled = true; // Example value for enabling/disabling the port
 
 	// Step 01: Attempt to enable/disable video port without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsEnableVideoPort(-1, enabled);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -1736,8 +1786,10 @@ void test_l1_dsVideoPort_negative_dsEnableVideoPort(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 06: Attempt to enable/disable video port after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsEnableVideoPort(handle[0], enabled);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -1835,8 +1887,10 @@ void test_l1_dsVideoPort_negative_dsSetResolution(void) {
 
 
 	// Step 01: Attempt to set resolution without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsSetResolution(-1, &(kResolutions[0]));
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -1870,8 +1924,10 @@ void test_l1_dsVideoPort_negative_dsSetResolution(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 08: Attempt to set resolution after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsSetResolution(handle[0], &(kResolutions[0]));
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -1985,8 +2041,10 @@ void test_l1_dsVideoPort_negative_dsGetResolution(void) {
 	dsVideoPortResolution_t resolution[NUM_OF_PORTS];
 
 	// Step 01: Attempt to get resolution without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetResolution(-1, &(resolution[0]));
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -2013,8 +2071,10 @@ void test_l1_dsVideoPort_negative_dsGetResolution(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 07: Attempt to get resolution after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetResolution(handle[0], &(resolution[0]));
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -2105,8 +2165,10 @@ void test_l1_dsVideoPort_negative_dsSetActiveSource(void) {
 	intptr_t handle [NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
 
 	// Step 01: Attempt to set active source without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsSetActiveSource(-1);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -2127,8 +2189,10 @@ void test_l1_dsVideoPort_negative_dsSetActiveSource(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 06: Attempt to set active source after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsSetActiveSource(handle[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -2212,8 +2276,10 @@ void test_l1_dsVideoPort_negative_dsVideoFormatUpdateRegisterCB(void) {
 	dsError_t status;
 
 	// Step 01: Attempt to register callback without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsVideoFormatUpdateRegisterCB(mockVideoFormatCallback);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -2228,8 +2294,10 @@ void test_l1_dsVideoPort_negative_dsVideoFormatUpdateRegisterCB(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 05: Attempt to register callback after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsVideoFormatUpdateRegisterCB(mockVideoFormatCallback);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -2331,8 +2399,10 @@ void test_l1_dsVideoPort_negative_dsRegisterHdcpStatusCallback(void) {
 	dsHDCPStatusCallback_t validHdcpStatusCallback = myHdcpStatusCallbackFunction;
 
 	// Step 01: Attempt to register HDCP status callback without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsRegisterHdcpStatusCallback(-1, validHdcpStatusCallback);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -2358,8 +2428,10 @@ void test_l1_dsVideoPort_negative_dsRegisterHdcpStatusCallback(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 07: Attempt to register HDCP status callback after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsRegisterHdcpStatusCallback(handle[0], validHdcpStatusCallback);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -2469,8 +2541,10 @@ void test_l1_dsVideoPort_negative_dsGetHDCPStatus(void) {
 	dsHdcpStatus_t hdcpStatus[NUM_OF_PORTS];
 
 	// Step 01: Attempt to get HDCP status without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetHDCPStatus(-1, &(hdcpStatus[0]));
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -2497,8 +2571,10 @@ void test_l1_dsVideoPort_negative_dsGetHDCPStatus(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 07: Attempt to get HDCP status after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetHDCPStatus(handle[0], &(hdcpStatus[0]));
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -2608,8 +2684,10 @@ void test_l1_dsVideoPort_negative_dsGetHDCPProtocol(void) {
 	dsHdcpProtocolVersion_t protocolVersion[NUM_OF_PORTS];
 
 	// Step 01: Attempt to get HDCP protocol without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetHDCPProtocol(-1, &(protocolVersion[0]));
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -2636,8 +2714,10 @@ void test_l1_dsVideoPort_negative_dsGetHDCPProtocol(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 07: Attempt to get HDCP protocol after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetHDCPProtocol(handle[0], &protocolVersion[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -2748,8 +2828,10 @@ void test_l1_dsVideoPort_negative_dsGetHDCPReceiverProtocol(void) {
 	dsHdcpProtocolVersion_t receiverProtocolVersion[NUM_OF_PORTS];
 
 	// Step 01: Attempt to get Receiver HDCP protocol without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetHDCPReceiverProtocol(-1, &receiverProtocolVersion[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -2776,8 +2858,10 @@ void test_l1_dsVideoPort_negative_dsGetHDCPReceiverProtocol(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 07: Attempt to get Receiver HDCP protocol after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetHDCPReceiverProtocol(handle[0], &receiverProtocolVersion[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -2887,8 +2971,10 @@ void test_l1_dsVideoPort_negative_dsGetHDCPCurrentProtocol(void) {
 	dsHdcpProtocolVersion_t currentProtocolVersion[NUM_OF_PORTS];
 
 	// Step 01: Attempt to get current negotiated HDCP protocol without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetHDCPCurrentProtocol(-1, &currentProtocolVersion[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -2915,8 +3001,10 @@ void test_l1_dsVideoPort_negative_dsGetHDCPCurrentProtocol(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 07: Attempt to get current negotiated HDCP protocol after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetHDCPCurrentProtocol(handle[0], &currentProtocolVersion[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -3026,8 +3114,10 @@ void test_l1_dsVideoPort_negative_dsGetTVHDRCapabilities(void) {
 	int capabilities[NUM_OF_PORTS]; 
 
 	// Step 01: Attempt to get HDR capabilities without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetTVHDRCapabilities(-1, &capabilities[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -3054,8 +3144,10 @@ void test_l1_dsVideoPort_negative_dsGetTVHDRCapabilities(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 07: Attempt to get HDR capabilities after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetTVHDRCapabilities(handle[0], &capabilities[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -3165,8 +3257,10 @@ void test_l1_dsVideoPort_negative_dsSupportedTvResolutions(void) {
 	int resolutions[NUM_OF_PORTS];
 
 	// Step 01: Attempt to get supported resolutions without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsSupportedTvResolutions(-1, &resolutions[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -3193,8 +3287,10 @@ void test_l1_dsVideoPort_negative_dsSupportedTvResolutions(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 07: Attempt to get supported resolutions after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsSupportedTvResolutions(handle[0], &resolutions[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -3561,8 +3657,10 @@ void test_l1_dsVideoPort_negative_dsGetVideoEOTF(void) {
 	dsHDRStandard_t eotf[NUM_OF_PORTS];
 
 	// Step 01: Attempt to get EOTF without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetVideoEOTF(-1, &eotf[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -3589,8 +3687,10 @@ void test_l1_dsVideoPort_negative_dsGetVideoEOTF(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 07: Attempt to get EOTF after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetVideoEOTF(handle[0], &eotf[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -3700,8 +3800,10 @@ void test_l1_dsVideoPort_negative_dsGetMatrixCoefficients(void) {
 	dsDisplayMatrixCoefficients_t matrixCoefficients[NUM_OF_PORTS];
 
 	// Step 01: Attempt to get matrix coefficients without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetMatrixCoefficients(-1, &matrixCoefficients[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -3728,8 +3830,10 @@ void test_l1_dsVideoPort_negative_dsGetMatrixCoefficients(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 07: Attempt to get matrix coefficients after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetMatrixCoefficients(handle[0], &matrixCoefficients[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -3839,8 +3943,10 @@ void test_l1_dsVideoPort_negative_dsGetColorDepth(void) {
 	unsigned int colorDepth[NUM_OF_PORTS]; // To store the color depth
 
 	// Step 01: Attempt to get color depth without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetColorDepth(-1, &colorDepth[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -3867,8 +3973,10 @@ void test_l1_dsVideoPort_negative_dsGetColorDepth(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 07: Attempt to get color depth after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetColorDepth(handle[0], &colorDepth[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -3977,8 +4085,10 @@ void test_l1_dsVideoPort_negative_dsGetColorSpace(void) {
 	dsDisplayColorSpace_t colorSpace[NUM_OF_PORTS];
 
 	// Step 01: Attempt to get color space without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetColorSpace(-1, &colorSpace[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -4005,8 +4115,10 @@ void test_l1_dsVideoPort_negative_dsGetColorSpace(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 07: Attempt to get color space after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetColorSpace(handle[0], &colorSpace[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -4114,8 +4226,10 @@ void test_l1_dsVideoPort_negative_dsGetQuantizationRange(void) {
 	dsDisplayQuantizationRange_t quantizationRange[NUM_OF_PORTS];
 
 	// Step 01: Attempt to get quantization range without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetQuantizationRange(-1, &quantizationRange[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -4142,8 +4256,10 @@ void test_l1_dsVideoPort_negative_dsGetQuantizationRange(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 07: Attempt to get quantization range after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetQuantizationRange(handle[0], &quantizationRange[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -4274,9 +4390,11 @@ void test_l1_dsVideoPort_negative_dsGetCurrentOutputSettings(void) {
 	dsDisplayQuantizationRange_t quant_rangearray[NUM_OF_PORTS];
 
 	// Step 01: Attempt to get output settings without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetCurrentOutputSettings(-1, &hdrstandardarray[0], &matrixcoefarray[0], &colorspacearray[0],\
 			&colordeptharray[0], &quant_rangearray[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -4333,9 +4451,11 @@ void test_l1_dsVideoPort_negative_dsGetCurrentOutputSettings(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 11: Attempt to get output settings after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetCurrentOutputSettings(handle[0], &hdrstandardarray[0], &matrixcoefarray[0], &colorspacearray[0],\
 			&colordeptharray[0], &quant_rangearray[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -4446,8 +4566,10 @@ void test_l1_dsVideoPort_negative_dsIsOutputHDR(void) {
 	bool hdrStatus[NUM_OF_PORTS];
 
 	// Step 01: Attempt to check HDR status without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsIsOutputHDR(-1, &hdrStatus[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -4474,8 +4596,10 @@ void test_l1_dsVideoPort_negative_dsIsOutputHDR(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 07: Attempt to check HDR status after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsIsOutputHDR(handle[0], &hdrStatus[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -4554,8 +4678,10 @@ void test_l1_dsVideoPort_negative_dsResetOutputToSDR(void) {
 	dsError_t status;
 
 	// Step 01: Attempt reset without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsResetOutputToSDR();
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -4566,8 +4692,10 @@ void test_l1_dsVideoPort_negative_dsResetOutputToSDR(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 04: Attempt reset after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsResetOutputToSDR();
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -4665,8 +4793,10 @@ void test_l1_dsVideoPort_negative_dsSetHdmiPreference(void) {
 	dsHdcpProtocolVersion_t in_range = dsHDCP_VERSION_1X , out_range = dsHDCP_VERSION_MAX; 
 
 	// Step 01: Attempt set HDMI preference without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsSetHdmiPreference(-1, &in_range);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -4693,8 +4823,10 @@ void test_l1_dsVideoPort_negative_dsSetHdmiPreference(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 07: Attempt set HDMI preference after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsSetHdmiPreference(handle[0], &in_range);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -4804,8 +4936,10 @@ void test_l1_dsVideoPort_negative_dsGetHdmiPreference(void) {
 	dsHdcpProtocolVersion_t hdcpCurrentProtocol[NUM_OF_PORTS];
 
 	// Step 01: Attempt to get HDMI preference without initialization
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetHdmiPreference(-1, &hdcpCurrentProtocol[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	// Step 02: Initialize video port system
 	status = dsVideoPortInit();
@@ -4832,8 +4966,10 @@ void test_l1_dsVideoPort_negative_dsGetHdmiPreference(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 07: Attempt to get HDMI preference after termination
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	status = dsGetHdmiPreference(handle[0], &hdcpCurrentProtocol[0]);
 	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
+	#endif
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
