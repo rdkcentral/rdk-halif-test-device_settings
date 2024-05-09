@@ -57,7 +57,7 @@ dsError_t __attribute__((weak)) dsGetSocIDFromSDK(char* socID, unsigned int SocI
   return (dsError_t)0;
 }
 
-dsError_t __attribute__((weak)) dsError_t dsGetHostEDIDSize(unsigned int *pMaxEDIDLength)
+dsError_t __attribute__((weak)) dsGetHostEDIDSize(unsigned int *pMaxEDIDLength)
 {
   /*TODO: Implement Me!*/
   (void)pMaxEDIDLength;
