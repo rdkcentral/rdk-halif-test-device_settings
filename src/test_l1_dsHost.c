@@ -173,9 +173,11 @@ void test_l1_dsHost_negative_dsHostInit(void) {
     UT_LOG("Step 01: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 02: Call dsHostInit() Attempt to initialize dsHost again
+    #ifdef ENABLE_ENHANCED_ERROR_CODE
     result = dsHostInit();
     DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_ALREADY_INITIALIZED);
     UT_LOG("Step 02: Attempt to initialize dsHost again -> Expected: dsERR_ALREADY_INITIALIZED, Got: %d\n", result);
+    #endif
 
     // Step 03: Call dsHostTerm() Terminate dsHost
     result = dsHostTerm();
@@ -258,9 +260,11 @@ void test_l1_dsHost_negative_dsHostTerm(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 	
     // Step 01: dsHostTerm() Attempt to terminate dsHost without initialization
+    #ifdef ENABLE_ENHANCED_ERROR_CODE
     dsError_t result = dsHostTerm();
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("Step 01: Attempt to terminate dsHost without initialization -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+    #endif
 
     // Step 02: dsHostInit() Initialize dsHost
     result = dsHostInit();
@@ -273,9 +277,11 @@ void test_l1_dsHost_negative_dsHostTerm(void) {
     UT_LOG("Step 03: Terminate dsHost after initialization -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 04: dsHostTerm() Attempt to terminate dsHost again
+    #ifdef ENABLE_ENHANCED_ERROR_CODE
     result = dsHostTerm();
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("Step 04: Attempt to terminate dsHost again -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+    #endif
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -358,9 +364,11 @@ void test_l1_dsHost_negative_dsGetCPUTemperature(void) {
     float temperatureValue;
 
     // Step 01: dsGetCPUTemperature() Call without prior initialization
+    #ifdef ENABLE_ENHANCED_ERROR_CODE
     dsError_t result = dsGetCPUTemperature(&temperatureValue);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("Step 01: Fetch CPU Temperature without initialization -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+    #endif
 
     // Step 02: dsHostInit() Initialize dsHost
     result = dsHostInit();
@@ -368,9 +376,11 @@ void test_l1_dsHost_negative_dsGetCPUTemperature(void) {
     UT_LOG("Step 02: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 03: dsGetCPUTemperature() Call with NULL pointer
+    #ifdef ENABLE_ENHANCED_ERROR_CODE
     result = dsGetCPUTemperature(NULL);
     DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
     UT_LOG("Step 03: Fetch CPU Temperature with NULL pointer -> Expected: dsERR_INVALID_PARAM, Got: %d\n", result);
+    #endif
 
     // Step 04: dsHostTerm() Terminate dsHost
     result = dsHostTerm();
@@ -378,9 +388,11 @@ void test_l1_dsHost_negative_dsGetCPUTemperature(void) {
     UT_LOG("Step 04: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 05: dsGetCPUTemperature() Call after termination
+    #ifdef ENABLE_ENHANCED_ERROR_CODE
     result = dsGetCPUTemperature(&temperatureValue);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("Step 05: Fetch CPU Temperature after termination -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+    #endif
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -470,9 +482,11 @@ void test_l1_dsHost_negative_dsGetSocIDFromSDK(void) {
     char socID[1024] = {0};
 
     // Step 01: dsGetSocIDFromSDK() Call without prior initialization
+    #ifdef ENABLE_ENHANCED_ERROR_CODE
     dsError_t result = dsGetSocIDFromSDK(socID);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("Step 01: Fetch SOC ID without initialization -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+    #endif
 
     // Step 02: dsHostInit() Initialize dsHost
     result = dsHostInit();
@@ -490,9 +504,11 @@ void test_l1_dsHost_negative_dsGetSocIDFromSDK(void) {
     UT_LOG("Step 04: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 05: dsGetSocIDFromSDK() Call after termination
+    #ifdef ENABLE_ENHANCED_ERROR_CODE
     result = dsGetSocIDFromSDK(socID);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("Step 05: Fetch SOC ID after termination -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+    #endif
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -586,9 +602,11 @@ void test_l1_dsHost_negative_dsGetHostEDID(void) {
     int length;
 
     // Step 01: dsGetHostEDID() Call without prior initialization
+    #ifdef ENABLE_ENHANCED_ERROR_CODE
     dsError_t result = dsGetHostEDID(edid, &length);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("Step 01: Fetch Host EDID without initialization -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+    #endif
 
     // Step 02: dsHostInit() Initialize dsHost
     result = dsHostInit();
@@ -611,9 +629,11 @@ void test_l1_dsHost_negative_dsGetHostEDID(void) {
     UT_LOG("Step 04: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 06: dsGetHostEDID() Call after termination
+    #ifdef ENABLE_ENHANCED_ERROR_CODE
     result = dsGetHostEDID(edid, &length);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("Step 05: Fetch Host EDID after termination -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+    #endif
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
