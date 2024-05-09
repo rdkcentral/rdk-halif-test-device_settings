@@ -183,9 +183,12 @@ void test_l1_dsDisplay_negative_dsDisplayInit(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 02: Attempt to initialize the display module again
+    #ifdef ENABLE_ENHANCED_ERROR_CODE
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_ALREADY_INITIALIZED);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_ALREADY_INITIALIZED); 
+    #endif
+
 
     // Step 03: Terminate the display module
     result = dsDisplayTerm();
@@ -278,9 +281,11 @@ void test_l1_dsDisplay_negative_dsDisplayTerm(void) {
     int result;
 
     // Step 01: Call dsDisplayTerm() without initializing the display sub-system
+    #ifdef ENABLE_ENHANCED_ERROR_CODE
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    #endif
 
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
@@ -293,9 +298,11 @@ void test_l1_dsDisplay_negative_dsDisplayTerm(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 04: Call dsDisplayTerm() again after termination
+    #ifdef ENABLE_ENHANCED_ERROR_CODE
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    #endif
 
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -401,9 +408,11 @@ void test_l1_dsDisplay_negative_dsGetDisplay(void) {
     intptr_t displayHandle;
 
     // Step 01: Call dsGetDisplay() without initializing the display sub-system
+    #ifdef ENABLE_ENHANCED_ERROR_CODE
     result = dsGetDisplay(kSupportedPortTypes[0], 0, &displayHandle);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    #endif
 
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
@@ -431,9 +440,11 @@ void test_l1_dsDisplay_negative_dsGetDisplay(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 07: Call dsGetDisplay() again after termination
+    #ifdef ENABLE_ENHANCED_ERROR_CODE
     result = dsGetDisplay(kSupportedPortTypes[0], 0, &displayHandle);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    #endif
 
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -558,9 +569,11 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
     dsDisplayEDID_t *edid = {0};
 
     // Step 01: Call dsGetEDID() without initializing the display sub-system
+    #ifdef ENABLE_ENHANCED_ERROR_CODE
     result = dsGetEDID(displayHandle, edid);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    #endif
 
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
@@ -587,9 +600,11 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 07: Call dsGetEDID() without initializing the display sub-system
+    #ifdef ENABLE_ENHANCED_ERROR_CODE
     result = dsGetEDID(displayHandle, edid);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    #endif
 
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -727,6 +742,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
     int length = 0;
 
     // Step 01: Call dsGetEDIDBytes() without initializing or obtaining a handle
+    #ifdef ENABLE_ENHANCED_ERROR_CODE
     result = dsGetEDIDBytes(displayHandle, edid, &length);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     if(result != dsERR_NOT_INITIALIZED)
@@ -735,7 +751,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
         free(edid);
         return;
     }
-
+    #endif
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
@@ -792,6 +808,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
     }
 
     // Step 08: Call dsGetEDIDBytes() without initializing or obtaining a handle
+    #ifdef ENABLE_ENHANCED_ERROR_CODE
     result = dsGetEDIDBytes(displayHandle, edid, &length);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     if(result != dsERR_NOT_INITIALIZED)
@@ -802,6 +819,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
     }
 
     free(edid);
+    #endif
     
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -909,9 +927,11 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
     dsVideoAspectRatio_t aspectRatio;
 
     // Step 01: Call dsGetDisplayAspectRatio() without initializing the display sub-system
+    #ifdef ENABLE_ENHANCED_ERROR_CODE
     result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    #endif
 
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
@@ -938,9 +958,11 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 07: Call dsGetDisplayAspectRatio() without initializing the display sub-system
+    #ifdef ENABLE_ENHANCED_ERROR_CODE
     result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    #endif
 
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -1041,9 +1063,11 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
     const int portCount = sizeof(kSupportedPortTypes) / sizeof(kSupportedPortTypes[0]);
 
     // Step 01: Call dsRegisterDisplayEventCallback() without initializing the display sub-system
+    #ifdef ENABLE_ENHANCED_ERROR_CODE
     result = dsRegisterDisplayEventCallback(displayHandle, testDisplayCallback);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    #endif
 
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
@@ -1071,9 +1095,11 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 06: Call dsRegisterDisplayEventCallback() without reinitializing the display sub-system
+    #ifdef ENABLE_ENHANCED_ERROR_CODE
     result = dsRegisterDisplayEventCallback(displayHandle, testDisplayCallback);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    #endif
 
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
