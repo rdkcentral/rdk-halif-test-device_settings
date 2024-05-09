@@ -512,10 +512,11 @@ void test_l1_dsHost_negative_dsGetSocIDLength(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
  * |01|dsHostInit() Initialize dsHost | | dsERR_NONE | Initialization should pass |
- * |02|dsGetSocIDFromSDK() Call with a valid pointer to store the SOC ID | Valid char pointer (size of 8 bytes) | dsERR_NONE | SOC ID should be fetched successfully |
- * |03|dsGetSocIDFromSDK() Call with a valid pointer to store the SOC ID again | Valid char pointer (size of 8 bytes) | dsERR_NONE | SOC ID should be fetched successfully |
- * |04|Compare return values from step 2/3 to ensure that they are the same |  |  | Success |
- * |05|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful |
+ * |02|dsGetSocIDLength() Call with a valid pointer to get SOC ID length | Valid unsigned int pointer | dsERR_NONE | SOC ID length should be fetched successfully |
+ * |03|dsGetSocIDFromSDK() Call with a valid pointer to store the SOC ID | Valid char pointer (size of 8 bytes) | dsERR_NONE | SOC ID should be fetched successfully |
+ * |04|dsGetSocIDFromSDK() Call with a valid pointer to store the SOC ID again | Valid char pointer (size of 8 bytes) | dsERR_NONE | SOC ID should be fetched successfully |
+ * |05|Compare return values from step 2/3 to ensure that they are the same |  |  | Success |
+ * |06|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful |
  * 
  */
 void test_l1_dsHost_positive_dsGetSocIDFromSDK(void) {
@@ -524,30 +525,36 @@ void test_l1_dsHost_positive_dsGetSocIDFromSDK(void) {
 	
     char socID1[1024]= {0}; 
     char socID2[1024]= {0};
+    unsigned int socIDLength = 0;
 
     // Step 01: dsHostInit() Initialize dsHost
     dsError_t result = dsHostInit();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
     UT_LOG("Step 01: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
-    // Step 02: dsGetSocIDFromSDK() Call with a valid pointer to store the SOC ID
-    result = dsGetSocIDFromSDK(socID1);
+    // Step 02: dsGetSocIDLength() Call with a valid pointer to store the SOC ID Length
+    result = dsGetSocIDLength(&socIDLength);
     DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-    UT_LOG("Step 02: Fetch SOC ID (1st time) -> Expected: dsERR_NONE, Got: %d\n", result);
+    UT_LOG("Step 02: Fetch SOC ID Length (1st time) -> Expected: dsERR_NONE, Got: %d\n", result);
 
-    // Step 03: dsGetSocIDFromSDK() Call with a valid pointer to store the SOC ID again
-    result = dsGetSocIDFromSDK(socID2);
+    // Step 03: dsGetSocIDFromSDK() Call with a valid pointer to store the SOC ID
+    result = dsGetSocIDFromSDK(socID1, socIDLength);
     DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-    UT_LOG("Step 03: Fetch SOC ID (2nd time) -> Expected: dsERR_NONE, Got: %d\n", result);
+    UT_LOG("Step 03: Fetch SOC ID (1st time) -> Expected: dsERR_NONE, Got: %d\n", result);
 
-    // Step 04: Compare return values from step 2/3 to ensure they are the same
+    // Step 04: dsGetSocIDFromSDK() Call with a valid pointer to store the SOC ID again
+    result = dsGetSocIDFromSDK(socID2, socIDLength);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_LOG("Step 04: Fetch SOC ID (2nd time) -> Expected: dsERR_NONE, Got: %d\n", result);
+
+    // Step 05: Compare return values from step 2/3 to ensure they are the same
     DS_ASSERT_AUTO_TERM_NUMERICAL(strcmp(socID1, socID2),0);
-    UT_LOG("Step 04: Compare SOC IDs from Step 2 and Step 3 -> Expected: Match, Result: Matched\n");
+    UT_LOG("Step 05: Compare SOC IDs from Step 2 and Step 3 -> Expected: Match, Result: Matched\n");
 
-    // Step 05: dsHostTerm() Terminate dsHost
+    // Step 06: dsHostTerm() Terminate dsHost
     result = dsHostTerm();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
-    UT_LOG("Step 05: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+    UT_LOG("Step 06: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -568,9 +575,11 @@ void test_l1_dsHost_positive_dsGetSocIDFromSDK(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|dsGetSocIDFromSDK() Call without prior initialization | Valid char pointer (size of 8 bytes) | dsERR_NOT_INITIALIZED | Fetching SOC ID should fail as module is not initialized |
  * |02|dsHostInit() Initialize dsHost | | dsERR_NONE | Initialization should pass |
- * |03|dsGetSocIDFromSDK() Call with NULL pointer | NULL | dsERR_INVALID_PARAM | Should return invalid parameter error |
- * |04|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful |
- * |05|dsGetSocIDFromSDK() Call after termination | Valid char pointer (size of 8 bytes) | dsERR_NOT_INITIALIZED | Fetching SOC ID should fail as module is terminated |
+ * |03|dsGetSocIDLength() Call with a valid pointer to get SOC ID length | Valid unsigned int pointer | dsERR_NONE | SOC ID length should be fetched successfully |
+ * |04|dsGetSocIDFromSDK() Call with NULL pointer | NULL, valid length fetched from step 03 | dsERR_INVALID_PARAM | Should return invalid parameter error |
+ * |05|dsGetSocIDFromSDK() Call with valid pointer and zero length| Valid char pointer, length = 0 | dsERR_INVALID_PARAM | Should return invalid parameter error |
+ * |06|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful |
+ * |07|dsGetSocIDFromSDK() Call after termination | Valid char pointer (size of 8 bytes) | dsERR_NOT_INITIALIZED | Fetching SOC ID should fail as module is terminated |
  * 
  * @note Testing for dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED in dsGetSocIDFromSDK() might be challenging as these represent undefined platform
  * 
@@ -580,9 +589,10 @@ void test_l1_dsHost_negative_dsGetSocIDFromSDK(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 	
     char socID[1024] = {0};
+    unsigned int socIDLength = 0;
 
     // Step 01: dsGetSocIDFromSDK() Call without prior initialization
-    dsError_t result = dsGetSocIDFromSDK(socID);
+    dsError_t result = dsGetSocIDFromSDK(socID, socIDLength);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("Step 01: Fetch SOC ID without initialization -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
 
@@ -591,20 +601,30 @@ void test_l1_dsHost_negative_dsGetSocIDFromSDK(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
     UT_LOG("Step 02: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
-    // Step 03: dsGetSocIDFromSDK() Call with NULL pointer
-    result = dsGetSocIDFromSDK(NULL);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-    UT_LOG("Step 03: Fetch SOC ID with NULL pointer -> Expected: dsERR_INVALID_PARAM, Got: %d\n", result);
+    // Step 03: dsGetSocIDLength() Call with a valid pointer to store the SOC ID Length
+    result = dsGetSocIDLength(&socIDLength);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_LOG("Step 03: Fetch SOC ID Length (1st time) -> Expected: dsERR_NONE, Got: %d\n", result);
 
-    // Step 04: dsHostTerm() Terminate dsHost
+    // Step 04: dsGetSocIDFromSDK() Call with NULL pointer and valid length
+    result = dsGetSocIDFromSDK(NULL, socIDLength);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_LOG("Step 04: Fetch SOC ID with NULL pointer -> Expected: dsERR_INVALID_PARAM, Got: %d\n", result);
+
+    // Step 05: dsGetSocIDFromSDK() Call with valid pointer and zero length
+    result = dsGetSocIDFromSDK(socID, 0);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_LOG("Step 05: Fetch SOC ID with zero length -> Expected: dsERR_INVALID_PARAM, Got: %d\n", result);
+
+    // Step 06: dsHostTerm() Terminate dsHost
     result = dsHostTerm();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
-    UT_LOG("Step 04: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+    UT_LOG("Step 06: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
-    // Step 05: dsGetSocIDFromSDK() Call after termination
-    result = dsGetSocIDFromSDK(socID);
+    // Step 07: dsGetSocIDFromSDK() Call after termination
+    result = dsGetSocIDFromSDK(socID, socIDLength);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    UT_LOG("Step 05: Fetch SOC ID after termination -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+    UT_LOG("Step 07: Fetch SOC ID after termination -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -735,10 +755,11 @@ void test_l1_dsHost_negative_dsGetHostEDIDSize(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
  * |01|dsHostInit() Initialize dsHost | | dsERR_NONE | Initialization should pass |
- * |02|dsGetHostEDID() Call with valid pointers for edid and length | Valid unsigned char pointer, valid int pointer | dsERR_NONE | EDID and its length should be fetched successfully |
- * |03|dsGetHostEDID() Call with valid pointers for edid and length | Valid unsigned char pointer, valid int pointer | dsERR_NONE | EDID and its length should be fetched successfully |
- * |04|Compare returns from step 2/3 and verify they are the same| |  | Should succeed |
- * |05|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful |
+ * |02|dsGetHostEDIDSize() Call with valid pointers for edid length | Valid unsigned int pointer | dsERR_NONE | EDID length should be fetched successfully |
+ * |03|dsGetHostEDID() Call with valid pointers for edid and length | Valid unsigned char pointer, valid int | dsERR_NONE | EDID and its length should be fetched successfully |
+ * |04|dsGetHostEDID() Call with valid pointers for edid and length | Valid unsigned char pointer, valid int | dsERR_NONE | EDID and its length should be fetched successfully |
+ * |05|Compare returns from step 2/3 and verify they are the same| |  | Should succeed |
+ * |06|dsHostTerm() Terminate dsHost | | dsERR_NONE | Termination should be successful |
  * 
  */
 void test_l1_dsHost_positive_dsGetHostEDID(void) {
@@ -747,33 +768,36 @@ void test_l1_dsHost_positive_dsGetHostEDID(void) {
 	
     unsigned char edid1[EDID_MAX_DATA_SIZE] = {0};  
     unsigned char edid2[EDID_MAX_DATA_SIZE] = {0};
-    int length1 = 0;
-    int length2 = 0;
+    unsigned int maxEDIDLength = 0;
 
     // Step 01: dsHostInit() Initialize dsHost
     dsError_t result = dsHostInit();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
     UT_LOG("Step 01: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
-    // Step 02: dsGetHostEDID() Call with valid pointers for edid and length
-    result = dsGetHostEDID(edid1, &length1);
+    // Step 02: dsGetHostEDIDSize() Call with valid pointers for edid length
+    result = dsGetHostEDIDSize(&maxEDIDLength);
     DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
     UT_LOG("Step 02: Fetch Host EDID (1st time) -> Expected: dsERR_NONE, Got: %d\n", result);
 
-    // Step 03: dsGetHostEDID() Call with valid pointers for edid and length again
-    result = dsGetHostEDID(edid2, &length2);
+    // Step 03: dsGetHostEDID() Call with valid pointers for edid and length
+    result = dsGetHostEDID(edid1, maxEDIDLength);
     DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-    UT_LOG("Step 03: Fetch Host EDID (2nd time) -> Expected: dsERR_NONE, Got: %d\n", result);
+    UT_LOG("Step 03: Fetch Host EDID (1st time) -> Expected: dsERR_NONE, Got: %d\n", result);
 
-    // Step 04: Compare EDIDs from step 2/3 and verify they are the same
-    DS_ASSERT_AUTO_TERM_NUMERICAL(length1, length2);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(memcmp(edid1, edid2, length1), 0);
-    UT_LOG("Step 04: Compare EDIDs from Step 2 and Step 3 -> Expected: Match, Result: Matched\n");
+    // Step 04: dsGetHostEDID() Call with valid pointers for edid and length again
+    result = dsGetHostEDID(edid2, maxEDIDLength);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_LOG("Step 04: Fetch Host EDID (2nd time) -> Expected: dsERR_NONE, Got: %d\n", result);
 
-    // Step 05: dsHostTerm() Terminate dsHost
+    // Step 05: Compare EDIDs from step 2/3 and verify they are the same
+    DS_ASSERT_AUTO_TERM_NUMERICAL(memcmp(edid1, edid2, maxEDIDLength), 0);
+    UT_LOG("Step 05: Compare EDIDs from Step 2 and Step 3 -> Expected: Match, Result: Matched\n");
+
+    // Step 06: dsHostTerm() Terminate dsHost
     result = dsHostTerm();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
-    UT_LOG("Step 05: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+    UT_LOG("Step 06: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -794,10 +818,11 @@ void test_l1_dsHost_positive_dsGetHostEDID(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|dsGetHostEDID() Call without prior initialization | Valid unsigned char pointer, valid int pointer | dsERR_NOT_INITIALIZED | Fetching EDID should fail as module is not initialized |
  * |02|dsHostInit() Initialize dsHost| | dsERR_NONE | Initialization should pass |
- * |03|dsGetHostEDID() Call with NULL pointers | Valid char, NULL | dsERR_INVALID_PARAM | Should return invalid parameter error |
- * |04|dsGetHostEDID() Call with NULL pointers | NULL, Valid length | dsERR_INVALID_PARAM | Should return invalid parameter error |
- * |05|dsHostTerm() Terminate dsHost| | dsERR_NONE | Termination should be successful |
- * |06|dsGetHostEDID() Call after termination | Valid unsigned char pointer, valid int pointer | dsERR_NOT_INITIALIZED | Fetching EDID should fail as module is terminated |
+ * |03|dsGetHostEDIDSize() Call with valid pointers for edid length | Valid unsigned int pointer | dsERR_NONE | EDID length should be fetched successfully |
+ * |04|dsGetHostEDID() Call with NULL pointers | NULL, valid length | dsERR_INVALID_PARAM | Should return invalid parameter error |
+ * |05|dsGetHostEDID() Call with invalid length | valid pointer, length=0 | dsERR_INVALID_PARAM | Should return invalid parameter error |
+ * |06|dsHostTerm() Terminate dsHost| | dsERR_NONE | Termination should be successful |
+ * |07|dsGetHostEDID() Call after termination | Valid unsigned char pointer, valid int pointer | dsERR_NOT_INITIALIZED | Fetching EDID should fail as module is terminated |
  * 
  * @note Testing for dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED in dsGetHostEDID() might be challenging as these represent undefined platform errors or specific hardware constraints. Such errors can be hard to simulate consistently in a controlled testing environment.
  */
@@ -806,10 +831,10 @@ void test_l1_dsHost_negative_dsGetHostEDID(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 	
     unsigned char edid[EDID_MAX_DATA_SIZE]= {0};  // Making an assumption about maximum EDID size.
-    int length;
+    unsigned int maxEDIDLength = 0;
 
     // Step 01: dsGetHostEDID() Call without prior initialization
-    dsError_t result = dsGetHostEDID(edid, &length);
+    dsError_t result = dsGetHostEDID(edid, maxEDIDLength);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("Step 01: Fetch Host EDID without initialization -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
 
@@ -818,25 +843,30 @@ void test_l1_dsHost_negative_dsGetHostEDID(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
     UT_LOG("Step 02: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
-    // Step 03: dsGetHostEDID() Call with NULL pointers
-    result = dsGetHostEDID(edid, NULL);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-    UT_LOG("Step 03: Fetch Host EDID with NULL pointers -> Expected: dsERR_INVALID_PARAM, Got: %d\n", result);
+    // Step 03: dsGetHostEDIDSize() Call with valid pointers for edid length
+    result = dsGetHostEDIDSize(&maxEDIDLength);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_LOG("Step 03: Fetch Host EDID (1st time) -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 04: dsGetHostEDID() Call with NULL pointers
-    result = dsGetHostEDID(NULL, &length);
+    result = dsGetHostEDID(NULL, maxEDIDLength);
     DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
-    UT_LOG("Step 03: Fetch Host EDID with NULL pointers -> Expected: dsERR_INVALID_PARAM, Got: %d\n", result);
+    UT_LOG("Step 04: Fetch Host EDID with NULL pointers -> Expected: dsERR_INVALID_PARAM, Got: %d\n", result);
 
-    // Step 05: dsHostTerm() Terminate dsHost
+    // Step 05: dsGetHostEDID() Call with invalid length
+    result = dsGetHostEDID(edid, 0);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_LOG("Step 05: Fetch Host EDID with NULL pointers -> Expected: dsERR_INVALID_PARAM, Got: %d\n", result);
+
+    // Step 06: dsHostTerm() Terminate dsHost
     result = dsHostTerm();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
-    UT_LOG("Step 04: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
+    UT_LOG("Step 06: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
-    // Step 06: dsGetHostEDID() Call after termination
-    result = dsGetHostEDID(edid, &length);
+    // Step 07: dsGetHostEDID() Call after termination
+    result = dsGetHostEDID(edid, &maxEDIDLength);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    UT_LOG("Step 05: Fetch Host EDID after termination -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+    UT_LOG("Step 07: Fetch Host EDID after termination -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 

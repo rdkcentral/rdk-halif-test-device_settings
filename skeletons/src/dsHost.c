@@ -49,10 +49,11 @@ dsError_t __attribute__((weak)) dsGetSocIDLength(unsigned int *pSocIDLength)
   return (dsError_t)0;
 }
 
-dsError_t __attribute__((weak)) dsGetSocIDFromSDK(char* socID)
+dsError_t __attribute__((weak)) dsGetSocIDFromSDK(char* socID, unsigned int SocIDLength)
 {
   /*TODO: Implement Me!*/
   (void)socID;
+  (void)SocIDLength;
   return (dsError_t)0;
 }
 
@@ -63,7 +64,7 @@ dsError_t __attribute__((weak)) dsError_t dsGetHostEDIDSize(unsigned int *pMaxED
   return (dsError_t)0;
 }
 
-dsError_t __attribute__((weak)) dsGetHostEDID(unsigned char* edid, int* length)
+dsError_t __attribute__((weak)) dsGetHostEDID(unsigned char* edid, unsigned int length)
 {
   /*TODO: Implement Me!*/
   (void)edid;
