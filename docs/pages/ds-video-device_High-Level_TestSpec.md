@@ -1,4 +1,4 @@
-# Device Settings Video Device Test Specification Documentation
+# Device Settings Video Device High Level Test Specification Documentation
 
 ## Table of Contents
 
@@ -26,13 +26,15 @@
 
 ## Introduction
 
-This document provides an overview of the testing requirements for the Device Settings Video Device module. It outlines the scope of testing, objectives, testing levels and approaches, specific test requirements, and expected deliverables.
+This document provides an overview of the High Level testing requirements for the Device Settings Video Device module. It outlines the scope of testing, objectives, testing levels and approaches, specific test requirements, and expected deliverables.
 
 Interface of the test is available here: [dsVideoDevice HAL header](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsVideoDevice.h)
 
 ## Module Description
 
 `DS` Video device `HAL` provides a set of `APIs` to initialize, query and set information about about the zoom mode, `HDR` capabilities, Video encoding formats and frame rate.
+
+Interface specification is available here: [dsVideoPort HAL Spec](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/docs/pages/ds-video-device_halSpec.md)
 
 ## Testing Scope
 
@@ -59,9 +61,10 @@ Supported zoom modes [dsVideoZoom_t link](https://github.com/rdkcentral/rdk-hali
 
 ### Check the Zoom Control
 
-|Test Functionality|Description|L2|L3|Source|Sink|
-|------------------|-----------|--|--|------|----|
-|Check the zoom mode status|Ensure that the video device can be retrieved and the zoom mode can be set, retrieved and verify successfully with/without Video playback |`Y`|`Y`|`Y`|`NA`|
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Check the zoom mode status|Ensure that the each video device can be retrieved and the zoom mode can be set using  configuration file and verify using get|dsGetVideoDevice(), dsSetDFC(), dsGetDFC()|`Y`|`N`|`Y`|`NA`|`NA`|
+||Ensure that the each video device can be retrieved and the zoom mode can be set using  configuration file and verify using get with Video playback & connected device |dsGetVideoDevice(), dsSetDFC(), dsGetDFC()|`NA`|`Y`|`Y`|`NA`|`Y`|
 
 #### Test Startup Requirement-Check the Zoom Control
 
@@ -77,13 +80,13 @@ Verify the applied zoom mode during playback with analyzer.
 
 ### Check the HDR Capability
 
-|Test Functionality|Description|L2|L3|Source|Sink|
-|------------------|-----------|--|--|------|----|
-|Check `HDR` Capability|Get the `HDR` capabilities and status|`Y`|`NA`|`Y`|`Y`|
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Check `HDR` Capability|Get the `HDR` capabilities for each port and verify with the configuration file|dsGetHDRCapabilities()|`Y`|`NA`|`Y`|`Y`|`NA`|
 
 #### Test Startup Requirement-Check the HDR Capability
 
-Playback the pre-define streams
+`NA`
 
 #### Emulator Requirements-Check the HDR Capability
 
@@ -91,17 +94,18 @@ Playback the pre-define streams
 
 #### Control Plane Requirements-Check the HDR Capability
 
-Verify the `HDR` status with analyzer.
+`NA`
 
 ### Check Video codec and Formats
 
-|Test Functionality|Description|L2|L3|Source|Sink|
-|------------------|-----------|--|--|------|----|
-|Check Video codec Formats and information|Check the supported Video coding format |`Y`|`NA`|`Y`|`Y`|
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Check Video coding Formats and information|Check each video device the supported Video coding format and verify the with configuration file or profile|dsGetSupportedVideoCodingFormats() |`Y`|`NA`|`Y`|`Y`|`NA`|
+||Check the supported Video codec information for each port and verify the with configuration file or profile|dsGetVideoCodecInfo() |`Y`|`NA`|`Y`|`NA`|`NA`|
 
 #### Test Startup Requirement-Check Video codec and Formats
 
-Playback the pre-define streams
+`NA`
 
 #### Emulator Requirements-Check Video codec and Formats
 
@@ -109,14 +113,14 @@ Playback the pre-define streams
 
 #### Control Plane Requirements-Check Video codec and Formats
 
-None
+`NA`
 
 ### Check the Display frame rate Capability
 
-|Test Functionality|Description|L2|L3|Source|Sink|
-|------------------|-----------|--|--|------|----|
-|Check the Display frame rate Capability|set, retrieved and verify the display framerate successfully|`Y`|`NA`|`NA`|Y|
-||Set the frame rate and check if callbacks are triggered|`NA`|`Y`|`NA`|`Y`|
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Check the Display frame rate Capability|Set the supported display frame rate using configuration file and verify using get|dsSetDisplayframerate(), dsGetCurrentDisplayframerate()|`Y`|`NA`|`NA`|`Y`|`NA`|
+||Set the supported display frame rate using configuration file and check if callbacks are triggered|dsSetDisplayframerate(), dsRegisterFrameratePreChangeCB(), dsRegisterFrameratePostChangeCB()|`NA`|`Y`|`NA`|`Y`|`Y`|
 
 #### Test Startup Requirement-Check the Display frame rate Capability
 
