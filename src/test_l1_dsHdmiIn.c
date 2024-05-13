@@ -322,6 +322,8 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetNumberOfInputs(void) {
     // Step 3: Call dsHdmiInGetNumberOfInputs() with NULL as the parameter
     #ifdef ENABLE_ENHANCED_ERROR_CODE
     DS_ASSERT_AUTO_TERM_NUMERICAL(dsHdmiInGetNumberOfInputs(NULL), dsERR_INVALID_PARAM);
+    #else
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsHdmiInGetNumberOfInputs(NULL), dsERR_NONE);
     #endif
 
     // Step 4: Call dsHdmiInTerm() to ensure deinitialization
@@ -422,6 +424,8 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetStatus(void) {
     // Step 3: Call dsHdmiInGetStatus() with NULL as the parameter
     #ifdef ENABLE_ENHANCED_ERROR_CODE
     DS_ASSERT_AUTO_TERM_NUMERICAL(dsHdmiInGetStatus(NULL), dsERR_INVALID_PARAM);
+    #else
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsHdmiInGetStatus(NULL), dsERR_GENERAL);
     #endif
 
     // Step 4: Call dsHdmiInTerm() to ensure deinitialization
@@ -664,6 +668,10 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSelectZoomMode(void) {
         dsVideoZoom_t zoomMode = i;
         DS_ASSERT_AUTO_TERM_NUMERICAL(dsHdmiInSelectZoomMode(zoomMode), dsERR_NONE);
     }
+    #else
+    for (int i = dsVIDEO_ZOOM_NONE; i < dsVIDEO_ZOOM_MAX; i++) {
+        dsVideoZoom_t zoomMode = i;
+        DS_ASSERT_AUTO_TERM_NUMERICAL(dsHdmiInSelectZoomMode(zoomMode), dsERR_GENERAL);
     #endif
 
     // Step 3: Call dsHdmiInTerm() to ensure deinitialization
@@ -707,6 +715,8 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode(void) {
     // Step 3: Call dsHdmiInSelectZoomMode() with invalid value (dsVIDEO_ZOOM_MAX)
     #ifdef ENABLE_ENHANCED_ERROR_CODE
     DS_ASSERT_AUTO_TERM_NUMERICAL(dsHdmiInSelectZoomMode(dsVIDEO_ZOOM_MAX), dsERR_INVALID_PARAM);
+    #else
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsHdmiInSelectZoomMode(dsVIDEO_ZOOM_MAX), dsERR_GENERAL);
     #endif
 
     // Step 4: Call dsHdmiInTerm() to ensure deinitialization
@@ -807,6 +817,8 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetCurrentVideoMode(void) {
     // Step 3: dsHdmiInGetCurrentVideoMode() with NULL `resolution` pointer
     #ifdef ENABLE_ENHANCED_ERROR_CODE
     DS_ASSERT_AUTO_TERM_NUMERICAL(dsHdmiInGetCurrentVideoMode(NULL), dsERR_INVALID_PARAM);
+    #else
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsHdmiInGetCurrentVideoMode(NULL), dsERR_GENERAL);
     #endif
 	
     // Step 4: Call dsHdmiInTerm() to ensure deinitialization
@@ -1483,11 +1495,15 @@ void test_l1_dsHdmiIn_negative_dsIsHdmiARCPort(void) {
     // Step 3: Call dsIsHdmiARCPort() with invalid value (dsHDMI_IN_PORT_MAX)
     #ifdef ENABLE_ENHANCED_ERROR_CODE
     DS_ASSERT_AUTO_TERM_NUMERICAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_MAX, &isArcPort), dsERR_INVALID_PARAM);
+    #else
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_MAX, &isArcPort), dsERR_NONE);
     #endif
 
     // Step 4: Call dsIsHdmiARCPort() with invalid value (dsHDMI_IN_PORT_0) and NULL pointer
     #ifdef ENABLE_ENHANCED_ERROR_CODE
     DS_ASSERT_AUTO_TERM_NUMERICAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_0, NULL), dsERR_INVALID_PARAM);
+    #else
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_0, NULL), dsERR_NONE);
     #endif
 
     // Step 5: Call dsHdmiInTerm() to ensure deinitialization
@@ -1607,16 +1623,22 @@ void test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo(void) {
     // Step 3: Call dsGetEDIDBytesInfo() with invalid value (dsHDMI_IN_PORT_MAX)
     #ifdef ENABLE_ENHANCED_ERROR_CODE
     DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_MAX, edidBytes, &edidSize), dsERR_INVALID_PARAM);
+    #else
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_MAX, edidBytes, &edidSize), dsERR_GENERAL);
     #endif
 
     // Step 4: Call dsGetEDIDBytesInfo() with invalid value (NULL pointer)
     #ifdef ENABLE_ENHANCED_ERROR_CODE
     DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, NULL, &edidSize), dsERR_INVALID_PARAM);
+    #else
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, NULL, &edidSize), dsERR_GENERAL);
     #endif
 
     // Step 5: Call dsGetEDIDBytesInfo() with invalid value (NULL pointer)
     #ifdef ENABLE_ENHANCED_ERROR_CODE
     DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, edidBytes, NULL), dsERR_INVALID_PARAM);
+    #else
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, edidBytes, NULL), dsERR_GENERAL);
     #endif
 
     // Step 6: Call dsHdmiInTerm() to ensure deinitialization
@@ -1729,11 +1751,15 @@ void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo(void) {
     // Step 3: Call dsGetHDMISPDInfo() with invalid values (dsHDMI_IN_PORT_MAX)
     #ifdef ENABLE_ENHANCED_ERROR_CODE
     DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_MAX, spdInfo1), dsERR_INVALID_PARAM);
+    #else
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_MAX, spdInfo1), dsERR_GENERAL);
     #endif
 
     // Step 4: Call dsGetHDMISPDInfo() with invalid values (NULL pointer)
     #ifdef ENABLE_ENHANCED_ERROR_CODE
     DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, NULL), dsERR_INVALID_PARAM);
+    #else
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, NULL), dsERR_GENERAL);
     #endif
 
     // Step 5: Call dsHdmiInTerm() to ensure deinitialization
@@ -1829,11 +1855,15 @@ void test_l1_dsHdmiIn_negative_dsSetEdidVersion(void) {
     // Step 3: Call dsSetEdidVersion() with invalid inputs (dsHDMI_IN_PORT_MAX)
     #ifdef ENABLE_ENHANCED_ERROR_CODE
     DS_ASSERT_AUTO_TERM_NUMERICAL(dsSetEdidVersion(dsHDMI_IN_PORT_MAX, HDMI_EDID_VER_14), dsERR_INVALID_PARAM);
+    #else
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsSetEdidVersion(dsHDMI_IN_PORT_MAX, HDMI_EDID_VER_14), dsERR_GENERAL);
     #endif
 
     // Step 4: Call dsSetEdidVersion() with invalid inputs (HDMI_EDID_VER_MAX)
     #ifdef ENABLE_ENHANCED_ERROR_CODE
     DS_ASSERT_AUTO_TERM_NUMERICAL(dsSetEdidVersion(dsHDMI_IN_PORT_0, HDMI_EDID_VER_MAX), dsERR_INVALID_PARAM);
+    #else
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsSetEdidVersion(dsHDMI_IN_PORT_0, HDMI_EDID_VER_MAX), dsERR_GENERAL);
     #endif
 
     // Step 5: Call dsHdmiInTerm() to ensure deinitialization
@@ -1924,11 +1954,15 @@ void test_l1_dsHdmiIn_negative_dsGetEdidVersion(void) {
     // Step 3: Call dsGetEdidVersion() with invalid inputs (dsHDMI_IN_PORT_MAX)
     #ifdef ENABLE_ENHANCED_ERROR_CODE
     DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetEdidVersion(dsHDMI_IN_PORT_MAX, &edid_version), dsERR_INVALID_PARAM);
+    #else
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetEdidVersion(dsHDMI_IN_PORT_MAX, &edid_version), dsERR_GENERAL);
     #endif
 
     // Step 4: Call dsGetEdidVersion() with invalid inputs (NULL)
     #ifdef ENABLE_ENHANCED_ERROR_CODE
     DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetEdidVersion(dsHDMI_IN_PORT_0, NULL), dsERR_INVALID_PARAM);
+    #else
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetEdidVersion(dsHDMI_IN_PORT_0, NULL), dsERR_GENERAL);
     #endif
 
     // Step 5: Call dsHdmiInTerm() to ensure deinitialization
@@ -2029,11 +2063,15 @@ void test_l1_dsHdmiIn_negative_dsGetAllmStatus(void) {
     // Step 3: Call dsGetAllmStatus() without valid inputs (dsHDMI_IN_PORT_MAX)
     #ifdef ENABLE_ENHANCED_ERROR_CODE
     DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetAllmStatus(dsHDMI_IN_PORT_MAX, &allm_status), dsERR_INVALID_PARAM);
+    #else
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetAllmStatus(dsHDMI_IN_PORT_MAX, &allm_status), dsERR_GENERAL);
     #endif
 
     // Step 4: Call dsGetAllmStatus() without valid inputs (NULL)
     #ifdef ENABLE_ENHANCED_ERROR_CODE
     DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetAllmStatus(dsHDMI_IN_PORT_0, NULL), dsERR_INVALID_PARAM);
+    #else
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetAllmStatus(dsHDMI_IN_PORT_0, NULL), dsERR_GENERAL);
     #endif
 
     // Step 5: Call dsHdmiInTerm() to ensure deinitialization
@@ -2126,6 +2164,8 @@ void test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList(void) {
     // Step 3: Call dsGetSupportedGameFeaturesList() with invalid input (NULL)
     #ifdef ENABLE_ENHANCED_ERROR_CODE
     DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetSupportedGameFeaturesList(NULL), dsERR_INVALID_PARAM);
+    #else
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetSupportedGameFeaturesList(NULL), dsERR_GENERAL);
     #endif
 
     // Step 4: Call dsHdmiInTerm() to ensure deinitialization
@@ -2213,11 +2253,15 @@ void test_l1_dsHdmiIn_negative_dsGetAVLatency(void) {
     // Step 3: Call dsGetAVLatency() with valid inputs (NULL, int*)
     #ifdef ENABLE_ENHANCED_ERROR_CODE
     DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetAVLatency(NULL, &videoLatency), dsERR_INVALID_PARAM);
+    #else
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetAVLatency(NULL, &videoLatency), dsERR_NONE);
     #endif
 
     // Step 4: Call dsGetAVLatency() with valid inputs (int*, NULL)
     #ifdef ENABLE_ENHANCED_ERROR_CODE
     DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetAVLatency(&audioLatency, NULL), dsERR_INVALID_PARAM);
+    #else
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsGetAVLatency(&audioLatency, NULL), dsERR_NONE);
     #endif
 
     // Step 5: Call dsHdmiInTerm() to ensure deinitialization
@@ -2304,6 +2348,8 @@ void test_l1_dsHdmiIn_negative_dsSetEdid2AllmSupport(void) {
     // Step 3: Call dsSetEdid2AllmSupport() with an invalid HDMI port
     #ifdef ENABLE_ENHANCED_ERROR_CODE
     DS_ASSERT_AUTO_TERM_NUMERICAL(dsSetEdid2AllmSupport(dsHDMI_IN_PORT_MAX, true), dsERR_INVALID_PARAM);
+    #else
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsSetEdid2AllmSupport(dsHDMI_IN_PORT_MAX, true), dsERR_GENERAL);
     #endif
 
     // Step 4: Terminate the HDMI input using dsHdmiInTerm()
