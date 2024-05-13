@@ -167,9 +167,9 @@ void test_l1_dsVideoDevice_negative_dsVideoDeviceInit(void)
     // Step 02: Try initializing again without terminating
     result = dsVideoDeviceInit();
     #ifdef ENABLE_ENHANCED_ERROR_CODE
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_ALREADY_INITIALIZED);
+    UT_ASSERT_EQUAL(result, dsERR_ALREADY_INITIALIZED);
     #else
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
     #endif
 
     // Step 03: De-initialize the video devices for cleanup
@@ -303,7 +303,7 @@ void test_l1_dsVideoDevice_positive_dsGetVideoDevice(void)
     // Step 02: Get the video device handle
     intptr_t handle = -1;
     result = dsGetVideoDevice(0, &handle);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
     UT_ASSERT_TRUE(handle >= 0);
 
     // Step 03: De-initialize the video devices
@@ -355,11 +355,11 @@ void test_l1_dsVideoDevice_negative_dsGetVideoDevice(void)
 
     // Step 03: Get the video device handle with invalid index
     result = dsGetVideoDevice(-1, &handle);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 04: Get the video device handle with valid index but null pointer for handle
     result = dsGetVideoDevice(0, NULL);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 05: De-initialize the video devices
     result = dsVideoDeviceTerm();
@@ -420,7 +420,7 @@ void test_l1_dsVideoDevice_positive_dsSetDFC (void)
 
     // 02: Obtain video device handle
     result = dsGetVideoDevice(0, &handle);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
     UT_ASSERT_TRUE(handle >= 0);
 
     // 03-15: Set DFC mode with various zoom modes
@@ -428,7 +428,7 @@ void test_l1_dsVideoDevice_positive_dsSetDFC (void)
     {
         dsVideoZoom_t zoomMode = i;
         result = dsSetDFC(handle, zoomMode);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
     // 16: De-initialize video devices
@@ -481,16 +481,16 @@ void test_l1_dsVideoDevice_negative_dsSetDFC (void)
 
     // 03: Obtain video device handle
     result = dsGetVideoDevice(0, &handle);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
     UT_ASSERT_TRUE(handle >= 0);
 
     // 04: Call dsSetDFC() with an invalid handle
     result = dsSetDFC(-1, dsVIDEO_ZOOM_NONE);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // 05: Call dsSetDFC() with an invalid zoom mode
     result = dsSetDFC(handle, dsVIDEO_ZOOM_MAX);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // 06: De-initialize video devices
     result = dsVideoDeviceTerm();
@@ -544,19 +544,19 @@ void test_l1_dsVideoDevice_positive_dsGetDFC(void)
 
     // Step 02: Obtain video device handle
     result = dsGetVideoDevice(index, &handle);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-    DS_ASSERT_AUTO_TERM_NUMERICAL((handle >= 0), true);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL((handle >= 0), true);
 
     // Step 03: Get the DFC mode using dsGetDFC() with the obtained handle
     result = dsGetDFC(handle, &dfc_mode_1);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 04: Get the DFC mode using dsGetDFC() again
     result = dsGetDFC(handle, &dfc_mode_2);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 05: Compare the results to make sure they match
-    DS_ASSERT_AUTO_TERM_NUMERICAL(memcmp(&dfc_mode_1, &dfc_mode_2, sizeof(dsVideoZoom_t)),0);
+    UT_ASSERT_EQUAL(memcmp(&dfc_mode_1, &dfc_mode_2, sizeof(dsVideoZoom_t)),0);
 
     // Step 06: De-initialize the video devices
     result = dsVideoDeviceTerm();
@@ -612,16 +612,16 @@ void test_l1_dsVideoDevice_negative_dsGetDFC(void)
 
     // Step 03: Obtain video device handle
     result = dsGetVideoDevice(index, &handle);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-    DS_ASSERT_AUTO_TERM_NUMERICAL((handle >= 0), true);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL((handle >= 0), true);
 
     // Step 04: Call dsGetDFC() with an invalid handle
     result = dsGetDFC(-1, &dfc_mode);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 05: Call dsGetDFC() with an invalid pointer
     result = dsGetDFC(handle, NULL);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 06: De-initialize the video devices
     result = dsVideoDeviceTerm();
@@ -675,20 +675,20 @@ void test_l1_dsVideoDevice_positive_dsGetHDRCapabilities(void)
     // Step 02: Obtain video device handle
     result = dsGetVideoDevice(index, &handle);
     UT_LOG("\nHandle: %d\n", handle);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-    DS_ASSERT_AUTO_TERM_NUMERICAL((handle >= 0), true);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL((handle >= 0), true);
 
     // Step 03: Get HDR capabilities using dsGetHDRCapabilities() with the obtained handle
     result = dsGetHDRCapabilities(handle, &hdr_capabilities_1);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 04: Get HDR capabilities using dsGetHDRCapabilities() again
     result = dsGetHDRCapabilities(handle, &hdr_capabilities_2);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 05: Compare the results to make sure they match
     UT_LOG("\nhdr1: %d, hrd2: %d\n", hdr_capabilities_1, hdr_capabilities_2);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(hdr_capabilities_1, hdr_capabilities_2);
+    UT_ASSERT_EQUAL(hdr_capabilities_1, hdr_capabilities_2);
 
     // Step 06: De-initialize the video devices
     result = dsVideoDeviceTerm();
@@ -744,20 +744,20 @@ void test_l1_dsVideoDevice_negative_dsGetHDRCapabilities(void)
 
     // Step 03: Obtain video device handle
     result = dsGetVideoDevice(index, &handle);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-    DS_ASSERT_AUTO_TERM_NUMERICAL((handle >= 0), true);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL((handle >= 0), true);
 
     // Step 04: Call dsGetHDRCapabilities() with an invalid handle
     result = dsGetHDRCapabilities(-1, &hdr_capabilities);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 05: Call dsGetHDRCapabilities() with a null parameter
     result = dsGetHDRCapabilities(handle, NULL);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 06: De-initialize the video devices
     result = dsVideoDeviceTerm();
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 07: Call dsGetHDRCapabilities() after termination
     result = dsGetHDRCapabilities(handle, &hdr_capabilities);
@@ -807,19 +807,19 @@ void test_l1_dsVideoDevice_positive_dsGetSupportedVideoCodingFormats(void)
 
     // Step 02: Obtain video device handle
     result = dsGetVideoDevice(index, &handle);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-    DS_ASSERT_AUTO_TERM_NUMERICAL((handle >= 0), true);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL((handle >= 0), true);
 
     // Step 03: Get supported video formats using dsGetSupportedVideoCodingFormats() with the obtained handle
     result = dsGetSupportedVideoCodingFormats(handle, &supported_formats_1);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 04: Get supported video formats using dsGetSupportedVideoCodingFormats() with the obtained handle
     result = dsGetSupportedVideoCodingFormats(handle, &supported_formats_2);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 05: Compare the results to make sure they match
-    DS_ASSERT_AUTO_TERM_NUMERICAL(supported_formats_1, supported_formats_2);
+    UT_ASSERT_EQUAL(supported_formats_1, supported_formats_2);
 
     // Step 06: De-initialize the video devices
     result = dsVideoDeviceTerm();
@@ -875,16 +875,16 @@ void test_l1_dsVideoDevice_negative_dsGetSupportedVideoCodingFormats(void)
 
     // Step 03: Obtain video device handle
     result = dsGetVideoDevice(index, &handle);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-    DS_ASSERT_AUTO_TERM_NUMERICAL((handle >= 0), true);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL((handle >= 0), true);
 
     // Step 04: Call dsGetSupportedVideoCodingFormats() with an invalid handle
     result = dsGetSupportedVideoCodingFormats(-1, &supported_formats);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 05: Call dsGetSupportedVideoCodingFormats() with a null value
     result = dsGetSupportedVideoCodingFormats(handle, NULL);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 06: De-initialize the video devices
     result = dsVideoDeviceTerm();
@@ -938,39 +938,39 @@ void test_l1_dsVideoDevice_positive_dsGetVideoCodecInfo(void)
 
     // Step 02: Obtain video device handle
     result = dsGetVideoDevice(index, &handle);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-    DS_ASSERT_AUTO_TERM_NUMERICAL((handle >= 0), true);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL((handle >= 0), true);
 
     // Step 03: Get video codec information with dsVIDEO_CODEC_MPEGHPART2
     result = dsGetVideoCodecInfo(handle, dsVIDEO_CODEC_MPEGHPART2, &codecInfo);
     #ifdef ENABLE_ENHANCED_ERROR_CODE
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
     #else
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     #endif
 
     // Step 04: Get video codec information with dsVIDEO_CODEC_MPEG4PART10
     result = dsGetVideoCodecInfo(handle, dsVIDEO_CODEC_MPEG4PART10, &codecInfo);
     #ifdef ENABLE_ENHANCED_ERROR_CODE
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
     #else
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     #endif
 
     // Step 05: Get video codec information with dsVIDEO_CODEC_MPEG2
     result = dsGetVideoCodecInfo(handle, dsVIDEO_CODEC_MPEG2, &codecInfo);
     #ifdef ENABLE_ENHANCED_ERROR_CODE
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
     #else
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_OPERATION_NOT_SUPPORTED); 
+    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED); 
     #endif
 
     // Step 06: Get video codec information with dsVIDEO_CODEC_MPEG2 (again to replicate the provided test case)
     result = dsGetVideoCodecInfo(handle, dsVIDEO_CODEC_MPEG2, &codecInfo);
     #ifdef ENABLE_ENHANCED_ERROR_CODE
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
     #else
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     #endif
 
     // Step 07: De-initialize the video devices
@@ -1029,20 +1029,20 @@ void test_l1_dsVideoDevice_negative_dsGetVideoCodecInfo(void)
 
     // Step 03: Obtain video device handle
     result = dsGetVideoDevice(index, &handle);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-    DS_ASSERT_AUTO_TERM_NUMERICAL((handle >= 0), true);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL((handle >= 0), true);
 
     // Step 04: Call dsGetVideoCodecInfo() with an invalid handle
     result = dsGetVideoCodecInfo(-1, dsVIDEO_CODEC_MPEGHPART2, &codecInfo);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 05: Call dsGetVideoCodecInfo() with an invalid coding format
     result = dsGetVideoCodecInfo(handle, dsVIDEO_CODEC_MAX, &codecInfo);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 06: Call dsGetVideoCodecInfo() with a null parameter
     result = dsGetVideoCodecInfo(handle, dsVIDEO_CODEC_MPEGHPART2, NULL);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 07: De-initialize the video devices
     result = dsVideoDeviceTerm();
@@ -1094,16 +1094,16 @@ void test_l1_dsVideoDevice_positive_dsForceDisableHDRSupport(void)
 
     // Step 02: Obtain video device handle
     result = dsGetVideoDevice(index, &handle);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-    DS_ASSERT_AUTO_TERM_NUMERICAL((handle >= 0), true);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL((handle >= 0), true);
 
     // Step 03: Force disable HDR support (set to true)
     result = dsForceDisableHDRSupport(handle, true);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 04: Force disable HDR support (set to false)
     result = dsForceDisableHDRSupport(handle, false);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 05: De-initialize the video devices
     result = dsVideoDeviceTerm();
@@ -1158,12 +1158,12 @@ void test_l1_dsVideoDevice_negative_dsForceDisableHDRSupport(void)
 
     // Step 03: Obtain video device handle
     result = dsGetVideoDevice(index, &handle);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-    DS_ASSERT_AUTO_TERM_NUMERICAL((handle >= 0), true);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL((handle >= 0), true);
 
     // Step 04: Call dsForceDisableHDRSupport() with an invalid handle
     result = dsForceDisableHDRSupport(-1, true);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 05: De-initialize the video devices
     result = dsVideoDeviceTerm();
@@ -1215,12 +1215,12 @@ void test_l1_dsVideoDevice_positive_dsSetFRFMode(void)
 
     // Step 02: Obtain video device handle
     result = dsGetVideoDevice(index, &handle);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-    DS_ASSERT_AUTO_TERM_NUMERICAL((handle >= 0), true);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL((handle >= 0), true);
 
     // Step 03: Set the FRF mode using a valid framerate
     result = dsSetFRFMode(handle, validFramerate);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 04: De-initialize the video devices
     result = dsVideoDeviceTerm();
@@ -1276,16 +1276,16 @@ void test_l1_dsVideoDevice_negative_dsSetFRFMode(void)
 
     // Step 03: Obtain video device handle
     result = dsGetVideoDevice(index, &handle);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
-    DS_ASSERT_AUTO_TERM_NUMERICAL((handle >= 0), true);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL((handle >= 0), true);
 
     // Step 04: Call dsSetFRFMode() with an invalid handle
     result = dsSetFRFMode(-1, 60);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 05: Call dsSetFRFMode() with an invalid framerate
     result = dsSetFRFMode(handle, -1);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 06: De-initialize the video devices
     result = dsVideoDeviceTerm();
@@ -1340,19 +1340,19 @@ void test_l1_dsVideoDevice_positive_dsGetFRFMode(void)
 
     // Step 02: Obtain video device handle
     result = dsGetVideoDevice(index, &handle);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
     UT_ASSERT_TRUE(handle >= 0);
 
     // Step 03: Get the FRF mode using the obtained handle
     result = dsGetFRFMode(handle, &fetchedFRFMode1);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 04: Get the FRF mode using the obtained handle again
     result = dsGetFRFMode(handle, &fetchedFRFMode2);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 05: Compare the returned values
-    DS_ASSERT_AUTO_TERM_NUMERICAL(fetchedFRFMode1, fetchedFRFMode2);
+    UT_ASSERT_EQUAL(fetchedFRFMode1, fetchedFRFMode2);
 
     // Step 06: De-initialize the video devices
     result = dsVideoDeviceTerm();
@@ -1409,16 +1409,16 @@ void test_l1_dsVideoDevice_negative_dsGetFRFMode(void)
 
     // Step 03: Obtain video device handle
     result = dsGetVideoDevice(index, &handle);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
     UT_ASSERT_TRUE(handle >= 0);
 
     // Step 04: Call dsGetFRFMode() with an invalid handle
     result = dsGetFRFMode(-1, &fetchedFRFMode);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 05: Call dsGetFRFMode() with null value
     result = dsGetFRFMode(handle, NULL);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 06: De-initialize the video devices
     result = dsVideoDeviceTerm();
@@ -1473,19 +1473,19 @@ void test_l1_dsVideoDevice_positive_dsGetCurrentDisplayframerate(void)
 
     // Step 02: Obtain video device handle
     result = dsGetVideoDevice(index, &handle);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
     UT_ASSERT_TRUE(handle >= 0);
 
     // Step 03: Get the current display framerate using the obtained handle
     result = dsGetCurrentDisplayframerate(handle, fetchedFramerate1);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 04: Get the current display framerate again
     result = dsGetCurrentDisplayframerate(handle, fetchedFramerate2);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 05: Compare the returned values
-    DS_ASSERT_AUTO_TERM_NUMERICAL(strcmp(fetchedFramerate1, fetchedFramerate2), 0); // They should be the same
+    UT_ASSERT_EQUAL(strcmp(fetchedFramerate1, fetchedFramerate2), 0); // They should be the same
 
     // Step 06: De-initialize the video devices
     result = dsVideoDeviceTerm();
@@ -1542,16 +1542,16 @@ void test_l1_dsVideoDevice_negative_dsGetCurrentDisplayframerate(void)
 
     // Step 03: Obtain video device handle
     result = dsGetVideoDevice(index, &handle);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
     UT_ASSERT_TRUE(handle >= 0);
 
     // Step 04: Call dsGetCurrentDisplayframerate() with an invalid handle
     result = dsGetCurrentDisplayframerate(-1, fetchedFramerate);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 05: Call dsGetCurrentDisplayframerate() with NULL value
     result = dsGetCurrentDisplayframerate(handle, NULL);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 06: De-initialize the video devices
     result = dsVideoDeviceTerm();
@@ -1603,12 +1603,12 @@ void test_l1_dsVideoDevice_positive_dsSetDisplayframerate(void)
 
     // Step 02: Obtain video device handle
     result = dsGetVideoDevice(index, &handle);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
     UT_ASSERT_TRUE(handle >= 0);
 
     // Step 03: Set the display framerate using the obtained handle
     result = dsSetDisplayframerate(handle, desiredFramerate);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 04: De-initialize the video devices
     result = dsVideoDeviceTerm();
@@ -1665,20 +1665,20 @@ void test_l1_dsVideoDevice_negative_dsSetDisplayframerate(void)
 
     // Step 03: Obtain video device handle
     result = dsGetVideoDevice(index, &handle);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
     UT_ASSERT_TRUE(handle >= 0);
 
     // Step 04: Call dsSetDisplayframerate() with an invalid handle
     result = dsSetDisplayframerate(-1, "30fps");
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 05: Call dsSetDisplayframerate() with NULL char*
     result = dsSetDisplayframerate(handle, NULL);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 06: Call dsSetDisplayframerate() with invalid char*
     result = dsSetDisplayframerate(handle, "junk");
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 07: De-initialize the video devices
     result = dsVideoDeviceTerm();
