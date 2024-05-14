@@ -83,7 +83,7 @@ static int gTestID = 1;
 #define NUM_OF_PORTS (sizeof(kPorts) / sizeof(kPorts[0]))
 #define HANDLE_ARRAY_INIT 0
 
-#define UT_ASSERT_EQUAL(value, comparison){\
+#define DS_ASSERT_AUTO_TERM_NUMERICAL(value, comparison){\
 	if(value != comparison){\
 		UT_LOG("\n In %s Comparison: [%d = %d]\n", __FUNCTION__, value, comparison);\
 		dsVideoPortTerm();\
