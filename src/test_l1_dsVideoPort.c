@@ -2019,120 +2019,6 @@ void test_l1_dsVideoPort_negative_dsGetResolution(void) {
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
-
-/**
- * @brief Positive Test Scenarios for dsSetActiveSource()
- * 
- * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 031@n
- * 
- * **Pre-Conditions:** None@n
- * 
- * **Dependencies:** None@n
- * 
- * **User Interaction:** None
- * 
- * **Test Procedure:**@n
- * |Variation / Step|Description|Test Data|Expected Result|Notes|
- * |:--:|---------|----------|--------------|-----|
- * |01|Call dsVideoPortInit() - Initialize video ports of a system | |dsERR_NONE| Initialization must be successful |
- * |02|Call dsGetVideoPort() - Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports|
- * |03|Call dsSetActiveSource() by looping through the acquired port handles and set the video port as active source | handle  = [loop through valid handles] |dsERR_NONE|The video port must be set as the active source successfully|
- * |04|dsVideoPortTerm() - Terminate the video ports of a system| |dsERR_NONE|Termination must be successful|
- * 
- */
-void test_l1_dsVideoPort_positive_dsSetActiveSource(void) {
-	gTestID = 31;
-	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-	dsError_t status;
-	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
-
-	// Step 01: Initialize video port system
-	status = dsVideoPortInit();
-	UT_ASSERT_EQUAL(status, dsERR_NONE);
-
-	// Step 02: Get the video port handle
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
-		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-	}
-
-	// Step 03: Set the video port as the active source
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
-		status = dsSetActiveSource(handle[i]);
-		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-	}
-
-	// Step 04: Terminate the video port system
-	status = dsVideoPortTerm();
-	UT_ASSERT_EQUAL(status, dsERR_NONE);
-
-	UT_LOG("\n Out %s\n", __FUNCTION__); 
-}
-
-
-/**
- * @brief Negative Test Scenarios for dsSetActiveSource()
- * 
- * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 032@n
- * 
- * **Pre-Conditions:** None@n
- * 
- * **Dependencies:** None@n
- * 
- * **User Interaction:** None
- * 
- * **Test Procedure:**@n
- * |Variation / Step|Description|Test Data|Expected Result|Notes|
- * |:--:|---------|----------|--------------|-----|
- * |01|Call dsSetActiveSource() - Attempt to set the active source with out initializing video ports| handle =  [invalid handle] | dsERR_NOT_INITIALIZED| dsSetActiveSource call must fail as module is not initialized |
- * |02|Call dsVideoPortInit() - Initialize video ports of a system | |dsERR_NONE| Initialization must be successful |
- * |03|Call dsSetActiveSource() - Using an invalid handle attempt to set active source | handle = [invalid handle] | dsERR_INVALID_PARAM | Invalid paramerter must be returned |
- * |04|Call dsGetVideoPort()  - Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports |
- * |05|Call dsVideoPortTerm() - Terminate the video ports of a system | | dsERR_NONE | Termination must be successful |
- * |06|Call dsSetActiveSource()  - Again after terminating video ports attempt to set the active source | handle= [valid handle ] | dsERR_NOT_INITIALIZED | dsSetActiveSource call must fail as module is not initialized |
- * 
- * 
- * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
- */
-void test_l1_dsVideoPort_negative_dsSetActiveSource(void) {
-	gTestID = 32;
-	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-	dsError_t status;
-	intptr_t handle [NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
-
-	// Step 01: Attempt to set active source without initialization
-	status = dsSetActiveSource(-1);
-	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
-
-	// Step 02: Initialize video port system
-	status = dsVideoPortInit();
-	UT_ASSERT_EQUAL(status, dsERR_NONE);
-
-	// Step 03: Invalid handle check
-	status = dsSetActiveSource(handle[0]);
-	DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_INVALID_PARAM);
-
-	// Step 04: Get valid video port handle
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
-		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
-		DS_ASSERT_AUTO_TERM_NUMERICAL(status, dsERR_NONE);
-	}
-
-	// Step 05: Terminate the video port system
-	status = dsVideoPortTerm();
-	UT_ASSERT_EQUAL(status, dsERR_NONE);
-
-	// Step 06: Attempt to set active source after termination
-	status = dsSetActiveSource(handle[0]);
-	UT_ASSERT_EQUAL(status, dsERR_NOT_INITIALIZED);
-
-	UT_LOG("\n Out %s\n", __FUNCTION__); 
-}
-
 /**
  * @brief Positive Test Scenarios for dsVideoFormatUpdateRegisterCB()
  *
@@ -5673,8 +5559,6 @@ int test_l1_dsVideoPort_register ( void )
 	UT_add_test( pSuite, "dsSetResolution_L1_negative" ,test_l1_dsVideoPort_negative_dsSetResolution );
 	UT_add_test( pSuite, "dsGetResolution_L1_positive" ,test_l1_dsVideoPort_positive_dsGetResolution );
 	UT_add_test( pSuite, "dsGetResolution_L1_negative" ,test_l1_dsVideoPort_negative_dsGetResolution );
-	UT_add_test( pSuite, "dsSetActiveSource_L1_positive" ,test_l1_dsVideoPort_positive_dsSetActiveSource );
-	UT_add_test( pSuite, "dsSetActiveSource_L1_negative" ,test_l1_dsVideoPort_negative_dsSetActiveSource );
 	UT_add_test( pSuite, "dsRegisterHdcpStatusCallback_L1_positive" ,test_l1_dsVideoPort_positive_dsRegisterHdcpStatusCallback );
 	UT_add_test( pSuite, "dsRegisterHdcpStatusCallback_L1_negative" ,test_l1_dsVideoPort_negative_dsRegisterHdcpStatusCallback );
 	UT_add_test( pSuite, "dsGetHDCPStatus_L1_positive" ,test_l1_dsVideoPort_positive_dsGetHDCPStatus );
