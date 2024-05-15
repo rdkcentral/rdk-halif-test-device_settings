@@ -757,8 +757,8 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
     int length = 0;
 
     // Step 01: Call dsGetEDIDBytes() without initializing or obtaining a handle
+     result = dsGetEDIDBytes(displayHandle, edid, &length);
 #ifdef ENABLE_ENHANCED_ERROR_CODE
-    result = dsGetEDIDBytes(displayHandle, edid, &length);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     if(result != dsERR_NOT_INITIALIZED)
     {
@@ -766,6 +766,8 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
         free(edid);
         return;
     }
+#else
+     UT_ASSERT_EQUAL(result, dsERR_NONE);
 #endif
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
@@ -823,8 +825,8 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
     }
 
     // Step 08: Call dsGetEDIDBytes() without initializing or obtaining a handle
+     result = dsGetEDIDBytes(displayHandle, edid, &length);
 #ifdef ENABLE_ENHANCED_ERROR_CODE
-    result = dsGetEDIDBytes(displayHandle, edid, &length);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     if(result != dsERR_NOT_INITIALIZED)
     {
@@ -834,6 +836,8 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
     }
 
     free(edid);
+#else
+     UT_ASSERT_EQUAL(result, dsERR_NONE);
 #endif
     
     // End of the test
@@ -942,10 +946,13 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
     dsVideoAspectRatio_t aspectRatio;
 
     // Step 01: Call dsGetDisplayAspectRatio() without initializing the display sub-system
-#ifdef ENABLE_ENHANCED_ERROR_CODE
     result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio);
+
+#ifdef ENABLE_ENHANCED_ERROR_CODE
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+#else
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 #endif
 
     // Step 02: Initialize the display sub-system
@@ -973,10 +980,12 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 07: Call dsGetDisplayAspectRatio() without initializing the display sub-system
-#ifdef ENABLE_ENHANCED_ERROR_CODE
     result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio);
+#ifdef ENABLE_ENHANCED_ERROR_CODE
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+#else
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 #endif
 
     // End of the test
@@ -1078,10 +1087,13 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
     const int portCount = sizeof(kSupportedPortTypes) / sizeof(kSupportedPortTypes[0]);
 
     // Step 01: Call dsRegisterDisplayEventCallback() without initializing the display sub-system
-#ifdef ENABLE_ENHANCED_ERROR_CODE
     result = dsRegisterDisplayEventCallback(displayHandle, testDisplayCallback);
+#ifdef ENABLE_ENHANCED_ERROR_CODE
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+#else
+     UT_ASSERT_EQUAL(result, dsERR_NONE);
+
 #endif
 
     // Step 02: Initialize the display sub-system
@@ -1110,12 +1122,13 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 06: Call dsRegisterDisplayEventCallback() without reinitializing the display sub-system
-#ifdef ENABLE_ENHANCED_ERROR_CODE
     result = dsRegisterDisplayEventCallback(displayHandle, testDisplayCallback);
+#ifdef ENABLE_ENHANCED_ERROR_CODE
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+#else
+       UT_ASSERT_EQUAL(result, dsERR_NONE);
 #endif
-
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
