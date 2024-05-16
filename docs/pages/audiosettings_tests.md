@@ -340,7 +340,7 @@ Playback of stream is required for the L3 testcase
 
 |Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |-----------|--------|--|--|------|----|--------------------------|
-|Set Audio mixer levels with stream playback and verify with external analyzer|dsGetAudioPort(), dsSetAudioMixerLevels()|`NA`|`Y`|`NA`|`Y`|`Y`|
+|Set Audio mixer levels for Primary and system audio with stream playback and verify with external analyzer|dsGetAudioPort(), dsSetAudioMixerLevels()|`NA`|`Y`|`NA`|`Y`|`Y`|
 
 ### Test Startup Requirement - Test Audio Mixer Levels
 
