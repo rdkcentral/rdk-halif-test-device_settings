@@ -73,16 +73,18 @@ Boot configuration: Various Audio ports, audio formats, Stereo modes and `Ms12` 
 - Supported Stereo Modes - [dsSetStereoMode](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsAVDTypes.h#L376)
 - Supported Audio Compression - [dsAudioCompression_t](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsAVDTypes.h#L234)
 - Supported `MS12` `DAP` Capabilities - [dsMS12Capabilities_t](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsAVDTypes.h#L335)
+- Supported `MS12` Profiles - [dsMS12AudioProfileList_t](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsAVDTypes.h#L345)
+- Supported `ARC` Types - [dsAudioARCTypes_t](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsAVDTypes.h#L304)
 
 ## Test Audio Port
 
 |Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |-----------|--------|--|--|------|----|--------------------------|
 |Loop through supported audio ports, Enable/disable audio ports and retrieve status for verification|dsGetAudioPort(), dsEnableAudioPort(), dsIsAudioPortEnabled()|`Y`|`NA`|`Y`|`Y`|`NA`|
-|Loop through supported audio ports, Enable/disable audio ports and verify using external analyzer|dsGetAudioPort(), dsEnableAudioPort()|`NA`|`Y`|`Y`|`Y`|`Y`|
-|Loop through supported audio ports, Check the connection status. For Sink devices, internal speaker connection status should be true always and other ports connection status should be false. For Source devices the connection status is always false for all ports|dsGetAudioPort(), dsAudioOutIsConnected()|`Y`|`NA`|`Y`|`Y`|`NA`|
-|Loop through supported audio ports, Check the connection status by connecting/disconnecting the port. For Sink devices, internal speaker connection status should be true always|dsGetAudioPort(), dsAudioOutIsConnected()|`NA`|`Y`|`Y`|`Y`|`Y`|
-|Loop through supported audio ports, Check the connection status with call-back function by connecting/disconnecting the port|dsGetAudioPort(), dsAudioOutRegisterConnectCB()|`NA`|`Y`|`NA`|`Y`|`Y`|
+|Loop through supported audio ports, Enable/disable audio ports and verify using external analyzer with stream playback|dsGetAudioPort(), dsEnableAudioPort()|`NA`|`Y`|`Y`|`Y`|`Y`|
+|Loop through supported audio ports, Check the connection status. For Sink devices, dsAUDIOPORT_TYPE_SPEAKER(internal speaker) connection status should be true always and other ports connection status should be false. For Source devices the connection status is always false for all ports|dsGetAudioPort(), dsAudioOutIsConnected()|`Y`|`NA`|`Y`|`Y`|`NA`|
+|Loop through supported audio ports, Check the connection status by connecting/disconnecting the port. For Sink devices, dsAUDIOPORT_TYPE_SPEAKER (internal speaker) connection status should be true always|dsGetAudioPort(), dsAudioOutIsConnected()|`NA`|`Y`|`Y`|`Y`|`Y`|
+|Select dsAUDIOPORT_TYPE_HEADPHONE port, Check the connection status with call-back function by connecting/disconnecting the port|dsGetAudioPort(), dsAudioOutRegisterConnectCB()|`NA`|`Y`|`NA`|`Y`|`Y`|
 
 ### Test Startup Requirement - Test Audio Port
 
@@ -137,7 +139,8 @@ Playback of stream is required for the L3 testcases
 
 ### Control Plane Requirements - Test MS12 `DAP` Capabilities
 
-Control the external analyzer
+- Control the external analyzer
+- Control the port connections
 
 ## Test MS12 Capabilities
 
@@ -179,7 +182,8 @@ Playback of stream is required for the L3 testcases
 
 ### Control Plane Requirements - Test `ARC` Support
 
-Control the external analyzer
+- Control the external analyzer
+- Control the port connections
 
 ## Test Stereo Mode Support
 
@@ -200,16 +204,17 @@ Playback of audio streams supported by the platform is required for the L3 testc
 
 ### Control Plane Requirements - Test Stereo Mode Support
 
-Control the external analyzer
+- Control the external analyzer
+- Control the port connections
 
 ## Test Audio Gain and Mute
 
 |Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |-----------|--------|--|--|------|----|--------------------------|
-|Loop through supported audio ports, Set various Linear Audio Gain Values for supported ports and retrieve Audio Gain for verification|dsGetAudioPort(), dsSetAudioGain(), dsGetAudioGain()|`Y`|`NA`|`Y`|`Y`|`NA`|
-|Loop through supported audio ports, Set various Linear Audio Gain Values for all supported ports and verify levels using the external analyzer|dsGetAudioPort(), dsSetAudioGain()|`NA`|`Y`|`Y`|`Y`|`Y`|
-|Loop through supported audio ports, Set various Audio Levels for supported ports and retrieve Audio Level for verification|dsGetAudioPort(), dsSetAudioLevel(), dsGetAudioLevel()|`Y`|`NA`|`Y`|`Y`|`NA`|
-|Loop through supported audio ports, Set various Audio Level for all supported ports and verify using the external analyzer|dsGetAudioPort(), dsSetAudioLevel()|`NA`|`Y`|`Y`|`Y`|`Y`|
+|Loop through supported audio ports, Set various Linear Audio Gain Values for supported ports and retrieve Audio Gain for verification|dsGetAudioPort(), dsSetAudioGain(), dsGetAudioGain()|`Y`|`NA`|`NA`|`Y`|`NA`|
+|Loop through supported audio ports, Set various Linear Audio Gain Values for all supported ports and verify levels using the external analyzer|dsGetAudioPort(), dsSetAudioGain()|`NA`|`Y`|`NA`|`Y`|`Y`|
+|Loop through supported audio ports, Set various Audio Levels for supported ports and retrieve Audio Level for verification|dsGetAudioPort(), dsSetAudioLevel(), dsGetAudioLevel()|`Y`|`NA`|`NA`|`Y`|`NA`|
+|Loop through supported audio ports, Set various Audio Level for all supported ports and verify using the external analyzer|dsGetAudioPort(), dsSetAudioLevel()|`NA`|`Y`|`NA`|`Y`|`Y`|
 |Loop through supported audio ports, Enable/disable audio mute for supported ports and retrieve Mute status for verification|dsGetAudioPort(), dsSetAudioMute(), dsIsAudioMute()|`Y`|`NA`|`Y`|`Y`|`NA`|
 |Loop through supported audio ports, Enable/disable audio mute and verify mute status using external analyzer|dsGetAudioPort(), dsSetAudioMute()|`NA`|`Y`|`Y`|`Y`|`Y`|
 
@@ -223,7 +228,8 @@ Playback of audio streams supported by the platform is required for the L3 testc
 
 ### Control Plane Requirements - Test Audio Gain and Mute
 
-Control the external analyzer
+- Control the external analyzer
+- Control the port connections
 
 ## Test Audio Delay
 
@@ -242,19 +248,21 @@ Playback of stream is required for the L3 testcase
 
 ### Control Plane Requirements - Test Audio Delay
 
-Control the external analyzer
+- Control the external analyzer
+- Control the port connections
 
 ## Test Atmos Mode
 
 |Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |-----------|--------|--|--|------|----|--------------------------|
 |Loop through supported audio ports, Enable Audio Atmos mode for supported ports and analyze with external device|dsAudioPortInit(), dsSetAudioAtmosOutputMode()|`NA`|`Y`|`Y`|`Y`|`Y`|
+|For sink devices get the ATMOS capabilities of dsAUDIOPORT_TYPE_SPEAKER (internal speaker) and verify with configuration file|dsGetAudioPort(), dsGetSinkDeviceAtmosCapability()|`Y`|`NA`|`NA`|`Y`|`NA`|
 |Loop through supported audio ports, Get the ATMOS capabilities of connected devices and verify with configuration file|dsGetAudioPort(), dsGetSinkDeviceAtmosCapability()|`NA`|`Y`|`Y`|`Y`|`Y`|
-|Register for Atmos capability call-back, change the Atmos capabilities of connected device, and check whether call-back is triggered or not|dsAudioAtmosCapsChangeRegisterCB ()|`NA`|`Y`|`Y`|`Y`|`Y`|
+|Register Atmos capability call-back, change the Atmos capabilities of connected device, and check whether the call-back is triggered or not|dsAudioAtmosCapsChangeRegisterCB ()|`NA`|`Y`|`Y`|`Y`|`Y`|
 
 ### Test Startup Requirement - Test Atmos Mode
 
-`NA`
+Playback of stream is required for the L3 testcase
 
 ### Emulator Requirements - Test Atmos Mode
 
@@ -262,7 +270,8 @@ Control the external analyzer
 
 ### Control Plane Requirements - Test Atmos Mode
 
-Controls the external analyzer
+- Control the external analyzer
+- Control the port connections
 
 ## Test Audio Format
 
@@ -282,7 +291,8 @@ Playback of stream is required for the L3 testcases
 
 ### Control Plane Requirements - Test Audio Format
 
-Control the external analyzer
+- Control the external analyzer
+- Control the port connections
 
 ## Test Associated Audio Mixing
 
@@ -302,7 +312,8 @@ Playback of stream is required for the L3 testcases
 
 ### Control Plane Requirements - Associated Audio Mixing Test
 
-Control the external analyzer
+- Control the external analyzer
+- Control the port connections
 
 ## Test Primary/Secondary Language
 
@@ -323,7 +334,8 @@ Playback of stream is required for the L3 testcase
 
 ### Control Plane Requirements - Language Test
 
-Control the external analyzer
+- Control the external analyzer
+- Control the port connections
 
 ## Test Audio Mixer Levels
 
@@ -341,4 +353,5 @@ Playback of stream is required for the L3 testcase
 
 ### Control Plane Requirements - Test Audio Mixer Levels
 
-Control the external analyzer
+- Control the external analyzer
+- Control the port connections
