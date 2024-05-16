@@ -71,7 +71,6 @@ Boot configuration: Various Audio ports, audio formats, Stereo modes and `Ms12` 
 - Supported Audio Ports - [dsAudioPortType_t](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsAVDTypes.h#L201)
 - Supported Audio Encoding Formats - [dsAudioEncoding_t](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsAVDTypes.h#L222)
 - Supported Stereo Modes - [dsSetStereoMode](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsAVDTypes.h#L376)
-- Supported Audio Compression - [dsAudioCompression_t](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsAVDTypes.h#L234)
 - Supported `MS12` `DAP` Capabilities - [dsMS12Capabilities_t](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsAVDTypes.h#L335)
 - Supported `MS12` Profiles - [dsMS12AudioProfileList_t](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsAVDTypes.h#L345)
 - Supported `ARC` Types - [dsAudioARCTypes_t](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsAVDTypes.h#L304)
