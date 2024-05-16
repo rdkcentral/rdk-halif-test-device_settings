@@ -62,7 +62,7 @@ The Audio device setting interface provides control to enable or disable Audio O
 |09|[Test Audio Format](#test-audio-format)|Test for Audio Formats|
 |10|[Test Associated Audio Mixing](#test-associated-audio-mixing)|Test for Associated Audio Mixing|
 |11|[Test Primary/Secondary Language](#test-primarysecondary-language)|Test for primary/secondary language configuration|
-|12|[Test Audio Mixer Levels](#test-audio-mixer-levels)|Test for primary/secondary language configuration|
+|12|[Test Audio Mixer Levels](#test-audio-mixer-levels)|Test for Primary and secondary Audio mixer levels|
 
 ## Emulator Requirements
 
