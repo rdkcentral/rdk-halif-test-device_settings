@@ -75,19 +75,21 @@ Boot configuration: Various Audio ports, audio formats, Stereo modes and `Ms12` 
 - Supported `MS12` Profiles - [dsMS12AudioProfileList_t](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsAVDTypes.h#L345)
 - Supported `ARC` Types - [dsAudioARCTypes_t](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsAVDTypes.h#L304)
 
+## Audio Format Requirements for Playback
+
 ## Test Audio Port
 
 |Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |-----------|--------|--|--|------|----|--------------------------|
 |Loop through supported audio ports, Enable/disable audio ports and retrieve status for verification|dsGetAudioPort(), dsEnableAudioPort(), dsIsAudioPortEnabled()|`Y`|`NA`|`Y`|`Y`|`NA`|
 |Loop through supported audio ports, Enable/disable audio ports and verify using external analyzer with stream playback|dsGetAudioPort(), dsEnableAudioPort()|`NA`|`Y`|`Y`|`Y`|`Y`|
-|Loop through supported audio ports, Check the connection status. For Sink devices, dsAUDIOPORT_TYPE_SPEAKER(internal speaker) connection status should be true always and other ports connection status should be false. For Source devices the connection status is always false for all ports|dsGetAudioPort(), dsAudioOutIsConnected()|`Y`|`NA`|`Y`|`Y`|`NA`|
-|Loop through supported audio ports, Check the connection status by connecting/disconnecting the port. For Sink devices, dsAUDIOPORT_TYPE_SPEAKER (internal speaker) connection status should be true always|dsGetAudioPort(), dsAudioOutIsConnected()|`NA`|`Y`|`Y`|`Y`|`Y`|
-|Select dsAUDIOPORT_TYPE_HEADPHONE port, Check the connection status with call-back function by connecting/disconnecting the port|dsGetAudioPort(), dsAudioOutRegisterConnectCB()|`NA`|`Y`|`NA`|`Y`|`Y`|
+|Loop through supported audio ports, get the handle for dsAUDIOPORT_TYPE_HEADPHONE port, check the connection status. Connection status should be false|dsGetAudioPort(), dsAudioOutIsConnected()|`Y`|`NA`|`NA`|`Y`|`NA`|
+|Loop through supported audio ports, get the handle for dsAUDIOPORT_TYPE_HEADPHONE port, check the connection status by connecting/disconnecting the port connections.|dsGetAudioPort(), dsAudioOutIsConnected()|`NA`|`Y`|`NA`|`Y`|`Y`|
+|Loop through supported audio ports, get the handle for dsAUDIOPORT_TYPE_HEADPHONE port, Check the connection status with call-back function by connecting/disconnecting the port connection|dsGetAudioPort(), dsAudioOutRegisterConnectCB()|`NA`|`Y`|`NA`|`Y`|`Y`|
 
 ### Test Startup Requirement - Test Audio Port
 
-Playback of stream is required for the L3 testcases
+Playback of stream is required for the L3 testcases. [Audio Format Requirements for Playback](#audio-format-requirements-for-playback)
 
 ### Emulator Requirements - Test Audio Port
 
@@ -130,7 +132,7 @@ Playback of stream is required for the L3 testcases
 
 ### Test Startup Requirement - Test MS12 `DAP` Capabilities
 
-Playback of stream is required for the L3 testcases
+Playback of stream is required for the L3 testcases. [Audio Format Requirements for Playback](#audio-format-requirements-for-playback)
 
 ### Emulator Requirements - Test MS12 `DAP` Capabilities
 
@@ -166,14 +168,14 @@ Playback of stream is required for the L3 testcases
 
 |Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |-----------|--------|--|--|------|----|--------------------------|
-|Get the `ARC` port handle by looping through supported audio ports, get the `ARC` type for `ARC` port and verify with configuration file|dsGetAudioPort(), dsGetSupportedARCTypes()|`Y`|`NA`|`NA`|`Y`|`NA`|
+|Get the `ARC` port handle by looping through supported audio ports, get the `ARC` type of connected device and verify with configuration file|dsGetAudioPort(), dsGetSupportedARCTypes()|`NA`|`Y`|`NA`|`Y`|`Y`|
 |Get the `ARC` port ID and verify with configuration file|dsGetHDMIARCPortId()|`Y`|`NA`|`NA`|`Y`|`NA`|
 |Get the `ARC` port handle by looping through supported audio ports, enable the `ARC` Port and check if the audio routed to `ARC` port using external analyzers|dsGetAudioPort(), dsAudioEnableARC()|`NA`|`Y`|`NA`|`Y`|`Y`|
 |Get the `ARC` port handle by looping through supported audio ports, enable the `ARC` Port, Set `SAD` for `ARC` port and verify using external analyzers|dsGetAudioPort(), dsAudioEnableARC(), dsAudioSetSAD()|`NA`|`Y`|`NA`|`Y`|`Y`|
 
 ### Test Startup Requirement - Test `ARC` Support
 
-Playback of stream is required for the L3 testcases
+Playback of stream is required for the L3 testcases. [Audio Format Requirements for Playback](#audio-format-requirements-for-playback)
 
 ### Emulator Requirements - Test `ARC` Support
 
@@ -195,7 +197,7 @@ Playback of stream is required for the L3 testcases
 
 ### Test Startup Requirement - Test Stereo Mode Support
 
-Playback of audio streams supported by the platform is required for the L3 testcases
+Playback of stream is required for the L3 testcases. [Audio Format Requirements for Playback](#audio-format-requirements-for-playback)
 
 ### Emulator Requirements - Test Stereo Mode Support
 
@@ -219,7 +221,7 @@ Playback of audio streams supported by the platform is required for the L3 testc
 
 ### Test Startup Requirement - Test Audio Gain and Mute
 
-Playback of audio streams supported by the platform is required for the L3 testcases
+Playback of stream is required for the L3 testcases. [Audio Format Requirements for Playback](#audio-format-requirements-for-playback)
 
 ### Emulator Requirements - Test Audio Gain and Mute
 
@@ -239,7 +241,7 @@ Playback of audio streams supported by the platform is required for the L3 testc
 
 ### Test Startup Requirement - Test Audio Delay
 
-Playback of stream is required for the L3 testcase
+Playback of stream is required for the L3 testcases. [Audio Format Requirements for Playback](#audio-format-requirements-for-playback)
 
 ### Emulator Requirements - Test Audio Delay
 
@@ -254,14 +256,14 @@ Playback of stream is required for the L3 testcase
 
 |Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |-----------|--------|--|--|------|----|--------------------------|
-|Loop through supported audio ports, Enable Audio Atmos mode for supported ports and analyze with external device|dsAudioPortInit(), dsSetAudioAtmosOutputMode()|`NA`|`Y`|`Y`|`Y`|`Y`|
+|Loop through supported audio ports, Set Atmos for supported ports and analyze with external device|dsAudioPortInit(), dsSetAudioAtmosOutputMode()|`NA`|`Y`|`Y`|`Y`|`Y`|
 |For sink devices get the ATMOS capabilities of dsAUDIOPORT_TYPE_SPEAKER (internal speaker) and verify with configuration file|dsGetAudioPort(), dsGetSinkDeviceAtmosCapability()|`Y`|`NA`|`NA`|`Y`|`NA`|
 |Loop through supported audio ports, Get the ATMOS capabilities of connected devices and verify with configuration file|dsGetAudioPort(), dsGetSinkDeviceAtmosCapability()|`NA`|`Y`|`Y`|`Y`|`Y`|
 |Register Atmos capability call-back, change the Atmos capabilities of connected device, and check whether the call-back is triggered or not|dsAudioAtmosCapsChangeRegisterCB ()|`NA`|`Y`|`Y`|`Y`|`Y`|
 
 ### Test Startup Requirement - Test Atmos Mode
 
-Playback of stream is required for the L3 testcase
+Playback of stream is required for the L3 testcases. [Audio Format Requirements for Playback](#audio-format-requirements-for-playback)
 
 ### Emulator Requirements - Test Atmos Mode
 
@@ -282,7 +284,7 @@ Playback of stream is required for the L3 testcase
 
 ### Test Startup Requirement - Test Audio Format
 
-Playback of stream is required for the L3 testcases
+Playback of stream is required for the L3 testcases. [Audio Format Requirements for Playback](#audio-format-requirements-for-playback)
 
 ### Emulator Requirements - Test Audio Format
 
@@ -303,7 +305,7 @@ Playback of stream is required for the L3 testcases
 
 ### Test Startup Requirement - Associated Audio Mixing Test
 
-Playback of stream is required for the L3 testcases
+Playback of stream is required for the L3 testcases. [Audio Format Requirements for Playback](#audio-format-requirements-for-playback)
 
 ### Emulator Requirements - Associated Audio Mixing Test
 
@@ -325,7 +327,7 @@ Playback of stream is required for the L3 testcases
 
 ### Test Startup Requirement - Language Test
 
-Playback of stream is required for the L3 testcase
+Playback of stream is required for the L3 testcases. [Audio Format Requirements for Playback](#audio-format-requirements-for-playback)
 
 ### Emulator Requirements - Language Test
 
@@ -344,7 +346,7 @@ Playback of stream is required for the L3 testcase
 
 ### Test Startup Requirement - Test Audio Mixer Levels
 
-Playback of stream is required for the L3 testcase
+Playback of stream is required for the L3 testcases. [Audio Format Requirements for Playback](#audio-format-requirements-for-playback)
 
 ### Emulator Requirements -Test Audio Mixer Levels
 
