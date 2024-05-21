@@ -1,7 +1,7 @@
 /*
 * If not stated otherwise in this file or this component's LICENSE file the
 * following copyright and licenses apply:*
-* Copyright 2023 RDK Management
+* Copyright 2024 RDK Management
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -32,12 +32,14 @@
 
 #include <ut.h>
 #include <ut_log.h>
+#include <stdlib.h>
+#include <time.h>
 #include "dsCompositeIn.h"
 
 /**
-* @brief This test aims to verify the functionality of getting the number of inputs in the dsCompositeIn module.
+* @brief Test to verify the number of composite input ports
 *
-* In this test, the dsCompositeInInit function is first called to initialize the dsCompositeIn module. Then, the dsCompositeInGetNumberOfInputs function is called to get the number of inputs. The returned number of inputs is checked to ensure it is not less than zero. Finally, the dsCompositeInTerm function is called to terminate the dsCompositeIn module. The return values of all these function calls are checked against the expected return value of dsERR_NONE.
+* This test verifies the number of composite input ports by comparing the expected number of ports with the actual number of ports returned by the API. The test is designed to ensure that the API is correctly identifying the number of ports and that the system is correctly configured.
 *
 * **Test Group ID:** 02@n
 * **Test Case ID:** 001@n
@@ -46,62 +48,61 @@
 * Refer to UT specification documentation [l2_dsCompositeIn_test_specification.md](l2_dsCompositeIn_test_specification.md)
 */
 
-void test_l2_dsCompositeIn_GetNumberOfInputs(void)
+void test_l2_dsCompositeIn_VerifyCompositeInputPorts(void)
 {
-    UT_LOG("Entering test_l2_dsCompositeIn_GetNumberOfInputs...");
+    UT_LOG("Entering test_l2_dsCompositeIn_VerifyCompositeInputPorts...");
 
-    dsError_t ret;
+    dsError_t status;
     uint8_t numInputs;
+    uint8_t expectedNumInputs = 2; // This value should be fetched from the configuration file
 
-    // Call dsCompositeInInit
-    UT_LOG("Invoking dsCompositeInInit.");
-    ret = dsCompositeInInit();
-    UT_LOG("dsCompositeInInit returns : %d",ret);
-    if (ret != dsERR_NONE) {
-        UT_LOG("Expected return value: dsERR_NONE. Actual return value: %d", ret);
-        UT_ASSERT_EQUAL(ret, dsERR_NONE);
-        UT_LOG("Exiting test_l2_dsCompositeIn_GetNumberOfInputs...");
+    // Step 1: Call the pre-requisite API dsCompositeInInit to initialize the COMPOSITE Input module.
+    status = dsCompositeInInit();
+    UT_ASSERT_EQUAL(status, dsERR_NONE);
+    if (status != dsERR_NONE)
+    {
+        UT_LOG("dsCompositeInInit failed with status: %d", status);
         return;
     }
 
-    // Call dsCompositeInGetNumberOfInputs
-    UT_LOG("Invoking dsCompositeInGetNumberOfInputs with valid buffer. ");
-    ret = dsCompositeInGetNumberOfInputs(&numInputs);
-    UT_LOG("dsCompositeInGetNumberOfInputs returns : %d and numberOfInputs : %d",ret,numInputs);
-    if (ret != dsERR_NONE) {
-        UT_LOG("Expected return value: dsERR_NONE. Actual return value: %d", ret);
-        UT_ASSERT_EQUAL(ret, dsERR_NONE);
-        UT_LOG("Exiting test_l2_dsCompositeIn_GetNumberOfInputs...");
+    // Step 2: Call the API dsCompositeInGetNumberOfInputs to get the number of COMPOSITE Input ports on the specific platform.
+    status = dsCompositeInGetNumberOfInputs(&numInputs);
+    UT_LOG("Invoked dsCompositeInGetNumberOfInputs() . Return status: %d, numInputs : %d ", status, numInputs);
+    // Step 3: Check the return status of the API. If it is not dsERR_NONE, then the API has failed. The test case should fail in this scenario.
+    UT_ASSERT_EQUAL(status, dsERR_NONE);
+    if (status != dsERR_NONE)
+    {
+        UT_LOG("dsCompositeInGetNumberOfInputs failed with status: %d", status);
+        // Call the post-requisite API dsCompositeInTerm to terminate the COMPOSITE Input module.
+        dsCompositeInTerm();
         return;
     }
 
-    // Verify returned number of COMPOSITE Input ports
-    if (numInputs < 0) {
-        UT_LOG("Verifying number of COMPOSITE Input ports. Expected: >=0. Actual: %d", numInputs);
-        UT_ASSERT(numInputs >= 0);
-        UT_LOG("Exiting test_l2_dsCompositeIn_GetNumberOfInputs...");
+    // Step 4: If the return status is dsERR_NONE, compare the value of the uint8_t variable with the expected number of COMPOSITE input ports from the configuration file.
+    UT_ASSERT_EQUAL(numInputs, expectedNumInputs);
+    if (numInputs != expectedNumInputs)
+    {
+        UT_LOG("Mismatch in number of inputs. Expected: %d, Got: %d", expectedNumInputs, numInputs);
+        // Call the post-requisite API dsCompositeInTerm to terminate the COMPOSITE Input module.
+        dsCompositeInTerm();
         return;
     }
 
-    // Call dsCompositeInTerm
-    UT_LOG("Invoking dsCompositeInTerm.");
-    ret = dsCompositeInTerm();
-    UT_LOG("dsCompositeInTerm returns : %d",ret);
-    if (ret != dsERR_NONE) {
-        UT_LOG("Expected return value: dsERR_NONE. Actual return value: %d", ret);
-        UT_ASSERT_EQUAL(ret, dsERR_NONE);
-        UT_LOG("Exiting test_l2_dsCompositeIn_GetNumberOfInputs...");
-        return;
+    // Step 6: Call the post-requisite API dsCompositeInTerm to terminate the COMPOSITE Input module.
+    status = dsCompositeInTerm();
+    UT_ASSERT_EQUAL(status, dsERR_NONE);
+    if (status != dsERR_NONE)
+    {
+        UT_LOG("dsCompositeInTerm failed with status: %d", status);
     }
 
-    UT_LOG("Test case test_l2_dsCompositeIn_GetNumberOfInputs passed successfully.");
-    UT_LOG("Exiting test_l2_dsCompositeIn_GetNumberOfInputs...");
+    UT_LOG("Exiting test_l2_dsCompositeIn_VerifyCompositeInputPorts...");
 }
 
 /**
-* @brief This test verifies the status of the Composite Input in the L2 DS module
+* @brief Test to verify the Composite Input Status
 *
-* This test initializes the DS module, gets the status of the Composite Input, verifies if it is disabled, and then terminates the DS module. This is done to ensure that the Composite Input is not enabled when it is not supposed to be.
+* This function tests the Composite Input Status by initializing the COMPOSITE Input module, getting the status, checking the status fields, and then terminating the COMPOSITE Input module.
 *
 * **Test Group ID:** 02@n
 * **Test Case ID:** 002@n
@@ -117,47 +118,49 @@ void test_l2_dsCompositeIn_VerifyCompositeInputStatus(void)
     dsError_t ret;
     dsCompositeInStatus_t status;
 
-    // Call dsCompositeInInit
+    // Step 1: Call dsCompositeInInit
     ret = dsCompositeInInit();
-    UT_LOG("Invoking dsCompositeInInit(). Return status: %d", ret);
-    if (ret != dsERR_NONE) {
-        UT_LOG("dsCompositeInInit failed. Exiting test_l2_dsCompositeIn_VerifyCompositeInputStatus...");
-        UT_ASSERT_EQUAL(ret, dsERR_NONE);
-        return;
-    }
+    UT_LOG("Invoked dsCompositeInInit(). Return status: %d", ret);
+    UT_ASSERT_EQUAL(ret, dsERR_NONE);
 
-    // Call dsCompositeInGetStatus
-    ret = dsCompositeInGetStatus(&status);
-    UT_LOG("Invoking dsCompositeInGetStatus() with valid buffer. Return status: %d and Ispresented : %d isPortConnected : %d activePort: %d ", ret, status.isPresented, status.isPortConnected, status.activePort);
-    if (ret != dsERR_NONE) {
-        UT_LOG("dsCompositeInGetStatus failed. Exiting test_l2_dsCompositeIn_VerifyCompositeInputStatus...");
+    if (ret == dsERR_NONE)
+    {
+        // Step 2: Call dsCompositeInGetStatus
+        ret = dsCompositeInGetStatus(&status);
+        UT_LOG("Invoked dsCompositeInGetStatus(). Return status: %d", ret);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
-        return;
-    }
 
-    // Verify Composite Input is disabled
-    if (status.isPresented) {
-        UT_LOG("Composite Input is enabled. Exiting test_l2_dsCompositeIn_VerifyCompositeInputStatus...");
-        UT_ASSERT_EQUAL(status.isPresented, false);
-        return;
-    }
+        if (ret == dsERR_NONE)
+        {
+            // Step 3: Check 'isPresented' field
+            UT_LOG("'isPresented' field is: %d", status.isPresented);
+            UT_ASSERT_EQUAL(status.isPresented, false);
 
-    // Call dsCompositeInTerm
-    ret = dsCompositeInTerm();
-    UT_LOG("Invoking dsCompositeInTerm(). Return status: %d", ret);
-    if (ret != dsERR_NONE) {
-        UT_LOG("dsCompositeInTerm failed. Exiting test_l2_dsCompositeIn_VerifyCompositeInputStatus...");
+            // Step 4: Check 'isPortConnected' field
+            for (int i = 0; i < dsCOMPOSITE_IN_PORT_MAX; i++)
+            {
+                UT_LOG("'isPortConnected' field for port %d is: %d", i, status.isPortConnected[i]);
+                UT_ASSERT_EQUAL(status.isPortConnected[i], false);
+            }
+
+            // Step 5: Check 'activePort' field
+            UT_LOG("'activePort' field is: %d", status.activePort);
+            UT_ASSERT_EQUAL(status.activePort, dsCOMPOSITE_IN_PORT_NONE);
+        }
+
+        // Step 6: Call dsCompositeInTerm
+        ret = dsCompositeInTerm();
+        UT_LOG("Invoked dsCompositeInTerm(). Return status: %d", ret);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
-        return;
     }
 
     UT_LOG("Exiting test_l2_dsCompositeIn_VerifyCompositeInputStatus...");
 }
 
 /**
-* @brief This test aims to verify the functionality of the dsCompositeInSelectPort function
+* @brief Test for setting and checking composite input port
 *
-* This test case checks if the dsCompositeInSelectPort function correctly selects the desired port and handles errors appropriately. It also verifies if the function dsCompositeInInit and dsCompositeInTerm are working as expected.
+* This function tests the APIs dsCompositeInInit, dsCompositeInSelectPort, dsCompositeInGetStatus, and dsCompositeInTerm. It first initializes the COMPOSITE Input sub-system, then selects a random port for presentation, gets the status of all COMPOSITE Input Status, checks the returned status, and finally terminates the COMPOSITE Input sub-system.
 *
 * **Test Group ID:** 02@n
 * **Test Case ID:** 003@n
@@ -166,53 +169,115 @@ void test_l2_dsCompositeIn_VerifyCompositeInputStatus(void)
 * Refer to UT specification documentation [l2_dsCompositeIn_test_specification.md](l2_dsCompositeIn_test_specification.md)
 */
 
-void test_l2_dsCompositeIn_SelectPort(void)
+void test_l2_dsCompositeIn_SetAndCheckCompositeInputPort(void)
 {
-    UT_LOG("Entering test_l2_dsCompositeIn_SelectPort...");
+    UT_LOG("Entering test_l2_dsCompositeIn_SetAndCheckCompositeInputPort...");
 
     dsError_t ret;
-    dsCompositeInPort_t port = dsCOMPOSITE_IN_PORT_0;
+    dsCompositeInStatus_t status;
+    dsCompositeInPort_t port;
 
-    // Call dsCompositeInInit
+    // Initialize the COMPOSITE Input sub-system
     ret = dsCompositeInInit();
-    UT_LOG("Invoking dsCompositeInInit(). Return status: %d", ret);
-    if (ret != dsERR_NONE) {
-        UT_LOG("dsCompositeInInit failed. Exiting test_l2_dsCompositeIn_SelectPort...");
-        UT_ASSERT_EQUAL(ret, dsERR_NONE);
-        return;
-    }
-
-    // Call dsCompositeInSelectPort
-    ret = dsCompositeInSelectPort(port);
-    UT_LOG("Invoking dsCompositeInSelectPort() with input port: %d. Return status: %d", port, ret);
-    if (ret != dsERR_NONE) {
-        UT_LOG("dsCompositeInSelectPort failed. Exiting test_l2_dsCompositeIn_SelectPort...");
-        UT_ASSERT_EQUAL(ret, dsERR_NONE);
-        return;
-    }
-
-    // Verify function returns dsERR_NONE
     UT_ASSERT_EQUAL(ret, dsERR_NONE);
-
-    // Check port info and confirm active port
-    // This part is left as a comment because it depends on the implementation of the dsCompositeInSelectPort function
-    // and how the active port is stored and accessed. Replace this comment with the appropriate code.
-    // if (activePort != port) {
-    //     UT_LOG("Active port is not the expected port. Exiting test_l2_dsCompositeIn_SelectPort...");
-    //     UT_ASSERT_EQUAL(activePort, port);
-    //     return;
-    // }
-
-    // Call dsCompositeInTerm
-    ret = dsCompositeInTerm();
-    UT_LOG("Invoking dsCompositeInTerm(). Return status: %d", ret);
-    if (ret != dsERR_NONE) {
-        UT_LOG("dsCompositeInTerm failed. Exiting test_l2_dsCompositeIn_SelectPort...");
-        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+    if (ret != dsERR_NONE)
+    {
+        UT_LOG("dsCompositeInInit failed with error: %d", ret);
         return;
     }
 
-    UT_LOG("Exiting test_l2_dsCompositeIn_SelectPort...");
+    // Select a random port from the available ports
+    srand(time(NULL));
+    port = rand() % dsCOMPOSITE_IN_PORT_MAX;
+
+    // Set the COMPOSITE Input port for presentation
+    ret = dsCompositeInSelectPort(port);
+    UT_ASSERT_EQUAL(ret, dsERR_NONE);
+    if (ret != dsERR_NONE)
+    {
+        UT_LOG("dsCompositeInSelectPort failed with error: %d", ret);
+        dsCompositeInTerm();
+        return;
+    }
+
+    // Get the status of all COMPOSITE Input Status
+    ret = dsCompositeInGetStatus(&status);
+    UT_LOG("Invoked dsCompositeInGetStatus(). Return status: %d ,port status.isPresented : %d, isPortConnected[%d] : %d, activePort: %d ", ret, status.isPresented, port, status.isPortConnected[port], status.activePort);
+    UT_ASSERT_EQUAL(ret, dsERR_NONE);
+    if (ret != dsERR_NONE)
+    {
+        UT_LOG("dsCompositeInGetStatus failed with error: %d", ret);
+        dsCompositeInTerm();
+        return;
+    }
+
+    // Check the returned status
+    UT_ASSERT_EQUAL(status.isPresented, false);
+    UT_ASSERT_EQUAL(status.isPortConnected[port], false);
+    UT_ASSERT_EQUAL(status.activePort, port);
+
+    // Terminate the COMPOSITE Input sub-system
+    ret = dsCompositeInTerm();
+    UT_ASSERT_EQUAL(ret, dsERR_NONE);
+    if (ret != dsERR_NONE)
+    {
+        UT_LOG("dsCompositeInTerm failed with error: %d", ret);
+    }
+
+    UT_LOG("Exiting test_l2_dsCompositeIn_SetAndCheckCompositeInputPort...");
+}
+
+/**
+* @brief Test for scaling video without selecting COMPOSITE Input port
+*
+* This function tests the scenario where `dsCompositeInScaleVideo` is called without selecting the COMPOSITE Input port. It first initializes the COMPOSITE Input module using `dsCompositeInInit`, then tries to scale the video using `dsCompositeInScaleVideo`, and finally terminates the COMPOSITE Input module using `dsCompositeInTerm`.
+*
+* **Test Group ID:** 02@n
+* **Test Case ID:** 004@n
+*
+* **Test Procedure:**
+* Refer to UT specification documentation [l2_dsCompositeIn_test_specification.md](l2_dsCompositeIn_test_specification.md)
+*/
+
+void test_l2_dsCompositeIn_ScaleVideoWithoutSelectingPort(void)
+{
+    UT_LOG("Entering test_l2_dsCompositeIn_ScaleVideoWithoutSelectingPort...");
+
+    dsError_t status;
+    int32_t x, y, width, height;
+
+    srand(time(0)); // use current time as seed for random generator
+    x = rand() % 1000; // assuming the resolution width is 1000
+    y = rand() % 1000; // assuming the resolution height is 1000
+    width = rand() % (1000 - x); // width should not exceed the resolution width
+    height = rand() % (1000 - y); // height should not exceed the resolution height
+
+    status = dsCompositeInInit();
+    UT_ASSERT_EQUAL(status, dsERR_NONE);
+    if (status != dsERR_NONE)
+    {
+        UT_LOG("dsCompositeInInit failed with status: %d", status);
+        return;
+    }
+
+    status = dsCompositeInScaleVideo(x, y, width, height);
+    UT_LOG("Invoked dsCompositeInScaleVideo(). Return status: %d", status);
+    UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    if (status != dsERR_OPERATION_NOT_SUPPORTED)
+    {
+        UT_LOG("dsCompositeInScaleVideo failed with status: %d", status);
+        dsCompositeInTerm();
+        return;
+    }
+
+    status = dsCompositeInTerm();
+    UT_ASSERT_EQUAL(status, dsERR_NONE);
+    if (status != dsERR_NONE)
+    {
+        UT_LOG("dsCompositeInTerm failed with status: %d", status);
+    }
+
+    UT_LOG("Exiting test_l2_dsCompositeIn_ScaleVideoWithoutSelectingPort...");
 }
 
 static UT_test_suite_t * pSuite = NULL;
@@ -227,14 +292,16 @@ int test_dsCompositeIn_l2_register(void)
 {
     // Create the test suite
     pSuite = UT_add_suite("[L2 dsCompositeIn]", NULL, NULL);
-    if (pSuite == NULL) {
+    if (pSuite == NULL)
+    {
         return -1;
     }
     // List of test function names and strings
 
-    UT_add_test( pSuite, "l2_dsCompositeIn_GetNumberOfInputs", test_l2_dsCompositeIn_GetNumberOfInputs);
+    UT_add_test( pSuite, "l2_dsCompositeIn_VerifyCompositeInputPorts", test_l2_dsCompositeIn_VerifyCompositeInputPorts);
     UT_add_test( pSuite, "l2_dsCompositeIn_VerifyCompositeInputStatus", test_l2_dsCompositeIn_VerifyCompositeInputStatus);
-    UT_add_test( pSuite, "l2_dsCompositeIn_SelectPort", test_l2_dsCompositeIn_SelectPort);
+    UT_add_test( pSuite, "l2_dsCompositeIn_SetAndCheckCompositeInputPort", test_l2_dsCompositeIn_SetAndCheckCompositeInputPort);
+    UT_add_test( pSuite, "l2_dsCompositeIn_ScaleVideoWithoutSelectingPort", test_l2_dsCompositeIn_ScaleVideoWithoutSelectingPort);
 
     return 0;
 }
