@@ -75,6 +75,7 @@
 
 #include <ut.h>
 #include <ut_log.h>
+#include <ut_kvp_profile.h>
 #include "stdint.h"
 #include "dsDisplay.h"
 #include "dsVideoPortSettings.h"

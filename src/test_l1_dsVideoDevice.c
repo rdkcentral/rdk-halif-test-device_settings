@@ -74,6 +74,7 @@
 
 #include <ut.h>
 #include <ut_log.h>
+#include <ut_kvp_profile.h>
 #include "dsVideoDevice.h"
 
 static int gTestGroup = 1;
