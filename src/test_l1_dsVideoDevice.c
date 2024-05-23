@@ -94,6 +94,21 @@ static int gTestID = 1;
     }\
 }\
 
+#define CHECK_FOR_EXTENDED_ERROR_CODE( result, enhanced, old )\
+{\
+   if ( extendedEnumsSupported == true )\
+   {\
+      UT_ASSERT_EQUAL( enhanced, result );\
+   }\
+   else\
+   {\
+       UT_ASSERT_EQUAL( old, result );\
+   }\
+}
+
+/* Global flags to support features */
+static bool extendedEnumsSupported=false; //Default to not supported
+
 /**
  * @brief Ensure dsVideoDeviceInit() correctly initializes all video devices during positive scenarios.
  * 
@@ -166,11 +181,7 @@ void test_l1_dsVideoDevice_negative_dsVideoDeviceInit(void)
 
     // Step 02: Try initializing again without terminating
     result = dsVideoDeviceInit();
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_ALREADY_INITIALIZED);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #endif
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_ALREADY_INITIALIZED, dsERR_NONE);
 
     // Step 03: De-initialize the video devices for cleanup
     result = dsVideoDeviceTerm();
@@ -248,11 +259,7 @@ void test_l1_dsVideoDevice_negative_dsVideoDeviceTerm(void)
 
     // Step 01: Call de-initialization without prior initialization
     int result = dsVideoDeviceTerm();
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #endif
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     // Step 02: Initialize video devices
     result = dsVideoDeviceInit();
@@ -264,11 +271,7 @@ void test_l1_dsVideoDevice_negative_dsVideoDeviceTerm(void)
 
     // Step 04: Call de-initialization again without re-initialization
     result = dsVideoDeviceTerm();
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #endif
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -343,11 +346,7 @@ void test_l1_dsVideoDevice_negative_dsGetVideoDevice(void)
     // Step 01: Get the video device handle without prior initialization
     intptr_t handle = -1;
     int result = dsGetVideoDevice(0, &handle);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #endif
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     // Step 02: Initialize video devices
     result = dsVideoDeviceInit();
@@ -367,11 +366,7 @@ void test_l1_dsVideoDevice_negative_dsGetVideoDevice(void)
 
     // Step 06: Get the video device handle after prior termination
     result = dsGetVideoDevice(0, &handle);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #endif
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -469,11 +464,7 @@ void test_l1_dsVideoDevice_negative_dsSetDFC (void)
     
     // 01: Call dsSetDFC() without initialization
     result = dsSetDFC(-1, dsVIDEO_ZOOM_NONE);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #endif
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     // 02: Initialize video devices
     result = dsVideoDeviceInit();
@@ -498,11 +489,8 @@ void test_l1_dsVideoDevice_negative_dsSetDFC (void)
 
     // 07: Call dsSetDFC() after termination
     result = dsSetDFC(handle, dsVIDEO_ZOOM_NONE);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #endif
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
@@ -600,11 +588,7 @@ void test_l1_dsVideoDevice_negative_dsGetDFC(void)
 
     // Step 01: Call dsGetDFC() without prior initialization
     result = dsGetDFC(handle, &dfc_mode);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #endif
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     // Step 02: Initialize video devices
     result = dsVideoDeviceInit();
@@ -629,11 +613,8 @@ void test_l1_dsVideoDevice_negative_dsGetDFC(void)
 
     // Step 07: Call dsGetDFC() after termination
     result = dsGetDFC(handle, &dfc_mode);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #endif
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
@@ -732,11 +713,7 @@ void test_l1_dsVideoDevice_negative_dsGetHDRCapabilities(void)
 
     // Step 01: Call dsGetHDRCapabilities() without prior initialization
     result = dsGetHDRCapabilities(handle, &hdr_capabilities); // Note: using handle for HDR capabilities for this error case
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #endif
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     // Step 02: Initialize video devices
     result = dsVideoDeviceInit();
@@ -761,11 +738,8 @@ void test_l1_dsVideoDevice_negative_dsGetHDRCapabilities(void)
 
     // Step 07: Call dsGetHDRCapabilities() after termination
     result = dsGetHDRCapabilities(handle, &hdr_capabilities);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #endif
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
@@ -863,11 +837,7 @@ void test_l1_dsVideoDevice_negative_dsGetSupportedVideoCodingFormats(void)
 
     // Step 01: Call dsGetSupportedVideoCodingFormats() without prior initialization
     result = dsGetSupportedVideoCodingFormats(handle, &supported_formats); // Note: using handle for supported formats for this error case
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #endif
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     // Step 02: Initialize video devices
     result = dsVideoDeviceInit();
@@ -892,11 +862,8 @@ void test_l1_dsVideoDevice_negative_dsGetSupportedVideoCodingFormats(void)
 
     // Step 07: Call dsGetSupportedVideoCodingFormats() after termination
     result = dsGetSupportedVideoCodingFormats(handle, &supported_formats);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #endif
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
@@ -943,35 +910,19 @@ void test_l1_dsVideoDevice_positive_dsGetVideoCodecInfo(void)
 
     // Step 03: Get video codec information with dsVIDEO_CODEC_MPEGHPART2
     result = dsGetVideoCodecInfo(handle, dsVIDEO_CODEC_MPEGHPART2, &codecInfo);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
     UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
-    #endif
 
     // Step 04: Get video codec information with dsVIDEO_CODEC_MPEG4PART10
     result = dsGetVideoCodecInfo(handle, dsVIDEO_CODEC_MPEG4PART10, &codecInfo);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
     UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
-    #endif
 
     // Step 05: Get video codec information with dsVIDEO_CODEC_MPEG2
     result = dsGetVideoCodecInfo(handle, dsVIDEO_CODEC_MPEG2, &codecInfo);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
     UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED); 
-    #endif
 
     // Step 06: Get video codec information with dsVIDEO_CODEC_MPEG2 (again to replicate the provided test case)
     result = dsGetVideoCodecInfo(handle, dsVIDEO_CODEC_MPEG2, &codecInfo);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
     UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
-    #endif
 
     // Step 07: De-initialize the video devices
     result = dsVideoDeviceTerm();
@@ -1017,11 +968,7 @@ void test_l1_dsVideoDevice_negative_dsGetVideoCodecInfo(void)
 
     // Step 01: Call dsGetVideoCodecInfo() without prior initialization
     result = dsGetVideoCodecInfo(handle, dsVIDEO_CODEC_MPEGHPART2, &codecInfo);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
-    #endif
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
 
     // Step 02: Initialize video devices
     result = dsVideoDeviceInit();
@@ -1050,11 +997,7 @@ void test_l1_dsVideoDevice_negative_dsGetVideoCodecInfo(void)
 
     // Step 08: Call dsGetVideoCodecInfo() after termination
     result = dsGetVideoCodecInfo(handle, dsVIDEO_CODEC_MPEGHPART2, &codecInfo);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
-    #endif
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -1146,11 +1089,7 @@ void test_l1_dsVideoDevice_negative_dsForceDisableHDRSupport(void)
 
     // Step 01: Call dsForceDisableHDRSupport() without prior initialization
     result = dsForceDisableHDRSupport(handle, true); // Note: uninitialized 'handle' used here
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #endif
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     // Step 02: Initialize video devices
     result = dsVideoDeviceInit();
@@ -1171,11 +1110,7 @@ void test_l1_dsVideoDevice_negative_dsForceDisableHDRSupport(void)
 
     // Step 06: Call dsForceDisableHDRSupport() after termination
     result = dsForceDisableHDRSupport(handle, true);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #endif
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -1264,11 +1199,7 @@ void test_l1_dsVideoDevice_negative_dsSetFRFMode(void)
 
     // Step 01: Call dsSetFRFMode() without prior initialization
     result = dsSetFRFMode(handle, 60); // Note: uninitialized 'handle' used here
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #endif
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     // Step 02: Initialize video devices
     result = dsVideoDeviceInit();
@@ -1293,11 +1224,7 @@ void test_l1_dsVideoDevice_negative_dsSetFRFMode(void)
 
     // Step 07: Call dsSetFRFMode() after termination
     result = dsSetFRFMode(handle, 60);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #endif
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -1397,11 +1324,7 @@ void test_l1_dsVideoDevice_negative_dsGetFRFMode(void)
 
     // Step 01: Call dsGetFRFMode() without prior initialization
     result = dsGetFRFMode(handle, &fetchedFRFMode); // Note: uninitialized 'handle' used here
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #endif
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     // Step 02: Initialize video devices
     result = dsVideoDeviceInit();
@@ -1426,11 +1349,7 @@ void test_l1_dsVideoDevice_negative_dsGetFRFMode(void)
 
     // Step 07: Call dsGetFRFMode() after termination
     result = dsGetFRFMode(handle, &fetchedFRFMode);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #endif
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -1530,11 +1449,7 @@ void test_l1_dsVideoDevice_negative_dsGetCurrentDisplayframerate(void)
 
     // Step 01: Call dsGetCurrentDisplayframerate() without prior initialization
     result = dsGetCurrentDisplayframerate(handle, fetchedFramerate); // Note: uninitialized 'handle' used here
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #endif
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     // Step 02: Initialize video devices
     result = dsVideoDeviceInit();
@@ -1559,11 +1474,7 @@ void test_l1_dsVideoDevice_negative_dsGetCurrentDisplayframerate(void)
 
     // Step 07: Call dsGetCurrentDisplayframerate() after termination
     result = dsGetCurrentDisplayframerate(handle, fetchedFramerate);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #endif
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -1653,11 +1564,7 @@ void test_l1_dsVideoDevice_negative_dsSetDisplayframerate(void)
 
     // Step 01: Call dsSetDisplayframerate() without prior initialization
     result = dsSetDisplayframerate(handle, "30fps"); // Note: uninitialized 'handle' used here
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #endif
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     // Step 02: Initialize video devices
     result = dsVideoDeviceInit();
@@ -1686,11 +1593,7 @@ void test_l1_dsVideoDevice_negative_dsSetDisplayframerate(void)
 
     // Step 08: Call dsSetDisplayframerate() after termination
     result = dsSetDisplayframerate(handle, "30fps");
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    #else
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
-    #endif
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -1747,7 +1650,7 @@ int test_l1_dsVideoDevice_register ( void )
     UT_add_test( pSuite2, "dsForceDisableHDRSupport_L1_positive" ,test_l1_dsVideoDevice_positive_dsForceDisableHDRSupport );
     UT_add_test( pSuite2, "dsGetDFC_L1_negative" ,test_l1_dsVideoDevice_negative_dsGetDFC );
     UT_add_test( pSuite2, "dsForceDisableHDRSupport_L1_negative" ,test_l1_dsVideoDevice_negative_dsForceDisableHDRSupport );
-	
+    extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsVideoDevice/features/extendedEnumsSupported" ); 	
 
 	return 0;
 } 
