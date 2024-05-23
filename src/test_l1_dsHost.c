@@ -71,6 +71,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include<stdbool.h>
 #include <ut.h>
 #include <ut_log.h>
 #include "dsHost.h"
@@ -78,6 +79,10 @@
 
 static int gTestGroup = 1;
 static int gTestID = 1;
+
+/* Global flags to support features */
+static bool extendedEnumsSupported=false; //Default to not supported
+
 
 #define DS_ASSERT_AUTO_TERM_NUMERICAL(value, comparison){\
     if(value != comparison){\
@@ -94,6 +99,20 @@ static int gTestID = 1;
         UT_FAIL();\
     }\
 }\
+
+#define CHECK_FOR_EXTENDED_ERROR_CODE( result, enhanced, old )\
+{\
+   if ( extendedEnumsSupported == true )\
+   {\
+      UT_ASSERT_EQUAL( enhanced, result );\
+   }\
+   else\
+   {\
+       UT_ASSERT_EQUAL( old, result );\
+   }\
+}
+
+
 
 /**
  * @brief Ensure dsHostInit() returns correct error codes during positive scenarios
@@ -174,12 +193,9 @@ void test_l1_dsHost_negative_dsHostInit(void) {
 
     // Step 02: Call dsHostInit() Attempt to initialize dsHost again
     result = dsHostInit();
- #ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_ALREADY_INITIALIZED);
+    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_ALREADY_INITIALIZED, dsERR_NONE);
     UT_LOG("Step 02: Attempt to initialize dsHost again -> Expected: dsERR_ALREADY_INITIALIZED, Got: %d\n", result);
-#else
-      UT_ASSERT_EQUAL(result, dsERR_NONE);
-#endif
+      
 
     // Step 03: Call dsHostTerm() Terminate dsHost
     result = dsHostTerm();
@@ -263,12 +279,9 @@ void test_l1_dsHost_negative_dsHostTerm(void) {
 	
     // Step 01: dsHostTerm() Attempt to terminate dsHost without initialization
     dsError_t result = dsHostTerm();
-#ifdef ENABLE_ENHANCED_ERROR_CODE
-      UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-      UT_LOG("Step 01: Attempt to terminate dsHost without initialization -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
-#else
-      UT_ASSERT_EQUAL(result, dsERR_NONE);
-#endif
+    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    UT_LOG("Step 01: Attempt to terminate dsHost without initialization -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+
 
     // Step 02: dsHostInit() Initialize dsHost
     result = dsHostInit();
@@ -282,12 +295,9 @@ void test_l1_dsHost_negative_dsHostTerm(void) {
 
     // Step 04: dsHostTerm() Attempt to terminate dsHost again
     result = dsHostTerm();	
-#ifdef ENABLE_ENHANCED_ERROR_CODE
-       UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-       UT_LOG("Step 04: Attempt to terminate dsHost again -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
-#else
-	 UT_ASSERT_EQUAL(result, dsERR_NONE);
-#endif
+    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    UT_LOG("Step 04: Attempt to terminate dsHost again -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -371,12 +381,9 @@ void test_l1_dsHost_negative_dsGetCPUTemperature(void) {
 
     // Step 01: dsGetCPUTemperature() Call without prior initialization
     dsError_t result = dsGetCPUTemperature(&temperatureValue);
-#ifdef ENABLE_ENHANCED_ERROR_CODE
-        UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-        UT_LOG("Step 01: Fetch CPU Temperature without initialization -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
-#else
-	  UT_ASSERT_EQUAL(result, dsERR_NONE);
-#endif
+    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    UT_LOG("Step 01: Fetch CPU Temperature without initialization -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+
 
     // Step 02: dsHostInit() Initialize dsHost
     result = dsHostInit();
@@ -396,13 +403,9 @@ void test_l1_dsHost_negative_dsGetCPUTemperature(void) {
 
     // Step 05: dsGetCPUTemperature() Call after termination
      result = dsGetCPUTemperature(&temperatureValue);
-#ifdef ENABLE_ENHANCED_ERROR_CODE
-       UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-       UT_LOG("Step 05: Fetch CPU Temperature after termination -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
-#else
-	UT_ASSERT_EQUAL(result, dsERR_NONE);
-#endif
-    UT_LOG("\n Out  %s\n",__FUNCTION__);
+      CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+      UT_LOG("Step 05: Fetch CPU Temperature after termination -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+      UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
 /**
@@ -492,12 +495,9 @@ void test_l1_dsHost_negative_dsGetSocIDFromSDK(void) {
 
     // Step 01: dsGetSocIDFromSDK() Call without prior initialization
     dsError_t result = dsGetSocIDFromSDK(socID);
-#ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("Step 01: Fetch SOC ID without initialization -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
-#else
-	 UT_ASSERT_EQUAL(result, dsERR_NONE);
-#endif
+
 
     // Step 02: dsHostInit() Initialize dsHost
     result = dsHostInit();
@@ -516,13 +516,10 @@ void test_l1_dsHost_negative_dsGetSocIDFromSDK(void) {
 
     // Step 05: dsGetSocIDFromSDK() Call after termination
      result = dsGetSocIDFromSDK(socID);
-#ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-    UT_LOG("Step 05: Fetch SOC ID after termination -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
-#else
-     UT_ASSERT_EQUAL(result, dsERR_NONE);
-#endif
-    UT_LOG("\n Out  %s\n",__FUNCTION__);
+     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+     UT_LOG("Step 05: Fetch SOC ID after termination -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+
+     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
 /**
@@ -616,12 +613,8 @@ void test_l1_dsHost_negative_dsGetHostEDID(void) {
 
     // Step 01: dsGetHostEDID() Call without prior initialization
      dsError_t result = dsGetHostEDID(edid, &length);
-#ifdef ENABLE_ENHANCED_ERROR_CODE 
-     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
      UT_LOG("Step 01: Fetch Host EDID without initialization -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
-#else
-	 UT_ASSERT_EQUAL(result, dsERR_NONE);
-#endif
 
     // Step 02: dsHostInit() Initialize dsHost
     result = dsHostInit();
@@ -645,12 +638,9 @@ void test_l1_dsHost_negative_dsGetHostEDID(void) {
 
     // Step 06: dsGetHostEDID() Call after termination
     result = dsGetHostEDID(edid, &length);
-#ifdef ENABLE_ENHANCED_ERROR_CODE
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("Step 05: Fetch Host EDID after termination -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
-#else
-     UT_ASSERT_EQUAL(result, dsERR_NONE);
-#endif
+
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -690,6 +680,7 @@ int test_l1_dsHost_register ( void )
     UT_add_test( pSuite2, "dsGetHostEDID_L1_positive" ,test_l1_dsHost_positive_dsGetHostEDID );
     UT_add_test( pSuite2, "dsGetHostEDID_L1_negative" ,test_l1_dsHost_negative_dsGetHostEDID );
 	
+   extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsHost/features/extendedEnumsSupported" );
 
 	return 0;
 } 
