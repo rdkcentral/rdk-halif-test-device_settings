@@ -75,6 +75,7 @@
 #include "dsAudioSettings.h"
 #include <ut.h>
 #include <ut_log.h>
+#include <ut_kvp_profile.h>
 
 #define NUM_OF_PORTS (sizeof(kPorts) / sizeof(kPorts[0]))
 #define MAX_PROFILE_NAME_LEN 10
