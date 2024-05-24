@@ -507,7 +507,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectPort(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID); 
     // Step 1: Call dsHdmiInSelectPort() without initializing the HDMI input sub-system
     dsError_t result = dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
@@ -523,7 +523,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectPort(void) {
 
     // Step 6: Call dsHdmiInSelectPort() after terminating the HDMI input sub-system
     result = dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -1684,7 +1684,7 @@ void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo(void) {
 
     // Step 1: Call dsGetHDMISPDInfo() without initializing the HDMI input sub-system
     dsError_t result = dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, spdInfo1);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE); 
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_GENERAL); 
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
@@ -1700,7 +1700,7 @@ void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo(void) {
 
     // Step 6: Call dsGetHDMISPDInfo() after terminating the HDMI input sub-system
     result = dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, spdInfo1);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_GENERAL);
 
     free(spdInfo1);
 
@@ -2056,7 +2056,7 @@ void test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList(void) {
     // Step 1: Call dsGetSupportedGameFeaturesList() without initializing the HDMI input sub-system
     dsSupportedGameFeatureList_t supported_features;
     dsError_t result = dsGetSupportedGameFeaturesList(&supported_features);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_GENERAL);
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
@@ -2069,7 +2069,7 @@ void test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList(void) {
 
     // Step 5: Call dsGetSupportedGameFeaturesList() after terminating the HDMI input sub-system
     result = dsGetSupportedGameFeaturesList(&supported_features);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_GENERAL);
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
@@ -2310,7 +2310,8 @@ void test_l1_dsHdmiIn_negative_dsGetEdid2AllmSupport(void) {
     gTestID = 50;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     bool allmSupport;
-    UT_ASSERT_EQUAL(dsGetEdid2AllmSupport(dsHDMI_IN_PORT_0, &allmSupport), dsERR_NOT_INITIALIZED);
+    dsError_t result = dsGetEdid2AllmSupport(dsHDMI_IN_PORT_0, &allmSupport);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
 
     // Step 2: Initialize HDMI input using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
@@ -2325,7 +2326,8 @@ void test_l1_dsHdmiIn_negative_dsGetEdid2AllmSupport(void) {
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 
     // Step 6: Call dsGetEdid2AllmSupport() without initializing the HDMI input sub-system again
-    UT_ASSERT_EQUAL(dsGetEdid2AllmSupport(dsHDMI_IN_PORT_0, &allmSupport), dsERR_NOT_INITIALIZED);
+    result = dsGetEdid2AllmSupport(dsHDMI_IN_PORT_0, &allmSupport);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
