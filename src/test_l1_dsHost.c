@@ -196,7 +196,6 @@ void test_l1_dsHost_negative_dsHostInit(void) {
     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_ALREADY_INITIALIZED, dsERR_NONE);
     UT_LOG("Step 02: Attempt to initialize dsHost again -> Expected: dsERR_ALREADY_INITIALIZED, Got: %d\n", result);
       
-
     // Step 03: Call dsHostTerm() Terminate dsHost
     result = dsHostTerm();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -281,7 +280,6 @@ void test_l1_dsHost_negative_dsHostTerm(void) {
     dsError_t result = dsHostTerm();
     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("Step 01: Attempt to terminate dsHost without initialization -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
-
 
     // Step 02: dsHostInit() Initialize dsHost
     result = dsHostInit();
@@ -384,7 +382,6 @@ void test_l1_dsHost_negative_dsGetCPUTemperature(void) {
     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("Step 01: Fetch CPU Temperature without initialization -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
 
-
     // Step 02: dsHostInit() Initialize dsHost
     result = dsHostInit();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -395,7 +392,6 @@ void test_l1_dsHost_negative_dsGetCPUTemperature(void) {
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     UT_LOG("Step 03: Fetch CPU Temperature with NULL pointer -> Expected: dsERR_INVALID_PARAM, Got: %d\n", result);
     
-
     // Step 04: dsHostTerm() Terminate dsHost
      result = dsHostTerm();
     UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -497,7 +493,6 @@ void test_l1_dsHost_negative_dsGetSocIDFromSDK(void) {
     dsError_t result = dsGetSocIDFromSDK(socID);
     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("Step 01: Fetch SOC ID without initialization -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
-
 
     // Step 02: dsHostInit() Initialize dsHost
     result = dsHostInit();
