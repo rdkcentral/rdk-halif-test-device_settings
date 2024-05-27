@@ -27,125 +27,143 @@
 * **Pre-Conditions:**  None@n
 * **Dependencies:** None@n
 *
-* Ref to API Definition specification documentation : [halSpec.md](../../../docs/halSpec.md)
+* Ref to API Definition specification documentation : [dsDisplay_halSpec.md](../../docs/pages/dsDisplay_halSpec.md)
 */
 
 #include <ut.h>
 #include <ut_log.h>
-#include <stdlib.h>
 #include "dsDisplay.h"
 
+static int gTestGroup = 2;
+static int gTestID = 1;
+
 /**
-* @brief This test validates the EDID of a display
+* @brief This test validates the EDID information of the display
 *
-* This test initializes the display, gets the display handle, retrieves the EDID and EDID bytes, and then terminates the display. The obtained EDID and EDID bytes are expected to be validated with predefined values.
+* This test function initializes the display, gets the display handle, retrieves the EDID information and the EDID bytes, and then terminates the display. The validation of the product code and the Manufacturer ID from the EDID buffer against the values available in the profile file 'ReferencePanel_EDID_Info.yml'.
 *
 * **Test Group ID:** 02@n
 * **Test Case ID:** 001@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [l2_dsDisplay_test_specification.md](l2_dsDisplay_test_specification.md)
+* Refer to UT specification documentation [dsDisplay_L2_Low-Level_TestSpecification.md](../../docs/pages/dsDisplay_L2_Low-Level_TestSpecification.md)
 */
 
-void test_l2_dsDisplay_ValidateEDID(void)
+void test_l2_dsDisplay_ValidateEDIDInfo(void)
 {
-    UT_LOG("Entering test_l2_dsDisplay_ValidateEDID...");
+    gTestID = 1;
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret;
     intptr_t handle;
-    dsDisplayEDID_t *edid = (dsDisplayEDID_t*)malloc(sizeof(dsDisplayEDID_t));
-    unsigned char *edidBuffer = (unsigned char *)malloc(1024);
+    dsDisplayEDID_t edid;
+    unsigned char edidBytes[MAX_EDID_BYTES_LEN];
     int length;
 
     // Step 1
     ret = dsDisplayInit();
-    UT_LOG("Invoked dsDisplayInit(). Return status: %d", ret);
+    UT_LOG_DEBUG("Invoking dsDisplayInit(), returned: %d\n", ret);
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+
+    // Step 2
+    ret = dsGetDisplay(dsVIDEOPORT_TYPE_HDMI, 0, &handle);
+    UT_LOG_DEBUG("Invoking dsGetDisplay() with dsVIDEOPORT_TYPE_HDMI and index 0, returned: %d, handle: %ld\n", ret, handle);
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+
+    // Step 3
+    ret = dsGetEDID(handle, &edid);
+    UT_LOG_DEBUG("Invoking dsGetEDID() with handle: %ld, returned: %d, productCode: %d\n", handle, ret, edid.productCode);
     UT_ASSERT_EQUAL(ret, dsERR_NONE);
 
-    if (ret == dsERR_NONE)
-    {
-        // Step 2
-        ret = dsGetDisplay(dsVIDEOPORT_TYPE_HDMI, 0, &handle);
-        UT_LOG("Invoked dsGetDisplay() with dsVIDEOPORT_TYPE_HDMI and index 0. Return status: %d, Handle: %ld", ret, handle);
-        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+    // Validate the product code from the output structure against the data available in Profile file 'ReferencePanel_EDID_Info.yml'.
+    // This step is not implemented as it requires access to the profile file and parsing it.
 
-        if (ret == dsERR_NONE)
-        {
-            // Step 3
-            ret = dsGetEDID(handle, edid);
-            UT_LOG("Invoked dsGetEDID() with handle. Return status: %d", ret);
-            UT_LOG("Parameter values ; productCode : %d , serialNumber :%d, manufactureYear : %d, manufactureWeek : %d, hdmiDeviceType : %d, isRepeater : %d, physicalAddressA :%d, physicalAddressB : %d, physicalAddressC : %d, physicalAddressD : %d, numOfSupportedResolution : %d, monitorName :%s ", edid->productCode, edid->serialNumber, edid->manufactureYear, edid->manufactureWeek, edid->hdmiDeviceType, edid->isRepeater, edid->physicalAddressA, edid->physicalAddressB, edid->physicalAddressC, edid->physicalAddressD, edid->numOfSupportedResolution, edid->monitorName );
-            UT_ASSERT_EQUAL(ret, dsERR_NONE);
+    // Step 4
+    ret = dsGetEDIDBytes(handle, edidBytes, &length);
+    UT_LOG_DEBUG("Invoking dsGetEDIDBytes() with handle: %ld, returned: %d, length: %d\n", handle, ret, length);
+    UT_ASSERT_EQUAL(ret, dsERR_NONE);
 
-            // Step 4
-            // Validate the obtained EDID information with the predefined EDID value.
-            // This step is not implemented as it requires predefined EDID value.
+    // Validate the "Manufacturer ID" at byte 8th and 9th from the EDID buffer against the values available in the profile file 'ReferencePanel_EDID_Info.yml'.
+    // This step is not implemented as it requires access to the profile file and parsing it.
 
-            // Step 5
-            ret = dsGetEDIDBytes(handle, edidBuffer, &length);
-            UT_LOG("Invoked dsGetEDIDBytes() with handle. Return status: %d, EDID Buffer Length: %d", ret, length);
-            UT_ASSERT_EQUAL(ret, dsERR_NONE);
+    // Step 5
+    ret = dsDisplayTerm();
+    UT_LOG_DEBUG("Invoking dsDisplayTerm(), returned: %d\n", ret);
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
 
-            // Step 6
-            // Validate the obtained EDID buffer with the predefined EDID buffer.
-            // This step is not implemented as it requires predefined EDID buffer.
-        }
-
-        // Step 7
-        ret = dsDisplayTerm();
-        UT_LOG("Invoked dsDisplayTerm(). Return status: %d", ret);
-        UT_ASSERT_EQUAL(ret, dsERR_NONE);
-    }
-
-    UT_LOG("Exiting test_l2_dsDisplay_ValidateEDID...");
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
 /**
-* @brief This test checks the default aspect ratio of the display
+* @brief Test for default aspect ratio of the display
 *
-* This test initializes the display, gets the display handle for HDMI port, checks the aspect ratio of the display and then terminates the display. The purpose of this test is to ensure that the default aspect ratio of the display is 16x9.
+* This function tests the default aspect ratio of the display. It first initializes the display subsystem, then gets the handle of the connected display device. It then gets the aspect ratio of the display and checks if it is 16:9. Finally, it terminates the display subsystem.
 *
 * **Test Group ID:** 02@n
 * **Test Case ID:** 002@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [l2_dsDisplay_test_specification.md](l2_dsDisplay_test_specification.md)
+* Refer to UT specification documentation [dsDisplay_L2_Low-Level_TestSpecification.md](../../docs/pages/dsDisplay_L2_Low-Level_TestSpecification.md)
 */
 
 void test_l2_dsDisplay_TestDefaultAspectRatio(void)
 {
-    UT_LOG("Entering test_l2_dsDisplay_TestDefaultAspectRatio...");
-
+    gTestID = 2;
     dsError_t ret;
     intptr_t handle;
     dsVideoAspectRatio_t aspectRatio;
 
-    // Step 1: Call dsDisplayInit API
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    UT_LOG_DEBUG("Invoking dsDisplayInit");
     ret = dsDisplayInit();
-    UT_LOG("Invoking dsDisplayInit(). Return status: %d", ret);
-    UT_ASSERT_EQUAL(ret, dsERR_NONE);
-
-    if (ret == dsERR_NONE) {
-        // Step 2: Call dsGetDisplay API
-        ret = dsGetDisplay(dsVIDEOPORT_TYPE_HDMI, 0, &handle);
-        UT_LOG("Invoking dsGetDisplay() with vType: dsVIDEOPORT_TYPE_HDMI and index: 0. Return status: %d", ret);
-        UT_ASSERT_EQUAL(ret, dsERR_NONE);
-
-        if (ret == dsERR_NONE) {
-            // Step 3: Call dsGetDisplayAspectRatio API
-            ret = dsGetDisplayAspectRatio(handle, &aspectRatio);
-            UT_LOG("Invoking dsGetDisplayAspectRatio() with handle: %ld. Return status: %d, Aspect Ratio: %d", handle, ret, aspectRatio);
-            UT_ASSERT_EQUAL(ret, dsERR_NONE);
-            UT_ASSERT_EQUAL(aspectRatio, dsVIDEO_ASPECT_RATIO_16x9);
-        }
-
-        // Step 4: Call dsDisplayTerm API
-        ret = dsDisplayTerm();
-        UT_LOG("Invoking dsDisplayTerm(). Return status: %d", ret);
-        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+    UT_LOG_DEBUG(" dsDisplayInit returned status : %d", ret);
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+    if (ret != dsERR_NONE)
+    {
+        UT_LOG_ERROR("dsDisplayInit failed with error: %d\n", ret);
+        return;
     }
 
-    UT_LOG("Exiting test_l2_dsDisplay_TestDefaultAspectRatio...");
+    UT_LOG_DEBUG("Invoking dsGetDisplay with dsVIDEOPORT_TYPE_HDMI and index 0");
+    ret = dsGetDisplay(dsVIDEOPORT_TYPE_HDMI, 0, &handle);
+    UT_LOG_DEBUG(" dsGetDisplay returned status : %d", ret);
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+    if (ret != dsERR_NONE)
+    {
+        UT_LOG_ERROR("dsGetDisplay failed with error: %d\n", ret);
+        dsDisplayTerm();
+        return;
+    }
+
+    UT_LOG_DEBUG("Invoking dsGetDisplayAspectRatio with handle obtained from dsGetDisplay");
+    ret = dsGetDisplayAspectRatio(handle, &aspectRatio);
+    UT_LOG_DEBUG(" dsGetDisplayAspectRatio returned status : %d", ret);
+    UT_ASSERT_EQUAL(ret, dsERR_NONE);
+    if (ret != dsERR_NONE)
+    {
+        UT_LOG_ERROR("dsGetDisplayAspectRatio failed with error: %d\n", ret);
+        dsDisplayTerm();
+        return;
+    }
+
+    UT_ASSERT_EQUAL(aspectRatio, dsVIDEO_ASPECT_RATIO_16x9);
+    if (aspectRatio != dsVIDEO_ASPECT_RATIO_16x9)
+    {
+        UT_LOG_ERROR("Aspect ratio is not dsVIDEO_ASPECT_RATIO_16x9\n");
+        dsDisplayTerm();
+        return;
+    }
+
+    UT_LOG_DEBUG("Invoking dsDisplayTerm");
+    ret = dsDisplayTerm();
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+    if (ret != dsERR_NONE)
+    {
+        UT_LOG_ERROR("dsDisplayTerm failed with error: %d\n", ret);
+    }
+
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
 static UT_test_suite_t * pSuite = NULL;
@@ -160,12 +178,13 @@ int test_dsDisplay_l2_register(void)
 {
     // Create the test suite
     pSuite = UT_add_suite("[L2 dsDisplay]", NULL, NULL);
-    if (pSuite == NULL) {
+    if (pSuite == NULL)
+    {
         return -1;
     }
     // List of test function names and strings
 
-    UT_add_test( pSuite, "l2_dsDisplay_ValidateEDID", test_l2_dsDisplay_ValidateEDID);
+    UT_add_test( pSuite, "l2_dsDisplay_ValidateEDIDInfo", test_l2_dsDisplay_ValidateEDIDInfo);
     UT_add_test( pSuite, "l2_dsDisplay_TestDefaultAspectRatio", test_l2_dsDisplay_TestDefaultAspectRatio);
 
     return 0;
