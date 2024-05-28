@@ -104,7 +104,7 @@ Playback of stream is required for the L3 testcases. [Audio Format Requirements 
 
 |Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |-----------|--------|--|--|------|----|--------------------------|
-|Get supported `MS12` `DAP` capabilities of device and verify with configuration file|dsGetAudioPort(), dsGetMS12Capabilities()|`Y`|`NA`|`Y`|`Y`|`NA`|
+|Retrieve the supported MS12 DAP capabilities of the device and verify them with the configuration YAML file. If it is a sink device, retrieve the value from the 'Sink_AudioSettings.yaml' file using the path "Ports/1/MS12_Capabilities" supported by the SPEAKER port. If it is a source device, retrieve the value from the 'Source_AudioSettings.yaml' file using the path "Ports/2/MS12_Capabilities" supported by the HDMI port.|dsGetAudioPort(), dsGetMS12Capabilities()|`Y`|`NA`|`Y`|`Y`|`NA`|
 |Loop through supported audio ports, Set various compression levels for supported ports and retrieve compression levels for verification|dsGetAudioPort(), dsSetAudioCompression(), dsGetAudioCompression()|`Y`|`NA`|`Y`|`Y`|`NA`|
 |Test various compression levels with stream playback. Loop through supported audio ports, Set various compression levels for supported ports and verify with external analyzer|dsGetAudioPort(), dsSetAudioCompression()|`NA`|`Y`|`Y`|`Y`|`Y`|
 |Loop through supported audio ports, Set Dialog Enhancement for supported ports and retrieve Dialog Enhancement for verification|dsGetAudioPort(), dsSetDialogEnhancement(), dsGetDialogEnhancement()|`Y`|`NA`|`Y`|`Y`|`NA`|
@@ -147,9 +147,9 @@ Playback of stream is required for the L3 testcases. [Audio Format Requirements 
 
 |Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |-----------|--------|--|--|------|----|--------------------------|
-|Loop through supported audio ports, Check whether the port supports `MS12` decode or not with configuration file|dsGetAudioPort(), dsIsAudioMS12Decode()|`Y`|`NA`|`Y`|`Y`|`NA`|
-|Loop through supported audio ports, Check whether the port supports `MS11` decode or not with configuration file|dsGetAudioPort(), dsIsAudioMSDecode()|`Y`|`NA`|`Y`|`Y`|`NA`|
-|Get Supported `MS12` Audio profiles and verify with configuration file|dsGetAudioPort(), dsGetMS12AudioProfileList()|`Y`|`NA`|`NA`|`Y`|`NA`|
+|Loop through the supported audio ports and check whether the port supports MS12 decode using the configuration YAML file. For a sink device, retrieve the value from the 'Sink_AudioSettings.yaml' file using the path "Ports/1/IsMS12Decode" supported by the SPEAKER port. For a source device, retrieve the value from the 'Source_AudioSettings.yaml' file using the path "Ports/2/IsMS12Decode" supported by the HDMI port.|dsGetAudioPort(), dsIsAudioMS12Decode()|`Y`|`NA`|`Y`|`Y`|`NA`|
+|Loop through the supported audio ports and check whether the port supports MS11 decode using the configuration YAML file. For a sink device, retrieve the value from the 'Sink_AudioSettings.yaml' file using the path "Ports/1/IsMS11Decode" supported by the SPEAKER port. For a source device, retrieve the value from the 'Source_AudioSettings.yaml' file using the path "Ports/2/IsMS11Decode" supported by the HDMI port.|dsGetAudioPort(), dsIsAudioMSDecode()|`Y`|`NA`|`Y`|`Y`|`NA`|
+|Get the supported MS12 audio profiles and verify them with the configuration YAML file. For a sink device, retrieve the value from the 'Sink_AudioSettings.yaml' file using the path "Ports/1/MS12_AudioProfiles" supported by the SPEAKER port. For source devices, it is not supported. |dsGetAudioPort(), dsGetMS12AudioProfileList()|`Y`|`NA`|`NA`|`Y`|`NA`|
 |Get Supported `MS12` Audio profiles, Loop through supported audio ports, set various audio profiles for supported ports and retrieve audio profile for verification|dsGetAudioPort(), dsGetMS12AudioProfileList(), dsSetMS12AudioProfile(), dsGetMS12AudioProfile()|`Y`|`NA`|`NA`|`Y`|`NA`|
 
 ### Test Startup Requirement - Test MS12 Capabilities
@@ -168,8 +168,8 @@ Playback of stream is required for the L3 testcases. [Audio Format Requirements 
 
 |Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |-----------|--------|--|--|------|----|--------------------------|
-|Get the `ARC` port handle by looping through supported audio ports, get the `ARC` type of connected device and verify with configuration file|dsGetAudioPort(), dsGetSupportedARCTypes()|`NA`|`Y`|`NA`|`Y`|`Y`|
-|Get the `ARC` port ID and verify with configuration file|dsGetHDMIARCPortId()|`Y`|`NA`|`NA`|`Y`|`NA`|
+|Get the ARC port handle by looping through the supported audio ports, get the ARC type of the connected device, and verify it with the configuration YAML file. For a sink device, retrieve the value from the 'Sink_AudioSettings.yaml' file using the path "Ports/2/Arc_Types" as the sink device supports Arc_Types only on the HDMI_ARC port. It does not support for source device.|dsGetAudioPort(), dsGetSupportedARCTypes()|`NA`|`Y`|`NA`|`Y`|`Y`|
+|Get the ARC port ID and verify it with the configuration YAML file. For a sink device, retrieve the value from the 'Sink_AudioSettings.yaml' file using the path "Ports/2/Arc_Port" as the sink device supports Arc_Port only on the HDMI_ARC port. It is not supported on source devices.|dsGetHDMIARCPortId()|`Y`|`NA`|`NA`|`Y`|`NA`|
 |Get the `ARC` port handle by looping through supported audio ports, enable the `ARC` Port and check if the audio routed to `ARC` port using external analyzers|dsGetAudioPort(), dsAudioEnableARC()|`NA`|`Y`|`NA`|`Y`|`Y`|
 |Get the `ARC` port handle by looping through supported audio ports, enable the `ARC` Port, Set `SAD` for `ARC` port and verify using external analyzers|dsGetAudioPort(), dsAudioEnableARC(), dsAudioSetSAD()|`NA`|`Y`|`NA`|`Y`|`Y`|
 
@@ -257,8 +257,8 @@ Playback of stream is required for the L3 testcases. [Audio Format Requirements 
 |Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |-----------|--------|--|--|------|----|--------------------------|
 |Loop through supported audio ports, Set Atmos for supported ports and analyze with external device|dsAudioPortInit(), dsSetAudioAtmosOutputMode()|`NA`|`Y`|`Y`|`Y`|`Y`|
-|For sink devices get the ATMOS capabilities of dsAUDIOPORT_TYPE_SPEAKER (internal speaker) and verify with configuration file|dsGetAudioPort(), dsGetSinkDeviceAtmosCapability()|`Y`|`NA`|`NA`|`Y`|`NA`|
-|Loop through supported audio ports, Get the ATMOS capabilities of connected devices and verify with configuration file|dsGetAudioPort(), dsGetSinkDeviceAtmosCapability()|`NA`|`Y`|`Y`|`Y`|`Y`|
+|For sink devices, get the ATMOS capabilities of dsAUDIOPORT_TYPE_SPEAKER (internal speaker) and verify them with the configuration YAML file. Retrieve the value from the 'Sink_AudioSettings.yaml' file using the path "Ports/1/ATMOS_Capabilities" as the SPEAKER port number is 1. It is not supported for source device.|dsGetAudioPort(), dsGetSinkDeviceAtmosCapability()|`Y`|`NA`|`NA`|`Y`|`NA`|
+|Loop through supported audio ports, Get the ATMOS capabilities of connected devices and verify with configuration file.|dsGetAudioPort(), dsGetSinkDeviceAtmosCapability()|`NA`|`Y`|`Y`|`Y`|`Y`|
 |Register Atmos capability call-back, change the Atmos capabilities of connected device, and check whether the call-back is triggered or not|dsAudioAtmosCapsChangeRegisterCB ()|`NA`|`Y`|`Y`|`Y`|`Y`|
 
 ### Test Startup Requirement - Test Atmos Mode
@@ -278,8 +278,8 @@ Playback of stream is required for the L3 testcases. [Audio Format Requirements 
 
 |Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |-----------|--------|--|--|------|----|--------------------------|
-|Get the audio format of stream played and verify with external analyzer|dsGetAudioFormat()|`NA`|`Y`|`Y`|`Y`|`Y`|
-|Get the audio capabilities of the device and verify with configuration file|dsGetAudioCapabilities()|`Y`|`NA`|`Y`|`Y`|`NA`|
+|Get the audio format of stream played and verify with external analyzer|dsGetAudioFormat()|`NA`|`Y`|`Y`|`Y`|`NA`|
+|Get the audio capabilities of the device and verify with configuration YAML file. If it is a sink device, the value to be retrieved from the 'Sink_AudioSettings.yaml' file with the path of "Audio_Capabilities". For the source devices, the value to be retrieved from the 'Source_AudioSettings.yaml' file with the path of "Audio_Capabilities".|dsGetAudioCapabilities()|`Y`|`NA`|`Y`|`Y`|`NA`|
 |Register a call-back, Change the audio format of playback and check whether call-back is triggered or not|dsAudioFormatUpdateRegisterCB(), dsGetAudioFormat()|`NA`|`Y`|`Y`|`Y`|`NA`|
 
 ### Test Startup Requirement - Test Audio Format
@@ -291,9 +291,6 @@ Playback of stream is required for the L3 testcases. [Audio Format Requirements 
 [Emulator Requirements](#emulator-requirements)
 
 ### Control Plane Requirements - Test Audio Format
-
-- Control the external analyzer
-- Control the port connections
 
 ## Test Associated Audio Mixing
 
