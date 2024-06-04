@@ -51,7 +51,7 @@ High level overview:
 |Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |-----------|--------|--|--|------|----|--------------------------|
 |The Get EDID Information test aims to verify the functionality of the display device module's dsGetEDID and dsGetEDIDBytes functions, which are responsible for retrieving the Extended Display Identification Data (EDID) from connected display devices. This test ensures that the module can accurately retrieve and interpret EDID information, providing essential data about the display's capabilities and characteristics.|dsGetEDID(), dsGetEDIDBytes()|N|Y|Y|N|N|
-|For sink devices, validate the predefined the EDID value coming from the TV HDMI port1 EDID |dsGetEDID(), dsGetEDIDBytes()|Y|N|N|Y|N|
+|For the sink device, retrieve EDID information for the 'dsVIDEOPORT_TYPE_INTERNAL' type using GetEDID and GetEDIDBytes, then validate the values against the data available in the profile file. The values to be validated are the 'EDID_Data/productCode' for GetEDID and the 'EDID_Data/edidBytes'(which stands for Manufacturer ID) at bytes 8 and 9 against the values available in the profile file "Panel_4K_Display.yaml" for GetEDIDBytes.|dsGetEDID(), dsGetEDIDBytes()|Y|N|N|Y|N|
 
 ### Test Startup Requirement - Get EDID Information
 

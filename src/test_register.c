@@ -25,8 +25,8 @@ int register_hal_l2_tests( void )
 {
     int registerFailed=0;
 
-    registerFailed |= test_dsCompositeIn_l2_register();
     registerFailed |= test_dsDisplay_l2_register();
+    registerFailed |= test_dsCompositeIn_l2_register();
 
     return registerFailed;
 }

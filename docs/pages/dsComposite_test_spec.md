@@ -46,7 +46,7 @@ High level overview:
 
 |Description|HAL APIs|L2|L3|Control plane requirements|
 |-----------|--------|--|--|--------------------------|
-|Verify that the function returns the expected COMPOSITE input ports. Compare the input port values with the configuration file.|dsCompositeInGetNumberOfInputs|Y|N|N|
+|Ensure that the function returns the expected number of COMPOSITE input ports by comparing the input port values parsed from the configuration YAML file 'Panel_CompositeInput.yaml'. The value to be retrieved from the YAML is 'composite_input_configurations/number_of_ports'. |dsCompositeInGetNumberOfInputs|Y|N|N|
 
 ### Emulator Requirement - Get Number of Inputs
 
@@ -79,8 +79,8 @@ Connecting and disconnecting source devices in the CompositeIn will be handled b
 
 |Description|HAL APIs|L2|L3|Control plane requirements|
 |-----------|--------|--|--|--------------------------|
-|Verify that the function successfully sets the specified COMPOSITE Input port when there is no connection of source device, and check the disable status of the port information using "Get status".|dsCompositeInSelectPort, dsCompositeInGetStatus|Y|N|N|
-|Verify that the function successfully sets the specified COMPOSITE Input port as active for presentation, and check the port information using "Get status".|dsCompositeInSelectPort, dsCompositeInGetStatus|N|Y|Y|
+|Loop through the all composite ports, verify that the function successfully sets the specified COMPOSITE Input port when there is no connection of source device, and check the disable status of the port information using "Get status".|dsCompositeInSelectPort, dsCompositeInGetStatus|Y|N|N|
+|Loop through the all composite ports, verify that the function successfully sets the specified COMPOSITE Input port as active for presentation, and check the port information using "Get status".|dsCompositeInSelectPort, dsCompositeInGetStatus|N|Y|Y|
 
 ### Test Startup Requirement - Set the Composite port
 
@@ -99,7 +99,6 @@ Emulator will boot with the port informations coming from the configuration file
 |Description|HAL APIs|L2|L3|Control plane requirements|
 |-----------|--------|--|--|--------------------------|
 |Verify that the function successfully scales the COMPOSITE input video when valid coordinates and dimensions are provided within the current resolution limits. Based on video resolution need to check whether the coordinates are in range|dsCompositeInSelectPort(), dsCompositeInScaleVideo()|N|Y|Y|
-|Scaling the COMPOSITE input video without selecting the composite Input port. It should result as 'NOT SUPPORTED'.|dsCompositeInScaleVideo()|Y|N|N| 
 
 ### Test Startup Requirement - Scale the Composite Input Video
 
