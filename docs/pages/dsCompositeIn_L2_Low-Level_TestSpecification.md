@@ -164,10 +164,8 @@ graph TB
     A -->|Failure| A1[Test case fail]
     B -->|dsCOMPOSITE_IN_PORT_0 to dsCOMPOSITE_IN_PORT_MAX| C[Call dsCompositeInSelectPort <br> with current port]
     C -->|Success| D[Verify function sets <br> specified COMPOSITE <br> Input port]
-    C -->|Failure| C1[Test case fail]
     D --> E[Call dsCompositeInGetStatus]
     E -->|Success| F[Check disable status of the port]
-    E -->|Failure| E1[Test case fail]
     F --> G{End of Loop?}
     G -->|No| B
     G -->|Yes| H[Call dsCompositeInTerm]
