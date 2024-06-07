@@ -14,7 +14,7 @@
 - `HDMI`     - High-Definition Multimedia Interface
 - `dsHdmiIn` - Device Settings High-Definition Multimedia Interface Input
 - `SPD`      - Source Product Descriptor
-- `ALLM`     - Auto Low Latency Mode 
+- `ALLM`     - Auto Low Latency Mode
 - `AVI`      - Audio Video Interleave
 - `Y`        - Yes
 - `N`        - No
@@ -65,7 +65,7 @@ High level overview:
 
 |Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |-----------|--------|--|--|------|----|--------------------------|
-|Verify that the function returns the expected `HDMI` Input ports. Compare the input port values by parsing the configuration YAML file 'ReferencePanel_AVInput_Info.yaml'.|dsHdmiInGetNumberOfInputs|`Y`|`N`|`Y`|`Y`|`NA`|
+|Verify that the function returns the expected `HDMI` Input ports. Compare the input port values by parsing the configuration YAML file `ReferencePanel_AVInput_Info.yaml (HdmiInputPort/numberOfPorts)`|dsHdmiInGetNumberOfInputs|`Y`|`N`|`Y`|`Y`|`NA`|
 
 ### Test Startup Requirement - Get Number of Inputs
 
@@ -291,7 +291,7 @@ Changing `AVI` content type by control Plane..
 
 |Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |-----------|--------|--|--|------|----|--------------------------|
-|Loop through all the ports and verify whether the given port is an HDMI ARC port by comparing it with the 'ReferencePanel_AVInput_Info.yaml' configuration file.|dsIsHdmiARCPort|`Y`|`N`|`N`|`Y`|`NA`|
+|Loop through all the ports and verify whether the given port is an HDMI ARC port by comparing it with the `ReferencePanel_AVInput_Info.yaml (HdmiArcPort/numberOfPorts)` configuration file.|dsIsHdmiARCPort|`Y`|`N`|`N`|`Y`|`NA`|
 
 ### Test Startup Requirement - Check `HDMI` ARC Port
 
@@ -309,7 +309,7 @@ None
 
 |Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |-----------|--------|--|--|------|----|--------------------------|
-|Setting the `EDID` version for a given port and getting back the `EDID` version and compare with the Set value. Also, validate the EDID length for a given port. Compare the EDID length values by parsing the configuration YAML file 'ReferencePanel_EDID_Info.yaml'.|dsSetEdidVersion, dsGetEdidVersion, dsGetEDIDBytesInfo|`Y`|`N`|`N`|`Y`|`NA`|
+|Setting the `EDID` version for a given port and getting back the `EDID` version and compare with the Set value. Also, validate the EDID length for a given port. Compare the EDID length values by parsing the configuration YAML file `ReferencePanel_EDID_Info.yaml (EDID_Reference_Data/edidBytesLength)`.|dsSetEdidVersion, dsGetEdidVersion, dsGetEDIDBytesInfo|`Y`|`N`|`N`|`Y`|`NA`|
 |This test ensures that the module can accurately retrieve and interpret `EDID` information, providing essential data about the display's capabilities and characteristics.|dsGetEdidVersion, dsGetEDIDBytesInfo|`N`|`Y`|`N`|`Y`|`Y`|
 
 ### Test Startup Requirement - Set and Get `EDID` Information
@@ -347,7 +347,7 @@ Connecting and disconnecting source devices in the `HDMI` Input will be handled 
 
 |Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |-----------|--------|--|--|------|----|--------------------------|
-|Make sure that the functionality can list and get the count of all the game features that are supported. Compare the result by parsing the configuration YAML file 'ReferencePanel_AVInput_Info.yaml'.|dsGetSupportedGameFeaturesList|`Y`|`N`|`N`|`Y`|`NA`|
+|Make sure that the functionality can list and get the count of all the game features that are supported. Compare the result by parsing the configuration YAML file `ReferencePanel_AVInput_Info.yaml(gameFeatures/count)`.|dsGetSupportedGameFeaturesList|`Y`|`N`|`N`|`Y`|`NA`|
 
 ### Test Startup Requirement - Get Supported Game Feature List
 
