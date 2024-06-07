@@ -1,0 +1,15 @@
+HDMIIN:
+  Type: sink
+  Name: element
+  HdmiInputPort:
+    #dsHDMI_IN_PORT_NONE = -1,  /*!< HDMI input port index for NONE */
+    #dsHDMI_IN_PORT_0,          /*!< HDMI input port index for PORT 0 */
+    #dsHDMI_IN_PORT_1,          /*!< HDMI input port index for PORT 1 */
+    #dsHDMI_IN_PORT_2,          /*!< HDMI input port index for PORT 2 */
+    #dsHDMI_IN_PORT_MAX         /*!< Out of range */
+    numberOfPorts: 3
+  HdmiArcPort:
+    portNumber: 1
+  gameFeatures:
+    feature: "allm"
+    count: 1

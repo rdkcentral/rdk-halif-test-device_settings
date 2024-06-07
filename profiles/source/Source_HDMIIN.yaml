@@ -1,0 +1,10 @@
+HDMIIN:
+  Type: source
+  Name: xi-one
+  compositeInputPort:
+    numberOfPorts: 0
+  HdmiInputPort:
+    numberOfPorts: 0
+  HdmiArcPort:
+    portNumber: 0
+gameFeatures: false
