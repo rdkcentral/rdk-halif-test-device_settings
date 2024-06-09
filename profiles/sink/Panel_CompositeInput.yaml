@@ -2,6 +2,10 @@ Device:
   Type: sink
   Name: element
 
+dsCompositeIn:
+  features:
+    extendedEnumsSupported: false
+
 composite_input_configurations:
   #dsCOMPOSITE_IN_PORT_NONE = -1,  ///< No composite port.
   #dsCOMPOSITE_IN_PORT_0,          ///< Composite port index 0.
