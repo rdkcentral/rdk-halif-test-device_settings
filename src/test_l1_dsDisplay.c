@@ -75,12 +75,14 @@
 
 #include <ut.h>
 #include <ut_log.h>
+#include <ut_kvp_profile.h>
 #include "stdint.h"
 #include "dsDisplay.h"
 #include "dsVideoPortSettings.h"
 
 static int gTestGroup = 1;
 static int gTestID = 1;
+static bool extendedEnumsSupported=false; 
 
 #define DS_ASSERT_AUTO_TERM_NUMERICAL(value, comparison){\
     if(value != comparison){\
@@ -97,6 +99,19 @@ static int gTestID = 1;
         UT_FAIL();\
     }\
 }\
+
+#define CHECK_FOR_EXTENDED_ERROR_CODE( result, enhanced, old )\
+{\
+   if ( extendedEnumsSupported == true )\
+   {\
+      UT_ASSERT_EQUAL( enhanced, result );\
+   }\
+   else\
+   {\
+       UT_ASSERT_EQUAL( old, result );\
+   }\
+}
+
 
 /**
  * @brief Ensure dsDisplayInit() initializes the DS Display sub-system correctly during positive scenarios
@@ -184,9 +199,9 @@ void test_l1_dsDisplay_negative_dsDisplayInit(void) {
 
     // Step 02: Attempt to initialize the display module again
     result = dsDisplayInit();
+    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_ALREADY_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_ALREADY_INITIALIZED);
-
+       
     // Step 03: Terminate the display module
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
@@ -195,7 +210,6 @@ void test_l1_dsDisplay_negative_dsDisplayInit(void) {
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
-
 
 
 /**
@@ -278,10 +292,10 @@ void test_l1_dsDisplay_negative_dsDisplayTerm(void) {
     int result;
 
     // Step 01: Call dsDisplayTerm() without initializing the display sub-system
-    result = dsDisplayTerm();
-    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+     result = dsDisplayTerm();
+     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
+       
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
@@ -294,13 +308,12 @@ void test_l1_dsDisplay_negative_dsDisplayTerm(void) {
 
     // Step 04: Call dsDisplayTerm() again after termination
     result = dsDisplayTerm();
+    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+      
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
-
 
 
 /**
@@ -344,15 +357,15 @@ void test_l1_dsDisplay_positive_dsGetDisplay(void) {
         // Step 02: Call dsGetDisplay() for each valid port
         result = dsGetDisplay(vType, i, &displayHandle1);
         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_LOG("Display handle for port type %d: %ld\n", vType, (long)displayHandle1);
 
         // Step 03: Call the last value again, and compare the results
         result = dsGetDisplay(vType, i, &displayHandle2);
         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, displayHandle1, displayHandle2);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_LOG("\n In %s Comparison: [%d = %d]\n", __FUNCTION__, result);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(displayHandle1, displayHandle2);
+        UT_ASSERT_EQUAL(displayHandle1, displayHandle2);
         UT_LOG("Repeated display handle for port type %d: %ld\n", vType, (long)displayHandle2);
     }
 
@@ -364,8 +377,6 @@ void test_l1_dsDisplay_positive_dsGetDisplay(void) {
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
-
-
 
 
 /**
@@ -402,8 +413,8 @@ void test_l1_dsDisplay_negative_dsGetDisplay(void) {
 
     // Step 01: Call dsGetDisplay() without initializing the display sub-system
     result = dsGetDisplay(kSupportedPortTypes[0], 0, &displayHandle);
-    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);       
 
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
@@ -413,17 +424,17 @@ void test_l1_dsDisplay_negative_dsGetDisplay(void) {
     // Step 03: Call dsGetDisplay() with invalid video type
     result = dsGetDisplay(dsVIDEOPORT_TYPE_MAX, (int)dsVIDEOPORT_TYPE_MAX, &displayHandle);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM);
 
     // Step 04: Call dsGetDisplay() with invalid index
     result = dsGetDisplay(kSupportedPortTypes[0], -1, &displayHandle);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 05: Call dsGetDisplay() with NULL handle
     result = dsGetDisplay(kSupportedPortTypes[0], 0, NULL);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 06: Terminate the display sub-system
     result = dsDisplayTerm();
@@ -432,9 +443,9 @@ void test_l1_dsDisplay_negative_dsGetDisplay(void) {
 
     // Step 07: Call dsGetDisplay() again after termination
     result = dsGetDisplay(kSupportedPortTypes[0], 0, &displayHandle);
+    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+    
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -484,29 +495,29 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
         // Step 02: Get the display device handle
         if(kSupportedPortTypes[i] == dsVIDEOPORT_TYPE_INTERNAL || kSupportedPortTypes[i] == dsVIDEOPORT_TYPE_HDMI || kSupportedPortTypes[i] == dsVIDEOPORT_TYPE_HDMI_INPUT){
             result = dsGetDisplay(kSupportedPortTypes[i], i, &displayHandle);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
             // Step 03: Call dsGetEDID() with the obtained handle
             result = dsGetEDID(displayHandle, edid1);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
 
             // Step 04: Call dsGetEDID() again with the same handle
             result = dsGetEDID(displayHandle, edid2);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
 
             // Step 05: Compare the returned results
-            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1->productCode , edid2->productCode);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1->serialNumber , edid2->serialNumber);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1->manufactureYear , edid2->manufactureYear);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1->manufactureWeek , edid2->manufactureWeek);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1->hdmiDeviceType , edid2->hdmiDeviceType);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1->isRepeater , edid2->isRepeater);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1->physicalAddressA , edid2->physicalAddressA);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1->physicalAddressB , edid2->physicalAddressB);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1->physicalAddressC , edid2->physicalAddressC);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1->physicalAddressD , edid2->physicalAddressD);
-            DS_ASSERT_AUTO_TERM_NUMERICAL(edid1->numOfSupportedResolution , edid2->numOfSupportedResolution);
-            DS_ASSERT_AUTO_TERM_STRING(edid2->monitorName, edid2->monitorName)
+            UT_ASSERT_EQUAL(edid1->productCode , edid2->productCode);
+            UT_ASSERT_EQUAL(edid1->serialNumber , edid2->serialNumber);
+            UT_ASSERT_EQUAL(edid1->manufactureYear , edid2->manufactureYear);
+            UT_ASSERT_EQUAL(edid1->manufactureWeek , edid2->manufactureWeek);
+            UT_ASSERT_EQUAL(edid1->hdmiDeviceType , edid2->hdmiDeviceType);
+            UT_ASSERT_EQUAL(edid1->isRepeater , edid2->isRepeater);
+            UT_ASSERT_EQUAL(edid1->physicalAddressA , edid2->physicalAddressA);
+            UT_ASSERT_EQUAL(edid1->physicalAddressB , edid2->physicalAddressB);
+            UT_ASSERT_EQUAL(edid1->physicalAddressC , edid2->physicalAddressC);
+            UT_ASSERT_EQUAL(edid1->physicalAddressD , edid2->physicalAddressD);
+            UT_ASSERT_EQUAL(edid1->numOfSupportedResolution , edid2->numOfSupportedResolution);
+            UT_ASSERT_EQUAL(edid2->monitorName, edid2->monitorName);
 
         }
     }
@@ -519,7 +530,6 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
-
 
 
 /**
@@ -559,9 +569,9 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
 
     // Step 01: Call dsGetEDID() without initializing the display sub-system
     result = dsGetEDID(displayHandle, edid);
+    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+       
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
@@ -570,15 +580,15 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
     // Step 03: Obtain a display device handle
     for (int i = 0; i < sizeof(kSupportedPortTypes) / sizeof(kSupportedPortTypes[0]); i++) {
         result = dsGetDisplay(kSupportedPortTypes[i], i, &displayHandle);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 04: Call dsGetEDID() with an invalid handle
         result = dsGetEDID((intptr_t)NULL, edid);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+	UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
         // Step 05: Call dsGetEDID() with a NULL dsDisplayEDID_t
         result = dsGetEDID(displayHandle, NULL);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     }
 
     // Step 06: Terminate the display sub-system
@@ -588,8 +598,9 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
 
     // Step 07: Call dsGetEDID() without initializing the display sub-system
     result = dsGetEDID(displayHandle, edid);
+    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+        
 
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -728,14 +739,9 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
 
     // Step 01: Call dsGetEDIDBytes() without initializing or obtaining a handle
     result = dsGetEDIDBytes(displayHandle, edid, &length);
+    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    if(result != dsERR_NOT_INITIALIZED)
-    {
-        UT_FAIL("Incorrect error return");
-        free(edid);
-        return;
-    }
-
+    
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
@@ -749,7 +755,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
     // Step 03: Loop through all valid ports
     for (int i = 0; i < sizeof(kSupportedPortTypes) / sizeof(kSupportedPortTypes[0]); i++) {
         result = dsGetDisplay(kSupportedPortTypes[i], i, &displayHandle);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
         if(result != dsERR_NONE)
         {
             UT_FAIL("Failed to get displayHandle");
@@ -792,16 +798,10 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
     }
 
     // Step 08: Call dsGetEDIDBytes() without initializing or obtaining a handle
-    result = dsGetEDIDBytes(displayHandle, edid, &length);
-    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    if(result != dsERR_NOT_INITIALIZED)
-    {
-        UT_FAIL("ncorrect error return");
-        free(edid);
-        return;
-    }
+     result = dsGetEDIDBytes(displayHandle, edid, &length);
+     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
-    free(edid);
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -849,18 +849,18 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
     // Step 02: Loop through all valid ports in kSupportedPortTypes
     for (int i = 0; i < sizeof(kSupportedPortTypes) / sizeof(kSupportedPortTypes[0]); i++) {
         result = dsGetDisplay(kSupportedPortTypes[i], i, &displayHandle);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 03: Call dsGetDisplayAspectRatio() with the obtained handle
         result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio1);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 04: Call dsGetDisplayAspectRatio() again with the same handle
         result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio2);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 05: Compare the results
-        DS_ASSERT_AUTO_TERM_NUMERICAL(aspectRatio1, aspectRatio2);
+        UT_ASSERT_EQUAL(aspectRatio1, aspectRatio2);
     }
 
     // Step 06: Terminate the display sub-system
@@ -910,9 +910,9 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
 
     // Step 01: Call dsGetDisplayAspectRatio() without initializing the display sub-system
     result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio);
+    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+   
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
@@ -921,15 +921,15 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
     // Step 03: Loop through all valid ports in kSupportedPortTypes
     for (int i = 0; i < sizeof(kSupportedPortTypes) / sizeof(kSupportedPortTypes[0]); i++) {
         result = dsGetDisplay(kSupportedPortTypes[i], i, &displayHandle);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 04: Call dsGetDisplayAspectRatio() with an invalid handle
         result = dsGetDisplayAspectRatio((intptr_t)NULL, &aspectRatio);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
         // Step 05: Call dsGetDisplayAspectRatio() with a NULL aspectRatio
         result = dsGetDisplayAspectRatio(displayHandle, NULL);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     }
 
     // Step 06: Terminate the display sub-system
@@ -939,9 +939,9 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
 
     // Step 07: Call dsGetDisplayAspectRatio() without initializing the display sub-system
     result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio);
+    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+    
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -968,7 +968,6 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
  * @note valid ports can be retrieved from kSupportedPortTypes which can be retrieved from dsVideoPortSettings.
  * 
  */
-
 void testDisplayCallback(int handle, dsDisplayEvent_t event,void* eventData) {
     // Callback function logic
 }
@@ -989,11 +988,11 @@ void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback(void) {
     // Step 02: Loop through all valid ports in kSupportedPortTypes
     for (int i = 0; i < sizeof(kSupportedPortTypes) / sizeof(kSupportedPortTypes[0]); i++) {
         result = dsGetDisplay(kSupportedPortTypes[i], i, &displayHandle);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 03: Call dsRegisterDisplayEventCallback() with the obtained handle and a valid callback function
         result = dsRegisterDisplayEventCallback(displayHandle, testDisplayCallback);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
     // Step 04: Terminate the display sub-system
@@ -1029,8 +1028,6 @@ void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback(void) {
  * 
  * @note The ability to test scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might require specific setup or environment configuration.
  */
-
-
 void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
     // Start of the test
     gTestID = 14;
@@ -1042,9 +1039,9 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
 
     // Step 01: Call dsRegisterDisplayEventCallback() without initializing the display sub-system
     result = dsRegisterDisplayEventCallback(displayHandle, testDisplayCallback);
+    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+   
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
@@ -1054,15 +1051,15 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
     for (int i = 0; i < portCount; ++i) {
         // Obtain a display device handle
         result = dsGetDisplay(kSupportedPortTypes[i], i, &displayHandle);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_NONE);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Call dsRegisterDisplayEventCallback() with a NULL handle
         result = dsRegisterDisplayEventCallback((intptr_t)NULL, testDisplayCallback);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
         // Call dsRegisterDisplayEventCallback() with a NULL callback function
         result = dsRegisterDisplayEventCallback(displayHandle, NULL);
-        DS_ASSERT_AUTO_TERM_NUMERICAL(result, dsERR_INVALID_PARAM);
+        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     }
 
     // Step 05: Terminate the display sub-system
@@ -1072,9 +1069,9 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
 
     // Step 06: Call dsRegisterDisplayEventCallback() without reinitializing the display sub-system
     result = dsRegisterDisplayEventCallback(displayHandle, testDisplayCallback);
+    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+    
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -1112,7 +1109,8 @@ int test_l1_dsDisplay_register ( void )
 	UT_add_test( pSuite, "dsGetDisplayAspectRatio_L1_negative" ,test_l1_dsDisplay_negative_dsGetDisplayAspectRatio );
 	UT_add_test( pSuite, "dsRegisterDisplayEventCallback_L1_positive" ,test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback );
 	UT_add_test( pSuite, "dsRegisterDisplayEventCallback_L1_negative" ,test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback );
-	
+
+      extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsDisplay/features/extendedEnumsSupported" );	
 
 	return 0;
 } 
