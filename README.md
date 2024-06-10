@@ -49,3 +49,5 @@ This repository contains the Unit Test Suites (L1) for the following submodules 
 - All APIs in each individual sub-module need to be implemented in this current version. If any API is not supported, please add stub implementation with return type dsERR_OPERATION_NOT_SUPPORTED for the same.
 - Building against the actual library may introduce SOC dependencies. Hence, a template SKELETON library is created without SOC dependencies. On the real platform (target), it can be mounted, copied and bound with the actual library.
 - The configuration/settings file(s) for certain `DS` sub-modules, specific to a platform (templates in [DS HAL README.md](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/docs/pages/README.md "DS HAL README.md")), should be added in the `profiles/include` directory within the root directory of the DS HAL Test repository.
+- When running the binary, remember to include a profile file as an argument for designated test cases. The following example illustrates this: `./hal_test -p deviceSettingsExtendedEnumsNotSupported.yaml`
+- Profiles file available in [profile yaml file](./profiles/deviceSettingsExtendedEnumsNotSupported.yaml)
