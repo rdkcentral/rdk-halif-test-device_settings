@@ -1,8 +1,24 @@
 Device:
   Type: sink
   Name: element
-
+  
+#For L1 profile
+dsAudio:
+  features:
+    extendedEnumsSupported: false
+dsHdmiIn:
+  features:
+    extendedEnumsSupported: false
+dsVideoDevice:
+  features:
+    extendedEnumsSupported: false
 dsDisplay:
+  features:
+    extendedEnumsSupported: false
+dsHost:
+  features:
+    extendedEnumsSupported: false
+dsVideoPort:
   features:
     extendedEnumsSupported: false
 
