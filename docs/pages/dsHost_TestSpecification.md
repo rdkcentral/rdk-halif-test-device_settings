@@ -54,9 +54,9 @@ High level overview:
 
 ## Retrieve CPU Temperature
 
-|Description|L2|L3|Control Plane Requirements|
-|-----------|--|--|--------------------------|
-|Invoke the module to retrieve `CPU` temperature, verify the returned temperature falls within valid operating range and ensure the `CPU` is in a normal operating state.|Y|N|N|
+|Description|HAL APIs|L2|L3|Control plane requirements|
+|-----------|--------|--|--|--------------------------|
+|Invoke the module to retrieve `CPU` temperature, verify the returned temperature falls within valid operating range and ensure the `CPU` is in a normal operating state.|dsGetCPUTemperature|Y|N|N|
 
 ### Test Startup Requirement - Retrieve CPU Temperature
 
@@ -72,9 +72,9 @@ None
 
 ## Obtain SoC ID
 
-|Description|L2|L3|Control Plane Requirements|
-|-----------|--|--|--------------------------|
-|Trigger the module to obtain `SoC` ID and verify the returned ID matches the expected format and length.|Y|N|N|
+|Description|HAL APIs|L2|L3|Control plane requirements|
+|-----------|--------|--|--|--------------------------|
+|Trigger the module to obtain `SoC` ID and verify the returned ID matches the expected format and length.|dsGetSocIDFromSDK|Y|N|N|
 
 ### Test Startup Requirement-Obtain SoC ID
 
@@ -90,9 +90,9 @@ None
 
 ## Fetch Host EDID
 
-|Description|L2|L3|Control Plane Requirements|
-|-----------|--|--|--------------------------|
-|Call the module function dsGetHostEDID() to fetch the host `EDID`. Verify the retrieved `EDID` data corresponds to the capabilities and specifications of the host device|Y|N|N|
+|Description|HAL APIs|L2|L3|Control plane requirements|
+|-----------|--------|--|--|--------------------------|
+|Call the module function dsGetHostEDID() to fetch the host `EDID`. Verify the retrieved `EDID` data corresponds to the capabilities and specifications of the host device. Each device will have it's own EDID that is supports. I.E. Two pioneer tvs with the same resolution and size will have the same EDID values, but if those two pioneer tvs are of different sizes their EDID values will be different.|dsGetHostEDID|Y|N|N|
 
 ### Test Startup Requirement - Fetch Host EDID
 
@@ -100,14 +100,7 @@ Launch the test with the predefined configuration set of results.
 
 ### Emulator Requirement - Fetch Host EDID
 
-Emulator will boot with the `EDID` coming from the configuration file.
-
-|#|Description|
-|-|-----------|
-|1|`EDID` for a panel TV|
-
-TODO: Generate a list of sample list for 5 to 6 different TV's.
-Generate a list of TV's from the office for the different `EDID`s and store the binaries of the test. It can use it as samples.
+Emulator will boot with the `EDID` coming from the configuration file. Each 
 
 ### Control Plane Requirement - Fetch Host EDID
 
