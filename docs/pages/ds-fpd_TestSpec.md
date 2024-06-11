@@ -11,11 +11,11 @@
 
 - `HAL`     - Hardware Abstraction layer
 - `SOC`     - System On a Chip
-- `FP`       - Front Panel
+- `FP`      - Front Panel
 - `FPD`     - Front Panel Display
-- `ds`       - Device Settings.
+- `ds`      - Device Settings.
 - `LED`     - Light Emitting Devices
-- `dsFPD` - Device Settings Front Panel Display
+- `dsFPD`   - Device Settings Front Panel Display
 
 ## Introduction
 
@@ -46,13 +46,15 @@ Interface specification is available here: [ds-fdp HAl Spec](https://github.com/
 
 ## Discrete `LED` Brightness Control
 
-|Description|L2|L3|Control Plane|
-|-----------|--|--|-------------|
-|Verify the Discrete `LED`s Brightness using Set and Get functions.|Y|Y|Read the `LED` Brightness|
+|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|-----------|--------|--|--|------|----|--------------------------|
+|Iterate over supported `FPD` indicators. For each supported indicator: 1. Check the current state of the `FP`. 2. If it's OFF, set it to ON. 3. Set the brightness of the discrete `LED` within the specified range (min-max) and verify using the get function.|dsGetFPState(), dsSetFPState(), dsSetFPBrightness(), dsGetFPBrightness()|`Y`|`NA`|`Y`|`Y`|`NA`|
+|Iterate over supported `FPD` indicators. For each supported indicator: 1. Check the current state of the `FP`. 2. If it's ON, set it to OFF. 3. Set the brightness of the discrete `LED` and check it returns `dsERR_OPERATION_NOT_SUPPORTED`.|dsGetFPState(), dsSetFPState(), dsSetFPBrightness()|`Y`|`NA`|`Y`|`Y`|`NA`|
+|Iterate over supported `FPD` indicators. For each supported indicator: 1.Check the current state of the `FP`.2. If it's OFF, set it to ON. 3. Set the brightness of the discrete `LED` and verify brightness intensity with help of control plane.|dsGetFPState(), dsSetFPState(), dsSetFPBrightness()|`NA`|`Y`|`Y`|`Y`|`Y`|
 
 ### Test Startup Requirement-Discrete `LED` Brightness Control
 
-NA
+`NA`
 
 ### Emulator Requirement-Discrete `LED` Brightness Control
 
@@ -68,13 +70,14 @@ Read the brightness intensity of the `LED` when set to a different level and com
 
 ## Discrete `LED` blink control
 
-|Description|L2|L3|Control Plane|
-|-----------|--|--|-------------|
-|Validate the blink functionality of discrete `LED` available on the platform |N|Y| Read the `LED` blink rate|
+|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|-----------|--------|--|--|------|----|--------------------------|
+|Iterate over supported `FPD` indicators. For each supported indicator: 1. Check the current state of the `FP`. 2. If it's OFF, set it to ON. 3. set the blink functionality of discrete `LED` and verify Blink interval with help of control plane.|dsGetFPState(), dsSetFPState(), dsSetFPBlink()|`NA`|`Y`|`Y`|`Y`|`Y`|
+|Iterate over supported `FPD` indicators. For each supported indicator: 1. Check the current state of the `FP`. 2. If it's ON, set it to OFF. 3. set the blink functionality of discrete `LED` and check it returns `dsERR_OPERATION_NOT_SUPPORTED`.|dsGetFPState(), dsSetFPState(), dsSetFPBlink()|`Y`|`NA`|`Y`|`Y`|`NA`|
 
 ### Test Startup Requirement-Discrete `LED` blink control
 
-NA
+`NA`
 
 ### Emulator Requirement-Discrete `LED` blink control
 
@@ -88,13 +91,16 @@ Read the Blink interval from the `LED` detector device.
 
 ## Discrete `LED` color control
 
-|Description|L2|L3|Control Plane|
-|-----------|--|--|-------------|
-|Validate the color functionality of discrete `LED` available by setting and getting different colors supported by the discrete `LED` |Y|Y| Read the `LED` Color|
+|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|-----------|--------|--|--|------|----|--------------------------|
+|Iterate over supported `FPD` indicators. For each supported indicator: 1. Check the current state of the `FP`. 2. If it's OFF, set it to ON. 3. set the color functionality of discrete `LED` available by setting and getting different colors supported by the discrete `LED` |dsGetFPState(), dsSetFPState(), dsSetFPColor(), dsGetFPColor()|`Y`|`NA`|`Y`|`Y`|`NA`|
+|Iterate over supported `FPD` indicators. For each supported indicator: 1. Check the current state of the `FP`. 2. If it's ON, set it to OFF. 3. set the color functionality of discrete `LED` and check it returns `dsERR_OPERATION_NOT_SUPPORTED`.|dsGetFPState(), dsSetFPState(), dsSetFPColor()|`Y`|`NA`|`Y`|`Y`|`NA`|
+|Iterate over supported `FPD` indicators. For each supported indicator: 1. Check the current state of the `FP`. 2. If it's ON, set it to OFF. 3. if the indicator is `multi-colored`, set it to `single-colored` 4. set the color functionality of discrete `LED` and check it returns `dsERR_OPERATION_NOT_SUPPORTED`.|dsGetFPState(), dsSetFPState(), dsSetFPColor()|`Y`|`NA`|`Y`|`Y`|`NA`|
+|Iterate over supported `FPD` indicators. For each supported indicator: 1. Check the current state of the `FP`. 2. If it's OFF, set it to ON. 3. set the color functionality of discrete `LED` available by setting and verify Blink interval with help of control plane. |dsGetFPState(), dsSetFPState(), dsSetFPColor()|`NA`|`Y`|`Y`|`Y`|`Y`|
 
 ### Test Startup Requirement-Discrete `LED` color control
 
-NA
+`NA`
 
 ### Emulator Requirement-Discrete `LED` color control
 
@@ -109,9 +115,10 @@ The control panel should be able to read the color of the `LED` through the spec
 
 ## Discrete Power `LED` control
 
-|Description|L2|L3|Control Plane|
-|-----------|--|--|-------------|
-|Validate the functionality of discrete Power `LED` available on the platform in different states by set and get `API`s. The `LED` functionality should be validated against the different supported states on the platform |Y|Y|NA|
+|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|-----------|--------|--|--|------|----|--------------------------|
+|Verify the `LED` state transitions 1.Loop through all supported `LED` states. 2. For each state, set the `LED` to that state using dsFPSetLEDState(). 3. Verify the state using dsFPGetLEDState(). 4. Ensure each state transition is valid.|dsFPGetSupportedLEDStates(), dsFPSetLEDState(), dsFPGetLEDState()|`Y`|`NA`|`Y`|`Y`|`NA`|
+|Verify the `LED` state transitions 1.Loop through all supported `LED` states. 2. For each state, set the `LED` to that state using dsFPSetLEDState(). 3. Verify the state with control plane. 4. Ensure each state transition is valid.|dsFPGetSupportedLEDStates(), dsFPSetLEDState()|`NA`|`Y`|`Y`|`Y`|`Y`|
 
 ### Test Startup Requirement-Discrete Power `LED` control
 
@@ -129,11 +136,14 @@ Due to platform-specific requirements, it may not be possible to capture the `LE
 
 ## Frontpanel Text and Brightness Display Control
 
-|Description|L2|L3|Control Plane|
-|-----------|--|--|-------------|
-|Set the `FPD` mode to "Text" mode and set the valid "Text" using dsSetFPText `API`. Validate the displayed "Text" |N|Y|Read the "Text"|
-|Set the `FPD` mode to "Any" mode and set the valid "Text" using dsSetFPText `API`. Validate the displayed "Text" |N|Y|Read the "Text"|
-|Set the `FPD` mode to "Text" mode and set the "Text" to display. Now set the brightness of the `FPD`  using the appropriate Set API and validate it Get API |Y|Y|Read the Brightness|
+|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|-----------|--------|--|--|------|----|--------------------------|
+|if the device supports a 7-Segment `LED` display, Set the `FPD` mode to "Text" mode and set the valid "Text" using dsSetFPText(). Validate the displayed "Text" with help of the control plane |dsSetFPDMode(), dsSetFPText()|`N`|`Y`|`Y`|`Y`|`Y`|
+|if the device supports a 7-Segment `LED` display, Set the `FPD` mode to "ANY" mode and set the valid "Text" using dsSetFPText(). Validate the displayed "Text" with help of the control plane |dsSetFPDMode(), dsSetFPText()|`N`|`Y`|||`Y`|
+|if the device supports a 7-Segment `LED` display,Iterate over supported `FPD` indicators. For each supported indicator: 1. Check the current state of the `FP`. 2. If it's OFF, set it to ON. 3.Set the `FPD` mode to "Text" mode and set the valid "Text" using dsSetFPText(). 4.Set the brightness of the `LED` within the specified range (min-max) using dsSetFPTextBrightness() and verify using get function dsGetFPTextBrightness()|dsGetFPState(), dsSetFPState(), dsSetFPDMode(), dsSetFPText(), dsSetFPTextBrightness(), dsGetFPTextBrightness()|`Y`|`NA`|`Y`|`Y`|`NA`|
+|if the device supports a 7-Segment `LED` display,Iterate over supported `FPD` indicators. For each supported indicator: 1. Check the current state of the `FP`. 2. If it's ON, set it to OFF. 3.Set the `FPD` mode to "Text" mode and set the valid "Text" using dsSetFPText(). 4. Set the brightness of the  `LED` and check it returns `dsERR_OPERATION_NOT_SUPPORTED`.|dsGetFPState(), dsSetFPState(),dsSetFPDMode(), dsSetFPText(), dsSetFPTextBrightness()|`Y`|`NA`|`Y`|`Y`|`NA`|
+|if the device supports a 7-Segment `LED` display,Iterate over supported `FPD` indicators. For each supported indicator: 1. Check the current state of the `FP`. 2. If it's OFF, set it to ON. 3.Set the `FPD` mode to "ANY" mode and set the valid "Text" using dsSetFPText(). 4.Set the brightness of the `LED` within the specified range (min-max) using dsSetFPTextBrightness() and verify using get function dsGetFPTextBrightness()|dsGetFPState(), dsSetFPState(), dsSetFPDMode(), dsSetFPText(), dsSetFPTextBrightness(), dsGetFPTextBrightness()|`Y`|`NA`|`Y`|`Y`|`NA`|
+|Iterate over supported `FPD` indicators. For each supported indicator: 1.Check the current state of the `FP`.2. If it's OFF, set it to ON. 3. Set the brightness of the discrete `LED` and verify brightness intensity with help of control plane.|dsGetFPState(), dsSetFPState(), dsSetFPBrightness()|`NA`|`Y`|`Y`|`Y`|`Y`|
 
 ### Test Startup Requirement-Frontpanel Text and Brightness Display Control
 
@@ -151,11 +161,11 @@ The control Panel should be able to read the data from the tool that can recogni
 
 ## Frontpanel Display Text Mode and Scroll control
 
-|Description|L2|L3|Control Plane|
-|-----------|--|--|-------------|
-|Set the `FPD` mode to "Text" mode, "Any" mode, and "clock" mode to validate the "Text" display. The test should fail to display the "Text" when "Clock" mode is set |Y|Y|Read the "Text"|
-|Set the `FPD` mode to "Text" mode, set the "Text" scroll duration, and set the "Text" to display using dsSetFPText `API` |N|Y|Read the scroll rate|
-|Set the `FPD` mode to "Any" mode, set the "Text" scroll duration, and set the "Text" to display using dsSetFPText `API` |N|Y|Read the scroll rate|
+|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|-----------|--------|--|--|------|----|--------------------------|
+|Set the `FPD` mode to "Text" mode, "Any" mode, and "clock" mode to validate the "Text" display. The test should fail to display the "Text" when "Clock" mode is set ||Y|Y|||Read the "Text"|
+|Set the `FPD` mode to "Text" mode, set the "Text" scroll duration, and set the "Text" to display using dsSetFPText `API` ||N|Y|||Read the scroll rate|
+|Set the `FPD` mode to "Any" mode, set the "Text" scroll duration, and set the "Text" to display using dsSetFPText `API` ||N|Y|||Read the scroll rate|
 
 ### Test Startup Requirement-Frontpanel Display Text Mode and Scroll control
 
@@ -173,12 +183,12 @@ The control Panel should be able to read the data from the tool that shall recog
 
 ## Frontpanel Clock Display Control
 
-|Description|L2|L3|Control Plane|
-|-----------|--|--|-------------|
-|Set the `FPD` Time Format using set `API` and validate the same with get `API` |Y|N|NA|
-|Set the `FPD` Time with supported formats. |N|Y|Read the Time and Time Format|
-|Enable the `FPD` Clock display and validate|N|Y|Read the Time and Time Format|
-|Disable the `FPD` Clock display and validate |N|Y|validate that NO Time is displayed|
+|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|-----------|--------|--|--|------|----|--------------------------|
+|Set the `FPD` Time Format using set `API` and validate the same with get `API` ||Y|N|||NA|
+|Set the `FPD` Time with supported formats. ||N|Y|||Read the Time and Time Format|
+|Enable the `FPD` Clock display and validate||N|Y|||Read the Time and Time Format|
+|Disable the `FPD` Clock display and validate ||N|Y|||validate that NO Time is displayed|
 
 ### Test Startup Requirement-Frontpanel Clock Display Control
 
