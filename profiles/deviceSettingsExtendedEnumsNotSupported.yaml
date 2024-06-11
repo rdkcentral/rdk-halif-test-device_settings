@@ -17,3 +17,6 @@ dsHost:
 dsVideoPort:
   features:
     extendedEnumsSupported: false
+dsFPD:
+  features:
+    extendedEnumsSupported: false
