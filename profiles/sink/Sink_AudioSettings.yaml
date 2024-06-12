@@ -84,17 +84,6 @@ Ports:
     # dsAUDIO_STEREO_DDPLUS                    = 0x06, ///< Dolby Digital Plus
     # dsAUDIO_STEREO_MAX                       = 0x07  ///< Out of range
     stereo_modes: [0x2, 0x3]  # STEREO, SURROUND
-    # dsVIDEOPORT_TYPE_RF                      = 0x00, ///< RF modulator (channel 3/4) video output
-    # dsVIDEOPORT_TYPE_BB                      = 0x01, ///< Baseband (composite, RCA) video output
-    # dsVIDEOPORT_TYPE_SVIDEO                  = 0x02, ///< S-Video video output
-    # dsVIDEOPORT_TYPE_1394                    = 0x03, ///< IEEE 1394 (Firewire) video output
-    # dsVIDEOPORT_TYPE_DVI                     = 0x04, ///< DVI (Panel-Link, HDCP) video output
-    # dsVIDEOPORT_TYPE_COMPONENT               = 0x05, ///< Component video output
-    # dsVIDEOPORT_TYPE_HDMI                    = 0x06, ///< HDMI video output
-    # dsVIDEOPORT_TYPE_HDMI_INPUT              = 0x07, ///< HDMI video input
-    # dsVIDEOPORT_TYPE_INTERNAL                = 0x08, ///< Internal (integrated/internal display) video output
-    # dsVIDEOPORT_TYPE_MAX                     = 0x09  ///< Out of range
-    connected_video_ports: [{type: 0x08, index: 0}]  # INTERNAL
     # dsMS12SUPPORT_NONE                       = 0x0,  ///< MS12 Supported None
     # dsMS12SUPPORT_DolbyVolume                = 0x01, //< MS12 supported Dolby Volume
     # dsMS12SUPPORT_InteligentEqualizer        = 0x02, ///< MS12 supported Intelligent Equalizer
@@ -183,17 +172,6 @@ Ports:
     # dsAUDIO_STEREO_DDPLUS                    = 0x06,  ///< Dolby Digital Plus
     # dsAUDIO_STEREO_MAX                       = 0x07   ///< Out of range
     stereo_modes: [0x02, 0x03, 0x04]  # STEREO, SURROUND, PASSTHRU
-    # dsVIDEOPORT_TYPE_RF                      = 0x00,  ///< RF modulator (channel 3/4) video output
-    # dsVIDEOPORT_TYPE_BB                      = 0x01,  ///< Baseband (composite, RCA) video output
-    # dsVIDEOPORT_TYPE_SVIDEO                  = 0x02,  ///< S-Video video output
-    # dsVIDEOPORT_TYPE_1394                    = 0x03,  ///< IEEE 1394 (Firewire) video output
-    # dsVIDEOPORT_TYPE_DVI                     = 0x04,  ///< DVI (Panel-Link, HDCP) video output
-    # dsVIDEOPORT_TYPE_COMPONENT               = 0x05,  ///< Component video output
-    # dsVIDEOPORT_TYPE_HDMI                    = 0x06,  ///< HDMI video output
-    # dsVIDEOPORT_TYPE_HDMI_INPUT              = 0x07,  ///< HDMI video input
-    # dsVIDEOPORT_TYPE_INTERNAL                = 0x08,  ///< Internal (integrated/internal display) video output
-    # dsVIDEOPORT_TYPE_MAX                     = 0x09   ///< Out of range
-    connected_video_ports: [{type: 0x08, index: 0}]  # INTERNAL
     # dsMS12SUPPORT_NONE                       = 0x0,  ///< MS12 Supported None
     # dsMS12SUPPORT_DolbyVolume                = 0x01, //< MS12 supported Dolby Volume
     # dsMS12SUPPORT_InteligentEqualizer        = 0x02, ///< MS12 supported Intelligent Equalizer
@@ -276,17 +254,6 @@ Ports:
     #dsAUDIO_STEREO_DDPLUS                    = 0x06,   ///< Dolby Digital Plus
     #dsAUDIO_STEREO_MAX                       = 0x07    ///< Out of range
     stereo_modes: [0x02, 0x03, 0x04]  # STEREO, SURROUND, PASSTHRU
-    #dsVIDEOPORT_TYPE_RF                      = 0x00,   ///< RF modulator (channel 3/4) video output
-    #dsVIDEOPORT_TYPE_BB                      = 0x01,   ///< Baseband (composite, RCA) video output
-    #dsVIDEOPORT_TYPE_SVIDEO                  = 0x02,   ///< S-Video video output
-    #dsVIDEOPORT_TYPE_1394                    = 0x03,   ///< IEEE 1394 (Firewire) video output
-    #dsVIDEOPORT_TYPE_DVI                     = 0x04,   ///< DVI (Panel-Link, HDCP) video output
-    #dsVIDEOPORT_TYPE_COMPONENT               = 0x05,   ///< Component video output
-    #dsVIDEOPORT_TYPE_HDMI                    = 0x06,   ///< HDMI video output
-    #dsVIDEOPORT_TYPE_HDMI_INPUT              = 0x07,   ///< HDMI video input
-    #dsVIDEOPORT_TYPE_INTERNAL                = 0x08,   ///< Internal (integrated/internal display) video output
-    #dsVIDEOPORT_TYPE_MAX                     = 0x09    ///< Out of range
-    connected_video_ports: [{type: 8, index: 0}]  # INTERNAL
     # dsMS12SUPPORT_NONE                       = 0x0,  ///< MS12 Supported None
     # dsMS12SUPPORT_DolbyVolume                = 0x01, //< MS12 supported Dolby Volume
     # dsMS12SUPPORT_InteligentEqualizer        = 0x02, ///< MS12 supported Intelligent Equalizer
@@ -363,17 +330,6 @@ Ports:
     #dsAUDIO_STEREO_DDPLUS                    = 0x06,   ///< Dolby Digital Plus
     #dsAUDIO_STEREO_MAX                       = 0x07    ///< Out of range
     stereo_modes: [0x02, 0x03]  # STEREO, SURROUND
-    #dsVIDEOPORT_TYPE_RF                      = 0x00,   ///< RF modulator (channel 3/4) video output
-    #dsVIDEOPORT_TYPE_BB                      = 0x01,   ///< Baseband (composite, RCA) video output
-    #dsVIDEOPORT_TYPE_SVIDEO                  = 0x02,   ///< S-Video video output
-    #dsVIDEOPORT_TYPE_1394                    = 0x03,   ///< IEEE 1394 (Firewire) video output
-    #dsVIDEOPORT_TYPE_DVI                     = 0x04,   ///< DVI (Panel-Link, HDCP) video output
-    #dsVIDEOPORT_TYPE_COMPONENT               = 0x05,   ///< Component video output
-    #dsVIDEOPORT_TYPE_HDMI                    = 0x06,   ///< HDMI video output
-    #dsVIDEOPORT_TYPE_HDMI_INPUT              = 0x07,   ///< HDMI video input
-    #dsVIDEOPORT_TYPE_INTERNAL                = 0x08,   ///< Internal (integrated/internal display) video output
-    #dsVIDEOPORT_TYPE_MAX                     = 0x09    ///< Out of range
-    connected_video_ports: [{type: 8, index: 0}]  # INTERNAL
     # dsMS12SUPPORT_NONE                       = 0x0,  ///< MS12 Supported None
     # dsMS12SUPPORT_DolbyVolume                = 0x01, //< MS12 supported Dolby Volume
     # dsMS12SUPPORT_InteligentEqualizer        = 0x02, ///< MS12 supported Intelligent Equalizer
