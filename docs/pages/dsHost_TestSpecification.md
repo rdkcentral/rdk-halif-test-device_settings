@@ -57,6 +57,7 @@ High level overview:
 |Description|HAL APIs|L2|L3|Control plane requirements|
 |-----------|--------|--|--|--------------------------|
 |Invoke the module to retrieve `CPU` temperature, verify the returned temperature falls within valid operating range and ensure the `CPU` is in a normal operating state.|dsGetCPUTemperature|Y|N|N|
+|Invoke the module to retrieve `CPU` temperature while the device is within a heat/cold chambers to verify that the device will properly retrieve the information while within abnormal temperatures|dsGetCPUTemperature|N|Y|N|
 
 ### Test Startup Requirement - Retrieve CPU Temperature
 
@@ -74,7 +75,7 @@ None
 
 |Description|HAL APIs|L2|L3|Control plane requirements|
 |-----------|--------|--|--|--------------------------|
-|Trigger the module to obtain `SoC` ID and verify the returned ID matches the expected format and length.|dsGetSocIDFromSDK|Y|N|N|
+|Trigger the module to obtain `SoC` ID and verify the returned ID matches the expected format and length based on the configuration file.|dsGetSocIDFromSDK|Y|N|N|
 
 ### Test Startup Requirement-Obtain SoC ID
 
@@ -92,7 +93,7 @@ None
 
 |Description|HAL APIs|L2|L3|Control plane requirements|
 |-----------|--------|--|--|--------------------------|
-|Call the module function dsGetHostEDID() to fetch the host `EDID`. Verify the retrieved `EDID` data corresponds to the capabilities and specifications of the host device. Each device will have it's own EDID that is supports. I.E. Two pioneer tvs with the same resolution and size will have the same EDID values, but if those two pioneer tvs are of different sizes their EDID values will be different.|dsGetHostEDID|Y|N|N|
+|Call the module function dsGetHostEDID() to fetch the host `EDID`. Verify the retrieved `EDID` data corresponds to the capabilities and specifications of the host device. Each device will have it's own `EDID` that is supports. I.E. Two devices with the same resolution and size will have the same `EDID` values. If the devices are not the same size, resolution, and device type they will not have the same `EDID` value. The retrieved `EDID` values will be compared against those within the configuration file.|dsGetHostEDID|Y|N|N|
 
 ### Test Startup Requirement - Fetch Host EDID
 
