@@ -20,6 +20,7 @@
 extern int test_dsDisplay_l2_register(void);
 extern int test_dsCompositeIn_l2_register(void);
 extern int test_dsVideoPort_l2_register(void);
+extern int test_dsAudio_l2_register(void);
 
 int register_hal_l2_tests( void )
 {
@@ -28,6 +29,7 @@ int register_hal_l2_tests( void )
     registerFailed |= test_dsDisplay_l2_register();
     registerFailed |= test_dsCompositeIn_l2_register();
     registerFailed |= test_dsVideoPort_l2_register();
+    registerFailed |= test_dsAudio_l2_register();
 
     return registerFailed;
 }
