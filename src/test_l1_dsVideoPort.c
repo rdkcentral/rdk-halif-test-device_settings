@@ -129,6 +129,7 @@ PortConfig_t *ports = NULL;
 
 void populate_device_config() {
    	ut_kvp_status_t status;
+	char key[256];
    	status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "Device/Type", deviceType, UT_KVP_MAX_ELEMENT_SIZE);
    	status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "Device/Name", deviceName, UT_KVP_MAX_ELEMENT_SIZE);
 	number_of_ports = ut_kvp_getUInt16Field(ut_kvp_profile_getInstance(), "Number_of_ports");
@@ -143,41 +144,58 @@ void populate_device_config() {
 	for (int i = 0; i < number_of_ports; i++) {
 		ports[i].port_no = ut_kvp_getUInt16Field(ut_kvp_profile_getInstance(), "Ports/i/PortNo");
 		char* type_id_str = NULL;
-		status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "Ports/i/Typeid", type_id_str, UT_KVP_MAX_ELEMENT_SIZE);
+		snprintf(key, sizeof(key), "Ports/[%d]/Typeid", i);
+		status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key, type_id_str, UT_KVP_MAX_ELEMENT_SIZE);
 		ports[i].type_id = (int)strtol(type_id_str, NULL, 0);
-		status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "Ports/i/Name", ports[i].name, UT_KVP_MAX_ELEMENT_SIZE);
-		ports[i].dtcp_supported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "Ports/i/dtcp_supported" );
-		ports[i].hdcp_supported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "Ports/i/hdcp_supported" );
-		ports[i].numSupportedResolutions = ut_kvp_getUInt16Field(ut_kvp_profile_getInstance(), "Ports/i/Typeid");
+		snprintf(key, sizeof(key), "Ports/[%d]/Name", i);
+		status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key, ports[i].name, UT_KVP_MAX_ELEMENT_SIZE);
+		snprintf(key, sizeof(key), "Ports/[%d]/dtcp_supported", i);
+		ports[i].dtcp_supported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), key );
+		snprintf(key, sizeof(key), "Ports/[%d]/hdcp_supported", i);
+		ports[i].hdcp_supported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), key );
+		snprintf(key, sizeof(key), "Ports/[%d]/numSupportedResolutions", i);
+		ports[i].numSupportedResolutions = ut_kvp_getUInt16Field(ut_kvp_profile_getInstance(), key);
 		for (int j = 0; j < ports[i].numSupportedResolutions; j++) {
-			status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "Ports/i/supportedResolutionNames/j", ports[i].supportedResolutionNames[j], UT_KVP_MAX_ELEMENT_SIZE);
+			snprintf(key, sizeof(key), "Ports/[%d]/supportedResolutionNames/[%d]", i, j);
+			status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key, ports[i].supportedResolutionNames[j], UT_KVP_MAX_ELEMENT_SIZE);
 		}
 		char* type_str = NULL;
-		status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "Ports/i/connected_audio_ports/type", type_str, UT_KVP_MAX_ELEMENT_SIZE);
+		snprintf(key, sizeof(key), "Ports/[%d]/connected_audio_ports/type", i);
+		status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key, type_str, UT_KVP_MAX_ELEMENT_SIZE);
 		ports[i].connected_audio_ports.type = (int)strtol(type_str, NULL, 0);
-		ports[i].connected_audio_ports.index = ut_kvp_getUInt16Field(ut_kvp_profile_getInstance(), "Ports/i/connected_audio_ports/index");
-		status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "Ports/i/defaultResolution", ports[i].defaultResolution, UT_KVP_MAX_ELEMENT_SIZE);
+		snprintf(key, sizeof(key), "Ports/[%d]/connected_audio_ports/index", i);
+		ports[i].connected_audio_ports.index = ut_kvp_getUInt16Field(ut_kvp_profile_getInstance(), key);
+		snprintf(key, sizeof(key), "Ports/[%d]/defaultResolution", i);
+		status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key, ports[i].defaultResolution, UT_KVP_MAX_ELEMENT_SIZE);
 		char* colorspaces_str = NULL;
-		status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "Ports/i/colorspaces", colorspaces_str, UT_KVP_MAX_ELEMENT_SIZE);
+		snprintf(key, sizeof(key), "Ports/[%d]/colorspaces", i);
+		status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key, colorspaces_str, UT_KVP_MAX_ELEMENT_SIZE);
 		ports[i].colorspaces = (int)strtol(colorspaces_str, NULL, 0);
 		char* supported_color_depth_capabilities_str = NULL;
-		status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "Ports/i/Supported_color_depth_capabilities", supported_color_depth_capabilities_str, UT_KVP_MAX_ELEMENT_SIZE);
+		snprintf(key, sizeof(key), "Ports/[%d]/Supported_color_depth_capabilities", i);
+		status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key, supported_color_depth_capabilities_str, UT_KVP_MAX_ELEMENT_SIZE);
 		ports[i].supported_color_depth_capabilities = (int)strtol(supported_color_depth_capabilities_str, NULL, 0);
-		ports[i].display_surrond = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "Ports/i/Display_surrond" );
+		snprintf(key, sizeof(key), "Ports/[%d]/Display_surrond", i);
+		ports[i].display_surrond = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), key );
 		char* supported_tv_resolutions_capabilities_str = NULL;
-		status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "Ports/i/Supported_tv_resolutions_capabilities", supported_tv_resolutions_capabilities_str, UT_KVP_MAX_ELEMENT_SIZE);
+		snprintf(key, sizeof(key), "Ports/[%d]/Supported_tv_resolutions_capabilities", i);
+		status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key, supported_tv_resolutions_capabilities_str, UT_KVP_MAX_ELEMENT_SIZE);
 		ports[i].supported_tv_resolutions_capabilities = (int)strtol(supported_tv_resolutions_capabilities_str, NULL, 0);
 		char* hdr_capabilities_str = NULL;
-		status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "Ports/i/hdr_capabilities", hdr_capabilities_str, UT_KVP_MAX_ELEMENT_SIZE);
+		snprintf(key, sizeof(key), "Ports/[%d]/hdr_capabilities", i);
+		status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key, hdr_capabilities_str, UT_KVP_MAX_ELEMENT_SIZE);
 		ports[i].hdr_capabilities = (int)strtol(hdr_capabilities_str, NULL, 0);
 		char* hdcp_protocol_version_str = NULL;
-		status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "Ports/i/hdcp_protocol_version", hdcp_protocol_version_str, UT_KVP_MAX_ELEMENT_SIZE);
+		snprintf(key, sizeof(key), "Ports/[%d]/hdcp_protocol_version", i);
+		status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key, hdcp_protocol_version_str, UT_KVP_MAX_ELEMENT_SIZE);
 		ports[i].hdcp_protocol_version = (int)strtol(hdcp_protocol_version_str, NULL, 0);
 		char* quantization_ranges_str = NULL;
-		status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "Ports/i/quantization_ranges", quantization_ranges_str, UT_KVP_MAX_ELEMENT_SIZE);
+		snprintf(key, sizeof(key), "Ports/[%d]/quantization_ranges", i);
+		status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key, quantization_ranges_str, UT_KVP_MAX_ELEMENT_SIZE);
 		ports[i].quantization_ranges = (int)strtol(quantization_ranges_str, NULL, 0);
 		char* matrix_coefficients_str = NULL;
-		status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "Ports/i/matrix_coefficients", matrix_coefficients_str, UT_KVP_MAX_ELEMENT_SIZE);
+		snprintf(key, sizeof(key), "Ports/[%d]/matrix_coefficients", i);
+		status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key, matrix_coefficients_str, UT_KVP_MAX_ELEMENT_SIZE);
 		ports[i].matrix_coefficients = (int)strtol(matrix_coefficients_str, NULL, 0);
 	}
 }
@@ -540,35 +558,36 @@ void test_l1_dsVideoPort_positive_dsIsVideoPortEnabled(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
-	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	intptr_t handle[number_of_ports];
 
-	bool isEnabledArray1[NUM_OF_PORTS];
-	bool isEnabledArray2[NUM_OF_PORTS];
+	bool isEnabledArray1[number_of_ports];
+	bool isEnabledArray2[number_of_ports];
 
 	// Step 01: Initialize video port system
 	status = dsVideoPortInit();
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 02: Get the port handle for all supported video ports
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
-		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+	for (int i = 0; i < number_of_ports; i++) {
+		handle[i]=HANDLE_ARRAY_INIT;
+		status = dsGetVideoPort(ports[i].connected_audio_ports.type, ports[i].connected_audio_ports.index, &(handle[i]));
 		UT_ASSERT_EQUAL(status, dsERR_NONE);
 	}
 
 	// Step 03: Check if video port is enabled or not
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
+	for (int i = 0; i < number_of_ports; i++) {
 		status = dsIsVideoPortEnabled(handle[i], &isEnabledArray1[i]);
 		UT_ASSERT_EQUAL(status, dsERR_NONE);
 	}
 
 	// Step 04: Repeat the check for enabled status
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
+	for (int i = 0; i < number_of_ports; i++) {
 		status = dsIsVideoPortEnabled(handle[i], &isEnabledArray2[i]);
 		UT_ASSERT_EQUAL(status, dsERR_NONE);
 	}
 
 	// Step 05: Compare the array values
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
+	for (int i = 0; i < number_of_ports; i++) {
 		UT_ASSERT_EQUAL(isEnabledArray1[i], isEnabledArray2[i]);
 	}
 
@@ -611,9 +630,9 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortEnabled(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
-	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	intptr_t handle[number_of_ports];
 
-	bool enabled[NUM_OF_PORTS];
+	bool enabled[number_of_ports];
 
 	// Step 01: Attempt to check enabled status without initialization
 	status = dsIsVideoPortEnabled(-1, &enabled[0]);
@@ -628,13 +647,14 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortEnabled(void) {
 	UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
 
 	// Step 04: Get valid video port handle
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
-		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+	for (int i = 0; i < number_of_ports; i++) {
+		handle[i]=HANDLE_ARRAY_INIT;
+		status = dsGetVideoPort(ports[i].connected_audio_ports.type, ports[i].connected_audio_ports.index, &handle[i]);
 		UT_ASSERT_EQUAL(status, dsERR_NONE);
 	}
 
 	// Step 05: Check enabled status with null pointer
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
+	for (int i = 0; i < number_of_ports; i++) {
 		status = dsIsVideoPortEnabled(handle[i], NULL);
 		UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
 	}
@@ -679,35 +699,36 @@ void test_l1_dsVideoPort_positive_dsIsDisplayConnected(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
-	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	intptr_t handle[number_of_ports];
 
-	bool isConnectedArray1[NUM_OF_PORTS];
-	bool isConnectedArray2[NUM_OF_PORTS];
+	bool isConnectedArray1[number_of_ports];
+	bool isConnectedArray2[number_of_ports];
 
 	// Step 01: Initialize video port system
 	status = dsVideoPortInit();
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 02: Get the video port handle
-	for (int i = 0; i < NUM_OF_PORTS ; i++) {
-		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+	for (int i = 0; i < number_of_ports ; i++) {
+		handle[i]=HANDLE_ARRAY_INIT;
+		status = dsGetVideoPort(ports[i].connected_audio_ports.type, ports[i].connected_audio_ports.index, &(handle[i]));
 		UT_ASSERT_EQUAL(status, dsERR_NONE);
 	}
 
 	// Step 03: Check if video port is connected
-	for (int i = 0; i < NUM_OF_PORTS ; i++) {
+	for (int i = 0; i < number_of_ports ; i++) {
 		status = dsIsDisplayConnected(handle[i], &isConnectedArray1[i]);
 		UT_ASSERT_EQUAL(status, dsERR_NONE);
 	}
 
 	// Step 04: Repeat the check for connection status
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
+	for (int i = 0; i < number_of_ports; i++) {
 		status = dsIsDisplayConnected(handle[i], &isConnectedArray2[i]);
 		UT_ASSERT_EQUAL(status, dsERR_NONE);
 	}
 
 	// Step 05: Compare the array values
-	for (int i = 0; i < NUM_OF_PORTS ; i++) {
+	for (int i = 0; i < number_of_ports ; i++) {
 		UT_ASSERT_EQUAL(isConnectedArray1[i], isConnectedArray2[i]);
 	}
 
@@ -750,9 +771,9 @@ void test_l1_dsVideoPort_negative_dsIsDisplayConnected(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
-	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	intptr_t handle[number_of_ports];
 
-	bool connected[NUM_OF_PORTS];
+	bool connected[number_of_ports];
 
 	// Step 01: Attempt to check connection status without initialization
 	status = dsIsDisplayConnected(-1 , &(connected[0]));
@@ -767,13 +788,14 @@ void test_l1_dsVideoPort_negative_dsIsDisplayConnected(void) {
 	UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
 
 	// Step 04: Get valid video port handle
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
-		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+	for (int i = 0; i < number_of_ports; i++) {
+		handle[i]=HANDLE_ARRAY_INIT;
+		status = dsGetVideoPort(ports[i].connected_audio_ports.type, ports[i].connected_audio_ports.index, &handle[i]);
 		UT_ASSERT_EQUAL(status, dsERR_NONE);
 	}
 
 	// Step 05: Check connection status with null pointer
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
+	for (int i = 0; i < number_of_ports; i++) {
 		status = dsIsDisplayConnected(handle[i], NULL);
 		UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
 	}
@@ -818,18 +840,19 @@ void test_l1_dsVideoPort_positive_dsIsDisplaySurround(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
-	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	intptr_t handle[number_of_ports];
 
-	bool isSurroundArray1[NUM_OF_PORTS];
-	bool isSurroundArray2[NUM_OF_PORTS];
+	bool isSurroundArray1[number_of_ports];
+	bool isSurroundArray2[number_of_ports];
 
 	// Step 01: Initialize video port system
 	status = dsVideoPortInit();
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 02: Get the video port handle
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
-		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+	for (int i = 0; i < number_of_ports; i++) {
+		handle[i]=HANDLE_ARRAY_INIT;
+		status = dsGetVideoPort(ports[i].connected_audio_ports.type, ports[i].connected_audio_ports.index, &handle[i]);
 		UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 		// Step 03: Check if the connected display supports audio surround
@@ -838,13 +861,13 @@ void test_l1_dsVideoPort_positive_dsIsDisplaySurround(void) {
 	}
 
 	// Step 04: Repeat the check for audio surround support
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
+	for (int i = 0; i < number_of_ports; i++) {
 		status = dsIsDisplaySurround(handle[i], &isSurroundArray2[i]);
 		UT_ASSERT_EQUAL(status, dsERR_NONE);
 	}
 
 	// Step 05: Compare the array values
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
+	for (int i = 0; i < number_of_ports; i++) {
 		UT_ASSERT_EQUAL(isSurroundArray1[i], isSurroundArray2[i]);
 	}
 
@@ -887,9 +910,9 @@ void test_l1_dsVideoPort_negative_dsIsDisplaySurround(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
-	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	intptr_t handle[number_of_ports];
 
-	bool surround[NUM_OF_PORTS];
+	bool surround[number_of_ports];
 
 	// Step 01: Attempt to check audio surround support without initialization
 	status = dsIsDisplaySurround(-1, &surround[0]);
@@ -904,13 +927,14 @@ void test_l1_dsVideoPort_negative_dsIsDisplaySurround(void) {
 	UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
 
 	// Step 04: Get valid video port handle
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
-		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+	for (int i = 0; i < number_of_ports; i++) {
+		handle[i]=HANDLE_ARRAY_INIT;
+		status = dsGetVideoPort(ports[i].connected_audio_ports.type, ports[i].connected_audio_ports.index, &handle[i]);
 		UT_ASSERT_EQUAL(status, dsERR_NONE);
 	}
 
 	// Step 05: Check audio surround support with null pointer
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
+	for (int i = 0; i < number_of_ports; i++) {
 		status = dsIsDisplaySurround(handle[i], NULL);
 		UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
 	}
@@ -955,35 +979,36 @@ void test_l1_dsVideoPort_positive_dsGetSurroundMode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
-	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	intptr_t handle[number_of_ports];
 
-	int surroundModeArray1[NUM_OF_PORTS];
-	int surroundModeArray2[NUM_OF_PORTS];
+	int surroundModeArray1[number_of_ports];
+	int surroundModeArray2[number_of_ports];
 
 	// Step 01: Initialize video port system
 	status = dsVideoPortInit();
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 02: Get the video port handle
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
-		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+	for (int i = 0; i < number_of_ports; i++) {
+		handle[i]=HANDLE_ARRAY_INIT;
+		status = dsGetVideoPort(ports[i].connected_audio_ports.type, ports[i].connected_audio_ports.index, &(handle[i]));
 		UT_ASSERT_EQUAL(status, dsERR_NONE);
 	}
 
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
+	for (int i = 0; i < number_of_ports; i++) {
 		// Step 03: Get the surround mode of each video port
 		status = dsGetSurroundMode(handle[i], &surroundModeArray1[i]);
 		UT_ASSERT_EQUAL(status, dsERR_NONE);
 	}
 
 	// Step 04: Repeat the retrieval of surround mode
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
+	for (int i = 0; i < number_of_ports; i++) {
 		status = dsGetSurroundMode(handle[i], &surroundModeArray2[i]);
 		UT_ASSERT_EQUAL(status, dsERR_NONE);
 	}
 
 	// Step 05: Compare the array values
-	for (int i = 0; i < NUM_OF_PORTS  ; i++) {
+	for (int i = 0; i < number_of_ports  ; i++) {
 		UT_ASSERT_EQUAL(surroundModeArray1[i], surroundModeArray2[i]);
 	}
 
@@ -1026,9 +1051,9 @@ void test_l1_dsVideoPort_negative_dsGetSurroundMode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
-	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	intptr_t handle[number_of_ports];
 
-	int surroundMode[NUM_OF_PORTS];
+	int surroundMode[number_of_ports];
 
 	// Step 01: Attempt to get surround mode without initialization
 	status = dsGetSurroundMode(-1, &surroundMode[0]);
@@ -1043,13 +1068,14 @@ void test_l1_dsVideoPort_negative_dsGetSurroundMode(void) {
 	UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
 
 	// Step 04: Get valid video port handle
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
-		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+	for (int i = 0; i < number_of_ports; i++) {
+		handle[i]=HANDLE_ARRAY_INIT;
+		status = dsGetVideoPort(ports[i].connected_audio_ports.type, ports[i].connected_audio_ports.index, &(handle[i]));
 		UT_ASSERT_EQUAL(status, dsERR_NONE);
 	}
 
 	// Step 05: Check surround mode with null pointer
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
+	for (int i = 0; i < number_of_ports; i++) {
 		status = dsGetSurroundMode(handle[i], NULL);
 		UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
 	}
@@ -1095,35 +1121,36 @@ void test_l1_dsVideoPort_positive_dsIsVideoPortActive(void) {
 
 	dsError_t status;
 
-	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	intptr_t handle[number_of_ports];
 
-	bool isActiveArray1[NUM_OF_PORTS];
-	bool isActiveArray2[NUM_OF_PORTS];
+	bool isActiveArray1[number_of_ports];
+	bool isActiveArray2[number_of_ports];
 
 	// Step 01: Initialize video port system
 	status = dsVideoPortInit();
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 02: Get the video port handle
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
-		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+	for (int i = 0; i < number_of_ports; i++) {
+		handle[i]=HANDLE_ARRAY_INIT;
+		status = dsGetVideoPort(ports[i].connected_audio_ports.type, ports[i].connected_audio_ports.index, &(handle[i]));
 		UT_ASSERT_EQUAL(status, dsERR_NONE);
 	}
 
 	// Step 03: Check whether each video port is active
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
+	for (int i = 0; i < number_of_ports; i++) {
 		status = dsIsVideoPortActive(handle[i], &isActiveArray1[i]);
 		UT_ASSERT_EQUAL(status, dsERR_NONE);
 	}
 
 	// Step 04: Repeat the active status check
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
+	for (int i = 0; i < number_of_ports; i++) {
 		status = dsIsVideoPortActive(handle[i], &isActiveArray2[i]);
 		UT_ASSERT_EQUAL(status, dsERR_NONE);
 	}
 
 	// Step 05: Compare the array values
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
+	for (int i = 0; i < number_of_ports; i++) {
 		UT_ASSERT_EQUAL(isActiveArray1[i], isActiveArray2[i]);
 	}
 
@@ -1166,9 +1193,9 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortActive(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
-	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	intptr_t handle[number_of_ports];
 
-	bool active[NUM_OF_PORTS];
+	bool active[number_of_ports];
 
 	// Step 01: Attempt to check active status without initialization
 	status = dsIsVideoPortActive(-1, &active[0]);
@@ -1183,13 +1210,14 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortActive(void) {
 	UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
 
 	// Step 04: Get valid video port handle
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
-		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+	for (int i = 0; i < number_of_ports; i++) {
+		handle[i]=HANDLE_ARRAY_INIT;
+		status = dsGetVideoPort(ports[i].connected_audio_ports.type, ports[i].connected_audio_ports.index, &(handle[i]));
 		UT_ASSERT_EQUAL(status, dsERR_NONE);
 	}
 
 	// Step 05: Check active status with null pointer
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
+	for (int i = 0; i < number_of_ports; i++) {
 		status = dsIsVideoPortActive(handle[i], NULL);
 		UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
 	}
@@ -1232,7 +1260,7 @@ void test_l1_dsVideoPort_positive_dsEnableDTCP(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
-	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	intptr_t handle[number_of_ports];
 
 	bool enableDTCP = true;
 
@@ -1241,13 +1269,14 @@ void test_l1_dsVideoPort_positive_dsEnableDTCP(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 02: Get the video port handle
-	for (int i = 0; i < NUM_OF_PORTS ; i++) {
-		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+	for (int i = 0; i < number_of_ports ; i++) {
+		handle[i]=HANDLE_ARRAY_INIT;
+		status = dsGetVideoPort(ports[i].connected_audio_ports.type, ports[i].connected_audio_ports.index, &handle[i]);
 		UT_ASSERT_EQUAL(status, dsERR_NONE);
 	}
 
 	// Step 03: Enable DTCP
-	for (int i = 0; i < NUM_OF_PORTS ; i++) {
+	for (int i = 0; i < number_of_ports ; i++) {
 		status = dsEnableDTCP(handle[i], enableDTCP);
 		UT_ASSERT_EQUAL(status, dsERR_NONE);
 	}
@@ -1290,7 +1319,7 @@ void test_l1_dsVideoPort_negative_dsEnableDTCP(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
-	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	intptr_t handle[number_of_ports];
 
 	bool enableDTCP = true; // Flag to enable/disable DTCP
 
@@ -1307,8 +1336,9 @@ void test_l1_dsVideoPort_negative_dsEnableDTCP(void) {
 	UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
 
 	// Step 04: Get the Video Port handle
-	for (int i = 0; i < NUM_OF_PORTS ; i++) {
-		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+	for (int i = 0; i < number_of_ports ; i++) {
+		handle[i]=HANDLE_ARRAY_INIT;
+		status = dsGetVideoPort(ports[i].connected_audio_ports.type, ports[i].connected_audio_ports.index, &handle[i]);
 		UT_ASSERT_EQUAL(status, dsERR_NONE);
 	}
 
@@ -1350,7 +1380,7 @@ void test_l1_dsVideoPort_positive_dsEnableHDCP(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
-	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	intptr_t handle[number_of_ports];
 
 	bool enableHDCP = true;
 	char hdcpKey[HDCP_KEY_MAX_SIZE] = "ADEF";
@@ -1361,8 +1391,9 @@ void test_l1_dsVideoPort_positive_dsEnableHDCP(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 02: Get the video port handle
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
-		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+	for (int i = 0; i < number_of_ports; i++) {
+		handle[i]=HANDLE_ARRAY_INIT;
+		status = dsGetVideoPort(ports[i].connected_audio_ports.type, ports[i].connected_audio_ports.index, &(handle[i]));
 		UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 		// Step 03: Enable HDCP
@@ -1411,7 +1442,7 @@ void test_l1_dsVideoPort_negative_dsEnableHDCP(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
-	intptr_t handle[NUM_OF_PORTS]={HANDLE_ARRAY_INIT};
+	intptr_t handle[number_of_ports];
 
 	bool enableHDCP = true;
 	char hdcpKey[HDCP_KEY_MAX_SIZE] = "ADEF";
@@ -1430,8 +1461,9 @@ void test_l1_dsVideoPort_negative_dsEnableHDCP(void) {
 	UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
 
 	// Step 04: Get the video port handle for supported video ports
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
-		status = dsGetVideoPort(kPorts[i].id.type, kPorts[i].id.index, &(handle[i]));
+	for (int i = 0; i < number_of_ports; i++) {
+		handle[i]=HANDLE_ARRAY_INIT;
+		status = dsGetVideoPort(ports[i].connected_audio_ports.type, ports[i].connected_audio_ports.index, &(handle[i]));
 		UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 		// Step 05: Enable HDCP with invalid key size
