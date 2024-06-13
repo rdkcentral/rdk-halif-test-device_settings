@@ -243,13 +243,13 @@ If user chose to run the test in interactive mode, then the test case has to be 
 graph TB
 A[Call dsHdmiInInit API] -->|dsERR_NONE| B[Call dsHdmiInGetNumberOfInputs API]
 A -->|Not dsERR_NONE| A1[Test case fail]
-B -->|dsERR_NONE and non-zero inputs| C[Loop through all HDMI input ports]
-B -->|Not dsERR_NONE or zero inputs| B1[Test case fail]
+B -->|dsERR_NONE and<br> non-zero inputs| C{Loop through all <br> HDMI input ports}
+B -->|Not dsERR_NONE or <br>zero inputs| B1[Test case fail]
 C --> D[Call dsHdmiInSelectPort API with current port]
 D -->|dsERR_NONE| E[Call dsHdmiInGetStatus API]
 E -->|dsERR_NONE, activePort is current port, isPresented is false, isPortConnected is false| F[Next port in loop]
 F --> C
-C --> G[Call dsHdmiInTerm API]
+C -->|End of loop| G[Call dsHdmiInTerm API]
 G -->|dsERR_NONE| H[Test case pass]
 G -->|Not dsERR_NONE| G1[Test case fail]
 ```
@@ -383,7 +383,6 @@ If user chose to run the test in interactive mode, then the test case has to be 
 
 
 ```mermaid
-graph TB
 graph TB
     A[dsHdmiInInit] --> |Success| B[dsSetEdidVersion for various ports and edid version]
     A --> |Failure| A1[Test Case Fail: dsHdmiInInit]
