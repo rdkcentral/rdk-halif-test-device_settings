@@ -410,6 +410,7 @@ void test_l2_dsAudio_SetAndGetAudioCompression_sink(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: 0", type);
         ret = dsGetAudioPort(type, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with error: %d", ret);
@@ -420,6 +421,7 @@ void test_l2_dsAudio_SetAndGetAudioCompression_sink(void)
         {
             UT_LOG_DEBUG("Invoking dsSetAudioCompression with handle: %ld and compression: %d", handle, compression);
             ret = dsSetAudioCompression(handle, compression);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsSetAudioCompression failed with error: %d", ret);
@@ -428,6 +430,7 @@ void test_l2_dsAudio_SetAndGetAudioCompression_sink(void)
 
             UT_LOG_DEBUG("Invoking dsGetAudioCompression with handle: %ld", handle);
             ret = dsGetAudioCompression(handle, &getCompression);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsGetAudioCompression failed with error: %d", ret);
@@ -475,6 +478,7 @@ void test_l2_dsAudio_SetAndGetAudioCompression_source(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: 0", portType);
         ret = dsGetAudioPort(portType, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with error: %d", ret);
@@ -485,6 +489,7 @@ void test_l2_dsAudio_SetAndGetAudioCompression_source(void)
         {
             UT_LOG_DEBUG("Invoking dsSetAudioCompression with handle: %ld and compression: %d", handle, compression);
             ret = dsSetAudioCompression(handle, compression);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsSetAudioCompression failed with error: %d", ret);
@@ -493,6 +498,7 @@ void test_l2_dsAudio_SetAndGetAudioCompression_source(void)
 
             UT_LOG_DEBUG("Invoking dsGetAudioCompression with handle: %ld", handle);
             ret = dsGetAudioCompression(handle, &getCompression);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsGetAudioCompression failed with error: %d", ret);
@@ -539,6 +545,7 @@ void test_l2_dsAudio_SetAndGetDialogEnhancement_sink(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort() with type: %d and index: 0", type);
         ret = dsGetAudioPort(type, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort() failed with error: %d", ret);
@@ -549,6 +556,7 @@ void test_l2_dsAudio_SetAndGetDialogEnhancement_sink(void)
         {
             UT_LOG_DEBUG("Invoking dsSetDialogEnhancement() with handle: %ld and level: %d", handle, level);
             ret = dsSetDialogEnhancement(handle, level);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsSetDialogEnhancement() failed with error: %d", ret);
@@ -557,6 +565,7 @@ void test_l2_dsAudio_SetAndGetDialogEnhancement_sink(void)
 
             UT_LOG_DEBUG("Invoking dsGetDialogEnhancement() with handle: %ld", handle);
             ret = dsGetDialogEnhancement(handle, &getLevel);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsGetDialogEnhancement() failed with error: %d", ret);
@@ -603,6 +612,7 @@ void test_l2_dsAudio_SetAndGetDialogEnhancement_source(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: 0", type);
         ret = dsGetAudioPort(type, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with error: %d", ret);
@@ -613,6 +623,7 @@ void test_l2_dsAudio_SetAndGetDialogEnhancement_source(void)
         {
             UT_LOG_DEBUG("Invoking dsSetDialogEnhancement with handle: %ld and level: %d", handle, level);
             ret = dsSetDialogEnhancement(handle, level);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsSetDialogEnhancement failed with error: %d", ret);
@@ -621,6 +632,7 @@ void test_l2_dsAudio_SetAndGetDialogEnhancement_source(void)
 
             UT_LOG_DEBUG("Invoking dsGetDialogEnhancement with handle: %ld", handle);
             ret = dsGetDialogEnhancement(handle, &getLevel);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsGetDialogEnhancement failed with error: %d", ret);
@@ -668,6 +680,7 @@ void test_l2_dsAudio_SetAndGetDolbyVolumeMode_sink(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type %d and index 0", portType);
         ret = dsGetAudioPort(portType, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
@@ -676,6 +689,7 @@ void test_l2_dsAudio_SetAndGetDolbyVolumeMode_sink(void)
 
         UT_LOG_DEBUG("Invoking dsSetDolbyVolumeMode with handle %ld and mode true", handle);
         ret = dsSetDolbyVolumeMode(handle, true);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsSetDolbyVolumeMode failed with error %d", ret);
@@ -684,6 +698,8 @@ void test_l2_dsAudio_SetAndGetDolbyVolumeMode_sink(void)
 
         UT_LOG_DEBUG("Invoking dsGetDolbyVolumeMode with handle %ld", handle);
         ret = dsGetDolbyVolumeMode(handle, &mode);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_EQUAL(mode,true);
         if (ret != dsERR_NONE || !mode)
         {
             UT_LOG_ERROR("dsGetDolbyVolumeMode failed with error %d and mode %d", ret, mode);
@@ -691,6 +707,7 @@ void test_l2_dsAudio_SetAndGetDolbyVolumeMode_sink(void)
 
         UT_LOG_DEBUG("Invoking dsSetDolbyVolumeMode with handle %ld and mode false", handle);
         ret = dsSetDolbyVolumeMode(handle, false);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsSetDolbyVolumeMode failed with error %d", ret);
@@ -699,6 +716,8 @@ void test_l2_dsAudio_SetAndGetDolbyVolumeMode_sink(void)
 
         UT_LOG_DEBUG("Invoking dsGetDolbyVolumeMode with handle %ld", handle);
         ret = dsGetDolbyVolumeMode(handle, &mode);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_EQUAL(mode,false);
         if (ret != dsERR_NONE || mode)
         {
             UT_LOG_ERROR("dsGetDolbyVolumeMode failed with error %d and mode %d", ret, mode);
@@ -741,6 +760,7 @@ void test_l2_dsAudio_SetAndGetDolbyVolumeMode_source(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: 0", i);
         ret = dsGetAudioPort(i, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with error: %d", ret);
@@ -749,6 +769,7 @@ void test_l2_dsAudio_SetAndGetDolbyVolumeMode_source(void)
 
         UT_LOG_DEBUG("Invoking dsSetDolbyVolumeMode with handle: %ld and mode: true", handle);
         ret = dsSetDolbyVolumeMode(handle, true);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsSetDolbyVolumeMode failed with error: %d", ret);
@@ -757,6 +778,8 @@ void test_l2_dsAudio_SetAndGetDolbyVolumeMode_source(void)
 
         UT_LOG_DEBUG("Invoking dsGetDolbyVolumeMode with handle: %ld", handle);
         ret = dsGetDolbyVolumeMode(handle, &mode);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_EQUAL(mode,true);
         if (ret != dsERR_NONE || !mode)
         {
             UT_LOG_ERROR("dsGetDolbyVolumeMode failed with error: %d", ret);
@@ -764,6 +787,7 @@ void test_l2_dsAudio_SetAndGetDolbyVolumeMode_source(void)
 
         UT_LOG_DEBUG("Invoking dsSetDolbyVolumeMode with handle: %ld and mode: false", handle);
         ret = dsSetDolbyVolumeMode(handle, false);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsSetDolbyVolumeMode failed with error: %d", ret);
@@ -772,6 +796,8 @@ void test_l2_dsAudio_SetAndGetDolbyVolumeMode_source(void)
 
         UT_LOG_DEBUG("Invoking dsGetDolbyVolumeMode with handle: %ld", handle);
         ret = dsGetDolbyVolumeMode(handle, &mode);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_EQUAL(mode,false);
         if (ret != dsERR_NONE || mode)
         {
             UT_LOG_ERROR("dsGetDolbyVolumeMode failed with error: %d", ret);
@@ -814,6 +840,7 @@ void test_l2_dsAudio_SetAndGetIntelligentEqualizerMode_sink(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type %d and index 0", type);
         ret = dsGetAudioPort(type, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
@@ -824,6 +851,7 @@ void test_l2_dsAudio_SetAndGetIntelligentEqualizerMode_sink(void)
         {
             UT_LOG_DEBUG("Invoking dsSetIntelligentEqualizerMode with handle %ld and mode %d", handle, mode);
             ret = dsSetIntelligentEqualizerMode(handle, mode);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsSetIntelligentEqualizerMode failed with error %d", ret);
@@ -833,6 +861,7 @@ void test_l2_dsAudio_SetAndGetIntelligentEqualizerMode_sink(void)
             int getMode = 0;
             UT_LOG_DEBUG("Invoking dsGetIntelligentEqualizerMode with handle %ld", handle);
             ret = dsGetIntelligentEqualizerMode(handle, &getMode);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsGetIntelligentEqualizerMode failed with error %d", ret);
@@ -879,6 +908,7 @@ void test_l2_dsAudio_SetAndGetIntelligentEqualizerMode_source(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: 0", type);
         ret = dsGetAudioPort(type, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with error: %d", ret);
@@ -889,6 +919,7 @@ void test_l2_dsAudio_SetAndGetIntelligentEqualizerMode_source(void)
         {
             UT_LOG_DEBUG("Invoking dsSetIntelligentEqualizerMode with handle: %ld and mode: %d", handle, mode);
             ret = dsSetIntelligentEqualizerMode(handle, mode);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsSetIntelligentEqualizerMode failed with error: %d", ret);
@@ -898,6 +929,7 @@ void test_l2_dsAudio_SetAndGetIntelligentEqualizerMode_source(void)
             int getMode = 0;
             UT_LOG_DEBUG("Invoking dsGetIntelligentEqualizerMode with handle: %ld", handle);
             ret = dsGetIntelligentEqualizerMode(handle, &getMode);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsGetIntelligentEqualizerMode failed with error: %d", ret);
@@ -944,6 +976,7 @@ void test_l2_dsAudio_SetAndGetVolumeLeveller_sink(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with portType: %d and index: 0", portType);
         retStatus = dsGetAudioPort(portType, 0, &handle);
+        UT_ASSERT_EQUAL(retStatus, dsERR_NONE);
         if (retStatus != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with status: %d", retStatus);
@@ -952,6 +985,7 @@ void test_l2_dsAudio_SetAndGetVolumeLeveller_sink(void)
 
         UT_LOG_DEBUG("Invoking dsSetVolumeLeveller with handle: %ld and volLeveller: {mode: %d, level: %d}", handle, volLevellerSet.mode, volLevellerSet.level);
         retStatus = dsSetVolumeLeveller(handle, volLevellerSet);
+        UT_ASSERT_EQUAL(retStatus, dsERR_NONE);
         if (retStatus != dsERR_NONE)
         {
             UT_LOG_ERROR("dsSetVolumeLeveller failed with status: %d", retStatus);
@@ -960,6 +994,7 @@ void test_l2_dsAudio_SetAndGetVolumeLeveller_sink(void)
 
         UT_LOG_DEBUG("Invoking dsGetVolumeLeveller with handle: %ld", handle);
         retStatus = dsGetVolumeLeveller(handle, &volLevellerGet);
+        UT_ASSERT_EQUAL(retStatus, dsERR_NONE);
         if (retStatus != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetVolumeLeveller failed with status: %d", retStatus);
@@ -1006,6 +1041,7 @@ void test_l2_dsAudio_SetAndGetVolumeLeveller_source(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type=%d and index=0", type);
         ret = dsGetAudioPort(type, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with status %d", ret);
@@ -1014,6 +1050,7 @@ void test_l2_dsAudio_SetAndGetVolumeLeveller_source(void)
 
         UT_LOG_DEBUG("Invoking dsSetVolumeLeveller with handle=%ld and mode=%d, level=%d", handle, volLevellerSet.mode, volLevellerSet.level);
         ret = dsSetVolumeLeveller(handle, volLevellerSet);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsSetVolumeLeveller failed with status %d", ret);
@@ -1022,6 +1059,7 @@ void test_l2_dsAudio_SetAndGetVolumeLeveller_source(void)
 
         UT_LOG_DEBUG("Invoking dsGetVolumeLeveller with handle=%ld", handle);
         ret = dsGetVolumeLeveller(handle, &volLevellerGet);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetVolumeLeveller failed with status %d", ret);
@@ -1070,6 +1108,7 @@ void test_l2_dsAudio_SetAndGetBassEnhancer_sink(void)
 
         UT_LOG_DEBUG("Invoking dsGetAudioPort() with type: %d and index: 0", i);
         ret = dsGetAudioPort(i, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort() failed with error: %d", ret);
@@ -1079,6 +1118,7 @@ void test_l2_dsAudio_SetAndGetBassEnhancer_sink(void)
         {
             UT_LOG_DEBUG("Invoking dsSetBassEnhancer() with handle: %ld and boost: %d", handle, setBoost);
             ret = dsSetBassEnhancer(handle, setBoost);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsSetBassEnhancer() failed with error: %d", ret);
@@ -1087,6 +1127,7 @@ void test_l2_dsAudio_SetAndGetBassEnhancer_sink(void)
 
             UT_LOG_DEBUG("Invoking dsGetBassEnhancer() with handle: %ld", handle);
             ret = dsGetBassEnhancer(handle, &boost);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsGetBassEnhancer() failed with error: %d", ret);
@@ -1134,6 +1175,7 @@ void test_l2_dsAudio_SetAndGetBassEnhancer_source(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: 0", type);
         ret = dsGetAudioPort(type, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with error: %d", ret);
@@ -1144,6 +1186,7 @@ void test_l2_dsAudio_SetAndGetBassEnhancer_source(void)
         {
             UT_LOG_DEBUG("Invoking dsSetBassEnhancer with handle: %ld and boost: %d", handle, setBoost);
             ret = dsSetBassEnhancer(handle, setBoost);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsSetBassEnhancer failed with error: %d", ret);
@@ -1152,6 +1195,7 @@ void test_l2_dsAudio_SetAndGetBassEnhancer_source(void)
 
             UT_LOG_DEBUG("Invoking dsGetBassEnhancer with handle: %ld", handle);
             ret = dsGetBassEnhancer(handle, &boost);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsGetBassEnhancer failed with error: %d", ret);
@@ -1198,6 +1242,7 @@ void test_l2_dsAudio_EnableAndVerifySurroundDecoder_sink(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type %d and index 0", i);
         ret = dsGetAudioPort(i, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
@@ -1206,6 +1251,7 @@ void test_l2_dsAudio_EnableAndVerifySurroundDecoder_sink(void)
 
         UT_LOG_DEBUG("Invoking dsEnableSurroundDecoder with handle %ld and enabled set to true", handle);
         ret = dsEnableSurroundDecoder(handle, enabled);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsEnableSurroundDecoder failed with error %d", ret);
@@ -1214,6 +1260,8 @@ void test_l2_dsAudio_EnableAndVerifySurroundDecoder_sink(void)
 
         UT_LOG_DEBUG("Invoking dsIsSurroundDecoderEnabled with handle %ld", handle);
         ret = dsIsSurroundDecoderEnabled(handle, &enabled);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_EQUAL(enabled,true);
         if (ret != dsERR_NONE || !enabled)
         {
             UT_LOG_ERROR("dsIsSurroundDecoderEnabled failed with error %d or enabled is not set", ret);
@@ -1257,6 +1305,7 @@ void test_l2_dsAudio_EnableAndVerifySurroundDecoder_source(void)
 
         UT_LOG_DEBUG("Invoking dsGetAudioPort() with type: %d and index: 0", type);
         ret = dsGetAudioPort(type, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort() failed with error: %d", ret);
@@ -1265,6 +1314,7 @@ void test_l2_dsAudio_EnableAndVerifySurroundDecoder_source(void)
 
         UT_LOG_DEBUG("Invoking dsEnableSurroundDecoder() with handle: %ld and enabled: %d", handle, enabled);
         ret = dsEnableSurroundDecoder(handle, enabled);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsEnableSurroundDecoder() failed with error: %d", ret);
@@ -1274,6 +1324,7 @@ void test_l2_dsAudio_EnableAndVerifySurroundDecoder_source(void)
         bool isEnabled = false;
         UT_LOG_DEBUG("Invoking dsIsSurroundDecoderEnabled() with handle: %ld", handle);
         ret = dsIsSurroundDecoderEnabled(handle, &isEnabled);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsIsSurroundDecoderEnabled() failed with error: %d", ret);
@@ -1320,6 +1371,7 @@ void test_l2_dsAudio_SetAndGetDRCMode_sink(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort() with type=%d and index=0", type);
         ret = dsGetAudioPort(type, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort() failed with status: %d", ret);
@@ -1330,6 +1382,7 @@ void test_l2_dsAudio_SetAndGetDRCMode_sink(void)
         {
             UT_LOG_DEBUG("Invoking dsSetDRCMode() with handle=%ld and mode=%d", handle, mode);
             ret = dsSetDRCMode(handle, mode);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsSetDRCMode() failed with status: %d", ret);
@@ -1338,6 +1391,7 @@ void test_l2_dsAudio_SetAndGetDRCMode_sink(void)
 
             UT_LOG_DEBUG("Invoking dsGetDRCMode() with handle=%ld", handle);
             ret = dsGetDRCMode(handle, &getMode);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsGetDRCMode() failed with status: %d", ret);
@@ -1384,6 +1438,7 @@ void test_l2_dsAudio_SetAndGetDRCMode_source(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort() with type=%d and index=0", type);
         ret = dsGetAudioPort(type, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort() failed with error: %d", ret);
@@ -1394,6 +1449,7 @@ void test_l2_dsAudio_SetAndGetDRCMode_source(void)
         {
             UT_LOG_DEBUG("Invoking dsSetDRCMode() with handle=%ld and mode=%d", handle, mode);
             ret = dsSetDRCMode(handle, mode);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsSetDRCMode() failed with error: %d", ret);
@@ -1403,6 +1459,7 @@ void test_l2_dsAudio_SetAndGetDRCMode_source(void)
             int getMode;
             UT_LOG_DEBUG("Invoking dsGetDRCMode() with handle=%ld", handle);
             ret = dsGetDRCMode(handle, &getMode);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsGetDRCMode() failed with error: %d", ret);
@@ -1449,6 +1506,7 @@ void test_l2_dsAudio_SetAndGetSurroundVirtualizer_sink(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: 0", i);
         ret = dsGetAudioPort(i, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with error: %d", ret);
@@ -1457,6 +1515,7 @@ void test_l2_dsAudio_SetAndGetSurroundVirtualizer_sink(void)
 
         UT_LOG_DEBUG("Invoking dsSetSurroundVirtualizer with handle: %ld and virtualizer: {mode: %d, boost: %d}", handle, virtualizer.mode, virtualizer.boost);
         ret = dsSetSurroundVirtualizer(handle, virtualizer);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsSetSurroundVirtualizer failed with error: %d", ret);
@@ -1465,6 +1524,7 @@ void test_l2_dsAudio_SetAndGetSurroundVirtualizer_sink(void)
 
         UT_LOG_DEBUG("Invoking dsGetSurroundVirtualizer with handle: %ld", handle);
         ret = dsGetSurroundVirtualizer(handle, &getVirtualizer);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetSurroundVirtualizer failed with error: %d", ret);
@@ -1511,6 +1571,7 @@ void test_l2_dsAudio_SetAndGetSurroundVirtualizer_source(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type %d and index 0", i);
         ret = dsGetAudioPort(i, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
@@ -1522,6 +1583,7 @@ void test_l2_dsAudio_SetAndGetSurroundVirtualizer_source(void)
 
         UT_LOG_DEBUG("Invoking dsSetSurroundVirtualizer with handle %ld and virtualizer mode %d, boost %d", handle, virtualizer.mode, virtualizer.boost);
         ret = dsSetSurroundVirtualizer(handle, virtualizer);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsSetSurroundVirtualizer failed with error %d", ret);
@@ -1530,6 +1592,7 @@ void test_l2_dsAudio_SetAndGetSurroundVirtualizer_source(void)
 
         UT_LOG_DEBUG("Invoking dsGetSurroundVirtualizer with handle %ld", handle);
         ret = dsGetSurroundVirtualizer(handle, &getVirtualizer);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetSurroundVirtualizer failed with error %d", ret);
@@ -1578,6 +1641,7 @@ void test_l2_dsAudio_SetAndGetMISteering_sink(void)
 
         UT_LOG_DEBUG("Invoking dsGetAudioPort() with type=%d and index=0", type);
         ret = dsGetAudioPort(type, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort() failed with error: %d", ret);
@@ -1586,6 +1650,7 @@ void test_l2_dsAudio_SetAndGetMISteering_sink(void)
 
         UT_LOG_DEBUG("Invoking dsSetMISteering() with handle=%ld and enabled=true", handle);
         ret = dsSetMISteering(handle, true);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsSetMISteering() failed with error: %d", ret);
@@ -1594,6 +1659,7 @@ void test_l2_dsAudio_SetAndGetMISteering_sink(void)
 
         UT_LOG_DEBUG("Invoking dsGetMISteering() with handle=%ld", handle);
         ret = dsGetMISteering(handle, &enabled);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetMISteering() failed with error: %d", ret);
@@ -1640,6 +1706,7 @@ void test_l2_dsAudio_SetAndGetMISteering_source(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: 0", i);
         ret = dsGetAudioPort(i, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with error: %d", ret);
@@ -1648,6 +1715,7 @@ void test_l2_dsAudio_SetAndGetMISteering_source(void)
 
         UT_LOG_DEBUG("Invoking dsSetMISteering with handle: %ld and enabled: %d", handle, enabled);
         ret = dsSetMISteering(handle, enabled);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsSetMISteering failed with error: %d", ret);
@@ -1702,6 +1770,7 @@ void test_l2_dsAudio_SetAndGetGraphicEqualizerMode_sink(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort() with type: %d and index: 0", type);
         ret = dsGetAudioPort(type, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort() failed with error: %d", ret);
@@ -1711,6 +1780,7 @@ void test_l2_dsAudio_SetAndGetGraphicEqualizerMode_sink(void)
         {
             UT_LOG_DEBUG("Invoking dsSetGraphicEqualizerMode() with handle: %ld and mode: %d", handle, mode);
             ret = dsSetGraphicEqualizerMode(handle, mode);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsSetGraphicEqualizerMode() failed with error: %d", ret);
@@ -1719,6 +1789,7 @@ void test_l2_dsAudio_SetAndGetGraphicEqualizerMode_sink(void)
 
             UT_LOG_DEBUG("Invoking dsGetGraphicEqualizerMode() with handle: %ld", handle);
             ret = dsGetGraphicEqualizerMode(handle, &getMode);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsGetGraphicEqualizerMode() failed with error: %d", ret);
@@ -1766,6 +1837,7 @@ void test_l2_dsAudio_SetAndGetGraphicEqualizerMode_source(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type %d and index 0", i);
         ret = dsGetAudioPort(i, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
@@ -1775,6 +1847,7 @@ void test_l2_dsAudio_SetAndGetGraphicEqualizerMode_source(void)
         {
             UT_LOG_DEBUG("Invoking dsSetGraphicEqualizerMode with handle %ld and mode:%d", handle, mode);
             ret = dsSetGraphicEqualizerMode(handle, mode);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsSetGraphicEqualizerMode failed with error %d", ret);
@@ -1783,6 +1856,7 @@ void test_l2_dsAudio_SetAndGetGraphicEqualizerMode_source(void)
 
             UT_LOG_DEBUG("Invoking dsGetGraphicEqualizerMode with handle %ld", handle);
             ret = dsGetGraphicEqualizerMode(handle, &getmode);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsGetGraphicEqualizerMode failed with error %d", ret);
@@ -1827,6 +1901,7 @@ void test_l2_dsAudio_EnableDisableAndRetrieveLEConfig_sink(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort() with type=%d and index=0", i);
         ret = dsGetAudioPort(i, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort() failed with error: %d", ret);
@@ -1835,6 +1910,7 @@ void test_l2_dsAudio_EnableDisableAndRetrieveLEConfig_sink(void)
 
         UT_LOG_DEBUG("Invoking dsEnableLEConfig() with handle=%ld and enable=true", handle);
         ret = dsEnableLEConfig(handle, true);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsEnableLEConfig() failed with error: %d", ret);
@@ -1843,13 +1919,16 @@ void test_l2_dsAudio_EnableDisableAndRetrieveLEConfig_sink(void)
 
         UT_LOG_DEBUG("Invoking dsGetLEConfig() with handle=%ld", handle);
         ret = dsGetLEConfig(handle, &enable);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE || !enable)
         {
             UT_LOG_ERROR("dsGetLEConfig() failed with error: %d", ret);
         }
+        UT_ASSERT_EQUAL(enable,true);
 
         UT_LOG_DEBUG("Invoking dsEnableLEConfig() with handle=%ld and enable=false", handle);
         ret = dsEnableLEConfig(handle, false);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsEnableLEConfig() failed with error: %d", ret);
@@ -1858,10 +1937,12 @@ void test_l2_dsAudio_EnableDisableAndRetrieveLEConfig_sink(void)
 
         UT_LOG_DEBUG("Invoking dsGetLEConfig() with handle=%ld", handle);
         ret = dsGetLEConfig(handle, &enable);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE || enable)
         {
             UT_LOG_ERROR("dsGetLEConfig() failed with error: %d", ret);
         }
+        UT_ASSERT_EQUAL(enable,false);
     }
 
     UT_LOG_DEBUG("Invoking dsAudioPortTerm()");
@@ -1901,6 +1982,7 @@ void test_l2_dsAudio_EnableDisableAndRetrieveLEConfig_source(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type %d and index 0", portType);
         ret = dsGetAudioPort(portType, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
@@ -1909,6 +1991,7 @@ void test_l2_dsAudio_EnableDisableAndRetrieveLEConfig_source(void)
 
         UT_LOG_DEBUG("Invoking dsEnableLEConfig with handle %ld and enable true", handle);
         ret = dsEnableLEConfig(handle, true);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsEnableLEConfig failed with error %d", ret);
@@ -1917,13 +2000,16 @@ void test_l2_dsAudio_EnableDisableAndRetrieveLEConfig_source(void)
 
         UT_LOG_DEBUG("Invoking dsGetLEConfig with handle %ld", handle);
         ret = dsGetLEConfig(handle, &enable);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE || !enable)
         {
             UT_LOG_ERROR("dsGetLEConfig failed with error %d or LE feature is not enabled", ret);
         }
+        UT_ASSERT_EQUAL(enable, true);
 
         UT_LOG_DEBUG("Invoking dsEnableLEConfig with handle %ld and enable false", handle);
         ret = dsEnableLEConfig(handle, false);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsEnableLEConfig failed with error %d", ret);
@@ -1932,10 +2018,12 @@ void test_l2_dsAudio_EnableDisableAndRetrieveLEConfig_source(void)
 
         UT_LOG_DEBUG("Invoking dsGetLEConfig with handle %ld", handle);
         ret = dsGetLEConfig(handle, &enable);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE || enable)
         {
             UT_LOG_ERROR("dsGetLEConfig failed with error %d or LE feature is not disabled", ret);
         }
+        UT_ASSERT_EQUAL(enable, false);
     }
 
     UT_LOG_DEBUG("Invoking dsAudioPortTerm");
@@ -1976,6 +2064,7 @@ void test_l2_dsAudio_CheckMS12DecodeSupport_sink(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type %d and index 0", type);
         ret = dsGetAudioPort(type, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort returned %d", ret);
@@ -1986,6 +2075,7 @@ void test_l2_dsAudio_CheckMS12DecodeSupport_sink(void)
         {
             UT_LOG_DEBUG("Invoking dsIsAudioMS12Decode with handle %ld", handle);
             ret = dsIsAudioMS12Decode(handle, &hasMS12Decode);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsIsAudioMS12Decode returned %d", ret);
@@ -2037,6 +2127,7 @@ void test_l2_dsAudio_CheckMS12DecodeSupport_source(void)
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type %d and index 0", type);
         ret = dsGetAudioPort(type, 0, &handle);
         UT_LOG_DEBUG("dsGetAudioPort returned handle %ld and status %d", handle, ret);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with status %d", ret);
@@ -2047,6 +2138,7 @@ void test_l2_dsAudio_CheckMS12DecodeSupport_source(void)
             UT_LOG_DEBUG("Invoking dsIsAudioMS12Decode with handle %ld", handle);
             ret = dsIsAudioMS12Decode(handle, &hasMS12Decode);
             UT_LOG_DEBUG("dsIsAudioMS12Decode returned hasMS12Decode %d and status %d", hasMS12Decode, ret);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsIsAudioMS12Decode failed with status %d", ret);
@@ -2057,8 +2149,8 @@ void test_l2_dsAudio_CheckMS12DecodeSupport_source(void)
 
     UT_LOG_DEBUG("Invoking dsAudioPortTerm");
     ret = dsAudioPortTerm();
-    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
     UT_LOG_DEBUG("dsAudioPortTerm returned %d", ret);
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -2150,6 +2242,7 @@ void test_l2_dsAudio_CheckMS11DecodeSupport_source(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: %d", type, index);
         ret = dsGetAudioPort(type, index, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with error: %d", ret);
@@ -2159,6 +2252,7 @@ void test_l2_dsAudio_CheckMS11DecodeSupport_source(void)
         {
             UT_LOG_DEBUG("Invoking dsIsAudioMSDecode with handle: %ld", handle);
             ret = dsIsAudioMSDecode(handle, &HasMS11Decode);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsIsAudioMSDecode failed with error: %d", ret);
@@ -2288,6 +2382,7 @@ void test_l2_dsAudio_SetAndGetMS12AudioProfile_sink(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort() with type=%d and index=0", i);
         ret = dsGetAudioPort(i, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort() failed with status=%d", ret);
@@ -2296,6 +2391,7 @@ void test_l2_dsAudio_SetAndGetMS12AudioProfile_sink(void)
 
         UT_LOG_DEBUG("Invoking dsGetMS12AudioProfileList() with handle=%ld", handle);
         ret = dsGetMS12AudioProfileList(handle, &profiles);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetMS12AudioProfileList() failed with status=%d", ret);
@@ -2306,6 +2402,7 @@ void test_l2_dsAudio_SetAndGetMS12AudioProfile_sink(void)
         {
             UT_LOG_DEBUG("Invoking dsSetMS12AudioProfile() with handle=%ld and profile=%s", handle, profileName);
             ret = dsSetMS12AudioProfile(handle, profileName);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsSetMS12AudioProfile() failed with status=%d", ret);
@@ -2314,6 +2411,7 @@ void test_l2_dsAudio_SetAndGetMS12AudioProfile_sink(void)
 
             UT_LOG_DEBUG("Invoking dsGetMS12AudioProfile() with handle=%ld", handle);
             ret = dsGetMS12AudioProfile(handle, profile);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsGetMS12AudioProfile() failed with status=%d", ret);
@@ -2408,6 +2506,7 @@ void test_l2_dsAudio_SetAndGetStereoMode_sink(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort() with type=%d and index=0", i);
         ret = dsGetAudioPort(i, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort() failed with status: %d", ret);
@@ -2418,6 +2517,7 @@ void test_l2_dsAudio_SetAndGetStereoMode_sink(void)
             mode = (dsAudioStereoMode_t)j;
             UT_LOG_DEBUG("Invoking dsSetStereoMode() with handle=%ld and mode=%d", handle, mode);
             ret = dsSetStereoMode(handle, mode);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsSetStereoMode() failed with status: %d", ret);
@@ -2426,6 +2526,7 @@ void test_l2_dsAudio_SetAndGetStereoMode_sink(void)
 
             UT_LOG_DEBUG("Invoking dsGetStereoMode() with handle=%ld", handle);
             ret = dsGetStereoMode(handle, &getmode);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                UT_LOG_ERROR("dsGetStereoMode() failed with status: %d", ret);
@@ -2472,6 +2573,7 @@ void test_l2_dsAudio_SetAndGetStereoMode_source(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort() with type %d", i);
         ret = dsGetAudioPort(i, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort() failed with status %d", ret);
@@ -2483,6 +2585,7 @@ void test_l2_dsAudio_SetAndGetStereoMode_source(void)
             mode = (dsAudioStereoMode_t)j;
             UT_LOG_DEBUG("Invoking dsSetStereoMode() with handle %ld and mode %d", handle, mode);
             ret = dsSetStereoMode(handle, mode);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsSetStereoMode() failed with status %d", ret);
@@ -2491,6 +2594,7 @@ void test_l2_dsAudio_SetAndGetStereoMode_source(void)
 
             UT_LOG_DEBUG("Invoking dsGetStereoMode() with handle %ld", handle);
             ret = dsGetStereoMode(handle, &getMode);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsGetStereoMode() failed with status %d", ret);
@@ -2538,6 +2642,7 @@ void test_l2_dsAudio_SetAndGetStereoAuto_sink(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type %d and index 0", portType);
         ret = dsGetAudioPort(portType, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
@@ -2547,6 +2652,7 @@ void test_l2_dsAudio_SetAndGetStereoAuto_sink(void)
 
         UT_LOG_DEBUG("Invoking dsSetStereoAuto with handle %ld and autoMode %d", handle, autoMode);
         ret = dsSetStereoAuto(handle, autoMode);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsSetStereoAuto failed with error %d", ret);
@@ -2668,6 +2774,7 @@ void test_l2_dsAudio_SetAndGetAudioLevel_sink(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type=%d and index=0", portType);
         ret = dsGetAudioPort(portType, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with error: %d", ret);
@@ -2678,6 +2785,7 @@ void test_l2_dsAudio_SetAndGetAudioLevel_sink(void)
         {
             UT_LOG_DEBUG("Invoking dsSetAudioLevel with handle=%ld and level=%f", handle, level);
             ret = dsSetAudioLevel(handle, level);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsSetAudioLevel failed with error: %d", ret);
@@ -2733,6 +2841,7 @@ void test_l2_dsAudio_AudioMuteVerification_sink(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: 0", type);
         ret = dsGetAudioPort(type, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with error: %d", ret);
@@ -2883,6 +2992,7 @@ void test_l2_dsAudio_SetAndGetAudioDelay_sink(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with port type %d and index 0", port);
         ret = dsGetAudioPort(port, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
@@ -2891,6 +3001,7 @@ void test_l2_dsAudio_SetAndGetAudioDelay_sink(void)
 
         UT_LOG_DEBUG("Invoking dsSetAudioDelay with handle and delay %d ms", setDelay);
         ret = dsSetAudioDelay(handle, setDelay);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsSetAudioDelay failed with error %d", ret);
@@ -2899,6 +3010,7 @@ void test_l2_dsAudio_SetAndGetAudioDelay_sink(void)
 
         UT_LOG_DEBUG("Invoking dsGetAudioDelay with handle");
         ret = dsGetAudioDelay(handle, &getDelay);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioDelay failed with error %d", ret);
@@ -2945,6 +3057,7 @@ void test_l2_dsAudio_SetAndGetAudioDelay_source(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: 0", type);
         ret = dsGetAudioPort(type, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with error: %d", ret);
@@ -2953,6 +3066,7 @@ void test_l2_dsAudio_SetAndGetAudioDelay_source(void)
 
         UT_LOG_DEBUG("Invoking dsSetAudioDelay with handle: %ld and delay: %d", handle, delaySet);
         ret = dsSetAudioDelay(handle, delaySet);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsSetAudioDelay failed with error: %d", ret);
@@ -2961,6 +3075,7 @@ void test_l2_dsAudio_SetAndGetAudioDelay_source(void)
 
         UT_LOG_DEBUG("Invoking dsGetAudioDelay with handle: %ld", handle);
         ret = dsGetAudioDelay(handle, &delayGet);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioDelay failed with error: %d", ret);
@@ -3128,6 +3243,7 @@ void test_l2_dsAudio_GetAudioCapabilities_source(void)
         UT_LOG_DEBUG("Invoking dsGetAudioPort with valid parameters");
         ret = dsGetAudioPort(index, 0, &handle);
         UT_LOG_DEBUG("Handle: %ld, Return status: %d", handle, ret);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if(ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with status: %d", ret);
@@ -3137,6 +3253,7 @@ void test_l2_dsAudio_GetAudioCapabilities_source(void)
         UT_LOG_DEBUG("Invoking dsGetAudioCapabilities with handle obtained from previous step");
         ret = dsGetAudioCapabilities(handle, &capabilities);
         UT_LOG_DEBUG("Capabilities: %d, Return status: %d", capabilities, ret);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if(ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioCapabilities failed with status: %d", ret);
@@ -3182,6 +3299,7 @@ void test_l2_dsAudio_EnableDisableRetrieveAudioMixing_sink(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: 0", type);
         ret = dsGetAudioPort(type, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with error: %d", ret);
@@ -3190,6 +3308,7 @@ void test_l2_dsAudio_EnableDisableRetrieveAudioMixing_sink(void)
 
         UT_LOG_DEBUG("Invoking dsSetAssociatedAudioMixing with handle: %ld and mixing: true", handle);
         ret = dsSetAssociatedAudioMixing(handle, true);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsSetAssociatedAudioMixing failed with error: %d", ret);
@@ -3198,13 +3317,16 @@ void test_l2_dsAudio_EnableDisableRetrieveAudioMixing_sink(void)
 
         UT_LOG_DEBUG("Invoking dsGetAssociatedAudioMixing with handle: %ld", handle);
         ret = dsGetAssociatedAudioMixing(handle, &mixing);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE || !mixing)
         {
             UT_LOG_ERROR("dsGetAssociatedAudioMixing failed with error: %d", ret);
         }
+        UT_ASSERT_EQUAL(mixing,true);
 
         UT_LOG_DEBUG("Invoking dsSetAssociatedAudioMixing with handle: %ld and mixing: false", handle);
         ret = dsSetAssociatedAudioMixing(handle, false);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsSetAssociatedAudioMixing failed with error: %d", ret);
@@ -3213,10 +3335,12 @@ void test_l2_dsAudio_EnableDisableRetrieveAudioMixing_sink(void)
 
         UT_LOG_DEBUG("Invoking dsGetAssociatedAudioMixing with handle: %ld", handle);
         ret = dsGetAssociatedAudioMixing(handle, &mixing);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE || mixing)
         {
             UT_LOG_ERROR("dsGetAssociatedAudioMixing failed with error: %d", ret);
         }
+        UT_ASSERT_EQUAL(mixing,false);
     }
 
     UT_LOG_DEBUG("Invoking dsAudioPortTerm");
@@ -3255,6 +3379,7 @@ void test_l2_dsAudio_EnableDisableRetrieveAudioMixing_source(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type %d and index 0", i);
         ret = dsGetAudioPort(i, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
@@ -3263,6 +3388,7 @@ void test_l2_dsAudio_EnableDisableRetrieveAudioMixing_source(void)
 
         UT_LOG_DEBUG("Invoking dsSetAssociatedAudioMixing with handle %ld and mixing true", handle);
         ret = dsSetAssociatedAudioMixing(handle, true);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsSetAssociatedAudioMixing failed with error %d", ret);
@@ -3271,13 +3397,16 @@ void test_l2_dsAudio_EnableDisableRetrieveAudioMixing_source(void)
 
         UT_LOG_DEBUG("Invoking dsGetAssociatedAudioMixing with handle %ld", handle);
         ret = dsGetAssociatedAudioMixing(handle, &mixing);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE || !mixing)
         {
             UT_LOG_ERROR("dsGetAssociatedAudioMixing failed with error %d or mixing is not true", ret);
         }
+        UT_ASSERT_EQUAL(mixing,true);
 
         UT_LOG_DEBUG("Invoking dsSetAssociatedAudioMixing with handle %ld and mixing false", handle);
         ret = dsSetAssociatedAudioMixing(handle, false);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsSetAssociatedAudioMixing failed with error %d", ret);
@@ -3286,10 +3415,12 @@ void test_l2_dsAudio_EnableDisableRetrieveAudioMixing_source(void)
 
         UT_LOG_DEBUG("Invoking dsGetAssociatedAudioMixing with handle %ld", handle);
         ret = dsGetAssociatedAudioMixing(handle, &mixing);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE || mixing)
         {
             UT_LOG_ERROR("dsGetAssociatedAudioMixing failed with error %d or mixing is not false", ret);
         }
+        UT_ASSERT_EQUAL(mixing,false);
     }
 
     UT_LOG_DEBUG("Invoking dsAudioPortTerm");
@@ -3328,6 +3459,7 @@ void test_l2_dsAudio_AudioPortControl_sink(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort() with type=%d and index=0", type);
         ret = dsGetAudioPort(type, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort() failed with error: %d", ret);
@@ -3403,6 +3535,7 @@ void test_l2_dsAudio_AudioPortControl_source(void)
     {
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type=%d and index=0", type);
         ret = dsGetAudioPort(type, 0, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetAudioPort failed with error: %d", ret);
