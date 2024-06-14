@@ -77,9 +77,10 @@
 #include <ut_log.h>
 #include <ut_kvp_profile.h>
 
-#define NUM_OF_PORTS (sizeof(kPorts) / sizeof(kPorts[0]))
+#define NUM_OF_PORTS 4
 #define MAX_PROFILE_NAME_LEN 10
 #define INT_ARRAY_INIT 0
+#define ARRAY_SIZE 9
 
 #define CHECK_FOR_EXTENDED_ERROR_CODE( result, enhanced, old )\
 {\
@@ -99,6 +100,106 @@ intptr_t null_handle = 0;
 
 /* Global flags to support features */
 static bool extendedEnumsSupported=false; //Default to not supported
+static char* device_type = NULL;
+static char* device_name = NULL;
+static int numports = 0;
+
+typedef struct  port_config {
+	uint16_t typeid;
+	uint16_t index;
+	char* port_name;
+	int no_of_supported_compression;
+	int supported_compressions[ARRAY_SIZE];
+	int no_of_supported_encodings;
+	int supported_encodings[ARRAY_SIZE];
+	int no_of_supported_stereo_mode;
+	int supported_stereo_mode[ARRAY_SIZE];
+	int ms12_capabilites;
+	char* ms12_audio_profiles[ARRAY_SIZE];
+	int ms12_audioprofilecount;
+	bool isms12decode;
+	bool isms11decode;
+	int atmos_capabilites;
+
+}port_config_t;
+
+port_config_t* portid = NULL;
+
+void populate_port_config()
+{
+	ut_kvp_status_t status;
+	char string[100];
+
+	status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "Device/Type", device_type, UT_KVP_MAX_ELEMENT_SIZE);
+	status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "Device/Name", device_name, UT_KVP_MAX_ELEMENT_SIZE);
+	numports = ut_kvp_getUInt16Field( ut_kvp_profile_getInstance(), "Number_of_supported_ports" );
+
+	portid = (port_config_t*) malloc(numports * sizeof(port_config_t));
+	if(portid == NULL)
+	{
+		UT_LOG("\n %s - Failed to allocate memory \n",__FUNCTION__);
+	}
+
+	for(int i =0 ; i < numports ; i++)
+	{
+		sprintf(string , "ports/%d/Typeid" , i);
+		portid[i].typeid = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), string );
+		sprintf(string , "ports/%d/connected_video_ports/index" , i);
+		portid[i].index = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), string );
+		sprintf(string , "ports/%d/Name" , i);
+		status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), string, portid[i].port_name, UT_KVP_MAX_ELEMENT_SIZE);
+		sprintf(string , "ports/%d/number_of_supported_compressions" , i);
+		portid[i].no_of_supported_compression = ut_kvp_getUInt16Field( ut_kvp_profile_getInstance(), string );
+		sprintf(string , "ports/%d/number_of_supported_encodings" , i);
+		portid[i].no_of_supported_encodings = ut_kvp_getUInt16Field( ut_kvp_profile_getInstance(), string );
+		sprintf(string , "ports/%d/number_of_supported_stereo_modes" , i);
+		portid[i].no_of_supported_stereo_mode = ut_kvp_getUInt16Field( ut_kvp_profile_getInstance(), string );
+		sprintf(string , "ports/%d/MS12_Capabilities" , i);
+		portid[i].ms12_capabilites = ut_kvp_getUInt16Field( ut_kvp_profile_getInstance(), string );
+		sprintf(string , "ports/%d/MS12_AudioProfileCount" , i);
+		portid[i].ms12_audioprofilecount = ut_kvp_getUInt16Field( ut_kvp_profile_getInstance(), string );
+		sprintf(string , "ports/%d/IsMS12Decode" , i);
+		portid[i].isms12decode = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), string );
+		sprintf(string , "ports/%d/isms11decode" , i);
+		portid[i].isms11decode = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), string );
+		sprintf(string , "ports/%d/ATMOS_Capabilities" , i);
+		portid[i].atmos_capabilites = ut_kvp_getUInt16Field( ut_kvp_profile_getInstance(), string  );
+
+		for(int j=0 ; j < portid[i].no_of_supported_compression ; j++) // loop to get supported compressions in array
+		{
+			if(j == 0)
+			memset(portid[i].supported_compressions , 0 , sizeof(portid[i].supported_compressions));
+
+			sprintf(string , "ports/%d/compressions/%d" , i , j);
+			portid[i].supported_compressions[j] = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), string);
+		}
+
+		for(int j=0 ; j < portid[i].no_of_supported_encodings ; j++) // loop to get supported encodings in array
+		{
+			if(j == 0)
+			memset(portid[i].supported_encodings , 0 , sizeof(portid[i].supported_encodings));
+
+			sprintf(string , "ports/%d/encodings/%d" , i , j);
+			portid[i].supported_encodings[j] = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), string);
+		}
+
+		for(int j=0 ; j < portid[i].no_of_supported_stereo_mode ; j++) //loop to get supported stereo modes in array
+		{
+			if(j == 0)
+			memset(portid[i].supported_stereo_mode , 0 , sizeof(portid[i].supported_stereo_mode));
+
+			sprintf(string , "ports/%d/stereo_modes/%d" , i , j);
+			portid[i].supported_stereo_mode[j] = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), string);
+		}
+
+		for(int j=0 ; j < ARRAY_SIZE ; j++) // loop to get ms12 audio profiles
+		{
+			sprintf(string , "ports/%d/MS12_AudioProfiles/%d" , i , j);
+			status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), string, portid[i].ms12_audio_profiles[j], UT_KVP_MAX_ELEMENT_SIZE);
+		}
+	}
+}
+
 
 /**
  * @brief Ensure dsAudioPortInit() returns correct status codes during positive scenarios
@@ -304,7 +405,7 @@ void test_l1_dsAudio_positive_dsGetAudioPort(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t  result;
-	intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	intptr_t  handle[numports];
 	intptr_t  lastHandle , newHandle;
 
 	// Step 01: Initialize audio ports
@@ -312,19 +413,19 @@ void test_l1_dsAudio_positive_dsGetAudioPort(void) {
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
 
 	// Step 02: Loop through kPorts to get audio port handle
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
-		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+	for (int i = 0; i < numports; i++) {
+		result = dsGetAudioPort(portid[i].typeid, portid[i].index, &handle[i]);
 		UT_ASSERT_EQUAL(result, dsERR_NONE);
 		UT_ASSERT_NOT_EQUAL(handle[i], null_handle);
 
 		// Remember last handle for comparison in next step
-		if (i == (NUM_OF_PORTS-1)) {
+		if (i == (numports-1)) {
 			lastHandle = handle[i];
 		}
 	}
 
 	// Step 03: Compare with the last element
-	result = dsGetAudioPort(kPorts[NUM_OF_PORTS-1].id.type, kPorts[NUM_OF_PORTS-1].id.index, &newHandle);
+	result = dsGetAudioPort(portid[numports-1].typeid, portid[numports-1].index, &newHandle);
 	UT_ASSERT_EQUAL(result,dsERR_NONE);
 	// previous handle comparison
 	UT_ASSERT_EQUAL(lastHandle, newHandle);
@@ -365,10 +466,10 @@ void test_l1_dsAudio_negative_dsGetAudioPort(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t  result;
-	intptr_t  handle[NUM_OF_PORTS]={INT_ARRAY_INIT};
+	intptr_t  handle[numports];
 
 	// Step 01: Attempt to get the Audio Port handle without initializing
-	result = dsGetAudioPort(kPorts[0].id.type, kPorts[0].id.index, &handle[0]);
+	result = dsGetAudioPort(portid[0].typeid, portid[0].index, &handle[0]);
 	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
 	
 	// Step 02: Initialize audio ports
@@ -376,21 +477,21 @@ void test_l1_dsAudio_negative_dsGetAudioPort(void) {
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
 
 	// Step 03: Invalid type
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
-		result = dsGetAudioPort(dsAUDIOPORT_TYPE_MAX, kPorts[i].id.index, &handle[i]);
+	for (int i = 0; i < numports; i++) {
+		result = dsGetAudioPort(dsAUDIOPORT_TYPE_MAX, portid[i].index, &handle[i]);
 		UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 		UT_ASSERT_NOT_EQUAL(handle[i], null_handle);
 	}
 
 	// Step 04: Invalid index
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
-		result = dsGetAudioPort(kPorts[i].id.type, -1 , &handle[i]);
+	for (int i = 0; i < numports; i++) {
+		result = dsGetAudioPort(portid[i].typeid, -1 , &handle[i]);
 		UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 	}
 
 	// Step 05: NULL handle
-	for (int i = 0; i < NUM_OF_PORTS; i++) {
-		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, NULL);
+	for (int i = 0; i < numports; i++) {
+		result = dsGetAudioPort(portid[i].typeid, portid[i].index, NULL);
 		UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 	}
 
@@ -399,7 +500,7 @@ void test_l1_dsAudio_negative_dsGetAudioPort(void) {
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
 
 	// Step 07: Attempt to get the audio port handle after termination
-	result = dsGetAudioPort(kPorts[0].id.type, kPorts[0].id.index, &handle[0]);
+	result = dsGetAudioPort(portid[0].typeid, portid[0].index, &handle[0]);
 	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
 	
 	// Logging at the end
@@ -10259,6 +10360,7 @@ int test_l1_dsAudio_register ( void )
 	UT_add_test( pSuite, "dsSetAudioMixerLevels_l1_positive" ,test_l1_dsAudio_positive_dsSetAudioMixerLevels );
 	UT_add_test( pSuite, "dsSetAudioMixerLevels_l1_negative" ,test_l1_dsAudio_negative_dsSetAudioMixerLevels );
 
+	populate_port_config();
 	extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsAudio/features/extendedEnumsSupported" );
 
 	return 0;
