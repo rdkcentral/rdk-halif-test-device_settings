@@ -56,8 +56,8 @@ High level overview:
 
 |Description|HAL APIs|L2|L3|Control plane requirements|
 |-----------|--------|--|--|--------------------------|
-|Invoke the module to retrieve `CPU` temperature, verify the returned temperature falls within valid operating range and ensure the `CPU` is in a normal operating state.|dsGetCPUTemperature|Y|N|N|
-|Invoke the module to retrieve `CPU` temperature while the device is within a heat/cold chambers to verify that the device will properly retrieve the information while within abnormal temperatures|dsGetCPUTemperature|N|Y|N|
+|Invoke the module to retrieve `CPU` temperature, verify the returned temperature falls within valid operating range and ensure the `CPU` is in a normal operating state based on the test profile|dsGetCPUTemperature|Y|N|N|
+|Invoke the module to retrieve `CPU` temperature while the device is within a heat/cold chambers to verify that the device will properly retrieve the information while within abnormal temperatures based on the test profile, see ../../profiles/TempatureSettings.yaml |dsGetCPUTemperature|N|Y|N|
 
 ### Test Startup Requirement - Retrieve CPU Temperature
 
