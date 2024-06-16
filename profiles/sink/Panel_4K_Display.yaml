@@ -2,6 +2,10 @@ Device:
   Type: sink
   Name: element
 
+dsDisplay:
+  features:
+    extendedEnumsSupported: false
+
 EDID_Data:
   # Product code of the display device of the type int32_t 
   productCode: 0x2A1B
