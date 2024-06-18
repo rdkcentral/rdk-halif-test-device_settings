@@ -57,7 +57,7 @@ If user chose to run the test in interactive mode, then the test case has to be 
 | Variation / Steps | Description | Test Data | Expected Result | Notes|
 | -- | --------- | ---------- | -------------- | ----- |
 | 01 | Initialize video device using dsVideoDeviceInit | None | dsERR_NONE | Should be successful |
-| 02 | Get video device handle using dsGetVideoDevice | index = 0 to MAX_DEVICES| dsERR_NONE | Should be successful |
+| 02 | Get video device handle using dsGetVideoDevice | index = 0 to MAX_DEVICES from profile file| dsERR_NONE | Should be successful |
 | 03 | Loop through each supported video device and set the zoom mode using dsSetDFC | handle = obtained handle, dfc = dsVIDEO_ZOOM_NONE to dsVIDEO_ZOOM_MAX | dsERR_NONE | Should be successful |
 | 04 | Verify the set zoom mode using dsGetDFC | handle = obtained handle, dfc_get = buffer to get dfc | dsERR_NONE, dfc_get = dfc | Should be successful |
 | 05 | Terminate video device using dsVideoDeviceTerm | None | dsERR_NONE | Should be successful |
@@ -102,7 +102,7 @@ If user chose to run the test in interactive mode, then the test case has to be 
 | Variation / Steps | Description | Test Data | Expected Result | Notes|
 | -- | --------- | ---------- | -------------- | ----- |
 | 01 | Initialize the video device using dsVideoDeviceInit | None | dsERR_NONE | Should be successful |
-| 02 | Loop through each video device using dsGetVideoDevice | index = 0 to MAX_DEVICES, handle = valid pointer | dsERR_NONE | Should be successful |
+| 02 | Loop through each video device using dsGetVideoDevice | index = 0 to MAX_DEVICES from profile file, handle = valid pointer | dsERR_NONE | Should be successful |
 | 03 | Get the HDR capabilities for each video device using dsGetHDRCapabilities | handle = obtained from previous step, capabilities = valid pointer | dsERR_NONE | Should be successful |
 | 04 | Verify the obtained HDR capabilities with the profile file | capabilities = obtained from previous step | Value should match with the profile file | Should be successful |
 | 05 | Terminate the video device using dsVideoDeviceTerm | None | dsERR_NONE | Should be successful |
@@ -146,7 +146,7 @@ If user chose to run the test in interactive mode, then the test case has to be 
 | Variation / Steps | Description | Test Data | Expected Result | Notes|
 | -- | --------- | ---------- | -------------- | ----- |
 | 01 | Initialize the video device using dsVideoDeviceInit | None | dsERR_NONE | Should be successful |
-| 02 | Loop through each video device using dsGetVideoDevice | index = 0 to MAX_DEVICES, handle = valid buffer | dsERR_NONE | Should be successful |
+| 02 | Loop through each video device using dsGetVideoDevice | index = 0 to MAX_DEVICES from profile file, handle = valid buffer | dsERR_NONE | Should be successful |
 | 03 | Get the HDR capabilities for each video device using dsGetHDRCapabilities | handle = obtained from dsGetVideoDevice, capabilities = valid buffer | dsERR_NONE | Should be successful |
 | 04 | Verify the obtained HDR capabilities with the profile file | capabilities = obtained from dsGetHDRCapabilities | Equal to the value in the profile file | Should be successful |
 | 05 | Terminate the video device using dsVideoDeviceTerm | None | dsERR_NONE | Should be successful |
@@ -191,7 +191,7 @@ If user chose to run the test in interactive mode, then the test case has to be 
 | Variation / Steps | Description | Test Data | Expected Result | Notes|
 | -- | --------- | ---------- | -------------- | ----- |
 | 01 | Initialize the video device using dsVideoDeviceInit() | None | dsERR_NONE | Should be successful |
-| 02 | Loop through each video device using dsGetVideoDevice() | index = 0 to MAX_DEVICES | dsERR_NONE | Should be successful |
+| 02 | Loop through each video device using dsGetVideoDevice() | index = 0 to MAX_DEVICES from profile file | dsERR_NONE | Should be successful |
 | 03 | Get the supported video coding formats for each device using dsGetSupportedVideoCodingFormats() | handle = obtained from dsGetVideoDevice() | dsERR_NONE | Should be successful |
 | 04 | Verify the obtained supported formats with the profile file | supported_formats = obtained from dsGetSupportedVideoCodingFormats() | dsERR_NONE | Should be successful |
 | 05 | Terminate the video device using dsVideoDeviceTerm() | None | dsERR_NONE | Should be successful |
@@ -235,7 +235,7 @@ If user chose to run the test in interactive mode, then the test case has to be 
 | Variation / Steps | Description | Test Data | Expected Result | Notes|
 | -- | --------- | ---------- | -------------- | ----- |
 | 01 | Initialize the video device using dsVideoDeviceInit | None | dsERR_NONE | Should be successful |
-| 02 | Loop through each video device using dsGetVideoDevice | index = 0 to MAX_DEVICES | dsERR_NONE | Should be successful |
+| 02 | Loop through each video device using dsGetVideoDevice | index = 0 to MAX_DEVICES from profile file | dsERR_NONE | Should be successful |
 | 03 | For each device, get the supported video coding formats using dsGetSupportedVideoCodingFormats | handle = handle from dsGetVideoDevice | dsERR_NONE | Should be successful |
 | 04 | Verify the supported video coding formats with the profile file | supported_formats = supported_formats from dsGetSupportedVideoCodingFormats | VideoDevice/VideoDevice0/SupportedVideoCodingFormats from Source_VideoDevice.yaml  | Should be successful |
 | 05 | Terminate the video device using dsVideoDeviceTerm | None | dsERR_NONE | Should be successful |
@@ -280,7 +280,7 @@ If user chose to run the test in interactive mode, then the test case has to be 
 | Variation / Steps | Description | Test Data | Expected Result | Notes|
 | -- | --------- | ---------- | -------------- | ----- |
 | 01 | Initialize the video device using dsVideoDeviceInit | None | dsERR_NONE | Should be successful |
-| 02 | Loop through each supported video device using dsGetVideoDevice | index = 0 to MAX_DEVICES | dsERR_NONE | Should be successful |
+| 02 | Loop through each supported video device using dsGetVideoDevice | index = 0 to MAX_DEVICES from profile file | dsERR_NONE | Should be successful |
 | 03 | Get Video codec information for each video device using dsGetVideoCodecInfo | handle = handle from dsGetVideoDevice, codec = codec | dsERR_NONE | Should be successful |
 | 04 | Verify the obtained Video codec information with `Source_VideoDevice.yaml(VideoDevice/VideoDevice0/VideoCodecInfo)` profile file | info.num_entries = num_entries from dsGetVideoCodecInfo, info.entries from dsGetVideoCode | dsERR_NONE | Should be successful |
 | 05 | Terminate the video device using dsVideoDeviceTerm | None | dsERR_NONE | Should be successful |
@@ -324,7 +324,7 @@ If user chose to run the test in interactive mode, then the test case has to be 
 | Variation / Steps | Description | Test Data | Expected Result | Notes|
 | -- | --------- | ---------- | -------------- | ----- |
 | 01 | Initialize video device using dsVideoDeviceInit | None | dsERR_NONE | Should be successful |
-| 02 | Get video device handle using dsGetVideoDevice with index 0 , Loop through each supported video device| index = 0 to MAX_DEVICES, handle = valid pointer | dsERR_NONE | Should be successful |
+| 02 | Get video device handle using dsGetVideoDevice with index 0 , Loop through each supported video device| index = 0 to MAX_DEVICES from profile file, handle = valid pointer | dsERR_NONE | Should be successful |
 | 03 | Set the supported display frame rate for each video device using dsSetDisplayframerate | handle = obtained handle, framerate = "VideoDevice/VideoDevice0/SupportedDisplayframerate" | dsERR_NONE | Should be successful |
 | 04 | Verify the set frame rate using dsGetCurrentDisplayframerate | handle = obtained handle, framerate = valid pointer | dsERR_NONE | Should be successful |
 | 05 | Terminate video device using dsVideoDeviceTerm | None | dsERR_NONE | Should be successful |

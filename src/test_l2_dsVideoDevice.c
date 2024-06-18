@@ -38,7 +38,18 @@
 static int gTestGroup = 2;
 static int gTestID = 1;
 
-int MAX_DEVICES = 1;
+int MAX_DEVICES = 0;
+
+//Retrieve supported Number of VideoDevices from profile file
+int get_MaxDevices(void)
+{
+    ut_kvp_instance_t *pInstance = NULL;
+    pInstance = ut_kvp_profile_getInstance();
+    MAX_DEVICES = ut_kvp_getUInt32Field( pInstance, "VideoDevice/NumVideoDevices");
+    UT_LOG_INFO("Supported Number of VideoDevices from profile file is : %d",MAX_DEVICES);
+
+    return 0;
+}
 
 /**
 * @brief Test for setting and getting DFC source in dsVideoDevice
