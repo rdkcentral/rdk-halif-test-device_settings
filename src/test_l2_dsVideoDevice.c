@@ -395,6 +395,7 @@ void test_l2_dsVideoDevice_GetVideoCodecInfo_source(void)
             for(int i = 0; i < info.num_entries; i++)
             {
                 UT_ASSERT_KVP_EQUAL_PROFILE_UINT32(info.entries->profile,"VideoDevice/VideoDevice0/VideoCodecInfo/VideoCodec0/profile");
+                //TODO : kvp profile support for float type is not available now
                 UT_ASSERT_KVP_EQUAL_PROFILE_UINT32(info.entries->level,"VideoDevice/VideoDevice0/VideoCodecInfo/VideoCodec0/level");
             }
             codec = (0x01 << (j++));
