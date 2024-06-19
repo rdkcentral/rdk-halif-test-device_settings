@@ -56,7 +56,7 @@ High level overview:
 
 |Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |-----------|--------|--|--|------|----|--------------------------|
-|Get the CPU temperature and check weather the temperature falls within valid operating range and ensure the `CPU` is in a normal operating state based on "cpuTemperature" value in the configuration yaml|dsGetCPUTemperature|Y|N|Y|Y|N|
+|Get the CPU temperature and check weather the temperature falls within valid operating range and ensure the `CPU` is in a normal operating state based on maximum and minimum values of "cpuTemperature" in the configuration yaml|dsGetCPUTemperature|Y|N|Y|Y|N|
 |Invoke the module to retrieve `CPU` temperature while the device is within a heat/cold chambers to verify that the device will properly retrieve the information|dsGetCPUTemperature|N|Y|Y|Y|Y|
 
 ### Test Startup Requirement - Retrieve CPU Temperature
