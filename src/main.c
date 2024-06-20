@@ -15,13 +15,13 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
- 
+
 #include <ut.h>
 
 extern int MAX_DEVICES;
 extern int get_MaxDevices(void);
 extern int register_hal_l2_tests( void );
- 
+
 int main(int argc, char** argv)
 {
     int registerReturn = 0;
@@ -29,13 +29,16 @@ int main(int argc, char** argv)
     /* Register tests as required, then call the UT-main to support switches and triggering */
     UT_init( argc, argv );
 
-    if (get_MaxDevices() == 0)
+    if ( (!(strcmp(argv[2],"Source_VideoDevice.yaml")))|| (!(strcmp(argv[2],"Sink_VideoDevice.yaml"))))
     {
-        UT_LOG("Got the Supported Number of VideoDevices value : %d\n ", MAX_DEVICES);
-    }
-    else
-    {
-        printf("Failed to get Supported Number of VideoDevices\n");
+        if (get_MaxDevices() == 0)
+        {
+            UT_LOG("Got the Supported Number of VideoDevices value : %d\n ", MAX_DEVICES);
+        }
+        else
+        {
+            printf("Failed to get Supported Number of VideoDevices\n");
+        }
     }
     /* Check if tests are registered successfully */
     registerReturn = register_hal_l2_tests();
