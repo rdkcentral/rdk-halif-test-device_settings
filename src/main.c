@@ -29,6 +29,7 @@ int main(int argc, char** argv)
     /* Register tests as required, then call the UT-main to support switches and triggering */
     UT_init( argc, argv );
 
+    //TODO : This check is to be removed when all the profile files are combined into single profile file.
     if ( (!(strcmp(argv[2],"Source_VideoDevice.yaml")))|| (!(strcmp(argv[2],"Sink_VideoDevice.yaml"))))
     {
         if (get_MaxDevices() == 0)
