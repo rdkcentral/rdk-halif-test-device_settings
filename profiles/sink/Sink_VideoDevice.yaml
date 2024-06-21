@@ -1,8 +1,10 @@
-VideoDevice:
+dsVideoDevice:
   Type: sink
-  Name: element
+  Name: TV
   Module: 0x10 #dsVideoDevice
   NumVideoDevices: 1
+  features:
+    extendedEnumsSupported: false
   Device:
     1:
         #dsVIDEO_ZOOM_UNKNOWN           = -1        /*!< Unknown mode */
@@ -28,34 +30,14 @@ VideoDevice:
         #dsHDRSTANDARD_HDR10PLUS         = 0x10,  ///< Video Format HDRPlus
         #dsHDRSTANDARD_SDR               = 0x20,  ///< Video Format SDR
         #dsHDRSTANDARD_Invalid           = 0x80   ///< When invalid value observed
-      HDRCapabilities: 0x37 # OR-ed value of SDR | HDR10 | HDR10PLUS | DolbyVision | HLG
+      HDRCapabilities: 0x17 # OR-ed value of SDR | HDR10 | HDR10PLUS | DolbyVision
         #dsVIDEO_CODEC_MPEGHPART2  = (0x01 << 0)    /*!< Also known HEVC, H.265 */
         #dsVIDEO_CODEC_MPEG4PART10 = (0x01 << 1)    /*!< Also known as H.264, MPEG4 AVC */
         #dsVIDEO_CODEC_MPEG2       = (0x01 << 2)    /*!< Also known as H.222/H.262 */
         #dsVIDEO_CODEC_MAX         = (0x01 << 3)    /*!< Out of range */
-      SupportedVideoCodingFormats: 6  #dsVIDEO_CODEC_MPEG2|dsVIDEO_CODEC_MPEG4PART10
+      SupportedVideoCodingFormats: 0x06  #dsVIDEO_CODEC_MPEG2|dsVIDEO_CODEC_MPEG4PART10
       SupportedDisplayFramerate:
         - "60"
         - "50"
         - "24"
       VideoCodecInfo: 0 #Not supported
-
-# Profile for L1
-dsAudio:
-  features:
-    extendedEnumsSupported: false
-dsHdmiIn:
-  features:
-    extendedEnumsSupported: false
-dsVideoDevice:
-  features:
-    extendedEnumsSupported: false
-dsDisplay:
-  features:
-    extendedEnumsSupported: false
-dsHost:
-  features:
-    extendedEnumsSupported: false
-dsVideoPort:
-  features:
-    extendedEnumsSupported: false

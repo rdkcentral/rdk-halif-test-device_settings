@@ -1,8 +1,10 @@
-VideoDevice:
+dsVideoDevice:
   Type: source
-  Name: xione
+  Name: STB
   Module: 0x10 #dsVideoDevice
   NumVideoDevices: 1
+  features:
+    extendedEnumsSupported: false
   Device:
     1:
         #dsVIDEO_ZOOM_UNKNOWN           = -1        /*!< Unknown mode */
@@ -19,7 +21,6 @@ VideoDevice:
         #dsVIDEO_ZOOM_PILLARBOX_4_3     = 10        /*!< Pillarbox 4:3 (4:3 video is placed in a 16:9 frame with a pillarbox effect) */
         #dsVIDEO_ZOOM_WIDE_4_3          = 11        /*!< Wide 4:3 (4:3 video is stretched to fill 16:9 frame) */
         SupportedDFCs:
-          - 0   #dsVIDEO_ZOOM_NONE
           - 1   #dsVIDEO_ZOOM_FULL
           - 8   #dsVIDEO_ZOOM_PLATFORM
         DefaultDFC: 1 #dsVIDEO_ZOOM_FULL=1
@@ -31,38 +32,19 @@ VideoDevice:
         #dsHDRSTANDARD_HDR10PLUS          = 0x10,  ///< Video Format HDRPlus
         #dsHDRSTANDARD_SDR                = 0x20,  ///< Video Format SDR
         #dsHDRSTANDARD_Invalid            = 0x80   ///< When invalid value observed
-        HDRCapabilities: 0x37 # OR-ed value of SDR | HDR10 | HDR10PLUS | DolbyVision | HLG
+        HDRCapabilities: 0x07 # OR-ed value of HDR10 | DolbyVision | HLG
         #dsVIDEO_CODEC_MPEGHPART2  = (0x01 << 0)    /*!< Also known HEVC, H.265 */
         #dsVIDEO_CODEC_MPEG4PART10 = (0x01 << 1)    /*!< Also known as H.264, MPEG4 AVC */
         #dsVIDEO_CODEC_MPEG2       = (0x01 << 2)    /*!< Also known as H.222/H.262 */
         #dsVIDEO_CODEC_MAX         = (0x01 << 3)    /*!< Out of range */
-        SupportedVideoCodingFormats: 7  #dsVIDEO_CODEC_MPEG2|dsVIDEO_CODEC_MPEG4PART10
+        SupportedVideoCodingFormats: 0x07  #dsVIDEO_CODEC_MPEG2|dsVIDEO_CODEC_MPEG4PART10
         SupportedDisplayFramerate: 0 #Not supported
         VideoCodecInfo:
           num_entries: 1
           VideoCodec0:
             level: 5.1 #HEVC profile level
-            profile: 1 #dsVIDEO_CODEC_HEVC_PROFILE_MAIN10
+            profile: 2 #dsVIDEO_CODEC_HEVC_PROFILE_MAIN10
             #dsVIDEO_CODEC_HEVC_PROFILE_MAIN             = (0x01 << 0)     /*!< 8-bit HEVC video profile. */
             #dsVIDEO_CODEC_HEVC_PROFILE_MAIN10           = (0x01 << 1)     /*!< 10-bit HEVC video profile. */
             #dsVIDEO_CODEC_HEVC_PROFILE_MAINSTILLPICTURE = (0x01 << 2)     /*!< HECV Main Still Picture profile */
             #dsVIDEO_CODEC_HEVC_MAX                      = (0x01 << 3)     /*!< Out of range  */
-# Profile for L1
-dsAudio:
-  features:
-    extendedEnumsSupported: false
-dsHdmiIn:
-  features:
-    extendedEnumsSupported: false
-dsVideoDevice:
-  features:
-    extendedEnumsSupported: false
-dsDisplay:
-  features:
-    extendedEnumsSupported: false
-dsHost:
-  features:
-    extendedEnumsSupported: false
-dsVideoPort:
-  features:
-    extendedEnumsSupported: false

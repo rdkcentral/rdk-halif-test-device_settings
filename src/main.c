@@ -65,37 +65,47 @@
 */
 
 #include <ut.h>
+#include "test_utils.h"
 
 extern int UT_register_APIDEF_l1_tests( void );
 extern int UT_register_APIDEF_l2_tests( void );
 
 int main(int argc, char** argv) 
 {
-	int registerReturn = 0;
+    int registerReturn = 0;
 
-	/* Register tests as required, then call the UT-main to support switches and triggering */
-	UT_init( argc, argv );
+    /* Register tests as required, then call the UT-main to support switches and triggering */
+    UT_init( argc, argv );
+    UT_LOG("---Start ------");
+    if ( test_utils_parseConfig() == -1 )
+    {
+        printf("\n Failed to parse the configuration file");
+        test_utils_parseConfig_term();
+        return -1;
+    }
 
-	/* Check if tests are registered successfully */
+    /* Check if tests are registered successfully */
 
-	registerReturn = UT_register_APIDEF_l1_tests();
-	if ( registerReturn == -1 )
-	{
-		printf("\n UT_register_APIDEF_l1_tests() returned failure");
-		return -1;
-	}
+    registerReturn = UT_register_APIDEF_l1_tests();
+    if ( registerReturn == -1 )
+    {
+        printf("\n UT_register_APIDEF_l1_tests() returned failure");
+        return -1;
+    }
 
-	registerReturn = UT_register_APIDEF_l2_tests();
-	if ( registerReturn == -1 )
-	{	
-		printf("\n UT_register_APIDEF_l2_tests() returned failure");
-		return -1;
-	}
+    registerReturn = UT_register_APIDEF_l2_tests();
+    if ( registerReturn == -1 )
+    {
+        printf("\n UT_register_APIDEF_l2_tests() returned failure");
+        return -1;
+    }
 
-	/* Begin test executions */
-	UT_run_tests();
+    /* Begin test executions */
+    UT_run_tests();
 
-	return 0;
+    test_utils_parseConfig_term();
+
+    return 0;
 
 }
 /** @} */ // End of Device_Settings_MAIN
