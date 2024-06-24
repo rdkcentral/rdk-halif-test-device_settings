@@ -161,7 +161,7 @@ Control plane validates the current mode by the analyzers.
 |Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |------------------|-----------|--------|--|--|------|----|--------------------------|
 |Callback for connection Status|Verify that the callback function properly updates the connection/disconnection status flag and notifies the application when a `HDMI` Input port is connected or disconnected.|dsHdmiInRegisterConnectCB()|`N`|`Y`|`Y`|`Y`|`Y`|
-|Callback for connection Status|Verify that the callback function properly updates the isPresented status in ::dsHdmiInStatus_t, if the connected port is active and presents video after being connected.|dsHdmiInRegisterConnectCB()|`N`|`Y`|`Y`|`Y`|`Y`|
+|Callback for connection Status|Verify that the callback function properly updates the isPresented status, if the connected port is active and presents video after being connected.|dsHdmiInRegisterConnectCB()|`N`|`Y`|`Y`|`Y`|`Y`|
 
 ### Test Startup Requirement - Callback for connection Status
 
