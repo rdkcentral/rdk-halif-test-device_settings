@@ -54,10 +54,10 @@ High level overview:
 
 ## Retrieve CPU Temperature
 
-|Description|HAL APIs|L2|L3|Control plane requirements|
-|-----------|--------|--|--|--------------------------|
-|Invoke the module to retrieve `CPU` temperature, verify the returned temperature falls within valid operating range and ensure the `CPU` is in a normal operating state based on the test profile|dsGetCPUTemperature|Y|N|N|
-|Invoke the module to retrieve `CPU` temperature while the device is within a heat/cold chambers to verify that the device will properly retrieve the information while within abnormal temperatures based on the test profile, see ../../profiles/TempatureSettings.yaml |dsGetCPUTemperature|N|Y|N|
+|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|-----------|--------|--|--|------|----|--------------------------|
+|Get the CPU temperature and check weather the temperature falls within valid operating range and ensure the `CPU` is in a normal operating state based on "cpuTemperature" value in the configuration yaml|dsGetCPUTemperature|Y|N|Y|Y|N|
+|Invoke the module to retrieve `CPU` temperature while the device is within a heat/cold chambers to verify that the device will properly retrieve the information|dsGetCPUTemperature|N|Y|Y|Y|Y|
 
 ### Test Startup Requirement - Retrieve CPU Temperature
 
@@ -69,13 +69,13 @@ None
 
 ### Control Plane Requirement - Retrieve CPU Temperature
 
-None
+Control external heat/cold chambers
 
 ## Obtain SoC ID
 
-|Description|HAL APIs|L2|L3|Control plane requirements|
-|-----------|--------|--|--|--------------------------|
-|Trigger the module to obtain `SoC` ID and verify the returned ID matches the expected format and length based on the configuration file.|dsGetSocIDFromSDK|Y|N|N|
+|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|-----------|--------|--|--|------|----|--------------------------|
+|Get the `SoC` ID and verify with "socID" value in configuration yaml file.|dsGetSocIDFromSDK|Y|N|Y|Y|N|
 
 ### Test Startup Requirement-Obtain SoC ID
 
@@ -91,9 +91,9 @@ None
 
 ## Fetch Host EDID
 
-|Description|HAL APIs|L2|L3|Control plane requirements|
-|-----------|--------|--|--|--------------------------|
-|Call the module function dsGetHostEDID() to fetch the host `EDID`. Verify the retrieved `EDID` data corresponds to the capabilities and specifications of the host device. Each device will have it's own `EDID` that is supports. I.E. Two devices with the same resolution and size will have the same `EDID` values. If the devices are not the same size, resolution, and device type they will not have the same `EDID` value. The retrieved `EDID` values will be compared against those within the configuration file.|dsGetHostEDID|Y|N|N|
+|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|-----------|--------|--|--|------|----|--------------------------|
+|Get the host EDID bytes and validate the EDID bytes and length with the "edidBytes" and "edidbytesLength" values from the configuration yaml file|dsGetHostEDID|Y|N|N|Y|N|
 
 ### Test Startup Requirement - Fetch Host EDID
 
@@ -101,7 +101,7 @@ Launch the test with the predefined configuration set of results.
 
 ### Emulator Requirement - Fetch Host EDID
 
-Emulator will boot with the `EDID` coming from the configuration file. Each 
+Emulator will boot with the `EDID` coming from the configuration file.
 
 ### Control Plane Requirement - Fetch Host EDID
 

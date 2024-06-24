@@ -1,0 +1,36 @@
+Device:
+  Type: sink
+  Name: element
+
+# OR-ed value of DS module 
+# dsHost|dsFPD|dsDisplay|dsVideoDevice|dsHdmiIn|dsComposite|dsVideoPort|dsAudioPort
+Module: 0x80 #dsHost
+
+# Profile for L1 
+dsAudio:
+  features:
+    extendedEnumsSupported: false
+dsHdmiIn:
+  features:
+    extendedEnumsSupported: false
+dsVideoDevice:
+  features:
+    extendedEnumsSupported: false
+dsDisplay:
+  features:
+    extendedEnumsSupported: false
+dsHost:
+  features:
+    extendedEnumsSupported: false
+dsVideoPort:
+  features:
+    extendedEnumsSupported: false
+
+#soc ID
+socID: "ABC32343"
+#cpu temperatures in centigrade [min, max]
+cpuTemperature: [30, 65]
+# edid bytes data
+edidBytes: ""
+# length of the edid bytes
+edidbytesLength: 0
