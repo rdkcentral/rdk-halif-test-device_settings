@@ -1,19 +1,16 @@
-# DSDISPLAY L2 Low Level Test Specification and Procedure Documentation
+# Device Settings Display L2 Low Level Test Specification and Procedure Documentation
 
 ## Table of Contents
 
-- [DSDISPLAY L2 Low Level Test Specification and Procedure Documentation](#dsdisplay-l2-low-level-test-specification-and-procedure-documentation)
-
-  - [Table of Contents](#table-of-contents)
-  - [Overview](#overview)
-    - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-    - [Definitions](#definitions)
-    - [References](#references)
-  - [Level 2 Test Procedure](#level-2-test-procedure)
+- [Overview](#overview)
+- [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
+- [Definitions](#definitions)
+- [References](#references)
+- [Level 2 Test Procedure](#level-2-test-procedure)
 
 ## Overview
 
-This document describes the level 2 testing suite for the DSDISPLAY module.
+This document describes the Low Level L2 test Specification and Procedure for the Device settings Display module.
 
 ### Acronyms, Terms and Abbreviations
 
@@ -29,10 +26,12 @@ This document describes the level 2 testing suite for the DSDISPLAY module.
 
 ### Definitions
 
-  - `ut-core` \- Common Testing Framework <https://github.com/rdkcentral/ut-core>, which wraps a open-source framework that can be expanded to the requirements for future framework.
+- `ut-core` \- Common Testing Framework <https://github.com/rdkcentral/ut-core>, which wraps a open-source framework that can be expanded to the requirements for future framework.
 
 ### References
-- `High Level Test Specification` - [dsDisplay_TestSpecificaion.md](:/4d6a87ee74104f3bbe64f7514565a5a2)
+
+- `High Level Test Specification` - [dsDisplay_TestSpecificaion.md](https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/main/docs/pages/ds-display-high-Level_TestSpec)
+- `HAL Interface file` - [dsDisplay.h](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsDisplay.h)
 
 ## Level 2 Test Procedure
 
@@ -44,31 +43,30 @@ The following functions are expecting to test the module operates correctly.
 |--|--|
 |Function Name|`test_l2_dsDisplay_RetrieveAndValidateEDID_sink`|
 |Description|For the sink device, retrieve EDID information for the display type 'dsVIDEOPORT_TYPE_INTERNAL' using GetEDID and GetEDIDBytes, then validate the values against the data available in the "Panel_4K_Display.yaml" profile file. The values to be validated are the 'EDID_Data/productCode' for GetEDID and the 'EDID_Data/edidBytes'(which stands for Manufacturer ID) at bytes 8 and 9 against the values available in the profile file for GetEDIDBytes.|
-|Test Group|Module : 02|
+|Test Group|02|
 |Test Case ID|001|
 |Priority|High|
 
-**Pre-Conditions :**
+**Pre-Conditions**
 None
 
-**Dependencies :**
+**Dependencies**
 None
 
-**User Interaction :**
+**User Interaction**
 If user chose to run the test in interactive mode, then the test case has to be selected via console.
 
-#### Test Procedure :
+#### Test Procedure - Test 1
 
 | Variation / Steps | Description | Test Data | Expected Result | Notes|
 | -- | --------- | ---------- | -------------- | ----- |
-| 01 | Initialize the display using dsDisplayInit | None | dsERR_NONE | Should be successful |
-| 02 | Get the display handle using dsGetDisplay for the 'dsVIDEOPORT_TYPE_INTERNAL' type  | type = dsVIDEOPORT_TYPE_INTERNAL, index = 0 | dsERR_NONE | Should be successful |
-| 03 | Retrieve EDID information using dsGetEDID | handle = obtained from step 02 | dsERR_NONE | Should be successful |
-| 04 | Validate with the product code data available in the profile file 'Panel_4K_Display.yaml.yml' | product code, EDID_Data/productCode | Value matches | Should be successful |
-| 05 | Retrieve EDID bytes using dsGetEDIDBytes | handle = obtained from step 02, edidBytes = valid buffer, length = valid buffer | dsERR_NONE | Should be successful |
-| 06 | Validate with the Manufacturer ID at bytes 8 and 9 against the values available in the profile file "Panel_4K_Display.yaml" | Manufacturer ID , EDID_Data/edidBytes | Value matches | Should be successful |
-| 07 | Terminate the display using dsDisplayTerm | None | dsERR_NONE | Should be successful |
-
+| 01 | Initialize the display using `dsDisplayInit` | None | `dsERR_NONE` | Should be successful |
+| 02 | Get the display handle using `dsGetDisplay` for the `dsVIDEOPORT_TYPE_INTERNAL` type  | type = `dsVIDEOPORT_TYPE_INTERNAL`, index = 0 | `dsERR_NONE` | Should be successful |
+| 03 | Retrieve EDID information using `dsGetEDID` | handle = obtained from step 02 | `dsERR_NONE` | Should be successful |
+| 04 | Validate with the product code data available in the profile file | product code, `dsDisplay/EDID_Data/productCode` | Value matches | Should be successful |
+| 05 | Retrieve EDID bytes using `dsGetEDIDBytes` | handle = obtained from step 02, edidBytes = valid buffer, length = valid buffer | `dsERR_NONE` | Should be successful |
+| 06 | Validate with the Manufacturer ID at bytes 8 and 9 against the values available in the profile file | Manufacturer ID , `dsDisplay/EDID_Data/edidBytes` | Value matches | Should be successful |
+| 07 | Terminate the display using `dsDisplayTerm` | None | `dsERR_NONE` | Should be successful |
 
 ```mermaid
 graph TB
@@ -87,36 +85,34 @@ graph TB
     H -->|!= dsERR_NONE| H1[Test case fail]
 ```
 
-
 ### Test 2
 
 |Title|Details|
 |--|--|
 |Function Name|`test_l2_dsDisplay_TestDefaultAspectRatio_source`|
 |Description|Test the default aspect ratio (16:9) without any TV connected on source devices.|
-|Test Group|Module : 02|
+|Test Group|02|
 |Test Case ID|002|
 |Priority|High|
 
-**Pre-Conditions :**
+**Pre-Conditions**
 None
 
-**Dependencies :**
+**Dependencies**
 None
 
-**User Interaction :**
+**User Interaction**
 If user chose to run the test in interactive mode, then the test case has to be selected via console.
 
-#### Test Procedure :
+#### Test Procedure - Test 2
 
 | Variation / Steps | Description | Test Data | Expected Result | Notes|
 | -- | --------- | ---------- | -------------- | ----- |
-| 01 | Initialize the display using dsDisplayInit() | None | dsERR_NONE | Should be successful |
-| 02 | Get the display handle using dsGetDisplay() with dsVIDEOPORT_TYPE_HDMI and index 0 | dsVIDEOPORT_TYPE_HDMI, 0 | dsERR_NONE | Should be successful |
-| 03 | Get the display aspect ratio using dsGetDisplayAspectRatio() with the handle obtained from dsGetDisplay() | handle obtained from dsGetDisplay() and aspectRatio = valid buffer | dsERR_NONE, dsVIDEO_ASPECT_RATIO_16x9 | Should be successful |
-| 04 | Verify that the aspect ratio is dsVIDEO_ASPECT_RATIO_16x9 | None | dsVIDEO_ASPECT_RATIO_16x9 | Should be successful |
-| 05 | Terminate the display using dsDisplayTerm() | None | dsERR_NONE | Should be successful |
-
+| 01 | Initialize the display using `dsDisplayInit` | None | `dsERR_NONE` | Should be successful |
+| 02 | Get the display handle using `dsGetDisplay` with `dsVIDEOPORT_TYPE_HDMI` and index 0 | `dsVIDEOPORT_TYPE_HDMI`, 0 | `dsERR_NONE` | Should be successful |
+| 03 | Get the display aspect ratio using `dsGetDisplayAspectRatio` with the handle obtained from `dsGetDisplay` | handle obtained from `dsGetDisplay` and aspectRatio = valid buffer | `dsERR_NONE`, `dsVIDEO_ASPECT_RATIO_16x9` | Should be successful |
+| 04 | Verify that the aspect ratio is `dsVIDEO_ASPECT_RATIO_16x9` | None | `dsVIDEO_ASPECT_RATIO_16x9`, `dsDisplay/AspectRatio`  | Should be successful |
+| 05 | Terminate the display using `dsDisplayTerm` | None | `dsERR_NONE` | Should be successful |
 
 ```mermaid
 graph TB
