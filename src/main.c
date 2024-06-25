@@ -2,7 +2,7 @@
 *  If not stated otherwise in this file or this component's LICENSE
 *  file the following copyright and licenses apply:
 *
-*  Copyright 2022 RDK Management
+*  Copyright 2024 RDK Management
 *
 *  Licensed under the Apache License, Version 2.0 (the License);
 *  you may not use this file except in compliance with the License.
@@ -65,40 +65,51 @@
 */
 
 #include <ut.h>
+#include "test_parse_configuration.h"
 
 extern int UT_register_APIDEF_l1_tests( void );
 extern int UT_register_APIDEF_l2_tests( void );
 
 int main(int argc, char** argv) 
 {
-	int registerReturn = 0;
+    int registerReturn = 0;
 
-	/* Register tests as required, then call the UT-main to support switches and triggering */
-	UT_init( argc, argv );
+    /* Register tests as required, then call the UT-main to support switches and triggering */
+    UT_init( argc, argv );
 
-	/* Check if tests are registered successfully */
+    if ( test_parse_configuration() == -1 )
+    {
+        printf("\n Failed to parse the configuration file");
+        test_parse_configuration_term();
+        return -1;
+    }
 
-	registerReturn = UT_register_APIDEF_l1_tests();
-	if ( registerReturn == -1 )
-	{
-		printf("\n UT_register_APIDEF_l1_tests() returned failure");
-		return -1;
-	}
+    /* Check if tests are registered successfully */
 
-	registerReturn = UT_register_APIDEF_l2_tests();
-	if ( registerReturn == -1 )
-	{	
-		printf("\n UT_register_APIDEF_l2_tests() returned failure");
-		return -1;
-	}
+    registerReturn = UT_register_APIDEF_l1_tests();
+    if ( registerReturn == -1 )
+    {
+        printf("\n UT_register_APIDEF_l1_tests() returned failure");
+        return -1;
+    }
 
-	/* Begin test executions */
-	UT_run_tests();
+    registerReturn = UT_register_APIDEF_l2_tests();
+    if ( registerReturn == -1 )
+    {
+        printf("\n UT_register_APIDEF_l2_tests() returned failure");
+        return -1;
+    }
 
-	return 0;
+    /* Begin test executions */
+    UT_run_tests();
+
+    test_parse_configuration_term();
+
+    return 0;
 
 }
 /** @} */ // End of Device_Settings_MAIN
 /** @} */ // End of Device_Settings_HALTEST
 /** @} */ // End of Device_Settings
 /** @} */ // End of HPK
+
