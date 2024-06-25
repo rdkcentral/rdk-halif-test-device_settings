@@ -287,7 +287,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetNumberOfInputs(void) {
     UT_ASSERT_EQUAL(dsHdmiInGetNumberOfInputs(&numInputs1), dsERR_NONE);
 
     // Step 3: Call dsHdmiInGetNumberOfInputs() again to fetch the number of HDMI input ports
-    UT_ASSERT_EQUAL(dsHdmiInGetNumberOfInputs(&numInputs2), dsERR_NONE);
+    numInputs2 = ut_kvp_getUInt8Field(ut_kvp_profile_getInstance(), "dsHdmiIn/HdmiInputPort/numberOfPorts");
 
     // Step 4: Compare the results to make sure they are equal
     UT_ASSERT_EQUAL(numInputs1, numInputs2);
@@ -1412,7 +1412,7 @@ void test_l1_dsHdmiIn_positive_dsIsHdmiARCPort(void) {
     UT_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_2, &isArcPort1), dsERR_NONE);
 
     // Step 5: Call dsIsHdmiARCPort() with valid input (dsHDMI_IN_PORT_2)
-    UT_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_2, &isArcPort2), dsERR_NONE);
+     UT_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_2, &isArcPort2), dsERR_NONE);
 
     // Step 6: Compare the values of steps 4 and 5 to make sure they equal one another
     UT_ASSERT_EQUAL(isArcPort1, isArcPort2);
@@ -2008,6 +2008,10 @@ void test_l1_dsHdmiIn_negative_dsGetAllmStatus(void) {
 void test_l1_dsHdmiIn_positive_dsGetSupportedGameFeaturesList(void) {
     gTestID = 43;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+     char featureString[MAX_FEATURE_LIST_BUFFER_LEN];
+     ut_kvp_instance_t *instance = ut_kvp_profile_getInstance();
+
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
@@ -2016,7 +2020,13 @@ void test_l1_dsHdmiIn_positive_dsGetSupportedGameFeaturesList(void) {
     UT_ASSERT_EQUAL(dsGetSupportedGameFeaturesList(&supported_features_1), dsERR_NONE);
 
     // Step 3: Call dsGetSupportedGameFeaturesList() with valid inputs (dsSupportedGameFeatureList_t*)
-    UT_ASSERT_EQUAL(dsGetSupportedGameFeaturesList(&supported_features_2), dsERR_NONE);
+    ut_kvp_getStringField(instance, "dsHdmiIn/gameFeatures/feature", featureString, sizeof(featureString));
+
+    strncpy(supported_features_2.gameFeatureList, featureString, sizeof(supported_features_2.gameFeatureList) - 1);
+    supported_features_2.gameFeatureList[sizeof(supported_features_2.gameFeatureList) - 1] = '\0';
+
+    uint8_t featureCount  = ut_kvp_getUInt8Field(instance, "dsHdmiIn/gameFeatures/count");
+    supported_features_2.gameFeatureCount = featureCount;
 
     // Step 4: Compare the returns of steps 2/3 and make sure they compare
     // Note: You should implement a function to compare dsSupportedGameFeatureList_t objects
