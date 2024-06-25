@@ -112,6 +112,7 @@ static bool extendedEnumsSupported=false;
    }\
 }
 
+#define MONITOR_NAME_LENGTH 14
 
 /**
  * @brief Ensure dsDisplayInit() initializes the DS Display sub-system correctly during positive scenarios
@@ -364,7 +365,7 @@ void test_l1_dsDisplay_positive_dsGetDisplay(void) {
         result = dsGetDisplay(vType, i, &displayHandle2);
         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, displayHandle1, displayHandle2);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_LOG("\n In %s Comparison: [%d = %d]\n", __FUNCTION__, result);
+	UT_LOG("\n In %s Comparison: [%d = %d]\n", __FUNCTION__, result);
         UT_ASSERT_EQUAL(displayHandle1, displayHandle2);
         UT_LOG("Repeated display handle for port type %d: %ld\n", vType, (long)displayHandle2);
     }
@@ -502,8 +503,24 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
             // Step 04: Call dsGetEDID() again with the same handle
-            result = dsGetEDID(displayHandle, edid2);
-            UT_ASSERT_EQUAL(result, dsERR_NONE);
+            //result = dsGetEDID(displayHandle, edid2);
+            //UT_ASSERT_EQUAL(result, dsERR_NONE);
+	    edid2->productCode = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), "dsDisplay/EDID_Data/productCode");
+	    edid2->serialNumber = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), "dsDisplay/EDID_Data/serialNumber");
+	    edid2->manufactureYear = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), "dsDisplay/EDID_Data/manufactureYear");
+	    edid2->manufactureWeek = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), "dsDisplay/EDID_Data/manufactureWeek");
+	    edid2->hdmiDeviceType = ut_kvp_getBoolField(ut_kvp_profile_getInstance(), "dsDisplay/EDID_Data/hdmiDeviceType");
+	    edid2->isRepeater = ut_kvp_getBoolField(ut_kvp_profile_getInstance(), "dsDisplay/EDID_Data/isRepeater");
+	    edid2->physicalAddressA = ut_kvp_getUInt8Field(ut_kvp_profile_getInstance(), "dsDisplay/EDID_Data/physicalAddressA");
+	    edid2->physicalAddressB = ut_kvp_getUInt8Field(ut_kvp_profile_getInstance(), "dsDisplay/EDID_Data/physicalAddressB");
+	    edid2->physicalAddressC = ut_kvp_getUInt8Field(ut_kvp_profile_getInstance(), "dsDisplay/EDID_Data/physicalAddressC");
+	    edid2->physicalAddressD = ut_kvp_getUInt8Field(ut_kvp_profile_getInstance(), "dsDisplay/EDID_Data/physicalAddressD");
+	    //edid2->numOfSupportedResolution =
+	    int status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsDisplay/EDID_Data/monitorName", edid2->monitorName, MONITOR_NAME_LENGTH);
+	    if (status != 0) {
+                UT_LOG_ERROR("Failed to get the monitor name");
+	        return ;
+	    }
 
             // Step 05: Compare the returned results
             UT_ASSERT_EQUAL(edid1->productCode , edid2->productCode);
@@ -666,13 +683,7 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
            UT_FAIL("Failed to get EDID Bytes");
             break;
         }
-        result = dsGetEDIDBytes(displayHandle, edid2, &length2);
-        UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-        if(result != dsERR_NONE)
-        {
-            UT_FAIL("Failed to get EDID Bytes");
-            break;
-        }
+	length2 = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), "dsDisplay/EDID_Data/edidbytesLength");
 
         // Step 05: Verify that the return results are the same
         UT_ASSERT_EQUAL(length1, length2);
