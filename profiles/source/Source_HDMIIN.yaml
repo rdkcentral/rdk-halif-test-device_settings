@@ -1,24 +1,4 @@
-# Profile for L1
-dsAudio:
-  features:
-    extendedEnumsSupported: false
 dsHdmiIn:
-  features:
-    extendedEnumsSupported: false
-dsVideoDevice:
-  features:
-    extendedEnumsSupported: false
-dsDisplay:
-  features:
-    extendedEnumsSupported: false
-dsHost:
-  features:
-    extendedEnumsSupported: false
-dsVideoPort:
-  features:
-    extendedEnumsSupported: false
-
-HDMIIN:
   Type: source
   Name: xi-one
   compositeInputPort:
