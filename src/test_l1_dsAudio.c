@@ -75,14 +75,30 @@
 #include "dsAudioSettings.h"
 #include <ut.h>
 #include <ut_log.h>
+#include <ut_kvp_profile.h>
 
 #define NUM_OF_PORTS (sizeof(kPorts) / sizeof(kPorts[0]))
 #define MAX_PROFILE_NAME_LEN 10
 #define INT_ARRAY_INIT 0
 
+#define CHECK_FOR_EXTENDED_ERROR_CODE( result, enhanced, old )\
+{\
+   if ( extendedEnumsSupported == true )\
+   {\
+      UT_ASSERT_EQUAL( enhanced, result );\
+   }\
+   else\
+   {\
+       UT_ASSERT_EQUAL( old, result );\
+   }\
+}
+
 static int gTestGroup = 1;
 static int gTestID = 1;
 intptr_t null_handle = 0;
+
+/* Global flags to support features */
+static bool extendedEnumsSupported=false; //Default to not supported
 
 /**
  * @brief Ensure dsAudioPortInit() returns correct status codes during positive scenarios
@@ -161,8 +177,7 @@ void test_l1_dsAudio_negative_dsAudioPortInit (void)
 
 	// Step 02: Call dsAudioPortInit() Attempt to initialize dsAudio again
 	result = dsAudioPortInit();
-	UT_ASSERT_EQUAL(result, dsERR_ALREADY_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_ALREADY_INITIALIZED, dsERR_NONE );	
 
 	// Step 03: Call dsAudioPortTerm() Terminate dsAudio
 	result = dsAudioPortTerm();
@@ -246,8 +261,8 @@ void test_l1_dsAudio_negative_dsAudioPortTerm (void)
 
 	// Step 01: dsAudioPortTerm() Attempt to terminate dsAudio without initialization
 	dsError_t result = dsAudioPortTerm();
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
+	
 	// Step 02: dsAudioPortInit() Initialize dsAudio
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -258,7 +273,7 @@ void test_l1_dsAudio_negative_dsAudioPortTerm (void)
 
 	// Step 04: dsAudioPortTerm() Attempt to terminate dsAudio again
 	result = dsAudioPortTerm();
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
 
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
@@ -354,8 +369,8 @@ void test_l1_dsAudio_negative_dsGetAudioPort(void) {
 
 	// Step 01: Attempt to get the Audio Port handle without initializing
 	result = dsGetAudioPort(kPorts[0].id.type, kPorts[0].id.index, &handle[0]);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -385,8 +400,8 @@ void test_l1_dsAudio_negative_dsGetAudioPort(void) {
 
 	// Step 07: Attempt to get the audio port handle after termination
 	result = dsGetAudioPort(kPorts[0].id.type, kPorts[0].id.index, &handle[0]);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -494,7 +509,7 @@ void test_l1_dsAudio_negative_dsGetAudioEncoding(void) {
 
 	// Step 01: Get audio encoding without initializing
 	result = dsGetAudioEncoding(-1, &encoding[0]);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
 
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
@@ -517,12 +532,12 @@ void test_l1_dsAudio_negative_dsGetAudioEncoding(void) {
 
 	// Step 06: Terminate audio ports
 	result = dsAudioPortTerm();
-	UT_ASSERT_EQUAL(result, dsERR_NONE);
+	UT_ASSERT_EQUAL(result,dsERR_NONE );
 
 	// Step 07: Attempt to get the audio encoding type after termination
 	result = dsGetAudioEncoding(handle[0], &encoding[0]);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -633,8 +648,8 @@ void test_l1_dsAudio_negative_dsSetAudioEncoding(void) {
 
 	// Step 01: Attempt to set Audio Encoding without initializing
 	result = dsSetAudioEncoding(-1 , kSupportedSPEAKEREncodings[0]);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -660,8 +675,8 @@ void test_l1_dsAudio_negative_dsSetAudioEncoding(void) {
 
 	// Step 07: Attempt to set Audio Encoding after termination
 	result = dsSetAudioEncoding(handle[0], kSupportedSPEAKEREncodings[0]); // Replace with valid handle and encoding
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -767,8 +782,8 @@ void test_l1_dsAudio_negative_dsGetAudioFormat(void) {
 
 	// Step 01: Attempt to get audio format without initializing
 	result = dsGetAudioFormat(-1, &audioFormat[0]);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -794,8 +809,8 @@ void test_l1_dsAudio_negative_dsGetAudioFormat(void) {
 
 	// Step 07: Attempt to get audio format after termination
 	result = dsGetAudioFormat(handle[0], &audioFormat[0]); // Replace with valid handle
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -895,8 +910,8 @@ void test_l1_dsAudio_negative_dsGetAudioCompression(void) {
 
 	// Step 01: Attempt to get audio compression without initializing
 	result = dsGetAudioCompression(-1, &compression[0]); // Replace with valid handle
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -924,8 +939,8 @@ void test_l1_dsAudio_negative_dsGetAudioCompression(void) {
 
 	// Step 07: Attempt to get audio compression after termination
 	result = dsGetAudioCompression(handle[0], &compression[0]);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -1026,8 +1041,8 @@ void test_l1_dsAudio_negative_dsSetAudioCompression(void) {
 
 	// Step 01: Attempt to set audio compression with an invalid handle
 	result = dsSetAudioCompression(-1, max_compression);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -1057,8 +1072,8 @@ void test_l1_dsAudio_negative_dsSetAudioCompression(void) {
 
 	// Step 08: Attempt to set audio compression after termination
 	result = dsSetAudioCompression(handle[0], max_compression);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -1151,8 +1166,8 @@ void test_l1_dsAudio_negative_dsGetDialogEnhancement(void) {
 
 	// Step 01: Attempt to get dialog enhancement without initializing
 	result = dsGetDialogEnhancement(-1, &dialogEnhancementLevel[0]);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -1178,8 +1193,8 @@ void test_l1_dsAudio_negative_dsGetDialogEnhancement(void) {
 
 	// Step 07: Attempt to get dialog enhancement after termination
 	result = dsGetDialogEnhancement(handle[0], &dialogEnhancementLevel[0]);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -1281,7 +1296,7 @@ void test_l1_dsAudio_negative_dsSetDialogEnhancement(void) {
 
 	// Step 01: Attempt to set dialog enhancement without initializing
 	result = dsSetDialogEnhancement(-1, valid_de_level); // Assume INVALID_HANDLE is an invalid handle
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
 
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
@@ -1311,9 +1326,9 @@ void test_l1_dsAudio_negative_dsSetDialogEnhancement(void) {
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
 
 	// Step 08: Attempt to set dialog enhancement after termination
-	result = dsSetDialogEnhancement(handle[0], valid_de_level); 
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	result = dsSetDialogEnhancement(handle[0], valid_de_level);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM ); 
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -1405,8 +1420,8 @@ void test_l1_dsAudio_negative_dsGetDolbyVolumeMode(void) {
 
 	// Step 01: Attempt to get Dolby Volume mode without initializing
 	result = dsGetDolbyVolumeMode(-1, &dolbyVolumeMode[0]);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -1432,8 +1447,8 @@ void test_l1_dsAudio_negative_dsGetDolbyVolumeMode(void) {
 
 	// Step 07: Attempt to get Dolby Volume mode after termination
 	result = dsGetDolbyVolumeMode(handle[0], &dolbyVolumeMode[0]);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -1523,8 +1538,8 @@ void test_l1_dsAudio_negative_dsSetDolbyVolumeMode(void) {
 
 	// Step 01: Attempt to set the Dolby Volume Mode without initializing
 	result = dsSetDolbyVolumeMode(-1, validMode);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -1546,8 +1561,8 @@ void test_l1_dsAudio_negative_dsSetDolbyVolumeMode(void) {
 
 	// Step 06: Attempt to set Dolby Volume Mode after termination
 	result = dsSetDolbyVolumeMode(handle[0], validMode);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -1638,8 +1653,8 @@ void test_l1_dsAudio_negative_dsGetIntelligentEqualizerMode(void) {
 
 	// Step 01: Attempt to get Intelligent Equalizer Mode without initializing
 	result = dsGetIntelligentEqualizerMode(-1, &intelligentEqualizerMode[0]);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -1665,8 +1680,8 @@ void test_l1_dsAudio_negative_dsGetIntelligentEqualizerMode(void) {
 
 	// Step 07: Attempt to get Intelligent Equalizer Mode after termination
 	result = dsGetIntelligentEqualizerMode(handle[0], &intelligentEqualizerMode[0]);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -1757,8 +1772,8 @@ void test_l1_dsAudio_negative_dsSetIntelligentEqualizerMode(void) {
 
 	// Step 01: Attempt to set Intelligent Equalizer Mode without initializing
 	result = dsSetIntelligentEqualizerMode(-1, valid_mode);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -1784,8 +1799,8 @@ void test_l1_dsAudio_negative_dsSetIntelligentEqualizerMode(void) {
 
 	// Step 07: Attempt to set Intelligent Equalizer Mode after termination
 	result = dsSetIntelligentEqualizerMode(handle[0], valid_mode);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -1875,8 +1890,8 @@ void test_l1_dsAudio_negative_dsGetVolumeLeveller(void) {
 
 	// Step 01: Attempt to get Volume Leveller settings without initializing
 	result = dsGetVolumeLeveller(-1, &volLeveller[0]);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -1904,8 +1919,8 @@ void test_l1_dsAudio_negative_dsGetVolumeLeveller(void) {
 
 	// Step 07: Attempt to get Volume Leveller settings after termination
 	result = dsGetVolumeLeveller(handle[0], &volLeveller[0]);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -2006,8 +2021,8 @@ void test_l1_dsAudio_negative_dsSetVolumeLeveller(void) {
 	volLeveller.mode = valid_mode;
 	volLeveller.level = valid_level;
 	result = dsSetVolumeLeveller(-1, volLeveller);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -2048,8 +2063,8 @@ void test_l1_dsAudio_negative_dsSetVolumeLeveller(void) {
 	volLeveller.mode = valid_mode;
 	volLeveller.level = valid_level;
 	result = dsSetVolumeLeveller(handle[0],volLeveller);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -2149,8 +2164,8 @@ void test_l1_dsAudio_negative_dsGetBassEnhancer(void) {
 
 	// Step 01: Attempt to get Bass Enhancer without initializing
 	result = dsGetBassEnhancer(-1, &boost);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -2176,8 +2191,8 @@ void test_l1_dsAudio_negative_dsGetBassEnhancer(void) {
 
 	// Step 07: Attempt to get Bass Enhancer after termination
 	result = dsGetBassEnhancer(handle[0], &boost);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -2272,9 +2287,9 @@ void test_l1_dsAudio_negative_dsSetBassEnhancer(void) {
 	int boost = 75, invalidBoost_pos = 101, invalidBoost_neg = -20; 
 
 	// Step 01: Attempt to set Bass Enhancer without initializing
-	result = dsSetBassEnhancer(-1, boost); 
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	result = dsSetBassEnhancer(-1, boost);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM ); 
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -2303,8 +2318,8 @@ void test_l1_dsAudio_negative_dsSetBassEnhancer(void) {
 
 	// Step 07: Attempt to set Bass Enhancer after termination
 	result = dsSetBassEnhancer(handle[0], boost);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -2394,8 +2409,8 @@ void test_l1_dsAudio_negative_dsIsSurroundDecoderEnabled(void) {
 
 	// Step 01: Attempt to check Surround Decoder status without initializing
 	result = dsIsSurroundDecoderEnabled(-1, &surroundDecoderEnabled);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -2421,8 +2436,8 @@ void test_l1_dsAudio_negative_dsIsSurroundDecoderEnabled(void) {
 
 	// Step 07: Attempt to check Surround Decoder status after termination
 	result = dsIsSurroundDecoderEnabled(handle[0], &surroundDecoderEnabled);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -2512,8 +2527,8 @@ void test_l1_dsAudio_negative_dsEnableSurroundDecoder(void) {
 
 	// Step 01: Attempt to enable Surround Decoder without initializing
 	result = dsEnableSurroundDecoder(-1, enabled);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -2535,8 +2550,8 @@ void test_l1_dsAudio_negative_dsEnableSurroundDecoder(void) {
 
 	// Step 06: Attempt to enable Surround Decoder after termination
 	result = dsEnableSurroundDecoder(handle[0], enabled);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -2640,8 +2655,8 @@ void test_l1_dsAudio_negative_dsGetDRCMode(void) {
 
 	// Step 01: Attempt to get DRC Mode without initializing
 	result = dsGetDRCMode(-1, &drcMode);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -2667,8 +2682,8 @@ void test_l1_dsAudio_negative_dsGetDRCMode(void) {
 
 	// Step 07: Attempt to get DRC Mode after termination
 	result = dsGetDRCMode(handle[0], &drcMode);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -2759,8 +2774,8 @@ void test_l1_dsAudio_negative_dsSetDRCMode(void) {
 
 	// Step 01: Attempt to set DRC Mode without initializing
 	result = dsSetDRCMode(-1, validMode); // Assume INVALID_HANDLE is an invalid handle
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -2786,8 +2801,8 @@ void test_l1_dsAudio_negative_dsSetDRCMode(void) {
 
 	// Step 08: Attempt to set DRC Mode after termination
 	result = dsSetDRCMode(handle[0], validMode);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -2893,8 +2908,8 @@ void test_l1_dsAudio_negative_dsGetSurroundVirtualizer(void) {
 
 	// Step 01: Attempt to get Surround Virtualizer without initializing
 	result = dsGetSurroundVirtualizer(-1, &virtualizerLevel);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -2920,8 +2935,8 @@ void test_l1_dsAudio_negative_dsGetSurroundVirtualizer(void) {
 
 	// Step 07: Attempt to get Surround Virtualizer after termination
 	result = dsGetSurroundVirtualizer(handle[0], &virtualizerLevel);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -3031,8 +3046,8 @@ void test_l1_dsAudio_negative_dsSetSurroundVirtualizer(void) {
 	virtualizer.mode = valid_mode;
 	virtualizer.boost = valid_boost;
 	result = dsSetSurroundVirtualizer(-1, virtualizer);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -3069,8 +3084,8 @@ void test_l1_dsAudio_negative_dsSetSurroundVirtualizer(void) {
 	virtualizer.mode = valid_mode;
 	virtualizer.boost = valid_boost;
 	result = dsSetSurroundVirtualizer(handle[0], virtualizer);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -3175,8 +3190,8 @@ void test_l1_dsAudio_negative_dsGetMISteering(void) {
 
 	// Step 01: Attempt to get MI Steering without initializing
 	result = dsGetMISteering(-1, &miSteeringEnabled);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -3202,8 +3217,8 @@ void test_l1_dsAudio_negative_dsGetMISteering(void) {
 
 	// Step 07: Attempt to get MI Steering after termination
 	result = dsGetMISteering(handle[0], &miSteeringEnabled);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -3291,15 +3306,15 @@ void test_l1_dsAudio_negative_dsSetMISteering(void) {
 
 	// Step 01: Attempt to set MI Steering without initializing
 	result = dsSetMISteering(-1, enabled);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
 
 	// Step 03: Attempt to set MI Steering using an invalid handle
 	result = dsSetMISteering(handle[0], enabled);
-	UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+	UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);	
 
 	// Step 04: Get the port handle for all supported audio ports
 	for (int i = 0; i < NUM_OF_PORTS; i++) {
@@ -3314,8 +3329,8 @@ void test_l1_dsAudio_negative_dsSetMISteering(void) {
 
 	// Step 06: Attempt to set MI Steering after termination
 	result = dsSetMISteering(handle[0], enabled);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -3421,8 +3436,8 @@ void test_l1_dsAudio_negative_dsGetGraphicEqualizerMode(void) {
 
 	// Step 01: Attempt to get Graphic Equalizer Mode without initializing
 	result = dsGetGraphicEqualizerMode(-1, &graphicEqMode);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -3448,8 +3463,8 @@ void test_l1_dsAudio_negative_dsGetGraphicEqualizerMode(void) {
 
 	// Step 07: Attempt to get Graphic Equalizer Mode after termination
 	result = dsGetGraphicEqualizerMode(handle[0], &graphicEqMode);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -3541,8 +3556,8 @@ void test_l1_dsAudio_negative_dsSetGraphicEqualizerMode(void) {
 
 	// Step 01: Attempt to set Graphic Equalizer Mode without initializing
 	result = dsSetGraphicEqualizerMode(-1, valid_mode);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -3571,8 +3586,8 @@ void test_l1_dsAudio_negative_dsSetGraphicEqualizerMode(void) {
 
 	// Step 07: Attempt to set Graphic Equalizer Mode after termination
 	result = dsSetGraphicEqualizerMode(handle[0], valid_mode);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -3688,8 +3703,8 @@ void test_l1_dsAudio_negative_dsGetMS12AudioProfileList(void) {
 
 	// Step 01: Attempt to get MS12 Audio Profile List without initializing
 	result = dsGetMS12AudioProfileList(-1, &profileList);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -3715,8 +3730,8 @@ void test_l1_dsAudio_negative_dsGetMS12AudioProfileList(void) {
 
 	// Step 07: Attempt to get MS12 Audio Profile List after termination
 	result = dsGetMS12AudioProfileList(handle[0], &profileList);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -3817,8 +3832,8 @@ void test_l1_dsAudio_negative_dsGetMS12AudioProfile(void) {
 
 	// Step 01: Attempt to get MS12 Audio Profile without initializing
 	result = dsGetMS12AudioProfile(-1, currentProfile);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -3846,8 +3861,8 @@ void test_l1_dsAudio_negative_dsGetMS12AudioProfile(void) {
 
 	// Step 07: Attempt to get MS12 Audio Profile after termination
 	result = dsGetMS12AudioProfile(handle[0], currentProfile);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -3946,8 +3961,8 @@ void test_l1_dsAudio_negative_dsGetStereoMode(void) {
 
 	// Step 01: Attempt to get stereo mode without initializing
 	result = dsGetStereoMode(-1, &stereoMode);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -3973,8 +3988,8 @@ void test_l1_dsAudio_negative_dsGetStereoMode(void) {
 
 	// Step 07: Attempt to get stereo mode again after termination
 	result = dsGetStereoMode(handle[0], &stereoMode);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -4063,9 +4078,9 @@ void test_l1_dsAudio_negative_dsSetStereoMode(void) {
 	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
 
 	// Step 01: Attempt to set stereo mode without initializing
-	result = dsSetStereoMode(-1, dsAUDIO_STEREO_SURROUND); 
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	result = dsSetStereoMode(-1, dsAUDIO_STEREO_SURROUND);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM ); 
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -4090,8 +4105,8 @@ void test_l1_dsAudio_negative_dsSetStereoMode(void) {
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
 
 	result = dsSetStereoMode(handle[0], dsAUDIO_STEREO_SURROUND);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -4189,8 +4204,8 @@ void test_l1_dsAudio_negative_dsGetStereoAuto(void) {
 
 	// Step 01: Attempt to get stereo auto without initializing
 	result = dsGetStereoAuto(-1, &autoMode);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -4216,8 +4231,8 @@ void test_l1_dsAudio_negative_dsGetStereoAuto(void) {
 
 	//Step 07: Attempt to get Stereo Auto after termination
 	result = dsGetStereoAuto(handle[0], &autoMode);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -4307,8 +4322,8 @@ void test_l1_dsAudio_negative_dsSetStereoAuto(void) {
 
 	// Step 01: Attempt to set stereo auto without initializing
 	result = dsSetStereoAuto(-1, autoMode);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -4335,8 +4350,8 @@ void test_l1_dsAudio_negative_dsSetStereoAuto(void) {
 
 	// Step 07: Attempt to set auto mode after terminating audio ports
 	result = dsSetStereoAuto(handle[0], autoMode);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -4436,8 +4451,8 @@ void test_l1_dsAudio_negative_dsGetAudioGain(void) {
 
 	// Step 01: Attempt to get audio gain without initializing
 	result = dsGetAudioGain(-1, &gain);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -4463,8 +4478,8 @@ void test_l1_dsAudio_negative_dsGetAudioGain(void) {
 
 	// Step 07: Attempt to get the Audio Gain after termination
 	result = dsGetAudioGain(handle[0], &gain);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -4560,8 +4575,8 @@ void test_l1_dsAudio_negative_dsSetAudioGain(void) {
 
 	// Step 01: Attempt to set audio gain without initializing
 	result = dsSetAudioGain(-1, gainValue);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -4590,8 +4605,8 @@ void test_l1_dsAudio_negative_dsSetAudioGain(void) {
 
 	// Step 07: Attempt t set audio gain after termination
 	result = dsSetAudioGain(handle[0], gainValue);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -4693,8 +4708,8 @@ void test_l1_dsAudio_negative_dsGetAudioDB(void) {
 
 	// Step 01: Attempt to call dsGetAudioDB without initializing audio ports
 	result = dsGetAudioDB(-1, &db);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -4720,8 +4735,8 @@ void test_l1_dsAudio_negative_dsGetAudioDB(void) {
 
 	// Step 07: Attempt to call dsGetAudioDB after audio ports have been terminated
 	result = dsGetAudioDB(handle[0], &db);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -4817,8 +4832,8 @@ void test_l1_dsAudio_negative_dsSetAudioDB(void) {
 
 	// Step 01: Attempt to call dsSetAudioDB without initializing audio ports
 	result = dsSetAudioDB(-1, valid_db);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -4847,8 +4862,8 @@ void test_l1_dsAudio_negative_dsSetAudioDB(void) {
 
 	// Step 07: Attempt to call dsSetAudioDB after audio ports have been terminated
 	result = dsSetAudioDB(handle[0], valid_db);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -4953,8 +4968,8 @@ void test_l1_dsAudio_negative_dsGetAudioLevel(void) {
 
 	// Step 01: Attempt to get audio level without initializing audio ports
 	result = dsGetAudioLevel(-1, &audioLevel);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -4980,8 +4995,8 @@ void test_l1_dsAudio_negative_dsGetAudioLevel(void) {
 
 	// Step 07: Attempt to get audio level after terminating audio ports
 	result = dsGetAudioLevel(handle[0], &audioLevel);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -5075,8 +5090,8 @@ void test_l1_dsAudio_negative_dsSetAudioLevel(void) {
 
 	// Step 01: Attempt to set audio level without initializing audio ports
 	result = dsSetAudioLevel(-1, audio_level);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -5105,8 +5120,8 @@ void test_l1_dsAudio_negative_dsSetAudioLevel(void) {
 
 	// Step 07: Attempt to set audio level after terminating audio ports
 	result = dsSetAudioLevel(handle[0], audio_level);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -5208,8 +5223,8 @@ void test_l1_dsAudio_negative_dsGetAudioMaxDB(void) {
 
 	// Step 01: Attempt to get max dB without initializing audio ports
 	result = dsGetAudioMaxDB(-1, &maxDb);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -5235,8 +5250,8 @@ void test_l1_dsAudio_negative_dsGetAudioMaxDB(void) {
 
 	// Step 07: Attempt to get max dB after terminating audio ports
 	result = dsGetAudioMaxDB(handle[0], &maxDb);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -5338,7 +5353,7 @@ void test_l1_dsAudio_negative_dsGetAudioMinDB(void) {
 
 	// Step 01: Attempt to get min dB without initializing audio ports
 	result = dsGetAudioMinDB(-1, &minDb);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
 
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
@@ -5365,8 +5380,8 @@ void test_l1_dsAudio_negative_dsGetAudioMinDB(void) {
 
 	// Step 07: Attempt to get min dB after terminating audio ports
 	result = dsGetAudioMinDB(handle[0], &minDb);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -5466,8 +5481,8 @@ void test_l1_dsAudio_negative_dsGetAudioOptimalLevel(void) {
 
 	// Step 01: Attempt to get optimal dB without initializing audio ports
 	result = dsGetAudioOptimalLevel(-1, &optimalLevel);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -5493,8 +5508,8 @@ void test_l1_dsAudio_negative_dsGetAudioOptimalLevel(void) {
 
 	// Step 07: Attempt to get optimal dB after terminating audio ports
 	result = dsGetAudioOptimalLevel(handle[0], &optimalLevel);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -5596,8 +5611,8 @@ void test_l1_dsAudio_negative_dsGetAudioDelay(void) {
 
 	// Step 01: Attempt to get audio delay without initializing audio ports
 	result = dsGetAudioDelay(-1, &audioDelay);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -5623,8 +5638,8 @@ void test_l1_dsAudio_negative_dsGetAudioDelay(void) {
 
 	// Step 07: Attempt to get audio delay after terminating audio ports
 	result = dsGetAudioDelay(handle[0], &audioDelay);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -5720,8 +5735,8 @@ void test_l1_dsAudio_negative_dsSetAudioDelay(void) {
 
 	// Step 01: Attempt to set audio delay without initializing audio ports
 	result = dsSetAudioDelay(-1, audio_delay);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -5746,7 +5761,7 @@ void test_l1_dsAudio_negative_dsSetAudioDelay(void) {
 
 		// Step 05: Attempt to set audio delay after terminating audio ports
 		result = dsSetAudioDelay(handle[0], audio_delay);
-		UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+		CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
 
 		// End of the test
 		UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -5847,8 +5862,8 @@ void test_l1_dsAudio_negative_dsGetAudioDelayOffset(void) {
 
 	// Step 01: Attempt to retrieve audio delay offset without initializing audio ports
 	result = dsGetAudioDelayOffset(-1, &audioDelayOffsetMs);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -5874,8 +5889,8 @@ void test_l1_dsAudio_negative_dsGetAudioDelayOffset(void) {
 
 	// Step 07: Attempt to retrieve audio delay offset after terminating audio ports
 	result = dsGetAudioDelayOffset(handle[0], &audioDelayOffsetMs);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -5964,8 +5979,8 @@ void test_l1_dsAudio_negative_dsSetAudioDelayOffset(void) {
 
 	// Step 01: Attempt to set audio delay offset without initializing audio ports
 	result = dsSetAudioDelayOffset(-1, audio_delay_offset);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -5991,8 +6006,8 @@ void test_l1_dsAudio_negative_dsSetAudioDelayOffset(void) {
 
 	// Step 07: Attempt to set audio delay offset after terminating audio ports
 	result = dsSetAudioDelayOffset(handle[0], audio_delay_offset);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -6085,8 +6100,8 @@ void test_l1_dsAudio_negative_dsSetAudioAtmosOutputMode(void) {
 
 	// Step 01: Attempt to set ATMOS Output mode without initializing audio ports
 	result = dsSetAudioAtmosOutputMode(-1, valid_value);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_GENERAL );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -6108,7 +6123,7 @@ void test_l1_dsAudio_negative_dsSetAudioAtmosOutputMode(void) {
 
 	// Step 06: Attempt to set ATMOS Output mode after terminating audio ports
 	result = dsSetAudioAtmosOutputMode(handle[0], valid_value);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_GENERAL );
 
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -6209,7 +6224,7 @@ void test_l1_dsAudio_negative_dsGetSinkDeviceAtmosCapability(void) {
 
 	// Step 01: Attempt to get ATMOS capability without initializing audio ports
 	result = dsGetSinkDeviceAtmosCapability(-1, &atmosCapability);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
 
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
@@ -6237,8 +6252,8 @@ void test_l1_dsAudio_negative_dsGetSinkDeviceAtmosCapability(void) {
 
 	// Step 07: Attempt to get ATMOS capability after terminating audio ports
 	result = dsGetSinkDeviceAtmosCapability(handle[0], &atmosCapability);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -6338,7 +6353,7 @@ void test_l1_dsAudio_negative_dsIsAudioLoopThru(void) {
 
 	// Step 01: Attempt to check Loop-Thru status without initializing audio ports
 	result = dsIsAudioLoopThru(-1, &loopThru);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
 
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
@@ -6361,8 +6376,8 @@ void test_l1_dsAudio_negative_dsIsAudioLoopThru(void) {
 
 	// Step 07: Attempt to check Loop-Thru status after terminating audio ports
 	result = dsIsAudioLoopThru(handle[0], &loopThru);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -6461,7 +6476,7 @@ void test_l1_dsAudio_negative_dsIsAudioMute(void) {
 
 	// Step 01: Attempt to check Mute status without initializing audio ports
 	result = dsIsAudioMute(-1, &muted);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
 
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
@@ -6484,8 +6499,8 @@ void test_l1_dsAudio_negative_dsIsAudioMute(void) {
 
 	// Step 07: Attempt to check Mute status after terminating audio ports
 	result = dsIsAudioMute(handle[0], &muted);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -6584,8 +6599,8 @@ void test_l1_dsAudio_negative_dsIsAudioPortEnabled(void) {
 
 	// Step 01: Attempt to check Enabled status without initializing audio ports
 	result = dsIsAudioPortEnabled(-1, &isEnabled);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -6607,8 +6622,8 @@ void test_l1_dsAudio_negative_dsIsAudioPortEnabled(void) {
 
 	// Step 07: Attempt to check Enabled status after terminating audio ports
 	result = dsIsAudioPortEnabled(handle[0], &isEnabled);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -6712,8 +6727,8 @@ void test_l1_dsAudio_negative_dsEnableAudioPort(void) {
 
 	// Step 01: Attempt to enable/disable audio ports without initializing
 	result = dsEnableAudioPort(-1, true);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -6735,7 +6750,7 @@ void test_l1_dsAudio_negative_dsEnableAudioPort(void) {
 
 	// Step 06: Attempt to enable/disable after terminating
 	result = dsEnableAudioPort(handle[0], true);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
 
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -6832,8 +6847,8 @@ void test_l1_dsAudio_negative_dsEnableMS12Config(void) {
 
 	// Step 01: Attempt to enable MS12 Configs without initializing
 	result = dsEnableMS12Config(-1, dsMS12FEATURE_DAPV2 , true);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -6859,8 +6874,8 @@ void test_l1_dsAudio_negative_dsEnableMS12Config(void) {
 
 	// Step 07: Attempt to enable MS12 Configs after terminating
 	result = dsEnableMS12Config(handle[0], dsMS12FEATURE_DAPV2, true);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -6948,8 +6963,8 @@ void test_l1_dsAudio_negative_dsEnableLEConfig(void) {
 
 	// Step 01: Attempt to enable LE without initializing
 	result = dsEnableLEConfig(-1, true);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -6971,7 +6986,7 @@ void test_l1_dsAudio_negative_dsEnableLEConfig(void) {
 
 	// Step 06: Attempt to enable LE after terminating
 	result = dsEnableLEConfig(handle[0], false);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
 
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -7072,7 +7087,7 @@ void test_l1_dsAudio_negative_dsGetLEConfig(void) {
 
 	// Step 01: Attempt to get LE Config without initializing
 	result = dsGetLEConfig(-1, &enable);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
 
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
@@ -7099,8 +7114,8 @@ void test_l1_dsAudio_negative_dsGetLEConfig(void) {
 
 	// Step 07: Attempt to get LE Config after terminating
 	result = dsGetLEConfig(handle[0], &enable);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -7192,7 +7207,7 @@ void test_l1_dsAudio_negative_dsSetMS12AudioProfile(void) {
 
 	// Step 01: Attempt to set MS12 Audio Profile without initializing
 	result = dsSetMS12AudioProfile(-1, validProfile);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
 
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
@@ -7219,8 +7234,8 @@ void test_l1_dsAudio_negative_dsSetMS12AudioProfile(void) {
 
 	// Step 07: Attempt to set MS12 Audio Profile after terminating
 	result = dsSetMS12AudioProfile(handle[0], validProfile);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -7324,8 +7339,8 @@ void test_l1_dsAudio_negative_dsSetAudioDucking(void) {
 
 	// Step 01: Attempt to set Audio Ducking without initializing
 	result = dsSetAudioDucking(-1, valid_action, vaild_type, valid_level);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -7360,8 +7375,8 @@ void test_l1_dsAudio_negative_dsSetAudioDucking(void) {
 
 	// Step 09: Attempt to set Audio Ducking after terminating
 	result = dsSetAudioDucking(handle[0], valid_action, vaild_type, valid_level);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -7454,7 +7469,7 @@ void test_l1_dsAudio_negative_dsEnableLoopThru(void) {
 
 	// Step 01: Attempt to enable loop-through without initializing
 	result = dsEnableLoopThru(-1, true);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED );
 
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
@@ -7477,7 +7492,7 @@ void test_l1_dsAudio_negative_dsEnableLoopThru(void) {
 
 	// Step 06: Attempt to enable loop-through after terminating
 	result = dsEnableLoopThru(handle[0], true);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED );
 
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -7573,7 +7588,7 @@ void test_l1_dsAudio_negative_dsSetAudioMute(void) {
 
 	// Step 01: Attempt to set mute without initializing
 	result = dsSetAudioMute(-1, valid_value);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
 
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
@@ -7596,8 +7611,8 @@ void test_l1_dsAudio_negative_dsSetAudioMute(void) {
 
 	// Step 06: Attempt to set mute after terminating
 	result = dsSetAudioMute(handle[0], true);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -7687,8 +7702,8 @@ void test_l1_dsAudio_negative_dsIsAudioMSDecode(void) {
 
 	// Step 01: Attempt to check MS11 Decode without initializing
 	result = dsIsAudioMSDecode(-1, &hasMS11Decode);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -7715,8 +7730,8 @@ void test_l1_dsAudio_negative_dsIsAudioMSDecode(void) {
 
 	// Step 07: Attempt to check MS11 Decode after terminating
 	result = dsIsAudioMSDecode(handle[0], &hasMS11Decode);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -7806,8 +7821,8 @@ void test_l1_dsAudio_negative_dsIsAudioMS12Decode(void) {
 
 	// Step 01: Attempt to check MS12 Decode without initializing
 	result = dsIsAudioMS12Decode(-1, &hasMS12Decode);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -7833,8 +7848,8 @@ void test_l1_dsAudio_negative_dsIsAudioMS12Decode(void) {
 
 	// Step 07: Attempt to check MS12 Decode after terminating
 	result = dsIsAudioMS12Decode(handle[0], &hasMS12Decode);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -7924,8 +7939,8 @@ void test_l1_dsAudio_negative_dsAudioOutIsConnected(void) {
 
 	// Step 01: Attempt to check connection status without initializing
 	result = dsAudioOutIsConnected(-1, &isConnected);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -7951,8 +7966,8 @@ void test_l1_dsAudio_negative_dsAudioOutIsConnected(void) {
 
 	// Step 07: Attempt to check connection status after terminating
 	result = dsAudioOutIsConnected(handle[0], &isConnected);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -8032,8 +8047,8 @@ void test_l1_dsAudio_negative_dsAudioOutRegisterConnectCB(void) {
 
 	// Step 01: Attempt to register callback without initializing ports
 	result = dsAudioOutRegisterConnectCB(NULL);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -8126,8 +8141,8 @@ void test_l1_dsAudio_negative_dsAudioFormatUpdateRegisterCB(void) {
 
 	// Step 01: Attempt to register callback without initializing ports
 	result = dsAudioFormatUpdateRegisterCB(NULL);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -8235,8 +8250,8 @@ void test_l1_dsAudio_negative_dsGetAudioCapabilities(void) {
 
 	// Step 01: Call without initializing
 	result = dsGetAudioCapabilities(-1, &capabilities);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -8262,8 +8277,8 @@ void test_l1_dsAudio_negative_dsGetAudioCapabilities(void) {
 
 	// Step 07: Call again after terminating
 	result = dsGetAudioCapabilities(handle[0], &capabilities);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -8363,8 +8378,8 @@ void test_l1_dsAudio_negative_dsGetMS12Capabilities(void) {
 
 	// Step 01: Call without initializing
 	result = dsGetMS12Capabilities(-1, &ms12Capabilities);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -8390,8 +8405,8 @@ void test_l1_dsAudio_negative_dsGetMS12Capabilities(void) {
 
 	// Step 07: Call again after terminating
 	result = dsGetMS12Capabilities(handle[0], &ms12Capabilities);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -8478,8 +8493,8 @@ void test_l1_dsAudio_negative_dsResetDialogEnhancement(void) {
 
 	// Step 01: Call without initializing
 	result = dsResetDialogEnhancement(-1);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -8502,8 +8517,8 @@ void test_l1_dsAudio_negative_dsResetDialogEnhancement(void) {
 
 	// Step 05: Call again after terminating
 	result = dsResetDialogEnhancement(handle[0]);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -8591,8 +8606,8 @@ void test_l1_dsAudio_negative_dsResetBassEnhancer(void) {
 
 	// Step 01: Call without initializing
 	result = dsResetBassEnhancer(-1);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -8614,8 +8629,8 @@ void test_l1_dsAudio_negative_dsResetBassEnhancer(void) {
 
 	// Step 06: Call again after terminating
 	result = dsResetBassEnhancer(handle[0]);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -8701,8 +8716,8 @@ void test_l1_dsAudio_negative_dsResetSurroundVirtualizer(void) {
 
 	// Step 01: Call without initializing
 	result = dsResetSurroundVirtualizer(-1);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -8724,8 +8739,8 @@ void test_l1_dsAudio_negative_dsResetSurroundVirtualizer(void) {
 
 	// Step 06: Call again after terminating
 	result = dsResetSurroundVirtualizer(handle[0]);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -8812,8 +8827,8 @@ void test_l1_dsAudio_negative_dsResetVolumeLeveller(void) {
 
 	// Step 01: Call without initializing
 	result = dsResetVolumeLeveller(-1);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -8835,8 +8850,8 @@ void test_l1_dsAudio_negative_dsResetVolumeLeveller(void) {
 
 	// Step 06: Call again after terminating
 	result = dsResetVolumeLeveller(handle[0]);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -8927,15 +8942,15 @@ void test_l1_dsAudio_negative_dsSetAssociatedAudioMixing(void) {
 
 	// Step 01: Call without initializing
 	result = dsSetAssociatedAudioMixing(-1, true); // Example invalid handle
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_GENERAL );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
 
 	// Step 03: Call with invalid handle
 	result = dsSetAssociatedAudioMixing(handle[0], true); // Example invalid handle
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+	UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
 	// Step 04: Loop through kPorts to get audio port handle
 	for (int i = 0; i < NUM_OF_PORTS; i++) {
@@ -8950,8 +8965,8 @@ void test_l1_dsAudio_negative_dsSetAssociatedAudioMixing(void) {
 
 	// Step 06: Call again after terminating
 	result = dsSetAssociatedAudioMixing(handle[0], true);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_GENERAL );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -9051,8 +9066,8 @@ void test_l1_dsAudio_negative_dsGetAssociatedAudioMixing(void) {
 
 	// Step 01: Call without initializing
 	result = dsGetAssociatedAudioMixing(-1, &mixing);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -9078,8 +9093,8 @@ void test_l1_dsAudio_negative_dsGetAssociatedAudioMixing(void) {
 
 	// Step 07: Call again after terminating
 	result = dsGetAssociatedAudioMixing(handle[0], &mixing);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -9175,8 +9190,8 @@ void test_l1_dsAudio_negative_dsSetFaderControl(void) {
 	// Step 01: Call without initializing
 	int mixerBalance = 0; //valid value
 	result = dsSetFaderControl(-1, mixerBalance);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -9202,8 +9217,8 @@ void test_l1_dsAudio_negative_dsSetFaderControl(void) {
 
 	// Step 07: Call again after terminating
 	result = dsSetFaderControl(handle[0], mixerBalance);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -9303,8 +9318,8 @@ void test_l1_dsAudio_negative_dsGetFaderControl(void) {
 
 	// Step 01: Call dsGetFaderControl() without initializing audio ports
 	result = dsGetFaderControl(-1, &mixerBalance);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -9330,8 +9345,8 @@ void test_l1_dsAudio_negative_dsGetFaderControl(void) {
 
 	// Step 07: Call dsGetFaderControl() after terminating audio ports
 	result = dsGetFaderControl(handle[0], &mixerBalance); // using last valid handle obtained
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -9422,8 +9437,8 @@ void test_l1_dsAudio_negative_dsSetPrimaryLanguage(void) {
 
 	// Step 01: Call without initializing audio ports
 	result = dsSetPrimaryLanguage(-1, "ENG");
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -9453,8 +9468,8 @@ void test_l1_dsAudio_negative_dsSetPrimaryLanguage(void) {
 
 	// Step 07: Call after terminating audio ports
 	result = dsSetPrimaryLanguage(handle[0], "ENG");
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -9554,8 +9569,8 @@ void test_l1_dsAudio_negative_dsGetPrimaryLanguage(void) {
 
 	// Step 01: Call without initializing audio ports
 	result = dsGetPrimaryLanguage(-1, primaryLanguage);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -9581,8 +9596,8 @@ void test_l1_dsAudio_negative_dsGetPrimaryLanguage(void) {
 
 	// Step 07: Call after terminating audio ports
 	result = dsGetPrimaryLanguage(handle[0], primaryLanguage);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -9671,8 +9686,8 @@ void test_l1_dsAudio_negative_dsSetSecondaryLanguage(void) {
 
 	// Step 01: Call without initializing audio ports
 	result = dsSetSecondaryLanguage(-1, "ENG");
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -9702,8 +9717,8 @@ void test_l1_dsAudio_negative_dsSetSecondaryLanguage(void) {
 
 	// Step 08: Call after terminating audio ports
 	result = dsSetSecondaryLanguage(handle[0], "ENG");
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -9803,8 +9818,8 @@ void test_l1_dsAudio_negative_dsGetSecondaryLanguage(void) {
 
 	// Step 01: Call without initializing audio ports
 	result = dsGetSecondaryLanguage(-1, languageCode);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -9830,8 +9845,8 @@ void test_l1_dsAudio_negative_dsGetSecondaryLanguage(void) {
 
 	// Step 07: Call after terminating audio ports
 	result = dsGetSecondaryLanguage(handle[0], languageCode);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -9908,8 +9923,8 @@ void test_l1_dsAudio_negative_dsGetHDMIARCPortId(void) {
 
 	// Step 01: Call without initializing audio ports
 	result = dsGetHDMIARCPortId(NULL);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
+	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -9924,8 +9939,8 @@ void test_l1_dsAudio_negative_dsGetHDMIARCPortId(void) {
 
 	// Step 05: Call after terminating audio ports
 	result = dsGetHDMIARCPortId(NULL);
-	UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
+	
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -10024,9 +10039,9 @@ void test_l1_dsAudio_negative_dsSetAudioMixerLevels(void) {
         intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
 
         // Step 01: Call dsSetAudioMixerLevels() without prior initialization of Audio Port
-        result = dsSetAudioMixerLevels((intptr_t)NULL, dsAUDIO_INPUT_PRIMARY, valid_vol_level);
-        UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	result = dsSetAudioMixerLevels((intptr_t)NULL, dsAUDIO_INPUT_PRIMARY, valid_vol_level);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
         // Step 02: Initialize Audio Port using dsAudioPortInit()
         result = dsAudioPortInit();
         UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -10058,9 +10073,9 @@ void test_l1_dsAudio_negative_dsSetAudioMixerLevels(void) {
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 08: Call dsSetAudioMixerLevels() after termination
-        result = dsSetAudioMixerLevels(handle[0], dsAUDIO_INPUT_PRIMARY, valid_vol_level);
-        UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
-
+	result = dsSetAudioMixerLevels(handle[0], dsAUDIO_INPUT_PRIMARY, valid_vol_level);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
         // End of the test
         UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -10244,6 +10259,7 @@ int test_l1_dsAudio_register ( void )
 	UT_add_test( pSuite, "dsSetAudioMixerLevels_l1_positive" ,test_l1_dsAudio_positive_dsSetAudioMixerLevels );
 	UT_add_test( pSuite, "dsSetAudioMixerLevels_l1_negative" ,test_l1_dsAudio_negative_dsSetAudioMixerLevels );
 
+	extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsAudio/features/extendedEnumsSupported" );
 
 	return 0;
 } 
