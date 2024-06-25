@@ -2,7 +2,7 @@
 *  If not stated otherwise in this file or this component's LICENSE
 *  file the following copyright and licenses apply:
 *
-*  Copyright 2022 RDK Management
+*  Copyright 2024 RDK Management
 *
 *  Licensed under the Apache License, Version 2.0 (the License);
 *  you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@
  */
 
 /**
- * @defgroup DS_VideoDevice_HALTEST_L2 Device Settings Video Device HAL Tests L2 File
+ * @defgroup DS_VideoDevice_HALTEST_L2 Device Settings Video Device HAL Tests L1 File
  * @{
  * @parblock
  *
@@ -58,7 +58,7 @@
  * **Pre-Conditions:**  None@n
  * **Dependencies:** None@n
  *
- * TODO: Refer to L2 Specification documentation : [l2_module_test_specification_template.md](../docs/pages/l2_module_test_specification_template.md)
+ * Refer to API Definition specification documentation : [ds-video-device_halSpec.md](../../docs/pages/ds-video-device_halSpec.md)
  *
  * @endparblock
  */
@@ -68,48 +68,380 @@
  *
  */
 
-#include <string.h>
 #include <stdlib.h>
-
 #include <ut.h>
 #include <ut_log.h>
+#include <ut_kvp_profile.h>
+#include <ut_kvp.h>
+
+#include "test_parse_configuration.h"
+#include "dsVideoDevice.h"
+
+static int gTestGroup = 2;
+static int gTestID = 1;
 
 /**
-* @brief TODO: Describe the object of the test
+* @brief Test for setting and getting DFC source in dsVideoDevice
 *
-* TODO: Add the description of what is tested and why in this test
+* This test case is designed to verify the functionality of setting and getting DFC source in dsVideoDevice.
+* The test involves initializing the video device, getting the video device, setting the DFC,
+* getting the DFC and terminating the video device. The test asserts that the DFC set is the same as the DFC get.
 *
-* **Test Group ID:** TODO: Add the group this test belongs to - Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
+* **Test Group ID:** 02@n
+* **Test Case ID:** 001@n
 *
 * **Test Procedure:**
-* TODO: Refer to L2 Specification documentation : [l2_module_test_specification_template.md](../docs/pages/l2_module_test_specification_template.md)
+* Refer to Test specification documentation [ds-video-device_L2-Low-Level_TestSpec.md](../docs/pages/ds-video-device_L2-Low-Level_TestSpec.md)
 */
-void test_l2_dsVideoDevice (void)
+
+void test_l2_dsVideoDevice_SetAndGetDFC_source(void)
 {
-	UT_FAIL("This function needs to be implemented!"); 
+    dsError_t retStatus;
+    intptr_t handle;
+    dsVideoZoom_t dfc_get;
+
+    gTestID = 1;
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    UT_LOG_DEBUG("Invoking dsVideoDeviceInit");
+    retStatus = dsVideoDeviceInit();
+    UT_LOG_DEBUG("Return status: %d", retStatus);
+    UT_ASSERT_EQUAL_FATAL(retStatus, dsERR_NONE);
+
+    for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++)
+    {
+        UT_LOG_DEBUG("Invoking dsGetVideoDevice with index: %d", i);
+        retStatus = dsGetVideoDevice(i, &handle);
+        UT_LOG_DEBUG("Return status: %d, Handle: %ld", retStatus, handle);
+        UT_ASSERT_EQUAL(retStatus, dsERR_NONE);
+        if (retStatus != dsERR_NONE)
+        {
+            UT_LOG_ERROR("dsGetVideoDevice failed with status: %d", retStatus);
+            continue;
+        }
+        for (int j = 0;j < gDSVideoDeviceConfiguration[j].NoOfSupportedDFCs; j++)
+        {
+            UT_LOG_DEBUG("Invoking dsSetDFC with handle: %ld, dfc: %d", handle, gDSVideoDeviceConfiguration[i].SupportedDFCs[j]);
+            retStatus = dsSetDFC(handle, gDSVideoDeviceConfiguration[i].SupportedDFCs[j]);
+            UT_LOG_DEBUG("Return status: %d", retStatus);
+            UT_ASSERT_EQUAL(retStatus, dsERR_NONE);
+
+            if (retStatus != dsERR_NONE)
+            {
+                UT_LOG_ERROR("dsSetDFC failed with status: %d", retStatus);
+                continue;
+            }
+
+            UT_LOG_DEBUG("Invoking dsGetDFC with handle: %ld", handle);
+            retStatus = dsGetDFC(handle, &dfc_get);
+            UT_LOG_DEBUG("Return status: %d, dfc_get: %d", retStatus, dfc_get);
+            UT_ASSERT_EQUAL(retStatus, dsERR_NONE);
+
+            UT_ASSERT_EQUAL(gDSVideoDeviceConfiguration[i].SupportedDFCs[j], dfc_get);
+        } /* for(j)*/
+    } /* for(i)*/
+
+    UT_LOG_DEBUG("Invoking dsVideoDeviceTerm");
+    retStatus = dsVideoDeviceTerm();
+    UT_LOG_DEBUG("Return status: %d", retStatus);
+    UT_ASSERT_EQUAL_FATAL(retStatus, dsERR_NONE);
+
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
+}
+
+/**
+* @brief This test aims to verify the HDR capabilities of the video device
+*
+* In this test, the HDR capabilities of the video device are retrieved and checked
+* against the expected capabilities. This is done to ensure that the video device
+* is functioning as expected and can support the required HDR capabilities.
+*
+* **Test Group ID:** 02@n
+* **Test Case ID:** 002@n
+*
+* **Test Procedure:**
+* Refer to Test specification documentation [ds-video-device_L2-Low-Level_TestSpec.md](../docs/pages/ds-video-device_L2-Low-Level_TestSpec.md)
+*/
+
+void test_l2_dsVideoDevice_GetHDRCapabilities(void)
+{
+    gTestID = 2;
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t ret;
+    intptr_t handle;
+    int capabilities;
+
+    UT_LOG_DEBUG("Invoking dsVideoDeviceInit");
+    ret = dsVideoDeviceInit();
+    UT_LOG_DEBUG("Return status: %d", ret);
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+
+    for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++)
+    {
+        UT_LOG_DEBUG("Invoking dsGetVideoDevice with index: %d", i);
+        ret = dsGetVideoDevice(i, &handle);
+        UT_LOG_DEBUG("Return status: %d, Handle: %ld", ret, handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        if (ret != dsERR_NONE)
+        {
+            UT_LOG_ERROR("dsGetVideoDevice failed with status: %d", ret);
+            continue;
+        }
+
+        UT_LOG_DEBUG("Invoking dsGetHDRCapabilities with handle: %ld", handle);
+        ret = dsGetHDRCapabilities(handle, &capabilities);
+        UT_LOG_DEBUG("Return status: %d, Capabilities: %d", ret, capabilities);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+
+        UT_ASSERT_EQUAL(capabilities, gDSVideoDeviceConfiguration[i].HDRCapabilities);
+    } /* for(i)*/
+
+    UT_LOG_DEBUG("Invoking dsVideoDeviceTerm");
+    ret = dsVideoDeviceTerm();
+    UT_LOG_DEBUG("Return status: %d", ret);
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
+}
+
+/**
+* @brief This test checks the functionality of getting supported video coding formats for a video device
+*
+* This test initializes the video device, gets the video device for each index,
+* checks the supported video coding formats for each device and finally terminates
+* the video device. The test ensures that all the API calls return the expected status
+* and the supported video coding formats are as expected.
+*
+* **Test Group ID:** 02@n
+* **Test Case ID:** 003@n
+*
+* **Test Procedure:**
+* Refer to Test specification documentation [ds-video-device_L2-Low-Level_TestSpec.md](../docs/pages/ds-video-device_L2-Low-Level_TestSpec.md)
+*/
+
+void test_l2_dsVideoDevice_GetSupportedVideoCodingFormats(void)
+{
+    gTestID = 3;
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t retStatus;
+    intptr_t handle;
+    unsigned int supported_formats;
+
+    UT_LOG_DEBUG("Invoking dsVideoDeviceInit()");
+    retStatus = dsVideoDeviceInit();
+    UT_LOG_DEBUG("Return status: %d", retStatus);
+    UT_ASSERT_EQUAL_FATAL(retStatus, dsERR_NONE);
+
+    for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++)
+    {
+        UT_LOG_DEBUG("Invoking dsGetVideoDevice() with index: %d", i);
+        retStatus = dsGetVideoDevice(i, &handle);
+        UT_LOG_DEBUG("Return status: %d, Handle: %ld", retStatus, handle);
+        UT_ASSERT_EQUAL(retStatus, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
+        if(retStatus != dsERR_NONE)
+        {
+            UT_LOG_ERROR("dsGetVideoDevice failed with error %d", retStatus);
+            continue;
+        }
+
+        UT_LOG_DEBUG("Invoking dsGetSupportedVideoCodingFormats() with handle: %ld", handle);
+        retStatus = dsGetSupportedVideoCodingFormats(handle, &supported_formats);
+        UT_LOG_DEBUG("Return status: %d, Supported formats: %u", retStatus, supported_formats);
+        UT_ASSERT_EQUAL(retStatus, dsERR_NONE);
+
+        UT_ASSERT_EQUAL(supported_formats, gDSVideoDeviceConfiguration[i].SupportedVideoCodingFormats);
+    } /* for(i)*/
+
+    UT_LOG_DEBUG("Invoking dsVideoDeviceTerm()");
+    retStatus = dsVideoDeviceTerm();
+    UT_LOG_DEBUG("Return status: %d", retStatus);
+    UT_ASSERT_EQUAL_FATAL(retStatus, dsERR_NONE);
+
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
+}
+
+/**
+* @brief Test for getting video codec information from a source
+*
+* This test verifies if the dsGetVideoCodecInfo function can successfully
+* retrieve video codec information from a source. It checks if the function
+* returns the correct status and if the retrieved information matches the expected values.
+*
+* **Test Group ID:** 02@n
+* **Test Case ID:** 004@n
+*
+* **Test Procedure:**
+* Refer to Test specification documentation [ds-video-device_L2-Low-Level_TestSpec.md](../docs/pages/ds-video-device_L2-Low-Level_TestSpec.md)
+*/
+
+void test_l2_dsVideoDevice_GetVideoCodecInfo_source(void)
+{
+    gTestID = 4;
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t retStatus;
+    intptr_t handle;
+    dsVideoCodecInfo_t info;
+    dsVideoCodingFormat_t codec = dsVIDEO_CODEC_MPEGHPART2;
+    int j = 1;
+
+    UT_LOG_DEBUG("Invoking dsVideoDeviceInit");
+    retStatus = dsVideoDeviceInit();
+    UT_LOG_DEBUG("dsVideoDeviceInit return status: %d", retStatus);
+    UT_ASSERT_EQUAL_FATAL(retStatus, dsERR_NONE);
+
+    for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++)
+    {
+        UT_LOG_DEBUG("Invoking dsGetVideoDevice with index: %d", i);
+        retStatus = dsGetVideoDevice(i, &handle);
+        UT_ASSERT_EQUAL(retStatus, dsERR_NONE);
+        UT_LOG_DEBUG("dsGetVideoDevice return status: %d, handle: %ld", retStatus, handle);
+        if(retStatus != dsERR_NONE)
+        {
+            UT_LOG_ERROR("dsGetVideoDevice failed with error %d", retStatus);
+            continue;
+        }
+
+        for(codec = dsVIDEO_CODEC_MPEGHPART2 ; codec < dsVIDEO_CODEC_MAX; )
+        {
+            if(!(gDSVideoDeviceConfiguration[i].SupportedVideoCodingFormats & codec))
+            {
+                continue;
+            }
+            UT_LOG_DEBUG("Invoking dsGetVideoCodecInfo with handle: %ld, codec: %d", handle, codec);
+            retStatus = dsGetVideoCodecInfo(handle, codec, &info);
+            UT_ASSERT_EQUAL(retStatus, dsERR_NONE);
+            UT_LOG_DEBUG("dsGetVideoCodecInfo return status: %d, num_entries: %d", retStatus, info.num_entries);
+
+            UT_ASSERT_EQUAL(info.num_entries, gDSVideoDeviceConfiguration[i].num_codec_entries);
+            /* for now hal get info supports only MPEGHPART2 */
+            if(codec == dsVIDEO_CODEC_MPEGHPART2)
+            {
+                UT_LOG_DEBUG("Profile: %d", info.entries->profile);
+                UT_ASSERT_EQUAL(info.entries->profile,gDSVideoDeviceConfiguration[i].profile);
+                //TODO : kvp profile support for float type is not available now
+                //UT_ASSERT_EQUAL(info.entries->level,gDSVideoDeviceConfiguration[i].level);
+            }
+            codec = (0x01 << (j++));
+        } /* for(codec)*/
+    } /* for(i)*/
+    UT_LOG_DEBUG("Invoking dsVideoDeviceTerm");
+    retStatus = dsVideoDeviceTerm();
+    UT_LOG_DEBUG("dsVideoDeviceTerm return status: %d", retStatus);
+    UT_ASSERT_EQUAL_FATAL(retStatus, dsERR_NONE);
+
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
+}
+
+/**
+* @brief Test to verify the setting and getting of display framerate for dsVideoDevice
+*
+* This test case is designed to validate the functionality of dsSetDisplayframerate and
+* dsGetCurrentDisplayframerate APIs. The test involves setting a display framerate for
+* a video device and then getting the current display framerate to verify if the set value
+* is correctly retrieved.
+*
+* **Test Group ID:** 02@n
+* **Test Case ID:** 005@n
+*
+* **Test Procedure:**
+* Refer to Test specification documentation [ds-video-device_L2-Low-Level_TestSpec.md](../docs/pages/ds-video-device_L2-Low-Level_TestSpec.md)
+*/
+void test_l2_dsVideoDevice_SetAndVerifyDisplayframerate_sink(void)
+{
+    gTestID = 5;
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t ret;
+    intptr_t handle;
+    char getframerate[dsVIDEO_FRAMERATE_MAX] = {0};
+
+    UT_LOG_DEBUG("Invoking dsVideoDeviceInit");
+    ret = dsVideoDeviceInit();
+    UT_LOG_DEBUG("dsVideoDeviceInit return status: %d", ret);
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+
+    for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++)
+    {
+        UT_LOG_DEBUG("Invoking dsGetVideoDevice with index :%d",i);
+        ret = dsGetVideoDevice(i, &handle);
+        UT_LOG_DEBUG("dsGetVideoDevice return status: %d, handle: %ld", ret, handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        if(ret != dsERR_NONE)
+        {
+            UT_LOG_ERROR("dsGetVideoDevice failed with error %d", ret);
+            continue;
+        }
+
+        for (int j=0;j<gDSVideoDeviceConfiguration[i].NoOfSupportedDFR;j++)
+        {
+            UT_LOG_DEBUG("Invoking dsSetDisplayframerate with handle: %ld", handle);
+            ret = dsSetDisplayframerate(handle, gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
+            UT_LOG_DEBUG("dsSetDisplayframerate return status: %d", ret);
+            if(ret != dsERR_NONE)
+            {
+                UT_LOG_ERROR("dsGetVideoDevice failed with error %d", ret);
+                continue;
+            }
+
+            UT_LOG_DEBUG("Invoking dsGetCurrentDisplayframerate with handle: %ld", handle);
+            ret = dsGetCurrentDisplayframerate(handle, getframerate);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
+            UT_LOG_DEBUG("dsGetCurrentDisplayframerate return status: %d, framerate: %s", ret, getframerate);
+            UT_ASSERT_STRING_EQUAL(gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate, getframerate);
+        } /* for(j) */
+    } /* for(i) */
+
+    UT_LOG_DEBUG("Invoking dsVideoDeviceTerm");
+    ret = dsVideoDeviceTerm();
+    UT_LOG_DEBUG("dsVideoDeviceTerm return status: %d", ret);
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
 static UT_test_suite_t * pSuite = NULL;
 
 /**
- * @brief Register the main test(s) for this module
+ * @brief Register the main tests for this module
  *
  * @return int - 0 on success, otherwise failure
  */
-int test_l2_dsVideoDevice_register ( void )
+
+int test_l2_dsVideoDevice_register(void)
 {
-	/* add a suite to the registry */
-	pSuite = UT_add_suite( "[L2 dsVideoDevice]", NULL, NULL );
-	if ( NULL == pSuite )
-	{
-		return -1;
-	}	
+    if(gSourceType == 0) {
+        // Create the test suite
+        pSuite = UT_add_suite("[L2 dsVideoDevice - Sink]", NULL, NULL);
+    }
+    else
+    {
+        // Create the test suite
+        pSuite = UT_add_suite("[L2 dsVideoDevice - Source]", NULL, NULL);
+    }
 
-	
-	UT_add_test( pSuite, "test_l2_dsVideoDevice" ,test_l2_dsVideoDevice );
+    if (pSuite == NULL)
+    {
+        return -1;
+    }
 
-	return 0;
+    UT_add_test( pSuite, "L2_GetHDRCapabilities", test_l2_dsVideoDevice_GetHDRCapabilities);
+    UT_add_test( pSuite, "L2_GetSupportedVideoCodingFormats", test_l2_dsVideoDevice_GetSupportedVideoCodingFormats);
+
+    if(gSourceType == 0) {
+        UT_add_test( pSuite, "L2_SetAndVerifyDisplayframerate_Sink", test_l2_dsVideoDevice_SetAndVerifyDisplayframerate_sink);
+    }
+
+    if(gSourceType == 1) {
+        UT_add_test( pSuite, "L2_SetAndGetDFC_source", test_l2_dsVideoDevice_SetAndGetDFC_source);
+        UT_add_test( pSuite, "L2_GetVideoCodecInfo_source", test_l2_dsVideoDevice_GetVideoCodecInfo_source);
+    }
+
+    return 0;
 }
 
 /** @} */ // End of DS_VideoDevice_HALTEST_L2

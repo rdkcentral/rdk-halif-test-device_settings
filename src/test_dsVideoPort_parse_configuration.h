@@ -42,40 +42,42 @@
  */
 
 /**
- * @defgroup Device_Settings_UTILS Device Settings HAL Tests Utility File
+ * @defgroup DS_VideoPort_HALTEST Device Settings Video Port HAL Tests
  * @{
- * @parblock
- *
- * ### Utility functions for Device Settings HAL :
- *
- * Utility functions required for the module across all vendors.
- *
- * **Pre-Conditions:**  None @n
- * **Dependencies:** None @n
- *
- * @endparblock
- *
  */
 
 /**
-* @file test_utils.h
-*
-*/
-#ifndef __TEST_UTILS_H__
-#define __TEST_UTILS_H__
+ * @defgroup DS_VideoPort_HALTEST_PARSE_CONFIG_HEADER Device Settings Video Port Parse Config Header File
+ * @{
+ * @parblock
+ *
+ * ### Configuration Header file for DS Video Port test suit :
+ *
+ *  DS Video Port Parse Configuration Header file
+ *
+ * @endparblock
+ */
+
+
+/**
+ * @file test_dsVideoPort_parse_configuration.h
+ *
+ */
+
+#ifndef __TEST_DS_VIDEO_PARSE_CONFIG_H__
+#define __TEST_DS_VIDEO_PARSE_CONFIG_H__
 
 #include "dsVideoPort.h"
 
-#define TEST_UTIL_KVP_SIZE             256
-#define TEST_UTIL_DEVICE_TYPE_SIZE     8
-#define TEST_UTIL_DEVICE_NAME_SIZE     64
-#define TEST_UTIL_DS_MODULE_NAME_SIZE  32
 
-#define TEST_UTIL_TYPE_SOURCE_VALUE     "source"
-#define TEST_UTIL_TYPE_SINK_VALUE       "sink"
+#define DS_VIDEO_PORT_KVP_SIZE                128
+#define DS_VIDEO_PORT_TYPE_SIZE               8
+#define DS_VIDEO_PORT_NAME_SIZE               64
+#define DS_VIDEO_PORT_MODULE_NAME_SIZE        32
+#define DS_VIDEO_PORT_RESOLUTION_MAX          32
+#define DS_VIDEO_PORT_RESOLUTION_NAME_MAX     32
 
-#define DS_VIDEO_PORT_NAME_SIZE        32
-#define dsVideoPortRESOLUTION_NUMMAX 32
+#define DS_VIDEO_PORT_MODULE_NAME             "dsVideoPort"
 
 /* Video Port configuration */
 typedef struct _dsVideoPortConfiguration_t {
@@ -85,8 +87,8 @@ typedef struct _dsVideoPortConfiguration_t {
     bool     dtcp_supported;
     bool     hdcp_supported;
     int32_t  numSupportedResolutions;
-    char     supportedResolutons[dsVideoPortRESOLUTION_NUMMAX][DS_VIDEO_PORT_NAME_SIZE];
-    char     defaultResolution[TEST_UTIL_DEVICE_NAME_SIZE];
+    //char     supportedResolutons[DS_VIDEO_PORT_RESOLUTION_NMAX][];
+    char     defaultResolution[DS_VIDEO_PORT_RESOLUTION_NAME_MAX];
     int32_t  colorspaces;
     int32_t  Supported_color_depth_capabilities;
     bool     DisplaySurround;
@@ -98,23 +100,7 @@ typedef struct _dsVideoPortConfiguration_t {
     int32_t  matrix_coefficients;
 }dsVideoPortConfiguration_t;
 
-typedef enum _dsModule_t {
-    dsAudioPort   = (0x1 << 0),
-    dsVideoPort   = (0x1 << 1),
-    dsComposite   = (0x1 << 2),
-    dsHdmiIn      = (0x1 << 3),
-    dsVideoDevice = (0x1 << 4),
-    dsDisplay     = (0x1 << 5),
-    dsFPD         = (0x1 << 6),
-    dsHost        = (0x1 << 7),
-}dsModule_t;
-
 /* Global variables */
-extern char    gDeviceType[TEST_UTIL_DEVICE_TYPE_SIZE];
-extern char    gDeviceName[TEST_UTIL_DEVICE_NAME_SIZE];
-extern int32_t gSourceType;
-extern int32_t gDSModule;
-
 extern dsVideoPortConfiguration_t* gDSVideoPortConfiguration;
 extern int32_t gDSvideoPort_NumberOfPorts;
 extern int32_t gDSvideoPort_color_depth;
@@ -122,11 +108,14 @@ extern int32_t gDSvideoPort_connectedAOP;
 //extern char    gDSvideoPort_defaultResolution[TEST_UTIL_DEVICE_NAME_SIZE];
 
 /*Function prototypes */
-int test_utils_parseConfig();
-void test_utils_parseConfig_term();
+int test_dsVideoPort_parse_configuration();
+void test_dsVideoPort_parse_term();
 
-#endif //__TEST_UTILS_H__
-/** @} */ // End of Device_Settings_UTILS
+
+#endif //__TEST_DS_VIDEO_PARSE_CONFIG_H__
+
+/** @} */ // End of DS_VideoPort_HALTEST_PARSE_CONFIG_HEADER
+/** @} */ // End of DS_VideoPort_HALTEST
 /** @} */ // End of Device_Settings_HALTEST
 /** @} */ // End of Device_Settings
 /** @} */ // End of HPK

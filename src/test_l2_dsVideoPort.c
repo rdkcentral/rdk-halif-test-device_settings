@@ -2,7 +2,7 @@
 *  If not stated otherwise in this file or this component's LICENSE
 *  file the following copyright and licenses apply:
 *
-*  Copyright 2022 RDK Management
+*  Copyright 2024 RDK Management
 *
 *  Licensed under the Apache License, Version 2.0 (the License);
 *  you may not use this file except in compliance with the License.
@@ -58,7 +58,7 @@
  * **Pre-Conditions:**  None@n
  * **Dependencies:** None@n
  *
- * Ref to API Definition specification documentation : [dsVideoPort_halSpec.md](../../docs/pages/dsVideoPort_halSpec.md)
+ * Ref to API Definition specification documentation : [ds-video-port_halSpec.md](../../docs/pages/ds-video-port_halSpec.md)
  *
  * @endparblock
  */
@@ -75,7 +75,8 @@
 #include <ut_kvp_profile.h>
 #include <ut_kvp.h>
 
-#include "test_utils.h"
+#include "test_parse_configuration.h"
+#include "test_dsVideoPort_parse_configuration.h"
 #include "dsVideoPort.h"
 
 static int gTestGroup = 2;
@@ -84,13 +85,14 @@ static int gTestID = 1;
 /**
 * @brief This test aims to enable disabled video ports and verify their status
 *
-* In this test, we initialize the video port, get the video port for each type, check if it's enabled. If not, we enable it and verify if it's enabled successfully.
+* In this test, we initialize the video port, get the video port for supported type, check if it's enabled.
+* If not, we enable it and verify if it's enabled successfully.
 *
 * **Test Group ID:** 02@n
 * **Test Case ID:** 001@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [dsVideoPort_L2_Low-Level_TestSpecification.md](../../docs/pages/dsVideoPort_L2_Low-Level_TestSpecification.md)
+* Refer to test specification documentation [ds-video-port_L2_Low-Level_TestSpecification.md](../docs/pages/ds-video-port_L2_Low-Level_TestSpecification.md)
 */
 
 void test_l2_dsVideoPort_EnableDisabledVideoPorts(void)
@@ -98,9 +100,9 @@ void test_l2_dsVideoPort_EnableDisabledVideoPorts(void)
     gTestID = 1;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t ret;
-    intptr_t handle;
-    bool enabled;
+    dsError_t ret   = dsERR_NONE;
+    intptr_t handle = 0;
+    bool enabled    = false;
 
     UT_LOG_DEBUG("Invoking dsVideoPortInit()");
     ret = dsVideoPortInit();
@@ -145,15 +147,17 @@ void test_l2_dsVideoPort_EnableDisabledVideoPorts(void)
 }
 
 /**
-* @brief This test verifies the display and port status of the sink in the L2 dsVideoPort
+* @brief This test verifies the display and port status of the L2 dsVideoPort
 *
-* This test function initializes the video port, gets the video port for each type, checks if the display is connected and if the video port is active, and finally terminates the video port. The test is designed to ensure that the video port functionalities are working as expected.
+* This test function initializes the video port, gets the video port for each type,
+* checks if the display is connected and if the video port is active, and finally terminates the video port.
+* The test is designed to ensure that the video port functionalities are working as expected.
 *
 * **Test Group ID:** 02@n
 * **Test Case ID:** 002@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [dsVideoPort_L2_Low-Level_TestSpecification.md](../../docs/pages/dsVideoPort_L2_Low-Level_TestSpecification.md)
+* Refer to Test specification documentation [ds-video-port_L2_Low-Level_TestSpecification.md](../docs/pages/ds-video-port_L2_Low-Level_TestSpecification.md)
 */
 
 void test_l2_dsVideoPort_VerifyDisplayAndPortStatus(void)
@@ -161,9 +165,10 @@ void test_l2_dsVideoPort_VerifyDisplayAndPortStatus(void)
     gTestID = 2;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t ret;
-    intptr_t handle;
-    bool connected, active;
+    dsError_t ret   = dsERR_NONE;
+    intptr_t handle = 0;
+    bool connected  = false;
+    bool active     = false;
 
     UT_LOG_DEBUG("Invoking dsVideoPortInit");
     ret = dsVideoPortInit();
@@ -213,15 +218,18 @@ void test_l2_dsVideoPort_VerifyDisplayAndPortStatus(void)
 }
 
 /**
-* @brief This test aims to retrieve and verify the surround mode capabilities of the video port sink
+* @brief This test aims to retrieve and verify the surround mode capabilities of the video port
 *
-* In this test, the dsVideoPortInit() function is invoked to initialize the video port. Then, the dsGetVideoPort() function is called with dsVIDEOPORT_TYPE_INTERNAL and index 0 to get the video port. The dsIsDisplaySurround() function is then invoked with the obtained handle to check if the display is in surround mode. The result is then compared with the expected value. Finally, the dsVideoPortTerm() function is invoked to terminate the video port.
+* In this test, the dsVideoPortInit() function is invoked to initialize the video port.
+* Then, the dsGetVideoPort() function is called with dsVIDEOPORT_TYPE_INTERNAL and index 0 to get the video port.
+* The dsIsDisplaySurround() function is then invoked with the obtained handle to check if the display is in surround mode.
+* The result is then compared with the expected value. Finally, the dsVideoPortTerm() function is invoked to terminate the video port.
 *
 * **Test Group ID:** 02@n
 * **Test Case ID:** 003@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [dsVideoPort_L2_Low-Level_TestSpecification.md](../../docs/pages/dsVideoPort_L2_Low-Level_TestSpecification.md)
+* Refer to Test specification documentation [ds-video-port_L2_Low-Level_TestSpecification.md](../docs/pages/ds-video-port_L2_Low-Level_TestSpecification.md)
 */
 
 void test_l2_dsVideoPort_RetrieveAndVerifySurroundModeCapabilities(void)
@@ -229,10 +237,10 @@ void test_l2_dsVideoPort_RetrieveAndVerifySurroundModeCapabilities(void)
     gTestID = 3;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t ret;
-    intptr_t handle;
-    bool surround;
-    int surround_mode;
+    dsError_t ret   = dsERR_NONE;
+    intptr_t handle = 0;
+    bool surround   = false;
+    int surround_mode = 0;
 
     UT_LOG_DEBUG("Invoking dsVideoPortInit()");
     ret = dsVideoPortInit();
@@ -279,15 +287,17 @@ void test_l2_dsVideoPort_RetrieveAndVerifySurroundModeCapabilities(void)
 }
 
 /**
-* @brief Test for setting and getting the resolution of a video source
+* @brief Test for setting and getting the resolution of a video Port
 *
-* This test checks if the dsSetResolution and dsGetResolution functions work as expected. It sets the resolution of a video source and then gets the resolution to verify if the set resolution is correctly applied. This is done for all possible combinations of pixel resolution, aspect ratio, stereoscopic mode, and frame rate.
+* This test checks if the dsSetResolution and dsGetResolution functions work as expected.
+* It sets the resolution of a video port and then gets the resolution to verify if the set resolution is correctly applied.
+* This is done for all possible combinations of pixel resolution, aspect ratio, stereoscopic mode, and frame rate.
 *
 * **Test Group ID:** 02@n
 * **Test Case ID:** 004@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [dsVideoPort_L2_Low-Level_TestSpecification.md](../../docs/pages/dsVideoPort_L2_Low-Level_TestSpecification.md)
+* Refer to Test specification documentation [ds-video-port_L2_Low-Level_TestSpecification.md](../docs/pages/ds-video-port_L2_Low-Level_TestSpecification.md)
 */
 
 void test_l2_dsVideoPort_SetAndGetResolution_source(void)
@@ -295,8 +305,8 @@ void test_l2_dsVideoPort_SetAndGetResolution_source(void)
     gTestID = 4;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t ret;
-    intptr_t handle;
+    dsError_t ret   = dsERR_NONE;
+    intptr_t handle = 0;
     dsVideoPortResolution_t setResolution, getResolution;
 
     UT_LOG_DEBUG("Invoking dsVideoPortInit()");
@@ -321,7 +331,7 @@ void test_l2_dsVideoPort_SetAndGetResolution_source(void)
                 {
                     for (int l = dsVIDEO_FRAMERATE_UNKNOWN; l < dsVIDEO_FRAMERATE_MAX; l++)
                     {
-                        strcpy(setResolution.name, "TestResolution");
+                        strncpy(setResolution.name, "TestResolution",sizeof(setResolution.name));
                         setResolution.pixelResolution = i;
                         setResolution.aspectRatio = j;
                         setResolution.stereoScopicMode = k;
@@ -374,13 +384,14 @@ void test_l2_dsVideoPort_SetAndGetResolution_source(void)
 /**
 * @brief Test to verify the supported TV resolutions
 *
-* This test verifies if the dsVideoPort API correctly identifies and returns the supported TV resolutions . The test is crucial to ensure the correct functioning of the video port in different resolution settings.
+* This test verifies if the dsVideoPort API correctly identifies and returns the supported TV resolutions.
+* The test is crucial to ensure the correct functioning of the video port in different resolution settings.
 *
 * **Test Group ID:** 02@n
 * **Test Case ID:** 005@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [dsVideoPort_L2_Low-Level_TestSpecification.md](../../docs/pages/dsVideoPort_L2_Low-Level_TestSpecification.md)
+* Refer to Test specification documentation [ds-video-port_L2_Low-Level_TestSpecification.md](../docs/pages/ds-video-port_L2_Low-Level_TestSpecification.md)
 */
 
 void test_l2_dsVideoPort_VerifySupportedTvResolutions(void)
@@ -388,8 +399,8 @@ void test_l2_dsVideoPort_VerifySupportedTvResolutions(void)
     gTestID = 5;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t ret;
-    intptr_t handle;
+    dsError_t ret   = dsERR_NONE;
+    intptr_t handle = 0;
     int resolutions;
 
     UT_LOG_DEBUG("Invoking dsVideoPortInit");
@@ -430,13 +441,15 @@ void test_l2_dsVideoPort_VerifySupportedTvResolutions(void)
 /**
 * @brief Test for getting HDR capabilities
 *
-* This test verifies if the dsGetTVHDRCapabilities() function can successfully get the HDR capabilities. The test first initializes the video port, gets the video port with dsVIDEOPORT_TYPE_INTERNAL and index 0, then gets the HDR capabilities. It asserts that all these operations return dsERR_NONE, and that the obtained capabilities match the expected value.
+* This test verifies if the dsGetTVHDRCapabilities() function can successfully get the HDR capabilities.
+* The test first initializes the video port, gets the video port with dsVIDEOPORT_TYPE_INTERNAL and index 0,
+* then gets the HDR capabilities. It asserts that all these operations return dsERR_NONE, and that the obtained capabilities match the expected value.
 *
 * **Test Group ID:** 02@n
 * **Test Case ID:** 06@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [dsVideoPort_L2_Low-Level_TestSpecification.md](../../docs/pages/dsVideoPort_L2_Low-Level_TestSpecification.md)
+* Refer to Test specification documentation [ds-video-port_L2_Low-Level_TestSpecification.md](../docs/pages/ds-video-port_L2_Low-Level_TestSpecification.md)
 */
 
 void test_l2_dsVideoPort_GetHDRCapabilities(void)
@@ -444,8 +457,8 @@ void test_l2_dsVideoPort_GetHDRCapabilities(void)
     gTestID = 6;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t ret;
-    intptr_t handle;
+    dsError_t ret   = dsERR_NONE;
+    intptr_t handle = 0;
     int capabilities;
 
     UT_LOG_DEBUG("Invoking dsVideoPortInit()");
@@ -484,141 +497,17 @@ void test_l2_dsVideoPort_GetHDRCapabilities(void)
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
-#if 0
-
-/**
-* @brief Test for setting and getting the ForceDisable4KSupport for a video port
-*
-* This test verifies the functionality of the dsSetForceDisable4KSupport() and dsGetForceDisable4KSupport() APIs.
-* It checks if the APIs are able to correctly set and retrieve the ForceDisable4KSupport status for a video port.
-*
-* **Test Group ID:** 02@n
-* **Test Case ID:** 012@n
-*
-* **Test Procedure:**
-* Refer to UT specification documentation [dsVideoPort_L2_Low-Level_TestSpecification.md](../../docs/pages/dsVideoPort_L2_Low-Level_TestSpecification.md)
-*/
-
-void test_l2_dsVideoPort_SetAndGetForceDisable4KSupport_sink(void)
-{
-    gTestID = 12;
-    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-    dsError_t ret;
-    intptr_t handle;
-    bool disable;
-
-    UT_LOG_DEBUG("Invoking dsVideoPortInit()");
-    ret = dsVideoPortInit();
-    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
-    UT_LOG_DEBUG("dsVideoPortInit() returned %d", ret);
-
-    for (int type = dsVIDEOPORT_TYPE_RF; type < dsVIDEOPORT_TYPE_MAX; type++)
-    {
-        UT_LOG_DEBUG("Invoking dsGetVideoPort() with type: %d and index: 0", type);
-        ret = dsGetVideoPort(type, 0, &handle);
-        UT_LOG_DEBUG("Handle: %ld, Return status: %d", handle, ret);
-        UT_ASSERT_EQUAL(ret, dsERR_NONE);
-		if (ret != dsERR_NONE)
-        {
-		    UT_LOG_ERROR("dsGetVideoPort failed with ret: %d", ret);
-            continue;
-        }
-        for (int i = 0; i < 2; i++) {
-	        disable = (i == 0) ? true : false;
-            UT_LOG_DEBUG("Invoking dsSetForceDisable4KSupport() with handle: %ld, disable: %d", handle, disable);
-            ret = dsSetForceDisable4KSupport(handle, disable);
-		    UT_ASSERT_EQUAL(ret, dsERR_NONE);
-            UT_LOG_DEBUG("Return status: %d", ret);
-
-            bool getDisable;
-            UT_LOG_DEBUG("Invoking dsGetForceDisable4KSupport() with handle: %ld", handle);
-            ret = dsGetForceDisable4KSupport(handle, &getDisable);
-            UT_ASSERT_EQUAL(ret, dsERR_NONE);
-            UT_ASSERT_EQUAL(getDisable, disable);
-            UT_LOG_DEBUG("Disable: %d, Return status: %d", disable, ret);
-        }
-    }
-
-    UT_LOG_DEBUG("Invoking dsVideoPortTerm()");
-    ret = dsVideoPortTerm();
-    UT_LOG_DEBUG("dsVideoPortTerm() returned %d", ret);
-    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
-
-    UT_LOG_INFO("Out %s\n", __FUNCTION__);
-}
-
-/**
-* @brief This test aims to validate the setting and getting of ForceDisable4KSupport in dsVideoPort
-*
-* This test function tests the setting and getting of ForceDisable4KSupport in dsVideoPort. It first initializes the video port, then gets the video port with valid parameters. It then sets the ForceDisable4KSupport and gets the same to validate if the set value is correctly retrieved. The test is performed for both true and false values of ForceDisable4KSupport. Finally, it terminates the video port. The test is designed to ensure the correct functioning of the dsSetForceDisable4KSupport and dsGetForceDisable4KSupport functions.
-*
-* **Test Group ID:** 02@n
-* **Test Case ID:** 013@n
-*
-* **Test Procedure:**
-* Refer to UT specification documentation [dsVideoPort_L2_Low-Level_TestSpecification.md](../../docs/pages/dsVideoPort_L2_Low-Level_TestSpecification.md)
-*/
-
-void test_l2_dsVideoPort_SetAndGetForceDisable4KSupport_source(void)
-{
-    gTestID = 13;
-    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-    dsError_t ret;
-    intptr_t handle;
-    bool disable;
-
-    UT_LOG_DEBUG("Invoking dsVideoPortInit()");
-    ret = dsVideoPortInit();
-    UT_LOG_DEBUG("Return status: %d", ret);
-    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
-
-    for (int type = dsVIDEOPORT_TYPE_RF; type < dsVIDEOPORT_TYPE_MAX; type++)
-    {
-        UT_LOG_DEBUG("Invoking dsGetVideoPort() with type: %d and index: 0", type);
-        ret = dsGetVideoPort(type, 0, &handle);
-        UT_LOG_DEBUG("Handle: %ld, Return status: %d", handle, ret);
-        UT_ASSERT_EQUAL(ret, dsERR_NONE);
-		if (ret != dsERR_NONE)
-        {
-		    UT_LOG_ERROR("dsGetVideoPort failed with ret: %d", ret);
-            continue;
-        }
-        for (int i = 0; i < 2; i++) {
-	        disable = (i == 0) ? true : false;
-            UT_LOG_DEBUG("Invoking dsSetForceDisable4KSupport() with handle: %ld, disable: %d", handle, disable);
-            ret = dsSetForceDisable4KSupport(handle, disable);
-		    UT_ASSERT_EQUAL(ret, dsERR_NONE);
-            UT_LOG_DEBUG("Return status: %d", ret);
-
-            bool getDisable;
-            UT_LOG_DEBUG("Invoking dsGetForceDisable4KSupport() with handle: %ld", handle);
-            ret = dsGetForceDisable4KSupport(handle, &getDisable);
-            UT_ASSERT_EQUAL(ret, dsERR_NONE);
-            UT_ASSERT_EQUAL(getDisable, disable);
-            UT_LOG_DEBUG("Disable: %d, Return status: %d", disable, ret);
-        }
-    }
-
-    UT_LOG_DEBUG("Invoking dsVideoPortTerm()");
-    ret = dsVideoPortTerm();
-    UT_LOG_DEBUG("Return status: %d", ret);
-    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
-
-    UT_LOG_INFO("Out %s\n", __FUNCTION__);
-}
-#endif
 /**
 * @brief This test checks the HDCP status of the video port
 *
-* This test initializes the video port, gets the video port handle for each type, checks the HDCP status and finally terminates the video port. The test is designed to verify if the HDCP status is authenticated for each video port type.
+* This test initializes the video port, gets the video port handle for each type, checks the HDCP status and finally terminates the video port.
+* The test is designed to verify if the HDCP status is authenticated for each video port type.
 *
 * **Test Group ID:** 02@n
 * **Test Case ID:** 007@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [dsVideoPort_L2_Low-Level_TestSpecification.md](../../docs/pages/dsVideoPort_L2_Low-Level_TestSpecification.md)
+* Refer to Test specification documentation [ds-video-port_L2_Low-Level_TestSpecification.md](../docs/pages/ds-video-port_L2_Low-Level_TestSpecification.md)
 */
 
 void test_l2_dsVideoPort_GetHDCPStatus(void)
@@ -626,8 +515,8 @@ void test_l2_dsVideoPort_GetHDCPStatus(void)
     gTestID = 7;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t ret;
-    intptr_t handle;
+    dsError_t ret   = dsERR_NONE;
+    intptr_t handle = 0;
     dsHdcpStatus_t status;
 
     UT_LOG_DEBUG("Invoking dsVideoPortInit()");
@@ -681,13 +570,14 @@ void test_l2_dsVideoPort_GetHDCPStatus(void)
 /**
 * @brief Test to verify the HDCP Protocol Status
 *
-* This test case verifies the HDCP Protocol Status by invoking the dsVideoPortInit, dsGetVideoPort, dsGetHDCPProtocol and dsVideoPortTerm APIs. The HDCP protocol version obtained from the API is compared with the one retrieved from the yaml file.
+* This test case verifies the HDCP Protocol Status by invoking the dsVideoPortInit, dsGetVideoPort, dsGetHDCPProtocol and dsVideoPortTerm APIs.
+* The HDCP protocol version obtained from the API is compared with the one retrieved from the yaml file.
 *
 * **Test Group ID:** 02@n
 * **Test Case ID:** 008@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [dsVideoPort_L2_Low-Level_TestSpecification.md](../../docs/pages/dsVideoPort_L2_Low-Level_TestSpecification.md)
+* Refer to Test specification documentation [ds-video-port_L2_Low-Level_TestSpecification.md](../docs/pages/ds-video-port_L2_Low-Level_TestSpecification.md)
 */
 
 void test_l2_dsVideoPort_VerifyHDCPProtocolStatus(void)
@@ -695,8 +585,8 @@ void test_l2_dsVideoPort_VerifyHDCPProtocolStatus(void)
     gTestID = 8;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t ret;
-    intptr_t handle;
+    dsError_t ret   = dsERR_NONE;
+    intptr_t handle = 0;
     dsHdcpProtocolVersion_t protocolVersion;
 
     UT_LOG_DEBUG("Invoking dsVideoPortInit");
@@ -732,13 +622,15 @@ void test_l2_dsVideoPort_VerifyHDCPProtocolStatus(void)
 /**
 * @brief This test aims to set and get the HDMI preference for a video port
 *
-* In this test, the HDMI preference for each type of video port is set and then retrieved to verify if the set operation was successful. This is done for all types of HDCP protocol versions. The test is important to ensure the correct functioning of the HDMI preference setting and getting operations for different types of video ports and HDCP protocol versions.
+* In this test, the HDMI preference for each type of video port is set and then retrieved to verify if the set operation was successful.
+* This is done for all types of HDCP protocol versions.
+* The test is important to ensure the correct functioning of the HDMI preference setting and getting operations for different types of video ports and HDCP protocol versions.
 *
 * **Test Group ID:** 02@n
 * **Test Case ID:** 009@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [dsVideoPort_L2_Low-Level_TestSpecification.md](../../docs/pages/dsVideoPort_L2_Low-Level_TestSpecification.md)
+* Refer to Test specification documentation [ds-video-port_L2_Low-Level_TestSpecification.md](../docs/pages/ds-video-port_L2_Low-Level_TestSpecification.md)
 */
 
 void test_l2_dsVideoPort_SetAndGetHdmiPreference(void)
@@ -746,9 +638,9 @@ void test_l2_dsVideoPort_SetAndGetHdmiPreference(void)
     gTestID = 9;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t ret;
-    intptr_t handle;
-    dsHdcpProtocolVersion_t hdcpCurrentProtocol, hdcpCurrentProtocolGet;
+    dsError_t ret   = dsERR_NONE;
+    intptr_t handle = 0;
+    dsHdcpProtocolVersion_t protocolVersion,hdcpCurrentProtocolGet;
 
     UT_LOG_DEBUG("Invoking dsVideoPortInit");
     ret = dsVideoPortInit();
@@ -765,14 +657,18 @@ void test_l2_dsVideoPort_SetAndGetHdmiPreference(void)
             continue;
         }
 
-        for (hdcpCurrentProtocol = dsHDCP_VERSION_1X; hdcpCurrentProtocol < dsHDCP_VERSION_MAX; hdcpCurrentProtocol++)
+        UT_LOG_DEBUG("Invoking dsGetHDCPProtocol with handle: %ld", handle);
+        ret = dsGetHDCPProtocol(handle, &protocolVersion);
+        UT_LOG_DEBUG("Return status: %d, Protocol Version: %d", ret, protocolVersion);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_EQUAL(protocolVersion, gDSVideoPortConfiguration[port].hdcp_protocol_version);
+        if(protocolVersion == gDSVideoPortConfiguration[port].hdcp_protocol_version)
         {
-            UT_LOG_DEBUG("Invoking dsSetHdmiPreference with handle: %ld and hdcpCurrentProtocol: %d", handle, hdcpCurrentProtocol);
-            ret = dsSetHdmiPreference(handle, &hdcpCurrentProtocol);
+            UT_LOG_DEBUG("Invoking dsSetHdmiPreference with handle: %ld and hdcpCurrentProtocol: %d", handle, protocolVersion);
+            ret = dsSetHdmiPreference(handle, &protocolVersion);
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsSetHdmiPreference failed with error: %d", ret);
-                continue;
             }
 
             UT_LOG_DEBUG("Invoking dsGetHdmiPreference with handle: %ld", handle);
@@ -780,11 +676,9 @@ void test_l2_dsVideoPort_SetAndGetHdmiPreference(void)
             if (ret != dsERR_NONE)
             {
                 UT_LOG_ERROR("dsGetHdmiPreference failed with error: %d", ret);
-                continue;
             }
-
-            UT_LOG_DEBUG("HDCP protocol version set: %d, HDCP protocol version get: %d", hdcpCurrentProtocol, hdcpCurrentProtocolGet);
-            UT_ASSERT_EQUAL(hdcpCurrentProtocol, hdcpCurrentProtocolGet);
+            UT_LOG_DEBUG("HDCP protocol version set: %d, HDCP protocol version get: %d", protocolVersion, hdcpCurrentProtocolGet);
+            UT_ASSERT_EQUAL(protocolVersion, hdcpCurrentProtocolGet);
         }
     }
 
@@ -799,13 +693,16 @@ void test_l2_dsVideoPort_SetAndGetHdmiPreference(void)
 /**
 * @brief This test aims to verify the functionality of dsVideoPort_GetColorSpace
 *
-* This test is designed to check the correct operation of the dsVideoPort_GetColorSpace function. It does this by initializing the video port, getting the video port with type as dsVIDEOPORT_TYPE_INTERNAL and index as 0, then getting the color space with the handle obtained from the previous step. The test asserts that all these operations return dsERR_NONE, indicating successful operation. The color space obtained is then compared with the expected value.
+* This test is designed to check the correct operation of the dsVideoPort_GetColorSpace function.
+* It does this by initializing the video port, getting the video port with type as dsVIDEOPORT_TYPE_INTERNAL and index as 0,
+* then getting the color space with the handle obtained from the previous step. The test asserts that all these operations return dsERR_NONE,
+* indicating successful operation. The color space obtained is then compared with the expected value.
 *
 * **Test Group ID:** 02@n
 * **Test Case ID:** 010@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [dsVideoPort_L2_Low-Level_TestSpecification.md](../../docs/pages/dsVideoPort_L2_Low-Level_TestSpecification.md)
+* Refer to Test specification documentation [ds-video-port_L2_Low-Level_TestSpecification.md](../docs/pages/ds-video-port_L2_Low-Level_TestSpecification.md)
 */
 
 void test_l2_dsVideoPort_GetColorSpace(void)
@@ -813,8 +710,8 @@ void test_l2_dsVideoPort_GetColorSpace(void)
     gTestID = 10;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t ret;
-    intptr_t handle;
+    dsError_t ret   = dsERR_NONE;
+    intptr_t handle = 0;
     dsDisplayColorSpace_t color_space;
 
     UT_LOG_DEBUG("Invoking dsVideoPortInit()");
@@ -851,13 +748,15 @@ void test_l2_dsVideoPort_GetColorSpace(void)
 /**
 * @brief Test to check the color depth capabilities of the video port
 *
-* This test checks the color depth capabilities of the video port by invoking the dsVideoPortInit, dsGetVideoPort, dsColorDepthCapabilities, and dsVideoPortTerm functions. The test verifies that all these functions return the expected status and that the color depth capability matches the expected value.
+* This test checks the color depth capabilities of the video port by invoking the dsVideoPortInit,
+* dsGetVideoPort, dsColorDepthCapabilities, and dsVideoPortTerm functions.
+* The test verifies that all these functions return the expected status and that the color depth capability matches the expected value.
 *
 * **Test Group ID:** 02@n
 * **Test Case ID:** 011@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [dsVideoPort_L2_Low-Level_TestSpecification.md](../../docs/pages/dsVideoPort_L2_Low-Level_TestSpecification.md)
+* Refer to Test specification documentation [ds-video-port_L2_Low-Level_TestSpecification.md](../docs/pages/ds-video-port_L2_Low-Level_TestSpecification.md)
 */
 
 void test_l2_dsVideoPort_CheckColorDepthCapabilities_source(void)
@@ -865,8 +764,8 @@ void test_l2_dsVideoPort_CheckColorDepthCapabilities_source(void)
     gTestID = 11;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t ret;
-    intptr_t handle;
+    dsError_t ret   = dsERR_NONE;
+    intptr_t handle = 0;
     unsigned int colorDepthCapability;
 
     UT_LOG_DEBUG("Invoking dsVideoPortInit");
@@ -902,13 +801,15 @@ void test_l2_dsVideoPort_CheckColorDepthCapabilities_source(void)
 /**
 * @brief This test aims to verify the functionality of the dsVideoPort_GetColorDepth
 *
-* In this test, the dsVideoPort_GetColorDepth is tested to ensure it correctly retrieves the color depth of the video port. The test involves initializing the video port, getting the video port with type=dsVIDEOPORT_TYPE_INTERNAL and index=0, getting the color depth, and then terminating the video port. The test asserts that all these operations return dsERR_NONE, indicating successful execution.
+* In this test, the dsVideoPort_GetColorDepth is tested to ensure it correctly retrieves the color depth of the video port.
+* The test involves initializing the video port, getting the video port with type=dsVIDEOPORT_TYPE_INTERNAL and index=0, getting the color depth,
+* and then terminating the video port. The test asserts that all these operations return dsERR_NONE, indicating successful execution.
 *
 * **Test Group ID:** 02@n
 * **Test Case ID:** 012@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [dsVideoPort_L2_Low-Level_TestSpecification.md](../../docs/pages/dsVideoPort_L2_Low-Level_TestSpecification.md)
+* Refer to Test specification documentation [ds-video-port_L2_Low-Level_TestSpecification.md](../docs/pages/ds-video-port_L2_Low-Level_TestSpecification.md)
 */
 
 void test_l2_dsVideoPort_GetColorDepth(void)
@@ -916,8 +817,8 @@ void test_l2_dsVideoPort_GetColorDepth(void)
     gTestID = 12;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t ret;
-    intptr_t handle;
+    dsError_t ret   = dsERR_NONE;
+    intptr_t handle = 0;
     unsigned int color_depth;
 
     UT_LOG_DEBUG("Invoking dsVideoPortInit()");
@@ -961,7 +862,7 @@ void test_l2_dsVideoPort_GetColorDepth(void)
 * **Test Case ID:** 013@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [dsVideoPort_L2_Low-Level_TestSpecification.md](../../docs/pages/dsVideoPort_L2_Low-Level_TestSpecification.md)
+* Refer to Test specification documentation [ds-video-port_L2_Low-Level_TestSpecification.md](../docs/pages/ds-video-port_L2_Low-Level_TestSpecification.md)
 */
 void test_l2_dsVideoPort_SetAndGetPreferredColorDepth_source(void)
 {
@@ -1022,13 +923,16 @@ void test_l2_dsVideoPort_SetAndGetPreferredColorDepth_source(void)
 /**
 * @brief This test aims to verify the functionality of dsVideoPort_GetQuantizationRang
 *
-* This test case is designed to test the dsVideoPort_GetQuantizationRange function. It checks if the function correctly initializes the video port, gets the video port with dsVIDEOPORT_TYPE_INTERNAL as type and 0 as index, gets the quantization range with the handle obtained from the previous step, and finally terminates the video port. The test asserts that all these operations return dsERR_NONE, indicating successful execution.
+* This test case is designed to test the dsVideoPort_GetQuantizationRange function.
+* It checks if the function correctly initializes the video port, gets the video port with dsVIDEOPORT_TYPE_INTERNAL as type and 0 as index,
+* gets the quantization range with the handle obtained from the previous step, and finally terminates the video port.
+* The test asserts that all these operations return dsERR_NONE, indicating successful execution.
 *
 * **Test Group ID:** 02@n
 * **Test Case ID:** 014@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [dsVideoPort_L2_Low-Level_TestSpecification.md](../../docs/pages/dsVideoPort_L2_Low-Level_TestSpecification.md)
+* Refer to Test specification documentation [ds-video-port_L2_Low-Level_TestSpecification.md](../docs/pages/ds-video-port_L2_Low-Level_TestSpecification.md)
 */
 
 void test_l2_dsVideoPort_GetQuantizationRange(void)
@@ -1036,8 +940,8 @@ void test_l2_dsVideoPort_GetQuantizationRange(void)
     gTestID = 14;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t ret;
-    intptr_t handle;
+    dsError_t ret   = dsERR_NONE;
+    intptr_t handle = 0;
     dsDisplayQuantizationRange_t quantization_range;
 
     UT_LOG_DEBUG("Invoking dsVideoPortInit()");
@@ -1079,13 +983,15 @@ void test_l2_dsVideoPort_GetQuantizationRange(void)
 /**
 * @brief Test to verify the functionality of dsVideoPort_GetMatrixCoefficients API
 *
-* This test case verifies the functionality of dsVideoPort_GetMatrixCoefficients API. The test case initializes the video port, gets the video port handle, retrieves the matrix coefficients and verifies it with the expected value. The test case also ensures that the API returns the correct status codes at each step.
+* This test case verifies the functionality of dsVideoPort_GetMatrixCoefficients API.
+* The test case initializes the video port, gets the video port handle, retrieves the matrix coefficients and verifies it with the expected value.
+* The test case also ensures that the API returns the correct status codes at each step.
 *
 * **Test Group ID:** 02@n
 * **Test Case ID:** 015@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [dsVideoPort_L2_Low-Level_TestSpecification.md](../../docs/pages/dsVideoPort_L2_Low-Level_TestSpecification.md)
+* Refer to Test specification documentation [ds-video-port_L2_Low-Level_TestSpecification.md](../docs/pages/ds-video-port_L2_Low-Level_TestSpecification.md)
 */
 
 void test_l2_dsVideoPort_GetMatrixCoefficients(void)
@@ -1093,8 +999,8 @@ void test_l2_dsVideoPort_GetMatrixCoefficients(void)
     gTestID = 15;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t ret;
-    intptr_t handle;
+    dsError_t ret   = dsERR_NONE;
+    intptr_t handle = 0;
     dsDisplayMatrixCoefficients_t matrix_coefficients;
 
     UT_LOG_DEBUG("Invoking dsVideoPortInit()");
@@ -1131,6 +1037,132 @@ void test_l2_dsVideoPort_GetMatrixCoefficients(void)
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
+
+#if 0
+
+/**
+* @brief Test for setting and getting the ForceDisable4KSupport for a video port
+*
+* This test verifies the functionality of the dsSetForceDisable4KSupport() and dsGetForceDisable4KSupport() APIs.
+* It checks if the APIs are able to correctly set and retrieve the ForceDisable4KSupport status for a video port.
+*
+* **Test Group ID:** 02@n
+* **Test Case ID:** 016@n
+*
+* **Test Procedure:**
+* Refer to Test specification documentation [ds-video-port_L2_Low-Level_TestSpecification.md](../docs/pages/ds-video-port_L2_Low-Level_TestSpecification.md)
+*/
+
+void test_l2_dsVideoPort_SetAndGetForceDisable4KSupport_sink(void)
+{
+    gTestID = 12;
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t ret   = dsERR_NONE;
+    intptr_t handle = 0;
+    bool disable;
+
+    UT_LOG_DEBUG("Invoking dsVideoPortInit()");
+    ret = dsVideoPortInit();
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+    UT_LOG_DEBUG("dsVideoPortInit() returned %d", ret);
+
+    for (int type = dsVIDEOPORT_TYPE_RF; type < dsVIDEOPORT_TYPE_MAX; type++)
+    {
+        UT_LOG_DEBUG("Invoking dsGetVideoPort() with type: %d and index: 0", type);
+        ret = dsGetVideoPort(type, 0, &handle);
+        UT_LOG_DEBUG("Handle: %ld, Return status: %d", handle, ret);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+		if (ret != dsERR_NONE)
+        {
+		    UT_LOG_ERROR("dsGetVideoPort failed with ret: %d", ret);
+            continue;
+        }
+        for (int i = 0; i < 2; i++) {
+	        disable = (i == 0) ? true : false;
+            UT_LOG_DEBUG("Invoking dsSetForceDisable4KSupport() with handle: %ld, disable: %d", handle, disable);
+            ret = dsSetForceDisable4KSupport(handle, disable);
+		    UT_ASSERT_EQUAL(ret, dsERR_NONE);
+            UT_LOG_DEBUG("Return status: %d", ret);
+
+            bool getDisable;
+            UT_LOG_DEBUG("Invoking dsGetForceDisable4KSupport() with handle: %ld", handle);
+            ret = dsGetForceDisable4KSupport(handle, &getDisable);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
+            UT_ASSERT_EQUAL(getDisable, disable);
+            UT_LOG_DEBUG("Disable: %d, Return status: %d", disable, ret);
+        }
+    }
+
+    UT_LOG_DEBUG("Invoking dsVideoPortTerm()");
+    ret = dsVideoPortTerm();
+    UT_LOG_DEBUG("dsVideoPortTerm() returned %d", ret);
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
+}
+
+/**
+* @brief This test aims to validate the setting and getting of ForceDisable4KSupport in dsVideoPort
+*
+* This test function tests the setting and getting of ForceDisable4KSupport in dsVideoPort. It first initializes the video port, then gets the video port with valid parameters. It then sets the ForceDisable4KSupport and gets the same to validate if the set value is correctly retrieved. The test is performed for both true and false values of ForceDisable4KSupport. Finally, it terminates the video port. The test is designed to ensure the correct functioning of the dsSetForceDisable4KSupport and dsGetForceDisable4KSupport functions.
+*
+* **Test Group ID:** 02@n
+* **Test Case ID:** 017@n
+*
+* **Test Procedure:**
+* Refer to Test specification documentation [ds-video-port_L2_Low-Level_TestSpecification.md](../docs/pages/ds-video-port_L2_Low-Level_TestSpecification.md)
+*/
+
+void test_l2_dsVideoPort_SetAndGetForceDisable4KSupport_source(void)
+{
+    gTestID = 13;
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t ret   = dsERR_NONE;
+    intptr_t handle = 0;
+    bool disable;
+
+    UT_LOG_DEBUG("Invoking dsVideoPortInit()");
+    ret = dsVideoPortInit();
+    UT_LOG_DEBUG("Return status: %d", ret);
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+
+    for (int type = dsVIDEOPORT_TYPE_RF; type < dsVIDEOPORT_TYPE_MAX; type++)
+    {
+        UT_LOG_DEBUG("Invoking dsGetVideoPort() with type: %d and index: 0", type);
+        ret = dsGetVideoPort(type, 0, &handle);
+        UT_LOG_DEBUG("Handle: %ld, Return status: %d", handle, ret);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+		if (ret != dsERR_NONE)
+        {
+		    UT_LOG_ERROR("dsGetVideoPort failed with ret: %d", ret);
+            continue;
+        }
+        for (int i = 0; i < 2; i++) {
+	        disable = (i == 0) ? true : false;
+            UT_LOG_DEBUG("Invoking dsSetForceDisable4KSupport() with handle: %ld, disable: %d", handle, disable);
+            ret = dsSetForceDisable4KSupport(handle, disable);
+		    UT_ASSERT_EQUAL(ret, dsERR_NONE);
+            UT_LOG_DEBUG("Return status: %d", ret);
+
+            bool getDisable;
+            UT_LOG_DEBUG("Invoking dsGetForceDisable4KSupport() with handle: %ld", handle);
+            ret = dsGetForceDisable4KSupport(handle, &getDisable);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
+            UT_ASSERT_EQUAL(getDisable, disable);
+            UT_LOG_DEBUG("Disable: %d, Return status: %d", disable, ret);
+        }
+    }
+
+    UT_LOG_DEBUG("Invoking dsVideoPortTerm()");
+    ret = dsVideoPortTerm();
+    UT_LOG_DEBUG("Return status: %d", ret);
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
+}
+#endif
 
 static UT_test_suite_t * pSuite = NULL;
 
