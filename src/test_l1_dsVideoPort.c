@@ -73,7 +73,7 @@
 #include <stdlib.h>
 #include "dsVideoPort.h"
 #include "dsVideoPortSettings.h"
-#include "test_utils.h"
+#include "test_parse_configuration.h"
 
 #include <ut.h>
 #include <ut_log.h>
