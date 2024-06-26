@@ -65,11 +65,11 @@
 */
 
 #include <ut.h>
-#include "test_utils.h"
+#include "test_parse_configuration.h"
 
 /**
  * @brief Register test functionality
- * 
+ *
  */
 
 /* L1 Testing Functions */

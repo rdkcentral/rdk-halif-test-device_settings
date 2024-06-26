@@ -42,13 +42,13 @@
  */
 
 /**
- * @defgroup Device_Settings_UTILS Device Settings HAL Tests Utility File
+ * @defgroup Device_Settings_PARSE_CONFIG_HEADER Device Settings HAL Tests configuration parser Header File
  * @{
  * @parblock
  *
- * ### Utility functions for Device Settings HAL :
+ * ### Configuration parser functions for Device Settings HAL :
  *
- * Utility functions required for the module across all vendors.
+ * Configuration parser functions required for the module across all vendors.
  *
  * **Pre-Conditions:**  None @n
  * **Dependencies:** None @n
@@ -58,40 +58,27 @@
  */
 
 /**
-* @file test_utils.h
+* @file test_parse_configuration.h
 *
 */
-#ifndef __TEST_UTILS_H__
-#define __TEST_UTILS_H__
+#ifndef __TEST_DS_PARSE_CONFIG_H__
+#define __TEST_DS_PARSE_CONFIG_H__
 
-#include "dsVideoDevice.h"
+#include "test_dsVideoDevice_parse_configuration.h"
 
-#define TEST_UTIL_KVP_SIZE             256
-#define TEST_UTIL_DEVICE_TYPE_SIZE     8
-#define TEST_UTIL_DEVICE_NAME_SIZE     64
-#define TEST_UTIL_DS_MODULE_NAME_SIZE  32
+#define TEST_DEVICE_TYPE_SIZE     8
+#define TEST_DS_MODULE_NAME_SIZE  32
 
-#define TEST_UTIL_TYPE_SOURCE_VALUE     "source"
-#define TEST_UTIL_TYPE_SINK_VALUE       "sink"
+#define TEST_TYPE_SOURCE_VALUE     "source"
+#define TEST_TYPE_SINK_VALUE       "sink"
 
-
-#define DS_VIDEO_DEVICE_MODULE_NAME       "VideoDevice"
-
-/* Video Device configuration */
-typedef struct _dsVideoDeviceConfiguration_t {
-    int32_t  NoOfSupportedDFCs;
-    int32_t  SupportedDFCs[dsVIDEO_ZOOM_MAX];
-    int32_t  DefaultDFC;
-    int32_t  HDRCapabilities;
-    int32_t  SupportedVideoCodingFormats;
-    int32_t  NoOfSupportedDFR;
-    char     SupportedDisplayFramerate[dsVIDEO_FRAMERATE_MAX];
-    int32_t  num_codec_entries;
-    float    level;
-    int32_t  profile;
-}dsVideoDeviceConfiguration_t;
+/* Global variables */
+extern char gDeviceType[TEST_DEVICE_TYPE_SIZE];
+extern int32_t gSourceType;
+extern int32_t gDSModule;
 
 typedef enum _dsModule_t {
+    dsNone        = (0x0 << 0),
     dsAudioPort   = (0x1 << 0),
     dsVideoPort   = (0x1 << 1),
     dsComposite   = (0x1 << 2),
@@ -102,21 +89,13 @@ typedef enum _dsModule_t {
     dsHost        = (0x1 << 7),
 }dsModule_t;
 
-/* Global variables */
-extern char    gDeviceType[TEST_UTIL_DEVICE_TYPE_SIZE];
-extern char    gDeviceName[TEST_UTIL_DEVICE_NAME_SIZE];
-extern int32_t gSourceType;
-extern int32_t gDSModule;
-
-extern dsVideoDeviceConfiguration_t* gDSVideoDeviceConfiguration;
-extern int32_t gDSvideoDevice_NumVideoDevices;
-
 /*Function prototypes */
-int test_utils_parseConfig();
-void test_utils_parseConfig_term();
+int test_parse_configuration();
+void test_parse_configuration_term();
 
-#endif //__TEST_UTILS_H__
-/** @} */ // End of Device_Settings_UTILS
+#endif //__TEST_DS_PARSE_CONFIG_H__
+
+/** @} */ // End of Device_Settings_PARSE_CONFIG_HEADER
 /** @} */ // End of Device_Settings_HALTEST
 /** @} */ // End of Device_Settings
 /** @} */ // End of HPK

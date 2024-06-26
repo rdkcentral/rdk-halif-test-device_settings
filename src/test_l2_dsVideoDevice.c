@@ -36,7 +36,7 @@
 #include <ut_kvp_profile.h>
 #include <ut_kvp.h>
 
-#include "test_utils.h"
+#include "test_parse_configuration.h"
 #include "dsVideoDevice.h"
 
 static int gTestGroup = 2;
