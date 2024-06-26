@@ -60,7 +60,8 @@ export HAL_LIB_DIR
 
 build: $(SETUP_SKELETON_LIBS)
 	@echo UT [$@]
-	make -C ./ut-core
+	make -C ./ut-core framework
+	make -C ./ut-core test
 
 #Build against the real library leads to the SOC library dependency also.SOC lib dependency cannot be specified in the ut Makefile, since it is supposed to be common across may platforms. So in order to over come this situation, creating a template SKELETON library with empty templates so that the template library wont have any other Soc dependency. And in the real platform mount copy bind with the actual library will work fine.
 skeleton:
@@ -74,6 +75,6 @@ list:
 
 clean:
 	@echo UT [$@]
-	make -C ./ut-core clean
+	make -C ./ut-core cleanall
 	rm -rf $(BIN_DIR)/lib$(HAL_LIB).so
 	rm -rf $(ROOT_DIR)/libs/lib$(HAL_LIB).so
