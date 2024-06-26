@@ -112,3 +112,4 @@ int main(int argc, char** argv)
 /** @} */ // End of Device_Settings_HALTEST
 /** @} */ // End of Device_Settings
 /** @} */ // End of HPK
+
