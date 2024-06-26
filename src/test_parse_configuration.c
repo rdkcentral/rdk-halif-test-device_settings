@@ -74,7 +74,6 @@ int32_t gDSModule = dsNone;
 
 char gDeviceType[TEST_DEVICE_TYPE_SIZE]      = {0};
 
-
 /* Parse configuration file */
 int test_parse_configuration()
 {

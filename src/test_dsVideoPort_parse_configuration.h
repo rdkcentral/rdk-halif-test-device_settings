@@ -87,7 +87,7 @@ typedef struct _dsVideoPortConfiguration_t {
     bool     dtcp_supported;
     bool     hdcp_supported;
     int32_t  numSupportedResolutions;
-    //char     supportedResolutons[DS_VIDEO_PORT_RESOLUTION_NMAX][];
+    char     supportedResolutons[DS_VIDEO_PORT_RESOLUTION_NMAX][];
     char     defaultResolution[DS_VIDEO_PORT_RESOLUTION_NAME_MAX];
     int32_t  colorspaces;
     int32_t  Supported_color_depth_capabilities;

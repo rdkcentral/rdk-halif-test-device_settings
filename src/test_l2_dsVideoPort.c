@@ -109,33 +109,36 @@ void test_l2_dsVideoPort_EnableDisabledVideoPorts(void)
     UT_LOG_DEBUG("Return status: %d", ret);
     UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
 
-	for (int port = 0; port < gDSvideoPort_NumberOfPorts; port++) {
-		UT_LOG_DEBUG("Invoking dsGetVideoPort with type: %d and index: %d",
+    for (int port = 0; port < gDSvideoPort_NumberOfPorts; port++) {
+        UT_LOG_DEBUG("Invoking dsGetVideoPort with type: %d and index: %d",
                            gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index);
-		ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
+        ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
             continue;
         }
+
+        UT_LOG_DEBUG("Invoking dsEnableVideoPort() with handle: %ld and enabled: true", handle);
+        ret = dsEnableVideoPort(handle, true);
+        UT_LOG_DEBUG("Return status: %d", ret);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+
         UT_LOG_DEBUG("Invoking dsIsVideoPortEnabled() with handle: %ld", handle);
         ret = dsIsVideoPortEnabled(handle, &enabled);
         UT_LOG_DEBUG("Return status: %d, Enabled: %d", ret, enabled);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_EQUAL(enabled, true);
 
-        if (!enabled)
-        {
-            UT_LOG_DEBUG("Invoking dsEnableVideoPort() with handle: %ld and enabled: true", handle);
-            ret = dsEnableVideoPort(handle, true);
-            UT_LOG_DEBUG("Return status: %d", ret);
-            UT_ASSERT_EQUAL(ret, dsERR_NONE);
-
-            UT_LOG_DEBUG("Invoking dsIsVideoPortEnabled() with handle: %ld", handle);
-            ret = dsIsVideoPortEnabled(handle, &enabled);
-            UT_LOG_DEBUG("Return status: %d, Enabled: %d", ret, enabled);
-            UT_ASSERT_EQUAL(ret, dsERR_NONE);
-            UT_ASSERT_EQUAL(enabled, true);
-        }
+        UT_LOG_DEBUG("Invoking dsEnableVideoPort() with handle: %ld and enabled: true", handle);
+        ret = dsEnableVideoPort(handle, false);
+        UT_LOG_DEBUG("Return status: %d", ret);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_LOG_DEBUG("Invoking dsIsVideoPortEnabled() with handle: %ld", handle);
+        ret = dsIsVideoPortEnabled(handle, &enabled);
+        UT_LOG_DEBUG("Return status: %d, Enabled: %d", ret, enabled);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_EQUAL(enabled, false);
     }
 
     UT_LOG_DEBUG("Invoking dsVideoPortTerm()");
@@ -178,7 +181,7 @@ void test_l2_dsVideoPort_VerifyDisplayAndPortStatus(void)
     for (int port = 0; port < gDSvideoPort_NumberOfPorts; port++) {
         UT_LOG_DEBUG("Invoking dsGetVideoPort with type: %d and index: %d",
                            gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index);
-		ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
+        ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
@@ -194,7 +197,12 @@ void test_l2_dsVideoPort_VerifyDisplayAndPortStatus(void)
             UT_ASSERT_EQUAL(connected, false);
         }
         else if(gSourceType == 0) {
-            UT_ASSERT_EQUAL(connected, true);
+            if(gDSVideoPortConfiguration[port].typeid == dsVIDEOPORT_TYPE_INTERNAL){
+                UT_ASSERT_EQUAL(connected, true);
+            }
+            else{
+                UT_ASSERT_EQUAL(connected, false);
+            }
         }
 
         UT_LOG_DEBUG("Invoking dsIsVideoPortActive with handle: %ld", handle);
@@ -205,7 +213,12 @@ void test_l2_dsVideoPort_VerifyDisplayAndPortStatus(void)
             UT_ASSERT_EQUAL(connected, false);
         }
         else if(gSourceType == 0) {
-            UT_ASSERT_EQUAL(connected, true);
+            if(gDSVideoPortConfiguration[port].typeid == dsVIDEOPORT_TYPE_INTERNAL){
+                UT_ASSERT_EQUAL(connected, true);
+            }
+            else{
+                UT_ASSERT_EQUAL(connected, false);
+            }
         }
     }
 
@@ -250,7 +263,7 @@ void test_l2_dsVideoPort_RetrieveAndVerifySurroundModeCapabilities(void)
     for (int port = 0; port < gDSvideoPort_NumberOfPorts; port++) {
         UT_LOG_DEBUG("Invoking dsGetVideoPort with type: %d and index: %d",
                            gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index);
-		ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
+        ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
@@ -274,13 +287,13 @@ void test_l2_dsVideoPort_RetrieveAndVerifySurroundModeCapabilities(void)
         }
         else if(gSourceType == 0){
             /*check for sink device*/
-            UT_ASSERT_EQUAL(surround, true);
+            UT_ASSERT_EQUAL(surround, gDSVideoPortConfiguration[i].DisplaySurround);
         }
     }
 
     UT_LOG_DEBUG("Invoking dsVideoPortTerm()");
     ret = dsVideoPortTerm();
-	UT_LOG_DEBUG("dsVideoPortTerm() returned %d", ret);
+    UT_LOG_DEBUG("dsVideoPortTerm() returned %d", ret);
     UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
@@ -316,7 +329,7 @@ void test_l2_dsVideoPort_SetAndGetResolution_source(void)
     for (int port = 0; port < gDSvideoPort_NumberOfPorts; port++) {
         UT_LOG_DEBUG("Invoking dsGetVideoPort with type: %d and index: %d",
                            gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index);
-		ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
+        ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
@@ -368,7 +381,7 @@ void test_l2_dsVideoPort_SetAndGetResolution_source(void)
                         UT_ASSERT_EQUAL(setResolution.stereoScopicMode, getResolution.stereoScopicMode);
                         UT_ASSERT_EQUAL(setResolution.frameRate, getResolution.frameRate);
                         UT_ASSERT_EQUAL(setResolution.interlaced, getResolution.interlaced);
-				    }
+                    }
                 }
             }
         }
@@ -411,7 +424,7 @@ void test_l2_dsVideoPort_VerifySupportedTvResolutions(void)
     for (int port = 0; port < gDSvideoPort_NumberOfPorts; port++) {
         UT_LOG_DEBUG("Invoking dsGetVideoPort with type: %d and index: %d",
                            gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index);
-		ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
+        ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
@@ -469,7 +482,7 @@ void test_l2_dsVideoPort_GetHDRCapabilities(void)
     for (int port = 0; port < gDSvideoPort_NumberOfPorts; port++) {
         UT_LOG_DEBUG("Invoking dsGetVideoPort with type: %d and index: %d",
                            gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index);
-		ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
+        ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
@@ -527,7 +540,7 @@ void test_l2_dsVideoPort_GetHDCPStatus(void)
     for (int port = 0; port < gDSvideoPort_NumberOfPorts; port++) {
         UT_LOG_DEBUG("Invoking dsGetVideoPort with type: %d and index: %d",
                            gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index);
-		ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
+        ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
@@ -553,9 +566,9 @@ void test_l2_dsVideoPort_GetHDCPStatus(void)
         else if(gSourceType == 0) {
             /*check for sink*/
             UT_ASSERT_EQUAL(status, dsHDCP_STATUS_AUTHENTICATED);
-	    if (status != dsHDCP_STATUS_AUTHENTICATED) {
-		    UT_LOG_ERROR("HDCP status is not authenticated. Status: %d", status);
-	    }
+        if (status != dsHDCP_STATUS_AUTHENTICATED) {
+            UT_LOG_ERROR("HDCP status is not authenticated. Status: %d", status);
+        }
         }
     }
 
@@ -597,7 +610,7 @@ void test_l2_dsVideoPort_VerifyHDCPProtocolStatus(void)
     for (int port = 0; port < gDSvideoPort_NumberOfPorts; port++) {
         UT_LOG_DEBUG("Invoking dsGetVideoPort with type: %d and index: %d",
                            gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index);
-		ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
+        ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
@@ -644,13 +657,13 @@ void test_l2_dsVideoPort_SetAndGetHdmiPreference(void)
 
     UT_LOG_DEBUG("Invoking dsVideoPortInit");
     ret = dsVideoPortInit();
-	UT_LOG_DEBUG("Return status: %d", ret);
+    UT_LOG_DEBUG("Return status: %d", ret);
     UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
 
     for (int port = 0; port < gDSvideoPort_NumberOfPorts; port++) {
         UT_LOG_DEBUG("Invoking dsGetVideoPort with type: %d and index: %d",
                            gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index);
-		ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
+        ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
@@ -684,7 +697,7 @@ void test_l2_dsVideoPort_SetAndGetHdmiPreference(void)
 
     UT_LOG_DEBUG("Invoking dsVideoPortTerm");
     ret = dsVideoPortTerm();
-	UT_LOG_DEBUG("Return status: %d", ret);
+    UT_LOG_DEBUG("Return status: %d", ret);
     UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
@@ -722,7 +735,7 @@ void test_l2_dsVideoPort_GetColorSpace(void)
     for (int port = 0; port < gDSvideoPort_NumberOfPorts; port++) {
         UT_LOG_DEBUG("Invoking dsGetVideoPort with type: %d and index: %d",
                            gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index);
-		ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
+        ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
@@ -739,7 +752,7 @@ void test_l2_dsVideoPort_GetColorSpace(void)
 
     UT_LOG_DEBUG("Invoking dsVideoPortTerm()");
     ret = dsVideoPortTerm();
-	UT_LOG_DEBUG("dsVideoPortTerm() returned %d", ret);
+    UT_LOG_DEBUG("dsVideoPortTerm() returned %d", ret);
     UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
@@ -776,7 +789,7 @@ void test_l2_dsVideoPort_CheckColorDepthCapabilities_source(void)
     for (int port = 0; port < gDSvideoPort_NumberOfPorts; port++) {
         UT_LOG_DEBUG("Invoking dsGetVideoPort with type: %d and index: %d",
                            gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index);
-		ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
+        ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
@@ -829,7 +842,7 @@ void test_l2_dsVideoPort_GetColorDepth(void)
     for (int port = 0; port < gDSvideoPort_NumberOfPorts; port++) {
         UT_LOG_DEBUG("Invoking dsGetVideoPort with type: %d and index: %d",
                            gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index);
-		ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
+        ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
@@ -875,13 +888,13 @@ void test_l2_dsVideoPort_SetAndGetPreferredColorDepth_source(void)
 
     UT_LOG_DEBUG("Invoking dsVideoPortInit()");
     ret = dsVideoPortInit();
-	UT_LOG_DEBUG("dsVideoPortInit() returned %d", ret);
+    UT_LOG_DEBUG("dsVideoPortInit() returned %d", ret);
     UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
 
     for (int port = 0; port < gDSvideoPort_NumberOfPorts; port++) {
         UT_LOG_DEBUG("Invoking dsGetVideoPort with type: %d and index: %d",
                            gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index);
-		ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
+        ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
@@ -914,7 +927,7 @@ void test_l2_dsVideoPort_SetAndGetPreferredColorDepth_source(void)
 
     UT_LOG_DEBUG("Invoking dsVideoPortTerm()");
     ret = dsVideoPortTerm();
-	UT_LOG_DEBUG("dsVideoPortTerm() returned %d", ret);
+    UT_LOG_DEBUG("dsVideoPortTerm() returned %d", ret);
     UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
@@ -946,13 +959,13 @@ void test_l2_dsVideoPort_GetQuantizationRange(void)
 
     UT_LOG_DEBUG("Invoking dsVideoPortInit()");
     ret = dsVideoPortInit();
-	UT_LOG_DEBUG("dsVideoPortInit() returned %d", ret);
+    UT_LOG_DEBUG("dsVideoPortInit() returned %d", ret);
     UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
 
     for (int port = 0; port < gDSvideoPort_NumberOfPorts; port++) {
         UT_LOG_DEBUG("Invoking dsGetVideoPort with type: %d and index: %d",
                            gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index);
-		ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
+        ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
@@ -974,7 +987,7 @@ void test_l2_dsVideoPort_GetQuantizationRange(void)
 
     UT_LOG_DEBUG("Invoking dsVideoPortTerm()");
     ret = dsVideoPortTerm();
-	UT_LOG_DEBUG("dsVideoPortTerm() returned %d", ret);
+    UT_LOG_DEBUG("dsVideoPortTerm() returned %d", ret);
     UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
@@ -1011,7 +1024,7 @@ void test_l2_dsVideoPort_GetMatrixCoefficients(void)
     for (int port = 0; port < gDSvideoPort_NumberOfPorts; port++) {
         UT_LOG_DEBUG("Invoking dsGetVideoPort with type: %d and index: %d",
                            gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index);
-		ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
+        ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
@@ -1038,7 +1051,7 @@ void test_l2_dsVideoPort_GetMatrixCoefficients(void)
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
-#if 0
+#ifdef DS_VIDEO_PORT_FORCE_DISABLE4K
 
 /**
 * @brief Test for setting and getting the ForceDisable4KSupport for a video port
@@ -1053,7 +1066,7 @@ void test_l2_dsVideoPort_GetMatrixCoefficients(void)
 * Refer to Test specification documentation [ds-video-port_L2_Low-Level_TestSpecification.md](../docs/pages/ds-video-port_L2_Low-Level_TestSpecification.md)
 */
 
-void test_l2_dsVideoPort_SetAndGetForceDisable4KSupport_sink(void)
+void test_l2_dsVideoPort_SetAndGetForceDisable4KSupport(void)
 {
     gTestID = 12;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -1073,16 +1086,16 @@ void test_l2_dsVideoPort_SetAndGetForceDisable4KSupport_sink(void)
         ret = dsGetVideoPort(type, 0, &handle);
         UT_LOG_DEBUG("Handle: %ld, Return status: %d", handle, ret);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
-		if (ret != dsERR_NONE)
+        if (ret != dsERR_NONE)
         {
-		    UT_LOG_ERROR("dsGetVideoPort failed with ret: %d", ret);
+            UT_LOG_ERROR("dsGetVideoPort failed with ret: %d", ret);
             continue;
         }
         for (int i = 0; i < 2; i++) {
-	        disable = (i == 0) ? true : false;
+            disable = (i == 0) ? true : false;
             UT_LOG_DEBUG("Invoking dsSetForceDisable4KSupport() with handle: %ld, disable: %d", handle, disable);
             ret = dsSetForceDisable4KSupport(handle, disable);
-		    UT_ASSERT_EQUAL(ret, dsERR_NONE);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
             UT_LOG_DEBUG("Return status: %d", ret);
 
             bool getDisable;
@@ -1102,66 +1115,6 @@ void test_l2_dsVideoPort_SetAndGetForceDisable4KSupport_sink(void)
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
-/**
-* @brief This test aims to validate the setting and getting of ForceDisable4KSupport in dsVideoPort
-*
-* This test function tests the setting and getting of ForceDisable4KSupport in dsVideoPort. It first initializes the video port, then gets the video port with valid parameters. It then sets the ForceDisable4KSupport and gets the same to validate if the set value is correctly retrieved. The test is performed for both true and false values of ForceDisable4KSupport. Finally, it terminates the video port. The test is designed to ensure the correct functioning of the dsSetForceDisable4KSupport and dsGetForceDisable4KSupport functions.
-*
-* **Test Group ID:** 02@n
-* **Test Case ID:** 017@n
-*
-* **Test Procedure:**
-* Refer to Test specification documentation [ds-video-port_L2_Low-Level_TestSpecification.md](../docs/pages/ds-video-port_L2_Low-Level_TestSpecification.md)
-*/
-
-void test_l2_dsVideoPort_SetAndGetForceDisable4KSupport_source(void)
-{
-    gTestID = 13;
-    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-    dsError_t ret   = dsERR_NONE;
-    intptr_t handle = 0;
-    bool disable;
-
-    UT_LOG_DEBUG("Invoking dsVideoPortInit()");
-    ret = dsVideoPortInit();
-    UT_LOG_DEBUG("Return status: %d", ret);
-    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
-
-    for (int type = dsVIDEOPORT_TYPE_RF; type < dsVIDEOPORT_TYPE_MAX; type++)
-    {
-        UT_LOG_DEBUG("Invoking dsGetVideoPort() with type: %d and index: 0", type);
-        ret = dsGetVideoPort(type, 0, &handle);
-        UT_LOG_DEBUG("Handle: %ld, Return status: %d", handle, ret);
-        UT_ASSERT_EQUAL(ret, dsERR_NONE);
-		if (ret != dsERR_NONE)
-        {
-		    UT_LOG_ERROR("dsGetVideoPort failed with ret: %d", ret);
-            continue;
-        }
-        for (int i = 0; i < 2; i++) {
-	        disable = (i == 0) ? true : false;
-            UT_LOG_DEBUG("Invoking dsSetForceDisable4KSupport() with handle: %ld, disable: %d", handle, disable);
-            ret = dsSetForceDisable4KSupport(handle, disable);
-		    UT_ASSERT_EQUAL(ret, dsERR_NONE);
-            UT_LOG_DEBUG("Return status: %d", ret);
-
-            bool getDisable;
-            UT_LOG_DEBUG("Invoking dsGetForceDisable4KSupport() with handle: %ld", handle);
-            ret = dsGetForceDisable4KSupport(handle, &getDisable);
-            UT_ASSERT_EQUAL(ret, dsERR_NONE);
-            UT_ASSERT_EQUAL(getDisable, disable);
-            UT_LOG_DEBUG("Disable: %d, Return status: %d", disable, ret);
-        }
-    }
-
-    UT_LOG_DEBUG("Invoking dsVideoPortTerm()");
-    ret = dsVideoPortTerm();
-    UT_LOG_DEBUG("Return status: %d", ret);
-    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
-
-    UT_LOG_INFO("Out %s\n", __FUNCTION__);
-}
 #endif
 
 static UT_test_suite_t * pSuite = NULL;
