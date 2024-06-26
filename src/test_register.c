@@ -70,7 +70,7 @@
 
 /**
  * @brief Register test functionality
- * 
+ *
  */
 
 /* L1 Testing Functions */
