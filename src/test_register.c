@@ -64,6 +64,7 @@
 *
 */
 
+#include <stdint.h>
 #include <ut.h>
 #include "test_parse_configuration.h"
 
