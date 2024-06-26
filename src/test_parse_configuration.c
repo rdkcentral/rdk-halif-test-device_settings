@@ -42,13 +42,13 @@
  */
 
 /**
- * @defgroup Device_Settings_PARSE_CONFIG Device Settings HAL Tests parse configuration File
+ * @defgroup Device_Settings_PARSE_CONFIG Device Settings HAL Tests parse configuraion File
  * @{
  * @parblock
  *
- * ### Parse configuration functions for Device Settings HAL :
+ * ### Parse configuraion functions for Device Settings HAL :
  *
- * Parse configuration functions required for the module across all vendors.
+ * Parse configuraion functions required for the module across all vendors.
  *
  * **Pre-Conditions:**  None @n
  * **Dependencies:** None @n
@@ -68,19 +68,18 @@
 
 #include "test_parse_configuration.h"
 
-/* Global Variables */
+/* Global Vairables */
 int32_t gSourceType = -1;
 int32_t gDSModule = dsNone;
 
 char gDeviceType[TEST_DEVICE_TYPE_SIZE]      = {0};
-
 
 /* Parse configuration file */
 int test_parse_configuration()
 {
     ut_kvp_status_t status;
     char szReturnedString[UT_KVP_MAX_ELEMENT_SIZE];
-#if 0
+
     status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsAudio/Type", szReturnedString, UT_KVP_MAX_ELEMENT_SIZE);
     if(status == UT_KVP_STATUS_SUCCESS) {
         gDSModule |= dsAudioPort;
@@ -90,7 +89,7 @@ int test_parse_configuration()
             return -1;
         }
     }
-#endif
+
     status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsVideoDevice/Type", szReturnedString, UT_KVP_MAX_ELEMENT_SIZE);
     if(status == UT_KVP_STATUS_SUCCESS) {
         gDSModule |= dsVideoDevice;
@@ -100,7 +99,7 @@ int test_parse_configuration()
             return -1;
         }
     }
-#if 0
+
     status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsVideoPort/Type", szReturnedString, UT_KVP_MAX_ELEMENT_SIZE);
     if(status == UT_KVP_STATUS_SUCCESS) {
         gDSModule |= dsVideoPort;
@@ -135,14 +134,13 @@ int test_parse_configuration()
     if(status == UT_KVP_STATUS_SUCCESS) {
         gDSModule |= dsHdmiIn;
     }
-#endif
     return 0;
 }
 
 void test_parse_configuration_term()
 {
-    //test_dsAudio_parse_configuration_term();
-    //test_dsVideoPort_parse_configuration_term();
+    test_dsAudio_parse_configuration_term();
+    test_dsVideoPort_parse_configuration_term();
     test_dsVideoDevice_parse_configuration_term();
 }
 

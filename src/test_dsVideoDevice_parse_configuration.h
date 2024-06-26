@@ -51,7 +51,7 @@
  * @{
  * @parblock
  *
- * ### Audio Parse configuration functions for Device Settings HAL :
+ * ### Video Device Parse configuration functions for Device Settings HAL :
  *
  * Parse configuration functions required for the module across all vendors.
  *

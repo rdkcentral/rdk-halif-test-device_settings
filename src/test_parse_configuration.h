@@ -61,10 +61,12 @@
 * @file test_parse_configuration.h
 *
 */
-#ifndef __TEST_DS_PARSE_CONFIG_H__
-#define __TEST_DS_PARSE_CONFIG_H__
+#ifndef __TEST_PARSE_CONFIG_H__
+#define __TEST_PARSE_CONFIG_H__
 
+#include "test_dsAudio_parse_configuration.h"
 #include "test_dsVideoDevice_parse_configuration.h"
+#include "test_dsVideoPort_parse_configuration.h"
 
 #define TEST_DEVICE_TYPE_SIZE     8
 #define TEST_DS_MODULE_NAME_SIZE  32
@@ -93,7 +95,7 @@ typedef enum _dsModule_t {
 int test_parse_configuration();
 void test_parse_configuration_term();
 
-#endif //__TEST_DS_PARSE_CONFIG_H__
+#endif //__TEST_PARSE_CONFIG_H__
 
 /** @} */ // End of Device_Settings_PARSE_CONFIG_HEADER
 /** @} */ // End of Device_Settings_HALTEST

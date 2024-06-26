@@ -2,7 +2,7 @@
 *  If not stated otherwise in this file or this component's LICENSE
 *  file the following copyright and licenses apply:
 *
-*  Copyright 2022 RDK Management
+*  Copyright 2024 RDK Management
 *
 *  Licensed under the Apache License, Version 2.0 (the License);
 *  you may not use this file except in compliance with the License.
@@ -88,7 +88,7 @@ int test_dsVideoDevice_parse_configuration()
 
     gDSvideoDevice_NumVideoDevices = ut_kvp_getUInt16Field( ut_kvp_profile_getInstance(), "dsVideoDevice/NumVideoDevices" );
 
-    UT_LOG("gDSvideoDevice_NumVideoDevices: %d",gDSvideoDevice_NumVideoDevices);
+    UT_LOG_DEBUG("gDSvideoDevice_NumVideoDevices: %d",gDSvideoDevice_NumVideoDevices);
 
     status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsVideoDevice/Type", gDeviceType, TEST_DEVICE_TYPE_SIZE);
     if (status == UT_KVP_STATUS_SUCCESS ) {
@@ -127,55 +127,62 @@ int test_dsVideoDevice_parse_configuration()
         if(gSourceType == 1){
             snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/SupportedDFCs" , i+1);
             gDSVideoDeviceConfiguration[i].NoOfSupportedDFCs = ut_kvp_getListCount(ut_kvp_profile_getInstance(), key_string);
-            UT_LOG("NoOfSupportedDFCs: %d",gDSVideoDeviceConfiguration[i].NoOfSupportedDFCs);
+            UT_LOG_DEBUG("NoOfSupportedDFCs: %d",gDSVideoDeviceConfiguration[i].NoOfSupportedDFCs);
 
             // loop to get supported SupportedDFCs in array
             for(int j = 0; j < gDSVideoDeviceConfiguration[i].NoOfSupportedDFCs; j++) {
                 snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/SupportedDFCs/%d" , i+1 , j);
                 gDSVideoDeviceConfiguration[i].SupportedDFCs[j] = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
-                UT_LOG("SupportedDFCs: %d",gDSVideoDeviceConfiguration[i].SupportedDFCs[j]);
+                UT_LOG_DEBUG("SupportedDFCs: %d",gDSVideoDeviceConfiguration[i].SupportedDFCs[j]);
             }
         }
 
         snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/DefaultDFC" , i+1);
         gDSVideoDeviceConfiguration[i].DefaultDFC = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string );
-	    UT_LOG("gDSVideoDeviceConfiguration[i].DefaultDFC :%d",gDSVideoDeviceConfiguration[i].DefaultDFC);
+        UT_LOG_DEBUG("gDSVideoDeviceConfiguration[i].DefaultDFC :%d",gDSVideoDeviceConfiguration[i].DefaultDFC);
 
         snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/HDRCapabilities" , i+1);
         gDSVideoDeviceConfiguration[i].HDRCapabilities = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string );
-	    UT_LOG("gDSVideoDeviceConfiguration[i].HDRCapabilities :%d",gDSVideoDeviceConfiguration[i].HDRCapabilities);
+        UT_LOG_DEBUG("gDSVideoDeviceConfiguration[i].HDRCapabilities :%d",gDSVideoDeviceConfiguration[i].HDRCapabilities);
 
         snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/SupportedVideoCodingFormats" , i+1);
         gDSVideoDeviceConfiguration[i].SupportedVideoCodingFormats = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string );
-	    UT_LOG("SupportedVideoCodingFormats: %d ",gDSVideoDeviceConfiguration[i].SupportedVideoCodingFormats);
+        UT_LOG_DEBUG("SupportedVideoCodingFormats: %d ",gDSVideoDeviceConfiguration[i].SupportedVideoCodingFormats);
 
         if(gSourceType == 0){
             snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/SupportedDisplayFramerate" , i+1);
             gDSVideoDeviceConfiguration[i].NoOfSupportedDFR = ut_kvp_getListCount(ut_kvp_profile_getInstance(), key_string);
-            UT_LOG("NoOfSupportedDFR: %d ",gDSVideoDeviceConfiguration[i].NoOfSupportedDFR);
+            UT_LOG_DEBUG("NoOfSupportedDFR: %d ",gDSVideoDeviceConfiguration[i].NoOfSupportedDFR);
             // loop to get supported SupportedDFR in array
             for(int j = 0; j < gDSVideoDeviceConfiguration[i].NoOfSupportedDFR; j++) {
                 snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/SupportedDisplayFramerate/%d" , i+1 , j);
                 status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key_string, gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate, sizeof(gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate));
-                UT_LOG("SupportedDisplayFramerate: %s ",gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate);
+                if (status == UT_KVP_STATUS_SUCCESS ) {
+                    UT_LOG_DEBUG("SupportedDisplayFramerate: %s ",gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate);
+                }
+                else {
+                    UT_LOG_ERROR("Failed to get the platform Device SupportedDisplayFramerate");
+                    return -1;
+                }
             }
         }
 
-        UT_LOG("gSourceType %d ",gSourceType);
+        UT_LOG_DEBUG("gSourceType %d ",gSourceType);
         /* check for only source */
         if(gSourceType == 1){
             snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo/num_entries" , i+1);
             gDSVideoDeviceConfiguration[i].num_codec_entries = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string );
-            UT_LOG("num_codec_entries %d",gDSVideoDeviceConfiguration[i].num_codec_entries);
+            UT_LOG_DEBUG("num_codec_entries %d",gDSVideoDeviceConfiguration[i].num_codec_entries);
 
+            //TODO : kvp profile support for float type is not available now
             //snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo/VideoCodec0/level" , i+1);
             //status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key_string, gDSVideoDeviceConfiguration[i].level, sizeof(key_string));
             //snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo/VideoCodec0/level" , i+1);
             //gDSVideoDeviceConfiguration[i].level = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string );
-            //UT_LOG("gDSVideoDeviceConfiguration[i].level:%d",gDSVideoDeviceConfiguration[i].level);
+            //UT_LOG_DEBUG("gDSVideoDeviceConfiguration[i].level:%d",gDSVideoDeviceConfiguration[i].level);
             snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo/VideoCodec0/profile" , i+1);
             gDSVideoDeviceConfiguration[i].profile = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string );
-            UT_LOG("gDSVideoDeviceConfiguration[i].profile :%d",gDSVideoDeviceConfiguration[i].profile);
+            UT_LOG_DEBUG("gDSVideoDeviceConfiguration[i].profile :%d",gDSVideoDeviceConfiguration[i].profile);
         }
     }
 

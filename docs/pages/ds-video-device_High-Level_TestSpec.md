@@ -63,8 +63,8 @@ Supported zoom modes [dsVideoZoom_t link](https://github.com/rdkcentral/rdk-hali
 
 |Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |------------------|-----------|--------|--|--|------|----|--------------------------|
-|Check the zoom mode status|Loop through each supported video device and the zoom mode can be set using `Source_VideoDevice.yaml(dsVideoDevice/Device/devicenumber/SupportedDFCs)` profile file and verify using get function.Note:Supported Number of VideoDevices check this profile file for source `Source_VideoDevice.yaml(dsVideoDevice/NumVideoDevices)` |dsGetVideoDevice(), dsSetDFC(), dsGetDFC()|`Y`|`N`|`Y`|`NA`|`NA`|
-||Loop through each supported video device and the zoom mode can be set using `Source_VideoDevice.yaml(dsVideoDevice/Device/devicenumber/SupportedDFCs)` profile file and verify using get with Video playback & connected device. Note:Supported Number of VideoDevices check this profile file for source `Source_VideoDevice.yaml(dsVideoDevice/NumVideoDevices)` |dsGetVideoDevice(), dsSetDFC(), dsGetDFC()|`NA`|`Y`|`Y`|`NA`|`Y`|
+|Check the zoom mode status|Loop through each supported video device and the zoom mode can be set using `Source_VideoDevice.yaml(dsVideoDevice/Device/[Device Number]/SupportedDFCs)` profile file and verify using get function.Note:Supported Number of VideoDevices check this profile file for source `Source_VideoDevice.yaml(dsVideoDevice/NumVideoDevices)` |dsGetVideoDevice(), dsSetDFC(), dsGetDFC()|`Y`|`N`|`Y`|`NA`|`NA`|
+||Loop through each supported video device and the zoom mode can be set using `Source_VideoDevice.yaml(dsVideoDevice/Device/[Device Number]/SupportedDFCs)` profile file and verify using get with Video playback & connected device. Note:Supported Number of VideoDevices check this profile file for source `Source_VideoDevice.yaml(dsVideoDevice/NumVideoDevices)` |dsGetVideoDevice(), dsSetDFC(), dsGetDFC()|`NA`|`Y`|`Y`|`NA`|`Y`|
 
 #### Test Startup Requirement-Check the Zoom Control
 
@@ -82,7 +82,7 @@ Verify the applied zoom mode during playback with analyzer.
 
 |Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |------------------|-----------|--------|--|--|------|----|--------------------------|
-|Check `HDR` Capability|Loop through each supported video device and Get the `HDR` capabilities for each video device and verify with the profile file for source use this `Source_VideoDevice.yaml(dsVideoDevice/Device/devicenumber/HDRCapabilities)` and for the sink use this `Sink_VideoDevice.yaml(dsVideoDevice/Device/devicenumber/HDRCapabilities)` Note:Supported Number of VideoDevices check this profile file for source `Source_VideoDevice.yaml(dsVideoDevice/NumVideoDevices)` and for the sink use this `Sink_VideoDevice.yaml(dsVideoDevice/NumVideoDevices)`|dsGetHDRCapabilities() |`Y`|`NA`|`Y`|`Y`|`NA`|
+|Check `HDR` Capability|Loop through each supported video device and Get the `HDR` capabilities for each video device and verify with the profile file for source use this `Source_VideoDevice.yaml(dsVideoDevice/Device/[Device Number]/HDRCapabilities)` and for the sink use this `Sink_VideoDevice.yaml(dsVideoDevice/Device/[Device Number]/HDRCapabilities)` Note:Supported Number of VideoDevices check this profile file for source `Source_VideoDevice.yaml(dsVideoDevice/NumVideoDevices)` and for the sink use this `Sink_VideoDevice.yaml(dsVideoDevice/NumVideoDevices)`|dsGetHDRCapabilities() |`Y`|`NA`|`Y`|`Y`|`NA`|
 
 #### Test Startup Requirement-Check the HDR Capability
 
@@ -100,8 +100,8 @@ Verify the applied zoom mode during playback with analyzer.
 
 |Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |------------------|-----------|--------|--|--|------|----|--------------------------|
-|Check Video coding Formats and information|Loop through each supported video device and the get Video coding format for each video device and verify the with profile file for source use this file `Source_VideoDevice.yaml(dsVideoDevice/Device/devicenumber/SupportedVideoCodingFormats)` and for the sink use this `Sink_VideoDevice.yaml(dsVideoDevice/Device/devicenumber/SupportedVideoCodingFormats)` Note:Supported Number of VideoDevices check this profile file for source `Source_VideoDevice.yaml(dsVideoDevice/NumVideoDevices)` and for the sink use this `Sink_VideoDevice.yaml(dsVideoDevice/NumVideoDevices)` |dsGetSupportedVideoCodingFormats() |`Y`|`NA`|`Y`|`Y`|`NA`|
-||Loop through each supported video device and get Video codec information for each video device and verify the with `Source_VideoDevice.yaml(dsVideoDevice/Device/devicenumber/VideoCodecInfo)` profile file.Note:Supported Number of VideoDevices check this profile file for source `Source_VideoDevice.yaml(dsVideoDevice/NumVideoDevices)`.|dsGetVideoCodecInfo() |`Y`|`NA`|`Y`|`NA`|`NA`|
+|Check Video coding Formats and information|Loop through each supported video device and the get Video coding format for each video device and verify the with profile file for source use this file `Source_VideoDevice.yaml(dsVideoDevice/Device/[Device Number]/SupportedVideoCodingFormats)` and for the sink use this `Sink_VideoDevice.yaml(dsVideoDevice/Device/[Device Number]/SupportedVideoCodingFormats)` Note:Supported Number of VideoDevices check this profile file for source `Source_VideoDevice.yaml(dsVideoDevice/NumVideoDevices)` and for the sink use this `Sink_VideoDevice.yaml(dsVideoDevice/NumVideoDevices)` |dsGetSupportedVideoCodingFormats() |`Y`|`NA`|`Y`|`Y`|`NA`|
+||Loop through each supported video device and get Video codec information for each video device and verify the with `Source_VideoDevice.yaml(dsVideoDevice/Device/[Device Number]/VideoCodecInfo)` profile file.Note:Supported Number of VideoDevices check this profile file for source `Source_VideoDevice.yaml(dsVideoDevice/NumVideoDevices)`.|dsGetVideoCodecInfo() |`Y`|`NA`|`Y`|`NA`|`NA`|
 
 #### Test Startup Requirement-Check Video codec and Formats
 
@@ -119,8 +119,8 @@ Verify the applied zoom mode during playback with analyzer.
 
 |Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |------------------|-----------|--------|--|--|------|----|--------------------------|
-|Check the Display frame rate Capability|Loop through each supported video device and Set the supported display frame rate for each video device using profile file `Source_VideoDevice.yaml(dsVideoDevice/Device/devicenumber/SupportedDisplayFramerate)` and verify using get function. Note:Supported Number of VideoDevices check this profile file for source `Source_VideoDevice.yaml(dsVideoDevice/NumVideoDevices)`.|dsSetDisplayframerate(), dsGetCurrentDisplayframerate()|`Y`|`NA`|`NA`|`Y`|`NA`|
-||Loop through each supported video device and Set the supported display frame rate for each video device using profile file `Source_VideoDevice.yaml(dsVideoDevice/Device/devicenumber/SupportedDisplayFramerate)` and check if callbacks are triggered Note:Supported Number of VideoDevices check this profile file for source `Source_VideoDevice.yaml(dsVideoDevice/NumVideoDevices)` |dsSetDisplayframerate(), dsRegisterFrameratePreChangeCB(), dsRegisterFrameratePostChangeCB()|`NA`|`Y`|`NA`|`Y`|`Y`|
+|Check the Display frame rate Capability|Loop through each supported video device and Set the supported display frame rate for each video device using profile file `Source_VideoDevice.yaml(dsVideoDevice/Device/[Device Number]/SupportedDisplayFramerate)` and verify using get function. Note:Supported Number of VideoDevices check this profile file for source `Source_VideoDevice.yaml(dsVideoDevice/NumVideoDevices)`.|dsSetDisplayframerate(), dsGetCurrentDisplayframerate()|`Y`|`NA`|`NA`|`Y`|`NA`|
+||Loop through each supported video device and Set the supported display frame rate for each video device using profile file `Source_VideoDevice.yaml(dsVideoDevice/Device/[Device Number]/SupportedDisplayFramerate)` and check if callbacks are triggered Note:Supported Number of VideoDevices check this profile file for source `Source_VideoDevice.yaml(dsVideoDevice/NumVideoDevices)` |dsSetDisplayframerate(), dsRegisterFrameratePreChangeCB(), dsRegisterFrameratePostChangeCB()|`NA`|`Y`|`NA`|`Y`|`Y`|
 
 #### Test Startup Requirement-Check the Display frame rate Capability
 
