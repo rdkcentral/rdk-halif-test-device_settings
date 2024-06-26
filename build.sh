@@ -62,7 +62,7 @@ else
     check_next_revision
     cd ./ut-core
     git checkout ${UT_CORE_PROJECT_VERSION}
-    ./build.sh
+    ./build.sh $@
     cd ..
     ./${0} $@
 fi
