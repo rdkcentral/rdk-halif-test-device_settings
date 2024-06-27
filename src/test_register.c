@@ -24,6 +24,7 @@ extern int test_dsAudio_l2_register(void);
 extern int test_dsHdmiIn_l2_register(void);
 extern int test_dsVideoDevice_l2_register(void);
 extern int test_dsHost_l2_register(void);
+extern int test_dsFPD_l2_register(void);
 
 int register_hal_l2_tests( void )
 {
@@ -36,6 +37,7 @@ int register_hal_l2_tests( void )
     registerFailed |= test_dsHdmiIn_l2_register();
     registerFailed |= test_dsVideoDevice_l2_register();
     registerFailed |= test_dsHost_l2_register();
+    registerFailed |= test_dsFPD_l2_register();
 
     return registerFailed;
 }
