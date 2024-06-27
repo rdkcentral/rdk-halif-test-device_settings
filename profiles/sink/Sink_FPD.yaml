@@ -1,4 +1,4 @@
-FPD:
+dsFPD:
   Type: sink
   Name: Panel_FPD_1_Indicator
   Number_of_Indicators: 1
