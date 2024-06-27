@@ -69,13 +69,13 @@
 
 #include "dsVideoPort.h"
 
-
 #define DS_VIDEO_PORT_KVP_SIZE                128
 #define DS_VIDEO_PORT_TYPE_SIZE               8
 #define DS_VIDEO_PORT_NAME_SIZE               64
 #define DS_VIDEO_PORT_MODULE_NAME_SIZE        32
 #define DS_VIDEO_PORT_RESOLUTION_MAX          32
 #define DS_VIDEO_PORT_RESOLUTION_NAME_MAX     32
+#define DS_VIDEO_PORT_RESOLUTION_NUM_MAX      32
 
 #define DS_VIDEO_PORT_MODULE_NAME             "dsVideoPort"
 
@@ -87,10 +87,9 @@ typedef struct _dsVideoPortConfiguration_t {
     bool     dtcp_supported;
     bool     hdcp_supported;
     int32_t  numSupportedResolutions;
-    char     supportedResolutons[DS_VIDEO_PORT_RESOLUTION_NMAX][];
+    dsVideoPortResolution_t  supportedResolutons[DS_VIDEO_PORT_RESOLUTION_NUM_MAX];
     char     defaultResolution[DS_VIDEO_PORT_RESOLUTION_NAME_MAX];
     int32_t  colorspaces;
-    int32_t  Supported_color_depth_capabilities;
     bool     DisplaySurround;
     int32_t  SurroundMode;
     int32_t  Supported_tv_resolutions_capabilities;
@@ -105,12 +104,10 @@ extern dsVideoPortConfiguration_t* gDSVideoPortConfiguration;
 extern int32_t gDSvideoPort_NumberOfPorts;
 extern int32_t gDSvideoPort_color_depth;
 extern int32_t gDSvideoPort_connectedAOP;
-//extern char    gDSvideoPort_defaultResolution[TEST_UTIL_DEVICE_NAME_SIZE];
 
 /*Function prototypes */
 int test_dsVideoPort_parse_configuration();
 void test_dsVideoPort_parse_term();
-
 
 #endif //__TEST_DS_VIDEO_PARSE_CONFIG_H__
 

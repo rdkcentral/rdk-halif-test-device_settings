@@ -42,7 +42,7 @@
  */
 
 /**
- * @defgroup DS_PARSE_CONFIG_HEADER Device Settings HAL Tests configuration parser Header File
+ * @defgroup Device_Settings_PARSE_CONFIG_HEADER Device Settings HAL Tests configuration parser Header File
  * @{
  * @parblock
  *
@@ -68,14 +68,14 @@
 #include "test_dsVideoDevice_parse_configuration.h"
 #include "test_dsVideoPort_parse_configuration.h"
 
-#define TEST_DEVICE_TYPE_SIZE     8
+#define TEST_DS_DEVICE_TYPE_SIZE     8
 #define TEST_DS_MODULE_NAME_SIZE  32
 
 #define TEST_TYPE_SOURCE_VALUE     "source"
 #define TEST_TYPE_SINK_VALUE       "sink"
 
 /* Global variables */
-extern char gDeviceType[TEST_DEVICE_TYPE_SIZE];
+extern char gDeviceType[TEST_DS_DEVICE_TYPE_SIZE];
 extern int32_t gSourceType;
 extern int32_t gDSModule;
 
@@ -97,7 +97,7 @@ void test_parse_configuration_term();
 
 #endif //__TEST_PARSE_CONFIG_H__
 
-/** @} */ // End of DS_PARSE_CONFIG_HEADER
+/** @} */ // End of Device_Settings_PARSE_CONFIG_HEADER
 /** @} */ // End of Device_Settings_HALTEST
 /** @} */ // End of Device_Settings
 /** @} */ // End of HPK

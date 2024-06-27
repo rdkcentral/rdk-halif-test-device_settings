@@ -82,7 +82,6 @@ dsVideoPortConfiguration_t* gDSVideoPortConfiguration = NULL;
 char gDSVideoPortName[DS_VIDEO_PORT_NAME_SIZE]      = {0};
 int32_t gDSvideoPort_NumberOfPorts = 0;
 int32_t gDSvideoPort_color_depth = 0;
-int32_t gDSvideoPort_connectedAOP = 0;
 
 /* Parse Video Port Configuration */
 int test_dsVideoPort_parse_configuration()
@@ -92,7 +91,6 @@ int test_dsVideoPort_parse_configuration()
 
     gDSvideoPort_NumberOfPorts    = ut_kvp_getUInt32Field( ut_kvp_profile_getInstance(), "dsVideoPort/Number_of_ports" );
     gDSvideoPort_color_depth      = ut_kvp_getUInt16Field( ut_kvp_profile_getInstance(), "dsVideoPort/color_depth" );
-    gDSvideoPort_connectedAOP     = ut_kvp_getUInt16Field( ut_kvp_profile_getInstance(), "dsVideoPort/connectedAOP" );
 
     gDSVideoPortConfiguration = (dsVideoPortConfiguration_t*) calloc(gDSvideoPort_NumberOfPorts, sizeof(dsVideoPortConfiguration_t));
     if(gDSVideoPortConfiguration == NULL) {
@@ -100,12 +98,12 @@ int test_dsVideoPort_parse_configuration()
         return -1;
     }
 
-    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsVideoPort/Type", gDeviceType, TEST_DEVICE_TYPE_SIZE);
+    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsVideoPort/Type", gDeviceType, TEST_DS_DEVICE_TYPE_SIZE);
     if (status == UT_KVP_STATUS_SUCCESS ) {
-        if (!strncmp(gDeviceType, TEST_TYPE_SOURCE_VALUE, TEST_DEVICE_TYPE_SIZE)) {
+        if (!strncmp(gDeviceType, TEST_TYPE_SOURCE_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) {
             gSourceType = 1;
         }
-        else if(!strncmp(gDeviceType, TEST_TYPE_SINK_VALUE, TEST_DEVICE_TYPE_SIZE)) {
+        else if(!strncmp(gDeviceType, TEST_TYPE_SINK_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) {
             gSourceType = 0;
         }
         else {
@@ -127,10 +125,7 @@ int test_dsVideoPort_parse_configuration()
         return -1;
     }
 
-
-
     for(int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
-
         snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/Typeid" , i+1);
         gDSVideoPortConfiguration[i].typeid = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
 
@@ -155,9 +150,6 @@ int test_dsVideoPort_parse_configuration()
         snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/colorspaces" , i+1 );
         gDSVideoPortConfiguration[i].colorspaces = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
 
-        snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/Supported_color_depth_capabilities" , i+1 );
-        gDSVideoPortConfiguration[i].Supported_color_depth_capabilities = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
-
         snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/DisplaySurround" , i+1);
         gDSVideoPortConfiguration[i].DisplaySurround = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), key_string );
 
@@ -179,7 +171,28 @@ int test_dsVideoPort_parse_configuration()
         snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/matrix_coefficients" , i+1 );
         gDSVideoPortConfiguration[i].matrix_coefficients = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
 
-    }
+        for(int j = 0; j < gDSVideoPortConfiguration[i].numSupportedResolutions; j++) {
+            snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/supportedResolutons/%d/name", i+1, j+1);
+            status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key_string,
+                                           gDSVideoPortConfiguration[i].supportedResolutons[j].name,
+                                           DS_VIDEO_PORT_RESOLUTION_NAME_MAX);
+    
+            snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/supportedResolutons/%d/pixelResolution", i+1, j+1);
+            gDSVideoPortConfiguration[i].supportedResolutons[j].pixelResolution = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
+
+            snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/supportedResolutons/%d/aspectRatio", i+1, j+1);
+            gDSVideoPortConfiguration[i].supportedResolutons[j].aspectRatio = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
+
+            snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/supportedResolutons/%d/stereoScopicMode", i+1, j+1);
+            gDSVideoPortConfiguration[i].supportedResolutons[j].stereoScopicMode = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
+
+            snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/supportedResolutons/%d/frameRate", i+1, j+1);
+            gDSVideoPortConfiguration[i].supportedResolutons[j].frameRate = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
+
+            snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/supportedResolutons/%d/interlaced", i+1, j+1);
+            gDSVideoPortConfiguration[i].supportedResolutons[j].interlaced = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
+        } /* for(j) */
+    } /* for(i) */
 
     return 0;
 }

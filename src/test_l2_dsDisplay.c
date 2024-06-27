@@ -74,6 +74,8 @@
 #include "dsDisplay.h"
 #include "test_parse_configuration.h"
 
+#define DS_DSIPLAY_KVP_SIZE 128
+
 static int gTestGroup = 2;
 static int gTestID = 1;
 /**
@@ -99,7 +101,7 @@ void test_l2_dsDisplay_RetrieveAndValidateEDID_sink(void)
     unsigned char edidBytes[MAX_EDID_BYTES_LEN] = { 0 }; // Initialize the edidbytes to 0.
     int length = 0; // Initialize the length to 0.
     unsigned char edid_profile;
-    char key_string[TEST_DS_KEY_SIZE];
+    char key_string[DS_DSIPLAY_KVP_SIZE];
 
     // Step 1: Call dsDisplayInit
     ret = dsDisplayInit();
@@ -138,7 +140,7 @@ void test_l2_dsDisplay_RetrieveAndValidateEDID_sink(void)
     // Manufacturer ID
     for( uint8_t i = 8; i < 9; i++)
     {
-        snprintf(key_string, MAX_EDID_BYTES_LEN, "dsDisplay.edidBytes.%d", i);
+        snprintf(key_string, DS_DSIPLAY_KVP_SIZE, "dsDisplay.edidBytes.%d", i);
         edid_profile = UT_KVP_PROFILE_GET_UINT8(key_string);
         if(edid_profile != edidBytes[i])
         {

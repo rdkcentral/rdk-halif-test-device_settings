@@ -42,13 +42,13 @@
  */
 
 /**
- * @defgroup DS_HALTEST_PARSE_CONFIG Device Settings HAL Tests parse configuration File
+ * @defgroup Device_Settings_PARSE_CONFIG Device Settings HAL Tests parse configuraion File
  * @{
  * @parblock
  *
- * ### Parse configuration functions for Device Settings HAL :
+ * ### Parse configuraion functions for Device Settings HAL :
  *
- * Parse configuration functions required for the module across all vendors.
+ * Parse configuraion functions required for the module across all vendors.
  *
  * **Pre-Conditions:**  None @n
  * **Dependencies:** None @n
@@ -68,11 +68,11 @@
 
 #include "test_parse_configuration.h"
 
-/* Global Variables */
+/* Global Vairables */
 int32_t gSourceType = -1;
 int32_t gDSModule = dsNone;
 
-char gDeviceType[TEST_DEVICE_TYPE_SIZE]      = {0};
+char gDeviceType[TEST_DS_DEVICE_TYPE_SIZE]      = {0};
 
 /* Parse configuration file */
 int test_parse_configuration()
@@ -134,17 +134,18 @@ int test_parse_configuration()
     if(status == UT_KVP_STATUS_SUCCESS) {
         gDSModule |= dsHdmiIn;
     }
+
     return 0;
 }
 
 void test_parse_configuration_term()
 {
     test_dsAudio_parse_configuration_term();
-    test_dsVideoPort_parse_configuration_term();
+    test_dsVideoDevice_parse_configuration_term();
     test_dsVideoDevice_parse_configuration_term();
 }
 
-/** @} */ // End of DS_HALTEST_PARSE_CONFIG
+/** @} */ // End of Device_Settings_PARSE_CONFIG
 /** @} */ // End of Device_Settings_HALTEST
 /** @} */ // End of Device_Settings
 /** @} */ // End of HPK
