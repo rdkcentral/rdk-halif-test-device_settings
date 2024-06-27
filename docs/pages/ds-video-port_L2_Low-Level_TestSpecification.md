@@ -68,12 +68,10 @@ If user chose to run the test in interactive mode, then the test case has to be 
 
 ```mermaid
 graph TB
-    A[Call dsVideoPortInit API] -->|dsERR_NONE|B{For supported video port type <br>call dsGetVideoPort API}
+    A[Call dsVideoPortInit API] -->|dsERR_NONE|B{For each supported<br> type and index <br> call dsGetVideoPort}
     A -->|Not dsERR_NONE|A1[Test case fail]
     B -->|dsERR_NONE and valid handle|D[Call dsEnableVideoPort API with true]
-    D -->|Not dsERR_NONE|A2[Test case fail]
     D -->|dsERR_NONE|E[verify the port is true with dsIsVideoPortEnabled]
-    E -->|Not dsERR_NONE|A3[Test case fail]
     E -->|check Enabled flag is true|F[Call dsEnableVideoPort API with false]
     F -->|dsERR_NONE|G[verify the port is false with dsIsVideoPortEnabled]
     G -->|Not dsERR_NONE|A4[Test case fail]
@@ -114,10 +112,11 @@ If user chose to run the test in interactive mode, then the test case has to be 
 
 ```mermaid
 graph TB
-    A[Call dsVideoPortInit] -->|dsERR_NONE|B{For each supported type and index <br> call dsGetVideoPort}
+    A[Call dsVideoPortInit] -->|dsERR_NONE|B{For each supported<br> type and index <br> call dsGetVideoPort}
     A -->|Not dsERR_NONE|A1[Test case fail]
     B -->|dsERR_NONE and valid handle|C[Call dsIsDisplayConnected for each handle]
     C -->|dsERR_NONE and connected is false|D[Call dsIsVideoPortActive for each handle]
+    D -->|Not dsERR_NONE|A2[Test case fail]
     D -->|dsERR_NONE and enabled flag is true|B
     B -->|End of loop|I[Call dsVideoPortTerm API]
     I -->|dsERR_NONE|J[Test case success]
@@ -156,15 +155,14 @@ If user chose to run the test in interactive mode, then the test case has to be 
 ```mermaid
 graph TB
     Step1[Call dsVideoPortInit API]
-    Step1 -->|dsERR_NONE|Step2[Call dsGetVideoPort API]
+    Step1 -->|dsERR_NONE|Step2{For each supported <br> type and index <br> call dsGetVideoPort}
     Step1 -->|Not dsERR_NONE|Fail1[Test Case Failed]
     Step2 -->|dsERR_NONE and valid handle|Step3[Call dsIsDisplaySurround API]
-    Step3 -->|Not dsERR_NONE|Fail4[Test Case Failed]
     Step3 -->|dsERR_NONE and boolean value|Step4[Retrieve surround mode capabilities]
-    Step4 -->|Not dsERR_NONE|Fail3[Test Case Failed]
-    Step4 --> Step5[Verify if dsIsDisplaySurround value matches with configuration file value]
-    Step5 --> Step6[Call dsVideoPortTerm API]
-    Step5 -->|Not match|Fail5[Test Case Failed]
+    Step4 -->|Not dsERR_NONE|Step5[Verify if dsIsDisplaySurround value matches with configuration file value]
+    Step5 -->|loop through |Step2
+    Step2 -->|End of loop|Step6[Call dsVideoPortTerm API]
+    Step5 -->|Not match|Fail6[Test Case Failed]
     Step6 -->|dsERR_NONE|End[Test Case Passed]
     Step6 -->|Not dsERR_NONE|Fail5[Test Case Failed]
 ```
@@ -202,16 +200,16 @@ If user chose to run the test in interactive mode, then the test case has to be 
 
 ```mermaid
 graph TB
-    A[Call dsVideoPortInit] -->|dsERR_NONE|B[Call dsGetVideoPort]
+    A[Call dsVideoPortInit] -->|dsERR_NONE|B{For each supported<br> type and index <br> call dsGetVideoPort}
     A -->|Not dsERR_NONE|A1[Test case Fail]
-    B -->|dsERR_NONE and valid handle|C{Loop through supported values}
-    C --> E[Set values using dsSetResolution API]
-    E --> F[Get values using dsGetResolution API]
-    F --> G[Compare returned and set resolution]
+    B -->|Not dsERR_NONE|E[Set supported values<br> using dsSetResolution API]
+    E -->|Not dsERR_NONE| F[Get values using dsGetResolution API]
+    F -->|Not dsERR_NONE|G[Compare returned and set resolution]
+    G -->|loop through | B
     G -->|Not dsERR_NONE|I1[Test case Fail]
-    F --> I[Call dsVideoPortTerm]
+    B -->|End of Iteration| I[Call dsVideoPortTerm]
     I -->|dsERR_NONE|J[Test case Success]
-    I -->|Not dsERR_NONE|I1[Test case Fail]
+    I -->|Not dsERR_NONE|I2[Test case Fail]
 ```
 
 ### Test 5
@@ -246,14 +244,15 @@ If user chose to run the test in interactive mode, then the test case has to be 
 ```mermaid
 graph TB
     Step1[Call dsVideoPortInit API]
-    Step1 -- dsERR_NONE --> Step2[Call dsGetVideoPort API with dsVIDEOPORT_TYPE_INTERNAL]
+    Step1 -- dsERR_NONE --> Step2{For each supported<br> type and index <br> call dsGetVideoPort}
     Step1 -- Not dsERR_NONE --> Fail1[Test case fail]
     Step2 -- dsERR_NONE and valid handle --> Step3[Call dsSupportedTvResolutions API]
     Step3 -- dsERR_NONE and valid resolutions --> Step4[Verify if resolutions match with configuration file value]
+    Step4 -->|loop through | Step2
     Step4 -- Not Match --> Fail2[Test case fail]
-    Step4 --> Step5[Call dsVideoPortTerm API]
+    Step2 -->|End of Iteration| Step5[Call dsVideoPortTerm API]
     Step5 -- dsERR_NONE --> End[Test Case Passed]
-    Step5 -- Not dsERR_NONE --> Fail5[Test Case Failed: dsVideoPortTerm API failed]
+    Step5 -- Not dsERR_NONE --> Fail5[Test Case Failed]
 ```
 
 ### Test 6
@@ -287,12 +286,13 @@ If user chose to run the test in interactive mode, then the test case has to be 
 
 ```mermaid
 graph TB
-    A[Call dsVideoPortInit API] -->|dsERR_NONE|B[Call dsGetVideoPort API with dsVIDEOPORT_TYPE_INTERNAL]
+    A[Call dsVideoPortInit API] -->|dsERR_NONE|B{For each supported<br> type and index <br> call dsGetVideoPort}
     A -->|Not dsERR_NONE|A1[Test case fail]
     B -->|dsERR_NONE and valid handle|C[Call dsGetTVHDRCapabilities API with handle]
     C -->|dsERR_NONE|D[Verify if output matches with value from configuration file]
     D -->|Not dsERR_NONE|A2[Test case fail]
-    D --> E[Call dsVideoPortTerm API]
+    D -->|loop through | B
+    B -->|End of Iteration| E[Call dsVideoPortTerm API]
     E -->|dsERR_NONE|F[Test case success]
     E -->|Not dsERR_NONE|E1[Test case fail]
 ```
@@ -328,12 +328,13 @@ If user chose to run the test in interactive mode, then the test case has to be 
 
 ```mermaid
 graph TB
-    A[Call dsVideoPortInit API] -->|dsERR_NONE|B{For each supported video port type <br>call dsGetVideoPort API}
+    A[Call dsVideoPortInit API] -->|dsERR_NONE|B{For each supported<br> type and index <br> call dsGetVideoPort}
     A -->|Not dsERR_NONE|A1[Test Case Fail]
     B -->|dsERR_NONE and valid handle|C[Call dsGetHDCPStatus API with handle]
     C -->|dsERR_NONE and HDCP status|D[Verify HDCP status is dsHDCP_STATUS_AUTHENTICATED]
+    D -->|Not dsERR_NONE|E2[Test Case Fail]
     D -->|Iterate through all possible values|B
-    D -->|End of loop|E[Call dsVideoPortTerm API]
+    B -->|End of loop|E[Call dsVideoPortTerm API]
     E -->|dsERR_NONE|F[Test Case Success]
     E -->|Not dsERR_NONE|E1[Test Case Fail]
 ```
@@ -370,11 +371,13 @@ If user chose to run the test in interactive mode, then the test case has to be 
 ```mermaid
 graph TB
     Step1[Call dsVideoPortInit API]
-    Step1 -- dsERR_NONE --> Step2[Call dsGetVideoPort API with supported port type]
+    Step1 -- dsERR_NONE --> Step2{For each supported<br> type and index <br> call dsGetVideoPort}
     Step1 -- Not dsERR_NONE --> Fail1[Test Case Failed]
     Step2 -- dsERR_NONE and valid handle --> Step3[Call dsGetHDCPProtocol API and get HDCP protocol version]
     Step3 -- dsERR_NONE --> Step5[Compare the version with the value from configuration file ]
-    Step5 --> Step6[Call dsVideoPortTerm API]
+    Step5 -->|loop through | Step2
+    Step5 -- Not dsERR_NONE --> Fail3[Test Case Failed]
+    Step2 -->|End of Iteration| Step6[Call dsVideoPortTerm API]
     Step6 -- dsERR_NONE --> End[Test Case Passed]
     Step6 -- Not dsERR_NONE --> Fail6[Test Case Failed]
 ```
@@ -410,11 +413,13 @@ If user chose to run the test in interactive mode, then the test case has to be 
 
 ```mermaid
 graph TB
-    A[Call dsVideoPortInit] -->|return dsERR_NONE|B[Call dsGetVideoPort] -->|return dsERR_NONE and valid handle|P{Loop through all the supported ports and <br>protocol versions}
+    A[Call dsVideoPortInit] -->|return dsERR_NONE|B{For each supported<br> type and index <br> call dsGetVideoPort}
+    B -->|return dsERR_NONE and valid handle|D[Call dsSetHdmiPreference<br> to set supported protocol version]
     A -->|Not dsERR_NONE|C[Test case fail]
-    P --> D[Call dsSetHdmiPreference API]
-    D -->|dsERR_NONE|F[Call dsGetHdmiPreference API] -->|Proceed to other values|P
-    F --> J[Call dsVideoPortTerm API]
+    D -->|dsERR_NONE|F[Call dsGetHdmiPreference API]
+    F -->|Not dsERR_NONE|A2[Test case fail]
+    F -->|loop through | B
+    B -->|End of Iteration|J[Call dsVideoPortTerm API]
     J -->|dsERR_NONE|K[Test case success]
     J -->|Not dsERR_NONE|L[Test case fail]
 ```
@@ -450,11 +455,13 @@ If user chose to run the test in interactive mode, then the test case has to be 
 
 ```mermaid
 graph TB
-A[Call dsVideoPortInit] -->|dsERR_NONE|B[Call dsGetVideoPort with type as dsVIDEOPORT_TYPE_INTERNAL]
+A[Call dsVideoPortInit] -->|dsERR_NONE|B{For each supported<br> type and index <br> call dsGetVideoPort}
 A -->|Not dsERR_NONE|A1[Test case fail]
 B -->|dsERR_NONE and valid handle|C[Call dsGetColorSpace API]
-C -->|dsERR_NONE|D[Compare color space with value from configuration file]
-D --> E[Call dsVideoPortTerm]
+C -->|dsERR_NONE|D[Compare color space <br>with value from profile file]
+D -->|loop through | B
+D -->|dsERR_NONE|E2[Test case fail]
+B -->|End of Iteration| E[Call dsVideoPortTerm]
 E -->|dsERR_NONE|F[Test case success]
 E -->|dsERR_NONE|E1[Test case fail]
 ```
@@ -490,14 +497,15 @@ If user chose to run the test in interactive mode, then the test case has to be 
 
 ```mermaid
 graph TB
-    Start(Start) --> Step1[Call dsVideoPortInit API]
-    Step1 -- "dsERR_NONE" --> Step2[Call dsGetVideoPort API with dsVIDEOPORT_TYPE_HDMI]
+    Step1[Call dsVideoPortInit] -->|dsERR_NONE| Step2{For each supported<br> type and index <br> call dsGetVideoPort}
     Step1 -- "Not dsERR_NONE" --> Fail1[Test Case Failed]
     Step2 -- "dsERR_NONE and valid handle" --> Step3[Call dsColorDepthCapabilities API with handle]
-    Step3 -- "dsERR_NONE" --> Step4[Compare if value retrieved from API and configuration file matches]
-    Step4 --> Step6[Call dsVideoPortTerm API]
+    Step3 -- "dsERR_NONE" --> Step4[Compare if value retrieved <br>from API and configuration file matches]
+    Step4 -->|loop through | Step2
+    Step4 -- "dsERR_NONE" --> Fail6[Test Case Failed]
+    Step2 -->|End of Iteration| Step6[Call dsVideoPortTerm API]
     Step6 -- "dsERR_NONE" --> End[Test Case Passed]
-    Step6 -- "Not dsERR_NONE" --> Fail6[Test Case Failed]
+    Step6 -- "Not dsERR_NONE" --> Fail4[Test Case Failed]
 ```
 
 ### Test 12
@@ -531,11 +539,13 @@ If user chose to run the test in interactive mode, then the test case has to be 
 
 ```mermaid
 graph TB
-    A[Call dsVideoPortInit] -->|dsERR_NONE|B[Call dsGetVideoPort with type=dsVIDEOPORT_TYPE_INTERNAL]
+    A[Call dsVideoPortInit] -->|dsERR_NONE|B{For each supported<br> type and index <br> call dsGetVideoPort}
     A -->|Not dsERR_NONE|A1[Test case fail]
     B -->|dsERR_NONE and valid handle|C[Call dsGetColorDepth with handle from previous step]
-    C -->|dsERR_NONE|D[Compare the color depth values from API and configuration file]
-    D --> F[Call dsVideoPortTerm]
+    C -->|dsERR_NONE|D[Compare the color depth <br>values from API and configuration file]
+    D -->|loop through | B
+    D -->|dsERR_NONE|E2[Test case fail]
+    B -->|End of Iteration| F[Call dsVideoPortTerm]
     F -->|dsERR_NONE|G[Test case success]
     F -->|Not dsERR_NONE|F1[Test case fail]
 ```
@@ -572,14 +582,15 @@ If user chose to run the test in interactive mode, then the test case has to be 
 
 ```mermaid
 graph TB
-    Step1[Call dsVideoPortInit API]
-    Step1 --> Step{Loop through all possible ports and color depths} -->  Step2[Call dsGetVideoPort API]
-    Step1 -->|Failure|TestcaseFail1[Testcase Fail]
+    Step1[Call dsVideoPortInit] -->|dsERR_NONE| Step2{For each supported<br> type and index <br> call dsGetVideoPort}
+    Step1 -- "Not dsERR_NONE" --> Fail1[Test Case Failed]
     Step2 -->|dsERR_NONE and valid handle|Step3[Call dsSetPreferredColorDepth API]
     Step3 -->|dsERR_NONE|Step4[Call dsGetPreferredColorDepth API]
-    Step4 -->|dsERR_NONE|Step5[Compare color depth values] -->|Continue to next set of values|Step
-    Step5 -->|End of Iteration|Step7[Call dsVideoPortTerm API]
-    Step7 -->|dsERR_NONE|End(End)
+    Step4 -->|dsERR_NONE|Step5[Compare color depth values]
+    Step5 -->|loop through | Step2
+    Step5 -- "dsERR_NONE" --> Fail6[Test Case Failed]
+    Step2 -->|End of Iteration|Step7[Call dsVideoPortTerm API]
+    Step7 -->|dsERR_NONE|End[Test Case success]
     Step7 -->|Failure|TestcaseFail6[Testcase Fail]
 ```
 
@@ -615,13 +626,15 @@ If user chose to run the test in interactive mode, then the test case has to be 
 ```mermaid
 graph TB
     Start(Start) --> Step1[Call dsVideoPortInit]
-    Step1 -- dsERR_NONE --> Step2[Call dsGetVideoPort with dsVIDEOPORT_TYPE_INTERNAL port]
+    Step1 -- dsERR_NONE --> Step2{For each supported<br> type and index <br> call dsGetVideoPort}
     Step1 -- Not dsERR_NONE --> TestcaseFail1[Test case fail]
     Step2 -- dsERR_NONE and valid handle --> Step3[Call dsGetQuantizationRange with handle]
-    Step3 -- dsERR_NONE and valid quantization range --> Step4[Compare quantization range with configuration file]
-    Step4  --> Step5[Call dsVideoPortTerm]
+    Step3 -- dsERR_NONE and valid quantization range --> Step4[Compare quantization <br>range with configuration file]
+    Step4 -->|loop through | Step2
+    Step4 -- Not dsERR_NONE --> TestcaseFail5[Test case fail]
+    Step2  --> |End of Iteration|Step5[Call dsVideoPortTerm]
     Step5 -- dsERR_NONE --> End[Test case success]
-    Step5 -- Not dsERR_NONE --> TestcaseFail5[Test case fail]
+    Step5 -- Not dsERR_NONE --> TestcaseFail6[Test case fail]
 ```
 
 ### Test 15
@@ -655,12 +668,14 @@ If user chose to run the test in interactive mode, then the test case has to be 
 
 ```mermaid
 graph TB
-    Step1[Call dsVideoPortInit]
-    Step1 -- dsERR_NONE --> Step2[Call dsGetVideoPort with type=dsVIDEOPORT_TYPE_INTERNAL]
-    Step1 -- Not dsERR_NONE --> Fail1[Test Case Fail]
+    Start(Start) --> Step1[Call dsVideoPortInit]
+    Step1 -- dsERR_NONE --> Step2{For each supported<br> type and index <br> call dsGetVideoPort}
+    Step1 -- Not dsERR_NONE --> TestcaseFail1[Test case fail]
     Step2 -- dsERR_NONE and valid handle --> Step3[Call dsGetMatrixCoefficients with handle]
-    Step3 -- dsERR_NONE --> Step4[Compare the retrieved matrix_coefficients with value from configuration file]
-    Step4 --> Step6[Call dsVideoPortTerm]
+    Step3 -- dsERR_NONE --> Step4[Compare the retrieved matrix_coefficients<br> with value from configuration file]
+    Step4 -->|loop through | Step2
+    Step4 -- Not dsERR_NONE --> Fail7[Test Case Fail]
+    Step2 -->|End of Iteration| Step6[Call dsVideoPortTerm]
     Step6 -- dsERR_NONE --> End[Test Case Success]
     Step6 -- Not dsERR_NONE --> Fail6[Test Case Fail]
 ```
