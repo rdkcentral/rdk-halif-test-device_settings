@@ -1,20 +1,19 @@
-/**
-*  If not stated otherwise in this file or this component's LICENSE
-*  file the following copyright and licenses apply:
+/*
+* If not stated otherwise in this file or this component's LICENSE file the
+* following copyright and licenses apply:*
+* Copyright 2024 RDK Management
 *
-*  Copyright 2022 RDK Management
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
 *
-*  Licensed under the Apache License, Version 2.0 (the License);
-*  you may not use this file except in compliance with the License.
-*  You may obtain a copy of the License atS
+* http://www.apache.org/licenses/LICENSE-2.0
 *
-*  http://www.apache.org/licenses/LICENSE-2.0
-*
-*  Unless required by applicable law or agreed to in writing, software
-*  distributed under the License is distributed on an AS IS BASIS,
-*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-*  See the License for the specific language governing permissions and
-*  limitations under the License.
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
 */
 
 /**
@@ -42,7 +41,7 @@
  */
 
 /**
- * @addtogroup DS_Display_HALTEST Device Settings Display HAL Tests
+ * @defgroup DS_Display_HALTEST Device Settings Display HAL Tests
  * @{
  */
 
@@ -58,7 +57,7 @@
  * **Pre-Conditions:**  None@n
  * **Dependencies:** None@n
  *
- * TODO: Refer to L2 Specification documentation : [l2_module_test_specification_template.md](../docs/pages/l2_module_test_specification_template.md)
+ * Refer to API Definition specification documentation : [ds-display_halSpec.md](../../docs/pages/ds-display_halSpec.md)
  *
  * @endparblock
  */
@@ -69,50 +68,206 @@
  *
  */
 
-#include <string.h>
-#include <stdlib.h>
-
 #include <ut.h>
 #include <ut_log.h>
+#include <ut_kvp_profile.h>
+#include "dsDisplay.h"
+#include "test_parse_configuration.h"
 
+#define DS_DSIPLAY_KVP_SIZE 128
+
+static int gTestGroup = 2;
+static int gTestID = 1;
 /**
-* @brief TODO: Describe the object of the test
+* @brief This test aims to retrieve and validate the EDID of a sink in the L2 dsDisplay module
 *
-* TODO: Add the description of what is tested and why in this test
+* This test function tests the retrieval and validation of the Extended Display Identification Data (EDID) of a sink in the L2 dsDisplay module. It ensures that the functions dsDisplayInit, dsGetDisplay, dsGetEDID, dsGetEDIDBytes, and dsDisplayTerm are working as expected.
 *
-* **Test Group ID:** TODO: Add the group this test belongs to - Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
+* **Test Group ID:** 02@n
+* **Test Case ID:** 001@n
 *
 * **Test Procedure:**
-* TODO: Refer to L2 Specification documentation : [l2_module_test_specification_template.md](../docs/pages/l2_module_test_specification_template.md)
+* Refer to UT specification documentation [dsDisplay_L2_Low-Level_TestSpecification.md](../docs/pages/ds-display-L2-Low-Level_TestSpec.md)
 */
-void test_l2_dsDisplay (void)
+
+void test_l2_dsDisplay_RetrieveAndValidateEDID_sink(void)
 {
-	UT_FAIL("This function needs to be implemented!");
+    gTestID = 1;
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t ret = dsERR_NONE; // Initialize the return status to dsERR_NONE.
+    intptr_t handle = 0; // Initialize handle to 0.
+    dsDisplayEDID_t edid = { 0 }; // Initialize all edid fields to 0.
+    unsigned char edidBytes[MAX_EDID_BYTES_LEN] = { 0 }; // Initialize the edidbytes to 0.
+    int length = 0; // Initialize the length to 0.
+    unsigned char edid_profile;
+    char key_string[DS_DSIPLAY_KVP_SIZE];
+
+    // Step 1: Call dsDisplayInit
+    ret = dsDisplayInit();
+    UT_LOG_INFO("Invoked dsDisplayInit(), returned: %d\n", ret);
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+
+    // Step 2: Call dsGetDisplay
+    ret = dsGetDisplay(dsVIDEOPORT_TYPE_INTERNAL, 0, &handle);
+    UT_LOG_INFO("Invoked dsGetDisplay() with dsVIDEOPORT_TYPE_INTERNAL and index 0, returned: %d, handle: %ld\n", ret, handle);
+    UT_ASSERT_EQUAL(ret, dsERR_NONE);
+    if (ret != dsERR_NONE)
+    {
+        // Call dsDisplayTerm if dsGetEDID fails
+        dsDisplayTerm();
+        return;
+    }
+
+    // Step 3: Call dsGetEDID
+    ret = dsGetEDID(handle, &edid);
+    UT_ASSERT_EQUAL(ret, dsERR_NONE);
+    UT_LOG_INFO("Invoked dsGetEDID() with handle %ld, returned: %d, productCode: %d\n", handle, ret, edid.productCode);
+
+    UT_ASSERT_KVP_EQUAL_PROFILE_UINT32(edid.productCode, "dsDisplay/EDID_Data/productCode");
+
+    // Step 4: Call dsGetEDIDBytes
+    ret = dsGetEDIDBytes(handle, edidBytes, &length);
+    UT_ASSERT_EQUAL(ret, dsERR_NONE);
+    UT_LOG_INFO("Invoked dsGetEDIDBytes() with handle %ld, returned: %d, Manufacturer ID: %d\n", handle, ret, edidBytes[8] << 8 | edidBytes[9]);
+    if (ret != dsERR_NONE)
+    {
+        // Call dsDisplayTerm if dsGetEDIDBytes fails
+        dsDisplayTerm();
+        return;
+    }
+
+    // Manufacturer ID
+    for( uint8_t i = 8; i < 9; i++)
+    {
+        snprintf(key_string, DS_DSIPLAY_KVP_SIZE, "dsDisplay.edidBytes.%d", i);
+        edid_profile = UT_KVP_PROFILE_GET_UINT8(key_string);
+        if(edid_profile != edidBytes[i])
+        {
+            UT_FAIL("edid check failed");
+            UT_LOG_ERROR("edid byte: %x, expected value: %x", edidBytes[i], edid_profile);
+            break;
+        }
+    }
+
+    // Step 5: Call dsDisplayTerm
+    ret = dsDisplayTerm();
+    UT_LOG_INFO("Invoked dsDisplayTerm(), returned: %d\n", ret);
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
+}
+
+/**
+* @brief This test aims to verify the default aspect ratio of the source in the L2 dsDisplay module
+*
+* In this test, the dsDisplayInit(), dsGetDisplay(), dsGetDisplayAspectRatio(), and dsDisplayTerm() functions are called in sequence to check the default aspect ratio of the source. The test verifies that the aspect ratio is dsVIDEO_ASPECT_RATIO_16x9. If any of the function calls fail or the aspect ratio is not as expected, the test fails.
+*
+* **Test Group ID:** 02@n
+* **Test Case ID:** 002@n
+*
+* **Test Procedure:**
+* Refer to UT specification documentation [dsDisplay_L2_Low-Level_TestSpecification.md](../docs/pages/ds-display-L2-Low-Level_TestSpec.md)
+*/
+
+void test_l2_dsDisplay_TestDefaultAspectRatio_source(void)
+{
+    gTestID = 2;
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t ret = dsERR_NONE; // Initialize the return status to dsERR_NONE.
+    intptr_t handle = 0; //Initialize handle to 0.
+    dsVideoAspectRatio_t aspectRatio = dsVIDEO_ASPECT_RATIO_MAX; // Initialize aspect ratio with MAX value.
+
+    // Step 1: Call dsDisplayInit()
+    UT_LOG_DEBUG("Invoking dsDisplayInit()");
+    ret = dsDisplayInit();
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+
+    // Step 2: Call dsGetDisplay()
+    UT_LOG_DEBUG("Invoking dsGetDisplay() with dsVIDEOPORT_TYPE_HDMI and index 0");
+    ret = dsGetDisplay(dsVIDEOPORT_TYPE_HDMI, 0, &handle);
+    UT_ASSERT_EQUAL(ret, dsERR_NONE);
+    if (ret != dsERR_NONE)
+    {
+        UT_LOG_ERROR("dsGetDisplay() failed with error: %d\n", ret);
+        dsDisplayTerm();
+        return;
+    }
+
+    // Step 3: Call dsGetDisplayAspectRatio()
+    UT_LOG_DEBUG("Invoking dsGetDisplayAspectRatio() with handle obtained from dsGetDisplay()");
+    ret = dsGetDisplayAspectRatio(handle, &aspectRatio);
+    UT_ASSERT_EQUAL(ret, dsERR_NONE);
+    UT_ASSERT_EQUAL(aspectRatio, dsVIDEO_ASPECT_RATIO_16x9);
+    if (ret != dsERR_NONE || aspectRatio != dsVIDEO_ASPECT_RATIO_16x9)
+    {
+        UT_LOG_ERROR("dsGetDisplayAspectRatio() failed with error: %d\n", ret);
+    }
+
+    // Step 4: Verify aspect ratio
+    UT_LOG_DEBUG("Verifying that the aspect ratio is dsVIDEO_ASPECT_RATIO_16x9");
+    UT_ASSERT_EQUAL(aspectRatio, dsVIDEO_ASPECT_RATIO_16x9);
+
+    // Step 5: Call dsDisplayTerm()
+    UT_LOG_DEBUG("Invoking dsDisplayTerm()");
+    ret = dsDisplayTerm();
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
 static UT_test_suite_t * pSuite = NULL;
-
 /**
- * @brief Register the main test(s) for this module
+ * @brief Register the main tests for this module
  *
  * @return int - 0 on success, otherwise failure
  */
-int test_l2_dsDisplay_register ( void )
+
+int test_l2_dsDisplay_register(void)
 {
-	/* add a suite to the registry */
-	pSuite = UT_add_suite( "[L2 dsDisplay]", NULL, NULL );
-	if ( NULL == pSuite )
-	{
-		return -1;
-	}	
+     int32_t source_type = 0;
+     ut_kvp_status_t status;
 
-	
-	UT_add_test( pSuite, "test_l2_dsDisplay" ,test_l2_dsDisplay );
+    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsDisplay.Type", gDeviceType, TEST_DS_DEVICE_TYPE_SIZE);
 
-	return 0;
-} 
+    // Create the test suite
+    if (status == UT_KVP_STATUS_SUCCESS ) {
+        if (!strncmp(gDeviceType, TEST_TYPE_SOURCE_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) {
+            pSuite = UT_add_suite("[L2 dsDisplay Sink]", NULL, NULL);
+            if (pSuite == NULL)
+            {
+                return -1;
+            }
+            source_type = 1;
+        }
+        else if(!strncmp(gDeviceType, TEST_TYPE_SINK_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) {
+            pSuite = UT_add_suite("[L2 dsDisplay Source ]", NULL, NULL);
+            if (pSuite == NULL)
+            {
+                return -1;
+            }
+            source_type = 0;
+        }
+        else {
+            UT_LOG_ERROR("Invalid platform type: %s", gDeviceType);
+            return -1;
+        }
+    }
+    else {
+        UT_LOG_ERROR("Failed to get the platform type");
+        return -1;
+    }
+    // List of test function names and strings
+    if(source_type == 0) {
+        UT_add_test( pSuite, "L2_RetrieveAndValidateEDID_sink", test_l2_dsDisplay_RetrieveAndValidateEDID_sink);
+    }
+    else if ( source_type == 1 ){
+        UT_add_test( pSuite, "L2_TestDefaultAspectRatio_source", test_l2_dsDisplay_TestDefaultAspectRatio_source);
+    }
 
+    return 0;
+}
 
 /** @} */ // End of DS_Display_HALTEST_L2
 /** @} */ // End of DS_Display_HALTEST
