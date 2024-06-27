@@ -90,12 +90,12 @@ int test_dsVideoDevice_parse_configuration()
 
     UT_LOG_DEBUG("gDSvideoDevice_NumVideoDevices: %d",gDSvideoDevice_NumVideoDevices);
 
-    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsVideoDevice/Type", gDeviceType, TEST_DEVICE_TYPE_SIZE);
+    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsVideoDevice/Type", gDeviceType, TEST_DS_DEVICE_TYPE_SIZE);
     if (status == UT_KVP_STATUS_SUCCESS ) {
-        if (!strncmp(gDeviceType, TEST_TYPE_SOURCE_VALUE, TEST_DEVICE_TYPE_SIZE)) {
+        if (!strncmp(gDeviceType, TEST_TYPE_SOURCE_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) {
             gSourceType = 1;
         }
-        else if(!strncmp(gDeviceType, TEST_TYPE_SINK_VALUE, TEST_DEVICE_TYPE_SIZE)) {
+        else if(!strncmp(gDeviceType, TEST_TYPE_SINK_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) {
             gSourceType = 0;
         }
         else {
