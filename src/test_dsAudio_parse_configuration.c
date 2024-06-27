@@ -86,13 +86,13 @@ int test_dsAudio_parse_configuration()
     char key_string[DS_AUDIO_KVP_SIZE];
     ut_kvp_status_t status;
 
-    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsAudio.Type", gDeviceType, TEST_DEVICE_TYPE_SIZE);
+    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsAudio.Type", gDeviceType, TEST_DS_DEVICE_TYPE_SIZE);
 
     if (status == UT_KVP_STATUS_SUCCESS ) {
-        if (!strncmp(gDeviceType, TEST_TYPE_SOURCE_VALUE, TEST_DEVICE_TYPE_SIZE)) {
+        if (!strncmp(gDeviceType, TEST_TYPE_SOURCE_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) {
             gSourceType = 1;
         }
-        else if(!strncmp(gDeviceType, TEST_TYPE_SINK_VALUE, TEST_DEVICE_TYPE_SIZE)) {
+        else if(!strncmp(gDeviceType, TEST_TYPE_SINK_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) {
             gSourceType = 0;
         }
         else {

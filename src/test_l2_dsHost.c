@@ -74,7 +74,8 @@
 #include "dsHost.h"
 #include "test_parse_configuration.h"
 
-#define DSHOST_SOC_LENGTH 20
+#define DSHOST_SOC_LENGTH    20
+#define DS_HOST_KVP_SIZE     128
 
 static int gTestGroup = 2;
 static int gTestID = 1;
@@ -216,7 +217,7 @@ void test_l2_dsHost_ValidateHostEDID_sink(void)
     dsError_t ret;
     unsigned char edid[EDID_MAX_DATA_SIZE];
     unsigned char edid_profile;
-    char key_string[TEST_DS_KEY_SIZE];
+    char key_string[DS_HOST_KVP_SIZE];
     int i = 0;
     int length;
 
@@ -239,7 +240,7 @@ void test_l2_dsHost_ValidateHostEDID_sink(void)
     /* Checking only manufacture ID */
     for( i = 8; i < 9; i++)
     {
-        snprintf(key_string, TEST_DS_KEY_SIZE, "dsHost.edidBytes.%d", i);
+        snprintf(key_string, DS_HOST_KVP_SIZE, "dsHost.edidBytes.%d", i);
         edid_profile = UT_KVP_PROFILE_GET_UINT8(key_string);
         if(edid_profile != edid[i])
         {

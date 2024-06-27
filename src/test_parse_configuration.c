@@ -72,7 +72,7 @@
 int32_t gSourceType = -1;
 int32_t gDSModule = dsNone;
 
-char gDeviceType[TEST_DEVICE_TYPE_SIZE]      = {0};
+char gDeviceType[TEST_DS_DEVICE_TYPE_SIZE]      = {0};
 
 /* Parse configuration file */
 int test_parse_configuration()
@@ -134,13 +134,14 @@ int test_parse_configuration()
     if(status == UT_KVP_STATUS_SUCCESS) {
         gDSModule |= dsHdmiIn;
     }
+
     return 0;
 }
 
 void test_parse_configuration_term()
 {
     test_dsAudio_parse_configuration_term();
-    test_dsVideoPort_parse_configuration_term();
+    test_dsVideoDevice_parse_configuration_term();
     test_dsVideoDevice_parse_configuration_term();
 }
 
