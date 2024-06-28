@@ -172,25 +172,25 @@ int test_dsVideoPort_parse_configuration()
         gDSVideoPortConfiguration[i].matrix_coefficients = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
 
         for(int j = 0; j < gDSVideoPortConfiguration[i].numSupportedResolutions; j++) {
-            snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/supportedResolutons/%d/name", i+1, j+1);
+            snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/supportedResolutions/%d/name", i+1, j+1);
             status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key_string,
-                                           gDSVideoPortConfiguration[i].supportedResolutons[j].name,
+                                           gDSVideoPortConfiguration[i].supportedResolutions[j].name,
                                            DS_VIDEO_PORT_RESOLUTION_NAME_MAX);
-    
-            snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/supportedResolutons/%d/pixelResolution", i+1, j+1);
-            gDSVideoPortConfiguration[i].supportedResolutons[j].pixelResolution = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
 
-            snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/supportedResolutons/%d/aspectRatio", i+1, j+1);
-            gDSVideoPortConfiguration[i].supportedResolutons[j].aspectRatio = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
+            snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/supportedResolutions/%d/pixelResolution", i+1, j+1);
+            gDSVideoPortConfiguration[i].supportedResolutions[j].pixelResolution = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
 
-            snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/supportedResolutons/%d/stereoScopicMode", i+1, j+1);
-            gDSVideoPortConfiguration[i].supportedResolutons[j].stereoScopicMode = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
+            snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/supportedResolutions/%d/aspectRatio", i+1, j+1);
+            gDSVideoPortConfiguration[i].supportedResolutions[j].aspectRatio = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
 
-            snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/supportedResolutons/%d/frameRate", i+1, j+1);
-            gDSVideoPortConfiguration[i].supportedResolutons[j].frameRate = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
+            snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/supportedResolutions/%d/stereoScopicMode", i+1, j+1);
+            gDSVideoPortConfiguration[i].supportedResolutions[j].stereoScopicMode = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
 
-            snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/supportedResolutons/%d/interlaced", i+1, j+1);
-            gDSVideoPortConfiguration[i].supportedResolutons[j].interlaced = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
+            snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/supportedResolutions/%d/frameRate", i+1, j+1);
+            gDSVideoPortConfiguration[i].supportedResolutions[j].frameRate = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
+
+            snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/supportedResolutions/%d/interlaced", i+1, j+1);
+            gDSVideoPortConfiguration[i].supportedResolutions[j].interlaced = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
         } /* for(j) */
     } /* for(i) */
 

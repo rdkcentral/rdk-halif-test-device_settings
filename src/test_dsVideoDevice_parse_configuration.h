@@ -42,24 +42,20 @@
  */
 
 /**
- * @addtogroup Device_Settings_HALTEST_PARSE_CONFIG Device Settings HAL Tests parse configuration File
+ * @defgroup DS_VideoDevice_HALTEST Device Settings Video Device HAL Tests
  * @{
  */
 
 /**
- * @defgroup DS_HALTEST_VIDEO_DEVICE_PARSE_CONFIG_H Device Settings HAL Tests video device parse configuration Header File
+ * @defgroup DS_VideoDevice_HALTEST_PARSE_CONFIG_HEADER Device Settings Video Device Parse Config Header File
  * @{
  * @parblock
  *
- * ### Video Device Parse configuration functions for Device Settings HAL :
+ * ### Configuration Header file for DS Video Device test suit :
  *
- * Parse configuration functions required for the module across all vendors.
- *
- * **Pre-Conditions:**  None @n
- * **Dependencies:** None @n
+ *  DS Video Device Parse Configuration Header file
  *
  * @endparblock
- *
  */
 
 /**
@@ -104,8 +100,8 @@ void test_dsVideoDevice_parse_configuration_term();
 
 #endif //__TEST_DS_VIDEO_DEVICE_PARSE_CONFIG_H__
 
-/** @} */ // End of DS_HALTEST_VIDEO_DEVICE_PARSE_CONFIG_H
-/** @} */ // End of Device_Settings_HALTEST_PARSE_CONFIG
+/** @} */ // End of DS_VideoDevice_HALTEST_PARSE_CONFIG_HEADER
+/** @} */ // End of DS_VideoDevice_HALTEST
 /** @} */ // End of Device_Settings_HALTEST
 /** @} */ // End of Device_Settings
 /** @} */ // End of HPK
