@@ -42,24 +42,20 @@
  */
 
 /**
- * @addtogroup Device_Settings_PARSE_CONFIG Device Settings HAL Tests parse configuraion File
+ * @defgroup DS_Audio_HALTEST Device Settings Audio HAL Tests
  * @{
  */
 
 /**
- * @defgroup Device_Settings_DS_AUDIO_PARSE_CONFIG_H Device Settings HAL Tests audio parse configuraion Header File
+ * @defgroup DS_Audio_HALTEST_PARSE_CONFIG_HEADER Device Settings Audio Parse Config Header File
  * @{
  * @parblock
  *
- * ### Audio Parse configuraion functions for Device Settings HAL :
+ * ### Configuration Header file for DS Audio test suit :
  *
- * Parse configuraion functions required for the module across all vendors.
- *
- * **Pre-Conditions:**  None @n
- * **Dependencies:** None @n
+ *  DS Audio Parse Configuration Header file
  *
  * @endparblock
- *
  */
 
 /**
@@ -109,8 +105,8 @@ void test_dsAudio_parse_configuration_term();
 
 #endif //__TEST_DSAUDIO_PARSE_CONFIG_H__
 
-/** @} */ // End of Device_Settings_DS_AUDIO_PARSE_CONFIG_H
-/** @} */ // End of Device_Settings_PARSE_CONFIG
+/** @} */ // End of DS_Audio_HALTEST_PARSE_CONFIG
+/** @} */ // End of DS_Audio_HALTEST
 /** @} */ // End of Device_Settings_HALTEST
 /** @} */ // End of Device_Settings
 /** @} */ // End of HPK
