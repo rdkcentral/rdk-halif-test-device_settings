@@ -1,0 +1,29 @@
+dsFPD:
+  Type: source
+  Name: STB_FPD_1_Indicator
+  SupportedFPDIndicators :
+    1: #dsFPD_INDICATOR_POWER
+      Indicator_Type : 0x01 #dsFPD_INDICATOR_POWER
+      MAX_BRIGHTNESS : 100            # Maximum brightness value of FPD LEDs
+      MIN_BRIGHTNESS : 0              # Minimum brightness value of FPD LEDs
+      DEFAULT_LEVELS : 1              # Default Brightness level for the FP text display
+      MAX_CYCLERATE : 2               # Maximum Rate at which LED is rotating during scrolling
+      DEFAULT_COLOR_MODE : 0          # Color Mode of LED (Single(0) or Multicolored(1))
+      MULTI_COLOR_MODE : 2
+      supportedColors :
+      - dsFPD_COLOR_GREEN
+      - dsFPD_COLOR_RED
+      - dsFPD_COLOR_ORANGE
+      - dsFPD_COLOR_WHITE
+  SupportedLEDStates: 0x1FE
+  #dsFPD_LED_DEVICE_NONE,                      ///< Default state
+  #dsFPD_LED_DEVICE_ACTIVE,                    ///< Device is active
+  #dsFPD_LED_DEVICE_STANDBY,                   ///< Device is in standby mode
+  #dsFPD_LED_DEVICE_WPS_CONNECTING,            ///< Device connecting to WPS
+  #dsFPD_LED_DEVICE_WPS_CONNECTED,             ///< Device connected to WPS
+  #dsFPD_LED_DEVICE_WPS_ERROR,                 ///< Error when trying to connect to WPS
+  #dsFPD_LED_DEVICE_FACTORY_RESET,             ///< Reset Device to factory base
+  #dsFPD_LED_DEVICE_USB_UPGRADE,               ///< Updating from USB drive
+  #dsFPD_LED_DEVICE_SOFTWARE_DOWNLOAD_ERROR,   ///< Error in downloading new software update
+  #dsFPD_LED_DEVICE_MAX                        ///< Out of range
+  7segement_display_Support : false
