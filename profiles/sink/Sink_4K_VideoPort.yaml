@@ -48,7 +48,7 @@ dsVideoPort:
             #768p60
             #1080p
             #2160p60
-            supportedResolutons:
+            supportedResolutions:
                 1:
                     name : "480i"
                     #dsVIDEO_PIXELRES_720x480   = 0   ///< 720x480 Resolution
