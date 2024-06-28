@@ -40,7 +40,7 @@ This repository contains the Unit Test Suites (L1 & L2) for the following submod
 |---|-------------|--------------------|-------------|
 |1|Device Settings `HAL`|This document provides specific information on each `DS` sub-module's `APIs` for which tests are written in this module|[`DS` `HAL` Guide](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/docs/pages/README.md)|
 |2|`DS` Audio High-Level Test Spec |`High Level Test Specification` Documentation for `DS` Audio module.|[ds-audio_High-Level_TestSpecification.md]( docs/pages/ds-audio_High-Level_TestSpecification.md)|
-|3|`DS` Audio `L2` Low-Level Test Spec |`L2` `Low Level Test Specification` Documentation for `DS` Audio module|[ds-audio_High-Level_TestSpecification.md]( docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)|
+|3|`DS` Audio `L2` Low-Level Test Spec |`L2` `Low Level Test Specification` Documentation for `DS` Audio module|[ds-audio_L2_Low-Level_TestSpecification.md]( docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)|
 |4|`DS` Video Device High-Level Test Spec |`High Level Test Specification` Documentation for `DS` Video Device module.|[ds-video-device_High-Level_TestSpec.md]( docs/pages/ds-video-device_High-Level_TestSpec.md)|
 |5|`DS` Video Device `L2` Low-Level Test Spec |`L2` `Low Level Test Specification` Documentation for `DS` Video Device module|[ds-video-device_L2-Low-Level_TestSpec.md]( docs/pages/ds-video-device_L2-Low-Level_TestSpec.md)|
 |6|`DS` Video Port High-Level Test Spec |`High Level Test Specification` Documentation for `DS` Video Port module.|[ds-video-port_High-Level_TestSpec.md]( docs/pages/ds-video-port_High-Level_TestSpec.md)|
