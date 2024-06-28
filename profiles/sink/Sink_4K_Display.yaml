@@ -1,6 +1,6 @@
 dsDisplay:
   Type: sink
-  Name: element
+  Name: TV
   features:
     extendedEnumsSupported: false
   EDID_Data:
