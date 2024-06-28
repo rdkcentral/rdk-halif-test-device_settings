@@ -233,21 +233,21 @@ int test_l2_dsDisplay_register(void)
 
     // Create the test suite
     if (status == UT_KVP_STATUS_SUCCESS ) {
-        if (!strncmp(gDeviceType, TEST_TYPE_SOURCE_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) {
+        if (!strncmp(gDeviceType, TEST_TYPE_SINK_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) {
             pSuite = UT_add_suite("[L2 dsDisplay Sink]", NULL, NULL);
             if (pSuite == NULL)
             {
                 return -1;
             }
-            source_type = 1;
+            source_type = 0;
         }
-        else if(!strncmp(gDeviceType, TEST_TYPE_SINK_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) {
+        else if(!strncmp(gDeviceType, TEST_TYPE_SOURCE_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) {
             pSuite = UT_add_suite("[L2 dsDisplay Source ]", NULL, NULL);
             if (pSuite == NULL)
             {
                 return -1;
             }
-            source_type = 0;
+            source_type = 1;
         }
         else {
             UT_LOG_ERROR("Invalid platform type: %s", gDeviceType);
