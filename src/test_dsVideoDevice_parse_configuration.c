@@ -42,18 +42,18 @@
  */
 
 /**
- * @defgroup Device_Settings_HALTEST_PARSE_CONFIG Device Settings Video Device HAL Tests
+ * @defgroup DS_VIdeoDevice_HALTEST Device Settings VIdeo Device HAL Tests
  * @{
  */
 
 /**
- * @defgroup DS_HALTEST_VIDEO_DEVICE_PARSE_CONFIG Device Settings Video Device Parse Config File
+ * @defgroup DS_VIdeoDevice_HALTEST_PARSE_CONFIG Device Settings VIdeo Device Parse Config File
  * @{
  * @parblock
  *
- * ### L2 Tests for DS Video Device HAL :
+ * ### Configuration file for DS VIdeo Device test suit :
  *
- * Level 2 unit test cases for all APIs of Device Settings Video Device HAL
+ *  DS VIdeo Device Parse Configuration file
  *
  * **Pre-Conditions:**  None@n
  * **Dependencies:** None@n
@@ -198,8 +198,8 @@ void test_dsVideoDevice_parse_configuration_term()
 }
 
 
-/** @} */ // End of DS_HALTEST_VIDEO_DEVICE_PARSE_CONFIG
-/** @} */ // End of Device_Settings_HALTEST_PARSE_CONFIG
+/** @} */ // End of DS_VideoDevice_HALTEST_PARSE_CONFIG
+/** @} */ // End of DS_VideoDevice_HALTEST
 /** @} */ // End of Device_Settings_HALTEST
 /** @} */ // End of Device_Settings
 /** @} */ // End of HPK
