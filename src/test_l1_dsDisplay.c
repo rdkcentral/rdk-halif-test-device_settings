@@ -112,7 +112,7 @@ static bool extendedEnumsSupported=false;
    }\
 }
 
-#define MONITOR_NAME_LENGTH 14
+#define dsEEDID_MAX_MON_NAME_LENGTH 14
 
 /**
  * @brief Ensure dsDisplayInit() initializes the DS Display sub-system correctly during positive scenarios
@@ -503,8 +503,6 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
             // Step 04: Call dsGetEDID() again with the same handle
-            //result = dsGetEDID(displayHandle, edid2);
-            //UT_ASSERT_EQUAL(result, dsERR_NONE);
 	    edid2->productCode = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), "dsDisplay/EDID_Data/productCode");
 	    edid2->serialNumber = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), "dsDisplay/EDID_Data/serialNumber");
 	    edid2->manufactureYear = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), "dsDisplay/EDID_Data/manufactureYear");
@@ -516,7 +514,7 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
 	    edid2->physicalAddressC = ut_kvp_getUInt8Field(ut_kvp_profile_getInstance(), "dsDisplay/EDID_Data/physicalAddressC");
 	    edid2->physicalAddressD = ut_kvp_getUInt8Field(ut_kvp_profile_getInstance(), "dsDisplay/EDID_Data/physicalAddressD");
 	    //edid2->numOfSupportedResolution =
-	    int status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsDisplay/EDID_Data/monitorName", edid2->monitorName, MONITOR_NAME_LENGTH);
+	    int status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsDisplay/EDID_Data/monitorName", edid2->monitorName, dsEEDID_MAX_MON_NAME_LENGTH);
 	    if (status != 0) {
                 UT_LOG_ERROR("Failed to get the monitor name");
 	        return ;
