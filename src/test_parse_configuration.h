@@ -37,79 +37,67 @@
  */
 
 /**
- * @defgroup Device_Settings_HALTEST Device Settings HAL Tests
+ * @addtogroup Device_Settings_HALTEST Device Settings HAL Tests
  * @{
  */
 
 /**
- * @defgroup Device_Settings_MAIN Device Settings HAL Tests Main File
- *  @{
+ * @defgroup Device_Settings_PARSE_CONFIG_HEADER Device Settings HAL Tests configuration parser Header File
+ * @{
  * @parblock
  *
- * ### Tests for Device Settings HAL :
+ * ### Configuration parser functions for Device Settings HAL :
  *
- * This is to ensure that the API meets the operational requirements of the module across all vendors.
+ * Configuration parser functions required for the module across all vendors.
  *
- * **Pre-Conditions:** None @n
+ * **Pre-Conditions:**  None @n
  * **Dependencies:** None @n
  *
- * Refer to Device Settings HAL Documentation Guide : [README.md](../../docs/pages/README.md)
- *
  * @endparblock
+ *
  */
 
-
 /**
-* @file main.c
+* @file test_parse_configuration.h
 *
 */
+#ifndef __TEST_PARSE_CONFIG_H__
+#define __TEST_PARSE_CONFIG_H__
 
-#include <ut.h>
-#include "test_parse_configuration.h"
+#include "test_dsAudio_parse_configuration.h"
+#include "test_dsVideoDevice_parse_configuration.h"
+#include "test_dsVideoPort_parse_configuration.h"
 
-extern int UT_register_APIDEF_l1_tests( void );
-extern int UT_register_APIDEF_l2_tests( void );
+#define TEST_DS_DEVICE_TYPE_SIZE     8
+#define TEST_DS_MODULE_NAME_SIZE  32
 
-int main(int argc, char** argv) 
-{
-    int registerReturn = 0;
+#define TEST_TYPE_SOURCE_VALUE     "source"
+#define TEST_TYPE_SINK_VALUE       "sink"
 
-    /* Register tests as required, then call the UT-main to support switches and triggering */
-    UT_init( argc, argv );
+/* Global variables */
+extern char gDeviceType[TEST_DS_DEVICE_TYPE_SIZE];
+extern int32_t gSourceType;
+extern int32_t gDSModule;
 
-    if ( test_parse_configuration() == -1 )
-    {
-        printf("\n Failed to parse the configuration file");
-        test_parse_configuration_term();
-        return -1;
-    }
+typedef enum _dsModule_t {
+    dsNone        = (0x0 << 0),
+    dsAudioPort   = (0x1 << 0),
+    dsVideoPort   = (0x1 << 1),
+    dsComposite   = (0x1 << 2),
+    dsHdmiIn      = (0x1 << 3),
+    dsVideoDevice = (0x1 << 4),
+    dsDisplay     = (0x1 << 5),
+    dsFPD         = (0x1 << 6),
+    dsHost        = (0x1 << 7),
+}dsModule_t;
 
-    /* Check if tests are registered successfully */
+/*Function prototypes */
+int test_parse_configuration();
+void test_parse_configuration_term();
 
-    registerReturn = UT_register_APIDEF_l1_tests();
-    if ( registerReturn == -1 )
-    {
-        printf("\n UT_register_APIDEF_l1_tests() returned failure");
-        return -1;
-    }
+#endif //__TEST_PARSE_CONFIG_H__
 
-    registerReturn = UT_register_APIDEF_l2_tests();
-    if ( registerReturn == -1 )
-    {
-        printf("\n UT_register_APIDEF_l2_tests() returned failure");
-        return -1;
-    }
-
-    /* Begin test executions */
-    UT_run_tests();
-
-    test_parse_configuration_term();
-
-    return 0;
-
-}
-/** @} */ // End of Device_Settings_MAIN
+/** @} */ // End of Device_Settings_PARSE_CONFIG_HEADER
 /** @} */ // End of Device_Settings_HALTEST
 /** @} */ // End of Device_Settings
 /** @} */ // End of HPK
-
