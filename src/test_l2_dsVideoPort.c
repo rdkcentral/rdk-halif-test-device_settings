@@ -342,7 +342,7 @@ void test_l2_dsVideoPort_SetAndGetResolution_source(void)
 
         for (int i = 0; i < gDSVideoPortConfiguration[i].numSupportedResolutions; i++) {
             dsVideoPortResolution_t getResolution;
-            dsVideoPortResolution_t *pSetResolution = &gDSVideoPortConfiguration[port].supportedResolutons[i];
+            dsVideoPortResolution_t *pSetResolution = &gDSVideoPortConfiguration[port].supportedResolutions[i];
 
             UT_LOG_DEBUG("Invoking dsSetResolution() with handle and setResolution");
 
