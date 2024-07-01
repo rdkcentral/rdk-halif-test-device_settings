@@ -292,7 +292,7 @@ void test_l1_dsCompositeIn_positive_dsCompositeInGetNumberOfInputs(void)
     DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInGetNumberOfInputs(&numberOfInputs1), dsERR_NONE);
 
     // Step 03: Get number of inputs for the second time
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInGetNumberOfInputs(&numberOfInputs2), dsERR_NONE);
+    numberOfInputs2=ut_kvp_getUInt16Field(ut_kvp_profile_getInstance(), "composite_input_configurations/number_of_ports");
 
     // Step 04: Compare the results of both calls
     DS_ASSERT_AUTO_TERM_NUMERICAL(numberOfInputs1, numberOfInputs2);
