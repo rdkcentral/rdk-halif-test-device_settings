@@ -94,7 +94,7 @@ static int gTestID    = 1;
 * **Test Case ID:** 001@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -173,7 +173,7 @@ void test_l2_dsAudio_EnableDisableAndVerifyAudioPortStatus(void)
 * **Test Case ID:** 002@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -238,7 +238,7 @@ void test_l2_dsAudio_CheckHeadphoneConnectionStatus_sink(void)
 * **Test Case ID:** 003@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -308,7 +308,7 @@ void test_l2_dsAudio_RetrieveAndVerifyMS12Capabilities(void)
 * **Test Case ID:** 004@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -381,7 +381,7 @@ void test_l2_dsAudio_SetAndGetAudioCompression(void)
 * **Test Case ID:** 005@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 *   [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -453,7 +453,7 @@ void test_l2_dsAudio_SetAndGetDialogEnhancement(void)
 * **Test Case ID:** 06@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -536,7 +536,7 @@ void test_l2_dsAudio_SetAndGetDolbyVolumeMode(void)
 * **Test Case ID:** 07@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -612,7 +612,7 @@ void test_l2_dsAudio_SetAndGetIntelligentEqualizerMode(void)
 * **Test Case ID:** 08@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -690,7 +690,7 @@ void test_l2_dsAudio_SetAndGetVolumeLeveller(void)
 * **Test Case ID:** 09@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -763,7 +763,7 @@ void test_l2_dsAudio_SetAndGetBassEnhancer(void)
 * **Test Case ID:** 010@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -849,7 +849,7 @@ void test_l2_dsAudio_EnableAndVerifySurroundDecoder(void)
 * **Test Case ID:** 011@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -925,7 +925,7 @@ void test_l2_dsAudio_SetAndGetDRCMode(void)
 * **Test Case ID:** 012@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -1002,7 +1002,7 @@ void test_l2_dsAudio_SetAndGetSurroundVirtualizer(void)
 * **Test Case ID:** 013@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -1093,7 +1093,7 @@ void test_l2_dsAudio_SetAndGetMISteering(void)
 * **Test Case ID:** 014@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
+* Refer to Test specification documentation [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
 void test_l2_dsAudio_SetAndGetGraphicEqualizerMode(void)
@@ -1167,7 +1167,7 @@ void test_l2_dsAudio_SetAndGetGraphicEqualizerMode(void)
 * **Test Case ID:** 015@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -1250,7 +1250,7 @@ void test_l2_dsAudio_EnableDisableAndRetrieveLEConfig(void)
 * **Test Case ID:** 016@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -1310,7 +1310,7 @@ void test_l2_dsAudio_CheckMS12DecodeSupport(void)
 * **Test Case ID:** 017@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -1365,7 +1365,7 @@ void test_l2_dsAudio_CheckMS11DecodeSupport(void)
 * **Test Case ID:** 018@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -1435,7 +1435,7 @@ void test_l2_dsAudio_VerifyMS12AudioProfiles_sink(void)
 * **Test Case ID:** 019@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -1517,7 +1517,7 @@ void test_l2_dsAudio_SetAndGetMS12AudioProfile_sink(void)
 * **Test Case ID:** 020@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -1582,7 +1582,7 @@ void test_l2_dsAudio_SetAndGetStereoMode(void)
 * **Test Case ID:** 021@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -1647,7 +1647,7 @@ void test_l2_dsAudio_SetAndGetStereoAuto_sink(void)
 * **Test Case ID:** 022@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -1712,7 +1712,7 @@ void test_l2_dsAudio_SetAndGetAudioGain_sink(void)
 * **Test Case ID:** 023@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -1779,7 +1779,7 @@ void test_l2_dsAudio_SetAndGetAudioLevel_sink(void)
 * **Test Case ID:** 024@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -1850,7 +1850,7 @@ void test_l2_dsAudio_AudioMuteVerification(void)
 * **Test Case ID:** 025@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -1916,7 +1916,7 @@ void test_l2_dsAudio_SetAndGetAudioDelay(void)
 * **Test Case ID:** 026@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -1975,7 +1975,7 @@ void test_l2_dsAudio_VerifyAtmosCapabilities_sink(void)
 * **Test Case ID:** 027@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -2025,7 +2025,7 @@ void test_l2_dsAudio_GetAudioCapabilities(void)
 * **Test Case ID:** 028@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -2086,7 +2086,7 @@ void test_l2_dsAudio_EnableDisableRetrieveAudioMixing(void)
 * **Test Case ID:** 029@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -2143,7 +2143,7 @@ void test_l2_dsAudio_AudioPortControl(void)
 * **Test Case ID:** 030@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 
@@ -2198,7 +2198,7 @@ void test_l2_dsAudio_SetAndGetPrimaryLanguage(void)
 * **Test Case ID:** 031@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation
+* Refer to Test specification documentation
 * [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
 */
 

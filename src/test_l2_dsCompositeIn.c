@@ -87,7 +87,7 @@ static int gTestID = 1;
 * **Test Case ID:** 001@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [ds-compositeIn-L2-Low-Level_TestSpec.md](../docs/pages/ds-compositeIn-L2-Low-Level_TestSpec.md)
+* Refer to Test specification documentation [ds-compositeIn-L2-Low-Level_TestSpec.md](../docs/pages/ds-compositeIn-L2-Low-Level_TestSpec.md)
 */
 
 void test_l2_dsCompositeIn_GetNumberOfInputs(void)
@@ -139,7 +139,7 @@ void test_l2_dsCompositeIn_GetNumberOfInputs(void)
 * **Test Case ID:** 002@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [ds-compositeIn-L2-Low-Level_TestSpec.md](../docs/pages/ds-compositeIn-L2-Low-Level_TestSpec.md)
+* Refer to Test specification documentation [ds-compositeIn-L2-Low-Level_TestSpec.md](../docs/pages/ds-compositeIn-L2-Low-Level_TestSpec.md)
 */
 
 void test_l2_dsCompositeIn_VerifyCompositeInputStatus(void)
@@ -202,7 +202,7 @@ void test_l2_dsCompositeIn_VerifyCompositeInputStatus(void)
 * **Test Case ID:** 003@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [ds-compositeIn-L2-Low-Level_TestSpec.md](../docs/pages/ds-compositeIn-L2-Low-Level_TestSpec.md)
+* Refer to Test specification documentation [ds-compositeIn-L2-Low-Level_TestSpec.md](../docs/pages/ds-compositeIn-L2-Low-Level_TestSpec.md)
 */
 
 void test_l2_dsCompositeIn_VerifyCompositeInPortSelectionAndStatus(void)
