@@ -1,10 +1,12 @@
+# Profile for L1
 dsHdmiIn:
   Type: source
-  Name: xi-one
-  compositeInputPort:
-    numberOfPorts: 0
-  HdmiInputPort:
-    numberOfPorts: 0
-  HdmiArcPort:
-    portNumber: 0
-gameFeatures: false
+  Name: STB
+  features:
+    extendedEnumsSupported: false
+  numberOfPorts: 0
+  EdidVersion: #No ports
+  HdmiArcPortID: #No ports
+  gameFeatures:
+    feature: ""
+    count: 0
