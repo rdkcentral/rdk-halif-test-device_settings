@@ -73,7 +73,7 @@
 #include <stdlib.h>
 #include "dsAudio.h"
 #include "dsAudioSettings.h"
-#include "test_utils.h"
+#include "test_dsAudio_parse_configuration.h"
 #include <ut.h>
 #include <ut_log.h>
 #include <ut_kvp_profile.h>
@@ -304,7 +304,7 @@ void test_l1_dsAudio_positive_dsGetAudioPort(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t  result;
-	intptr_t*  handle;
+	intptr_t*  handle = NULL;
 	intptr_t  lastHandle , newHandle;
 
 	// allocate memory for the handles
@@ -376,7 +376,7 @@ void test_l1_dsAudio_negative_dsGetAudioPort(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t  result;
-	intptr_t*  handle;
+	intptr_t*  handle = NULL;
 
 	// allocate memory for the handles
         handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -455,7 +455,7 @@ void test_l1_dsAudio_positive_dsGetAudioEncoding(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t  result;
-	intptr_t*  handle;
+	intptr_t*  handle = NULL;
 	dsAudioEncoding_t*  encodingarray[MAX_ARRAY_SIZE];
 
 	// allocate memory for the handles
@@ -550,7 +550,7 @@ void test_l1_dsAudio_negative_dsGetAudioEncoding(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t  result;
-	intptr_t*  handle;
+	intptr_t*  handle = NULL;
 
 	dsAudioEncoding_t* encoding;
 
@@ -637,7 +637,7 @@ void test_l1_dsAudio_positive_dsSetAudioEncoding(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t  result;
-	intptr_t*  handle;
+	intptr_t*  handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -725,7 +725,7 @@ void test_l1_dsAudio_negative_dsSetAudioEncoding(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t*  handle;
+	intptr_t*  handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -799,7 +799,7 @@ void test_l1_dsAudio_positive_dsGetAudioFormat(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t*  handle;
+	intptr_t*  handle = NULL;
 
 	dsAudioFormat_t* audioFormatarray[MAX_ARRAY_SIZE];
 
@@ -894,7 +894,7 @@ void test_l1_dsAudio_negative_dsGetAudioFormat(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t*  handle;
+	intptr_t*  handle = NULL;
 	dsAudioFormat_t* audioFormat;
 
 	// allocate memory for the handles
@@ -981,7 +981,7 @@ void test_l1_dsAudio_positive_dsGetAudioCompression(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t*  handle;
+	intptr_t*  handle = NULL;
 	int*  compression[MAX_ARRAY_SIZE];
 
 	// allocate memory for the handles
@@ -1069,7 +1069,7 @@ void test_l1_dsAudio_negative_dsGetAudioCompression(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int* compression;
 
 	// allocate memory for the handles
@@ -1159,7 +1159,7 @@ void test_l1_dsAudio_positive_dsSetAudioCompression(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int min_compression = 0, max_compression = 10, mid_compression = 5;
 
 	// allocate memory for the handles
@@ -1234,7 +1234,7 @@ void test_l1_dsAudio_negative_dsSetAudioCompression(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int max_compression = 10, out_of_range_pos = 20, out_of_range_neg = -10;
 
 	// allocate memory for the handles
@@ -1313,7 +1313,7 @@ void test_l1_dsAudio_positive_dsGetDialogEnhancement(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t*  handle;
+	intptr_t*  handle = NULL;
 	int* dialogEnhancementLevel;
 
 	// allocate memory for the handles
@@ -1394,7 +1394,7 @@ void test_l1_dsAudio_negative_dsGetDialogEnhancement(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int* dialogEnhancementLevel;
 
 	// allocate memory for the handles
@@ -1483,7 +1483,7 @@ void test_l1_dsAudio_positive_dsSetDialogEnhancement(void) {
 
 	dsError_t result;
 	int min_de_level = 0, max_de_level = 16, mid_de_level = 8;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -1559,7 +1559,7 @@ void test_l1_dsAudio_negative_dsSetDialogEnhancement(void) {
 
 	dsError_t result;
 	int valid_de_level = 10, invalid_de_level_pos = 20, invalid_de_level_neg = -10;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 
         // allocate memory for the handles
         handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -1636,7 +1636,7 @@ void test_l1_dsAudio_positive_dsGetDolbyVolumeMode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t  result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool* dolbyVolumeMode;
 
 	// allocate memory for the handles
@@ -1714,7 +1714,7 @@ void test_l1_dsAudio_negative_dsGetDolbyVolumeMode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle= NULL;
 	bool* dolbyVolumeMode;
 
         // allocate memory for the handles
@@ -1801,7 +1801,7 @@ void test_l1_dsAudio_positive_dsSetDolbyVolumeMode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool mode = true;
 
         // allocate memory for the handles
@@ -1866,7 +1866,7 @@ void test_l1_dsAudio_negative_dsSetDolbyVolumeMode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool validMode = true; // Assuming 'true' as a valid mode
 
         // allocate memory for the handles
@@ -1936,7 +1936,7 @@ void test_l1_dsAudio_positive_dsGetIntelligentEqualizerMode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int* intelligentEqualizerMode;
 
         // allocate memory for the handles
@@ -2015,7 +2015,7 @@ void test_l1_dsAudio_negative_dsGetIntelligentEqualizerMode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int* intelligentEqualizerMode;
 
         // allocate memory for the handles
@@ -2101,7 +2101,7 @@ void test_l1_dsAudio_positive_dsSetIntelligentEqualizerMode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t  result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -2168,7 +2168,7 @@ void test_l1_dsAudio_negative_dsSetIntelligentEqualizerMode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int valid_mode = 0, invalid_mode = -1; 
 
 	// allocate memory for the handles
@@ -2242,7 +2242,7 @@ void test_l1_dsAudio_positive_dsGetVolumeLeveller(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	dsVolumeLeveller_t* volLeveller;
 
 	// allocate memory for the handles
@@ -2320,7 +2320,7 @@ void test_l1_dsAudio_negative_dsGetVolumeLeveller(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	dsVolumeLeveller_t* volLeveller;
 
 	// allocate memory for the handles
@@ -2408,7 +2408,7 @@ void test_l1_dsAudio_positive_dsSetVolumeLeveller(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	dsVolumeLeveller_t volLeveller;
 
 	// allocate memory for the handles
@@ -2482,7 +2482,7 @@ void test_l1_dsAudio_negative_dsSetVolumeLeveller(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	dsVolumeLeveller_t volLeveller;
 	int valid_mode = 2, valid_level = 10, invalid_mode = -1, invalid_level = 20;
 
@@ -2575,7 +2575,7 @@ void test_l1_dsAudio_positive_dsGetBassEnhancer(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int* boostarray[MAX_ARRAY_SIZE];
 
 	// allocate memory for the handles
@@ -2664,7 +2664,7 @@ void test_l1_dsAudio_negative_dsGetBassEnhancer(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int boost;
 
 	// allocate memory for the handles
@@ -2738,7 +2738,7 @@ void test_l1_dsAudio_positive_dsSetBassEnhancer(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int min_boost = 0, max_boost = 100, mid_boost = 50;
 
 	// allocate memory for the handles
@@ -2810,7 +2810,7 @@ void test_l1_dsAudio_negative_dsSetBassEnhancer(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int boost = 75, invalidBoost_pos = 101, invalidBoost_neg = -20;
 
 	// allocate memory for the handles
@@ -2887,7 +2887,7 @@ void test_l1_dsAudio_positive_dsIsSurroundDecoderEnabled(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool* surroundDecoderEnabled;
 
 	// allocate memory for the handles
@@ -2965,7 +2965,7 @@ void test_l1_dsAudio_negative_dsIsSurroundDecoderEnabled(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle= NULL;
 	bool surroundDecoderEnabled;
 
 	// allocate memory for the handles
@@ -3039,7 +3039,7 @@ void test_l1_dsAudio_positive_dsEnableSurroundDecoder(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool enabledValue = true;
 
 	// allocate memory for the handles
@@ -3105,7 +3105,7 @@ void test_l1_dsAudio_negative_dsEnableSurroundDecoder(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool enabled = true;
 
 	// allocate memory for the handles
@@ -3177,7 +3177,7 @@ void test_l1_dsAudio_positive_dsGetDRCMode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int* drcModearray [MAX_ARRAY_SIZE];
 
 	// allocate memory for the handles
@@ -3269,7 +3269,7 @@ void test_l1_dsAudio_negative_dsGetDRCMode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int drcMode;
 
 	// allocate memory for the handles
@@ -3343,7 +3343,7 @@ void test_l1_dsAudio_positive_dsSetDRCMode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int mode = 1;
 
 	// allocate memory for the handles
@@ -3410,7 +3410,7 @@ void test_l1_dsAudio_negative_dsSetDRCMode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int validMode = 1, invalidMode = 2;
 
 	// allocate memory for the handles
@@ -3486,7 +3486,7 @@ void test_l1_dsAudio_positive_dsGetSurroundVirtualizer(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	dsSurroundVirtualizer_t* surroundVirtualizerarray[MAX_ARRAY_SIZE];
 
 	// allocate memory for the handles
@@ -3581,7 +3581,7 @@ void test_l1_dsAudio_negative_dsGetSurroundVirtualizer(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	dsSurroundVirtualizer_t virtualizerLevel;
 
 	// allocate memory for the handles
@@ -3656,7 +3656,7 @@ void test_l1_dsAudio_positive_dsSetSurroundVirtualizer(void) {
 
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int boost_min = 0, boost_max = 96, boost_mid = 48;
 	dsSurroundVirtualizer_t virtualizer;
 
@@ -3738,7 +3738,7 @@ void test_l1_dsAudio_negative_dsSetSurroundVirtualizer(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	dsSurroundVirtualizer_t virtualizer;
 	int valid_mode = 2, valid_boost = 96, invalid_mode = -1, invalid_boost = 100;
 
@@ -3828,7 +3828,7 @@ void test_l1_dsAudio_positive_dsGetMISteering(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool* miSteeringEnabledarray[MAX_ARRAY_SIZE];
 
 	// allocate memory for the handles
@@ -3920,7 +3920,7 @@ void test_l1_dsAudio_negative_dsGetMISteering(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool miSteeringEnabled;
 
 	// allocate memory for the handles
@@ -3993,7 +3993,7 @@ void test_l1_dsAudio_positive_dsSetMISteering(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool enabledValue = true;
 
 	// allocate memory for the handles
@@ -4058,7 +4058,7 @@ void test_l1_dsAudio_negative_dsSetMISteering(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t*  handle;
+	intptr_t*  handle = NULL;
 	bool enabled = true;
 
 	// allocate memory for the handles
@@ -4130,7 +4130,7 @@ void test_l1_dsAudio_positive_dsGetGraphicEqualizerMode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int* graphicEqModearray[MAX_ARRAY_SIZE];
 
 	// allocate memory for the handles
@@ -4224,7 +4224,7 @@ void test_l1_dsAudio_negative_dsGetGraphicEqualizerMode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int graphicEqMode;
 
 	// allocate memory for the handles
@@ -4298,7 +4298,7 @@ void test_l1_dsAudio_positive_dsSetGraphicEqualizerMode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int validModes[] = {0, 1, 2, 3}; // Array of valid Graphic Equalizer modes
 
 	// allocate memory for the handles
@@ -4366,7 +4366,7 @@ void test_l1_dsAudio_negative_dsSetGraphicEqualizerMode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int valid_mode = 2, invalid_mode_neg = -1, invalid_mode_pos = 4;
 
 	// allocate memory for the handles
@@ -4447,7 +4447,7 @@ void test_l1_dsAudio_positive_dsGetMS12AudioProfileList(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	dsMS12AudioProfileList_t* profileListarray[MAX_ARRAY_SIZE];
 
 	// allocate memory for the handles
@@ -4549,7 +4549,7 @@ void test_l1_dsAudio_negative_dsGetMS12AudioProfileList(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	dsMS12AudioProfileList_t profileList;
 
 	// allocate memory for the handles
@@ -4624,7 +4624,7 @@ void test_l1_dsAudio_positive_dsGetMS12AudioProfile(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	char currentProfile[MAX_PROFILE_NAME_LEN];
 
 	// allocate memory for the handles
@@ -4700,7 +4700,7 @@ void test_l1_dsAudio_negative_dsGetMS12AudioProfile(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	char currentProfile[MAX_PROFILE_NAME_LEN];
 
 	// allocate memory for the handles
@@ -4777,7 +4777,7 @@ void test_l1_dsAudio_positive_dsGetStereoMode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	dsAudioStereoMode_t* stereoMode[MAX_ARRAY_SIZE];
 
 	// allocate memory for the handles
@@ -4858,7 +4858,7 @@ void test_l1_dsAudio_negative_dsGetStereoMode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	dsAudioStereoMode_t stereoMode;
 
 	// allocate memory for the handles
@@ -4932,7 +4932,7 @@ void test_l1_dsAudio_positive_dsSetStereoMode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -5001,7 +5001,7 @@ void test_l1_dsAudio_negative_dsSetStereoMode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -5075,7 +5075,7 @@ void test_l1_dsAudio_positive_dsGetStereoAuto(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int* autoMode[MAX_ARRAY_SIZE];
 
 	// allocate memory for the handles
@@ -5162,7 +5162,7 @@ void test_l1_dsAudio_negative_dsGetStereoAuto(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int autoMode;
 
 	// allocate memory for the handles
@@ -5236,7 +5236,7 @@ void test_l1_dsAudio_positive_dsSetStereoAuto(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int autoMode = 1;
 
 	// allocate memory for the handles
@@ -5302,7 +5302,7 @@ void test_l1_dsAudio_negative_dsSetStereoAuto(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int autoMode = 1, invalidAutoMode = -1;
 
 	// allocate memory for the handles
@@ -5378,7 +5378,7 @@ void test_l1_dsAudio_positive_dsGetAudioGain(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	float* gainarray[MAX_ARRAY_SIZE];
 
 	// allocate memory for the handles
@@ -5467,7 +5467,7 @@ void test_l1_dsAudio_negative_dsGetAudioGain(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	float gain;
 
 	// allocate memory for the handles
@@ -5541,7 +5541,7 @@ void test_l1_dsAudio_positive_dsSetAudioGain(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	float gain_min = -2080, gain_max = 480, gain_mid = -200;
 
 	// allocate memory for the handles
@@ -5613,7 +5613,7 @@ void test_l1_dsAudio_negative_dsSetAudioGain(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	float gainValue = 200, invalid_gain_neg = -3000, invalid_gain_pos = 500;
 
 	// allocate memory for the handles
@@ -5692,7 +5692,7 @@ void test_l1_dsAudio_positive_dsGetAudioDB(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	float* dbArray[MAX_ARRAY_SIZE];
 
 	// allocate memory for the handles
@@ -5782,7 +5782,7 @@ void test_l1_dsAudio_negative_dsGetAudioDB(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	float db;
 
 	// allocate memory for the handles
@@ -5856,7 +5856,7 @@ void test_l1_dsAudio_positive_dsSetAudioDB(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	float db_max = 180, db_min = -1450, db_mid = -500;
 
 	// allocate memory for the handles
@@ -5928,7 +5928,7 @@ void test_l1_dsAudio_negative_dsSetAudioDB(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	float valid_db = 100, invalid_db_neg = -1500, invalid_db_pos = 200;
 
 	// allocate memory for the handles
@@ -6007,7 +6007,7 @@ void test_l1_dsAudio_positive_dsGetAudioLevel(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	float* audioLevel[MAX_ARRAY_SIZE];
 
 	// allocate memory for the handles
@@ -6098,7 +6098,7 @@ void test_l1_dsAudio_negative_dsGetAudioLevel(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	float audioLevel;
 
 	// allocate memory for the handles
@@ -6172,7 +6172,7 @@ void test_l1_dsAudio_positive_dsSetAudioLevel(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	float minAudioLevel = 0, maxAudioLevel = 100, midAudioLevel = 50; 
 
 	// allocate memory for the handles
@@ -6242,7 +6242,7 @@ void test_l1_dsAudio_negative_dsSetAudioLevel(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle= NULL;
 	float audio_level = 50, invalid_audio_level_neg = -10, invalid_audio_level_pos = 120;
 
 	// allocate memory for the handles
@@ -6321,7 +6321,7 @@ void test_l1_dsAudio_positive_dsGetAudioMaxDB(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	float* maxDbArray[MAX_ARRAY_SIZE];
 
 	// allocate memory for the handles
@@ -6411,7 +6411,7 @@ void test_l1_dsAudio_negative_dsGetAudioMaxDB(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	float maxDb;
 
 	// allocate memory for the handles
@@ -6487,7 +6487,7 @@ void test_l1_dsAudio_positive_dsGetAudioMinDB(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	float* minDbArray[MAX_ARRAY_SIZE]; // arrays for min dB values
 
 	// allocate memory for the handles
@@ -6577,7 +6577,7 @@ void test_l1_dsAudio_negative_dsGetAudioMinDB(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	float minDb;
 
 	// allocate memory for the handles
@@ -6653,7 +6653,7 @@ void test_l1_dsAudio_positive_dsGetAudioOptimalLevel(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	float* optimalLevelArray[MAX_ARRAY_SIZE];
 
 	// allocate memory for the handles
@@ -6741,7 +6741,7 @@ void test_l1_dsAudio_negative_dsGetAudioOptimalLevel(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	float optimalLevel;
 
 	// allocate memory for the handles
@@ -6817,7 +6817,7 @@ void test_l1_dsAudio_positive_dsGetAudioDelay(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	uint32_t* audioDelayArray[MAX_ARRAY_SIZE];
 
 	// allocate memory for the handles
@@ -6907,7 +6907,7 @@ void test_l1_dsAudio_negative_dsGetAudioDelay(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	uint32_t audioDelay;
 
 	// allocate memory for the handles
@@ -6981,7 +6981,7 @@ void test_l1_dsAudio_positive_dsSetAudioDelay(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	uint32_t audio_delay_min = 0, audio_delay_mid = 100, audio_delay_max = 200;
 
 	// allocate memory for the handles
@@ -7053,7 +7053,7 @@ void test_l1_dsAudio_negative_dsSetAudioDelay(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	uint32_t audio_delay = 100, invalid_audio_delay = 300;
 
 	// allocate memory for the handles
@@ -7128,7 +7128,7 @@ void test_l1_dsAudio_positive_dsGetAudioDelayOffset(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	uint32_t* audioDelayOffsetMs[MAX_ARRAY_SIZE];
 
 	// allocate memory for the handles
@@ -7216,7 +7216,7 @@ void test_l1_dsAudio_negative_dsGetAudioDelayOffset(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	uint32_t audioDelayOffsetMs;
 
 	// allocate memory for the handles
@@ -7289,7 +7289,7 @@ void test_l1_dsAudio_positive_dsSetAudioDelayOffset(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	uint32_t audioDelayOffsetMs = 200;
 
 	// allocate memory for the handles
@@ -7355,7 +7355,7 @@ void test_l1_dsAudio_negative_dsSetAudioDelayOffset(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	uint32_t audio_delay_offset = 200 , invalid_audio_delay_offset= 300; 
 
 	// allocate memory for the handles
@@ -7429,7 +7429,7 @@ void test_l1_dsAudio_positive_dsSetAudioAtmosOutputMode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool enable = true , disable = false;
 
 	// allocate memory for the handles
@@ -7498,7 +7498,7 @@ void test_l1_dsAudio_negative_dsSetAudioAtmosOutputMode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool valid_value = true;
 
 	// allocate memory for the handles
@@ -7570,7 +7570,7 @@ void test_l1_dsAudio_positive_dsGetSinkDeviceAtmosCapability(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	dsATMOSCapability_t* atmosCapability[MAX_ARRAY_SIZE];
 
 	// allocate memory for the handles
@@ -7658,7 +7658,7 @@ void test_l1_dsAudio_negative_dsGetSinkDeviceAtmosCapability(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	dsATMOSCapability_t atmosCapability;
 
 	// allocate memory for the handles
@@ -7734,7 +7734,7 @@ void test_l1_dsAudio_positive_dsIsAudioLoopThru(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool* loopThruArray[MAX_ARRAY_SIZE];
 
 
@@ -7824,7 +7824,7 @@ void test_l1_dsAudio_negative_dsIsAudioLoopThru(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool loopThru;
 
 	// allocate memory for the handles
@@ -7896,7 +7896,7 @@ void test_l1_dsAudio_positive_dsIsAudioMute(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool* muteStatusArray[MAX_ARRAY_SIZE];
 
 	// allocate memory for the handles
@@ -7984,7 +7984,7 @@ void test_l1_dsAudio_negative_dsIsAudioMute(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool muted;
 
 	// allocate memory for the handles
@@ -8056,7 +8056,7 @@ void test_l1_dsAudio_positive_dsIsAudioPortEnabled(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool* enabledStatusArray[MAX_ARRAY_SIZE];
 
 	// allocate memory for the handles
@@ -8144,7 +8144,7 @@ void test_l1_dsAudio_negative_dsIsAudioPortEnabled(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool isEnabled;
 
 	// allocate memory for the handles
@@ -8216,7 +8216,7 @@ void test_l1_dsAudio_positive_dsEnableAudioPort(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t*  handle;
+	intptr_t*  handle = NULL;
 	bool enabledStatus;
 
 	// allocate memory for the handles
@@ -8296,7 +8296,7 @@ void test_l1_dsAudio_negative_dsEnableAudioPort(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t*  handle;
+	intptr_t*  handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -8366,7 +8366,7 @@ void test_l1_dsAudio_positive_dsEnableMS12Config(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -8438,7 +8438,7 @@ void test_l1_dsAudio_negative_dsEnableMS12Config(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -8511,7 +8511,7 @@ void test_l1_dsAudio_positive_dsEnableLEConfig(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -8576,7 +8576,7 @@ void test_l1_dsAudio_negative_dsEnableLEConfig(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -8647,7 +8647,7 @@ void test_l1_dsAudio_positive_dsGetLEConfig(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool* leconfigarray[MAX_ARRAY_SIZE];
 
 	// allocate memory for the handles
@@ -8735,7 +8735,7 @@ void test_l1_dsAudio_negative_dsGetLEConfig(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool enable;
 
 	// allocate memory for the handles
@@ -8809,7 +8809,7 @@ void test_l1_dsAudio_positive_dsSetMS12AudioProfile(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t*  handle;
+	intptr_t*  handle = NULL;
 	char *validProfile = "YourValidMS12Profile"; // Replace with a valid profile from _dsMS12AudioProfileList_t
 
 	// allocate memory for the handles
@@ -8877,7 +8877,7 @@ void test_l1_dsAudio_negative_dsSetMS12AudioProfile(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	char *validProfile = "YourValidMS12Profile"; // Replace with a valid profile from _dsMS12AudioProfileList_t
 
 	// allocate memory for the handles
@@ -8951,7 +8951,7 @@ void test_l1_dsAudio_positive_dsSetAudioDucking(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	dsAudioDuckingAction_t action;
 	dsAudioDuckingType_t   type;
 	unsigned char level = 100;
@@ -9026,7 +9026,7 @@ void test_l1_dsAudio_negative_dsSetAudioDucking(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t*  handle;
+	intptr_t*  handle = NULL;
 	dsAudioDuckingAction_t  valid_action = dsAUDIO_DUCKINGACTION_START;
 	dsAudioDuckingAction_t  invalid_action = dsAudio_DUCKINGACTION_MAX;
 
@@ -9114,7 +9114,7 @@ void test_l1_dsAudio_positive_dsEnableLoopThru(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -9184,7 +9184,7 @@ void test_l1_dsAudio_negative_dsEnableLoopThru(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -9253,7 +9253,7 @@ void test_l1_dsAudio_positive_dsSetAudioMute(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t*  handle;
+	intptr_t*  handle = NULL;
 	bool mute = true , unmute = false;
 
 	// allocate memory for the handles
@@ -9324,7 +9324,7 @@ void test_l1_dsAudio_negative_dsSetAudioMute(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool valid_value = true;
 
 	// allocate memory for the handles
@@ -9394,7 +9394,7 @@ void test_l1_dsAudio_positive_dsIsAudioMSDecode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool* hasMS11Decode;
 
 	// allocate memory for the handles
@@ -9472,7 +9472,7 @@ void test_l1_dsAudio_negative_dsIsAudioMSDecode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool hasMS11Decode;
 
 	// allocate memory for the handles
@@ -9547,7 +9547,7 @@ void test_l1_dsAudio_positive_dsIsAudioMS12Decode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool* hasMS12Decode;
 
 	// allocate memory for the handles
@@ -9625,7 +9625,7 @@ void test_l1_dsAudio_negative_dsIsAudioMS12Decode(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool hasMS12Decode;
 
 	// allocate memory for the handles
@@ -9699,7 +9699,7 @@ void test_l1_dsAudio_positive_dsAudioOutIsConnected(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool* isConnected;
 
 	// allocate memory for the handles
@@ -9777,7 +9777,7 @@ void test_l1_dsAudio_negative_dsAudioOutIsConnected(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool isConnected;
 
 	// allocate memory for the handles
@@ -10038,7 +10038,7 @@ void test_l1_dsAudio_positive_dsGetAudioCapabilities(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int* capabilities[MAX_ARRAY_SIZE];
 
 	// allocate memory for the handles
@@ -10126,7 +10126,7 @@ void test_l1_dsAudio_negative_dsGetAudioCapabilities(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result , capabilities;
-	intptr_t*  handle;
+	intptr_t*  handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -10201,7 +10201,7 @@ void test_l1_dsAudio_positive_dsGetMS12Capabilities(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t*  handle;
+	intptr_t*  handle = NULL;
 	int* ms12Capabilities[MAX_ARRAY_SIZE];
 
 	// allocate memory for the handles
@@ -10290,7 +10290,7 @@ void test_l1_dsAudio_negative_dsGetMS12Capabilities(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int ms12Capabilities;
 
 	// allocate memory for the handles
@@ -10363,7 +10363,7 @@ void test_l1_dsAudio_positive_dsResetDialogEnhancement(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -10428,7 +10428,7 @@ void test_l1_dsAudio_negative_dsResetDialogEnhancement(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -10497,7 +10497,7 @@ void test_l1_dsAudio_positive_dsResetBassEnhancer(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -10563,7 +10563,7 @@ void test_l1_dsAudio_negative_dsResetBassEnhancer(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -10630,7 +10630,7 @@ void test_l1_dsAudio_positive_dsResetSurroundVirtualizer(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -10695,7 +10695,7 @@ void test_l1_dsAudio_negative_dsResetSurroundVirtualizer(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -10762,7 +10762,7 @@ void test_l1_dsAudio_positive_dsResetVolumeLeveller(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 
 	// Step 01: Initialize audio ports
 	result = dsAudioPortInit();
@@ -10820,7 +10820,7 @@ void test_l1_dsAudio_negative_dsResetVolumeLeveller(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -10889,7 +10889,7 @@ void test_l1_dsAudio_positive_dsSetAssociatedAudioMixing(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -10957,7 +10957,7 @@ void test_l1_dsAudio_negative_dsSetAssociatedAudioMixing(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t*  handle;
+	intptr_t*  handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -11028,7 +11028,7 @@ void test_l1_dsAudio_positive_dsGetAssociatedAudioMixing(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t*  handle;
+	intptr_t*  handle = NULL;
 	bool* mixing[MAX_ARRAY_SIZE];
 
 	// allocate memory for the handles
@@ -11109,7 +11109,7 @@ void test_l1_dsAudio_negative_dsGetAssociatedAudioMixing(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	bool mixing;
 
 	// allocate memory for the handles
@@ -11183,7 +11183,7 @@ void test_l1_dsAudio_positive_dsSetFaderControl(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int mixerbalance_neg = -32 ,mixerbalance_pos = 32;
 
 	// allocate memory for the handles
@@ -11255,7 +11255,7 @@ void test_l1_dsAudio_negative_dsSetFaderControl(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int invalidMixerBalance = 100;                     // invalid mixer balance value
 
 	// allocate memory for the handles
@@ -11332,7 +11332,7 @@ void test_l1_dsAudio_positive_dsGetFaderControl(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	int* mixerBalance[MAX_ARRAY_SIZE];
 
 	// allocate memory for the handles
@@ -11421,7 +11421,7 @@ void test_l1_dsAudio_negative_dsGetFaderControl(void) {
 
 	int result;
 	int mixerBalance;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -11494,7 +11494,7 @@ void test_l1_dsAudio_positive_dsSetPrimaryLanguage(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	const char *primaryLanguage = "ENG"; // Assuming "ENG" is a valid language code
 
 	// allocate memory for the handles
@@ -11561,7 +11561,7 @@ void test_l1_dsAudio_negative_dsSetPrimaryLanguage(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	const char *invalidLanguage = "XYZ"; // Assuming "XYZ" is an invalid language code
 
 	// allocate memory for the handles
@@ -11642,7 +11642,7 @@ void test_l1_dsAudio_positive_dsGetPrimaryLanguage(void) {
 
 	int array_size = 4; // Assuming 3 letter language code plus null terminator
 	int result;
-	intptr_t*  handle;
+	intptr_t*  handle = NULL;
 	char primaryLanguage[array_size], primaryLanguage1[array_size];
 
 	// allocate memory for the handles
@@ -11715,7 +11715,7 @@ void test_l1_dsAudio_negative_dsGetPrimaryLanguage(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	char primaryLanguage[4];
 
 	// allocate memory for the handles
@@ -11789,7 +11789,7 @@ void test_l1_dsAudio_positive_dsSetSecondaryLanguage(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -11855,7 +11855,7 @@ void test_l1_dsAudio_negative_dsSetSecondaryLanguage(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -11935,7 +11935,7 @@ void test_l1_dsAudio_positive_dsGetSecondaryLanguage(void) {
 
 
 	int result , array_size = 4;        //Assuming a 3 letter language code plus null terminator
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	char languageCode[array_size] , languageCode1[array_size];
 
 	// allocate memory for the handles
@@ -12008,7 +12008,7 @@ void test_l1_dsAudio_negative_dsGetSecondaryLanguage(void) {
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 	char languageCode[4];
 
 	// allocate memory for the handles
@@ -12176,7 +12176,7 @@ void test_l1_dsAudio_positive_dsSetAudioMixerLevels(void) {
         UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
         int result, volume = 75;
-        intptr_t* handle;
+        intptr_t* handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -12253,7 +12253,7 @@ void test_l1_dsAudio_negative_dsSetAudioMixerLevels(void) {
         UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result, invalid_vol_level_pos = 105, invalid_vol_level_neg = -5, valid_vol_level = 75;
-	intptr_t* handle;
+	intptr_t* handle = NULL;
 
 	// allocate memory for the handles
 	handle = (intptr_t *) calloc(gDSAudioNumberOfPorts , sizeof(intptr_t));
@@ -12486,7 +12486,7 @@ int test_l1_dsAudio_register ( void )
 	UT_add_test( pSuite, "dsGetHDMIARCPortId_L1_negative" ,test_l1_dsAudio_negative_dsGetHDMIARCPortId );
 	UT_add_test( pSuite, "dsSetAudioMixerLevels_l1_positive" ,test_l1_dsAudio_positive_dsSetAudioMixerLevels );
 	UT_add_test( pSuite, "dsSetAudioMixerLevels_l1_negative" ,test_l1_dsAudio_negative_dsSetAudioMixerLevels );
-	test_utils_parseconfig();
+	test_dsAudio_parse_configuration();
 
 	extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsAudio/features/extendedEnumsSupported" );
 
