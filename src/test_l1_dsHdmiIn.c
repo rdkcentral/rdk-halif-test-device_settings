@@ -1730,20 +1730,27 @@ void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo(void) {
 void test_l1_dsHdmiIn_positive_dsSetEdidVersion(void) {
     gTestID = 37;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    uint8_t ver14, ver20;
+
+    ver14 = ut_kvp_getUInt8Field(ut_kvp_profile_getInstance(),"dsHdmiIn/EdidVersions/0");
+
+    ver20 = ut_kvp_getUInt8Field(ut_kvp_profile_getInstance(),"dsHdmiIn/EdidVersions/1");
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
     // Step 2: Call dsSetEdidVersion() with valid values (dsHDMI_IN_PORT_0, HDMI_EDID_VER_14)
-    UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_0, HDMI_EDID_VER_14), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_0, ver14), dsERR_NONE);
+    //UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_0, HDMI_EDID_VER_14), dsERR_NONE);
 
     // Step 3: Call dsSetEdidVersion() with valid values (dsHDMI_IN_PORT_0, HDMI_EDID_VER_20)
-    UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_0, HDMI_EDID_VER_20), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_0, ver20), dsERR_NONE);
 
     // Step 4: Call dsSetEdidVersion() with valid values (dsHDMI_IN_PORT_1, HDMI_EDID_VER_14)
-    UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_1, HDMI_EDID_VER_14), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_1, ver14), dsERR_NONE);
 
     // Step 5: Call dsSetEdidVersion() with valid values (dsHDMI_IN_PORT_2, HDMI_EDID_VER_14)
-    UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_2, HDMI_EDID_VER_14), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_2, ver14), dsERR_NONE);
 
     // Step 6: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
@@ -1776,15 +1783,18 @@ void test_l1_dsHdmiIn_positive_dsSetEdidVersion(void) {
 void test_l1_dsHdmiIn_negative_dsSetEdidVersion(void) {
     gTestID = 38;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    uint8_t ver14 = ut_kvp_getUInt8Field(ut_kvp_profile_getInstance(), "dsHdmiIn/EdidVersions/0");
+   
     // Step 1: Call dsSetEdidVersion() without initializing the HDMI input sub-system
-    dsError_t result = dsSetEdidVersion(dsHDMI_IN_PORT_0, HDMI_EDID_VER_14);
+    dsError_t result = dsSetEdidVersion(dsHDMI_IN_PORT_0, ver14);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
     // Step 3: Call dsSetEdidVersion() with invalid inputs (dsHDMI_IN_PORT_MAX)
-    UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_MAX, HDMI_EDID_VER_14), dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_MAX, ver14), dsERR_INVALID_PARAM);
 
     // Step 4: Call dsSetEdidVersion() with invalid inputs (HDMI_EDID_VER_MAX)
     UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_0, HDMI_EDID_VER_MAX), dsERR_INVALID_PARAM);
@@ -1793,7 +1803,7 @@ void test_l1_dsHdmiIn_negative_dsSetEdidVersion(void) {
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 
     // Step 6: Call dsSetEdidVersion() without initializing the HDMI input sub-system
-    result = dsSetEdidVersion(dsHDMI_IN_PORT_0, HDMI_EDID_VER_14);
+    result = dsSetEdidVersion(dsHDMI_IN_PORT_0, ver14);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
@@ -1863,8 +1873,10 @@ void test_l1_dsHdmiIn_positive_dsGetEdidVersion(void) {
 void test_l1_dsHdmiIn_negative_dsGetEdidVersion(void) {
     gTestID = 40;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    uint8_t edid_version = ut_kvp_getUInt8Field(ut_kvp_profile_getInstance(), "dsHdmiIn/EdidVersions/0");
+
     // Step 1: Call dsGetEdidVersion() without initializing the HDMI input sub-system
-    tv_hdmi_edid_version_t edid_version;
     dsError_t result = dsGetEdidVersion(dsHDMI_IN_PORT_0, &edid_version);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
