@@ -1805,8 +1805,8 @@ void test_l1_dsVideoPort_positive_dsSetResolution(void) {
 	// Step 03: Set the resolution for the video port
 	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
 		for(int j =0; j < gDSVideoPortConfiguration[i].numSupportedResolutions; j++) {
-			//strcpy(setResolution.name, gDSVideoPortConfiguration[i].supportedResolutons[j]);
-			status = dsSetResolution(handle[i], &(gDSVideoPortConfiguration[i].supportedResolutons[j]));
+			//strcpy(setResolution.name, gDSVideoPortConfiguration[i].supportedResolutions[j]);
+			status = dsSetResolution(handle[i], &(gDSVideoPortConfiguration[i].supportedResolutions[j]));
 			UT_ASSERT_EQUAL(status, dsERR_NONE);
 		}
 	}
@@ -1856,7 +1856,7 @@ void test_l1_dsVideoPort_negative_dsSetResolution(void) {
 	
 
 	// Step 01: Attempt to set resolution without initialization
-	status = dsSetResolution(-1, &(gDSVideoPortConfiguration[0].supportedResolutons[0]));
+	status = dsSetResolution(-1, &(gDSVideoPortConfiguration[0].supportedResolutions[0]));
 	CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
 	// Step 02: Initialize video port system
@@ -1864,7 +1864,7 @@ void test_l1_dsVideoPort_negative_dsSetResolution(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 03: Invalid handle check
-	status = dsSetResolution(handle[0], &(gDSVideoPortConfiguration[0].supportedResolutons[0]));
+	status = dsSetResolution(handle[0], &(gDSVideoPortConfiguration[0].supportedResolutions[0]));
 	UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
 
 	// Step 04: Get valid video port handle
@@ -1891,7 +1891,7 @@ void test_l1_dsVideoPort_negative_dsSetResolution(void) {
 	UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 	// Step 08: Attempt to set resolution after termination
-	status = dsSetResolution(handle[0], &(gDSVideoPortConfiguration[0].supportedResolutons[0]));
+	status = dsSetResolution(handle[0], &(gDSVideoPortConfiguration[0].supportedResolutions[0]));
 	CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
