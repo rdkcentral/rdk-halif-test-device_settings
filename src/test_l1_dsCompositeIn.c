@@ -289,15 +289,12 @@ void test_l1_dsCompositeIn_positive_dsCompositeInGetNumberOfInputs(void)
     UT_ASSERT_EQUAL(dsCompositeInInit(), dsERR_NONE);
 
     // Step 02: Get number of inputs for the first time
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInGetNumberOfInputs(&numberOfInputs1), dsERR_NONE);
+    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInGetNumberOfInputs(&numberOfInputs), dsERR_NONE);
 
-    // Step 03: Get number of inputs for the second time
-    numberOfInputs2=ut_kvp_getUInt16Field(ut_kvp_profile_getInstance(), "composite_input_configurations/number_of_ports");
+    // Step 03: Compare the result with the value from the profile
+    UT_ASSERT_KVP_EQUAL_PROFILE_UINT16("dsCompositeIn/composite_input_configurations/number_of_ports", numberOfInputs);
 
-    // Step 04: Compare the results of both calls
-    DS_ASSERT_AUTO_TERM_NUMERICAL(numberOfInputs1, numberOfInputs2);
-
-    // Step 05: Terminate the module
+    // Step 04: Terminate the module
     UT_ASSERT_EQUAL(dsCompositeInTerm(), dsERR_NONE);
 
     UT_LOG("\n Out  %s\n",__FUNCTION__);
