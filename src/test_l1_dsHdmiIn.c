@@ -278,19 +278,16 @@ void test_l1_dsHdmiIn_negative_dsHdmiInTerm(void) {
 void test_l1_dsHdmiIn_positive_dsHdmiInGetNumberOfInputs(void) {
     gTestID = 5;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID); 
-    uint8_t numInputs1, numInputs2;
+    uint8_t numInputs;
 
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
     // Step 2: Call dsHdmiInGetNumberOfInputs() to fetch the number of HDMI input ports
-    UT_ASSERT_EQUAL(dsHdmiInGetNumberOfInputs(&numInputs1), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsHdmiInGetNumberOfInputs(&numInputs), dsERR_NONE);
 
-    // Step 3: Call dsHdmiInGetNumberOfInputs() again to fetch the number of HDMI input ports
-    numInputs2 = ut_kvp_getUInt8Field(ut_kvp_profile_getInstance(), "dsHdmiIn/HdmiInputPort/numberOfPorts");
-
-    // Step 4: Compare the results to make sure they are equal
-    UT_ASSERT_EQUAL(numInputs1, numInputs2);
+    // Step 3: Compare the results to make sure they are equal
+    UT_ASSERT_KVP_EQUAL_PROFILE_UINT8(numInputs, "dsHdmiIn/HdmiInputPort/numberOfPorts");
 
     // Step 5: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
@@ -1412,7 +1409,7 @@ void test_l1_dsHdmiIn_positive_dsIsHdmiARCPort(void) {
     UT_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_2, &isArcPort1), dsERR_NONE);
 
     // Step 5: Call dsIsHdmiARCPort() with valid input (dsHDMI_IN_PORT_2)
-     UT_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_2, &isArcPort2), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_2, &isArcPort2), dsERR_NONE);
 
     // Step 6: Compare the values of steps 4 and 5 to make sure they equal one another
     UT_ASSERT_EQUAL(isArcPort1, isArcPort2);
