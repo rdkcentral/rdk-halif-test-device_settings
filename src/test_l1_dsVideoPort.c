@@ -72,7 +72,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include "dsVideoPort.h"
-#include "dsVideoPortSettings.h"
 #include "test_parse_configuration.h"
 
 #include <ut.h>
@@ -106,6 +105,63 @@ static bool extendedEnumsSupported=false; //Default to not supported
    {\
        UT_ASSERT_EQUAL( result, old );\
    }\
+}
+
+static dsVideoPortResolution_t invalid_kRes[] = {
+                {   /*480i*/
+                        /*.name = */                                    "NULL",
+                        /*.pixelResolution = */                 dsVIDEO_PIXELRES_720x480,
+                        /*.aspectRatio = */                             dsVIDEO_ASPECT_RATIO_4x3,
+                        /*.stereoscopicMode = */                dsVIDEO_SSMODE_2D,
+                        /*.frameRate = */                               dsVIDEO_FRAMERATE_29dot97,
+                        /*.interlaced = */                              dsVIDEO_SCANMODE_INTERLACED,
+                },
+                {   /*480p*/
+                        /*.name = */                                    "480p",
+                        /*.pixelResolution = */                 dsVIDEO_PIXELRES_MAX,
+                        /*.aspectRatio = */                             dsVIDEO_ASPECT_RATIO_4x3,
+                        /*.stereoscopicMode = */                dsVIDEO_SSMODE_2D,
+                        /*.frameRate = */                               dsVIDEO_FRAMERATE_59dot94,
+                        /*.interlaced = */                              dsVIDEO_SCANMODE_PROGRESSIVE,
+                },
+                {   /*576p*/
+                        /*.name = */                                    "576p50",
+                        /*.pixelResolution = */                 dsVIDEO_PIXELRES_720x576,
+                        /*.aspectRatio = */                             dsVIDEO_ASPECT_RATIO_MAX,
+                        /*.stereoscopicMode = */                dsVIDEO_SSMODE_2D,
+                        /*.frameRate = */                               dsVIDEO_FRAMERATE_50,
+                        /*.interlaced = */                              dsVIDEO_SCANMODE_PROGRESSIVE,
+                },
+                {   /*720p - Default - AutoSelect */
+                        /*.name = */                                    "720p",
+                        /*.pixelResolution = */                 dsVIDEO_PIXELRES_1280x720,
+                        /*.aspectRatio = */                             dsVIDEO_ASPECT_RATIO_16x9,
+                        /*.stereoscopicMode = */                dsVIDEO_SSMODE_MAX,
+                        /*.frameRate = */                               dsVIDEO_FRAMERATE_59dot94,
+                        /*.interlaced = */                              dsVIDEO_SCANMODE_PROGRESSIVE,
+                },
+                {   /*720p - Default - AutoSelect */
+                        /*.name = */                                    "720p50",
+                        /*.pixelResolution = */                 dsVIDEO_PIXELRES_1280x720,
+                        /*.aspectRatio = */                             dsVIDEO_ASPECT_RATIO_16x9,
+                        /*.stereoscopicMode = */                dsVIDEO_SSMODE_2D,
+                        /*.frameRate = */                               dsVIDEO_FRAMERATE_MAX,
+                        /*.interlaced = */                              dsVIDEO_SCANMODE_PROGRESSIVE,
+                },
+};
+
+dsDisplayColorDepth_t getColorDepth(void){
+	dsDisplayColorDepth_t colorDepth;
+	if (gDSvideoPort_color_depth == 8) {
+		colorDepth = 0x01;
+	} else if (gDSvideoPort_color_depth == 10) {
+        colorDepth = 0x02;
+	} else if (gDSvideoPort_color_depth == 12) {
+		colorDepth = 0x04;
+	} else {
+		colorDepth = 0x08;
+	}
+	return colorDepth;
 }
 
 /**
@@ -621,6 +677,13 @@ void test_l1_dsVideoPort_positive_dsIsDisplayConnected(void) {
 
 	// Step 05: Compare the array values
 	for (int i = 0; i < gDSvideoPort_NumberOfPorts ; i++) {
+		bool isConnected;
+		if (gSourceType == 0) {
+			isConnected = true;
+		} else if (gSourceType == 1) {
+			isConnected = false;
+		}
+		UT_ASSERT_EQUAL(isConnectedArray1[i], isConnected);
 		UT_ASSERT_EQUAL(isConnectedArray1[i], isConnectedArray2[i]);
 	}
 
@@ -758,6 +821,7 @@ void test_l1_dsVideoPort_positive_dsIsDisplaySurround(void) {
 
 	// Step 05: Compare the array values
 	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
+		UT_ASSERT_EQUAL(isSurroundArray1[i], gDSVideoPortConfiguration[i].DisplaySurround);
 		UT_ASSERT_EQUAL(isSurroundArray1[i], isSurroundArray2[i]);
 	}
 
@@ -897,6 +961,7 @@ void test_l1_dsVideoPort_positive_dsGetSurroundMode(void) {
 
 	// Step 05: Compare the array values
 	for (int i = 0; i < gDSvideoPort_NumberOfPorts  ; i++) {
+		UT_ASSERT_EQUAL(surroundModeArray1[i],gDSVideoPortConfiguration[i].SurroundMode);
 		UT_ASSERT_EQUAL(surroundModeArray1[i], surroundModeArray2[i]);
 	}
 
@@ -1120,129 +1185,10 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortActive(void) {
 
 
 /**
- * @brief Positive Test Scenarios for dsEnableDTCP()
- * 
- * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 017@n
- * 
- * **Pre-Conditions:** None@n
- * 
- * **Dependencies:** None@n
- * 
- * **User Interaction:** None
- * 
- * **Test Procedure:**@n
- * |Variation / Step|Description|Test Data|Expected Result|Notes|
- * |:--:|---------|----------|--------------|-----|
- * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
- * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsEnableDTCP() by looping through the acquired port handles to enable DTCP for ports which support DTCP | handle: [ loop through valid handles ] , contentProtect: [1] (enable DTCP) |dsERR_NONE or dsERR_OPERATION_NOT_SUPPORTED| API must either successfully enable DTCP or indicate that the operation isn't supported if the particular video does not have DTCP support|
- * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
- * 
- */
-void test_l1_dsVideoPort_positive_dsEnableDTCP(void) {
-	gTestID = 17;
-	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-	dsError_t status;
-	intptr_t handle[gDSvideoPort_NumberOfPorts];
-
-	bool enableDTCP = false;
-
-	// Step 01: Initialize video port system
-	status = dsVideoPortInit();
-	UT_ASSERT_EQUAL(status, dsERR_NONE);
-
-	// Step 02: Get the video port handle
-	for (int i = 0; i < gDSvideoPort_NumberOfPorts ; i++) {
-		status = dsGetVideoPort(gDSVideoPortConfiguration[i].typeid, gDSVideoPortConfiguration[i].index, &handle[i]);
-		UT_ASSERT_EQUAL(status, dsERR_NONE);
-	}
-
-	// Step 03: Enable DTCP
-	for (int i = 0; i < gDSvideoPort_NumberOfPorts ; i++) {
-		enableDTCP = gDSVideoPortConfiguration[i].dtcp_supported;
-		status = dsEnableDTCP(handle[i], enableDTCP);
-		UT_ASSERT_EQUAL(status, dsERR_NONE);
-	}
-
-	// Step 04: Terminate the video port system
-	status = dsVideoPortTerm();
-	UT_ASSERT_EQUAL(status, dsERR_NONE);
-
-	UT_LOG("\n Out %s\n", __FUNCTION__); 
-}
-
-
-/**
- * @brief Negative Test Scenarios for dsEnableDTCP()
- * 
- * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 018@n
- * 
- * **Pre-Conditions:** None@n
- * 
- * **Dependencies:** None@n
- * 
- * **User Interaction:** None
- * 
- * **Test Procedure:**@n
- * |Variation / Step|Description|Test Data|Expected Result|Notes|
- * |:--:|---------|----------|--------------|-----|
- * |01|Call dsEnableDTCP() - Attempt to enable DTCP without initializing the video ports | handle: [ invalid handle ], contentProtect: [true = enable DTCP/ false = disable DTCP] | dsERR_NOT_INITIALIZED | Enable DTCP must fail as module is not initialized |
- * |02|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
- * |03|Call dsEnableDTCP() using an invalid handle but with a valid DTCP Flag(enable = 1/ disable = 0) | handle: [ invalid handle ], contentProtect: [ Flag to enable/disable DTCP] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
- * |04|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
- * |06|Call dsEnableDTCP() Attempt to enable DTCP without initializing the video ports | handle: [ valid handle ], contentProtect: [true = enable DTCP/ false = disable DTCP] | dsERR_NOT_INITIALIZED | Enable DTCP must fail as module is not initialized |
- * 
- * 
- * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
- */
-void test_l1_dsVideoPort_negative_dsEnableDTCP(void) {
-	gTestID = 18;
-	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-	dsError_t status;
-	intptr_t handle[gDSvideoPort_NumberOfPorts];
-
-	bool enableDTCP = gDSVideoPortConfiguration[0].dtcp_supported; // Flag to enable/disable DTCP
-
-	// Step 01: Attempt to enable DTCP without initialization
-	status = dsEnableDTCP(-1, enableDTCP);
-	CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
-
-	// Step 02: Initialize video port system
-	status = dsVideoPortInit();
-	UT_ASSERT_EQUAL(status, dsERR_NONE);
-
-	// Step 03: Invalid handle check
-	status = dsEnableDTCP(handle[0], enableDTCP);
-	UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
-
-	// Step 04: Get the Video Port handle
-	for (int i = 0; i < gDSvideoPort_NumberOfPorts ; i++) {
-		status = dsGetVideoPort(gDSVideoPortConfiguration[i].typeid, gDSVideoPortConfiguration[i].index, &handle[i]);
-		UT_ASSERT_EQUAL(status, dsERR_NONE);
-	}
-
-	// Step 05: Terminate the video port system
-	status = dsVideoPortTerm();
-	UT_ASSERT_EQUAL(status, dsERR_NONE);
-
-	// Step 06: Attempt to enable DTCP after termination
-	status = dsEnableDTCP(handle[0], enableDTCP);
-	CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
-
-	UT_LOG("\n Out %s\n", __FUNCTION__); 
-}
-
-
-/**
  * @brief Positive Test Scenarios for dsEnableHDCP()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 019@n
+ * **Test Case ID:** 017@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -1298,7 +1244,7 @@ void test_l1_dsVideoPort_positive_dsEnableHDCP(void) {
  * @brief Negative Test Scenarios for dsEnableHDCP()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 020@n
+ * **Test Case ID:** 018@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -1372,148 +1318,10 @@ void test_l1_dsVideoPort_negative_dsEnableHDCP(void) {
 
 
 /**
- * @brief Positive Test Scenarios for dsIsDTCPEnabled()
- *
- * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 021@n
- *
- * **Pre-Conditions:** None@n
- *
- * **Dependencies:** None@n
- *
- * **User Interaction:** None
- *
- * **Test Procedure:**@n
- * |Variation / Step|Description|Test Data|Expected Result|Notes|
- * |:--:|---------|----------|--------------|-----|
- * |01|Call dsVideoPortInit() - Initialize video ports of a system | |dsERR_NONE| Initialization must be successful |
- * |02|Call dsGetVideoPort() - Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports|
- * |03|Call dsIsDTCPEnabled() by looping through the acquired port handles  and valid pointer to check whether DTCP enabled or not(.ie TRUE / FALSE) and store it in an array | handle : [loop through valid handles] , pContentProtected = [pointer to hold data ]|dsERR_NONE |dsIsDTCPEnabled must return a valid value|
- * |03|Call dsIsDTCPEnabled() by looping through the acquired port handles  and valid pointer to check whether DTCP enabled or not(.ie TRUE / FALSE) and store it in a new array | handle : [loop through valid handles] , pContentProtected = [pointer to hold data ]|dsERR_NONE |dsIsDTCPEnabled must return a valid value|
- * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
- * |06|Call dsVideoPortTerm() - Terminate the video ports of a system| |dsERR_NONE|Termination must be successful|
- *
- */
-void test_l1_dsVideoPort_positive_dsIsDTCPEnabled(void) {
-	gTestID = 21;
-	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-	dsError_t status;
-	intptr_t handle[gDSvideoPort_NumberOfPorts];
-
-	bool isDTCPEnabledArray1[gDSvideoPort_NumberOfPorts];
-	bool isDTCPEnabledArray2[gDSvideoPort_NumberOfPorts];
-
-	// Step 01: Initialize video port system
-	status = dsVideoPortInit();
-	UT_ASSERT_EQUAL(status, dsERR_NONE);
-
-	// Step 02: Get the video port handle
-	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
-		status = dsGetVideoPort(gDSVideoPortConfiguration[i].typeid, gDSVideoPortConfiguration[i].index, &(handle[i]));
-		UT_ASSERT_EQUAL(status, dsERR_NONE);
-	}
-
-	// Step 03: Check if DTCP is enabled
-	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
-		status = dsIsDTCPEnabled(handle[i], &isDTCPEnabledArray1[i]);
-		UT_ASSERT_EQUAL(status, dsERR_NONE);
-	}
-
-	// Step 04: Repeat the check for DTCP status
-	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++){
-		status = dsIsDTCPEnabled(handle[i], &isDTCPEnabledArray2[i]);
-		UT_ASSERT_EQUAL(status, dsERR_NONE);
-	}
-
-	// Step 05: Compare the array values
-	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
-		UT_ASSERT_EQUAL(isDTCPEnabledArray1[i], isDTCPEnabledArray2[i]);
-	}
-
-	// Step 06: Terminate the video port system
-	status = dsVideoPortTerm();
-	UT_ASSERT_EQUAL(status, dsERR_NONE);
-
-	UT_LOG("\n Out %s\n", __FUNCTION__); 
-}
-
-
-/**
- * @brief Negative Test Scenarios for dsIsDTCPEnabled()
- *
- * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 022@n
- *
- * **Pre-Conditions:** None@n
- *
- * **Dependencies:** None@n
- * **User Interaction:** None
- *
- * **Test Procedure:**@n
- * |Variation / Step|Description|Test Data|Expected Result|Notes|
- * |:--:|---------|----------|--------------|-----|
- * |01|Call dsIsDTCPEnabled() - Attempt to get the DTCP status with out initializing video ports| handle [invalid handle] , pContentProtected = [valid pointer]|dsERR_NOT_INITIALIZED| dsIsDTCPEnabled call must fail as module is not initialized |
- * |02|Call dsVideoPortInit() - Initialize video ports of a system | |dsERR_NONE| Initialization must be successful |
- * |03|Call dsIsDTCPEnabled() - Using an invalid handle but with valid pointer | handle = [invalid handle], pContentProtected = [valid pointer] | dsERR_INVALID_PARAM | Invalid paramerter must be returned |
- * |04|Call dsGetVideoPort()  - Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports |
- * |05|Call dsIsDTCPEnabled() By looping through acquired port handles but with a invalid pointer | handle = [valid handle], pContentProtected = [invalid pointer] | dsERR_INVALID_PARAM | Invalid paramerter must be returned |
- * |06|Call dsVideoPortTerm() - Terminate the video ports of a system | | dsERR_NONE | Termination must be successful |
- * |07|Call dsIsDTCPEnabled() - Again after terminating video ports attempt to get DTCP status | handle= [valid handle] , pContentProtected = [valid pointer] | dsERR_NOT_INITIALIZED | dsIsDTCPEnabled call must fail as module is not initialized |
- *
- * 
- * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
- */
-void test_l1_dsVideoPort_negative_dsIsDTCPEnabled(void) {
-	gTestID = 22;
-	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-	dsError_t status;
-	intptr_t handle[gDSvideoPort_NumberOfPorts];
-
-	bool isDTCPEnabled[gDSvideoPort_NumberOfPorts];
-
-	// Step 01: Attempt to get DTCP status without initialization
-	status = dsIsDTCPEnabled(-1, &isDTCPEnabled[0]);
-	CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
-
-	// Step 02: Initialize video port system
-	status = dsVideoPortInit();
-	UT_ASSERT_EQUAL(status, dsERR_NONE);
-
-	// Step 03: Invalid handle check
-	status = dsIsDTCPEnabled(handle[0], &isDTCPEnabled[0]);
-	UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
-
-	// Step 04: Get valid video port handle
-	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
-		status = dsGetVideoPort(gDSVideoPortConfiguration[i].typeid, gDSVideoPortConfiguration[i].index, &(handle[i]));
-		UT_ASSERT_EQUAL(status, dsERR_NONE);
-	}
-
-	// Step 05: Check DTCP status with invalid pointer
-	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++){
-		status = dsIsDTCPEnabled(handle[i], NULL);
-		UT_ASSERT_EQUAL(status, dsERR_NONE);
-	}
-
-	// Step 06: Terminate the video port system
-	status = dsVideoPortTerm();
-	UT_ASSERT_EQUAL(status, dsERR_NONE);
-
-	// Step 07: Attempt to get DTCP status after termination
-	status = dsIsDTCPEnabled(handle[0], &isDTCPEnabled[0]);
-	CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
-
-	UT_LOG("\n Out %s\n", __FUNCTION__); 
-}
-
-
-/**
  * @brief Positive Test Scenarios for dsIsHDCPEnabled()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 023@n
+ * **Test Case ID:** 019@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -1565,6 +1373,7 @@ void test_l1_dsVideoPort_positive_dsIsHDCPEnabled(void) {
 
 	// Step 05: Compare the array values
 	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
+		UT_ASSERT_EQUAL(isHDCPEnabledArray1[i], gDSVideoPortConfiguration[i].hdcp_supported);
 		UT_ASSERT_EQUAL(isHDCPEnabledArray1[i], isHDCPEnabledArray2[i]);
 	}
 
@@ -1580,7 +1389,7 @@ void test_l1_dsVideoPort_positive_dsIsHDCPEnabled(void) {
  * @brief Negative Test Scenarios for dsIsHDCPEnabled()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 024@n
+ * **Test Case ID:** 020@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -1651,7 +1460,7 @@ void test_l1_dsVideoPort_negative_dsIsHDCPEnabled(void) {
  * @brief Positive Test Scenarios for dsEnableVideoPort()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 025@n
+ * **Test Case ID:** 021@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -1703,7 +1512,7 @@ void test_l1_dsVideoPort_positive_dsEnableVideoPort(void) {
  * @brief Negative Test Scenarios for dsEnableVideoPort()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 026@n
+ * **Test Case ID:** 022@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -1767,7 +1576,7 @@ void test_l1_dsVideoPort_negative_dsEnableVideoPort(void) {
  * @brief Positive Test Scenarios for dsSetResolution()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 027@n
+ * **Test Case ID:** 023@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -1823,7 +1632,7 @@ void test_l1_dsVideoPort_positive_dsSetResolution(void) {
  * @brief Negative Test Scenarios for dsSetResolution()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 028@n
+ * **Test Case ID:** 024@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -1902,7 +1711,7 @@ void test_l1_dsVideoPort_negative_dsSetResolution(void) {
  * @brief Positive Test Scenarios for dsGetResolution()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 029@n
+ * **Test Case ID:** 025@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -1955,11 +1764,18 @@ void test_l1_dsVideoPort_positive_dsGetResolution(void) {
 
 	// Step 05: Compare the array values
 	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
+		for (int j = 0; i < gDSVideoPortConfiguration[i].numSupportedResolutions; j++) {
+		UT_ASSERT_EQUAL(resolutionArray1[i].pixelResolution, gDSVideoPortConfiguration[i].supportedResolutions[j].pixelResolution);
 		UT_ASSERT_EQUAL(resolutionArray1[i].pixelResolution, resolutionArray2[i].pixelResolution);
+		UT_ASSERT_EQUAL(resolutionArray1[i].aspectRatio, gDSVideoPortConfiguration[i].supportedResolutions[j].aspectRatio);
 		UT_ASSERT_EQUAL(resolutionArray1[i].aspectRatio, resolutionArray2[i].aspectRatio);
+		UT_ASSERT_EQUAL(resolutionArray1[i].stereoScopicMode, gDSVideoPortConfiguration[i].supportedResolutions[j].stereoScopicMode);
 		UT_ASSERT_EQUAL(resolutionArray1[i].stereoScopicMode, resolutionArray2[i].stereoScopicMode);
+		UT_ASSERT_EQUAL(resolutionArray1[i].frameRate, gDSVideoPortConfiguration[i].supportedResolutions[j].frameRate);
 		UT_ASSERT_EQUAL(resolutionArray1[i].frameRate, resolutionArray2[i].frameRate);
+		UT_ASSERT_EQUAL(resolutionArray1[i].interlaced, gDSVideoPortConfiguration[i].supportedResolutions[j].interlaced);
 		UT_ASSERT_EQUAL(resolutionArray1[i].interlaced, resolutionArray2[i].interlaced);
+		}
 	}
 
 	// Step 06: Terminate the video port system
@@ -1974,7 +1790,7 @@ void test_l1_dsVideoPort_positive_dsGetResolution(void) {
  * @brief Negative Test Scenarios for dsGetResolution()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 030@n
+ * **Test Case ID:** 026@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -2042,123 +1858,10 @@ void test_l1_dsVideoPort_negative_dsGetResolution(void) {
 
 
 /**
- * @brief Positive Test Scenarios for dsSetActiveSource()
- * 
- * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 031@n
- * 
- * **Pre-Conditions:** None@n
- * 
- * **Dependencies:** None@n
- * 
- * **User Interaction:** None
- * 
- * **Test Procedure:**@n
- * |Variation / Step|Description|Test Data|Expected Result|Notes|
- * |:--:|---------|----------|--------------|-----|
- * |01|Call dsVideoPortInit() - Initialize video ports of a system | |dsERR_NONE| Initialization must be successful |
- * |02|Call dsGetVideoPort() - Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports|
- * |03|Call dsSetActiveSource() by looping through the acquired port handles and set the video port as active source | handle  = [loop through valid handles] |dsERR_NONE|The video port must be set as the active source successfully|
- * |04|dsVideoPortTerm() - Terminate the video ports of a system| |dsERR_NONE|Termination must be successful|
- * 
- */
-void test_l1_dsVideoPort_positive_dsSetActiveSource(void) {
-	gTestID = 31;
-	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-	dsError_t status;
-	intptr_t handle[gDSvideoPort_NumberOfPorts];
-
-	// Step 01: Initialize video port system
-	status = dsVideoPortInit();
-	UT_ASSERT_EQUAL(status, dsERR_NONE);
-
-	// Step 02: Get the video port handle
-	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
-		status = dsGetVideoPort(gDSVideoPortConfiguration[i].typeid, gDSVideoPortConfiguration[i].index, &(handle[i]));
-		UT_ASSERT_EQUAL(status, dsERR_NONE);
-	}
-
-	// Step 03: Set the video port as the active source
-	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
-		status = dsSetActiveSource(handle[i]);
-		UT_ASSERT_EQUAL(status, dsERR_NONE);
-	}
-
-	// Step 04: Terminate the video port system
-	status = dsVideoPortTerm();
-	UT_ASSERT_EQUAL(status, dsERR_NONE);
-
-	UT_LOG("\n Out %s\n", __FUNCTION__); 
-}
-
-
-/**
- * @brief Negative Test Scenarios for dsSetActiveSource()
- * 
- * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 032@n
- * 
- * **Pre-Conditions:** None@n
- * 
- * **Dependencies:** None@n
- * 
- * **User Interaction:** None
- * 
- * **Test Procedure:**@n
- * |Variation / Step|Description|Test Data|Expected Result|Notes|
- * |:--:|---------|----------|--------------|-----|
- * |01|Call dsSetActiveSource() - Attempt to set the active source with out initializing video ports| handle =  [invalid handle] | dsERR_NOT_INITIALIZED| dsSetActiveSource call must fail as module is not initialized |
- * |02|Call dsVideoPortInit() - Initialize video ports of a system | |dsERR_NONE| Initialization must be successful |
- * |03|Call dsSetActiveSource() - Using an invalid handle attempt to set active source | handle = [invalid handle] | dsERR_INVALID_PARAM | Invalid paramerter must be returned |
- * |04|Call dsGetVideoPort()  - Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports |
- * |05|Call dsVideoPortTerm() - Terminate the video ports of a system | | dsERR_NONE | Termination must be successful |
- * |06|Call dsSetActiveSource()  - Again after terminating video ports attempt to set the active source | handle= [valid handle ] | dsERR_NOT_INITIALIZED | dsSetActiveSource call must fail as module is not initialized |
- * 
- * 
- * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
- */
-void test_l1_dsVideoPort_negative_dsSetActiveSource(void) {
-	gTestID = 32;
-	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-	dsError_t status;
-	intptr_t handle [gDSvideoPort_NumberOfPorts];
-
-	// Step 01: Attempt to set active source without initialization
-	status = dsSetActiveSource(-1);
-	CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
-
-	// Step 02: Initialize video port system
-	status = dsVideoPortInit();
-	UT_ASSERT_EQUAL(status, dsERR_NONE);
-
-	// Step 03: Invalid handle check
-	status = dsSetActiveSource(handle[0]);
-	UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
-
-	// Step 04: Get valid video port handle
-	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
-		status = dsGetVideoPort(gDSVideoPortConfiguration[i].typeid, gDSVideoPortConfiguration[i].index, &(handle[i]));
-		UT_ASSERT_EQUAL(status, dsERR_NONE);
-	}
-
-	// Step 05: Terminate the video port system
-	status = dsVideoPortTerm();
-	UT_ASSERT_EQUAL(status, dsERR_NONE);
-
-	// Step 06: Attempt to set active source after termination
-	status = dsSetActiveSource(handle[0]);
-	CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
-
-	UT_LOG("\n Out %s\n", __FUNCTION__); 
-}
-
-/**
  * @brief Positive Test Scenarios for dsVideoFormatUpdateRegisterCB()
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 033@n
+ * **Test Case ID:** 027@n
  *
  * **Pre-Conditions:** None@n
  *
@@ -2206,7 +1909,7 @@ void test_l1_dsVideoPort_positive_dsVideoFormatUpdateRegisterCB(void) {
  * @brief Negative Test Scenarios for dsVideoFormatUpdateRegisterCB()
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 034@n
+ * **Test Case ID:** 028@n
  *
  * **Pre-Conditions:** None@n
  *
@@ -2259,7 +1962,7 @@ void test_l1_dsVideoPort_negative_dsVideoFormatUpdateRegisterCB(void) {
  * @brief Positive Test Scenarios for dsRegisterHdcpStatusCallback()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 035@n
+ * **Test Case ID:** 029@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -2319,7 +2022,7 @@ void test_l1_dsVideoPort_positive_dsRegisterHdcpStatusCallback(void) {
  * @brief Negative Test Scenarios for dsRegisterHdcpStatusCallback()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 036@n
+ * **Test Case ID:** 030@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -2390,7 +2093,7 @@ void test_l1_dsVideoPort_negative_dsRegisterHdcpStatusCallback(void) {
  * @brief Positive Test Scenarios for dsGetHDCPStatus()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 037@n
+ * **Test Case ID:** 031@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -2458,7 +2161,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPStatus(void) {
  * @brief Negative Test Scenarios for dsGetHDCPStatus()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 038@n
+ * **Test Case ID:** 032@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -2530,7 +2233,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPStatus(void) {
  * @brief Positive Test Scenarios for dsGetHDCPProtocol()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 039@n
+ * **Test Case ID:** 033@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -2583,6 +2286,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPProtocol(void) {
 
 	// Step 05: Compare the array values
 	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
+		UT_ASSERT_EQUAL(protocolVersionArray1[i], gDSVideoPortConfiguration[i].hdcp_protocol_version);
 		UT_ASSERT_EQUAL(protocolVersionArray1[i], protocolVersionArray2[i]);
 	}
 
@@ -2597,7 +2301,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPProtocol(void) {
  * @brief Negative Test Scenarios for dsGetHDCPProtocol()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 040@n
+ * **Test Case ID:** 034@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -2668,7 +2372,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPProtocol(void) {
  * @brief Positive Test Scenarios for dsGetHDCPReceiverProtocol()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 041@n
+ * **Test Case ID:** 035@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -2737,7 +2441,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPReceiverProtocol(void) {
  * @brief Negative Test Scenarios for dsGetHDCPReceiverProtocol()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 042@n
+ * **Test Case ID:** 036@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -2808,7 +2512,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPReceiverProtocol(void) {
  * @brief Positive Test Scenarios for dsGetHDCPCurrentProtocol()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 043@n
+ * **Test Case ID:** 037@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -2861,6 +2565,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPCurrentProtocol(void) {
 
 	// Step 05: Compare the array values
 	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
+		UT_ASSERT_EQUAL(currentProtocolArray1[i], gDSVideoPortConfiguration[i].hdcp_protocol_version);
 		UT_ASSERT_EQUAL(currentProtocolArray1[i], currentProtocolArray2[i]);
 	}
 
@@ -2876,7 +2581,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPCurrentProtocol(void) {
  * @brief Negative Test Scenarios for dsGetHDCPCurrentProtocol()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 044@n
+ * **Test Case ID:** 038@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -2947,7 +2652,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPCurrentProtocol(void) {
  * @brief Positive Test Scenarios for dsGetTVHDRCapabilities()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 045@n
+ * **Test Case ID:** 039@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -3000,6 +2705,7 @@ void test_l1_dsVideoPort_positive_dsGetTVHDRCapabilities(void) {
 
 	// Step 05: Compare the array values
 	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
+		UT_ASSERT_EQUAL(capabilitiesArray1[i], gDSVideoPortConfiguration[i].hdr_capabilities);
 		UT_ASSERT_EQUAL(capabilitiesArray1[i], capabilitiesArray2[i]);
 	}
 
@@ -3015,7 +2721,7 @@ void test_l1_dsVideoPort_positive_dsGetTVHDRCapabilities(void) {
  * @brief Negative Test Scenarios for dsGetTVHDRCapabilities()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 046@n
+ * **Test Case ID:** 040@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -3086,7 +2792,7 @@ void test_l1_dsVideoPort_negative_dsGetTVHDRCapabilities(void) {
  * @brief Positive Test Scenarios for dsSupportedTvResolutions()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 047@n
+ * **Test Case ID:** 041@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -3139,6 +2845,7 @@ void test_l1_dsVideoPort_positive_dsSupportedTvResolutions(void) {
 
 	// Step 05: Compare the array values
 	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
+		UT_ASSERT_EQUAL(resolutionsArray1[i], gDSVideoPortConfiguration[i].Supported_tv_resolutions_capabilities);
 		UT_ASSERT_EQUAL(resolutionsArray1[i], resolutionsArray2[i]);
 	}
 
@@ -3154,7 +2861,7 @@ void test_l1_dsVideoPort_positive_dsSupportedTvResolutions(void) {
  * @brief Negative Test Scenarios for dsSupportedTvResolutions()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 048@n
+ * **Test Case ID:** 042@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -3225,7 +2932,7 @@ void test_l1_dsVideoPort_negative_dsSupportedTvResolutions(void) {
  * @brief Positive Test Scenarios for dsSetForceDisable4KSupport()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 049@n
+ * **Test Case ID:** 043@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -3279,7 +2986,7 @@ void test_l1_dsVideoPort_positive_dsSetForceDisable4KSupport(void) {
  * @brief Negative Test Scenarios for dsSetForceDisable4KSupport()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 050@n
+ * **Test Case ID:** 044@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -3343,7 +3050,7 @@ void test_l1_dsVideoPort_negative_dsSetForceDisable4KSupport(void) {
  * @brief Positive Test Scenarios for dsGetForceDisable4KSupport()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 051@n
+ * **Test Case ID:** 045@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -3411,7 +3118,7 @@ void test_l1_dsVideoPort_positive_dsGetForceDisable4KSupport(void) {
  * @brief Negative Test Scenarios for dsGetForceDisable4KSupport()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 052@n
+ * **Test Case ID:** 046@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -3482,7 +3189,7 @@ void test_l1_dsVideoPort_negative_dsGetForceDisable4KSupport(void) {
  * @brief Positive Test Scenarios for dsGetVideoEOTF()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 053@n
+ * **Test Case ID:** 047@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -3535,6 +3242,7 @@ void test_l1_dsVideoPort_positive_dsGetVideoEOTF(void) {
 
 	// Step 05: Compare the array values
 	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
+		UT_ASSERT_EQUAL(eotfArray1[i], gDSVideoPortConfiguration[i].hdr_capabilities);
 		UT_ASSERT_EQUAL(eotfArray1[i], eotfArray2[i]);
 	}
 
@@ -3550,7 +3258,7 @@ void test_l1_dsVideoPort_positive_dsGetVideoEOTF(void) {
  * @brief Negative Test Scenarios for dsGetVideoEOTF()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 054@n
+ * **Test Case ID:** 048@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -3621,7 +3329,7 @@ void test_l1_dsVideoPort_negative_dsGetVideoEOTF(void) {
  * @brief Positive Test Scenarios for dsGetMatrixCoefficients()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 055@n
+ * **Test Case ID:** 049@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -3674,6 +3382,7 @@ void test_l1_dsVideoPort_positive_dsGetMatrixCoefficients(void) {
 
 	// Step 05: Compare the array values
 	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
+		UT_ASSERT_EQUAL(matrixCoefficientsArray1[i], gDSVideoPortConfiguration[i].matrix_coefficients);
 		UT_ASSERT_EQUAL(matrixCoefficientsArray1[i], matrixCoefficientsArray2[i]);
 	}
 
@@ -3689,7 +3398,7 @@ void test_l1_dsVideoPort_positive_dsGetMatrixCoefficients(void) {
  * @brief Negative Test Scenarios for dsGetMatrixCoefficients()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 056@n
+ * **Test Case ID:** 050@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -3760,7 +3469,7 @@ void test_l1_dsVideoPort_negative_dsGetMatrixCoefficients(void) {
  * @brief Positive Test Scenarios for dsGetColorDepth()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 057@n
+ * **Test Case ID:** 051@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -3813,6 +3522,7 @@ void test_l1_dsVideoPort_positive_dsGetColorDepth(void) {
 
 	// Step 05: Compare the array values
 	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
+		UT_ASSERT_EQUAL(colorDepthArray1[i], gDSvideoPort_color_depth);
 		UT_ASSERT_EQUAL(colorDepthArray1[i], colorDepthArray2[i]);
 	}
 
@@ -3828,7 +3538,7 @@ void test_l1_dsVideoPort_positive_dsGetColorDepth(void) {
  * @brief Negative Test Scenarios for dsGetColorDepth()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 058@n
+ * **Test Case ID:** 052@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -3899,7 +3609,7 @@ void test_l1_dsVideoPort_negative_dsGetColorDepth(void) {
  * @brief Positive Test Scenarios for dsGetColorSpace()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 059@n
+ * **Test Case ID:** 053@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -3952,6 +3662,7 @@ void test_l1_dsVideoPort_positive_dsGetColorSpace(void) {
 
 	// Step 05: Compare the array values
 	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
+		UT_ASSERT_EQUAL(colorSpaceArray1[i], (dsDisplayColorSpace_t)gDSVideoPortConfiguration[i].colorspaces);
 		UT_ASSERT_EQUAL(colorSpaceArray1[i], colorSpaceArray2[i]);
 	}
 
@@ -3966,7 +3677,7 @@ void test_l1_dsVideoPort_positive_dsGetColorSpace(void) {
  * @brief Negative Test Scenarios for dsGetColorSpace()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 060@n
+ * **Test Case ID:** 054@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -4036,7 +3747,7 @@ void test_l1_dsVideoPort_negative_dsGetColorSpace(void) {
  * @brief Positive Test Scenarios for dsGetQuantizationRange()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 061@n
+ * **Test Case ID:** 055@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -4089,6 +3800,7 @@ void test_l1_dsVideoPort_positive_dsGetQuantizationRange(void) {
 
 	// Step 05: Compare the array values
 	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
+		UT_ASSERT_EQUAL(quantizationRangeArray1[i], (dsDisplayQuantizationRange_t)gDSVideoPortConfiguration[i].quantization_ranges);
 		UT_ASSERT_EQUAL(quantizationRangeArray1[i], quantizationRangeArray2[i]);
 	}
 
@@ -4103,7 +3815,7 @@ void test_l1_dsVideoPort_positive_dsGetQuantizationRange(void) {
  * @brief Negative Test Scenarios for dsGetQuantizationRange()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 062@n
+ * **Test Case ID:** 056@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -4174,7 +3886,7 @@ void test_l1_dsVideoPort_negative_dsGetQuantizationRange(void) {
  * @brief Positive Test Scenarios for dsGetCurrentOutputSettings()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 063@n
+ * **Test Case ID:** 057@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -4237,10 +3949,15 @@ void test_l1_dsVideoPort_positive_dsGetCurrentOutputSettings(void) {
 
 	// Step 05: Compare the array values
 	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
+		UT_ASSERT_EQUAL(hdrstandardarray1[i], (dsHDRStandard_t)gDSVideoPortConfiguration[i].hdr_capabilities);
 		UT_ASSERT_EQUAL(hdrstandardarray1[i], hdrstandardarray2[i]);
+		UT_ASSERT_EQUAL(matrixcoefarray1[i], (dsDisplayMatrixCoefficients_t)gDSVideoPortConfiguration[i].matrix_coefficients);
 		UT_ASSERT_EQUAL(matrixcoefarray1[i], matrixcoefarray2[i]);
+		UT_ASSERT_EQUAL(colorspacearray1[i], (dsDisplayColorSpace_t)gDSVideoPortConfiguration[i].colorspaces);
 		UT_ASSERT_EQUAL(colorspacearray1[i], colorspacearray2[i]);
+		UT_ASSERT_EQUAL(colordeptharray1[i], gDSvideoPort_color_depth);
 		UT_ASSERT_EQUAL(colordeptharray1[i], colordeptharray2[i]);
+		UT_ASSERT_EQUAL(quant_rangearray1[i], (dsDisplayQuantizationRange_t)gDSVideoPortConfiguration[i].quantization_ranges);
 		UT_ASSERT_EQUAL(quant_rangearray1[i], quant_rangearray2[i]);
 	}
 
@@ -4256,7 +3973,7 @@ void test_l1_dsVideoPort_positive_dsGetCurrentOutputSettings(void) {
  * @brief Negative Test Scenarios for dsGetCurrentOutputSettings()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 064@n
+ * **Test Case ID:** 058@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -4283,7 +4000,7 @@ void test_l1_dsVideoPort_positive_dsGetCurrentOutputSettings(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetCurrentOutputSettings(void) {
-	gTestID = 64;
+	gTestID = 59;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status; 
@@ -4366,7 +4083,7 @@ void test_l1_dsVideoPort_negative_dsGetCurrentOutputSettings(void) {
  * @brief Positive Test Scenarios for dsIsOutputHDR()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 065@n
+ * **Test Case ID:** 059@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -4435,7 +4152,7 @@ void test_l1_dsVideoPort_positive_dsIsOutputHDR(void) {
  * @brief Negative Test Scenarios for dsIsOutputHDR()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 066@n
+ * **Test Case ID:** 060@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -4506,7 +4223,7 @@ void test_l1_dsVideoPort_negative_dsIsOutputHDR(void) {
  * @brief Positive Test Scenarios for dsResetOutputToSDR()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 067@n
+ * **Test Case ID:** 061@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -4549,7 +4266,7 @@ void test_l1_dsVideoPort_positive_dsResetOutputToSDR(void) {
  * @brief Negative Test Scenarios for dsResetOutputToSDR()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 068@n
+ * **Test Case ID:** 062@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -4598,7 +4315,7 @@ void test_l1_dsVideoPort_negative_dsResetOutputToSDR(void) {
  * @brief Positive Test Scenarios for dsSetHdmiPreference()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 069@n
+ * **Test Case ID:** 063@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -4652,7 +4369,7 @@ void test_l1_dsVideoPort_positive_dsSetHdmiPreference(void) {
  * @brief Negative Test Scenarios for dsSetHdmiPreference()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 070@n
+ * **Test Case ID:** 064@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -4723,7 +4440,7 @@ void test_l1_dsVideoPort_negative_dsSetHdmiPreference(void) {
  * @brief Positive Test Scenarios for dsGetHdmiPreference()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 071@n
+ * **Test Case ID:** 065@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -4776,6 +4493,7 @@ void test_l1_dsVideoPort_positive_dsGetHdmiPreference(void) {
 
 	// Step 05: Compare the array values and make sure they are equal
 	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
+		UT_ASSERT_EQUAL(hdcpCurrentProtocol1[i], (dsHdcpProtocolVersion_t)gDSVideoPortConfiguration[i].hdcp_protocol_version);
 		UT_ASSERT_EQUAL(hdcpCurrentProtocol1[i], hdcpCurrentProtocol2[i]);
 	}
 
@@ -4791,7 +4509,7 @@ void test_l1_dsVideoPort_positive_dsGetHdmiPreference(void) {
  * @brief Negative Test Scenarios for dsGetHdmiPreference()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 072@n
+ * **Test Case ID:** 066@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -4862,7 +4580,7 @@ void test_l1_dsVideoPort_negative_dsGetHdmiPreference(void) {
  * @brief Positive Test Scenarios for dsGetIgnoreEDIDStatus()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 073@n
+ * **Test Case ID:** 067@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -4930,7 +4648,7 @@ void test_l1_dsVideoPort_positive_dsGetIgnoreEDIDStatus(void) {
  * @brief Negative Test Scenarios for dsGetIgnoreEDIDStatus()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 074@n
+ * **Test Case ID:** 068@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -5001,7 +4719,7 @@ void test_l1_dsVideoPort_negative_dsGetIgnoreEDIDStatus(void) {
  * @brief Positive Test Scenarios for dsSetBackgroundColor()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 075@n
+ * **Test Case ID:** 069@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -5055,7 +4773,7 @@ void test_l1_dsVideoPort_positive_dsSetBackgroundColor(void) {
  * @brief Negative Test Scenarios for dsSetBackgroundColor()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 076@n
+ * **Test Case ID:** 070@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -5124,7 +4842,7 @@ void test_l1_dsVideoPort_negative_dsSetBackgroundColor(void) {
  * @brief Positive Test Scenarios for dsSetForceHDRMode()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 077@n
+ * **Test Case ID:** 071@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -5176,7 +4894,7 @@ void test_l1_dsVideoPort_positive_dsSetForceHDRMode(void) {
  * @brief Negative Test Scenarios for dsSetForceHDRMode()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 078@n
+ * **Test Case ID:** 072@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -5246,7 +4964,7 @@ void test_l1_dsVideoPort_negative_dsSetForceHDRMode(void) {
  * @brief Positive Test Scenarios for dsColorDepthCapabilities()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 079@n
+ * **Test Case ID:** 073@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -5299,6 +5017,7 @@ void test_l1_dsVideoPort_positive_dsColorDepthCapabilities(void) {
 
 	// Step 05: Compare array values
 	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
+		UT_ASSERT_EQUAL(colorDepthCapability1[i], gDSvideoPort_color_depth);
 		UT_ASSERT_EQUAL(colorDepthCapability1[i], colorDepthCapability2[i]);
 	}
 
@@ -5314,7 +5033,7 @@ void test_l1_dsVideoPort_positive_dsColorDepthCapabilities(void) {
  * @brief Negative Test Scenarios for dsColorDepthCapabilities()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 080@n
+ * **Test Case ID:** 074@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -5380,12 +5099,11 @@ void test_l1_dsVideoPort_negative_dsColorDepthCapabilities(void) {
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
-
 /**
  * @brief Positive Test Scenarios for dsGetPreferredColorDepth()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 081@n
+ * **Test Case ID:** 075@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -5437,7 +5155,9 @@ void test_l1_dsVideoPort_positive_dsGetPreferredColorDepth(void) {
 	}
 
 	// Step 05: Compare array values
+	dsDisplayColorDepth_t colorDepth = getColorDepth();
 	for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
+		UT_ASSERT_EQUAL(colorDepth1[i], colorDepth);
 		UT_ASSERT_EQUAL(colorDepth1[i], colorDepth2[i]);
 	}
 
@@ -5453,7 +5173,7 @@ void test_l1_dsVideoPort_positive_dsGetPreferredColorDepth(void) {
  * @brief Negative Test Scenarios for dsGetPreferredColorDepth()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 082@n
+ * **Test Case ID:** 076@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -5519,12 +5239,11 @@ void test_l1_dsVideoPort_negative_dsGetPreferredColorDepth(void) {
 	UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
-
 /**
  * @brief Positive Test Scenarios for dsSetPreferredColorDepth()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 083@n
+ * **Test Case ID:** 077@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -5547,16 +5266,7 @@ void test_l1_dsVideoPort_positive_dsSetPreferredColorDepth(void) {
 
 	dsError_t status;
 	intptr_t handle[gDSvideoPort_NumberOfPorts];
-	dsDisplayColorDepth_t colorDepth = dsDISPLAY_COLORDEPTH_UNKNOWN;
-    if (gDSvideoPort_color_depth == 8) {
-		colorDepth = 0x01;
-	} else if (gDSvideoPort_color_depth == 10) {
-        colorDepth = 0x02;
-	} else if (gDSvideoPort_color_depth == 12) {
-		colorDepth = 0x04;
-	} else {
-		colorDepth = 0x08;
-	}
+	dsDisplayColorDepth_t colorDepth = getColorDepth();
 
 	// Step 01: Initialize video port system
 	status = dsVideoPortInit();
@@ -5586,7 +5296,7 @@ void test_l1_dsVideoPort_positive_dsSetPreferredColorDepth(void) {
  * @brief Negative Test Scenarios for dsSetPreferredColorDepth()
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 084@n
+ * **Test Case ID:** 078@n
  * 
  * **Pre-Conditions:** None@n
  * 
@@ -5685,12 +5395,8 @@ int test_l1_dsVideoPort_register ( void )
 	UT_add_test( pSuite, "dsVideoFormatUpdateRegisterCB_L1_negative" ,test_l1_dsVideoPort_negative_dsVideoFormatUpdateRegisterCB );
 	UT_add_test( pSuite, "dsIsVideoPortActive_L1_positive" ,test_l1_dsVideoPort_positive_dsIsVideoPortActive );
 	UT_add_test( pSuite, "dsIsVideoPortActive_L1_negative" ,test_l1_dsVideoPort_negative_dsIsVideoPortActive );
-	UT_add_test( pSuite, "dsEnableDTCP_L1_positive" ,test_l1_dsVideoPort_positive_dsEnableDTCP );
-	UT_add_test( pSuite, "dsEnableDTCP_L1_negative" ,test_l1_dsVideoPort_negative_dsEnableDTCP );
 	UT_add_test( pSuite, "dsEnableHDCP_L1_positive" ,test_l1_dsVideoPort_positive_dsEnableHDCP );
 	UT_add_test( pSuite, "dsEnableHDCP_L1_negative" ,test_l1_dsVideoPort_negative_dsEnableHDCP );
-	UT_add_test( pSuite, "dsIsDTCPEnabled_L1_positive" ,test_l1_dsVideoPort_positive_dsIsDTCPEnabled );
-	UT_add_test( pSuite, "dsIsDTCPEnabled_L1_negative" ,test_l1_dsVideoPort_negative_dsIsDTCPEnabled );
 	UT_add_test( pSuite, "dsIsHDCPEnabled_L1_positive" ,test_l1_dsVideoPort_positive_dsIsHDCPEnabled );
 	UT_add_test( pSuite, "dsIsHDCPEnabled_L1_negative" ,test_l1_dsVideoPort_negative_dsIsHDCPEnabled );
 	UT_add_test( pSuite, "dsEnableVideoPort_L1_positive" ,test_l1_dsVideoPort_positive_dsEnableVideoPort );
@@ -5699,8 +5405,6 @@ int test_l1_dsVideoPort_register ( void )
 	UT_add_test( pSuite, "dsSetResolution_L1_negative" ,test_l1_dsVideoPort_negative_dsSetResolution );
 	UT_add_test( pSuite, "dsGetResolution_L1_positive" ,test_l1_dsVideoPort_positive_dsGetResolution );
 	UT_add_test( pSuite, "dsGetResolution_L1_negative" ,test_l1_dsVideoPort_negative_dsGetResolution );
-	UT_add_test( pSuite, "dsSetActiveSource_L1_positive" ,test_l1_dsVideoPort_positive_dsSetActiveSource );
-	UT_add_test( pSuite, "dsSetActiveSource_L1_negative" ,test_l1_dsVideoPort_negative_dsSetActiveSource );
 	UT_add_test( pSuite, "dsRegisterHdcpStatusCallback_L1_positive" ,test_l1_dsVideoPort_positive_dsRegisterHdcpStatusCallback );
 	UT_add_test( pSuite, "dsRegisterHdcpStatusCallback_L1_negative" ,test_l1_dsVideoPort_negative_dsRegisterHdcpStatusCallback );
 	UT_add_test( pSuite, "dsGetHDCPStatus_L1_positive" ,test_l1_dsVideoPort_positive_dsGetHDCPStatus );
@@ -5753,7 +5457,7 @@ int test_l1_dsVideoPort_register ( void )
 	UT_add_test( pSuite, "dsSetPreferredColorDepth_L1_negative" ,test_l1_dsVideoPort_negative_dsSetPreferredColorDepth );
    
    extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsVideoPort/features/extendedEnumsSupported" );
-
+   
 
 	return 0;
 } 
