@@ -75,6 +75,7 @@
 #include <ut.h>
 #include <ut_log.h>
 #include "dsCompositeIn.h"
+#include <ut_kvp_profile.h>
 
 static int gTestGroup = 1;
 static int gTestID = 1;
@@ -94,21 +95,6 @@ static int gTestID = 1;
         UT_FAIL();\
     }\
 }\
-
-uint16_t get_value_from_profile(const char *profile_key) {
-    if (strcmp(profile_key, "dsCompositeIn/composite_input_configurations/number_of_ports") == 0) {
-        return 8;
-    }
-    return 0;
-}
-
-#define UT_ASSERT_KVP_EQUAL_PROFILE_UINT16(value, profile_key) {\
-    uint16_t expected_value = get_value_from_profile(profile_key); \
-    if ((value) != expected_value) {\
-        UT_LOG("\n In %s Comparison: [%u != %u] (Profile Key: %s)\n", __FUNCTION__, (unsigned int)(value), (unsigned int)(expected_value), profile_key);\
-        UT_FAIL();\
-    }\
-}
 
 /**
  * @brief Ensure dsCompositeInInit() returns correct error codes during basic positive scenarios
@@ -307,7 +293,7 @@ void test_l1_dsCompositeIn_positive_dsCompositeInGetNumberOfInputs(void)
     DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInGetNumberOfInputs(&numberOfInputs), dsERR_NONE);
 
     // Step 03: Compare the result with the value from the profile
-    UT_ASSERT_KVP_EQUAL_PROFILE_UINT16(numberOfInputs, "dsCompositeIn/composite_input_configurations/number_of_ports");
+    UT_ASSERT_KVP_EQUAL_PROFILE_UINT8(numberOfInputs, "dsCompositeIn/composite_input_configurations/number_of_ports");
 
     // Step 04: Terminate the module
     UT_ASSERT_EQUAL(dsCompositeInTerm(), dsERR_NONE);
