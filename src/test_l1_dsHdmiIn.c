@@ -1728,11 +1728,12 @@ void test_l1_dsHdmiIn_positive_dsSetEdidVersion(void) {
     gTestID = 37;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    uint8_t ver14, ver20;
+    uint32_t ver14, ver20;
 
-    ver14 = ut_kvp_getUInt8Field(ut_kvp_profile_getInstance(),"dsHdmiIn/EdidVersions/0");
+    ver14 = UT_KVP_PROFILE_GET_UINT32("dsHdmiIn/EdidVersions/0");
 
-    ver20 = ut_kvp_getUInt8Field(ut_kvp_profile_getInstance(),"dsHdmiIn/EdidVersions/1");
+    ver20 = UT_KVP_PROFILE_GET_UINT32("dsHdmiIn/EdidVersions/1");
+
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
@@ -1781,7 +1782,7 @@ void test_l1_dsHdmiIn_negative_dsSetEdidVersion(void) {
     gTestID = 38;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    uint8_t ver14 = ut_kvp_getUInt8Field(ut_kvp_profile_getInstance(), "dsHdmiIn/EdidVersions/0");
+    uint8_t ver14 = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/EdidVersions/0");
    
     // Step 1: Call dsSetEdidVersion() without initializing the HDMI input sub-system
     dsError_t result = dsSetEdidVersion(dsHDMI_IN_PORT_0, ver14);
@@ -1871,7 +1872,7 @@ void test_l1_dsHdmiIn_negative_dsGetEdidVersion(void) {
     gTestID = 40;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    uint8_t edid_version = ut_kvp_getUInt8Field(ut_kvp_profile_getInstance(), "dsHdmiIn/EdidVersions/0");
+    uint8_t edid_version = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/EdidVersions/0");
 
     // Step 1: Call dsGetEdidVersion() without initializing the HDMI input sub-system
     dsError_t result = dsGetEdidVersion(dsHDMI_IN_PORT_0, &edid_version);
@@ -2018,31 +2019,19 @@ void test_l1_dsHdmiIn_positive_dsGetSupportedGameFeaturesList(void) {
     gTestID = 43;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-     char featureString[MAX_FEATURE_LIST_BUFFER_LEN];
-     ut_kvp_instance_t *instance = ut_kvp_profile_getInstance();
-
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL(dsHdmiInInit(), dsERR_NONE);
 
     // Step 2: Call dsGetSupportedGameFeaturesList() with valid inputs (dsSupportedGameFeatureList_t*)
-    dsSupportedGameFeatureList_t supported_features_1, supported_features_2;
+    dsSupportedGameFeatureList_t supported_features_1;
     UT_ASSERT_EQUAL(dsGetSupportedGameFeaturesList(&supported_features_1), dsERR_NONE);
 
-    // Step 3: Call dsGetSupportedGameFeaturesList() with valid inputs (dsSupportedGameFeatureList_t*)
-    ut_kvp_getStringField(instance, "dsHdmiIn/gameFeatures/feature", featureString, sizeof(featureString));
+    //step 3:Validating the results retrieved from dsGetSupportedGameFeaturesList() 
+    //and Comparing the results to the expected values defined in the test profile
+    UT_ASSERT_KVP_EQUAL_PROFILE_STRING(supported_features_1.gameFeatureList, "dsHdmiIn/gameFeatures/feature");
+    UT_ASSERT_KVP_EQUAL_PROFILE_UINT32(supported_features_1.gameFeatureCount, "dsHdmiIn/gameFeatures/count");
 
-    strncpy(supported_features_2.gameFeatureList, featureString, sizeof(supported_features_2.gameFeatureList) - 1);
-    supported_features_2.gameFeatureList[sizeof(supported_features_2.gameFeatureList) - 1] = '\0';
-
-    uint8_t featureCount  = ut_kvp_getUInt8Field(instance, "dsHdmiIn/gameFeatures/count");
-    supported_features_2.gameFeatureCount = featureCount;
-
-    // Step 4: Compare the returns of steps 2/3 and make sure they compare
-    // Note: You should implement a function to compare dsSupportedGameFeatureList_t objects
-    UT_ASSERT_EQUAL(supported_features_1.gameFeatureList, supported_features_2.gameFeatureList);
-    UT_ASSERT_EQUAL(supported_features_1.gameFeatureCount, supported_features_2.gameFeatureCount);
-
-    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
+    // Step 4: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL(dsHdmiInTerm(), dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__); 
