@@ -410,7 +410,7 @@ void test_l1_dsAudio_negative_dsGetAudioPort(void) {
  * @brief Ensure dsGetAudioFormat() retrieves the audio format correctly during positive scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 011@n
+ * **Test Case ID:** 07@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -477,7 +477,7 @@ void test_l1_dsAudio_positive_dsGetAudioFormat(void) {
  * @brief Ensure dsGetAudioFormat() returns correct error codes during negative scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 012@n
+ * **Test Case ID:** 08@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -544,7 +544,7 @@ void test_l1_dsAudio_negative_dsGetAudioFormat(void) {
  * @brief Ensure dsGetAudioCompression() retrieves the audio compression level correctly during positive scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 013@n
+ * **Test Case ID:** 09@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -605,7 +605,7 @@ void test_l1_dsAudio_positive_dsGetAudioCompression(void) {
  * @brief Ensure dsGetAudioCompression() returns correct error codes during negative scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 014@n
+ * **Test Case ID:** 010@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -674,7 +674,7 @@ void test_l1_dsAudio_negative_dsGetAudioCompression(void) {
  * @brief Ensure dsSetAudioCompression() sets the audio compression level correctly during positive scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 015@n
+ * **Test Case ID:** 011@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -735,7 +735,7 @@ void test_l1_dsAudio_positive_dsSetAudioCompression(void) {
  * @brief Ensure dsSetAudioCompression() returns the correct error codes during negative scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 016@n
+ * **Test Case ID:** 012@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -807,7 +807,7 @@ void test_l1_dsAudio_negative_dsSetAudioCompression(void) {
  * @brief Ensure dsGetDialogEnhancement() returns correct Dialog enhancement levels during positive scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 017@n
+ * **Test Case ID:** 013@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -861,7 +861,7 @@ void test_l1_dsAudio_positive_dsGetDialogEnhancement(void) {
  * @brief Ensure dsGetDialogEnhancement() returns correct error codes during negative scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 018@n
+ * **Test Case ID:** 014@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -928,7 +928,7 @@ void test_l1_dsAudio_negative_dsGetDialogEnhancement(void) {
  * @brief Ensure dsSetDialogEnhancement retrieves the Dialog Enhancement level correctly during positive scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 019@n
+ * **Test Case ID:** 015@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -990,7 +990,7 @@ void test_l1_dsAudio_positive_dsSetDialogEnhancement(void) {
  * @brief Ensure dsSetDialogEnhancement() returns correct error codes during negative scenarios
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 020@n
+ * **Test Case ID:** 016@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1062,7 +1062,7 @@ void test_l1_dsAudio_negative_dsSetDialogEnhancement(void) {
  * @brief Ensure dsGetDolbyVolumeMode() retrieves the Dolby Volume Mode status correctly during positive scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 021@n
+ * **Test Case ID:** 017@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1114,7 +1114,7 @@ void test_l1_dsAudio_positive_dsGetDolbyVolumeMode(void) {
  * @brief Ensure dsGetDolbyVolumeMode() returns correct error codes during negative scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 022@n
+ * **Test Case ID:** 018@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1182,7 +1182,7 @@ void test_l1_dsAudio_negative_dsGetDolbyVolumeMode(void) {
  * @brief Ensure dsSetDolbyVolumeMode() sets the Dolby Volume Mode status correctly during positive scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 023@n
+ * **Test Case ID:** 019@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1234,7 +1234,7 @@ void test_l1_dsAudio_positive_dsSetDolbyVolumeMode(void) {
  * @brief Ensure dsSetDolbyVolumeMode() returns correct error codes during negative scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 024@n
+ * **Test Case ID:** 020@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1296,7 +1296,7 @@ void test_l1_dsAudio_negative_dsSetDolbyVolumeMode(void) {
  * @brief Ensure dsGetIntelligentEqualizerMode() retrieves the Intelligent Equalizer Mode correctly during positive scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 025@n
+ * **Test Case ID:** 021@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1348,7 +1348,7 @@ void test_l1_dsAudio_positive_dsGetIntelligentEqualizerMode(void) {
  * @brief Ensure dsGetIntelligentEqualizerMode() returns correct error codes during negative scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 026@n
+ * **Test Case ID:** 022@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1415,7 +1415,7 @@ void test_l1_dsAudio_negative_dsGetIntelligentEqualizerMode(void) {
  * @brief Ensure dsSetIntelligentEqualizerMode() sets the Intelligent Equalizer Mode correctly during positive scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 027@n
+ * **Test Case ID:** 023@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1467,7 +1467,7 @@ void test_l1_dsAudio_positive_dsSetIntelligentEqualizerMode(void) {
  * @brief Ensure dsSetIntelligentEqualizerMode() returns correct error codes during negative scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 028@n
+ * **Test Case ID:** 024@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1534,7 +1534,7 @@ void test_l1_dsAudio_negative_dsSetIntelligentEqualizerMode(void) {
  * @brief Ensure dsGetVolumeLeveller() retrieves the Volume Leveller settings correctly during positive scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 029@n
+ * **Test Case ID:** 025@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1585,7 +1585,7 @@ void test_l1_dsAudio_positive_dsGetVolumeLeveller(void) {
  * @brief Ensure dsGetVolumeLeveller() returns correct error codes during negative scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 030@n
+ * **Test Case ID:** 026@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1654,7 +1654,7 @@ void test_l1_dsAudio_negative_dsGetVolumeLeveller(void) {
  * @brief Ensure dsSetVolumeLeveller() sets the Volume Leveller settings correctly during positive scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 031@n
+ * **Test Case ID:** 027@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1712,7 +1712,7 @@ void test_l1_dsAudio_positive_dsSetVolumeLeveller(void) {
  * @brief Ensure dsSetVolumeLeveller() returns correct error codes during negative scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 032@n
+ * **Test Case ID:** 028@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1798,7 +1798,7 @@ void test_l1_dsAudio_negative_dsSetVolumeLeveller(void) {
  * @brief Ensure dsGetBassEnhancer() retrieves the Bass Enhancer settings correctly during positive scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 033@n
+ * **Test Case ID:** 029@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1859,7 +1859,7 @@ void test_l1_dsAudio_positive_dsGetBassEnhancer(void) {
  * @brief Ensure dsGetBassEnhancer() returns correct error codes during negative scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 034@n
+ * **Test Case ID:** 030@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1926,7 +1926,7 @@ void test_l1_dsAudio_negative_dsGetBassEnhancer(void) {
  * @brief Ensure dsSetBassEnhancer() sets the Bass Enhancer settings correctly during positive scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 035@n
+ * **Test Case ID:** 031@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1983,7 +1983,7 @@ void test_l1_dsAudio_positive_dsSetBassEnhancer(void) {
  * @brief Ensure dsSetBassEnhancer() returns correct error codes during negative scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 036@n
+ * **Test Case ID:** 032@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2053,7 +2053,7 @@ void test_l1_dsAudio_negative_dsSetBassEnhancer(void) {
  * @brief Ensure dsIsSurroundDecoderEnabled() retrieves the Surround Decoder status correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 037@n
+ * **Test Case ID:** 033@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2104,7 +2104,7 @@ void test_l1_dsAudio_positive_dsIsSurroundDecoderEnabled(void) {
  * @brief Ensure dsIsSurroundDecoderEnabled() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 038@n
+ * **Test Case ID:** 034@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2171,7 +2171,7 @@ void test_l1_dsAudio_negative_dsIsSurroundDecoderEnabled(void) {
  * @brief Ensure dsEnableSurroundDecoder() sets the Surround Decoder status correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 039@n
+ * **Test Case ID:** 035@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2222,7 +2222,7 @@ void test_l1_dsAudio_positive_dsEnableSurroundDecoder(void) {
  * @brief Ensure dsEnableSurroundDecoder() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 040@n
+ * **Test Case ID:** 036@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2285,7 +2285,7 @@ void test_l1_dsAudio_negative_dsEnableSurroundDecoder(void) {
  * @brief Ensure dsGetDRCMode() retrieves the DRC Mode correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 041@n
+ * **Test Case ID:** 037@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2350,7 +2350,7 @@ void test_l1_dsAudio_positive_dsGetDRCMode(void) {
  * @brief Ensure dsGetDRCMode() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 042@n
+ * **Test Case ID:** 038@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2417,7 +2417,7 @@ void test_l1_dsAudio_negative_dsGetDRCMode(void) {
  * @brief Ensure dsSetDRCMode() sets the DRC Mode correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 043@n
+ * **Test Case ID:** 039@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2469,7 +2469,7 @@ void test_l1_dsAudio_positive_dsSetDRCMode(void) {
  * @brief Ensure dsSetDRCMode() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 044@n
+ * **Test Case ID:** 040@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2536,7 +2536,7 @@ void test_l1_dsAudio_negative_dsSetDRCMode(void) {
  * @brief Ensure dsGetSurroundVirtualizer() retrieves the Surround Virtualizer level correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 045@n
+ * **Test Case ID:** 041@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2603,7 +2603,7 @@ void test_l1_dsAudio_positive_dsGetSurroundVirtualizer(void) {
  * @brief Ensure dsGetSurroundVirtualizer() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 046@n
+ * **Test Case ID:** 042@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2670,7 +2670,7 @@ void test_l1_dsAudio_negative_dsGetSurroundVirtualizer(void) {
  * @brief Ensure dsSetSurroundVirtualizer() sets the Surround Virtualizer level correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 047@n
+ * **Test Case ID:** 043@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2737,7 +2737,7 @@ void test_l1_dsAudio_positive_dsSetSurroundVirtualizer(void) {
  * @brief Ensure dsSetSurroundVirtualizer() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 048@n
+ * **Test Case ID:** 044@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2819,7 +2819,7 @@ void test_l1_dsAudio_negative_dsSetSurroundVirtualizer(void) {
  * @brief Ensure dsGetMISteering() retrieves the MI Steering status correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 049@n
+ * **Test Case ID:** 045@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2885,7 +2885,7 @@ void test_l1_dsAudio_positive_dsGetMISteering(void) {
  * @brief Ensure dsGetMISteering() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 050@n
+ * **Test Case ID:** 046@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2951,7 +2951,7 @@ void test_l1_dsAudio_negative_dsGetMISteering(void) {
  * @brief Ensure dsSetMISteering() sets the MI Steering status correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 051@n
+ * **Test Case ID:** 047@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -3002,7 +3002,7 @@ void test_l1_dsAudio_positive_dsSetMISteering(void) {
  * @brief Ensure dsSetMISteering() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 052@n
+ * **Test Case ID:** 048@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -3064,7 +3064,7 @@ void test_l1_dsAudio_negative_dsSetMISteering(void) {
  * @brief Ensure dsGetGraphicEqualizerMode() retrieves the Graphic Equalizer Mode correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 053@n
+ * **Test Case ID:** 049@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -3131,7 +3131,7 @@ void test_l1_dsAudio_positive_dsGetGraphicEqualizerMode(void) {
  * @brief Ensure dsGetGraphicEqualizerMode() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 054@n
+ * **Test Case ID:** 050@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -3198,7 +3198,7 @@ void test_l1_dsAudio_negative_dsGetGraphicEqualizerMode(void) {
  * @brief Ensure dsSetGraphicEqualizerMode() sets the Graphic Equalizer Mode correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 055@n
+ * **Test Case ID:** 051@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -3251,7 +3251,7 @@ void test_l1_dsAudio_positive_dsSetGraphicEqualizerMode(void) {
  * @brief Ensure dsSetGraphicEqualizerMode() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 056@n
+ * **Test Case ID:** 052@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -3321,7 +3321,7 @@ void test_l1_dsAudio_negative_dsSetGraphicEqualizerMode(void) {
  * @brief Ensure dsGetMS12AudioProfileList() retrieves the list of supported MS12 audio profiles correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 057@n
+ * **Test Case ID:** 053@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -3398,7 +3398,7 @@ void test_l1_dsAudio_positive_dsGetMS12AudioProfileList(void) {
  * @brief Ensure dsGetMS12AudioProfileList() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 058@n
+ * **Test Case ID:** 054@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -3465,7 +3465,7 @@ void test_l1_dsAudio_negative_dsGetMS12AudioProfileList(void) {
  * @brief Ensure dsGetMS12AudioProfile() retrieves the current audio profile configured correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 059@n
+ * **Test Case ID:** 055@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -3527,7 +3527,7 @@ void test_l1_dsAudio_positive_dsGetMS12AudioProfile(void) {
  * @brief Ensure dsGetMS12AudioProfile() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 060@n
+ * **Test Case ID:** 056@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -3595,7 +3595,7 @@ void test_l1_dsAudio_negative_dsGetMS12AudioProfile(void) {
  * @brief Ensure dsGetStereoMode() retrieves the correct stereo mode during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 61@n
+ * **Test Case ID:** 57@n
  * 
  * **Dependencies:** Audio device should be connected and working properly.@n
  * **User Interaction:** None
@@ -3656,7 +3656,7 @@ void test_l1_dsAudio_positive_dsGetStereoMode(void) {
  * @brief Ensure dsGetStereoMode() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 62@n
+ * **Test Case ID:** 58@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -3723,7 +3723,7 @@ void test_l1_dsAudio_negative_dsGetStereoMode(void) {
  * @brief Ensure dsSetStereoMode() sets the stereo mode correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 63@n
+ * **Test Case ID:** 59@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -3775,7 +3775,7 @@ void test_l1_dsAudio_positive_dsSetStereoMode(void) {
  * @brief Ensure dsSetStereoMode() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 64@n
+ * **Test Case ID:** 60@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -3840,7 +3840,7 @@ void test_l1_dsAudio_negative_dsSetStereoMode(void) {
  * @brief Ensure dsGetStereoAuto() retrieves the auto mode correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 65@n
+ * **Test Case ID:** 61@n
  * 
  * **Dependencies:** Audio device should be connected and working properly.@n
  * **User Interaction:** None
@@ -3899,7 +3899,7 @@ void test_l1_dsAudio_positive_dsGetStereoAuto(void) {
  * @brief Ensure dsGetStereoAuto() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 66@n
+ * **Test Case ID:** 62@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -3966,7 +3966,7 @@ void test_l1_dsAudio_negative_dsGetStereoAuto(void) {
  * @brief Ensure dsSetStereoAuto() sets the auto mode correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 67@n
+ * **Test Case ID:** 63@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -4017,7 +4017,7 @@ void test_l1_dsAudio_positive_dsSetStereoAuto(void) {
  * @brief Ensure dsSetStereoAuto() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 68@n
+ * **Test Case ID:** 64@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -4084,7 +4084,7 @@ void test_l1_dsAudio_negative_dsSetStereoAuto(void) {
  * @brief Ensure dsGetAudioGain() retrieves the audio gain correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 69@n
+ * **Test Case ID:** 65@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -4146,7 +4146,7 @@ void test_l1_dsAudio_positive_dsGetAudioGain(void) {
  * @brief Ensure dsGetAudioGain() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 70@n
+ * **Test Case ID:** 66@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -4213,7 +4213,7 @@ void test_l1_dsAudio_negative_dsGetAudioGain(void) {
  * @brief Ensure dsSetAudioGain() sets the audio gain correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 71@n
+ * **Test Case ID:** 67@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -4270,7 +4270,7 @@ void test_l1_dsAudio_positive_dsSetAudioGain(void) {
  * @brief Ensure dsSetAudioGain() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 72@n
+ * **Test Case ID:** 68@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -4339,7 +4339,7 @@ void test_l1_dsAudio_negative_dsSetAudioGain(void) {
  * @brief Ensure dsGetAudioLevel() retrieves the audio volume level correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 077@n
+ * **Test Case ID:** 069@n
  * 
  * **Dependencies:**.@n
  * **User Interaction:** None
@@ -4404,7 +4404,7 @@ void test_l1_dsAudio_positive_dsGetAudioLevel(void) {
  * @brief Ensure dsGetAudioLevel() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 078@n
+ * **Test Case ID:** 070@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -4472,7 +4472,7 @@ void test_l1_dsAudio_negative_dsGetAudioLevel(void) {
  * @brief Ensure dsSetAudioLevel() sets the audio volume level correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 079@n
+ * **Test Case ID:** 071@n
  * 
  * **Dependencies:** Audio device should be connected and working properly.@n
  * **User Interaction:** None
@@ -4527,7 +4527,7 @@ void test_l1_dsAudio_positive_dsSetAudioLevel(void) {
  * @brief Ensure dsSetAudioLevel() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 080@n
+ * **Test Case ID:** 072@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -4596,7 +4596,7 @@ void test_l1_dsAudio_negative_dsSetAudioLevel(void) {
  * @brief Ensure dsGetAudioDelay() retrieves the audio delay correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 087@n
+ * **Test Case ID:** 073@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -4659,7 +4659,7 @@ void test_l1_dsAudio_positive_dsGetAudioDelay(void) {
  * @brief Ensure dsGetAudioDelay() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 088@n
+ * **Test Case ID:** 074@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -4726,7 +4726,7 @@ void test_l1_dsAudio_negative_dsGetAudioDelay(void) {
  * @brief Ensure dsSetAudioDelay() sets the audio delay correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 089@n
+ * **Test Case ID:** 075@n
  * 
  * **Dependencies:**@n
  * **User Interaction:** None
@@ -4783,7 +4783,7 @@ void test_l1_dsAudio_positive_dsSetAudioDelay(void) {
  * @brief Ensure dsSetAudioDelay() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 090@n
+ * **Test Case ID:** 076@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -4849,7 +4849,7 @@ void test_l1_dsAudio_negative_dsSetAudioDelay(void) {
  * @brief Ensure dsSetAudioAtmosOutputMode() sets the Audio ATMOS output mode correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 95@n
+ * **Test Case ID:** 77@n
  * 
  * **Dependencies:** Audio device should be connected and working properly.@n
  * **User Interaction:** None
@@ -4866,7 +4866,7 @@ void test_l1_dsAudio_negative_dsSetAudioDelay(void) {
  */
 void test_l1_dsAudio_positive_dsSetAudioAtmosOutputMode(void) {
 	// Start of the test
-	gTestID = 77; // Assuming Test Case ID is 238
+	gTestID = 77; // Assuming Test Case ID is 77
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -4905,7 +4905,7 @@ void test_l1_dsAudio_positive_dsSetAudioAtmosOutputMode(void) {
  * @brief Ensure dsSetAudioAtmosOutputMode() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 96@n
+ * **Test Case ID:** 78@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -4967,7 +4967,7 @@ void test_l1_dsAudio_negative_dsSetAudioAtmosOutputMode(void) {
  * @brief Ensure dsGetSinkDeviceAtmosCapability() retrieves the ATMOS capability correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 97@n
+ * **Test Case ID:** 79@n
  * 
  * **Dependencies:**@n
  * **User Interaction:** None
@@ -4985,7 +4985,7 @@ void test_l1_dsAudio_negative_dsSetAudioAtmosOutputMode(void) {
  */
 void test_l1_dsAudio_positive_dsGetSinkDeviceAtmosCapability(void) {
 	// Start of the test
-	gTestID = 79; // Assuming Test Case ID is 240
+	gTestID = 79; // Assuming Test Case ID is 79
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -5028,7 +5028,7 @@ void test_l1_dsAudio_positive_dsGetSinkDeviceAtmosCapability(void) {
  * @brief Ensure dsGetSinkDeviceAtmosCapability() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 98@n
+ * **Test Case ID:** 80@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -5094,7 +5094,7 @@ void test_l1_dsAudio_negative_dsGetSinkDeviceAtmosCapability(void) {
  * @brief Ensure dsIsAudioMute() retrieves the mute status correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 101@n
+ * **Test Case ID:** 81@n
  * 
  * **Dependencies:** Audio device should be connected and working properly.@n
  * **User Interaction:** None
@@ -5112,7 +5112,7 @@ void test_l1_dsAudio_negative_dsGetSinkDeviceAtmosCapability(void) {
  */
 void test_l1_dsAudio_positive_dsIsAudioMute(void) {
 	// Start of the test
-	gTestID = 81; // Assuming Test Case ID is 101
+	gTestID = 81; // Assuming Test Case ID is 81
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -5154,7 +5154,7 @@ void test_l1_dsAudio_positive_dsIsAudioMute(void) {
  * @brief Ensure dsIsAudioMute() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 102@n
+ * **Test Case ID:** 82@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -5174,7 +5174,7 @@ void test_l1_dsAudio_positive_dsIsAudioMute(void) {
  */
 void test_l1_dsAudio_negative_dsIsAudioMute(void) {
 	// Start of the test
-	gTestID = 82; // Assuming Test Case ID is 102
+	gTestID = 82; // Assuming Test Case ID is 82
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -5217,7 +5217,7 @@ void test_l1_dsAudio_negative_dsIsAudioMute(void) {
  * @brief Ensure dsIsAudioPortEnabled() retrieves the enable status correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 103@n
+ * **Test Case ID:** 83@n
  * 
  * **Dependencies:** Audio device should be connected and working properly.@n
  * **User Interaction:** None
@@ -5235,7 +5235,7 @@ void test_l1_dsAudio_negative_dsIsAudioMute(void) {
  */
 void test_l1_dsAudio_positive_dsIsAudioPortEnabled(void) {
 	// Start of the test
-	gTestID = 83; // Assuming Test Case ID is 103
+	gTestID = 83; // Assuming Test Case ID is 83
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -5277,7 +5277,7 @@ void test_l1_dsAudio_positive_dsIsAudioPortEnabled(void) {
  * @brief Ensure dsIsAudioPortEnabled() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 104@n
+ * **Test Case ID:** 84@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -5297,7 +5297,7 @@ void test_l1_dsAudio_positive_dsIsAudioPortEnabled(void) {
  */
 void test_l1_dsAudio_negative_dsIsAudioPortEnabled(void) {
 	// Start of the test
-	gTestID = 84; // Assuming Test Case ID is 104
+	gTestID = 84; // Assuming Test Case ID is 84
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -5340,7 +5340,7 @@ void test_l1_dsAudio_negative_dsIsAudioPortEnabled(void) {
  * @brief Ensure dsEnableAudioPort() sets the audio port state correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 105@n
+ * **Test Case ID:** 85@n
  * 
  * **Dependencies:** Audio device should be connected and working properly.@n
  * **User Interaction:** None
@@ -5357,7 +5357,7 @@ void test_l1_dsAudio_negative_dsIsAudioPortEnabled(void) {
  */
 void test_l1_dsAudio_positive_dsEnableAudioPort(void) {
 	// Start of the test
-	gTestID = 85; // Assuming Test Case ID is 105
+	gTestID = 85; // Assuming Test Case ID is 85
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -5407,7 +5407,7 @@ void test_l1_dsAudio_positive_dsEnableAudioPort(void) {
  * @brief Ensure dsEnableAudioPort() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 106@n
+ * **Test Case ID:** 86@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -5426,7 +5426,7 @@ void test_l1_dsAudio_positive_dsEnableAudioPort(void) {
  */
 void test_l1_dsAudio_negative_dsEnableAudioPort(void) {
 	// Start of the test
-	gTestID = 86; // Assuming Test Case ID is 106
+	gTestID = 86; // Assuming Test Case ID is 86
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -5468,7 +5468,7 @@ void test_l1_dsAudio_negative_dsEnableAudioPort(void) {
  * @brief Ensure dsEnableMS12Config() sets the MS12 features correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 107@n
+ * **Test Case ID:** 87@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -5485,7 +5485,7 @@ void test_l1_dsAudio_negative_dsEnableAudioPort(void) {
  */
 void test_l1_dsAudio_positive_dsEnableMS12Config(void) {
 	// Start of the test
-	gTestID = 87; // Assuming Test Case ID is 107
+	gTestID = 87; // Assuming Test Case ID is 87
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -5526,7 +5526,7 @@ void test_l1_dsAudio_positive_dsEnableMS12Config(void) {
  * @brief Ensure dsEnableMS12Config() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 108@n
+ * **Test Case ID:** 88@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -5546,7 +5546,7 @@ void test_l1_dsAudio_positive_dsEnableMS12Config(void) {
  */
 void test_l1_dsAudio_negative_dsEnableMS12Config(void) {
 	// Start of the test
-	gTestID = 88; // Assuming Test Case ID is 108
+	gTestID = 88; // Assuming Test Case ID is 88
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -5592,7 +5592,7 @@ void test_l1_dsAudio_negative_dsEnableMS12Config(void) {
  * @brief Ensure dsEnableLEConfig() sets the Loudness Equivalence (LE) feature correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 109@n
+ * **Test Case ID:** 89@n
  * 
  * **Dependencies:** Audio device should be connected and working properly.@n
  * **User Interaction:** None
@@ -5608,7 +5608,7 @@ void test_l1_dsAudio_negative_dsEnableMS12Config(void) {
  */
 void test_l1_dsAudio_positive_dsEnableLEConfig(void) {
 	// Start of the test
-	gTestID = 89; // Assuming Test Case ID is 109
+	gTestID = 89; // Assuming Test Case ID is 89
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -5643,7 +5643,7 @@ void test_l1_dsAudio_positive_dsEnableLEConfig(void) {
  * @brief Ensure dsEnableLEConfig() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 110@n
+ * **Test Case ID:** 90@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -5662,7 +5662,7 @@ void test_l1_dsAudio_positive_dsEnableLEConfig(void) {
  */
 void test_l1_dsAudio_negative_dsEnableLEConfig(void) {
 	// Start of the test
-	gTestID = 90; // Assuming Test Case ID is 110
+	gTestID = 90; // Assuming Test Case ID is 90
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -5704,7 +5704,7 @@ void test_l1_dsAudio_negative_dsEnableLEConfig(void) {
  * @brief Ensure dsGetLEConfig() retrieves the Loudness Equivalence (LE) feature status correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 111@n
+ * **Test Case ID:** 91@n
  * 
  * **Dependencies:** Audio device should be connected and LE features are supported.@n
  * **User Interaction:** None
@@ -5722,7 +5722,7 @@ void test_l1_dsAudio_negative_dsEnableLEConfig(void) {
  */
 void test_l1_dsAudio_positive_dsGetLEConfig(void) {
 	// Start of the test
-	gTestID = 91; // Assuming Test Case ID is 111
+	gTestID = 91; // Assuming Test Case ID is 91
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -5765,7 +5765,7 @@ void test_l1_dsAudio_positive_dsGetLEConfig(void) {
  * @brief Ensure dsGetLEConfig() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 112@n
+ * **Test Case ID:** 92@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -5785,7 +5785,7 @@ void test_l1_dsAudio_positive_dsGetLEConfig(void) {
  */
 void test_l1_dsAudio_negative_dsGetLEConfig(void) {
 	// Start of the test
-	gTestID = 92; // Assuming Test Case ID is 112
+	gTestID = 92; // Assuming Test Case ID is 92
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -5832,7 +5832,7 @@ void test_l1_dsAudio_negative_dsGetLEConfig(void) {
  * @brief Ensure dsSetMS12AudioProfile() sets the MS12 audio profile correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 113@n
+ * **Test Case ID:** 93@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -5848,7 +5848,7 @@ void test_l1_dsAudio_negative_dsGetLEConfig(void) {
  */
 void test_l1_dsAudio_positive_dsSetMS12AudioProfile(void) {
 	// Start of the test
-	gTestID = 93; // Assuming Test Case ID is 113
+	gTestID = 93; // Assuming Test Case ID is 93
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -5886,7 +5886,7 @@ void test_l1_dsAudio_positive_dsSetMS12AudioProfile(void) {
  * @brief Ensure dsSetMS12AudioProfile() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 114@n
- * **Test Case ID:** 114@n
+ * **Test Case ID:** 94@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -5905,7 +5905,7 @@ void test_l1_dsAudio_positive_dsSetMS12AudioProfile(void) {
  */
 void test_l1_dsAudio_negative_dsSetMS12AudioProfile(void) {
 	// Start of the test
-	gTestID = 94; // Assuming Test Case ID is 114
+	gTestID = 94; // Assuming Test Case ID is 94
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -5951,7 +5951,7 @@ void test_l1_dsAudio_negative_dsSetMS12AudioProfile(void) {
  * @brief Ensure dsSetAudioMute() mutes or un-mutes an audio port correctly during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 119@n
+ * **Test Case ID:** 95@n
  * 
  * **Dependencies:** Audio device should be connected.@n
  * **User Interaction:** None
@@ -5967,7 +5967,7 @@ void test_l1_dsAudio_negative_dsSetMS12AudioProfile(void) {
  */
 void test_l1_dsAudio_positive_dsSetAudioMute(void) {
 	// Start of the test
-	gTestID = 95; // Assuming Test Case ID is 119
+	gTestID = 95; // Assuming Test Case ID is 95
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -6008,7 +6008,7 @@ void test_l1_dsAudio_positive_dsSetAudioMute(void) {
  * @brief Ensure dsSetAudioMute() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 120@n
+ * **Test Case ID:** 96@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -6027,7 +6027,7 @@ void test_l1_dsAudio_positive_dsSetAudioMute(void) {
  */
 void test_l1_dsAudio_negative_dsSetAudioMute(void) {
 	// Start of the test
-	gTestID = 96; // Assuming Test Case ID is 120
+	gTestID = 96; // Assuming Test Case ID is 96
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -6070,7 +6070,7 @@ void test_l1_dsAudio_negative_dsSetAudioMute(void) {
  * @brief Ensure dsIsAudioMSDecode() correctly checks for Dolby MS11 Multistream Decode support during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 121@n
+ * **Test Case ID:** 97@n
  * 
  * **Dependencies:**@n
  * **User Interaction:** None
@@ -6086,7 +6086,7 @@ void test_l1_dsAudio_negative_dsSetAudioMute(void) {
  */
 void test_l1_dsAudio_positive_dsIsAudioMSDecode(void) {
 	// Start of the test
-	gTestID = 97; // Assuming Test Case ID is 121
+	gTestID = 97; // Assuming Test Case ID is 97
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -6121,7 +6121,7 @@ void test_l1_dsAudio_positive_dsIsAudioMSDecode(void) {
  * @brief Ensure dsIsAudioMSDecode() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 122@n
+ * **Test Case ID:** 98@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -6141,7 +6141,7 @@ void test_l1_dsAudio_positive_dsIsAudioMSDecode(void) {
  */
 void test_l1_dsAudio_negative_dsIsAudioMSDecode(void) {
 	// Start of the test
-	gTestID = 98; // Assuming Test Case ID is 122
+	gTestID = 98; // Assuming Test Case ID is 98
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -6189,7 +6189,7 @@ void test_l1_dsAudio_negative_dsIsAudioMSDecode(void) {
  * @brief Ensure dsIsAudioMS12Decode() correctly checks for Dolby MS12 Multistream Decode support during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 123@n
+ * **Test Case ID:** 99@n
  * 
  * **Dependencies:**@n
  * **User Interaction:** None
@@ -6205,7 +6205,7 @@ void test_l1_dsAudio_negative_dsIsAudioMSDecode(void) {
  */
 void test_l1_dsAudio_positive_dsIsAudioMS12Decode(void) {
 	// Start of the test
-	gTestID = 99; // Assuming Test Case ID is 123
+	gTestID = 99; // Assuming Test Case ID is 99
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -6240,7 +6240,7 @@ void test_l1_dsAudio_positive_dsIsAudioMS12Decode(void) {
  * @brief Ensure dsIsAudioMS12Decode() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 124@n
+ * **Test Case ID:** 100@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -6260,7 +6260,7 @@ void test_l1_dsAudio_positive_dsIsAudioMS12Decode(void) {
  */
 void test_l1_dsAudio_negative_dsIsAudioMS12Decode(void) {
 	// Start of the test
-	gTestID = 100; // Assuming Test Case ID is 124
+	gTestID = 100; // Assuming Test Case ID is 100
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -6307,7 +6307,7 @@ void test_l1_dsAudio_negative_dsIsAudioMS12Decode(void) {
  * @brief Ensure dsAudioOutIsConnected() correctly checks for audio output port connection during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 125@n
+ * **Test Case ID:** 101@n
  * 
  * **Dependencies:**@n
  * **User Interaction:** None
@@ -6323,7 +6323,7 @@ void test_l1_dsAudio_negative_dsIsAudioMS12Decode(void) {
  */
 void test_l1_dsAudio_positive_dsAudioOutIsConnected(void) {
 	// Start of the test
-	gTestID = 101; // Assuming Test Case ID is 125
+	gTestID = 101; // Assuming Test Case ID is 101
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -6358,7 +6358,7 @@ void test_l1_dsAudio_positive_dsAudioOutIsConnected(void) {
  * @brief Ensure dsAudioOutIsConnected() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 126@n
+ * **Test Case ID:** 102@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -6378,7 +6378,7 @@ void test_l1_dsAudio_positive_dsAudioOutIsConnected(void) {
  */
 void test_l1_dsAudio_negative_dsAudioOutIsConnected(void) {
 	// Start of the test
-	gTestID = 102; // Assuming Test Case ID is 126
+	gTestID = 102; // Assuming Test Case ID is 102
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -6425,7 +6425,7 @@ void test_l1_dsAudio_negative_dsAudioOutIsConnected(void) {
  * @brief Ensure dsAudioOutRegisterConnectCB() correctly registers for the audio output connect event during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 127@n
+ * **Test Case ID:** 103@n
  * 
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
@@ -6444,7 +6444,7 @@ void testAudioOutConnectCallbackFunction(dsAudioPortType_t type, unsigned int in
 
 void test_l1_dsAudio_positive_dsAudioOutRegisterConnectCB(void) {
 	// Start of the test
-	gTestID = 103; // Assuming Test Case ID is 127
+	gTestID = 103; // Assuming Test Case ID is 103
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -6472,7 +6472,7 @@ void test_l1_dsAudio_positive_dsAudioOutRegisterConnectCB(void) {
  * @brief Ensure dsAudioOutRegisterConnectCB() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 128@n
+ * **Test Case ID:** 104@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -6488,7 +6488,7 @@ void test_l1_dsAudio_positive_dsAudioOutRegisterConnectCB(void) {
  */
 void test_l1_dsAudio_negative_dsAudioOutRegisterConnectCB(void) {
 	// Start of the test
-	gTestID = 104; // Assuming Test Case ID is 128
+	gTestID = 104; // Assuming Test Case ID is 104
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -6518,7 +6518,7 @@ void test_l1_dsAudio_negative_dsAudioOutRegisterConnectCB(void) {
  * @brief Ensure dsAudioFormatUpdateRegisterCB() correctly registers for the audio format update event during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 129@n
+ * **Test Case ID:** 105@n
  * 
  * 
  * **Test Procedure:**@n
@@ -6538,7 +6538,7 @@ void testAudioFormatUpdateCallbackFunction(dsAudioFormat_t format)
 
 void test_l1_dsAudio_positive_dsAudioFormatUpdateRegisterCB(void) {
 	// Start of the test
-	gTestID = 105; // Assuming Test Case ID is 129
+	gTestID = 105; // Assuming Test Case ID is 105
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -6566,7 +6566,7 @@ void test_l1_dsAudio_positive_dsAudioFormatUpdateRegisterCB(void) {
  * @brief Ensure dsAudioFormatUpdateRegisterCB() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 130@n
+ * **Test Case ID:** 106@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -6582,7 +6582,7 @@ void test_l1_dsAudio_positive_dsAudioFormatUpdateRegisterCB(void) {
  */
 void test_l1_dsAudio_negative_dsAudioFormatUpdateRegisterCB(void) {
 	// Start of the test
-	gTestID = 106; // Assuming Test Case ID is 130
+	gTestID = 106; // Assuming Test Case ID is 106
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -6611,7 +6611,7 @@ void test_l1_dsAudio_negative_dsAudioFormatUpdateRegisterCB(void) {
  * @brief Ensure dsGetAudioCapabilities() correctly fetches the supported audio capabilities during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 131@n
+ * **Test Case ID:** 107@n
  * 
  * **User Interaction:** None
  * 
@@ -6628,7 +6628,7 @@ void test_l1_dsAudio_negative_dsAudioFormatUpdateRegisterCB(void) {
  */
 void test_l1_dsAudio_positive_dsGetAudioCapabilities(void) {
 	// Start of the test
-	gTestID = 107; // Assuming Test Case ID is 131
+	gTestID = 107; // Assuming Test Case ID is 107
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -6670,7 +6670,7 @@ void test_l1_dsAudio_positive_dsGetAudioCapabilities(void) {
  * @brief Ensure dsGetAudioCapabilities() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 132@n
+ * **Test Case ID:** 108@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -6690,7 +6690,7 @@ void test_l1_dsAudio_positive_dsGetAudioCapabilities(void) {
  */
 void test_l1_dsAudio_negative_dsGetAudioCapabilities(void) {
 	// Start of the test
-	gTestID = 108; // Assuming Test Case ID is 275
+	gTestID = 108; // Assuming Test Case ID is 108
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result , capabilities;
@@ -6736,7 +6736,7 @@ void test_l1_dsAudio_negative_dsGetAudioCapabilities(void) {
  * @brief Ensure dsGetMS12Capabilities() correctly fetches the supported MS12 capabilities during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 133@n
+ * **Test Case ID:** 109@n
  * 
  * **Dependencies:** Audio device should be connected and should have known MS12 capabilities.@n
  * **User Interaction:** None
@@ -6754,7 +6754,7 @@ void test_l1_dsAudio_negative_dsGetAudioCapabilities(void) {
  */
 void test_l1_dsAudio_positive_dsGetMS12Capabilities(void) {
 	// Start of the test
-	gTestID = 109; // Assuming Test Case ID is 133
+	gTestID = 109; // Assuming Test Case ID is 109
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -6797,7 +6797,7 @@ void test_l1_dsAudio_positive_dsGetMS12Capabilities(void) {
  * @brief Ensure dsGetMS12Capabilities() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 134@n
+ * **Test Case ID:** 110@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -6817,7 +6817,7 @@ void test_l1_dsAudio_positive_dsGetMS12Capabilities(void) {
  */
 void test_l1_dsAudio_negative_dsGetMS12Capabilities(void) {
 	// Start of the test
-	gTestID = 110; // Assuming Test Case ID is 134
+	gTestID = 110; // Assuming Test Case ID is 110
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -6863,7 +6863,7 @@ void test_l1_dsAudio_negative_dsGetMS12Capabilities(void) {
  * @brief Ensure dsSetAssociatedAudioMixing() correctly enables/disables the associated audio mixing feature during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 145@n
+ * **Test Case ID:** 111@n
  * 
  * **Dependencies:** Audio device should be connected.@n
  * **User Interaction:** None
@@ -6880,7 +6880,7 @@ void test_l1_dsAudio_negative_dsGetMS12Capabilities(void) {
  */
 void test_l1_dsAudio_positive_dsSetAssociatedAudioMixing(void) {
 	// Start of the test
-	gTestID = 111; // Assuming Test Case ID is 145
+	gTestID = 111; // Assuming Test Case ID is 111
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -6918,7 +6918,7 @@ void test_l1_dsAudio_positive_dsSetAssociatedAudioMixing(void) {
  * @brief Ensure dsSetAssociatedAudioMixing() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 146@n
+ * **Test Case ID:** 112@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -6937,7 +6937,7 @@ void test_l1_dsAudio_positive_dsSetAssociatedAudioMixing(void) {
  */
 void test_l1_dsAudio_negative_dsSetAssociatedAudioMixing(void) {
 	// Start of the test
-	gTestID = 112; // Assuming Test Case ID is 146
+	gTestID = 112; // Assuming Test Case ID is 112
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -6979,7 +6979,7 @@ void test_l1_dsAudio_negative_dsSetAssociatedAudioMixing(void) {
  * @brief Ensure dsGetAssociatedAudioMixing() correctly fetches the status of the associated audio mixing feature during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 147@n
+ * **Test Case ID:** 113@n
  * 
  * **Dependencies:**@n
  * **User Interaction:** None
@@ -6997,7 +6997,7 @@ void test_l1_dsAudio_negative_dsSetAssociatedAudioMixing(void) {
  */
 void test_l1_dsAudio_positive_dsGetAssociatedAudioMixing(void) {
 	// Start of the test
-	gTestID = 113; // Assuming Test Case ID is 147
+	gTestID = 113; // Assuming Test Case ID is 113
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -7040,7 +7040,7 @@ void test_l1_dsAudio_positive_dsGetAssociatedAudioMixing(void) {
  * @brief Ensure dsGetAssociatedAudioMixing() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 148@n
+ * **Test Case ID:** 114@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -7060,7 +7060,7 @@ void test_l1_dsAudio_positive_dsGetAssociatedAudioMixing(void) {
  */
 void test_l1_dsAudio_negative_dsGetAssociatedAudioMixing(void) {
 	// Start of the test
-	gTestID = 114; // Assuming Test Case ID is 148
+	gTestID = 114; // Assuming Test Case ID is 114
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -7106,7 +7106,7 @@ void test_l1_dsAudio_negative_dsGetAssociatedAudioMixing(void) {
  * @brief Ensure dsSetFaderControl() correctly sets the mixer balance between main and associated audio during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 149@n
+ * **Test Case ID:** 115@n
  * 
  * **Dependencies:**@n
  * **User Interaction:** None
@@ -7123,7 +7123,7 @@ void test_l1_dsAudio_negative_dsGetAssociatedAudioMixing(void) {
  */
 void test_l1_dsAudio_positive_dsSetFaderControl(void) {
 	// Start of the test
-	gTestID = 115; // Assuming Test Case ID is 149
+	gTestID = 115; // Assuming Test Case ID is 115
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -7163,7 +7163,7 @@ void test_l1_dsAudio_positive_dsSetFaderControl(void) {
  * @brief Ensure dsSetFaderControl() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 150@n
+ * **Test Case ID:** 116@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -7183,7 +7183,7 @@ void test_l1_dsAudio_positive_dsSetFaderControl(void) {
  */
 void test_l1_dsAudio_negative_dsSetFaderControl(void) {
 	// Start of the test
-	gTestID = 116; // Assuming Test Case ID is 150
+	gTestID = 116; // Assuming Test Case ID is 116
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -7231,7 +7231,7 @@ void test_l1_dsAudio_negative_dsSetFaderControl(void) {
  * @brief Ensure dsGetFaderControl() correctly fetches the mixer balance between main and associated audio during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 151@n
+ * **Test Case ID:** 117@n
  * 
  * **Dependencies:**@n
  * **User Interaction:** None
@@ -7249,7 +7249,7 @@ void test_l1_dsAudio_negative_dsSetFaderControl(void) {
  */
 void test_l1_dsAudio_positive_dsGetFaderControl(void) {
 	// Start of the test
-	gTestID = 117; // Assuming Test Case ID is 151
+	gTestID = 117; // Assuming Test Case ID is 117
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -7292,7 +7292,7 @@ void test_l1_dsAudio_positive_dsGetFaderControl(void) {
  * @brief Ensure dsGetFaderControl() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 152@n
+ * **Test Case ID:** 118@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -7312,7 +7312,7 @@ void test_l1_dsAudio_positive_dsGetFaderControl(void) {
  */
 void test_l1_dsAudio_negative_dsGetFaderControl(void) {
 	// Start of the test
-	gTestID = 118; // Assuming Test Case ID is 152
+	gTestID = 118; // Assuming Test Case ID is 118
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -7359,7 +7359,7 @@ void test_l1_dsAudio_negative_dsGetFaderControl(void) {
  * @brief Ensure dsSetPrimaryLanguage() correctly sets the AC4 Primary language during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 153@n
+ * **Test Case ID:** 119@n
  * 
  * **Dependencies:** Audio device should be connected.@n
  * **User Interaction:** None
@@ -7375,7 +7375,7 @@ void test_l1_dsAudio_negative_dsGetFaderControl(void) {
  */
 void test_l1_dsAudio_positive_dsSetPrimaryLanguage(void) {
 	// Start of the test
-	gTestID = 119; // Assuming Test Case ID is 153
+	gTestID = 119; // Assuming Test Case ID is 119
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -7410,7 +7410,7 @@ void test_l1_dsAudio_positive_dsSetPrimaryLanguage(void) {
  * @brief Ensure dsSetPrimaryLanguage() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 154@n
+ * **Test Case ID:** 120@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -7431,7 +7431,7 @@ void test_l1_dsAudio_positive_dsSetPrimaryLanguage(void) {
  */
 void test_l1_dsAudio_negative_dsSetPrimaryLanguage(void) {
 	// Start of the test
-	gTestID = 120; // Assuming Test Case ID is 154
+	gTestID = 120; // Assuming Test Case ID is 120
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -7482,7 +7482,7 @@ void test_l1_dsAudio_negative_dsSetPrimaryLanguage(void) {
  * @brief Ensure dsGetPrimaryLanguage() correctly fetches the AC4 Primary language during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 155@n
+ * **Test Case ID:** 121@n
  * 
  * **Dependencies:**@n
  * **User Interaction:** None
@@ -7500,7 +7500,7 @@ void test_l1_dsAudio_negative_dsSetPrimaryLanguage(void) {
  */
 void test_l1_dsAudio_positive_dsGetPrimaryLanguage(void) {
 	// Start of the test
-	gTestID = 121; // Assuming Test Case ID is 155
+	gTestID = 121; // Assuming Test Case ID is 121
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int array_size = 4; // Assuming 3 letter language code plus null terminator
@@ -7543,7 +7543,7 @@ void test_l1_dsAudio_positive_dsGetPrimaryLanguage(void) {
  * @brief Ensure dsGetPrimaryLanguage() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 156@n
+ * **Test Case ID:** 122@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -7563,7 +7563,7 @@ void test_l1_dsAudio_positive_dsGetPrimaryLanguage(void) {
  */
 void test_l1_dsAudio_negative_dsGetPrimaryLanguage(void) {
 	// Start of the test
-	gTestID = 122; // Assuming Test Case ID is 156
+	gTestID = 122; // Assuming Test Case ID is 122
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -7610,7 +7610,7 @@ void test_l1_dsAudio_negative_dsGetPrimaryLanguage(void) {
  * @brief Ensure dsSetSecondaryLanguage() correctly sets the AC4 Secondary language during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 157@n
+ * **Test Case ID:** 123@n
  * 
  * **Dependencies:**@n
  * **User Interaction:** None
@@ -7626,7 +7626,7 @@ void test_l1_dsAudio_negative_dsGetPrimaryLanguage(void) {
  */
 void test_l1_dsAudio_positive_dsSetSecondaryLanguage(void) {
 	// Start of the test
-	gTestID = 123; // Assuming Test Case ID is 157
+	gTestID = 123; // Assuming Test Case ID is 123
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -7660,7 +7660,7 @@ void test_l1_dsAudio_positive_dsSetSecondaryLanguage(void) {
  * @brief Ensure dsSetSecondaryLanguage() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 158@n
+ * **Test Case ID:** 124@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -7681,7 +7681,7 @@ void test_l1_dsAudio_positive_dsSetSecondaryLanguage(void) {
  */
 void test_l1_dsAudio_negative_dsSetSecondaryLanguage(void) {
 	// Start of the test
-	gTestID = 124; // Assuming Test Case ID is 158
+	gTestID = 124; // Assuming Test Case ID is 124
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -7731,7 +7731,7 @@ void test_l1_dsAudio_negative_dsSetSecondaryLanguage(void) {
  * @brief Ensure dsGetSecondaryLanguage() correctly fetches the AC4 Secondary language during positive scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 159@n
+ * **Test Case ID:** 125@n
  * 
  * **Dependencies:**@n
  * **User Interaction:** None
@@ -7749,7 +7749,7 @@ void test_l1_dsAudio_negative_dsSetSecondaryLanguage(void) {
  */
 void test_l1_dsAudio_positive_dsGetSecondaryLanguage(void) {
 	// Start of the test
-	gTestID = 125; // Assuming Test Case ID is 159
+	gTestID = 125; // Assuming Test Case ID is 125
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 
@@ -7792,7 +7792,7 @@ void test_l1_dsAudio_positive_dsGetSecondaryLanguage(void) {
  * @brief Ensure dsGetSecondaryLanguage() returns correct error codes during negative scenarios.
  * 
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 160@n
+ * **Test Case ID:** 126@n
  * 
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -7812,7 +7812,7 @@ void test_l1_dsAudio_positive_dsGetSecondaryLanguage(void) {
  */
 void test_l1_dsAudio_negative_dsGetSecondaryLanguage(void) {
 	// Start of the test
-	gTestID = 126; // Assuming Test Case ID is 160
+	gTestID = 126; // Assuming Test Case ID is 126
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	int result;
@@ -7858,7 +7858,7 @@ void test_l1_dsAudio_negative_dsGetSecondaryLanguage(void) {
 * @brief Ensure dsSetAudioMixerLevels() sets the audio mixer levels of primary/system input
 *
 * **Test Group ID:** Basic: 01@n
-* **Test Case ID:** 163@n
+* **Test Case ID:** 127@n
 *
 * **Dependencies:** None@n
 * **User Interaction:** None
@@ -7875,7 +7875,7 @@ void test_l1_dsAudio_negative_dsGetSecondaryLanguage(void) {
 */
 void test_l1_dsAudio_positive_dsSetAudioMixerLevels(void) {
         // Start of the test
-        gTestID = 127; // Assuming Test Case ID is 163
+        gTestID = 127; // Assuming Test Case ID is 127
         UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
         int result, volume = 75;
@@ -7919,7 +7919,7 @@ void test_l1_dsAudio_positive_dsSetAudioMixerLevels(void) {
 * @brief Ensure dsSetAudioMixerLevels() returns correct error codes during negative scenarios.
 *
 * **Test Group ID:** Basic: 01@n
-* **Test Case ID:** 164@n
+* **Test Case ID:** 128@n
 *
 * **Dependencies:** None@n
 * **User Interaction:** None
@@ -7941,7 +7941,7 @@ void test_l1_dsAudio_positive_dsSetAudioMixerLevels(void) {
 */
 void test_l1_dsAudio_negative_dsSetAudioMixerLevels(void) {
         // Start of the test
-        gTestID = 128; // Assuming Test Case ID is 164
+        gTestID = 128; // Assuming Test Case ID is 128
         UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
         int result, invalid_vol_level_pos = 105, invalid_vol_level_neg = -5, valid_vol_level = 75;
@@ -7987,6 +7987,477 @@ void test_l1_dsAudio_negative_dsSetAudioMixerLevels(void) {
 	
         // End of the test
         UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsAudioAtmosCapsChangeRegisterCB() correctly registers for the Atmos capability change event of the sink device during positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 129@n
+ * 
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |02|Register the audio format update callback using dsAudioAtmosCapsChangeRegisterCB() | `cbFun`=test callback function | dsERR_NONE | Should Pass |
+ * |03|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * 
+ */
+
+/* call back */
+void testAudioAtmosCapsChangeCallbackFunction(dsATMOSCapability_t atmosCaps, bool status)
+{
+	/* stub callback */
+}
+
+void test_l1_dsAudio_positive_dsAudioAtmosCapsChangeRegisterCB(void) {
+	// Start of the test
+	gTestID = 129; // Assuming Test Case ID is 129
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	int result;
+
+	dsAtmosCapsChangeCB_t atmoscaps_change = &testAudioAtmosCapsChangeCallbackFunction;
+
+	// Step 01: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 02: Register the audio format update callback
+	result = dsAudioAtmosCapsChangeRegisterCB(atmoscaps_change);
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 03: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsAudioAtmosCapsChangeRegisterCB() returns correct error codes during negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 130@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsAudioAtmosCapsChangeRegisterCB() without initializing audio ports | `cbFun`=NULL | dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |03|Call dsAudioAtmosCapsChangeRegisterCB() using a NULL callback function | `cbFun`=NULL | dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * 
+ */
+void test_l1_dsAudio_negative_dsAudioAtmosCapsChangeRegisterCB(void) {
+	// Start of the test
+	gTestID = 130; // Assuming Test Case ID is 130
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	int result;
+
+	// Step 01: Attempt to register callback without initializing ports
+	result = dsAudioAtmosCapsChangeRegisterCB(NULL);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
+	// Step 02: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 03: Attempt to register a NULL callback
+	result = dsAudioAtmosCapsChangeRegisterCB(NULL);
+	UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+	// Step 04: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsGetSupportedARCTypes() retrieves the the supported ARC types of the connected ARC/eARC device during positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 131@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |03|Call dsGetSupportedARCTypes() by looping through the acquired port handles to get the supported ARC types of the connected ARC/eARC device | handle: [valid handles ] , types: [vaild pointer] | dsERR_NONE | The supported ARC types must be returned |
+ * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * 
+ */
+void test_l1_dsAudio_positive_dsGetSupportedARCTypes(void) {
+	// Logging at the start
+	gTestID = 131;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	dsError_t result;
+	intptr_t handle[NUM_OF_PORTS] = {NUM_OF_PORTS};
+	int types[NUM_OF_PORTS];
+
+	// Step 01: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 02: Get the port handle for all supported audio ports
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		UT_ASSERT_EQUAL(result, dsERR_NONE);
+		UT_ASSERT_NOT_EQUAL(handle[i], null_handle);
+
+		if(handle[i] == dsAUDIOPORT_TYPE_SPEAKER) {
+			// Step 03: supported ARC types of the connected ARC/eARC
+			result = dsGetSupportedARCTypes(handle[i], &types[i]);
+			UT_ASSERT_EQUAL(result, dsERR_NONE);
+		}
+		else {
+			result = dsGetSupportedARCTypes(handle[i], &types[i]);
+			UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+		}
+	}
+
+	// Step 04: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Logging at the end
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsGetSupportedARCTypes() returns correct error codes during negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 132@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsGetSupportedARCTypes() without initializing audio ports | handle =[any value], type=[valid pointer] | dsERR_NOT_INITIALIZED |dsGetSupportedARCTypes call must fail as module is not intialized |
+ * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |03|Call dsGetSupportedARCTypes() using an invalid handle and valid pointer | handle=[invalid handle] , pointer=[valid pointer] | dsERR_INVALID_PARAM | Invalid parameter error must be returned|
+ * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|Call dsGetSupportedARCTypes() by looping through valid handles and with a null pointer for type | handle=[valid handle], type=[NULL] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |07|Call dsGetSupportedARCTypes() again after terminating audio ports | handle=[valid handle],type=[valid pointer] | dsERR_NOT_INITIALIZED | dsGetSupportedARCTypes call must fail as module is not intialized |
+ * 
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
+ */
+void test_l1_dsAudio_negative_dsGetSupportedARCTypes(void) {
+	// Logging at the start
+	gTestID = 132;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	dsError_t result;
+	intptr_t handle[NUM_OF_PORTS];
+	int types[NUM_OF_PORTS];
+
+	// Step 01: Attempt to get MS12 Audio Profile without initializing
+	result = dsGetSupportedARCTypes(-1, &types[0]);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
+	// Step 02: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 03: Attempt to get MS12 Audio Profile using an invalid handle
+	result = dsGetSupportedARCTypes(handle[0], &types[0]);
+	UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+	// Step 04: Get the port handle for all supported audio ports
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		UT_ASSERT_EQUAL(result, dsERR_NONE);
+		UT_ASSERT_NOT_EQUAL(handle[i], null_handle);
+
+		// Step 05: Attempt to get MS12 Audio Profile with a null pointer
+		if(handle[i] == dsAUDIOPORT_TYPE_SPEAKER) {
+			result = dsGetSupportedARCTypes(handle[i], NULL);
+			UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+		}
+	}
+
+	// Step 06: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 07: Attempt to get MS12 Audio Profile after termination
+	result = dsGetSupportedARCTypes(handle[0], &types[0]);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
+	// Logging at the end
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsAudioSetSAD() sets Short Audio Descriptor retrieved from CEC correctly during positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 133@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |03|Call dsAudioSetSAD() by looping through valid handles and vaild SAD value | handle = [valid handle], sad = [dsAudioSADList_t] | dsERR_NONE |dsAudioSetSAD must set the valid values |
+ * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * 
+ */
+void test_l1_dsAudio_positive_dsAudioSetSAD(void) {
+	// Logging at the start
+	gTestID = 133;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	dsError_t result;
+	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	dsAudioSADList_t sadlist;
+	sadlist.sad[0] = 0; sadlist.sad[1] = 1; sadlist.sad[2] = 2; sadlist.sad[3] = 3;
+	sadlist.count = 4;
+
+	// Step 01: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 02: Get the port handle for all supported audio ports
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		UT_ASSERT_EQUAL(result, dsERR_NONE);
+		UT_ASSERT_NOT_EQUAL(handle[i], null_handle);
+
+		// Step 03: Set SAD for each port
+		result = dsAudioSetSAD(handle[i], sadlist);
+		UT_ASSERT_EQUAL(result, dsERR_NONE);
+	}
+
+	// Step 04: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Logging at the end
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsAudioSetSAD() returns correct error codes during negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 134@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsAudioSetSAD() without initializing audio ports | handle = [any value], sad = [dsAudioSADList_t] | dsERR_NOT_INITIALIZED | dsAudioSetSAD call must fail as module is not initialized |
+ * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |03|Call dsAudioSetSAD() using an invalid handle and valid sad value | handle = [invalid handle], sad = [dsAudioSADList_t] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|Call dsAudioSetSAD() by looping through valid handles and using an invalid sad value | handle = [valid handle], sad = [invalid dsAudioSADList_t] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |07|Call dsAudioSetSAD() again after terminating audio ports | handle = [valid handle obtained at setp4], sad = [dsAudioSADList_t] | dsERR_NOT_INITIALIZED | dsAudioSetSAD call must fail as module is not initialized |
+ * 
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
+ */
+void test_l1_dsAudio_negative_dsAudioSetSAD(void) {
+	// Logging at the start
+	gTestID = 134;
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	dsError_t result;
+	intptr_t handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+	dsAudioSADList_t sadlist;
+	sadlist.sad[0] = 0; sadlist.sad[1] = 1; sadlist.sad[2] = 2; sadlist.sad[3] = 3;
+	sadlist.count = 4;
+
+	// Step 01: Attempt to set Short Audio Descriptor without initializing
+	result = dsAudioSetSAD(-1, sadlist);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
+	// Step 02: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 03: Attempt to set Short Audio Descriptor using an invalid handle
+	result = dsAudioSetSAD(handle[0], sadlist);
+	UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+	// Step 04: Get the port handle for all supported audio ports
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		UT_ASSERT_EQUAL(result, dsERR_NONE);
+		UT_ASSERT_NOT_EQUAL(handle[i], null_handle);
+
+		// Step 05: Attempt to set Short Audio Descriptor with an invalid mode value
+		dsAudioSADList_t sadlist1;
+	    sadlist1.sad[0] = 0; sadlist1.sad[1] = 1; sadlist1.sad[2] = 2; sadlist1.sad[3] = 3;
+	    sadlist1.count = 20; //max sad is 15
+		result = dsAudioSetSAD(handle[i], sadlist1);
+		UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+	}
+
+	// Step 06: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 07: Attempt to set Short Audio Descriptor after termination
+	result = dsAudioSetSAD(handle[0], sadlist);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
+	// Logging at the end
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsAudioEnableARC() Enable/Disable ARC/eARC and route audio during positive scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 135@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ], handle = [valid handle]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |03|Call dsAudioEnableARC() by looping through the acquired port handles and enable ARC/eARC for each port| handle = [loop through valid handles] , status = [dsAudioARCTypes_t, TRUE] | dsERR_NONE | ARC/eARC must be enabled for all supported audio ports |
+ * |04|Call dsAudioEnableARC() by looping through the acquired port handles and disable ARC/eARC for each port| handle = [loop through valid handles] , status = [dsAudioARCTypes_t, FALSE] | dsERR_NONE | ARC/eARC must be disabled for all supported audio ports |
+ * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * 
+ */
+void test_l1_dsAudio_positive_dsAudioEnableARC(void) {
+	// Start of the test
+	gTestID = 135; // Assuming Test Case ID is 135
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	int result;
+	intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+
+	// Step 01: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Steps 02 to 04: Enable and disable ARC/eARC for each port
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		UT_ASSERT_EQUAL(result, dsERR_NONE);
+		UT_ASSERT_NOT_EQUAL(handle[i], null_handle);
+
+		// Loop through all arc types
+		for (dsAudioARCTypes_t type = dsAUDIOARCSUPPORT_ARC; type <= dsAUDIOARCSUPPORT_eARC ; type++) {
+			dsAudioARCStatus_t arcstatus;
+			arcstatus.type = type;
+			arcstatus.status = true;
+			// Enable ARC/eARC
+			result = dsAudioEnableARC(handle[i], arcstatus);
+			UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+			// Disable ARC/eARC
+			arcstatus.status = false;
+			result = dsAudioEnableARC(handle[i], arcstatus);
+			UT_ASSERT_EQUAL(result, dsERR_NONE);
+		}
+	}
+
+	// Step 05: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+
+/**
+ * @brief Ensure dsAudioEnableARC() returns correct error codes during negative scenarios.
+ * 
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 136@n
+ * 
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ * 
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|----------|--------------|-----|
+ * |01|Call dsAudioEnableARC() - Attempt to enable ARC/eARC without initializing audio ports | handle = [invalid handle], status = [dsAudioARCTypes_t, TRUE] | dsERR_NOT_INITIALIZED | Enable ARC/eARC must fail as module is not initialized |
+ * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |03|Call dsAudioEnableARC() using an invalid handle | handle = [invalid handle], status = [dsAudioARCTypes_t,TRUE] | dsERR_INVALID_PARAM | Invalid Parameter error must be returned |
+ * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ], handle = [valid handle]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
+ * |05|Call dsAudioEnableARC() using an unsupported ARC/eARC  | handle = [valid value], status = [0x03, TRUE] | dsERR_INVALID_PARAM | Invalid Parameter error must be returned |
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |07|Call dsAudioEnableARC() - Attempt to enable ARC/eARC again after terminating audio ports | handle = [valid handle from previous step], feature = [loop through dsMS12FEATURE_t], enable = [TRUE] | dsERR_NOT_INITIALIZED | Enable ARC/eARC must fail as module is not initialized |
+ * 
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
+ */
+void test_l1_dsAudio_negative_dsAudioEnableARC(void) {
+	// Start of the test
+	gTestID = 136; // Assuming Test Case ID is 136
+	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+	int result;
+	intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
+
+    dsAudioARCStatus_t arcstatus;
+	arcstatus.type = dsAUDIOARCSUPPORT_ARC;
+	arcstatus.status = true;
+	// Step 01: Attempt to enable ARC/eARC without initializing
+	result = dsAudioEnableARC(-1, arcstatus);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
+	// Step 02: Initialize audio ports
+	result = dsAudioPortInit();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 03: Attempt to enable with invalid handle
+	result = dsAudioEnableARC(handle[0], arcstatus);
+	UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+	// Step 04: Loop through kPorts to get audio port handle
+	for (int i = 0; i < NUM_OF_PORTS; i++) {
+		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
+		UT_ASSERT_EQUAL(result, dsERR_NONE);
+		UT_ASSERT_NOT_EQUAL(handle[i], null_handle);
+
+		// Step 05: Attempt to enable unsupported ARC/eARC
+		arcstatus.type = 0x03;
+		result = dsAudioEnableARC(handle[i], arcstatus);
+		UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+	}
+
+	// Step 06: Terminate audio ports
+	result = dsAudioPortTerm();
+	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+	// Step 07: Attempt to enable ARC/eARC after terminating
+	result = dsAudioEnableARC(handle[0], arcstatus);
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	
+	// End of the test
+	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 static UT_test_suite_t * pSuite = NULL;
@@ -8133,6 +8604,14 @@ int test_l1_dsAudio_register ( void )
 	UT_add_test( pSuite, "dsGetSecondaryLanguage_L1_negative" ,test_l1_dsAudio_negative_dsGetSecondaryLanguage );
 	UT_add_test( pSuite, "dsSetAudioMixerLevels_l1_positive" ,test_l1_dsAudio_positive_dsSetAudioMixerLevels );
 	UT_add_test( pSuite, "dsSetAudioMixerLevels_l1_negative" ,test_l1_dsAudio_negative_dsSetAudioMixerLevels );
+	UT_add_test( pSuite, "dsAudioAtmosCapsChangeRegisterCB_l1_positive" ,test_l1_dsAudio_positive_dsAudioAtmosCapsChangeRegisterCB );
+	UT_add_test( pSuite, "dsAudioAtmosCapsChangeRegisterCB_l1_negative" ,test_l1_dsAudio_negative_dsAudioAtmosCapsChangeRegisterCB );
+	UT_add_test( pSuite, "dsGetSupportedARCTypes_l1_positive" ,test_l1_dsAudio_positive_dsGetSupportedARCTypes );
+	UT_add_test( pSuite, "dsGetSupportedARCTypes_l1_negative" ,test_l1_dsAudio_negative_dsGetSupportedARCTypes );
+	UT_add_test( pSuite, "dsAudioSetSAD_l1_positive" ,test_l1_dsAudio_positive_dsAudioSetSAD );
+	UT_add_test( pSuite, "dsAudioSetSAD_l1_negative" ,test_l1_dsAudio_negative_dsAudioSetSAD );
+	UT_add_test( pSuite, "dsAudioEnableARC_l1_positive" ,test_l1_dsAudio_positive_dsAudioEnableARC );
+	UT_add_test( pSuite, "dsAudioEnableARC_l1_negative" ,test_l1_dsAudio_negative_dsAudioEnableARC );
 
 	extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsAudio/features/extendedEnumsSupported" );
 
