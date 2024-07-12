@@ -565,6 +565,13 @@ dsError_t dsAudioFormatUpdateRegisterCB(dsAudioFormatUpdateCB_t cbFun)
   return (dsError_t)0;
 }
 
+dsError_t dsAudioAtmosCapsChangeRegisterCB(dsAtmosCapsChangeCB_t cbFun)
+{
+  /*TODO: Implement Me!*/
+  (void)cbFun;
+  return (dsError_t)0;
+}
+
 dsError_t dsGetAudioCapabilities(intptr_t handle, int* capabilities)
 {
   /*TODO: Implement Me!*/
