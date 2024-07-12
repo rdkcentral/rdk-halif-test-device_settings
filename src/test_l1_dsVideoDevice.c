@@ -79,21 +79,6 @@
 
 static int gTestGroup = 1;
 static int gTestID = 1;
-#define DS_ASSERT_AUTO_TERM_NUMERICAL(value, comparison){\
-    if(value != comparison){\
-        UT_LOG("\n In %s Comparison: [%d = %d]\n", __FUNCTION__, value, comparison);\
-        dsVideoDeviceTerm();\
-        UT_FAIL();\
-    }\
-}\
-
-#define DS_ASSERT_AUTO_TERM_STRING(value, comparison){\
-    if(strcmp(value, comparison) != 0){\
-        UT_LOG("\n In %s Comparison: [%s = %s]\n", __FUNCTION__, value, comparison);\
-        dsVideoDeviceTerm();\
-        UT_FAIL();\
-    }\
-}\
 
 #define CHECK_FOR_EXTENDED_ERROR_CODE( result, enhanced, old )\
 {\
@@ -1599,6 +1584,204 @@ void test_l1_dsVideoDevice_negative_dsSetDisplayframerate(void)
     UT_LOG("\n Out %s\n", __FUNCTION__); 
 }
 
+/**
+ * @brief Test guidance to ensure dsRegisterFrameratePreChangeCB() returns correct error codes for positive scenarios.
+ *
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 027@n
+ *
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ *
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
+ * |02|Call dsRegisterFrameratePreChangeCB() - Register a valid callback for Display framerate pre change event | cb = [valid callback function] | dsERR_NONE | Display framerate pre change event update callback registration must be successful |
+ * |03|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ *
+ * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
+ *
+ */
+
+/*callback*/
+void mockFrameRatePreChangeCallback(unsigned int tSecond){
+        // Mock implementation, can be customized for testing
+}
+
+void test_l1_dsVideoDevice_positive_dsRegisterFrameratePreChangeCB(void)
+{
+    gTestID = 27;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    // Define variables
+    int result;
+
+    // Step 01: Initialize video devices
+    result = dsVideoDeviceInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 02: Register a valid callback function for Display framerate pre change event
+    result = dsRegisterFrameratePreChangeCB(mockFrameRatePreChangeCallback);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 03: De-initialize the video devices
+    result = dsVideoDeviceTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Test guidance to ensure dsRegisterFrameratePreChangeCB() returns correct error codes for negative scenarios.
+ *
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 028@n
+ *
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ *
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsRegisterFrameratePostChangeCB() - Attempt to register for display framerate pre change event callback without initializing the video device | cb = [valid callback function ] | dsERR_NOT_INITIALIZED | Callback registration must fail as module is not initialized |
+ * |02|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
+ * |03|Call dsRegisterFrameratePostChangeCB() with an invalid callback (NULL)| cb = NULL | dsERR_INVALID_PARAM | Invalid paramter error must be returned |
+ * |04|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * |05|Call dsRegisterFrameratePostChangeCB() - Attempt to register for display framerate pre change event callback without initializing the video devices | cb = [valid callback function ] | dsERR_NOT_INITIALIZED | Callback registration must fail as module is not initialized |
+ *
+ * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
+ *
+ */
+
+void test_l1_dsVideoDevice_negative_dsRegisterFrameratePreChangeCB(void)
+{
+    gTestID = 28;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    // Define variables
+    int result;
+
+    // Step 01: Attempt to register callback without initialization
+    result = dsRegisterFrameratePreChangeCB(mockFrameRatePreChangeCallback);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+
+    // Step 02: Initialize video devices
+    result = dsVideoDeviceInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 03: Register with invalid callback (NULL)
+    result = dsRegisterFrameratePreChangeCB(NULL);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 04: De-initialize the video devices
+    result = dsVideoDeviceTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 05: Attempt to register callback after termination
+    result = dsRegisterFrameratePreChangeCB(mockFrameRatePreChangeCallback);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Test guidance to ensure dsRegisterFrameratePostChangeCB() returns correct error codes for positive scenarios.
+ *
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 029@n
+ *
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ *
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
+ * |02|Call dsRegisterFrameratePostChangeCB() - Register a valid callback for Display framerate post change event | cb = [valid callback function] | dsERR_NONE | Display framerate Update callback registration must be successful |
+ * |03|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ *
+ * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
+ *
+ */
+
+/*callback*/
+void mockFrameRatePostChangeCallback(unsigned int tSecond){
+	// Mock implementation, can be customized for testing
+}
+
+void test_l1_dsVideoDevice_positive_dsRegisterFrameratePostChangeCB(void)
+{
+    gTestID = 29;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    // Define variables
+    int result;
+    
+    // Step 01: Initialize video devices
+    result = dsVideoDeviceInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 02: Register a valid callback function for Display framerate post change event
+    result = dsRegisterFrameratePostChangeCB(mockFrameRatePostChangeCallback);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 03: De-initialize the video devices
+    result = dsVideoDeviceTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Test guidance to ensure dsRegisterFrameratePostChangeCB() returns correct error codes for negative scenarios.
+ *
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 030@n
+ *
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ *
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsRegisterFrameratePostChangeCB() - Attempt to register for frame rate update callback without initializing the video device | cb = [valid callback function ] | dsERR_NOT_INITIALIZED | Callback registration must fail as module is not initialized |
+ * |02|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
+ * |03|Call dsRegisterFrameratePostChangeCB() with an invalid callback (NULL)| cb = NULL | dsERR_INVALID_PARAM | Invalid paramter error must be returned |
+ * |04|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * |05|Call dsRegisterFrameratePostChangeCB() - Attempt to register for frame rate update callback without initializing the video devices | cb = [valid callback function ] | dsERR_NOT_INITIALIZED | Callback registration must fail as module is not initialized |
+ *
+ * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
+ *
+ */
+
+void test_l1_dsVideoDevice_negative_dsRegisterFrameratePostChangeCB(void)
+{
+    gTestID = 30;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    // Define variables
+    int result;
+
+    // Step 01: Attempt to register callback without initialization
+    result = dsRegisterFrameratePostChangeCB(mockFrameRatePostChangeCallback);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+
+    // Step 02: Initialize video devices
+    result = dsVideoDeviceInit();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 03: Register with invalid callback (NULL)
+    result = dsRegisterFrameratePostChangeCB(NULL);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 04: De-initialize the video devices
+    result = dsVideoDeviceTerm();
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 05: Attempt to register callback after termination
+    result = dsRegisterFrameratePostChangeCB(mockFrameRatePostChangeCallback);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
 static UT_test_suite_t * pSuite1 = NULL;
 static UT_test_suite_t * pSuite2 = NULL;
 
@@ -1651,6 +1834,10 @@ int test_l1_dsVideoDevice_register ( void )
     UT_add_test( pSuite2, "dsForceDisableHDRSupport_L1_positive" ,test_l1_dsVideoDevice_positive_dsForceDisableHDRSupport );
     UT_add_test( pSuite2, "dsGetDFC_L1_negative" ,test_l1_dsVideoDevice_negative_dsGetDFC );
     UT_add_test( pSuite2, "dsForceDisableHDRSupport_L1_negative" ,test_l1_dsVideoDevice_negative_dsForceDisableHDRSupport );
+    UT_add_test( pSuite2, "dsRegisterFrameratePreChangeCB_L1_positive" ,test_l1_dsVideoDevice_positive_dsRegisterFrameratePreChangeCB );
+    UT_add_test( pSuite2, "dsRegisterFrameratePreChangeCB_L1_negative" ,test_l1_dsVideoDevice_negative_dsRegisterFrameratePreChangeCB );
+    UT_add_test( pSuite2, "dsRegisterFrameratePostChangeCB_L1_positive" ,test_l1_dsVideoDevice_positive_dsRegisterFrameratePostChangeCB );
+    UT_add_test( pSuite2, "dsRegisterFrameratePostChangeCB_L1_negative" ,test_l1_dsVideoDevice_negative_dsRegisterFrameratePostChangeCB );
     extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsVideoDevice/features/extendedEnumsSupported" ); 	
 
 	return 0;
