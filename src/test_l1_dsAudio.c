@@ -7991,18 +7991,17 @@ void test_l1_dsAudio_negative_dsSetAudioMixerLevels(void) {
 
 /**
  * @brief Ensure dsAudioAtmosCapsChangeRegisterCB() correctly registers for the Atmos capability change event of the sink device during positive scenarios.
- * 
+ *
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 129@n
- * 
- * 
+ *
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|----------|--------------|-----|
  * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
  * |02|Register the audio format update callback using dsAudioAtmosCapsChangeRegisterCB() | `cbFun`=test callback function | dsERR_NONE | Should Pass |
  * |03|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
- * 
+ *
  */
 
 /* call back */
@@ -8038,13 +8037,13 @@ void test_l1_dsAudio_positive_dsAudioAtmosCapsChangeRegisterCB(void) {
 
 /**
  * @brief Ensure dsAudioAtmosCapsChangeRegisterCB() returns correct error codes during negative scenarios.
- * 
+ *
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 130@n
- * 
+ *
  * **Dependencies:** None@n
  * **User Interaction:** None
- * 
+ *
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|----------|--------------|-----|
@@ -8052,7 +8051,7 @@ void test_l1_dsAudio_positive_dsAudioAtmosCapsChangeRegisterCB(void) {
  * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
  * |03|Call dsAudioAtmosCapsChangeRegisterCB() using a NULL callback function | `cbFun`=NULL | dsERR_INVALID_PARAM | Should Pass |
  * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
- * 
+ *
  */
 void test_l1_dsAudio_negative_dsAudioAtmosCapsChangeRegisterCB(void) {
 	// Start of the test
@@ -8064,7 +8063,7 @@ void test_l1_dsAudio_negative_dsAudioAtmosCapsChangeRegisterCB(void) {
 	// Step 01: Attempt to register callback without initializing ports
 	result = dsAudioAtmosCapsChangeRegisterCB(NULL);
 	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
-	
+
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -8086,10 +8085,10 @@ void test_l1_dsAudio_negative_dsAudioAtmosCapsChangeRegisterCB(void) {
  * 
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 131@n
- * 
+ *
  * **Dependencies:** None@n
  * **User Interaction:** None
- * 
+ *
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
@@ -8097,7 +8096,7 @@ void test_l1_dsAudio_negative_dsAudioAtmosCapsChangeRegisterCB(void) {
  * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
  * |03|Call dsGetSupportedARCTypes() by looping through the acquired port handles to get the supported ARC types of the connected ARC/eARC device | handle: [valid handles ] , types: [vaild pointer] | dsERR_NONE | The supported ARC types must be returned |
  * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
- * 
+ *
  */
 void test_l1_dsAudio_positive_dsGetSupportedARCTypes(void) {
 	// Logging at the start
@@ -8118,7 +8117,7 @@ void test_l1_dsAudio_positive_dsGetSupportedARCTypes(void) {
 		UT_ASSERT_EQUAL(result, dsERR_NONE);
 		UT_ASSERT_NOT_EQUAL(handle[i], null_handle);
 
-		if(handle[i] == dsAUDIOPORT_TYPE_SPEAKER) {
+		if(handle[i] == dsAUDIOPORT_TYPE_HDMI_ARC) {
 			// Step 03: supported ARC types of the connected ARC/eARC
 			result = dsGetSupportedARCTypes(handle[i], &types[i]);
 			UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -8139,13 +8138,13 @@ void test_l1_dsAudio_positive_dsGetSupportedARCTypes(void) {
 
 /**
  * @brief Ensure dsGetSupportedARCTypes() returns correct error codes during negative scenarios.
- * 
+ *
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 132@n
- * 
+ *
  * **Dependencies:** None@n
  * **User Interaction:** None
- * 
+ *
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
@@ -8156,7 +8155,7 @@ void test_l1_dsAudio_positive_dsGetSupportedARCTypes(void) {
  * |05|Call dsGetSupportedARCTypes() by looping through valid handles and with a null pointer for type | handle=[valid handle], type=[NULL] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
  * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  * |07|Call dsGetSupportedARCTypes() again after terminating audio ports | handle=[valid handle],type=[valid pointer] | dsERR_NOT_INITIALIZED | dsGetSupportedARCTypes call must fail as module is not intialized |
- * 
+ *
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
 void test_l1_dsAudio_negative_dsGetSupportedARCTypes(void) {
@@ -8168,15 +8167,15 @@ void test_l1_dsAudio_negative_dsGetSupportedARCTypes(void) {
 	intptr_t handle[NUM_OF_PORTS];
 	int types[NUM_OF_PORTS];
 
-	// Step 01: Attempt to get MS12 Audio Profile without initializing
+	// Step 01: Attempt to get SupportedARCTypes without initializing
 	result = dsGetSupportedARCTypes(-1, &types[0]);
 	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
-	
+
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-	// Step 03: Attempt to get MS12 Audio Profile using an invalid handle
+	// Step 03: Attempt to get SupportedARCTypes using an invalid handle
 	result = dsGetSupportedARCTypes(handle[0], &types[0]);
 	UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
@@ -8186,34 +8185,32 @@ void test_l1_dsAudio_negative_dsGetSupportedARCTypes(void) {
 		UT_ASSERT_EQUAL(result, dsERR_NONE);
 		UT_ASSERT_NOT_EQUAL(handle[i], null_handle);
 
-		// Step 05: Attempt to get MS12 Audio Profile with a null pointer
-		if(handle[i] == dsAUDIOPORT_TYPE_SPEAKER) {
+		// Step 05: Attempt to get SupportedARCTypes with a null pointer
 			result = dsGetSupportedARCTypes(handle[i], NULL);
 			UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
-		}
 	}
 
 	// Step 06: Terminate audio ports
 	result = dsAudioPortTerm();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-	// Step 07: Attempt to get MS12 Audio Profile after termination
+	// Step 07: Attempt to get SupportedARCTypes after termination
 	result = dsGetSupportedARCTypes(handle[0], &types[0]);
 	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
-	
+
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 /**
  * @brief Ensure dsAudioSetSAD() sets Short Audio Descriptor retrieved from CEC correctly during positive scenarios.
- * 
+ *
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 133@n
- * 
+ *
  * **Dependencies:** None@n
  * **User Interaction:** None
- * 
+ *
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
@@ -8221,7 +8218,7 @@ void test_l1_dsAudio_negative_dsGetSupportedARCTypes(void) {
  * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
  * |03|Call dsAudioSetSAD() by looping through valid handles and vaild SAD value | handle = [valid handle], sad = [dsAudioSADList_t] | dsERR_NONE |dsAudioSetSAD must set the valid values |
  * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
- * 
+ *
  */
 void test_l1_dsAudio_positive_dsAudioSetSAD(void) {
 	// Logging at the start
@@ -8244,9 +8241,12 @@ void test_l1_dsAudio_positive_dsAudioSetSAD(void) {
 		UT_ASSERT_EQUAL(result, dsERR_NONE);
 		UT_ASSERT_NOT_EQUAL(handle[i], null_handle);
 
-		// Step 03: Set SAD for each port
-		result = dsAudioSetSAD(handle[i], sadlist);
-		UT_ASSERT_EQUAL(result, dsERR_NONE);
+		// Step 03: Set SAD for HDMI ARC port
+		if(handle[i] == dsAUDIOPORT_TYPE_HDMI_ARC)
+		{
+			result = dsAudioSetSAD(handle[i], sadlist);
+			UT_ASSERT_EQUAL(result, dsERR_NONE);
+		}
 	}
 
 	// Step 04: Terminate audio ports
@@ -8260,13 +8260,13 @@ void test_l1_dsAudio_positive_dsAudioSetSAD(void) {
 
 /**
  * @brief Ensure dsAudioSetSAD() returns correct error codes during negative scenarios.
- * 
+ *
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 134@n
- * 
+ *
  * **Dependencies:** None@n
  * **User Interaction:** None
- * 
+ *
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
@@ -8277,7 +8277,7 @@ void test_l1_dsAudio_positive_dsAudioSetSAD(void) {
  * |05|Call dsAudioSetSAD() by looping through valid handles and using an invalid sad value | handle = [valid handle], sad = [invalid dsAudioSADList_t] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
  * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  * |07|Call dsAudioSetSAD() again after terminating audio ports | handle = [valid handle obtained at setp4], sad = [dsAudioSADList_t] | dsERR_NOT_INITIALIZED | dsAudioSetSAD call must fail as module is not initialized |
- * 
+ *
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
 void test_l1_dsAudio_negative_dsAudioSetSAD(void) {
@@ -8294,7 +8294,7 @@ void test_l1_dsAudio_negative_dsAudioSetSAD(void) {
 	// Step 01: Attempt to set Short Audio Descriptor without initializing
 	result = dsAudioSetSAD(-1, sadlist);
 	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
-	
+
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -8309,9 +8309,9 @@ void test_l1_dsAudio_negative_dsAudioSetSAD(void) {
 		UT_ASSERT_EQUAL(result, dsERR_NONE);
 		UT_ASSERT_NOT_EQUAL(handle[i], null_handle);
 
-		// Step 05: Attempt to set Short Audio Descriptor with an invalid mode value
+		// Step 05: Attempt to set Short Audio Descriptor with an invalid sad value
 		dsAudioSADList_t sadlist1;
-	    sadlist1.sad[0] = 0; sadlist1.sad[1] = 1; sadlist1.sad[2] = 2; sadlist1.sad[3] = 3;
+	    sadlist1.sad[0] = -1; sadlist1.sad[1] = -2; sadlist1.sad[2] = -3; sadlist1.sad[3] = -4;
 	    sadlist1.count = 20; //max sad is 15
 		result = dsAudioSetSAD(handle[i], sadlist1);
 		UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
@@ -8324,20 +8324,20 @@ void test_l1_dsAudio_negative_dsAudioSetSAD(void) {
 	// Step 07: Attempt to set Short Audio Descriptor after termination
 	result = dsAudioSetSAD(handle[0], sadlist);
 	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
-	
+
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 /**
  * @brief Ensure dsAudioEnableARC() Enable/Disable ARC/eARC and route audio during positive scenarios.
- * 
+ *
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 135@n
- * 
+ *
  * **Dependencies:** None@n
  * **User Interaction:** None
- * 
+ *
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|----------|--------------|-----|
@@ -8346,7 +8346,7 @@ void test_l1_dsAudio_negative_dsAudioSetSAD(void) {
  * |03|Call dsAudioEnableARC() by looping through the acquired port handles and enable ARC/eARC for each port| handle = [loop through valid handles] , status = [dsAudioARCTypes_t, TRUE] | dsERR_NONE | ARC/eARC must be enabled for all supported audio ports |
  * |04|Call dsAudioEnableARC() by looping through the acquired port handles and disable ARC/eARC for each port| handle = [loop through valid handles] , status = [dsAudioARCTypes_t, FALSE] | dsERR_NONE | ARC/eARC must be disabled for all supported audio ports |
  * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
- * 
+ *
  */
 void test_l1_dsAudio_positive_dsAudioEnableARC(void) {
 	// Start of the test
@@ -8393,13 +8393,13 @@ void test_l1_dsAudio_positive_dsAudioEnableARC(void) {
 
 /**
  * @brief Ensure dsAudioEnableARC() returns correct error codes during negative scenarios.
- * 
+ *
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 136@n
- * 
+ *
  * **Dependencies:** None@n
  * **User Interaction:** None
- * 
+ *
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|----------|--------------|-----|
@@ -8409,8 +8409,8 @@ void test_l1_dsAudio_positive_dsAudioEnableARC(void) {
  * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ], handle = [valid handle]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
  * |05|Call dsAudioEnableARC() using an unsupported ARC/eARC  | handle = [valid value], status = [0x03, TRUE] | dsERR_INVALID_PARAM | Invalid Parameter error must be returned |
  * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
- * |07|Call dsAudioEnableARC() - Attempt to enable ARC/eARC again after terminating audio ports | handle = [valid handle from previous step], feature = [loop through dsMS12FEATURE_t], enable = [TRUE] | dsERR_NOT_INITIALIZED | Enable ARC/eARC must fail as module is not initialized |
- * 
+ * |07|Call dsAudioEnableARC() - Attempt to enable ARC/eARC again after terminating audio ports | handle = [valid handle from previous step], enable = [TRUE] | dsERR_NOT_INITIALIZED | Enable ARC/eARC must fail as module is not initialized |
+ *
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
 void test_l1_dsAudio_negative_dsAudioEnableARC(void) {
@@ -8421,13 +8421,13 @@ void test_l1_dsAudio_negative_dsAudioEnableARC(void) {
 	int result;
 	intptr_t  handle[NUM_OF_PORTS] = {INT_ARRAY_INIT};
 
-    dsAudioARCStatus_t arcstatus;
+	dsAudioARCStatus_t arcstatus;
 	arcstatus.type = dsAUDIOARCSUPPORT_ARC;
 	arcstatus.status = true;
 	// Step 01: Attempt to enable ARC/eARC without initializing
 	result = dsAudioEnableARC(-1, arcstatus);
 	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
-	
+
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -8455,7 +8455,7 @@ void test_l1_dsAudio_negative_dsAudioEnableARC(void) {
 	// Step 07: Attempt to enable ARC/eARC after terminating
 	result = dsAudioEnableARC(handle[0], arcstatus);
 	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
-	
+
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
