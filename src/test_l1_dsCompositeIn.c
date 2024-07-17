@@ -74,27 +74,27 @@
 
 #include <ut.h>
 #include <ut_log.h>
+#include <ut_kvp_profile.h>
 #include "dsCompositeIn.h"
 #include <ut_kvp_profile.h>
 
 static int gTestGroup = 1;
 static int gTestID = 1;
 
-#define DS_ASSERT_AUTO_TERM_NUMERICAL(value, comparison){\
-    if(value != comparison){\
-        UT_LOG("\n In %s Comparison: [%d = %d]\n", __FUNCTION__, value, comparison);\
-        dsCompositeInTerm();\
-        UT_FAIL();\
-    }\
-}\
+#define CHECK_FOR_EXTENDED_ERROR_CODE( result, enhanced, old )\
+{\
+   if ( extendedEnumsSupported == true )\
+   {\
+      UT_ASSERT_EQUAL( enhanced, result );\
+   }\
+   else\
+   {\
+       UT_ASSERT_EQUAL( old, result );\
+   }\
+}
 
-#define DS_ASSERT_AUTO_TERM_STRING(value, comparison){\
-    if(strcmp(value, comparison) != 0){\
-        UT_LOG("\n In %s Comparison: [%s = %s]\n", __FUNCTION__, value, comparison);\
-        dsCompositeInTerm();\
-        UT_FAIL();\
-    }\
-}\
+/* Global flags to support features */
+static bool extendedEnumsSupported=false; //Default to not supported
 
 /**
  * @brief Ensure dsCompositeInInit() returns correct error codes during basic positive scenarios
@@ -165,7 +165,8 @@ void test_l1_dsCompositeIn_negative_dsCompositeInInit(void)
     UT_ASSERT_EQUAL(dsCompositeInInit(), dsERR_NONE);
 
     // Step 02: Attempt to initialize again
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInInit(), dsERR_ALREADY_INITIALIZED);
+    dsError_t result = dsCompositeInInit();
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_ALREADY_INITIALIZED, dsERR_NONE);
 
     // Step 03: Terminate the module
     UT_ASSERT_EQUAL(dsCompositeInTerm(), dsERR_NONE);
@@ -243,7 +244,8 @@ void test_l1_dsCompositeIn_negative_dsCompositeInTerm(void)
     gTestID = 4;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     // Step 01: Call Termination without initialization
-    UT_ASSERT_EQUAL(dsCompositeInTerm(), dsERR_NOT_INITIALIZED);
+    dsError_t result = dsCompositeInTerm();
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     // Step 02: Initialize the module
     UT_ASSERT_EQUAL(dsCompositeInInit(), dsERR_NONE);
@@ -252,7 +254,8 @@ void test_l1_dsCompositeIn_negative_dsCompositeInTerm(void)
     UT_ASSERT_EQUAL(dsCompositeInTerm(), dsERR_NONE);
 
     // Step 04: Attempt to terminate again after proper termination
-    UT_ASSERT_EQUAL(dsCompositeInTerm(), dsERR_NOT_INITIALIZED);
+    result = dsCompositeInTerm();
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
@@ -290,12 +293,15 @@ void test_l1_dsCompositeIn_positive_dsCompositeInGetNumberOfInputs(void)
     UT_ASSERT_EQUAL(dsCompositeInInit(), dsERR_NONE);
 
     // Step 02: Get number of inputs for the first time
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInGetNumberOfInputs(&numberOfInputs), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsCompositeInGetNumberOfInputs(&numberOfInputs1), dsERR_NONE);
 
-    // Step 03: Compare the result with the value from the profile
-    UT_ASSERT_KVP_EQUAL_PROFILE_UINT8(numberOfInputs, "dsCompositeIn/composite_input_configurations/number_of_ports");
+    // Step 03: Get number of inputs for the second time
+    UT_ASSERT_EQUAL(dsCompositeInGetNumberOfInputs(&numberOfInputs2), dsERR_NONE);
 
-    // Step 04: Terminate the module
+    // Step 04: Compare the results of both calls
+    UT_ASSERT_EQUAL(numberOfInputs1, numberOfInputs2);
+
+    // Step 05: Terminate the module
     UT_ASSERT_EQUAL(dsCompositeInTerm(), dsERR_NONE);
 
     UT_LOG("\n Out  %s\n",__FUNCTION__);
@@ -332,19 +338,21 @@ void test_l1_dsCompositeIn_negative_dsCompositeInGetNumberOfInputs(void)
     uint8_t pNumberOfInputs;
 
     // Step 01: Call GetNumberOfInputs without initialization
-    UT_ASSERT_EQUAL(dsCompositeInGetNumberOfInputs(&pNumberOfInputs), dsERR_NOT_INITIALIZED);
+    dsError_t result = dsCompositeInGetNumberOfInputs(&pNumberOfInputs);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     // Step 02: Initialize the module
     UT_ASSERT_EQUAL(dsCompositeInInit(), dsERR_NONE);
 
     // Step 03: Call GetNumberOfInputs with NULL pointer
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInGetNumberOfInputs(NULL), dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(dsCompositeInGetNumberOfInputs(NULL), dsERR_INVALID_PARAM);
 
     // Step 04: Terminate the module
     UT_ASSERT_EQUAL(dsCompositeInTerm(), dsERR_NONE);
 
     // Step 05: Call GetNumberOfInputs after termination
-    UT_ASSERT_EQUAL(dsCompositeInGetNumberOfInputs(&pNumberOfInputs), dsERR_NOT_INITIALIZED);
+    result = dsCompositeInGetNumberOfInputs(&pNumberOfInputs);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
@@ -382,13 +390,13 @@ void test_l1_dsCompositeIn_positive_dsCompositeInGetStatus(void)
     UT_ASSERT_EQUAL(dsCompositeInInit(), dsERR_NONE);
 
     // Step 02: Get status for the first time
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInGetStatus(&status1), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsCompositeInGetStatus(&status1), dsERR_NONE);
 
     // Step 03: Get status for the second time
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInGetStatus(&status2), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsCompositeInGetStatus(&status2), dsERR_NONE);
 
     // Step 04: Verify the retrieved statuses are the same
-    DS_ASSERT_AUTO_TERM_NUMERICAL(memcmp(&status1, &status2, sizeof(dsCompositeInStatus_t)), 0);
+    UT_ASSERT_EQUAL(memcmp(&status1, &status2, sizeof(dsCompositeInStatus_t)), 0);
 
     // Step 05: Terminate the module
     UT_ASSERT_EQUAL(dsCompositeInTerm(), dsERR_NONE);
@@ -427,19 +435,21 @@ void test_l1_dsCompositeIn_negative_dsCompositeInGetStatus(void)
 
     dsCompositeInStatus_t status;
     // Step 01: Call GetStatus without initialization
-    UT_ASSERT_EQUAL(dsCompositeInGetStatus(&status), dsERR_NOT_INITIALIZED);
+    dsError_t result = dsCompositeInGetStatus(&status);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     // Step 02: Initialize the module
     UT_ASSERT_EQUAL(dsCompositeInInit(), dsERR_NONE);
 
     // Step 03: Call GetStatus with NULL pointer
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInGetStatus(NULL), dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(dsCompositeInGetStatus(NULL), dsERR_INVALID_PARAM);
 
     // Step 04: Terminate the module
     UT_ASSERT_EQUAL(dsCompositeInTerm(), dsERR_NONE);
 
     // Step 05: Call GetStatus after termination
-    UT_ASSERT_EQUAL(dsCompositeInGetStatus(&status), dsERR_NOT_INITIALIZED);
+    result = dsCompositeInGetStatus(&status);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
@@ -476,11 +486,11 @@ void test_l1_dsCompositeIn_positive_dsCompositeInSelectPort(void)
     UT_ASSERT_EQUAL(dsCompositeInInit(), dsERR_NONE);
 
     // Step 02: Get number of inputs
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInGetNumberOfInputs(&numberOfInputs), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsCompositeInGetNumberOfInputs(&numberOfInputs), dsERR_NONE);
 
     // Step 03: Loop through all valid ports and set them
     for (int i = 0; i < numberOfInputs; ++i) {
-        DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInSelectPort((dsCompositeInPort_t)(i)), dsERR_NONE);
+        UT_ASSERT_EQUAL(dsCompositeInSelectPort((dsCompositeInPort_t)(i)), dsERR_NONE);
     }
     
 
@@ -523,25 +533,27 @@ void test_l1_dsCompositeIn_negative_dsCompositeInSelectPort(void)
     uint8_t numberOfInputs;
 
     // Step 01: Call SelectPort without initialization
-    UT_ASSERT_EQUAL(dsCompositeInSelectPort(dsCOMPOSITE_IN_PORT_0), dsERR_NOT_INITIALIZED);
+    dsError_t result = dsCompositeInSelectPort(dsCOMPOSITE_IN_PORT_0);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     // Step 02: Initialize the module
     UT_ASSERT_EQUAL(dsCompositeInInit(), dsERR_NONE);
 
     // Step 03: Get number of inputs
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInGetNumberOfInputs(&numberOfInputs), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsCompositeInGetNumberOfInputs(&numberOfInputs), dsERR_NONE);
 
     // Step 04: Call SelectPort with an out-of-range port number
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInSelectPort(dsCOMPOSITE_IN_PORT_MAX), dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(dsCompositeInSelectPort(dsCOMPOSITE_IN_PORT_MAX), dsERR_INVALID_PARAM);
 
     // Step 05: Call SelectPort with an invalid port number (pNumberOfInputs + 1)
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInSelectPort(numberOfInputs + 1), dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(dsCompositeInSelectPort(numberOfInputs + 1), dsERR_INVALID_PARAM);
 
     // Step 06: Terminate the module
     UT_ASSERT_EQUAL(dsCompositeInTerm(), dsERR_NONE);
 
     // Step 07: Call SelectPort after termination
-    UT_ASSERT_EQUAL(dsCompositeInSelectPort(dsCOMPOSITE_IN_PORT_0), dsERR_NOT_INITIALIZED);
+    result = dsCompositeInSelectPort(dsCOMPOSITE_IN_PORT_0);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
@@ -577,20 +589,20 @@ void test_l1_dsCompositeIn_positive_dsCompositeInScaleVideo(void)
 
     // Step 01: Initialize the module and select a port
     UT_ASSERT_EQUAL(dsCompositeInInit(), dsERR_NONE);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInSelectPort(dsCOMPOSITE_IN_PORT_0), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsCompositeInSelectPort(dsCOMPOSITE_IN_PORT_0), dsERR_NONE);
 
     // Step 02: Get number of inputs
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInGetNumberOfInputs(&numberOfInputs), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsCompositeInGetNumberOfInputs(&numberOfInputs), dsERR_NONE);
 
     // Step 03: Select a valid port number
     for(int x = 0; x < numberOfInputs; x++){
-        DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInSelectPort((dsCompositeInPort_t)(x)), dsERR_NONE);
+        UT_ASSERT_EQUAL(dsCompositeInSelectPort((dsCompositeInPort_t)(x)), dsERR_NONE);
 
          // Step 04: Scale video with first set of parameters
-        DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInScaleVideo(10, 10, 800, 800), dsERR_NONE);
+        UT_ASSERT_EQUAL(dsCompositeInScaleVideo(10, 10, 800, 800), dsERR_NONE);
     
         // Step 05: Scale video with a different set of parameters
-        DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInScaleVideo(50, 50, 600, 600), dsERR_NONE);
+        UT_ASSERT_EQUAL(dsCompositeInScaleVideo(50, 50, 600, 600), dsERR_NONE);
     }
 
     // Step 06: Terminate the module
@@ -633,28 +645,30 @@ void test_l1_dsCompositeIn_negative_dsCompositeInScaleVideo(void)
     gTestID = 12;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     // Step 01: Call ScaleVideo without initialization or port selection
-    UT_ASSERT_EQUAL(dsCompositeInScaleVideo(10, 10, 800, 800), dsERR_NOT_INITIALIZED);
+    dsError_t result = dsCompositeInScaleVideo(10, 10, 800, 800);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     // Step 02: Initialize the module and select a port
     UT_ASSERT_EQUAL(dsCompositeInInit(), dsERR_NONE);
 
     // Step 03: Initialize the module and select a port
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInScaleVideo(10, 10, 800, 800), dsERR_OPERATION_NOT_SUPPORTED);
+    UT_ASSERT_EQUAL(dsCompositeInScaleVideo(10, 10, 800, 800), dsERR_OPERATION_NOT_SUPPORTED);
 
     // Step 04: Initialize the module and select a port
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInSelectPort(dsCOMPOSITE_IN_PORT_0), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsCompositeInSelectPort(dsCOMPOSITE_IN_PORT_0), dsERR_NONE);
 
     // Step 05 to 08: Test ScaleVideo with invalid parameters
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInScaleVideo(-1, 10, 10, 10), dsERR_INVALID_PARAM);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInScaleVideo(10, -1, 10, 10), dsERR_INVALID_PARAM);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInScaleVideo(10, 10, -1, 10), dsERR_INVALID_PARAM);
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInScaleVideo(10, 10, 10, -1), dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(dsCompositeInScaleVideo(-1, 10, 10, 10), dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(dsCompositeInScaleVideo(10, -1, 10, 10), dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(dsCompositeInScaleVideo(10, 10, -1, 10), dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(dsCompositeInScaleVideo(10, 10, 10, -1), dsERR_INVALID_PARAM);
 
     // Step 09: Terminate the module
     UT_ASSERT_EQUAL(dsCompositeInTerm(), dsERR_NONE);
 
     // Step 10: Call ScaleVideo without initialization or port selection
-    UT_ASSERT_EQUAL(dsCompositeInScaleVideo(10, 10, 800, 800), dsERR_NOT_INITIALIZED);
+    result = dsCompositeInScaleVideo(10, 10, 800, 800);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
@@ -692,7 +706,7 @@ void test_l1_dsCompositeIn_positive_dsCompositeInRegisterConnectCB(void)
     UT_ASSERT_EQUAL(dsCompositeInInit(), dsERR_NONE);
 
     // Step 02: Register the callback function
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInRegisterConnectCB(exampleConnectCallback), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsCompositeInRegisterConnectCB(exampleConnectCallback), dsERR_NONE);
 
     // Step 03: Terminate the module
     UT_ASSERT_EQUAL(dsCompositeInTerm(), dsERR_NONE);
@@ -729,19 +743,21 @@ void test_l1_dsCompositeIn_negative_dsCompositeInRegisterConnectCB(void)
     gTestID = 14;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     // Step 01: Call RegisterConnectCB without initialization
-    UT_ASSERT_EQUAL(dsCompositeInRegisterConnectCB(exampleConnectCallback), dsERR_NOT_INITIALIZED);
-
+    dsError_t result = dsCompositeInRegisterConnectCB(exampleConnectCallback);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+   
     // Step 02: Initialize the module
     UT_ASSERT_EQUAL(dsCompositeInInit(), dsERR_NONE);
 
     // Step 03: Register the callback with NULL or invalid function
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInRegisterConnectCB(NULL), dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(dsCompositeInRegisterConnectCB(NULL), dsERR_INVALID_PARAM);
 
     // Step 04: Terminate the module
     UT_ASSERT_EQUAL(dsCompositeInTerm(), dsERR_NONE);
 
     // Step 05: Call RegisterConnectCB after termination
-    UT_ASSERT_EQUAL(dsCompositeInRegisterConnectCB(exampleConnectCallback), dsERR_NOT_INITIALIZED);
+    result = dsCompositeInRegisterConnectCB(exampleConnectCallback);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
@@ -780,7 +796,7 @@ void test_l1_dsCompositeIn_positive_dsCompositeInRegisterSignalChangeCB(void)
     UT_ASSERT_EQUAL(dsCompositeInInit(), dsERR_NONE);
 
     // Step 02: Register the signal change callback function
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInRegisterSignalChangeCB(exampleSignalChangeCallback), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsCompositeInRegisterSignalChangeCB(exampleSignalChangeCallback), dsERR_NONE);
 
     // Step 03: Terminate the module
     UT_ASSERT_EQUAL(dsCompositeInTerm(), dsERR_NONE);
@@ -817,19 +833,21 @@ void test_l1_dsCompositeIn_negative_dsCompositeInRegisterSignalChangeCB(void)
     gTestID = 16;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     // Step 01: Call RegisterSignalChangeCB without initialization
-    UT_ASSERT_EQUAL(dsCompositeInRegisterSignalChangeCB(exampleSignalChangeCallback), dsERR_NOT_INITIALIZED);
+    dsError_t result = dsCompositeInRegisterSignalChangeCB(exampleSignalChangeCallback);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     // Step 02: Initialize the module
     UT_ASSERT_EQUAL(dsCompositeInInit(), dsERR_NONE);
 
     // Step 03: Register the callback with NULL or invalid function
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInRegisterSignalChangeCB(NULL), dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(dsCompositeInRegisterSignalChangeCB(NULL), dsERR_INVALID_PARAM);
 
     // Step 04: Terminate the module
     UT_ASSERT_EQUAL(dsCompositeInTerm(), dsERR_NONE);
 
     // Step 05: Call RegisterSignalChangeCB after termination
-    UT_ASSERT_EQUAL(dsCompositeInRegisterSignalChangeCB(exampleSignalChangeCallback), dsERR_NOT_INITIALIZED);
+    result = dsCompositeInRegisterSignalChangeCB(exampleSignalChangeCallback);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
@@ -868,7 +886,7 @@ void test_l1_dsCompositeIn_positive_dsCompositeInRegisterStatusChangeCB(void)
     UT_ASSERT_EQUAL(dsCompositeInInit(), dsERR_NONE);
 
     // Step 02: Register the status change callback function
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInRegisterStatusChangeCB(exampleStatusChangeCallback), dsERR_NONE);
+    UT_ASSERT_EQUAL(dsCompositeInRegisterStatusChangeCB(exampleStatusChangeCallback), dsERR_NONE);
 
     // Step 03: Terminate the module
     UT_ASSERT_EQUAL(dsCompositeInTerm(), dsERR_NONE);
@@ -905,19 +923,21 @@ void test_l1_dsCompositeIn_negative_dsCompositeInRegisterStatusChangeCB(void)
     gTestID = 18;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     // Step 01: Call RegisterStatusChangeCB without initialization
-    UT_ASSERT_EQUAL(dsCompositeInRegisterStatusChangeCB(exampleStatusChangeCallback), dsERR_NOT_INITIALIZED);
+    dsError_t result = dsCompositeInRegisterStatusChangeCB(exampleStatusChangeCallback);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     // Step 02: Initialize the module
     UT_ASSERT_EQUAL(dsCompositeInInit(), dsERR_NONE);
 
     // Step 03: Register the callback with NULL or invalid function
-    DS_ASSERT_AUTO_TERM_NUMERICAL(dsCompositeInRegisterStatusChangeCB(NULL), dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(dsCompositeInRegisterStatusChangeCB(NULL), dsERR_INVALID_PARAM);
 
     // Step 04: Terminate the module
     UT_ASSERT_EQUAL(dsCompositeInTerm(), dsERR_NONE);
 
     // Step 05: Call RegisterStatusChangeCB after termination
-    UT_ASSERT_EQUAL(dsCompositeInRegisterStatusChangeCB(exampleStatusChangeCallback), dsERR_NOT_INITIALIZED);
+    result = dsCompositeInRegisterStatusChangeCB(exampleStatusChangeCallback);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
@@ -957,6 +977,7 @@ int test_l1_dsCompositeIn_register ( void )
 	UT_add_test( pSuite, "dsCompositeInRegisterSignalChangeCB_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInRegisterSignalChangeCB );
 	UT_add_test( pSuite, "dsCompositeInRegisterStatusChangeCB_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInRegisterStatusChangeCB );
 	UT_add_test( pSuite, "dsCompositeInRegisterStatusChangeCB_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInRegisterStatusChangeCB );
+	extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsCompositeIn/features/extendedEnumsSupported" );
 	
 
 	return 0;
