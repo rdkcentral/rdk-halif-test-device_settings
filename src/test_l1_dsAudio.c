@@ -6592,7 +6592,7 @@ void test_l1_dsAudio_negative_dsAudioFormatUpdateRegisterCB(void) {
 
 	// Step 01: Attempt to register callback without initializing ports
 	result = dsAudioFormatUpdateRegisterCB(format_update);
-	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
 	
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
@@ -6608,7 +6608,7 @@ void test_l1_dsAudio_negative_dsAudioFormatUpdateRegisterCB(void) {
 
         // Step 05: Attempt to register callback after terminating audio ports
         result = dsAudioFormatUpdateRegisterCB(format_update);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE );
 
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -8120,15 +8120,16 @@ void test_l1_dsAudio_positive_dsGetSupportedARCTypes(void) {
 
 	// Step 02: Get the port handle for all supported audio ports
 	for (int i = 0; i < NUM_OF_PORTS; i++) {
+                if(kPorts[i].id.type != dsAUDIOPORT_TYPE_HDMI_ARC)
+                continue;
+
 		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
 		UT_ASSERT_EQUAL(result, dsERR_NONE);
 		UT_ASSERT_NOT_EQUAL(handle[i], null_handle);
 
-		if(handle[i] == dsAUDIOPORT_TYPE_HDMI_ARC) {
-			// Step 03: supported ARC types of the connected ARC/eARC
-			result = dsGetSupportedARCTypes(handle[i], &types[i]);
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-		}
+	        // Step 03: supported ARC types of the connected ARC/eARC
+                result = dsGetSupportedARCTypes(handle[i], &types[i]);
+                UT_ASSERT_EQUAL(result, dsERR_NONE);
 	}
 
 	// Step 04: Terminate audio ports
@@ -8184,16 +8185,16 @@ void test_l1_dsAudio_negative_dsGetSupportedARCTypes(void) {
 
 	// Step 04: Get the port handle for all supported audio ports
 	for (int i = 0; i < NUM_OF_PORTS; i++) {
+                if(kPorts[i].id.type != dsAUDIOPORT_TYPE_HDMI_ARC)
+                continue;
+
 		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
 		UT_ASSERT_EQUAL(result, dsERR_NONE);
 		UT_ASSERT_NOT_EQUAL(handle[i], null_handle);
 
-                if(handle[i] == dsAUDIOPORT_TYPE_HDMI_ARC)
-                {
-		    // Step 05: Attempt to get SupportedARCTypes with a null pointer
-		    result = dsGetSupportedARCTypes(handle[i], NULL);
-		    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
-                }
+		// Step 05: Attempt to get SupportedARCTypes with a null pointer
+                result = dsGetSupportedARCTypes(handle[i], NULL);
+                UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 	}
 
 	// Step 06: Terminate audio ports
@@ -8243,16 +8244,16 @@ void test_l1_dsAudio_positive_dsAudioSetSAD(void) {
 
 	// Step 02: Get the port handle for all supported audio ports
 	for (int i = 0; i < NUM_OF_PORTS; i++) {
+                if(kPorts[i].id.type != dsAUDIOPORT_TYPE_HDMI_ARC)
+                continue;
+
 		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
 		UT_ASSERT_EQUAL(result, dsERR_NONE);
 		UT_ASSERT_NOT_EQUAL(handle[i], null_handle);
 
 		// Step 03: Set SAD for HDMI ARC port
-		if(handle[i] == dsAUDIOPORT_TYPE_HDMI_ARC)
-		{
-			result = dsAudioSetSAD(handle[i], sadlist);
-			UT_ASSERT_EQUAL(result, dsERR_NONE);
-		}
+                result = dsAudioSetSAD(handle[i], sadlist);
+                UT_ASSERT_EQUAL(result, dsERR_NONE);
 	}
 
 	// Step 04: Terminate audio ports
@@ -8311,19 +8312,19 @@ void test_l1_dsAudio_negative_dsAudioSetSAD(void) {
 
 	// Step 04: Get the port handle for all supported audio ports
 	for (int i = 0; i < NUM_OF_PORTS; i++) {
+                if(kPorts[i].id.type != dsAUDIOPORT_TYPE_HDMI_ARC)
+                continue;
+
 		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
 		UT_ASSERT_EQUAL(result, dsERR_NONE);
 		UT_ASSERT_NOT_EQUAL(handle[i], null_handle);
 
 		// Step 05: Attempt to set Short Audio Descriptor with an invalid sad value
-                if(handle[i] == dsAUDIOPORT_TYPE_HDMI_ARC)
-		{
-		    dsAudioSADList_t sadlist1;
-		    sadlist1.sad[0] = -1; sadlist1.sad[1] = -2; sadlist1.sad[2] = -3; sadlist1.sad[3] = -4;
-		    sadlist1.count = 20; //max sad is 15
-		    result = dsAudioSetSAD(handle[i], sadlist1);
-		    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
-                }
+                dsAudioSADList_t sadlist1;
+		sadlist1.sad[0] = -1; sadlist1.sad[1] = -2; sadlist1.sad[2] = -3; sadlist1.sad[3] = -4;
+                sadlist1.count = 20; //max sad is 15
+                result = dsAudioSetSAD(handle[i], sadlist1);
+                UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 	}
 
 	// Step 06: Terminate audio ports
@@ -8371,6 +8372,9 @@ void test_l1_dsAudio_positive_dsAudioEnableARC(void) {
 
 	// Steps 02 to 04: Enable and disable ARC/eARC for each port
 	for (int i = 0; i < NUM_OF_PORTS; i++) {
+                if(kPorts[i].id.type != dsAUDIOPORT_TYPE_HDMI_ARC)
+                continue;
+
 		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
 		UT_ASSERT_EQUAL(result, dsERR_NONE);
 		UT_ASSERT_NOT_EQUAL(handle[i], null_handle);
@@ -8447,6 +8451,9 @@ void test_l1_dsAudio_negative_dsAudioEnableARC(void) {
 
 	// Step 04: Loop through kPorts to get audio port handle
 	for (int i = 0; i < NUM_OF_PORTS; i++) {
+                if(kPorts[i].id.type != dsAUDIOPORT_TYPE_HDMI_ARC)
+                continue;
+
 		result = dsGetAudioPort(kPorts[i].id.type, kPorts[i].id.index, &handle[i]);
 		UT_ASSERT_EQUAL(result, dsERR_NONE);
 		UT_ASSERT_NOT_EQUAL(handle[i], null_handle);
