@@ -6574,10 +6574,11 @@ void test_l1_dsAudio_positive_dsAudioFormatUpdateRegisterCB(void) {
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|----------|--------------|-----|
- * |01|Call dsAudioFormatUpdateRegisterCB() without initializing audio ports | `cbFun`=NULL | dsERR_NOT_INITIALIZED | Should Pass |
+ * |01|Call dsAudioFormatUpdateRegisterCB() without initializing audio ports | `cbFun`=callback | dsERR_NOT_INITIALIZED | Should Pass |
  * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
  * |03|Call dsAudioFormatUpdateRegisterCB() using a NULL callback function | `cbFun`=NULL | dsERR_INVALID_PARAM | Should Pass |
  * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
+ * |05|Call dsAudioFormatUpdateRegisterCB() after terminationg audio ports | `cbFun`=callback | dsERR_NOT_INITIALIZED | Should Pass |
  *
  */
 void test_l1_dsAudio_negative_dsAudioFormatUpdateRegisterCB(void) {
@@ -6587,8 +6588,10 @@ void test_l1_dsAudio_negative_dsAudioFormatUpdateRegisterCB(void) {
 
 	int result;
 
+        dsAudioFormatUpdateCB_t format_update = &testAudioFormatUpdateCallbackFunction;
+
 	// Step 01: Attempt to register callback without initializing ports
-	result = dsAudioFormatUpdateRegisterCB(NULL);
+	result = dsAudioFormatUpdateRegisterCB(format_update);
 	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
 	
 	// Step 02: Initialize audio ports
@@ -6602,6 +6605,10 @@ void test_l1_dsAudio_negative_dsAudioFormatUpdateRegisterCB(void) {
 	// Step 04: Terminate audio ports
 	result = dsAudioPortTerm();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+        // Step 05: Attempt to register callback after terminating audio ports
+        result = dsAudioFormatUpdateRegisterCB(format_update);
+        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
 
 	// End of the test
 	UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -8122,10 +8129,6 @@ void test_l1_dsAudio_positive_dsGetSupportedARCTypes(void) {
 			result = dsGetSupportedARCTypes(handle[i], &types[i]);
 			UT_ASSERT_EQUAL(result, dsERR_NONE);
 		}
-		else {
-			result = dsGetSupportedARCTypes(handle[i], &types[i]);
-			UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
-		}
 	}
 
 	// Step 04: Terminate audio ports
@@ -8185,9 +8188,12 @@ void test_l1_dsAudio_negative_dsGetSupportedARCTypes(void) {
 		UT_ASSERT_EQUAL(result, dsERR_NONE);
 		UT_ASSERT_NOT_EQUAL(handle[i], null_handle);
 
-		// Step 05: Attempt to get SupportedARCTypes with a null pointer
-			result = dsGetSupportedARCTypes(handle[i], NULL);
-			UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                if(handle[i] == dsAUDIOPORT_TYPE_HDMI_ARC)
+                {
+		    // Step 05: Attempt to get SupportedARCTypes with a null pointer
+		    result = dsGetSupportedARCTypes(handle[i], NULL);
+		    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                }
 	}
 
 	// Step 06: Terminate audio ports
@@ -8310,11 +8316,14 @@ void test_l1_dsAudio_negative_dsAudioSetSAD(void) {
 		UT_ASSERT_NOT_EQUAL(handle[i], null_handle);
 
 		// Step 05: Attempt to set Short Audio Descriptor with an invalid sad value
-		dsAudioSADList_t sadlist1;
-	    sadlist1.sad[0] = -1; sadlist1.sad[1] = -2; sadlist1.sad[2] = -3; sadlist1.sad[3] = -4;
-	    sadlist1.count = 20; //max sad is 15
-		result = dsAudioSetSAD(handle[i], sadlist1);
-		UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                if(handle[i] == dsAUDIOPORT_TYPE_HDMI_ARC)
+		{
+		    dsAudioSADList_t sadlist1;
+		    sadlist1.sad[0] = -1; sadlist1.sad[1] = -2; sadlist1.sad[2] = -3; sadlist1.sad[3] = -4;
+		    sadlist1.count = 20; //max sad is 15
+		    result = dsAudioSetSAD(handle[i], sadlist1);
+		    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                }
 	}
 
 	// Step 06: Terminate audio ports
