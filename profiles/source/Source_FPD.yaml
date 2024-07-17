@@ -1,6 +1,9 @@
 dsFPD:
   Type: source
   Name: STB_FPD_1_Indicator
+  features:
+    extendedEnumsSupported: false
+
   SupportedFPDIndicators :
     1: #dsFPD_INDICATOR_POWER
       Indicator_Type : 0x01 #dsFPD_INDICATOR_POWER
