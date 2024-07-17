@@ -1815,6 +1815,8 @@ int test_l1_dsVideoDevice_register ( void )
     UT_add_test( pSuite1, "dsGetFRFMode_L1_positive" ,test_l1_dsVideoDevice_positive_dsGetFRFMode );
     UT_add_test( pSuite1, "dsGetCurrentDisplayframerate_L1_positive" ,test_l1_dsVideoDevice_positive_dsGetCurrentDisplayframerate );
     UT_add_test( pSuite1, "dsSetDisplayframerate_L1_positive" ,test_l1_dsVideoDevice_positive_dsSetDisplayframerate );
+    UT_add_test( pSuite1, "dsRegisterFrameratePreChangeCB_L1_positive" ,test_l1_dsVideoDevice_positive_dsRegisterFrameratePreChangeCB );
+    UT_add_test( pSuite1, "dsRegisterFrameratePostChangeCB_L1_positive" ,test_l1_dsVideoDevice_positive_dsRegisterFrameratePostChangeCB );
 
 
 	UT_add_test( pSuite1, "dsVideoDeviceInit_L1_negative" ,test_l1_dsVideoDevice_negative_dsVideoDeviceInit );
@@ -1828,16 +1830,14 @@ int test_l1_dsVideoDevice_register ( void )
 	UT_add_test( pSuite1, "dsGetFRFMode_L1_negative" ,test_l1_dsVideoDevice_negative_dsGetFRFMode );
 	UT_add_test( pSuite1, "dsGetCurrentDisplayframerate_L1_negative" ,test_l1_dsVideoDevice_negative_dsGetCurrentDisplayframerate );
 	UT_add_test( pSuite1, "dsSetDisplayframerate_L1_negative" ,test_l1_dsVideoDevice_negative_dsSetDisplayframerate );
+        UT_add_test( pSuite1, "dsRegisterFrameratePreChangeCB_L1_negative" ,test_l1_dsVideoDevice_negative_dsRegisterFrameratePreChangeCB );
+        UT_add_test( pSuite1, "dsRegisterFrameratePostChangeCB_L1_negative" ,test_l1_dsVideoDevice_negative_dsRegisterFrameratePostChangeCB );
 
 
     UT_add_test( pSuite2, "dsGetDFC_L1_positive" ,test_l1_dsVideoDevice_positive_dsGetDFC );
     UT_add_test( pSuite2, "dsForceDisableHDRSupport_L1_positive" ,test_l1_dsVideoDevice_positive_dsForceDisableHDRSupport );
     UT_add_test( pSuite2, "dsGetDFC_L1_negative" ,test_l1_dsVideoDevice_negative_dsGetDFC );
     UT_add_test( pSuite2, "dsForceDisableHDRSupport_L1_negative" ,test_l1_dsVideoDevice_negative_dsForceDisableHDRSupport );
-    UT_add_test( pSuite2, "dsRegisterFrameratePreChangeCB_L1_positive" ,test_l1_dsVideoDevice_positive_dsRegisterFrameratePreChangeCB );
-    UT_add_test( pSuite2, "dsRegisterFrameratePreChangeCB_L1_negative" ,test_l1_dsVideoDevice_negative_dsRegisterFrameratePreChangeCB );
-    UT_add_test( pSuite2, "dsRegisterFrameratePostChangeCB_L1_positive" ,test_l1_dsVideoDevice_positive_dsRegisterFrameratePostChangeCB );
-    UT_add_test( pSuite2, "dsRegisterFrameratePostChangeCB_L1_negative" ,test_l1_dsVideoDevice_negative_dsRegisterFrameratePostChangeCB );
     extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsVideoDevice/features/extendedEnumsSupported" ); 	
 
 	return 0;
