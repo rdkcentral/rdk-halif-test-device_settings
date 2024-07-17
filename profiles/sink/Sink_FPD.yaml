@@ -2,7 +2,7 @@ dsFPD:
   Type: sink
   Name: Panel_FPD_1_Indicator
   features:
-        extendedEnumsSupported: false
+    extendedEnumsSupported: false
 
   Number_of_Indicators: 1
   SupportedFPDIndicators :
