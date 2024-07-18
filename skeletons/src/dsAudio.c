@@ -44,22 +44,6 @@ dsError_t dsGetAudioPort(dsAudioPortType_t type, int index, intptr_t* handle)
   return (dsError_t)0;
 }
 
-dsError_t dsGetAudioEncoding(intptr_t handle, dsAudioEncoding_t* encoding)
-{
-  /*TODO: Implement Me!*/
-  (void)handle;
-  (void)encoding;
-  return (dsError_t)0;
-}
-
-dsError_t dsSetAudioEncoding(intptr_t handle, dsAudioEncoding_t encoding)
-{
-  /*TODO: Implement Me!*/
-  (void)handle;
-  (void)encoding;
-  return (dsError_t)0;
-}
-
 dsError_t dsGetAudioFormat(intptr_t handle, dsAudioFormat_t* audioFormat)
 {
   /*TODO: Implement Me!*/
@@ -340,14 +324,6 @@ dsError_t dsGetAudioDB(intptr_t handle, float* db)
   return (dsError_t)0;
 }
 
-dsError_t dsSetAudioDB(intptr_t handle, float db)
-{
-  /*TODO: Implement Me!*/
-  (void)handle;
-  (void)db;
-  return (dsError_t)0;
-}
-
 dsError_t dsGetAudioLevel(intptr_t handle, float* level)
 {
   /*TODO: Implement Me!*/
@@ -361,30 +337,6 @@ dsError_t dsSetAudioLevel(intptr_t handle, float level)
   /*TODO: Implement Me!*/
   (void)handle;
   (void)level;
-  return (dsError_t)0;
-}
-
-dsError_t dsGetAudioMaxDB(intptr_t handle, float* maxDb)
-{
-  /*TODO: Implement Me!*/
-  (void)handle;
-  (void)maxDb;
-  return (dsError_t)0;
-}
-
-dsError_t dsGetAudioMinDB(intptr_t handle, float* minDb)
-{
-  /*TODO: Implement Me!*/
-  (void)handle;
-  (void)minDb;
-  return (dsError_t)0;
-}
-
-dsError_t dsGetAudioOptimalLevel(intptr_t handle, float* optimalLevel)
-{
-  /*TODO: Implement Me!*/
-  (void)handle;
-  (void)optimalLevel;
   return (dsError_t)0;
 }
 
@@ -404,22 +356,6 @@ dsError_t dsSetAudioDelay(intptr_t handle, const uint32_t audioDelayMs)
   return (dsError_t)0;
 }
 
-dsError_t dsGetAudioDelayOffset(intptr_t handle, uint32_t* audioDelayOffsetMs)
-{
-  /*TODO: Implement Me!*/
-  (void)handle;
-  (void)audioDelayOffsetMs;
-  return (dsError_t)0;
-}
-
-dsError_t dsSetAudioDelayOffset(intptr_t handle, const uint32_t audioDelayOffsetMs)
-{
-  /*TODO: Implement Me!*/
-  (void)handle;
-  (void)audioDelayOffsetMs;
-  return (dsError_t)0;
-}
-
 dsError_t dsSetAudioAtmosOutputMode(intptr_t handle, bool enable)
 {
   /*TODO: Implement Me!*/
@@ -433,14 +369,6 @@ dsError_t dsGetSinkDeviceAtmosCapability(intptr_t handle, dsATMOSCapability_t* c
   /*TODO: Implement Me!*/
   (void)handle;
   (void)capability;
-  return (dsError_t)0;
-}
-
-dsError_t dsIsAudioLoopThru(intptr_t handle, bool* loopThru)
-{
-  /*TODO: Implement Me!*/
-  (void)handle;
-  (void)loopThru;
   return (dsError_t)0;
 }
 
@@ -498,24 +426,6 @@ dsError_t dsSetMS12AudioProfile(intptr_t handle, const char* profile)
   /*TODO: Implement Me!*/
   (void)handle;
   (void)profile;
-  return (dsError_t)0;
-}
-
-dsError_t dsSetAudioDucking(intptr_t handle, dsAudioDuckingAction_t action, dsAudioDuckingType_t type, const unsigned char level)
-{
-  /*TODO: Implement Me!*/
-  (void)handle;
-  (void)action;
-  (void)type;
-  (void)level;
-  return (dsError_t)0;
-}
-
-dsError_t dsEnableLoopThru(intptr_t handle, bool loopThru)
-{
-  /*TODO: Implement Me!*/
-  (void)handle;
-  (void)loopThru;
   return (dsError_t)0;
 }
 
@@ -585,34 +495,6 @@ dsError_t dsGetMS12Capabilities(intptr_t handle, int* capabilities)
   /*TODO: Implement Me!*/
   (void)handle;
   (void)capabilities;
-  return (dsError_t)0;
-}
-
-dsError_t dsResetDialogEnhancement(intptr_t handle)
-{
-  /*TODO: Implement Me!*/
-  (void)handle;
-  return (dsError_t)0;
-}
-
-dsError_t dsResetBassEnhancer(intptr_t handle)
-{
-  /*TODO: Implement Me!*/
-  (void)handle;
-  return (dsError_t)0;
-}
-
-dsError_t dsResetSurroundVirtualizer(intptr_t handle)
-{
-  /*TODO: Implement Me!*/
-  (void)handle;
-  return (dsError_t)0;
-}
-
-dsError_t dsResetVolumeLeveller(intptr_t handle)
-{
-  /*TODO: Implement Me!*/
-  (void)handle;
   return (dsError_t)0;
 }
 
@@ -688,13 +570,6 @@ dsError_t dsGetSecondaryLanguage(intptr_t handle, char* sLang)
   /*TODO: Implement Me!*/
   (void)handle;
   (void)sLang;
-  return (dsError_t)0;
-}
-
-dsError_t dsGetHDMIARCPortId(int* portId)
-{
-  /*TODO: Implement Me!*/
-  (void)portId;
   return (dsError_t)0;
 }
 
