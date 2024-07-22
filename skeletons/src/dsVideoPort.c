@@ -91,14 +91,6 @@ dsError_t dsIsVideoPortActive(intptr_t handle, bool* active)
   return (dsError_t)0;
 }
 
-dsError_t dsEnableDTCP(intptr_t handle, bool contentProtect)
-{
-  /*TODO: Implement Me!*/
-  (void)handle;
-  (void)contentProtect;
-  return (dsError_t)0;
-}
-
 dsError_t dsEnableHDCP(intptr_t handle, bool contentProtect, char* hdcpKey, size_t keySize)
 {
   /*TODO: Implement Me!*/
@@ -106,14 +98,6 @@ dsError_t dsEnableHDCP(intptr_t handle, bool contentProtect, char* hdcpKey, size
   (void)contentProtect;
   (void)hdcpKey;
   (void)keySize;
-  return (dsError_t)0;
-}
-
-dsError_t dsIsDTCPEnabled(intptr_t handle, bool* pContentProtected)
-{
-  /*TODO: Implement Me!*/
-  (void)handle;
-  (void)pContentProtected;
   return (dsError_t)0;
 }
 
@@ -146,13 +130,6 @@ dsError_t dsGetResolution(intptr_t handle, dsVideoPortResolution_t* resolution)
   /*TODO: Implement Me!*/
   (void)handle;
   (void)resolution;
-  return (dsError_t)0;
-}
-
-dsError_t dsSetActiveSource(intptr_t handle)
-{
-  /*TODO: Implement Me!*/
-  (void)handle;
   return (dsError_t)0;
 }
 

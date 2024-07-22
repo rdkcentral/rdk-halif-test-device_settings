@@ -1089,7 +1089,7 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortActive(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsEnableHDCP(void) {
-	gTestID = 19;
+	gTestID = 17;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -1153,7 +1153,7 @@ void test_l1_dsVideoPort_positive_dsEnableHDCP(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsEnableHDCP(void) {
-	gTestID = 20;
+	gTestID = 18;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -1236,7 +1236,7 @@ void test_l1_dsVideoPort_negative_dsEnableHDCP(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsIsHDCPEnabled(void) {
-	gTestID = 23;
+	gTestID = 19;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -1299,7 +1299,7 @@ void test_l1_dsVideoPort_positive_dsIsHDCPEnabled(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsIsHDCPEnabled(void) {
-	gTestID = 24;
+	gTestID = 20;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -1369,7 +1369,7 @@ void test_l1_dsVideoPort_negative_dsIsHDCPEnabled(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsEnableVideoPort(void) {
-	gTestID = 25;
+	gTestID = 21;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -1422,7 +1422,7 @@ void test_l1_dsVideoPort_positive_dsEnableVideoPort(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsEnableVideoPort(void) {
-	gTestID = 26;
+	gTestID = 22;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -1482,7 +1482,7 @@ void test_l1_dsVideoPort_negative_dsEnableVideoPort(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsSetResolution(void) {
-	gTestID = 27;
+	gTestID = 23;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -1544,7 +1544,7 @@ void test_l1_dsVideoPort_positive_dsSetResolution(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSetResolution(void) {
-	gTestID = 28;
+	gTestID = 24;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -1623,7 +1623,7 @@ void test_l1_dsVideoPort_negative_dsSetResolution(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetResolution(void) {
-	gTestID = 29;
+	gTestID = 25;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -1689,7 +1689,7 @@ void test_l1_dsVideoPort_positive_dsGetResolution(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetResolution(void) {
-	gTestID = 30;
+	gTestID = 26;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -1757,7 +1757,7 @@ void mockVideoFormatCallback(dsHDRStandard_t videoFormat){
 }
 
 void test_l1_dsVideoPort_positive_dsVideoFormatUpdateRegisterCB(void) {
-	gTestID = 33;
+	gTestID = 27;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -1803,7 +1803,7 @@ void test_l1_dsVideoPort_positive_dsVideoFormatUpdateRegisterCB(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsVideoFormatUpdateRegisterCB(void) {
-	gTestID = 34;
+	gTestID = 28;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -1860,7 +1860,7 @@ void myHdcpStatusCallbackFunction(intptr_t handle, dsHdcpStatus_t status)
 }
 
 void test_l1_dsVideoPort_positive_dsRegisterHdcpStatusCallback(void) {
-	gTestID = 35;
+	gTestID = 29;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -1918,7 +1918,7 @@ void test_l1_dsVideoPort_positive_dsRegisterHdcpStatusCallback(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsRegisterHdcpStatusCallback(void) {
-	gTestID = 36;
+	gTestID = 30;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -1983,7 +1983,7 @@ void test_l1_dsVideoPort_negative_dsRegisterHdcpStatusCallback(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetHDCPStatus(void) {
-	gTestID = 37;
+	gTestID = 31;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID); 
 
 	dsError_t status;
@@ -2046,7 +2046,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPStatus(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetHDCPStatus(void) {
-	gTestID = 38;
+	gTestID = 32;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -2116,7 +2116,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPStatus(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetHDCPProtocol(void) {
-	gTestID = 39;
+	gTestID = 33;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -2174,7 +2174,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPProtocol(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetHDCPProtocol(void) {
-	gTestID = 40;
+	gTestID = 34;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -2238,7 +2238,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPProtocol(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetHDCPReceiverProtocol(void) {
-	gTestID = 41;
+	gTestID = 35;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -2297,7 +2297,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPReceiverProtocol(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetHDCPReceiverProtocol(void) {
-	gTestID = 42;
+	gTestID = 36;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -2361,7 +2361,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPReceiverProtocol(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetHDCPCurrentProtocol(void) {
-	gTestID = 43;
+	gTestID = 37;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -2419,7 +2419,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPCurrentProtocol(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetHDCPCurrentProtocol(void) {
-	gTestID = 44;
+	gTestID = 38;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -2483,7 +2483,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPCurrentProtocol(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetTVHDRCapabilities(void) {
-	gTestID = 45;
+	gTestID = 39;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -2541,7 +2541,7 @@ void test_l1_dsVideoPort_positive_dsGetTVHDRCapabilities(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetTVHDRCapabilities(void) {
-	gTestID = 46;
+	gTestID = 40;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -2605,7 +2605,7 @@ void test_l1_dsVideoPort_negative_dsGetTVHDRCapabilities(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsSupportedTvResolutions(void) {
-	gTestID = 47;
+	gTestID = 41;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -2663,7 +2663,7 @@ void test_l1_dsVideoPort_positive_dsSupportedTvResolutions(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSupportedTvResolutions(void) {
-	gTestID = 48;
+	gTestID = 42;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -2726,7 +2726,7 @@ void test_l1_dsVideoPort_negative_dsSupportedTvResolutions(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsSetForceDisable4KSupport(void) {
-	gTestID = 49;
+	gTestID = 43;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -2782,7 +2782,7 @@ void test_l1_dsVideoPort_positive_dsSetForceDisable4KSupport(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSetForceDisable4KSupport(void) {
-	gTestID = 50;
+	gTestID = 44;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -2848,7 +2848,7 @@ void test_l1_dsVideoPort_negative_dsSetForceDisable4KSupport(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetForceDisable4KSupport(void) {
-	gTestID = 51;
+	gTestID = 45;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -2911,7 +2911,7 @@ void test_l1_dsVideoPort_positive_dsGetForceDisable4KSupport(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetForceDisable4KSupport(void) {
-	gTestID = 52;
+	gTestID = 46;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -2979,7 +2979,7 @@ void test_l1_dsVideoPort_negative_dsGetForceDisable4KSupport(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetVideoEOTF(void) {
-	gTestID = 53;
+	gTestID = 47;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -3037,7 +3037,7 @@ void test_l1_dsVideoPort_positive_dsGetVideoEOTF(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetVideoEOTF(void) {
-	gTestID = 54;
+	gTestID = 48;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -3101,7 +3101,7 @@ void test_l1_dsVideoPort_negative_dsGetVideoEOTF(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetMatrixCoefficients(void) {
-	gTestID = 55;
+	gTestID = 49;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -3159,7 +3159,7 @@ void test_l1_dsVideoPort_positive_dsGetMatrixCoefficients(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetMatrixCoefficients(void) {
-	gTestID = 56;
+	gTestID = 50;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -3223,7 +3223,7 @@ void test_l1_dsVideoPort_negative_dsGetMatrixCoefficients(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetColorDepth(void) {
-	gTestID = 57;
+	gTestID = 51;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -3281,7 +3281,7 @@ void test_l1_dsVideoPort_positive_dsGetColorDepth(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetColorDepth(void) {
-	gTestID = 58;
+	gTestID = 52;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -3345,7 +3345,7 @@ void test_l1_dsVideoPort_negative_dsGetColorDepth(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetColorSpace(void) {
-	gTestID = 59;
+	gTestID = 53;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -3403,7 +3403,7 @@ void test_l1_dsVideoPort_positive_dsGetColorSpace(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetColorSpace(void) {
-	gTestID = 60;
+	gTestID = 54;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -3466,7 +3466,7 @@ void test_l1_dsVideoPort_negative_dsGetColorSpace(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetQuantizationRange(void) {
-	gTestID = 61;
+	gTestID = 55;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -3523,7 +3523,7 @@ void test_l1_dsVideoPort_positive_dsGetQuantizationRange(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetQuantizationRange(void) {
-	gTestID = 62;
+	gTestID = 56;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -3587,7 +3587,7 @@ void test_l1_dsVideoPort_negative_dsGetQuantizationRange(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetCurrentOutputSettings(void) {
-	gTestID = 63;
+	gTestID = 57;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -3660,7 +3660,7 @@ void test_l1_dsVideoPort_positive_dsGetCurrentOutputSettings(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetCurrentOutputSettings(void) {
-	gTestID = 59;
+	gTestID = 58;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status; 
@@ -3749,7 +3749,7 @@ void test_l1_dsVideoPort_negative_dsGetCurrentOutputSettings(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsIsOutputHDR(void) {
-	gTestID = 65;
+	gTestID = 59;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -3811,7 +3811,7 @@ void test_l1_dsVideoPort_positive_dsIsOutputHDR(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsIsOutputHDR(void) {
-	gTestID = 66;
+	gTestID = 60;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -3874,7 +3874,7 @@ void test_l1_dsVideoPort_negative_dsIsOutputHDR(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsResetOutputToSDR(void) {
-	gTestID = 67;
+	gTestID = 61;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -3922,7 +3922,7 @@ void test_l1_dsVideoPort_positive_dsResetOutputToSDR(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsResetOutputToSDR(void) {
-	gTestID = 68;
+	gTestID = 62;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -3975,7 +3975,7 @@ void test_l1_dsVideoPort_negative_dsResetOutputToSDR(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsSetHdmiPreference(void) {
-	gTestID = 69;
+	gTestID = 63;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -4031,7 +4031,7 @@ void test_l1_dsVideoPort_positive_dsSetHdmiPreference(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSetHdmiPreference(void) {
-	gTestID = 70;
+	gTestID = 64;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -4095,7 +4095,7 @@ void test_l1_dsVideoPort_negative_dsSetHdmiPreference(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetHdmiPreference(void) {
-	gTestID = 71;
+	gTestID = 65;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -4154,7 +4154,7 @@ void test_l1_dsVideoPort_positive_dsGetHdmiPreference(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetHdmiPreference(void) {
-	gTestID = 72;
+	gTestID = 66;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -4219,7 +4219,7 @@ void test_l1_dsVideoPort_negative_dsGetHdmiPreference(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetIgnoreEDIDStatus(void) {
-	gTestID = 73;
+	gTestID = 67;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -4284,7 +4284,7 @@ void test_l1_dsVideoPort_positive_dsGetIgnoreEDIDStatus(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetIgnoreEDIDStatus(void) {
-	gTestID = 74;
+	gTestID = 68;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -4352,7 +4352,7 @@ void test_l1_dsVideoPort_negative_dsGetIgnoreEDIDStatus(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsSetBackgroundColor(void) {
-	gTestID = 75;
+	gTestID = 69;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -4411,7 +4411,7 @@ void test_l1_dsVideoPort_positive_dsSetBackgroundColor(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSetBackgroundColor(void) {
-	gTestID = 76;
+	gTestID = 70;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -4476,7 +4476,7 @@ void test_l1_dsVideoPort_negative_dsSetBackgroundColor(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsSetForceHDRMode(void) {
-	gTestID = 77;
+	gTestID = 71;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -4533,7 +4533,7 @@ void test_l1_dsVideoPort_positive_dsSetForceHDRMode(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSetForceHDRMode(void) {
-	gTestID = 78;
+	gTestID = 72;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -4603,7 +4603,7 @@ void test_l1_dsVideoPort_negative_dsSetForceHDRMode(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsColorDepthCapabilities(void) {
-	gTestID = 79;
+	gTestID = 73;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -4664,7 +4664,7 @@ void test_l1_dsVideoPort_positive_dsColorDepthCapabilities(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsColorDepthCapabilities(void) {
-	gTestID = 80;
+	gTestID = 74;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -4731,7 +4731,7 @@ void test_l1_dsVideoPort_negative_dsColorDepthCapabilities(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetPreferredColorDepth(void) {
-	gTestID = 81;
+	gTestID = 75;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -4795,7 +4795,7 @@ void test_l1_dsVideoPort_positive_dsGetPreferredColorDepth(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetPreferredColorDepth(void) {
-	gTestID = 82;
+	gTestID = 76;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -4862,7 +4862,7 @@ void test_l1_dsVideoPort_negative_dsGetPreferredColorDepth(void) {
  * 
  */
 void test_l1_dsVideoPort_positive_dsSetPreferredColorDepth(void) {
-	gTestID = 83;
+	gTestID = 77;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
@@ -4920,7 +4920,7 @@ void test_l1_dsVideoPort_positive_dsSetPreferredColorDepth(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSetPreferredColorDepth(void) {
-	gTestID = 84;
+	gTestID = 78;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	dsError_t status;
