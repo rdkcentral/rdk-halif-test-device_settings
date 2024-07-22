@@ -124,3 +124,17 @@ dsError_t dsSetDisplayframerate(intptr_t handle, char* framerate)
   return (dsError_t)0;
 }
 
+typedef void (*dsRegisterFrameratePreChangeCB_t)(unsigned int tSecond);
+dsError_t dsRegisterFrameratePreChangeCB(dsRegisterFrameratePreChangeCB_t CBFunc)
+{
+  /*TODO: Implement Me!*/
+  return (dsError_t)0;
+}
+
+typedef void (*dsRegisterFrameratePostChangeCB_t)(unsigned int tSecond);
+dsError_t dsRegisterFrameratePostChangeCB(dsRegisterFrameratePostChangeCB_t CBFunc)
+{
+  /*TODO: Implement Me!*/
+  return (dsError_t)0;
+}
+
