@@ -278,9 +278,8 @@ void test_l1_dsCompositeIn_negative_dsCompositeInTerm(void)
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsCompositeInInit() and initialize the module | | dsERR_NONE | Initialization should succeed |
  * |02|Call dsCompositeInGetNumberOfInputs() with a valid pointer | uint8_t *pNumberOfInputs | dsERR_NONE and a valid number of inputs | Number of inputs should be returned correctly |
- * |03|Call dsCompositeInGetNumberOfInputs() with a valid pointer | uint8_t *pNumberOfInputs | dsERR_NONE and a valid number of inputs | Number of inputs should be consistent with the first call |
- * |04|Compare the results of both calls to ensure consistency | Results of first and second calls | Consistent number of inputs | The number of inputs returned should be the same in both calls |
- * |05|Call dsCompositeInTerm() to terminate the module| | dsERR_NONE | Termination should succeed |
+ * |03|Get the number of inputs from the profile and compare it with the value obtained by calling dsCompositeInGetNumberOfInputs()| | dsERR_NONE | |
+ * |04|Call dsCompositeInTerm() to terminate the module| | dsERR_NONE | Termination should succeed |
  * 
  */
 void test_l1_dsCompositeIn_positive_dsCompositeInGetNumberOfInputs(void)
