@@ -9,6 +9,25 @@
             "program": "${file}",
             "args": [ "--config", "/home/gweatherup/git/fast/comcast/code/opensource/raft/rdk-halif-device_settings/ut/"],
             "console": "integratedTerminal"
-        }
+        },
+        {
+            "name": "C/C++ Runner: Debug Session",
+            "type": "cppdbg",
+            "request": "launch",
+            "stopAtEntry": false,
+            "externalConsole": false,
+            "cwd": "${workspaceFolder}/bin/",
+            "program": "${workspaceFolder}/bin/run.sh",
+            "args": [ "-l", "${workspaceFolder}/logs/", "-p", "${workspaceFolder}/profile/assets/test_kvp.yaml" ],
+            "MIMode": "gdb",
+            "miDebuggerPath": "gdb",
+            "setupCommands": [
+              {
+                "description": "Enable pretty-printing for gdb",
+                "text": "-enable-pretty-printing",
+                "ignoreFailures": true
+              }
+            ]
+          }
     ]
 }

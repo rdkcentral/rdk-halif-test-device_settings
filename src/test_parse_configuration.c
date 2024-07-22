@@ -42,13 +42,13 @@
  */
 
 /**
- * @defgroup Device_Settings_PARSE_CONFIG Device Settings HAL Tests parse configuraion File
+ * @defgroup Device_Settings_PARSE_CONFIG Device Settings HAL Tests parse configuration File
  * @{
  * @parblock
  *
- * ### Parse configuraion functions for Device Settings HAL :
+ * ### Parse configuration functions for Device Settings HAL :
  *
- * Parse configuraion functions required for the module across all vendors.
+ * Parse configuration functions required for the module across all vendors.
  *
  * **Pre-Conditions:**  None @n
  * **Dependencies:** None @n
@@ -68,7 +68,7 @@
 
 #include "test_parse_configuration.h"
 
-/* Global Vairables */
+/* Global Variables */
 int32_t gSourceType = -1;
 int32_t gDSModule = dsNone;
 
@@ -80,11 +80,24 @@ int test_parse_configuration()
     bool nodeStatus = false;
     ut_kvp_status_t status;
 
+/* CODING STANDARDS: K&R Brackets are not allowed, 
+    if ( blah ){
+    ...
+    }
+Requirement
+    if ( blah )
+    {
+    ...
+    }    
+
+*/
     nodeStatus = ut_kvp_fieldPresent(ut_kvp_profile_getInstance(), "dsAudio");
-    if(nodeStatus == true) {
+    if(nodeStatus == true) 
+    {
         gDSModule |= dsAudioPort;
         status = test_dsAudio_parse_configuration();
-        if(status != UT_KVP_STATUS_SUCCESS) {
+        if(status != UT_KVP_STATUS_SUCCESS) 
+        {
             UT_LOG_ERROR("Failed to parse audio configuration file");
             return -1;
         }
@@ -92,10 +105,12 @@ int test_parse_configuration()
 
     nodeStatus = false;
     nodeStatus = ut_kvp_fieldPresent(ut_kvp_profile_getInstance(), "dsVideoDevice");
-    if(nodeStatus == true) {
+    if(nodeStatus == true) 
+    {
         gDSModule |= dsVideoDevice;
         status = test_dsVideoDevice_parse_configuration();
-        if(status != UT_KVP_STATUS_SUCCESS) {
+        if(status != UT_KVP_STATUS_SUCCESS) 
+        {
             UT_LOG_ERROR("Failed to parse video device configuration file");
             return -1;
         }
@@ -103,10 +118,12 @@ int test_parse_configuration()
 
     nodeStatus = false;
     nodeStatus = ut_kvp_fieldPresent(ut_kvp_profile_getInstance(), "dsVideoPort");
-    if(nodeStatus == true) {
+    if(nodeStatus == true) 
+    {
         gDSModule |= dsVideoPort;
         status = test_dsVideoPort_parse_configuration();
-        if(status != UT_KVP_STATUS_SUCCESS) {
+        if(status != UT_KVP_STATUS_SUCCESS) 
+        {
             UT_LOG_ERROR("Failed to parse video port configuration file");
             return -1;
         }
@@ -114,31 +131,36 @@ int test_parse_configuration()
 
     nodeStatus = false;
     nodeStatus = ut_kvp_fieldPresent(ut_kvp_profile_getInstance(), "dsCompositeIn");
-    if(nodeStatus == true) {
+    if(nodeStatus == true) 
+    {
         gDSModule |= dsComposite;
     }
 
     nodeStatus = false;
     nodeStatus = ut_kvp_fieldPresent(ut_kvp_profile_getInstance(), "dsFPD");
-    if(nodeStatus == true) {
+    if(nodeStatus == true) 
+    {
         gDSModule |= dsFPD;
     }
 
     nodeStatus = false;
     nodeStatus = ut_kvp_fieldPresent(ut_kvp_profile_getInstance(), "dsDisplay");
-    if(nodeStatus == true) {
+    if(nodeStatus == true) 
+    {
         gDSModule |= dsDisplay;
     }
 
     nodeStatus = false;
     nodeStatus = ut_kvp_fieldPresent(ut_kvp_profile_getInstance(), "dsHost");
-    if(nodeStatus == true) {
+    if(nodeStatus == true) 
+    {
         gDSModule |= dsHost;
     }
 
     nodeStatus = false;
     nodeStatus = ut_kvp_fieldPresent(ut_kvp_profile_getInstance(), "dsHdmiIn");
-    if(nodeStatus == true) {
+    if(nodeStatus == true) 
+    {
         gDSModule |= dsHdmiIn;
     }
 
