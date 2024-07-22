@@ -1,66 +1,39 @@
 dsAudio:  # Prefix must always exist
-    description: "dsAudio Device Settings testing suites"
+    description: "dsAudio Device Settings testing suite configuration"
     test:
-        execute: "~/Downloads/dsAudio/run.sh -p ~/Downloads/dsAudio/Sink_AudioSettings.yaml"
+        execute: "cd bin;./run.sh -p ../profiles/sink/Sink_AudioSettings.yaml"
         type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
         suites:
             0:
                 name: "L1 dsAudio - Sink"
-            1:
+                tests:
+                    - None
+            1: 
                 name: "L2 dsAudio - Sink"
-            2:
+                tests:
+                    - None
+            2: 
                 name: "L3 dsAudio - Sink"
-                test_initialise_audio:
-                    name: "Initialize dsAudio"
-                test_enable_audio_port:
-                    name: "Enable Audio Port"
-                    input:
-                        - "Select dsAudio Port:"
-                test_enable_disable_audio:
-                    name: "Disable Audio Port"
-                test_enable_headphone_connection:
-                    name: "Headphone Connection"
-                test_audio_compression:
-                    name: "Audio Compression"
-                test_ms12_dap_features:
-                    name: "MS12 DAP Features"
-                test_set_stereo_mode:
-                    name: "Set Stereo Mode"
-                test_enable_disable_stero_auto:
-                    name: "Enable/Disable Stereo Auto"
-                test_set_audio_level:
-                    name: "Set Audio Level"
-                test_set_audio_gain_for_speaker:
-                    name: "Set Audio Gain For Speaker"
-                test_audio_mute_unmute:
-                    name: "Audio Mute/UnMute"
-                test_set_audio_delay:
-                    name: "Set Audio Delay"
-                test_get_audio_format:
-                    name: "Get Audio Format"
-                test_set_atmos_output_mode:
-                    name: "Set ATMOS Output Mode"
-                    input:
-                        - "Enable/Disable ATMOS Mode[1:Enable, 2:Disable]:"
-                test_get_atmos_capabilties:
-                    name: "Get ATMOS Capabilities"
-                test_set_ms12_profiles:
-                    name: "Set MS12 Profiles"
-                test_set_associate_audio_mixing:
-                    name: "Set Associate Audio Mixing"
-                    input:
-                        - "Enable/Disable Associated Audio Mixing[1:Enable, 2:Disable]:"
-                        - "Set Fader Control[-32(mute associated audio) to 32(mute main audio)]:"
-                test_set_audio_mixer_level:
-                    name: "Set Audio Mixer Levels"
-                    intput:
-                        - "Select Mixer Input: "
-                        - "Set the Volume[0 to 100]: "
-                test_primary_secondary_language:
-                    name: "Primary/Secondary Language"
-                test_get_arc_type:
-                    name: "Get ARC Type"
-                test_set_sad_list:
-                    name: "Set SAD List"
-                test_terminate_audio:
-                    name: "Terminate dsAudio"
+                tests:
+                    - "Initialize dsAudio"
+                    - "Enable Audio Port"
+                    - "Disable Audio Port"
+                    - "Headphone Connection"
+                    - "Audio Compression"
+                    - "MS12 DAP Features"
+                    - "Set Stereo Mode"
+                    - "Enable/Disable Stereo Auto"
+                    - "Set Audio Level"
+                    - "Set Audio Gain For Speaker"
+                    - "Audio Mute/UnMute"
+                    - "Set Audio Delay"
+                    - "Get Audio Format"
+                    - "Set ATMOS Output Mode"
+                    - "Get ATMOS Capabilities"
+                    - "Set MS12 Profiles"
+                    - "Set Associate Audio Mixing"
+                    - "Set Audio Mixer Levels"
+                    - "Primary/Secondary Language"
+                    - "Get ARC Type"
+                    - "Set SAD List"
+                    - "Terminate dsAudio"
