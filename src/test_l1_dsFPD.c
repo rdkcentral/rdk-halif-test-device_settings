@@ -85,7 +85,7 @@ static int gTestID = 1;
 /* Global flags to support features */
 static bool extendedEnumsSupported=false; //Default to not supported
 
-#define INDICATOR_COLORS_SIZE_1 (sizeof(kIndicatorColors)/sizeof(dsFPDColorConfig_t))
+#define INDICATOR_COLORS_SIZE_1 (sizeof(kIndicatorColors_1)/sizeof(dsFPDColorConfig_t))
 #define INDICATOR_COLORS_SIZE_2 (sizeof(kIndicatorColors_2)/sizeof(dsFPDColorConfig_t))
 #define INDICATOR_COLORS_SIZE_3 (sizeof(kIndicatorColors_3)/sizeof(dsFPDColorConfig_t))
 
