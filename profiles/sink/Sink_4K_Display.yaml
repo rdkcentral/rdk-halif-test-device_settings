@@ -4,7 +4,7 @@ dsDisplay:
   features:
     extendedEnumsSupported: false
   Number_of_ports: 1
-  Video_Ports: 0x08 # dsVIDEOPORT_TYPE_INTERNAL
+  Video_Ports: [0x08] # dsVIDEOPORT_TYPE_INTERNAL
   EDID_Data:
     # Product code of the display device of the type int32_t
     productCode: 0x2A1B
