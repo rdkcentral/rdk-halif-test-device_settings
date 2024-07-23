@@ -2931,7 +2931,9 @@ void test_l1_dsFPD_negative_dsFPGetLEDState(void)
 }
 
 static UT_test_suite_t * pSuite = NULL;
+#if 0
 static UT_test_suite_t * pSuite7Segment = NULL;
+#endif
 
 /**
  * @brief Register the main test(s) for this module
@@ -2942,15 +2944,19 @@ int test_l1_dsFPD_register ( void )
 {
 	/* add a suite to the registry */
         pSuite = UT_add_suite( "[L1 dsFPD]", NULL, NULL );
-        pSuite7Segment = UT_add_suite( "[L1 dsFPD 7Segment]", NULL, NULL );
+        #if 0
+      	pSuite7Segment = UT_add_suite( "[L1 dsFPD 7Segment]", NULL, NULL );
+        #endif
 	if ( NULL == pSuite )
 	{
 		return -1;
-	}	
-    if ( NULL == pSuite7Segment )
+	}
+        #if 0
+        if ( NULL == pSuite7Segment )
 	{
 		return -1;
 	}	
+        #endif
 
 	UT_add_test( pSuite, "dsFPInit_L1_positive" ,test_l1_dsFPD_positive_dsFPInit );
 	UT_add_test( pSuite, "dsFPInit_L1_negative" ,test_l1_dsFPD_negative_dsFPInit );
@@ -2976,8 +2982,9 @@ int test_l1_dsFPD_register ( void )
 	UT_add_test( pSuite, "dsFPSetLEDState_L1_negative" ,test_l1_dsFPD_negative_dsFPSetLEDState );
 	UT_add_test( pSuite, "dsFPGetLEDState_L1_positive" ,test_l1_dsFPD_positive_dsFPGetLEDState );
 	UT_add_test( pSuite, "dsFPGetLEDState_L1_negative" ,test_l1_dsFPD_negative_dsFPGetLEDState );
-	
-
+       
+        /* the LED 7 Segment APIs are now deprecated as the HAL Interfaces are now deprecated */
+        #if 0
         UT_add_test( pSuite7Segment, "dsSetFPDMode_L1_positive" ,test_l1_dsFPD_positive_dsSetFPDMode );
 	UT_add_test( pSuite7Segment, "dsSetFPDMode_L1_negative" ,test_l1_dsFPD_negative_dsSetFPDMode );
 	UT_add_test( pSuite7Segment, "dsSetFPTime_L1_positive" ,test_l1_dsFPD_positive_dsSetFPTime );
@@ -2996,6 +3003,7 @@ int test_l1_dsFPD_register ( void )
 	UT_add_test( pSuite7Segment, "dsSetFPTimeFormat_L1_negative" ,test_l1_dsFPD_negative_dsSetFPTimeFormat );
 	UT_add_test( pSuite7Segment, "dsGetFPTimeFormat_L1_positive" ,test_l1_dsFPD_positive_dsGetFPTimeFormat );
 	UT_add_test( pSuite7Segment, "dsGetFPTimeFormat_L1_negative" ,test_l1_dsFPD_negative_dsGetFPTimeFormat );
+        #endif
         extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsFPD/features/extendedEnumsSupported" );
 
 	return 0;
