@@ -332,10 +332,10 @@ void test_l1_dsDisplay_positive_dsGetDisplay(void) {
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-    uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
+    uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
+    uint32_t videoPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
     for (size_t i = 0; i < numPorts; i++) {
-        int vType = numPorts[i];
+        uint32_t vType = videoPorts;
         UT_LOG("\n In %s Port Type: [%d]\n", __FUNCTION__, vType);
     
         // Step 02: Call dsGetDisplay() for each valid port
@@ -397,7 +397,7 @@ void test_l1_dsDisplay_negative_dsGetDisplay(void) {
 
     // Step 01: Call dsGetDisplay() without initializing the display sub-system
     uint32_t vType = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
-    result = dsGetDisplay(vType[0], 0, &displayHandle);
+    result = dsGetDisplay(vType, 0, &displayHandle);
     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);       
 
@@ -412,12 +412,12 @@ void test_l1_dsDisplay_negative_dsGetDisplay(void) {
     UT_ASSERT_EQUAL( result, dsERR_INVALID_PARAM);
 
     // Step 04: Call dsGetDisplay() with invalid index
-    result = dsGetDisplay(vType[0], -1, &displayHandle);
+    result = dsGetDisplay(vType, -1, &displayHandle);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 05: Call dsGetDisplay() with NULL handle
-    result = dsGetDisplay(vType[0], 0, NULL);
+    result = dsGetDisplay(vType, 0, NULL);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
@@ -427,7 +427,7 @@ void test_l1_dsDisplay_negative_dsGetDisplay(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 07: Call dsGetDisplay() again after termination
-    result = dsGetDisplay(vType[0], 0, &displayHandle);
+    result = dsGetDisplay(vType, 0, &displayHandle);
     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     
@@ -475,10 +475,10 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
     
     // Loop through all valid ports
-    uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
+    uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
+    uint32_t videoPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
     for (size_t i = 0; i < numPorts; i++) {
-        int vType = numPorts[i];
-
+        uint32_t vType = videoPorts;
         // Step 02: Get the display device handle
         result = dsGetDisplay(vType, 0, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -561,9 +561,10 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 03: Obtain a display device handle
-    uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
+    uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
+    uint32_t videoPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
     for (size_t i = 0; i < numPorts; i++) {
-        int vType = numPorts[i];
+        uint32_t vType = videoPorts;
         result = dsGetDisplay(vType, 0, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -631,9 +632,10 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 02: Call dsGetDisplay() for each valid port
-    uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
+    uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
+    uint32_t videoPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
     for (size_t i = 0; i < numPorts; i++) {
-        int vType = numPorts[i];
+        uint32_t vType = videoPorts;
         result = dsGetDisplay(vType, 0, &displayHandle);
         if(result != dsERR_NONE)
         {
@@ -723,9 +725,10 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
     }
 
     // Step 03: Obtain the display handle with valid port
-    uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
+    uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
+    uint32_t videoPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
     for (size_t i = 0; i < numPorts; i++) {
-        int vType = numPorts[i];
+        uint32_t vType = videoPorts;
         result = dsGetDisplay(vType, 0, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         if(result != dsERR_NONE)
@@ -817,9 +820,10 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 02: Obtain display handle with valid port
-    uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
+    uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
+    uint32_t videoPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
     for (size_t i = 0; i < numPorts; i++) {
-        int vType = numPorts[i];
+        uint32_t vType = videoPorts;
         result = dsGetDisplay(vType, 0, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -890,9 +894,10 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 03: Obtain the display handle with valid port
-    uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
+    uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
+    uint32_t videoPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
     for (size_t i = 0; i < numPorts; i++) {
-        int vType = numPorts[i];
+        uint32_t vType = videoPorts;
         result = dsGetDisplay(vType, 0, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -957,9 +962,10 @@ void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 02: Loop through all valid ports in kSupportedPortTypes
-    uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
+    uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
+    uint32_t videoPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
     for (size_t i = 0; i < numPorts; i++) {
-        int vType = numPorts[i];
+        uint32_t vType = videoPorts;
         result = dsGetDisplay(vType, 0, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -1019,9 +1025,10 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 03: Obtain the display handle with valid port
-    uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
+    uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
+    uint32_t videoPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
     for (size_t i = 0; i < numPorts; i++) {
-        int vType = numPorts[i];
+        uint32_t vType = videoPorts;
         result = dsGetDisplay(vType, 0, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
