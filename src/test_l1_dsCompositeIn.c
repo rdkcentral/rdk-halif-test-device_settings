@@ -76,7 +76,7 @@
 #include <ut_log.h>
 #include <ut_kvp_profile.h>
 #include "dsCompositeIn.h"
-#include <ut_kvp_profile.h>
+#include "test_parse_configuration.h"
 
 static int gTestGroup = 1;
 static int gTestID = 1;
@@ -948,35 +948,52 @@ static UT_test_suite_t * pSuite = NULL;
  */
 int test_l1_dsCompositeIn_register ( void )
 {
-	/* add a suite to the registry */
-	pSuite = UT_add_suite( "[L1 dsCompositeIn]", NULL, NULL );
-	if ( NULL == pSuite )
-	{
-		return -1;
-	}	
+    ut_kvp_status_t status;
+    int32_t source_type = 0;
 
-	UT_add_test( pSuite, "dsCompositeInInit_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInInit );
+    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsCompositeIn.Type", gDeviceType, TEST_DS_DEVICE_TYPE_SIZE);
+    if (status == UT_KVP_STATUS_SUCCESS ) {
+        if (!strncmp(gDeviceType, TEST_TYPE_SINK_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) {
+            // Create the test suite for sink type
+            pSuite = UT_add_suite("[L2 dsCompositeIn - Sink]", NULL, NULL);
+            if (pSuite == NULL)
+            {
+                return -1;
+            }
+            source_type = 0;
+        }
+        else {
+            UT_LOG_ERROR("Invalid platform type: %s", gDeviceType);
+            return -1;
+        }
+    }
+    else {
+        UT_LOG_ERROR("Failed to get the platform type");
+        return -1;
+    }
+    
+    if ( source_type == 0 ){
+        UT_add_test( pSuite, "dsCompositeInInit_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInInit );
 	UT_add_test( pSuite, "dsCompositeInInit_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInInit );
-	UT_add_test( pSuite, "dsCompositeInTerm_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInTerm );
-	UT_add_test( pSuite, "dsCompositeInTerm_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInTerm );
-	UT_add_test( pSuite, "dsCompositeInGetNumberOfInputs_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInGetNumberOfInputs );
-	UT_add_test( pSuite, "dsCompositeInGetNumberOfInputs_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInGetNumberOfInputs );
-	UT_add_test( pSuite, "dsCompositeInGetStatus_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInGetStatus );
-	UT_add_test( pSuite, "dsCompositeInGetStatus_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInGetStatus );
-	UT_add_test( pSuite, "dsCompositeInSelectPort_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInSelectPort );
-	UT_add_test( pSuite, "dsCompositeInSelectPort_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInSelectPort );
-	UT_add_test( pSuite, "dsCompositeInScaleVideo_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInScaleVideo );
-	UT_add_test( pSuite, "dsCompositeInScaleVideo_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInScaleVideo );
-	UT_add_test( pSuite, "dsCompositeInRegisterConnectCB_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInRegisterConnectCB );
-	UT_add_test( pSuite, "dsCompositeInRegisterConnectCB_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInRegisterConnectCB );
-	UT_add_test( pSuite, "dsCompositeInRegisterSignalChangeCB_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInRegisterSignalChangeCB );
-	UT_add_test( pSuite, "dsCompositeInRegisterSignalChangeCB_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInRegisterSignalChangeCB );
-	UT_add_test( pSuite, "dsCompositeInRegisterStatusChangeCB_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInRegisterStatusChangeCB );
-	UT_add_test( pSuite, "dsCompositeInRegisterStatusChangeCB_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInRegisterStatusChangeCB );
-	extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsCompositeIn/features/extendedEnumsSupported" );
-	
-
-	return 0;
+        UT_add_test( pSuite, "dsCompositeInTerm_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInTerm );
+        UT_add_test( pSuite, "dsCompositeInTerm_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInTerm );
+        UT_add_test( pSuite, "dsCompositeInGetNumberOfInputs_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInGetNumberOfInputs );
+        UT_add_test( pSuite, "dsCompositeInGetNumberOfInputs_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInGetNumberOfInputs );
+        UT_add_test( pSuite, "dsCompositeInGetStatus_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInGetStatus );
+        UT_add_test( pSuite, "dsCompositeInGetStatus_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInGetStatus );
+        UT_add_test( pSuite, "dsCompositeInSelectPort_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInSelectPort );
+        UT_add_test( pSuite, "dsCompositeInSelectPort_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInSelectPort );
+        UT_add_test( pSuite, "dsCompositeInScaleVideo_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInScaleVideo );
+        UT_add_test( pSuite, "dsCompositeInScaleVideo_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInScaleVideo );
+        UT_add_test( pSuite, "dsCompositeInRegisterConnectCB_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInRegisterConnectCB );
+        UT_add_test( pSuite, "dsCompositeInRegisterConnectCB_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInRegisterConnectCB );
+        UT_add_test( pSuite, "dsCompositeInRegisterSignalChangeCB_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInRegisterSignalChangeCB );
+        UT_add_test( pSuite, "dsCompositeInRegisterSignalChangeCB_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInRegisterSignalChangeCB );
+        UT_add_test( pSuite, "dsCompositeInRegisterStatusChangeCB_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInRegisterStatusChangeCB );
+        UT_add_test( pSuite, "dsCompositeInRegisterStatusChangeCB_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInRegisterStatusChangeCB );
+        extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsCompositeIn/features/extendedEnumsSupported" );
+    }
+    return 0;
 } 
 
 /** @} */ // End of DS_CompositeIn_HALTEST_L1
