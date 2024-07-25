@@ -90,7 +90,7 @@ static int gTestID = 1;
 * **Test Case ID:** 001@n
 *
 * **Test Procedure:**
-* Refer to Test specification documentation [ds-front-panel-display__L2_Low-Level_TestSpecification.md](../docs/pages/ds-front-panel-display__L2_Low-Level_TestSpecification.md)
+* Refer to Test specification documentation [ds-front-panel-display_L2_Low-Level_TestSpecification.md](../docs/pages/ds-front-panel-display_L2_Low-Level_TestSpecification.md)
 */
 
 void test_l2_dsFPD_SetFPstateON_SetBrightness(void)
@@ -196,7 +196,7 @@ void test_l2_dsFPD_SetFPstateON_SetBrightness(void)
 * **Test Case ID:** 002@n
 *
 * **Test Procedure:**
-* Refer to Test specification documentation [ds-front-panel-display__L2_Low-Level_TestSpecification.md](../docs/pages/ds-front-panel-display__L2_Low-Level_TestSpecification.md)
+* Refer to Test specification documentation [ds-front-panel-display_L2_Low-Level_TestSpecification.md](../docs/pages/ds-front-panel-display_L2_Low-Level_TestSpecification.md)
 */
 
 void test_l2_dsFPD_SetFPstateOFF_SetBrightness(void)
@@ -282,7 +282,7 @@ void test_l2_dsFPD_SetFPstateOFF_SetBrightness(void)
 * **Test Case ID:** 003@n
 *
 * **Test Procedure:**
-* Refer to Test specification documentation [ds-front-panel-display__L2_Low-Level_TestSpecification.md](../docs/pages/ds-front-panel-display__L2_Low-Level_TestSpecification.md)
+* Refer to Test specification documentation [ds-front-panel-display_L2_Low-Level_TestSpecification.md](../docs/pages/ds-front-panel-display_L2_Low-Level_TestSpecification.md)
 */
 
 void test_l2_dsFPD_SetFPstateOFF_SetBlink(void)
@@ -365,7 +365,7 @@ void test_l2_dsFPD_SetFPstateOFF_SetBlink(void)
 * **Test Case ID:** 004@n
 *
 * **Test Procedure:**
-* Refer to Test specification documentation [ds-front-panel-display__L2_Low-Level_TestSpecification.md](../docs/pages/ds-front-panel-display__L2_Low-Level_TestSpecification.md)
+* Refer to Test specification documentation [ds-front-panel-display_L2_Low-Level_TestSpecification.md](../docs/pages/ds-front-panel-display_L2_Low-Level_TestSpecification.md)
 */
 
 void test_l2_dsFPD_SetFPstateON_Multi_SetColor(void)
@@ -498,7 +498,7 @@ void test_l2_dsFPD_SetFPstateON_Multi_SetColor(void)
 * **Test Case ID:** 005@n
 *
 * **Test Procedure:**
-* Refer to Test specification documentation [ds-front-panel-display__L2_Low-Level_TestSpecification.md](../docs/pages/ds-front-panel-display__L2_Low-Level_TestSpecification.md)
+* Refer to Test specification documentation [ds-front-panel-display_L2_Low-Level_TestSpecification.md](../docs/pages/ds-front-panel-display_L2_Low-Level_TestSpecification.md)
 */
 
 void test_l2_dsFPD_SetFPstateOFF_SetColor(void)
@@ -592,7 +592,7 @@ void test_l2_dsFPD_SetFPstateOFF_SetColor(void)
 * **Test Case ID:** 006@n
 *
 * **Test Procedure:**
-* Refer to Test specification documentation [ds-front-panel-display__L2_Low-Level_TestSpecification.md](../docs/pages/ds-front-panel-display__L2_Low-Level_TestSpecification.md)
+* Refer to Test specification documentation [ds-front-panel-display_L2_Low-Level_TestSpecification.md](../docs/pages/ds-front-panel-display_L2_Low-Level_TestSpecification.md)
 */
 
 void test_l2_dsFPD_SetFPstateON_Single_SetColor(void)
@@ -699,7 +699,7 @@ void test_l2_dsFPD_SetFPstateON_Single_SetColor(void)
 * **Test Case ID:** 007@n
 *
 * **Test Procedure:**
-* Refer to Test specification documentation [ds-front-panel-display__L2_Low-Level_TestSpecification.md](../docs/pages/ds-front-panel-display__L2_Low-Level_TestSpecification.md)
+* Refer to Test specification documentation [ds-front-panel-display_L2_Low-Level_TestSpecification.md](../docs/pages/ds-front-panel-display_L2_Low-Level_TestSpecification.md)
 */
 
 void test_l2_dsFPD_VerifyLEDStateTransitions(void)
