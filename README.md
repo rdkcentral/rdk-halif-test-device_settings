@@ -6,20 +6,24 @@
 - [Description](#description)
 - [Reference Documents](#reference-documents)
 - [Notes](#notes)
+- [Known Issues](#known-issues)
 
 ## Acronyms, Terms and Abbreviations
 
 - `L1`  - Functional Tests
+- `L2`  - Module functional Testing
 - `HAL` - Hardware Abstraction Layer
 - `API` - Application Programming Interface
 - `DS`  - Device Settings
 - `FPD` - Front Panel Display
 - `HDMIIn` - HDMI Input
 - `CompositeIn` - Composite Input
+- `High-Level Test Specification` : These specification will provide a broad overview of the system's functionality from the callers' perspective. It focuses on major use cases, system behavior, and overall caller experience.
+- `Low-Level Test Specification` : These specification will delve deeper into the technical details. They will define specific test cases with inputs, expected outputs, and pass/fail criteria for individual functionalities, modules, or APIs.
 
 ## Description
 
-This repository contains the Unit Test Suites (L1) for the following submodules of Device Settings  `HAL` :
+This repository contains the Unit Test Suites (L1 & L2) for the following submodules of Device Settings  `HAL` :
 
 - `DS` Audio `HAL`
 - `DS` Video Device `HAL`
@@ -34,20 +38,34 @@ This repository contains the Unit Test Suites (L1) for the following submodules 
 
 |SNo|Document Name|Document Description|Document Link|
 |---|-------------|--------------------|-------------|
-|1|Device Settings `HAL`|This document provides specific information on each `DS` sub-module's `APIs` for which tests are written in this module|[`DS` `HAL` Guide - v2.0.0]( https://github.com/rdkcentral/rdk-halif-device_settings/blob/2.0.0 "Device Settings `HAL` Guide" )|
-|2|`DS` Audio `L1` Tests |`L1` Test Case File for `DS` Audio `HAL`|[test_l1_dsAudio.c]( https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/main/src/test_l1_dsAudio.c "test_l1_dsAudio.c" )|
-|3|`DS` Video Device `L1` Tests|`L1` Test Case File for `DS` Video Device `HAL`|[test_l1_dsVideoDevice.c]( https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/main/src/test_l1_dsVideoDevice.c "test_l1_dsVideoDevice.c" )|
-|4|`DS` Video Port `L1` Tests |`L1` Test Case File for `DS` Video Port `HAL`|[test_l1_dsVideoPort.c]( https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/main/src/test_l1_dsVideoPort.c "test_l1_dsVideoPort.c" )|
-|5|`DS` Display `L1` Tests |`L1` Test Case File for `DS` Display `HAL`|[test_l1_dsDisplay.c]( https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/main/src/test_l1_dsDisplay.c "test_l1_dsDisplay.c" )|
-|6|`DS` Front Panel Display `L1` Tests |`L1` Test Case File for `DS` Front Panel Display `HAL`|[test_l1_dsFPD.c]( https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/main/src/test_l1_dsFPD.c "test_l1_dsFPD.c" )|
-|7|`DS` Host `L1` Tests |`L1` Test Case File for `DS` Host `HAL`|[test_l1_dsHost.c]( https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/main/src/test_l1_dsHost.c "test_l1_dsHost.c")|
-|8|`DS` HDMI Input `L1` Tests |`L1` Test Case File for `DS` HDMI Input `HAL`|[test_l1_dsHdmiIn.c]( https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/main/src/test_l1_dsHdmiIn.c "test_l1_dsHdmiIn.c" )|
-|9|`DS` Composite Input `L1` Tests |`L1` Test Case File for `DS` Composite Input `HAL`|[test_l1_dsCompositeIn.c]( https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/main/src/test_l1_dsCompositeIn.c "test_l1_dsCompositeIn.c" )|
+|1|Device Settings `HAL`|This document provides specific information on each `DS` sub-module's `APIs` for which tests are written in this module|[`DS` `HAL` Guide](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/docs/pages/README.md)|
+|2|`DS` Audio High-Level Test Spec |`High Level Test Specification` Documentation for `DS` Audio module.|[ds-audio_High-Level_TestSpecification.md]( docs/pages/ds-audio_High-Level_TestSpecification.md)|
+|3|`DS` Audio `L2` Low-Level Test Spec |`L2` `Low Level Test Specification` Documentation for `DS` Audio module|[ds-audio_L2_Low-Level_TestSpecification.md]( docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)|
+|4|`DS` Video Device High-Level Test Spec |`High Level Test Specification` Documentation for `DS` Video Device module.|[ds-video-device_High-Level_TestSpec.md]( docs/pages/ds-video-device_High-Level_TestSpec.md)|
+|5|`DS` Video Device `L2` Low-Level Test Spec |`L2` `Low Level Test Specification` Documentation for `DS` Video Device module|[ds-video-device_L2-Low-Level_TestSpec.md]( docs/pages/ds-video-device_L2-Low-Level_TestSpec.md)|
+|6|`DS` Video Port High-Level Test Spec |`High Level Test Specification` Documentation for `DS` Video Port module.|[ds-video-port_High-Level_TestSpec.md]( docs/pages/ds-video-port_High-Level_TestSpec.md)|
+|7|`DS` Video Port `L2` Low-Level Test Spec |`L2` `Low Level Test Specification` Documentation for `DS` Video Port module|[ds-video-port_L2_Low-Level_TestSpecification.md]( docs/pages/ds-video-port_L2_Low-Level_TestSpecification.md)|
+|8|`DS` Display High-Level Test Spec |`High Level Test Specification` Documentation for `DS` Display module.|[ds-display-high-Level_TestSpec.md]( docs/pages/ds-display-high-Level_TestSpec.md)|
+|9|`DS` Display `L2` Low-Level Test Spec |`L2` `Low Level Test Specification` Documentation for `DS` Display module|[ds-display-L2-Low-Level_TestSpec.md]( docs/pages/ds-display-L2-Low-Level_TestSpec.md)|
+|10|`DS` Front Panel Display High-Level Test Spec |`High Level Test Specification` Documentation for `DS` Front Panel Display module.|[ds-front-panel-display_High-Level_TestSpec.md]( docs/pages/ds-front-panel-display_High-Level_TestSpec.md)|
+|11|`DS` Front Panel Display `L2` Low-Level Test Spec |`L2` `Low Level Test Specification` Documentation for `DS` Front Panel Display module|[ds-front-panel-display_L2_Low-Level_TestSpecification.md]( docs/pages/ds-front-panel-display_L2_Low-Level_TestSpecification.md)|
+|12|`DS` Host High-Level Test Spec |`High Level Test Specification` Documentation for `DS` Host module.|[ds-host_High-Level_TestSpecification.md]( docs/pages/ds-host_High-Level_TestSpecification.md)|
+|13|`DS` Host `L2` Low-Level Test Spec |`L2` `Low Level Test Specification` Documentation for `DS` Host module|[ds-host_L2_Low-Level_TestSpecification.md]( docs/pages/ds-host_L2_Low-Level_TestSpecification.md)|
+|14|`DS` HDMI Input High-Level Test Spec |`High Level Test Specification` Documentation for `DS` HDMI Input module.|[ds-hdmi-in-High-Level_TestSpec.md]( docs/pages/ds-hdmi-in-High-Level_TestSpec.md)|
+|15|`DS` HDMI Input `L2` Low-Level Test Spec |`L2` `Low Level Test Specification` Documentation for `DS` HDMI Input module|[ds-hdmi-in-L2-Low-Level_TestSpec.md]( docs/pages/ds-hdmi-in-L2-Low-Level_TestSpec.md)|
+|16|`DS` Composite Input High-Level Test Spec |`High Level Test Specification` Documentation for `DS` Composite Input module.|[ds-compositeIn-High-Level_TestSpec.md]( docs/pages/ds-compositeIn-High-Level_TestSpec.md)|
+|17|`DS` Composite Input `L2` Low-Level Test Spec |`L2` `Low Level Test Specification` Documentation for `DS` Composite Input module|[ds-compositeIn-L2-Low-Level_TestSpec.md]( docs/pages/ds-compositeIn-L2-Low-Level_TestSpec.md)|
 
 ## Notes
 
 - All APIs in each individual sub-module need to be implemented in this current version. If any API is not supported, please add stub implementation with return type dsERR_OPERATION_NOT_SUPPORTED for the same.
 - Building against the actual library may introduce SOC dependencies. Hence, a template SKELETON library is created without SOC dependencies. On the real platform (target), it can be mounted, copied and bound with the actual library.
-- The configuration/settings file(s) for certain `DS` sub-modules, specific to a platform (templates in [DS HAL README.md](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/docs/pages/README.md "DS HAL README.md")), should be added in the `profiles/include` directory within the root directory of the DS HAL Test repository.
-- When running the binary, remember to include a profile file as an argument for designated test cases. The following example illustrates this: `./hal_test -p deviceSettingsExtendedEnumsNotSupported.yaml`
-- Profiles file available in [profile yaml file](./profiles/deviceSettingsExtendedEnumsNotSupported.yaml)
+- The configuration/settings file(s) for certain `DS` sub-modules, specific to a platform (templates in [DS HAL README.md](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/docs/pages/README.md "DS HAL README.md")), should be added in the `profiles/include` directory within the root directory of the DS HAL Test repository for compilation.
+- `L1` test cases currently use the setting file to configure platform capabilities during the test. This functionality will be migrated to use test profiles in YAML format in upcoming releases.
+- `L2` test cases already use test profiles in YAML format to configure platform capabilities during the test.
+- When running the binary, remember to include a profile file as an argument for designated test cases. The following example illustrates this: `./hal_test -p Sink_AudioSettings.yaml`
+- Profiles files defines the configuration for the platform available for sink and source [profile yaml file](./profiles/)
+
+## known issues
+
+- `L1` code may generate compilation warnings due to the removal of `APIs` from a header file. These warnings are caused by deprecated `APIs` and will not affect functionality. They will be resolved in the next release.

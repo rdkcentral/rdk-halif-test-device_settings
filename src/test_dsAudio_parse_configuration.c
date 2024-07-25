@@ -42,25 +42,26 @@
  */
 
 /**
- * @addtogroup Device_Settings_PARSE_CONFIG Device Settings HAL Tests parse configuraion File
+ * @defgroup DS_Audio_HALTEST Device Settings Audio HAL Tests
  * @{
  */
 
 /**
- * @defgroup Device_Settings_DS_AUDIO_PARSE_CONFIG Device Settings HAL Tests audio parse configuraion File
+ * @defgroup DS_Audio_HALTEST_PARSE_CONFIG Device Settings Audio Parse Config File
  * @{
  * @parblock
  *
- * ### Audio Parse configuraion functions for Device Settings HAL :
+ * ### Configuration file for DS Audio test suit :
  *
- * Parse configuraion functions required for the module across all vendors.
+ *  DS Audio Parse Configuration file
  *
- * **Pre-Conditions:**  None @n
- * **Dependencies:** None @n
+ * **Pre-Conditions:**  None@n
+ * **Dependencies:** None@n
+ *
  *
  * @endparblock
- *
  */
+
 
 /**
 * @file test_dsAudio_parse_configuration.c
@@ -74,7 +75,7 @@
 #include "dsAudio.h"
 #include "test_parse_configuration.h"
 
-/* Global Vairables */
+/* Global variables */
 dsAudioPortConfiguration_t* gDSAudioPortConfiguration   = NULL;
 char gDSAudioDeviceName[DS_AUDIO_DEVICE_NAME_SIZE]      = {0};
 int32_t gDSAudioNumberOfPorts = 0;
@@ -188,8 +189,8 @@ void test_dsAudio_parse_configuration_term()
     }
 }
 
-/** @} */ // End of Device_Settings_DS_AUDIO_PARSE_CONFIG
-/** @} */ // End of Device_Settings_PARSE_CONFIG
+/** @} */ // End of DS_HALTEST_PARSE_CONFIG_AUDIO
+/** @} */ // End of Device_Settings_HALTEST_PARSE_CONFIG
 /** @} */ // End of Device_Settings_HALTEST
 /** @} */ // End of Device_Settings
 /** @} */ // End of HPK
