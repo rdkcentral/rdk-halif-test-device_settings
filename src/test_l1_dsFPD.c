@@ -85,7 +85,7 @@ static int gTestID = 1;
 /* Global flags to support features */
 static bool extendedEnumsSupported=false; //Default to not supported
 
-#define INDICATOR_COLORS_SIZE_1 (sizeof(kIndicatorColors) / sizeof(dsFPDColorConfig_t))
+#define INDICATOR_COLORS_SIZE_1 (sizeof(kIndicatorColors_1)/sizeof(dsFPDColorConfig_t))
 #define INDICATOR_COLORS_SIZE_2 (sizeof(kIndicatorColors_2)/sizeof(dsFPDColorConfig_t))
 #define INDICATOR_COLORS_SIZE_3 (sizeof(kIndicatorColors_3)/sizeof(dsFPDColorConfig_t))
 
@@ -542,7 +542,7 @@ void test_l1_dsFPD_negative_dsSetFPBlink (void)
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
         result = dsSetFPBlink(kIndicators[i].id, 500, 10);
-	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     }
 
     // Variation 02: Initialize with dsFPInit()
@@ -567,8 +567,7 @@ void test_l1_dsFPD_negative_dsSetFPBlink (void)
 
     // Variation 06: Pass an invalid eIndicator parameter to dsSetFPBlink()
     result = dsSetFPBlink(dsFPD_INDICATOR_MAX, 500, 10);
-         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
-
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Variation 07: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
     disableFPDIndicators();
@@ -588,8 +587,7 @@ void test_l1_dsFPD_negative_dsSetFPBlink (void)
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
         result = dsSetFPBlink(kIndicators[i].id, 500, 10);
-	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
-
+        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     }
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
@@ -687,8 +685,7 @@ void test_l1_dsFPD_negative_dsSetFPBrightness (void)
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
         result = dsSetFPBrightness(kIndicators[i].id, 50);
-	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
-
+        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     }
 
     // Variation 02: Initialize with dsFPInit()
@@ -710,7 +707,6 @@ void test_l1_dsFPD_negative_dsSetFPBrightness (void)
     result = dsSetFPBrightness(dsFPD_INDICATOR_MAX, 50);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     
-
     // Variation 06: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
@@ -734,7 +730,6 @@ void test_l1_dsFPD_negative_dsSetFPBrightness (void)
     {
         result = dsSetFPBrightness(kIndicators[i].id, 50);
         CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
-
     }
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
@@ -846,7 +841,7 @@ void test_l1_dsFPD_negative_dsGetFPBrightness (void)
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
          result = dsGetFPBrightness(kIndicators[i].id, &brightness);
-	 CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+         CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     }
 
     // Step 02: Initialize with dsFPInit()
@@ -892,7 +887,7 @@ void test_l1_dsFPD_negative_dsGetFPBrightness (void)
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
         result = dsGetFPBrightness(kIndicators[i].id, &brightness);
-	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     }
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
@@ -996,8 +991,7 @@ void test_l1_dsFPD_negative_dsGetFPState (void)
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
         result = dsGetFPState(kIndicators[i].id, &state);
-	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
-       
+        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     }
 
     // Step 02: Initialize with dsFPInit()
@@ -1043,7 +1037,6 @@ void test_l1_dsFPD_negative_dsGetFPState (void)
     {
         result = dsGetFPState(kIndicators[i].id, &state);
         CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
-
     }
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
@@ -1152,7 +1145,7 @@ void test_l1_dsFPD_negative_dsSetFPColor (void)
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
         result = dsSetFPColor(kIndicators[i].id, dsFPD_COLOR_WHITE);
-	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     }
 
     // Step 02: Initialize with dsFPInit()
@@ -1317,7 +1310,7 @@ void test_l1_dsFPD_negative_dsGetFPColor (void)
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
         result = dsGetFPColor(kIndicators[i].id, &retrievedColor);
-	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     }
 
     // Step 02: Initialize with dsFPInit()
@@ -1357,7 +1350,7 @@ void test_l1_dsFPD_negative_dsGetFPColor (void)
     for (int i = 0; i < sizeof(kIndicators) / sizeof(kIndicators[0]); ++i)
     {
         result = dsGetFPColor(kIndicators[i].id, &retrievedColor);
-	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     }
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
@@ -1380,7 +1373,8 @@ void test_l1_dsFPD_negative_dsGetFPColor (void)
  * |01|Initialize using dsFPInit()||dsERR_NONE|Ensure the system is initialized|
  * |02|Call dsSetFPDMode() and loop through all valid values in dsFPDMode_t|eMode: [Valid Mode]|dsERR_NONE|API should set mode successfully|
  * |03|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
- * 
+ *
+ * @note This test case is deprecated. 
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsSetFPDMode (void)
@@ -1427,6 +1421,7 @@ void test_l1_dsFPD_positive_dsSetFPDMode (void)
  * |04|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |05|Call dsSetFPDMode() after termination|eMode: dsFPD_MODE_ANY|dsERR_NOT_INITIALIZED|API should not work after termination|
  * 
+ * @note This test case is deprecated.
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsSetFPDMode (void)
@@ -1481,6 +1476,7 @@ void test_l1_dsFPD_negative_dsSetFPDMode (void)
  * |07|Call dsSetFPTime() with valid parameters for 12-hour format|eTimeFormat: dsFPD_TIME_12_HOUR, uHour: 2, uMinutes: 30|dsERR_NONE|Check the function in 12-hour format|
  * |08|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
+ * @note This test case is deprecated.
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsSetFPTime (void)
@@ -1556,6 +1552,7 @@ void test_l1_dsFPD_positive_dsSetFPTime (void)
  * |16|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |17|Call dsSetFPTime() after termination|eTimeFormat: dsFPD_TIME_24_HOUR, uHour: 14, uMinutes: 30|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
+ * @note This test case is deprecated.
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsSetFPTime (void)
@@ -1651,6 +1648,7 @@ void test_l1_dsFPD_negative_dsSetFPTime (void)
  * |05|Call dsSetFPText() with valid text|pText: "HELLO"|dsERR_NONE|Check the function with valid text|
  * |06|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
+ * @note This test case is deprecated.
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsSetFPText (void)
@@ -1714,6 +1712,7 @@ void test_l1_dsFPD_positive_dsSetFPText (void)
  * |12|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |13|Call dsSetFPText() after termination|pText: "HELLO"|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
+ * @note This test case is deprecated.
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsSetFPText (void)
@@ -1798,6 +1797,7 @@ void test_l1_dsFPD_negative_dsSetFPText (void)
  * |05|Call dsSetFPTextBrightness() with valid eIndicator and eBrightness|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: 70|dsERR_NONE|Check the function with valid parameters|
  * |06|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
+ * @note This test case is deprecated.
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsSetFPTextBrightness(void)
@@ -1861,6 +1861,7 @@ void test_l1_dsFPD_positive_dsSetFPTextBrightness(void)
  * |12|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |13|Call dsSetFPTextBrightness() after termination|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: 70|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
+ * @note This test case is deprecated.
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsSetFPTextBrightness(void)
@@ -1944,6 +1945,7 @@ void test_l1_dsFPD_negative_dsSetFPTextBrightness(void)
  * |05|Compare the results from step 3/4 and make sure they're the same||Success|The values should be the same|
  * |06|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
+ * @note This test case is deprecated.
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsGetFPTextBrightness(void)
@@ -1997,6 +1999,7 @@ void test_l1_dsFPD_positive_dsGetFPTextBrightness(void)
  * |05|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |06|Call dsGetFPTextBrightness() after termination|eIndicator: dsFPD_TEXTDISP_TEXT, eBrightness: Pointer to brightness variable|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
+ * @note This test case is deprecated.
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsGetFPTextBrightness(void)
@@ -2032,8 +2035,6 @@ void test_l1_dsFPD_negative_dsGetFPTextBrightness(void)
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
-
-
 /**
  * @brief Ensure dsFPEnableCLockDisplay() correctly enables/disables the clock display
  *  
@@ -2058,6 +2059,7 @@ void test_l1_dsFPD_negative_dsGetFPTextBrightness(void)
  * |07|Disable clock display using dsFPEnableCLockDisplay()|enable: 0|dsERR_NONE|Validate that clock display can be disabled|
  * |08|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
+ * @note This test case is deprecated.
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsFPEnableCLockDisplay(void)
@@ -2129,6 +2131,7 @@ void test_l1_dsFPD_positive_dsFPEnableCLockDisplay(void)
  * |11|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |12|Call dsFPEnableCLockDisplay() after termination|enable: 1|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
+ * @note This test case is deprecated.
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsFPEnableCLockDisplay(void)
@@ -2209,6 +2212,7 @@ void test_l1_dsFPD_negative_dsFPEnableCLockDisplay(void)
  * |05|Call dsSetFPScroll() with minimum valid parameters for quick scrolling|uScrollHoldOnDur: 100, uHorzScrollIterations: 0, uVertScrollIterations: 1|dsERR_NONE|Quick horizontal scrolling should occur on the display|
  * |06|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
+ * @note This test case is deprecated.
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsSetFPScroll(void)
@@ -2269,6 +2273,7 @@ void test_l1_dsFPD_positive_dsSetFPScroll(void)
  * |05|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |06|Call dsSetFPScroll() after termination|uScrollHoldOnDur: 1000, uHorzScrollIterations: 5, uVertScrollIterations: 0|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
+ * @note This test case is deprecated.
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsSetFPScroll(void)
@@ -2327,6 +2332,7 @@ void test_l1_dsFPD_negative_dsSetFPScroll(void)
  * |07|Call dsSetFPTimeFormat() with a valid 24-hour format|eTimeFormat: dsFPD_TIME_24_HOUR|dsERR_NONE|Attempt to set time in 24-hour format|
  * |08|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
+ * @note This test case is deprecated.
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsSetFPTimeFormat(void)
@@ -2396,6 +2402,7 @@ void test_l1_dsFPD_positive_dsSetFPTimeFormat(void)
  * |10|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |11|Call dsSetFPTimeFormat() after termination|eTimeFormat: dsFPD_TIME_24_HOUR|dsERR_NOT_INITIALIZED|API should not work after termination|
  * 
+ * @note This test case is deprecated.
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsSetFPTimeFormat(void)
@@ -2472,7 +2479,8 @@ void test_l1_dsFPD_negative_dsSetFPTimeFormat(void)
  * |05|Call dsGetFPTimeFormat() to retrieve the new time format|dsFPDTimeFormat_t*|dsERR_NONE|Should get the newly set time format|
  * |06|Compare the results to make sure the returned values are the same||Success|The values should be the same|
  * |07|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
- * 
+ *
+ * @note This test case is deprecated.
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_positive_dsGetFPTimeFormat(void)
@@ -2538,6 +2546,7 @@ void test_l1_dsFPD_positive_dsGetFPTimeFormat(void)
  * |08|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |09|Call dsGetFPTimeFormat() after termination|dsFPDTimeFormat_t*|dsERR_NOT_INITIALIZED|API should not work after termination|
  * 
+ * @note This test case is deprecated.
  * @note Valid indicators can retrieved from id element in kIndicators in the dsFPDSettings.h file
  */
 void test_l1_dsFPD_negative_dsGetFPTimeFormat(void)
@@ -2922,7 +2931,9 @@ void test_l1_dsFPD_negative_dsFPGetLEDState(void)
 }
 
 static UT_test_suite_t * pSuite = NULL;
+#if 0
 static UT_test_suite_t * pSuite7Segment = NULL;
+#endif
 
 /**
  * @brief Register the main test(s) for this module
@@ -2932,22 +2943,26 @@ static UT_test_suite_t * pSuite7Segment = NULL;
 int test_l1_dsFPD_register ( void )
 {
 	/* add a suite to the registry */
-	pSuite = UT_add_suite( "[L1 dsFPD]", NULL, NULL );
-    pSuite7Segment = UT_add_suite( "[L1 dsFPD 7Segment]", NULL, NULL );
+        pSuite = UT_add_suite( "[L1 dsFPD]", NULL, NULL );
+        #if 0
+      	pSuite7Segment = UT_add_suite( "[L1 dsFPD 7Segment]", NULL, NULL );
+        #endif
 	if ( NULL == pSuite )
 	{
 		return -1;
-	}	
-    if ( NULL == pSuite7Segment )
+	}
+        #if 0
+        if ( NULL == pSuite7Segment )
 	{
 		return -1;
 	}	
+        #endif
 
 	UT_add_test( pSuite, "dsFPInit_L1_positive" ,test_l1_dsFPD_positive_dsFPInit );
 	UT_add_test( pSuite, "dsFPInit_L1_negative" ,test_l1_dsFPD_negative_dsFPInit );
-    UT_add_test( pSuite, "dsFPTerm_L1_positive" ,test_l1_dsFPD_positive_dsFPTerm );
+        UT_add_test( pSuite, "dsFPTerm_L1_positive" ,test_l1_dsFPD_positive_dsFPTerm );
 	UT_add_test( pSuite, "dsFPTerm_L1_negative" ,test_l1_dsFPD_negative_dsFPTerm );
-    UT_add_test( pSuite, "dsSetFPState_L1_positive" ,test_l1_dsFPD_positive_dsSetFPState );
+        UT_add_test( pSuite, "dsSetFPState_L1_positive" ,test_l1_dsFPD_positive_dsSetFPState );
 	UT_add_test( pSuite, "dsSetFPState_L1_negative" ,test_l1_dsFPD_negative_dsSetFPState );
 	UT_add_test( pSuite, "dsSetFPBlink_L1_positive" ,test_l1_dsFPD_positive_dsSetFPBlink );
 	UT_add_test( pSuite, "dsSetFPBlink_L1_negative" ,test_l1_dsFPD_negative_dsSetFPBlink );
@@ -2961,17 +2976,16 @@ int test_l1_dsFPD_register ( void )
 	UT_add_test( pSuite, "dsSetFPColor_L1_negative" ,test_l1_dsFPD_negative_dsSetFPColor );
 	UT_add_test( pSuite, "dsGetFPColor_L1_positive" ,test_l1_dsFPD_positive_dsGetFPColor );
 	UT_add_test( pSuite, "dsGetFPColor_L1_negative" ,test_l1_dsFPD_negative_dsGetFPColor );
-    UT_add_test( pSuite, "dsFPSetLEDState_L1_positive" ,test_l1_dsFPD_positive_dsFPSetLEDState );
-	UT_add_test( pSuite, "dsFPGetSupportedLEDStates_L1_positive" ,test_l1_dsFPD_positive_dsFPGetSupportedLEDStates );
-    UT_add_test( pSuite, "dsFPGetSupportedLEDStates_L1_negative" ,test_l1_dsFPD_negative_dsFPGetSupportedLEDStates );
+        UT_add_test( pSuite, "dsFPSetLEDState_L1_positive" ,test_l1_dsFPD_positive_dsFPSetLEDState );
+        UT_add_test( pSuite, "dsFPGetSupportedLEDStates_L1_positive" ,test_l1_dsFPD_positive_dsFPGetSupportedLEDStates );
+        UT_add_test( pSuite, "dsFPGetSupportedLEDStates_L1_negative" ,test_l1_dsFPD_negative_dsFPGetSupportedLEDStates );
 	UT_add_test( pSuite, "dsFPSetLEDState_L1_negative" ,test_l1_dsFPD_negative_dsFPSetLEDState );
 	UT_add_test( pSuite, "dsFPGetLEDState_L1_positive" ,test_l1_dsFPD_positive_dsFPGetLEDState );
 	UT_add_test( pSuite, "dsFPGetLEDState_L1_negative" ,test_l1_dsFPD_negative_dsFPGetLEDState );
-	
-
-
-
-    UT_add_test( pSuite7Segment, "dsSetFPDMode_L1_positive" ,test_l1_dsFPD_positive_dsSetFPDMode );
+       
+        /* the LED 7 Segment APIs are now deprecated as the HAL Interfaces are now deprecated */
+        #if 0
+        UT_add_test( pSuite7Segment, "dsSetFPDMode_L1_positive" ,test_l1_dsFPD_positive_dsSetFPDMode );
 	UT_add_test( pSuite7Segment, "dsSetFPDMode_L1_negative" ,test_l1_dsFPD_negative_dsSetFPDMode );
 	UT_add_test( pSuite7Segment, "dsSetFPTime_L1_positive" ,test_l1_dsFPD_positive_dsSetFPTime );
 	UT_add_test( pSuite7Segment, "dsSetFPTime_L1_negative" ,test_l1_dsFPD_negative_dsSetFPTime );
@@ -2989,8 +3003,7 @@ int test_l1_dsFPD_register ( void )
 	UT_add_test( pSuite7Segment, "dsSetFPTimeFormat_L1_negative" ,test_l1_dsFPD_negative_dsSetFPTimeFormat );
 	UT_add_test( pSuite7Segment, "dsGetFPTimeFormat_L1_positive" ,test_l1_dsFPD_positive_dsGetFPTimeFormat );
 	UT_add_test( pSuite7Segment, "dsGetFPTimeFormat_L1_negative" ,test_l1_dsFPD_negative_dsGetFPTimeFormat );
-	
-
+        #endif
         extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsFPD/features/extendedEnumsSupported" );
 
 	return 0;
