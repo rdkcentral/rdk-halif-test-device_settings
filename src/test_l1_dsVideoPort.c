@@ -1240,12 +1240,12 @@ void test_l1_dsVideoPort_positive_dsIsHDCPEnabled(void) {
         // Step 03: Check if HDCP is enabled
         status = dsIsHDCPEnabled(handle, &isHDCPEnabled1);
         // Step 04: Compare the array values with profile values
-        if ((gSourceType == 1)) {
+        if (gSourceType == 1) {
             if (gDSVideoPortConfiguration[i].hdcp_supported == false) {
                 UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
             } else {
                 UT_ASSERT_EQUAL(status, dsERR_NONE);
-                 UT_ASSERT_EQUAL(isHDCPEnabled1, gDSVideoPortConfiguration[i].hdcp_supported);
+                UT_ASSERT_EQUAL(isHDCPEnabled1, gDSVideoPortConfiguration[i].hdcp_supported);
             }
         } else if ((gSourceType == 0)) {
             UT_ASSERT_EQUAL(status, dsERR_NONE);
