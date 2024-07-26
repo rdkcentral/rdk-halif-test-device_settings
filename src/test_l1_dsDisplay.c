@@ -78,6 +78,7 @@
 #include <ut_kvp_profile.h>
 #include "stdint.h"
 #include "dsDisplay.h"
+#include "test_parse_configuration.h"
 
 static int gTestGroup = 1;
 static int gTestID = 1;
@@ -127,22 +128,22 @@ void test_l1_dsDisplay_positive_dsDisplayInit(void) {
     // Step 01: Initialize the display module
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 02: Terminate the display module
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 03: Reinitialize the display module to check for reinitialization capability
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 04: Terminate the display module again
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -179,7 +180,7 @@ void test_l1_dsDisplay_negative_dsDisplayInit(void) {
     // Step 01: Initialize the display module
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 02: Attempt to initialize the display module again
     result = dsDisplayInit();
@@ -189,7 +190,7 @@ void test_l1_dsDisplay_negative_dsDisplayInit(void) {
     // Step 03: Terminate the display module
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -226,22 +227,22 @@ void test_l1_dsDisplay_positive_dsDisplayTerm(void) {
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 02: Terminate the display sub-system
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 03: Reinitialize the display sub-system to check for reinitialization
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 04: Terminate the display sub-system again to confirm termination capability
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -283,12 +284,12 @@ void test_l1_dsDisplay_negative_dsDisplayTerm(void) {
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 03: Terminate the display sub-system
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 04: Call dsDisplayTerm() again after termination
     result = dsDisplayTerm();
@@ -331,21 +332,22 @@ void test_l1_dsDisplay_positive_dsGetDisplay(void) {
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
-    uint32_t videoPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
     for (size_t i = 0; i < numPorts; i++) {
-        uint32_t vType = videoPorts;
+	char key_str[64];
+	snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
+	uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
         UT_LOG("\n In %s Port Type: [%d]\n", __FUNCTION__, vType);
     
         // Step 02: Call dsGetDisplay() for each valid port
-        result = dsGetDisplay(vType, 0, &displayHandle1);
+        result = dsGetDisplay(vType, i, &displayHandle1);
         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_LOG("Display handle for port type %d: %ld\n", vType, (long)displayHandle1);
 
         // Step 03: Call the last value again, and compare the results
-        result = dsGetDisplay(vType, 0, &displayHandle2);
+        result = dsGetDisplay(vType, i, &displayHandle2);
         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, displayHandle1, displayHandle2);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_LOG("\n In %s Comparison: [%d = %d]\n", __FUNCTION__, result);
@@ -356,7 +358,7 @@ void test_l1_dsDisplay_positive_dsGetDisplay(void) {
     // Step 04: Terminate the display sub-system
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -396,7 +398,7 @@ void test_l1_dsDisplay_negative_dsGetDisplay(void) {
     intptr_t displayHandle;
 
     // Step 01: Call dsGetDisplay() without initializing the display sub-system
-    uint32_t vType = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
+    uint32_t vType = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports/0");
     result = dsGetDisplay(vType, 0, &displayHandle);
     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);       
@@ -404,7 +406,7 @@ void test_l1_dsDisplay_negative_dsGetDisplay(void) {
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 03: Call dsGetDisplay() with invalid video type
     result = dsGetDisplay(dsVIDEOPORT_TYPE_MAX, (int)dsVIDEOPORT_TYPE_MAX, &displayHandle);
@@ -424,7 +426,7 @@ void test_l1_dsDisplay_negative_dsGetDisplay(void) {
     // Step 06: Terminate the display sub-system
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 07: Call dsGetDisplay() again after termination
     result = dsGetDisplay(vType, 0, &displayHandle);
@@ -472,15 +474,17 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
-    
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
+
     // Loop through all valid ports
     uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
-    uint32_t videoPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
     for (size_t i = 0; i < numPorts; i++) {
-        uint32_t vType = videoPorts;
+        char key_str[64];
+	snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
+	uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
+
         // Step 02: Get the display device handle
-        result = dsGetDisplay(vType, 0, &displayHandle);
+        result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 03: Call dsGetEDID() with the obtained handle
@@ -509,7 +513,7 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
     // Step 06: Terminate the display sub-system
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -558,14 +562,15 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 03: Obtain a display device handle
     uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
-    uint32_t videoPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
     for (size_t i = 0; i < numPorts; i++) {
-        uint32_t vType = videoPorts;
-        result = dsGetDisplay(vType, 0, &displayHandle);
+        char key_str[64];
+        snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
+        uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
+        result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 04: Call dsGetEDID() with an invalid handle
@@ -580,7 +585,7 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
     // Step 06: Terminate the display sub-system
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 07: Call dsGetEDID() without initializing the display sub-system
     result = dsGetEDID(displayHandle, edid);
@@ -622,44 +627,42 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
 
     int result;
     intptr_t displayHandle;
-    unsigned char *edid1 = (unsigned char *)malloc(512);
-    unsigned char *edid2 = (unsigned char *)malloc(512);
+    unsigned char *edid1 = NULL;
+    unsigned char *edid2 = NULL;
     int length1 = 0;
 
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
+    edid1 = (unsigned char *)malloc(512);
+    edid2 = (unsigned char *)malloc(512);
 
     // Step 02: Call dsGetDisplay() for each valid port
     uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
-    uint32_t videoPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
     for (size_t i = 0; i < numPorts; i++) {
-        uint32_t vType = videoPorts;
-        result = dsGetDisplay(vType, 0, &displayHandle);
-        if(result != dsERR_NONE)
+        char key_str[64];
+	snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
+	uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
+	result = dsGetDisplay(vType, i, &displayHandle);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+	if(result != dsERR_NONE)
         {
             UT_FAIL("Failed to get display handle");
-            return;
         }
 
         // Step 03 and 04: Allocate memory for the EDID buffer and call dsGetEDIDBytes() twice
-        result = dsGetEDIDBytes(displayHandle, edid1, &length1);
-        UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-        if(result != dsERR_NONE)
+        result = dsGetEDIDBytes(displayHandle, edid1, &length1); 
+	UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+	if(result != dsERR_NONE)
         {
             UT_FAIL("Failed to get EDID Bytes");
-            return;
         }
 
         // Step 05: Verify that the return results are the same
         UT_ASSERT_KVP_EQUAL_PROFILE_UINT32(length1, "dsDisplay/EDID_Data/edidbytesLength");
         UT_ASSERT_EQUAL(memcmp(edid1, edid2, length1), 0);
-        if(memcmp(edid1, edid2, length1) != 0)
-        {
-            UT_FAIL("Invalid EDID Bytes");
-            return;
-        }  
     }
     free(edid1);
     free(edid2);
@@ -667,7 +670,7 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
     // Step 06: Terminate the display sub-system
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -706,7 +709,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
 
     int result;
     intptr_t displayHandle =-1;
-    unsigned char *edid = (unsigned char *)malloc(512);
+    unsigned char *edid = NULL;
     int length = 0;
 
     // Step 01: Call dsGetEDIDBytes() without initializing or obtaining a handle
@@ -717,65 +720,45 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    if(result != dsERR_NONE)
-    {
-        UT_FAIL("Init has failed");
-        free(edid);
-        return;
-    }
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
+
+    // Allocate buffer for edid after successful initialization
+    edid = (unsigned char *)malloc(512);
 
     // Step 03: Obtain the display handle with valid port
     uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
-    uint32_t videoPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
     for (size_t i = 0; i < numPorts; i++) {
-        uint32_t vType = videoPorts;
-        result = dsGetDisplay(vType, 0, &displayHandle);
+        char key_str[64];
+        snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
+        uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
+        result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        if(result != dsERR_NONE)
-        {
-            UT_FAIL("Failed to get displayHandle");
-            return;
-        }
 
         // Step 04: Call dsGetEDIDBytes() with an invalid handle
         result = dsGetEDIDBytes((intptr_t)NULL, edid, &length);
-        if(result != dsERR_INVALID_PARAM)
-        {
-            UT_FAIL("Incorrect error return");
-            return;
-        }
+        UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
+	UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
         // Step 05: Call dsGetEDIDBytes() with null edid
         result = dsGetEDIDBytes(displayHandle, NULL, &length);
-        if(result != dsERR_INVALID_PARAM)
-        {
-            UT_FAIL("Incorrect error return");
-            return;
-        }  
+        UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
+	UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
         // Step 06: Call dsGetEDIDBytes() with null length
         result = dsGetEDIDBytes(displayHandle, edid, NULL);
-        if(result != dsERR_INVALID_PARAM)
-        {
-            UT_FAIL("Incorrect error return");
-            return;
-        }
+        UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
+	UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     }
-    
+
     // Step 07: Terminate the display sub-system
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    if(result != dsERR_NONE)
-    {
-        UT_FAIL("Term has failed");
-        free(edid);
-        return;
-    }
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 08: Call dsGetEDIDBytes() without initializing or obtaining a handle
-     result = dsGetEDIDBytes(displayHandle, edid, &length);
-     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
-
+    result = dsGetEDIDBytes(displayHandle, edid, &length);
+    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    free(edid);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     
     // End of the test
@@ -817,20 +800,21 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 02: Obtain display handle with valid port
     uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
-    uint32_t videoPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
     for (size_t i = 0; i < numPorts; i++) {
-        uint32_t vType = videoPorts;
-        result = dsGetDisplay(vType, 0, &displayHandle);
+        char key_str[64];
+        snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
+	uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
+        result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 03: Call dsGetDisplayAspectRatio() with the obtained handle
         result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio1);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
- 
+
         // Step 04: Call dsGetDisplayAspectRatio() again with the same handle
         result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio2);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -842,7 +826,7 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
     // Step 06: Terminate the display sub-system
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -891,14 +875,15 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 03: Obtain the display handle with valid port
     uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
-    uint32_t videoPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
     for (size_t i = 0; i < numPorts; i++) {
-        uint32_t vType = videoPorts;
-        result = dsGetDisplay(vType, 0, &displayHandle);
+        char key_str[64];
+        snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
+        uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
+        result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 04: Call dsGetDisplayAspectRatio() with an invalid handle
@@ -913,7 +898,7 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
     // Step 06: Terminate the display sub-system
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 07: Call dsGetDisplayAspectRatio() without initializing the display sub-system
     result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio);
@@ -959,14 +944,15 @@ void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback(void) {
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 02: Loop through all valid ports in kSupportedPortTypes
     uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
-    uint32_t videoPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
     for (size_t i = 0; i < numPorts; i++) {
-        uint32_t vType = videoPorts;
-        result = dsGetDisplay(vType, 0, &displayHandle);
+        char key_str[64];
+        snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
+        uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
+        result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 03: Call dsRegisterDisplayEventCallback() with the obtained handle and a valid callback function
@@ -977,7 +963,7 @@ void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback(void) {
     // Step 04: Terminate the display sub-system
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -1022,14 +1008,15 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 03: Obtain the display handle with valid port
     uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
-    uint32_t videoPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports");
     for (size_t i = 0; i < numPorts; i++) {
-        uint32_t vType = videoPorts;
-        result = dsGetDisplay(vType, 0, &displayHandle);
+        char key_str[64];
+        snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
+        uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
+        result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Call dsRegisterDisplayEventCallback() with a NULL handle
@@ -1044,7 +1031,7 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
     // Step 05: Terminate the display sub-system
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 06: Call dsRegisterDisplayEventCallback() without reinitializing the display sub-system
     result = dsRegisterDisplayEventCallback(displayHandle, testDisplayCallback);
