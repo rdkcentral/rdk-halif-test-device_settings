@@ -335,9 +335,9 @@ void test_l1_dsDisplay_positive_dsGetDisplay(void) {
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
     for (size_t i = 0; i < numPorts; i++) {
-	char key_str[64];
-	snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
-	uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
+        char key_str[64];
+        snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
+        uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
         UT_LOG("\n In %s Port Type: [%d]\n", __FUNCTION__, vType);
     
         // Step 02: Call dsGetDisplay() for each valid port
@@ -480,8 +480,8 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
     uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
     for (size_t i = 0; i < numPorts; i++) {
         char key_str[64];
-	snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
-	uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
+        snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
+        uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
 
         // Step 02: Get the display device handle
         result = dsGetDisplay(vType, i, &displayHandle);
@@ -642,20 +642,20 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
     uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
     for (size_t i = 0; i < numPorts; i++) {
         char key_str[64];
-	snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
-	uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
-	result = dsGetDisplay(vType, i, &displayHandle);
+        snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
+        uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
+        result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-	if(result != dsERR_NONE)
+        if(result != dsERR_NONE)
         {
             UT_FAIL("Failed to get display handle");
         }
 
         // Step 03 and 04: Allocate memory for the EDID buffer and call dsGetEDIDBytes() twice
         result = dsGetEDIDBytes(displayHandle, edid1, &length1); 
-	UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
+        UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-	if(result != dsERR_NONE)
+        if(result != dsERR_NONE)
         {
             UT_FAIL("Failed to get EDID Bytes");
         }
@@ -737,17 +737,17 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
         // Step 04: Call dsGetEDIDBytes() with an invalid handle
         result = dsGetEDIDBytes((intptr_t)NULL, edid, &length);
         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-	UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
         // Step 05: Call dsGetEDIDBytes() with null edid
         result = dsGetEDIDBytes(displayHandle, NULL, &length);
         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-	UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
         // Step 06: Call dsGetEDIDBytes() with null length
         result = dsGetEDIDBytes(displayHandle, edid, NULL);
         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-	UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     }
 
     // Step 07: Terminate the display sub-system
@@ -807,7 +807,7 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
     for (size_t i = 0; i < numPorts; i++) {
         char key_str[64];
         snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
-	uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
+        uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
         result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -1076,7 +1076,7 @@ int test_l1_dsDisplay_register ( void )
 	UT_add_test( pSuite, "dsRegisterDisplayEventCallback_L1_positive" ,test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback );
 	UT_add_test( pSuite, "dsRegisterDisplayEventCallback_L1_negative" ,test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback );
 
-      extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsDisplay/features/extendedEnumsSupported" );	
+        extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsDisplay/features/extendedEnumsSupported" );	
 
 	return 0;
 } 
