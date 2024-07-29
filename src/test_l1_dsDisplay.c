@@ -78,7 +78,6 @@
 #include <ut_kvp_profile.h>
 #include "stdint.h"
 #include "dsDisplay.h"
-#include "test_parse_configuration.h"
 
 static int gTestGroup = 1;
 static int gTestID = 1;
