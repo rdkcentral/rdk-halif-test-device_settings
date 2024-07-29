@@ -823,6 +823,7 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
             UT_ASSERT_EQUAL(aspectRatio1, aspectRatio2);
         } else if(source_type == 0){
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
     }
 
     // Step 06: Terminate the display sub-system
