@@ -811,15 +811,18 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 03: Call dsGetDisplayAspectRatio() with the obtained handle
-        result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio1);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+        if(source_type == 1){
+            result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio1);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-        // Step 04: Call dsGetDisplayAspectRatio() again with the same handle
-        result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio2);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+            // Step 04: Call dsGetDisplayAspectRatio() again with the same handle
+            result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio2);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-        // Step 05: Compare the results
-        UT_ASSERT_EQUAL(aspectRatio1, aspectRatio2);
+            // Step 05: Compare the results
+            UT_ASSERT_EQUAL(aspectRatio1, aspectRatio2);
+        } else if(source_type == 0){
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     }
 
     // Step 06: Terminate the display sub-system
@@ -1043,7 +1046,6 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
 
 
 static UT_test_suite_t * pSuite = NULL;
-static UT_test_suite_t * pSuite2 = NULL;
 
 /**
  * @brief Register the main test(s) for this module
@@ -1054,8 +1056,7 @@ int test_l1_dsDisplay_register ( void )
 {
     /* add a suite to the registry */
     pSuite = UT_add_suite( "[L1 dsDisplay]", NULL, NULL );
-    pSuite2 = UT_add_suite( "[L1 dsDisplay -- advanced]", NULL, NULL );
-    if ( NULL == pSuite || NULL == pSuite2 )
+    if ( NULL == pSuite)
     {
         return -1;
     }	
@@ -1068,7 +1069,7 @@ int test_l1_dsDisplay_register ( void )
     UT_add_test( pSuite, "dsGetDisplay_L1_negative" ,test_l1_dsDisplay_negative_dsGetDisplay );
     UT_add_test( pSuite, "dsGetEDID_L1_positive" ,test_l1_dsDisplay_positive_dsGetEDID );
     UT_add_test( pSuite, "dsGetEDID_L1_negative" ,test_l1_dsDisplay_negative_dsGetEDID );
-    UT_add_test( pSuite2, "dsGetEDIDBytes_L1_positive" ,test_l1_dsDisplay_positive_dsGetEDIDBytes );
+    UT_add_test( pSuite, "dsGetEDIDBytes_L1_positive" ,test_l1_dsDisplay_positive_dsGetEDIDBytes );
     UT_add_test( pSuite, "dsGetEDIDBytes_L1_negative" ,test_l1_dsDisplay_negative_dsGetEDIDBytes );
     UT_add_test( pSuite, "dsGetDisplayAspectRatio_L1_positive" ,test_l1_dsDisplay_positive_dsGetDisplayAspectRatio );
     UT_add_test( pSuite, "dsGetDisplayAspectRatio_L1_negative" ,test_l1_dsDisplay_negative_dsGetDisplayAspectRatio );
