@@ -78,6 +78,7 @@
 #include <ut_kvp_profile.h>
 #include "stdint.h"
 #include "dsDisplay.h"
+#include "test_parse_configuration.h"
 
 static int gTestGroup = 1;
 static int gTestID = 1;
@@ -781,9 +782,8 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
  * |01|Initialize the display sub-system and get a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
  * |02|Call dsGetDisplay() Loop through all valid ports in numPorts[]|vType: [Valid Port Type]_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
  * |03|Call dsGetDisplayAspectRatio() with the obtained display device handle | intptr_t handle, dsVideoAspectRatio_t *aspectRatio | dsERR_NONE and valid aspect ratio | Aspect ratio of the display device should be retrieved successfully |
- * |04|Call dsGetDisplayAspectRatio() with the obtained display device handle | intptr_t handle, dsVideoAspectRatio_t *aspectRatio | dsERR_NONE and valid aspect ratio | Aspect ratio of the display device should be retrieved successfully |
- * |05|Compare the results, and make sure the returned values are the same |  | Success | The values should be the same |
- * |06|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
+ * |04|Compare the results with the value from the profile, and make sure the returned values are the same |  | Success | The values should be the same |
+ * |05|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
  * 
  */
 void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
@@ -793,8 +793,7 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
 
     int result;
     intptr_t displayHandle;
-    dsVideoAspectRatio_t aspectRatio1 = dsVIDEO_ASPECT_RATIO_MAX;
-    dsVideoAspectRatio_t aspectRatio2 = dsVIDEO_ASPECT_RATIO_MAX;
+    dsVideoAspectRatio_t aspectRatio = dsVIDEO_ASPECT_RATIO_MAX;
 
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
@@ -811,22 +810,18 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 03: Call dsGetDisplayAspectRatio() with the obtained handle
-        if(source_type == 1){
-            result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio1);
+        if(gSourceType == 1){
+            result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio);
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-            // Step 04: Call dsGetDisplayAspectRatio() again with the same handle
-            result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio2);
-            UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-            // Step 05: Compare the results
-            UT_ASSERT_EQUAL(aspectRatio1, aspectRatio2);
-        } else if(source_type == 0){
+            // Step 04: Compare the results with value from the profile
+            UT_ASSERT_KVP_EQUAL_PROFILE_UINT32(aspectRatio, "dsDisplay/Default_Aspect_Ratio");
+        } else if(gSourceType == 0){
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
     }
 
-    // Step 06: Terminate the display sub-system
+    // Step 05: Terminate the display sub-system
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
