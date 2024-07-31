@@ -985,9 +985,9 @@ void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback(void) {
  * |02|Initialize the display sub-system and obtain a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
  * |03|Call dsGetDisplay() Loop through all valid ports in numPorts[]|vType: [Valid Port Type]_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
  * |04|Call dsRegisterDisplayEventCallback() with an NULL handle | NULL, callback function | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
- * |04|Call dsRegisterDisplayEventCallback() with an NULL callback function | Valid handle,  NULL | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
- * |05|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
- * |06|Call dsRegisterDisplayEventCallback() without initializing the display sub-system or obtaining a handle | Valid handle and callback function| dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |05|Call dsRegisterDisplayEventCallback() with an NULL callback function | Valid handle,  NULL | dsERR_INVALID_PARAM | Should return error indicating invalid parameters |
+ * |06|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
+ * |07|Call dsRegisterDisplayEventCallback() without initializing the display sub-system or obtaining a handle | Valid handle and callback function| dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * 
  * @note The ability to test scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might require specific setup or environment configuration.
  */
@@ -1017,21 +1017,21 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
         result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-        // Call dsRegisterDisplayEventCallback() with a NULL handle
+        // Step 04: Call dsRegisterDisplayEventCallback() with a NULL handle
         result = dsRegisterDisplayEventCallback((intptr_t)NULL, testDisplayCallback);
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
-        // Call dsRegisterDisplayEventCallback() with a NULL callback function
+        // Step 05: Call dsRegisterDisplayEventCallback() with a NULL callback function
         result = dsRegisterDisplayEventCallback(displayHandle, NULL);
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     }
 
-    // Step 05: Terminate the display sub-system
+    // Step 06: Terminate the display sub-system
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // Step 06: Call dsRegisterDisplayEventCallback() without reinitializing the display sub-system
+    // Step 07: Call dsRegisterDisplayEventCallback() without reinitializing the display sub-system
     result = dsRegisterDisplayEventCallback(displayHandle, testDisplayCallback);
     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
