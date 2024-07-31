@@ -283,6 +283,7 @@ void test_l1_dsVideoDevice_negative_dsVideoDeviceTerm(void)
 void test_l1_dsVideoDevice_positive_dsGetVideoDevice(void)
 {
     gTestID = 5;
+    intptr_t handle = -1;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     // Step 01: Initialize video devices
@@ -291,10 +292,9 @@ void test_l1_dsVideoDevice_positive_dsGetVideoDevice(void)
 
     // Step 02: Get the video device handle
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
-        intptr_t handle = -1;
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_TRUE(handle >= 0);
+        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
     }
 
     // Step 03: De-initialize the video devices
@@ -376,20 +376,8 @@ void test_l1_dsVideoDevice_negative_dsGetVideoDevice(void)
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
  * |02|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
- * |03|Set the DFC mode using dsSetDFC() with the obtained handle and a valid zoom mode | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_UNKNOWN | dsERR_NONE | Should successfully set the DFC mode |
- * |04|Set the DFC mode using dsSetDFC() with the obtained handle and a valid zoom mode | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_NONE | dsERR_NONE | Should successfully set the DFC mode |
- * |05|Set the DFC mode using dsSetDFC() with the obtained handle and a valid zoom mode | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_FULL | dsERR_NONE | Should successfully set the DFC mode |
- * |06|Set the DFC mode using dsSetDFC() with the obtained handle and a valid zoom mode | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_LB_16_9 | dsERR_NONE | Should successfully set the DFC mode |
- * |07|Set the DFC mode using dsSetDFC() with the obtained handle and a valid zoom mode | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_LB_14_9 | dsERR_NONE | Should successfully set the DFC mode |
- * |08|Set the DFC mode using dsSetDFC() with the obtained handle and a valid zoom mode | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_CCO | dsERR_NONE | Should successfully set the DFC mode |
- * |09|Set the DFC mode using dsSetDFC() with the obtained handle and a valid zoom mode | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_PAN_SCAN | dsERR_NONE | Should successfully set the DFC mode |
- * |10|Set the DFC mode using dsSetDFC() with the obtained handle and a valid zoom mode | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_LB_2_21_1_ON_4_3 | dsERR_NONE | Should successfully set the DFC mode |
- * |11|Set the DFC mode using dsSetDFC() with the obtained handle and a valid zoom mode | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_LB_2_21_1_ON_16_9 | dsERR_NONE | Should successfully set the DFC mode |
- * |12|Set the DFC mode using dsSetDFC() with the obtained handle and a valid zoom mode | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_PLATFORM | dsERR_NONE | Should successfully set the DFC mode |
- * |13|Set the DFC mode using dsSetDFC() with the obtained handle and a valid zoom mode | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_16_9_ZOOM | dsERR_NONE | Should successfully set the DFC mode |
- * |14|Set the DFC mode using dsSetDFC() with the obtained handle and a valid zoom mode | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_PILLARBOX_4_3 | dsERR_NONE | Should successfully set the DFC mode |
- * |15|Set the DFC mode using dsSetDFC() with the obtained handle and a valid zoom mode | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_WIDE_4_3 | dsERR_NONE | Should successfully set the DFC mode |
- * |16|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * |03|Set the DFC mode by looping through the supported zoom modes | int=handle | dsERR_NONE | Should successfully set the DFC mode |
+ * |04|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
  * 
  */
 void test_l1_dsVideoDevice_positive_dsSetDFC (void) 
@@ -408,10 +396,10 @@ void test_l1_dsVideoDevice_positive_dsSetDFC (void)
     for (int i = 0; i < gDSvideoDevice_NumVideoDevices; ++i) {
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_TRUE(handle >= 0);
+        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
         
         if(gSourceType == 1) {
-            // 03-15: Set DFC mode with various zoom modes
+            // 03: Loop through the supported zoom modes
             for (int j = 0; j < gDSVideoDeviceConfiguration[j].NoOfSupportedDFCs; ++j) {
                 result = dsSetDFC(handle, gDSVideoDeviceConfiguration[i].SupportedDFCs[j]);
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -421,7 +409,7 @@ void test_l1_dsVideoDevice_positive_dsSetDFC (void)
         }
     }
 
-    // 16: De-initialize video devices
+    // 04: De-initialize video devices
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("\n Out %s\n", __FUNCTION__); 
@@ -469,7 +457,7 @@ void test_l1_dsVideoDevice_negative_dsSetDFC (void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_TRUE(handle >= 0);
+        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // 04: Call dsSetDFC() with an invalid handle
         result = dsSetDFC(-1, gDSVideoDeviceConfiguration[i].DefaultDFC);
@@ -530,7 +518,7 @@ void test_l1_dsVideoDevice_positive_dsGetDFC(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_EQUAL((handle >= 0), true);
+        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 03: Get the DFC mode using dsGetDFC() with the obtained handle
         if(gSourceType == 1) {
@@ -540,8 +528,6 @@ void test_l1_dsVideoDevice_positive_dsGetDFC(void)
             // Step 04: Get the DFC mode from the profile
             for (int j = 0; j < gDSVideoDeviceConfiguration[j].NoOfSupportedDFCs; ++j) {
                 dsVideoZoom_t dfc_mode = gDSVideoDeviceConfiguration[i].SupportedDFCs[j];
-                int result = dsSetDFC(handle, dfc_mode);
-                UT_ASSERT_EQUAL(result, dsERR_NONE);
 
                 // Step 05: Compare the DFC mode with the value from the profile
                 UT_ASSERT_EQUAL(dfc_mode, gDSVideoDeviceConfiguration[i].SupportedDFCs[j]);
@@ -602,7 +588,7 @@ void test_l1_dsVideoDevice_negative_dsGetDFC(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_EQUAL((handle >= 0), true);
+        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 04: Call dsGetDFC() with an invalid handle
         result = dsGetDFC(-1, &dfc_mode);
@@ -661,7 +647,7 @@ void test_l1_dsVideoDevice_positive_dsGetHDRCapabilities(void)
         result = dsGetVideoDevice(i, &handle);
         UT_LOG("\nHandle: %d\n", handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_EQUAL((handle >= 0), true);
+        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 03: Get HDR capabilities using dsGetHDRCapabilities() with the obtained handle
         result = dsGetHDRCapabilities(handle, &hdr_capabilities);
@@ -722,7 +708,7 @@ void test_l1_dsVideoDevice_negative_dsGetHDRCapabilities(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_EQUAL((handle >= 0), true);
+        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 04: Call dsGetHDRCapabilities() with an invalid handle
         result = dsGetHDRCapabilities(-1, &hdr_capabilities);
@@ -781,7 +767,7 @@ void test_l1_dsVideoDevice_positive_dsGetSupportedVideoCodingFormats(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_EQUAL((handle >= 0), true);
+        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 03: Get supported video formats using dsGetSupportedVideoCodingFormats() with the obtained handle
         result = dsGetSupportedVideoCodingFormats(handle, &supported_formats);
@@ -842,7 +828,7 @@ void test_l1_dsVideoDevice_negative_dsGetSupportedVideoCodingFormats(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_EQUAL((handle >= 0), true);
+        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 04: Call dsGetSupportedVideoCodingFormats() with an invalid handle
         result = dsGetSupportedVideoCodingFormats(-1, &supported_formats);
@@ -897,10 +883,11 @@ void test_l1_dsVideoDevice_positive_dsGetVideoCodecInfo(void)
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 02: Obtain video device handle
+    int j = 1;
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_EQUAL((handle >= 0), true);
+        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
         
         if(gSourceType == 1) {
 	    // Step 03: Iterate over all codecs
@@ -917,6 +904,7 @@ void test_l1_dsVideoDevice_positive_dsGetVideoCodecInfo(void)
                     // Support for float values in KVP
                     UT_ASSERT_EQUAL(codecInfo.entries->level, gDSVideoDeviceConfiguration[i].level);
                 }
+                codec = (0x01 << (j++));
     	    }
         } else if(gSourceType == 0) {
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
@@ -975,7 +963,7 @@ void test_l1_dsVideoDevice_negative_dsGetVideoCodecInfo(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_EQUAL((handle >= 0), true);
+        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 04: Call dsGetVideoCodecInfo() with an invalid handle
         result = dsGetVideoCodecInfo(-1, dsVIDEO_CODEC_MPEGHPART2, &codecInfo);
@@ -1037,7 +1025,7 @@ void test_l1_dsVideoDevice_positive_dsForceDisableHDRSupport(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_EQUAL((handle >= 0), true);
+        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 03: Force disable HDR support (set to true)
         result = dsForceDisableHDRSupport(handle, true);
@@ -1098,7 +1086,7 @@ void test_l1_dsVideoDevice_negative_dsForceDisableHDRSupport(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_EQUAL((handle >= 0), true);
+        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 04: Call dsForceDisableHDRSupport() with an invalid handle
         result = dsForceDisableHDRSupport(-1, true);
@@ -1142,7 +1130,6 @@ void test_l1_dsVideoDevice_positive_dsSetFRFMode(void)
     // Define variables
     int result;
     intptr_t handle = -1;
-    int validFramerate = 60; // This is just a placeholder value; replace with an appropriate value as per your environment.
 
     // Step 01: Initialize video devices
     result = dsVideoDeviceInit();
@@ -1152,15 +1139,18 @@ void test_l1_dsVideoDevice_positive_dsSetFRFMode(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_EQUAL((handle >= 0), true);
+        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
-       // Step 03: Set the FRF mode using a valid framerate
-       result = dsSetFRFMode(handle, validFramerate);
-       if(gSourceType == 1) {
-           UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
-       } else if(gSourceType == 0) {
-           UT_ASSERT_EQUAL(result, dsERR_NONE);
-       }
+        // Step 03: Set the FRF mode using a valid framerate
+        for (int j=0;j<gDSVideoDeviceConfiguration[i].NoOfSupportedDFR;j++){
+            int framerate = gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate[j]; 
+            result = dsSetFRFMode(handle, framerate);
+            if(gSourceType == 1) {
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+            } else if(gSourceType == 0) {
+                UT_ASSERT_EQUAL(result, dsERR_NONE);
+            }
+        }
     }
 
     // Step 04: De-initialize the video devices
@@ -1214,7 +1204,7 @@ void test_l1_dsVideoDevice_negative_dsSetFRFMode(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_EQUAL((handle >= 0), true);
+        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 04: Call dsSetFRFMode() with an invalid handle
         result = dsSetFRFMode(-1, 60);
@@ -1274,7 +1264,7 @@ void test_l1_dsVideoDevice_positive_dsGetFRFMode(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_TRUE(handle >= 0);
+        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 03: Get the FRF mode using the obtained handle
         result = dsGetFRFMode(handle, &fetchedFRFMode);
@@ -1340,7 +1330,7 @@ void test_l1_dsVideoDevice_negative_dsGetFRFMode(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_TRUE(handle >= 0);
+        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 04: Call dsGetFRFMode() with an invalid handle
         result = dsGetFRFMode(-1, &fetchedFRFMode);
@@ -1400,7 +1390,7 @@ void test_l1_dsVideoDevice_positive_dsGetCurrentDisplayframerate(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_TRUE(handle >= 0);
+        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 03: Get the current display framerate using the obtained handle
         for (int j=0;j<gDSVideoDeviceConfiguration[i].NoOfSupportedDFR;j++){
@@ -1467,7 +1457,7 @@ void test_l1_dsVideoDevice_negative_dsGetCurrentDisplayframerate(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_TRUE(handle >= 0);
+        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 04: Call dsGetCurrentDisplayframerate() with an invalid handle
         result = dsGetCurrentDisplayframerate(-1, fetchedFramerate);
@@ -1515,7 +1505,6 @@ void test_l1_dsVideoDevice_positive_dsSetDisplayframerate(void)
     // Define variables
     int result;
     intptr_t handle = -1;
-    char desiredFramerate[] = "30fps"; // You can modify this value as necessary
 
     // Step 01: Initialize video devices
     result = dsVideoDeviceInit();
@@ -1525,12 +1514,14 @@ void test_l1_dsVideoDevice_positive_dsSetDisplayframerate(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_TRUE(handle >= 0);
+        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 03: Set the display framerate using the obtained handle
-        result = dsSetDisplayframerate(handle, desiredFramerate);
         if(gSourceType == 0) {
-            UT_ASSERT_EQUAL(result, dsERR_NONE);
+            for(int j=0;j<gDSVideoDeviceConfiguration[i].NoOfSupportedDFR;j++){
+                result = dsSetDisplayframerate(handle, gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate);  
+                UT_ASSERT_EQUAL(result, dsERR_NONE);
+            }
         } else if(gSourceType == 1) {
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
@@ -1588,7 +1579,7 @@ void test_l1_dsVideoDevice_negative_dsSetDisplayframerate(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){ 
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_TRUE(handle >= 0);
+        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 04: Call dsSetDisplayframerate() with an invalid handle
         result = dsSetDisplayframerate(-1, "30fps");
@@ -1820,8 +1811,7 @@ void test_l1_dsVideoDevice_negative_dsRegisterFrameratePostChangeCB(void)
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
-static UT_test_suite_t * pSuite1 = NULL;
-static UT_test_suite_t * pSuite2 = NULL;
+static UT_test_suite_t * pSuite = NULL;
 
 /**
  * @brief Register the main test(s) for this module
@@ -1830,52 +1820,43 @@ static UT_test_suite_t * pSuite2 = NULL;
  */
 int test_l1_dsVideoDevice_register ( void )
 {
-	/* add a suite to the registry */
-	pSuite1 = UT_add_suite( "[L1 dsVideoDevice]", NULL, NULL );
-    pSuite2 = UT_add_suite( "[L1 dsVideoDevice - advanced]", NULL, NULL );
-	if ( NULL == pSuite1 )
-	{
-		return -1;
-	}
-    if ( NULL == pSuite2 )
-	{
-		return -1;
-	}	
+    /* add a suite to the registry */
+    pSuite = UT_add_suite( "[L1 dsVideoDevice]", NULL, NULL );
+    if ( NULL == pSuite )
+    {
+        return -1;
+    }
 
-    UT_add_test( pSuite1, "dsVideoDeviceInit_L1_positive" ,test_l1_dsVideoDevice_positive_dsVideoDeviceInit );
-    UT_add_test( pSuite1, "dsVideoDeviceTerm_L1_positive" ,test_l1_dsVideoDevice_positive_dsVideoDeviceTerm );
-    UT_add_test( pSuite1, "dsGetVideoDevice_L1_positive" ,test_l1_dsVideoDevice_positive_dsGetVideoDevice );
-    UT_add_test( pSuite1, "dsSetDFC_L1_positive" ,test_l1_dsVideoDevice_positive_dsSetDFC );
-    UT_add_test( pSuite1, "dsGetHDRCapabilities_L1_positive" ,test_l1_dsVideoDevice_positive_dsGetHDRCapabilities );
-    UT_add_test( pSuite1, "dsGetSupportedVideoCodingFormats_L1_positive" ,test_l1_dsVideoDevice_positive_dsGetSupportedVideoCodingFormats );
-    UT_add_test( pSuite1, "dsGetVideoCodecInfo_L1_positive" ,test_l1_dsVideoDevice_positive_dsGetVideoCodecInfo );
-    UT_add_test( pSuite1, "dsSetFRFMode_L1_positive" ,test_l1_dsVideoDevice_positive_dsSetFRFMode );
-    UT_add_test( pSuite1, "dsGetFRFMode_L1_positive" ,test_l1_dsVideoDevice_positive_dsGetFRFMode );
-    UT_add_test( pSuite1, "dsGetCurrentDisplayframerate_L1_positive" ,test_l1_dsVideoDevice_positive_dsGetCurrentDisplayframerate );
-    UT_add_test( pSuite1, "dsSetDisplayframerate_L1_positive" ,test_l1_dsVideoDevice_positive_dsSetDisplayframerate );
-    UT_add_test( pSuite1, "dsRegisterFrameratePreChangeCB_L1_positive" ,test_l1_dsVideoDevice_positive_dsRegisterFrameratePreChangeCB );
-    UT_add_test( pSuite1, "dsRegisterFrameratePostChangeCB_L1_positive" ,test_l1_dsVideoDevice_positive_dsRegisterFrameratePostChangeCB );
-
-
-	UT_add_test( pSuite1, "dsVideoDeviceInit_L1_negative" ,test_l1_dsVideoDevice_negative_dsVideoDeviceInit );
-	UT_add_test( pSuite1, "dsVideoDeviceTerm_L1_negative" ,test_l1_dsVideoDevice_negative_dsVideoDeviceTerm );
-	UT_add_test( pSuite1, "dsGetVideoDevice_L1_negative" ,test_l1_dsVideoDevice_negative_dsGetVideoDevice );
-	UT_add_test( pSuite1, "dsSetDFC_L1_negative" ,test_l1_dsVideoDevice_negative_dsSetDFC );
-	UT_add_test( pSuite1, "dsGetHDRCapabilities_L1_negative" ,test_l1_dsVideoDevice_negative_dsGetHDRCapabilities );
-	UT_add_test( pSuite1, "dsGetSupportedVideoCodingFormats_L1_negative" ,test_l1_dsVideoDevice_negative_dsGetSupportedVideoCodingFormats );
-	UT_add_test( pSuite1, "dsGetVideoCodecInfo_L1_negative" ,test_l1_dsVideoDevice_negative_dsGetVideoCodecInfo );
-	UT_add_test( pSuite1, "dsSetFRFMode_L1_negative" ,test_l1_dsVideoDevice_negative_dsSetFRFMode );
-	UT_add_test( pSuite1, "dsGetFRFMode_L1_negative" ,test_l1_dsVideoDevice_negative_dsGetFRFMode );
-	UT_add_test( pSuite1, "dsGetCurrentDisplayframerate_L1_negative" ,test_l1_dsVideoDevice_negative_dsGetCurrentDisplayframerate );
-	UT_add_test( pSuite1, "dsSetDisplayframerate_L1_negative" ,test_l1_dsVideoDevice_negative_dsSetDisplayframerate );
-        UT_add_test( pSuite1, "dsRegisterFrameratePreChangeCB_L1_negative" ,test_l1_dsVideoDevice_negative_dsRegisterFrameratePreChangeCB );
-        UT_add_test( pSuite1, "dsRegisterFrameratePostChangeCB_L1_negative" ,test_l1_dsVideoDevice_negative_dsRegisterFrameratePostChangeCB );
-
-
-    UT_add_test( pSuite2, "dsGetDFC_L1_positive" ,test_l1_dsVideoDevice_positive_dsGetDFC );
-    UT_add_test( pSuite2, "dsForceDisableHDRSupport_L1_positive" ,test_l1_dsVideoDevice_positive_dsForceDisableHDRSupport );
-    UT_add_test( pSuite2, "dsGetDFC_L1_negative" ,test_l1_dsVideoDevice_negative_dsGetDFC );
-    UT_add_test( pSuite2, "dsForceDisableHDRSupport_L1_negative" ,test_l1_dsVideoDevice_negative_dsForceDisableHDRSupport );
+    UT_add_test( pSuite, "dsVideoDeviceInit_L1_positive" ,test_l1_dsVideoDevice_positive_dsVideoDeviceInit );
+    UT_add_test( pSuite, "dsVideoDeviceTerm_L1_positive" ,test_l1_dsVideoDevice_positive_dsVideoDeviceTerm );
+    UT_add_test( pSuite, "dsGetVideoDevice_L1_positive" ,test_l1_dsVideoDevice_positive_dsGetVideoDevice );
+    UT_add_test( pSuite, "dsSetDFC_L1_positive" ,test_l1_dsVideoDevice_positive_dsSetDFC );
+    UT_add_test( pSuite, "dsGetHDRCapabilities_L1_positive" ,test_l1_dsVideoDevice_positive_dsGetHDRCapabilities );
+    UT_add_test( pSuite, "dsGetSupportedVideoCodingFormats_L1_positive" ,test_l1_dsVideoDevice_positive_dsGetSupportedVideoCodingFormats );
+    UT_add_test( pSuite, "dsGetVideoCodecInfo_L1_positive" ,test_l1_dsVideoDevice_positive_dsGetVideoCodecInfo );
+    UT_add_test( pSuite, "dsSetFRFMode_L1_positive" ,test_l1_dsVideoDevice_positive_dsSetFRFMode );
+    UT_add_test( pSuite, "dsGetFRFMode_L1_positive" ,test_l1_dsVideoDevice_positive_dsGetFRFMode );
+    UT_add_test( pSuite, "dsGetCurrentDisplayframerate_L1_positive" ,test_l1_dsVideoDevice_positive_dsGetCurrentDisplayframerate );
+    UT_add_test( pSuite, "dsSetDisplayframerate_L1_positive" ,test_l1_dsVideoDevice_positive_dsSetDisplayframerate );
+    UT_add_test( pSuite, "dsRegisterFrameratePreChangeCB_L1_positive" ,test_l1_dsVideoDevice_positive_dsRegisterFrameratePreChangeCB );
+    UT_add_test( pSuite, "dsRegisterFrameratePostChangeCB_L1_positive" ,test_l1_dsVideoDevice_positive_dsRegisterFrameratePostChangeCB );
+    UT_add_test( pSuite, "dsVideoDeviceInit_L1_negative" ,test_l1_dsVideoDevice_negative_dsVideoDeviceInit );
+    UT_add_test( pSuite, "dsVideoDeviceTerm_L1_negative" ,test_l1_dsVideoDevice_negative_dsVideoDeviceTerm );
+    UT_add_test( pSuite, "dsGetVideoDevice_L1_negative" ,test_l1_dsVideoDevice_negative_dsGetVideoDevice );
+    UT_add_test( pSuite, "dsSetDFC_L1_negative" ,test_l1_dsVideoDevice_negative_dsSetDFC );
+    UT_add_test( pSuite, "dsGetHDRCapabilities_L1_negative" ,test_l1_dsVideoDevice_negative_dsGetHDRCapabilities );
+    UT_add_test( pSuite, "dsGetSupportedVideoCodingFormats_L1_negative" ,test_l1_dsVideoDevice_negative_dsGetSupportedVideoCodingFormats );
+    UT_add_test( pSuite, "dsGetVideoCodecInfo_L1_negative" ,test_l1_dsVideoDevice_negative_dsGetVideoCodecInfo );
+    UT_add_test( pSuite, "dsSetFRFMode_L1_negative" ,test_l1_dsVideoDevice_negative_dsSetFRFMode );
+    UT_add_test( pSuite, "dsGetFRFMode_L1_negative" ,test_l1_dsVideoDevice_negative_dsGetFRFMode );
+    UT_add_test( pSuite, "dsGetCurrentDisplayframerate_L1_negative" ,test_l1_dsVideoDevice_negative_dsGetCurrentDisplayframerate );
+    UT_add_test( pSuite, "dsSetDisplayframerate_L1_negative" ,test_l1_dsVideoDevice_negative_dsSetDisplayframerate );
+    UT_add_test( pSuite, "dsRegisterFrameratePreChangeCB_L1_negative" ,test_l1_dsVideoDevice_negative_dsRegisterFrameratePreChangeCB );
+    UT_add_test( pSuite, "dsRegisterFrameratePostChangeCB_L1_negative" ,test_l1_dsVideoDevice_negative_dsRegisterFrameratePostChangeCB );
+    UT_add_test( pSuite, "dsGetDFC_L1_positive" ,test_l1_dsVideoDevice_positive_dsGetDFC );
+    UT_add_test( pSuite, "dsForceDisableHDRSupport_L1_positive" ,test_l1_dsVideoDevice_positive_dsForceDisableHDRSupport );
+    UT_add_test( pSuite, "dsGetDFC_L1_negative" ,test_l1_dsVideoDevice_negative_dsGetDFC );
+    UT_add_test( pSuite, "dsForceDisableHDRSupport_L1_negative" ,test_l1_dsVideoDevice_negative_dsForceDisableHDRSupport );
     extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsVideoDevice/features/extendedEnumsSupported" ); 	
 
 	return 0;
