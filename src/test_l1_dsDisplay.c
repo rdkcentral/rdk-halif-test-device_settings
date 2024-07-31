@@ -814,8 +814,8 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
             result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio);
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-            // Step 04: Compare the results with value from the profile
-            UT_ASSERT_KVP_EQUAL_PROFILE_UINT32(aspectRatio, "dsDisplay/Default_Aspect_Ratio");
+            // Step 04: Compare the results with default value
+            UT_ASSERT_EQUAL(aspectRatio, dsVIDEO_ASPECT_RATIO_16x9);
         } else if(gSourceType == 0){
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
