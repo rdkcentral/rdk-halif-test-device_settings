@@ -3857,7 +3857,7 @@ void test_l1_dsAudio_negative_dsSetGraphicEqualizerMode(void) {
  * |08|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  * 
  */
-void test_l1_dsAudio_positive_dsGetMS12AudioProfileList_sink(void) {
+void test_l1_dsAudio_positive_dsGetMS12AudioProfileList(void) {
 	// Logging at the start
 	gTestID = 53;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -3886,6 +3886,8 @@ void test_l1_dsAudio_positive_dsGetMS12AudioProfileList_sink(void) {
 
                 // Step 03: Get the list of supported MS12 audio profiles for each port
                 result = dsGetMS12AudioProfileList(*(handle+i), &profileList1);
+            if(gSourceType == 0) {
+
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
 
                 // Step 04: Verify that the profiles list is valid and not empty
@@ -3903,6 +3905,9 @@ void test_l1_dsAudio_positive_dsGetMS12AudioProfileList_sink(void) {
                 //Step 07: compare the values of profileList arrays
                 UT_ASSERT_STRING_EQUAL(profileList1.audioProfileList, profileList2.audioProfileList);
                 UT_ASSERT_EQUAL(profileList1.audioProfileCount, profileList2.audioProfileCount);
+            } else {
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+            }
         }
 
         // Step 08: Terminate audio ports
@@ -3939,7 +3944,7 @@ void test_l1_dsAudio_positive_dsGetMS12AudioProfileList_sink(void) {
  * 
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
-void test_l1_dsAudio_negative_dsGetMS12AudioProfileList_sink(void) {
+void test_l1_dsAudio_negative_dsGetMS12AudioProfileList(void) {
 	// Logging at the start
 	gTestID = 54;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -3958,7 +3963,11 @@ void test_l1_dsAudio_negative_dsGetMS12AudioProfileList_sink(void) {
 
         // Step 01: Attempt to get MS12 Audio Profile List without initializing
         result = dsGetMS12AudioProfileList(-1, &profileList);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) { 
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // Step 02: Initialize audio ports
         result = dsAudioPortInit();
@@ -3966,7 +3975,11 @@ void test_l1_dsAudio_negative_dsGetMS12AudioProfileList_sink(void) {
 
         // Step 03: Attempt to get MS12 Audio Profile List using an invalid handle
         result = dsGetMS12AudioProfileList(*handle, &profileList);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if(gSourceType == 0) {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // Step 04: Get the port handle for all supported audio ports
         for (int i = 0; i < gDSAudioNumberOfPorts; i++) {
@@ -3976,7 +3989,11 @@ void test_l1_dsAudio_negative_dsGetMS12AudioProfileList_sink(void) {
 
                 // Step 05: Attempt to get MS12 Audio Profile List with a null pointer
                 result = dsGetMS12AudioProfileList(*(handle+i), NULL);
-                UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                if(gSourceType == 0) {
+                    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                } else {
+                    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+                }
         }
 
         // Step 06: Terminate audio ports
@@ -3985,7 +4002,11 @@ void test_l1_dsAudio_negative_dsGetMS12AudioProfileList_sink(void) {
 
         // Step 07: Attempt to get MS12 Audio Profile List after termination
         result = dsGetMS12AudioProfileList(*handle, &profileList);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // deallocating memory
         free(handle);
@@ -4454,7 +4475,7 @@ void test_l1_dsAudio_negative_dsSetStereoMode(void) {
  * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  * 
  */
-void test_l1_dsAudio_positive_dsGetStereoAuto_sink(void) {
+void test_l1_dsAudio_positive_dsGetStereoAuto(void) {
 	// Logging at the start
 	gTestID = 61;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -4483,14 +4504,18 @@ void test_l1_dsAudio_positive_dsGetStereoAuto_sink(void) {
 
                 // Step 03: Get the current auto mode
                 result = dsGetStereoAuto(*(handle+i), &autoMode1);
-                UT_ASSERT_EQUAL(result, dsERR_NONE);
+                if(gSourceType == 0) {
+                    UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-                // Step 04: Get the current auto mode in a new variable for comparison
-                result = dsGetStereoAuto(*(handle+i), &autoMode2);
-                UT_ASSERT_EQUAL(result, dsERR_NONE);
+                    // Step 04: Get the current auto mode in a new variable for comparison
+                    result = dsGetStereoAuto(*(handle+i), &autoMode2);
+                    UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-                // Step 05: Compare the values
-                UT_ASSERT_EQUAL(autoMode1, autoMode2);
+                    // Step 05: Compare the values
+                    UT_ASSERT_EQUAL(autoMode1, autoMode2);
+                } else {
+                    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+                }
         }
 
         // Step 06: Terminate audio ports
@@ -4526,7 +4551,7 @@ void test_l1_dsAudio_positive_dsGetStereoAuto_sink(void) {
  * 
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
-void test_l1_dsAudio_negative_dsGetStereoAuto_sink(void) {
+void test_l1_dsAudio_negative_dsGetStereoAuto(void) {
 	// Logging at the start
 	gTestID = 62;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -4545,7 +4570,11 @@ void test_l1_dsAudio_negative_dsGetStereoAuto_sink(void) {
 
         // Step 01: Attempt to get stereo auto without initializing
         result = dsGetStereoAuto(-1, &autoMode);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // Step 02: Initialize audio ports
         result = dsAudioPortInit();
@@ -4553,7 +4582,11 @@ void test_l1_dsAudio_negative_dsGetStereoAuto_sink(void) {
 
         // Step 03: Attempt to get stereo auto using an invalid handle
         result = dsGetStereoAuto(*handle, &autoMode);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if(gSourceType == 0) {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // Step 04: Get a valid handle
         for (int i = 0; i < gDSAudioNumberOfPorts; ++i) {
@@ -4563,7 +4596,11 @@ void test_l1_dsAudio_negative_dsGetStereoAuto_sink(void) {
 
                 // Step 05: Attempt to get stereo auto with a NULL pointer
                 result = dsGetStereoAuto(*(handle+i), NULL);
-                UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                if(gSourceType == 0) {
+                    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                } else {
+                    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+                }
         }
 
         // Step 06: Terminate audio ports
@@ -4572,7 +4609,11 @@ void test_l1_dsAudio_negative_dsGetStereoAuto_sink(void) {
 
         //Step 07: Attempt to get Stereo Auto after termination
         result = dsGetStereoAuto(*handle, &autoMode);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // deallocating memory
         free(handle);
@@ -4600,7 +4641,7 @@ void test_l1_dsAudio_negative_dsGetStereoAuto_sink(void) {
  * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  * 
  */
-void test_l1_dsAudio_positive_dsSetStereoAuto_sink(void) {
+void test_l1_dsAudio_positive_dsSetStereoAuto(void) {
 	// Logging at the start
 	gTestID = 63;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -4626,9 +4667,13 @@ void test_l1_dsAudio_positive_dsSetStereoAuto_sink(void) {
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
                 UT_ASSERT_NOT_EQUAL(*(handle+i), null_handle);
 
+             if(gSourceType == 0) {
                 // Step 03: Set auto mode for each port
                 result = dsSetStereoAuto(*(handle+i), gDSAudioPortConfiguration[i].stereo_auto_mode);
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
+             } else {
+                 UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED)
+             }
         }
 
         // Step 05: Terminate audio ports
@@ -4665,7 +4710,7 @@ void test_l1_dsAudio_positive_dsSetStereoAuto_sink(void) {
  * 
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
-void test_l1_dsAudio_negative_dsSetStereoAuto_sink(void) {
+void test_l1_dsAudio_negative_dsSetStereoAuto(void) {
 	// Logging at the start
 	gTestID = 64;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -4684,7 +4729,11 @@ void test_l1_dsAudio_negative_dsSetStereoAuto_sink(void) {
 
         // Step 01: Attempt to set stereo auto without initializing
         result = dsSetStereoAuto(-1, autoMode);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // Step 02: Initialize audio ports
         result = dsAudioPortInit();
@@ -4692,7 +4741,11 @@ void test_l1_dsAudio_negative_dsSetStereoAuto_sink(void) {
 
         // Step 03: Attempt to set stereo auto using an invalid handle
         result = dsSetStereoAuto(*handle, autoMode);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if(gSourceType == 0) {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // Step 04: Get a valid handle
         for (int i = 0; i < gDSAudioNumberOfPorts; ++i) {
@@ -4702,8 +4755,11 @@ void test_l1_dsAudio_negative_dsSetStereoAuto_sink(void) {
 
                 //Step 05: Set a invalid auto mode
                 result = dsSetStereoAuto(*(handle+i), invalidAutoMode);
-                UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
-
+                if(gSourceType == 0) {
+                    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                } else {
+                    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+                }
         }
 
         // Step 06: Terminate audio ports
@@ -4712,7 +4768,11 @@ void test_l1_dsAudio_negative_dsSetStereoAuto_sink(void) {
 
         // Step 07: Attempt to set auto mode after terminating audio ports
         result = dsSetStereoAuto(*handle, autoMode);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // deallocating memory
         free(handle);
@@ -4741,7 +4801,7 @@ void test_l1_dsAudio_negative_dsSetStereoAuto_sink(void) {
  * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  * 
  */
-void test_l1_dsAudio_positive_dsGetAudioGain_sink(void) {
+void test_l1_dsAudio_positive_dsGetAudioGain(void) {
 	// Logging at the start
 	gTestID = 65;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -4770,6 +4830,7 @@ void test_l1_dsAudio_positive_dsGetAudioGain_sink(void) {
 
                 // Step 03: Get audio gain for each port
                 result = dsGetAudioGain(*(handle+i), &gain1);
+            if(gSourceType == 0) {
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
                 UT_ASSERT_TRUE(gain1 >= -2080 && gain1 <= 480);
 
@@ -4780,6 +4841,9 @@ void test_l1_dsAudio_positive_dsGetAudioGain_sink(void) {
 
                 //compare the values of gain arrays
                 UT_ASSERT_EQUAL(gain1, gain2);
+            } else {
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+            }
         }
 
         // Step 04: Terminate audio ports
@@ -4815,7 +4879,7 @@ void test_l1_dsAudio_positive_dsGetAudioGain_sink(void) {
  * 
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
-void test_l1_dsAudio_negative_dsGetAudioGain_sink(void) {
+void test_l1_dsAudio_negative_dsGetAudioGain(void) {
 	// Logging at the start
 	gTestID = 66;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -4834,7 +4898,11 @@ void test_l1_dsAudio_negative_dsGetAudioGain_sink(void) {
 
         // Step 01: Attempt to get audio gain without initializing
         result = dsGetAudioGain(-1, &gain);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // Step 02: Initialize audio ports
         result = dsAudioPortInit();
@@ -4842,7 +4910,11 @@ void test_l1_dsAudio_negative_dsGetAudioGain_sink(void) {
 
         // Step 03: Attempt to get audio gain using an invalid handle
         result = dsGetAudioGain(*handle, &gain);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if(gSourceType == 0) {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // Step 04: Get a valid handle
         for (int i = 0; i < gDSAudioNumberOfPorts; ++i) {
@@ -4852,7 +4924,11 @@ void test_l1_dsAudio_negative_dsGetAudioGain_sink(void) {
 
                 // Step 05: Attempt to get audio gain using a valid handle but null pointer for gain
                 result = dsGetAudioGain(*(handle+i), NULL);
-                UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                if(gSourceType == 0) {
+                    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                } else {
+                    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+                }
         }
 
         // Step 06: Terminate audio ports and try again
@@ -4861,7 +4937,11 @@ void test_l1_dsAudio_negative_dsGetAudioGain_sink(void) {
 
         // Step 07: Attempt to get the Audio Gain after termination
         result = dsGetAudioGain(*handle, &gain);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // deallocating memory
         free(handle);
@@ -4889,7 +4969,7 @@ void test_l1_dsAudio_negative_dsGetAudioGain_sink(void) {
  * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  * 
  */
-void test_l1_dsAudio_positive_dsSetAudioGain_sink(void) {
+void test_l1_dsAudio_positive_dsSetAudioGain(void) {
 	// Logging at the start
 	gTestID = 67;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -4918,6 +4998,7 @@ void test_l1_dsAudio_positive_dsSetAudioGain_sink(void) {
 
                 // Step 03: Set audio gain for each port
                 result = dsSetAudioGain(*(handle+i), gain_min);
+             if(gSourceType == 0) {
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
 
                 result = dsSetAudioGain(*(handle+i), gain_max);
@@ -4925,6 +5006,9 @@ void test_l1_dsAudio_positive_dsSetAudioGain_sink(void) {
 
                 result = dsSetAudioGain(*(handle+i), gain_mid);
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
+             } else {
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+             }
         }
 
         // Step 04: Terminate audio ports
@@ -4961,7 +5045,7 @@ void test_l1_dsAudio_positive_dsSetAudioGain_sink(void) {
  * 
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
-void test_l1_dsAudio_negative_dsSetAudioGain_sink(void) {
+void test_l1_dsAudio_negative_dsSetAudioGain(void) {
 	// Logging at the start
 	gTestID = 68;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -4980,7 +5064,11 @@ void test_l1_dsAudio_negative_dsSetAudioGain_sink(void) {
 
         // Step 01: Attempt to set audio gain without initializing
         result = dsSetAudioGain(-1, gainValue);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // Step 02: Initialize audio ports
         result = dsAudioPortInit();
@@ -4988,7 +5076,11 @@ void test_l1_dsAudio_negative_dsSetAudioGain_sink(void) {
 
         // Step 03: Attempt to set audio gain using an invalid handle
         result = dsSetAudioGain(*handle, gainValue);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if(gSourceType == 0) {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // Step 04: Get a valid handle
         for (int i = 0; i < gDSAudioNumberOfPorts; ++i) {
@@ -4998,10 +5090,14 @@ void test_l1_dsAudio_negative_dsSetAudioGain_sink(void) {
 
                 // Step 05: Attempt to set audio gain using a valid handle but out of range gain value
                 result = dsSetAudioGain(*(handle+i), invalid_gain_neg);
+            if(gSourceType == 0) {
                 UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
                 result = dsSetAudioGain(*(handle+i), invalid_gain_pos);
                 UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+            } else {
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+            }
         }
 
         // Step 06: Terminate audio ports
@@ -5010,7 +5106,11 @@ void test_l1_dsAudio_negative_dsSetAudioGain_sink(void) {
 
         // Step 07: Attempt t set audio gain after termination
         result = dsSetAudioGain(*handle, gainValue);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+           UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // deallocating memory
         free(handle);
@@ -5039,7 +5139,7 @@ void test_l1_dsAudio_negative_dsSetAudioGain_sink(void) {
  * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  * 
  */
-void test_l1_dsAudio_positive_dsGetAudioLevel_sink(void) {
+void test_l1_dsAudio_positive_dsGetAudioLevel(void) {
 	// Start of the test
 	gTestID = 69;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -5068,6 +5168,7 @@ void test_l1_dsAudio_positive_dsGetAudioLevel_sink(void) {
 
                 // Step 03: Get the audio level values
                 result = dsGetAudioLevel(*(handle+i), &audioLevel1);
+            if(gSourceType == 0) {
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
                 UT_ASSERT_TRUE(audioLevel1 >= 0 && audioLevel1 <= 100);
 
@@ -5078,6 +5179,9 @@ void test_l1_dsAudio_positive_dsGetAudioLevel_sink(void) {
 
                 // Step 05: Compare values
                 UT_ASSERT_EQUAL(audioLevel1, audioLevel2);
+            } else {
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+            }
         }
 
         // Step 06: Terminate audio ports
@@ -5113,7 +5217,7 @@ void test_l1_dsAudio_positive_dsGetAudioLevel_sink(void) {
  * 
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
-void test_l1_dsAudio_negative_dsGetAudioLevel_sink(void) {
+void test_l1_dsAudio_negative_dsGetAudioLevel(void) {
 	// Start of the test
 	gTestID = 70;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -5132,7 +5236,11 @@ void test_l1_dsAudio_negative_dsGetAudioLevel_sink(void) {
 
         // Step 01: Attempt to get audio level without initializing audio ports
         result = dsGetAudioLevel(-1, &audioLevel);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // Step 02: Initialize audio ports
         result = dsAudioPortInit();
@@ -5140,7 +5248,11 @@ void test_l1_dsAudio_negative_dsGetAudioLevel_sink(void) {
 
         // Step 03: Attempt to get audio level with invalid handle
         result = dsGetAudioLevel(*handle, &audioLevel);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if(gSourceType == 0) {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // Step 04 : Get a valid handle
         for (int i = 0; i < gDSAudioNumberOfPorts; i++) {
@@ -5150,8 +5262,12 @@ void test_l1_dsAudio_negative_dsGetAudioLevel_sink(void) {
 
                 // Step 05: Attempt to get audio level with NULL pointer
                 result = dsGetAudioLevel(*(handle+i), NULL);
-                UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
-        }
+                if(gSourceType == 0) {
+                    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                } else {
+                    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+                }
+        } 
 
         // Step 06: Terminate audio ports
         result = dsAudioPortTerm();
@@ -5159,7 +5275,11 @@ void test_l1_dsAudio_negative_dsGetAudioLevel_sink(void) {
 
         // Step 07: Attempt to get audio level after terminating audio ports
         result = dsGetAudioLevel(*handle, &audioLevel);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // deallocating memory
         free(handle);
@@ -5187,7 +5307,7 @@ void test_l1_dsAudio_negative_dsGetAudioLevel_sink(void) {
  * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  * 
  */
-void test_l1_dsAudio_positive_dsSetAudioLevel_sink(void) {
+void test_l1_dsAudio_positive_dsSetAudioLevel(void) {
 	// Start of the test
 	gTestID = 71;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -5215,6 +5335,7 @@ void test_l1_dsAudio_positive_dsSetAudioLevel_sink(void) {
                 UT_ASSERT_NOT_EQUAL(*(handle+i), null_handle);
 
                 result = dsSetAudioLevel(*(handle+i), minAudioLevel);
+            if(gSourceType == 0) {
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
 
                 result = dsSetAudioLevel(*(handle+i), maxAudioLevel);
@@ -5222,6 +5343,9 @@ void test_l1_dsAudio_positive_dsSetAudioLevel_sink(void) {
 
                 result = dsSetAudioLevel(*(handle+i), midAudioLevel);
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
+            } else {
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+            }
         }
 
         // Step 04: Terminate audio ports
@@ -5257,7 +5381,7 @@ void test_l1_dsAudio_positive_dsSetAudioLevel_sink(void) {
  * 
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
-void test_l1_dsAudio_negative_dsSetAudioLevel_sink(void) {
+void test_l1_dsAudio_negative_dsSetAudioLevel(void) {
 	// Start of the test
 	gTestID = 72;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -5276,7 +5400,11 @@ void test_l1_dsAudio_negative_dsSetAudioLevel_sink(void) {
 
         // Step 01: Attempt to set audio level without initializing audio ports
         result = dsSetAudioLevel(-1, audio_level);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // Step 02: Initialize audio ports
         result = dsAudioPortInit();
@@ -5284,7 +5412,11 @@ void test_l1_dsAudio_negative_dsSetAudioLevel_sink(void) {
 
         // Step 03: Attempt to set audio level with invalid handle
         result = dsSetAudioLevel(*handle, audio_level);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if(gSourceType == 0) {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // Step 04 : Get a valid handle
         for (int i = 0; i < gDSAudioNumberOfPorts; i++) {
@@ -5294,10 +5426,14 @@ void test_l1_dsAudio_negative_dsSetAudioLevel_sink(void) {
 
                 // Step 05 : Attempt to set Audio level with invalid values
                 result = dsSetAudioLevel(*(handle+i), invalid_audio_level_neg);
+             if(gSourceType == 0){
                 UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
                 result = dsSetAudioLevel(*(handle+i), invalid_audio_level_pos);
                 UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+             } else {
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+             }
         }
 
         // Step 06: Terminate audio ports
@@ -5306,7 +5442,11 @@ void test_l1_dsAudio_negative_dsSetAudioLevel_sink(void) {
 
         // Step 07: Attempt to set audio level after terminating audio ports
         result = dsSetAudioLevel(*handle, audio_level);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // deallocating memory
         free(handle);
@@ -6504,7 +6644,7 @@ void test_l1_dsAudio_negative_dsEnableMS12Config(void) {
  * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  * 
  */
-void test_l1_dsAudio_positive_dsEnableLEConfig_sink(void) {
+void test_l1_dsAudio_positive_dsEnableLEConfig(void) {
 	// Start of the test
 	gTestID = 89; // Assuming Test Case ID is 89
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -6532,8 +6672,11 @@ void test_l1_dsAudio_positive_dsEnableLEConfig_sink(void) {
 
                 // Enable LE Config
                 result = dsEnableLEConfig(*(handle+i), true);
+             if(gSourceType == 0) {
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
-
+             } else {
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+             }
         }
 
         // Step 04: Terminate audio ports
@@ -6569,7 +6712,7 @@ void test_l1_dsAudio_positive_dsEnableLEConfig_sink(void) {
  * 
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
-void test_l1_dsAudio_negative_dsEnableLEConfig_sink(void) {
+void test_l1_dsAudio_negative_dsEnableLEConfig(void) {
 	// Start of the test
 	gTestID = 90; // Assuming Test Case ID is 90
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -6587,7 +6730,11 @@ void test_l1_dsAudio_negative_dsEnableLEConfig_sink(void) {
 
         // Step 01: Attempt to enable LE without initializing
         result = dsEnableLEConfig(-1, true);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // Step 02: Initialize audio ports
         result = dsAudioPortInit();
@@ -6595,7 +6742,11 @@ void test_l1_dsAudio_negative_dsEnableLEConfig_sink(void) {
 
         // Step 03: Attempt to enable with invalid handle
         result = dsEnableLEConfig(*handle, true);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if(gSourceType == 0) {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // Step 04: Loop through kPorts to get audio port handle
         for (int i = 0; i < gDSAudioNumberOfPorts; i++) {
@@ -6610,7 +6761,11 @@ void test_l1_dsAudio_negative_dsEnableLEConfig_sink(void) {
 
         // Step 06: Attempt to enable LE after terminating
         result = dsEnableLEConfig(*handle, false);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // deallocating memory
         free(handle);
@@ -6640,7 +6795,7 @@ void test_l1_dsAudio_negative_dsEnableLEConfig_sink(void) {
  * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  * 
  */
-void test_l1_dsAudio_positive_dsGetLEConfig_sink(void) {
+void test_l1_dsAudio_positive_dsGetLEConfig(void) {
 	// Start of the test
 	gTestID = 91; // Assuming Test Case ID is 91
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -6669,6 +6824,7 @@ void test_l1_dsAudio_positive_dsGetLEConfig_sink(void) {
 
                 // Step 03: Retrieve LE Config
                 result = dsGetLEConfig(*(handle+i), &leconfig1);
+            if(gSourceType == 0) {
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
 
                 // Step 04: Retrieve LE Config
@@ -6677,6 +6833,9 @@ void test_l1_dsAudio_positive_dsGetLEConfig_sink(void) {
 
                 // Step 05: compare leconfigarray array values
                 UT_ASSERT_EQUAL(leconfig1, leconfig2);
+            } else {
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+            }
         }
 
         // Step 06: Terminate audio ports
@@ -6713,7 +6872,7 @@ void test_l1_dsAudio_positive_dsGetLEConfig_sink(void) {
  * 
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
-void test_l1_dsAudio_negative_dsGetLEConfig_sink(void) {
+void test_l1_dsAudio_negative_dsGetLEConfig(void) {
 	// Start of the test
 	gTestID = 92; // Assuming Test Case ID is 92
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -6732,7 +6891,11 @@ void test_l1_dsAudio_negative_dsGetLEConfig_sink(void) {
 
         // Step 01: Attempt to get LE Config without initializing
         result = dsGetLEConfig(-1, &enable);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // Step 02: Initialize audio ports
         result = dsAudioPortInit();
@@ -6740,7 +6903,11 @@ void test_l1_dsAudio_negative_dsGetLEConfig_sink(void) {
 
         // Step 03: Attempt to get LE Config with invalid handle
         result = dsGetLEConfig(*handle, &enable);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if(gSourceType == 0) {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // Step 04: Loop through kPorts to get audio port handle
         for (int i = 0; i < gDSAudioNumberOfPorts; i++) {
@@ -6750,7 +6917,11 @@ void test_l1_dsAudio_negative_dsGetLEConfig_sink(void) {
 
                 //Setp 05:Attempt to get LE Config with NULL pointer
                 result = dsGetLEConfig(*(handle+i), NULL);
+             if(gSourceType == 0) {
                 UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+             } else {
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+             }
         }
 
         // Step 06: Terminate audio ports
@@ -6759,7 +6930,11 @@ void test_l1_dsAudio_negative_dsGetLEConfig_sink(void) {
 
         // Step 07: Attempt to get LE Config after terminating
         result = dsGetLEConfig(*handle, &enable);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // deallocating memory
         free(handle);
@@ -6787,7 +6962,7 @@ void test_l1_dsAudio_negative_dsGetLEConfig_sink(void) {
  * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  * 
  */
-void test_l1_dsAudio_positive_dsSetMS12AudioProfile_sink(void) {
+void test_l1_dsAudio_positive_dsSetMS12AudioProfile(void) {
 	// Start of the test
 	gTestID = 93; // Assuming Test Case ID is 93
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -6815,11 +6990,16 @@ void test_l1_dsAudio_positive_dsSetMS12AudioProfile_sink(void) {
                 UT_ASSERT_NOT_EQUAL(*(handle+i), null_handle);
 
                 // Set MS12 Audio Profile
+             if(gSourceType == 0) {
                 for(int j = 0; j < gDSAudioPortConfiguration[i].ms12_audioprofilecount ; j++)
                 {
                         result = dsSetMS12AudioProfile(*(handle+i), gDSAudioPortConfiguration[i].ms12_audio_profiles[j]);
                         UT_ASSERT_EQUAL(result, dsERR_NONE);
                 }
+             } else {
+                result = dsSetMS12AudioProfile(*(handle+i), gDSAudioPortConfiguration[0].ms12_audio_profiles[0]);
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+             }
         }
 
         // Step 04: Terminate audio ports
@@ -6855,7 +7035,7 @@ void test_l1_dsAudio_positive_dsSetMS12AudioProfile_sink(void) {
  * |07|Call dsSetMS12AudioProfile() -  Attempt to set MS12 Audio profile again after terminating audio ports | handle = [valid handle from previous step], profile = [a valid MS12 audio profile](from _dsMS12AudioProfileList_t) | dsERR_NOT_INITIALIZED | Set MS12 audio profile must fail as module is not initialized |
  * 
  */
-void test_l1_dsAudio_negative_dsSetMS12AudioProfile_sink(void) {
+void test_l1_dsAudio_negative_dsSetMS12AudioProfile(void) {
 	// Start of the test
 	gTestID = 94; // Assuming Test Case ID is 94
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -6873,7 +7053,11 @@ void test_l1_dsAudio_negative_dsSetMS12AudioProfile_sink(void) {
 
         // Step 01: Attempt to set MS12 Audio Profile without initializing
         result = dsSetMS12AudioProfile(-1, gDSAudioPortConfiguration[0].ms12_audio_profiles[0]);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // Step 02: Initialize audio ports
         result = dsAudioPortInit();
@@ -6881,7 +7065,11 @@ void test_l1_dsAudio_negative_dsSetMS12AudioProfile_sink(void) {
 
         // Step 03: Attempt to set MS12 Audio Profile with invalid handle
         result = dsSetMS12AudioProfile(*handle, gDSAudioPortConfiguration[0].ms12_audio_profiles[0]);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if(gSourceType == 0) {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // Step 04: Loop through kPorts to get audio port handle
         for (int i = 0; i < gDSAudioNumberOfPorts; i++) {
@@ -6891,7 +7079,11 @@ void test_l1_dsAudio_negative_dsSetMS12AudioProfile_sink(void) {
 
                 // Step 05: Attempt to set MS12 Audio Profile with null profile string
                 result = dsSetMS12AudioProfile(*(handle+i), NULL);
-                UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                if(gSourceType == 0) {
+                    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                } else {
+                    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+                }
         }
 
         // Step 06: Terminate audio ports
@@ -6900,7 +7092,11 @@ void test_l1_dsAudio_negative_dsSetMS12AudioProfile_sink(void) {
 
         // Step 07: Attempt to set MS12 Audio Profile after terminating
         result = dsSetMS12AudioProfile(*handle, gDSAudioPortConfiguration[0].ms12_audio_profiles[0]);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // deallocating memory
         free(handle);
@@ -7349,7 +7545,7 @@ void test_l1_dsAudio_negative_dsIsAudioMS12Decode(void) {
  * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  * 
  */
-void test_l1_dsAudio_positive_dsAudioOutIsConnected_sink(void) {
+void test_l1_dsAudio_positive_dsAudioOutIsConnected(void) {
 	// Start of the test
 	gTestID = 101; // Assuming Test Case ID is 101
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -7377,7 +7573,11 @@ void test_l1_dsAudio_positive_dsAudioOutIsConnected_sink(void) {
                 UT_ASSERT_NOT_EQUAL(*(handle+i), null_handle);
 
                 result = dsAudioOutIsConnected(*(handle+i), &isConnected);
+            if(gSourceType == 0) {
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
+            } else {
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+            }
                 // Optionally check isConnected value
         }
 
@@ -7415,7 +7615,7 @@ void test_l1_dsAudio_positive_dsAudioOutIsConnected_sink(void) {
  * 
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions
  */
-void test_l1_dsAudio_negative_dsAudioOutIsConnected_sink(void) {
+void test_l1_dsAudio_negative_dsAudioOutIsConnected(void) {
 	// Start of the test
 	gTestID = 102; // Assuming Test Case ID is 102
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -7434,7 +7634,11 @@ void test_l1_dsAudio_negative_dsAudioOutIsConnected_sink(void) {
 
         // Step 01: Attempt to check connection status without initializing
         result = dsAudioOutIsConnected(-1, &isConnected);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // Step 02: Initialize audio ports
         result = dsAudioPortInit();
@@ -7442,7 +7646,11 @@ void test_l1_dsAudio_negative_dsAudioOutIsConnected_sink(void) {
 
         // Step 03: Test with invalid handle
         result = dsAudioOutIsConnected(*handle, &isConnected);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if(gSourceType == 0) {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // Step 04: Loop through kPorts to get audio port handle
         for (int i = 0; i < gDSAudioNumberOfPorts; i++) {
@@ -7452,7 +7660,11 @@ void test_l1_dsAudio_negative_dsAudioOutIsConnected_sink(void) {
 
                 // Step 05: Test with Null pointer
                 result = dsAudioOutIsConnected(*(handle+i), NULL);
-                UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                if(gSourceType == 0) {
+                    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                } else {
+                    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+                }
         }
 
         // Step 06: Terminate audio ports
@@ -7461,7 +7673,11 @@ void test_l1_dsAudio_negative_dsAudioOutIsConnected_sink(void) {
 
         // Step 07: Attempt to check connection status after terminating
         result = dsAudioOutIsConnected(*handle, &isConnected);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // deallocating memory
         free(handle);
@@ -7492,7 +7708,7 @@ void testAudioOutConnectCallbackFunction(dsAudioPortType_t type, unsigned int in
 	/* call back */
 }
 
-void test_l1_dsAudio_positive_dsAudioOutRegisterConnectCB_sink(void) {
+void test_l1_dsAudio_positive_dsAudioOutRegisterConnectCB(void) {
 	// Start of the test
 	gTestID = 103; // Assuming Test Case ID is 103
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -7507,7 +7723,11 @@ void test_l1_dsAudio_positive_dsAudioOutRegisterConnectCB_sink(void) {
 
 	// Step 02: Register the audio output connect callback
 	result = dsAudioOutRegisterConnectCB(connectcb);
-	UT_ASSERT_EQUAL(result, dsERR_NONE);
+        if(gSourceType == 0) {
+   	    UT_ASSERT_EQUAL(result, dsERR_NONE);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
 	// Step 03: Terminate audio ports
 	result = dsAudioPortTerm();
@@ -7536,7 +7756,7 @@ void test_l1_dsAudio_positive_dsAudioOutRegisterConnectCB_sink(void) {
  * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  * 
  */
-void test_l1_dsAudio_negative_dsAudioOutRegisterConnectCB_sink(void) {
+void test_l1_dsAudio_negative_dsAudioOutRegisterConnectCB(void) {
 	// Start of the test
 	gTestID = 104; // Assuming Test Case ID is 104
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -7545,15 +7765,23 @@ void test_l1_dsAudio_negative_dsAudioOutRegisterConnectCB_sink(void) {
 
 	// Step 01: Attempt to register callback without initializing ports
 	result = dsAudioOutRegisterConnectCB(NULL);
-	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
-	
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+	}
+ 
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
 	UT_ASSERT_EQUAL(result, dsERR_NONE);
 
 	// Step 03: Attempt to register a NULL callback
 	result = dsAudioOutRegisterConnectCB(NULL);
-	UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if(gSourceType == 0) {
+ 	    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
 	// Step 04: Terminate audio ports
 	result = dsAudioPortTerm();
@@ -9145,7 +9373,7 @@ void test_l1_dsAudio_negative_dsGetSecondaryLanguage(void) {
 * |05|Terminate the Audio Port using dsAudioPortTerm() | | dsERR_NONE | Clean up after test |
 *
 */
-void test_l1_dsAudio_positive_dsSetAudioMixerLevels_sink(void) {
+void test_l1_dsAudio_positive_dsSetAudioMixerLevels(void) {
         // Start of the test
         gTestID = 127; // Assuming Test Case ID is 127
         UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -9176,7 +9404,11 @@ void test_l1_dsAudio_positive_dsSetAudioMixerLevels_sink(void) {
                         // Step 03: Call dsSetAudioMixerLevels() for each port by looping through dsAudioInput_t enum
                         for (dsAudioInput_t audioInput = dsAUDIO_INPUT_PRIMARY; audioInput < dsAUDIO_INPUT_MAX; audioInput++) {
                                 result = dsSetAudioMixerLevels(*(handle+i), audioInput, volume);
-                                UT_ASSERT_EQUAL(result, dsERR_NONE);
+                                if(gSourceType == 0) {
+                                    UT_ASSERT_EQUAL(result, dsERR_NONE);
+                                } else {
+                                    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+                                }
                         }
                 }
         }
@@ -9216,7 +9448,7 @@ void test_l1_dsAudio_positive_dsSetAudioMixerLevels_sink(void) {
 * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions
 *
 */
-void test_l1_dsAudio_negative_dsSetAudioMixerLevels_sink(void) {
+void test_l1_dsAudio_negative_dsSetAudioMixerLevels(void) {
         // Start of the test
         gTestID = 128; // Assuming Test Case ID is 128
         UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -9234,7 +9466,11 @@ void test_l1_dsAudio_negative_dsSetAudioMixerLevels_sink(void) {
 
         // Step 01: Call dsSetAudioMixerLevels() without prior initialization of Audio Port
         result = dsSetAudioMixerLevels((intptr_t)NULL, dsAUDIO_INPUT_PRIMARY, valid_vol_level);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // Step 02: Initialize Audio Port using dsAudioPortInit()
         result = dsAudioPortInit();
@@ -9249,6 +9485,7 @@ void test_l1_dsAudio_negative_dsSetAudioMixerLevels_sink(void) {
                 if(result == dsERR_NONE ) {
                         // Step 04: Set Audio Mixer level for Invalid Audio Input(dsAudioInputMax)
                         result = dsSetAudioMixerLevels(*(handle+i), dsAUDIO_INPUT_MAX, valid_vol_level);
+                    if(gSourceType == 0){
                         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
                         // Step 05: Set Audio Mixer level for Invalid Volume Level above the upper limit(105)
@@ -9258,6 +9495,9 @@ void test_l1_dsAudio_negative_dsSetAudioMixerLevels_sink(void) {
                         // Step 06: Set Audio Mixer level for Invalid Volume Level below the lower limit(-5)
                         result = dsSetAudioMixerLevels(*(handle+i), dsAUDIO_INPUT_PRIMARY, invalid_vol_level_neg);
                         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                   } else {
+                        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+                   }
                 }
         }
 
@@ -9268,7 +9508,11 @@ void test_l1_dsAudio_negative_dsSetAudioMixerLevels_sink(void) {
 
         // Step 08: Call dsSetAudioMixerLevels() after termination
         result = dsSetAudioMixerLevels(*handle, dsAUDIO_INPUT_PRIMARY, valid_vol_level);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // deallocating memory
         free(handle);
@@ -9386,7 +9630,7 @@ void test_l1_dsAudio_negative_dsAudioAtmosCapsChangeRegisterCB(void) {
  * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  *
  */
-void test_l1_dsAudio_positive_dsGetSupportedARCTypes_sink(void) {
+void test_l1_dsAudio_positive_dsGetSupportedARCTypes(void) {
 	// Logging at the start
 	gTestID = 131;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -9414,12 +9658,16 @@ void test_l1_dsAudio_positive_dsGetSupportedARCTypes_sink(void) {
                 continue;
 
 		result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, (handle+i));
+             if(gSourceType == 0) {
 		UT_ASSERT_EQUAL(result, dsERR_NONE);
 		UT_ASSERT_NOT_EQUAL(*(handle+i), null_handle);
 
 	        // Step 03: supported ARC types of the connected ARC/eARC
                 result = dsGetSupportedARCTypes(*(handle+i), &types);
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
+             } else {
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+             }
 	}
 
 	// Step 04: Terminate audio ports
@@ -9455,7 +9703,7 @@ void test_l1_dsAudio_positive_dsGetSupportedARCTypes_sink(void) {
  *
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
-void test_l1_dsAudio_negative_dsGetSupportedARCTypes_sink(void) {
+void test_l1_dsAudio_negative_dsGetSupportedARCTypes(void) {
 	// Logging at the start
 	gTestID = 132;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -9474,7 +9722,11 @@ void test_l1_dsAudio_negative_dsGetSupportedARCTypes_sink(void) {
 
 	// Step 01: Attempt to get SupportedARCTypes without initializing
 	result = dsGetSupportedARCTypes(-1, &type);
-	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+       	    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
@@ -9482,7 +9734,11 @@ void test_l1_dsAudio_negative_dsGetSupportedARCTypes_sink(void) {
 
 	// Step 03: Attempt to get SupportedARCTypes using an invalid handle
 	result = dsGetSupportedARCTypes(*handle, &type);
-	UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if(gSourceType == 0) {
+       	    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
 	// Step 04: Get the port handle for all supported audio ports
 	for (int i = 0; i < gDSAudioNumberOfPorts; i++) {
@@ -9495,7 +9751,11 @@ void test_l1_dsAudio_negative_dsGetSupportedARCTypes_sink(void) {
 
 		// Step 05: Attempt to get SupportedARCTypes with a null pointer
                 result = dsGetSupportedARCTypes(*(handle+i), NULL);
-                UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                if(gSourceType == 0) {
+                    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                } else {
+                    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+                }
 	}
 
 	// Step 06: Terminate audio ports
@@ -9504,7 +9764,11 @@ void test_l1_dsAudio_negative_dsGetSupportedARCTypes_sink(void) {
 
 	// Step 07: Attempt to get SupportedARCTypes after termination
 	result = dsGetSupportedARCTypes(*handle, &type);
-	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+       	    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // deallocating memory
         free(handle);
@@ -9531,7 +9795,7 @@ void test_l1_dsAudio_negative_dsGetSupportedARCTypes_sink(void) {
  * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  *
  */
-void test_l1_dsAudio_positive_dsAudioSetSAD_sink(void) {
+void test_l1_dsAudio_positive_dsAudioSetSAD(void) {
 	// Logging at the start
 	gTestID = 133;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -9565,7 +9829,11 @@ void test_l1_dsAudio_positive_dsAudioSetSAD_sink(void) {
 
 		// Step 03: Set SAD for HDMI ARC port
                 result = dsAudioSetSAD(*(handle+i), sadlist);
-                UT_ASSERT_EQUAL(result, dsERR_NONE);
+                if(gSourceType == 0) {
+                    UT_ASSERT_EQUAL(result, dsERR_NONE);
+                } else {
+                    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+                }
 	}
 
 	// Step 04: Terminate audio ports
@@ -9602,7 +9870,7 @@ void test_l1_dsAudio_positive_dsAudioSetSAD_sink(void) {
  *
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
-void test_l1_dsAudio_negative_dsAudioSetSAD_sink(void) {
+void test_l1_dsAudio_negative_dsAudioSetSAD(void) {
 	// Logging at the start
 	gTestID = 134;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -9623,7 +9891,11 @@ void test_l1_dsAudio_negative_dsAudioSetSAD_sink(void) {
 
 	// Step 01: Attempt to set Short Audio Descriptor without initializing
 	result = dsAudioSetSAD(-1, sadlist);
-	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
@@ -9631,7 +9903,11 @@ void test_l1_dsAudio_negative_dsAudioSetSAD_sink(void) {
 
 	// Step 03: Attempt to set Short Audio Descriptor using an invalid handle
 	result = dsAudioSetSAD(*handle, sadlist);
-	UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if(gSourceType == 0) {
+  	    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
 	// Step 04: Get the port handle for all supported audio ports
 	for (int i = 0; i < gDSAudioNumberOfPorts; i++) {
@@ -9647,7 +9923,11 @@ void test_l1_dsAudio_negative_dsAudioSetSAD_sink(void) {
 		sadlist1.sad[0] = -1; sadlist1.sad[1] = -2; sadlist1.sad[2] = -3; sadlist1.sad[3] = -4;
                 sadlist1.count = 20; //max sad is 15
                 result = dsAudioSetSAD(*(handle+i), sadlist1);
-                UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                if(gSourceType == 0) {
+                    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                } else {
+                    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+                }
 	}
 
 	// Step 06: Terminate audio ports
@@ -9656,7 +9936,11 @@ void test_l1_dsAudio_negative_dsAudioSetSAD_sink(void) {
 
 	// Step 07: Attempt to set Short Audio Descriptor after termination
 	result = dsAudioSetSAD(*handle, sadlist);
-	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+       	    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // deallocating memory
         free(handle);
@@ -9684,7 +9968,7 @@ void test_l1_dsAudio_negative_dsAudioSetSAD_sink(void) {
  * |05|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  *
  */
-void test_l1_dsAudio_positive_dsAudioEnableARC_sink(void) {
+void test_l1_dsAudio_positive_dsAudioEnableARC(void) {
 	// Start of the test
 	gTestID = 135; // Assuming Test Case ID is 135
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -9720,12 +10004,17 @@ void test_l1_dsAudio_positive_dsAudioEnableARC_sink(void) {
 			arcstatus.status = true;
 			// Enable ARC/eARC
 			result = dsAudioEnableARC(*(handle+i), arcstatus);
+                     if(gSourceType == 0) {
+
 			UT_ASSERT_EQUAL(result, dsERR_NONE);
 
 			// Disable ARC/eARC
 			arcstatus.status = false;
 			result = dsAudioEnableARC(*(handle+i), arcstatus);
 			UT_ASSERT_EQUAL(result, dsERR_NONE);
+                    } else {
+                        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+                    }
 		}
 	}
 
@@ -9763,7 +10052,7 @@ void test_l1_dsAudio_positive_dsAudioEnableARC_sink(void) {
  *
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
  */
-void test_l1_dsAudio_negative_dsAudioEnableARC_sink(void) {
+void test_l1_dsAudio_negative_dsAudioEnableARC(void) {
 	// Start of the test
 	gTestID = 136; // Assuming Test Case ID is 136
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -9785,7 +10074,11 @@ void test_l1_dsAudio_negative_dsAudioEnableARC_sink(void) {
 
 	// Step 01: Attempt to enable ARC/eARC without initializing
 	result = dsAudioEnableARC(-1, arcstatus);
-	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+ 	    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
 	// Step 02: Initialize audio ports
 	result = dsAudioPortInit();
@@ -9793,7 +10086,11 @@ void test_l1_dsAudio_negative_dsAudioEnableARC_sink(void) {
 
 	// Step 03: Attempt to enable with invalid handle
 	result = dsAudioEnableARC(*handle, arcstatus);
-	UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if(gSourceType == 0) {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
 	// Step 04: Loop through kPorts to get audio port handle
 	for (int i = 0; i < gDSAudioNumberOfPorts; i++) {
@@ -9807,7 +10104,11 @@ void test_l1_dsAudio_negative_dsAudioEnableARC_sink(void) {
 		// Step 05: Attempt to enable unsupported ARC/eARC
 		arcstatus.type = 0x03;
 		result = dsAudioEnableARC(*(handle+i), arcstatus);
-		UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                if(gSourceType == 0) {
+		    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                } else {
+                    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+                }
 	}
 
 	// Step 06: Terminate audio ports
@@ -9816,7 +10117,11 @@ void test_l1_dsAudio_negative_dsAudioEnableARC_sink(void) {
 
 	// Step 07: Attempt to enable ARC/eARC after terminating
 	result = dsAudioEnableARC(*handle, arcstatus);
-	CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0) {
+            CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // deallocating memory
         free(handle);
@@ -9835,28 +10140,13 @@ static UT_test_suite_t * pSuite = NULL;
 int test_l1_dsAudio_register ( void )
 {
 
-    if(gSourceType == 1) {
-        // Create the test suite for source type
-        pSuite = UT_add_suite("[L1 dsAudio - Source]", NULL, NULL);
-        if (pSuite == NULL) {
-            UT_LOG_ERROR("Failed to create the test suite");
-            return -1;
-        }
-    }
-    else if(gSourceType == 0) {
-        // Create the test suite for sink type
-        pSuite = UT_add_suite("[L1 dsAudio - Sink]", NULL, NULL);
-        if (pSuite == NULL) {
-            UT_LOG_ERROR("Failed to create the test suite");
-            return -1;
-        }
-    }
-    else {
-        UT_LOG_ERROR("Invalid platform type");
+    /* add a suite to the registry */
+    pSuite = UT_add_suite( "[L1 dsAudio]", NULL, NULL );
+    if ( NULL == pSuite )
+    {
         return -1;
     }
 
-    /* add a suite to the registry */
     UT_add_test( pSuite, "dsAudioPortInit_L1_positive" ,test_l1_dsAudio_positive_dsAudioPortInit );
     UT_add_test( pSuite, "dsAudioPortInit_L1_negative" ,test_l1_dsAudio_negative_dsAudioPortInit );
     UT_add_test( pSuite, "dsAudioPortTerm_L1_positive" ,test_l1_dsAudio_positive_dsAudioPortTerm );
@@ -9909,30 +10199,26 @@ int test_l1_dsAudio_register ( void )
     UT_add_test( pSuite, "dsGetGraphicEqualizerMode_L1_negative" ,test_l1_dsAudio_negative_dsGetGraphicEqualizerMode );
     UT_add_test( pSuite, "dsSetGraphicEqualizerMode_L1_positive" ,test_l1_dsAudio_positive_dsSetGraphicEqualizerMode );
     UT_add_test( pSuite, "dsSetGraphicEqualizerMode_L1_negative" ,test_l1_dsAudio_negative_dsSetGraphicEqualizerMode );
-if(gSourceType == 0) {
-    UT_add_test( pSuite, "dsGetMS12AudioProfileList_L1_positive" ,test_l1_dsAudio_positive_dsGetMS12AudioProfileList_sink );
-    UT_add_test( pSuite, "dsGetMS12AudioProfileList_L1_negative" ,test_l1_dsAudio_negative_dsGetMS12AudioProfileList_sink );
-}
+    UT_add_test( pSuite, "dsGetMS12AudioProfileList_L1_positive" ,test_l1_dsAudio_positive_dsGetMS12AudioProfileList );
+    UT_add_test( pSuite, "dsGetMS12AudioProfileList_L1_negative" ,test_l1_dsAudio_negative_dsGetMS12AudioProfileList );
     UT_add_test( pSuite, "dsGetMS12AudioProfile_L1_positive" ,test_l1_dsAudio_positive_dsGetMS12AudioProfile );
     UT_add_test( pSuite, "dsGetMS12AudioProfile_L1_negative" ,test_l1_dsAudio_negative_dsGetMS12AudioProfile );
     UT_add_test( pSuite, "dsGetStereoMode_L1_positive" ,test_l1_dsAudio_positive_dsGetStereoMode );
     UT_add_test( pSuite, "dsGetStereoMode_L1_negative" ,test_l1_dsAudio_negative_dsGetStereoMode );
     UT_add_test( pSuite, "dsSetStereoMode_L1_positive" ,test_l1_dsAudio_positive_dsSetStereoMode );
     UT_add_test( pSuite, "dsSetStereoMode_L1_negative" ,test_l1_dsAudio_negative_dsSetStereoMode );
-if(gSourceType == 0) {
-    UT_add_test( pSuite, "dsGetStereoAuto_L1_positive" ,test_l1_dsAudio_positive_dsGetStereoAuto_sink );
-    UT_add_test( pSuite, "dsGetStereoAuto_L1_negative" ,test_l1_dsAudio_negative_dsGetStereoAuto_sink );
-    UT_add_test( pSuite, "dsSetStereoAuto_L1_positive" ,test_l1_dsAudio_positive_dsSetStereoAuto_sink );
-    UT_add_test( pSuite, "dsSetStereoAuto_L1_negative" ,test_l1_dsAudio_negative_dsSetStereoAuto_sink );
-    UT_add_test( pSuite, "dsGetAudioGain_L1_positive" ,test_l1_dsAudio_positive_dsGetAudioGain_sink );
-    UT_add_test( pSuite, "dsGetAudioGain_L1_negative" ,test_l1_dsAudio_negative_dsGetAudioGain_sink );
-    UT_add_test( pSuite, "dsSetAudioGain_L1_positive" ,test_l1_dsAudio_positive_dsSetAudioGain_sink );
-    UT_add_test( pSuite, "dsSetAudioGain_L1_negative" ,test_l1_dsAudio_negative_dsSetAudioGain_sink );
-    UT_add_test( pSuite, "dsGetAudioLevel_L1_positive" ,test_l1_dsAudio_positive_dsGetAudioLevel_sink );
-    UT_add_test( pSuite, "dsGetAudioLevel_L1_negative" ,test_l1_dsAudio_negative_dsGetAudioLevel_sink );
-    UT_add_test( pSuite, "dsSetAudioLevel_L1_positive" ,test_l1_dsAudio_positive_dsSetAudioLevel_sink );
-    UT_add_test( pSuite, "dsSetAudioLevel_L1_negative" ,test_l1_dsAudio_negative_dsSetAudioLevel_sink );
-}
+    UT_add_test( pSuite, "dsGetStereoAuto_L1_positive" ,test_l1_dsAudio_positive_dsGetStereoAuto );
+    UT_add_test( pSuite, "dsGetStereoAuto_L1_negative" ,test_l1_dsAudio_negative_dsGetStereoAuto );
+    UT_add_test( pSuite, "dsSetStereoAuto_L1_positive" ,test_l1_dsAudio_positive_dsSetStereoAuto );
+    UT_add_test( pSuite, "dsSetStereoAuto_L1_negative" ,test_l1_dsAudio_negative_dsSetStereoAuto );
+    UT_add_test( pSuite, "dsGetAudioGain_L1_positive" ,test_l1_dsAudio_positive_dsGetAudioGain );
+    UT_add_test( pSuite, "dsGetAudioGain_L1_negative" ,test_l1_dsAudio_negative_dsGetAudioGain );
+    UT_add_test( pSuite, "dsSetAudioGain_L1_positive" ,test_l1_dsAudio_positive_dsSetAudioGain );
+    UT_add_test( pSuite, "dsSetAudioGain_L1_negative" ,test_l1_dsAudio_negative_dsSetAudioGain );
+    UT_add_test( pSuite, "dsGetAudioLevel_L1_positive" ,test_l1_dsAudio_positive_dsGetAudioLevel );
+    UT_add_test( pSuite, "dsGetAudioLevel_L1_negative" ,test_l1_dsAudio_negative_dsGetAudioLevel );
+    UT_add_test( pSuite, "dsSetAudioLevel_L1_positive" ,test_l1_dsAudio_positive_dsSetAudioLevel );
+    UT_add_test( pSuite, "dsSetAudioLevel_L1_negative" ,test_l1_dsAudio_negative_dsSetAudioLevel );
     UT_add_test( pSuite, "dsGetAudioDelay_L1_positive" ,test_l1_dsAudio_positive_dsGetAudioDelay );
     UT_add_test( pSuite, "dsGetAudioDelay_L1_negative" ,test_l1_dsAudio_negative_dsGetAudioDelay );
     UT_add_test( pSuite, "dsSetAudioDelay_L1_positive" ,test_l1_dsAudio_positive_dsSetAudioDelay );
@@ -9949,26 +10235,22 @@ if(gSourceType == 0) {
     UT_add_test( pSuite, "dsEnableAudioPort_L1_negative" ,test_l1_dsAudio_negative_dsEnableAudioPort );
     UT_add_test( pSuite, "dsEnableMS12Config_L1_positive" ,test_l1_dsAudio_positive_dsEnableMS12Config );
     UT_add_test( pSuite, "dsEnableMS12Config_L1_negative" ,test_l1_dsAudio_negative_dsEnableMS12Config );
-if(gSourceType == 0) {
-    UT_add_test( pSuite, "dsEnableLEConfig_L1_positive" ,test_l1_dsAudio_positive_dsEnableLEConfig_sink );
-    UT_add_test( pSuite, "dsEnableLEConfig_L1_negative" ,test_l1_dsAudio_negative_dsEnableLEConfig_sink );
-    UT_add_test( pSuite, "dsGetLEConfig_L1_positive" ,test_l1_dsAudio_positive_dsGetLEConfig_sink );
-    UT_add_test( pSuite, "dsGetLEConfig_L1_negative" ,test_l1_dsAudio_negative_dsGetLEConfig_sink );
-    UT_add_test( pSuite, "dsSetMS12AudioProfile_L1_positive" ,test_l1_dsAudio_positive_dsSetMS12AudioProfile_sink );
-    UT_add_test( pSuite, "dsSetMS12AudioProfile_L1_negative" ,test_l1_dsAudio_negative_dsSetMS12AudioProfile_sink );
-}
+    UT_add_test( pSuite, "dsEnableLEConfig_L1_positive" ,test_l1_dsAudio_positive_dsEnableLEConfig );
+    UT_add_test( pSuite, "dsEnableLEConfig_L1_negative" ,test_l1_dsAudio_negative_dsEnableLEConfig );
+    UT_add_test( pSuite, "dsGetLEConfig_L1_positive" ,test_l1_dsAudio_positive_dsGetLEConfig );
+    UT_add_test( pSuite, "dsGetLEConfig_L1_negative" ,test_l1_dsAudio_negative_dsGetLEConfig );
+    UT_add_test( pSuite, "dsSetMS12AudioProfile_L1_positive" ,test_l1_dsAudio_positive_dsSetMS12AudioProfile );
+    UT_add_test( pSuite, "dsSetMS12AudioProfile_L1_negative" ,test_l1_dsAudio_negative_dsSetMS12AudioProfile );
     UT_add_test( pSuite, "dsSetAudioMute_L1_positive" ,test_l1_dsAudio_positive_dsSetAudioMute );
     UT_add_test( pSuite, "dsSetAudioMute_L1_negative" ,test_l1_dsAudio_negative_dsSetAudioMute );
     UT_add_test( pSuite, "dsIsAudioMSDecode_L1_positive" ,test_l1_dsAudio_positive_dsIsAudioMSDecode );
     UT_add_test( pSuite, "dsIsAudioMSDecode_L1_negative" ,test_l1_dsAudio_negative_dsIsAudioMSDecode );
     UT_add_test( pSuite, "dsIsAudioMS12Decode_L1_positive" ,test_l1_dsAudio_positive_dsIsAudioMS12Decode );
     UT_add_test( pSuite, "dsIsAudioMS12Decode_L1_negative" ,test_l1_dsAudio_negative_dsIsAudioMS12Decode );
-if(gSourceType == 0) {
-    UT_add_test( pSuite, "dsAudioOutIsConnected_L1_positive" ,test_l1_dsAudio_positive_dsAudioOutIsConnected_sink );
-    UT_add_test( pSuite, "dsAudioOutIsConnected_L1_negative" ,test_l1_dsAudio_negative_dsAudioOutIsConnected_sink );
-    UT_add_test( pSuite, "dsAudioOutRegisterConnectCB_L1_positive" ,test_l1_dsAudio_positive_dsAudioOutRegisterConnectCB_sink );
-    UT_add_test( pSuite, "dsAudioOutRegisterConnectCB_L1_negative" ,test_l1_dsAudio_negative_dsAudioOutRegisterConnectCB_sink );
-}
+    UT_add_test( pSuite, "dsAudioOutIsConnected_L1_positive" ,test_l1_dsAudio_positive_dsAudioOutIsConnected );
+    UT_add_test( pSuite, "dsAudioOutIsConnected_L1_negative" ,test_l1_dsAudio_negative_dsAudioOutIsConnected );
+    UT_add_test( pSuite, "dsAudioOutRegisterConnectCB_L1_positive" ,test_l1_dsAudio_positive_dsAudioOutRegisterConnectCB );
+    UT_add_test( pSuite, "dsAudioOutRegisterConnectCB_L1_negative" ,test_l1_dsAudio_negative_dsAudioOutRegisterConnectCB );
     UT_add_test( pSuite, "dsAudioFormatUpdateRegisterCB_L1_positive" ,test_l1_dsAudio_positive_dsAudioFormatUpdateRegisterCB );
     UT_add_test( pSuite, "dsAudioFormatUpdateRegisterCB_L1_negative" ,test_l1_dsAudio_negative_dsAudioFormatUpdateRegisterCB );
     UT_add_test( pSuite, "dsGetAudioCapabilities_L1_positive" ,test_l1_dsAudio_positive_dsGetAudioCapabilities );
@@ -9991,20 +10273,17 @@ if(gSourceType == 0) {
     UT_add_test( pSuite, "dsSetSecondaryLanguage_L1_negative" ,test_l1_dsAudio_negative_dsSetSecondaryLanguage );
     UT_add_test( pSuite, "dsGetSecondaryLanguage_L1_positive" ,test_l1_dsAudio_positive_dsGetSecondaryLanguage );
     UT_add_test( pSuite, "dsGetSecondaryLanguage_L1_negative" ,test_l1_dsAudio_negative_dsGetSecondaryLanguage );
-if(gSourceType == 0) {
-    UT_add_test( pSuite, "dsSetAudioMixerLevels_l1_positive" ,test_l1_dsAudio_positive_dsSetAudioMixerLevels_sink );
-    UT_add_test( pSuite, "dsSetAudioMixerLevels_l1_negative" ,test_l1_dsAudio_negative_dsSetAudioMixerLevels_sink );
-}
+    UT_add_test( pSuite, "dsSetAudioMixerLevels_l1_positive" ,test_l1_dsAudio_positive_dsSetAudioMixerLevels );
+    UT_add_test( pSuite, "dsSetAudioMixerLevels_l1_negative" ,test_l1_dsAudio_negative_dsSetAudioMixerLevels );
     UT_add_test( pSuite, "dsAudioAtmosCapsChangeRegisterCB_l1_positive" ,test_l1_dsAudio_positive_dsAudioAtmosCapsChangeRegisterCB );
     UT_add_test( pSuite, "dsAudioAtmosCapsChangeRegisterCB_l1_negative" ,test_l1_dsAudio_negative_dsAudioAtmosCapsChangeRegisterCB );
-if(gSourceType == 0) {
-    UT_add_test( pSuite, "dsGetSupportedARCTypes_l1_positive" ,test_l1_dsAudio_positive_dsGetSupportedARCTypes_sink );
-    UT_add_test( pSuite, "dsGetSupportedARCTypes_l1_negative" ,test_l1_dsAudio_negative_dsGetSupportedARCTypes_sink );
-    UT_add_test( pSuite, "dsAudioSetSAD_l1_positive" ,test_l1_dsAudio_positive_dsAudioSetSAD_sink );
-    UT_add_test( pSuite, "dsAudioSetSAD_l1_negative" ,test_l1_dsAudio_negative_dsAudioSetSAD_sink );
-    UT_add_test( pSuite, "dsAudioEnableARC_l1_positive" ,test_l1_dsAudio_positive_dsAudioEnableARC_sink );
-    UT_add_test( pSuite, "dsAudioEnableARC_l1_negative" ,test_l1_dsAudio_negative_dsAudioEnableARC_sink );
-}
+    UT_add_test( pSuite, "dsGetSupportedARCTypes_l1_positive" ,test_l1_dsAudio_positive_dsGetSupportedARCTypes );
+    UT_add_test( pSuite, "dsGetSupportedARCTypes_l1_negative" ,test_l1_dsAudio_negative_dsGetSupportedARCTypes );
+    UT_add_test( pSuite, "dsAudioSetSAD_l1_positive" ,test_l1_dsAudio_positive_dsAudioSetSAD );
+    UT_add_test( pSuite, "dsAudioSetSAD_l1_negative" ,test_l1_dsAudio_negative_dsAudioSetSAD );
+    UT_add_test( pSuite, "dsAudioEnableARC_l1_positive" ,test_l1_dsAudio_positive_dsAudioEnableARC );
+    UT_add_test( pSuite, "dsAudioEnableARC_l1_negative" ,test_l1_dsAudio_negative_dsAudioEnableARC );
+
     extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsAudio/features/extendedEnumsSupported" );
 
     return 0;
