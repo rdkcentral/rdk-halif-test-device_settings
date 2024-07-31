@@ -399,7 +399,7 @@ void test_l1_dsVideoDevice_positive_dsSetDFC (void)
         UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
         
         if(gSourceType == 1) {
-            // 03: Loop through the supported zoom modes
+            // 03: Set DFC mode with various zoom modes
             for (int j = 0; j < gDSVideoDeviceConfiguration[j].NoOfSupportedDFCs; ++j) {
                 result = dsSetDFC(handle, gDSVideoDeviceConfiguration[i].SupportedDFCs[j]);
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -528,6 +528,8 @@ void test_l1_dsVideoDevice_positive_dsGetDFC(void)
             // Step 04: Get the DFC mode from the profile
             for (int j = 0; j < gDSVideoDeviceConfiguration[j].NoOfSupportedDFCs; ++j) {
                 dsVideoZoom_t dfc_mode = gDSVideoDeviceConfiguration[i].SupportedDFCs[j];
+                int result = dsSetDFC(handle, dfc_mode);
+                UT_ASSERT_EQUAL(result, dsERR_NONE);
 
                 // Step 05: Compare the DFC mode with the value from the profile
                 UT_ASSERT_EQUAL(dfc_mode, gDSVideoDeviceConfiguration[i].SupportedDFCs[j]);
@@ -1138,7 +1140,6 @@ void test_l1_dsVideoDevice_positive_dsSetFRFMode(void)
     // Step 02: Obtain video device handle
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 03: Set the FRF mode using a valid framerate
@@ -1151,6 +1152,14 @@ void test_l1_dsVideoDevice_positive_dsSetFRFMode(void)
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
             }
         }
+
+       // Step 03: Set the FRF mode using a valid framerate
+       result = dsSetFRFMode(handle, validFramerate);
+       if(gSourceType == 1) {
+           UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+       } else if(gSourceType == 0) {
+           UT_ASSERT_EQUAL(result, dsERR_NONE);
+       }
     }
 
     // Step 04: De-initialize the video devices
@@ -1522,6 +1531,11 @@ void test_l1_dsVideoDevice_positive_dsSetDisplayframerate(void)
                 result = dsSetDisplayframerate(handle, gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate);  
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
             }
+
+        // Step 03: Set the display framerate using the obtained handle
+        result = dsSetDisplayframerate(handle, desiredFramerate);
+        if(gSourceType == 0) {
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
         } else if(gSourceType == 1) {
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
