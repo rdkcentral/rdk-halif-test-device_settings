@@ -6,5 +6,4 @@ dsDisplay:
   # dsVIDEO_ASPECT_RATIO_4x3 = 0x00,    ///< 4:3 aspect ratio
   # dsVIDEO_ASPECT_RATIO_16x9 = 0x01,   ///< 16:9 aspect ratio
   # dsVIDEO_ASPECT_RATIO_MAX  = 0xFF    ///< Out of range
-  Default_Aspect_Ratio: 16:9
   Aspect Ratio: 0x01 # 16:9
