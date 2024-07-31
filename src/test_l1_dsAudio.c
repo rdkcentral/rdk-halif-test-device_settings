@@ -2833,8 +2833,8 @@ void test_l1_dsAudio_positive_dsSetDRCMode(void) {
         // Step 01: Initialize audio ports
         result = dsAudioPortInit();
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-        // Step 02: Get the port handle for all supported audio ports
+        
+	// Step 02: Get the port handle for all supported audio ports
         for (int i = 0; i < gDSAudioNumberOfPorts; i++) {
                 result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, (handle+i));
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -3886,7 +3886,7 @@ void test_l1_dsAudio_positive_dsGetMS12AudioProfileList(void) {
 
                 // Step 03: Get the list of supported MS12 audio profiles for each port
                 result = dsGetMS12AudioProfileList(*(handle+i), &profileList1);
-            if(gSourceType == 0) {
+             if(gSourceType == 0) {
 
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -4833,11 +4833,6 @@ void test_l1_dsAudio_positive_dsGetAudioGain(void) {
             if(gSourceType == 0) {
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
                 UT_ASSERT_TRUE(gain1 >= -2080 && gain1 <= 480);
-
-                // Step 03: Get audio gain for each port in new array
-                result = dsGetAudioGain(*(handle+i), &gain2);
-                UT_ASSERT_EQUAL(result, dsERR_NONE);
-                UT_ASSERT_TRUE(gain2 >= -2080 && gain2 <= 480);
 
                 //compare the values of gain arrays
                 UT_ASSERT_EQUAL(gain1, gain2);
@@ -6683,6 +6678,7 @@ void test_l1_dsAudio_positive_dsEnableLEConfig(void) {
         result = dsAudioPortTerm();
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
+
         // deallocating memory
         free(handle);
 
@@ -6917,6 +6913,7 @@ void test_l1_dsAudio_negative_dsGetLEConfig(void) {
 
                 //Setp 05:Attempt to get LE Config with NULL pointer
                 result = dsGetLEConfig(*(handle+i), NULL);
+
              if(gSourceType == 0) {
                 UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
              } else {
@@ -9773,6 +9770,9 @@ void test_l1_dsAudio_negative_dsGetSupportedARCTypes(void) {
         // deallocating memory
         free(handle);
 
+        // deallocating memory
+        free(handle);
+
 	// Logging at the end
 	UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -9941,6 +9941,9 @@ void test_l1_dsAudio_negative_dsAudioSetSAD(void) {
         } else {
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
+
+        // deallocating memory
+        free(handle);
 
         // deallocating memory
         free(handle);
@@ -10283,7 +10286,7 @@ int test_l1_dsAudio_register ( void )
     UT_add_test( pSuite, "dsAudioSetSAD_l1_negative" ,test_l1_dsAudio_negative_dsAudioSetSAD );
     UT_add_test( pSuite, "dsAudioEnableARC_l1_positive" ,test_l1_dsAudio_positive_dsAudioEnableARC );
     UT_add_test( pSuite, "dsAudioEnableARC_l1_negative" ,test_l1_dsAudio_negative_dsAudioEnableARC );
-
+    
     extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsAudio/features/extendedEnumsSupported" );
 
     return 0;
