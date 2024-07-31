@@ -496,9 +496,8 @@ void test_l1_dsVideoDevice_negative_dsSetDFC (void)
  * |01|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
  * |02|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
  * |03|Get the DFC mode using dsGetDFC() with the obtained handle |int=handle, dsVideoZoom_t*| dsERR_NONE | Should successfully fetch the DFC mode |
- * |04|Get the DFC mode from the profile |int=handle, dsVideoZoom_t*| dsERR_NONE | Should successfully fetch the DFC mode |
- * |05|Compare the results to make sure they match || Success | Should be equal |
- * |06|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * |04|Compare the dfc mode with the value from profile to make sure they match || Success | Should be equal |
+ * |05|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
  * 
  */
 void test_l1_dsVideoDevice_positive_dsGetDFC(void)
@@ -525,13 +524,8 @@ void test_l1_dsVideoDevice_positive_dsGetDFC(void)
             result = dsGetDFC(handle, &dfc_mode);
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-            // Step 04: Get the DFC mode from the profile
+            // Step 04: Compare the DFC mode with value from the profile
             for (int j = 0; j < gDSVideoDeviceConfiguration[j].NoOfSupportedDFCs; ++j) {
-                dsVideoZoom_t dfc_mode = gDSVideoDeviceConfiguration[i].SupportedDFCs[j];
-                int result = dsSetDFC(handle, dfc_mode);
-                UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-                // Step 05: Compare the DFC mode with the value from the profile
                 UT_ASSERT_EQUAL(dfc_mode, gDSVideoDeviceConfiguration[i].SupportedDFCs[j]);
             }
         } else if(gSourceType == 0) {
@@ -539,7 +533,7 @@ void test_l1_dsVideoDevice_positive_dsGetDFC(void)
         }
     }
 
-    // Step 06: De-initialize the video devices
+    // Step 05: De-initialize the video devices
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("\n Out %s\n", __FUNCTION__); 
