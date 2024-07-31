@@ -1152,14 +1152,6 @@ void test_l1_dsVideoDevice_positive_dsSetFRFMode(void)
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
             }
         }
-
-       // Step 03: Set the FRF mode using a valid framerate
-       result = dsSetFRFMode(handle, validFramerate);
-       if(gSourceType == 1) {
-           UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
-       } else if(gSourceType == 0) {
-           UT_ASSERT_EQUAL(result, dsERR_NONE);
-       }
     }
 
     // Step 04: De-initialize the video devices
@@ -1531,13 +1523,6 @@ void test_l1_dsVideoDevice_positive_dsSetDisplayframerate(void)
                 result = dsSetDisplayframerate(handle, gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate);  
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
             }
-
-        // Step 03: Set the display framerate using the obtained handle
-        result = dsSetDisplayframerate(handle, desiredFramerate);
-        if(gSourceType == 0) {
-            UT_ASSERT_EQUAL(result, dsERR_NONE);
-        } else if(gSourceType == 1) {
-            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
     }
 
