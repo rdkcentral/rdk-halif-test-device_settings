@@ -1388,23 +1388,24 @@ void test_l1_dsVideoDevice_positive_dsGetCurrentDisplayframerate(void)
         UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 03: Get the current display framerate using the obtained handle
-        for (int j=0;j<gDSVideoDeviceConfiguration[i].NoOfSupportedDFR;j++){
+        if(gSourceType == 0) {
             result = dsGetCurrentDisplayframerate(handle, fetchedFramerate);
-            if(gSourceType == 0) {
-                UT_ASSERT_EQUAL(result, dsERR_NONE);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-                // Step 04: Compare the current display framerate with the value from the profile
-	        UT_ASSERT_EQUAL(gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate, fetchedFramerate);
-            } else if(gSourceType == 1){
-                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+            // Step 04: Compare the current display framerate with the value from the profile
+            for (int j = 0; j < gDSVideoDeviceConfiguration[i].NoOfSupportedDFR ;j++) {
+                UT_ASSERT_EQUAL(fetchedFramerate, gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate);
             }
+        } else if(gSourceType == 1){
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
-    }  
+    }
+
     // Step 05: De-initialize the video devices
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -1517,6 +1518,8 @@ void test_l1_dsVideoDevice_positive_dsSetDisplayframerate(void)
                 result = dsSetDisplayframerate(handle, gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate);  
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
             }
+        } else if(gSourceType == 1){
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
     }
 
@@ -1741,7 +1744,7 @@ void test_l1_dsVideoDevice_positive_dsRegisterFrameratePostChangeCB(void)
     result = dsRegisterFrameratePostChangeCB(mockFrameRatePostChangeCallback);
     if(gSourceType == 1) {
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
-    } else if(gSourceType == 1) {
+    } else if(gSourceType == 0) {
         UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
