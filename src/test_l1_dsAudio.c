@@ -902,15 +902,16 @@ void test_l1_dsAudio_positive_dsGetDialogEnhancement(void) {
                 result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, (handle+i));
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
                 UT_ASSERT_NOT_EQUAL(*(handle+i), null_handle);
-        }
 
-        // Step 03: Get the dialog enhancement levels for each port
-        for (int i = 0; i < gDSAudioNumberOfPorts; i++) {
+                // Step 03: Get the dialog enhancement levels for each port
+
+                result = dsGetDialogEnhancement(*(handle+i), &dialogEnhancementLevel);
                 if(gDSAudioPortConfiguration[i].ms12_capabilites & 0x04)
                 {
-                        result = dsGetDialogEnhancement(*(handle+i), &dialogEnhancementLevel);
                         UT_ASSERT_EQUAL(result, dsERR_NONE);
                         UT_ASSERT_TRUE(dialogEnhancementLevel >= 0 && dialogEnhancementLevel <= 16); // Valid level range check
+                } else {
+                        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
                 }
         }
 
@@ -1067,7 +1068,7 @@ void test_l1_dsAudio_positive_dsSetDialogEnhancement(void) {
 
                 } else {
                         result = dsSetDialogEnhancement(*(handle+i), max_de_level);
-                        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
 
                 }
         }
@@ -4462,7 +4463,7 @@ void test_l1_dsAudio_positive_dsGetMS12AudioProfile(void) {
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
                 UT_ASSERT_NOT_EQUAL(*(handle+i), null_handle);
 
-                if(handle[i] == dsAUDIOPORT_TYPE_SPEAKER) {
+                if((gSourceType == 0) && (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER)) {
                         // Step 03: Get the current MS12 audio profile for Speaker. MS12 Audio Profile is supported only on SPEAKER Port
                         result = dsGetMS12AudioProfile(*(handle+i), currentProfile);
                         UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -4530,7 +4531,12 @@ void test_l1_dsAudio_negative_dsGetMS12AudioProfile(void) {
 
         // Step 01: Attempt to get MS12 Audio Profile without initializing
         result = dsGetMS12AudioProfile(-1, currentProfile);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0)
+        {
+             CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // Step 02: Initialize audio ports
         result = dsAudioPortInit();
@@ -4538,7 +4544,12 @@ void test_l1_dsAudio_negative_dsGetMS12AudioProfile(void) {
 
         // Step 03: Attempt to get MS12 Audio Profile using an invalid handle
         result = dsGetMS12AudioProfile(*handle, currentProfile);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if(gSourceType == 0)
+        {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // Step 04: Get the port handle for all supported audio ports
         for (int i = 0; i < gDSAudioNumberOfPorts; i++) {
@@ -4547,9 +4558,11 @@ void test_l1_dsAudio_negative_dsGetMS12AudioProfile(void) {
                 UT_ASSERT_NOT_EQUAL(*(handle+i), null_handle);
 
                 // Step 05: Attempt to get MS12 Audio Profile with a null pointer
-                if(handle[i] == gDSAudioPortConfiguration[0].typeid ) {
+                if((gSourceType == 0) && (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER) ) {
                         result = dsGetMS12AudioProfile(*(handle+i), NULL);
                         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                } else {
+                        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
                 }
         }
 
@@ -4559,7 +4572,12 @@ void test_l1_dsAudio_negative_dsGetMS12AudioProfile(void) {
 
         // Step 07: Attempt to get MS12 Audio Profile after termination
         result = dsGetMS12AudioProfile(*handle, currentProfile);
-        CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        if(gSourceType == 0)
+        {
+             CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM );
+        } else {
+             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // deallocating memory
         free(handle);
