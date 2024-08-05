@@ -99,13 +99,13 @@ static bool extendedEnumsSupported=false; //Default to not supported
 dsDisplayColorDepth_t getColorDepth(void){
     dsDisplayColorDepth_t colorDepth;
     if (gDSvideoPort_color_depth == 8) {
-        colorDepth = 0x01;
+        colorDepth = dsDISPLAY_COLORDEPTH_8BIT;
     } else if (gDSvideoPort_color_depth == 10) {
-        colorDepth = 0x02;
+        colorDepth = dsDISPLAY_COLORDEPTH_10BIT;
     } else if (gDSvideoPort_color_depth == 12) {
-        colorDepth = 0x04;
+        colorDepth = dsDISPLAY_COLORDEPTH_12BIT;
     } else {
-        colorDepth = 0x08;
+        colorDepth = dsDISPLAY_COLORDEPTH_AUTO;
     }
     return colorDepth;
 }
