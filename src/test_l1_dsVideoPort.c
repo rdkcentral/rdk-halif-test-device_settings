@@ -3199,7 +3199,7 @@ void test_l1_dsVideoPort_positive_dsGetColorDepth(void) {
         // Step 03: Retrieve the color depth
         status = dsGetColorDepth(handle, &colorDepth1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
-        // Step 04: Compare the value witjh values from profile file
+        // Step 04: Compare the value with values from profile file
         UT_ASSERT_EQUAL(colorDepth1, gDSvideoPort_color_depth);
     }
 
