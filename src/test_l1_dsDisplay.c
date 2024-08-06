@@ -63,12 +63,10 @@
  * @endparblock
  */
 
-
 /**
  * @file test_l1_dsDisplay.c
  *
  */
-
 
 #include <string.h>
 #include <stdlib.h>
@@ -149,7 +147,6 @@ void test_l1_dsDisplay_positive_dsDisplayInit(void) {
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
-
 /**
  * @brief Ensure dsDisplayInit() returns correct error codes during negative scenarios
  * 
@@ -186,7 +183,7 @@ void test_l1_dsDisplay_negative_dsDisplayInit(void) {
     result = dsDisplayInit();
     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_ALREADY_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-       
+ 
     // Step 03: Terminate the display module
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
@@ -195,7 +192,6 @@ void test_l1_dsDisplay_negative_dsDisplayInit(void) {
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
-
 
 /**
  * @brief Ensure dsDisplayTerm() terminates the display sub-system correctly during positive scenarios
@@ -277,10 +273,10 @@ void test_l1_dsDisplay_negative_dsDisplayTerm(void) {
     int result;
 
     // Step 01: Call dsDisplayTerm() without initializing the display sub-system
-     result = dsDisplayTerm();
-     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
-     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-       
+    result = dsDisplayTerm();
+    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
+ 
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
@@ -295,11 +291,10 @@ void test_l1_dsDisplay_negative_dsDisplayTerm(void) {
     result = dsDisplayTerm();
     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-      
+ 
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
-
 
 /**
  * @brief Ensure dsGetDisplay() retrieves the handle of the connected display device correctly during positive scenarios
@@ -339,7 +334,7 @@ void test_l1_dsDisplay_positive_dsGetDisplay(void) {
         snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
         uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
         UT_LOG("\n In %s Port Type: [%d]\n", __FUNCTION__, vType);
-    
+ 
         // Step 02: Call dsGetDisplay() for each valid port
         result = dsGetDisplay(vType, i, &displayHandle1);
         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
@@ -363,7 +358,6 @@ void test_l1_dsDisplay_positive_dsGetDisplay(void) {
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
-
 
 /**
  * @brief Ensure dsGetDisplay() returns correct error codes during negative scenarios
@@ -432,11 +426,10 @@ void test_l1_dsDisplay_negative_dsGetDisplay(void) {
     result = dsGetDisplay(vType, 0, &displayHandle);
     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    
+ 
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
-
 
 /**
  * @brief Ensure dsGetEDID() retrieves the EDID information correctly during positive scenarios
@@ -458,7 +451,6 @@ void test_l1_dsDisplay_negative_dsGetDisplay(void) {
  * |04|Call dsGetEDID() with the obtained display device handle | intptr_t handle, dsDisplayEDID_t *edid | dsERR_NONE and valid EDID info | EDID information should be retrieved successfully |
  * |05|Compare the returned results |  | Success | The values should be the same |
  * |06|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
- * 
  * 
  */
 void test_l1_dsDisplay_positive_dsGetEDID(void) {
@@ -519,7 +511,6 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
-
 /**
  * @brief Ensure dsGetEDID() returns correct error codes during negative scenarios
  * 
@@ -558,7 +549,7 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
     result = dsGetEDID(displayHandle, edid);
     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-       
+ 
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
@@ -591,12 +582,10 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
     result = dsGetEDID(displayHandle, edid);
     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-        
 
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
-
 
 /**
  * @brief Ensure dsGetEDIDBytes() retrieves the EDID buffer and length correctly during positive scenarios
@@ -614,10 +603,9 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize the display sub-system and get a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
  * |02|Call dsGetDisplay() Loop through all valid ports in numPorts[]|vType: [Valid Port Type]_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
- * |03|Allocate memory for the EDID buffer and call dsGetEDIDBytes() with the obtained handle | intptr_t handle, unsigned char *edid, int *length | dsERR_NONE, valid EDID data, and length | EDID buffer and length should be retrieved successfully |
- * |04|Allocate memory for the EDID buffer and call dsGetEDIDBytes() with the obtained handle | intptr_t handle, unsigned char *edid, int *length | dsERR_NONE, valid EDID data, and length | EDID buffer and length should be retrieved successfully |
- * |05|Verify that the return results are the same |  | Success | The results should be the same  |
- * |06|Free the allocated EDID buffer and terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Memory deallocation and termination should succeed |
+ * |03|Call dsGetEDIDBytes() with the obtained handle | intptr_t handle, unsigned char *edid, int *length | dsERR_NONE, valid EDID data, and length | EDID buffer and length should be retrieved successfully |
+ * |04|Compare the obtained value with the value from profile |  | Success | The results should be the same  |
+ * |05|Free the allocated EDID buffer and terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Memory deallocation and termination should succeed |
  * 
  */
 void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
@@ -627,16 +615,14 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
 
     int result;
     intptr_t displayHandle;
-    unsigned char *edid1 = NULL;
-    unsigned char *edid2 = NULL;
-    int length1 = 0;
+    unsigned char *edid = NULL;
+    int length = 0;
 
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
-    edid1 = (unsigned char *)malloc(512);
-    edid2 = (unsigned char *)malloc(512);
+    edid = (unsigned char *)malloc(512);
 
     // Step 02: Call dsGetDisplay() for each valid port
     uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
@@ -651,8 +637,8 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
             UT_FAIL("Failed to get display handle");
         }
 
-        // Step 03 and 04: Allocate memory for the EDID buffer and call dsGetEDIDBytes() twice
-        result = dsGetEDIDBytes(displayHandle, edid1, &length1); 
+        // Step 03: Call dsGetEDIDBytes() with the obtained handle 
+        result = dsGetEDIDBytes(displayHandle, edid, &length); 
         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         if(result != dsERR_NONE)
@@ -660,14 +646,12 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
             UT_FAIL("Failed to get EDID Bytes");
         }
 
-        // Step 05: Verify that the return results are the same
-        UT_ASSERT_KVP_EQUAL_PROFILE_UINT32(length1, "dsDisplay/EDID_Data/edidbytesLength");
-        UT_ASSERT_EQUAL(memcmp(edid1, edid2, length1), 0);
+        // Step 04: Compare the value with the value from profile
+        UT_ASSERT_KVP_EQUAL_PROFILE_UINT32(length, "dsDisplay/EDID_Data/edidbytesLength");
     }
-    free(edid1);
-    free(edid2);
+    free(edid);
 
-    // Step 06: Terminate the display sub-system
+    // Step 05: Terminate the display sub-system
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
@@ -716,7 +700,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
     result = dsGetEDIDBytes(displayHandle, edid, &length);
     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    
+ 
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
@@ -760,7 +744,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     free(edid);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    
+ 
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -830,7 +814,6 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
-
 /**
  * @brief Ensure dsGetDisplayAspectRatio() returns correct error codes during negative scenarios
  * 
@@ -869,7 +852,7 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
     result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio);
     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-   
+ 
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
@@ -902,7 +885,7 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
     result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio);
     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    
+ 
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -1002,7 +985,7 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
     result = dsRegisterDisplayEventCallback(displayHandle, testDisplayCallback);
     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-   
+ 
     // Step 02: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
@@ -1035,11 +1018,10 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
     result = dsRegisterDisplayEventCallback(displayHandle, testDisplayCallback);
     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
-    
+
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
-
 
 static UT_test_suite_t * pSuite = NULL;
 
