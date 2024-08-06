@@ -63,7 +63,6 @@
  * @endparblock
  */
 
-
 /**
  * @file test_l1_dsCompositeIn.c
  *
@@ -174,7 +173,6 @@ void test_l1_dsCompositeIn_negative_dsCompositeInInit(void)
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
-
 /**
  * @brief Ensure dsCompositeInTerm() returns correct error codes during positive scenarios
  * 
@@ -215,7 +213,6 @@ void test_l1_dsCompositeIn_positive_dsCompositeInTerm(void)
 
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
-
 
 /**
  * @brief Ensure dsCompositeInTerm() returns correct error codes during negative scenarios
@@ -260,7 +257,6 @@ void test_l1_dsCompositeIn_negative_dsCompositeInTerm(void)
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
-
 /**
  * @brief Ensure dsCompositeInGetNumberOfInputs() returns consistent error codes and output during positive scenarios
  * 
@@ -296,13 +292,12 @@ void test_l1_dsCompositeIn_positive_dsCompositeInGetNumberOfInputs(void)
 
     // Step 03: Compare the result with the value from the profile
     UT_ASSERT_KVP_EQUAL_PROFILE_UINT8(numberOfInputs, "dsCompositeIn/composite_input_configurations/number_of_ports");
-    
+ 
     // Step 04: Terminate the module
     UT_ASSERT_EQUAL_FATAL(dsCompositeInTerm(), dsERR_NONE);
 
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
-
 
 /**
  * @brief Ensure dsCompositeInGetNumberOfInputs() returns correct error codes during negative scenarios
@@ -353,7 +348,6 @@ void test_l1_dsCompositeIn_negative_dsCompositeInGetNumberOfInputs(void)
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
-
 /**
  * @brief Ensure dsCompositeInGetStatus() returns correct status and error codes during positive scenarios
  * 
@@ -399,7 +393,6 @@ void test_l1_dsCompositeIn_positive_dsCompositeInGetStatus(void)
 
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
-
 
 /**
  * @brief Ensure dsCompositeInGetStatus() returns correct error codes during negative scenarios
@@ -450,7 +443,6 @@ void test_l1_dsCompositeIn_negative_dsCompositeInGetStatus(void)
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
-
 /**
  * @brief Ensure dsCompositeInSelectPort() sets the COMPOSITE Input port correctly during positive scenarios
  * 
@@ -488,14 +480,12 @@ void test_l1_dsCompositeIn_positive_dsCompositeInSelectPort(void)
     for (int i = 0; i < numberOfInputs; ++i) {
         UT_ASSERT_EQUAL(dsCompositeInSelectPort((dsCompositeInPort_t)(i)), dsERR_NONE);
     }
-    
 
     // Step 04: Terminate the module
     UT_ASSERT_EQUAL_FATAL(dsCompositeInTerm(), dsERR_NONE);
 
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
-
 
 /**
  * @brief Ensure dsCompositeInSelectPort() returns correct error codes during negative scenarios
@@ -554,7 +544,6 @@ void test_l1_dsCompositeIn_negative_dsCompositeInSelectPort(void)
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
-
 /**
  * @brief Ensure dsCompositeInScaleVideo() scales the COMPOSITE In video correctly during positive scenarios
  * 
@@ -596,7 +585,7 @@ void test_l1_dsCompositeIn_positive_dsCompositeInScaleVideo(void)
 
          // Step 04: Scale video with first set of parameters
         UT_ASSERT_EQUAL(dsCompositeInScaleVideo(10, 10, 800, 800), dsERR_NONE);
-    
+ 
         // Step 05: Scale video with a different set of parameters
         UT_ASSERT_EQUAL(dsCompositeInScaleVideo(50, 50, 600, 600), dsERR_NONE);
     }
@@ -606,7 +595,6 @@ void test_l1_dsCompositeIn_positive_dsCompositeInScaleVideo(void)
 
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
-
 
 /**
  * @brief Ensure dsCompositeInScaleVideo() returns correct error codes during negative scenarios
@@ -669,7 +657,6 @@ void test_l1_dsCompositeIn_negative_dsCompositeInScaleVideo(void)
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
-
 /**
  * @brief Ensure dsCompositeInRegisterConnectCB() registers the COMPOSITE Input hot plug event correctly during positive scenarios
  * 
@@ -694,6 +681,7 @@ void test_l1_dsCompositeIn_negative_dsCompositeInScaleVideo(void)
 void exampleConnectCallback(dsCompositeInPort_t Port, bool isPortConnected) {
     // Implementation of the callback (dummy for testing)
 }
+
 void test_l1_dsCompositeIn_positive_dsCompositeInRegisterConnectCB(void)
 {
     gTestID = 13;
@@ -709,7 +697,6 @@ void test_l1_dsCompositeIn_positive_dsCompositeInRegisterConnectCB(void)
 
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
-
 
 /**
  * @brief Ensure dsCompositeInRegisterConnectCB() returns correct error codes during negative scenarios
@@ -741,7 +728,7 @@ void test_l1_dsCompositeIn_negative_dsCompositeInRegisterConnectCB(void)
     // Step 01: Call RegisterConnectCB without initialization
     dsError_t result = dsCompositeInRegisterConnectCB(exampleConnectCallback);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
-   
+ 
     // Step 02: Initialize the module
     UT_ASSERT_EQUAL_FATAL(dsCompositeInInit(), dsERR_NONE);
 
@@ -757,7 +744,6 @@ void test_l1_dsCompositeIn_negative_dsCompositeInRegisterConnectCB(void)
 
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
-
 
 /**
  * @brief Ensure dsCompositeInRegisterSignalChangeCB() registers the Composite Input Signal Change event correctly during positive scenarios
@@ -799,7 +785,6 @@ void test_l1_dsCompositeIn_positive_dsCompositeInRegisterSignalChangeCB(void)
 
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
-
 
 /**
  * @brief Ensure dsCompositeInRegisterSignalChangeCB() returns correct error codes during negative scenarios
@@ -848,7 +833,6 @@ void test_l1_dsCompositeIn_negative_dsCompositeInRegisterSignalChangeCB(void)
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
-
 /**
  * @brief Ensure dsCompositeInRegisterStatusChangeCB() registers the Composite Input Status Change event correctly during positive scenarios
  * 
@@ -889,7 +873,6 @@ void test_l1_dsCompositeIn_positive_dsCompositeInRegisterStatusChangeCB(void)
 
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
-
 
 /**
  * @brief Ensure dsCompositeInRegisterStatusChangeCB() returns correct error codes during negative scenarios
@@ -938,7 +921,6 @@ void test_l1_dsCompositeIn_negative_dsCompositeInRegisterStatusChangeCB(void)
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
-
 static UT_test_suite_t * pSuite = NULL;
 
 /**
@@ -974,7 +956,7 @@ int test_l1_dsCompositeIn_register ( void )
     
     if ( source_type == 0 ){
         UT_add_test( pSuite, "dsCompositeInInit_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInInit );
-	UT_add_test( pSuite, "dsCompositeInInit_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInInit );
+        UT_add_test( pSuite, "dsCompositeInInit_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInInit );
         UT_add_test( pSuite, "dsCompositeInTerm_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInTerm );
         UT_add_test( pSuite, "dsCompositeInTerm_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInTerm );
         UT_add_test( pSuite, "dsCompositeInGetNumberOfInputs_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInGetNumberOfInputs );
