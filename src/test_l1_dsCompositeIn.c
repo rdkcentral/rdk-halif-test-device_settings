@@ -120,6 +120,7 @@ void test_l1_dsCompositeIn_positive_dsCompositeInInit(void)
 {
     gTestID = 1;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+ 
     // Step 01: First-time initialization
     UT_ASSERT_EQUAL_FATAL(dsCompositeInInit(), dsERR_NONE);
 
@@ -160,6 +161,7 @@ void test_l1_dsCompositeIn_negative_dsCompositeInInit(void)
 {
     gTestID = 2;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
     // Step 01: Initialize the module
     UT_ASSERT_EQUAL_FATAL(dsCompositeInInit(), dsERR_NONE);
 
@@ -193,12 +195,12 @@ void test_l1_dsCompositeIn_negative_dsCompositeInInit(void)
  * |03|Call dsCompositeInInit() and initialize the module | | dsERR_NONE | Initialization should succeed |
  * |04|Call dsCompositeInTerm() to terminate the module| | dsERR_NONE | Termination should succeed |
  * 
- * 
  */
 void test_l1_dsCompositeIn_positive_dsCompositeInTerm(void)
 {
     gTestID = 3;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
     // Step 01: Initialize the module
     UT_ASSERT_EQUAL_FATAL(dsCompositeInInit(), dsERR_NONE);
 
@@ -240,6 +242,7 @@ void test_l1_dsCompositeIn_negative_dsCompositeInTerm(void)
 {
     gTestID = 4;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
     // Step 01: Call Termination without initialization
     dsError_t result = dsCompositeInTerm();
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
@@ -421,8 +424,8 @@ void test_l1_dsCompositeIn_negative_dsCompositeInGetStatus(void)
 {
     gTestID = 8;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
     dsCompositeInStatus_t status;
+
     // Step 01: Call GetStatus without initialization
     dsError_t result = dsCompositeInGetStatus(&status);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
@@ -628,6 +631,7 @@ void test_l1_dsCompositeIn_negative_dsCompositeInScaleVideo(void)
 {
     gTestID = 12;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
     // Step 01: Call ScaleVideo without initialization or port selection
     dsError_t result = dsCompositeInScaleVideo(10, 10, 800, 800);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
@@ -686,6 +690,7 @@ void test_l1_dsCompositeIn_positive_dsCompositeInRegisterConnectCB(void)
 {
     gTestID = 13;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
     // Step 01: Initialize the module
     UT_ASSERT_EQUAL_FATAL(dsCompositeInInit(), dsERR_NONE);
 
@@ -725,6 +730,7 @@ void test_l1_dsCompositeIn_negative_dsCompositeInRegisterConnectCB(void)
 {
     gTestID = 14;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
     // Step 01: Call RegisterConnectCB without initialization
     dsError_t result = dsCompositeInRegisterConnectCB(exampleConnectCallback);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
@@ -774,6 +780,7 @@ void test_l1_dsCompositeIn_positive_dsCompositeInRegisterSignalChangeCB(void)
 {
     gTestID = 15;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
     // Step 01: Initialize the module
     UT_ASSERT_EQUAL_FATAL(dsCompositeInInit(), dsERR_NONE);
 
@@ -813,6 +820,7 @@ void test_l1_dsCompositeIn_negative_dsCompositeInRegisterSignalChangeCB(void)
 {
     gTestID = 16;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
     // Step 01: Call RegisterSignalChangeCB without initialization
     dsError_t result = dsCompositeInRegisterSignalChangeCB(exampleSignalChangeCallback);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
@@ -862,6 +870,7 @@ void test_l1_dsCompositeIn_positive_dsCompositeInRegisterStatusChangeCB(void)
 {
     gTestID = 17;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
     // Step 01: Initialize the module
     UT_ASSERT_EQUAL_FATAL(dsCompositeInInit(), dsERR_NONE);
 
@@ -901,6 +910,7 @@ void test_l1_dsCompositeIn_negative_dsCompositeInRegisterStatusChangeCB(void)
 {
     gTestID = 18;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
     // Step 01: Call RegisterStatusChangeCB without initialization
     dsError_t result = dsCompositeInRegisterStatusChangeCB(exampleStatusChangeCallback);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
