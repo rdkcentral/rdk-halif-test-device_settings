@@ -1594,7 +1594,8 @@ void test_l1_dsFPD_negative_dsGetFPColor (void)
  * |01|Initialize using dsFPInit()||dsERR_NONE|Ensure the system is initialized|
  * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsSetFPDMode() and loop through all valid values in dsFPDMode_t|eMode: [Valid Mode]|dsERR_NONE|API should set mode successfully|
- * |04|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
+ * |04|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState() |eIndicator: [Valid Indicator],  state: dsFPD_STATE_OFF |dsERR_NONE |Ensure the indicators are set to OFF  |
+ * |05|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  *
  * @note This test case is deprecated. 
  * @note Valid indicators can retrieved from yaml file
@@ -1621,8 +1622,6 @@ void test_l1_dsFPD_positive_dsSetFPDMode (void)
         UT_LOG("\n In %s , Indicator: [%d]\n", __FUNCTION__,  eIndicator);
         result = dsSetFPState(eIndicator, dsFPD_STATE_ON);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-	result = dsSetFPState(eIndicator, dsFPD_STATE_OFF);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
     // Step 03: Call dsSetFPDMode() and loop through all valid values in dsFPDMode_t
@@ -1632,7 +1631,17 @@ void test_l1_dsFPD_positive_dsSetFPDMode (void)
         UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
-    // Step 04: Terminate using dsFPTerm()
+    // Step 04: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
+    for (int i = 1; i <= count; i++)
+    {
+        snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
+        eIndicator = UT_KVP_PROFILE_GET_UINT32(buffer);
+        UT_LOG("\n In %s , Indicator: [%d]\n", __FUNCTION__,  eIndicator);
+        result = dsSetFPState(eIndicator, dsFPD_STATE_OFF);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 05: Terminate using dsFPTerm()
     result = dsFPTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("\n Out  %s\n",__FUNCTION__);
