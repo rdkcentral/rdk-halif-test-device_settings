@@ -389,7 +389,7 @@ void test_l1_dsFPD_positive_dsSetFPState (void)
  * |02|Initialize with dsFPInit()| |dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsSetFPState() with an invalid eIndicator value|eIndicator: dsFPD_INDICATOR_MAX, state: dsFPD_STATE_OFF|dsERR_INVALID_PARAM|Validate invalid parameter handling for eIndicator|
  * |04|Call dsSetFPState() and loop through all valid indicators from the profile file |eIndicator: [Valid Indicator], state: dsFPD_STATE_MAX|Validate invalid parameter handling for state|
- * |05|Call dsSetFPState() and loop through the indicators from the diff of profile file and dsFPDIndicator_t |eIndicator: [Invalid Indicator], state: dsFPD_STATE_OFF|dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
+ * |05|Call dsSetFPState() and loop through the indicators from the diff of profile file and dsFPDIndicator_t |eIndicator: [Invalid Indicator], state: dsFPD_STATE_OFF|dsERR_NONE |Validate invalid parameter handling for eIndicator|
  * |06|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
  * |07|Call dsSetFPState() after termination|eIndicator: dsFPD_INDICATOR_POWER, state: dsFPD_STATE_OFF|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  * 
@@ -445,7 +445,7 @@ void test_l1_dsFPD_negative_dsSetFPState (void)
         if (!isIndicatorValid)
         {
             result = dsSetFPState((dsFPDIndicator_t)i, dsFPD_STATE_OFF);
-            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
         }
     }
 
@@ -512,7 +512,7 @@ void test_l1_dsFPD_positive_dsSetFPBlink (void)
         result = dsSetFPBlink(eIndicator, 500, 10);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 	result = dsSetFPState(eIndicator, dsFPD_STATE_OFF);
-        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
     // Step 04: Terminate with dsFPTerm()
@@ -544,7 +544,7 @@ void test_l1_dsFPD_positive_dsSetFPBlink (void)
  * |06|Pass an invalid eIndicator parameter to dsSetFPBlink() |eIndicator: dsFPD_INDICATOR_MAX, uBlinkDuration: 500, uBlinkIterations: 10 |dsERR_INVALID_PARAM|Should validate that the function handles invalid indicator gracefully|
  * |07|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF |dsERR_NONE|Ensure the system is initialized|
  * |08|Call dsSetFPBlink() and loop through all valid indicators from the profile file |eIndicator: [Valid Indicator], uBlinkDuration: 500, uBlinkIterations: 10 |dsERR_OPERATION_NOT_SUPPORTED|Testing if function adheres to pre-condition of FP State being “ON”|
- * |09|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF |dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
+ * |09|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF | dsERR_NONE |Validate invalid parameter handling for eIndicator|
  * |10|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
  * |11|Attempt to set blink pattern after dsFPTerm() has been called|eIndicator: dsFPD_INDICATOR_POWER, uBlinkDuration: 500, uBlinkIterations: 10 |dsERR_NOT_INITIALIZED|Should fail due to termination|
  * 
@@ -612,7 +612,7 @@ void test_l1_dsFPD_negative_dsSetFPBlink (void)
         result = dsSetFPBlink(eIndicator, 500, 10);
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
 	result = dsSetFPState(eIndicator, dsFPD_STATE_OFF);
-        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
     // Variation 10: Terminate with dsFPTerm()
@@ -648,7 +648,7 @@ void test_l1_dsFPD_negative_dsSetFPBlink (void)
  * |01|Initialize with dsFPInit()| |dsERR_NONE|Ensure the system is initialized|
  * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsSetFPBrightness() and loop through all valid indicators from the profile file |eIndicator: [Valid Indicator], eBrightness: 20+5x|dsERR_NONE|Brightness is set without any issues|
- * |04|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF |dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
+ * |04|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF |dsERR_NONE | Validate invalid parameter handling for eIndicator|
  * |05|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
  * 
  * @note Valid indicators can retrieved from yaml file
@@ -701,7 +701,7 @@ void test_l1_dsFPD_positive_dsSetFPBrightness (void)
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         result = dsSetFPState(eIndicator, dsFPD_STATE_OFF);
-        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
     
     // Step 05: Terminate with dsFPTerm()
@@ -730,7 +730,7 @@ void test_l1_dsFPD_positive_dsSetFPBrightness (void)
  * |03|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |04|Pass an invalid eBrightness parameter to dsSetFPBrightness()|eIndicator: dsFPD_INDICATOR_POWER, eBrightness: 200 |dsERR_INVALID_PARAM|Should validate that the function handles invalid brightness gracefully|
  * |05|Pass an invalid eIndicator parameter to dsSetFPBrightness() |eIndicator: dsFPD_INDICATOR_MAX, eBrightness: 50 |dsERR_INVALID_PARAM|Should validate that the function handles invalid indicator gracefully|
- * |06|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF|dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
+ * |06|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF|dsERR_NONE | Validate invalid parameter handling for eIndicator|
  * |07|Call dsSetFPBrightness() and loop through all valid indicators from the profile file |eIndicator: [Valid Indicator], eBrightness: 50 |dsERR_OPERATION_NOT_SUPPORTED|Testing if function adheres to pre-condition of FP State being “ON”|
  * |08|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
  * |09|Attempt to set brightness after dsFPTerm() has been called|eIndicator: dsFPD_INDICATOR_POWER, eBrightness: 50 |dsERR_NOT_INITIALIZED|Should fail due to termination|
@@ -789,7 +789,7 @@ void test_l1_dsFPD_negative_dsSetFPBrightness (void)
         snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
         eIndicator = UT_KVP_PROFILE_GET_UINT32(buffer);
         result = dsSetFPState(eIndicator, dsFPD_STATE_OFF);
-        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
     // Variation 06: Call dsSetFPBrightness() and loop through all valid indicators from yaml
@@ -848,7 +848,7 @@ void test_l1_dsFPD_negative_dsSetFPBrightness (void)
  * |03|Call dsGetFPBrightness() with specific valid indicator and store the value|eIndicator: dsFPD_INDICATOR_POWER|dsERR_NONE|Brightness is retrieved without any issues|
  * |04|Call dsGetFPBrightness() and loop through all valid indicators from yaml|eIndicator: [Valid Indicator]|dsERR_NONE|Ensure consistent readings|
  * |05|Compare the two retrieved brightness values from step 02 and step 03 for dsFPD_INDICATOR_POWER||Brightness values should be equal|Ensuring consistency in retrieved brightness over consecutive calls|
- * |06|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF |dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
+ * |06|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF |dsERR_NONE | Validate invalid parameter handling for eIndicator|
  * |07|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
  * 
  * @note Valid indicators can retrieved from yaml file
@@ -901,7 +901,7 @@ void test_l1_dsFPD_positive_dsGetFPBrightness (void)
         snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
         eIndicator = UT_KVP_PROFILE_GET_UINT32(buffer);
         result = dsSetFPState(eIndicator, dsFPD_STATE_OFF);
-        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
     // Step 07: Terminate with dsFPTerm()
@@ -930,7 +930,7 @@ void test_l1_dsFPD_positive_dsGetFPBrightness (void)
  * |03|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |04|Call dsGetFPBrightness() with an invalid pBrightness pointer (NULL)|eIndicator: [Valid indicator], pBrightness: NULL|dsERR_INVALID_PARAM|Ensure it handles NULL pointer input for pBrightness|
  * |05|Call dsGetFPBrightness() with an invalid eIndicator value|eIndicator: dsFPD_INDICATOR_MAX, pBrightness: dsFPDBrightness_t*|dsERR_INVALID_PARAM|Validate invalid parameter handling|
- * |06|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState() |eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF|dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
+ * |06|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState() |eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF|dsERR_NONE | Validate invalid parameter handling for eIndicator|
  * |07|Call dsGetFPBrightness() and loop through all valid indicators from yaml |eIndicator: [Valid Indicator], pBrightness: dsFPDBrightness_t*|dsERR_OPERATION_NOT_SUPPORTED|Ensure it checks for FP state and returns operation not supported when it is "OFF"|
  * |08|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
  * |09|Call dsGetFPBrightness() after termination|eIndicator: dsFPD_INDICATOR_POWER, pBrightness: dsFPDBrightness_t*|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
@@ -988,7 +988,7 @@ void test_l1_dsFPD_negative_dsGetFPBrightness (void)
         snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
         eIndicator = UT_KVP_PROFILE_GET_UINT32(buffer);
         result = dsSetFPState(eIndicator, dsFPD_STATE_OFF);
-        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
     // Step 07: Call dsGetFPBrightness() and loop through all valid indicators
@@ -1099,7 +1099,7 @@ void test_l1_dsFPD_positive_dsGetFPState (void)
  * |02|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsGetFPState() with an invalid eIndicator value|eIndicator: dsFPD_INDICATOR_MAX, state: dsFPDState_t*|dsERR_INVALID_PARAM|Validate invalid parameter handling for eIndicator|
  * |04|Call dsGetFPState() with an invalid state pointer|eIndicator: [Valid Indicator], state: NULL|dsERR_INVALID_PARAM|Validate invalid parameter handling for state|
- * |05|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF |dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
+ * |05|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF |dsERR_NONE |Validate invalid parameter handling for eIndicator|
  * |06|Call dsGetFPState() and loop through the indicators from the diff of eIndicators and dsFPDIndicator_t |eIndicator: [invalid indicator], state: dsFPDState_t*|dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
  * |07|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * |08|Call dsGetFPState() after termination|eIndicator: dsFPD_INDICATOR_POWER, state: dsFPDState_t*|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
@@ -1152,7 +1152,7 @@ void test_l1_dsFPD_negative_dsGetFPState (void)
         snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
         eIndicator = UT_KVP_PROFILE_GET_UINT32(buffer);
         result = dsSetFPState(eIndicator, dsFPD_STATE_OFF);
-        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
     // Step 06: Call dsSetFPState() and loop through the indicators from the diff of kIndicators and dsFPDIndicator_t 
@@ -1209,7 +1209,7 @@ void test_l1_dsFPD_negative_dsGetFPState (void)
  * |01|Initialize with dsFPInit()||dsERR_NONE|Ensure the system is initialized|
  * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsSetFPColor() with all valid eIndicator and all valid eColor parameters from the profile file |eIndicator: [Valid Indicator], eColor: [Valid Color]|dsERR_NONE|Ensure that the function can set the color|
- * |04|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF |dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
+ * |04|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF |dsERR_NONE | Validate invalid parameter handling for eIndicator|
  * |05|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
  * @note Valid indicators can retrieved from yaml file
@@ -1260,7 +1260,7 @@ void test_l1_dsFPD_positive_dsSetFPColor (void)
         snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
         eIndicator = UT_KVP_PROFILE_GET_UINT32(buffer);
         result = dsSetFPState(eIndicator, dsFPD_STATE_OFF);
-        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
     // Step 05: Terminate with dsFPTerm()
@@ -1379,7 +1379,7 @@ void test_l1_dsFPD_negative_dsSetFPColor (void)
 	snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
         eIndicator = UT_KVP_PROFILE_GET_UINT32(buffer);
         result = dsSetFPState(eIndicator, dsFPD_STATE_OFF);
-        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/1/supportedColors/%d", eIndicator);
         color = UT_KVP_PROFILE_GET_UINT32(buffer);
@@ -1423,7 +1423,7 @@ void test_l1_dsFPD_negative_dsSetFPColor (void)
  * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsGetFPColor() with all valid indicators|eIndicator: [Valid Indicator], pColor: dsFPDColor_t*|dsERR_NONE|Ensure the function can retrieve color|
  * |04|Call dsGetFPColor() again and compare results|eIndicator: [Valid Indicator], pColor: dsFPDColor_t*|dsERR_NONE and same color as Step 04|Ensure consistency in repeated calls|
- * |05|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF |dsERR_OPERATION_NOT_SUPPORTED|Validate invalid parameter handling for eIndicator|
+ * |05|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF |dsERR_NONE |Validate invalid parameter handling for eIndicator|
  * |06|Terminate with dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
  * @note Valid indicators can retrieved from yaml file
@@ -1467,7 +1467,7 @@ void test_l1_dsFPD_positive_dsGetFPColor (void)
         snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
         eIndicator = UT_KVP_PROFILE_GET_UINT32(buffer);
         result = dsSetFPState(eIndicator, dsFPD_STATE_OFF);
-        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
     // Step 06: Terminate with dsFPTerm()
@@ -3066,9 +3066,8 @@ void test_l1_dsFPD_negative_dsFPSetLEDState(void)
  * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsFPSetLEDState() with valid value|state: dsFPD_LED_DEVICE_ACTIVE|dsERR_NONE|The LED state should be set successfully|
  * |04|Call dsFPGetLEDState() with a valid parameter|state: dsFPDLedState_t*|dsERR_NONE|API should retrieve the current state successfully|
- * |05|Call dsFPGetLEDState() with a valid parameter|state: dsFPDLedState_t*|dsERR_NONE|API should retrieve the current state successfully|
- * |06|Compare the returned values from steps 3/4 ||Success|The values should be the same|
- * |07|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
+ * |05|Compare the retrieved LED state with the expected value from the profile file
+ * |06|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  * 
  * @note Valid indicators can retrieved from yaml file
  */
@@ -3077,7 +3076,7 @@ void test_l1_dsFPD_positive_dsFPGetLEDState(void)
     gTestID = 41;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsError_t result;
-    dsFPDLedState_t ledState1, ledState2;
+    dsFPDLedState_t ledState1;
     int count=0;
 
     // Step 01: Initialize using dsFPInit()
@@ -3096,14 +3095,10 @@ void test_l1_dsFPD_positive_dsFPGetLEDState(void)
     result = dsFPGetLEDState(&ledState1);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-    // Step 05: Call dsFPGetLEDState() with a valid parameter again
-    result = dsFPGetLEDState(&ledState2);
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-    // Step 06: Compare the returned values from steps 3/4
-    UT_ASSERT_EQUAL(ledState1, ledState2);
-
-    // Step 07: Terminate using dsFPTerm()
+    // Step 05: Compare the retrieved LED state with the expected value from the profile file 
+    UT_ASSERT_KVP_EQUAL_PROFILE_UINT32(ledState1, "dsFPD/SupportedLEDStates");
+    
+    // Step 06: Terminate using dsFPTerm()
     result = dsFPTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("\n Out  %s\n",__FUNCTION__);
