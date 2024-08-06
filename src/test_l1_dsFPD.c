@@ -1535,12 +1535,14 @@ void test_l1_dsFPD_negative_dsGetFPColor (void)
     {
 	snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
         eIndicator = UT_KVP_PROFILE_GET_UINT32(buffer);
-
         UT_LOG("\n In %s , Indicator: [%d]\n", __FUNCTION__, eIndicator);
         result = dsSetFPState(eIndicator, dsFPD_STATE_ON);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         result = dsGetFPColor(eIndicator, NULL);
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+	result = dsSetFPState(eIndicator, dsFPD_STATE_OFF);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+
     }
 
     // Step 05: Call dsGetFPColor() with an invalid eIndicator value
@@ -1618,6 +1620,8 @@ void test_l1_dsFPD_positive_dsSetFPDMode (void)
         eIndicator = UT_KVP_PROFILE_GET_UINT32(buffer);
         UT_LOG("\n In %s , Indicator: [%d]\n", __FUNCTION__,  eIndicator);
         result = dsSetFPState(eIndicator, dsFPD_STATE_ON);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+	result = dsSetFPState(eIndicator, dsFPD_STATE_OFF);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
