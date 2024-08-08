@@ -1,9 +1,7 @@
 dsDisplay:
   Type: source
   Name: xione
+  Number_of_ports: 1
+  Video_Ports: [0x06] # dsVIDEOPORT_TYPE_HDMI
   features:
     extendedEnumsSupported: false
-  # dsVIDEO_ASPECT_RATIO_4x3 = 0x00,    ///< 4:3 aspect ratio
-  # dsVIDEO_ASPECT_RATIO_16x9 = 0x01,   ///< 16:9 aspect ratio
-  # dsVIDEO_ASPECT_RATIO_MAX  = 0xFF    ///< Out of range
-  Aspect Ratio: 0x01 # 16:9
