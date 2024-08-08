@@ -377,7 +377,7 @@ void test_l1_dsCompositeIn_positive_dsCompositeInGetStatus(void)
 {
     gTestID = 7;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsCompositeInStatus_t status1 = dsERR_NONE, status2 = dsERR_NONE;
+    dsCompositeInStatus_t status1 = {0}, status2 = {0};
 
     // Step 01: Initialize the module
     UT_ASSERT_EQUAL_FATAL(dsCompositeInInit(), dsERR_NONE);
@@ -424,7 +424,7 @@ void test_l1_dsCompositeIn_negative_dsCompositeInGetStatus(void)
 {
     gTestID = 8;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsCompositeInStatus_t status = dsERR_NONE;
+    dsCompositeInStatus_t status = {0};
 
     // Step 01: Call GetStatus without initialization
     dsError_t result = dsCompositeInGetStatus(&status);
