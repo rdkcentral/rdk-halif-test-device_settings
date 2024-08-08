@@ -506,7 +506,7 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
             UT_ASSERT_EQUAL(edid1->numOfSupportedResolution , edid2->numOfSupportedResolution);
             UT_ASSERT_EQUAL(edid2->monitorName, edid2->monitorName);
         } else if(gSourceType == 1){
-            UT_ASSERT_EQUAL(memcmp(edid1, edid2, sizeof(dsDisplayEDID_t), 0);
+            UT_ASSERT_EQUAL((memcmp(edid1, edid2, sizeof(dsDisplayEDID_t))), 0);
         }
     }
 
