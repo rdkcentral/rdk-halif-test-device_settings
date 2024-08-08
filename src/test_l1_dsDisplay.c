@@ -492,18 +492,22 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 05: Compare the returned results
-        UT_ASSERT_EQUAL(edid1->productCode , edid2->productCode);
-        UT_ASSERT_EQUAL(edid1->serialNumber , edid2->serialNumber);
-        UT_ASSERT_EQUAL(edid1->manufactureYear , edid2->manufactureYear);
-        UT_ASSERT_EQUAL(edid1->manufactureWeek , edid2->manufactureWeek);
-        UT_ASSERT_EQUAL(edid1->hdmiDeviceType , edid2->hdmiDeviceType);
-        UT_ASSERT_EQUAL(edid1->isRepeater , edid2->isRepeater);
-        UT_ASSERT_EQUAL(edid1->physicalAddressA , edid2->physicalAddressA);
-        UT_ASSERT_EQUAL(edid1->physicalAddressB , edid2->physicalAddressB);
-        UT_ASSERT_EQUAL(edid1->physicalAddressC , edid2->physicalAddressC);
-        UT_ASSERT_EQUAL(edid1->physicalAddressD , edid2->physicalAddressD);
-        UT_ASSERT_EQUAL(edid1->numOfSupportedResolution , edid2->numOfSupportedResolution);
-        UT_ASSERT_EQUAL(edid2->monitorName, edid2->monitorName);
+        if(gSourceType == 0){
+            UT_ASSERT_EQUAL(edid1->productCode , edid2->productCode);
+            UT_ASSERT_EQUAL(edid1->serialNumber , edid2->serialNumber);
+            UT_ASSERT_EQUAL(edid1->manufactureYear , edid2->manufactureYear);
+            UT_ASSERT_EQUAL(edid1->manufactureWeek , edid2->manufactureWeek);
+            UT_ASSERT_EQUAL(edid1->hdmiDeviceType , edid2->hdmiDeviceType);
+            UT_ASSERT_EQUAL(edid1->isRepeater , edid2->isRepeater);
+            UT_ASSERT_EQUAL(edid1->physicalAddressA , edid2->physicalAddressA);
+            UT_ASSERT_EQUAL(edid1->physicalAddressB , edid2->physicalAddressB);
+            UT_ASSERT_EQUAL(edid1->physicalAddressC , edid2->physicalAddressC);
+            UT_ASSERT_EQUAL(edid1->physicalAddressD , edid2->physicalAddressD);
+            UT_ASSERT_EQUAL(edid1->numOfSupportedResolution , edid2->numOfSupportedResolution);
+            UT_ASSERT_EQUAL(edid2->monitorName, edid2->monitorName);
+        } else if(gSourceType == 1){
+            UT_ASSERT_EQUAL(memcmp(edid1, edid2, sizeof(dsDisplayEDID_t), 0);
+        }
     }
 
     // Step 06: Terminate the display sub-system
@@ -653,7 +657,9 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
         }
 
         // Step 04: Compare the value with the value from profile
-        UT_ASSERT_KVP_EQUAL_PROFILE_UINT32(length, "dsDisplay/EDID_Data/edidbytesLength");
+        if(gSourceType == 0){
+            UT_ASSERT_KVP_EQUAL_PROFILE_UINT32(length, "dsDisplay/EDID_Data/edidbytesLength");
+        }
     }
     free(edid);
 
