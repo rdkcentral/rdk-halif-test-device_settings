@@ -153,7 +153,7 @@ void test_l1_dsVideoPort_positive_dsVideoPortInit(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 /**
@@ -196,7 +196,7 @@ void test_l1_dsVideoPort_negative_dsVideoPortInit(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -243,7 +243,7 @@ void test_l1_dsVideoPort_positive_dsVideoPortTerm(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -292,7 +292,7 @@ void test_l1_dsVideoPort_negative_dsVideoPortTerm(void) {
     status = dsVideoPortTerm();
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -353,7 +353,7 @@ void test_l1_dsVideoPort_positive_dsGetVideoPort(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 /**
@@ -417,7 +417,7 @@ void test_l1_dsVideoPort_negative_dsGetVideoPort(void) {
     status = dsGetVideoPort(gDSVideoPortConfiguration[0].typeid, gDSVideoPortConfiguration[0].index, &(handle));
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -475,7 +475,7 @@ void test_l1_dsVideoPort_positive_dsIsVideoPortEnabled(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -543,7 +543,7 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortEnabled(void) {
     status = dsIsVideoPortEnabled(handle, &enabled);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 /**
@@ -600,7 +600,7 @@ void test_l1_dsVideoPort_positive_dsIsDisplayConnected(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -668,7 +668,7 @@ void test_l1_dsVideoPort_negative_dsIsDisplayConnected(void) {
     status = dsIsDisplayConnected(handle, &connected);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -723,7 +723,7 @@ void test_l1_dsVideoPort_positive_dsIsDisplaySurround(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -791,7 +791,7 @@ void test_l1_dsVideoPort_negative_dsIsDisplaySurround(void) {
     status = dsIsDisplaySurround(handle, &surround);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -849,7 +849,7 @@ void test_l1_dsVideoPort_positive_dsGetSurroundMode(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -917,7 +917,7 @@ void test_l1_dsVideoPort_negative_dsGetSurroundMode(void) {
     status = dsGetSurroundMode(handle, &surroundMode);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -976,7 +976,7 @@ void test_l1_dsVideoPort_positive_dsIsVideoPortActive(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -1044,7 +1044,7 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortActive(void) {
     status = dsIsVideoPortActive(handle, &active);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -1107,7 +1107,7 @@ void test_l1_dsVideoPort_positive_dsEnableHDCP(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -1184,7 +1184,7 @@ void test_l1_dsVideoPort_negative_dsEnableHDCP(void) {
     status = dsEnableHDCP(handle, enableHDCP, hdcpKey, keySize);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -1247,7 +1247,7 @@ void test_l1_dsVideoPort_positive_dsIsHDCPEnabled(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -1315,7 +1315,7 @@ void test_l1_dsVideoPort_negative_dsIsHDCPEnabled(void) {
     status = dsIsHDCPEnabled(handle, &(contentProtected));
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -1364,7 +1364,7 @@ void test_l1_dsVideoPort_positive_dsEnableVideoPort(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -1428,7 +1428,7 @@ void test_l1_dsVideoPort_negative_dsEnableVideoPort(void) {
     status = dsEnableVideoPort(handle, enabled);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -1485,7 +1485,7 @@ void test_l1_dsVideoPort_positive_dsSetResolution(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -1562,7 +1562,7 @@ void test_l1_dsVideoPort_negative_dsSetResolution(void) {
     status = dsSetResolution(handle, &(gDSVideoPortConfiguration[0].supportedResolutions[0]));
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -1623,7 +1623,7 @@ void test_l1_dsVideoPort_positive_dsGetResolution(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -1691,7 +1691,7 @@ void test_l1_dsVideoPort_negative_dsGetResolution(void) {
     status = dsGetResolution(handle, &(resolution));
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -1852,7 +1852,7 @@ void test_l1_dsVideoPort_positive_dsRegisterHdcpStatusCallback(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -1921,7 +1921,7 @@ void test_l1_dsVideoPort_negative_dsRegisterHdcpStatusCallback(void) {
     status = dsRegisterHdcpStatusCallback(handle, validHdcpStatusCallback);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -1982,7 +1982,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPStatus(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -2018,7 +2018,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPStatus(void) {
 
     dsError_t status;
 
-    intptr_t handle = 0;          
+    intptr_t handle = 0;
     dsHdcpStatus_t hdcpStatus;
 
     // Step 01: Attempt to get HDCP status without initialization
@@ -2050,7 +2050,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPStatus(void) {
     status = dsGetHDCPStatus(handle, &(hdcpStatus));
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -2106,7 +2106,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPProtocol(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 /**
@@ -2173,7 +2173,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPProtocol(void) {
     status = dsGetHDCPProtocol(handle, &protocolVersion);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -2228,7 +2228,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPReceiverProtocol(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__)
 }
 
 
@@ -2296,7 +2296,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPReceiverProtocol(void) {
     status = dsGetHDCPReceiverProtocol(handle, &receiverProtocolVersion);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -2350,7 +2350,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPCurrentProtocol(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -2418,7 +2418,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPCurrentProtocol(void) {
     status = dsGetHDCPCurrentProtocol(handle, &currentProtocolVersion);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -2472,7 +2472,7 @@ void test_l1_dsVideoPort_positive_dsGetTVHDRCapabilities(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -2509,7 +2509,7 @@ void test_l1_dsVideoPort_negative_dsGetTVHDRCapabilities(void) {
     dsError_t status;
     intptr_t handle = 0;
 
-    int capabilities; 
+    int capabilities;
 
     // Step 01: Attempt to get HDR capabilities without initialization
     status = dsGetTVHDRCapabilities(-1, &capabilities);
@@ -2540,7 +2540,7 @@ void test_l1_dsVideoPort_negative_dsGetTVHDRCapabilities(void) {
     status = dsGetTVHDRCapabilities(handle, &capabilities);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -2571,7 +2571,7 @@ void test_l1_dsVideoPort_positive_dsSupportedTvResolutions(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
-    intptr_t handle = 0;    
+    intptr_t handle = 0;
 
     int resolutions1;
 
@@ -2594,7 +2594,7 @@ void test_l1_dsVideoPort_positive_dsSupportedTvResolutions(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -2662,7 +2662,7 @@ void test_l1_dsVideoPort_negative_dsSupportedTvResolutions(void) {
     status = dsSupportedTvResolutions(handle, &resolutions);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -2713,7 +2713,7 @@ void test_l1_dsVideoPort_positive_dsSetForceDisable4KSupport(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -2777,7 +2777,7 @@ void test_l1_dsVideoPort_negative_dsSetForceDisable4KSupport(void) {
     status = dsSetForceDisable4KSupport(handle, disable4K);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -2836,7 +2836,7 @@ void test_l1_dsVideoPort_positive_dsGetForceDisable4KSupport(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -2873,7 +2873,7 @@ void test_l1_dsVideoPort_negative_dsGetForceDisable4KSupport(void) {
     dsError_t status;
     intptr_t handle = 0;
 
-    bool disable4K = false; 
+    bool disable4K = false;
 
     // Step 01: Attempt to get 4K support status without initialization
     status = dsGetForceDisable4KSupport(-1, &disable4K);
@@ -2904,7 +2904,7 @@ void test_l1_dsVideoPort_negative_dsGetForceDisable4KSupport(void) {
     status = dsGetForceDisable4KSupport(handle, &disable4K);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -2963,7 +2963,7 @@ void test_l1_dsVideoPort_positive_dsGetVideoEOTF(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -3031,7 +3031,7 @@ void test_l1_dsVideoPort_negative_dsGetVideoEOTF(void) {
     status = dsGetVideoEOTF(handle, &eotf);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -3085,7 +3085,7 @@ void test_l1_dsVideoPort_positive_dsGetMatrixCoefficients(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -3153,7 +3153,7 @@ void test_l1_dsVideoPort_negative_dsGetMatrixCoefficients(void) {
     status = dsGetMatrixCoefficients(handle, &matrixCoefficients);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -3207,7 +3207,7 @@ void test_l1_dsVideoPort_positive_dsGetColorDepth(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -3275,7 +3275,7 @@ void test_l1_dsVideoPort_negative_dsGetColorDepth(void) {
     status = dsGetColorDepth(handle, &colorDepth);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -3330,7 +3330,7 @@ void test_l1_dsVideoPort_positive_dsGetColorSpace(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 /**
@@ -3397,7 +3397,7 @@ void test_l1_dsVideoPort_negative_dsGetColorSpace(void) {
     status = dsGetColorSpace(handle, &colorSpace);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 /**
@@ -3450,7 +3450,7 @@ void test_l1_dsVideoPort_positive_dsGetQuantizationRange(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 /**
@@ -3517,7 +3517,7 @@ void test_l1_dsVideoPort_negative_dsGetQuantizationRange(void) {
     status = dsGetQuantizationRange(handle, &quantizationRange);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -3593,7 +3593,7 @@ void test_l1_dsVideoPort_positive_dsGetCurrentOutputSettings(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -3688,7 +3688,7 @@ void test_l1_dsVideoPort_negative_dsGetCurrentOutputSettings(void) {
             &colordepth, &quant_range);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -3748,7 +3748,7 @@ void test_l1_dsVideoPort_positive_dsIsOutputHDR(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -3816,7 +3816,7 @@ void test_l1_dsVideoPort_negative_dsIsOutputHDR(void) {
     status = dsIsOutputHDR(handle, &hdrStatus);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -3863,7 +3863,7 @@ void test_l1_dsVideoPort_positive_dsResetOutputToSDR(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -3912,7 +3912,7 @@ void test_l1_dsVideoPort_negative_dsResetOutputToSDR(void) {
     status = dsResetOutputToSDR();
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -3962,7 +3962,7 @@ void test_l1_dsVideoPort_positive_dsSetHdmiPreference(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -4085,7 +4085,7 @@ void test_l1_dsVideoPort_positive_dsGetHdmiPreference(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -4153,7 +4153,7 @@ void test_l1_dsVideoPort_negative_dsGetHdmiPreference(void) {
     status = dsGetHdmiPreference(handle, &hdcpCurrentProtocol);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -4216,7 +4216,7 @@ void test_l1_dsVideoPort_positive_dsGetIgnoreEDIDStatus(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -4284,7 +4284,7 @@ void test_l1_dsVideoPort_negative_dsGetIgnoreEDIDStatus(void) {
     status = dsGetIgnoreEDIDStatus(handle, &ignoreEDIDStatus);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -4339,7 +4339,7 @@ void test_l1_dsVideoPort_positive_dsSetBackgroundColor(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -4405,7 +4405,7 @@ void test_l1_dsVideoPort_negative_dsSetBackgroundColor(void) {
     status = dsSetBackgroundColor(handle, dsVIDEO_BGCOLOR_BLACK);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -4458,7 +4458,7 @@ void test_l1_dsVideoPort_positive_dsSetForceHDRMode(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -4525,7 +4525,7 @@ void test_l1_dsVideoPort_negative_dsSetForceHDRMode(void) {
     status = dsSetForceHDRMode(handle, mode);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -4583,7 +4583,7 @@ void test_l1_dsVideoPort_positive_dsColorDepthCapabilities(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -4651,7 +4651,7 @@ void test_l1_dsVideoPort_negative_dsColorDepthCapabilities(void) {
     status = dsColorDepthCapabilities(handle, &colorDepthCapability);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 /**
@@ -4709,7 +4709,7 @@ void test_l1_dsVideoPort_positive_dsGetPreferredColorDepth(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -4777,7 +4777,7 @@ void test_l1_dsVideoPort_negative_dsGetPreferredColorDepth(void) {
     status = dsGetPreferredColorDepth(handle, &colorDepth);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 /**
@@ -4830,7 +4830,7 @@ void test_l1_dsVideoPort_positive_dsSetPreferredColorDepth(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -4896,7 +4896,7 @@ void test_l1_dsVideoPort_negative_dsSetPreferredColorDepth(void) {
     status = dsSetPreferredColorDepth(handle, dsDISPLAY_COLORDEPTH_12BIT );
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
@@ -4994,9 +4994,8 @@ int test_l1_dsVideoPort_register ( void )
     UT_add_test( pSuite, "dsGetPreferredColorDepth_L1_negative" ,test_l1_dsVideoPort_negative_dsGetPreferredColorDepth );
     UT_add_test( pSuite, "dsSetPreferredColorDepth_L1_positive" ,test_l1_dsVideoPort_positive_dsSetPreferredColorDepth );
     UT_add_test( pSuite, "dsSetPreferredColorDepth_L1_negative" ,test_l1_dsVideoPort_negative_dsSetPreferredColorDepth );
-   
+
    extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsVideoPort/features/extendedEnumsSupported" );
-   
 
     return 0;
 } 
