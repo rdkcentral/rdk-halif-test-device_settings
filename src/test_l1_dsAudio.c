@@ -4598,6 +4598,8 @@ void test_l1_dsAudio_positive_dsGetAudioGain(void) {
                 UT_ASSERT_TRUE(gain1 >= -2080 && gain1 <= 480);
 
                 //compare the values of gain arrays
+                result = dsGetAudioGain(handle, &gain2);
+                UT_ASSERT_EQUAL(result, dsERR_NONE);
                 UT_ASSERT_EQUAL(gain1, gain2);
             } else {
                 UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
@@ -6428,7 +6430,6 @@ void test_l1_dsAudio_positive_dsSetMS12AudioProfile(void) {
 
     int result;
     intptr_t  handle = null_handle;
-    char *validProfile = "YourValidMS12Profile"; // Replace with a valid profile from _dsMS12AudioProfileList_t
 
     // Step 01: Initialize audio ports
     result = dsAudioPortInit();
