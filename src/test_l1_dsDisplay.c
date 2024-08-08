@@ -94,8 +94,6 @@ static bool extendedEnumsSupported=false;
    }\
 }
 
-#define dsEEDID_MAX_MON_NAME_LENGTH 14
-
 /**
  * @brief Ensure dsDisplayInit() initializes the DS Display sub-system correctly during positive scenarios
  *
@@ -324,6 +322,7 @@ void test_l1_dsDisplay_positive_dsGetDisplay(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
+    dsVideoPortType_t vType;
     intptr_t displayHandle1, displayHandle2;
 
     // Step 01: Initialize the display sub-system
@@ -334,7 +333,7 @@ void test_l1_dsDisplay_positive_dsGetDisplay(void) {
     for (size_t i = 0; i < numPorts; i++) {
         char key_str[64];
         snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
-        uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
+        vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
         UT_LOG("\n In %s Port Type: [%d]\n", __FUNCTION__, vType);
 
         // Step 02: Call dsGetDisplay() for each valid port
@@ -393,9 +392,10 @@ void test_l1_dsDisplay_negative_dsGetDisplay(void) {
 
     int result;
     intptr_t displayHandle;
+    dsVideoPortType_t vType;
 
     // Step 01: Call dsGetDisplay() without initializing the display sub-system
-    uint32_t vType = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports/0");
+    vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32("dsDisplay/Video_Ports/0");
     result = dsGetDisplay(vType, 0, &displayHandle);
     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
@@ -463,6 +463,7 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
 
     int result;
     intptr_t displayHandle;
+    dsVideoPortType_t vType;
     dsDisplayEDID_t *edid1 = {0};
     dsDisplayEDID_t *edid2 = {0};
 
@@ -476,7 +477,7 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
     for (size_t i = 0; i < numPorts; i++) {
         char key_str[64];
         snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
-        uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
+        vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
 
         // Step 02: Get the display device handle
         result = dsGetDisplay(vType, i, &displayHandle);
@@ -546,6 +547,7 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
 
     int result;
     intptr_t displayHandle=-1;
+    dsVideoPortType_t vType;
     dsDisplayEDID_t *edid = {0};
 
     // Step 01: Call dsGetEDID() without initializing the display sub-system
@@ -563,7 +565,7 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
     for (size_t i = 0; i < numPorts; i++) {
         char key_str[64];
         snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
-        uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
+        vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
         result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -618,6 +620,7 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
 
     int result;
     intptr_t displayHandle;
+    dsVideoPortType_t vType;
     unsigned char *edid = NULL;
     int length = 0;
 
@@ -632,7 +635,7 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
     for (size_t i = 0; i < numPorts; i++) {
         char key_str[64];
         snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
-        uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
+        vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
         result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         if(result != dsERR_NONE)
@@ -695,6 +698,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
+    dsVideoPortType_t vType;
     intptr_t displayHandle =-1;
     unsigned char *edid = NULL;
     int length = 0;
@@ -717,7 +721,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
     for (size_t i = 0; i < numPorts; i++) {
         char key_str[64];
         snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
-        uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
+        vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
         result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -780,6 +784,7 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
 
     int result;
     intptr_t displayHandle;
+    dsVideoPortType_t vType;
     dsVideoAspectRatio_t aspectRatio = dsVIDEO_ASPECT_RATIO_MAX;
 
     // Step 01: Initialize the display sub-system
@@ -792,7 +797,7 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
     for (size_t i = 0; i < numPorts; i++) {
         char key_str[64];
         snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
-        uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
+        vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
         result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -849,6 +854,7 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
 
     int result;
     intptr_t displayHandle =-1;
+    dsVideoPortType_t vType;
     dsVideoAspectRatio_t aspectRatio;
 
     // Step 01: Call dsGetDisplayAspectRatio() without initializing the display sub-system
@@ -866,7 +872,7 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
     for (size_t i = 0; i < numPorts; i++) {
         char key_str[64];
         snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
-        uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
+        vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
         result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -923,6 +929,7 @@ void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
+    dsVideoPortType_t vType;
     intptr_t displayHandle;
 
     // Step 01: Initialize the display sub-system
@@ -935,7 +942,7 @@ void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback(void) {
     for (size_t i = 0; i < numPorts; i++) {
         char key_str[64];
         snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
-        uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
+        vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
         result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -984,6 +991,7 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
+    dsVideoPortType_t vType;
     intptr_t displayHandle =-1;
     // Step 01: Call dsRegisterDisplayEventCallback() without initializing the display sub-system
     result = dsRegisterDisplayEventCallback(displayHandle, testDisplayCallback);
@@ -1000,7 +1008,7 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
     for (size_t i = 0; i < numPorts; i++) {
         char key_str[64];
         snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
-        uint32_t vType = UT_KVP_PROFILE_GET_UINT32(key_str);
+        vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
         result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
