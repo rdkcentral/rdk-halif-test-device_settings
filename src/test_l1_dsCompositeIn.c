@@ -285,7 +285,7 @@ void test_l1_dsCompositeIn_positive_dsCompositeInGetNumberOfInputs(void)
 {
     gTestID = 5;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    uint8_t numberOfInputs;
+    uint8_t numberOfInputs = 0;
 
     // Step 01: Initialize the module
     UT_ASSERT_EQUAL_FATAL(dsCompositeInInit(), dsERR_NONE);
@@ -329,7 +329,7 @@ void test_l1_dsCompositeIn_negative_dsCompositeInGetNumberOfInputs(void)
 {
     gTestID = 6;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    uint8_t pNumberOfInputs;
+    uint8_t pNumberOfInputs = 0;
 
     // Step 01: Call GetNumberOfInputs without initialization
     dsError_t result = dsCompositeInGetNumberOfInputs(&pNumberOfInputs);
@@ -377,7 +377,7 @@ void test_l1_dsCompositeIn_positive_dsCompositeInGetStatus(void)
 {
     gTestID = 7;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsCompositeInStatus_t status1, status2;
+    dsCompositeInStatus_t status1 = dsERR_NONE, status2 = dsERR_NONE;
 
     // Step 01: Initialize the module
     UT_ASSERT_EQUAL_FATAL(dsCompositeInInit(), dsERR_NONE);
@@ -424,7 +424,7 @@ void test_l1_dsCompositeIn_negative_dsCompositeInGetStatus(void)
 {
     gTestID = 8;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsCompositeInStatus_t status;
+    dsCompositeInStatus_t status = dsERR_NONE;
 
     // Step 01: Call GetStatus without initialization
     dsError_t result = dsCompositeInGetStatus(&status);
@@ -471,7 +471,7 @@ void test_l1_dsCompositeIn_positive_dsCompositeInSelectPort(void)
 {
     gTestID = 9;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    uint8_t numberOfInputs;
+    uint8_t numberOfInputs = 0;
 
     // Step 01: Initialize the module
     UT_ASSERT_EQUAL_FATAL(dsCompositeInInit(), dsERR_NONE);
@@ -519,7 +519,7 @@ void test_l1_dsCompositeIn_negative_dsCompositeInSelectPort(void)
 {
     gTestID = 10;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    uint8_t numberOfInputs;
+    uint8_t numberOfInputs = 0;
 
     // Step 01: Call SelectPort without initialization
     dsError_t result = dsCompositeInSelectPort(dsCOMPOSITE_IN_PORT_0);
@@ -573,7 +573,7 @@ void test_l1_dsCompositeIn_positive_dsCompositeInScaleVideo(void)
 {
     gTestID = 11;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    uint8_t numberOfInputs;
+    uint8_t numberOfInputs = 0;
 
     // Step 01: Initialize the module and select a port
     UT_ASSERT_EQUAL_FATAL(dsCompositeInInit(), dsERR_NONE);
@@ -940,7 +940,7 @@ static UT_test_suite_t * pSuite = NULL;
  */
 int test_l1_dsCompositeIn_register ( void )
 {
-    ut_kvp_status_t status;
+    ut_kvp_status_t status = UT_KVP_STATUS_SUCCESS;
     int32_t source_type = 0;
 
     status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsCompositeIn.Type", gDeviceType, TEST_DS_DEVICE_TYPE_SIZE);
