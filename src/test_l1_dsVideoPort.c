@@ -2228,7 +2228,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPReceiverProtocol(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__)
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 
