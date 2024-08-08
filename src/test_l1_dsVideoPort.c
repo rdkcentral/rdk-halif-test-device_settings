@@ -3322,7 +3322,7 @@ void test_l1_dsVideoPort_positive_dsGetColorSpace(void) {
         status = dsGetColorSpace(handle, &colorSpace1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
         // Step 04: Compare the value with value from profile file
-        UT_ASSERT_EQUAL(colorSpace1, (dsDisplayColorSpace_t)gDSVideoPortConfiguration[i].colorspaces);
+        UT_ASSERT_EQUAL(colorSpace1, gDSVideoPortConfiguration[i].colorspaces);
 
     }
 
@@ -3443,7 +3443,7 @@ void test_l1_dsVideoPort_positive_dsGetQuantizationRange(void) {
         status = dsGetQuantizationRange(handle, &quantizationRange1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
         // Step 04: Compare the value with value from profile file
-        UT_ASSERT_EQUAL(quantizationRange1, (dsDisplayQuantizationRange_t)gDSVideoPortConfiguration[i].quantization_ranges);
+        UT_ASSERT_EQUAL(quantizationRange1, gDSVideoPortConfiguration[i].quantization_ranges);
     }
 
     // Step 05: Terminate the video port system
@@ -3954,8 +3954,7 @@ void test_l1_dsVideoPort_positive_dsSetHdmiPreference(void) {
         status = dsGetVideoPort(gDSVideoPortConfiguration[i].typeid, gDSVideoPortConfiguration[i].index, &(handle));
         UT_ASSERT_EQUAL(status, dsERR_NONE);
         // Step 03: Set the HDMI preference
-        dsHdcpProtocolVersion_t hdcpCurrentProtocol = gDSVideoPortConfiguration[i].hdcp_protocol_version;
-        status = dsSetHdmiPreference(handle, &hdcpCurrentProtocol);
+        status = dsSetHdmiPreference(handle, &(gDSVideoPortConfiguration[i].hdcp_protocol_version));
         UT_ASSERT_EQUAL(status, dsERR_NONE);
     }
 
@@ -4078,7 +4077,7 @@ void test_l1_dsVideoPort_positive_dsGetHdmiPreference(void) {
         status = dsGetHdmiPreference(handle, &hdcpCurrentProtocol1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
         // Step 04: Compare the value and make sure they are equal
-        UT_ASSERT_EQUAL(hdcpCurrentProtocol1, (dsHdcpProtocolVersion_t)gDSVideoPortConfiguration[i].hdcp_protocol_version);
+        UT_ASSERT_EQUAL(hdcpCurrentProtocol1, gDSVideoPortConfiguration[i].hdcp_protocol_version);
 
     }
 
