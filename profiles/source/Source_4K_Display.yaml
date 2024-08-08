@@ -1,6 +1,8 @@
 dsDisplay:
   Type: source
   Name: xione
+  Number_of_ports: 0
+  Video_Ports: []
   features:
     extendedEnumsSupported: false
   # dsVIDEO_ASPECT_RATIO_4x3 = 0x00,    ///< 4:3 aspect ratio
