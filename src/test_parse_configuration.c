@@ -77,11 +77,11 @@ char gDeviceType[TEST_DS_DEVICE_TYPE_SIZE]      = {0};
 /* Parse configuration file */
 int test_parse_configuration()
 {
+    bool nodeStatus = false;
     ut_kvp_status_t status;
-    char szReturnedString[UT_KVP_MAX_ELEMENT_SIZE];
 
-    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsAudio/Type", szReturnedString, UT_KVP_MAX_ELEMENT_SIZE);
-    if(status == UT_KVP_STATUS_SUCCESS) {
+    nodeStatus = ut_kvp_fieldPresent(ut_kvp_profile_getInstance(), "dsAudio");
+    if(nodeStatus == true) {
         gDSModule |= dsAudioPort;
         status = test_dsAudio_parse_configuration();
         if(status != UT_KVP_STATUS_SUCCESS) {
@@ -90,8 +90,9 @@ int test_parse_configuration()
         }
     }
 
-    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsVideoDevice/Type", szReturnedString, UT_KVP_MAX_ELEMENT_SIZE);
-    if(status == UT_KVP_STATUS_SUCCESS) {
+    nodeStatus = false;
+    nodeStatus = ut_kvp_fieldPresent(ut_kvp_profile_getInstance(), "dsVideoDevice");
+    if(nodeStatus == true) {
         gDSModule |= dsVideoDevice;
         status = test_dsVideoDevice_parse_configuration();
         if(status != UT_KVP_STATUS_SUCCESS) {
@@ -100,8 +101,9 @@ int test_parse_configuration()
         }
     }
 
-    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsVideoPort/Type", szReturnedString, UT_KVP_MAX_ELEMENT_SIZE);
-    if(status == UT_KVP_STATUS_SUCCESS) {
+    nodeStatus = false;
+    nodeStatus = ut_kvp_fieldPresent(ut_kvp_profile_getInstance(), "dsVideoPort");
+    if(nodeStatus == true) {
         gDSModule |= dsVideoPort;
         status = test_dsVideoPort_parse_configuration();
         if(status != UT_KVP_STATUS_SUCCESS) {
@@ -110,28 +112,33 @@ int test_parse_configuration()
         }
     }
 
-    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsCompositeIn/Type", szReturnedString, UT_KVP_MAX_ELEMENT_SIZE);
-    if(status == UT_KVP_STATUS_SUCCESS) {
+    nodeStatus = false;
+    nodeStatus = ut_kvp_fieldPresent(ut_kvp_profile_getInstance(), "dsCompositeIn");
+    if(nodeStatus == true) {
         gDSModule |= dsComposite;
     }
 
-    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsFPD/Type", szReturnedString, UT_KVP_MAX_ELEMENT_SIZE);
-    if(status == UT_KVP_STATUS_SUCCESS) {
+    nodeStatus = false;
+    nodeStatus = ut_kvp_fieldPresent(ut_kvp_profile_getInstance(), "dsFPD");
+    if(nodeStatus == true) {
         gDSModule |= dsFPD;
     }
 
-    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsDisplay/Type", szReturnedString, UT_KVP_MAX_ELEMENT_SIZE);
-    if(status == UT_KVP_STATUS_SUCCESS) {
+    nodeStatus = false;
+    nodeStatus = ut_kvp_fieldPresent(ut_kvp_profile_getInstance(), "dsDisplay");
+    if(nodeStatus == true) {
         gDSModule |= dsDisplay;
     }
 
-    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsHost/Type", szReturnedString, UT_KVP_MAX_ELEMENT_SIZE);
-    if(status == UT_KVP_STATUS_SUCCESS) {
+    nodeStatus = false;
+    nodeStatus = ut_kvp_fieldPresent(ut_kvp_profile_getInstance(), "dsHost");
+    if(nodeStatus == true) {
         gDSModule |= dsHost;
     }
 
-    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsHdmiIn/Type", szReturnedString, UT_KVP_MAX_ELEMENT_SIZE);
-    if(status == UT_KVP_STATUS_SUCCESS) {
+    nodeStatus = false;
+    nodeStatus = ut_kvp_fieldPresent(ut_kvp_profile_getInstance(), "dsHdmiIn");
+    if(nodeStatus == true) {
         gDSModule |= dsHdmiIn;
     }
 
