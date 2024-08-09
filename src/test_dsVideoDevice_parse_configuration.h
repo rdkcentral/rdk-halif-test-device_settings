@@ -78,15 +78,15 @@
 /* Video Device configuration */
 typedef struct _dsVideoDeviceConfiguration_t {
     int32_t  NoOfSupportedDFCs;
-    int32_t  SupportedDFCs[dsVIDEO_ZOOM_MAX];
-    int32_t  DefaultDFC;
+    dsVideoZoom_t  SupportedDFCs[dsVIDEO_ZOOM_MAX];
+    dsVideoZoom_t  DefaultDFC;
     int32_t  HDRCapabilities;
-    int32_t  SupportedVideoCodingFormats;
+    uint32_t SupportedVideoCodingFormats;
     int32_t  NoOfSupportedDFR;
     char     SupportedDisplayFramerate[dsVIDEO_FRAMERATE_MAX];
     int32_t  num_codec_entries;
     float    level;
-    int32_t  profile;
+    dsVideoCodecHevcProfiles_t  profile;
 }dsVideoDeviceConfiguration_t;
 
 /* Global variables */
