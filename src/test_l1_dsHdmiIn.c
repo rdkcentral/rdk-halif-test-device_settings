@@ -262,7 +262,6 @@ void test_l1_dsHdmiIn_negative_dsHdmiInTerm(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Get the number of input ports from the profile file
  * |02|Call dsHdmiInGetNumberOfInputs() to fetch the number of HDMI input ports |pNumberOfinputs: uint8_t*| dsERR_NONE | Number should be between 0 and max number of inputs defined in dsHdmiInPort_t |
  * |03|Retrieve the expected number of HDMI input ports from the profile file and compare it with the number obtained from dsHdmiInGetNumberOfInputs() |
  * |04|Call dsHdmiInGetNumberOfInputs() to fetch the number of HDMI input ports |dsERR_OPERATION_NOT_SUPPORTED |For source devices without HDMI input support | 
@@ -279,20 +278,20 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetNumberOfInputs(void) {
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    // Step 2: Get the number of input ports from the profile file
+
     numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
     if (numInputPorts > 0) {
-        // Step 3: Call dsHdmiInGetNumberOfInputs() to fetch the number of HDMI input ports
+        // Step 2: Call dsHdmiInGetNumberOfInputs() to fetch the number of HDMI input ports
         UT_ASSERT_EQUAL(dsHdmiInGetNumberOfInputs(&numInputs), dsERR_NONE);
 
-        // Step 4: Verify that the number of HDMI input ports obtained matches the expected value from the profile
+        // Step 3: Verify that the number of HDMI input ports obtained matches the expected value from the profile
         UT_ASSERT_KVP_EQUAL_PROFILE_UINT8(numInputs, "dsHdmiIn/HdmiInputPort/numberOfPorts");
     } else {
-       // Step 5: For source devices without HDMI input support
+       // Step 4: For source devices without HDMI input support
        UT_ASSERT_EQUAL(dsHdmiInGetNumberOfInputs(&numInputs), 0);
     }
 
-    // Step 6: Call dsHdmiInTerm() to ensure deinitialization
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -358,12 +357,11 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetNumberOfInputs(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Get the number of input ports from the profile file
+ * |02|Call dsHdmiInGetStatus() with valid pointer |dsHdmiInStatus_t*| dsERR_NONE | Status information should be populated. Validate the output structure |
  * |03|Call dsHdmiInGetStatus() with valid pointer |dsHdmiInStatus_t*| dsERR_NONE | Status information should be populated. Validate the output structure |
- * |04|Call dsHdmiInGetStatus() with valid pointer |dsHdmiInStatus_t*| dsERR_NONE | Status information should be populated. Validate the output structure |
- * |05|Compare the returned values to make sure they are equal || Success | The values should be the same |
- * |06|Call dsHdmiInGetStatus() with valid pointer |dsHdmiInStatus_t*| dsERR_OPERATION_NOT_SUPPORTED | For source devices without HDMI input support |
- * |07|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |04|Compare the returned values to make sure they are equal || Success | The values should be the same |
+ * |05|Call dsHdmiInGetStatus() with valid pointer |dsHdmiInStatus_t*| dsERR_OPERATION_NOT_SUPPORTED | For source devices without HDMI input support |
+ * |06|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  *
  */
 void test_l1_dsHdmiIn_positive_dsHdmiInGetStatus(void) {
@@ -376,16 +374,15 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetStatus(void) {
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    // Step 2: Get the number of input ports from the profile file
     numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
     if (numInputPorts > 0) {
-        // Step 3: Call dsHdmiInGetStatus()
+        // Step 2: Call dsHdmiInGetStatus()
         UT_ASSERT_EQUAL(dsHdmiInGetStatus(&status1), dsERR_NONE);
 
-        // Step 4: Call dsHdmiInGetStatus() again
+        // Step 3: Call dsHdmiInGetStatus() again
         UT_ASSERT_EQUAL(dsHdmiInGetStatus(&status2), dsERR_NONE);
 
-        // Step 5: Compare the returned values to make sure they are equal
+        // Step 4: Compare the returned values to make sure they are equal
         UT_ASSERT_EQUAL(status1.isPresented, status2.isPresented);
         UT_ASSERT_EQUAL(status1.activePort, status2.activePort);
         for (int i = 0; i < dsHDMI_IN_PORT_MAX; i++) {
@@ -395,11 +392,11 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetStatus(void) {
              UT_ASSERT_EQUAL(status1.isPortConnected[i], status2.isPortConnected[i]);
         }
     } else {
-      // Step 6: For source devices without hdmi input support
+      // Step 5: For source devices without hdmi input support
       UT_ASSERT_EQUAL(dsHdmiInGetStatus(&status1), dsERR_OPERATION_NOT_SUPPORTED);
     }
 
-    // Step 7: Call dsHdmiInTerm() to ensure deinitialization
+    // Step 6: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -465,12 +462,11 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetStatus(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Get the number of input ports from the profile file
- * |03|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_0, bool: false, dsVideoPlane_PRIMARY, bool false| dsERR_NONE | Port 0 should be selected |
- * |04|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_1, bool: true, dsVideoPlane_SECONDARY, bool true| dsERR_NONE | Port 1 should be selected |
- * |05|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_2, bool: false, dsVideoPlane_PRIMARY, bool false| dsERR_NONE | Port 2 should be selected |
- * |06||Call dsHdmiInSelectPort() | dsERR_OPERATION_NOT_SUPPORTED | Loop through the ports where HDMI input is not supported
- * |07|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |02|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_0, bool: false, dsVideoPlane_PRIMARY, bool false| dsERR_NONE | Port 0 should be selected |
+ * |03|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_1, bool: true, dsVideoPlane_SECONDARY, bool true| dsERR_NONE | Port 1 should be selected |
+ * |04|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_2, bool: false, dsVideoPlane_PRIMARY, bool false| dsERR_NONE | Port 2 should be selected |
+ * |05||Call dsHdmiInSelectPort() | dsERR_OPERATION_NOT_SUPPORTED | Loop through the ports where HDMI input is not supported
+ * |06|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  *
  */
 void test_l1_dsHdmiIn_positive_dsHdmiInSelectPort(void) {
@@ -482,31 +478,30 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSelectPort(void) {
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    // Step 2: Get the number of input ports from the profile file
     numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
     if (numInputPorts > 0) {
 
         for (uint8_t i = dsHDMI_IN_PORT_0; i < numInputPorts; i++)
         {
-             // Step 3: Call dsHdmiInSelectPort() to select Port 0
+             // Step 2: Call dsHdmiInSelectPort() to select Port 0
              UT_ASSERT_EQUAL(dsHdmiInSelectPort(i, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
 
-             // Step 4: Call dsHdmiInSelectPort() to select Port 1
+             // Step 3: Call dsHdmiInSelectPort() to select Port 1
              UT_ASSERT_EQUAL(dsHdmiInSelectPort(i, true, dsVideoPlane_SECONDARY, true), dsERR_NONE);
 
-             // Step 5: Call dsHdmiInSelectPort() to select Port 2
+             // Step 4: Call dsHdmiInSelectPort() to select Port 2
              UT_ASSERT_EQUAL(dsHdmiInSelectPort(i, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
        }
     } else {
 
 	for (uint8_t i =  numInputPorts; i < dsHDMI_IN_PORT_MAX; i++)
         {
-             // Step 6: Call dsHdmiInSelectPort()
+             // Step 5: Call dsHdmiInSelectPort()
     	     UT_ASSERT_EQUAL(dsHdmiInSelectPort(i, false, dsVideoPlane_PRIMARY, false), dsERR_OPERATION_NOT_SUPPORTED);
         }
     }
 
-    // Step 7: Call dsHdmiInTerm() to ensure deinitialization
+    // Step 6: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -526,11 +521,10 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSelectPort(void) {
  * |:--:|-----------|----------|--------------|-----|
  * |01|Call dsHdmiInSelectPort() without initializing the HDMI input sub-system |dsHDMI_IN_PORT_0, bool: false, dsVideoPlane_PRIMARY, bool: false| dsERR_NOT_INITIALIZED | Should Pass |
  * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |03|Get the number of input ports from the profile file
- * |04|Call dsHdmiInSelectPort() with invalid value |dsHDMI_IN_PORT_MAX, bool: false, dsVideoPlane_PRIMARY, bool: false| dsERR_INVALID_PARAM | Should Pass |
- * |05|Call dsHdmiInSelectPort() with invalid plane value |dsHDMI_IN_PORT_0, bool: false, dsVideoPlane_MAX, bool: true| dsERR_INVALID_PARAM | Should Pass |
- * |06|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
- * |07|Call dsHdmiInSelectPort() after terminating the HDMI input sub-system |dsHDMI_IN_PORT_0, bool: false, dsVideoPlane_PRIMARY, bool: false| dsERR_NOT_INITIALIZED | Should Pass |
+ * |03|Call dsHdmiInSelectPort() with invalid value |dsHDMI_IN_PORT_MAX, bool: false, dsVideoPlane_PRIMARY, bool: false| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsHdmiInSelectPort() with invalid plane value |dsHDMI_IN_PORT_0, bool: false, dsVideoPlane_MAX, bool: true| dsERR_INVALID_PARAM | Should Pass |
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |06|Call dsHdmiInSelectPort() after terminating the HDMI input sub-system |dsHDMI_IN_PORT_0, bool: false, dsVideoPlane_PRIMARY, bool: false| dsERR_NOT_INITIALIZED | Should Pass |
  *
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  *
@@ -548,7 +542,6 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectPort(void) {
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    // Step 3: Get the number of input ports from the profile file
     numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
     for (uint8_t i = dsHDMI_IN_PORT_0; i < numInputPorts; i++)
     {
@@ -582,12 +575,11 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectPort(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Get the number of input ports from the profile file
- * |03|Scale HDMI input video using dsHdmiInScaleVideo() |x=0, y=0, width=800, height=600| dsERR_NONE | Video should be scaled |
- * |04|Scale HDMI input video using dsHdmiInScaleVideo() |x=10, y=10, width=1000, height=800| dsERR_NONE | Video should be scaled |
- * |05|Scale HDMI input video using dsHdmiInScaleVideo() |x=100, y=100, width=800, height=600| dsERR_NONE | Video should be scaled |
- * |06|Scale HDMI input video using dsHdmiInScaleVideo() |x=0, y=0, width=800, height=600| dsERR_OPERATION_NOT_SUPPORTED | For source devices without HDMI input support |
- * |07|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |02|Scale HDMI input video using dsHdmiInScaleVideo() |x=0, y=0, width=800, height=600| dsERR_NONE | Video should be scaled |
+ * |03|Scale HDMI input video using dsHdmiInScaleVideo() |x=10, y=10, width=1000, height=800| dsERR_NONE | Video should be scaled |
+ * |04|Scale HDMI input video using dsHdmiInScaleVideo() |x=100, y=100, width=800, height=600| dsERR_NONE | Video should be scaled |
+ * |05|Scale HDMI input video using dsHdmiInScaleVideo() |x=0, y=0, width=800, height=600| dsERR_OPERATION_NOT_SUPPORTED | For source devices without HDMI input support |
+ * |06|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  *
  */
 void test_l1_dsHdmiIn_positive_dsHdmiInScaleVideo(void) {
@@ -599,23 +591,22 @@ void test_l1_dsHdmiIn_positive_dsHdmiInScaleVideo(void) {
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    // Step 2: Get the number of input ports from the profile file
     numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
     if (numInputPorts > 0) {
-        // Step 3: Scale HDMI input video (x=0, y=0, width=800, height=600)
+        // Step 2: Scale HDMI input video (x=0, y=0, width=800, height=600)
         UT_ASSERT_EQUAL(dsHdmiInScaleVideo(0, 0, 800, 600), dsERR_NONE);
 
-       // Step 4: Scale HDMI input video (x=10, y=10, width=1000, height=800)
+       // Step 3: Scale HDMI input video (x=10, y=10, width=1000, height=800)
        UT_ASSERT_EQUAL(dsHdmiInScaleVideo(10, 10, 1000, 800), dsERR_NONE);
 
-       // Step 5: Scale HDMI input video (x=-10, y=-10, width=800, height=600)
+       // Step 4: Scale HDMI input video (x=-10, y=-10, width=800, height=600)
        UT_ASSERT_EQUAL(dsHdmiInScaleVideo(100, 100, 800, 600), dsERR_NONE);
     } else {
-      // Step 6: For source devices without hdmi input support
+      // Step 5: For source devices without hdmi input support
       UT_ASSERT_EQUAL(dsHdmiInScaleVideo(0, 0, 800, 600), dsERR_OPERATION_NOT_SUPPORTED);
     }
 
-    // Step 7: Call dsHdmiInTerm() to ensure deinitialization
+    // Step 6: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -704,11 +695,10 @@ void test_l1_dsHdmiIn_negative_dsHdmiInScaleVideo(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Get the number of input ports from the profile file
- * |03|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_0, bool: false, dsVideoPlane_PRIMARY, bool false| dsERR_NONE | Port 0 should be selected |
- * |04|Call dsHdmiInSelectZoomMode() and loop through all valid dsVideoZoom_t |[Valid Zoom Mode]| dsERR_NONE | Zoom mode should be updated |
- * |05|Call dsHdmiInSelectZoomMode() updates the video zoom on the active HDMI input using the provided zoom |dsERR_OPERATION_NOT_SUPPORTED |For both sink and source devices without HDMI input support
- * |06|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |02|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_0, bool: false, dsVideoPlane_PRIMARY, bool false| dsERR_NONE | Port 0 should be selected |
+ * |03|Call dsHdmiInSelectZoomMode() and loop through all valid dsVideoZoom_t |[Valid Zoom Mode]| dsERR_NONE | Zoom mode should be updated |
+ * |04|Call dsHdmiInSelectZoomMode() updates the video zoom on the active HDMI input using the provided zoom |dsERR_OPERATION_NOT_SUPPORTED |For both sink and source devices without HDMI input support
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  *
  */
 void test_l1_dsHdmiIn_positive_dsHdmiInSelectZoomMode_source(void) {
@@ -720,23 +710,22 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSelectZoomMode_source(void) {
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    // Step 2: Get the number of input ports from the profile file
     numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
     if (numInputPorts > 0) {
-        // Step 3: Call dsHdmiInSelectPort() to select Port 0
+        // Step 2: Call dsHdmiInSelectPort() to select Port 0
         UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
 
-        // Step 4: Loop through all dsVideoZoom_t values and call dsHdmiInSelectZoomMode()
+        // Step 3: Loop through all dsVideoZoom_t values and call dsHdmiInSelectZoomMode()
         for (int i = dsVIDEO_ZOOM_NONE; i < dsVIDEO_ZOOM_MAX; i++) {
               dsVideoZoom_t zoomMode = i;
               UT_ASSERT_EQUAL(dsHdmiInSelectZoomMode(zoomMode), dsERR_NONE);
         }
     } else {
-       // Step 5:Calling dsHdmiInSelectZoomMode(dsVIDEO_ZOOM_MAX)
+       // Step 4:Calling dsHdmiInSelectZoomMode(dsVIDEO_ZOOM_MAX)
        UT_ASSERT_EQUAL(dsHdmiInSelectZoomMode(dsVIDEO_ZOOM_MAX), dsERR_OPERATION_NOT_SUPPORTED);
     }
 
-    // Step 6: Call dsHdmiInTerm() to ensure deinitialization
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -805,12 +794,11 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode_source(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Get the number of input ports from the profile file
+ * |02|Retrieve the current HDMI video mode using dsHdmiInGetCurrentVideoMode() |dsVideoPortResolution_t*| dsERR_NONE | Video mode should be retrieved |
  * |03|Retrieve the current HDMI video mode using dsHdmiInGetCurrentVideoMode() |dsVideoPortResolution_t*| dsERR_NONE | Video mode should be retrieved |
- * |04|Retrieve the current HDMI video mode using dsHdmiInGetCurrentVideoMode() |dsVideoPortResolution_t*| dsERR_NONE | Video mode should be retrieved |
- * |05|Ensure returned values are the same| |Success| The values should be the same |
- * |06|dsHdmiInGetCurrentVideoMode() to get the current HDMI input video mode of the active port | dsERR_OPERATION_NOT_SUPPORTED| For source devices without HDMI input support
- * |07|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |04|Ensure returned values are the same| |Success| The values should be the same |
+ * |05|dsHdmiInGetCurrentVideoMode() to get the current HDMI input video mode of the active port | dsERR_OPERATION_NOT_SUPPORTED| For source devices without HDMI input support
+ * |06|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  *
  */
 void test_l1_dsHdmiIn_positive_dsHdmiInGetCurrentVideoMode(void) {
@@ -824,14 +812,13 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetCurrentVideoMode(void) {
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    // Step 2: Get the number of input ports from the profile file
     numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
     if (numInputPorts > 0) {
-    	// Step 3: Retrieve the current HDMI video mode using dsHdmiInGetCurrentVideoMode()
+    	// Step 2: Retrieve the current HDMI video mode using dsHdmiInGetCurrentVideoMode()
         UT_ASSERT_EQUAL(dsHdmiInGetCurrentVideoMode(&resolution1), dsERR_NONE);
         UT_ASSERT_EQUAL(dsHdmiInGetCurrentVideoMode(&resolution2), dsERR_NONE);
 
-        // Step 4: Ensure returned values are the same
+        // Step 3: Ensure returned values are the same
         UT_LOG("\n In %s Name: [%d,%d]\n", __FUNCTION__, resolution1.name, resolution2.name);
         UT_ASSERT_EQUAL(resolution1.name, resolution2.name);
         UT_LOG("\n In %s pixelResolution: [%d,%d]\n", __FUNCTION__, resolution1.pixelResolution, resolution2.pixelResolution);
@@ -843,11 +830,11 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetCurrentVideoMode(void) {
         UT_LOG("\n In %s interlaced: [%d,%d]\n", __FUNCTION__, resolution1.interlaced, resolution2.interlaced);
         UT_ASSERT_EQUAL(resolution1.interlaced, resolution2.interlaced);
     } else {
-      // Step 6: Retrieve the current HDMI video mode using dsHdmiInGetCurrentVideoMode()
+      // Step 4: Retrieve the current HDMI video mode using dsHdmiInGetCurrentVideoMode()
       UT_ASSERT_EQUAL(dsHdmiInGetCurrentVideoMode(&resolution1), dsERR_OPERATION_NOT_SUPPORTED);
     }
 
-    // Step 7: Call dsHdmiInTerm() to ensure deinitialization
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -1009,7 +996,7 @@ void mockSignalCallback(dsHdmiInPort_t port, dsHdmiInSignalStatus_t sigStatus){
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Call dsHdmiInRegisterSignalChangeCB() based on the number of input ports from the profile file |dsHdmiInSignalChangeCB_t| dsERR_NONE | Callback should be registered |
+ * |02|Call dsHdmiInRegisterSignalChangeCB() based on the device type|dsHdmiInSignalChangeCB_t| dsERR_NONE | Callback should be registered |
  * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  *
  */
@@ -1017,19 +1004,16 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterSignalChangeCB(void) {
 
     gTestID = 19;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    uint8_t numInputPorts = 0;
-
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
 
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    // Step 2: Call dsHdmiInRegisterSignalChangeCB() based on the number of input ports
-    if (numInputPorts > 0) {
+    // Step 2: Call dsHdmiInRegisterSignalChangeCB() based on the device type
+    if (gSourceType == 0) {
     	// For sink devices
     	UT_ASSERT_EQUAL(dsHdmiInRegisterSignalChangeCB(mockSignalCallback), dsERR_NONE);
 
-    } else {
+    } else if (gSourceType == 1) {
     	// For source devices
         UT_ASSERT_EQUAL(dsHdmiInRegisterSignalChangeCB(mockSignalCallback), dsERR_OPERATION_NOT_SUPPORTED);
     }
@@ -1103,7 +1087,7 @@ void mockStatusChangeCallback(dsHdmiInStatus_t inputStatus){
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Call dsHdmiInRegisterStatusChangeCB() based on the number of input ports from the profile file |dsHdmiInStatusChangeCB_t| dsERR_NONE | Callback should be registered |
+ * |02|Call dsHdmiInRegisterStatusChangeCB() based on the device type |dsHdmiInStatusChangeCB_t| dsERR_NONE | Callback should be registered |
  * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  *
  */
@@ -1111,18 +1095,15 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterStatusChangeCB(void) {
 
     gTestID = 21;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    uint8_t numInputPorts = 0;
-
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
 
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
     // Step 2: Call dsHdmiInRegisterStatusChangeCB() based on the number of input ports
-    if (numInputPorts > 0) {
+    if (gSourceType == 0) {
     	// For sink devices
         UT_ASSERT_EQUAL(dsHdmiInRegisterStatusChangeCB(mockStatusChangeCallback), dsERR_NONE);
-    } else {
+    } else if (gSourceType == 1) {
         // For source devices
         UT_ASSERT_EQUAL(dsHdmiInRegisterStatusChangeCB(mockStatusChangeCallback), dsERR_OPERATION_NOT_SUPPORTED);
     }
@@ -1196,7 +1177,7 @@ void mockVideoModeUpdateCallback(dsHdmiInPort_t port, dsVideoPortResolution_t vi
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Call dsHdmiInRegisterVideoModeUpdateCB() based on the number of input ports from the profile file |dsHdmiInVideoModeUpdateCB_t| dsERR_NONE | Callback should be registered |
+ * |02|Call dsHdmiInRegisterVideoModeUpdateCB() based on the device type |dsHdmiInVideoModeUpdateCB_t| dsERR_NONE | Callback should be registered |
  * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  *
  */
@@ -1204,19 +1185,16 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterVideoModeUpdateCB(void) {
 
     gTestID = 23;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    uint8_t numInputPorts = 0;
-
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
 
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    // Step 2: Call dsHdmiInRegisterVideoModeUpdateCB() based on the number of input ports
-    if (numInputPorts > 0) {
+    // Step 2: Call dsHdmiInRegisterVideoModeUpdateCB() based on the device type
+    if (gSourceType == 0) {
         // For sink devices
          UT_ASSERT_EQUAL(dsHdmiInRegisterVideoModeUpdateCB(mockVideoModeUpdateCallback), dsERR_NONE);
 
-    } else {
+    } else if (gSourceType == 1) {
         // For source devices
         UT_ASSERT_EQUAL(dsHdmiInRegisterVideoModeUpdateCB(mockVideoModeUpdateCallback), dsERR_OPERATION_NOT_SUPPORTED);
     }
@@ -1290,7 +1268,7 @@ void mockALLMChangeCallback(dsHdmiInPort_t port, bool allm_mode){
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Call dsHdmiInRegisterAllmChangeCB() based on the number of input ports from the profile file |dsHdmiInAllmChangeCB_t| dsERR_NONE | Callback should be registered |
+ * |02|Call dsHdmiInRegisterAllmChangeCB() based on the device type |dsHdmiInAllmChangeCB_t| dsERR_NONE | Callback should be registered |
  * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  *
  */
@@ -1298,19 +1276,16 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAllmChangeCB(void) {
 
     gTestID = 25;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    uint8_t numInputPorts = 0;
-
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
 
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    // Step 2: Call dsHdmiInRegisterAllmChangeCB() based on the number of input ports
-    if (numInputPorts > 0) {
+    // Step 2: Call dsHdmiInRegisterAllmChangeCB() based on the device type
+    if (gSourceType == 0) {
         // For sink devices
          UT_ASSERT_EQUAL(dsHdmiInRegisterAllmChangeCB(mockALLMChangeCallback), dsERR_NONE);
 
-    } else {
+    } else if (gSourceType == 1) {
         // For source devices
         UT_ASSERT_EQUAL(dsHdmiInRegisterAllmChangeCB(mockALLMChangeCallback), dsERR_OPERATION_NOT_SUPPORTED);
     }
@@ -1384,7 +1359,7 @@ void mockLatencyChangeCallback(int audio_latency, int video_latency){
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Call dsHdmiInRegisterAVLatencyChangeCB() based on the number of input ports from the profile file |dsAVLatencyChangeCB_t| dsERR_NONE | Callback should be registered |
+ * |02|Call dsHdmiInRegisterAVLatencyChangeCB() based on the device type |dsAVLatencyChangeCB_t| dsERR_NONE | Callback should be registered |
  * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  *
  */
@@ -1392,19 +1367,16 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAVLatencyChangeCB(void) {
 
     gTestID = 27;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    uint8_t numInputPorts = 0;
-
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
 
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    // Step 2: Call dsHdmiInRegisterAVLatencyChangeCB() based on the number of input ports
-    if (numInputPorts > 0) {
+    // Step 2: Call dsHdmiInRegisterAVLatencyChangeCB() based on the device type
+    if (gSourceType == 0) {
         // For sink devices
         UT_ASSERT_EQUAL(dsHdmiInRegisterAVLatencyChangeCB(mockLatencyChangeCallback), dsERR_NONE);
 
-    } else {
+    } else if (gSourceType == 1) {
         // For source devices
         UT_ASSERT_EQUAL(dsHdmiInRegisterAVLatencyChangeCB(mockLatencyChangeCallback), dsERR_OPERATION_NOT_SUPPORTED);
     }
@@ -1478,7 +1450,7 @@ void mockAviContentCallback(dsHdmiInPort_t port, dsAviContentType_t avi_content_
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Call dsHdmiInRegisterAviContentTypeChangeCB() based on the number of input ports from the profile file |dsHdmiInAviContentTypeChangeCB_t| dsERR_NONE | Callback should be registered |
+ * |02|Call dsHdmiInRegisterAviContentTypeChangeCB() based on the device type|dsHdmiInAviContentTypeChangeCB_t| dsERR_NONE | Callback should be registered |
  * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  *
  */
@@ -1486,19 +1458,16 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterAviContentTypeChangeCB(void) {
 
     gTestID = 29;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    uint8_t numInputPorts = 0;
-
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
 
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    // Step 2: Call dsHdmiInRegisterAviContentTypeChangeCB() based on the number of input ports
-    if (numInputPorts > 0) {
+    // Step 2: Call dsHdmiInRegisterAviContentTypeChangeCB() based on the device type
+    if (gSourceType == 0) {
         // For sink devices
          UT_ASSERT_EQUAL(dsHdmiInRegisterAviContentTypeChangeCB(mockAviContentCallback), dsERR_NONE);
 
-    } else {
+    } else if (gSourceType == 1) {
         // For source devices
         UT_ASSERT_EQUAL(dsHdmiInRegisterAviContentTypeChangeCB(mockAviContentCallback), dsERR_OPERATION_NOT_SUPPORTED);
     }
@@ -1568,8 +1537,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAviContentTypeChangeCB(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Get the number of input ports from the profile file
- * |03|Call dsIsHdmiARCPort() with valid input |dsHDMI_IN_PORT_0, bool*| dsERR_NONE | Should successfully check for ARC capability |
+ * |02|Call dsIsHdmiARCPort() with valid input |dsHDMI_IN_PORT_0, bool*| dsERR_NONE | Should successfully check for ARC capability |
  * |04|Call dsIsHdmiARCPort() with valid input |dsHDMI_IN_PORT_1, bool*| dsERR_NONE | Should successfully check for ARC capability |
  * |05|Call dsIsHdmiARCPort() with valid input |dsHDMI_IN_PORT_2, bool*| dsERR_NONE | Should successfully check for ARC capability |
  * |06|Call dsIsHdmiARCPort() with valid input |dsHDMI_IN_PORT_2, bool*| dsERR_NONE | Should successfully check for ARC capability |
@@ -1582,35 +1550,33 @@ void test_l1_dsHdmiIn_positive_dsIsHdmiARCPort_sink(void) {
 
     gTestID = 31;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t  result = dsERR_NONE;
+    bool PortResult1 = 0, PortResult2 = 0;
     uint8_t numInputPorts = 0;
-    bool isArcPort1  = false; 
-    bool isArcPort2  = false;
 
     numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
 
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    // Step 2: Check if HDMI ARC is supported based on the number of input ports
-    if (numInputPorts > 0) {
-        // Step 3: Call dsIsHdmiARCPort() with valid input (dsHDMI_IN_PORT_0)
-        UT_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_0, &isArcPort1), dsERR_NONE);
+    // Step 2: Check if HDMI ARC is supported based on the device type
+    if (gSourceType == 0) {
 
-        // Step 4: Call dsIsHdmiARCPort() with valid input (dsHDMI_IN_PORT_1)
-        UT_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_1, &isArcPort2), dsERR_NONE);
+        // step 3 to 7: validating dsIsHdmiARCPort with valid Input and compare the Results
+        for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
+            result = dsIsHdmiARCPort(port, &PortResult1);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-        // Step 5: Call dsIsHdmiARCPort() with valid input (dsHDMI_IN_PORT_2)
-        UT_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_2, &isArcPort1), dsERR_NONE);
+            result = dsIsHdmiARCPort(port, &PortResult2);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-        // Step 6: Call dsIsHdmiARCPort() with valid input (dsHDMI_IN_PORT_2)
-        UT_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_2, &isArcPort2), dsERR_NONE);
+            UT_ASSERT_EQUAL(PortResult1, PortResult2);
+        }
 
-        // Step 7: Compare the values of steps 4 and 5 to make sure they equal one another
-        UT_ASSERT_EQUAL(isArcPort1, isArcPort2);
-    
-    } else {
+    } else if (gSourceType == 1) {
         // Step 8:Call dsIsHdmiARCPort() with valid input for source devices
-        UT_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_0, &isArcPort1), dsERR_OPERATION_NOT_SUPPORTED);
+        UT_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_0, &PortResult1), dsERR_OPERATION_NOT_SUPPORTED);
     }
 
     // Step 9: Call dsHdmiInTerm() to ensure deinitialization
@@ -1621,13 +1587,13 @@ void test_l1_dsHdmiIn_positive_dsIsHdmiARCPort_sink(void) {
 
 /**
  * @brief Ensure dsIsHdmiARCPort() returns correct error codes during negative scenarios.
- * 
+ *
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 032@n
- * 
+ *
  * **Dependencies:** None@n
  * **User Interaction:** None
- * 
+ *
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
@@ -1637,9 +1603,9 @@ void test_l1_dsHdmiIn_positive_dsIsHdmiARCPort_sink(void) {
  * |04|Call dsIsHdmiARCPort() with invalid value |dsHDMI_IN_PORT_0, NULL| dsERR_INVALID_PARAM | Should Pass |
  * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |06|Call dsIsHdmiARCPort() after terminating the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
- * 
+ *
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
- * 
+ *
  */
 void test_l1_dsHdmiIn_negative_dsIsHdmiARCPort_sink(void) {
 
@@ -1667,79 +1633,62 @@ void test_l1_dsHdmiIn_negative_dsIsHdmiARCPort_sink(void) {
     result = dsIsHdmiARCPort(dsHDMI_IN_PORT_0, &isArcPort);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 /**
  * @brief Ensure dsGetEDIDBytesInfo() correctly retrieves the EDID bytes information during positive scenarios.
- * 
+ *
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 033@n
- * 
+ *
  * **Dependencies:** None@n
  * **User Interaction:** None
- * 
+ *
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Get the number of input ports from the profile file
- * |03|Call dsGetEDIDBytesInfo() with valid inputs |dsHDMI_IN_PORT_0, unsigned char*, int*| dsERR_NONE | Should return EDID bytes information successfully |
- * |04|Call dsGetEDIDBytesInfo() with valid inputs |dsHDMI_IN_PORT_1, unsigned char*, int*| dsERR_NONE | Should return EDID bytes information successfully |
+ * |02|Call dsGetEDIDBytesInfo() with valid inputs |dsHDMI_IN_PORT_0, unsigned char*, int*| dsERR_NONE | Should return EDID bytes information successfully |
+ * |03|Call dsGetEDIDBytesInfo() with valid inputs |dsHDMI_IN_PORT_1, unsigned char*, int*| dsERR_NONE | Should return EDID bytes information successfully |
+ * |04|Call dsGetEDIDBytesInfo() with valid inputs |dsHDMI_IN_PORT_2, unsigned char*, int*| dsERR_NONE | Should return EDID bytes information successfully |
  * |05|Call dsGetEDIDBytesInfo() with valid inputs |dsHDMI_IN_PORT_2, unsigned char*, int*| dsERR_NONE | Should return EDID bytes information successfully |
- * |06|Call dsGetEDIDBytesInfo() with valid inputs |dsHDMI_IN_PORT_2, unsigned char*, int*| dsERR_NONE | Should return EDID bytes information successfully |
- * |07|Compare the results and make sure they are the same | | Success | The values should be the same |
- * |08|Call dsGetEDIDBytesInfo() with valid input |dsHDMI_IN_PORT_0, unsigned char*, int*| dsERR_OPERATION_NOT_SUPPORTED| For source devices
- * |09|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
- * 
+ * |06|Compare the results and make sure they are the same | | Success | The values should be the same |
+ * |07|Call dsGetEDIDBytesInfo() with valid input |dsHDMI_IN_PORT_0, unsigned char*, int*| dsERR_OPERATION_NOT_SUPPORTED| For source devices
+ * |08|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ *
  */
 void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo_sink(void) {
 
     gTestID = 33;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    unsigned char edidBytes1[255] = {0}, edidBytes2[255]={0};
+    int edidSize1 = 0, edidSize2 = 0;
     uint8_t numInputPorts = 0;
-    unsigned char* edidBytes1 = (unsigned char*) malloc(255);
-    unsigned char* edidBytes2 = (unsigned char*) malloc(255);
-    unsigned char* edidBytes3 = (unsigned char*) malloc(255);
-    unsigned char* edidBytes4 = (unsigned char*) malloc(255);
-    int edidSize1 = 0;
-    int edidSize2 = 0;
-    int edidSize3 = 0;
-    int edidSize4 = 0;
+
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
 
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    // Step 2: Get the number of input ports from the profile file
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
-    if (numInputPorts > 0) {
-        // Step 3: Call dsGetEDIDBytesInfo() with valid input (dsHDMI_IN_PORT_0)
-        UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, edidBytes1, &edidSize1), dsERR_NONE);
+    if (gSourceType == 0) {
+        // Step 3 to Step 7
+        for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
+            UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(port, edidBytes1, &edidSize1), dsERR_NONE);
 
-        // Step 4: Call dsGetEDIDBytesInfo() with valid input (dsHDMI_IN_PORT_1)
-        UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_1, edidBytes2, &edidSize2), dsERR_NONE);
+            UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(port, edidBytes2, &edidSize2), dsERR_NONE);
 
-        // Step 5: Call dsGetEDIDBytesInfo() with valid input (dsHDMI_IN_PORT_2)
-        UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_2, edidBytes3, &edidSize3), dsERR_NONE);
-
-        // Step 6: Call dsGetEDIDBytesInfo() with valid input (dsHDMI_IN_PORT_2)
-        UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_2, edidBytes4, &edidSize4), dsERR_NONE);
-
-        // Step 7: Compare the results and make sure they are the same
-        UT_ASSERT_EQUAL(edidSize3, edidSize4);
-        UT_ASSERT_EQUAL(memcmp(edidBytes3, edidBytes4, edidSize3),0);
-    } else {
+            // Compare the results and make sure they are the same
+            UT_ASSERT_EQUAL(edidSize1, edidSize2);
+            UT_ASSERT_EQUAL(memcmp(edidBytes1, edidBytes2, edidSize1),0);
+        }
+    } else if (gSourceType == 1) {
         // Step 8: Call dsGetEDIDBytesInfo() with valid input for source devices
         UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, edidBytes1, &edidSize1), dsERR_OPERATION_NOT_SUPPORTED);
     }
 
     // Step 9: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
-
-    free(edidBytes1);
-    free(edidBytes2);
-    free(edidBytes3);
-    free(edidBytes4);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -1771,7 +1720,7 @@ void test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo_sink(void) {
 
     gTestID = 34;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    unsigned char* edidBytes = (unsigned char*) malloc(255);
+    unsigned char edidBytes[255] = {0};
     int edidSize = 0;
 
     // Step 1: Call dsGetEDIDBytesInfo() without initializing the HDMI input sub-system
@@ -1797,7 +1746,6 @@ void test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo_sink(void) {
     result = dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, edidBytes, &edidSize);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
-    free(edidBytes);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -1815,59 +1763,46 @@ void test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo_sink(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Get the number of input ports from the profile file
- * |03|Call dsGetHDMISPDInfo() with valid input |dsHDMI_IN_PORT_0, unsigned char*| dsERR_NONE | Should return HDMI SPD information successfully |
- * |04|Call dsGetHDMISPDInfo() with valid input |dsHDMI_IN_PORT_1, unsigned char*| dsERR_NONE | Should return HDMI SPD information successfully |
+ * |02|Call dsGetHDMISPDInfo() with valid input |dsHDMI_IN_PORT_0, unsigned char*| dsERR_NONE | Should return HDMI SPD information successfully |
+ * |03|Call dsGetHDMISPDInfo() with valid input |dsHDMI_IN_PORT_1, unsigned char*| dsERR_NONE | Should return HDMI SPD information successfully |
+ * |04|Call dsGetHDMISPDInfo() with valid input |dsHDMI_IN_PORT_2, unsigned char*| dsERR_NONE | Should return HDMI SPD information successfully |
  * |05|Call dsGetHDMISPDInfo() with valid input |dsHDMI_IN_PORT_2, unsigned char*| dsERR_NONE | Should return HDMI SPD information successfully |
- * |06|Call dsGetHDMISPDInfo() with valid input |dsHDMI_IN_PORT_2, unsigned char*| dsERR_NONE | Should return HDMI SPD information successfully |
- * |07|Compare values from step 4/5 and make sure they're the same || Success | The values should be the same |
- * |08|Call dsGetHDMISPDInfo() with valid input | dsHDMI_IN_PORT_0, unsigned char* | dsERR_OPERATION_NOT_SUPPORTED | For source devices
- * |09|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |06|Compare values from step 4/5 and make sure they're the same || Success | The values should be the same |
+ * |07|Call dsGetHDMISPDInfo() with valid input | dsHDMI_IN_PORT_0, unsigned char* | dsERR_OPERATION_NOT_SUPPORTED | For source devices
+ * |08|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  *
  */
 void test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo_sink(void) {
 
     gTestID = 35;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    unsigned char spdInfo1[sizeof(struct dsSpd_infoframe_st)] = {0}, spdInfo2[sizeof(struct dsSpd_infoframe_st)] = {0};
     uint8_t numInputPorts = 0;
-    unsigned char* spdInfo1 = (unsigned char*) malloc(sizeof(struct dsSpd_infoframe_st));
-    unsigned char* spdInfo2 = (unsigned char*) malloc(sizeof(struct dsSpd_infoframe_st));
-    unsigned char* spdInfo3 = (unsigned char*) malloc(sizeof(struct dsSpd_infoframe_st));
-    unsigned char* spdInfo4 = (unsigned char*) malloc(sizeof(struct dsSpd_infoframe_st));
 
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    // Step 2: Get the number of input ports from the profile file
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
-    if (numInputPorts > 0) {
-         // Step 3: Call dsGetHDMISPDInfo() with valid input (dsHDMI_IN_PORT_0)
-         UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, spdInfo1), dsERR_NONE);
+    if (gSourceType == 0) {
+        // Step 3 to Step 7
+        for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
 
-        // Step 4: Call dsGetHDMISPDInfo() with valid input (dsHDMI_IN_PORT_1)
-        UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_1, spdInfo2), dsERR_NONE);
+            // Step 3: Call dsGetHDMISPDInfo() with valid input (dsHDMI_IN_PORT_0)
+            UT_ASSERT_EQUAL(dsGetHDMISPDInfo(port, spdInfo1), dsERR_NONE);
 
-        // Step 5: Call dsGetHDMISPDInfo() with valid input (dsHDMI_IN_PORT_2)
-        UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_2, spdInfo3), dsERR_NONE);
+            // Step 4: Call dsGetHDMISPDInfo() with valid input (dsHDMI_IN_PORT_1)
+            UT_ASSERT_EQUAL(dsGetHDMISPDInfo(port, spdInfo2), dsERR_NONE);
 
-        // Step 6: Call dsGetHDMISPDInfo() with valid input (dsHDMI_IN_PORT_2)
-        UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_2, spdInfo4), dsERR_NONE);
-
-        // Step 7: Compare the results and make sure they are the same
-        UT_ASSERT_EQUAL(memcmp(spdInfo3, spdInfo4,sizeof(struct dsSpd_infoframe_st)),0);
-
-    } else {
-        // Step 8: Call dsGetHDMISPDInfo() with valid input for source devices 
+            // Step 7: Compare the results and make sure they are the same
+            UT_ASSERT_EQUAL(memcmp(spdInfo1, spdInfo2,sizeof(struct dsSpd_infoframe_st)),0);
+        }
+    } else if (gSourceType == 1) {
+        // Step 8: Call dsGetHDMISPDInfo() with valid input for source devices
         UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, spdInfo1), dsERR_OPERATION_NOT_SUPPORTED);
     }
 
     // Step 9: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
-
-    free(spdInfo1);
-    free(spdInfo2);
-    free(spdInfo3);
-    free(spdInfo4);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -1898,11 +1833,12 @@ void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo_sink(void) {
 
     gTestID = 36;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    unsigned char* spdInfo1 = (unsigned char*) malloc(sizeof(struct dsSpd_infoframe_st)); 
+
+    unsigned char spdInfo1[sizeof(struct dsSpd_infoframe_st)] = {0};
 
     // Step 1: Call dsGetHDMISPDInfo() without initializing the HDMI input sub-system
     dsError_t result = dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, spdInfo1);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_GENERAL); 
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_GENERAL);
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
@@ -1920,9 +1856,8 @@ void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo_sink(void) {
     result = dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, spdInfo1);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_GENERAL);
 
-    free(spdInfo1);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 /**
@@ -1938,50 +1873,36 @@ void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo_sink(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Get the number of input ports from the profile file
- * |03|Call dsSetEdidVersion() with valid values |dsHDMI_IN_PORT_0, HDMI_EDID_VER_14| dsERR_NONE | Should set EDID version successfully |
- * |04|Call dsSetEdidVersion() with valid values |dsHDMI_IN_PORT_0, HDMI_EDID_VER_20| dsERR_NONE | Should set EDID version successfully |
- * |05|Call dsSetEdidVersion() with valid values |dsHDMI_IN_PORT_1, HDMI_EDID_VER_14| dsERR_NONE | Should set EDID version successfully |
- * |06|Call dsSetEdidVersion() with valid values |dsHDMI_IN_PORT_2, HDMI_EDID_VER_14| dsERR_NONE | Should set EDID version successfully |
- * |07|Call dsSetEdidVersion() with valid values | dsHDMI_IN_PORT_0, HDMI_EDID_VER_14 | dsERR_OPERATION_NOT_SUPPORTED | For source devices
- * |08|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |02|Call dsSetEdidVersion() with valid values for each port and each EDID version
+ * |03|Call dsSetEdidVersion() with valid values | dsHDMI_IN_PORT_0, HDMI_EDID_VER_14 | dsERR_OPERATION_NOT_SUPPORTED | For source devices
+ * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  *
  */
 void test_l1_dsHdmiIn_positive_dsSetEdidVersion_sink(void) {
 
     gTestID = 37;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    uint32_t ver14 = 0;
-    uint32_t ver20 = 0;
+    tv_hdmi_edid_version_t ver14 = UT_KVP_PROFILE_GET_UINT32("dsHdmiIn/EdidVersions/0");
+    tv_hdmi_edid_version_t ver20 = UT_KVP_PROFILE_GET_UINT32("dsHdmiIn/EdidVersions/1");
     uint8_t numInputPorts = 0;
 
-    ver14 = UT_KVP_PROFILE_GET_UINT32("dsHdmiIn/EdidVersions/0");
-
-    ver20 = UT_KVP_PROFILE_GET_UINT32("dsHdmiIn/EdidVersions/1");
-
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
-    
-    // Step 2: Get the number of input ports from the profile file
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
-    if (numInputPorts > 0) {
-        // Step 3: Call dsSetEdidVersion() with valid values (dsHDMI_IN_PORT_0, HDMI_EDID_VER_14)
-        UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_0, ver14), dsERR_NONE);
-    
-        // Step 4: Call dsSetEdidVersion() with valid values (dsHDMI_IN_PORT_0, HDMI_EDID_VER_20)
-        UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_0, ver20), dsERR_NONE);
 
-        // Step 5: Call dsSetEdidVersion() with valid values (dsHDMI_IN_PORT_1, HDMI_EDID_VER_14)
-        UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_1, ver14), dsERR_NONE);
-
-        // Step 6: Call dsSetEdidVersion() with valid values (dsHDMI_IN_PORT_2, HDMI_EDID_VER_14)
-        UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_2, ver14), dsERR_NONE);
-    } else {
-       // Step 7: Call dsSetEdidVersion() with valid values for source devices
+    if (gSourceType == 0) {
+	 
+	for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
+              // Step 2: Call dsSetEdidVersion() with valid values for each port and each EDID version
+              UT_ASSERT_EQUAL(dsSetEdidVersion(port, ver14), dsERR_NONE);
+              UT_ASSERT_EQUAL(dsSetEdidVersion(port, ver20), dsERR_NONE);
+         }
+    } else if (gSourceType == 1) {
+       // Step 3: Call dsSetEdidVersion() with valid values for source devices
        UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_0, ver14), dsERR_OPERATION_NOT_SUPPORTED);
     }
 
-    // Step 8: Call dsHdmiInTerm() to ensure deinitialization
+    // Step 4: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -2013,7 +1934,7 @@ void test_l1_dsHdmiIn_negative_dsSetEdidVersion_sink(void) {
 
     gTestID = 38;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    uint8_t ver14 = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/EdidVersions/0");
+    tv_hdmi_edid_version_t ver14 = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/EdidVersions/0");
 
     // Step 1: Call dsSetEdidVersion() without initializing the HDMI input sub-system
     dsError_t result = dsSetEdidVersion(dsHDMI_IN_PORT_0, ver14);
@@ -2051,37 +1972,39 @@ void test_l1_dsHdmiIn_negative_dsSetEdidVersion_sink(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Get the number of input ports from the profile file
- * |03|Call dsGetEdidVersion() with all valid ports and call the last one twice|[Valid Port], tv_hdmi_edid_version_t*| dsERR_NONE | Should Pass |
- * |04|Compare the values from final two calls in step 2 and make sure they match || Success | The values should be the same |
- * |05|Call dsGetEdidVersion() with valid ports | dsERR_OPERATION_NOT_SUPPORTED | For source devices
- * |06|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |02|Call dsGetEdidVersion() with all valid ports and call the last one twice|[Valid Port], tv_hdmi_edid_version_t*| dsERR_NONE | Should Pass |
+ * |03|Compare the values from final two calls in step 2 and make sure they match || Success | The values should be the same |
+ * |04|Call dsGetEdidVersion() with valid ports | dsERR_OPERATION_NOT_SUPPORTED | For source devices
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  *
  */
 void test_l1_dsHdmiIn_positive_dsGetEdidVersion_sink(void) {
 
     gTestID = 39;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    dsError_t  result = dsERR_NONE;
+    tv_hdmi_edid_version_t edid_version_1 = HDMI_EDID_VER_MAX;
+    tv_hdmi_edid_version_t edid_version_2 = HDMI_EDID_VER_MAX;
     uint8_t numInputPorts = 0;
-    tv_hdmi_edid_version_t edid_version_1 = dsERR_NONE;
-    tv_hdmi_edid_version_t edid_version_2 = dsERR_NONE;
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
 
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    // Step 2: Get the number of input ports from the profile file
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
-    if (numInputPorts > 0) {
+    if (gSourceType == 0) {
        // Step 3: Call dsGetEdidVersion() with valid values (dsHDMI_IN_PORT_0, tv_hdmi_edid_version_t*)
-       UT_ASSERT_EQUAL(dsGetEdidVersion(dsHDMI_IN_PORT_0, &edid_version_1), dsERR_NONE);
-       UT_ASSERT_EQUAL(dsGetEdidVersion(dsHDMI_IN_PORT_1, &edid_version_1), dsERR_NONE);
-       UT_ASSERT_EQUAL(dsGetEdidVersion(dsHDMI_IN_PORT_2, &edid_version_1), dsERR_NONE);
-       UT_ASSERT_EQUAL(dsGetEdidVersion(dsHDMI_IN_PORT_2, &edid_version_2), dsERR_NONE);
+       for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
+            result = dsGetEdidVersion(port, &edid_version_1);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-       // Step 4: Compare the values from steps 4/5 and make sure they match
-       UT_ASSERT_EQUAL(edid_version_1, edid_version_2);
-    } else {
-       // Step 5: Call dsGetEdidVersion() with valid ports 
+            result = dsGetEdidVersion(port, &edid_version_2);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+            UT_ASSERT_EQUAL(&edid_version_1, &edid_version_2);
+     
+      }
+    } else if (gSourceType == 1) {
+       // Step 5: Call dsGetEdidVersion() with valid ports
        UT_ASSERT_EQUAL(dsGetEdidVersion(dsHDMI_IN_PORT_0, &edid_version_1), dsERR_OPERATION_NOT_SUPPORTED);
     }
 
@@ -2109,7 +2032,7 @@ void test_l1_dsHdmiIn_positive_dsGetEdidVersion_sink(void) {
  * |04|Call dsGetEdidVersion() with invalid inputs |dsHDMI_IN_PORT_0, NULL| dsERR_INVALID_PARAM | Should Pass |
  * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  * |06|Call dsGetEdidVersion() without initializing the HDMI input sub-system |dsHDMI_IN_PORT_0, tv_hdmi_edid_version_t*| dsERR_NOT_INITIALIZED | Should Pass |
- * 
+ *
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  *
  */
@@ -2117,7 +2040,7 @@ void test_l1_dsHdmiIn_negative_dsGetEdidVersion_sink(void) {
 
     gTestID = 40;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    tv_hdmi_edid_version_t edid_version = dsERR_NONE;
+    tv_hdmi_edid_version_t edid_version = HDMI_EDID_VER_MAX;
 
     // Step 1: Call dsGetEdidVersion() without initializing the HDMI input sub-system
     dsError_t result = dsGetEdidVersion(dsHDMI_IN_PORT_0, &edid_version);
@@ -2155,51 +2078,42 @@ void test_l1_dsHdmiIn_negative_dsGetEdidVersion_sink(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Get the number of input ports from the profile file
- * |03|Call dsGetAllmStatus() with valid inputs |dsHDMI_IN_PORT_0, bool*| dsERR_NONE | Should retrieve ALLM status successfully |
- * |04|Call dsGetAllmStatus() with valid inputs |dsHDMI_IN_PORT_1, bool*| dsERR_NONE | Should retrieve ALLM status successfully |
- * |05|Call dsGetAllmStatus() with valid inputs |dsHDMI_IN_PORT_2, bool*| dsERR_NONE | Should retrieve ALLM status successfully |
- * |06|Call dsGetAllmStatus() with valid inputs |dsHDMI_IN_PORT_2, bool*| dsERR_NONE | Should retrieve ALLM status successfully |
- * |07|Compare the results of steps 4/5 and make sure they are the same || Success | The returned values should be the same |
- * |08|Call dsGetAllmStatus() with valid inputs | dsHDMI_IN_PORT_0, bool*| dsERR_OPERATION_NOT_SUPPORTED | For source devices
- * |09|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |02|Call dsGetAllmStatus() with valid inputs |dsHDMI_IN_PORT_0, bool*| dsERR_NONE | Should retrieve ALLM status successfully |
+ * |03|Call dsGetAllmStatus() with valid inputs | dsHDMI_IN_PORT_0, bool*| dsERR_OPERATION_NOT_SUPPORTED | For source devices
+ * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  *
  */
 void test_l1_dsHdmiIn_positive_dsGetAllmStatus_sink(void) {
 
     gTestID = 41;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    bool allm_status_1 = 0 , allm_status_2 = 0;
+    dsError_t  result = dsERR_NONE;
     uint8_t numInputPorts = 0;
-    bool allm_status_1 = false;
-    bool allm_status_2 = false;
-    bool allm_status_3 = false;
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
 
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    // Step 2: Get the number of input ports from the profile file
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
-    if (numInputPorts > 0) {
-       // Step 2: Call dsGetAllmStatus() with valid inputs (dsHDMI_IN_PORT_0, bool*)
-       UT_ASSERT_EQUAL(dsGetAllmStatus(dsHDMI_IN_PORT_0, &allm_status_1), dsERR_NONE);
+    if (gSourceType == 0) {
 
-       // Step 3: Call dsGetAllmStatus() with valid inputs (dsHDMI_IN_PORT_1, bool*)
-       UT_ASSERT_EQUAL(dsGetAllmStatus(dsHDMI_IN_PORT_1, &allm_status_2), dsERR_NONE);
+	   // Step 2: Call dsGetAllmStatus() with valid inputs
+	   for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
+           result = dsGetAllmStatus(port, &allm_status_1);
+           UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-       // Step 4: Call dsGetAllmStatus() with valid inputs (dsHDMI_IN_PORT_2, bool*)
-       UT_ASSERT_EQUAL(dsGetAllmStatus(dsHDMI_IN_PORT_2, &allm_status_3), dsERR_NONE);
+            result = dsGetAllmStatus(port, &allm_status_2);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-       // Step 5: Call dsGetAllmStatus() with valid inputs (dsHDMI_IN_PORT_2, bool*)
-       UT_ASSERT_EQUAL(dsGetAllmStatus(dsHDMI_IN_PORT_2, &allm_status_1), dsERR_NONE);
+            UT_ASSERT_EQUAL(allm_status_1, allm_status_2);
+        }
 
-       // Step 6: Compare the results of steps 4/5 and make sure they are the same
-       UT_ASSERT_EQUAL(allm_status_1, allm_status_3);
-    } else {
-       // Step 7: Call dsGetAllmStatus() with valid inputs
+    } else if (gSourceType == 1) {
+       // Step 3: Call dsGetAllmStatus() with valid inputs
        UT_ASSERT_EQUAL(dsGetAllmStatus(dsHDMI_IN_PORT_0, &allm_status_1), dsERR_OPERATION_NOT_SUPPORTED);
     }
 
-    // Step 8: Call dsHdmiInTerm() to ensure deinitialization
+    // Step 4: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -2269,39 +2183,35 @@ void test_l1_dsHdmiIn_negative_dsGetAllmStatus_sink(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Get the number of input ports from the profile file
- * |03|Call dsGetSupportedGameFeaturesList() with valid inputs |dsSupportedGameFeatureList_t*| dsERR_NONE | Should retrieve list successfully |
- * |04|Call dsGetSupportedGameFeaturesList() with valid inputs and Comparing the results to the expected values defined in the test profile |
- * |05||Call dsGetSupportedGameFeaturesList() with valid inputs | dsERR_OPERATION_NOT_SUPPORTED |For source devices
- * |06|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |02|Call dsGetSupportedGameFeaturesList() with valid inputs |dsSupportedGameFeatureList_t*| dsERR_NONE | Should retrieve list successfully |
+ * |03|Call dsGetSupportedGameFeaturesList() with valid inputs and Comparing the results to the expected values defined in the test profile |
+ * |04||Call dsGetSupportedGameFeaturesList() with valid inputs | dsERR_OPERATION_NOT_SUPPORTED |For source devices
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  *
  */
 void test_l1_dsHdmiIn_positive_dsGetSupportedGameFeaturesList_sink(void) {
 
     gTestID = 43;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    uint8_t numInputPorts = 0;
     dsSupportedGameFeatureList_t supported_features_1 = {0};
 
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    // Step 2: Get the number of input ports from the profile file
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
-    if (numInputPorts > 0) {
-       // Step 3: Call dsGetSupportedGameFeaturesList() with valid inputs (dsSupportedGameFeatureList_t*)
+    if (gSourceType == 0) {
+       // Step 2: Call dsGetSupportedGameFeaturesList() with valid inputs (dsSupportedGameFeatureList_t*)
        UT_ASSERT_EQUAL(dsGetSupportedGameFeaturesList(&supported_features_1), dsERR_NONE);
 
-       //step 4:Validating the results retrieved from dsGetSupportedGameFeaturesList() 
+       //step 3:Validating the results retrieved from dsGetSupportedGameFeaturesList()
        //and Comparing the results to the expected values defined in the profile file
        UT_ASSERT_KVP_EQUAL_PROFILE_STRING(supported_features_1.gameFeatureList, "dsHdmiIn/gameFeatures/feature");
        UT_ASSERT_KVP_EQUAL_PROFILE_UINT32(supported_features_1.gameFeatureCount, "dsHdmiIn/gameFeatures/count");
-    } else {
-       // Step 5:Call dsGetSupportedGameFeaturesList() with valid inputs	    
+    } else if (gSourceType == 1) {
+       // Step 4:Call dsGetSupportedGameFeaturesList() with valid inputs
        UT_ASSERT_EQUAL(dsGetSupportedGameFeaturesList(&supported_features_1), dsERR_OPERATION_NOT_SUPPORTED);
     }
 
-    // Step 6: Call dsHdmiInTerm() to ensure deinitialization
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -2367,11 +2277,10 @@ void test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList_sink(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Get the number of input ports from the profile file
- * |03|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_0, bool: false, dsVideoPlane_PRIMARY, bool: false| dsERR_NONE | Port 0 should be selected |
- * |04|Call dsGetAVLatency() with valid input |int*, int*| dsERR_NONE | Should retrieve AV latency values successfully |
- * |05|Call dsGetAVLatency() with valid input | dsERR_OPERATION_NOT_SUPPORTED | For source devices
- * |06|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |02|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_0, bool: false, dsVideoPlane_PRIMARY, bool: false| dsERR_NONE | Port 0 should be selected |
+ * |03|Call dsGetAVLatency() with valid input |int*, int*| dsERR_NONE | Should retrieve AV latency values successfully |
+ * |04|Call dsGetAVLatency() with valid input | dsERR_OPERATION_NOT_SUPPORTED | For source devices
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  *
  */
 void test_l1_dsHdmiIn_positive_dsGetAVLatency_sink(void) {
@@ -2380,25 +2289,23 @@ void test_l1_dsHdmiIn_positive_dsGetAVLatency_sink(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     int audioLatency1 =0;
     int videoLatency1 =0;
-    uint8_t numInputPorts = 0;
 
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    // Step 2: Get the number of input ports from the profile file
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
-    if (numInputPorts > 0){
-        // Step 3: Call dsHdmiInSelectPort() to select Port 0
+
+    if (gSourceType == 0) {
+        // Step 2: Call dsHdmiInSelectPort() to select Port 0
         UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
 
-        // Step 4: Call dsGetAVLatency() with valid inputs (int*, int*)
+        // Step 3: Call dsGetAVLatency() with valid inputs (int*, int*)
         UT_ASSERT_EQUAL(dsGetAVLatency(&audioLatency1, &videoLatency1), dsERR_NONE);
-    } else {
-        //Step 5: Call dsGetAVLatency() with valid inputs
+    } else if (gSourceType == 1) {
+        //Step 4: Call dsGetAVLatency() with valid inputs
 	UT_ASSERT_EQUAL(dsGetAVLatency(&audioLatency1, &videoLatency1), dsERR_OPERATION_NOT_SUPPORTED);
     }
 
-    // Step 6: Call dsHdmiInTerm() to ensure deinitialization
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -2430,7 +2337,7 @@ void test_l1_dsHdmiIn_negative_dsGetAVLatency_sink(void) {
 
     gTestID = 46;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    int audioLatency =0; 
+    int audioLatency =0;
     int	videoLatency =0;
 
     // Step 1: Call dsGetAVLatency() without initializing the HDMI input sub-system
@@ -2469,38 +2376,35 @@ void test_l1_dsHdmiIn_negative_dsGetAVLatency_sink(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize HDMI input using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Get the number of input ports from the profile file
- * |03|Call dsSetEdid2AllmSupport() with all valid ports and enable EDID ALLM support | iHdmiPort: dsHDMI_IN_PORT_0, allmSupport: true | dsERR_NONE | Should Pass |
- * |04|Call dsSetEdid2AllmSupport() to disable EDID ALLM support | iHdmiPort: dsHDMI_IN_PORT_0, allmSupport: false | dsERR_NONE | Should Pass |
- * |05|Call dsSetEdid2AllmSupport() with valid ports | dsERR_OPERATION_NOT_SUPPORTED | For source devices
- * |06|Terminate the HDMI input using dsHdmiInTerm() | | dsERR_NONE | Clean up after test |
+ * |02|Call dsSetEdid2AllmSupport() with all valid ports and enable EDID ALLM support | iHdmiPort: dsHDMI_IN_PORT_0, allmSupport: true | dsERR_NONE | Should Pass |
+ * |03|Call dsSetEdid2AllmSupport() to disable EDID ALLM support | iHdmiPort: dsHDMI_IN_PORT_0, allmSupport: false | dsERR_NONE | Should Pass |
+ * |04|Call dsSetEdid2AllmSupport() with valid ports | dsERR_OPERATION_NOT_SUPPORTED | For source devices
+ * |05|Terminate the HDMI input using dsHdmiInTerm() | | dsERR_NONE | Clean up after test |
  *
  */
 void test_l1_dsHdmiIn_positive_dsSetEdid2AllmSupport_sink(void) {
 
     gTestID = 47;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    uint8_t numInputPorts = 0;
+
 
     // Step 1: Initialize HDMI input using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    // Step 2: Get the number of input ports from the profile file
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
-    if (numInputPorts > 0) {
-        // Step 3: Call dsSetEdid2AllmSupport() with all valid ports and enable EDID ALLM support
+    if (gSourceType == 0) {
+        // Step 2: Call dsSetEdid2AllmSupport() with all valid ports and enable EDID ALLM support
         UT_ASSERT_EQUAL(dsSetEdid2AllmSupport(dsHDMI_IN_PORT_0, true), dsERR_NONE);
         UT_ASSERT_EQUAL(dsSetEdid2AllmSupport(dsHDMI_IN_PORT_1, true), dsERR_NONE);
         UT_ASSERT_EQUAL(dsSetEdid2AllmSupport(dsHDMI_IN_PORT_2, true), dsERR_NONE);
-    
-        // Step 4: Call dsSetEdid2AllmSupport() to disable EDID ALLM support
+
+        // Step 3: Call dsSetEdid2AllmSupport() to disable EDID ALLM support
         UT_ASSERT_EQUAL(dsSetEdid2AllmSupport(dsHDMI_IN_PORT_0, false), dsERR_NONE);
-    } else {
-        // Step 5:Call dsSetEdid2AllmSupport() with valid ports
+    } else if (gSourceType == 1) {
+        // Step 4:Call dsSetEdid2AllmSupport() with valid ports
         UT_ASSERT_EQUAL(dsSetEdid2AllmSupport(dsHDMI_IN_PORT_0, true), dsERR_OPERATION_NOT_SUPPORTED);
     }
 
-    // Step 6: Terminate the HDMI input using dsHdmiInTerm()
+    // Step 5: Terminate the HDMI input using dsHdmiInTerm()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -2525,7 +2429,7 @@ void test_l1_dsHdmiIn_positive_dsSetEdid2AllmSupport_sink(void) {
  * |05|Call dsSetEdid2AllmSupport() after termination | iHdmiPort: dsHDMI_IN_PORT_0, allmSupport: true | dsERR_NOT_INITIALIZED | Should Pass |
  *
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported or has failed respectively.
- * 
+ *
  */
 void test_l1_dsHdmiIn_negative_dsSetEdid2AllmSupport_sink(void) {
 
@@ -2565,11 +2469,10 @@ void test_l1_dsHdmiIn_negative_dsSetEdid2AllmSupport_sink(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize HDMI input using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Get the number of input ports from the profile file
- * |03|Call dsGetEdid2AllmSupport() with all valid ports, and call the last port twice to verify EDID ALLM support | iHdmiPort: dsHDMI_IN_PORT_0, allmSupport: bool* | dsERR_NONE | Should Pass |
- * |04|Compare the returned values from steps 2/3 and verify that they are the same |  | success | The values should be the same |
- * |05|Call dsGetEdid2AllmSupport() with  valid ports | dsERR_OPERATION_NOT_SUPPORTED | For source devices
- * |06|Terminate the HDMI input using dsHdmiInTerm() | | dsERR_NONE | Clean up after test |
+ * |02|Call dsGetEdid2AllmSupport() with all valid ports, and call the last port twice to verify EDID ALLM support | iHdmiPort: dsHDMI_IN_PORT_0, allmSupport: bool* | dsERR_NONE | Should Pass |
+ * |03|Compare the returned values from steps 2/3 and verify that they are the same |  | success | The values should be the same |
+ * |04|Call dsGetEdid2AllmSupport() with  valid ports | dsERR_OPERATION_NOT_SUPPORTED | For source devices
+ * |05|Terminate the HDMI input using dsHdmiInTerm() | | dsERR_NONE | Clean up after test |
  *
  * @note Ensure that the device supports querying of the EDID ALLM feature before running this test.
  *
@@ -2578,30 +2481,36 @@ void test_l1_dsHdmiIn_positive_dsGetEdid2AllmSupport_sink(void) {
 
     gTestID = 49;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    bool allmSupport1 = false; 
-    bool allmSupport2 = false;
+    bool allmSupport1 = 0;
+    bool allmSupport2 = 0;
+    dsError_t  result = dsERR_NONE;
     uint8_t numInputPorts = 0;
+
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
 
     // Step 1: Initialize HDMI input using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    // Step 2: Get the number of input ports from the profile file
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
-    if (numInputPorts > 0) {
-        // Step 3: Call dsGetEdid2AllmSupport() to verify EDID ALLM support
-        UT_ASSERT_EQUAL(dsGetEdid2AllmSupport(dsHDMI_IN_PORT_0, &allmSupport1), dsERR_NONE);
-        UT_ASSERT_EQUAL(dsGetEdid2AllmSupport(dsHDMI_IN_PORT_1, &allmSupport1), dsERR_NONE);
-        UT_ASSERT_EQUAL(dsGetEdid2AllmSupport(dsHDMI_IN_PORT_2, &allmSupport1), dsERR_NONE);
-        UT_ASSERT_EQUAL(dsGetEdid2AllmSupport(dsHDMI_IN_PORT_2, &allmSupport2), dsERR_NONE);
 
-        // Step 4: Compare the returned values from steps 2/3 and verify that they are the same
-        UT_ASSERT_EQUAL(allmSupport1, allmSupport2);
-    } else {
-      // Step 5:Call dsGetEdid2AllmSupport() with valid ports
+    if (gSourceType == 0) {
+
+        // Step 2 to 3: Call dsGetEdid2AllmSupport() to verify EDID ALLM support
+	for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
+            result = dsGetEdid2AllmSupport(port, &allmSupport1);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+            result = dsGetEdid2AllmSupport(port, &allmSupport2);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+            UT_ASSERT_EQUAL(allmSupport1, allmSupport2);
+        }
+
+    } else if (gSourceType == 1) {
+      // Step 4:Call dsGetEdid2AllmSupport() with valid ports
       UT_ASSERT_EQUAL(dsGetEdid2AllmSupport(dsHDMI_IN_PORT_0, &allmSupport1), dsERR_OPERATION_NOT_SUPPORTED);
     }
 
-    // Step 6: Terminate the HDMI input using dsHdmiInTerm()
+    // Step 5: Terminate the HDMI input using dsHdmiInTerm()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
@@ -2635,7 +2544,7 @@ void test_l1_dsHdmiIn_negative_dsGetEdid2AllmSupport_sink(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     bool allmSupport = false;
 
-    // Step 1: Call dsGetEdid2AllmSupport() without initializing the HDMI input sub-system 
+    // Step 1: Call dsGetEdid2AllmSupport() without initializing the HDMI input sub-system
     dsError_t result = dsGetEdid2AllmSupport(dsHDMI_IN_PORT_0, &allmSupport);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
 
@@ -2655,7 +2564,7 @@ void test_l1_dsHdmiIn_negative_dsGetEdid2AllmSupport_sink(void) {
     result = dsGetEdid2AllmSupport(dsHDMI_IN_PORT_0, &allmSupport);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 static UT_test_suite_t * pSuite = NULL;
@@ -2668,10 +2577,9 @@ static UT_test_suite_t * pSuite2 = NULL;
  */
 int test_l1_dsHdmiIn_register ( void )
 {
-    ut_kvp_status_t status;
-    int32_t source_type = 0;
+    ut_kvp_status_t status = UT_KVP_STATUS_SUCCESS;
     pSuite2 = UT_add_suite( "[L1 dsHdmiIn --  advanced]", NULL, NULL );
- 
+
     status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsHdmiIn.Type", gDeviceType, TEST_DS_DEVICE_TYPE_SIZE);
 
     if (status == UT_KVP_STATUS_SUCCESS ) {
@@ -2682,7 +2590,8 @@ int test_l1_dsHdmiIn_register ( void )
             {
                 return -1;
             }
-            source_type = 1;
+
+            gSourceType = 1;
     }
     else if(!strncmp(gDeviceType, TEST_TYPE_SINK_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) {
             // Create the test suite for sink type
@@ -2691,7 +2600,8 @@ int test_l1_dsHdmiIn_register ( void )
             {
                 return -1;
             }
-            source_type = 0;
+
+            gSourceType = 0;
          }
          else {
               UT_LOG_ERROR("Invalid platform type: %s", gDeviceType);
@@ -2732,39 +2642,36 @@ int test_l1_dsHdmiIn_register ( void )
     UT_add_test( pSuite, "dsHdmiInRegisterAviContentTypeChangeCB_L1_negative" ,test_l1_dsHdmiIn_negative_dsHdmiInRegisterAviContentTypeChangeCB );
     UT_add_test( pSuite2, "dsHdmiInGetStatus_L1_negative" ,test_l1_dsHdmiIn_negative_dsHdmiInGetStatus );
 
-   if ( source_type == 1 ){
-        UT_add_test( pSuite, "dsHdmiInSelectZoomMode_L1_positive" ,test_l1_dsHdmiIn_positive_dsHdmiInSelectZoomMode_source );
-        UT_add_test( pSuite, "dsHdmiInSelectZoomMode_L1_negative" ,test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode_source );
-   }
 
-   if ( source_type == 0 ){
-	UT_add_test( pSuite, "dsIsHdmiARCPort_L1_positive" ,test_l1_dsHdmiIn_positive_dsIsHdmiARCPort_sink );
-	UT_add_test( pSuite, "dsGetEDIDBytesInfo_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo_sink );
-        UT_add_test( pSuite, "dsGetHDMISPDInfo_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo_sink );
-        UT_add_test( pSuite, "dsSetEdidVersion_L1_positive" ,test_l1_dsHdmiIn_positive_dsSetEdidVersion_sink );
-        UT_add_test( pSuite, "dsGetEdidVersion_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetEdidVersion_sink );
-        UT_add_test( pSuite, "dsGetAllmStatus_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetAllmStatus_sink );
-        UT_add_test( pSuite, "dsGetSupportedGameFeaturesList_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetSupportedGameFeaturesList_sink );
-        UT_add_test( pSuite, "dsGetAVLatency_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetAVLatency_sink );
-        UT_add_test( pSuite, "dsSetEdid2AllmSupport_l1_positive" ,test_l1_dsHdmiIn_positive_dsSetEdid2AllmSupport_sink );
+    UT_add_test( pSuite, "dsHdmiInSelectZoomMode_L1_positive" ,test_l1_dsHdmiIn_positive_dsHdmiInSelectZoomMode_source );
+    UT_add_test( pSuite, "dsHdmiInSelectZoomMode_L1_negative" ,test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode_source );
 
-        UT_add_test( pSuite, "dsGetEDIDBytesInfo_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo_sink );
-        UT_add_test( pSuite, "dsGetHDMISPDInfo_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo_sink );
-        UT_add_test( pSuite, "dsSetEdidVersion_L1_negative" ,test_l1_dsHdmiIn_negative_dsSetEdidVersion_sink );
-        UT_add_test( pSuite, "dsGetEdidVersion_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetEdidVersion_sink );
-        UT_add_test( pSuite, "dsGetAllmStatus_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetAllmStatus_sink );
-        UT_add_test( pSuite, "dsGetSupportedGameFeaturesList_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList_sink );
-        UT_add_test( pSuite, "dsGetAVLatency_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetAVLatency_sink );
-        UT_add_test( pSuite, "dsSetEdid2AllmSupport_l1_negative" ,test_l1_dsHdmiIn_negative_dsSetEdid2AllmSupport_sink );
-        UT_add_test( pSuite2, "dsGetEdid2AllmSupport_l1_positive" ,test_l1_dsHdmiIn_positive_dsGetEdid2AllmSupport_sink );
-        UT_add_test( pSuite2, "dsGetEdid2AllmSupport_l1_negative" ,test_l1_dsHdmiIn_negative_dsGetEdid2AllmSupport_sink );
-        UT_add_test( pSuite2, "dsIsHdmiARCPort_L1_negative" ,test_l1_dsHdmiIn_negative_dsIsHdmiARCPort_sink );
-   }
+    UT_add_test( pSuite, "dsIsHdmiARCPort_L1_positive" ,test_l1_dsHdmiIn_positive_dsIsHdmiARCPort_sink );
+    UT_add_test( pSuite, "dsGetEDIDBytesInfo_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo_sink );
+    UT_add_test( pSuite, "dsGetHDMISPDInfo_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo_sink );
+    UT_add_test( pSuite, "dsSetEdidVersion_L1_positive" ,test_l1_dsHdmiIn_positive_dsSetEdidVersion_sink );
+    UT_add_test( pSuite, "dsGetEdidVersion_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetEdidVersion_sink );
+    UT_add_test( pSuite, "dsGetAllmStatus_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetAllmStatus_sink );
+    UT_add_test( pSuite, "dsGetSupportedGameFeaturesList_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetSupportedGameFeaturesList_sink );
+    UT_add_test( pSuite, "dsGetAVLatency_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetAVLatency_sink );
+    UT_add_test( pSuite, "dsSetEdid2AllmSupport_l1_positive" ,test_l1_dsHdmiIn_positive_dsSetEdid2AllmSupport_sink );
+    UT_add_test( pSuite, "dsGetEDIDBytesInfo_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo_sink );
+    UT_add_test( pSuite, "dsGetHDMISPDInfo_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo_sink );
+    UT_add_test( pSuite, "dsSetEdidVersion_L1_negative" ,test_l1_dsHdmiIn_negative_dsSetEdidVersion_sink );
+    UT_add_test( pSuite, "dsGetEdidVersion_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetEdidVersion_sink );
+    UT_add_test( pSuite, "dsGetAllmStatus_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetAllmStatus_sink );
+    UT_add_test( pSuite, "dsGetSupportedGameFeaturesList_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList_sink );
+    UT_add_test( pSuite, "dsGetAVLatency_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetAVLatency_sink );
+    UT_add_test( pSuite, "dsSetEdid2AllmSupport_l1_negative" ,test_l1_dsHdmiIn_negative_dsSetEdid2AllmSupport_sink );
+    UT_add_test( pSuite2, "dsGetEdid2AllmSupport_l1_positive" ,test_l1_dsHdmiIn_positive_dsGetEdid2AllmSupport_sink );
+    UT_add_test( pSuite2, "dsGetEdid2AllmSupport_l1_negative" ,test_l1_dsHdmiIn_negative_dsGetEdid2AllmSupport_sink );
+    UT_add_test( pSuite2, "dsIsHdmiARCPort_L1_negative" ,test_l1_dsHdmiIn_negative_dsIsHdmiARCPort_sink );
+
 
    extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsHdmiIn/features/extendedEnumsSupported" );
 
    return 0;
-} 
+}
 
 /** @} */ // End of DS_HDMIIn_HALTEST_L1
 /** @} */ // End of DS_HDMIIn_HALTEST
