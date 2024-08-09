@@ -116,7 +116,7 @@ static bool extendedEnumsSupported=false; //Default to not supported
 void test_l1_dsVideoDevice_positive_dsVideoDeviceInit(void)
 {
     gTestID = 1;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     // Step 01: Initialize video devices
     int result = dsVideoDeviceInit();
@@ -134,7 +134,7 @@ void test_l1_dsVideoDevice_positive_dsVideoDeviceInit(void)
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -159,7 +159,7 @@ void test_l1_dsVideoDevice_positive_dsVideoDeviceInit(void)
 void test_l1_dsVideoDevice_negative_dsVideoDeviceInit(void)
 {
     gTestID = 2;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     // Step 01: Initialize video devices
     int result = dsVideoDeviceInit();
@@ -173,7 +173,7 @@ void test_l1_dsVideoDevice_negative_dsVideoDeviceInit(void)
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -197,7 +197,7 @@ void test_l1_dsVideoDevice_negative_dsVideoDeviceInit(void)
 void test_l1_dsVideoDevice_positive_dsVideoDeviceTerm(void)
 {
     gTestID = 3;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     // Step 01: Initialize video devices
     int result = dsVideoDeviceInit();
@@ -215,7 +215,7 @@ void test_l1_dsVideoDevice_positive_dsVideoDeviceTerm(void)
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -241,7 +241,7 @@ void test_l1_dsVideoDevice_positive_dsVideoDeviceTerm(void)
 void test_l1_dsVideoDevice_negative_dsVideoDeviceTerm(void)
 {
     gTestID = 4;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     // Step 01: Call de-initialization without prior initialization
     int result = dsVideoDeviceTerm();
@@ -259,7 +259,7 @@ void test_l1_dsVideoDevice_negative_dsVideoDeviceTerm(void)
     result = dsVideoDeviceTerm();
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -283,7 +283,7 @@ void test_l1_dsVideoDevice_positive_dsGetVideoDevice(void)
 {
     gTestID = 5;
     intptr_t handle = -1;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     // Step 01: Initialize video devices
     int result = dsVideoDeviceInit();
@@ -300,7 +300,7 @@ void test_l1_dsVideoDevice_positive_dsGetVideoDevice(void)
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -328,7 +328,7 @@ void test_l1_dsVideoDevice_positive_dsGetVideoDevice(void)
 void test_l1_dsVideoDevice_negative_dsGetVideoDevice(void)
 {
     gTestID = 6;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     int result;
 
     // Step 01: Get the video device handle without prior initialization
@@ -358,7 +358,7 @@ void test_l1_dsVideoDevice_negative_dsGetVideoDevice(void)
     result = dsGetVideoDevice(0, &handle);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -382,7 +382,7 @@ void test_l1_dsVideoDevice_negative_dsGetVideoDevice(void)
 void test_l1_dsVideoDevice_positive_dsSetDFC (void)
 {
     gTestID = 7;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     dsError_t result;
     intptr_t handle = -1;
 
@@ -409,7 +409,7 @@ void test_l1_dsVideoDevice_positive_dsSetDFC (void)
     // 04: De-initialize video devices
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -438,7 +438,7 @@ void test_l1_dsVideoDevice_positive_dsSetDFC (void)
 void test_l1_dsVideoDevice_negative_dsSetDFC (void)
 {
     gTestID = 8;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     dsError_t result;
     intptr_t handle = -1;
 
@@ -474,7 +474,7 @@ void test_l1_dsVideoDevice_negative_dsSetDFC (void)
     result = dsSetDFC(handle, gDSVideoDeviceConfiguration[0].DefaultDFC);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -499,7 +499,7 @@ void test_l1_dsVideoDevice_negative_dsSetDFC (void)
 void test_l1_dsVideoDevice_positive_dsGetDFC(void)
 {
     gTestID = 9;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     int result;
     int count = 0;
     intptr_t handle = -1;
@@ -523,7 +523,7 @@ void test_l1_dsVideoDevice_positive_dsGetDFC(void)
             // Step 04: Compare the DFC mode with value from the profile
             for (int j = 0; j < gDSVideoDeviceConfiguration[j].NoOfSupportedDFCs; ++j) {
                 UT_LOG_DEBUG("SupportedDFCs: %d",gDSVideoDeviceConfiguration[i].SupportedDFCs[j]);
-                if(dfc_mode == (dsVideoZoom_t) gDSVideoDeviceConfiguration[i].SupportedDFCs[j]) {
+                if(dfc_mode == gDSVideoDeviceConfiguration[i].SupportedDFCs[j]) {
                     count++;
                     UT_LOG_DEBUG("SupportedDFCs: %d dfc_mode %d ",gDSVideoDeviceConfiguration[i].SupportedDFCs[j],dfc_mode);
                 }
@@ -539,7 +539,7 @@ void test_l1_dsVideoDevice_positive_dsGetDFC(void)
     // Step 05: De-initialize the video devices
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -568,7 +568,7 @@ void test_l1_dsVideoDevice_positive_dsGetDFC(void)
 void test_l1_dsVideoDevice_negative_dsGetDFC(void)
 {
     gTestID = 10;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     int result;
     intptr_t handle = -1;
     dsVideoZoom_t dfc_mode;
@@ -604,7 +604,7 @@ void test_l1_dsVideoDevice_negative_dsGetDFC(void)
     result = dsGetDFC(handle, &dfc_mode);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -629,7 +629,7 @@ void test_l1_dsVideoDevice_negative_dsGetDFC(void)
 void test_l1_dsVideoDevice_positive_dsGetHDRCapabilities(void)
 {
     gTestID = 11;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     int result;
     intptr_t handle = -1;
     int32_t hdr_capabilities = dsHDRSTANDARD_NONE;
@@ -641,7 +641,7 @@ void test_l1_dsVideoDevice_positive_dsGetHDRCapabilities(void)
     // Step 02: Obtain video device handle
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
-        UT_LOG("\nHandle: %d\n", handle);
+        UT_LOG_INFO("Handle: %d", handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
@@ -656,7 +656,7 @@ void test_l1_dsVideoDevice_positive_dsGetHDRCapabilities(void)
     // Step 05: De-initialize the video devices
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -685,7 +685,7 @@ void test_l1_dsVideoDevice_positive_dsGetHDRCapabilities(void)
 void test_l1_dsVideoDevice_negative_dsGetHDRCapabilities(void)
 {
     gTestID = 12;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     int result;
     intptr_t handle = -1;
     int32_t hdr_capabilities;
@@ -721,7 +721,7 @@ void test_l1_dsVideoDevice_negative_dsGetHDRCapabilities(void)
     result = dsGetHDRCapabilities(handle, &hdr_capabilities);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -746,7 +746,7 @@ void test_l1_dsVideoDevice_negative_dsGetHDRCapabilities(void)
 void test_l1_dsVideoDevice_positive_dsGetSupportedVideoCodingFormats(void)
 {
     gTestID = 13;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     int result;
     intptr_t handle = -1;
     unsigned int supported_formats;
@@ -772,7 +772,7 @@ void test_l1_dsVideoDevice_positive_dsGetSupportedVideoCodingFormats(void)
     // Step 05: De-initialize the video devices
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -801,7 +801,7 @@ void test_l1_dsVideoDevice_positive_dsGetSupportedVideoCodingFormats(void)
 void test_l1_dsVideoDevice_negative_dsGetSupportedVideoCodingFormats(void)
 {
     gTestID = 14;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     int result;
     intptr_t handle = -1;
     unsigned int supported_formats;
@@ -837,7 +837,7 @@ void test_l1_dsVideoDevice_negative_dsGetSupportedVideoCodingFormats(void)
     result = dsGetSupportedVideoCodingFormats(handle, &supported_formats);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -861,7 +861,7 @@ void test_l1_dsVideoDevice_negative_dsGetSupportedVideoCodingFormats(void)
 void test_l1_dsVideoDevice_positive_dsGetVideoCodecInfo(void)
 {
     gTestID = 15;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     int result;
     intptr_t handle = -1;
     dsVideoCodecInfo_t codecInfo;
@@ -885,11 +885,11 @@ void test_l1_dsVideoDevice_positive_dsGetVideoCodecInfo(void)
                 result = dsGetVideoCodecInfo(handle, codec, &codecInfo);
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
                 // Compare with profile file
-                UT_ASSERT_EQUAL((uint32_t)codecInfo.num_entries, gDSVideoDeviceConfiguration[i].num_codec_entries);
+                UT_ASSERT_EQUAL(codecInfo.num_entries, gDSVideoDeviceConfiguration[i].num_codec_entries);
                 if(codec == dsVIDEO_CODEC_MPEGHPART2){
-                    UT_ASSERT_EQUAL((uint32_t)codecInfo.entries->profile, gDSVideoDeviceConfiguration[i].profile);
+                    UT_ASSERT_EQUAL(codecInfo.entries->profile, gDSVideoDeviceConfiguration[i].profile);
                     // Support for float values in KVP
-                    UT_ASSERT_EQUAL((uint32_t)codecInfo.entries->level, gDSVideoDeviceConfiguration[i].level);
+                    UT_ASSERT_EQUAL(codecInfo.entries->level, gDSVideoDeviceConfiguration[i].level);
                 }
                 codec = (dsVideoCodingFormat_t) (0x01 << (j++));
     	    }
@@ -902,7 +902,7 @@ void test_l1_dsVideoDevice_positive_dsGetVideoCodecInfo(void)
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -932,7 +932,7 @@ void test_l1_dsVideoDevice_positive_dsGetVideoCodecInfo(void)
 void test_l1_dsVideoDevice_negative_dsGetVideoCodecInfo(void)
 {
     gTestID = 16;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     int result;
     intptr_t handle = -1;
     dsVideoCodecInfo_t codecInfo;
@@ -972,7 +972,7 @@ void test_l1_dsVideoDevice_negative_dsGetVideoCodecInfo(void)
     result = dsGetVideoCodecInfo(handle, dsVIDEO_CODEC_MPEGHPART2, &codecInfo);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -997,7 +997,7 @@ void test_l1_dsVideoDevice_negative_dsGetVideoCodecInfo(void)
 void test_l1_dsVideoDevice_positive_dsForceDisableHDRSupport(void)
 {
     gTestID = 17;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     int result;
     intptr_t handle = -1;
 
@@ -1024,7 +1024,7 @@ void test_l1_dsVideoDevice_positive_dsForceDisableHDRSupport(void)
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -1052,7 +1052,7 @@ void test_l1_dsVideoDevice_positive_dsForceDisableHDRSupport(void)
 void test_l1_dsVideoDevice_negative_dsForceDisableHDRSupport(void)
 {
     gTestID = 18;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     int result;
     intptr_t handle = -1;
 
@@ -1083,7 +1083,7 @@ void test_l1_dsVideoDevice_negative_dsForceDisableHDRSupport(void)
     result = dsForceDisableHDRSupport(handle, true);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -1107,7 +1107,7 @@ void test_l1_dsVideoDevice_negative_dsForceDisableHDRSupport(void)
 void test_l1_dsVideoDevice_positive_dsSetFRFMode(void)
 {
     gTestID = 19;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     int result;
     intptr_t handle = -1;
 
@@ -1136,7 +1136,7 @@ void test_l1_dsVideoDevice_positive_dsSetFRFMode(void)
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -1165,7 +1165,7 @@ void test_l1_dsVideoDevice_positive_dsSetFRFMode(void)
 void test_l1_dsVideoDevice_negative_dsSetFRFMode(void)
 {
     gTestID = 20;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     int result;
     intptr_t handle = -1;
 
@@ -1200,7 +1200,7 @@ void test_l1_dsVideoDevice_negative_dsSetFRFMode(void)
     result = dsSetFRFMode(handle, 60);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -1226,7 +1226,7 @@ void test_l1_dsVideoDevice_negative_dsSetFRFMode(void)
 void test_l1_dsVideoDevice_positive_dsGetFRFMode(void)
 {
     gTestID = 21;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     int result;
     intptr_t handle = -1;
     int fetchedFRFMode;
@@ -1257,7 +1257,7 @@ void test_l1_dsVideoDevice_positive_dsGetFRFMode(void)
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -1286,7 +1286,7 @@ void test_l1_dsVideoDevice_positive_dsGetFRFMode(void)
 void test_l1_dsVideoDevice_negative_dsGetFRFMode(void)
 {
     gTestID = 22;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     int result;
     intptr_t handle = -1;
     int fetchedFRFMode;
@@ -1322,7 +1322,7 @@ void test_l1_dsVideoDevice_negative_dsGetFRFMode(void)
     result = dsGetFRFMode(handle, &fetchedFRFMode);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -1348,7 +1348,7 @@ void test_l1_dsVideoDevice_negative_dsGetFRFMode(void)
 void test_l1_dsVideoDevice_positive_dsGetCurrentDisplayframerate(void)
 {
     gTestID = 23;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     int result;
     int count = 0;;
     intptr_t handle = -1;
@@ -1371,9 +1371,9 @@ void test_l1_dsVideoDevice_positive_dsGetCurrentDisplayframerate(void)
 
             // Step 04: Compare the current display framerate with the value from the profile
             for (int j = 0; j < gDSVideoDeviceConfiguration[i].NoOfSupportedDFR ;j++) {
-                UT_LOG("SupportedDisplayFramerate %s",gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate);
+                UT_LOG_INFO("SupportedDisplayFramerate %s",gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate);
                 if(strncpy(fetchedFramerate,gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate,sizeof(fetchedFramerate)) == 0) {
-                    UT_LOG("SupportedDisplayFramerate %s fetchedFramerate %s ",gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate, fetchedFramerate);
+                    UT_LOG_INFO("SupportedDisplayFramerate %s fetchedFramerate %s ",gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate, fetchedFramerate);
                     count++;
                 }
                 if(count < 1) {
@@ -1389,7 +1389,7 @@ void test_l1_dsVideoDevice_positive_dsGetCurrentDisplayframerate(void)
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -1418,7 +1418,7 @@ void test_l1_dsVideoDevice_positive_dsGetCurrentDisplayframerate(void)
 void test_l1_dsVideoDevice_negative_dsGetCurrentDisplayframerate(void)
 {
     gTestID = 24;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     int result;
     intptr_t handle = -1;
     char fetchedFramerate[50]; // Assuming a buffer size, modify as necessary.
@@ -1454,7 +1454,7 @@ void test_l1_dsVideoDevice_negative_dsGetCurrentDisplayframerate(void)
     result = dsGetCurrentDisplayframerate(handle, fetchedFramerate);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -1478,7 +1478,7 @@ void test_l1_dsVideoDevice_negative_dsGetCurrentDisplayframerate(void)
 void test_l1_dsVideoDevice_positive_dsSetDisplayframerate(void)
 {
     gTestID = 25;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     int result;
     intptr_t handle = -1;
 
@@ -1507,7 +1507,7 @@ void test_l1_dsVideoDevice_positive_dsSetDisplayframerate(void)
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -1537,7 +1537,7 @@ void test_l1_dsVideoDevice_positive_dsSetDisplayframerate(void)
 void test_l1_dsVideoDevice_negative_dsSetDisplayframerate(void)
 {
     gTestID = 26;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     int result;
     intptr_t handle = -1;
 
@@ -1576,7 +1576,7 @@ void test_l1_dsVideoDevice_negative_dsSetDisplayframerate(void)
     result = dsSetDisplayframerate(handle, "30fps");
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -1607,7 +1607,7 @@ void mockFrameRatePreChangeCallback(unsigned int tSecond){
 void test_l1_dsVideoDevice_positive_dsRegisterFrameratePreChangeCB(void)
 {
     gTestID = 27;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     int result;
 
     // Step 01: Initialize video devices
@@ -1626,7 +1626,7 @@ void test_l1_dsVideoDevice_positive_dsRegisterFrameratePreChangeCB(void)
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -1653,7 +1653,7 @@ void test_l1_dsVideoDevice_positive_dsRegisterFrameratePreChangeCB(void)
 void test_l1_dsVideoDevice_negative_dsRegisterFrameratePreChangeCB(void)
 {
     gTestID = 28;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     int result;
 
     // Step 01: Attempt to register callback without initialization
@@ -1676,7 +1676,7 @@ void test_l1_dsVideoDevice_negative_dsRegisterFrameratePreChangeCB(void)
     result = dsRegisterFrameratePreChangeCB(mockFrameRatePreChangeCallback);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -1707,7 +1707,7 @@ void mockFrameRatePostChangeCallback(unsigned int tSecond){
 void test_l1_dsVideoDevice_positive_dsRegisterFrameratePostChangeCB(void)
 {
     gTestID = 29;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     int result;
 
     // Step 01: Initialize video devices
@@ -1726,7 +1726,7 @@ void test_l1_dsVideoDevice_positive_dsRegisterFrameratePostChangeCB(void)
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -1753,7 +1753,7 @@ void test_l1_dsVideoDevice_positive_dsRegisterFrameratePostChangeCB(void)
 void test_l1_dsVideoDevice_negative_dsRegisterFrameratePostChangeCB(void)
 {
     gTestID = 30;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     int result;
 
     // Step 01: Attempt to register callback without initialization
@@ -1776,7 +1776,7 @@ void test_l1_dsVideoDevice_negative_dsRegisterFrameratePostChangeCB(void)
     result = dsRegisterFrameratePostChangeCB(mockFrameRatePostChangeCallback);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 static UT_test_suite_t * pSuite = NULL;
