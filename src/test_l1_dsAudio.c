@@ -8824,6 +8824,7 @@ void test_l1_dsAudio_positive_dsAudioSetSAD(void) {
                     result = dsAudioSetSAD(handle, sadlist);
            }        UT_ASSERT_EQUAL(result, dsERR_NONE);
     } else {
+            result = dsAudioSetSAD(handle, sadlist);
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
                  
     }
