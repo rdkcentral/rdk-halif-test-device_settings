@@ -305,7 +305,7 @@ void test_l1_dsHost_positive_dsGetCPUTemperature(void) {
     gTestID = 5;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    float temperatureValue;
+    float temperatureValue = 0.0f;
 
     // Step 01: dsHostInit() Initialize dsHost
     dsError_t result = dsHostInit();
@@ -356,7 +356,7 @@ void test_l1_dsHost_negative_dsGetCPUTemperature(void) {
     gTestID = 6;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    float temperatureValue;
+    float temperatureValue = 0.0f;
 
     // Step 01: dsGetCPUTemperature() Call without prior initialization
     dsError_t result = dsGetCPUTemperature(&temperatureValue);
@@ -585,7 +585,7 @@ void test_l1_dsHost_negative_dsGetHostEDID(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     unsigned char edid[EDID_MAX_DATA_SIZE]= {0};  // Making an assumption about maximum EDID size.
-    int length;
+    int length = 0;
 
     // Step 01: dsGetHostEDID() Call without prior initialization
     dsError_t result = dsGetHostEDID(edid, &length);
