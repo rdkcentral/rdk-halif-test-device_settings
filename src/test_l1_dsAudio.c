@@ -8824,6 +8824,9 @@ void test_l1_dsAudio_positive_dsAudioSetSAD(void) {
                     result = dsAudioSetSAD(handle, sadlist);
            }        UT_ASSERT_EQUAL(result, dsERR_NONE);
     } else {
+            result = dsGetAudioPort(gDSAudioPortConfiguration[0].typeid, gDSAudioPortConfiguration[0].index, &handle);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+            UT_ASSERT_NOT_EQUAL(handle, null_handle);
             result = dsAudioSetSAD(handle, sadlist);
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
                  
