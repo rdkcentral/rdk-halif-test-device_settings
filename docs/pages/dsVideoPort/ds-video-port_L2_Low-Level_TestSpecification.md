@@ -14,12 +14,13 @@ This document describes the L2 Low Level Test Specification and Procedure Docume
 
 ### Acronyms, Terms and Abbreviations
 
-- `HAL` \- Hardware Abstraction Layer, may include some common components
-- `UT`  \- Unit Test(s)
-- `OEM`  \- Original Equipment Manufacture
-- `SoC`  \- System on a Chip
+- `HAL`   \- Hardware Abstraction Layer, may include some common components
+- `UT`    \- Unit Test(s)
+- `OEM`   \- Original Equipment Manufacture
+- `SoC`   \- System on a Chip
 - `HDMI`  \- High-Definition Multimedia Interface
 - `HDCP`  \- High-bandwidth Digital Content Protection
+- `ALLM`  \- Auto Low Latency Mode
 
 ### Definitions
 
@@ -678,4 +679,51 @@ graph TB
     Step2 -->|End of Iteration| Step6[Call dsVideoPortTerm]
     Step6 -- dsERR_NONE --> End[Test Case Success]
     Step6 -- Not dsERR_NONE --> Fail6[Test Case Fail]
+```
+
+### Test 16
+
+|Title|Details|
+|-----|-------|
+|Function Name|`test_l2_dsVideoPort_CheckALLMStatus_source`|
+|Description|Set `ALLM` Status for HDMI port and compare with get function|
+|Test Group|02|
+|Test Case ID|016|
+|Priority|High|
+
+**Pre-Conditions :**
+None
+
+**Dependencies :**
+None
+
+**User Interaction :**
+If user chose to run the test in interactive mode, then the test case has to be selected via console.
+
+#### Test Procedure - Test 16
+
+|Variation / Steps|Description|Test Data|Expected Result|Notes|
+|-----------------|-----------|---------|---------------|-----|
+|01|Initialize video port using `dsVideoPortInit`|None|`dsERR_NONE`|Should be successful|
+|02|Loop through all supported ports and get video port handle for HDMI using `dsGetVideoPort`|type = `dsVIDEOPORT_TYPE_HDMI` and index = supported index|`dsERR_NONE`|Should be successful|
+|03|Enable `ALLM` using `dsSetAllmEnabled`|handle = from step 02, enabled = `true`|`dsERR_NONE`|Should be successful|
+|04|Get `ALLM` Status using `dsGetAllmEnabled`|handle = from step 02, enabled|`dsERR_NONE`|Should be successful|
+|05|Compare `ALLM` status|enabled = `true`|`ALLM` Status should be `true`|Should be successful|
+|06|Disable `ALLM` using `dsSetAllmEnabled`|handle = from step 02, enabled = `false`|`dsERR_NONE`|Should be successful|
+|07|Get `ALLM` Status using `dsGetAllmEnabled`|handle = from step 02, enabled|`dsERR_NONE`|Should be successful|
+|08|Compare `ALLM` status|enabled = `false`|`ALLM` Status should be `false`|Should be successful|
+|09|Terminate video port using `dsVideoPortTerm`|None|`dsERR_NONE`|Should be successful|
+
+```mermaid
+graph TB
+    Step1[Call dsVideoPortInit] -->|dsERR_NONE| Step2{For each supported<br> type and index <br> call dsGetVideoPort}
+    Step1 -- "Not dsERR_NONE" --> Fail1[Test Case Failed]
+    Step2 -->|dsERR_NONE and valid handle|Step3[Call dsSetAllmEnabled API]
+    Step3 -->|dsERR_NONE|Step4[Call dsGetAllmEnabled API]
+    Step4 -->|dsERR_NONE|Step5[Compare ALLM Status]
+    Step5 -->|loop through | Step2
+    Step5 -- "dsERR_NONE" --> Fail6[Test Case Failed]
+    Step2 -->|End of Iteration|Step7[Call dsVideoPortTerm API]
+    Step7 -->|dsERR_NONE|End[Test Case success]
+    Step7 -->|Failure|TestcaseFail6[Testcase Fail]
 ```
