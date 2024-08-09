@@ -83,23 +83,6 @@ static int gTestID = 1;
 /* Global flags to support features */
 static bool extendedEnumsSupported=false; //Default to not supported
 
-
-#define DS_ASSERT_AUTO_TERM_NUMERICAL(value, comparison){\
-    if(value != comparison){\
-        UT_LOG("\n In %s Comparison: [%d = %d]\n", __FUNCTION__, value, comparison);\
-        dsHostTerm();\
-        UT_FAIL();\
-    }\
-}\
-
-#define DS_ASSERT_AUTO_TERM_STRING(value, comparison){\
-    if(strcmp(value, comparison) != 0){\
-        UT_LOG("\n In %s Comparison: [%s = %s]\n", __FUNCTION__, value, comparison);\
-        dsHostTerm();\
-        UT_FAIL();\
-    }\
-}\
-
 #define CHECK_FOR_EXTENDED_ERROR_CODE( result, enhanced, old )\
 {\
    if ( extendedEnumsSupported == true )\
@@ -111,8 +94,6 @@ static bool extendedEnumsSupported=false; //Default to not supported
        UT_ASSERT_EQUAL( old, result );\
    }\
 }
-
-
 
 /**
  * @brief Ensure dsHostInit() returns correct error codes during positive scenarios
@@ -138,25 +119,25 @@ static bool extendedEnumsSupported=false; //Default to not supported
 void test_l1_dsHost_positive_dsHostInit(void) {
     gTestID = 1;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-	
+
     // Step 01: Call dsHostInit() Initialize dsHost
     dsError_t result = dsHostInit();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("Step 01: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 02: Call dsHostTerm() Terminate dsHost
      result = dsHostTerm();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("Step 02: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 03: Call dsHostInit() Initialize dsHost
     result = dsHostInit();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("Step 03: Initialize dsHost again -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 04: Call dsHostTerm() Terminate dsHost again
     result = dsHostTerm();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("Step 04: Terminate dsHost again -> Expected: dsERR_NONE, Got: %d\n", result);
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
@@ -185,10 +166,10 @@ void test_l1_dsHost_positive_dsHostInit(void) {
 void test_l1_dsHost_negative_dsHostInit(void) {
     gTestID = 2;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-	
+
     // Step 01: Call dsHostInit() Initialize dsHost
     dsError_t result = dsHostInit();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("Step 01: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 02: Call dsHostInit() Attempt to initialize dsHost again
@@ -198,7 +179,7 @@ void test_l1_dsHost_negative_dsHostInit(void) {
       
     // Step 03: Call dsHostTerm() Terminate dsHost
     result = dsHostTerm();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("Step 03: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
@@ -227,25 +208,25 @@ void test_l1_dsHost_negative_dsHostInit(void) {
 void test_l1_dsHost_positive_dsHostTerm(void) {
     gTestID = 3;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-	
+
     // Step 01: dsHostInit() Initialize dsHost
     dsError_t result = dsHostInit();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("Step 01: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 02: dsHostTerm() Terminate dsHost
     result = dsHostTerm();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("Step 02: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 03: dsHostInit() Initialize dsHost again
     result = dsHostInit();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("Step 03: Initialize dsHost again -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 04: dsHostTerm() Terminate dsHost
     result = dsHostTerm();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("Step 04: Terminate dsHost again -> Expected: dsERR_NONE, Got: %d\n", result);
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
@@ -275,7 +256,7 @@ void test_l1_dsHost_positive_dsHostTerm(void) {
 void test_l1_dsHost_negative_dsHostTerm(void) {
     gTestID = 4;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-	
+
     // Step 01: dsHostTerm() Attempt to terminate dsHost without initialization
     dsError_t result = dsHostTerm();
     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
@@ -283,16 +264,16 @@ void test_l1_dsHost_negative_dsHostTerm(void) {
 
     // Step 02: dsHostInit() Initialize dsHost
     result = dsHostInit();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("Step 02: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 03: dsHostTerm() Terminate dsHost after initialization
     result = dsHostTerm();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("Step 03: Terminate dsHost after initialization -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 04: dsHostTerm() Attempt to terminate dsHost again
-    result = dsHostTerm();	
+    result = dsHostTerm();
     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("Step 04: Attempt to terminate dsHost again -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
 
@@ -323,12 +304,12 @@ void test_l1_dsHost_negative_dsHostTerm(void) {
 void test_l1_dsHost_positive_dsGetCPUTemperature(void) {
     gTestID = 5;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-	
-    float temperatureValue;
+
+    float temperatureValue = 0.0f;
 
     // Step 01: dsHostInit() Initialize dsHost
     dsError_t result = dsHostInit();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("Step 01: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 02: dsGetCPUTemperature() Call with valid pointer to store temperature
@@ -343,7 +324,7 @@ void test_l1_dsHost_positive_dsGetCPUTemperature(void) {
 
     // Step 04: dsHostTerm() Terminate dsHost
     result = dsHostTerm();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("Step 04: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
@@ -374,8 +355,8 @@ void test_l1_dsHost_positive_dsGetCPUTemperature(void) {
 void test_l1_dsHost_negative_dsGetCPUTemperature(void) {
     gTestID = 6;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-	
-    float temperatureValue;
+
+    float temperatureValue = 0.0f;
 
     // Step 01: dsGetCPUTemperature() Call without prior initialization
     dsError_t result = dsGetCPUTemperature(&temperatureValue);
@@ -384,7 +365,7 @@ void test_l1_dsHost_negative_dsGetCPUTemperature(void) {
 
     // Step 02: dsHostInit() Initialize dsHost
     result = dsHostInit();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("Step 02: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 03: dsGetCPUTemperature() Call with NULL pointer
@@ -393,15 +374,15 @@ void test_l1_dsHost_negative_dsGetCPUTemperature(void) {
     UT_LOG("Step 03: Fetch CPU Temperature with NULL pointer -> Expected: dsERR_INVALID_PARAM, Got: %d\n", result);
     
     // Step 04: dsHostTerm() Terminate dsHost
-     result = dsHostTerm();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    result = dsHostTerm();
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("Step 04: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 05: dsGetCPUTemperature() Call after termination
-     result = dsGetCPUTemperature(&temperatureValue);
-      CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
-      UT_LOG("Step 05: Fetch CPU Temperature after termination -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
-      UT_LOG("\n Out  %s\n",__FUNCTION__);
+    result = dsGetCPUTemperature(&temperatureValue);
+    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    UT_LOG("Step 05: Fetch CPU Temperature after termination -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+    UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
 /**
@@ -429,13 +410,13 @@ void test_l1_dsHost_negative_dsGetCPUTemperature(void) {
 void test_l1_dsHost_positive_dsGetSocIDFromSDK(void) {
     gTestID = 7;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-	
+
     char socID1[1024]= {0}; 
     char socID2[1024]= {0};
 
     // Step 01: dsHostInit() Initialize dsHost
     dsError_t result = dsHostInit();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("Step 01: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 02: dsGetSocIDFromSDK() Call with a valid pointer to store the SOC ID
@@ -454,7 +435,7 @@ void test_l1_dsHost_positive_dsGetSocIDFromSDK(void) {
 
     // Step 05: dsHostTerm() Terminate dsHost
     result = dsHostTerm();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("Step 05: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
@@ -486,7 +467,7 @@ void test_l1_dsHost_positive_dsGetSocIDFromSDK(void) {
 void test_l1_dsHost_negative_dsGetSocIDFromSDK(void) {
     gTestID = 8;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-	
+
     char socID[1024] = {0};
 
     // Step 01: dsGetSocIDFromSDK() Call without prior initialization
@@ -496,7 +477,7 @@ void test_l1_dsHost_negative_dsGetSocIDFromSDK(void) {
 
     // Step 02: dsHostInit() Initialize dsHost
     result = dsHostInit();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("Step 02: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 03: dsGetSocIDFromSDK() Call with NULL pointer
@@ -506,7 +487,7 @@ void test_l1_dsHost_negative_dsGetSocIDFromSDK(void) {
 
     // Step 04: dsHostTerm() Terminate dsHost
     result = dsHostTerm();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("Step 04: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 05: dsGetSocIDFromSDK() Call after termination
@@ -542,7 +523,7 @@ void test_l1_dsHost_negative_dsGetSocIDFromSDK(void) {
 void test_l1_dsHost_positive_dsGetHostEDID(void) {
     gTestID = 9;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-	
+
     unsigned char edid1[EDID_MAX_DATA_SIZE] = {0};  
     unsigned char edid2[EDID_MAX_DATA_SIZE] = {0};
     int length1 = 0;
@@ -550,7 +531,7 @@ void test_l1_dsHost_positive_dsGetHostEDID(void) {
 
     // Step 01: dsHostInit() Initialize dsHost
     dsError_t result = dsHostInit();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("Step 01: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 02: dsGetHostEDID() Call with valid pointers for edid and length
@@ -570,7 +551,7 @@ void test_l1_dsHost_positive_dsGetHostEDID(void) {
 
     // Step 05: dsHostTerm() Terminate dsHost
     result = dsHostTerm();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("Step 05: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
@@ -602,18 +583,18 @@ void test_l1_dsHost_positive_dsGetHostEDID(void) {
 void test_l1_dsHost_negative_dsGetHostEDID(void) {
     gTestID = 10;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-	
+
     unsigned char edid[EDID_MAX_DATA_SIZE]= {0};  // Making an assumption about maximum EDID size.
-    int length;
+    int length = 0;
 
     // Step 01: dsGetHostEDID() Call without prior initialization
-     dsError_t result = dsGetHostEDID(edid, &length);
-     CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
-     UT_LOG("Step 01: Fetch Host EDID without initialization -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
+    dsError_t result = dsGetHostEDID(edid, &length);
+    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    UT_LOG("Step 01: Fetch Host EDID without initialization -> Expected: dsERR_NOT_INITIALIZED, Got: %d\n", result);
 
     // Step 02: dsHostInit() Initialize dsHost
     result = dsHostInit();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("Step 02: Initialize dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 03: dsGetHostEDID() Call with NULL pointers
@@ -628,7 +609,7 @@ void test_l1_dsHost_negative_dsGetHostEDID(void) {
 
     // Step 05: dsHostTerm() Terminate dsHost
     result = dsHostTerm();
-    UT_ASSERT_EQUAL(result, dsERR_NONE);
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG("Step 04: Terminate dsHost -> Expected: dsERR_NONE, Got: %d\n", result);
 
     // Step 06: dsGetHostEDID() Call after termination
@@ -649,24 +630,24 @@ static UT_test_suite_t * pSuite2 = NULL;
  */
 int test_l1_dsHost_register ( void )
 {
-	/* add a suite to the registry */
-	pSuite = UT_add_suite( "[L1 dsHost]", NULL, NULL );
+    /* add a suite to the registry */
+    pSuite = UT_add_suite( "[L1 dsHost]", NULL, NULL );
     pSuite2 = UT_add_suite( "[L1 dsHost -- advanced]", NULL, NULL );
-	if ( NULL == pSuite )
-	{
-		return -1;
-	}	
+    if ( NULL == pSuite )
+    {
+        return -1;
+    }
     if ( NULL == pSuite2 )
-	{
-		return -1;
-	}	
+    {
+        return -1;
+    }
 
-	UT_add_test( pSuite, "dsHostInit_L1_positive" ,test_l1_dsHost_positive_dsHostInit );
-	UT_add_test( pSuite, "dsHostInit_L1_negative" ,test_l1_dsHost_negative_dsHostInit );
-	UT_add_test( pSuite, "dsHostTerm_L1_positive" ,test_l1_dsHost_positive_dsHostTerm );
-	UT_add_test( pSuite, "dsHostTerm_L1_negative" ,test_l1_dsHost_negative_dsHostTerm );
-	UT_add_test( pSuite, "dsGetCPUTemperature_L1_positive" ,test_l1_dsHost_positive_dsGetCPUTemperature );
-	UT_add_test( pSuite, "dsGetSocIDFromSDK_L1_positive" ,test_l1_dsHost_positive_dsGetSocIDFromSDK );
+    UT_add_test( pSuite, "dsHostInit_L1_positive" ,test_l1_dsHost_positive_dsHostInit );
+    UT_add_test( pSuite, "dsHostInit_L1_negative" ,test_l1_dsHost_negative_dsHostInit );
+    UT_add_test( pSuite, "dsHostTerm_L1_positive" ,test_l1_dsHost_positive_dsHostTerm );
+    UT_add_test( pSuite, "dsHostTerm_L1_negative" ,test_l1_dsHost_negative_dsHostTerm );
+    UT_add_test( pSuite, "dsGetCPUTemperature_L1_positive" ,test_l1_dsHost_positive_dsGetCPUTemperature );
+    UT_add_test( pSuite, "dsGetSocIDFromSDK_L1_positive" ,test_l1_dsHost_positive_dsGetSocIDFromSDK );
 
     UT_add_test( pSuite, "dsGetSocIDFromSDK_L1_negative" ,test_l1_dsHost_negative_dsGetSocIDFromSDK );
     UT_add_test( pSuite, "dsGetCPUTemperature_L1_negative" ,test_l1_dsHost_negative_dsGetCPUTemperature );
@@ -674,10 +655,10 @@ int test_l1_dsHost_register ( void )
 
     UT_add_test( pSuite2, "dsGetHostEDID_L1_positive" ,test_l1_dsHost_positive_dsGetHostEDID );
     UT_add_test( pSuite2, "dsGetHostEDID_L1_negative" ,test_l1_dsHost_negative_dsGetHostEDID );
-	
-   extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsHost/features/extendedEnumsSupported" );
 
-	return 0;
+    extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsHost/features/extendedEnumsSupported" );
+
+    return 0;
 } 
 
 /** @} */ // End of DS_Host_HALTEST_L1
