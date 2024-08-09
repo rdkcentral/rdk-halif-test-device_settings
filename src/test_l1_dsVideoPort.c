@@ -81,14 +81,6 @@
 static int gTestGroup = 1;
 static int gTestID = 1;
 
-#define DS_ASSERT_AUTO_TERM_NUMERICAL(value, comparison){\
-    if(value != comparison){\
-        UT_LOG("\n In %s Comparison: [%d = %d]\n", __FUNCTION__, value, comparison);\
-        dsVideoPortTerm();\
-        UT_FAIL();\
-    }\
-}\
-
 /* Global flags to support features */
 static bool extendedEnumsSupported=false; //Default to not supported
 
@@ -107,13 +99,13 @@ static bool extendedEnumsSupported=false; //Default to not supported
 dsDisplayColorDepth_t getColorDepth(void){
     dsDisplayColorDepth_t colorDepth;
     if (gDSvideoPort_color_depth == 8) {
-        colorDepth = 0x01;
+        colorDepth = dsDISPLAY_COLORDEPTH_8BIT;
     } else if (gDSvideoPort_color_depth == 10) {
-        colorDepth = 0x02;
+        colorDepth = dsDISPLAY_COLORDEPTH_10BIT;
     } else if (gDSvideoPort_color_depth == 12) {
-        colorDepth = 0x04;
+        colorDepth = dsDISPLAY_COLORDEPTH_12BIT;
     } else {
-        colorDepth = 0x08;
+        colorDepth = dsDISPLAY_COLORDEPTH_AUTO;
     }
     return colorDepth;
 }
@@ -141,7 +133,7 @@ dsDisplayColorDepth_t getColorDepth(void){
  */
 void test_l1_dsVideoPort_positive_dsVideoPortInit(void) {
     gTestID = 1;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
 
@@ -161,7 +153,7 @@ void test_l1_dsVideoPort_positive_dsVideoPortInit(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO("\n Out %s\n", __FUNCTION__);
 }
 
 /**
@@ -188,7 +180,7 @@ void test_l1_dsVideoPort_positive_dsVideoPortInit(void) {
  */
 void test_l1_dsVideoPort_negative_dsVideoPortInit(void) {
     gTestID = 2;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
 
@@ -204,7 +196,7 @@ void test_l1_dsVideoPort_negative_dsVideoPortInit(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -231,7 +223,7 @@ void test_l1_dsVideoPort_negative_dsVideoPortInit(void) {
  */
 void test_l1_dsVideoPort_positive_dsVideoPortTerm(void) {
     gTestID = 3;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
 
@@ -251,7 +243,7 @@ void test_l1_dsVideoPort_positive_dsVideoPortTerm(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -280,7 +272,7 @@ void test_l1_dsVideoPort_positive_dsVideoPortTerm(void) {
  */
 void test_l1_dsVideoPort_negative_dsVideoPortTerm(void) {
     gTestID = 4;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
 
@@ -300,7 +292,7 @@ void test_l1_dsVideoPort_negative_dsVideoPortTerm(void) {
     status = dsVideoPortTerm();
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -327,7 +319,7 @@ void test_l1_dsVideoPort_negative_dsVideoPortTerm(void) {
  */
 void test_l1_dsVideoPort_positive_dsGetVideoPort(void) {
     gTestID = 5;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
 
@@ -361,7 +353,7 @@ void test_l1_dsVideoPort_positive_dsGetVideoPort(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 /**
@@ -392,7 +384,7 @@ void test_l1_dsVideoPort_positive_dsGetVideoPort(void) {
  */
 void test_l1_dsVideoPort_negative_dsGetVideoPort(void) {
     gTestID = 6;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -425,7 +417,7 @@ void test_l1_dsVideoPort_negative_dsGetVideoPort(void) {
     status = dsGetVideoPort(gDSVideoPortConfiguration[0].typeid, gDSVideoPortConfiguration[0].index, &(handle));
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -446,15 +438,15 @@ void test_l1_dsVideoPort_negative_dsGetVideoPort(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the port handle for all supported video ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported video ports |
- * |03|Call dsIsVideoPortEnabled - by looping through the acquired port handles to check if a video port is enabled or not and store the values in an array | handle: [valid handle], enabled: [pointer to hold the enabled/disabled status of video port] | dsERR_NONE | Flag which holds the enabled status of Video Port must be returned |
- * |04|Call dsIsVideoPortEnabled - Again by looping through the acquired port handles to check if a video port is enabled or not and store the values in a new array | handle: [valid handle], enabled: [pointer to hold the enabled/disabled status of video port] | dsERR_NONE | Flag which holds the enabled status of Video Port must be returned |
- * |05|Compare the array values and make sure they are equal| | dsERR_NONE | The values must be equal |
+ * |03|Call dsIsVideoPortEnabled - by looping through the acquired port handles to check if a video port is enabled or not and store the value | handle: [valid handle], enabled: [pointer to hold the enabled/disabled status of video port] | dsERR_NONE | Flag which holds the enabled status of Video Port must be returned |
+ * |04|Call dsIsVideoPortEnabled - Again by looping through the acquired port handles to check if a video port is enabled or not and store the value | handle: [valid handle], enabled: [pointer to hold the enabled/disabled status of video port] | dsERR_NONE | Flag which holds the enabled status of Video Port must be returned |
+ * |05|Compare the values and make sure they are equal| | dsERR_NONE | The values must be equal |
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsIsVideoPortEnabled(void) {
     gTestID = 7;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -475,7 +467,7 @@ void test_l1_dsVideoPort_positive_dsIsVideoPortEnabled(void) {
         // Step 04: Repeat the check for enabled status
         status = dsIsVideoPortEnabled(handle, &isEnabled2);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
-        // Step 05: Compare the array values
+        // Step 05: Check if the values are equal
         UT_ASSERT_EQUAL(isEnabled1, isEnabled2);
     }
 
@@ -483,7 +475,7 @@ void test_l1_dsVideoPort_positive_dsIsVideoPortEnabled(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -515,7 +507,7 @@ void test_l1_dsVideoPort_positive_dsIsVideoPortEnabled(void) {
  */
 void test_l1_dsVideoPort_negative_dsIsVideoPortEnabled(void) {
     gTestID = 8;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -551,7 +543,7 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortEnabled(void) {
     status = dsIsVideoPortEnabled(handle, &enabled);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 /**
@@ -571,14 +563,14 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortEnabled(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsIsDisplayConnected() - by looping through the acquired port handles to check if video port is connected to a display or not and store it in an array| handle: [ loop through valid handles ] , connected: [pointer to hold the connection status of Video Port] | dsERR_NONE | Flag which holds the connection status of Video Port must be returned |
- * |04|Compare the array values with the values for device respectively and make sure they are equal| | dsERR_NONE | The values must be equal |
+ * |03|Call dsIsDisplayConnected() - by looping through the acquired port handles to check if video port is connected to a display or not | handle: [ loop through valid handles ] , connected: [pointer to hold the connection status of Video Port] | dsERR_NONE | Flag which holds the connection status of Video Port must be returned |
+ * |04|Compare the value with the value for source/sink device respectively | | dsERR_NONE | The values must be equal |
  * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsIsDisplayConnected(void) {
     gTestID = 9;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -596,21 +588,19 @@ void test_l1_dsVideoPort_positive_dsIsDisplayConnected(void) {
         // Step 03: Check if video port is connected
         status = dsIsDisplayConnected(handle, &isConnected1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
-        // Step 04: Compare the array values
-        bool isConnected;
+        // Step 04: Compare the value with the value for source/sink device
         if (gSourceType == 0) {
-            isConnected = true;
+            UT_ASSERT_EQUAL(isConnected1, true);
         } else if (gSourceType == 1) {
-            isConnected = false;
+            UT_ASSERT_EQUAL(isConnected1, false);
         }
-        UT_ASSERT_EQUAL(isConnected1, isConnected);
     }
 
     // Step 05: Terminate the video port system
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -642,7 +632,7 @@ void test_l1_dsVideoPort_positive_dsIsDisplayConnected(void) {
  */
 void test_l1_dsVideoPort_negative_dsIsDisplayConnected(void) {
     gTestID = 10;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -678,7 +668,7 @@ void test_l1_dsVideoPort_negative_dsIsDisplayConnected(void) {
     status = dsIsDisplayConnected(handle, &connected);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -699,14 +689,14 @@ void test_l1_dsVideoPort_negative_dsIsDisplayConnected(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsIsDisplaySurround() - by looping through the acquired port handles to check if display connected to video port supports the audio surround and store it an array | handle: [ loop through valid handles ] , surround: [pointer to hold the audio surround support] | dsERR_NONE | Audio surround support of Video Port must be returned |
- * |04|Compare the array values with values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |03|Call dsIsDisplaySurround() - by looping through the acquired port handles to check if display connected to video port supports the audio surround | handle: [ loop through valid handles ] , surround: [pointer to hold the audio surround support] | dsERR_NONE | Audio surround support of Video Port must be returned |
+ * |04|Compare the values with values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
  * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsIsDisplaySurround(void) {
     gTestID = 11;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -725,7 +715,7 @@ void test_l1_dsVideoPort_positive_dsIsDisplaySurround(void) {
         // Step 03: Check if the connected display supports audio surround
         status = dsIsDisplaySurround(handle, &isSurround1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
-        // Step 05: Compare the array values with profile file values
+        // Step 05: Compare the value with value from profile file
         UT_ASSERT_EQUAL(isSurround1, gDSVideoPortConfiguration[i].DisplaySurround);
     }
 
@@ -733,7 +723,7 @@ void test_l1_dsVideoPort_positive_dsIsDisplaySurround(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -765,7 +755,7 @@ void test_l1_dsVideoPort_positive_dsIsDisplaySurround(void) {
  */
 void test_l1_dsVideoPort_negative_dsIsDisplaySurround(void) {
     gTestID = 12;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -801,7 +791,7 @@ void test_l1_dsVideoPort_negative_dsIsDisplaySurround(void) {
     status = dsIsDisplaySurround(handle, &surround);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -822,14 +812,14 @@ void test_l1_dsVideoPort_negative_dsIsDisplaySurround(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetSurroundMode() - by looping through the acquired port handles to get the surround mode of each video port and store it in an array | handle: [ loop through valid handles ] , surround: [pointer to hold the Surround mode] | dsERR_NONE | Surround mode (dsSURROUNDMode_t)of Video Port must be returned or indicate that the operation isn't supported |
- * |04|Compare the array values with the value from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |03|Call dsGetSurroundMode() - by looping through the acquired port handles to get the surround mode of each video port | handle: [ loop through valid handles ] , surround: [pointer to hold the Surround mode] | dsERR_NONE | Surround mode (dsSURROUNDMode_t)of Video Port must be returned or indicate that the operation isn't supported |
+ * |04|Compare the values with the value from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
  * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetSurroundMode(void) {
     gTestID = 13;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -848,7 +838,7 @@ void test_l1_dsVideoPort_positive_dsGetSurroundMode(void) {
         status = dsGetSurroundMode(handle, &surroundMode1);
         if (gSourceType == 1) {
             UT_ASSERT_EQUAL(status, dsERR_NONE);
-            // Step 04: Compare values with profile file
+            // Step 04: Compare value with profile file
             UT_ASSERT_EQUAL(surroundMode1,gDSVideoPortConfiguration[i].SurroundMode);
         } else if (gSourceType == 0) {
             UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
@@ -859,7 +849,7 @@ void test_l1_dsVideoPort_positive_dsGetSurroundMode(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -891,7 +881,7 @@ void test_l1_dsVideoPort_positive_dsGetSurroundMode(void) {
  */
 void test_l1_dsVideoPort_negative_dsGetSurroundMode(void) {
     gTestID = 14;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -927,7 +917,7 @@ void test_l1_dsVideoPort_negative_dsGetSurroundMode(void) {
     status = dsGetSurroundMode(handle, &surroundMode);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -948,15 +938,15 @@ void test_l1_dsVideoPort_negative_dsGetSurroundMode(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsIsVideoPortActive() - by looping through the acquired port handles to check whether a video port is active or not for each port and store it in an array| handle: [ loop through valid handles ] , active: [pointer to hold the active status] | dsERR_NONE | Active Status(A Video port is active if it is connected to the active port of sink device) of Video Port must be returned |
- * |04|Call dsIsVideoPortActive() - by looping through the acquired port handles to check whether a video port is active or not for each port and store it in a new array | handle: [ loop through valid handles ] , active: [pointer to hold the active status] | dsERR_NONE | Active Status(A Video port is active if it is connected to the active port of sink device) of Video Port must be returned |
- * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |03|Call dsIsVideoPortActive() - by looping through the acquired port handles to check whether a video port is active or not for each port and store it | handle: [ loop through valid handles ] , active: [pointer to hold the active status] | dsERR_NONE | Active Status(A Video port is active if it is connected to the active port of sink device) of Video Port must be returned |
+ * |04|Call dsIsVideoPortActive() - by looping through the acquired port handles to check whether a video port is active or not for each port and store it | handle: [ loop through valid handles ] , active: [pointer to hold the active status] | dsERR_NONE | Active Status(A Video port is active if it is connected to the active port of sink device) of Video Port must be returned |
+ * |05|Check if the values are equal | | dsERR_NONE | The values must be equal |
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsIsVideoPortActive(void) {
     gTestID = 15;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
 
@@ -978,7 +968,7 @@ void test_l1_dsVideoPort_positive_dsIsVideoPortActive(void) {
         // Step 04: Repeat the active status check
         status = dsIsVideoPortActive(handle, &isActive2);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
-        // Step 05: Compare the array values
+        // Step 05: Check if the values are equal
         UT_ASSERT_EQUAL(isActive1, isActive2);
     }
 
@@ -986,7 +976,7 @@ void test_l1_dsVideoPort_positive_dsIsVideoPortActive(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -1018,7 +1008,7 @@ void test_l1_dsVideoPort_positive_dsIsVideoPortActive(void) {
  */
 void test_l1_dsVideoPort_negative_dsIsVideoPortActive(void) {
     gTestID = 16;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -1054,7 +1044,7 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortActive(void) {
     status = dsIsVideoPortActive(handle, &active);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -1081,7 +1071,7 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortActive(void) {
  */
 void test_l1_dsVideoPort_positive_dsEnableHDCP(void) {
     gTestID = 17;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -1104,7 +1094,7 @@ void test_l1_dsVideoPort_positive_dsEnableHDCP(void) {
         status = dsEnableHDCP(handle, enableHDCP, hdcpKey, keySize);
         if (gSourceType == 1) {
             if (gDSVideoPortConfiguration[i].hdcp_supported == true) {
-            UT_ASSERT_EQUAL(status, dsERR_NONE);
+                UT_ASSERT_EQUAL(status, dsERR_NONE);
             } else {
                 UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
             }
@@ -1117,7 +1107,7 @@ void test_l1_dsVideoPort_positive_dsEnableHDCP(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -1150,7 +1140,7 @@ void test_l1_dsVideoPort_positive_dsEnableHDCP(void) {
  */
 void test_l1_dsVideoPort_negative_dsEnableHDCP(void) {
     gTestID = 18;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -1194,7 +1184,7 @@ void test_l1_dsVideoPort_negative_dsEnableHDCP(void) {
     status = dsEnableHDCP(handle, enableHDCP, hdcpKey, keySize);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -1215,14 +1205,14 @@ void test_l1_dsVideoPort_negative_dsEnableHDCP(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video ports of a system | |dsERR_NONE| Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports|
- * |03|Call dsIsHDCPEnabled() by looping through the acquired port handles  and checks whether HDCP enabled or not(.ie TRUE / FALSE) and store it in an array | handle : [loop through valid handles] , pContentProtected = [pointer to hold data ] | dsERR_NONE | dsIsHDCPEnabled must return a valid value or indicate that the operation isn't supported|
- * |04|Compare the array values with values of profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |03|Call dsIsHDCPEnabled() by looping through the acquired port handles  and checks whether HDCP enabled or not(.ie TRUE / FALSE) | handle : [loop through valid handles] , pContentProtected = [pointer to hold data ] | dsERR_NONE | dsIsHDCPEnabled must return a valid value or indicate that the operation isn't supported|
+ * |04|Compare the values with values of profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
  * |05|Call dsVideoPortTerm() - Terminate the video ports of a system| |dsERR_NONE|Termination must be successful|
  * 
  */
 void test_l1_dsVideoPort_positive_dsIsHDCPEnabled(void) {
     gTestID = 19;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -1239,7 +1229,7 @@ void test_l1_dsVideoPort_positive_dsIsHDCPEnabled(void) {
         UT_ASSERT_EQUAL(status, dsERR_NONE);
         // Step 03: Check if HDCP is enabled
         status = dsIsHDCPEnabled(handle, &isHDCPEnabled1);
-        // Step 04: Compare the array values with profile values
+        // Step 04: Compare the value with profile values
         if (gSourceType == 1) {
             if (gDSVideoPortConfiguration[i].hdcp_supported == false) {
                 UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
@@ -1257,7 +1247,7 @@ void test_l1_dsVideoPort_positive_dsIsHDCPEnabled(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -1289,7 +1279,7 @@ void test_l1_dsVideoPort_positive_dsIsHDCPEnabled(void) {
  */
 void test_l1_dsVideoPort_negative_dsIsHDCPEnabled(void) {
     gTestID = 20;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -1325,7 +1315,7 @@ void test_l1_dsVideoPort_negative_dsIsHDCPEnabled(void) {
     status = dsIsHDCPEnabled(handle, &(contentProtected));
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -1352,7 +1342,7 @@ void test_l1_dsVideoPort_negative_dsIsHDCPEnabled(void) {
  */
 void test_l1_dsVideoPort_positive_dsEnableVideoPort(void) {
     gTestID = 21;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -1374,7 +1364,7 @@ void test_l1_dsVideoPort_positive_dsEnableVideoPort(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -1405,7 +1395,7 @@ void test_l1_dsVideoPort_positive_dsEnableVideoPort(void) {
  */
 void test_l1_dsVideoPort_negative_dsEnableVideoPort(void) {
     gTestID = 22;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
 
@@ -1438,7 +1428,7 @@ void test_l1_dsVideoPort_negative_dsEnableVideoPort(void) {
     status = dsEnableVideoPort(handle, enabled);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -1465,7 +1455,7 @@ void test_l1_dsVideoPort_negative_dsEnableVideoPort(void) {
  */
 void test_l1_dsVideoPort_positive_dsSetResolution(void) {
     gTestID = 23;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -1495,7 +1485,7 @@ void test_l1_dsVideoPort_positive_dsSetResolution(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -1528,7 +1518,7 @@ void test_l1_dsVideoPort_positive_dsSetResolution(void) {
  */
 void test_l1_dsVideoPort_negative_dsSetResolution(void) {
     gTestID = 24;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -1572,7 +1562,7 @@ void test_l1_dsVideoPort_negative_dsSetResolution(void) {
     status = dsSetResolution(handle, &(gDSVideoPortConfiguration[0].supportedResolutions[0]));
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -1593,14 +1583,14 @@ void test_l1_dsVideoPort_negative_dsSetResolution(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video ports of a system | |dsERR_NONE| Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports|
- * |03|Call dsGetResolution() by looping through the acquired port handles and valid resolution pointer to retrieve the resolution of a video port and store it in an array | handle  = [loop through valid handles] , resolution = [valid pointer] |dsERR_NONE|Resolution must be retrieved successfully|
- * |04|Compare the array values with default values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |03|Call dsGetResolution() by looping through the acquired port handles and valid resolution pointer to retrieve the resolution of a video port | handle  = [loop through valid handles] , resolution = [valid pointer] |dsERR_NONE|Resolution must be retrieved successfully|
+ * |04|Compare the values with default values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
  * |05|Call dsVideoPortTerm() - Terminate the video ports of a system| |dsERR_NONE|Termination must be successful|
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetResolution(void) {
     gTestID = 25;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0; 
@@ -1617,7 +1607,7 @@ void test_l1_dsVideoPort_positive_dsGetResolution(void) {
         // Step 03: Retrieve the resolution of the video port
         status = dsGetResolution(handle, &(resolution1));
         UT_ASSERT_EQUAL(status, dsERR_NONE);
-        // Step 04: Compare the array values
+        // Step 04: Compare the value with value from profile file
         for (int j = 0; j < gDSVideoPortConfiguration[i].numSupportedResolutions; j++) {
             if(!strncmp(gDSVideoPortConfiguration[i].supportedResolutions[j].name, gDSVideoPortConfiguration[i].defaultResolution, DS_VIDEO_PORT_RESOLUTION_NAME_MAX)) {
                 UT_ASSERT_EQUAL(resolution1.pixelResolution, gDSVideoPortConfiguration[i].supportedResolutions[j].pixelResolution);
@@ -1633,7 +1623,7 @@ void test_l1_dsVideoPort_positive_dsGetResolution(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -1665,7 +1655,7 @@ void test_l1_dsVideoPort_positive_dsGetResolution(void) {
  */
 void test_l1_dsVideoPort_negative_dsGetResolution(void) {
     gTestID = 26;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -1701,7 +1691,7 @@ void test_l1_dsVideoPort_negative_dsGetResolution(void) {
     status = dsGetResolution(handle, &(resolution));
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -1733,7 +1723,7 @@ void mockVideoFormatCallback(dsHDRStandard_t videoFormat){
 
 void test_l1_dsVideoPort_positive_dsVideoFormatUpdateRegisterCB(void) {
     gTestID = 27;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
 
@@ -1749,7 +1739,7 @@ void test_l1_dsVideoPort_positive_dsVideoFormatUpdateRegisterCB(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -1779,7 +1769,7 @@ void test_l1_dsVideoPort_positive_dsVideoFormatUpdateRegisterCB(void) {
  */
 void test_l1_dsVideoPort_negative_dsVideoFormatUpdateRegisterCB(void) {
     gTestID = 28;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
 
@@ -1803,7 +1793,7 @@ void test_l1_dsVideoPort_negative_dsVideoFormatUpdateRegisterCB(void) {
     status = dsVideoFormatUpdateRegisterCB(mockVideoFormatCallback);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 /**
@@ -1836,7 +1826,7 @@ void myHdcpStatusCallbackFunction(intptr_t handle, dsHdcpStatus_t status)
 
 void test_l1_dsVideoPort_positive_dsRegisterHdcpStatusCallback(void) {
     gTestID = 29;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -1862,7 +1852,7 @@ void test_l1_dsVideoPort_positive_dsRegisterHdcpStatusCallback(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -1894,7 +1884,7 @@ void test_l1_dsVideoPort_positive_dsRegisterHdcpStatusCallback(void) {
  */
 void test_l1_dsVideoPort_negative_dsRegisterHdcpStatusCallback(void) {
     gTestID = 30;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0 /* Initialize with invalid handle */;
@@ -1931,7 +1921,7 @@ void test_l1_dsVideoPort_negative_dsRegisterHdcpStatusCallback(void) {
     status = dsRegisterHdcpStatusCallback(handle, validHdcpStatusCallback);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -1952,14 +1942,14 @@ void test_l1_dsVideoPort_negative_dsRegisterHdcpStatusCallback(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetHDCPStatus() by looping through the acquired port handles and valid pointer to retrieve HDCP status and store it in an array | handle  = [valid handles] status = [valid pointer] | dsERR_NONE | The HDCP status must be successfully fetched and stored in the given pointer or indicate that the operation isn't supported|
- * |04|Compare the array values with the HDCP status for sink and source devices respectively | | dsERR_NONE | The values must be equal |
+ * |03|Call dsGetHDCPStatus() by looping through the acquired port handles and valid pointer to retrieve HDCP status | handle  = [valid handles] status = [valid pointer] | dsERR_NONE | The HDCP status must be successfully fetched and stored in the given pointer or indicate that the operation isn't supported|
+ * |04|Compare the values with the HDCP status for sink and source devices respectively | | dsERR_NONE | The values must be equal |
  * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetHDCPStatus(void) {
     gTestID = 31;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID); 
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID); 
 
     dsError_t status;
     intptr_t handle = 0;
@@ -1975,7 +1965,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPStatus(void) {
         UT_ASSERT_EQUAL(status, dsERR_NONE);
         // Step 03: Retrieve the HDCP status
         status = dsGetHDCPStatus(handle, &(hdcpStatus1));
-        // Step 04: Compare the array values with values of profile file
+        // Step 04: Compare the value with values of profile file
         if (gSourceType == 0) {
             if (gDSVideoPortConfiguration[i].hdcp_supported == false) {
                 UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
@@ -1992,7 +1982,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPStatus(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -2024,11 +2014,11 @@ void test_l1_dsVideoPort_positive_dsGetHDCPStatus(void) {
  */
 void test_l1_dsVideoPort_negative_dsGetHDCPStatus(void) {
     gTestID = 32;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
 
-    intptr_t handle = 0;          
+    intptr_t handle = 0;
     dsHdcpStatus_t hdcpStatus;
 
     // Step 01: Attempt to get HDCP status without initialization
@@ -2060,7 +2050,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPStatus(void) {
     status = dsGetHDCPStatus(handle, &(hdcpStatus));
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -2082,14 +2072,14 @@ void test_l1_dsVideoPort_negative_dsGetHDCPStatus(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetHDCPProtocol() by looping through the acquired suported port handles and valid pointer to retrieve the protocol version  of a video port and store it in an array |handle  = [valid handles] , protocolVersion = [valid pointer] |dsERR_NONE|The HDCP protocol version must be successfully fetched |
- * |04|Compare the array values with the values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |03|Call dsGetHDCPProtocol() by looping through the acquired suported port handles and valid pointer to retrieve the protocol version  of a video port |handle  = [valid handles] , protocolVersion = [valid pointer] |dsERR_NONE|The HDCP protocol version must be successfully fetched |
+ * |04|Compare the values with the values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
  * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetHDCPProtocol(void) {
     gTestID = 33;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -2107,7 +2097,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPProtocol(void) {
         // Step 03: Retrieve the HDCP protocol version
         status = dsGetHDCPProtocol(handle, &(protocolVersion1));
         UT_ASSERT_EQUAL(status, dsERR_NONE);
-        // Step 04: Compare the array values
+        // Step 04: Compare the value with value from profile file
         UT_ASSERT_EQUAL(protocolVersion1, gDSVideoPortConfiguration[i].hdcp_protocol_version);
     }
 
@@ -2116,7 +2106,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPProtocol(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 /**
@@ -2147,7 +2137,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPProtocol(void) {
  */
 void test_l1_dsVideoPort_negative_dsGetHDCPProtocol(void) {
     gTestID = 34;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -2183,7 +2173,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPProtocol(void) {
     status = dsGetHDCPProtocol(handle, &protocolVersion);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -2204,14 +2194,14 @@ void test_l1_dsVideoPort_negative_dsGetHDCPProtocol(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetHDCPReceiverProtocol() by looping through the acquired supported port handles and valid pointer to retrieve the sink device protocol version of a video port and store it in an array |handle  = [loop through valid handles] , protocolVersion = [valid pointer] |dsERR_NONE|The Receiver HDCP protocol version must be successfully fetched and stored in the given pointer|
- * |05|Compare the array values with values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |03|Call dsGetHDCPReceiverProtocol() by looping through the acquired supported port handles and valid pointer to retrieve the sink device protocol version of a video port |handle  = [loop through valid handles] , protocolVersion = [valid pointer] |dsERR_NONE|The Receiver HDCP protocol version must be successfully fetched and stored in the given pointer|
+ * |05|Compare the values with values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetHDCPReceiverProtocol(void) {
     gTestID = 35;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
 
@@ -2230,7 +2220,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPReceiverProtocol(void) {
         // Step 03: Retrieve the Receiver HDCP protocol version
         status = dsGetHDCPReceiverProtocol(handle, &(protocolVersion1));
         UT_ASSERT_EQUAL(status, dsERR_NONE);
-        // Step 04: Compare the array values
+        // Step 04: Compare the value with value from profile file
         UT_ASSERT_EQUAL(protocolVersion1, gDSVideoPortConfiguration[i].hdcp_protocol_version);
     }
 
@@ -2238,7 +2228,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPReceiverProtocol(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -2270,7 +2260,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPReceiverProtocol(void) {
  */
 void test_l1_dsVideoPort_negative_dsGetHDCPReceiverProtocol(void) {
     gTestID = 36;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -2306,7 +2296,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPReceiverProtocol(void) {
     status = dsGetHDCPReceiverProtocol(handle, &receiverProtocolVersion);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -2327,14 +2317,14 @@ void test_l1_dsVideoPort_negative_dsGetHDCPReceiverProtocol(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetHDCPCurrentProtocol() by looping through the acquired supported port handles and valid pointer to retrieve the current negotiated protocol version  of a video port and store it in an array |handle  = [valid handles] , protocolVersion = [valid pointer] |dsERR_NONE|The current HDCP protocol version must be successfully fetched |
- * |05|Compare the array values with values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |03|Call dsGetHDCPCurrentProtocol() by looping through the acquired supported port handles and valid pointer to retrieve the current negotiated protocol version  of a video port |handle  = [valid handles] , protocolVersion = [valid pointer] |dsERR_NONE|The current HDCP protocol version must be successfully fetched |
+ * |05|Compare the values with value from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetHDCPCurrentProtocol(void) {
     gTestID = 37;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t  handle = 0;
@@ -2352,7 +2342,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPCurrentProtocol(void) {
         // Step 03: Retrieve the current negotiated HDCP protocol version
         status = dsGetHDCPCurrentProtocol(handle, &currentProtocol1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
-        // Step 04: Compare the array values with profile file values
+        // Step 04: Compare the value with profile file values
         UT_ASSERT_EQUAL(currentProtocol1, gDSVideoPortConfiguration[i].hdcp_protocol_version);
     }
 
@@ -2360,7 +2350,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPCurrentProtocol(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -2392,7 +2382,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPCurrentProtocol(void) {
  */
 void test_l1_dsVideoPort_negative_dsGetHDCPCurrentProtocol(void) {
     gTestID = 38;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t  handle = 0;
@@ -2428,7 +2418,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPCurrentProtocol(void) {
     status = dsGetHDCPCurrentProtocol(handle, &currentProtocolVersion);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -2449,14 +2439,14 @@ void test_l1_dsVideoPort_negative_dsGetHDCPCurrentProtocol(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video ports of a system | |dsERR_NONE| Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports|
- * |03|Call dsGetTVHDRCapabilities() by looping through the acquired port handles and valid pointer to retrieve the HDR capabilities of a video port and store it in an array | handle  = [loop through valid handles] , capabilities = [valid pointer] |dsERR_NONE|The HDR capabilities must be successfully fetched and stored in the given pointer|
- * |04|Compare the array values with values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |03|Call dsGetTVHDRCapabilities() by looping through the acquired port handles and valid pointer to retrieve the HDR capabilities of a video port | handle  = [loop through valid handles] , capabilities = [valid pointer] |dsERR_NONE|The HDR capabilities must be successfully fetched and stored in the given pointer|
+ * |04|Compare the values with values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
  * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetTVHDRCapabilities(void) {
     gTestID = 39;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -2474,7 +2464,7 @@ void test_l1_dsVideoPort_positive_dsGetTVHDRCapabilities(void) {
         // Step 03: Retrieve the HDR capabilities
         status = dsGetTVHDRCapabilities(handle, &capabilities1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
-        // Step 04: Compare the array values with profile file values
+        // Step 04: Compare the value with profile file values
         UT_ASSERT_EQUAL(capabilities1, gDSVideoPortConfiguration[i].hdr_capabilities);
     }
 
@@ -2482,7 +2472,7 @@ void test_l1_dsVideoPort_positive_dsGetTVHDRCapabilities(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -2514,12 +2504,12 @@ void test_l1_dsVideoPort_positive_dsGetTVHDRCapabilities(void) {
  */
 void test_l1_dsVideoPort_negative_dsGetTVHDRCapabilities(void) {
     gTestID = 40;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
 
-    int capabilities; 
+    int capabilities;
 
     // Step 01: Attempt to get HDR capabilities without initialization
     status = dsGetTVHDRCapabilities(-1, &capabilities);
@@ -2550,7 +2540,7 @@ void test_l1_dsVideoPort_negative_dsGetTVHDRCapabilities(void) {
     status = dsGetTVHDRCapabilities(handle, &capabilities);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -2571,17 +2561,17 @@ void test_l1_dsVideoPort_negative_dsGetTVHDRCapabilities(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video ports of a system | |dsERR_NONE| Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports|
- * |03|Call dsSupportedTvResolutions() by looping through the acquired port handles and valid pointer to retrieve the resolutions of a video port and store it in an array |handle  = [loop through valid handles] , resolutions = [valid pointer] |dsERR_NONE|Resolutions must be set successfully|
- * |05|Compare the array values with values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |03|Call dsSupportedTvResolutions() by looping through the acquired port handles and valid pointer to retrieve the resolutions of a video port |handle  = [loop through valid handles] , resolutions = [valid pointer] |dsERR_NONE|Resolutions must be set successfully|
+ * |05|Compare the values with values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
  * |06|Call dsVideoPortTerm() - Terminate the video ports of a system| |dsERR_NONE|Termination must be successful|
  * 
  */
 void test_l1_dsVideoPort_positive_dsSupportedTvResolutions(void) {
     gTestID = 41;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
-    intptr_t handle = 0;    
+    intptr_t handle = 0;
 
     int resolutions1;
 
@@ -2596,7 +2586,7 @@ void test_l1_dsVideoPort_positive_dsSupportedTvResolutions(void) {
         // Step 03: Retrieve the supported TV resolutions
         status = dsSupportedTvResolutions(handle, &resolutions1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
-        // Step 04: Compare the array values
+        // Step 04: Compare the value with value from profile file
         UT_ASSERT_EQUAL(resolutions1, gDSVideoPortConfiguration[i].Supported_tv_resolutions_capabilities);
     }
 
@@ -2604,7 +2594,7 @@ void test_l1_dsVideoPort_positive_dsSupportedTvResolutions(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -2636,7 +2626,7 @@ void test_l1_dsVideoPort_positive_dsSupportedTvResolutions(void) {
  */
 void test_l1_dsVideoPort_negative_dsSupportedTvResolutions(void) {
     gTestID = 42;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -2672,7 +2662,7 @@ void test_l1_dsVideoPort_negative_dsSupportedTvResolutions(void) {
     status = dsSupportedTvResolutions(handle, &resolutions);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -2699,7 +2689,7 @@ void test_l1_dsVideoPort_negative_dsSupportedTvResolutions(void) {
  */
 void test_l1_dsVideoPort_positive_dsSetForceDisable4KSupport(void) {
     gTestID = 43;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -2723,7 +2713,7 @@ void test_l1_dsVideoPort_positive_dsSetForceDisable4KSupport(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -2754,7 +2744,7 @@ void test_l1_dsVideoPort_positive_dsSetForceDisable4KSupport(void) {
  */
 void test_l1_dsVideoPort_negative_dsSetForceDisable4KSupport(void) {
     gTestID = 44;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -2787,7 +2777,7 @@ void test_l1_dsVideoPort_negative_dsSetForceDisable4KSupport(void) {
     status = dsSetForceDisable4KSupport(handle, disable4K);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -2808,15 +2798,15 @@ void test_l1_dsVideoPort_negative_dsSetForceDisable4KSupport(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call  dsGetForceDisable4KSupport() by looping through the acquired port handles and valid pointer to get the 4K support disabled or not and store it in an array | handle  = [loop through valid handles] , disable= [valid pointer] | dsERR_NONE | The 4K support disabled or not must be successfully retrieved |
- * |04|Call  dsGetForceDisable4KSupport() - Again by looping through the acquired port handles and valid pointer to get the 4K support disabled or not and store it in a new array | handle  = [loop through valid handles] , disable= [valid pointer] | dsERR_NONE | The 4K support disabled or not must be successfully retrieved or indicate that the operation isn't supported |
- * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |03|Call  dsGetForceDisable4KSupport() by looping through the acquired port handles and valid pointer to get the 4K support disabled or not and store it | handle  = [loop through valid handles] , disable= [valid pointer] | dsERR_NONE | The 4K support disabled or not must be successfully retrieved |
+ * |04|Call  dsGetForceDisable4KSupport() - Again by looping through the acquired port handles and valid pointer to get the 4K support disabled or not and store it | handle  = [loop through valid handles] , disable= [valid pointer] | dsERR_NONE | The 4K support disabled or not must be successfully retrieved or indicate that the operation isn't supported |
+ * |05|Check if the values are equal | | dsERR_NONE | The values must be equal |
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful | 
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetForceDisable4KSupport(void) {
     gTestID = 45;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -2838,7 +2828,7 @@ void test_l1_dsVideoPort_positive_dsGetForceDisable4KSupport(void) {
         // Step 04: Repeat the retrieval
         status = dsGetForceDisable4KSupport(handle, &disable4K2);
         UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
-        // Step 05: Compare the array values
+        // Step 05: Check if the values are equal
         UT_ASSERT_EQUAL(disable4K1, disable4K2);
     }
 
@@ -2846,7 +2836,7 @@ void test_l1_dsVideoPort_positive_dsGetForceDisable4KSupport(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -2878,12 +2868,12 @@ void test_l1_dsVideoPort_positive_dsGetForceDisable4KSupport(void) {
  */
 void test_l1_dsVideoPort_negative_dsGetForceDisable4KSupport(void) {
     gTestID = 46;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
 
-    bool disable4K = false; 
+    bool disable4K = false;
 
     // Step 01: Attempt to get 4K support status without initialization
     status = dsGetForceDisable4KSupport(-1, &disable4K);
@@ -2914,7 +2904,7 @@ void test_l1_dsVideoPort_negative_dsGetForceDisable4KSupport(void) {
     status = dsGetForceDisable4KSupport(handle, &disable4K);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -2935,15 +2925,15 @@ void test_l1_dsVideoPort_negative_dsGetForceDisable4KSupport(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetVideoEOTF() by looping through the acquired port handles and valid pointer to retrieve the current Electro-Optical Transfer Function (EOTF) value and store it in an array | handle = [loop through ports] , video_eotf = [valid pointer] |dsERR_NONE | Valid EOTF value must return a valid EOTF value of the specified video port|
- * |04|Call dsGetVideoEOTF() again by looping through the acquired port handles and valid pointer to retrieve the current Electro-Optical Transfer Function (EOTF) value and store it in an array | handle = [loop through ports] , video_eotf = [valid pointer] |dsERR_NONE | Valid EOTF value must return a valid EOTF value of the specified video port|
- * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |03|Call dsGetVideoEOTF() by looping through the acquired port handles and valid pointer to retrieve the current Electro-Optical Transfer Function (EOTF) value and store it | handle = [loop through ports] , video_eotf = [valid pointer] |dsERR_NONE | Valid EOTF value must return a valid EOTF value of the specified video port|
+ * |04|Call dsGetVideoEOTF() again by looping through the acquired port handles and valid pointer to retrieve the current Electro-Optical Transfer Function (EOTF) value and store it | handle = [loop through ports] , video_eotf = [valid pointer] |dsERR_NONE | Valid EOTF value must return a valid EOTF value of the specified video port|
+ * |05|Check if the values are equal | | dsERR_NONE | The values must be equal |
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetVideoEOTF(void) {
     gTestID = 47;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -2965,7 +2955,7 @@ void test_l1_dsVideoPort_positive_dsGetVideoEOTF(void) {
         // Step 04: Retrieve the EOTF value
         status = dsGetVideoEOTF(handle, &eotf2);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
-        // Step 05: Compare the array values
+        // Step 05: Check if the values are equal
         UT_ASSERT_EQUAL(eotf1, eotf2);
     }
 
@@ -2973,7 +2963,7 @@ void test_l1_dsVideoPort_positive_dsGetVideoEOTF(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -3005,7 +2995,7 @@ void test_l1_dsVideoPort_positive_dsGetVideoEOTF(void) {
  */
 void test_l1_dsVideoPort_negative_dsGetVideoEOTF(void) {
     gTestID = 48;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -3041,7 +3031,7 @@ void test_l1_dsVideoPort_negative_dsGetVideoEOTF(void) {
     status = dsGetVideoEOTF(handle, &eotf);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -3062,14 +3052,14 @@ void test_l1_dsVideoPort_negative_dsGetVideoEOTF(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetMatrixCoefficients() by looping through the acquired port handles and valid resolution pointer to retrieve the current matrix coefficients of a specified port  and store it in an array |handle  = [loop through valid handles] , matrix_coefficients = [valid pointer] |dsERR_NONE|must return a valid matrix coefficient value of the specified video port|
- * |04|Compare the array values with values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |03|Call dsGetMatrixCoefficients() by looping through the acquired port handles and valid resolution pointer to retrieve the current matrix coefficients of a specified port  |handle  = [loop through valid handles] , matrix_coefficients = [valid pointer] |dsERR_NONE|must return a valid matrix coefficient value of the specified video port|
+ * |04|Compare the values with values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
  * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetMatrixCoefficients(void) {
     gTestID = 49;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -3087,7 +3077,7 @@ void test_l1_dsVideoPort_positive_dsGetMatrixCoefficients(void) {
         // Step 03: Retrieve the matrix coefficients
         status = dsGetMatrixCoefficients(handle, &matrixCoefficients1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
-        // Step 04: Compare the array values
+        // Step 04: Compare the value with value from profile file
         UT_ASSERT_EQUAL(matrixCoefficients1, gDSVideoPortConfiguration[i].matrix_coefficients);
     }
 
@@ -3095,7 +3085,7 @@ void test_l1_dsVideoPort_positive_dsGetMatrixCoefficients(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -3127,7 +3117,7 @@ void test_l1_dsVideoPort_positive_dsGetMatrixCoefficients(void) {
  */
 void test_l1_dsVideoPort_negative_dsGetMatrixCoefficients(void) {
     gTestID = 50;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -3163,7 +3153,7 @@ void test_l1_dsVideoPort_negative_dsGetMatrixCoefficients(void) {
     status = dsGetMatrixCoefficients(handle, &matrixCoefficients);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -3184,14 +3174,14 @@ void test_l1_dsVideoPort_negative_dsGetMatrixCoefficients(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetColorDepth() by looping through the acquired port handles and valid pointer to retrieve the current color depth  & store in an array | handle  = [loop through valid handles] , color_depth = [valid pointer] | dsERR_NONE | must return a valid color depth value of the specified video port|
- * |04|Compare the array values with values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |03|Call dsGetColorDepth() by looping through the acquired port handles and valid pointer to retrieve the current color depth  | handle  = [loop through valid handles] , color_depth = [valid pointer] | dsERR_NONE | must return a valid color depth value of the specified video port|
+ * |04|Compare the values with values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetColorDepth(void) {
     gTestID = 51;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -3209,7 +3199,7 @@ void test_l1_dsVideoPort_positive_dsGetColorDepth(void) {
         // Step 03: Retrieve the color depth
         status = dsGetColorDepth(handle, &colorDepth1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
-        // Step 04: Compare the array values
+        // Step 04: Compare the value with values from profile file
         UT_ASSERT_EQUAL(colorDepth1, gDSvideoPort_color_depth);
     }
 
@@ -3217,7 +3207,7 @@ void test_l1_dsVideoPort_positive_dsGetColorDepth(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -3249,7 +3239,7 @@ void test_l1_dsVideoPort_positive_dsGetColorDepth(void) {
  */
 void test_l1_dsVideoPort_negative_dsGetColorDepth(void) {
     gTestID = 52;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -3285,7 +3275,7 @@ void test_l1_dsVideoPort_negative_dsGetColorDepth(void) {
     status = dsGetColorDepth(handle, &colorDepth);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -3306,14 +3296,14 @@ void test_l1_dsVideoPort_negative_dsGetColorDepth(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetColorSpace() by looping through the acquired port handles and valid pointer to retrieve the current color space setting of video port & store it in an array |handle  = [loop through valid handles] , color_space = [valid pointer] |Valid color space value|must return a valid color space setting of the specified video port|
- * |04|Compare the array values with values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |03|Call dsGetColorSpace() by looping through the acquired port handles and valid pointer to retrieve the current color space setting of video port |handle  = [loop through valid handles] , color_space = [valid pointer] |Valid color space value|must return a valid color space setting of the specified video port|
+ * |04|Compare the values with values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
  * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetColorSpace(void) {
     gTestID = 53;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -3331,8 +3321,8 @@ void test_l1_dsVideoPort_positive_dsGetColorSpace(void) {
         // Step 03: Retrieve the color space
         status = dsGetColorSpace(handle, &colorSpace1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
-        // Step 04: Compare the array values
-        UT_ASSERT_EQUAL(colorSpace1, (dsDisplayColorSpace_t)gDSVideoPortConfiguration[i].colorspaces);
+        // Step 04: Compare the value with value from profile file
+        UT_ASSERT_EQUAL(colorSpace1, gDSVideoPortConfiguration[i].colorspaces);
 
     }
 
@@ -3340,7 +3330,7 @@ void test_l1_dsVideoPort_positive_dsGetColorSpace(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 /**
@@ -3371,7 +3361,7 @@ void test_l1_dsVideoPort_positive_dsGetColorSpace(void) {
  */
 void test_l1_dsVideoPort_negative_dsGetColorSpace(void) {
     gTestID = 54;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -3407,7 +3397,7 @@ void test_l1_dsVideoPort_negative_dsGetColorSpace(void) {
     status = dsGetColorSpace(handle, &colorSpace);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 /**
@@ -3427,14 +3417,14 @@ void test_l1_dsVideoPort_negative_dsGetColorSpace(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetQuantizationRange() by looping through the acquired port handles and valid pointer to retrieve the current quantization range & store it in an array |handle  = [loop through valid handles] , quantization_range = [valid pointer] |dsERR_NONE | must return a valid quantization range of the specified video port|
- * |04|Compare the array values with values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |03|Call dsGetQuantizationRange() by looping through the acquired port handles and valid pointer to retrieve the current quantization range  |handle  = [loop through valid handles] , quantization_range = [valid pointer] |dsERR_NONE | must return a valid quantization range of the specified video port|
+ * |04|Compare the values with values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
  * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetQuantizationRange(void) {
     gTestID = 55;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -3452,15 +3442,15 @@ void test_l1_dsVideoPort_positive_dsGetQuantizationRange(void) {
         // Step 03: Retrieve the quantization range
         status = dsGetQuantizationRange(handle, &quantizationRange1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
-        // Step 04: Compare the array values
-        UT_ASSERT_EQUAL(quantizationRange1, (dsDisplayQuantizationRange_t)gDSVideoPortConfiguration[i].quantization_ranges);
+        // Step 04: Compare the value with value from profile file
+        UT_ASSERT_EQUAL(quantizationRange1, gDSVideoPortConfiguration[i].quantization_ranges);
     }
 
     // Step 05: Terminate the video port system
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 /**
@@ -3491,7 +3481,7 @@ void test_l1_dsVideoPort_positive_dsGetQuantizationRange(void) {
  */
 void test_l1_dsVideoPort_negative_dsGetQuantizationRange(void) {
     gTestID = 56;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -3527,7 +3517,7 @@ void test_l1_dsVideoPort_negative_dsGetQuantizationRange(void) {
     status = dsGetQuantizationRange(handle, &quantizationRange);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -3548,15 +3538,15 @@ void test_l1_dsVideoPort_negative_dsGetQuantizationRange(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetCurrentOutputSettings() by looping through the acquired port handles and valid pointer to retrieve the current output settings and store it in an array | handle= [loop through valid handles] , video_eotf = [valid EOTF pointer], matrix_coefficients = = [valid matrix coefficient pointer], color_space = [valid color space pointer], color_depth = [valid color depth pointer], quantization_range = [valid quantization range pointer]| dsERR_NONE and valid settings| All the output settings for the specified video port must be returned |
- * |04|Call dsGetCurrentOutputSettings() again by looping through the acquired port handles and valid pointer to retrieve the current output settings and store it in an array | handle= [loop through valid handles] , video_eotf = [valid EOTF pointer], matrix_coefficients = = [valid matrix coefficient pointer], color_space = [valid color space pointer], color_depth = [valid color depth pointer], quantization_range = [valid quantization range pointer]| dsERR_NONE and valid settings| All the output settings for the specified video port must be returned |
- * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |03|Call dsGetCurrentOutputSettings() by looping through the acquired port handles and valid pointer to retrieve the current output settings and store it | handle= [loop through valid handles] , video_eotf = [valid EOTF pointer], matrix_coefficients = = [valid matrix coefficient pointer], color_space = [valid color space pointer], color_depth = [valid color depth pointer], quantization_range = [valid quantization range pointer]| dsERR_NONE and valid settings| All the output settings for the specified video port must be returned |
+ * |04|Call dsGetCurrentOutputSettings() again by looping through the acquired port handles and valid pointer to retrieve the current output settings and store it | handle= [loop through valid handles] , video_eotf = [valid EOTF pointer], matrix_coefficients = = [valid matrix coefficient pointer], color_space = [valid color space pointer], color_depth = [valid color depth pointer], quantization_range = [valid quantization range pointer]| dsERR_NONE and valid settings| All the output settings for the specified video port must be returned |
+ * |05| Check if the values are equal | | dsERR_NONE | The values must be equal |
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetCurrentOutputSettings(void) {
     gTestID = 57;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle[gDSvideoPort_NumberOfPorts];
@@ -3591,7 +3581,7 @@ void test_l1_dsVideoPort_positive_dsGetCurrentOutputSettings(void) {
         status = dsGetCurrentOutputSettings(handle[i], &hdrstandard2 ,&matrixcoef2, &colorspace2,\
                 &colordepth2, &quant_range2);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
-        // Step 05: Compare the array values
+        // Step 05: Check if the values are equal
         UT_ASSERT_EQUAL(hdrstandard1, hdrstandard2);
         UT_ASSERT_EQUAL(matrixcoef1, matrixcoef2);
         UT_ASSERT_EQUAL(colorspace1, colorspace2);
@@ -3603,7 +3593,7 @@ void test_l1_dsVideoPort_positive_dsGetCurrentOutputSettings(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -3639,7 +3629,7 @@ void test_l1_dsVideoPort_positive_dsGetCurrentOutputSettings(void) {
  */
 void test_l1_dsVideoPort_negative_dsGetCurrentOutputSettings(void) {
     gTestID = 58;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status; 
     intptr_t handle = 0;
@@ -3698,7 +3688,7 @@ void test_l1_dsVideoPort_negative_dsGetCurrentOutputSettings(void) {
             &colordepth, &quant_range);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -3719,16 +3709,16 @@ void test_l1_dsVideoPort_negative_dsGetCurrentOutputSettings(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsIsOutputHDR() - by looping through acquired port handles to check if the video output is HDR or not & store it in an array |  handle = [valid handle], hdr = [valid pointer to hold hdr status value](true = HDR) | dsERR_NONE | Flag which holds the HDR status( @a true if Video Output is HDR and @a false otherwise ) of Video Port must be returned |
- * |04|Call dsIsOutputHDR() - Again by looping through acquired port handles to check if the video output is HDR or not & store it in a new array |  handle = [valid handle], hdr = [valid pointer to hold hdr status value](true = HDR) | dsERR_NONE | Flag which holds the HDR status( @a true if Video Output is HDR and @a false otherwise ) of Video Port must be returned |
- * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |03|Call dsIsOutputHDR() - by looping through acquired port handles to check if the video output is HDR or not & store it |  handle = [valid handle], hdr = [valid pointer to hold hdr status value](true = HDR) | dsERR_NONE | Flag which holds the HDR status( @a true if Video Output is HDR and @a false otherwise ) of Video Port must be returned |
+ * |04|Call dsIsOutputHDR() - Again by looping through acquired port handles to check if the video output is HDR or not & store it |  handle = [valid handle], hdr = [valid pointer to hold hdr status value](true = HDR) | dsERR_NONE | Flag which holds the HDR status( @a true if Video Output is HDR and @a false otherwise ) of Video Port must be returned |
+ * |05|Check if the values are equal | | dsERR_NONE | The values must be equal |
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  * 
  */
 void test_l1_dsVideoPort_positive_dsIsOutputHDR(void) {
     gTestID = 59;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -3745,12 +3735,12 @@ void test_l1_dsVideoPort_positive_dsIsOutputHDR(void) {
         status = dsGetVideoPort(gDSVideoPortConfiguration[i].typeid, gDSVideoPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
         // Step 03: Check HDR status
-        status = dsIsOutputHDR(handle, &hdr2);
+        status = dsIsOutputHDR(handle, &hdr1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
         // Step 04: Repeat the HDR status check
         status = dsIsOutputHDR(handle, &hdr2);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
-        // Step 05: Compare the array values
+        // Step 05: Check if the values are equal
         UT_ASSERT_EQUAL(hdr1, hdr2);
     }
 
@@ -3758,7 +3748,7 @@ void test_l1_dsVideoPort_positive_dsIsOutputHDR(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -3790,7 +3780,7 @@ void test_l1_dsVideoPort_positive_dsIsOutputHDR(void) {
  */
 void test_l1_dsVideoPort_negative_dsIsOutputHDR(void) {
     gTestID = 60;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -3826,7 +3816,7 @@ void test_l1_dsVideoPort_negative_dsIsOutputHDR(void) {
     status = dsIsOutputHDR(handle, &hdrStatus);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -3853,7 +3843,7 @@ void test_l1_dsVideoPort_negative_dsIsOutputHDR(void) {
  */
 void test_l1_dsVideoPort_positive_dsResetOutputToSDR(void) {
     gTestID = 61;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
 
@@ -3873,7 +3863,7 @@ void test_l1_dsVideoPort_positive_dsResetOutputToSDR(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -3902,7 +3892,7 @@ void test_l1_dsVideoPort_positive_dsResetOutputToSDR(void) {
  */
 void test_l1_dsVideoPort_negative_dsResetOutputToSDR(void) {
     gTestID = 62;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
 
@@ -3922,7 +3912,7 @@ void test_l1_dsVideoPort_negative_dsResetOutputToSDR(void) {
     status = dsResetOutputToSDR();
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -3949,7 +3939,7 @@ void test_l1_dsVideoPort_negative_dsResetOutputToSDR(void) {
  */
 void test_l1_dsVideoPort_positive_dsSetHdmiPreference(void) {
     gTestID = 63;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -3964,8 +3954,7 @@ void test_l1_dsVideoPort_positive_dsSetHdmiPreference(void) {
         status = dsGetVideoPort(gDSVideoPortConfiguration[i].typeid, gDSVideoPortConfiguration[i].index, &(handle));
         UT_ASSERT_EQUAL(status, dsERR_NONE);
         // Step 03: Set the HDMI preference
-        dsHdcpProtocolVersion_t hdcpCurrentProtocol = gDSVideoPortConfiguration[i].hdcp_protocol_version;
-        status = dsSetHdmiPreference(handle, &hdcpCurrentProtocol);
+        status = dsSetHdmiPreference(handle, &(gDSVideoPortConfiguration[i].hdcp_protocol_version));
         UT_ASSERT_EQUAL(status, dsERR_NONE);
     }
 
@@ -3973,7 +3962,7 @@ void test_l1_dsVideoPort_positive_dsSetHdmiPreference(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -4005,7 +3994,7 @@ void test_l1_dsVideoPort_positive_dsSetHdmiPreference(void) {
  */
 void test_l1_dsVideoPort_negative_dsSetHdmiPreference(void) {
     gTestID = 64;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -4041,7 +4030,7 @@ void test_l1_dsVideoPort_negative_dsSetHdmiPreference(void) {
     status = dsSetHdmiPreference(handle, &in_range);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -4062,14 +4051,14 @@ void test_l1_dsVideoPort_negative_dsSetHdmiPreference(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetHdmiPreference() - by looping through the acquired port handles to get the HDMI Preference of each video ports which supports HDCP & store it in an array | handle = [valid handle], hdcpCurrentProtocol = [valid pointer] | dsERR_NONE |  The Current HDMI Preference must be returned |
- * |04|Compare the array values with values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |03|Call dsGetHdmiPreference() - by looping through the acquired port handles to get the HDMI Preference of each video ports which supports HDCP | handle = [valid handle], hdcpCurrentProtocol = [valid pointer] | dsERR_NONE |  The Current HDMI Preference must be returned |
+ * |04|Compare the values with values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
  * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetHdmiPreference(void) {
     gTestID = 65;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -4087,8 +4076,8 @@ void test_l1_dsVideoPort_positive_dsGetHdmiPreference(void) {
         // Step 03: Get the HDMI preference
         status = dsGetHdmiPreference(handle, &hdcpCurrentProtocol1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
-        // Step 04: Compare the array values and make sure they are equal
-        UT_ASSERT_EQUAL(hdcpCurrentProtocol1, (dsHdcpProtocolVersion_t)gDSVideoPortConfiguration[i].hdcp_protocol_version);
+        // Step 04: Compare the value and make sure they are equal
+        UT_ASSERT_EQUAL(hdcpCurrentProtocol1, gDSVideoPortConfiguration[i].hdcp_protocol_version);
 
     }
 
@@ -4096,7 +4085,7 @@ void test_l1_dsVideoPort_positive_dsGetHdmiPreference(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -4128,7 +4117,7 @@ void test_l1_dsVideoPort_positive_dsGetHdmiPreference(void) {
  */
 void test_l1_dsVideoPort_negative_dsGetHdmiPreference(void) {
     gTestID = 66;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -4164,7 +4153,7 @@ void test_l1_dsVideoPort_negative_dsGetHdmiPreference(void) {
     status = dsGetHdmiPreference(handle, &hdcpCurrentProtocol);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -4185,15 +4174,15 @@ void test_l1_dsVideoPort_negative_dsGetHdmiPreference(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetIgnoreEDIDStatus() by looping through acquired handles and valid pointer to get IgnoreEDID status & store it in an array |handle=[valid handle] ,status=[valid pointer] |dsERR_NONE | must successfully get the IgnoreEDID status or indicate that the operation isn't supported|
- * |04|Call dsGetIgnoreEDIDStatus() - Again by looping through acquired handles and valid pointer to get IgnoreEDID status & store it in a new array |handle=[valid handle] ,status=[valid pointer] |dsERR_NONE | must successfully get the IgnoreEDID status|
- * |05|Compare the array values and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |03|Call dsGetIgnoreEDIDStatus() by looping through acquired handles and valid pointer to get IgnoreEDID status & store it |handle=[valid handle] ,status=[valid pointer] |dsERR_NONE | must successfully get the IgnoreEDID status or indicate that the operation isn't supported|
+ * |04|Call dsGetIgnoreEDIDStatus() - Again by looping through acquired handles and valid pointer to get IgnoreEDID status & store it |handle=[valid handle] ,status=[valid pointer] |dsERR_NONE | must successfully get the IgnoreEDID status|
+ * |05|Check if the values are equal | | dsERR_NONE | The values must be equal |
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetIgnoreEDIDStatus(void) {
     gTestID = 67;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -4216,7 +4205,7 @@ void test_l1_dsVideoPort_positive_dsGetIgnoreEDIDStatus(void) {
             // Step 04: Repeat getting IgnoreEDID status
             status = dsGetIgnoreEDIDStatus(handle, &ignoreEDIDStatus2);
             UT_ASSERT_EQUAL(status, dsERR_NONE);
-            // Step 05: Compare the array values and make sure they are equal
+            // Step 05: Check if the values are equal
             UT_ASSERT_EQUAL(ignoreEDIDStatus1, ignoreEDIDStatus2);
         } else if (gSourceType == 0) {
             UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
@@ -4227,7 +4216,7 @@ void test_l1_dsVideoPort_positive_dsGetIgnoreEDIDStatus(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -4259,7 +4248,7 @@ void test_l1_dsVideoPort_positive_dsGetIgnoreEDIDStatus(void) {
  */
 void test_l1_dsVideoPort_negative_dsGetIgnoreEDIDStatus(void) {
     gTestID = 68;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -4295,7 +4284,7 @@ void test_l1_dsVideoPort_negative_dsGetIgnoreEDIDStatus(void) {
     status = dsGetIgnoreEDIDStatus(handle, &ignoreEDIDStatus);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -4322,7 +4311,7 @@ void test_l1_dsVideoPort_negative_dsGetIgnoreEDIDStatus(void) {
  */
 void test_l1_dsVideoPort_positive_dsSetBackgroundColor(void) {
     gTestID = 69;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -4350,7 +4339,7 @@ void test_l1_dsVideoPort_positive_dsSetBackgroundColor(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -4382,7 +4371,7 @@ void test_l1_dsVideoPort_positive_dsSetBackgroundColor(void) {
  */
 void test_l1_dsVideoPort_negative_dsSetBackgroundColor(void) {
     gTestID = 70;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -4416,7 +4405,7 @@ void test_l1_dsVideoPort_negative_dsSetBackgroundColor(void) {
     status = dsSetBackgroundColor(handle, dsVIDEO_BGCOLOR_BLACK);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -4443,7 +4432,7 @@ void test_l1_dsVideoPort_negative_dsSetBackgroundColor(void) {
  */
 void test_l1_dsVideoPort_positive_dsSetForceHDRMode(void) {
     gTestID = 71;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -4469,7 +4458,7 @@ void test_l1_dsVideoPort_positive_dsSetForceHDRMode(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -4501,7 +4490,7 @@ void test_l1_dsVideoPort_positive_dsSetForceHDRMode(void) {
  */
 void test_l1_dsVideoPort_negative_dsSetForceHDRMode(void) {
     gTestID = 72;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -4536,7 +4525,7 @@ void test_l1_dsVideoPort_negative_dsSetForceHDRMode(void) {
     status = dsSetForceHDRMode(handle, mode);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -4557,14 +4546,14 @@ void test_l1_dsVideoPort_negative_dsSetForceHDRMode(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsColorDepthCapabilities() by looping through the acquired ports and valid pointer to get the color depth capabilities & store it in an array |handle=[vallid handle], colorDepthCapability=[valid pointer] |dsERR_NONE  Color depth capabilities must be retrieved successfully or indicate that the operation isn't supported |
- * |05|Compare the array values with the value read from profile file | dsERR_NONE | The values must be equal |
+ * |03|Call dsColorDepthCapabilities() by looping through the acquired ports and valid pointer to get the color depth capabilities |handle=[vallid handle], colorDepthCapability=[valid pointer] |dsERR_NONE  Color depth capabilities must be retrieved successfully or indicate that the operation isn't supported |
+ * |05|Compare the values with the value read from profile file | dsERR_NONE | The values must be equal |
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsColorDepthCapabilities(void) {
     gTestID = 73;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle;
@@ -4583,7 +4572,7 @@ void test_l1_dsVideoPort_positive_dsColorDepthCapabilities(void) {
         status = dsColorDepthCapabilities(handle, &colorDepthCapability1);
         if (gSourceType == 1) {
             UT_ASSERT_EQUAL(status, dsERR_NONE);
-            // Step 04: Compare array values with values from profile file
+            // Step 04: Compare value with value from profile file
             UT_ASSERT_EQUAL(colorDepthCapability1, gDSvideoPort_color_depth);
         } else if (gSourceType == 0) {
             UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
@@ -4594,7 +4583,7 @@ void test_l1_dsVideoPort_positive_dsColorDepthCapabilities(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -4626,7 +4615,7 @@ void test_l1_dsVideoPort_positive_dsColorDepthCapabilities(void) {
  */
 void test_l1_dsVideoPort_negative_dsColorDepthCapabilities(void) {
     gTestID = 74;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -4662,7 +4651,7 @@ void test_l1_dsVideoPort_negative_dsColorDepthCapabilities(void) {
     status = dsColorDepthCapabilities(handle, &colorDepthCapability);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 /**
@@ -4682,13 +4671,13 @@ void test_l1_dsVideoPort_negative_dsColorDepthCapabilities(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetPreferredColorDepth by looping through acquired handles and valid pointer to get the preferred color depth of each port & store it in an array |handle=[valid handle] , colorDepth=[valid pointer]|dsERR_NONE|Preferred Color depth must be retrieved successfully or indicate that the operation isn't supported|
+ * |03|Call dsGetPreferredColorDepth by looping through acquired handles and valid pointer to get the preferred color depth of each port |handle=[valid handle] , colorDepth=[valid pointer]|dsERR_NONE|Preferred Color depth must be retrieved successfully or indicate that the operation isn't supported|
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsGetPreferredColorDepth(void) {
     gTestID = 75;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle;
@@ -4710,8 +4699,7 @@ void test_l1_dsVideoPort_positive_dsGetPreferredColorDepth(void) {
         status = dsGetPreferredColorDepth(handle, &colorDepth1);
         if (gSourceType == 1) {
             UT_ASSERT_EQUAL(status, dsERR_NONE);
-            dsDisplayColorDepth_t colorDepth = getColorDepth();
-            UT_ASSERT_EQUAL(colorDepth1, colorDepth);
+            UT_ASSERT_EQUAL(colorDepth1, getColorDepth());
         } else if (gSourceType == 0) {
             UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
         }
@@ -4721,7 +4709,7 @@ void test_l1_dsVideoPort_positive_dsGetPreferredColorDepth(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -4753,7 +4741,7 @@ void test_l1_dsVideoPort_positive_dsGetPreferredColorDepth(void) {
  */
 void test_l1_dsVideoPort_negative_dsGetPreferredColorDepth(void) {
     gTestID = 76;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -4789,7 +4777,7 @@ void test_l1_dsVideoPort_negative_dsGetPreferredColorDepth(void) {
     status = dsGetPreferredColorDepth(handle, &colorDepth);
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 /**
@@ -4815,7 +4803,7 @@ void test_l1_dsVideoPort_negative_dsGetPreferredColorDepth(void) {
  */
 void test_l1_dsVideoPort_positive_dsSetPreferredColorDepth(void) {
     gTestID = 77;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -4842,7 +4830,7 @@ void test_l1_dsVideoPort_positive_dsSetPreferredColorDepth(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -4874,7 +4862,7 @@ void test_l1_dsVideoPort_positive_dsSetPreferredColorDepth(void) {
  */
 void test_l1_dsVideoPort_negative_dsSetPreferredColorDepth(void) {
     gTestID = 78;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO(" In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status;
     intptr_t handle = 0;
@@ -4908,7 +4896,7 @@ void test_l1_dsVideoPort_negative_dsSetPreferredColorDepth(void) {
     status = dsSetPreferredColorDepth(handle, dsDISPLAY_COLORDEPTH_12BIT );
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
 
 
@@ -5006,9 +4994,8 @@ int test_l1_dsVideoPort_register ( void )
     UT_add_test( pSuite, "dsGetPreferredColorDepth_L1_negative" ,test_l1_dsVideoPort_negative_dsGetPreferredColorDepth );
     UT_add_test( pSuite, "dsSetPreferredColorDepth_L1_positive" ,test_l1_dsVideoPort_positive_dsSetPreferredColorDepth );
     UT_add_test( pSuite, "dsSetPreferredColorDepth_L1_negative" ,test_l1_dsVideoPort_negative_dsSetPreferredColorDepth );
-   
+
    extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsVideoPort/features/extendedEnumsSupported" );
-   
 
     return 0;
 } 
