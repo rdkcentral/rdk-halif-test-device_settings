@@ -1054,6 +1054,81 @@ void test_l2_dsVideoPort_GetMatrixCoefficients(void)
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
+/**
+* @brief Test to verify the functionality of dsSetAllmEnabled and dsGetAllmEnabled APIs
+*
+* This test case verifies the functionality of dsSetAllmEnabled and dsGetAllmEnabled APIs.
+* The test case initializes the video port, gets the video port handle, sets the ALLM status and verifies it with the dsGetAllmEnabled.
+* The test case also ensures that the API returns the correct status codes at each step.
+*
+* **Test Group ID:** 02@n
+* **Test Case ID:** 016@n
+*
+* **Test Procedure:**
+* Refer to Test specification documentation [ds-video-port_L2_Low-Level_TestSpecification.md](../docs/pages/ds-video-port_L2_Low-Level_TestSpecification.md)
+*/
+
+void test_l2_dsVideoPort_CheckALLMStatus_source(void)
+{
+    gTestID = 16;
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t ret   = dsERR_NONE;
+    intptr_t handle = 0;
+    bool enabled = false;
+
+    UT_LOG_DEBUG("Invoking dsVideoPortInit()");
+    ret = dsVideoPortInit();
+    UT_LOG_DEBUG("Return status: %d", ret);
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+
+    for (int port = 0; port < gDSvideoPort_NumberOfPorts; port++) {
+        if(gDSVideoPortConfiguration[port].typeid != dsVIDEOPORT_TYPE_HDMI) {
+            continue;
+        }
+
+        UT_LOG_DEBUG("Invoking dsGetVideoPort with type: %d and index: %d",
+                           gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index);
+
+        ret = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        if (ret != dsERR_NONE) {
+            UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
+            continue;
+        }
+
+        UT_LOG_DEBUG("Invoking dsSetAllmEnabled() with true");
+        ret = dsSetAllmEnabled(handle, true);
+        UT_LOG_DEBUG("Return status: %d", ret);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+
+        UT_LOG_DEBUG("Invoking dsGetAllmEnabled()");
+        ret = dsGetAllmEnabled(handle, &enabled);
+        UT_LOG_DEBUG("Return status: %d, ALLM Status: %d", ret, enabled);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_EQUAL(enabled, true);
+
+        UT_LOG_DEBUG("Invoking dsSetAllmEnabled() with false");
+        ret = dsSetAllmEnabled(handle, false);
+        UT_LOG_DEBUG("Return status: %d", ret);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+
+        UT_LOG_DEBUG("Invoking dsGetAllmEnabled()");
+        ret = dsGetAllmEnabled(handle, &enabled);
+        UT_LOG_DEBUG("Return status: %d, ALLM Status: %d", ret, enabled);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_EQUAL(enabled, false);
+
+    } /* for (port) */
+
+    UT_LOG_DEBUG("Invoking dsVideoPortTerm()");
+    ret = dsVideoPortTerm();
+    UT_LOG_DEBUG("Return status: %d", ret);
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
+}
+
 static UT_test_suite_t * pSuite = NULL;
 
 /**
@@ -1092,6 +1167,7 @@ int test_l2_dsVideoPort_register(void)
         UT_add_test( pSuite, "L2_SetAndGetResolution_source", test_l2_dsVideoPort_SetAndGetResolution_source);
         UT_add_test( pSuite, "L2_SetAndGetPreferredColorDepth_source", test_l2_dsVideoPort_SetAndGetPreferredColorDepth_source);
         UT_add_test( pSuite, "L2_CheckColorDepthCapabilities_source", test_l2_dsVideoPort_CheckColorDepthCapabilities_source);
+        UT_add_test( pSuite, "L2_CheckALLMStatus_source", test_l2_dsVideoPort_CheckALLMStatus_source);
     }
 
     return 0;
