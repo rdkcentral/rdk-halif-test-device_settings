@@ -367,7 +367,8 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetStatus(void) {
 
     gTestID = 7;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsHdmiInStatus_t status1={0} , status2 = {0};
+    dsHdmiInStatus_t status1={0};
+    dsHdmiInStatus_t status2={0};
     uint8_t numInputPorts = 0;
 
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
