@@ -462,9 +462,9 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetStatus(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_0, bool: false, dsVideoPlane_PRIMARY, bool false| dsERR_NONE | Port 0 should be selected |
- * |03|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_1, bool: true, dsVideoPlane_SECONDARY, bool true| dsERR_NONE | Port 1 should be selected |
- * |04|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_2, bool: false, dsVideoPlane_PRIMARY, bool false| dsERR_NONE | Port 2 should be selected |
+ * |02|Call dsHdmiInSelectPort() |[Valid Port], bool: false, dsVideoPlane_PRIMARY, bool false| dsERR_NONE |for primary video plane |
+ * |03|Call dsHdmiInSelectPort() |[Valid Port], bool: true, dsVideoPlane_SECONDARY, bool true| dsERR_NONE |for secondary  video plane |
+ * |04|Call dsHdmiInSelectPort() |[Valid Port], bool: false, dsVideoPlane_PRIMARY, bool false| dsERR_NONE |for primary video plane
  * |05||Call dsHdmiInSelectPort() | dsERR_OPERATION_NOT_SUPPORTED | Loop through the ports where HDMI input is not supported
  * |06|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  *
@@ -480,16 +480,13 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSelectPort(void) {
 
     numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
     if (numInputPorts > 0) {
-
+        // Step 2 to Step 4: Call dsHdmiInSelectPort() with valid inputs
         for (uint8_t i = dsHDMI_IN_PORT_0; i < numInputPorts; i++)
         {
-             // Step 2: Call dsHdmiInSelectPort() to select Port 0
              UT_ASSERT_EQUAL(dsHdmiInSelectPort(i, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
 
-             // Step 3: Call dsHdmiInSelectPort() to select Port 1
              UT_ASSERT_EQUAL(dsHdmiInSelectPort(i, true, dsVideoPlane_SECONDARY, true), dsERR_NONE);
 
-             // Step 4: Call dsHdmiInSelectPort() to select Port 2
              UT_ASSERT_EQUAL(dsHdmiInSelectPort(i, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
        }
     } else {
@@ -533,7 +530,6 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectPort(void) {
 
     gTestID = 10;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    uint8_t numInputPorts = 0;
 
     // Step 1: Call dsHdmiInSelectPort() without initializing the HDMI input sub-system
     dsError_t result = dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false);
@@ -542,15 +538,11 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectPort(void) {
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
-    for (uint8_t i = dsHDMI_IN_PORT_0; i < numInputPorts; i++)
-    {
-	  // Step 3: Call dsHdmiInSelectPort() with an invalid value
-          UT_ASSERT_EQUAL(dsHdmiInSelectPort(i, false, dsVideoPlane_PRIMARY, false), dsERR_INVALID_PARAM);
+    // Step 3: Call dsHdmiInSelectPort() with an invalid value
+    UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_MAX, false, dsVideoPlane_PRIMARY, false), dsERR_INVALID_PARAM);
 
-          // Step 4: Call dsHdmiInSelectPort() with an invalid plane value
-          UT_ASSERT_EQUAL(dsHdmiInSelectPort(i, false, dsVideoPlane_MAX, false), dsERR_INVALID_PARAM);
-    }
+    // Step 4: Call dsHdmiInSelectPort() with an invalid plane value
+    UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_MAX, false), dsERR_INVALID_PARAM);
 
     // Step 5: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
@@ -716,9 +708,8 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSelectZoomMode_source(void) {
         UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
 
         // Step 3: Loop through all dsVideoZoom_t values and call dsHdmiInSelectZoomMode()
-        for (int i = dsVIDEO_ZOOM_NONE; i < dsVIDEO_ZOOM_MAX; i++) {
-              dsVideoZoom_t zoomMode = i;
-              UT_ASSERT_EQUAL(dsHdmiInSelectZoomMode(zoomMode), dsERR_NONE);
+        for (dsVideoZoom_t i = dsVIDEO_ZOOM_NONE; i < dsVIDEO_ZOOM_MAX; i++) {
+              UT_ASSERT_EQUAL(dsHdmiInSelectZoomMode(i), dsERR_NONE);
         }
     } else {
        // Step 4:Calling dsHdmiInSelectZoomMode(dsVIDEO_ZOOM_MAX)
@@ -2376,18 +2367,14 @@ void test_l1_dsHdmiIn_positive_dsSetEdid2AllmSupport_sink(void) {
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
     if (gSourceType == 0) {
-        // Step 2: Call dsSetEdid2AllmSupport() with all valid ports and enable EDID ALLM support
         for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++)
-        {
+        {     // Step 2: Enable EDID ALLM support
               result = dsSetEdid2AllmSupport(port, true);
               UT_ASSERT_EQUAL(result, dsERR_NONE);
-        }
+	      // Step 3: Disable EDID ALLM support
+	      result = dsSetEdid2AllmSupport(port, false);
+	      UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-        // Step 3: Call dsSetEdid2AllmSupport() to disable EDID ALLM support
-        for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++)
-        {
-              result = dsSetEdid2AllmSupport(port, false);
-              UT_ASSERT_EQUAL(result, dsERR_NONE);
         }
 
     } else if (gSourceType == 1) {
