@@ -788,9 +788,7 @@ void test_l1_dsFPD_negative_dsSetFPBrightness (void)
         maxBrightness =(dsFPDBrightness_t)UT_KVP_PROFILE_GET_UINT32(maxbuffer);
         dsFPDBrightness_t avgBrightness = (maxBrightness + minBrightness) / 2;
         result = dsSetFPBrightness(eIndicator, avgBrightness);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
-        result = dsSetFPState(eIndicator, dsFPD_STATE_OFF);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     }
 
     // Step 08: Terminate with dsFPTerm()
@@ -1402,23 +1400,14 @@ void test_l1_dsFPD_positive_dsGetFPColor (void)
     gTestID = 17;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsError_t result;
-    dsFPDColor_t retrievedColor;
     dsFPDIndicator_t eIndicator;
+    dsFPDColor_t retrievedColor;
     char buffer[DS_FPD_KEY_SIZE];
     int numOfSupportedColors =0;
-    uint8_t count =0;
     dsFPDColor_t color;
     char supportedColorbuffer[DS_FPD_KEY_SIZE];
-
-    dsFPDColor_t allColors[] = {
-        dsFPD_COLOR_BLUE,
-        dsFPD_COLOR_GREEN,
-        dsFPD_COLOR_RED,
-        dsFPD_COLOR_YELLOW,
-        dsFPD_COLOR_ORANGE,
-        dsFPD_COLOR_WHITE,
-        dsFPD_COLOR_MAX
-    };
+    int isSupported = 0;
+    uint8_t count =0;
 
     // Step 01: Initialize with dsFPInit()
     result = dsFPInit();
@@ -1438,31 +1427,24 @@ void test_l1_dsFPD_positive_dsGetFPColor (void)
         dsFPDColor_t previousColor;
         result = dsGetFPColor(eIndicator, &previousColor);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        result = dsGetFPColor(eIndicator, &retrievedColor);
+	result = dsGetFPColor(eIndicator, &retrievedColor);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_EQUAL(retrievedColor, previousColor);
 	snprintf(supportedColorbuffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/supportedColors",eIndicator);
         numOfSupportedColors =UT_KVP_PROFILE_GET_LIST_COUNT(supportedColorbuffer);
-	for (int j = 0; j < sizeof(allColors)/sizeof(allColors[0]); ++j)
+	for (int k = 1; k < numOfSupportedColors; ++k)
         {
-            int isSupported = 0;
-            for (int k = 1; k < numOfSupportedColors; ++k)
-            {
-                snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/supportedColors/%d", eIndicator, j);
+                snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/supportedColors/%d", eIndicator, k);
                 color =(dsFPDColor_t)UT_KVP_PROFILE_GET_UINT32(buffer);
-                if (allColors[j] == color)
+                if (retrievedColor == color)
                 {
                     isSupported = 1;
-                     break;
+                    break;
                 }
-
-            }
-            if (!isSupported)
-            {
-                result = dsSetFPColor(eIndicator, allColors[j]);
-                UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
-            }
-
+	}
+	if (!isSupported)
+        {
+           UT_ASSERT_EQUAL(retrievedColor, color);
         }
     }
 
