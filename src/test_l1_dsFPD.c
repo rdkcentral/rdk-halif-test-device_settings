@@ -1449,13 +1449,7 @@ void test_l1_dsFPD_positive_dsGetFPColor (void)
     }
 
     // Step 05: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
-    for (int i = 1; i <= count; i++)
-    {
-        snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
-        eIndicator =(dsFPDIndicator_t)UT_KVP_PROFILE_GET_UINT32(buffer);
-        result = dsSetFPState(eIndicator, dsFPD_STATE_OFF);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
-    }
+    disableFPDIndicators(count);
 
     // Step 06: Terminate with dsFPTerm()
     result = dsFPTerm();
