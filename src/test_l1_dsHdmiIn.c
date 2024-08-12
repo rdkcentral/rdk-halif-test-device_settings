@@ -1558,13 +1558,13 @@ void test_l1_dsHdmiIn_positive_dsIsHdmiARCPort_sink(void) {
     if (gSourceType == 0) {
         // step 2 to Step 3: validating dsIsHdmiARCPort with valid Input and compare the Results
         for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
-             result = dsIsHdmiARCPort(port, &PortResult1);
-             UT_ASSERT_EQUAL(result, dsERR_NONE);
+            result = dsIsHdmiARCPort(port, &PortResult1);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-             result = dsIsHdmiARCPort(port, &PortResult2);
-             UT_ASSERT_EQUAL(result, dsERR_NONE);
+            result = dsIsHdmiARCPort(port, &PortResult2);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-             UT_ASSERT_EQUAL(PortResult1, PortResult2);
+            UT_ASSERT_EQUAL(PortResult1, PortResult2);
         }
 
     } else if (gSourceType == 1) {
@@ -1984,7 +1984,7 @@ void test_l1_dsHdmiIn_positive_dsGetEdidVersion_sink(void) {
 
             UT_ASSERT_EQUAL(edid_version_1, edid_version_2);
 
-       }
+        }
     } else if (gSourceType == 1) {
        // Step 4: Call dsGetEdidVersion() with valid ports
        UT_ASSERT_EQUAL(dsGetEdidVersion(dsHDMI_IN_PORT_0, &edid_version_1), dsERR_OPERATION_NOT_SUPPORTED);
