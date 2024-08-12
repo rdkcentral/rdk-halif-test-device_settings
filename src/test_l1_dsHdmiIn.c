@@ -278,13 +278,13 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetNumberOfInputs(void) {
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
     if (numInputPorts > 0) {
         // Step 2: Call dsHdmiInGetNumberOfInputs() to fetch the number of HDMI input ports
         UT_ASSERT_EQUAL(dsHdmiInGetNumberOfInputs(&numInputs), dsERR_NONE);
 
         // Step 3: Verify that the number of HDMI input ports obtained matches the expected value from the profile
-        UT_ASSERT_KVP_EQUAL_PROFILE_UINT8(numInputs, "dsHdmiIn/HdmiInputPort/numberOfPorts");
+        UT_ASSERT_KVP_EQUAL_PROFILE_UINT8(numInputs, "dsHdmiIn/numberOfPorts");
     } else {
        // Step 4: For source devices without HDMI input support
        UT_ASSERT_EQUAL(dsHdmiInGetNumberOfInputs(&numInputs), 0);
@@ -374,7 +374,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetStatus(void) {
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
     if (numInputPorts > 0) {
         // Step 2: Call dsHdmiInGetStatus()
         UT_ASSERT_EQUAL(dsHdmiInGetStatus(&status1), dsERR_NONE);
@@ -478,7 +478,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSelectPort(void) {
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
     if (numInputPorts > 0) {
         // Step 2 to Step 4: Call dsHdmiInSelectPort() with valid inputs
         for (uint8_t i = dsHDMI_IN_PORT_0; i < numInputPorts; i++)
@@ -583,7 +583,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInScaleVideo(void) {
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
     if (numInputPorts > 0) {
         // Step 2: Scale HDMI input video (x=0, y=0, width=800, height=600)
         UT_ASSERT_EQUAL(dsHdmiInScaleVideo(0, 0, 800, 600), dsERR_NONE);
@@ -702,7 +702,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSelectZoomMode_source(void) {
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
     if (numInputPorts > 0) {
         // Step 2: Call dsHdmiInSelectPort() to select Port 0
         UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
@@ -802,7 +802,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetCurrentVideoMode(void) {
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
     if (numInputPorts > 0) {
     	// Step 2: Retrieve the current HDMI video mode using dsHdmiInGetCurrentVideoMode()
         UT_ASSERT_EQUAL(dsHdmiInGetCurrentVideoMode(&resolution1), dsERR_NONE);
@@ -908,7 +908,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInRegisterConnectCB(void) {
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
     // Step 2: Call dsHdmiInRegisterConnectCB() based on the number of input ports
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
     if (numInputPorts > 0) {
          // For sink devices
          UT_ASSERT_EQUAL(dsHdmiInRegisterConnectCB(mockConnectCallback), dsERR_NONE);
@@ -1542,7 +1542,7 @@ void test_l1_dsHdmiIn_positive_dsIsHdmiARCPort_sink(void) {
     bool PortResult1 = 0, PortResult2 = 0;
     uint8_t numInputPorts = 0;
 
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
 
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
@@ -1648,7 +1648,7 @@ void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo_sink(void) {
     int edidSize1 = 0, edidSize2 = 0;
     uint8_t numInputPorts = 0;
 
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
 
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
@@ -1757,7 +1757,7 @@ void test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo_sink(void) {
     unsigned char spdInfo1[sizeof(struct dsSpd_infoframe_st)] = {0}, spdInfo2[sizeof(struct dsSpd_infoframe_st)] = {0};
     uint8_t numInputPorts = 0;
 
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
@@ -1857,11 +1857,11 @@ void test_l1_dsHdmiIn_positive_dsSetEdidVersion_sink(void) {
 
     gTestID = 37;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    tv_hdmi_edid_version_t ver14 = UT_KVP_PROFILE_GET_UINT32("dsHdmiIn/EdidVersions/0");
-    tv_hdmi_edid_version_t ver20 = UT_KVP_PROFILE_GET_UINT32("dsHdmiIn/EdidVersions/1");
+    tv_hdmi_edid_version_t ver14 = UT_KVP_PROFILE_GET_UINT32("dsHdmiIn/EdidVersion/0");
+    tv_hdmi_edid_version_t ver20 = UT_KVP_PROFILE_GET_UINT32("dsHdmiIn/EdidVersion/1");
     uint8_t numInputPorts = 0;
 
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
@@ -1908,7 +1908,7 @@ void test_l1_dsHdmiIn_negative_dsSetEdidVersion_sink(void) {
 
     gTestID = 38;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    tv_hdmi_edid_version_t ver14 = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/EdidVersions/0");
+    tv_hdmi_edid_version_t ver14 = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/EdidVersion/0");
 
     // Step 1: Call dsSetEdidVersion() without initializing the HDMI input sub-system
     dsError_t result = dsSetEdidVersion(dsHDMI_IN_PORT_0, ver14);
@@ -1960,7 +1960,7 @@ void test_l1_dsHdmiIn_positive_dsGetEdidVersion_sink(void) {
     tv_hdmi_edid_version_t edid_version_1 = HDMI_EDID_VER_MAX;
     tv_hdmi_edid_version_t edid_version_2 = HDMI_EDID_VER_MAX;
     uint8_t numInputPorts = 0;
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
 
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
@@ -2064,7 +2064,7 @@ void test_l1_dsHdmiIn_positive_dsGetAllmStatus_sink(void) {
     bool allm_status_1 = 0 , allm_status_2 = 0;
     dsError_t  result = dsERR_NONE;
     uint8_t numInputPorts = 0;
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
 
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
@@ -2361,7 +2361,7 @@ void test_l1_dsHdmiIn_positive_dsSetEdid2AllmSupport_sink(void) {
 
     dsError_t  result = dsERR_NONE;
     uint8_t numInputPorts = 0;
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
 
     // Step 1: Initialize HDMI input using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
@@ -2464,7 +2464,7 @@ void test_l1_dsHdmiIn_positive_dsGetEdid2AllmSupport_sink(void) {
     dsError_t  result = dsERR_NONE;
     uint8_t numInputPorts = 0;
 
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/HdmiInputPort/numberOfPorts");
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
 
     // Step 1: Initialize HDMI input using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
