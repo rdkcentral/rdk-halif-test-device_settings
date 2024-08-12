@@ -81,7 +81,7 @@
 
 /* Video Port configuration */
 typedef struct _dsVideoPortConfiguration_t {
-    uint16_t typeid;
+    dsVideoPortType_t typeid;
     uint16_t index;
     char     port_name[DS_VIDEO_PORT_NAME_SIZE];
     bool     dtcp_supported;
@@ -89,14 +89,14 @@ typedef struct _dsVideoPortConfiguration_t {
     int32_t  numSupportedResolutions;
     dsVideoPortResolution_t  supportedResolutions[DS_VIDEO_PORT_RESOLUTION_NUM_MAX];
     char     defaultResolution[DS_VIDEO_PORT_RESOLUTION_NAME_MAX];
-    int32_t  colorspaces;
+    dsDisplayColorSpace_t  colorspaces;
     bool     DisplaySurround;
-    int32_t  SurroundMode;
+    dsSURROUNDMode_t  SurroundMode;
     int32_t  Supported_tv_resolutions_capabilities;
     int32_t  hdr_capabilities;
-    int32_t  hdcp_protocol_version;
-    int32_t  quantization_ranges;
-    int32_t  matrix_coefficients;
+    dsHdcpProtocolVersion_t  hdcp_protocol_version;
+    dsDisplayQuantizationRange_t  quantization_ranges;
+    dsDisplayMatrixCoefficients_t  matrix_coefficients;
 }dsVideoPortConfiguration_t;
 
 /* Global variables */
