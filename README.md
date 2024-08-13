@@ -6,7 +6,6 @@
 - [Description](#description)
 - [Reference Documents](#reference-documents)
 - [Notes](#notes)
-- [Known Issues](#known-issues)
 
 ## Acronyms, Terms and Abbreviations
 
@@ -60,12 +59,16 @@ This repository contains the Unit Test Suites (L1 & L2) for the following submod
 
 - All APIs in each individual sub-module need to be implemented in this current version. If any API is not supported, please add stub implementation with return type dsERR_OPERATION_NOT_SUPPORTED for the same.
 - Building against the actual library may introduce SOC dependencies. Hence, a template SKELETON library is created without SOC dependencies. On the real platform (target), it can be mounted, copied and bound with the actual library.
-- The configuration/settings file(s) for certain `DS` sub-modules, specific to a platform (templates in [DS HAL README.md](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/docs/pages/README.md "DS HAL README.md")), should be added in the `profiles/include` directory within the root directory of the DS HAL Test repository for compilation.
-- `L1` test cases currently use the setting file to configure platform capabilities during the test. This functionality will be migrated to use test profiles in YAML format in upcoming releases.
-- `L2` test cases already use test profiles in YAML format to configure platform capabilities during the test.
-- When running the binary, remember to include a profile file as an argument for designated test cases. The following example illustrates this: `./hal_test -p Sink_AudioSettings.yaml`
+- When executing the binary, ensure to include a platform-specific profile file as an argument for the designated test cases. The following example illustrates this:
+
+```bash
+ ./hal_test -p Sink_AudioSettings.yaml
+ ```
+
+Alternatively, use the run.sh script with the profile file:
+
+```bash
+./run.sh -p /absolute/path/to/profile/file
+ ```
+
 - Profiles files defines the configuration for the platform available for sink and source [profile yaml file](./profiles/)
-
-## known issues
-
-- `L1` code may generate compilation warnings due to the removal of `APIs` from a header file. These warnings are caused by deprecated `APIs` and will not affect functionality. They will be resolved in the next release.
