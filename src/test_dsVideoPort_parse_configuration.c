@@ -127,7 +127,7 @@ int test_dsVideoPort_parse_configuration()
 
     for(int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
         snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/Typeid" , i+1);
-        gDSVideoPortConfiguration[i].typeid = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
+        gDSVideoPortConfiguration[i].typeid = (dsVideoPortType_t)ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
 
         snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/Index" , i+1);
         gDSVideoPortConfiguration[i].index = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string );
@@ -148,13 +148,13 @@ int test_dsVideoPort_parse_configuration()
         status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key_string, gDSVideoPortConfiguration[i].defaultResolution, DS_VIDEO_PORT_NAME_SIZE);
 
         snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/colorspaces" , i+1 );
-        gDSVideoPortConfiguration[i].colorspaces = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
+        gDSVideoPortConfiguration[i].colorspaces = (dsDisplayColorSpace_t)ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
 
         snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/DisplaySurround" , i+1);
         gDSVideoPortConfiguration[i].DisplaySurround = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), key_string );
 
         snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/SurroundMode" , i+1 );
-        gDSVideoPortConfiguration[i].SurroundMode = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
+        gDSVideoPortConfiguration[i].SurroundMode = (dsSURROUNDMode_t)ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
 
         snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/Supported_tv_resolutions_capabilities" , i+1 );
         gDSVideoPortConfiguration[i].Supported_tv_resolutions_capabilities = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
@@ -163,13 +163,13 @@ int test_dsVideoPort_parse_configuration()
         gDSVideoPortConfiguration[i].hdr_capabilities = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
 
         snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/hdcp_protocol_version" , i+1 );
-        gDSVideoPortConfiguration[i].hdcp_protocol_version = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
+        gDSVideoPortConfiguration[i].hdcp_protocol_version = (dsHdcpProtocolVersion_t)ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
 
         snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/quantization_ranges" , i+1 );
-        gDSVideoPortConfiguration[i].quantization_ranges = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
+        gDSVideoPortConfiguration[i].quantization_ranges = (dsDisplayQuantizationRange_t)ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
 
         snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/matrix_coefficients" , i+1 );
-        gDSVideoPortConfiguration[i].matrix_coefficients = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
+        gDSVideoPortConfiguration[i].matrix_coefficients = (dsDisplayMatrixCoefficients_t)ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
 
         for(int j = 0; j < gDSVideoPortConfiguration[i].numSupportedResolutions; j++) {
             snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/supportedResolutions/%d/name", i+1, j+1);

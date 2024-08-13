@@ -133,7 +133,7 @@ int test_dsAudio_parse_configuration()
         gDSAudioPortConfiguration[i].index = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string );
 
         snprintf(key_string, DS_AUDIO_KVP_SIZE, "dsAudio/Ports/%d/Name" , i+1);
-        status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key_string, gDSAudioPortConfiguration[i].port_name, UT_KVP_MAX_ELEMENT_SIZE);
+        status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key_string, gDSAudioPortConfiguration[i].port_name, DS_AUDIO_PORT_NAME_SIZE);
 
         snprintf(key_string, DS_AUDIO_KVP_SIZE, "dsAudio/Ports/%d/number_of_supported_compressions" , i+1);
         gDSAudioPortConfiguration[i].no_of_supported_compression = ut_kvp_getUInt16Field( ut_kvp_profile_getInstance(), key_string );
@@ -175,7 +175,7 @@ int test_dsAudio_parse_configuration()
         // loop to get ms12 audio profiles
         for(int j = 0; j < gDSAudioPortConfiguration[i].ms12_audioprofilecount; j++) {
             snprintf(key_string, DS_AUDIO_KVP_SIZE, "dsAudio/Ports/%d/MS12_AudioProfiles/%d" , i+1 , j);
-            status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key_string, gDSAudioPortConfiguration[i].ms12_audio_profiles[j], UT_KVP_MAX_ELEMENT_SIZE);
+            status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key_string, gDSAudioPortConfiguration[i].ms12_audio_profiles[j], DS_AUDIO_MAX_MS12_PROFILE_LEN);
         }
     }
 
