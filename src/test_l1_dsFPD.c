@@ -1304,7 +1304,7 @@ void test_l1_dsFPD_negative_dsSetFPColor (void)
         for (int j = 0; j < sizeof(dsFPAvailableColors)/sizeof(dsFPAvailableColors[0]); ++j)
         {
             bool isSupported = false;
-            for (int k = 1; k < numOfSupportedColors; ++k)
+            for (int k = 0; k < numOfSupportedColors; ++k)
             {
                 snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/supportedColors/%d", i, k);
                 color = (dsFPDColor_t)UT_KVP_PROFILE_GET_UINT32(buffer);
