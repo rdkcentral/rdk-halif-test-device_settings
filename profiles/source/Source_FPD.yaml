@@ -12,6 +12,12 @@ dsFPD:
       DEFAULT_LEVELS : 1              # Default Brightness level for the FP text display
       MAX_CYCLERATE : 2               # Maximum Rate at which LED is rotating during scrolling
       DEFAULT_COLOR_MODE : 1          # Color Mode of LED (Single(0) or Multicolored(1))
+      # 0x0000FF      dsFPD_COLOR_BLUE   ///< Blue color LED
+      # 0x00FF00      dsFPD_COLOR_GREEN  ///< Green color LED
+      # 0xFF0000      dsFPD_COLOR_RED    ///< Red color LED
+      # 0xFFFFE0      dsFPD_COLOR_YELLOW ///< Yellow color LED
+      # 0xFF8C00      dsFPD_COLOR_ORANGE ///< Orange color LED
+      # 0xFFFFFF      dsFPD_COLOR_WHITE  ///< White color LED
       supportedColors :
         - 0x00FF00                    # dsFPD_COLOR_GREEN
         - 0xFF0000                    # dsFPD_COLOR_RED
