@@ -1090,7 +1090,6 @@ void test_l1_dsFPD_negative_dsGetFPState (void)
     // Step 01: Call dsGetFPState() without initializing (dsFPInit() not called)
     count = UT_KVP_PROFILE_GET_UINT8("dsFPD/Number_of_Indicators");
     for (int i = 1; i <= count; i++)
-:w
     {
         snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
         eIndicator =(dsFPDIndicator_t)UT_KVP_PROFILE_GET_UINT32(buffer);
