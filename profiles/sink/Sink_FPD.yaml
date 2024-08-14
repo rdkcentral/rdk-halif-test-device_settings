@@ -13,7 +13,7 @@ dsFPD:
         MAX_CYCLERATE : 2               # Maximum Rate at which LED is rotating during scrolling
         DEFAULT_COLOR_MODE : 0          # Color Mode of LED (Single(0) or Multicolored(1))
         supportedColors :
-        - dsFPD_COLOR_RED
+          - 0xFF0000                    # dsFPD_COLOR_RED
   7segement_display_Support : false
   SupportedLEDStates: 0x1FE
     #dsFPD_LED_DEVICE_NONE,                      ///< Default state

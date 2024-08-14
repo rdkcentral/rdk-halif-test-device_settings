@@ -3,6 +3,7 @@ dsFPD:
   Name: STB_FPD_1_Indicator
   features:
     extendedEnumsSupported: false
+  Number_of_Indicators: 1
   SupportedFPDIndicators :
     1: #dsFPD_INDICATOR_POWER
       Indicator_Type : 0x01 #dsFPD_INDICATOR_POWER
@@ -13,10 +14,10 @@ dsFPD:
       DEFAULT_COLOR_MODE : 0          # Color Mode of LED (Single(0) or Multicolored(1))
       MULTI_COLOR_MODE : 2
       supportedColors :
-      - dsFPD_COLOR_GREEN
-      - dsFPD_COLOR_RED
-      - dsFPD_COLOR_ORANGE
-      - dsFPD_COLOR_WHITE
+        - 0x00FF00                    # dsFPD_COLOR_GREEN
+        - 0xFF0000                    # dsFPD_COLOR_RED
+        - 0xFF8C00                    # dsFPD_COLOR_ORANGE
+        - 0xFFFFFF                    # dsFPD_COLOR_WHITE
   SupportedLEDStates: 0x1FE
   #dsFPD_LED_DEVICE_NONE,                      ///< Default state
   #dsFPD_LED_DEVICE_ACTIVE,                    ///< Device is active
