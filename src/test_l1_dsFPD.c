@@ -1190,6 +1190,7 @@ void test_l1_dsFPD_positive_dsSetFPColor (void)
     uint8_t count =0;
     dsFPDColor_t color;
     dsFPDIndicator_t eIndicator;
+    uint8_t colorMode = 0;
     char buffer[DS_FPD_KEY_SIZE];
     int numOfSupportedColors =0;
     char supportedColorbuffer[DS_FPD_KEY_SIZE];
@@ -1206,6 +1207,8 @@ void test_l1_dsFPD_positive_dsSetFPColor (void)
     {
         snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
         eIndicator =(dsFPDIndicator_t)UT_KVP_PROFILE_GET_UINT32(buffer);
+        snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/DEFAULT_COLOR_MODE", i);
+        colorMode =(uint8_t)UT_KVP_PROFILE_GET_UINT32(buffer);
         snprintf(supportedColorbuffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/supportedColors",i);
         numOfSupportedColors = UT_KVP_PROFILE_GET_LIST_COUNT(supportedColorbuffer);
 
@@ -1216,7 +1219,14 @@ void test_l1_dsFPD_positive_dsSetFPColor (void)
             color = (dsFPDColor_t)UT_KVP_PROFILE_GET_UINT32(buffer);
             UT_LOG_DEBUG("Invoking dsSetFPColor with eIndicator: %d and color: 0x%X", eIndicator, color);
             result = dsSetFPColor(eIndicator, color);
-            UT_ASSERT_EQUAL(result, dsERR_NONE);
+            if(colorMode == 0)
+            {
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+            } 
+            else
+            {
+                UT_ASSERT_EQUAL(result, dsERR_NONE);
+            }
         }
     }
 
@@ -1262,6 +1272,7 @@ void test_l1_dsFPD_negative_dsSetFPColor (void)
     dsError_t result;
     dsFPDIndicator_t eIndicator;
     dsFPDColor_t color;
+    uint8_t colorMode = 0;
     uint8_t count =0;
     char buffer[DS_FPD_KEY_SIZE];
     int numOfSupportedColors =0;
@@ -1298,28 +1309,41 @@ void test_l1_dsFPD_negative_dsSetFPColor (void)
         snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
         eIndicator =(dsFPDIndicator_t)UT_KVP_PROFILE_GET_UINT32(buffer);
 
+        snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/DEFAULT_COLOR_MODE", i);
+        colorMode =(uint8_t)UT_KVP_PROFILE_GET_UINT32(buffer);
+
         snprintf(supportedColorbuffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/supportedColors",i);
         numOfSupportedColors =UT_KVP_PROFILE_GET_LIST_COUNT(supportedColorbuffer);
 
-        for (int j = 0; j < sizeof(dsFPAvailableColors)/sizeof(dsFPAvailableColors[0]); ++j)
+        if(colorMode == 0)
         {
-            bool isSupported = false;
-            for (int k = 0; k < numOfSupportedColors; ++k)
+            for (int j = 0; j < sizeof(dsFPAvailableColors)/sizeof(dsFPAvailableColors[0]); ++j)
             {
-                snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/supportedColors/%d", i, k);
-                color = (dsFPDColor_t)UT_KVP_PROFILE_GET_UINT32(buffer);
-                if(color == dsFPAvailableColors[j])
-                {
-                    isSupported = true;
-                    break;
-                }
-
-            }
-            if (!isSupported){
                 result = dsSetFPColor(eIndicator, dsFPAvailableColors[j]);
-                UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+                UT_ASSERT_EQUAL(result,dsERR_OPERATION_NOT_SUPPORTED);
             }
-
+        }
+        else
+        {
+            for (int j = 0; j < sizeof(dsFPAvailableColors) / sizeof(dsFPAvailableColors[0]); ++j)
+            {
+                bool isSupported = false;
+                for (int k = 0; k < numOfSupportedColors; ++k)
+                {
+                    snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/supportedColors/%d", i, k);
+                    color = (dsFPDColor_t)UT_KVP_PROFILE_GET_UINT32(buffer);
+                    if (color == dsFPAvailableColors[j])
+                    {
+                        isSupported = true;
+                        break;
+                    }
+                }
+                if (!isSupported)
+                {
+                    result = dsSetFPColor(eIndicator, dsFPAvailableColors[j]);
+                    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+                }
+            }
         }
     }
 
