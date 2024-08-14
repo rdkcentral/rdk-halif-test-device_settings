@@ -722,7 +722,7 @@ void test_l1_dsFPD_positive_dsSetFPBrightness (void)
  * |10|Attempt to set brightness after dsFPTerm() has been called|eIndicator: dsFPD_INDICATOR_POWER, eBrightness: 50 |dsERR_NOT_INITIALIZED|Should fail due to termination|
  *
  * @note Valid indicators can retrieved from yaml file
- * 
+ *
  */
 void test_l1_dsFPD_negative_dsSetFPBrightness (void)
 {
@@ -836,7 +836,7 @@ void test_l1_dsFPD_negative_dsSetFPBrightness (void)
  * |07|Terminate with dsFPTerm()| |dsERR_NONE|Ensure the system is terminated|
  *
  * @note Valid indicators can retrieved from yaml file
- * 
+ *
  */
 void test_l1_dsFPD_positive_dsGetFPBrightness (void)
 {
@@ -880,7 +880,7 @@ void test_l1_dsFPD_positive_dsGetFPBrightness (void)
     UT_ASSERT_EQUAL(brightness_power_indicator, brightness_all_indicators[indicator_power_index]);
 
     // Step 06: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
-    disableFPDIndicators(count);    
+    disableFPDIndicators(count);
 
     // Step 07: Terminate with dsFPTerm()
     result = dsFPTerm();
@@ -1075,7 +1075,7 @@ void test_l1_dsFPD_positive_dsGetFPState (void)
  * |08|Call dsGetFPState() after termination|eIndicator: dsFPD_INDICATOR_POWER, state: dsFPDState_t*|dsERR_NOT_INITIALIZED|Validate it checks for initialization even after termination|
  *
  * @note Valid indicators can retrieved from the yaml file
- * 
+ *
  */
 void test_l1_dsFPD_negative_dsGetFPState (void)
 {
@@ -1222,14 +1222,13 @@ void test_l1_dsFPD_positive_dsSetFPColor (void)
             if(colorMode == 0)
             {
                 UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
-            } 
+            }
             else
             {
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
             }
         }
     }
-
     //Step 04: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
     disableFPDIndicators(count);
     // Step 05: Terminate with dsFPTerm()
@@ -1358,7 +1357,7 @@ void test_l1_dsFPD_negative_dsSetFPColor (void)
     {
         snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
         eIndicator =(dsFPDIndicator_t)UT_KVP_PROFILE_GET_UINT32(buffer);
-        
+
         result = dsSetFPColor(eIndicator, dsFPD_COLOR_WHITE);
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
 
@@ -1384,7 +1383,7 @@ void test_l1_dsFPD_negative_dsSetFPColor (void)
  *
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 017@n
- * 
+ *
  * **Pre-Conditions:**@n
  * None.
  *
@@ -1417,11 +1416,12 @@ void test_l1_dsFPD_positive_dsGetFPColor(void)
     char supportedColorbuffer[DS_FPD_KEY_SIZE];
     bool isSupported = false;
     uint8_t count = 0;
+    uint8_t colorMode = 0;
 
     // Step 01: Initialize with dsFPInit()
     result = dsFPInit();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
-    
+
     // Step 02: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
     count = UT_KVP_PROFILE_GET_UINT8("dsFPD/Number_of_Indicators");
     enableFPDIndicators(count);
@@ -1432,35 +1432,40 @@ void test_l1_dsFPD_positive_dsGetFPColor(void)
         snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
         eIndicator = (dsFPDIndicator_t)UT_KVP_PROFILE_GET_UINT32(buffer);
         UT_LOG("\n In %s , Indicator: [%d]\n", __FUNCTION__, eIndicator);
-        result = dsGetFPColor(eIndicator, &retrievedColor);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
-        snprintf(supportedColorbuffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/supportedColors", i);
-        numOfSupportedColors = UT_KVP_PROFILE_GET_LIST_COUNT(supportedColorbuffer);
-        for (int k = 0; k < numOfSupportedColors; ++k)
+        snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/DEFAULT_COLOR_MODE", i);
+        colorMode =(uint8_t)UT_KVP_PROFILE_GET_UINT32(buffer);
+
+        if(colorMode == 0)
         {
-            snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/supportedColors/%d", i, k);
-            color = (dsFPDColor_t)UT_KVP_PROFILE_GET_UINT32(buffer);
-            if (retrievedColor == color)
-            {
-                isSupported = true;
-                break;
-            }
+            result = dsGetFPColor(eIndicator, &retrievedColor);
+            UT_ASSERT_EQUAL(result,dsERR_OPERATION_NOT_SUPPORTED);
         }
-        UT_ASSERT_TRUE(isSupported);
+        else{
+            result = dsGetFPColor(eIndicator, &retrievedColor);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+            snprintf(supportedColorbuffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/supportedColors", i);
+            numOfSupportedColors = UT_KVP_PROFILE_GET_LIST_COUNT(supportedColorbuffer);
+
+            isSupported = false;
+            for (int k = 0; k < numOfSupportedColors; ++k)
+            {
+                snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/supportedColors/%d", i, k);
+                color = (dsFPDColor_t)UT_KVP_PROFILE_GET_UINT32(buffer);
+                if (retrievedColor == color)
+                {
+                    isSupported = true;
+                    break;
+                }
+            }
+            UT_ASSERT_TRUE(isSupported);
+
+            // Step 04: Call dsGetFPColor() second time and compare results
+            result = dsGetFPColor(eIndicator, &retryColor);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+            UT_ASSERT_EQUAL(retrievedColor,retryColor);
+        }
     }
-    // Step 04: Call dsGetFPColor() twice and compare results
-    for (int i = 1; i <= count; i++)
-    {
-        snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
-        eIndicator = (dsFPDIndicator_t)UT_KVP_PROFILE_GET_UINT32(buffer);
-        UT_LOG("\n In %s , Indicator: [%d]\n", __FUNCTION__, eIndicator);
-        result = dsGetFPColor(eIndicator, &retrievedColor);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
-        result = dsGetFPColor(eIndicator, &retryColor);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_EQUAL(retrievedColor,retryColor);
-    }
-    
     // Step 05: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
     disableFPDIndicators(count);
 
@@ -2270,7 +2275,7 @@ void test_l1_dsFPD_negative_dsGetFPTextBrightness(void)
 
 /**
  * @brief Ensure dsFPEnableCLockDisplay() correctly enables/disables the clock display
- * 
+ *
  * **Test Group ID:** Basic: 01@n
  * **Test Case ID:** 029@n
  *
@@ -3105,7 +3110,7 @@ void test_l1_dsFPD_positive_dsFPGetLEDState(void)
     result = dsFPGetLEDState(&ledState1);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-    // Step 05: Compare the retrieved LED state with the expected value from the profile file 
+    // Step 05: Compare the retrieved LED state with the expected value from the profile file
     UT_ASSERT_KVP_EQUAL_PROFILE_UINT32(ledState1, "dsFPD/SupportedLEDStates");
 
     // Step 06: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()

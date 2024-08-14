@@ -462,20 +462,18 @@ void test_l2_dsFPD_SetFPstateON_Multi_SetColor(void)
         }
         else
         {
-            ret = dsSetFPState(eIndicator, dsFPD_STATE_OFF);
-            UT_LOG_DEBUG("dsSetFPState() returned status=%d", ret);
-            UT_ASSERT_EQUAL(ret, dsERR_NONE);
-            if (ret != dsERR_NONE)
-            {
-                UT_LOG_ERROR("dsSetFPState failed with status: %d", ret);
-                continue;
-            }
-            UT_LOG_DEBUG("The indicator supports only single color");
-            ret = dsGetFPColor(eIndicator, &getcolor);
-            UT_LOG_DEBUG("Invoking dsGetFPColor with eIndicator: %d", eIndicator);
-            UT_LOG_DEBUG("Color: %d and return status: %d", getcolor, ret);
-            UT_ASSERT_EQUAL(ret, dsERR_OPERATION_NOT_SUPPORTED);
+            UT_LOG_DEBUG("The indicator supports only single color and Set Color not supported");
         }
+
+        ret = dsSetFPState(eIndicator, dsFPD_STATE_OFF);
+        UT_LOG_DEBUG("dsSetFPState() returned status=%d", ret);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        if (ret != dsERR_NONE)
+        {
+            UT_LOG_ERROR("dsSetFPState failed with status: %d", ret);
+            continue;
+        }
+
     }
 
     ret = dsFPTerm();
