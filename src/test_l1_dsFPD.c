@@ -666,9 +666,9 @@ void test_l1_dsFPD_positive_dsSetFPBrightness (void)
         printf("\n In %s, Indicator: [%d]\n", __FUNCTION__, eIndicator);
 
         // Set the brightness of the LED
-        snprintf(minbuffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/MIN_BRIGHTNESS",eIndicator);
+        snprintf(minbuffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/MIN_BRIGHTNESS",i);
         minBrightness =(dsFPDBrightness_t)UT_KVP_PROFILE_GET_UINT32(minbuffer);
-        snprintf(maxbuffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/MAX_BRIGHTNESS",eIndicator);
+        snprintf(maxbuffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/MAX_BRIGHTNESS",i);
         maxBrightness =(dsFPDBrightness_t)UT_KVP_PROFILE_GET_UINT32(maxbuffer);
         dsFPDBrightness_t avgBrightness = (maxBrightness + minBrightness) / 2;
 
@@ -742,9 +742,9 @@ void test_l1_dsFPD_negative_dsSetFPBrightness (void)
     {
         snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
         eIndicator =(dsFPDIndicator_t)UT_KVP_PROFILE_GET_UINT32(buffer);
-        snprintf(minbuffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/MIN_BRIGHTNESS",eIndicator);
+        snprintf(minbuffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/MIN_BRIGHTNESS",i);
         minBrightness =(dsFPDBrightness_t)UT_KVP_PROFILE_GET_UINT32(minbuffer);
-        snprintf(maxbuffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/MAX_BRIGHTNESS",eIndicator);
+        snprintf(maxbuffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/MAX_BRIGHTNESS",i);
         maxBrightness =(dsFPDBrightness_t)UT_KVP_PROFILE_GET_UINT32(maxbuffer);
         dsFPDBrightness_t avgBrightness = (maxBrightness + minBrightness) / 2;
         result = dsSetFPBrightness(eIndicator, avgBrightness);
@@ -783,9 +783,9 @@ void test_l1_dsFPD_negative_dsSetFPBrightness (void)
     {
         snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
         eIndicator =(dsFPDIndicator_t)UT_KVP_PROFILE_GET_UINT32(buffer);
-        snprintf(minbuffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/MIN_BRIGHTNESS",eIndicator);
+        snprintf(minbuffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/MIN_BRIGHTNESS",i);
         minBrightness =(dsFPDBrightness_t)UT_KVP_PROFILE_GET_UINT32(minbuffer);
-        snprintf(maxbuffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/MAX_BRIGHTNESS",eIndicator);
+        snprintf(maxbuffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/MAX_BRIGHTNESS",i);
         maxBrightness =(dsFPDBrightness_t)UT_KVP_PROFILE_GET_UINT32(maxbuffer);
         dsFPDBrightness_t avgBrightness = (maxBrightness + minBrightness) / 2;
         result = dsSetFPBrightness(eIndicator, avgBrightness);
@@ -801,9 +801,9 @@ void test_l1_dsFPD_negative_dsSetFPBrightness (void)
     {
         snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
         eIndicator =(dsFPDIndicator_t)UT_KVP_PROFILE_GET_UINT32(buffer);
-        snprintf(minbuffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/MIN_BRIGHTNESS",eIndicator);
+        snprintf(minbuffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/MIN_BRIGHTNESS",i);
         minBrightness =(dsFPDBrightness_t)UT_KVP_PROFILE_GET_UINT32(minbuffer);
-        snprintf(maxbuffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/MAX_BRIGHTNESS",eIndicator);
+        snprintf(maxbuffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/MAX_BRIGHTNESS",i);
         maxBrightness =(dsFPDBrightness_t)UT_KVP_PROFILE_GET_UINT32(maxbuffer);
         dsFPDBrightness_t avgBrightness = (maxBrightness + minBrightness) / 2;
         result = dsSetFPBrightness(eIndicator, avgBrightness );
