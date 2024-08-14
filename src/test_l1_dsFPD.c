@@ -1565,14 +1565,14 @@ void test_l1_dsFPD_negative_dsGetFPColor (void)
  * @note This test case is deprecated.
  * @note Valid indicators can retrieved from yaml file
  */
-void test_l1_dsFPD_positive_dsSetFPDMode (void)
+void test_l1_dsFPD_positive_dsSetFPDMode(void)
 {
     gTestID = 19;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsError_t result;
     dsFPDIndicator_t eIndicator;
     char buffer[DS_FPD_KEY_SIZE];
-    uint8_t count =0;
+    uint8_t count = 0;
 
     // Step 01: Initialize using dsFPInit()
     result = dsFPInit();
@@ -1583,8 +1583,8 @@ void test_l1_dsFPD_positive_dsSetFPDMode (void)
     for (int i = 1; i <= count; i++)
     {
         snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
-        eIndicator =(dsFPDIndicator_t)UT_KVP_PROFILE_GET_UINT32(buffer);
-        UT_LOG("\n In %s , Indicator: [%d]\n", __FUNCTION__,  eIndicator);
+        eIndicator = (dsFPDIndicator_t)UT_KVP_PROFILE_GET_UINT32(buffer);
+        UT_LOG("\n In %s , Indicator: [%d]\n", __FUNCTION__, eIndicator);
         result = dsSetFPState(eIndicator, dsFPD_STATE_ON);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
@@ -1600,8 +1600,8 @@ void test_l1_dsFPD_positive_dsSetFPDMode (void)
     for (int i = 1; i <= count; i++)
     {
         snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
-        eIndicator =(dsFPDIndicator_t)UT_KVP_PROFILE_GET_UINT32(buffer);
-        UT_LOG("\n In %s , Indicator: [%d]\n", __FUNCTION__,  eIndicator);
+        eIndicator = (dsFPDIndicator_t)UT_KVP_PROFILE_GET_UINT32(buffer);
+        UT_LOG("\n In %s , Indicator: [%d]\n", __FUNCTION__, eIndicator);
         result = dsSetFPState(eIndicator, dsFPD_STATE_OFF);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
@@ -1609,7 +1609,7 @@ void test_l1_dsFPD_positive_dsSetFPDMode (void)
     // Step 05: Terminate using dsFPTerm()
     result = dsFPTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
-    UT_LOG("\n Out  %s\n",__FUNCTION__);
+    UT_LOG("\n Out  %s\n", __FUNCTION__);
 }
 
 /**
@@ -3164,46 +3164,45 @@ static UT_test_suite_t * pSuite = NULL;
  *
  * @return int - 0 on success, otherwise failure
  */
-int test_l1_dsFPD_register ( void )
+int test_l1_dsFPD_register(void)
 {
-        /* add a suite to the registry */
-        pSuite = UT_add_suite( "[L1 dsFPD]", NULL, NULL );
+    /* add a suite to the registry */
+    pSuite = UT_add_suite("[L1 dsFPD]", NULL, NULL);
 
-        if ( NULL == pSuite )
-        {
-           return -1;
-        }
+    if (NULL == pSuite)
+    {
+        return -1;
+    }
 
+    UT_add_test(pSuite, "dsFPInit_L1_positive", test_l1_dsFPD_positive_dsFPInit);
+    UT_add_test(pSuite, "dsFPInit_L1_negative", test_l1_dsFPD_negative_dsFPInit);
+    UT_add_test(pSuite, "dsFPTerm_L1_positive", test_l1_dsFPD_positive_dsFPTerm);
+    UT_add_test(pSuite, "dsFPTerm_L1_negative", test_l1_dsFPD_negative_dsFPTerm);
+    UT_add_test(pSuite, "dsSetFPState_L1_positive", test_l1_dsFPD_positive_dsSetFPState);
+    UT_add_test(pSuite, "dsSetFPState_L1_negative", test_l1_dsFPD_negative_dsSetFPState);
+    UT_add_test(pSuite, "dsSetFPBlink_L1_positive", test_l1_dsFPD_positive_dsSetFPBlink);
+    UT_add_test(pSuite, "dsSetFPBlink_L1_negative", test_l1_dsFPD_negative_dsSetFPBlink);
+    UT_add_test(pSuite, "dsSetFPBrightness_L1_positive", test_l1_dsFPD_positive_dsSetFPBrightness);
+    UT_add_test(pSuite, "dsSetFPBrightness_L1_negative", test_l1_dsFPD_negative_dsSetFPBrightness);
+    UT_add_test(pSuite, "dsGetFPBrightness_L1_positive", test_l1_dsFPD_positive_dsGetFPBrightness);
+    UT_add_test(pSuite, "dsGetFPBrightness_L1_negative", test_l1_dsFPD_negative_dsGetFPBrightness);
+    UT_add_test(pSuite, "dsGetFPState_L1_positive", test_l1_dsFPD_positive_dsGetFPState);
+    UT_add_test(pSuite, "dsGetFPState_L1_negative", test_l1_dsFPD_negative_dsGetFPState);
+    UT_add_test(pSuite, "dsSetFPColor_L1_positive", test_l1_dsFPD_positive_dsSetFPColor);
+    UT_add_test(pSuite, "dsSetFPColor_L1_negative", test_l1_dsFPD_negative_dsSetFPColor);
+    UT_add_test(pSuite, "dsGetFPColor_L1_positive", test_l1_dsFPD_positive_dsGetFPColor);
+    UT_add_test(pSuite, "dsGetFPColor_L1_negative", test_l1_dsFPD_negative_dsGetFPColor);
+    UT_add_test(pSuite, "dsFPSetLEDState_L1_positive", test_l1_dsFPD_positive_dsFPSetLEDState);
+    UT_add_test(pSuite, "dsFPGetSupportedLEDStates_L1_positive", test_l1_dsFPD_positive_dsFPGetSupportedLEDStates);
+    UT_add_test(pSuite, "dsFPGetSupportedLEDStates_L1_negative", test_l1_dsFPD_negative_dsFPGetSupportedLEDStates);
+    UT_add_test(pSuite, "dsFPSetLEDState_L1_negative", test_l1_dsFPD_negative_dsFPSetLEDState);
+    UT_add_test(pSuite, "dsFPGetLEDState_L1_positive", test_l1_dsFPD_positive_dsFPGetLEDState);
+    UT_add_test(pSuite, "dsFPGetLEDState_L1_negative", test_l1_dsFPD_negative_dsFPGetLEDState);
 
-        UT_add_test( pSuite, "dsFPInit_L1_positive" ,test_l1_dsFPD_positive_dsFPInit );
-        UT_add_test( pSuite, "dsFPInit_L1_negative" ,test_l1_dsFPD_negative_dsFPInit );
-        UT_add_test( pSuite, "dsFPTerm_L1_positive" ,test_l1_dsFPD_positive_dsFPTerm );
-        UT_add_test( pSuite, "dsFPTerm_L1_negative" ,test_l1_dsFPD_negative_dsFPTerm );
-        UT_add_test( pSuite, "dsSetFPState_L1_positive" ,test_l1_dsFPD_positive_dsSetFPState );
-        UT_add_test( pSuite, "dsSetFPState_L1_negative" ,test_l1_dsFPD_negative_dsSetFPState );
-        UT_add_test( pSuite, "dsSetFPBlink_L1_positive" ,test_l1_dsFPD_positive_dsSetFPBlink );
-        UT_add_test( pSuite, "dsSetFPBlink_L1_negative" ,test_l1_dsFPD_negative_dsSetFPBlink );
-        UT_add_test( pSuite, "dsSetFPBrightness_L1_positive" ,test_l1_dsFPD_positive_dsSetFPBrightness );
-        UT_add_test( pSuite, "dsSetFPBrightness_L1_negative" ,test_l1_dsFPD_negative_dsSetFPBrightness );
-        UT_add_test( pSuite, "dsGetFPBrightness_L1_positive" ,test_l1_dsFPD_positive_dsGetFPBrightness );
-        UT_add_test( pSuite, "dsGetFPBrightness_L1_negative" ,test_l1_dsFPD_negative_dsGetFPBrightness );
-        UT_add_test( pSuite, "dsGetFPState_L1_positive" ,test_l1_dsFPD_positive_dsGetFPState );
-        UT_add_test( pSuite, "dsGetFPState_L1_negative" ,test_l1_dsFPD_negative_dsGetFPState );
-        UT_add_test( pSuite, "dsSetFPColor_L1_positive" ,test_l1_dsFPD_positive_dsSetFPColor );
-        UT_add_test( pSuite, "dsSetFPColor_L1_negative" ,test_l1_dsFPD_negative_dsSetFPColor );
-        UT_add_test( pSuite, "dsGetFPColor_L1_positive" ,test_l1_dsFPD_positive_dsGetFPColor );
-        UT_add_test( pSuite, "dsGetFPColor_L1_negative" ,test_l1_dsFPD_negative_dsGetFPColor );
-        UT_add_test( pSuite, "dsFPSetLEDState_L1_positive" ,test_l1_dsFPD_positive_dsFPSetLEDState );
-        UT_add_test( pSuite, "dsFPGetSupportedLEDStates_L1_positive" ,test_l1_dsFPD_positive_dsFPGetSupportedLEDStates );
-        UT_add_test( pSuite, "dsFPGetSupportedLEDStates_L1_negative" ,test_l1_dsFPD_negative_dsFPGetSupportedLEDStates );
-        UT_add_test( pSuite, "dsFPSetLEDState_L1_negative" ,test_l1_dsFPD_negative_dsFPSetLEDState );
-        UT_add_test( pSuite, "dsFPGetLEDState_L1_positive" ,test_l1_dsFPD_positive_dsFPGetLEDState );
-        UT_add_test( pSuite, "dsFPGetLEDState_L1_negative" ,test_l1_dsFPD_negative_dsFPGetLEDState );
-
-        extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsFPD/features/extendedEnumsSupported" );
+    extendedEnumsSupported = ut_kvp_getBoolField(ut_kvp_profile_getInstance(), "dsFPD/features/extendedEnumsSupported");
 
     return 0;
-} 
+}
 
 /** @} */ // End of DS_FPD_HALTEST_L1
 /** @} */ // End of DS_FPD_HALTEST
