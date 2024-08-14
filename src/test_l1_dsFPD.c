@@ -78,13 +78,15 @@
 #include "stdbool.h"
 #include <ut_kvp_profile.h>
 
+static int gTestGroup = 1;
+static int gTestID = 1;
+
+/* Global flags to support features */
+static bool extendedEnumsSupported=false; //Default to not supported
 
 #define DS_FPD_KEY_SIZE 128
 #define UB_LINK_DURATION 500
 #define UB_LINK_ITERATIONS 10
-
-static int gTestGroup = 1;
-static int gTestID = 1;
 
 #define enableFPDIndicators(count) {\
     dsError_t result;\
@@ -121,10 +123,6 @@ static int gTestID = 1;
        UT_ASSERT_EQUAL( old, result );\
    }\
 }
-
-
-/* Global flags to support features */
-static bool extendedEnumsSupported=false; //Default to not supported
 
 /**
  * @brief Ensure dsFPInit() returns correct error codes during positive scenarios
