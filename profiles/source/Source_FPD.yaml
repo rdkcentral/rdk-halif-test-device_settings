@@ -11,8 +11,7 @@ dsFPD:
       MIN_BRIGHTNESS : 0              # Minimum brightness value of FPD LEDs
       DEFAULT_LEVELS : 1              # Default Brightness level for the FP text display
       MAX_CYCLERATE : 2               # Maximum Rate at which LED is rotating during scrolling
-      DEFAULT_COLOR_MODE : 0          # Color Mode of LED (Single(0) or Multicolored(1))
-      MULTI_COLOR_MODE : 2
+      DEFAULT_COLOR_MODE : 1          # Color Mode of LED (Single(0) or Multicolored(1))
       supportedColors :
         - 0x00FF00                    # dsFPD_COLOR_GREEN
         - 0xFF0000                    # dsFPD_COLOR_RED
