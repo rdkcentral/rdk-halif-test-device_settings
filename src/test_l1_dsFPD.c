@@ -740,7 +740,7 @@ void test_l1_dsFPD_negative_dsSetFPBrightness (void)
     count = UT_KVP_PROFILE_GET_UINT8("dsFPD/Number_of_Indicators");
     for(int i = 1; i <= count; i++)
     {
-    snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
+        snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
         eIndicator =(dsFPDIndicator_t)UT_KVP_PROFILE_GET_UINT32(buffer);
         snprintf(minbuffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/MIN_BRIGHTNESS",eIndicator);
         minBrightness =(dsFPDBrightness_t)UT_KVP_PROFILE_GET_UINT32(minbuffer);
@@ -759,7 +759,7 @@ void test_l1_dsFPD_negative_dsSetFPBrightness (void)
     // Step 04: Pass an invalid eBrightness parameter to dsSetFPBrightness()
     for(int i = 1; i <= count; i++)
     {
-    snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
+        snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
         eIndicator =(dsFPDIndicator_t)UT_KVP_PROFILE_GET_UINT32(buffer);
         UT_LOG("\n In %s , Indicator: [%d]\n", __FUNCTION__, eIndicator);
         result = dsSetFPState(eIndicator, dsFPD_STATE_ON);
@@ -1304,7 +1304,7 @@ void test_l1_dsFPD_negative_dsSetFPColor (void)
         for (int j = 0; j < sizeof(dsFPAvailableColors)/sizeof(dsFPAvailableColors[0]); ++j)
         {
             bool isSupported = false;
-            for (int k = 0; k < numOfSupportedColors; ++k)
+            for (int k = 1; k < numOfSupportedColors; ++k)
             {
                 snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/supportedColors/%d", i, k);
                 color = (dsFPDColor_t)UT_KVP_PROFILE_GET_UINT32(buffer);
