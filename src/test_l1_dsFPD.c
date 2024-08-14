@@ -131,7 +131,7 @@ static int gTestID = 1;
 /* Global flags to support features */
 static bool extendedEnumsSupported=false; //Default to not supported
 
-static dsFPDColorDictionary_t dsFPColorMap =
+static dsFPDColorDictionary_t dsFPColorMap [dsFPD_COLOR_MAX] =
 {
     {"dsFPD_COLOR_BLUE",dsFPD_COLOR_BLUE},
     {"dsFPD_COLOR_GREEN",dsFPD_COLOR_GREEN},
@@ -139,7 +139,6 @@ static dsFPDColorDictionary_t dsFPColorMap =
     {"dsFPD_COLOR_YELLOW",dsFPD_COLOR_YELLOW},
     {"dsFPD_COLOR_ORANGE",dsFPD_COLOR_ORANGE},
     {"dsFPD_COLOR_WHITE",dsFPD_COLOR_WHITE},
-    {"dsFPD_COLOR_MAX",dsFPD_COLOR_MAX}
 };
 
 
@@ -147,11 +146,16 @@ static dsFPDColorDictionary_t dsFPColorMap =
 static dsFPDColor_t getColorFromString(char* colorName)
 {
     int count = 0;
+    dsFPDColor_t color = dsFPD_COLOR_WHITE;
     for (count = 0; count < ((sizeof(dsFPColorMap))/sizeof(dsFPColorMap[0])); count ++)
     {
-        if(!strncpy(colorName,dsFPColorMap[count].name,DS_FPD_KEY_SIZE))
-            return dsFPColorMap[count].color;
+        if(!strncpy(colorName,dsFPColorMap[count].name,DS_FPD_KEY_SIZE)){
+            color = dsFPColorMap[count].color;
+            break;
+        }
+
     }
+    return color;
 }
 /**
  * @brief Ensure dsFPInit() returns correct error codes during positive scenarios
@@ -1296,7 +1300,6 @@ void test_l1_dsFPD_negative_dsSetFPColor (void)
     char buffer[DS_FPD_KEY_SIZE];
     char colorName[DS_FPD_KEY_SIZE];
     int numOfSupportedColors =0;
-    dsFPDColor_t color;
     char supportedColorbuffer[DS_FPD_KEY_SIZE];
 
     // Step 01: Call dsSetFPColor() without initializing
