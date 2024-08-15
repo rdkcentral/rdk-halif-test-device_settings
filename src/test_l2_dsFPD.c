@@ -219,7 +219,7 @@ void test_l2_dsFPD_SetFPstateOFF_SetBrightness(void)
     UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
 
     pInstance = ut_kvp_profile_getInstance();
-    count = ut_kvp_getListCount(pInstance,"dsFPD/Number_of_Indicators");
+    count = ut_kvp_getUInt32Field(pInstance,"dsFPD/Number_of_Indicators");
     for (int i=1;i<=count;i++)
     {
         snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
