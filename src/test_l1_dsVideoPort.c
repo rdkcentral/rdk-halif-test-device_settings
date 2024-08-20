@@ -4934,11 +4934,11 @@ void test_l1_dsVideoPort_negative_dsSetPreferredColorDepth(void) {
  */
 void test_l1_dsVideoPort_positive_dsGetAllmEnabled(void) {
     gTestID = 79;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t status;
-    intptr_t handle = 0;
-    bool enabled;
+    dsError_t status = dsERR_NONE;
+    intptr_t handle  = 0;
+    bool enabled     = false;
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -4967,7 +4967,7 @@ void test_l1_dsVideoPort_positive_dsGetAllmEnabled(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO("\n Out %s\n", __FUNCTION__);
 }
 
 /**
@@ -4998,11 +4998,11 @@ void test_l1_dsVideoPort_positive_dsGetAllmEnabled(void) {
  */
 void test_l1_dsVideoPort_negative_dsGetAllmEnabled(void) {
     gTestID = 80;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t status;
+    dsError_t status = dsERR_NONE;
     intptr_t handle = 0, valid_handle = 0;
-    bool enabled;
+    bool enabled = false;
 
     // Step 01: Attempt to get ALLM Status without initialization
     status = dsGetAllmEnabled(-1, &enabled );
@@ -5043,7 +5043,7 @@ void test_l1_dsVideoPort_negative_dsGetAllmEnabled(void) {
     status = dsGetAllmEnabled(valid_handle, &enabled );
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG_INFO("\n Out %s\n", __FUNCTION__);
 }
 
 /**
@@ -5072,7 +5072,7 @@ void test_l1_dsVideoPort_positive_dsSetAllmEnabled(void) {
     gTestID = 81;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t status;
+    dsError_t status = dsERR_NONE;
     intptr_t handle = 0;
 
     // Step 01: Initialize video port system
@@ -5114,7 +5114,7 @@ void test_l1_dsVideoPort_positive_dsSetAllmEnabled(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 /**
@@ -5146,9 +5146,9 @@ void test_l1_dsVideoPort_negative_dsSetAllmEnabled(void) {
     gTestID = 82;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t status;
+    dsError_t status = dsERR_NONE;
     intptr_t handle = 0, valid_handle = 0;
-    bool enabled;
+    bool enabled = false;
 
     // Step 01: Attempt to Enable ALLM without initialization
     status = dsSetAllmEnabled(-1, true );
@@ -5181,7 +5181,7 @@ void test_l1_dsVideoPort_negative_dsSetAllmEnabled(void) {
     status = dsSetAllmEnabled(valid_handle, true );
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
+    UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
 static UT_test_suite_t * pSuite = NULL;
