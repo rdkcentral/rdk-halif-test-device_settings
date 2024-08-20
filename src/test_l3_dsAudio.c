@@ -300,39 +300,39 @@ void test_l3_dsAudio_initialize(void)
 
     if(gSourceType == 0) {
         /* Register connection status callback */
-        UT_LOG_INFO("Calling dsAudioOutRegisterConnectCB(CBFunc:[0x%0X])", audioOutPortConnectCB);
+        UT_LOG_INFO("Calling dsAudioOutRegisterConnectCB(IN:CBFunc:[0x%0X])", audioOutPortConnectCB);
         ret = dsAudioOutRegisterConnectCB(audioOutPortConnectCB);
         if (ret != dsERR_NONE) {
-            UT_LOG_ERROR("Failed dsAudioOutRegisterConnectCB(CBFunc:[0x%0X]) dsError_t:[%s]",
+            UT_LOG_ERROR("Failed dsAudioOutRegisterConnectCB(IN:CBFunc:[0x%0X]) dsError_t:[%s]",
                         audioOutPortConnectCB, ut_control_GetMapString(dsError_mapTable, ret));
         }
         else {
-            UT_LOG_INFO("Result dsAudioOutRegisterConnectCB(CBFunc:[0x%0X]) dsError_t:[%s]",
+            UT_LOG_INFO("Result dsAudioOutRegisterConnectCB(IN:CBFunc:[0x%0X]) dsError_t:[%s]",
                         audioOutPortConnectCB, ut_control_GetMapString(dsError_mapTable, ret));
         }
 
         /* Register ATMOS capabilities change callback */
-        UT_LOG_INFO("Calling dsAudioAtmosCapsChangeRegisterCB(cbFun:[0x%0X])", atmosCapsChange);
+        UT_LOG_INFO("Calling dsAudioAtmosCapsChangeRegisterCB(IN:cbFun:[0x%0X])", atmosCapsChange);
         ret = dsAudioAtmosCapsChangeRegisterCB (atmosCapsChange);
         if (ret != dsERR_NONE) {
-            UT_LOG_ERROR("Failed dsAudioAtmosCapsChangeRegisterCB(cbFun:[0x%0X]) dsError_t:[%s]",
+            UT_LOG_ERROR("Failed dsAudioAtmosCapsChangeRegisterCB(IN:cbFun:[0x%0X]) dsError_t:[%s]",
                         atmosCapsChange, ut_control_GetMapString(dsError_mapTable, ret));
         }
         else {
-            UT_LOG_INFO("Result dsAudioAtmosCapsChangeRegisterCB(cbFun:[0x%0X]) dsError_t:[%s]",
+            UT_LOG_INFO("Result dsAudioAtmosCapsChangeRegisterCB(IN:cbFun:[0x%0X]) dsError_t:[%s]",
                         atmosCapsChange, ut_control_GetMapString(dsError_mapTable, ret));
         }
     }
 
     /* Register audio format change callback */
-    UT_LOG_INFO("Calling dsAudioFormatUpdateRegisterCB(cbFun:[0x%0X])", audioFormatUpdateCB);
+    UT_LOG_INFO("Calling dsAudioFormatUpdateRegisterCB(IN:cbFun:[0x%0X])", audioFormatUpdateCB);
     ret = dsAudioFormatUpdateRegisterCB(audioFormatUpdateCB);
     if (ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsAudioFormatUpdateRegisterCB(cbFun:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsAudioFormatUpdateRegisterCB(IN:cbFun:[0x%0X]) dsError_t:[%s]",
                       audioFormatUpdateCB, ut_control_GetMapString(dsError_mapTable, ret));
     }
     else {
-        UT_LOG_INFO("Result dsAudioFormatUpdateRegisterCB(cbFun:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsAudioFormatUpdateRegisterCB(IN:cbFun:[0x%0X]) dsError_t:[%s]",
                      audioFormatUpdateCB, ut_control_GetMapString(dsError_mapTable, ret));
     }
 
@@ -381,12 +381,12 @@ void test_l3_dsAudio_enable_port(void)
 
     port = choice - 1;
 
-    UT_LOG_INFO("Calling dsGetAudioPort(type:[%s], index:[%d], handle:[])",
+    UT_LOG_INFO("Calling dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[])",
                  ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                  gDSAudioPortConfiguration[port].index);
     ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                       ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                       gDSAudioPortConfiguration[port].index,
                       handle,
@@ -394,40 +394,40 @@ void test_l3_dsAudio_enable_port(void)
         goto exit;
     }
     else {
-        UT_LOG_INFO("Result dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                      ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                      gDSAudioPortConfiguration[port].index,
                      handle,
                      ut_control_GetMapString(dsError_mapTable, ret));
     }
 
-    UT_LOG_INFO("Calling dsEnableAudioPort(handle:[0x%0X], enabled:[%s])",
+    UT_LOG_INFO("Calling dsEnableAudioPort(IN:handle:[0x%0X], IN:enabled:[%s])",
                  handle,
                  ut_control_GetMapString(bool_mapTable, true));
     ret = dsEnableAudioPort(handle, true);
     if (ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsEnableAudioPort(handle:[0x%0X], enabled:[%s]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsEnableAudioPort(IN:handle:[0x%0X], IN:enabled:[%s]) dsError_t:[%s]",
                       handle,
                       ut_control_GetMapString(bool_mapTable, true),
                       ut_control_GetMapString(dsError_mapTable, ret));
         goto exit;
     }
     else {
-        UT_LOG_INFO("Result dsEnableAudioPort(handle:[0x%0X], enabled:[%s]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsEnableAudioPort(IN:handle:[0x%0X], IN:enabled:[%s]) dsError_t:[%s]",
                      handle,
                      ut_control_GetMapString(bool_mapTable, true),
                      ut_control_GetMapString(dsError_mapTable, ret));
     }
 
-    UT_LOG_INFO("Calling dsIsAudioPortEnabled(handle:[0x%0X], enabled:[])", handle);
+    UT_LOG_INFO("Calling dsIsAudioPortEnabled(IN:handle:[0x%0X], OUT:enabled:[])", handle);
     ret = dsIsAudioPortEnabled(handle, &enabled);
     if (ret != dsERR_NONE || !enabled) {
-        UT_LOG_ERROR("Failed dsIsAudioPortEnabled(handle:[0x%0X], enabled:[%s]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsIsAudioPortEnabled(IN:handle:[0x%0X], OUT:enabled:[%s]) dsError_t:[%s]",
                       handle, ut_control_GetMapString(bool_mapTable, enabled),
                       ut_control_GetMapString(dsError_mapTable, ret));
     }
     else {
-        UT_LOG_INFO("Result dsIsAudioPortEnabled(handle:[0x%0X], enabled:[%s]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsIsAudioPortEnabled(IN:handle:[0x%0X], OUT:enabled:[%s]) dsError_t:[%s]",
                      handle, ut_control_GetMapString(bool_mapTable, enabled),
                      ut_control_GetMapString(dsError_mapTable, ret));
     }
@@ -450,34 +450,34 @@ void test_l3_dsAudio_enable_port(void)
         arcStatus.status = true;
         arcStatus.type   = (dsAudioARCTypes_t)archType;
 
-        UT_LOG_INFO("Calling dsAudioEnableARC(handle:[0x%0X], arcStatus:[.type=%s, .status=%s])",
+        UT_LOG_INFO("Calling dsAudioEnableARC(IN:handle:[0x%0X], IN:arcStatus:[.type=%s, .status=%s])",
                     handle,
                     ut_control_GetMapString(dsAudioARCTypes_mapTable, arcStatus.type),
                     ut_control_GetMapString(bool_mapTable, arcStatus.status));
         ret = dsAudioEnableARC(handle, arcStatus);
         if (ret != dsERR_NONE) {
-            UT_LOG_ERROR("Failed dsAudioEnableARC(handle:[0x%0X], arcStatus:[.type=%s, .status=%s]) dsError_t:[%s]",
+            UT_LOG_ERROR("Failed dsAudioEnableARC(IN:handle:[0x%0X], IN:arcStatus:[.type=%s, .status=%s]) dsError_t:[%s]",
                           handle,
                           ut_control_GetMapString(dsAudioARCTypes_mapTable, arcStatus.type),
                           ut_control_GetMapString(bool_mapTable, arcStatus.status),
                           ut_control_GetMapString(dsError_mapTable, ret));
         }
         else {
-            UT_LOG_INFO("Result dsAudioEnableARC(handle:[0x%0X], arcStatus:[.type=%s, .status=%s]) dsError_t:[%s]",
+            UT_LOG_INFO("Result dsAudioEnableARC(IN:handle:[0x%0X], IN:arcStatus:[.type=%s, .status=%s]) dsError_t:[%s]",
                         handle,
                         ut_control_GetMapString(dsAudioARCTypes_mapTable, arcStatus.type),
                         ut_control_GetMapString(bool_mapTable, arcStatus.status),
                         ut_control_GetMapString(dsError_mapTable, ret));
         }
-        UT_LOG_INFO("Calling dsIsAudioPortEnabled(handle:[0x%0X], enabled:[])", handle);
+        UT_LOG_INFO("Calling dsIsAudioPortEnabled(IN:handle:[0x%0X], OUT:enabled:[])", handle);
         ret = dsIsAudioPortEnabled(handle, &enabled);
         if (ret != dsERR_NONE || !enabled) {
-            UT_LOG_ERROR("Failed dsIsAudioPortEnabled(handle:[0x%0X], enabled:[%s]) dsError_t:[%s]",
+            UT_LOG_ERROR("Failed dsIsAudioPortEnabled(IN:handle:[0x%0X], OUT:enabled:[%s]) dsError_t:[%s]",
                         handle, ut_control_GetMapString(bool_mapTable, enabled),
                         ut_control_GetMapString(dsError_mapTable, ret));
         }
         else {
-            UT_LOG_INFO("Result dsIsAudioPortEnabled(handle:[0x%0X], enabled:[%s]) dsError_t:[%s]",
+            UT_LOG_INFO("Result dsIsAudioPortEnabled(IN:handle:[0x%0X], OUT:enabled:[%s]) dsError_t:[%s]",
                         handle, ut_control_GetMapString(bool_mapTable, enabled),
                         ut_control_GetMapString(dsError_mapTable, ret));
         }
@@ -518,7 +518,7 @@ void test_l3_dsAudio_disable_port(void)
     for(int32_t i = 0; i < gDSAudioNumberOfPorts; i++) {
         ret = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         if(ret != dsERR_NONE) {
-            UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+            UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                           ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[i].typeid),
                           gDSAudioPortConfiguration[i].index,
                           handle,
@@ -551,12 +551,12 @@ void test_l3_dsAudio_disable_port(void)
 
     port = enable_port[choice - 1];
 
-    UT_LOG_INFO("Calling dsGetAudioPort(type:[%s], index:[%d], handle:[])",
+    UT_LOG_INFO("Calling dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[])",
                  ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                  gDSAudioPortConfiguration[port].index);
     ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                       ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                       gDSAudioPortConfiguration[port].index,
                       handle,
@@ -564,41 +564,41 @@ void test_l3_dsAudio_disable_port(void)
         goto exit;
     }
     else {
-        UT_LOG_INFO("Result dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                      ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                      gDSAudioPortConfiguration[port].index,
                      handle,
                      ut_control_GetMapString(dsError_mapTable, ret));
     }
 
-    UT_LOG_INFO("Calling dsEnableAudioPort(handle:[0x%0X], enabled:[%s])",
+    UT_LOG_INFO("Calling dsEnableAudioPort(IN:handle:[0x%0X], IN:enabled:[%s])",
                  handle,
                  ut_control_GetMapString(bool_mapTable, false));
     ret = dsEnableAudioPort(handle, false);
     if (ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsEnableAudioPort(handle:[0x%0X], enabled:[%s]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsEnableAudioPort(IN:handle:[0x%0X], IN:enabled:[%s]) dsError_t:[%s]",
                       handle,
                       ut_control_GetMapString(bool_mapTable, false),
                       ut_control_GetMapString(dsError_mapTable, ret));
         goto exit;
     }
     else {
-        UT_LOG_INFO("Result dsEnableAudioPort(handle:[0x%0X], enabled:[%s]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsEnableAudioPort(IN:handle:[0x%0X], IN:enabled:[%s]) dsError_t:[%s]",
                      handle,
                      ut_control_GetMapString(bool_mapTable, false),
                      ut_control_GetMapString(dsError_mapTable, ret));
     }
 
-    UT_LOG_INFO("Calling dsIsAudioPortEnabled(handle:[0x%0X], enabled:[])",
+    UT_LOG_INFO("Calling dsIsAudioPortEnabled(IN:handle:[0x%0X], OUT:enabled:[])",
                  handle);
     ret = dsIsAudioPortEnabled(handle, &enabled);
     if (ret != dsERR_NONE || enabled) {
-        UT_LOG_ERROR("Failed dsIsAudioPortEnabled(handle:[0x%0X], enabled:[%s]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsIsAudioPortEnabled(IN:handle:[0x%0X], OUT:enabled:[%s]) dsError_t:[%s]",
                      handle, ut_control_GetMapString(bool_mapTable, enabled),
                      ut_control_GetMapString(dsError_mapTable, ret));
     }
     else {
-        UT_LOG_INFO("Result dsIsAudioPortEnabled(handle:[0x%0X], enabled:[%s]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsIsAudioPortEnabled(IN:handle:[0x%0X], OUT:enabled:[%s]) dsError_t:[%s]",
                      handle, ut_control_GetMapString(bool_mapTable, enabled),
                      ut_control_GetMapString(dsError_mapTable, ret));
     }
@@ -631,12 +631,12 @@ void test_l3_dsAudio_headphone_connection(void)
         if(gDSAudioPortConfiguration[i].typeid != dsAUDIOPORT_TYPE_HEADPHONE) {
             continue;
         }
-        UT_LOG_INFO("Calling dsGetAudioPort(type:[%s], index:[%d], handle:[])",
+        UT_LOG_INFO("Calling dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[])",
                      ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[i].typeid),
                      gDSAudioPortConfiguration[i].index);
         ret = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         if(ret != dsERR_NONE) {
-            UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+            UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                           ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[i].typeid),
                           gDSAudioPortConfiguration[i].index,
                           handle,
@@ -644,7 +644,7 @@ void test_l3_dsAudio_headphone_connection(void)
             goto exit;
         }
         else {
-            UT_LOG_INFO("Result dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+            UT_LOG_INFO("Result dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                          ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[i].typeid),
                          gDSAudioPortConfiguration[i].index,
                          handle,
@@ -658,16 +658,16 @@ void test_l3_dsAudio_headphone_connection(void)
         goto exit;
     }
 
-    UT_LOG_INFO("Calling dsAudioOutIsConnected(handle:[0x%0X], isConnected:[])",
+    UT_LOG_INFO("Calling dsAudioOutIsConnected(IN:handle:[0x%0X], OUT:isConnected:[])",
                  handle);
     ret = dsAudioOutIsConnected(handle, &isConnected);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsAudioOutIsConnected(handle:[0x%0X], isConnected:[%s]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsAudioOutIsConnected(IN:handle:[0x%0X], OUT:isConnected:[%s]) dsError_t:[%s]",
                       handle, ut_control_GetMapString(bool_mapTable, isConnected),
                       ut_control_GetMapString(dsError_mapTable, ret));
     }
     else {
-        UT_LOG_INFO("Result dsAudioOutIsConnected(handle:[0x%0X], isConnected:[%s]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsAudioOutIsConnected(IN:handle:[0x%0X], OUT:isConnected:[%s]) dsError_t:[%s]",
                      handle, ut_control_GetMapString(bool_mapTable, isConnected),
                      ut_control_GetMapString(dsError_mapTable, ret));
     }
@@ -718,7 +718,7 @@ void test_l3_dsAudio_audio_compression(void)
 
         ret = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         if(ret != dsERR_NONE) {
-            UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+            UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                           ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[i].typeid),
                           gDSAudioPortConfiguration[i].index,
                           handle,
@@ -751,12 +751,12 @@ void test_l3_dsAudio_audio_compression(void)
 
     port = enable_port[choice - 1];
 
-    UT_LOG_INFO("Calling dsGetAudioPort(type:[%s], index:[%d], handle:[])",
+    UT_LOG_INFO("Calling dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[])",
                  ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                  gDSAudioPortConfiguration[port].index);
     ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                       ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                       gDSAudioPortConfiguration[port].index,
                       handle,
@@ -764,7 +764,7 @@ void test_l3_dsAudio_audio_compression(void)
         goto exit;
     }
     else {
-        UT_LOG_INFO("Result dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                      ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                      gDSAudioPortConfiguration[port].index,
                      handle,
@@ -787,31 +787,31 @@ void test_l3_dsAudio_audio_compression(void)
         goto exit;
     }
 
-    UT_LOG_INFO("Calling dsSetAudioCompression(handle:[0x%0X], compression:[%s])",
+    UT_LOG_INFO("Calling dsSetAudioCompression(IN:handle:[0x%0X], IN:compression:[%s])",
                  handle,
                  ut_control_GetMapString(dsAudioCompression_mapTable, compression));
     ret = dsSetAudioCompression(handle, (dsAudioCompression_t)compression);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsSetAudioCompression(handle:[0x%0X], compression:[%s]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsSetAudioCompression(IN:handle:[0x%0X], IN:compression:[%s]) dsError_t:[%s]",
                       handle, ut_control_GetMapString(dsAudioCompression_mapTable, compression),
                       ut_control_GetMapString(dsError_mapTable, ret));
         goto exit;
     }
     else {
-        UT_LOG_INFO("Result dsSetAudioCompression(handle:[0x%0X], compression:[%s]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsSetAudioCompression(IN:handle:[0x%0X], IN:compression:[%s]) dsError_t:[%s]",
                      handle, ut_control_GetMapString(dsAudioCompression_mapTable, compression),
                      ut_control_GetMapString(dsError_mapTable, ret));
     }
 
-    UT_LOG_INFO("Calling dsGetAudioCompression(handle:[0x%0X], compression:[])", handle);
+    UT_LOG_INFO("Calling dsGetAudioCompression(IN:handle:[0x%0X], OUT:compression:[])", handle);
     ret = dsGetAudioCompression(handle, &compression_g);
     if(ret != dsERR_NONE || compression_g != compression) {
-        UT_LOG_ERROR("Failed dsGetAudioCompression(handle:[0x%0X], compression:[%s]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetAudioCompression(IN:handle:[0x%0X], OUT:compression:[%s]) dsError_t:[%s]",
                       handle, ut_control_GetMapString(dsAudioCompression_mapTable, compression_g),
                       ut_control_GetMapString(dsError_mapTable, ret));
     }
     else {
-        UT_LOG_INFO("Result dsGetAudioCompression(handle:[0x%0X], compression:[%s]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetAudioCompression(IN:handle:[0x%0X], OUT:compression:[%s]) dsError_t:[%s]",
                         handle, ut_control_GetMapString(dsAudioCompression_mapTable, compression_g),
                         ut_control_GetMapString(dsError_mapTable, ret));
     }
@@ -854,7 +854,7 @@ void test_l3_dsAudio_ms12_dap(void)
 
         ret = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         if(ret != dsERR_NONE) {
-            UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+            UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                           ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[i].typeid),
                           gDSAudioPortConfiguration[i].index,
                           handle,
@@ -887,12 +887,12 @@ void test_l3_dsAudio_ms12_dap(void)
 
     port = enable_port[choice - 1];
 
-    UT_LOG_INFO("Calling dsGetAudioPort(type:[%s], index:[%d], handle:[])",
+    UT_LOG_INFO("Calling dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[])",
                  ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                  gDSAudioPortConfiguration[port].index);
     ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                       ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                       gDSAudioPortConfiguration[port].index,
                       handle,
@@ -900,7 +900,7 @@ void test_l3_dsAudio_ms12_dap(void)
         goto exit;
     }
     else {
-        UT_LOG_INFO("Result dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                      ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                      gDSAudioPortConfiguration[port].index,
                      handle,
@@ -946,35 +946,35 @@ void test_l3_dsAudio_ms12_dap(void)
 
             mode = (choice == 1) ? true : false;
 
-            UT_LOG_INFO("Calling dsSetDolbyVolumeMode(handle:[0x%0X], mode:[%s])",
+            UT_LOG_INFO("Calling dsSetDolbyVolumeMode(IN:handle:[0x%0X], IN:mode:[%s])",
                         handle,
                         ut_control_GetMapString(bool_mapTable, mode));
             ret = dsSetDolbyVolumeMode(handle, mode);
             if(ret != dsERR_NONE) {
-                UT_LOG_ERROR("Failed dsSetDolbyVolumeMode(handle:[0x%0X], mode:[%s]) dsError_t:[%s]",
+                UT_LOG_ERROR("Failed dsSetDolbyVolumeMode(IN:handle:[0x%0X], IN:mode:[%s]) dsError_t:[%s]",
                               handle,
                               ut_control_GetMapString(bool_mapTable, mode),
                               ut_control_GetMapString(dsError_mapTable, ret));
                 break;
             }
             else {
-                UT_LOG_INFO("Result dsSetDolbyVolumeMode(handle:[0x%0X], mode:[%s]) dsError_t:[%s]",
+                UT_LOG_INFO("Result dsSetDolbyVolumeMode(IN:handle:[0x%0X], IN:mode:[%s]) dsError_t:[%s]",
                              handle,
                              ut_control_GetMapString(bool_mapTable, mode),
                              ut_control_GetMapString(dsError_mapTable, ret));
             }
 
-            UT_LOG_INFO("Calling dsGetDolbyVolumeMode(handle:[0x%0X], *mode:[])",
+            UT_LOG_INFO("Calling dsGetDolbyVolumeMode(IN:handle:[0x%0X], OUT:mode:[])",
                         handle);
             ret = dsGetDolbyVolumeMode(handle, &mode_g);
             if(ret != dsERR_NONE || mode != mode_g) {
-                UT_LOG_ERROR("Failed dsGetDolbyVolumeMode(handle:[0x%0X], *mode:[%s]) dsError_t:[%s]",
+                UT_LOG_ERROR("Failed dsGetDolbyVolumeMode(IN:handle:[0x%0X], OUT:mode:[%s]) dsError_t:[%s]",
                               handle,
                               ut_control_GetMapString(bool_mapTable, mode_g),
                               ut_control_GetMapString(dsError_mapTable, ret));
             }
             else {
-                UT_LOG_INFO("Result dsGetDolbyVolumeMode(handle:[0x%0X], *mode:[%s]) dsError_t:[%s]",
+                UT_LOG_INFO("Result dsGetDolbyVolumeMode(IN:handle:[0x%0X], OUT:mode:[%s]) dsError_t:[%s]",
                              handle,
                              ut_control_GetMapString(bool_mapTable, mode_g),
                              ut_control_GetMapString(dsError_mapTable, ret));
@@ -1012,30 +1012,30 @@ void test_l3_dsAudio_ms12_dap(void)
                 break;
             }
 
-            UT_LOG_INFO("Calling dsSetIntelligentEqualizerMode(handle:[0x%0X], mode:[%d])",
+            UT_LOG_INFO("Calling dsSetIntelligentEqualizerMode(IN:handle:[0x%0X], IN:mode:[%d])",
                         handle, mode);
             ret = dsSetIntelligentEqualizerMode(handle, mode);
             if(ret != dsERR_NONE) {
-                UT_LOG_ERROR("Failed dsSetIntelligentEqualizerMode(handle:[0x%0X], mode:[%d]) dsError_t:[%s]",
+                UT_LOG_ERROR("Failed dsSetIntelligentEqualizerMode(IN:handle:[0x%0X], IN:mode:[%d]) dsError_t:[%s]",
                               handle, mode,
                               ut_control_GetMapString(dsError_mapTable, ret));
                 break;
             }
             else {
-                UT_LOG_INFO("Result dsSetIntelligentEqualizerMode(handle:[0x%0X], mode:[%d]) dsError_t:[%s]",
+                UT_LOG_INFO("Result dsSetIntelligentEqualizerMode(IN:handle:[0x%0X], IN:mode:[%d]) dsError_t:[%s]",
                              handle, mode,
                              ut_control_GetMapString(dsError_mapTable, ret));
             }
 
-            UT_LOG_INFO("Calling dsGetIntelligentEqualizerMode(handle:[0x%0X], mode:[])", handle);
+            UT_LOG_INFO("Calling dsGetIntelligentEqualizerMode(IN:handle:[0x%0X], OUT:mode:[])", handle);
             ret = dsGetIntelligentEqualizerMode(handle, &mode_g);
             if(ret != dsERR_NONE || mode_g != mode) {
-                UT_LOG_ERROR("Failed dsGetIntelligentEqualizerMode(handle:[0x%0X], mode:[%d]) dsError_t:[%s]",
+                UT_LOG_ERROR("Failed dsGetIntelligentEqualizerMode(IN:handle:[0x%0X], OUT:mode:[%d]) dsError_t:[%s]",
                               handle, mode_g,
                               ut_control_GetMapString(dsError_mapTable, ret));
             }
             else {
-                UT_LOG_INFO("Result dsGetIntelligentEqualizerMode(handle:[0x%0X], mode:[%d]) dsError_t:[%s]",
+                UT_LOG_INFO("Result dsGetIntelligentEqualizerMode(IN:handle:[0x%0X], OUT:mode:[%d]) dsError_t:[%s]",
                              handle, mode_g,
                              ut_control_GetMapString(dsError_mapTable, ret));
             }
@@ -1058,31 +1058,31 @@ void test_l3_dsAudio_ms12_dap(void)
                 break;
             }
 
-            UT_LOG_INFO("Calling dsSetDialogEnhancement(handle:[0x%0X], level:[%d])",
+            UT_LOG_INFO("Calling dsSetDialogEnhancement(IN:handle:[0x%0X], IN:level:[%d])",
                         handle, level);
             ret = dsSetDialogEnhancement(handle, level);
             if(ret != dsERR_NONE) {
-                UT_LOG_ERROR("Failed dsSetDialogEnhancement(handle:[0x%0X], level:[%d]) dsError_t:[%s]",
+                UT_LOG_ERROR("Failed dsSetDialogEnhancement(IN:handle:[0x%0X], IN:level:[%d]) dsError_t:[%s]",
                               handle, level,
                               ut_control_GetMapString(dsError_mapTable, ret));
                 break;
             }
             else {
-                UT_LOG_INFO("Result dsSetDialogEnhancement(handle:[0x%0X], level:[%d]) dsError_t:[%s]",
+                UT_LOG_INFO("Result dsSetDialogEnhancement(IN:handle:[0x%0X], IN:level:[%d]) dsError_t:[%s]",
                              handle, level,
                              ut_control_GetMapString(dsError_mapTable, ret));
             }
 
-            UT_LOG_INFO("Calling dsGetDialogEnhancement(handle:[0x%0X], level:[%d])",
-                        handle, level);
+            UT_LOG_INFO("Calling dsGetDialogEnhancement(IN:handle:[0x%0X], OUT:level:[]])",
+                        handle);
             ret = dsGetDialogEnhancement(handle, &level_g);
             if(ret != dsERR_NONE || level_g != level) {
-                UT_LOG_ERROR("Failed dsGetDialogEnhancement(handle:[0x%0X], level:[%d]) dsError_t:[%s]",
+                UT_LOG_ERROR("Failed dsGetDialogEnhancement(IN:handle:[0x%0X], OUT:level:[%d]) dsError_t:[%s]",
                               handle, level_g,
                               ut_control_GetMapString(dsError_mapTable, ret));
             }
             else {
-                UT_LOG_INFO("Result dsGetDialogEnhancement(handle:[0x%0X], level:[%d]) dsError_t:[%s]",
+                UT_LOG_INFO("Result dsGetDialogEnhancement(IN:handle:[0x%0X], OUT:level:[%d]) dsError_t:[%s]",
                              handle, level_g,
                              ut_control_GetMapString(dsError_mapTable, ret));
             }
@@ -1112,31 +1112,31 @@ void test_l3_dsAudio_ms12_dap(void)
                 break;
             }
 
-            UT_LOG_INFO("Calling dsSetVolumeLeveller(handle:[0x%0X], volLeveller:[mode:%d, level:%d])",
+            UT_LOG_INFO("Calling dsSetVolumeLeveller(IN:handle:[0x%0X], IN:volLeveller:[mode:%d, level:%d])",
                          handle, volume_level.mode, volume_level.level);
             ret = dsSetVolumeLeveller(handle, volume_level);
             if(ret != dsERR_NONE) {
-                UT_LOG_ERROR("Failed dsSetVolumeLeveller(handle:[0x%0X], volLeveller:[mode:%d, level:%d]) dsError_t:[%s]",
+                UT_LOG_ERROR("Failed dsSetVolumeLeveller(IN:handle:[0x%0X], IN:volLeveller:[mode:%d, level:%d]) dsError_t:[%s]",
                               handle, volume_level.mode, volume_level.level,
                               ut_control_GetMapString(dsError_mapTable, ret));
                 break;
             }
             else {
-                UT_LOG_INFO("Result dsSetVolumeLeveller(handle:[0x%0X], volLeveller:[mode:%d, level:%d]) dsError_t:[%s]",
+                UT_LOG_INFO("Result dsSetVolumeLeveller(IN:handle:[0x%0X], IN:volLeveller:[mode:%d, level:%d]) dsError_t:[%s]",
                              handle, volume_level.mode, volume_level.level,
                              ut_control_GetMapString(dsError_mapTable, ret));
             }
 
-            UT_LOG_INFO("Calling dsGetVolumeLeveller(handle:[0x%0X], volLeveller:[])",
+            UT_LOG_INFO("Calling dsGetVolumeLeveller(IN:handle:[0x%0X], OUT:volLeveller:[])",
                          handle);
             ret = dsGetVolumeLeveller(handle, &volume_level_g);
             if(ret != dsERR_NONE || volume_level_g.mode != volume_level.mode || volume_level_g.level != volume_level.level) {
-                UT_LOG_ERROR("Failed dsGetVolumeLeveller(handle:[0x%0X], volLeveller:[mode:%d, level:%d]) dsError_t:[%s]",
+                UT_LOG_ERROR("Failed dsGetVolumeLeveller(IN:handle:[0x%0X], OUT:volLeveller:[mode:%d, level:%d]) dsError_t:[%s]",
                               handle, volume_level_g.mode, volume_level_g.level,
                               ut_control_GetMapString(dsError_mapTable, ret));
             }
             else {
-                UT_LOG_INFO("Result dsGetVolumeLeveller(handle:[0x%0X], volLeveller:[mode:%d, level:%d]) dsError_t:[%s]",
+                UT_LOG_INFO("Result dsGetVolumeLeveller(IN:handle:[0x%0X], OUT:volLeveller:[mode:%d, level:%d]) dsError_t:[%s]",
                              handle, volume_level_g.mode, volume_level_g.level,
                              ut_control_GetMapString(dsError_mapTable, ret));
             }
@@ -1158,30 +1158,30 @@ void test_l3_dsAudio_ms12_dap(void)
                 break;
             }
 
-            UT_LOG_INFO("Calling dsSetDialogEnhancement(handle:[0x%0X], boost:[%d])",
+            UT_LOG_INFO("Calling dsSetBassEnhancer(IN:handle:[0x%0X], IN:boost:[%d])",
                         handle, boost);
             ret = dsSetBassEnhancer(handle, boost);
             if(ret != dsERR_NONE) {
-                UT_LOG_ERROR("Failed dsSetBassEnhancer(handle:[0x%0X], boost:[%d]) dsError_t:[%s]",
+                UT_LOG_ERROR("Failed dsSetBassEnhancer(IN:handle:[0x%0X], IN:boost:[%d]) dsError_t:[%s]",
                               handle, boost,
                               ut_control_GetMapString(dsError_mapTable, ret));
                 break;
             }
             else {
-                UT_LOG_INFO("Result dsSetBassEnhancer(handle:[0x%0X], boost:[%d]) dsError_t:[%s]",
+                UT_LOG_INFO("Result dsSetBassEnhancer(IN:handle:[0x%0X], IN:boost:[%d]) dsError_t:[%s]",
                              handle, boost,
                              ut_control_GetMapString(dsError_mapTable, ret));
             }
 
-            UT_LOG_INFO("Calling dsGetBassEnhancer(handle:[0x%0X], boost:[])", handle);
+            UT_LOG_INFO("Calling dsGetBassEnhancer(IN:handle:[0x%0X], OUT:boost:[])", handle);
             ret = dsGetBassEnhancer(handle, &boost_g);
             if(ret != dsERR_NONE || boost != boost_g) {
-                UT_LOG_ERROR("Failed dsGetBassEnhancer(handle:[0x%0X], boost:[%d]) dsError_t:[%s]",
+                UT_LOG_ERROR("Failed dsGetBassEnhancer(IN:handle:[0x%0X], OUT:boost:[%d]) dsError_t:[%s]",
                               handle, boost_g,
                               ut_control_GetMapString(dsError_mapTable, ret));
             }
             else {
-                UT_LOG_INFO("Result dsGetBassEnhancer(handle:[0x%0X], boost:[%d]) dsError_t:[%s]",
+                UT_LOG_INFO("Result dsGetBassEnhancer(IN:handle:[0x%0X], OUT:boost:[%d]) dsError_t:[%s]",
                              handle, boost_g,
                              ut_control_GetMapString(dsError_mapTable, ret));
             }
@@ -1206,34 +1206,34 @@ void test_l3_dsAudio_ms12_dap(void)
 
             mode = (choice == 1) ? true : false;
 
-            UT_LOG_INFO("Calling dsEnableSurroundDecoder(handle:[0x%0X], mode:[%s])",
+            UT_LOG_INFO("Calling dsEnableSurroundDecoder(IN:handle:[0x%0X], IN:mode:[%s])",
                         handle,
                         ut_control_GetMapString(bool_mapTable, mode));
             ret = dsEnableSurroundDecoder(handle, mode);
             if(ret != dsERR_NONE) {
-                UT_LOG_ERROR("Failed dsEnableSurroundDecoder(handle:[0x%0X], mode:[%s]) dsError_t:[%s]",
+                UT_LOG_ERROR("Failed dsEnableSurroundDecoder(IN:handle:[0x%0X], IN:mode:[%s]) dsError_t:[%s]",
                               handle,
                               ut_control_GetMapString(bool_mapTable, mode),
                               ut_control_GetMapString(dsError_mapTable, ret));
                 break;
             }
             else {
-                UT_LOG_INFO("Result dsEnableSurroundDecoder(handle:[0x%0X], mode:[%s]) dsError_t:[%s]",
+                UT_LOG_INFO("Result dsEnableSurroundDecoder(IN:handle:[0x%0X], IN:mode:[%s]) dsError_t:[%s]",
                              handle,
                              ut_control_GetMapString(bool_mapTable, mode),
                              ut_control_GetMapString(dsError_mapTable, ret));
             }
 
-            UT_LOG_INFO("Calling dsIsSurroundDecoderEnabled(handle:[0x%0X], mode:[])", handle);
+            UT_LOG_INFO("Calling dsIsSurroundDecoderEnabled(IN:handle:[0x%0X], OUT:mode:[])", handle);
             ret = dsIsSurroundDecoderEnabled(handle, &mode_g);
             if(ret != dsERR_NONE || mode != mode_g) {
-                UT_LOG_ERROR("Failed dsIsSurroundDecoderEnabled(handle:[0x%0X], mode:[%s]) dsError_t:[%s]",
+                UT_LOG_ERROR("Failed dsIsSurroundDecoderEnabled(IN:handle:[0x%0X], OUT:mode:[%s]) dsError_t:[%s]",
                               handle,
                               ut_control_GetMapString(bool_mapTable, mode_g),
                               ut_control_GetMapString(dsError_mapTable, ret));
             }
             else {
-                UT_LOG_INFO("Result dsIsSurroundDecoderEnabled(handle:[0x%0X], mode:[%s]) dsError_t:[%s]",
+                UT_LOG_INFO("Result dsIsSurroundDecoderEnabled(IN:handle:[0x%0X], OUT:mode:[%s]) dsError_t:[%s]",
                              handle,
                              ut_control_GetMapString(bool_mapTable, mode_g),
                              ut_control_GetMapString(dsError_mapTable, ret));
@@ -1258,30 +1258,30 @@ void test_l3_dsAudio_ms12_dap(void)
                 break;
             }
 
-            UT_LOG_INFO("Calling dsSetDRCMode(handle:[0x%0X], mode:[%d])",
+            UT_LOG_INFO("Calling dsSetDRCMode(IN:handle:[0x%0X], IN:mode:[%d])",
                          handle, mode);
             ret = dsSetDRCMode(handle, mode);
             if(ret != dsERR_NONE) {
-                UT_LOG_ERROR("Failed dsSetDRCMode(handle:[0x%0X], mode:[%d]) dsError_t:[%s]",
+                UT_LOG_ERROR("Failed dsSetDRCMode(IN:handle:[0x%0X], IN:mode:[%d]) dsError_t:[%s]",
                                 handle, mode,
                                 ut_control_GetMapString(dsError_mapTable, ret));
                 break;
             }
             else {
-                UT_LOG_INFO("Result dsSetDRCMode(handle:[0x%0X], mode:[%d]) dsError_t:[%s]",
+                UT_LOG_INFO("Result dsSetDRCMode(IN:handle:[0x%0X], IN:mode:[%d]) dsError_t:[%s]",
                                 handle, mode,
                                 ut_control_GetMapString(dsError_mapTable, ret));
             }
 
-            UT_LOG_INFO("Calling dsGetDRCMode(handle:[0x%0X], mode:[])", handle);
+            UT_LOG_INFO("Calling dsGetDRCMode(IN:handle:[0x%0X], OUT:mode:[])", handle);
             ret = dsGetDRCMode(handle, &mode_g);
             if(ret != dsERR_NONE || mode_g != mode) {
-                UT_LOG_ERROR("Failed dsGetDRCMode(handle:[0x%0X], mode:[%d]) dsError_t:[%s]",
+                UT_LOG_ERROR("Failed dsGetDRCMode(IN:handle:[0x%0X], OUT:mode:[%d]) dsError_t:[%s]",
                              handle, mode_g,
                              ut_control_GetMapString(dsError_mapTable, ret));
             }
             else {
-                UT_LOG_INFO("Result dsGetDRCMode(handle:[0x%0X], mode:[%d]) dsError_t:[%s]",
+                UT_LOG_INFO("Result dsGetDRCMode(IN:handle:[0x%0X], OUT:mode:[%d]) dsError_t:[%s]",
                              handle, mode_g,
                              ut_control_GetMapString(dsError_mapTable, ret));
             }
@@ -1311,31 +1311,31 @@ void test_l3_dsAudio_ms12_dap(void)
                 break;
             }
 
-            UT_LOG_INFO("Calling dsSetSurroundVirtualizer(handle:[0x%0X], virtualizer:[mode:%d, boost:%d])",
+            UT_LOG_INFO("Calling dsSetSurroundVirtualizer(IN:handle:[0x%0X], IN:virtualizer:[mode:%d, boost:%d])",
                          handle, surround_virtualize.mode, surround_virtualize.boost);
             ret = dsSetSurroundVirtualizer(handle, surround_virtualize);
             if(ret != dsERR_NONE) {
-                UT_LOG_ERROR("Failed dsSetSurroundVirtualizer(handle:[0x%0X], virtualizer:[mode:%d, boost:%d]) dsError_t:[%s]",
+                UT_LOG_ERROR("Failed dsSetSurroundVirtualizer(IN:handle:[0x%0X], IN:virtualizer:[mode:%d, boost:%d]) dsError_t:[%s]",
                               handle, surround_virtualize.mode, surround_virtualize.boost,
                               ut_control_GetMapString(dsError_mapTable, ret));
                 break;
             }
             else {
-                UT_LOG_INFO("Result dsSetSurroundVirtualizer(handle:[0x%0X], virtualizer:[mode:%d, boost:%d]) dsError_t:[%s]",
+                UT_LOG_INFO("Result dsSetSurroundVirtualizer(IN:handle:[0x%0X], IN:virtualizer:[mode:%d, boost:%d]) dsError_t:[%s]",
                              handle, surround_virtualize.mode, surround_virtualize.boost,
                              ut_control_GetMapString(dsError_mapTable, ret));
             }
 
-            UT_LOG_INFO("Calling dsGetSurroundVirtualizer(handle:[0x%0X], virtualizer:[])",
+            UT_LOG_INFO("Calling dsGetSurroundVirtualizer(IN:handle:[0x%0X], OUT:virtualizer:[])",
                          handle, surround_virtualize.mode, surround_virtualize.boost);
             ret = dsGetSurroundVirtualizer(handle, &surround_virtualize_g);
             if(ret != dsERR_NONE || surround_virtualize_g.mode != surround_virtualize.mode || surround_virtualize_g.boost != surround_virtualize.boost) {
-                UT_LOG_ERROR("Failed dsGetSurroundVirtualizer(handle:[0x%0X], virtualizer:[mode:%d, boost:%d]) dsError_t:[%s]",
+                UT_LOG_ERROR("Failed dsGetSurroundVirtualizer(IN:handle:[0x%0X], OUT:virtualizer:[mode:%d, boost:%d]) dsError_t:[%s]",
                               handle, surround_virtualize_g.mode, surround_virtualize_g.boost,
                               ut_control_GetMapString(dsError_mapTable, ret));
             }
             else {
-                UT_LOG_INFO("Result dsGetSurroundVirtualizer(handle:[0x%0X], virtualizer:[mode:%d, boost:%d]) dsError_t:[%s]",
+                UT_LOG_INFO("Result dsGetSurroundVirtualizer(IN:handle:[0x%0X], OUT:virtualizer:[mode:%d, boost:%d]) dsError_t:[%s]",
                              handle, surround_virtualize_g.mode, surround_virtualize_g.boost,
                              ut_control_GetMapString(dsError_mapTable, ret));
             }
@@ -1360,34 +1360,34 @@ void test_l3_dsAudio_ms12_dap(void)
 
             mode = (choice == 1) ? true : false;
 
-            UT_LOG_INFO("Calling dsSetMISteering(handle:[0x%0X], mode:[%s])",
+            UT_LOG_INFO("Calling dsSetMISteering(IN:handle:[0x%0X], IN:mode:[%s])",
                         handle,
                         ut_control_GetMapString(bool_mapTable, mode));
             ret = dsSetMISteering(handle, mode);
             if(ret != dsERR_NONE) {
-                UT_LOG_ERROR("Failed dsSetMISteering(handle:[0x%0X], mode:[%s]) dsError_t:[%s]",
+                UT_LOG_ERROR("Failed dsSetMISteering(IN:handle:[0x%0X], IN:mode:[%s]) dsError_t:[%s]",
                               handle,
                               ut_control_GetMapString(bool_mapTable, mode),
                               ut_control_GetMapString(dsError_mapTable, ret));
                 break;
             }
             else {
-                UT_LOG_INFO("Result dsSetMISteering(handle:[0x%0X], mode:[%s]) dsError_t:[%s]",
+                UT_LOG_INFO("Result dsSetMISteering(IN:handle:[0x%0X], IN:mode:[%s]) dsError_t:[%s]",
                                 handle,
                                 ut_control_GetMapString(bool_mapTable, mode),
                                 ut_control_GetMapString(dsError_mapTable, ret));
             }
 
-            UT_LOG_INFO("Calling dsGetMISteering(handle:[0x%0X], mode:[])", handle);
+            UT_LOG_INFO("Calling dsGetMISteering(IN:handle:[0x%0X], OUT:mode:[])", handle);
             ret = dsGetMISteering(handle, &mode_g);
             if(ret != dsERR_NONE || mode != mode_g) {
-                UT_LOG_ERROR("Failed dsGetMISteering(handle:[0x%0X], mode:[%s]) dsError_t:[%s]",
+                UT_LOG_ERROR("Failed dsGetMISteering(IN:handle:[0x%0X], OUT:mode:[%s]) dsError_t:[%s]",
                               handle,
                               ut_control_GetMapString(bool_mapTable, mode_g),
                               ut_control_GetMapString(dsError_mapTable, ret));
             }
             else {
-                UT_LOG_INFO("Result dsGetMISteering(handle:[0x%0X], *mode:[%s]) dsError_t:[%s]",
+                UT_LOG_INFO("Result dsGetMISteering(handle:[0x%0X], OUT:mode:[%s]) dsError_t:[%s]",
                              handle,
                              ut_control_GetMapString(bool_mapTable, mode_g),
                              ut_control_GetMapString(dsError_mapTable, ret));
@@ -1412,30 +1412,30 @@ void test_l3_dsAudio_ms12_dap(void)
                 break;
             }
 
-            UT_LOG_INFO("Calling dsSetGraphicEqualizerMode(handle:[0x%0X], mode:[%d])",
+            UT_LOG_INFO("Calling dsSetGraphicEqualizerMode(IN:handle:[0x%0X], IN:mode:[%d])",
                         handle, mode);
             ret = dsSetGraphicEqualizerMode(handle, mode);
             if(ret != dsERR_NONE) {
-                UT_LOG_ERROR("Failed dsSetGraphicEqualizerMode(handle:[0x%0X], mode:[%d]) dsError_t:[%s]",
+                UT_LOG_ERROR("Failed dsSetGraphicEqualizerMode(IN:handle:[0x%0X], IN:mode:[%d]) dsError_t:[%s]",
                               handle, mode,
                               ut_control_GetMapString(dsError_mapTable, ret));
                 break;
             }
             else {
-                UT_LOG_INFO("Result dsSetGraphicEqualizerMode(handle:[0x%0X], mode:[%d]) dsError_t:[%s]",
+                UT_LOG_INFO("Result dsSetGraphicEqualizerMode(IN:handle:[0x%0X], IN:mode:[%d]) dsError_t:[%s]",
                              handle, mode,
                              ut_control_GetMapString(dsError_mapTable, ret));
             }
 
-            UT_LOG_INFO("Calling dsGetGraphicEqualizerMode(handle:[0x%0X], mode:[])", handle);
+            UT_LOG_INFO("Calling dsGetGraphicEqualizerMode(IN:handle:[0x%0X], OUT:mode:[])", handle);
             ret = dsGetGraphicEqualizerMode(handle, &mode_g);
             if(ret != dsERR_NONE || mode != mode_g) {
-                UT_LOG_ERROR("Failed dsGetGraphicEqualizerMode(handle:[0x%0X], mode:[%d]) dsError_t:[%s]",
+                UT_LOG_ERROR("Failed dsGetGraphicEqualizerMode(IN:handle:[0x%0X], OUT:mode:[%d]) dsError_t:[%s]",
                               handle, mode_g,
                               ut_control_GetMapString(dsError_mapTable, ret));
             }
             else {
-                UT_LOG_INFO("Result dsGetGraphicEqualizerMode(handle:[0x%0X], mode:[%d]) dsError_t:[%s]",
+                UT_LOG_INFO("Result dsGetGraphicEqualizerMode(IN:handle:[0x%0X], OUT:mode:[%d]) dsError_t:[%s]",
                              handle, mode_g,
                              ut_control_GetMapString(dsError_mapTable, ret));
             }
@@ -1460,34 +1460,34 @@ void test_l3_dsAudio_ms12_dap(void)
 
             mode = (choice == 1) ? true : false;
 
-            UT_LOG_INFO("Calling dsEnableSurroundDecoder(handle:[0x%0X], mode:[%s])",
+            UT_LOG_INFO("Calling dsEnableLEConfig(IN:handle:[0x%0X], IN:mode:[%s])",
                         handle,
                         ut_control_GetMapString(bool_mapTable, mode));
             ret = dsEnableLEConfig(handle, mode);
             if(ret != dsERR_NONE) {
-                UT_LOG_ERROR("Failed dsEnableLEConfig(handle:[0x%0X], mode:[%s]) dsError_t:[%s]",
+                UT_LOG_ERROR("Failed dsEnableLEConfig(IN:handle:[0x%0X], IN:mode:[%s]) dsError_t:[%s]",
                               handle,
                               ut_control_GetMapString(bool_mapTable, mode),
                               ut_control_GetMapString(dsError_mapTable, ret));
                 break;
             }
             else {
-                UT_LOG_INFO("Result dsEnableLEConfig(handle:[0x%0X], mode:[%s]) dsError_t:[%s]",
+                UT_LOG_INFO("Result dsEnableLEConfig(IN:handle:[0x%0X], IN:mode:[%s]) dsError_t:[%s]",
                              handle,
                              ut_control_GetMapString(bool_mapTable, mode),
                              ut_control_GetMapString(dsError_mapTable, ret));
             }
 
-            UT_LOG_INFO("Calling dsGetLEConfig(handle:[0x%0X], mode:[])", handle);
+            UT_LOG_INFO("Calling dsGetLEConfig(IN:handle:[0x%0X], OUT:mode:[])", handle);
             ret = dsGetLEConfig(handle, &mode_g);
             if(ret != dsERR_NONE || mode != mode_g) {
-                UT_LOG_ERROR("Failed dsGetLEConfig(handle:[0x%0X], mode:[%s]) dsError_t:[%s]",
+                UT_LOG_ERROR("Failed dsGetLEConfig(IN:handle:[0x%0X], OUT:mode:[%s]) dsError_t:[%s]",
                               handle,
                               ut_control_GetMapString(bool_mapTable, mode_g),
                               ut_control_GetMapString(dsError_mapTable, ret));
             }
             else {
-                UT_LOG_INFO("Result dsGetLEConfig(handle:[0x%0X], mode:[%s]) dsError_t:[%s]",
+                UT_LOG_INFO("Result dsGetLEConfig(IN:handle:[0x%0X], OUT:mode:[%s]) dsError_t:[%s]",
                              handle,
                              ut_control_GetMapString(bool_mapTable, mode_g),
                              ut_control_GetMapString(dsError_mapTable, ret));
@@ -1565,12 +1565,12 @@ void test_l3_dsAudio_stereo_mode(void)
 
     port = enable_port[choice - 1];
 
-    UT_LOG_INFO("Calling dsGetAudioPort(type:[%s], index:[%d], handle:[])",
+    UT_LOG_INFO("Calling dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[])",
                  ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                  gDSAudioPortConfiguration[port].index);
     ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                       ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                       gDSAudioPortConfiguration[port].index,
                       handle,
@@ -1578,7 +1578,7 @@ void test_l3_dsAudio_stereo_mode(void)
         goto exit;
     }
     else {
-        UT_LOG_INFO("Result dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                      ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                      gDSAudioPortConfiguration[port].index,
                      handle,
@@ -1602,31 +1602,31 @@ void test_l3_dsAudio_stereo_mode(void)
         goto exit;
     }
 
-    UT_LOG_INFO("Calling dsSetStereoMode(handle:[0x%0X], mode:[%s])",
+    UT_LOG_INFO("Calling dsSetStereoMode(IN:handle:[0x%0X], IN:mode:[%s])",
                  handle,
                  ut_control_GetMapString(dsAudioStereoMode_mapTable, mode));
     ret = dsSetStereoMode(handle, (dsAudioStereoMode_t)mode);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsSetStereoMode(handle:[0x%0X], mode:[%s]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsSetStereoMode(IN:handle:[0x%0X], IN:mode:[%s]) dsError_t:[%s]",
                       handle, ut_control_GetMapString(dsAudioStereoMode_mapTable, mode),
                       ut_control_GetMapString(dsError_mapTable, ret));
         goto exit;
     }
     else {
-        UT_LOG_INFO("Result dsSetStereoMode(handle:[0x%0X], mode:[%s]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsSetStereoMode(IN:handle:[0x%0X], IN:mode:[%s]) dsError_t:[%s]",
                         handle, ut_control_GetMapString(dsAudioStereoMode_mapTable, mode),
                         ut_control_GetMapString(dsError_mapTable, ret));
     }
 
-    UT_LOG_INFO("Calling dsGetStereoMode(handle:[0x%0X], mode:[])", handle);
+    UT_LOG_INFO("Calling dsGetStereoMode(IN:handle:[0x%0X], OUT:mode:[])", handle);
     ret = dsGetStereoMode(handle, (dsAudioStereoMode_t *)&mode_g);
     if(ret != dsERR_NONE || mode != mode_g) {
-        UT_LOG_ERROR("Failed dsGetStereoMode(handle:[0x%0X], mode:[%s]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetStereoMode(IN:handle:[0x%0X], OUT:mode:[%s]) dsError_t:[%s]",
                       handle, ut_control_GetMapString(dsAudioStereoMode_mapTable, mode_g),
                       ut_control_GetMapString(dsError_mapTable, ret));
     }
     else {
-        UT_LOG_INFO("Result dsGetStereoMode(handle:[0x%0X], mode:[%s]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetStereoMode(IN:handle:[0x%0X], OUT:mode:[%s]) dsError_t:[%s]",
                         handle, ut_control_GetMapString(dsAudioStereoMode_mapTable, mode_g),
                         ut_control_GetMapString(dsError_mapTable, ret));
     }
@@ -1667,7 +1667,7 @@ void test_l3_dsAudio_stereo_auto_mode(void)
     for(int32_t i = 0; i < gDSAudioNumberOfPorts; i++) {
         ret = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         if(ret != dsERR_NONE) {
-             UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+             UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                           ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[i].typeid),
                           gDSAudioPortConfiguration[i].index,
                           handle,
@@ -1700,12 +1700,12 @@ void test_l3_dsAudio_stereo_auto_mode(void)
 
     port = enable_port[choice - 1];
 
-    UT_LOG_INFO("Calling dsGetAudioPort(type:[%s], index:[%d], handle:[])",
+    UT_LOG_INFO("Calling dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[])",
                  ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                  gDSAudioPortConfiguration[port].index);
     ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                       ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                       gDSAudioPortConfiguration[port].index,
                       handle,
@@ -1713,7 +1713,7 @@ void test_l3_dsAudio_stereo_auto_mode(void)
         goto exit;
     }
     else {
-        UT_LOG_INFO("Result dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                      ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                      gDSAudioPortConfiguration[port].index,
                      handle,
@@ -1730,32 +1730,32 @@ void test_l3_dsAudio_stereo_auto_mode(void)
 
     mode = (choice == 1) ? true : false;
 
-    UT_LOG_INFO("Calling dsSetStereoAuto(handle:[0x%0X], autoMode:[%s])",
+    UT_LOG_INFO("Calling dsSetStereoAuto(IN:handle:[0x%0X], IN:autoMode:[%s])",
                 handle,
                 ut_control_GetMapString(bool_mapTable, mode));
     ret = dsSetStereoAuto(handle, mode);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsSetStereoAuto(handle:[0x%0X], autoMode:[%s]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsSetStereoAuto(IN:handle:[0x%0X], IN:autoMode:[%s]) dsError_t:[%s]",
                         handle, ut_control_GetMapString(bool_mapTable, mode),
                         ut_control_GetMapString(dsError_mapTable, ret));
         goto exit;
     }
     else {
-        UT_LOG_INFO("Result dsSetStereoAuto(handle:[0x%0X], autoMode:[%s]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsSetStereoAuto(IN:handle:[0x%0X], IN:autoMode:[%s]) dsError_t:[%s]",
                         handle, ut_control_GetMapString(bool_mapTable, mode),
                         ut_control_GetMapString(dsError_mapTable, ret));
     }
 
-    UT_LOG_INFO("Calling dsGetStereoAuto(handle:[0x%0X], autoMode:[])",
+    UT_LOG_INFO("Calling dsGetStereoAuto(IN:handle:[0x%0X], OUT:autoMode:[])",
                 handle);
     ret = dsGetStereoAuto(handle, &mode_g);
     if(ret != dsERR_NONE || mode_g != mode) {
-        UT_LOG_ERROR("Failed dsGetStereoAuto(handle:[0x%0X], autoMode:[%s]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetStereoAuto(IN:handle:[0x%0X], OUT:autoMode:[%s]) dsError_t:[%s]",
                         handle, ut_control_GetMapString(bool_mapTable, mode_g),
                         ut_control_GetMapString(dsError_mapTable, ret));
     }
     else {
-        UT_LOG_INFO("Result dsGetStereoAuto(handle:[0x%0X], autoMode:[%s]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetStereoAuto(IN:handle:[0x%0X], OUT:autoMode:[%s]) dsError_t:[%s]",
                         handle, ut_control_GetMapString(bool_mapTable, mode_g),
                         ut_control_GetMapString(dsError_mapTable, ret));
     }
@@ -1797,7 +1797,7 @@ void test_l3_dsAudio_set_audio_level(void)
     for(int32_t i = 0; i < gDSAudioNumberOfPorts; i++) {
         ret = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         if(ret != dsERR_NONE) {
-            UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+            UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                           ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[i].typeid),
                           gDSAudioPortConfiguration[i].index,
                           handle,
@@ -1830,12 +1830,12 @@ void test_l3_dsAudio_set_audio_level(void)
 
     port = enable_port[choice - 1];
 
-    UT_LOG_INFO("Calling dsGetAudioPort(type:[%s], index:[%d], handle:[])",
+    UT_LOG_INFO("Calling dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[])",
                  ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                  gDSAudioPortConfiguration[port].index);
     ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                       ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                       gDSAudioPortConfiguration[port].index,
                       handle,
@@ -1843,7 +1843,7 @@ void test_l3_dsAudio_set_audio_level(void)
         goto exit;
     }
     else {
-        UT_LOG_INFO("Result dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                      ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                      gDSAudioPortConfiguration[port].index,
                      handle,
@@ -1858,30 +1858,30 @@ void test_l3_dsAudio_set_audio_level(void)
         goto exit;
     }
 
-    UT_LOG_INFO("Calling dsSetAudioLevel(handle:[0x%0X], level:[%f])",
+    UT_LOG_INFO("Calling dsSetAudioLevel(IN:handle:[0x%0X], IN:level:[%f])",
                  handle, gain_level);
     ret = dsSetAudioLevel(handle, gain_level);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsSetAudioLevel(handle:[0x%0X], level:[%f]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsSetAudioLevel(IN:handle:[0x%0X], IN:level:[%f]) dsError_t:[%s]",
                       handle, gain_level,
                       ut_control_GetMapString(dsError_mapTable, ret));
         goto exit;
     }
     else {
-        UT_LOG_INFO("Result dsSetAudioLevel(handle:[0x%0X], level:[%f]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsSetAudioLevel(IN:handle:[0x%0X], IN:level:[%f]) dsError_t:[%s]",
                      handle, gain_level,
                      ut_control_GetMapString(dsError_mapTable, ret));
     }
 
-    UT_LOG_INFO("Calling dsGetAudioLevel(handle:[0x%0X], level:[])", handle);
+    UT_LOG_INFO("Calling dsGetAudioLevel(IN:handle:[0x%0X], OUT:level:[])", handle);
     ret = dsGetAudioLevel(handle, &gain_level_g);
     if(ret != dsERR_NONE || gain_level_g != gain_level) {
-        UT_LOG_ERROR("Failed dsGetAudioLevel(handle:[0x%0X], level:[%f]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetAudioLevel(IN:handle:[0x%0X], OUT:level:[%f]) dsError_t:[%s]",
                       handle, gain_level_g,
                       ut_control_GetMapString(dsError_mapTable, ret));
     }
     else {
-        UT_LOG_INFO("Result dsGetAudioLevel(handle:[0x%0X], level:[%f]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetAudioLevel(IN:handle:[0x%0X], OUT:level:[%f]) dsError_t:[%s]",
                      handle, gain_level_g,
                      ut_control_GetMapString(dsError_mapTable, ret));
     }
@@ -1918,12 +1918,12 @@ void test_l3_dsAudio_set_audio_gain(void)
             continue;
         }
 
-        UT_LOG_INFO("Calling dsGetAudioPort(type:[%s], index:[%d], handle:[])",
+        UT_LOG_INFO("Calling dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[])",
                     ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[i].typeid),
                     gDSAudioPortConfiguration[i].index);
         ret = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         if(ret != dsERR_NONE) {
-            UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+            UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                         ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[i].typeid),
                         gDSAudioPortConfiguration[i].index,
                         handle,
@@ -1931,24 +1931,24 @@ void test_l3_dsAudio_set_audio_gain(void)
             goto exit;
         }
         else {
-            UT_LOG_INFO("Result dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+            UT_LOG_INFO("Result dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                         ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[i].typeid),
                         gDSAudioPortConfiguration[i].index,
                         handle,
                         ut_control_GetMapString(dsError_mapTable, ret));
         }
 
-        UT_LOG_INFO("Calling dsIsAudioPortEnabled(handle:[0x%0X], enabled:[])",
+        UT_LOG_INFO("Calling dsIsAudioPortEnabled(IN:handle:[0x%0X], OUT:enabled:[])",
                      handle);
         ret = dsIsAudioPortEnabled(handle, &enabled);
         if (ret != dsERR_NONE || !enabled) {
-            UT_LOG_ERROR("Failed dsIsAudioPortEnabled(handle:[0x%0X], enabled:[%s]) dsError_t:[%s]",
+            UT_LOG_ERROR("Failed dsIsAudioPortEnabled(IN:handle:[0x%0X], OUT:enabled:[%s]) dsError_t:[%s]",
                           handle, ut_control_GetMapString(bool_mapTable, enabled),
                           ut_control_GetMapString(dsError_mapTable, ret));
             goto exit;
         }
         else {
-            UT_LOG_INFO("Result dsIsAudioPortEnabled(handle:[0x%0X], enabled:[%s]) dsError_t:[%s]",
+            UT_LOG_INFO("Result dsIsAudioPortEnabled(IN:handle:[0x%0X], OUT:enabled:[%s]) dsError_t:[%s]",
                          handle, ut_control_GetMapString(bool_mapTable, enabled),
                          ut_control_GetMapString(dsError_mapTable, ret));
         }
@@ -1964,31 +1964,31 @@ void test_l3_dsAudio_set_audio_gain(void)
         goto exit;
     }
 
-    UT_LOG_INFO("Calling dsSetAudioGain(handle:[0x%0X], gain:[%f])",
+    UT_LOG_INFO("Calling dsSetAudioGain(IN:handle:[0x%0X], IN:gain:[%f])",
                  handle, gain);
     ret = dsSetAudioGain(handle, gain);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsSetAudioGain(handle:[0x%0X], gain:[%f]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsSetAudioGain(IN:handle:[0x%0X], IN:gain:[%f]) dsError_t:[%s]",
                       handle, gain,
                       ut_control_GetMapString(dsError_mapTable, ret));
         goto exit;
     }
     else {
-        UT_LOG_INFO("Result dsSetAudioGain(handle:[0x%0X], gain:[%f]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsSetAudioGain(IN:handle:[0x%0X], IN:gain:[%f]) dsError_t:[%s]",
                         handle, gain,
                         ut_control_GetMapString(dsError_mapTable, ret));
     }
 
-    UT_LOG_INFO("Calling dsGetAudioGain(handle:[0x%0X], gain:[])",
+    UT_LOG_INFO("Calling dsGetAudioGain(IN:handle:[0x%0X], OUT:gain:[])",
                  handle);
     ret = dsGetAudioGain(handle, &gain_g);
     if(ret != dsERR_NONE || gain != gain_g) {
-        UT_LOG_ERROR("Failed dsGetAudioGain(handle:[0x%0X], gain:[%f]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetAudioGain(IN:handle:[0x%0X], OUT:gain:[%f]) dsError_t:[%s]",
                       handle, gain_g,
                       ut_control_GetMapString(dsError_mapTable, ret));
     }
     else {
-        UT_LOG_INFO("Result dsGetAudioGain(handle:[0x%0X], gain:[%f]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetAudioGain(IN:handle:[0x%0X], OUT:gain:[%f]) dsError_t:[%s]",
                         handle, gain_g,
                         ut_control_GetMapString(dsError_mapTable, ret));
     }
@@ -2029,7 +2029,7 @@ void test_l3_dsAudio_set_audio_mute(void)
     for(int32_t i = 0; i < gDSAudioNumberOfPorts; i++) {
         ret = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         if(ret != dsERR_NONE) {
-            UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+            UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                           ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[i].typeid),
                           gDSAudioPortConfiguration[i].index,
                           handle,
@@ -2062,12 +2062,12 @@ void test_l3_dsAudio_set_audio_mute(void)
 
     port = enable_port[choice - 1];
 
-    UT_LOG_INFO("Calling dsGetAudioPort(type:[%s], index:[%d], handle:[])",
+    UT_LOG_INFO("Calling dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[])",
                  ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                  gDSAudioPortConfiguration[port].index);
     ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                       ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                       gDSAudioPortConfiguration[port].index,
                       handle,
@@ -2075,7 +2075,7 @@ void test_l3_dsAudio_set_audio_mute(void)
         goto exit;
     }
     else {
-        UT_LOG_INFO("Result dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                      ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                      gDSAudioPortConfiguration[port].index,
                      handle,
@@ -2092,34 +2092,34 @@ void test_l3_dsAudio_set_audio_mute(void)
 
     mute = (choice == 1) ? true : false;
 
-    UT_LOG_INFO("Calling dsSetAudioMute(handle:[0x%0X], mute:[%s])",
+    UT_LOG_INFO("Calling dsSetAudioMute(IN:handle:[0x%0X], IN:mute:[%s])",
                 handle,
                 ut_control_GetMapString(bool_mapTable, mute));
     ret = dsSetAudioMute(handle, mute);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsSetAudioMute(handle:[0x%0X], mute:[%s]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsSetAudioMute(IN:handle:[0x%0X], IN:mute:[%s]) dsError_t:[%s]",
                         handle,
                         ut_control_GetMapString(bool_mapTable, mute),
                         ut_control_GetMapString(dsError_mapTable, ret));
         goto exit;
     }
     else {
-        UT_LOG_INFO("Result dsSetAudioMute(handle:[0x%0X], mute:[%s]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsSetAudioMute(IN:handle:[0x%0X], IN:mute:[%s]) dsError_t:[%s]",
                         handle,
                         ut_control_GetMapString(bool_mapTable, mute),
                         ut_control_GetMapString(dsError_mapTable, ret));
     }
 
-    UT_LOG_INFO("Calling dsIsAudioMute(handle:[0x%0X], muted:[])", handle);
+    UT_LOG_INFO("Calling dsIsAudioMute(IN:handle:[0x%0X], OUT:muted:[])", handle);
     ret = dsIsAudioMute(handle, &mute_g);
     if(ret != dsERR_NONE || mute != mute_g) {
-        UT_LOG_ERROR("Failed dsIsAudioMute(handle:[0x%0X], muted:[%s]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsIsAudioMute(IN:handle:[0x%0X], OUT:muted:[%s]) dsError_t:[%s]",
                         handle,
                         ut_control_GetMapString(bool_mapTable, mute_g),
                         ut_control_GetMapString(dsError_mapTable, ret));
     }
     else {
-        UT_LOG_INFO("Result dsIsAudioMute(handle:[0x%0X], muted:[%s]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsIsAudioMute(IN:handle:[0x%0X], OUT:muted:[%s]) dsError_t:[%s]",
                         handle,
                         ut_control_GetMapString(bool_mapTable, mute_g),
                         ut_control_GetMapString(dsError_mapTable, ret));
@@ -2167,7 +2167,7 @@ void test_l3_dsAudio_set_audio_delay(void)
         }
         ret = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         if(ret != dsERR_NONE) {
-            UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+            UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                           ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[i].typeid),
                           gDSAudioPortConfiguration[i].index,
                           handle,
@@ -2200,12 +2200,12 @@ void test_l3_dsAudio_set_audio_delay(void)
 
     port = enable_port[choice - 1];
 
-    UT_LOG_INFO("Calling dsGetAudioPort(type:[%s], index:[%d], handle:[])",
+    UT_LOG_INFO("Calling dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[])",
                  ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                  gDSAudioPortConfiguration[port].index);
     ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                       ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                       gDSAudioPortConfiguration[port].index,
                       handle,
@@ -2213,7 +2213,7 @@ void test_l3_dsAudio_set_audio_delay(void)
         goto exit;
     }
     else {
-        UT_LOG_INFO("Result dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                      ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                      gDSAudioPortConfiguration[port].index,
                      handle,
@@ -2228,31 +2228,31 @@ void test_l3_dsAudio_set_audio_delay(void)
         goto exit;
     }
 
-    UT_LOG_INFO("Calling dsSetAudioDelay(handle:[0x%0X], audioDelayMs:[%d])",
+    UT_LOG_INFO("Calling dsSetAudioDelay(IN:handle:[0x%0X], IN:audioDelayMs:[%d])",
                  handle, audioDelayMs);
     ret = dsSetAudioDelay(handle, audioDelayMs);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsSetAudioDelay(handle:[0x%0X], audioDelayMs:[%d]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsSetAudioDelay(IN:handle:[0x%0X], IN:audioDelayMs:[%d]) dsError_t:[%s]",
                       handle, audioDelayMs,
                       ut_control_GetMapString(dsError_mapTable, ret));
         goto exit;
     }
     else {
-        UT_LOG_INFO("Result dsSetAudioDelay(handle:[0x%0X], audioDelayMs:[%d]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsSetAudioDelay(IN:handle:[0x%0X], IN:audioDelayMs:[%d]) dsError_t:[%s]",
                      handle, audioDelayMs,
                      ut_control_GetMapString(dsError_mapTable, ret));
     }
 
-    UT_LOG_INFO("Calling dsGetAudioDelay(handle:[0x%0X], audioDelayMs:[%d])",
+    UT_LOG_INFO("Calling dsGetAudioDelay(IN:handle:[0x%0X], OUT:audioDelayMs:[%d])",
                  handle, audioDelayMs);
     ret = dsGetAudioDelay(handle, &audioDelayMs_g);
     if(ret != dsERR_NONE || audioDelayMs != audioDelayMs_g) {
-        UT_LOG_ERROR("Failed dsGetAudioDelay(handle:[0x%0X], audioDelayMs:[%d]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetAudioDelay(IN:handle:[0x%0X], OUT:audioDelayMs:[%d]) dsError_t:[%s]",
                       handle, audioDelayMs_g,
                       ut_control_GetMapString(dsError_mapTable, ret));
     }
     else {
-        UT_LOG_INFO("Result dsGetAudioDelay(handle:[0x%0X], audioDelayMs:[%d]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetAudioDelay(IN:handle:[0x%0X], OUT:audioDelayMs:[%d]) dsError_t:[%s]",
                      handle, audioDelayMs_g,
                      ut_control_GetMapString(dsError_mapTable, ret));
     }
@@ -2283,35 +2283,35 @@ void test_l3_dsAudio_get_audio_format(void)
     intptr_t handle = (intptr_t)NULL;
     dsAudioFormat_t getAudioFormat = dsAUDIO_FORMAT_NONE;
 
-    UT_LOG_INFO("Calling dsGetAudioPort(type:[%s], index:[%d], handle:[])",
+    UT_LOG_INFO("Calling dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[])",
                  ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                  gDSAudioPortConfiguration[port].index);
     ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                       ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                       gDSAudioPortConfiguration[port].index,
                       handle,
                       ut_control_GetMapString(dsError_mapTable, ret));
     }
     else {
-        UT_LOG_INFO("Result dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                      ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                      gDSAudioPortConfiguration[port].index,
                      handle,
                      ut_control_GetMapString(dsError_mapTable, ret));
     }
 
-    UT_LOG_INFO("Calling dsGetAudioFormat(handle:[0x%0X], audioFormat:[])", handle);
+    UT_LOG_INFO("Calling dsGetAudioFormat(IN:handle:[0x%0X], OUT:audioFormat:[])", handle);
     ret = dsGetAudioFormat(handle, &getAudioFormat);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsGetAudioFormat(handle:[0x%0X], audioFormat:[%s]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetAudioFormat(IN:handle:[0x%0X], OUT:audioFormat:[%s]) dsError_t:[%s]",
                       handle,
                       ut_control_GetMapString(dsAudioFormat_mapTable, getAudioFormat),
                       ut_control_GetMapString(dsError_mapTable, ret));
     }
     else {
-        UT_LOG_INFO("Result dsGetAudioFormat(handle:[0x%0X], audioFormat:[%s]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetAudioFormat(IN:handle:[0x%0X], OUT:audioFormat:[%s]) dsError_t:[%s]",
                      handle,
                      ut_control_GetMapString(dsAudioFormat_mapTable, getAudioFormat),
                      ut_control_GetMapString(dsError_mapTable, ret));
@@ -2347,19 +2347,19 @@ void test_l3_dsAudio_set_atmos_mode(void)
     int32_t choice  = 0;
     bool enable     = false;
 
-    UT_LOG_INFO("Calling dsGetAudioPort(type:[%s], index:[%d], handle:[])",
+    UT_LOG_INFO("Calling dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[])",
                  ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                  gDSAudioPortConfiguration[port].index);
     ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                       ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                       gDSAudioPortConfiguration[port].index,
                       handle,
                       ut_control_GetMapString(dsError_mapTable, ret));
     }
     else {
-        UT_LOG_INFO("Result dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                      ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                      gDSAudioPortConfiguration[port].index,
                      handle,
@@ -2375,18 +2375,18 @@ void test_l3_dsAudio_set_atmos_mode(void)
     }
     enable = (choice == 1) ? true : false;
 
-    UT_LOG_INFO("Calling dsSetAudioAtmosOutputMode(handle:[0x%0X], enable:[%s])",
+    UT_LOG_INFO("Calling dsSetAudioAtmosOutputMode(IN:handle:[0x%0X], IN:enable:[%s])",
                 handle,
                 ut_control_GetMapString(bool_mapTable, enable));
     ret = dsSetAudioAtmosOutputMode(handle, enable);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsSetAudioAtmosOutputMode(handle:[0x%0X], enable:[%s]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsSetAudioAtmosOutputMode(IN:handle:[0x%0X], IN:enable:[%s]) dsError_t:[%s]",
                       handle,
                       ut_control_GetMapString(bool_mapTable, enable),
                       ut_control_GetMapString(dsError_mapTable, ret));
     }
     else {
-        UT_LOG_INFO("Result dsSetAudioAtmosOutputMode(handle:[0x%0X], enable:[%s]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsSetAudioAtmosOutputMode(IN:handle:[0x%0X], IN:enable:[%s]) dsError_t:[%s]",
                      handle,
                      ut_control_GetMapString(bool_mapTable, enable),
                      ut_control_GetMapString(dsError_mapTable, ret));
@@ -2432,7 +2432,7 @@ void test_l3_dsAudio_getConnected_atmoscaps(void)
         }
         ret = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         if(ret != dsERR_NONE) {
-            UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+            UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                           ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[i].typeid),
                           gDSAudioPortConfiguration[i].index,
                           handle,
@@ -2465,12 +2465,12 @@ void test_l3_dsAudio_getConnected_atmoscaps(void)
 
     port = enable_port[choice - 1];
 
-    UT_LOG_INFO("Calling dsGetAudioPort(type:[%s], index:[%d], handle:[])",
+    UT_LOG_INFO("Calling dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[])",
                  ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                  gDSAudioPortConfiguration[port].index);
     ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                       ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                       gDSAudioPortConfiguration[port].index,
                       handle,
@@ -2478,22 +2478,22 @@ void test_l3_dsAudio_getConnected_atmoscaps(void)
         goto exit;
     }
     else {
-        UT_LOG_INFO("Result dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                      ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                      gDSAudioPortConfiguration[port].index,
                      handle,
                      ut_control_GetMapString(dsError_mapTable, ret));
     }
 
-    UT_LOG_INFO("Calling dsGetSinkDeviceAtmosCapability(handle:[0x%0X], capability:[])", handle);
+    UT_LOG_INFO("Calling dsGetSinkDeviceAtmosCapability(IN:handle:[0x%0X], OUT:capability:[])", handle);
     ret = dsGetSinkDeviceAtmosCapability(handle, &capability);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsGetSinkDeviceAtmosCapability(handle:[0x%0X], capability:[%s]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetSinkDeviceAtmosCapability(IN:handle:[0x%0X], OUT:capability:[%s]) dsError_t:[%s]",
                       handle, ut_control_GetMapString(dsATMOSCapability_mapTable, capability),
                       ut_control_GetMapString(dsError_mapTable, ret));
     }
     else {
-        UT_LOG_INFO("Result dsGetSinkDeviceAtmosCapability(handle:[0x%0X], capability:[%s]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetSinkDeviceAtmosCapability(IN:handle:[0x%0X], OUT:capability:[%s]) dsError_t:[%s]",
                         handle, ut_control_GetMapString(dsATMOSCapability_mapTable, capability),
                         ut_control_GetMapString(dsError_mapTable, ret));
     }
@@ -2548,7 +2548,7 @@ void test_l3_dsAudio_ms12Profile(void)
 
         ret = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         if(ret != dsERR_NONE) {
-            UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+            UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                           ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[i].typeid),
                           gDSAudioPortConfiguration[i].index,
                           handle,
@@ -2582,12 +2582,12 @@ void test_l3_dsAudio_ms12Profile(void)
 
     port = enable_port[choice - 1];
 
-    UT_LOG_INFO("Calling dsGetAudioPort(type:[%s], index:[%d], handle:[])",
+    UT_LOG_INFO("Calling dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[])",
                  ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                  gDSAudioPortConfiguration[port].index);
     ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                       ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                       gDSAudioPortConfiguration[port].index,
                       handle,
@@ -2595,7 +2595,7 @@ void test_l3_dsAudio_ms12Profile(void)
         goto exit;
     }
     else {
-        UT_LOG_INFO("Result dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                      ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                      gDSAudioPortConfiguration[port].index,
                      handle,
@@ -2625,30 +2625,30 @@ void test_l3_dsAudio_ms12Profile(void)
         goto exit;
     }
 
-    UT_LOG_INFO("Calling dsSetMS12AudioProfile(handle:[0x%0X], profile:[%s])",
+    UT_LOG_INFO("Calling dsSetMS12AudioProfile(IN:handle:[0x%0X], IN:profile:[%s])",
                  handle, profileList[choice-1]);
     ret = dsSetMS12AudioProfile(handle, profileList[choice-1]);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsSetMS12AudioProfile(handle:[0x%0X], profile:[%s]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsSetMS12AudioProfile(IN:handle:[0x%0X], IN:profile:[%s]) dsError_t:[%s]",
                       handle, profileList[choice-1],
                       ut_control_GetMapString(dsError_mapTable, ret));
         goto exit;
     }
     else {
-        UT_LOG_INFO("Result dsSetMS12AudioProfile(handle:[0x%0X], profile:[%s]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsSetMS12AudioProfile(IN:handle:[0x%0X], IN:profile:[%s]) dsError_t:[%s]",
                      handle, profileList[choice-1],
                      ut_control_GetMapString(dsError_mapTable, ret));
     }
 
-    UT_LOG_INFO("Calling dsGetMS12AudioProfile(handle:[0x%0X], profile:[])", handle);
+    UT_LOG_INFO("Calling dsGetMS12AudioProfile(IN:handle:[0x%0X], OUT:profile:[])", handle);
     ret = dsGetMS12AudioProfile(handle, profile);
     if(ret != dsERR_NONE || strcmp(profile, profileList[choice-1])) {
-        UT_LOG_ERROR("Failed dsGetMS12AudioProfile(handle:[0x%0X], profile:[%s]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetMS12AudioProfile(IN:handle:[0x%0X], OUT:profile:[%s]) dsError_t:[%s]",
                       handle, profile,
                       ut_control_GetMapString(dsError_mapTable, ret));
     }
     else {
-        UT_LOG_INFO("Result dsGetMS12AudioProfile(handle:[0x%0X], profile:[%s]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetMS12AudioProfile(IN:handle:[0x%0X], OUT:profile:[%s]) dsError_t:[%s]",
                      handle, profile,
                      ut_control_GetMapString(dsError_mapTable, ret));
     }
@@ -2681,19 +2681,19 @@ void test_l3_dsAudio_set_associate_audio_mixing(void)
     bool mixing     = false;
     bool mixing_g   = false;
 
-    UT_LOG_INFO("Calling dsGetAudioPort(type:[%s], index:[%d], handle:[])",
+    UT_LOG_INFO("Calling dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[])",
                  ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                  gDSAudioPortConfiguration[port].index);
     ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                       ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                       gDSAudioPortConfiguration[port].index,
                       handle,
                       ut_control_GetMapString(dsError_mapTable, ret));
     }
     else {
-        UT_LOG_INFO("Result dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                      ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                      gDSAudioPortConfiguration[port].index,
                      handle,
@@ -2709,35 +2709,35 @@ void test_l3_dsAudio_set_associate_audio_mixing(void)
     }
     mixing = (choice == 1) ? true : false;
 
-    UT_LOG_INFO("Calling dsSetAssociatedAudioMixing(handle:[0x%0X], mixing:[%s])",
+    UT_LOG_INFO("Calling dsSetAssociatedAudioMixing(IN:handle:[0x%0X], IN:mixing:[%s])",
                 handle,
                 ut_control_GetMapString(bool_mapTable, mixing));
     ret = dsSetAssociatedAudioMixing(handle, mixing);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsSetAssociatedAudioMixing(handle:[0x%0X], mixing:[%s]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsSetAssociatedAudioMixing(IN:handle:[0x%0X], IN:mixing:[%s]) dsError_t:[%s]",
                       handle,
                       ut_control_GetMapString(bool_mapTable, mixing),
                       ut_control_GetMapString(dsError_mapTable, ret));
         goto exit;
     }
     else {
-        UT_LOG_INFO("Result dsSetAssociatedAudioMixing(handle:[0x%0X], mixing:[%s]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsSetAssociatedAudioMixing(IN:handle:[0x%0X], IN:mixing:[%s]) dsError_t:[%s]",
                      handle,
                      ut_control_GetMapString(bool_mapTable, mixing),
                      ut_control_GetMapString(dsError_mapTable, ret));
     }
 
-    UT_LOG_INFO("Calling dsGetAssociatedAudioMixing(handle:[0x%0X], mixing:[])", handle);
+    UT_LOG_INFO("Calling dsGetAssociatedAudioMixing(IN:handle:[0x%0X], OUT:mixing:[])", handle);
     ret = dsGetAssociatedAudioMixing(handle, &mixing_g);
     if(ret != dsERR_NONE || mixing_g != mixing) {
-        UT_LOG_ERROR("Failed dsGetAssociatedAudioMixing(handle:[0x%0X], mixing:[%s]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetAssociatedAudioMixing(IN:handle:[0x%0X], OUT:mixing:[%s]) dsError_t:[%s]",
                       handle,
                       ut_control_GetMapString(bool_mapTable, mixing_g),
                       ut_control_GetMapString(dsError_mapTable, ret));
         goto exit;
     }
     else {
-        UT_LOG_INFO("Result dsGetAssociatedAudioMixing(handle:[0x%0X], mixing:[%s]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetAssociatedAudioMixing(IN:handle:[0x%0X], OUT:mixing:[%s]) dsError_t:[%s]",
                      handle,
                      ut_control_GetMapString(bool_mapTable, mixing_g),
                      ut_control_GetMapString(dsError_mapTable, ret));
@@ -2754,30 +2754,30 @@ void test_l3_dsAudio_set_associate_audio_mixing(void)
             goto exit;
         }
 
-        UT_LOG_INFO("Calling dsSetFaderControl(handle:[0x%0X], mixerbalance:[%d])",
+        UT_LOG_INFO("Calling dsSetFaderControl(IN:handle:[0x%0X], IN:mixerbalance:[%d])",
                     handle, mixerbalance);
         ret = dsSetFaderControl(handle, mixerbalance);
         if(ret != dsERR_NONE) {
-            UT_LOG_ERROR("Failed dsSetFaderControl(handle:[0x%0X], mixerbalance:[%d]) dsError_t:[%s]",
+            UT_LOG_ERROR("Failed dsSetFaderControl(IN:handle:[0x%0X], IN:mixerbalance:[%d]) dsError_t:[%s]",
                           handle, mixerbalance,
                           ut_control_GetMapString(dsError_mapTable, ret));
             goto exit;
         }
         else {
-            UT_LOG_INFO("Result dsSetFaderControl(handle:[0x%0X], mixerbalance:[%d]) dsError_t:[%s]",
+            UT_LOG_INFO("Result dsSetFaderControl(IN:handle:[0x%0X], IN:mixerbalance:[%d]) dsError_t:[%s]",
                          handle, mixerbalance,
                          ut_control_GetMapString(dsError_mapTable, ret));
         }
 
-        UT_LOG_INFO("Calling dsGetFaderControl(handle:[0x%0X], mixerbalance:[])", handle);
+        UT_LOG_INFO("Calling dsGetFaderControl(IN:handle:[0x%0X], OUT:mixerbalance:[])", handle);
         ret = dsGetFaderControl(handle, &mixerbalance_g);
         if(ret != dsERR_NONE || mixerbalance_g != mixerbalance) {
-            UT_LOG_ERROR("Failed dsGetFaderControl(handle:[0x%0X], mixerbalance:[%d]) dsError_t:[%s]",
+            UT_LOG_ERROR("Failed dsGetFaderControl(IN:handle:[0x%0X], OUT:mixerbalance:[%d]) dsError_t:[%s]",
                           handle, mixerbalance_g,
                           ut_control_GetMapString(dsError_mapTable, ret));
         }
         else {
-            UT_LOG_INFO("Result dsGetFaderControl(handle:[0x%0X], mixerbalance:[%d]) dsError_t:[%s]",
+            UT_LOG_INFO("Result dsGetFaderControl(IN:handle:[0x%0X], OUT:mixerbalance:[%d]) dsError_t:[%s]",
                          handle, mixerbalance_g,
                          ut_control_GetMapString(dsError_mapTable, ret));
         }
@@ -2810,19 +2810,19 @@ void test_l3_dsAudio_set_audio_mixerlevels(void)
     int32_t volume  = 0;
     int32_t aInput  = 0;
 
-    UT_LOG_INFO("Calling dsGetAudioPort(type:[%s], index:[%d], handle:[])",
+    UT_LOG_INFO("Calling dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[])",
                  ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                  gDSAudioPortConfiguration[port].index);
     ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                       ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                       gDSAudioPortConfiguration[port].index,
                       handle,
                       ut_control_GetMapString(dsError_mapTable, ret));
     }
     else {
-        UT_LOG_INFO("Result dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                      ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                      gDSAudioPortConfiguration[port].index,
                      handle,
@@ -2853,18 +2853,18 @@ void test_l3_dsAudio_set_audio_mixerlevels(void)
         goto exit;
     }
 
-    UT_LOG_INFO("Calling dsSetAudioMixerLevels(handle:[0x%0X], aInput:[%s], volume[%d])",
+    UT_LOG_INFO("Calling dsSetAudioMixerLevels(IN:handle:[0x%0X], IN:aInput:[%s], IN:volume[%d])",
                  handle,
                  ut_control_GetMapString(dsAudioInput_mapTable, aInput), volume);
     ret = dsSetAudioMixerLevels (handle, (dsAudioInput_t)aInput, volume);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsSetAudioMixerLevels(handle:[0x%0X], aInput:[%s], volume[%d]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsSetAudioMixerLevels(IN:handle:[0x%0X], IN:aInput:[%s], IN:volume[%d]) dsError_t:[%s]",
                       handle,
                       ut_control_GetMapString(dsAudioInput_mapTable, aInput), volume,
                       ut_control_GetMapString(dsError_mapTable, ret));
     }
     else {
-        UT_LOG_INFO("Result dsSetAudioMixerLevels(handle:[0x%0X], aInput:[%s], volume[%d]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsSetAudioMixerLevels(IN:handle:[0x%0X], IN:aInput:[%s], IN:volume[%d]) dsError_t:[%s]",
                      handle,
                      ut_control_GetMapString(dsAudioInput_mapTable, aInput), volume,
                      ut_control_GetMapString(dsError_mapTable, ret));
@@ -2898,19 +2898,19 @@ void test_l3_dsAudio_set_language(void)
     char language[4]      = {0};
     char language_g[4]    = {0};
 
-    UT_LOG_INFO("Calling dsGetAudioPort(type:[%s], index:[%d], handle:[])",
+    UT_LOG_INFO("Calling dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[])",
                  ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                  gDSAudioPortConfiguration[port].index);
     ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                       ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                       gDSAudioPortConfiguration[port].index,
                       handle,
                       ut_control_GetMapString(dsError_mapTable, ret));
     }
     else {
-        UT_LOG_INFO("Result dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                      ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
                      gDSAudioPortConfiguration[port].index,
                      handle,
@@ -2929,61 +2929,61 @@ void test_l3_dsAudio_set_language(void)
     fgets(language, 4, stdin);
     readAndDiscardRestOfLine(stdin);
     if(language_type == 1) {
-        UT_LOG_INFO("Calling dsSetPrimaryLanguage(handle:[0x%0X], pLang:[%s])",
+        UT_LOG_INFO("Calling dsSetPrimaryLanguage(IN:handle:[0x%0X], IN:pLang:[%s])",
                     handle, language);
         ret = dsSetPrimaryLanguage(handle, language);
         if(ret != dsERR_NONE) {
-            UT_LOG_ERROR("Failed dsSetPrimaryLanguage(handle:[0x%0X], pLang:[%s]) dsError_t:[%s]",
+            UT_LOG_ERROR("Failed dsSetPrimaryLanguage(IN:handle:[0x%0X], IN:pLang:[%s]) dsError_t:[%s]",
                         handle, language,
                         ut_control_GetMapString(dsError_mapTable, ret));
             goto exit;
         }
         else {
-            UT_LOG_INFO("Result dsSetPrimaryLanguage(handle:[0x%0X], pLang:[%s]) dsError_t:[%s]",
+            UT_LOG_INFO("Result dsSetPrimaryLanguage(IN:handle:[0x%0X], IN:pLang:[%s]) dsError_t:[%s]",
                             handle, language,
                             ut_control_GetMapString(dsError_mapTable, ret));
         }
 
-        UT_LOG_INFO("Calling dsGetPrimaryLanguage(handle:[0x%0X], pLang:[])", handle);
+        UT_LOG_INFO("Calling dsGetPrimaryLanguage(IN:handle:[0x%0X], OUT:pLang:[])", handle);
         ret = dsGetPrimaryLanguage(handle, language_g);
         if(ret != dsERR_NONE || strcmp(language_g, language)) {
-            UT_LOG_ERROR("Failed dsGetPrimaryLanguage(handle:[0x%0X], pLang:[%s]) dsError_t:[%s]",
+            UT_LOG_ERROR("Failed dsGetPrimaryLanguage(IN:handle:[0x%0X], OUT:pLang:[%s]) dsError_t:[%s]",
                         handle, language_g,
                         ut_control_GetMapString(dsError_mapTable, ret));
             goto exit;
         }
         else {
-            UT_LOG_INFO("Result dsGetPrimaryLanguage(handle:[0x%0X], pLang:[%s]) dsError_t:[%s]",
+            UT_LOG_INFO("Result dsGetPrimaryLanguage(IN:handle:[0x%0X], OUT:pLang:[%s]) dsError_t:[%s]",
                             handle, language_g,
                             ut_control_GetMapString(dsError_mapTable, ret));
         }
     }
     else {
-        UT_LOG_INFO("Calling dsSetSecondaryLanguage(handle:[0x%0X], pLang:[%s])",
+        UT_LOG_INFO("Calling dsSetSecondaryLanguage(IN:handle:[0x%0X], IN:pLang:[%s])",
                     handle, language);
         ret = dsSetSecondaryLanguage(handle, language);
         if(ret != dsERR_NONE) {
-            UT_LOG_ERROR("Failed dsSetSecondaryLanguage(handle:[0x%0X], pLang:[%s]) dsError_t:[%s]",
+            UT_LOG_ERROR("Failed dsSetSecondaryLanguage(IN:handle:[0x%0X], IN:pLang:[%s]) dsError_t:[%s]",
                         handle, language,
                         ut_control_GetMapString(dsError_mapTable, ret));
             goto exit;
         }
         else {
-            UT_LOG_INFO("Result dsSetSecondaryLanguage(handle:[0x%0X], pLang:[%s]) dsError_t:[%s]",
+            UT_LOG_INFO("Result dsSetSecondaryLanguage(IN:handle:[0x%0X], IN:pLang:[%s]) dsError_t:[%s]",
                             handle, language,
                             ut_control_GetMapString(dsError_mapTable, ret));
         }
 
-        UT_LOG_INFO("Calling dsGetSecondaryLanguage(handle:[0x%0X], pLang:[])", handle);
+        UT_LOG_INFO("Calling dsGetSecondaryLanguage(IN:handle:[0x%0X], OUT:pLang:[])", handle);
         ret = dsGetSecondaryLanguage(handle, language_g);
         if(ret != dsERR_NONE || strcmp(language_g, language)) {
-            UT_LOG_ERROR("Failed dsGetSecondaryLanguage(handle:[0x%0X], pLang:[%s]) dsError_t:[%s]",
+            UT_LOG_ERROR("Failed dsGetSecondaryLanguage(IN:handle:[0x%0X], OUT:pLang:[%s]) dsError_t:[%s]",
                         handle, language_g,
                         ut_control_GetMapString(dsError_mapTable, ret));
             goto exit;
         }
         else {
-            UT_LOG_INFO("Result dsGetSecondaryLanguage(handle:[0x%0X], pLang:[%s]) dsError_t:[%s]",
+            UT_LOG_INFO("Result dsGetSecondaryLanguage(IN:handle:[0x%0X], OUT:pLang:[%s]) dsError_t:[%s]",
                             handle, language_g,
                             ut_control_GetMapString(dsError_mapTable, ret));
         }
@@ -3020,12 +3020,12 @@ void test_l3_dsAudio_getArc_type(void)
             continue;
         }
 
-        UT_LOG_INFO("Calling dsGetAudioPort(type:[%s], index:[%d], handle:[])",
+        UT_LOG_INFO("Calling dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[])",
                     ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[i].typeid),
                     gDSAudioPortConfiguration[i].index);
         ret = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         if(ret != dsERR_NONE) {
-            UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+            UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                         ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[i].typeid),
                         gDSAudioPortConfiguration[i].index,
                         handle,
@@ -3033,39 +3033,39 @@ void test_l3_dsAudio_getArc_type(void)
             goto exit;
         }
         else {
-            UT_LOG_INFO("Result dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+            UT_LOG_INFO("Result dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                         ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[i].typeid),
                         gDSAudioPortConfiguration[i].index,
                         handle,
                         ut_control_GetMapString(dsError_mapTable, ret));
         }
 
-        UT_LOG_INFO("Calling dsIsAudioPortEnabled(handle:[0x%0X], enabled:[])",
+        UT_LOG_INFO("Calling dsIsAudioPortEnabled(IN:handle:[0x%0X], OUT:enabled:[])",
                      handle);
         ret = dsIsAudioPortEnabled(handle, &enabled);
         if (ret != dsERR_NONE || !enabled) {
-            UT_LOG_ERROR("Failed dsIsAudioPortEnabled(handle:[0x%0X], enabled:[%s]) dsError_t:[%s]",
+            UT_LOG_ERROR("Failed dsIsAudioPortEnabled(IN:handle:[0x%0X], OUT:enabled:[%s]) dsError_t:[%s]",
                           handle, ut_control_GetMapString(bool_mapTable, enabled),
                           ut_control_GetMapString(dsError_mapTable, ret));
             goto exit;
         }
         else {
-            UT_LOG_INFO("Result dsIsAudioPortEnabled(handle:[0x%0X], enabled:[%s]) dsError_t:[%s]",
+            UT_LOG_INFO("Result dsIsAudioPortEnabled(IN:handle:[0x%0X], OUT:enabled:[%s]) dsError_t:[%s]",
                          handle, ut_control_GetMapString(bool_mapTable, enabled),
                          ut_control_GetMapString(dsError_mapTable, ret));
         }
         break;
     }
 
-    UT_LOG_INFO("Calling dsGetSupportedARCTypes(handle:[0x%0X], types:[])", handle);
+    UT_LOG_INFO("Calling dsGetSupportedARCTypes(IN:handle:[0x%0X], OUT:types:[])", handle);
     ret = dsGetSupportedARCTypes(handle, &types);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsGetSupportedARCTypes(handle:[0x%0X], types:[%s]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsGetSupportedARCTypes(IN:handle:[0x%0X], OUT:types:[%s]) dsError_t:[%s]",
                       handle, ut_control_GetMapString(dsAudioARCTypes_mapTable, types),
                       ut_control_GetMapString(dsError_mapTable, ret));
     }
     else {
-        UT_LOG_INFO("Result dsGetSupportedARCTypes(handle:[0x%0X], types:[%s]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsGetSupportedARCTypes(IN:handle:[0x%0X], OUT:types:[%s]) dsError_t:[%s]",
                      handle, ut_control_GetMapString(dsAudioARCTypes_mapTable, types),
                      ut_control_GetMapString(dsError_mapTable, ret));
     }
@@ -3103,12 +3103,12 @@ void test_l3_dsAudio_setSAD(void)
             continue;
         }
 
-        UT_LOG_INFO("Calling dsGetAudioPort(type:[%s], index:[%d], handle:[])",
+        UT_LOG_INFO("Calling dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[])",
                     ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[i].typeid),
                     gDSAudioPortConfiguration[i].index);
         ret = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         if(ret != dsERR_NONE) {
-            UT_LOG_ERROR("Failed dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+            UT_LOG_ERROR("Failed dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                         ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[i].typeid),
                         gDSAudioPortConfiguration[i].index,
                         handle,
@@ -3116,24 +3116,24 @@ void test_l3_dsAudio_setSAD(void)
             goto exit;
         }
         else {
-            UT_LOG_INFO("Result dsGetAudioPort(type:[%s], index:[%d], handle:[0x%0X]) dsError_t:[%s]",
+            UT_LOG_INFO("Result dsGetAudioPort(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                         ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[i].typeid),
                         gDSAudioPortConfiguration[i].index,
                         handle,
                         ut_control_GetMapString(dsError_mapTable, ret));
         }
 
-        UT_LOG_INFO("Calling dsIsAudioPortEnabled(handle:[0x%0X], enabled:[])",
+        UT_LOG_INFO("Calling dsIsAudioPortEnabled(IN:handle:[0x%0X], OUT:enabled:[])",
                      handle);
         ret = dsIsAudioPortEnabled(handle, &enabled);
         if (ret != dsERR_NONE || !enabled) {
-            UT_LOG_ERROR("Failed dsIsAudioPortEnabled(handle:[0x%0X], enabled:[%s]) dsError_t:[%s]",
+            UT_LOG_ERROR("Failed dsIsAudioPortEnabled(IN:handle:[0x%0X], OUT:enabled:[%s]) dsError_t:[%s]",
                          handle, ut_control_GetMapString(bool_mapTable, enabled),
                          ut_control_GetMapString(dsError_mapTable, ret));
             goto exit;
         }
         else {
-            UT_LOG_INFO("Result dsIsAudioPortEnabled(handle:[0x%0X], enabled:[%s]) dsError_t:[%s]",
+            UT_LOG_INFO("Result dsIsAudioPortEnabled(IN:handle:[0x%0X], OUT:enabled:[%s]) dsError_t:[%s]",
                          handle, ut_control_GetMapString(bool_mapTable, enabled),
                          ut_control_GetMapString(dsError_mapTable, ret));
         }
@@ -3154,16 +3154,16 @@ void test_l3_dsAudio_setSAD(void)
     }
     readAndDiscardRestOfLine(stdin);
 
-    UT_LOG_INFO("Calling dsAudioSetSAD(handle:[0x%0X], sad_list:[count: %d])",
+    UT_LOG_INFO("Calling dsAudioSetSAD(IN:handle:[0x%0X], IN:sad_list:[count: %d])",
                  handle, sad_list.count);
     ret = dsAudioSetSAD(handle, sad_list);
     if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsAudioSetSAD(handle:[0x%0X], sad_list:[count: %d]) dsError_t:[%s]",
+        UT_LOG_ERROR("Failed dsAudioSetSAD(IN:handle:[0x%0X], IN:sad_list:[count: %d]) dsError_t:[%s]",
                       handle, sad_list.count,
                       ut_control_GetMapString(dsError_mapTable, ret));
     }
     else {
-        UT_LOG_INFO("Result dsAudioSetSAD(handle:[0x%0X], sad_list:[count: %d]) dsError_t:[%s]",
+        UT_LOG_INFO("Result dsAudioSetSAD(IN:handle:[0x%0X], IN:sad_list:[count: %d]) dsError_t:[%s]",
                      handle, sad_list.count,
                      ut_control_GetMapString(dsError_mapTable, ret));
     }
