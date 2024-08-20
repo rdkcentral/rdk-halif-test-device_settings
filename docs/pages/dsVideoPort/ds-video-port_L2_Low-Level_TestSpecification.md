@@ -722,7 +722,7 @@ graph TB
     Step3 -->|dsERR_NONE|Step4[Call dsGetAllmEnabled API]
     Step4 -->|dsERR_NONE|Step5[Compare ALLM Status]
     Step5 -->|loop through | Step2
-    Step5 -- "dsERR_NONE" --> Fail6[Test Case Failed]
+    Step5 -- "Status doesn't match" --> Fail6[Test Case Failed]
     Step2 -->|End of Iteration|Step7[Call dsVideoPortTerm API]
     Step7 -->|dsERR_NONE|End[Test Case success]
     Step7 -->|Failure|TestcaseFail6[Testcase Fail]
