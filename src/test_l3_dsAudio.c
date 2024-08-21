@@ -681,9 +681,7 @@ void test_l3_dsAudio_headphone_connection(void)
                      ut_control_GetMapString(dsError_mapTable, ret));
     }
 
-    UT_LOG_INFO("Headphone Connection status: %s, connection status from Callback: %s",
-                     ut_control_GetMapString(bool_mapTable, isConnected),
-                     ut_control_GetMapString(bool_mapTable, gConnectionStatus));
+    UT_LOG_INFO("Headphone Connection status: %s", ut_control_GetMapString(bool_mapTable, isConnected));
 
 exit:
     UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -781,19 +779,10 @@ void test_l3_dsAudio_audio_compression(void)
                      ut_control_GetMapString(dsError_mapTable, ret));
     }
 
-    UT_LOG_MENU_INFO("----------------------------------------------------------");
-    UT_LOG_MENU_INFO("Compression Type");
-    UT_LOG_MENU_INFO("----------------------------------------------------------");
-    UT_LOG_MENU_INFO("\t#  %-20s","Compression");
-    for(int32_t i = dsAUDIO_CMP_NONE; i < dsAUDIO_CMP_MAX; i++) {
-        UT_LOG_MENU_INFO("\t%d.  %-20s", i,
-                     ut_control_GetMapString(dsAudioCompression_mapTable, i));
-    }
-    UT_LOG_MENU_INFO("----------------------------------------------------------");
-    UT_LOG_MENU_INFO("Select Compression: ");
+    UT_LOG_MENU_INFO("Select Compression[0-10]: ");
     scanf("%d", &compression);
     readAndDiscardRestOfLine(stdin);
-    if(compression < dsAUDIO_CMP_NONE || compression >= dsAUDIO_CMP_MAX) {
+    if(compression < 0 || compression > 10) {
         UT_LOG_MENU_INFO("Invalid Compression Type");
         goto exit;
     }
@@ -1535,6 +1524,7 @@ void test_l3_dsAudio_stereo_mode(void)
 
     dsError_t ret   = dsERR_NONE;
     int32_t count   = 0;
+    int32_t mode_i  = 0;
     int32_t mode    = 0;
     int32_t mode_g  = 0;
     int32_t choice  = -1;
@@ -1603,19 +1593,20 @@ void test_l3_dsAudio_stereo_mode(void)
     UT_LOG_MENU_INFO("Stereo Mode");
     UT_LOG_MENU_INFO("----------------------------------------------------------");
     UT_LOG_MENU_INFO("\t#  %-20s","Stereo Mode");
-    for(int32_t i = dsAUDIO_STEREO_MONO; i < dsAUDIO_STEREO_MAX; i++) {
+    for(int32_t i = 0; i < gDSAudioPortConfiguration[port].no_of_supported_stereo_mode; i++) {
         UT_LOG_MENU_INFO("\t%d.  %-30s", i,
-                     ut_control_GetMapString(dsAudioStereoMode_mapTable, i));
+                     ut_control_GetMapString(dsAudioStereoMode_mapTable, gDSAudioPortConfiguration[port].supported_stereo_mode[i]));
     }
     UT_LOG_MENU_INFO("----------------------------------------------------------");
 
     UT_LOG_MENU_INFO("Select Stereo Mode: ");
-    scanf("%d", &mode);
+    scanf("%d", &mode_i);
     readAndDiscardRestOfLine(stdin);
-    if(mode < dsAUDIO_STEREO_MONO || mode > dsAUDIO_STEREO_MAX) {
+    if(mode_i < 0 || mode_i > gDSAudioPortConfiguration[port].no_of_supported_stereo_mode) {
         UT_LOG_ERROR("Invalid Mode choice");
         goto exit;
     }
+    mode = gDSAudioPortConfiguration[port].supported_stereo_mode[mode_i];
 
     UT_LOG_INFO("Calling dsSetStereoMode(IN:handle:[0x%0X], IN:mode:[%s])",
                  handle,
@@ -2336,9 +2327,7 @@ void test_l3_dsAudio_get_audio_format(void)
                      ut_control_GetMapString(dsError_mapTable, ret));
     }
 
-    UT_LOG_INFO("Audio Format: %s, Audio Format from Callback: %s",
-                 ut_control_GetMapString(dsAudioFormat_mapTable, getAudioFormat),
-                 ut_control_GetMapString(dsAudioFormat_mapTable, gAudioFormat));
+    UT_LOG_INFO("Audio Format: %s", ut_control_GetMapString(dsAudioFormat_mapTable, getAudioFormat));
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
@@ -2518,11 +2507,9 @@ void test_l3_dsAudio_getConnected_atmoscaps(void)
                         ut_control_GetMapString(dsError_mapTable, ret));
     }
 
-    UT_LOG_INFO("ATMOS Capability of %s: %s, ATMOS change capablity and Status from Callback: %s, Status: %s",
+    UT_LOG_INFO("ATMOS Capability of %s: %s",
                  ut_control_GetMapString(dsAudioPortType_mapTable, gDSAudioPortConfiguration[port].typeid),
-                 ut_control_GetMapString(dsATMOSCapability_mapTable, capability),
-                 ut_control_GetMapString(dsATMOSCapability_mapTable, gAtosCapablity),
-                 ut_control_GetMapString(bool_mapTable, gAtmosStatus));
+                 ut_control_GetMapString(dsATMOSCapability_mapTable, capability));
 
 exit:
     UT_LOG_INFO("Out %s", __FUNCTION__);
