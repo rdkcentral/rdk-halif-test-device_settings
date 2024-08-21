@@ -77,6 +77,7 @@
 #include "stdint.h"
 #include "dsDisplay.h"
 #include "test_parse_configuration.h"
+#include "dsHdmiIn.h"
 
 static int gTestGroup = 1;
 static int gTestID = 1;
@@ -634,6 +635,9 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     edid = (unsigned char *)malloc(512);
 
+    result = dsHdmiInInit();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
     // Step 02: Call dsGetDisplay() for each valid port
     uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
     for (size_t i = 0; i < numPorts; i++) {
@@ -644,6 +648,7 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         if(result != dsERR_NONE)
         {
+            result = dsHdmiInTerm();
             UT_FAIL("Failed to get display handle");
         }
 
@@ -653,6 +658,7 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         if(result != dsERR_NONE)
         {
+            result = dsHdmiInTerm();
             UT_FAIL("Failed to get EDID Bytes");
         }
 
@@ -663,6 +669,9 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
     }
     free(edid);
 
+    result = dsHdmiInTerm();
+    UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
     // Step 05: Terminate the display sub-system
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
