@@ -5046,7 +5046,12 @@ void test_l1_dsVideoPort_negative_dsGetAllmEnabled(void) {
 
     // Step 03: Call dsGetAllmEnabled with invalid handle
     status = dsGetAllmEnabled(handle, &enabled );
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    }
+    else if (gSourceType == 0) {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     // Step 04: Get the port handle for supported video ports
     for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
@@ -5073,7 +5078,12 @@ void test_l1_dsVideoPort_negative_dsGetAllmEnabled(void) {
 
     // Step 07: Attempt to get ALLM Status after termination
     status = dsGetAllmEnabled(valid_handle, &enabled );
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    if (gSourceType == 1) {
+            CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
+    else if (gSourceType == 0) {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     UT_LOG_INFO("\n Out %s\n", __FUNCTION__);
 }
@@ -5192,7 +5202,12 @@ void test_l1_dsVideoPort_negative_dsSetAllmEnabled(void) {
 
     // Step 03: Call dsSetAllmEnabled with invalid handle
     status = dsSetAllmEnabled(handle, true );
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    }
+    else if (gSourceType == 0) {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     // Step 04: Get the port handle for supported video ports
     for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
@@ -5211,7 +5226,12 @@ void test_l1_dsVideoPort_negative_dsSetAllmEnabled(void) {
 
     // Step 06: Attempt to enable ALLM Status after termination
     status = dsSetAllmEnabled(valid_handle, true );
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    if (gSourceType == 1) {
+        CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
+    else if (gSourceType == 0) {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
