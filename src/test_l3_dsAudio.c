@@ -2610,7 +2610,23 @@ void test_l3_dsAudio_ms12Profile(void)
                      ut_control_GetMapString(dsError_mapTable, ret));
     }
 
-    char* token = strtok(profiles.audioProfileList, " - ");
+    UT_LOG_INFO("Calling dsGetMS12AudioProfileList(IN:handle:[0x%0X], OUT:profile:[])", handle);
+    ret = dsGetMS12AudioProfileList(handle, &profiles);
+    if(ret != dsERR_NONE) {
+        UT_LOG_ERROR("Failed dsGetMS12AudioProfileList(IN:handle:[0x%0X], OUT:profile:[audioProfileList: %s, audioProfileCount: %d] dsError_t:[%s])",
+                      handle,
+                      profiles.audioProfileList, profiles.audioProfileCount,
+                      ut_control_GetMapString(dsError_mapTable, ret));
+        goto exit;
+    }
+    else {
+        UT_LOG_INFO("Result dsGetMS12AudioProfileList(IN:handle:[0x%0X], OUT:profile:[audioProfileList: %s, audioProfileCount: %d] dsError_t:[%s])",
+                     handle,
+                     profiles.audioProfileList, profiles.audioProfileCount,
+                     ut_control_GetMapString(dsError_mapTable, ret));
+    }
+
+    char* token = strtok(profiles.audioProfileList, ",");
     int32_t i = 0;
 
     UT_LOG_MENU_INFO("----------------------------------------------------------");
@@ -2620,7 +2636,7 @@ void test_l3_dsAudio_ms12Profile(void)
     while (token != NULL) {
         profileList[i] = token;
         UT_LOG_MENU_INFO("\t%d.  %-20s", i+1, profileList[i]);
-        token = strtok(NULL, " - ");
+        token = strtok(NULL, ",");
         i++;
     }
     UT_LOG_MENU_INFO("----------------------------------------------------------");
