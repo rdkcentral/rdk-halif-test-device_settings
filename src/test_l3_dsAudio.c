@@ -93,11 +93,13 @@ typedef struct _ut_control_keyMapTable_t
 /* Global Variables */
 static int32_t gTestGroup = 3;
 static int32_t gTestID    = 1;
+static bool    gConnectionStatus = false;
+static bool    gAtmosStatus      = false;
 
-static bool                gConnectionStatus = false;
-static dsAudioFormat_t     gAudioFormat      = dsAUDIO_FORMAT_NONE;
-static dsATMOSCapability_t gAtosCapablity    = dsAUDIO_ATMOS_NOTSUPPORTED;
-static bool                gAtmosStatus      = false;
+static dsAudioFormat_t     gAudioFormat   = dsAUDIO_FORMAT_NONE;
+static dsATMOSCapability_t gAtosCapablity = dsAUDIO_ATMOS_NOTSUPPORTED;
+static dsAudioARCStatus_t  gARCStatus     = {0};
+
 
 /* Enum mapping tables */
 
@@ -436,8 +438,9 @@ void test_l3_dsAudio_enable_port(void)
     }
 
     if(gDSAudioPortConfiguration[port].typeid == dsAUDIOPORT_TYPE_HDMI_ARC) {
-        dsAudioARCStatus_t arcStatus = {0};
         int32_t archType = 0;
+
+        memset(&gARCStatus, 0, sizeof(dsAudioARCStatus_t));
 
         UT_LOG_MENU_INFO("----------------------------------------------------------");
         UT_LOG_MENU_INFO("Supported ARC Types");
@@ -455,26 +458,26 @@ void test_l3_dsAudio_enable_port(void)
             goto exit;
         }
 
-        arcStatus.status = true;
-        arcStatus.type   = (dsAudioARCTypes_t)archType;
+        gARCStatus.status = true;
+        gARCStatus.type   = (dsAudioARCTypes_t)archType;
 
         UT_LOG_INFO("Calling dsAudioEnableARC(IN:handle:[0x%0X], IN:arcStatus:[.type=%s, .status=%s])",
                     handle,
-                    ut_control_GetMapString(dsAudioARCTypes_mapTable, arcStatus.type),
-                    ut_control_GetMapString(bool_mapTable, arcStatus.status));
-        ret = dsAudioEnableARC(handle, arcStatus);
+                    ut_control_GetMapString(dsAudioARCTypes_mapTable, gARCStatus.type),
+                    ut_control_GetMapString(bool_mapTable, gARCStatus.status));
+        ret = dsAudioEnableARC(handle, gARCStatus);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("Failed dsAudioEnableARC(IN:handle:[0x%0X], IN:arcStatus:[.type=%s, .status=%s]) dsError_t:[%s]",
                           handle,
-                          ut_control_GetMapString(dsAudioARCTypes_mapTable, arcStatus.type),
-                          ut_control_GetMapString(bool_mapTable, arcStatus.status),
+                          ut_control_GetMapString(dsAudioARCTypes_mapTable, gARCStatus.type),
+                          ut_control_GetMapString(bool_mapTable, gARCStatus.status),
                           ut_control_GetMapString(dsError_mapTable, ret));
         }
         else {
             UT_LOG_INFO("Result dsAudioEnableARC(IN:handle:[0x%0X], IN:arcStatus:[.type=%s, .status=%s]) dsError_t:[%s]",
                         handle,
-                        ut_control_GetMapString(dsAudioARCTypes_mapTable, arcStatus.type),
-                        ut_control_GetMapString(bool_mapTable, arcStatus.status),
+                        ut_control_GetMapString(dsAudioARCTypes_mapTable, gARCStatus.type),
+                        ut_control_GetMapString(bool_mapTable, gARCStatus.status),
                         ut_control_GetMapString(dsError_mapTable, ret));
         }
         UT_LOG_INFO("Calling dsIsAudioPortEnabled(IN:handle:[0x%0X], OUT:enabled:[])", handle);
@@ -578,6 +581,30 @@ void test_l3_dsAudio_disable_port(void)
                      gDSAudioPortConfiguration[port].index,
                      handle,
                      ut_control_GetMapString(dsError_mapTable, ret));
+    }
+
+    if(gDSAudioPortConfiguration[port].typeid == dsAUDIOPORT_TYPE_HDMI_ARC) {
+        gARCStatus.status = false;
+
+        UT_LOG_INFO("Calling dsAudioEnableARC(IN:handle:[0x%0X], IN:arcStatus:[.type=%s, .status=%s])",
+                    handle,
+                    ut_control_GetMapString(dsAudioARCTypes_mapTable, gARCStatus.type),
+                    ut_control_GetMapString(bool_mapTable, gARCStatus.status));
+        ret = dsAudioEnableARC(handle, gARCStatus);
+        if (ret != dsERR_NONE) {
+            UT_LOG_ERROR("Failed dsAudioEnableARC(IN:handle:[0x%0X], IN:arcStatus:[.type=%s, .status=%s]) dsError_t:[%s]",
+                          handle,
+                          ut_control_GetMapString(dsAudioARCTypes_mapTable, gARCStatus.type),
+                          ut_control_GetMapString(bool_mapTable, gARCStatus.status),
+                          ut_control_GetMapString(dsError_mapTable, ret));
+        }
+        else {
+            UT_LOG_INFO("Result dsAudioEnableARC(IN:handle:[0x%0X], IN:arcStatus:[.type=%s, .status=%s]) dsError_t:[%s]",
+                        handle,
+                        ut_control_GetMapString(dsAudioARCTypes_mapTable, gARCStatus.type),
+                        ut_control_GetMapString(bool_mapTable, gARCStatus.status),
+                        ut_control_GetMapString(dsError_mapTable, ret));
+        }
     }
 
     UT_LOG_INFO("Calling dsEnableAudioPort(IN:handle:[0x%0X], IN:enabled:[%s])",
