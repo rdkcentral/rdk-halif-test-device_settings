@@ -395,14 +395,18 @@ void test_l1_dsVideoDevice_positive_dsSetDFC (void)
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
-        if(gSourceType == 1) {
-            // 03: Set DFC mode with various zoom modes
-            for (int j = 0; j < gDSVideoDeviceConfiguration[j].NoOfSupportedDFCs; ++j) {
-                result = dsSetDFC(handle, gDSVideoDeviceConfiguration[i].SupportedDFCs[j]);
+        // 03: Set DFC mode with various zoom modes
+        for (int j = 0; j < gDSVideoDeviceConfiguration[j].NoOfSupportedDFCs; ++j)
+        {
+            result = dsSetDFC(handle, gDSVideoDeviceConfiguration[i].SupportedDFCs[j]);
+            if (gSourceType == 1)
+            {
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
             }
-        } else if(gSourceType == 0) {
-            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+            else if (gSourceType == 0)
+            {
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+            }
         }
     }
 
@@ -516,10 +520,9 @@ void test_l1_dsVideoDevice_positive_dsGetDFC(void)
         UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 03: Get the DFC mode using dsGetDFC() with the obtained handle
+        result = dsGetDFC(handle, &dfc_mode);
         if(gSourceType == 1) {
-            result = dsGetDFC(handle, &dfc_mode);
             UT_ASSERT_EQUAL(result, dsERR_NONE);
-
             // Step 04: Compare the DFC mode with value from the profile
             for (int j = 0; j < gDSVideoDeviceConfiguration[j].NoOfSupportedDFCs; ++j) {
                 UT_LOG_DEBUG("SupportedDFCs: %d",gDSVideoDeviceConfiguration[i].SupportedDFCs[j]);
@@ -1365,14 +1368,14 @@ void test_l1_dsVideoDevice_positive_dsGetCurrentDisplayframerate(void)
         UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 03: Get the current display framerate using the obtained handle
+        result = dsGetCurrentDisplayframerate(handle, fetchedFramerate);
         if(gSourceType == 0) {
-            result = dsGetCurrentDisplayframerate(handle, fetchedFramerate);
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
             // Step 04: Compare the current display framerate with the value from the profile
             for (int j = 0; j < gDSVideoDeviceConfiguration[i].NoOfSupportedDFR ;j++) {
                 UT_LOG_INFO("SupportedDisplayFramerate %s",gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate);
-                if(strncpy(fetchedFramerate,gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate,sizeof(fetchedFramerate)) == 0) {
+                if(strncmp(fetchedFramerate,gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate,sizeof(fetchedFramerate)) == 0) {
                     UT_LOG_INFO("SupportedDisplayFramerate %s fetchedFramerate %s ",gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate, fetchedFramerate);
                     count++;
                 }
