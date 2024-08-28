@@ -10,3 +10,4 @@ dsHdmiIn:
   gameFeatures:
     feature: ""
     count: 0
+  HdmiCompatibilityVersion: #No ports
