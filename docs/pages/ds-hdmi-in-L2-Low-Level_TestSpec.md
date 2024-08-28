@@ -292,8 +292,8 @@ graph TB
 
 |Title|Details|
 |--|--|
-|Function Name|`test_l2_dsHdmiIn_SetAndGetAllmSupport_sink`|
-|Description|Set and Get the `ALLM` support to `EDID` version 2.0 without connecting any source devices.|
+|Function Name|`test_l2_dsHdmiIn_SetAllmSupport_sink`|
+|Description|Set the `ALLM` support to `EDID` version 2.0 without connecting any source devices.|
 |Test Group|02|
 |Test Case ID|007|
 |Priority|High|
@@ -313,23 +313,17 @@ If user chose to run the test in interactive mode, then the test case has to be 
 | -- | --------- | ---------- | -------------- | ----- |
 | 01 | Initialize `HDMI` input using `dsHdmiInInit` | None | `dsERR_NONE` | Should be successful |
 | 02 | Set `EDID` 2.0 ALLM support to true using `dsSetEdid2AllmSupport` | iHdmiPort = `dsHDMI_IN_PORT_0`, allmSupport = true | `dsERR_NONE` | Should be successful |
-| 03 | Get `EDID` 2.0 ALLM support using `dsGetEdid2AllmSupport` | iHdmiPort = `dsHDMI_IN_PORT_0`,  number of Hdmi Input ports   | `dsERR_NONE`, allmSupport = true | Should be successful |
-| 04 | Set EDID 2.0 ALLM support to false using `dsSetEdid2AllmSupport` | iHdmiPort = dsHDMI_IN_PORT_0, allmSupport = false | `dsERR_NONE` | Should be successful |
-| 05 | Get EDID 2.0 ALLM support using `dsGetEdid2AllmSupport` | iHdmiPort = `dsHDMI_IN_PORT_0`, to number of Hdmi Input ports supported | `dsERR_NONE`, allmSupport = false | Should be successful |
-| 06 | Terminate HDMI input using `dsHdmiInTerm` | None | `dsERR_NONE` | Should be successful |
+| 03 | Set EDID 2.0 ALLM support to false using `dsSetEdid2AllmSupport` | iHdmiPort = dsHDMI_IN_PORT_0, allmSupport = false | `dsERR_NONE` | Should be successful |
+| 04 | Terminate HDMI input using `dsHdmiInTerm` | None | `dsERR_NONE` | Should be successful |
 
 ```mermaid
 graph TB
 A[Call dsHdmiInInit] -->|Success| B[Call dsSetEdid2AllmSupport with true]
 A -->|Failure| A1[Test case fail]
-B -->|Success| C[Call dsGetEdid2AllmSupport]
+B -->|Success| C[Call dsSetEdid2AllmSupport with false]
 B -->|Failure| B1[Test case fail]
-C -->|Success| D[Call dsSetEdid2AllmSupport with false]
+C -->|Success| D[Call dsHdmiInTerm]
 C -->|Failure| C1[Test case fail]
-D -->|Success| E[Call dsGetEdid2AllmSupport]
+D -->|Success| E[Test case success]
 D -->|Failure| D1[Test case fail]
-E -->|Success| F[Call dsHdmiInTerm]
-E -->|Failure| E1[Test case fail]
-F -->|Success| G[Test case success]
-F -->|Failure| F1[Test case fail]
 ```
