@@ -422,7 +422,7 @@ Control plane connects/ disconnects the external devices. Validates the ALLM by 
 
 |Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |------------------|-----------|--------|--|--|------|----|--------------------------|
-|Get `HDMI` Version|Get `HDMI` Version and Validate with the version from profile file|dsGetHdmiVersion()|`Y`|`N`|`N`|`Y`|`Y`|
+|Get `HDMI` Version|Get `HDMI` Version and Validate with the version from profile file|dsGetHdmiVersion()|`Y`|`N`|`N`|`Y`|`NA`|
 
 ### Test Startup Requirement - Get `HDMI` Version
 
@@ -435,4 +435,4 @@ Emulator will boot with the `EDID` coming from the configuration file.
 
 ### Control Plane Requirement - Get `HDMI` Version
 
-Connecting and disconnecting source devices in the `HDMI` Input will be handled by the Control Plane.
+None
