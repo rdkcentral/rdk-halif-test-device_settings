@@ -1,374 +1,438 @@
-# Device Settings HDMI Input L2 Low Level Test Specification and Procedure Documentation
+# HdmiIn High Level Test Specification Document
 
 ## Table of Contents
 
-- [Overview](#overview)
 - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-- [Definitions](#definitions)
-- [References](#references)
-- [Level 2 Test Procedure](#level-2-test-procedure)
+- [Introduction](#introduction)
+- [Module Description](#module-description)
+- [Testing Scope](#testing-scope)
 
-## Overview
+## Acronyms, Terms and Abbreviations
 
-This document describes the Low Level L2 Test Specification and Procedure Documentation for the Device Settings HDMI Input module.
+- `EDID`     - Extended Display Identification Data
+- `API`      - Application programming interface
+- `HDMI`     - High-Definition Multimedia Interface
+- `dsHdmiIn` - Device Settings High-Definition Multimedia Interface Input
+- `SPD`      - Source Product Descriptor
+- `ALLM`     - Auto Low Latency Mode
+- `AVI`      - Audio Video Interleave
+- `Y`        - Yes
+- `N`        - No
+- `NA`       - Not Applicable
 
-### Acronyms, Terms and Abbreviations
+## Introduction
 
-- `HAL` \- Hardware Abstraction Layer, may include some common components
-- `UT`  \- Unit Test(s)
-- `OEM`  \- Original Equipment Manufacture
-- `SoC`  \- System on a Chip
+This document provides an overview of the high level testing requirements for the `dsHdmiIn` module. It outlines the scope of testing, objectives, testing levels and approaches, specific test requirements, emulator requirements, control plane requirements and expected deliverables.
 
-### Definitions
+- Interface of the test is available in this link -  [Interface header](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsHdmiIn.h)
 
-- `ut-core` \- Common Testing Framework <https://github.com/rdkcentral/ut-core>, which wraps a open-source framework that can be expanded to the requirements for future framework.
+## Module Description
 
-### References
+High level overview:
 
-- `High Level Test Specification` - [ds-hdmi-in-High-Level_TestSpec.md](https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/main/docs/pages/ds-hdmi-in-High-Level_TestSpec.md)
-- `HAL Interface file` - [dsHdmiIn.h](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsHdmiIn.h)
+- `dsHdmiIn` provides a variety of `API`s for accessing information regarding the `HDMI` Inputs on sink devices and source devices that has an input port.
+- It facilitates interaction with `HDMI` Input ports, aiding in their configuration and utilization within the system. This information is then passed to the caller.
+- For the sink and source devices, to retrieve the available `HDMI` Input information, an external device must be connected.
 
-## Level 2 Test Procedure
+- `HAL` specification : [ds-hdmiIn HAL Spec](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/docs/pages/ds-hdmi-in_halSpec.md)
 
-The following functions are expecting to test the module operates correctly.
+## Testing Scope
 
-### Test 1
+|#|Test Functionality|Test Description|
+|-|------------------|----------------|
+|1|[Get Number of Inputs](#get-number-of-inputs)|The test aims to verify and validate the number of HDMI Input ports available on the platform.|
+|2|[Set and Get the `HDMI` Input port Status](#set-and-get-the-hdmi-input-port-status)|The test is to verify by selecting the HDMI input and getting the status of HDMI Input ports available on the platform.|
+|3|[Scale the `HDMI` Input Video](#scale-the-hdmi-input-video)|The test aims to verify and validate the video size and coordinates of the HMDI Input Video.|
+|4|[Select Zoom Mode](#select-zoom-mode)|The test aims to verify the zoom mode functionality of the module.|
+|5|[Get Current Video Mode](#get-current-video-mode)|The test is to get current HDMI input video mode from active port.|
+|6|[Callback for connection Status](#callback-for-connection-status)|The test aims to verify whether it notifies applications when the HDMI input port connection status changes|
+|7|[Callback for Signal Change](#callback-for-signal-change)|The test aims to verify the callback function used to inform applications about changes in the signal status of the `HDMI` In.(NoSignal/UnstableSignal/NotSupportedSignal/StableSignal)|
+|8|[Callback for Status Change](#callback-for-status-change)|The test validates the functionality of the callback function designed to notify applications of `HDMI` Input status change events.(Port,IsPresented flag status)|
+|9|[Callback for Video Mode Change](#callback-for-video-mode-change)|The test validates the functionality of the callback function designed to notify when there is a change in the video resolution|
+|10|[Callback for `ALLM` Mode Change](#callback-for-allm-mode-change)|The test validates the functionality of the callback function designed to notify when `HDMI` input `ALLM` mode changes|
+|11|[Callback for AV Latency Change](#callback-for-av-latency-change)|The test validates the functionality of the callback function designed to notify when `HDMI` input AV latency changes|
+|12|[Callback for `AVI` Content Type Change](#callback-for-avi-content-type-change)|The test validates the functionality of the callback function designed to notify when `HDMI` input AVI content type changes|
+|13|[Check `HDMI` ARC Port](#check-hdmi-arc-port)|The test verifies whether the given port is an `HDMI` ARC port or not|
+|14|[Set and Get `EDID` Information](#set-and-get-edid-information)|The test is to validate by setting and getting the `EDID` bytes information and `EDID` version|
+|15|[Get `HDMI` `SPD` Info](#get-hdmi-spd-info)|The test is to get and verify the `SPD` information.|
+|16|[Get Supported Game Feature List](#get-supported-game-feature-list)|The test verifies by getting the all supported game features in the list.|
+|17|[Get AV latency](#get-av-latency)|The test validates by getting the current av latency.|
+|18|[Get `ALLM` status](#get-allm-status)|The test aims to verify that `ALLM` status is enabled or disabled for the specific `HDMI` input port.|
+|19|[Get and Set `EDID` to all `ALLM` Support](#get-and-set-edid-to-all-allm-support)|The test aims to verfiy by setting and getting the `EDID` `ALLM` support.|
+|20|[Get `HDMI` version](#get-hdmi-version)|The test is to validate getting the `HDMI` compatibility version|
+-----------
 
-|Title|Details|
-|--|--|
-|Function Name|`test_l2_dsHdmiIn_GetNumberOfInputs`|
-|Description|Verify that the function returns the expected `HDMI` Input ports. Compare the input port values by parsing the configuration YAML file `dsHdmiIn/numberOfPorts`|
-|Test Group|02|
-|Test Case ID|001|
-|Priority|High|
+## Get Number of Inputs
 
-**Pre-Conditions**
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Get Number of Inputs|Verify that the function returns the expected `HDMI` Input ports. Compare the input port values by parsing the configuration YAML file for sink is `Sink_HDMIIN.yaml (HDMIIN/HdmiInputPort/numberOfPorts)` and source is `Source_HDMIIN.yaml(HDMIIN/HdmiInputPort/numberOfPorts)`|dsHdmiInGetNumberOfInputs()|`Y`|`N`|`Y`|`Y`|`NA`|
+
+### Test Startup Requirement - Get Number of Inputs
+
+The test begins with the configured `HDMI` input port details.
+
+### Emulator Requirement - Get Number of Inputs
+
+Emulator will boot with the port information's coming from the configuration file.
+
+### Control Plane Requirement - Get Number of Inputs
+
 None
 
-**Dependencies**
+## Set and Get the `HDMI` Input port Status
+
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Set and Get the `HDMI` Input port Status|Loop through supported `HDMI` Input port, verify that the function successfully sets the specified `HDMI` Input port without any external device connection and "Get status" to check the active port is false, port connected is false and presentation is false. Note:supported `HDMI` Input port, Check profile file for sink is `Sink_HDMIIN.yaml (HDMIIN/HdmiInputPort/numberOfPorts)` and source is `Source_HDMIIN.yaml(HDMIIN/HdmiInputPort/numberOfPorts)`|dsHdmiInGetNumberOfInputs(), dsHdmiInSelectPort(), dsHdmiInGetStatus()|`Y`|`N`|`Y`|`Y`|`NA`|
+||Loop through all `HDMI` Input port, verify that the function successfully sets the specified `HDMI` Input port as active for presentation and check the port information is valid using "Get status".Note:supported `HDMI` Input port, Check profile file for sink is `Sink_HDMIIN.yaml (HDMIIN/HdmiInputPort/numberOfPorts)` and source is `Source_HDMIIN.yaml(HDMIIN/HdmiInputPort/numberOfPorts)`|dsHdmiInGetNumberOfInput(), dsHdmiInSelectPort(), dsHdmiInGetStatus()|`N`|`Y`|`Y`|`Y`|`Y`|
+||On the active HDMI port, set the Audio Mix to be enable and disable|dsHdmiInSelectPort()|`N`|`Y`|`N`|`Y`|`Y`|
+||On the active HDMI port, verify the `HDMI` input with the video plane in both primary and secondary. Additionally, validate the topmost flag.|dsHdmiInSelectPort()|`N`|`Y`|`N`|`Y`|`Y`|
+
+### Test Startup Requirement - Set and Get the `HDMI` Input port Status
+
+- The test begins with the configured `HDMI` input port numbers.
+- Connection of the source device with the `HDMI` Input.
+
+### Emulator Requirement - Set and Get the `HDMI` Input port Status
+
+Emulator will boot with the port information's coming from the configuration file.
+
+### Control Plane Requirement - Set and Get the `HDMI` Input port Status
+
+- Connecting and disconnecting source devices in the `HDMI` Input will be handled by the Control Plane. 
+- Validate the Audio mix and Video plane by the analyzers.
+
+## Scale the `HDMI` Input Video
+
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Scale the `HDMI` Input Video|Verify that the function successfully scales the `HDMI` input video when valid coordinates and dimensions are provided within the resolution limits. Based on video resolution need to check whether the coordinates are in range|dsHdmiInScaleVideo()|`N`|`Y`|`Y`|`Y`|`Y`|
+
+### Test Startup Requirement - Scale the `HDMI` Input Video
+
+The test begins by setting up the video analyzer, and the video should be played.
+
+### Emulator Requirement - Scale the `HDMI` Input Video
+
+Emulator will boot with the port information's coming from the configuration file. Predefined coordinates and dimesions to compare.
+
+### Control Plane Requirement - Scale the `HDMI` Input Video
+
+Control plane to validate the coordinates and dimensions by the video analyzers.
+
+## Select Zoom Mode
+
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Select Zoom Mode|Verify that the function successfully updates the video zoom on the active `HDMI` input using the provided zoom mode|dsHdmiInSelectZoomMode()|`N`|`Y`|`Y`|`N`|`Y`|
+
+### Test Startup Requirement - Select Zoom Mode
+
+The test begins by setting up the video analyzer, and the video should be played.
+
+### Emulator Requirement - Select Zoom Mode
+
+Emulator will boot with the zoom modes in the configuration file.
+
+### Control Plane Requirement - Select Zoom Mode
+
+Changing the zoom modes by the Control Plane. Validates the zoom mode by analyzers.
+
+## Get Current Video Mode
+
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Get Current Video Mode|Verify that the function successfully updates the current `HDMI` input video modes like Pixel resolution, frame rate and interlaced information of the active port|dsHdmiInGetCurrentVideoMode()|`N`|`Y`|`Y`|`Y`|`Y`|
+
+### Test Startup Requirement - Get Current Video Mode
+
+The test begins by setting up the video analyzer, and the video should be played.
+
+### Emulator Requirement - Get Current Video Mode
+
+Emulator will boot with the all video mode related information in the configuration file.
+
+### Control Plane Requirement - Get Current Video Mode
+
+Control plane validates the current mode by the analyzers.
+
+## Callback for connection Status
+
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Callback for connection Status|Verify that the callback function properly updates the connection/disconnection status flag and notifies the application when a `HDMI` Input port is connected or disconnected.|dsHdmiInRegisterConnectCB()|`N`|`Y`|`Y`|`Y`|`Y`|
+|Callback for connection Status|Verify that the callback function properly updates the isPresented status, if the connected port is active and presents video after being connected.|dsHdmiInRegisterConnectCB()|`N`|`Y`|`Y`|`Y`|`Y`|
+
+### Test Startup Requirement - Callback for connection Status
+
+Connection of the source device with the `HDMI` Input.
+
+### Emulator Requirement - Callback for connection Status
+
+Emulator will boot with the port information coming from the configuration file.
+
+### Control Plane Requirement - Callback for connection Status
+
+Connecting and disconnecting source devices in the `HDMI` Input will be handled by the Control Plane.
+
+## Callback for Signal Change
+
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Callback for Signal Change|Verify that the callback function properly notifies the application whenever there is a change in the signal statuses (e.g., NoSignal, UnstableSignal, NotSupportedSignal, StableSignal) for the `HDMI` Input port.|dsHdmiInRegisterSignalChangeCB()|`N`|`Y`|`N`|`Y`|`Y`|
+
+### Test Startup Requirement - Callback for Signal Change
+
+Connection of the source device with the `HDMI` Input.
+
+### Emulator Requirement - Callback for Signal Change
+
+Emulator will boot with the port information's coming from the configuration file.
+
+### Control Plane Requirement - Callback for Signal Change
+
+- Connecting and disconnecting source devices in the `HDMI` Input will be handled by the Control Plane.
+- Provide resolution changes or configurations changes on the connected device that affects the output signal.
+
+## Callback for Status Change
+
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Callback for Status Change|Verify that the callback function properly triggers whenever the dsHdmiInStatus_t is updated and notifies the application of the `HDMI` Input status change event.|dsHdmiInRegisterStatusChangeCB()|`N`|`Y`|`N`|`Y`|`Y`|
+
+### Test Startup Requirement - Callback for Status Change
+
+Connection of the source device with the `HDMI` Input.
+
+### Emulator Requirement - Callback for Status Change
+
+Emulator will boot with the port information's coming from the configuration file.
+
+### Control Plane Requirement - Callback for Status Change
+
+Connecting and disconnecting source devices in the `HDMI` Input will be handled by the Control Plane.
+
+## Callback for Video Mode Change
+
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Callback for Video Mode Change|Verify that the callback function properly notifies the application whenever there is resolution and other video mode changes.|dsHdmiInRegisterVideoModeUpdateCB()|`N`|`Y`|`N`|`Y`|`Y`|
+
+### Test Startup Requirement - Callback for Video Mode Change
+
+Connection of the source device with the `HDMI` Input.
+
+### Emulator Requirement - Callback for Video Mode Change
+
+Emulator will boot with the video resolutions and other video modes from the configuration file.
+
+### Control Plane Requirement - Callback for Video Mode Change
+
+Changing of the video resolution by control Plane. 
+
+## Callback for `ALLM` mode change
+
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Callback for `ALLM` mode change|Verify that the callback function properly notifies the application whenever there is `ALLM` mode change.|dsHdmiInRegisterAllmChangeCB()|`N`|`Y`|`N`|`Y`|`Y`|
+
+### Test Startup Requirement - Callback for `ALLM` mode change
+
+Connection of the source device/compatible gaming console devices with the `HDMI` Input.
+
+### Emulator Requirement - Callback for `ALLM` mode change
+
+Emulator will boot with the `HDMI` input port numbers and `ALLM` mode information.
+
+### Control Plane Requirement - Callback for `ALLM` mode change
+
+Changing of the `ALLM` mode by control Plane.
+
+## Callback for AV Latency Change
+
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Callback for AV Latency Change|Verify that the callback function notifies the application whenever there is a change in the `HDMI` input Audio and Video latency within its Max(500ms) and Min(0) ranges.|dsHdmiInRegisterAVLatencyChangeCB()|`N`|`Y`|`N`|`Y`|`Y`|
+
+### Test Startup Requirement - Callback for AV Latency Change
+
+- Connection of the source device with the `HDMI` Input. 
+- Test starts with the video playback with different modes ( Film Maker, Cinema mode )
+
+### Emulator Requirement - Callback for AV Latency Change
+
+Emulator will boot with the AV latency information.
+
+### Control Plane Requirement - Callback for AV Latency Change
+
+Control plane signals the source device to play the content ( Cinema mode to Film Maker mode ).
+
+## Callback for `AVI` Content Type Change
+
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Callback for `AVI` Content Type Change|Verify that the callback function properly notifies the application whenever there is a change in the `AVI` content type.|dsHdmiInRegisterAviContentTypeChangeCB()|`N`|`Y`|`N`|`Y`|`Y`|
+
+### Test Startup Requirement - Callback for `AVI` Content Type Change
+
+- Connection of the source device with the `HDMI` Input.
+- Test starts with the video playback.
+
+### Emulator Requirement - Callback for `AVI` Content Type Change
+
+Emulator will boot with the `AVI` content type information.
+
+### Control Plane Requirement - Callback for `AVI` Content Type Change
+
+Changing `AVI` content type by control Plane..
+
+## Check `HDMI` ARC Port
+
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Check `HDMI` ARC Port|Loop through supported `HDMI` Input port and verify whether the given port is an HDMI ARC port by comparing it with the `Sink_HDMIIN.yaml (HDMIIN/HdmiArcPort/portNumber)` configuration file.Note:supported `HDMI` Input port, Check profile file for sink is `Sink_HDMIIN.yaml (HDMIIN/HdmiInputPort/numberOfPorts)`|dsIsHdmiARCPort()|`Y`|`N`|`N`|`Y`|`NA`|
+
+### Test Startup Requirement - Check `HDMI` ARC Port
+
+Test starts with the number of ports and ARC port from the configuration file.
+
+### Emulator Requirement - Check `HDMI` ARC Port
+
+Emulator will boot with the `HDMI` ARC port information.
+
+### Control Plane Requirement - Check `HDMI` ARC Port
+
 None
 
-**User Interaction**
-If user chose to run the test in interactive mode, then the test case has to be selected via console.
+## Set and Get `EDID` Information
 
-#### Test Procedure - Test 1
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Set and Get `EDID` Information|Setting the `EDID` version for a given port and getting back the `EDID` version and compare with the Set value. Also, validate the EDID length for a given port. Compare the EDID length values by parsing the configuration YAML file `Sink_EDID_Info.yaml (HDMIIN/EDID_Data/edidBytesLength)`|dsSetEdidVersion(), dsGetEdidVersion(), dsGetEDIDBytesInfo()|`Y`|`N`|`N`|`Y`|`NA`|
+||This test ensures that the module can accurately retrieve and interpret `EDID` information, providing essential data about the display's capabilities and characteristics.|dsGetEdidVersion(), dsGetEDIDBytesInfo()|`N`|`Y`|`N`|`Y`|`Y`|
 
-| Variation / Steps | Description | Test Data | Expected Result | Notes|
-| -- | --------- | ---------- | -------------- | ----- |
-| 01 | Initialize `HDMI` input using `dsHdmiInInit` | None | `dsERR_NONE` | Should be successful |
-| 02 | Get the number of `HDMI` input ports using `dsHdmiInGetNumberOfInputs` | pNumberOfinputs = valid buffer | `dsERR_NONE` | Should be successful |
-| 03 | Compare the number of `HDMI` input ports with the value in the configuration file | pNumberOfinputs = `dsHdmiIn/numberOfPorts` | `dsERR_NONE` | Should be successful |
-| 04 | Terminate `HDMI` input using `dsHdmiInTerm` | None | `dsERR_NONE` | Should be successful |
+### Test Startup Requirement - Set and Get `EDID` Information
 
-```mermaid
-graph TB
-A[Call dsHdmiInInit API] -->|dsERR_NONE| B[Parse Configuration file]
-A -->|Failure| A1[Test case fail]
-B -->|Success| C[Call dsHdmiInGetNumberOfInputs API]
-B -->|Failure| B1[Test case fail]
-C -->|Success| D[Compare pNumberOfinputs with YAML value]
-C -->|Failure| C1[Test case fail]
-D -->|Match| E[Call dsHdmiInTerm API]
-D -->|Mismatch| D1[Test case fail]
-E -->|Failure| E1[Test case fail]
-E -->|dsERR_NONE| F[Test case success]
-```
+- Connection of the source device with the `HDMI` Input and video analyzer to check the display capabilities.
+- Test starts with the predefined EDID length information coming from the configuration file.
 
-### Test 2
+### Emulator Requirement - Set and Get `EDID` Information
 
-|Title|Details|
-|--|--|
-|Function Name|`test_l2_dsHdmiIn_GetStatus`|
-|Description|Verify the HDMI port with the 'Get status' function when it is disabled, without selecting any port, and without any external devices.|
-|Test Group|02|
-|Test Case ID|002|
-|Priority|High|
+Emulator will boot with the `EDID` coming from the configuration file.
 
-**Pre-Conditions**
+### Control Plane Requirement - Set and Get `EDID` Information
+
+Connecting and disconnecting source devices in the `HDMI` Input will be handled by the Control Plane.
+
+## Get `HDMI` `SPD` Info
+
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Get `HDMI` `SPD` Info|Test to get the `HDMI` `SPD` Info. Check whether it gets the spd info frame information properly.|dsGetHDMISPDInfo()|`N`|`Y`|`N`|`Y`|`Y`|
+
+### Test Startup Requirement - Get `HDMI` `SPD` Info
+
+Connection of the source device with the `HDMI` Input.
+
+### Emulator Requirement - Get `HDMI` `SPD` Info
+
+Emulator will boot with the `HDMI` SPD information from the configuration file.
+
+### Control Plane Requirement - Get `HDMI` `SPD` Info
+
+Connecting and disconnecting source devices in the `HDMI` Input will be handled by the Control Plane. Check the SPD info frame - Vendor name by the Analyzers.
+
+## Get Supported Game Feature List
+
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Get Supported Game Feature List|Make sure that the functionality can list and get the count of all the game features that are supported. Compare the result by parsing the configuration YAML file `Sink_HDMIIN.yaml(HDMIIN/gameFeatures/count)`|dsGetSupportedGameFeaturesList()|`Y`|`N`|`N`|`Y`|`NA`|
+
+### Test Startup Requirement - Get Supported Game Feature List
+
+Connection of the source device/game supported device with the `HDMI` Input. Test boots with the game feature list and count in the configuration file to compare the results.
+
+### Emulator Requirement - Get Supported Game Feature List
+
+Emulator will boot with the game supported features in the configuration.
+
+### Control Plane Requirement - Get Supported Game Feature List
+
 None
 
-**Dependencies**
+## Get AV latency 
+
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Get AV latency|The test gets the current AV latency connected to the source device. Also, It checks the AV latency after changing the AV content, such as switching from FilmMaker mode to any other mode.|dsGetAVLatency|`N`|`Y`|`N`|`Y`|`Y`|
+
+### Test Startup Requirement - Get AV latency
+
+- Connection of the source device with the `HDMI` Input.
+- Test starts up with the video playback content of different modes ( Film Maker mode, Cinema mode )
+
+### Emulator Requirement - Get AV latency
+
+Emulator will boot with the av latency information in configuration file.
+
+### Control Plane Requirement - Get AV latency
+
+- Control plane handles the switch between the modes ( Film Maker modes and Cinema modes ). 
+- Control Plane to test the content with post processing and without post processing.
+
+## Get `ALLM` Status 
+
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Get `ALLM` Status|Gets the `ALLM` status of the designated `HDMI` input port. The status information indicates whether `ALLM` is enabled or disabled|dsGetAllmStatus()|`N`|`Y`|`N`|`Y`|`NA`|
+
+### Test Startup Requirement - Get `ALLM` status
+
+Connection of the Game console source devce with the `HDMI` Input with game playback. 
+
+### Emulator Requirement - Get `ALLM` status
+
+Emulator will boot with the `ALLM` configuration details.
+
+### Control Plane Requirement - Get `ALLM` status
+
 None
 
-**User Interaction**
-If user chose to run the test in interactive mode, then the test case has to be selected via console.
+## Get and Set `EDID` to all `ALLM` Support
 
-#### Test Procedure - Test 2
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Get and Set `EDID` to all `ALLM` Support|Set and Get the `ALLM` support to `EDID` version 2.0 without connecting any source devices.|dsSetEdid2AllmSupport(), dsGetEdid2AllmSupport()|`Y`|`N`|`N`|`Y`|`NA`|
+||Set and Get `ALLM` support to `EDID` Version 2.0 with the connected external source device|dsSetEdid2AllmSupport(), dsGetEdid2AllmSupport()|`N`|`Y`|`N`|`Y`|`Y`|
 
-| Variation / Steps | Description | Test Data | Expected Result | Notes|
-| -- | --------- | ---------- | -------------- | ----- |
-| 01 | Initialize `HDMI` input using `dsHdmiInInit` | None | `dsERR_NONE` | Should be successful |
-| 02 | Get the status of `HDMI` input using `dsHdmiInGetStatus` | status = valid buffer | `dsERR_NONE` | Should be successful |
-| 03 | Check if `HDMI` input is presented | isPresented = false | false | Should be successful |
-| 04 | Check if any `HDMI` input port is active | activePort = `dsHDMI_IN_PORT_NONE` | `dsHDMI_IN_PORT_NONE` | Should be successful |
-| 05 | Check if any `HDMI` input port is connected | isPortConnected[i] = false for all i in range 0 to `dsHDMI_IN_PORT_MAX` | false | Should be successful |
-| 06 | Terminate `HDMI` input using `dsHdmiInTerm` | None | `dsERR_NONE` | Should be successful |
+### Test Startup Requirement - Get and Set `EDID` to all `ALLM` Support
 
-```mermaid
-graph TB
-A[Call dsHdmiInInit] -->|dsERR_NONE| B[Call dsHdmiInGetStatus]
-A -->|Failure| A1[Test case fail]
-B -->|dsERR_NONE| C[Check pStatus]
-B -->|Failure| B1[Test case fail]
-C -->|isPresented=false, isPortConnected=false, <br> activePort=dsHDMI_IN_PORT_NONE| D[Call dsHdmiInTerm]
-C -->|Failure| C1[Test case fail]
-D -->|dsERR_NONE| E[Test case success]
-D -->|Failure| D1[Test case fail]
-```
+Connection of the Game console source device with the `HDMI` Input.
 
-### Test 3
+### Emulator Requirement - Get and Set `EDID` to all `ALLM` Support
 
-|Title|Details|
-|--|--|
-|Function Name|`test_l2_dsHdmiIn_VerifyHdmiInputPortStatus`|
-|Description|Loop through all `HDMI` Input port, verify that the function successfully sets the specified `HDMI` Input port without any external device connection and 'Get status' to check the active port is false, port connected is false and presentation is false.|
-|Test Group|02|
-|Test Case ID|003|
-|Priority|High|
+Emulator will boot with the `ALLM` support information.
 
-**Pre-Conditions**
+### Control Plane Requirement - Get and Set `EDID` to all `ALLM` Support
+
+Control plane connects/ disconnects the external devices. Validates the ALLM by analyzers.
+
+## Get `HDMI` Version
+
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Get `HDMI` Version|Get `HDMI` Version and Validate with the version from profile file|dsGetHdmiVersion()|`Y`|`N`|`N`|`Y`|`NA`|
+
+### Test Startup Requirement - Get `HDMI` Version
+
+- The test begins with the configured `HDMI` input port numbers.
+- Connection of the source device with the `HDMI` Input
+
+### Emulator Requirement - Get `HDMI` Version
+
+Emulator will boot with the `EDID` coming from the configuration file.
+
+### Control Plane Requirement - Get `HDMI` Version
+
 None
-
-**Dependencies**
-None
-
-**User Interaction**
-If user chose to run the test in interactive mode, then the test case has to be selected via console.
-
-#### Test Procedure - Test 3
-
-| Variation / Steps | Description | Test Data | Expected Result | Notes|
-| -- | --------- | ---------- | -------------- | ----- |
-| 01 | Initialize HDMI input using `dsHdmiInInit` | None | `dsERR_NONE` | Should be successful |
-| 02 | Get the number of `HDMI` inputs using `dsHdmiInGetNumberOfInputs` | numInputs = valid buffer | `dsERR_NONE`, numInputs > 0 | Should be successful |
-| 03 | Loop through supported `HDMI` input ports and select each port using `dsHdmiInSelectPort` | port = `dsHDMI_IN_PORT_0` to numInputs-1, audioMix = false, evideoPlaneType = dsVideoPlane_PRIMARY, topMost = false | `dsERR_NONE` | Should be successful |
-| 04 | Get the status of the selected HDMI input port using `dsHdmiInGetStatus` | status = valid buffer | `dsERR_NONE`, activePort = port, isPresented = false, isPortConnected[port] = false | Should be successful |
-| 05 | Terminate HDMI input using `dsHdmiInTerm` | None | `dsERR_NONE` | Should be successful |
-
-```mermaid
-graph TB
-A[Call dsHdmiInInit API] -->|dsERR_NONE| B[Call dsHdmiInGetNumberOfInputs API]
-A -->|Not dsERR_NONE| A1[Test case fail]
-B -->|dsERR_NONE and<br> non-zero inputs| C{Loop through supported <br> HDMI input ports}
-B -->|Not dsERR_NONE or <br>zero inputs| B1[Test case fail]
-C --> D[Call dsHdmiInSelectPort API with current port]
-D -->|dsERR_NONE| E[Call dsHdmiInGetStatus API]
-E -->|!dsERR_NONE| E1[Test case fail]
-E1 --> F
-E -->|dsERR_NONE, activePort is current port, <br> isPresented is false, isPortConnected is false| F[Next port in loop]
-F --> C
-C -->|End of loop| G[Call dsHdmiInTerm API]
-G -->|dsERR_NONE| H[Test case pass]
-G -->|Not dsERR_NONE| G1[Test case fail]
-```
-
-### Test 4
-
-|Title|Details|
-|--|--|
-|Function Name|`test_l2_dsHdmiIn_VerifyHdmiArcPort_sink`|
-|Description|Loop through supported ports and verify whether the given port is an HDMI ARC port by comparing it with the `dsHdmiIn/HdmiArcPort/numberOfPorts` configuration file.|
-|Test Group|02|
-|Test Case ID|004|
-|Priority|High|
-
-**Pre-Conditions**
-None
-
-**Dependencies**
-None
-
-**User Interaction**
-If user chose to run the test in interactive mode, then the test case has to be selected via console.
-
-#### Test Procedure - Test 4
-
-| Variation / Steps | Description | Test Data | Expected Result | Notes|
-| -- | --------- | ---------- | -------------- | ----- |
-| 01 | Initialize HDMI input using `dsHdmiInInit` | None | `dsERR_NONE` | Should be successful |
-| 02 | Loop through supported HDMI input ports | iPort = `dsHDMI_IN_PORT_0` to number of Hdmi Input ports supported | `dsERR_NONE` | Should be successful |
-| 03 | For each port, check if it is an `HDMI` ARC port using `dsIsHdmiARCPort` | iPort = current port in loop, &isArcPort = valid buffer | `dsERR_NONE` | Should be successful |
-| 04 | If the port is an `HDMI` ARC port, verify it with the configuration file | iPort = current port, isArcPort = `dsHdmiIn/HdmiArcPortID` from configuration file returned by `dsIsHdmiARCPort` | `dsERR_NONE` | Should be successful |
-| 05 | Terminate `HDMI` input using `dsHdmiInTerm` | None | `dsERR_NONE` | Should be successful |
-
-```mermaid
-graph TB
-    A[Call dsHdmiInInit API] -->|Success| B{Loop through <br> HDMI ports}
-    A -->|Failure| A1[Test case fail]
-    B --> C[Call dsIsHdmiARCPort API]
-    C -->|Success| D[Check isArcPort flag]
-    D -->|isArcPort is true| E[Compare with configuration file]
-    E --> F[Is it the last HDMI port?]
-    F -->|No| B
-    F -->|Yes| G[Call dsHdmiInTerm API]
-    G -->|Success| H[Test case pass]
-    G -->|Failure| G1[Test case fail]
-```
-
-### Test 5
-
-|Title|Details|
-|--|--|
-|Function Name|`test_l2_dsHdmiIn_SetAndGetEdidVersionAndValidateEdidLength_sink`|
-|Description|Setting the `EDID` version for a given port and getting back the `EDID` version and compare with the Set value.|
-|Test Group|02|
-|Test Case ID|005|
-|Priority|High|
-
-**Pre-Conditions**
-None
-
-**Dependencies**
-None
-
-**User Interaction**
-If user chose to run the test in interactive mode, then the test case has to be selected via console.
-
-#### Test Procedure - Test 5
-
-| Variation / Steps | Description | Test Data | Expected Result | Notes|
-| -- | --------- | ---------- | -------------- | ----- |
-| 01 | Initialize HDMI input module using `dsHdmiInInit` | None | `dsERR_NONE` | Should be successful |
-| 02 | Set `EDID` version for each HDMI port using `dsSetEdidVersion` | hdmiPort = `dsHDMI_IN_PORT_0` to `dsHDMI_IN_PORT_2`, edidVersion = Supported `EDID` version from configuration file  `dsHdmiIn/EdidVersion/` | `dsERR_NONE` | Should be successful |
-| 03 | Get  and compare the `EDID` version for each `HDMI` port using `dsGetEdidVersion` | hdmiPort  | `dsERR_NONE` | Should be successful |
-| 04 | Repeat steps 2 to 4 for all `HDMI` ports and `EDID` versions | | `dsERR_NONE` | Should be successful |
-| 05 | Terminate `HDMI` input module using `dsHdmiInTerm` | None | `dsERR_NONE` | Should be successful |
-
-```mermaid
-graph TB
-    A[dsHdmiInInit] --> |Success| B[dsSetEdidVersion for various ports and edid version]
-    A --> |Failure| A1[Test Case Fail: dsHdmiInInit]
-    B --> |Success| C[dsGetEdidVersion]
-    B --> |Failure| B1[Test Case Fail: dsSetEdidVersion]
-    C --> |Success & get and set matches | G[dsHdmiInTerm]
-    C --> |Failure| C1[Test Case Fail: dsGetEdidVersion]
-    G --> |Success| H[Test Case Success]
-    G --> |Failure| G1[Test Case Fail: dsHdmiInTerm]
-```
-
-### Test 6
-
-|Title|Details|
-|--|--|
-|Function Name|`test_l2_dsHdmiIn_GetSupportedGameFeaturesList_sink`|
-|Description|Make sure that the functionality can list and get the count of all the game features that are supported. Compare the result by parsing the configuration YAML file `dsHdmiIn/gameFeatures/count`|
-|Test Group|02|
-|Test Case ID|006|
-|Priority|High|
-
-**Pre-Conditions**
-None
-
-**Dependencies**
-None
-
-**User Interaction**
-If user chose to run the test in interactive mode, then the test case has to be selected via console.
-
-#### Test Procedure - Test 6
-
-| Variation / Steps | Description | Test Data | Expected Result | Notes|
-| -- | --------- | ---------- | -------------- | ----- |
-| 01 | Initialize HDMI input using dsHdmiInInit | None | dsERR_NONE | Should be successful |
-| 02 | Get the list of supported game features using dsGetSupportedGameFeaturesList | features = `dsHdmiIn/gameFeatures/feature` | dsERR_NONE | Should be successful |
-| 03 | Compare the count of game features with the count in the configuration file | features.gameFeatureCount = value from `dsHdmiIn/gameFeatures/count` | dsERR_NONE | Should be successful |
-| 04 | Terminate HDMI input using dsHdmiInTerm | None | dsERR_NONE | Should be successful |
-
-```mermaid
-graph TB
-    A[Call dsHdmiInInit API] -->|dsERR_NONE| B[Call dsGetSupportedGameFeaturesList API]
-    A -->|Failure| A1[Test case fail]
-    B --> C[Verify gameFeatureCount field]
-    B -->|Failure| B1[Test case fail]
-    C -->|dsERR_NONE| D[Verify gameFeatureList field]
-    C -->|Failure| C1[Test case fail]
-    D --> E[Call dsHdmiInTerm API]
-    D -->|Failure| D1[Test case fail]
-    E --> F[Test case success]
-    E -->|Failure| E1[Test case fail]
-```
-
-### Test 7
-
-|Title|Details|
-|--|--|
-|Function Name|`test_l2_dsHdmiIn_SetAndGetAllmSupport_sink`|
-|Description|Set and Get the `ALLM` support to `EDID` version 2.0 without connecting any source devices.|
-|Test Group|02|
-|Test Case ID|007|
-|Priority|High|
-
-**Pre-Conditions**
-None
-
-**Dependencies**
-None
-
-**User Interaction**
-If user chose to run the test in interactive mode, then the test case has to be selected via console.
-
-#### Test Procedure - Test 7
-
-| Variation / Steps | Description | Test Data | Expected Result | Notes|
-| -- | --------- | ---------- | -------------- | ----- |
-| 01 | Initialize `HDMI` input using `dsHdmiInInit` | None | `dsERR_NONE` | Should be successful |
-| 02 | Set `EDID` 2.0 ALLM support to true using `dsSetEdid2AllmSupport` | iHdmiPort = `dsHDMI_IN_PORT_0`, allmSupport = true | `dsERR_NONE` | Should be successful |
-| 03 | Get `EDID` 2.0 ALLM support using `dsGetEdid2AllmSupport` | iHdmiPort = `dsHDMI_IN_PORT_0`,  number of Hdmi Input ports   | `dsERR_NONE`, allmSupport = true | Should be successful |
-| 04 | Set EDID 2.0 ALLM support to false using `dsSetEdid2AllmSupport` | iHdmiPort = dsHDMI_IN_PORT_0, allmSupport = false | `dsERR_NONE` | Should be successful |
-| 05 | Get EDID 2.0 ALLM support using `dsGetEdid2AllmSupport` | iHdmiPort = `dsHDMI_IN_PORT_0`, to number of Hdmi Input ports supported | `dsERR_NONE`, allmSupport = false | Should be successful |
-| 06 | Terminate HDMI input using `dsHdmiInTerm` | None | `dsERR_NONE` | Should be successful |
-
-```mermaid
-graph TB
-A[Call dsHdmiInInit] -->|Success| B[Call dsSetEdid2AllmSupport with true]
-A -->|Failure| A1[Test case fail]
-B -->|Success| C[Call dsGetEdid2AllmSupport]
-B -->|Failure| B1[Test case fail]
-C -->|Success| D[Call dsSetEdid2AllmSupport with false]
-C -->|Failure| C1[Test case fail]
-D -->|Success| E[Call dsGetEdid2AllmSupport]
-D -->|Failure| D1[Test case fail]
-E -->|Success| F[Call dsHdmiInTerm]
-E -->|Failure| E1[Test case fail]
-F -->|Success| G[Test case success]
-F -->|Failure| F1[Test case fail]
-```
-
-### Test 8
-
-|Title|Details|
-|--|--|
-|Function Name|`test_l2_dsHdmiIn_GetHdmiVersionAndValidate_sink`|
-|Description|Getting the `HDMI` compatibility version for a given port version and validate it.|
-|Test Group|02|
-|Test Case ID|008|
-|Priority|High|
-
-**Pre-Conditions**
-None
-
-**Dependencies**
-None
-
-**User Interaction**
-If user chose to run the test in interactive mode, then the test case has to be selected via console.
-
-#### Test Procedure - Test 8
-
-| Variation / Steps | Description | Test Data | Expected Result | Notes|
-| -- | --------- | ---------- | -------------- | ----- |
-| 01 | Initialize HDMI input module using `dsHdmiInInit` | None | `dsERR_NONE` | Should be successful |
-| 02 | Get  and validate the `HDMI` compatibility version by comparing with the YAML file for each `HDMI` port using `dsGetHdmiVersion` | hdmiPort = `dsHDMI_IN_PORT_0` to number of supported ports | `dsERR_NONE` | Should be successful |
-| 03 | Terminate `HDMI` input module using `dsHdmiInTerm` | None | `dsERR_NONE` | Should be successful |
-
-```mermaid
-graph TB
-    A[dsHdmiInInit] --> |Success| B[dsGetHdmiVersion]
-    A --> |Failure| A1[Test Case Fail: dsHdmiInInit]
-    B --> |Success| C[Validate with value from profile file]
-    B --> |Failure| B1[Test Case Fail : dsGetHdmiVersion]
-    C --> |Success| D[dsHdmiInTerm]
-    C --> |Failure| C1[Test Case Fail]
-    D --> |Success| E[Test Case Success]
-    D --> |Failure| D1[Test Case Fail]
-```
