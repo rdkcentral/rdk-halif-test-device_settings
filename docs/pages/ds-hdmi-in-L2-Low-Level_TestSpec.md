@@ -358,9 +358,8 @@ If user chose to run the test in interactive mode, then the test case has to be 
 | Variation / Steps | Description | Test Data | Expected Result | Notes|
 | -- | --------- | ---------- | -------------- | ----- |
 | 01 | Initialize HDMI input module using `dsHdmiInInit` | None | `dsERR_NONE` | Should be successful |
-| 02 | Get  and validate the `HDMI` compatibility version for each `HDMI` port using `dsGetHdmiVersion` | hdmiPort = `dsHDMI_IN_PORT_0` to `dsHDMI_IN_PORT_2` | `dsERR_NONE` | Should be successful |
-| 03 | Repeat step 2 for all `HDMI` ports | | `dsERR_NONE` | Should be successful |
-| 04 | Terminate `HDMI` input module using `dsHdmiInTerm` | None | `dsERR_NONE` | Should be successful |
+| 02 | Get  and validate the `HDMI` compatibility version by comparing with the YAML file for each `HDMI` port using `dsGetHdmiVersion` | hdmiPort = `dsHDMI_IN_PORT_0` to number of supported ports | `dsERR_NONE` | Should be successful |
+| 03 | Terminate `HDMI` input module using `dsHdmiInTerm` | None | `dsERR_NONE` | Should be successful |
 
 ```mermaid
 graph TB
