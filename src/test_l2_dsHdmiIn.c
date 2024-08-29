@@ -552,11 +552,10 @@ void test_l2_dsHdmiIn_GetHdmiVersionAndValidate_sink(void)
     }
 
     UT_ASSERT_TRUE(numInputs >= 0 && numInputs <= UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts"));
+    dsHdmiMaxCapabilityVersion_t version = UT_KVP_PROFILE_GET_UINT32("dsHdmiIn/HdmiCompatibilityVersion");
 
     for (int port = dsHDMI_IN_PORT_0; port < numInputs; port++)
     {
-        dsHdmiMaxCapabilityVersion_t version = UT_KVP_PROFILE_GET_UINT32("dsHdmiIn/HdmiCompatibilityVersion");
-
         UT_LOG_DEBUG("Invoking dsGetEdidVersion with hdmiPort=%d\n", port);
         ret = dsGetHdmiVersion(port, &getVersion);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
