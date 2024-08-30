@@ -379,7 +379,7 @@ void test_l2_dsVideoDevice_SetAndVerifyDisplayframerate_sink(void)
         for (int j=0;j<gDSVideoDeviceConfiguration[i].NoOfSupportedDFR;j++)
         {
             UT_LOG_DEBUG("Invoking dsSetDisplayframerate with handle: %ld", handle);
-            ret = dsSetDisplayframerate(handle, gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate);
+            ret = dsSetDisplayframerate(handle, gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate[j]);
             UT_ASSERT_EQUAL(ret, dsERR_NONE);
             UT_LOG_DEBUG("dsSetDisplayframerate return status: %d", ret);
             if(ret != dsERR_NONE)
@@ -392,7 +392,7 @@ void test_l2_dsVideoDevice_SetAndVerifyDisplayframerate_sink(void)
             ret = dsGetCurrentDisplayframerate(handle, getframerate);
             UT_ASSERT_EQUAL(ret, dsERR_NONE);
             UT_LOG_DEBUG("dsGetCurrentDisplayframerate return status: %d, framerate: %s", ret, getframerate);
-            UT_ASSERT_STRING_EQUAL(gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate, getframerate);
+            UT_ASSERT_STRING_EQUAL(gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate[j], getframerate);
         } /* for(j) */
     } /* for(i) */
 

@@ -1171,7 +1171,7 @@ void test_l1_dsVideoDevice_negative_dsSetFRFMode(void)
     intptr_t handle = -1;
 
     // Step 01: Call dsSetFRFMode() without prior initialization
-    result = dsSetFRFMode(handle, 60); // Note: uninitialized 'handle' used here
+    result = dsSetFRFMode(handle, 1); // Note: uninitialized 'handle' used here
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     // Step 02: Initialize video devices
@@ -1184,7 +1184,7 @@ void test_l1_dsVideoDevice_negative_dsSetFRFMode(void)
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 04: Call dsSetFRFMode() with an invalid handle
-        result = dsSetFRFMode(-1, 60);
+        result = dsSetFRFMode(-1, 1);
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
         // Step 05: Call dsSetFRFMode() with an invalid framerate
@@ -1197,7 +1197,7 @@ void test_l1_dsVideoDevice_negative_dsSetFRFMode(void)
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 07: Call dsSetFRFMode() after termination
-    result = dsSetFRFMode(handle, 60);
+    result = dsSetFRFMode(handle, 1);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -1368,9 +1368,9 @@ void test_l1_dsVideoDevice_positive_dsGetCurrentDisplayframerate(void)
 
             // Step 04: Compare the current display framerate with the value from the profile
             for (int j = 0; j < gDSVideoDeviceConfiguration[i].NoOfSupportedDFR ;j++) {
-                UT_LOG_INFO("SupportedDisplayFramerate %s",gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate);
-                if(strncmp(fetchedFramerate,gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate,sizeof(fetchedFramerate)) == 0) {
-                    UT_LOG_INFO("SupportedDisplayFramerate %s fetchedFramerate %s ",gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate, fetchedFramerate);
+                UT_LOG_INFO("SupportedDisplayFramerate %s",gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate[j]);
+                if(strncmp(fetchedFramerate,gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate[j],sizeof(fetchedFramerate)) == 0) {
+                    UT_LOG_INFO("SupportedDisplayFramerate %s fetchedFramerate %s ",gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate[j], fetchedFramerate);
                     count++;
                 }
                 if(count < 1) {
@@ -1490,7 +1490,7 @@ void test_l1_dsVideoDevice_positive_dsSetDisplayframerate(void)
         // Step 03: Set the display framerate using the obtained handle
         if(gSourceType == 0) {
             for(int j=0;j<gDSVideoDeviceConfiguration[i].NoOfSupportedDFR;j++){
-                result = dsSetDisplayframerate(handle, gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate);
+                result = dsSetDisplayframerate(handle, gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate[j]);
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
             }
         } else if(gSourceType == 1){

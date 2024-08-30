@@ -83,7 +83,7 @@ typedef struct _dsVideoDeviceConfiguration_t {
     int32_t  HDRCapabilities;
     uint32_t SupportedVideoCodingFormats;
     int32_t  NoOfSupportedDFR;
-    char     SupportedDisplayFramerate[dsVIDEO_FRAMERATE_MAX];
+    char     SupportedDisplayFramerate[dsVIDEO_FRAMERATE_MAX][DS_VIDEO_DEVICE_KVP_SIZE];
     int32_t  num_codec_entries;
     float    level;
     dsVideoCodecHevcProfiles_t  profile;
