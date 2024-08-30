@@ -156,9 +156,9 @@ int test_dsVideoDevice_parse_configuration()
             // loop to get supported SupportedDFR in array
             for(int j = 0; j < gDSVideoDeviceConfiguration[i].NoOfSupportedDFR; j++) {
                 snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/SupportedDisplayFramerate/%d" , i+1 , j);
-                status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key_string, gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate, sizeof(gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate));
+                status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key_string, gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate[j], sizeof(gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate[j]));
                 if (status == UT_KVP_STATUS_SUCCESS ) {
-                    UT_LOG_DEBUG("SupportedDisplayFramerate: %s ",gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate);
+                    UT_LOG_DEBUG("SupportedDisplayFramerate: %s ",gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate[j]);
                 }
                 else {
                     UT_LOG_ERROR("Failed to get the platform Device SupportedDisplayFramerate");
