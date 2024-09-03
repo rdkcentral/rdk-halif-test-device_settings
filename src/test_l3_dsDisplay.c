@@ -79,11 +79,11 @@
 #include "dsDisplay.h"
 #include "test_parse_configuration.h"
 
-intptr_t displayHandle = 0;
-
 /* Global Variables */
 static int32_t gTestGroup = 3;
 static int32_t gTestID    = 1;
+static intptr_t displayHandle = 0;
+
 
 // Define the Mapping struct
 typedef struct _stringkey_mapping
