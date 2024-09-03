@@ -48,13 +48,13 @@
  */
 
 /**
- * @defgroup DS_Display_HALTEST_L1 Device Settings Display HAL Tests L3 File
+ * @defgroup DS_Display_HALTEST_L3 Device Settings Display HAL Tests L3 File
  * @{
  * @parblock
  *
  * ### L1 Tests for DS Display HAL :
  *
- * Level 1 unit test cases for all APIs of Device Settings Display HAL
+ * Level 3 unit test cases for all APIs of Device Settings Display HAL
  *
  * **Pre-Conditions:**  None@n
  * **Dependencies:** None@n
@@ -65,7 +65,7 @@
  */
 
 /**
- * @file test_l1_dsDisplay.c
+ * @file test_l3_dsDisplay.c
  *
  */
 
@@ -78,6 +78,12 @@
 #include "stdint.h"
 #include "dsDisplay.h"
 #include "test_parse_configuration.h"
+
+intptr_t displayHandle = 0;
+
+/* Global Variables */
+static int32_t gTestGroup = 3;
+static int32_t gTestID    = 1;
 
 // Define the Mapping struct
 typedef struct _stringkey_mapping
@@ -135,6 +141,12 @@ const static stringkey_mapping dsVideoAspect_RatioMappingTable[] = {
     {NULL, -1}
 };
 
+/**
+ * @brief This functions gets the Enum mapping string.
+ *
+ * This functions gets the Enum mapping string.
+ *
+ */
 static char* mapKeyToString(const stringkey_mapping* keyMappingTable, int32_t keyCode) {
     if (keyMappingTable == NULL) {
         return NULL;
@@ -149,14 +161,33 @@ static char* mapKeyToString(const stringkey_mapping* keyMappingTable, int32_t ke
     return "Unknown value";
 }
 
-/*callback*/
+/**
+ * @brief Callback function for display events.
+ *
+ * This function is invoked when a display event occurs, providing information about the event type.
+ */
 void DisplayEventCallback(intptr_t handle, dsDisplayEvent_t event, void* eventData)
 {
     UT_LOG_INFO("DisplayEventCallback dsDisplayEvent_t:[%s] ",mapKeyToString(displayEventMappingTable, event));
 }
 
+/**
+ * @brief This test initializes the dsDisplay Module.
+ *
+ * This test function initializes the dsDisplay Module.
+ *
+ * **Test Group ID:** 03@n
+ * **Test Case ID:** 001@n
+ *
+ * **Test Procedure:**
+ * Refer to Test specification documentation
+ * [ds-display_halSpec.md](../../docs/pages/ds-display_halSpec.md)
+ */
 void dsDisplay_Init()
 {
+    gTestID = 1;
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
+
     dsError_t status   = dsERR_NONE;
 
     UT_LOG_INFO("Calling dsDisplayInit()");
@@ -166,8 +197,23 @@ void dsDisplay_Init()
 
 }
 
+/**
+ * @brief This test terminates the dsDisplay Module.
+ *
+ * This test function terminates the dsDisplay Module.
+ *
+ * **Test Group ID:** 03@n
+ * **Test Case ID:** 002@n
+ *
+ * **Test Procedure:**
+ * Refer to Test specification documentation
+ * [ds-display_halSpec.md](../../docs/pages/ds-display_halSpec.md)
+ */
 void dsDisplay_Term()
 {
+    gTestID = 2;
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
+
     dsError_t status   = dsERR_NONE;
 
     UT_LOG_INFO("Calling dsDisplayTerm()");
@@ -176,13 +222,25 @@ void dsDisplay_Term()
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 }
 
+/**
+ * @brief Retrieves the display handle based on user-selected video port.
+ *
+ * Allows the user to select a video port and retrieves the corresponding display handle.
+ *
+ * **Test Group ID:** 03@n
+ * **Test Case ID:** 003@n
+ *
+ * **Test Procedure:**
+ * Refer to Test specification documentation
+ * [ds-display_halSpec.md](../../docs/pages/ds-display_halSpec.md)
+ */
 static void dsGetDisplay_getHandle()
 {
+    gTestID = 3;
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
+
     dsError_t status   = dsERR_NONE;
     int32_t choice,port;
-    intptr_t displayHandle = -1;
-
-    dsDisplay_Init();
 
     UT_LOG_INFO(" \t  Supported Video Port are:");
     UT_LOG_INFO("------------------------------------------");
@@ -210,11 +268,27 @@ static void dsGetDisplay_getHandle()
 
 }
 
-void dsDisplay_GetEDID() {
+/**
+ * @brief Retrieves Extended Display Identification Data (EDID) for the display.
+ *
+ * Retrieves the EDID information for the display associated with the selected handle.
+ *
+ * **Test Group ID:** 03@n
+ * **Test Case ID:** 004@n
+ *
+ * **Test Procedure:**
+ * Refer to Test specification documentation
+ * [ds-display_halSpec.md](../../docs/pages/ds-display_halSpec.md)
+ */
+void dsDisplay_GetEDID() 
+{
+    gTestID = 4;
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
+
     dsError_t status = dsERR_NONE;
     dsDisplayEDID_t *edid =NULL;
-    intptr_t displayHandle = -1;
-	dsGetDisplay_getHandle();
+
+    dsGetDisplay_getHandle();
 
     if (displayHandle == -1) {
         UT_LOG_ERROR("Failed to get display handle\n");
@@ -226,7 +300,7 @@ void dsDisplay_GetEDID() {
         UT_LOG_ERROR("Failed to allocate memory for edid\n");
         return;
     }
-    
+
     UT_LOG_INFO("Calling dsGetEDID(Handle:[0x%0X]])", displayHandle);
     status = dsGetEDID(displayHandle, edid);
 
@@ -239,32 +313,60 @@ void dsDisplay_GetEDID() {
     UT_LOG_INFO("Result dsGetEDID(dsDisplayEDID_t(productCode:[%d], serialNumber:[%d], manufactureYear:[%d], manufactureWeek:[%d], hdmiDeviceType:[%s], isRepeater:[%s], physicalAddressA:[%u], physicalAddressB:[%u], physicalAddressC:[%u], physicalAddressD:[%u], numOfSupportedResolution:[%d], monitorName:[%s])", \
              edid->productCode, edid->serialNumber, edid->manufactureYear, edid->manufactureWeek, edid->hdmiDeviceType, edid->isRepeater, edid->physicalAddressA, edid->physicalAddressB, edid->physicalAddressC, edid->physicalAddressD, edid->numOfSupportedResolution, edid->monitorName);
     UT_ASSERT_EQUAL(status, dsERR_NONE);
-   
+
     free(edid);
 }
 
+/**
+ * @brief Retrieves the Extended Display Identification Data (EDID) bytes for the display.
+ *
+ * Retrieves the EDID data bytes for the display associated with the selected handle.
+ *
+ * **Test Group ID:** 03@n
+ * **Test Case ID:** 005@n
+ *
+ * **Test Procedure:**
+ * Refer to Test specification documentation
+ * [ds-display_halSpec.md](../../docs/pages/ds-display_halSpec.md)
+ */
 void dsDisplay_GetEDIDBytes()
 {
+    gTestID = 5;
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
+
     dsError_t status = dsERR_NONE;
-    intptr_t displayHandle =-1;
     int length = 0;
     unsigned char *edid = NULL;
-  
+
     dsGetDisplay_getHandle();
-  
+
     UT_LOG_INFO("Calling dsGetEDID(Handle:[0x%0X]])", displayHandle);
     status = dsGetEDIDBytes(displayHandle, edid, &length);
-    
+
     UT_LOG_INFO("Result dsGetEDIDBytes()  dsError_t=[%s]", mapKeyToString(errorMappingTable, status));
     UT_ASSERT_EQUAL(status, dsERR_NONE);
 
 }
 
+/**
+ * @brief Retrieves the aspect ratio of the display.
+ *
+ * Retrieves the aspect ratio of the display.
+ *
+ * **Test Group ID:** 03@n
+ * **Test Case ID:** 006@n
+ *
+ * **Test Procedure:**
+ * Refer to Test specification documentation
+ * [ds-display_halSpec.md](../../docs/pages/ds-display_halSpec.md)
+ */
 void GetDisplay_AspectRatio()
 {
+    gTestID = 6;
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
+
     dsError_t status   = dsERR_NONE;
     dsVideoAspectRatio_t displayAspectRatio;
-    intptr_t displayHandle =-1;
   
     dsGetDisplay_getHandle();
 
@@ -274,13 +376,27 @@ void GetDisplay_AspectRatio()
     UT_LOG_INFO("Result dsGetDisplayAspectRatio(dsVideoAspectRatio_t:[%s], dsError_t=[%s])", mapKeyToString(dsVideoAspect_RatioMappingTable, displayAspectRatio), mapKeyToString(errorMappingTable, status));
 
     UT_ASSERT_EQUAL(status, dsERR_NONE);
- 
+
 }
 
+/**
+ * @brief This test registers a callback function for display events.
+ *
+ * Registers a callback function to handle display events associated with the display handle.
+ *
+ * **Test Group ID:** 03@n
+ * **Test Case ID:** 007@n
+ *
+ * **Test Procedure:**
+ * Refer to Test specification documentation
+ * [ds-display_halSpec.md](../../docs/pages/ds-display_halSpec.md)
+ */
 void RegisterDisplayEventCallback()
 {
+    gTestID = 7;
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
+
     dsError_t status   = dsERR_NONE;
-    intptr_t displayHandle =-1;
 
     dsGetDisplay_getHandle();
 
@@ -290,7 +406,7 @@ void RegisterDisplayEventCallback()
 
     UT_LOG_INFO("Result dsRegisterDisplayEventCallback() dsError_t=[%s]",  mapKeyToString(errorMappingTable, status));
     UT_ASSERT_EQUAL(status, dsERR_NONE);
-  
+
 }
 
 static UT_test_suite_t * pSuite = NULL;
@@ -313,7 +429,6 @@ int test_l3_dsDisplay_register (void)
     //Create the test suite
     UT_add_test( pSuite, "dsDisplay Init", dsDisplay_Init);
     UT_add_test( pSuite, "dsDisplay Term", dsDisplay_Term);
-    UT_add_test( pSuite, "dsGetDisplay getHandle", dsGetDisplay_getHandle);
     UT_add_test( pSuite, "dsDisplay GetEDID", dsDisplay_GetEDID);
     UT_add_test( pSuite, "dsDisplay GetEDIDBytes", dsDisplay_GetEDIDBytes);
     UT_add_test( pSuite, "GetDisplay AspectRatio",GetDisplay_AspectRatio);
