@@ -93,6 +93,9 @@ extern int test_l2_dsVideoPort_register( void );
 extern int test_l2_dsCompositeIn_register( void );
 extern int test_l2_dsDisplay_register( void );
 
+/* L3 Test Funtions*/
+extern int test_register_dsFPD_hal_l3_tests( void);
+
 int UT_register_APIDEF_l1_tests( void )
 {
     int registerFailed=0;
@@ -138,6 +141,17 @@ int UT_register_APIDEF_l2_tests( void )
         registerFailed |= test_l2_dsCompositeIn_register();
     if(gDSModule & dsDisplay)
         registerFailed |= test_l2_dsDisplay_register();
+
+    return registerFailed;
+}
+
+/* Register L3 Functions */
+int UT_register_APIDEF_l3_tests( void )
+{
+    int registerFailed=0;
+
+    if(gDSModule & dsFPD)
+        registerFailed |= test_register_dsFPD_hal_l3_tests();
 
     return registerFailed;
 }
