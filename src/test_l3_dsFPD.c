@@ -74,6 +74,7 @@
 #include <ut.h>
 #include <ut_log.h>
 #include <ut_kvp_profile.h>
+#include <assert.h>
 #include "dsFPD.h"
 
 #define TIMEOUT 5
@@ -152,13 +153,8 @@ static char* mapKeyToString(const stringkey_mapping* keyMappingTable, int32_t ke
 /**
 * @brief Initialization of the Device settings - Front Panel Module
 *
-* This test provides a scope to open the Front Panel module and preserve the handle.
+* This test provides a scope to Intialize the Front Panel module.
 
-*
-* **Test Group ID:** 03@n
-*
-* **Test Case ID:** 001@n
-*
 * **Pre-Conditions:** None@n
 *
 * **Dependencies:** None@n
@@ -168,7 +164,7 @@ static char* mapKeyToString(const stringkey_mapping* keyMappingTable, int32_t ke
 *
 */
 
-void test_l3_dsFPD_hal_Init(void)
+void test_1_dsFPD_hal_Init(void)
 {
    gTestID = 1;
    dsError_t status = dsERR_NONE;
@@ -185,23 +181,13 @@ void test_l3_dsFPD_hal_Init(void)
 
    UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
-
 /**
-* @brief This test provides a scope to add the sink logical address. Usually it shall be zero.
+* @brief This test provides a scope to set Front panel LES state.
 *
-* This test case provides a scope to add the available sink logical address
-* to a Device under test.
-*
-* Note:
-* This applies only for the Sink Devices.
-* Source devices will get the logical address during CEC open.
-*
-* **Test Group ID:** 02@n
-*
-* **Test Case ID:** 002@n
+* This test case provides a scope to  set the State of FP indicator to ON and OFF.
 *
 * **Pre-Conditions:** @n
-* HDMI-CEC Module should be intialized through Test 1 before calling this test.
+* Front Panle Module should be intialized through Test 1 before calling this test.
 *
 * **Dependencies:** None@n
 *
@@ -209,7 +195,70 @@ void test_l3_dsFPD_hal_Init(void)
 * User or Automation tool should select the Test 2 and provide the logical address.
 *
 */
-void test_l3_dsFPD_hal_SetFPBlink(void)
+void test_2_dsFPD_hal_SetFPState(void)
+{
+    gTestID = 2;
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t status = dsERR_NONE;
+    int32_t eIndicator;
+    int32_t indicatorType = 0;
+    uint32_t uState = 0;
+    int32_t dsFPDNumberOfIndicators = UT_KVP_PROFILE_GET_UINT32("dsFPD/Number_of_Indicators");
+    char buffer[DS_FPD_KEY_SIZE];
+
+    UT_LOG_INFO(" \t  Supported Indicators are:");
+    UT_LOG_INFO("------------------------------------------");
+    for (int indicator = 1; indicator <= dsFPDNumberOfIndicators; indicator++) {
+        snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", indicator);
+        indicatorType = UT_KVP_PROFILE_GET_UINT32(buffer);
+        UT_LOG_INFO("\t%d.  %-20s\n", indicatorType, mapKeyToString(dsFrontPanelIndicatorTable, indicatorType));
+    }
+    UT_LOG_INFO("----------------------------------------------------------");
+    UT_LOG_INFO("Select Indicator : ");
+    scanf("%d", &eIndicator);
+
+    UT_LOG_INFO(" \t  Supported Front Panel States are:");
+    UT_LOG_INFO("------------------------------------------");
+    for (int state = 0; state < ((sizeof(dsFrontPanelStateTable)/sizeof(dsFrontPanelStateTable[0]))-1); state++) {
+        UT_LOG_INFO("\t%d.  %-20s\n", state, mapKeyToString(dsFrontPanelStateTable, state));
+    }
+    UT_LOG_INFO("----------------------------------------------------------");
+    UT_LOG_INFO("Select State : ");
+    scanf("%d", &eIndicator);
+
+    /* Check that the Indicator is valid */
+    UT_LOG_INFO("Calling dsSetFPState(IN:Indicator:[0x%d], IN:State:[%d]" \
+                                                ,eIndicator,uState);
+    status = dsSetFPState((dsFPDIndicator_t)eIndicator,(dsFPDState_t)uState);
+
+    if (status != dsERR_NONE)
+    {
+        UT_LOG_INFO("Calling dsSetFPBrightness(IN:Indicator:[0x%d], IN:Brightness:[%d]" \
+                                                               ,eIndicator,uState);
+    }
+
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
+}
+
+/**
+* @brief This test provides a scope to set Front panel LED Blink functionality.
+*
+* This test case provides a scope to  set the Blink duration and iteration 
+* of FP indicator.
+*
+* **Pre-Conditions:** @n
+* Front Panle Module should be intialized through Test 1 before calling this test.
+* Front Panle idicator state should be set to On through Test 2 before calling this test
+*
+* **Dependencies:** None@n
+*
+* **User Interaction:** @n
+* User or Automation tool should select the Test 3 and provide indicator type, Blink duration
+* and Blink iteration.
+*
+*/
+void test_3_dsFPD_hal_SetFPBlink(void)
 {
     gTestID = 2;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -255,29 +304,21 @@ void test_l3_dsFPD_hal_SetFPBlink(void)
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 /**
-* @brief This test provides a scope to add the sink logical address. Usually it shall be zero.
+* @brief This test provides a scope to set Front panel LED Brightness functionality.
 *
-* This test case provides a scope to add the available sink logical address
-* to a Device under test.
-*
-* Note:
-* This applies only for the Sink Devices.
-* Source devices will get the logical address during CEC open.
-*
-* **Test Group ID:** 02@n
-*
-* **Test Case ID:** 002@n
+* This test case provides a scope to  set the Brightness of selected FP indicator.
 *
 * **Pre-Conditions:** @n
-* HDMI-CEC Module should be intialized through Test 1 before calling this test.
+* Front Panle Module should be intialized through Test 1 before calling this test.
+* Front Panle indicator state should be set to ON through Test 2 before calling this test
 *
 * **Dependencies:** None@n
 *
 * **User Interaction:** @n
-* User or Automation tool should select the Test 2 and provide the logical address.
+* User or Automation tool should select the Test 4 and provide indicator index and Brightness value.
 *
 */
-void test_l3_dsFPD_hal_SetFPBrightness(void)
+void test_4_dsFPD_hal_SetFPBrightness(void)
 {
     gTestID = 2;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -318,97 +359,69 @@ void test_l3_dsFPD_hal_SetFPBrightness(void)
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 /**
-* @brief This test provides a scope to add the sink logical address. Usually it shall be zero.
+* @brief This test provides a scope to set Power LED state.
 *
-* This test case provides a scope to add the available sink logical address
-* to a Device under test.
-*
-* Note:
-* This applies only for the Sink Devices.
-* Source devices will get the logical address during CEC open.
-*
-* **Test Group ID:** 02@n
-*
-* **Test Case ID:** 002@n
+* This test case provides a scope to  set the Power LED to differten FP States.
 *
 * **Pre-Conditions:** @n
-* HDMI-CEC Module should be intialized through Test 1 before calling this test.
+* Front Panle Module should be intialized through Test 1 before calling this test.
+* Front Panle indicator state should be set to ON through Test 2 before calling this test
 *
 * **Dependencies:** None@n
 *
 * **User Interaction:** @n
-* User or Automation tool should select the Test 2 and provide the logical address.
+* User or Automation tool should select the Test 5 and provide the FP state to check.
 *
 */
-void test_l3_dsFPD_hal_SetFPState(void)
+void test_5_dsFPD_hal_SetLEDState(void)
 {
     gTestID = 2;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
-    int32_t eIndicator;
-    int32_t indicatorType = 0;
-    uint32_t uState = 0;
-    int32_t dsFPDNumberOfIndicators = UT_KVP_PROFILE_GET_UINT32("dsFPD/Number_of_Indicators");
-    char buffer[DS_FPD_KEY_SIZE];
+    uint32_t uLedState;
+    uint32_t uSupportedLEDState= 0;
 
-    UT_LOG_INFO(" \t  Supported Indicators are:");
+    UT_LOG_INFO(" \t  Supported POWER LED States are:");
     UT_LOG_INFO("------------------------------------------");
-    for (int indicator = 1; indicator <= dsFPDNumberOfIndicators; indicator++) {
-        snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", indicator);
-        indicatorType = UT_KVP_PROFILE_GET_UINT32(buffer);
-        UT_LOG_INFO("\t%d.  %-20s\n", indicatorType, mapKeyToString(dsFrontPanelIndicatorTable, indicatorType));
+    uSupportedLEDState = UT_KVP_PROFILE_GET_UINT32("dsFPD/SupportedLEDStates");
+
+    for (int fpState = dsFPD_LED_DEVICE_NONE; fpState <= dsFPD_LED_DEVICE_MAX; fpState++) {
+        if (!(uSupportedLEDState & (1 << fpState)))
+            continue;
+        UT_LOG_INFO("\t%d.  %-20s\n", fpState, mapKeyToString(dsFrontPanelLEDState, fpState));
     }
     UT_LOG_INFO("----------------------------------------------------------");
-    UT_LOG_INFO("Select Indicator : ");
-    scanf("%d", &eIndicator);
-
-    UT_LOG_INFO(" \t  Supported Front Panel States are:");
-    UT_LOG_INFO("------------------------------------------");
-    for (int state = 0; state < ((sizeof(dsFrontPanelStateTable)/sizeof(dsFrontPanelStateTable[0]))-1); state++) {
-        UT_LOG_INFO("\t%d.  %-20s\n", state, mapKeyToString(dsFrontPanelStateTable, state));
-    }
-    UT_LOG_INFO("----------------------------------------------------------");
-    UT_LOG_INFO("Select State : ");
-    scanf("%d", &eIndicator);
+    UT_LOG_INFO("Select State: ");
+    scanf("%X", &uLedState);
 
     /* Check that the Indicator is valid */
-    UT_LOG_INFO("Calling dsSetFPState(IN:Indicator:[0x%d], IN:State:[%d]" \
-                                                ,eIndicator,uState);
-    status = dsSetFPState((dsFPDIndicator_t)eIndicator,(dsFPDState_t)uState);
+    UT_LOG_INFO("Calling dsFPSetLEDState(IN state:[0x%X]",uLedState);
+    status = dsFPSetLEDState((dsFPDLedState_t)uLedState);
 
     if (status != dsERR_NONE)
     {
-        UT_LOG_INFO("Calling dsSetFPBrightness(IN:Indicator:[0x%d], IN:Brightness:[%d]" \
-                                                               ,eIndicator,uState);
+        UT_LOG_ERROR("Calling dsFPSetLEDState(IN state:[0x%X]",uLedState);
     }
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 /**
-* @brief This test provides a scope to add the sink logical address. Usually it shall be zero.
+* @brief This test provides a scope to set LED indicator with suported colors.
 *
-* This test case provides a scope to add the available sink logical address
-* to a Device under test.
-*
-* Note:
-* This applies only for the Sink Devices.
-* Source devices will get the logical address during CEC open.
-*
-* **Test Group ID:** 02@n
-*
-* **Test Case ID:** 002@n
+* This test case provides a scope to  set the LED inicaotrs to different Supported Colors.
 *
 * **Pre-Conditions:** @n
-* HDMI-CEC Module should be intialized through Test 1 before calling this test.
+* Front Panle Module should be intialized through Test 1 before calling this test.
+* Front Panle indicator state should be set to ON through Test 2 before calling this test
 *
 * **Dependencies:** None@n
 *
 * **User Interaction:** @n
-* User or Automation tool should select the Test 2 and provide the logical address.
+* User or Automation tool should select the Test 6 and provide indicator value and Color value.
 *
 */
-void test_l3_dsFPD_hal_SetFPColor(void)
+void test_6_dsFPD_hal_SetFPColor(void)
 {
     gTestID = 2;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -433,7 +446,7 @@ void test_l3_dsFPD_hal_SetFPColor(void)
     UT_LOG_INFO("Select Indicator : ");
     scanf("%d", &eIndicator);
 
-    UT_LOG_INFO(" \t  Supported Front Panel color for the state %s are:",mapKeyToString(dsFrontPanelIndicatorTable, eIndicator));
+    UT_LOG_INFO(" \t  Supported Front Panel color for the indicaotr %s are:",mapKeyToString(dsFrontPanelIndicatorTable, eIndicator));
     UT_LOG_INFO("------------------------------------------");
 
     for (int indicator = 1; indicator <= dsFPDNumberOfIndicators; indicator++) {
@@ -469,25 +482,21 @@ void test_l3_dsFPD_hal_SetFPColor(void)
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 /**
-* @brief Termination of the Device settings - Front Panel Module
+* @brief This test provides a scope to Termnate Device Settings Front panle Module.
 *
-* This test provides a scope to open the Front Panel module and preserve the handle.
-
+* This test case provides a scope to terminate front panel module.
 *
-* **Test Group ID:** 03@n
-*
-* **Test Case ID:** 002@n
-*
-* **Pre-Conditions:** None@n
+* **Pre-Conditions:** @n
+* Front Panle Module should be intialized through Test 1 before calling this test.
 *
 * **Dependencies:** None@n
 *
 * **User Interaction:** @n
-* User or Automation tool should select the Test 1 to before running any test.
+* User or Automation tool should select the Test 7.
 *
 */
 
-void test_l3_dsFPD_hal_Term(void)
+void test_7_dsFPD_hal_Term(void)
 {
    gTestID = 1;
    dsError_t status = dsERR_NONE;
@@ -522,12 +531,13 @@ int test_register_dsFPD_hal_l3_tests(void)
     }
     // List of test function names and strings
 
-    UT_add_test( pSuite, "L3_Init_dsFPD", test_l3_dsFPD_hal_Init);
-    UT_add_test( pSuite, "L3_SetState_dsFPD", test_l3_dsFPD_hal_SetFPState);
-    UT_add_test( pSuite, "L3_SetBrightness_dsFPD", test_l3_dsFPD_hal_SetFPBrightness);
-    UT_add_test( pSuite, "L3_SetColor_dsFPD", test_l3_dsFPD_hal_SetFPColor);
-    UT_add_test( pSuite, "L3_SetBlink_dsFPD", test_l3_dsFPD_hal_SetFPBlink);
-    UT_add_test( pSuite, "L3_Term_dsFPD", test_l3_dsFPD_hal_Term);
+    UT_add_test( pSuite, "1_Init_dsFPD", test_1_dsFPD_hal_Init);
+    UT_add_test( pSuite, "2_SetState_dsFPD", test_2_dsFPD_hal_SetFPState);
+    UT_add_test( pSuite, "3_SetBlink_dsFPD", test_3_dsFPD_hal_SetFPBlink);
+    UT_add_test( pSuite, "4_SetBrightness_dsFPD", test_4_dsFPD_hal_SetFPBrightness);
+    UT_add_test( pSuite, "5_SetFPState_dsFPD", test_5_dsFPD_hal_SetLEDState);
+    UT_add_test( pSuite, "6_SetColor_dsFPD", test_6_dsFPD_hal_SetFPColor);
+    UT_add_test( pSuite, "7_Term_dsFPD", test_7_dsFPD_hal_Term);
 
     return 0;
 }
