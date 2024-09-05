@@ -60,7 +60,7 @@
  * **Pre-Conditions:**  None@n
  * **Dependencies:** None@n
  *
- * Refer to API Definition specification documentation : [hdmi-cec_halSpec.md](../../docs/pages/ds-front-panel-display_High-Level_TestSpec.md)
+ * Refer to API Definition specification documentation : [Device-Settings_front-panel_halSpec.md](../../docs/pages/ds-front-panel-display_High-Level_TestSpec.md)
  *
  * @endparblock
  */
@@ -174,15 +174,13 @@ void test_1_dsFPD_hal_Init(void)
    // Step 1: Call dsFPInit()
    UT_LOG_INFO("Calling dsFPInit()");
    status = dsFPInit();
-   if (status != dsERR_NONE)
-   {
-       UT_LOG_ERROR("Failed to Invoke HdmiCecOpen()");
-   }
+   assert(status == dsERR_NONE);
+   UT_LOG_INFO("Result dsFPInit(OUT:dsError_t:[dsERR_NONE])");
 
    UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 /**
-* @brief This test provides a scope to set Front panel LES state.
+* @brief This test provides a scope to set Front panel LED state.
 *
 * This test case provides a scope to  set the State of FP indicator to ON and OFF.
 *
@@ -192,7 +190,7 @@ void test_1_dsFPD_hal_Init(void)
 * **Dependencies:** None@n
 *
 * **User Interaction:** @n
-* User or Automation tool should select the Test 2 and provide the logical address.
+* User or Automation tool should select the Test 2 and provide indicator index and State to be set.
 *
 */
 void test_2_dsFPD_hal_SetFPState(void)
@@ -231,16 +229,56 @@ void test_2_dsFPD_hal_SetFPState(void)
     UT_LOG_INFO("Calling dsSetFPState(IN:Indicator:[0x%d], IN:State:[%d]" \
                                                 ,eIndicator,uState);
     status = dsSetFPState((dsFPDIndicator_t)eIndicator,(dsFPDState_t)uState);
-
-    if (status != dsERR_NONE)
-    {
-        UT_LOG_INFO("Calling dsSetFPBrightness(IN:Indicator:[0x%d], IN:Brightness:[%d]" \
-                                                               ,eIndicator,uState);
-    }
+    assert(status == dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
+/**
+* @brief This test provides a scope to get Front panel LED state.
+*
+* This test case provides a scope to  get the State of FP indicator to ON and OFF.
+*
+* **Pre-Conditions:** @n
+* Front Panle Module should be intialized through Test 1 before calling this test.
+*
+* **Dependencies:** None@n
+*
+* **User Interaction:** @n
+* User or Automation tool should select the Test 3 and provide indicator index.
+*
+*/
+void test_3_dsFPD_hal_GetFPState(void)
+{
+    gTestID = 2;
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t status = dsERR_NONE;
+    int32_t eIndicator;
+    int32_t indicatorType = 0;
+    dsFPDState_t eState = 0;
+    int32_t dsFPDNumberOfIndicators = UT_KVP_PROFILE_GET_UINT32("dsFPD/Number_of_Indicators");
+    char buffer[DS_FPD_KEY_SIZE];
+
+    UT_LOG_INFO(" \t  Supported Indicators are:");
+    UT_LOG_INFO("------------------------------------------");
+    for (int indicator = 1; indicator <= dsFPDNumberOfIndicators; indicator++) {
+        snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", indicator);
+        indicatorType = UT_KVP_PROFILE_GET_UINT32(buffer);
+        UT_LOG_INFO("\t%d.  %-20s\n", indicatorType, mapKeyToString(dsFrontPanelIndicatorTable, indicatorType));
+    }
+    UT_LOG_INFO("----------------------------------------------------------");
+    UT_LOG_INFO("Select Indicator : ");
+    scanf("%d", &eIndicator);
+
+    status = dsGetFPState((dsFPDIndicator_t)eIndicator,&eState);
+    assert(status == dsERR_NONE);
+    /* Check that the Indicator is valid */
+    UT_LOG_INFO("Result dsGetFPState(IN:Indicator:[0x%d], OUT:State:[%s] OUT: dsError_t:[dsERROR_NONE]" \
+                                                ,eIndicator,mapKeyToString(dsFrontPanelStateTable, eState));
+
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
+}
 /**
 * @brief This test provides a scope to set Front panel LED Blink functionality.
 *
@@ -254,11 +292,11 @@ void test_2_dsFPD_hal_SetFPState(void)
 * **Dependencies:** None@n
 *
 * **User Interaction:** @n
-* User or Automation tool should select the Test 3 and provide indicator type, Blink duration
+* User or Automation tool should select the Test 4 and provide indicator type, Blink duration
 * and Blink iteration.
 *
 */
-void test_3_dsFPD_hal_SetFPBlink(void)
+void test_4_dsFPD_hal_SetFPBlink(void)
 {
     gTestID = 2;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -294,12 +332,7 @@ void test_3_dsFPD_hal_SetFPBlink(void)
     UT_LOG_INFO("Calling dsSetFPBlink(IN:Indicator:[0x%d], IN:Blink Duration in ms:[%d], IN:Blink Iteration:[%d]" \
                                         ,eIndicator,uBlinkDuration,uBlinkIterations);
     status = dsSetFPBlink((dsFPDIndicator_t)eIndicator,uBlinkDuration,uBlinkIterations);
-
-    if (status != dsERR_NONE)
-    {
-        UT_LOG_ERROR("Failed  dsSetFPBlink(IN:Indicator:[0x%d], IN:Blink Duration in ms:[%d], IN:Blink Iteration:[%d]" \
-                                        ,eIndicator,uBlinkDuration,uBlinkIterations);
-    }
+    assert(status == dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -315,10 +348,10 @@ void test_3_dsFPD_hal_SetFPBlink(void)
 * **Dependencies:** None@n
 *
 * **User Interaction:** @n
-* User or Automation tool should select the Test 4 and provide indicator index and Brightness value.
+* User or Automation tool should select the Test 5 and provide indicator index and Brightness value.
 *
 */
-void test_4_dsFPD_hal_SetFPBrightness(void)
+void test_5_dsFPD_hal_SetFPBrightness(void)
 {
     gTestID = 2;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -349,12 +382,53 @@ void test_4_dsFPD_hal_SetFPBrightness(void)
     UT_LOG_INFO("Calling dsSetFPBrightness(IN:Indicator:[0x%d], IN:Brightness:[%d]" \
                                                 ,eIndicator,uBrightness);
     status = dsSetFPBrightness((dsFPDIndicator_t)eIndicator,uBrightness);
+    assert(status == dsERR_NONE);
 
-    if (status != dsERR_NONE)
-    {
-        UT_LOG_INFO("Calling dsSetFPBrightness(IN:Indicator:[0x%d], IN:Brightness:[%d]" \
-                                                               ,eIndicator,uBrightness);
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
+}
+/**
+* @brief This test provides a scope to get Front panel LED Brightness.
+*
+* This test case provides a scope to  get the brightness of given Indicator.
+*
+* **Pre-Conditions:** @n
+* Front Panle Module should be intialized through Test 1 before calling this test.
+* Front Panle idicator state should be set to On through Test 2 before calling this test
+*
+* **Dependencies:** None@n
+*
+* **User Interaction:** @n
+* User or Automation tool should select the Test 6 and provide indicator index.
+*
+*/
+void test_6_dsFPD_hal_GetFPBrightness(void)
+{
+    gTestID = 2;
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t status = dsERR_NONE;
+    int32_t eIndicator;
+    int32_t indicatorType = 0;
+    dsFPDBrightness_t brightness = 0;
+    int32_t dsFPDNumberOfIndicators = UT_KVP_PROFILE_GET_UINT32("dsFPD/Number_of_Indicators");
+    char buffer[DS_FPD_KEY_SIZE];
+
+    UT_LOG_INFO(" \t  Supported Indicators are:");
+    UT_LOG_INFO("------------------------------------------");
+    for (int indicator = 1; indicator <= dsFPDNumberOfIndicators; indicator++) {
+        snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", indicator);
+        indicatorType = UT_KVP_PROFILE_GET_UINT32(buffer);
+        UT_LOG_INFO("\t%d.  %-20s\n", indicatorType, mapKeyToString(dsFrontPanelIndicatorTable, indicatorType));
     }
+    UT_LOG_INFO("----------------------------------------------------------");
+    UT_LOG_INFO("Select Indicator : ");
+    scanf("%d", &eIndicator);
+
+    status = dsGetFPBrightness((dsFPDIndicator_t)eIndicator,&brightness);
+    assert(status == dsERR_NONE);
+    /* Check that the Indicator is valid */
+    UT_LOG_INFO("Result dsGetFPState(IN:Indicator:[0x%d], OUT:Brightness:[%d] OUT: dsError_t:[dsERROR_NONE]" \
+                                                ,eIndicator,brightness);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -370,10 +444,10 @@ void test_4_dsFPD_hal_SetFPBrightness(void)
 * **Dependencies:** None@n
 *
 * **User Interaction:** @n
-* User or Automation tool should select the Test 5 and provide the FP state to check.
+* User or Automation tool should select the Test 7 and provide the FP state to check.
 *
 */
-void test_5_dsFPD_hal_SetLEDState(void)
+void test_7_dsFPD_hal_SetLEDState(void)
 {
     gTestID = 2;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -398,11 +472,38 @@ void test_5_dsFPD_hal_SetLEDState(void)
     /* Check that the Indicator is valid */
     UT_LOG_INFO("Calling dsFPSetLEDState(IN state:[0x%X]",uLedState);
     status = dsFPSetLEDState((dsFPDLedState_t)uLedState);
+    assert(status == dsERR_NONE);
 
-    if (status != dsERR_NONE)
-    {
-        UT_LOG_ERROR("Calling dsFPSetLEDState(IN state:[0x%X]",uLedState);
-    }
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
+}
+/**
+* @brief This test provides a scope to get POWER LED State.
+*
+* This test case provides a scope to  get the State of FP Power LED.
+*
+* **Pre-Conditions:** @n
+* Front Panle Module should be intialized through Test 1 before calling this test.
+* Front Panle idicator state should be set to On through Test 2 before calling this test
+*
+* **Dependencies:** None@n
+*
+* **User Interaction:** @n
+* User or Automation tool should select the Test 8 and provide indicator index.
+*
+*/
+void test_8_dsFPD_hal_GetLEDState(void)
+{
+    gTestID = 2;
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t status = dsERR_NONE;
+    dsFPDLedState_t state = 0;
+
+    status = dsFPGetLEDState(&state);
+    assert(status == dsERR_NONE);
+    /* Check that the Indicator is valid */
+    UT_LOG_INFO("Result dsGetFPState(OUT:FP LED State:[%X] OUT: dsError_t:[dsERROR_NONE]" \
+                                                ,state);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -418,10 +519,10 @@ void test_5_dsFPD_hal_SetLEDState(void)
 * **Dependencies:** None@n
 *
 * **User Interaction:** @n
-* User or Automation tool should select the Test 6 and provide indicator value and Color value.
+* User or Automation tool should select the Test 9 and provide indicator value and Color value.
 *
 */
-void test_6_dsFPD_hal_SetFPColor(void)
+void test_9_dsFPD_hal_SetFPColor(void)
 {
     gTestID = 2;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -472,12 +573,53 @@ void test_6_dsFPD_hal_SetFPColor(void)
     UT_LOG_INFO("Calling SetFPColor(IN:Indicator:[0x%d], IN:Color:[%X]" \
                                                 ,eIndicator,uColor);
     status = dsSetFPColor((dsFPDIndicator_t)eIndicator,uColor);
+    assert(status == dsERR_NONE);
 
-    if (status != dsERR_NONE)
-    {
-        UT_LOG_INFO("Calling dsSetFPColor(IN:Indicator:[0x%d], IN:Color:[%d]" \
-                                                               ,eIndicator,uColor);
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
+}
+/**
+* @brief This test provides a scope to get Color of the Indicator set.
+*
+* This test case provides a scope to  get the Color of Given indicator
+*
+* **Pre-Conditions:** @n
+* Front Panle Module should be intialized through Test 1 before calling this test.
+* Front Panle indicator state should be set to ON through Test 2 before calling this test
+*
+* **Dependencies:** None@n
+*
+* **User Interaction:** @n
+* User or Automation tool should select the Test 10 and provide indicator index.
+*
+*/
+void test_10_dsFPD_hal_GetFPColor(void)
+{
+    gTestID = 2;
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t status = dsERR_NONE;
+    int32_t eIndicator;
+    int32_t indicatorType = 0;
+    dsFPDColor_t color;
+    int32_t dsFPDNumberOfIndicators = UT_KVP_PROFILE_GET_UINT32("dsFPD/Number_of_Indicators");
+    char buffer[DS_FPD_KEY_SIZE];
+
+    UT_LOG_INFO(" \t  Supported Indicators are:");
+    UT_LOG_INFO("------------------------------------------");
+    for (int indicator = 1; indicator <= dsFPDNumberOfIndicators; indicator++) {
+        snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", indicator);
+        indicatorType = UT_KVP_PROFILE_GET_UINT32(buffer);
+        UT_LOG_INFO("\t%d.  %-20s\n", indicatorType, mapKeyToString(dsFrontPanelIndicatorTable, indicatorType));
     }
+    UT_LOG_INFO("----------------------------------------------------------");
+    UT_LOG_INFO("Select Indicator : ");
+    scanf("%d", &eIndicator);
+
+    status = dsGetFPColor((dsFPDIndicator_t)eIndicator,&color);
+    assert(status == dsERR_NONE);
+    /* Check that the Indicator is valid */
+    UT_LOG_INFO("Result dsGetFPState(IN:Indicator:[0x%d], OUT:Brightness:[%d] OUT: dsError_t:[dsERROR_NONE]" \
+                                                ,eIndicator,color);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -492,11 +634,11 @@ void test_6_dsFPD_hal_SetFPColor(void)
 * **Dependencies:** None@n
 *
 * **User Interaction:** @n
-* User or Automation tool should select the Test 7.
+* User or Automation tool should select the Test 11.
 *
 */
 
-void test_7_dsFPD_hal_Term(void)
+void test_11_dsFPD_hal_Term(void)
 {
    gTestID = 1;
    dsError_t status = dsERR_NONE;
@@ -504,12 +646,9 @@ void test_7_dsFPD_hal_Term(void)
    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
    // Step 1: Call dsFPInit()
-   UT_LOG_INFO("Calling dsFPInit()");
-   status = dsFPInit();
-   if (status != dsERR_NONE)
-   {
-       UT_LOG_ERROR("Failed to Invoke ()");
-   }
+   UT_LOG_INFO("Calling dsFPTerm()");
+   status = dsFPTerm();
+   assert(status == dsERR_NONE);
 
    UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -533,11 +672,15 @@ int test_register_dsFPD_hal_l3_tests(void)
 
     UT_add_test( pSuite, "1_Init_dsFPD", test_1_dsFPD_hal_Init);
     UT_add_test( pSuite, "2_SetState_dsFPD", test_2_dsFPD_hal_SetFPState);
-    UT_add_test( pSuite, "3_SetBlink_dsFPD", test_3_dsFPD_hal_SetFPBlink);
-    UT_add_test( pSuite, "4_SetBrightness_dsFPD", test_4_dsFPD_hal_SetFPBrightness);
-    UT_add_test( pSuite, "5_SetFPState_dsFPD", test_5_dsFPD_hal_SetLEDState);
-    UT_add_test( pSuite, "6_SetColor_dsFPD", test_6_dsFPD_hal_SetFPColor);
-    UT_add_test( pSuite, "7_Term_dsFPD", test_7_dsFPD_hal_Term);
+    UT_add_test( pSuite, "3_GetState_dsFPD", test_3_dsFPD_hal_GetFPState);
+    UT_add_test( pSuite, "4_SetBlink_dsFPD", test_4_dsFPD_hal_SetFPBlink);
+    UT_add_test( pSuite, "5_SetBrightness_dsFPD", test_5_dsFPD_hal_SetFPBrightness);
+    UT_add_test( pSuite, "5_GetBrightness_dsFPD", test_6_dsFPD_hal_GetFPBrightness);
+    UT_add_test( pSuite, "7_SetFPState_dsFPD", test_7_dsFPD_hal_SetLEDState);
+    UT_add_test( pSuite, "8_GetFPState_dsFPD", test_8_dsFPD_hal_GetLEDState);
+    UT_add_test( pSuite, "9_SetColor_dsFPD", test_9_dsFPD_hal_SetFPColor);
+    UT_add_test( pSuite, "9_SetColor_dsFPD", test_10_dsFPD_hal_GetFPColor);
+    UT_add_test( pSuite, "11_Term_dsFPD", test_11_dsFPD_hal_Term);
 
     return 0;
 }
