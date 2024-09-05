@@ -199,24 +199,6 @@ const static ut_control_keyMapTable_t bool_mapTable [] = {
 };
 
 /**
- * @brief This functions gets the Enum mapping string.
- *
- * This functions gets the Enum mapping string.
- * &Todo: replace with ut control function
- */
-static char* ut_control_GetMapString(const ut_control_keyMapTable_t *conversionMap, int32_t key)
-{
-    int32_t count = 0;
-    while(conversionMap[count].string != NULL){
-        if(conversionMap[count].key == key) {
-            return conversionMap[count].string;
-        }
-        count++;
-    }
-    return "";
-}
-
-/**
  * @brief This function clears the stdin buffer.
  *
  * This function clears the stdin buffer.
