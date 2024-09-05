@@ -394,7 +394,7 @@ void test_l1_dsVideoDevice_positive_dsSetDFC (void)
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         // 03: Set DFC mode with various zoom modes
-        for (int j = 0; j < gDSVideoDeviceConfiguration[j].NoOfSupportedDFCs; ++j)
+        for (int j = 0; j < gDSVideoDeviceConfiguration[i].NoOfSupportedDFCs; ++j)
         {
             result = dsSetDFC(handle, gDSVideoDeviceConfiguration[i].SupportedDFCs[j]);
             if (gSourceType == 1)
@@ -520,7 +520,7 @@ void test_l1_dsVideoDevice_positive_dsGetDFC(void)
         if(gSourceType == 1) {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
             // Step 04: Compare the DFC mode with value from the profile
-            for (int j = 0; j < gDSVideoDeviceConfiguration[j].NoOfSupportedDFCs; ++j) {
+            for (int j = 0; j < gDSVideoDeviceConfiguration[i].NoOfSupportedDFCs; ++j) {
                 UT_LOG_DEBUG("SupportedDFCs: %d",gDSVideoDeviceConfiguration[i].SupportedDFCs[j]);
                 if(dfc_mode == gDSVideoDeviceConfiguration[i].SupportedDFCs[j]) {
                     count++;
