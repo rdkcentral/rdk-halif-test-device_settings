@@ -119,7 +119,7 @@ void test_l2_dsVideoDevice_SetAndGetDFC_source(void)
             UT_LOG_ERROR("dsGetVideoDevice failed with status: %d", retStatus);
             continue;
         }
-        for (int j = 0;j < gDSVideoDeviceConfiguration[j].NoOfSupportedDFCs; j++)
+        for (int j = 0;j < gDSVideoDeviceConfiguration[i].NoOfSupportedDFCs; j++)
         {
             UT_LOG_DEBUG("Invoking dsSetDFC with handle: %ld, dfc: %d", handle, gDSVideoDeviceConfiguration[i].SupportedDFCs[j]);
             retStatus = dsSetDFC(handle, gDSVideoDeviceConfiguration[i].SupportedDFCs[j]);
