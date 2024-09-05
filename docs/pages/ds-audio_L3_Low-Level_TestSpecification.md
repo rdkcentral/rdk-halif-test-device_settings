@@ -32,7 +32,7 @@
 
 ## Overview
 
-This document describes the Low Level L3 Test Specification and Procedure for the Device Settings Audio module.
+This document describes the L3 Test Procedure for the Device Settings Audio module.
 
 ## Definitions
 
@@ -46,21 +46,21 @@ This document describes the Low Level L3 Test Specification and Procedure for th
 
 ## Audio Streams Requirement
 
-|ID|Description|Audio Format|Samplerate|Channels|Bitrate(kbps)|
-|--|-----------|------------|----------|--------|-------|
-|001|400Hz sine tone|`PCM` with `WAV` header|48000|2|1536|
-|002|AAC stream|aac with `ADTS`|48000|2|256|
-|003|Vorbis stream|vorbis with `ogg`|48000|2|256|
-|004|wma stream|wma|48000|2|256|
-|005|Dolby AC3 (Dolby digital)|ac3|48000|2|256|
-|006|Dolby EAC3 (Dolby Digital plus)|ac3||||
-|007|Dolby AC4|ac4||||
-|008|Dolby MAT|||||
-|009|Dolby TrueHD|||||
-|010|Dolby EAC3 Atmos|||||
-|011|Dolby TRUEHD Atmos|||||
-|012|Dolby MAT Atmos|||||
-|013|Dolby AC4 Atmos|||||
+|ID|Description|Audio Format|Samplerate|Channels|Bitrate(kbps)|Stream Path|
+|--|-----------|------------|----------|--------|-------------|-----------|
+|001|400Hz sine tone|`PCM` with `WAV` header|48000|2|1536|`TBD`|
+|002|AAC stream|aac with `ADTS`|48000|2|256|`TBD`|
+|003|Vorbis stream|vorbis with `ogg`|48000|2|256|`TBD`|
+|004|wma stream|wma|48000|2|256|`TBD`|
+|005|Dolby AC3 (Dolby digital)|ac3|48000|2|256|`TBD`|
+|006|Dolby EAC3 (Dolby Digital plus)|ac3|48000|2|256|`TBD`|
+|007|Dolby AC4|ac4|48000|2|256|`TBD`|
+|008|Dolby MAT|MAT|48000|2|256|`TBD`|
+|009|Dolby TrueHD|ac3|48000|2|256|`TBD`|
+|010|Dolby EAC3 Atmos|eac3|48000|2|256|`TBD`|
+|011|Dolby TRUEHD Atmos|ac3|48000|2|256|`TBD`|
+|012|Dolby MAT Atmos|MAT|48000|2|256|`TBD`|
+|013|Dolby AC4 Atmos|ac4|48000|2|256|`TBD`|
 
 ## Level 3 Test Procedure
 
@@ -89,16 +89,16 @@ None
 |-----------------|-----------|
 |01|Initialize dsAudio|
 |02|Enable the Port|
-|03|Check port enable status|
+|03|Check playback status on enabled port|
 |04|Disable the port|
-|05|Check port disable status|
+|05|Check playback status on disabled port|
 |06|De-Initialize the dsAudio|
 
 ### Test 2
 
 |Title|Details|
 |-----|-------|
-|Function Name|`test2_CheckHeadphoneConnectionStatus`|
+|Test Name|`test2_CheckHeadphoneConnectionStatus`|
 |Description|Checks headphone connection status|
 
 **Pre-Conditions :**
@@ -118,16 +118,16 @@ None
 |01|Initialize dsAudio|
 |02|Enable the Port|
 |03|Connect the headphone to `DUT`|
-|04|Check the status|
+|04|Check the connection status|
 |05|Disconnect the headphone from `DUT`|
-|06|Check the status|
+|06|Check the connection status|
 |07|De-Initialize the dsAudio|
 
 ### Test 3
 
 |Title|Details|
 |-----|-------|
-|Function Name|`test3_CheckAudioFormat`|
+|Test Name|`test3_CheckAudioFormat`|
 |Description|Checks audio format of playback stream|
 
 **Pre-Conditions :**
