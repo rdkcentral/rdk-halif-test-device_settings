@@ -78,6 +78,8 @@
 #include "test_parse_configuration.h"
 #include "dsCompositeIn.h"
 
+#define ASSERT assert
+
 /* Global Variables */
 static int32_t gTestGroup = 3;
 static int32_t gTestID    = 1;
@@ -145,8 +147,10 @@ const static ut_control_keyMapTable_t bool_mapTable [] = {
 static char* ut_control_GetMapString(const ut_control_keyMapTable_t *conversionMap, int32_t key)
 {
     int32_t count = 0;
-    while(conversionMap[count].string != NULL){
-        if(conversionMap[count].key == key) {
+    while(conversionMap[count].string != NULL)
+    {
+        if(conversionMap[count].key == key) 
+        {
             return conversionMap[count].string;
         }
         count++;
@@ -214,8 +218,8 @@ static void compositeInStatusChangeCB(dsCompositeInStatus_t inputStatus)
                  ut_control_GetMapString(bool_mapTable, inputStatus.isPresented),
                  ut_control_GetMapString(dsCompositeInPortMappingTable, inputStatus.activePort));
 
-    for(int i = 0 ; i < dsCOMPOSITE_IN_PORT_MAX ; i++) {
-
+    for(int i = 0 ; i < dsCOMPOSITE_IN_PORT_MAX ; i++) 
+    {
          if(!(inputStatus.isPresented))
                  continue;
 
@@ -248,49 +252,30 @@ void test_l3_CompositeIn_initialize(void)
 
     /* Initialize the CompositeIn Module */
     UT_LOG_INFO("Calling dsCompositeInInit()");
-    ret = dsCompositeInInit();
-    if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsCompositeInInit() dsError_t:[%s]", ut_control_GetMapString(dsError_mapTable, ret));
-    }
-    else {
-        UT_LOG_INFO("Result dsCompositeInInit() dsError_t:[%s]", ut_control_GetMapString(dsError_mapTable, ret));
-    }
+    ret = dsCompositeInInit(); 
+    UT_LOG_INFO("Result dsCompositeInInit() dsError_t:[%s]", ut_control_GetMapString(dsError_mapTable, ret));
+    ASSERT(ret == dsERR_NONE);
 
     /* Register connection status callback */
     UT_LOG_INFO("Calling dsCompositeInRegisterConnectCB(CBFunc:[0x%0X])", compositeInConnectCB);
     ret = dsCompositeInRegisterConnectCB(compositeInConnectCB);
-    if (ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsCompositeInRegisterConnectCB(CBFunc:[0x%0X]) dsError_t:[%s]",
+    UT_LOG_INFO("Result dsCompositeInRegisterConnectCB(CBFunc:[0x%0X]) dsError_t:[%s]",
                         compositeInConnectCB, ut_control_GetMapString(dsError_mapTable, ret));
-    }
-    else {
-        UT_LOG_INFO("Result dsCompositeInRegisterConnectCB(CBFunc:[0x%0X]) dsError_t:[%s]",
-                        compositeInConnectCB, ut_control_GetMapString(dsError_mapTable, ret));
-    }
+    ASSERT(ret == dsERR_NONE);
 
     /* Register Signal change callback */
     UT_LOG_INFO("Calling dsCompositeInRegisterSignalChangeCB(cbFun:[0x%0X])", compositeInSignalChangeCB);
     ret = dsCompositeInRegisterSignalChangeCB(compositeInSignalChangeCB);
-    if (ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsCompositeInRegisterSignalChangeCB(cbFun:[0x%0X]) dsError_t:[%s]",
+    UT_LOG_INFO("Result dsCompositeInRegisterSignalChangeCB(cbFun:[0x%0X]) dsError_t:[%s]",
                         compositeInSignalChangeCB, ut_control_GetMapString(dsError_mapTable, ret));
-    }
-    else {
-        UT_LOG_INFO("Result dsCompositeInRegisterSignalChangeCB(cbFun:[0x%0X]) dsError_t:[%s]",
-                        compositeInSignalChangeCB, ut_control_GetMapString(dsError_mapTable, ret));
-    }
+    ASSERT(ret == dsERR_NONE);
 
     /* Register Status change callback */
     UT_LOG_INFO("Calling dsCompositeInRegisterStatusChangeCB(cbFun:[0x%0X])", compositeInStatusChangeCB);
     ret = dsCompositeInRegisterStatusChangeCB(compositeInStatusChangeCB);
-    if (ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsCompositeInRegisterStatusChangeCB(cbFun:[0x%0X]) dsError_t:[%s]",
+    UT_LOG_INFO("Result dsCompositeInRegisterStatusChangeCB(cbFun:[0x%0X]) dsError_t:[%s]",
                         compositeInStatusChangeCB, ut_control_GetMapString(dsError_mapTable, ret));
-    }
-    else {
-        UT_LOG_INFO("Result dsCompositeInRegisterStatusChangeCB(cbFun:[0x%0X]) dsError_t:[%s]",
-                        compositeInStatusChangeCB, ut_control_GetMapString(dsError_mapTable, ret));
-    }
+    ASSERT(ret == dsERR_NONE);
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
@@ -310,18 +295,17 @@ void test_l3_CompositeIn_initialize(void)
 void test_l3_CompositeIn_get_inputports(void)
 {
     gTestID = 2;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     uint8_t numInputs = 0;
     dsError_t ret   = dsERR_NONE;
 
-    UT_LOG_INFO("Calling dsCompositeInGetNumberOfInputs");
+    UT_LOG_INFO("Calling dsCompositeInGetNumberOfInputs(OUT:numInputs:[])");
     ret = dsCompositeInGetNumberOfInputs(&numInputs);
-    if(ret != dsERR_NONE)
-    {
-       UT_LOG_ERROR("Result: Failed to Get NumberOfInputsPorts:[%s]",ut_control_GetMapString(dsError_mapTable, ret));
-    } 
-    UT_LOG_INFO("Result: NumberOfInputsPorts:[%d]",numInputs);
+    UT_LOG_INFO("Result: dsCompositeInGetNumberOfInputs(OUT:numInputs:[%d]) dsError_t:[%s]", numInputs, 
+                  ut_control_GetMapString(dsError_mapTable, ret));
+    ASSERT(ret == dsERR_NONE);
+
     if(!numInputs)
         UT_LOG_INFO("Result: Platform does not supports CompositeIn Ports");
 
@@ -343,30 +327,22 @@ void test_l3_CompositeIn_get_inputports(void)
 void test_l3_CompositeIn_get_status(void)
 {
     gTestID = 3;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret   = dsERR_NONE;
     dsCompositeInStatus_t inputstatus;
 
-    UT_LOG_INFO("Calling dsCompositeInGetStatus");
+    UT_LOG_INFO("Calling dsCompositeInGetStatus(OUT:inputstatus:[])");
     ret = dsCompositeInGetStatus(&inputstatus);
-    if(ret != dsERR_NONE)
+    UT_LOG_INFO("Result dsCompositeInGetStatus dsError_t:[%s], ut_control_GetMapString(dsError_mapTable, ret)");
+    for(int i = 0 ; i < dsCOMPOSITE_IN_PORT_MAX ; i++) 
     {
-        UT_LOG_ERROR("Result: Failed to Get Composite input port status:[%s]",ut_control_GetMapString(dsError_mapTable, ret));
-    } 
-    UT_LOG_INFO("Result Composite input port status isPresented: %s, activeport: %s",
+        UT_LOG_INFO("Result dsCompositeInGetStatus(OUT:inputstatus[isPresented:%s, isPortConnected:%s, activeport:%s])",
                 ut_control_GetMapString(bool_mapTable, inputstatus.isPresented),
+                ut_control_GetMapString(bool_mapTable, inputstatus.isPortConnected[i]),
                 ut_control_GetMapString(dsCompositeInPortMappingTable, inputstatus.activePort));
-
-    for(int i = 0 ; i < dsCOMPOSITE_IN_PORT_MAX ; i++) {
-
-        if(!(inputstatus.isPresented))
-            continue;
-
-        UT_LOG_INFO("Result: CompositeIn port connected info isPortConnected: %s, activeport: %s",
-                    ut_control_GetMapString(bool_mapTable, inputstatus.isPortConnected[i]),
-                    ut_control_GetMapString(dsCompositeInPortMappingTable, inputstatus.activePort));
     }
+    ASSERT(ret == dsERR_NONE);
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
@@ -386,7 +362,7 @@ void test_l3_CompositeIn_get_status(void)
 void test_l3_CompositeIn_select_port(void)
 {
     gTestID = 4;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret   = dsERR_NONE;
     dsCompositeInPort_t port = dsCOMPOSITE_IN_PORT_MAX;
@@ -395,9 +371,16 @@ void test_l3_CompositeIn_select_port(void)
 
     numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsCompositeIn/composite_input_configurations/number_of_ports");
 
-    printf(" \n================Please Select Inputs==================\n");
-
-    printf("\n*******Enter the port number to select*******\n");
+    UT_LOG_INFO("----------------------------------------------------------");
+    UT_LOG_INFO("Available CompositeIn Ports");
+    UT_LOG_INFO("----------------------------------------------------------");
+    UT_LOG_INFO("\t#  %-20s","CompositeIn Port");
+    for(int32_t i = 0; i < numInputPorts; i++)
+    {
+        UT_LOG_INFO("\t%d.  %-20s", i, ut_control_GetMapString(dsCompositeInPortMappingTable, i));
+    }
+    UT_LOG_INFO("----------------------------------------------------------");
+    UT_LOG_INFO("Enter the port to select: ");
     readInput(&select);
 
     if(select <= 0 || select > numInputPorts) 
@@ -407,13 +390,15 @@ void test_l3_CompositeIn_select_port(void)
 
     port = (dsCompositeInPort_t)select;
 
+    UT_LOG_INFO("Calling dsCompositeInSelectPort(IN:port[%d])",
+                ut_control_GetMapString(dsCompositeInPortMappingTable, port));
     ret = dsCompositeInSelectPort(port);
-    if(ret != dsERR_NONE)
-    {
-       UT_LOG_ERROR("Result: Failed to select the Composite input port:[%s]",ut_control_GetMapString(dsError_mapTable, ret));
-    }
-    UT_LOG_INFO("Result : dsCompositeInSelectPort: %s, portnumber: %d",
-                ut_control_GetMapString(dsCompositeInPortMappingTable, port), port);
+    UT_LOG_INFO("Result dsCompositeInSelectPort(IN:port[%d] dsError_t:[%s])",
+                ut_control_GetMapString(dsCompositeInPortMappingTable, port), 
+                ut_control_GetMapString(dsError_mapTable, ret));
+    ASSERT(ret == dsERR_NONE);
+
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -431,64 +416,67 @@ void test_l3_CompositeIn_select_port(void)
 void test_l3_CompositeIn_scale_video(void)
 {
     gTestID = 5;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret   = dsERR_NONE;
     int32_t x = 0 , y = 0, width = 0 , height = 0;
 
-    printf(" \n================Please Select Inputs==================\n");
-
-    printf("\n*******Enter the x coordinate to select*******\t"
-                     "Acceptable inputs are:\t"
+    UT_LOG_INFO("----------------------------------------------------------");
+    UT_LOG_INFO("\nAcceptable inputs for x coordinate:\t"
                      "Min is 0\t"
-                     "Max is based on the current resolution\t"
-              "**********************************************\n");
-   readInput(&x);
-   if(x < 0)
-   {
-      UT_LOG_ERROR("\n invalid x coordinate selected \n");
-   }
+                     "Max is based on the current resolution\t");
+    UT_LOG_INFO("----------------------------------------------------------");
+    UT_LOG_INFO("\nEnter the x coordinate to scale: ");
+    readInput(&x);
+    if(x < 0)
+    {
+        UT_LOG_ERROR("\n Invalid x coordinate selected \n");
+    }
 
-   printf("\n*******Enter the y coordinate to select*******\t"
-                     "Acceptable inputs are:\t"
+    UT_LOG_INFO("----------------------------------------------------------");
+    UT_LOG_INFO("\nAcceptable inputs for y coordinate:\t"
                      "Min is 0\t"
-                     "Max is based on the current resolution\t"
-             "**********************************************\n");
-   readInput(&y);
-   if(y < 0)
-   {
-      UT_LOG_ERROR("\n invalid y coordinate selected \n");
-   }
+                     "Max is based on the current resolution\t");
+    UT_LOG_INFO("----------------------------------------------------------");
+    UT_LOG_INFO("\nEnter the y coordinate to scale: ");
+    readInput(&y);
+    if(y < 0)
+    {
+        UT_LOG_ERROR("\n Invalid y coordinate selected \n");
+    }
 
-   printf("\n*******Enter the width to select***************\t"
-                     "Acceptable inputs are:\t"
+    UT_LOG_INFO("----------------------------------------------------------");
+    UT_LOG_INFO("\nAcceptable inputs for width coordinate:\t"
                      "Min is 0\t"
-                     "Max is based on the current resolution\t"
-            "**********************************************\n");
-   readInput(&width);
-   if(width < 0)
-   {
-      UT_LOG_ERROR("\n invalid width selected \n");
-   }
+                     "Max is based on the current resolution\t");
+    UT_LOG_INFO("----------------------------------------------------------");
+    UT_LOG_INFO("\nEnter the width coordinate to scale: ");
+    readInput(&width);
+    if(width < 0)
+    {
+        UT_LOG_ERROR("\n Invalid width selected \n");
+    }
 
-   printf("\n*******Enter the height to select**************\t"
-                     "Acceptable inputs are:\t"
+    UT_LOG_INFO("----------------------------------------------------------");
+    UT_LOG_INFO("\nAcceptable inputs for height coordinate:\t"
                      "Min is 0\t"
-                     "Max is based on the current resolution\t"
-             "**********************************************\n");
-   readInput(&height);
-   if(height < 0)
-   {
-      UT_LOG_ERROR("\n invalid height selected \n");
-   }
+                     "Max is based on the current resolution\t");
+    UT_LOG_INFO("----------------------------------------------------------");
+    UT_LOG_INFO("\nEnter the height coordinate to scale: ");
+    readInput(&height);
+    if(height < 0)
+    {
+        UT_LOG_ERROR("\n Invalid height selected \n");
+    }
 
-  ret = dsCompositeInScaleVideo(x, y, width, height);
-  if(ret != dsERR_NONE)
-  {
-     UT_LOG_ERROR("Result: Failed to dsCompositeInScaleVideo:[%s]",ut_control_GetMapString(dsError_mapTable, ret));
-  }
-    UT_LOG_INFO("Result : Passed dsCompositeInScaleVideo paramsx : %d, y : %d, heitht : %d , width : %d",
-                x, y , width, height);
+    UT_LOG_INFO("Calling dsCompositeInScaleVideo(IN:x[%d], IN:y[%d], IN:width[%d], IN:height[%d])",
+                x, y, width, height);
+    ret = dsCompositeInScaleVideo(x, y, width, height);
+    UT_LOG_INFO("Result : dsCompositeInScaleVideo(IN:x[%d], IN:y[%d], IN:width[%d], IN:height[%d]) dsError_t:[%s]",
+                x, y , width, height, ut_control_GetMapString(dsError_mapTable, ret));
+    ASSERT(ret == dsERR_NONE);
+
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -512,10 +500,8 @@ void test_l3_dsCompositeIn_terminate(void)
 
     UT_LOG_INFO("Calling dsCompositeInTerm()");
     ret = dsCompositeInTerm();
-    if(ret != dsERR_NONE) {
-        UT_LOG_ERROR("Failed dsCompositeInTerm() dsError_t:[%s]", ut_control_GetMapString(dsError_mapTable, ret));
-    }
     UT_LOG_INFO("Result dsCompositeInTerm() dsError_t:[%s]", ut_control_GetMapString(dsError_mapTable, ret));
+    ASSERT(ret == dsERR_NONE);
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
@@ -533,15 +519,19 @@ int test_l3_dsCompositeIn_register(void)
     ut_kvp_status_t status = UT_KVP_STATUS_SUCCESS;
 
     status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsCompositeIn.Type", gDeviceType, TEST_DS_DEVICE_TYPE_SIZE);
-    if (status != UT_KVP_STATUS_SUCCESS ) {
+    if (status != UT_KVP_STATUS_SUCCESS ) 
+    {
         UT_ASSERT_FATAL(status);
-    } else {
-        if (!strncmp(gDeviceType, TEST_TYPE_SINK_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) {
+    } else 
+    {
+        if (!strncmp(gDeviceType, TEST_TYPE_SINK_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) 
+        {
             // Create the test suite for sink type
             pSuite = UT_add_suite_withGroupID("[L3 dsCompositeIn - Sink]", NULL, NULL, UT_TESTS_L3);
-            assert( pSuite != NULL );
+            ASSERT( pSuite != NULL );
         }
-        else {
+        else 
+        {
             UT_LOG_ERROR("Invalid platform type: %s", gDeviceType);
             return -1;
         }
