@@ -143,7 +143,11 @@ const static stringkey_mapping dsFrontPanelLEDState[] = {
     {NULL, -1}
 };
 
-
+void readAndDiscardRestOfLine(FILE* in)
+{
+    int c;
+    while ( (c = fgetc(in)) != EOF && c != '\n');
+}
 
 /**
  * @brief This functions gets the Enum mapping string.
@@ -230,6 +234,7 @@ void test_2_dsFPD_hal_SetFPState(void)
     UT_LOG_INFO("----------------------------------------------------------");
     UT_LOG_INFO("Select Indicator : ");
     scanf("%d", &eIndicator);
+    readAndDiscardRestOfLine(stdin);
 
     UT_LOG_INFO(" \t  Supported Front Panel States are:");
     UT_LOG_INFO("------------------------------------------");
@@ -239,11 +244,14 @@ void test_2_dsFPD_hal_SetFPState(void)
     UT_LOG_INFO("----------------------------------------------------------");
     UT_LOG_INFO("Select State : ");
     scanf("%d", &eIndicator);
+    readAndDiscardRestOfLine(stdin);
+
 
     /* Check that the Indicator is valid */
     UT_LOG_INFO("Calling dsSetFPState(IN:Indicator:[0x%d], IN:State:[%d]" \
                                                 ,eIndicator,uState);
     status = dsSetFPState((dsFPDIndicator_t)eIndicator,(dsFPDState_t)uState);
+    UT_LOG_INFO("Result dsSetFPState(OUT:dsError_t:[%s])",mapKeyToString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
@@ -285,6 +293,8 @@ void test_3_dsFPD_hal_GetFPState(void)
     UT_LOG_INFO("----------------------------------------------------------");
     UT_LOG_INFO("Select Indicator : ");
     scanf("%d", &eIndicator);
+    readAndDiscardRestOfLine(stdin);
+
 
     status = dsGetFPState((dsFPDIndicator_t)eIndicator,&eState);
     UT_LOG_INFO("Result dsGetFPState(IN:Indicator:[0x%d], OUT:State:[%s] OUT: dsError_t:[%s]" \
@@ -335,19 +345,26 @@ void test_4_dsFPD_hal_SetFPBlink(void)
     UT_LOG_INFO("----------------------------------------------------------");
     UT_LOG_INFO("Select Indicator : ");
     scanf("%d", &eIndicator);
+    readAndDiscardRestOfLine(stdin);
+
 
     UT_LOG_INFO("----------------------------------------------------------");
     UT_LOG_INFO("Enter Blink Duration in ms: ");
     scanf("%d", &uBlinkDuration);
+    readAndDiscardRestOfLine(stdin);
+
 
     UT_LOG_INFO("----------------------------------------------------------");
     UT_LOG_INFO("Enter Blink iteration: ");
     scanf("%d", &uBlinkIterations);
+    readAndDiscardRestOfLine(stdin);
+
 
     /* Check that the Indicator is valid */
     UT_LOG_INFO("Calling dsSetFPBlink(IN:Indicator:[0x%d], IN:Blink Duration in ms:[%d], IN:Blink Iteration:[%d]" \
                                         ,eIndicator,uBlinkDuration,uBlinkIterations);
     status = dsSetFPBlink((dsFPDIndicator_t)eIndicator,uBlinkDuration,uBlinkIterations);
+    UT_LOG_INFO("Result dsSetFPBlink(OUT:dsError_t:[%s])",mapKeyToString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
@@ -389,15 +406,20 @@ void test_5_dsFPD_hal_SetFPBrightness(void)
     UT_LOG_INFO("----------------------------------------------------------");
     UT_LOG_INFO("Select Indicator : ");
     scanf("%d", &eIndicator);
+    readAndDiscardRestOfLine(stdin);
+
 
     UT_LOG_INFO("----------------------------------------------------------");
     UT_LOG_INFO("Enter LED Brightness (Range: 0-100): ");
     scanf("%d", &uBrightness);
+    readAndDiscardRestOfLine(stdin);
+
 
     /* Check that the Indicator is valid */
     UT_LOG_INFO("Calling dsSetFPBrightness(IN:Indicator:[0x%d], IN:Brightness:[%d]" \
                                                 ,eIndicator,uBrightness);
     status = dsSetFPBrightness((dsFPDIndicator_t)eIndicator,uBrightness);
+    UT_LOG_INFO("Result dsSetFPBrightness(OUT:dsError_t:[%s])",mapKeyToString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
@@ -439,6 +461,8 @@ void test_6_dsFPD_hal_GetFPBrightness(void)
     UT_LOG_INFO("----------------------------------------------------------");
     UT_LOG_INFO("Select Indicator : ");
     scanf("%d", &eIndicator);
+    readAndDiscardRestOfLine(stdin);
+
 
     status = dsGetFPBrightness((dsFPDIndicator_t)eIndicator,&brightness);
     UT_LOG_INFO("Result dsGetFPState(IN:Indicator:[0x%d], OUT:Brightness:[%d] OUT: dsError_t:[%s]" \
@@ -484,10 +508,13 @@ void test_7_dsFPD_hal_SetLEDState(void)
     UT_LOG_INFO("----------------------------------------------------------");
     UT_LOG_INFO("Select State: ");
     scanf("%X", &uLedState);
+    readAndDiscardRestOfLine(stdin);
+
 
     /* Check that the Indicator is valid */
     UT_LOG_INFO("Calling dsFPSetLEDState(IN state:[0x%X]",uLedState);
     status = dsFPSetLEDState((dsFPDLedState_t)uLedState);
+    UT_LOG_INFO("Result dsFPSetLEDState(OUT:dsError_t:[%s])",mapKeyToString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
@@ -562,6 +589,8 @@ void test_9_dsFPD_hal_SetFPColor(void)
     UT_LOG_INFO("----------------------------------------------------------");
     UT_LOG_INFO("Select Indicator : ");
     scanf("%d", &eIndicator);
+    readAndDiscardRestOfLine(stdin);
+
 
     UT_LOG_INFO(" \t  Supported Front Panel color for the indicaotr %s are:",mapKeyToString(dsFrontPanelIndicatorTable, eIndicator));
     UT_LOG_INFO("------------------------------------------");
@@ -584,11 +613,14 @@ void test_9_dsFPD_hal_SetFPColor(void)
     UT_LOG_INFO("----------------------------------------------------------");
     UT_LOG_INFO("Select Color: ");
     scanf("%X", &uColor);
+    readAndDiscardRestOfLine(stdin);
+
 
     /* Check that the Indicator is valid */
     UT_LOG_INFO("Calling SetFPColor(IN:Indicator:[0x%d], IN:Color:[%X]" \
                                                 ,eIndicator,uColor);
     status = dsSetFPColor((dsFPDIndicator_t)eIndicator,uColor);
+    UT_LOG_INFO("Result dsSetFPColor(OUT:dsError_t:[%s])",mapKeyToString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
@@ -630,6 +662,8 @@ void test_10_dsFPD_hal_GetFPColor(void)
     UT_LOG_INFO("----------------------------------------------------------");
     UT_LOG_INFO("Select Indicator : ");
     scanf("%d", &eIndicator);
+    readAndDiscardRestOfLine(stdin);
+
 
     status = dsGetFPColor((dsFPDIndicator_t)eIndicator,&color);
     UT_LOG_INFO("Result dsGetFPState(IN:Indicator:[0x%d], OUT:Brightness:[%d] OUT: dsError_t:[%s]" \
