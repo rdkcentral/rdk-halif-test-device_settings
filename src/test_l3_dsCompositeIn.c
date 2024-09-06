@@ -73,6 +73,7 @@
 #include <ut.h>
 #include <ut_log.h>
 #include <ut_kvp_profile.h>
+#include <ut_control_plane.h>
 #include <ut_kvp.h>
 
 #include "test_parse_configuration.h"
@@ -88,15 +89,8 @@ static bool                    gConnectionStatus = false;
 static dsCompInSignalStatus_t  gSignalStatus  = dsCOMP_IN_SIGNAL_STATUS_NONE;
 static dsCompositeInStatus_t        gStatusChange;
 
-/* Type Definitions */
-typedef struct _ut_control_keyMapTable_t
-{
-    char* string;
-    int32_t key;
-} ut_control_keyMapTable_t;
-
 /* Mapping table for dsError_t */
-const static ut_control_keyMapTable_t dsError_mapTable [] = {
+const static ut_control_keyStringMapping_t dsError_mapTable [] = {
   { "dsERR_NONE",                    (int32_t)dsERR_NONE                    },
   { "dsERR_GENERAL",                 (int32_t)dsERR_GENERAL                 },
   { "dsERR_INVALID_PARAM",           (int32_t)dsERR_INVALID_PARAM           },
@@ -111,7 +105,7 @@ const static ut_control_keyMapTable_t dsError_mapTable [] = {
 };
 
 /* Mapping table for dsCompInSignalStatus_t */
-const static ut_control_keyMapTable_t dsCompInSignalStatusMappingTable[] = {
+const static ut_control_keyStringMapping_t dsCompInSignalStatusMappingTable[] = {
     {"dsCOMP_IN_SIGNAL_STATUS_NONE", (int32_t)dsCOMP_IN_SIGNAL_STATUS_NONE},
     {"dsCOMP_IN_SIGNAL_STATUS_NOSIGNAL", (int32_t)dsCOMP_IN_SIGNAL_STATUS_NOSIGNAL},
     {"dsCOMP_IN_SIGNAL_STATUS_UNSTABLE", (int32_t)dsCOMP_IN_SIGNAL_STATUS_UNSTABLE},
@@ -122,7 +116,7 @@ const static ut_control_keyMapTable_t dsCompInSignalStatusMappingTable[] = {
 };
 
 /* Mapping table for dsCompositeInPort_t */
-const static ut_control_keyMapTable_t dsCompositeInPortMappingTable[] = {
+const static ut_control_keyStringMapping_t dsCompositeInPortMappingTable[] = {
     {"dsCOMPOSITE_IN_PORT_NONE", (int32_t)dsCOMPOSITE_IN_PORT_NONE},
     {"dsCOMPOSITE_IN_PORT_0", (int32_t)dsCOMPOSITE_IN_PORT_0},
     {"dsCOMPOSITE_IN_PORT_1", (int32_t)dsCOMPOSITE_IN_PORT_1},
@@ -132,31 +126,11 @@ const static ut_control_keyMapTable_t dsCompositeInPortMappingTable[] = {
 
 
 /* Mapping table for boolean values */
-const static ut_control_keyMapTable_t bool_mapTable [] = {
+const static ut_control_keyStringMapping_t bool_mapTable [] = {
   { "false", (int32_t)false },
   { "true",  (int32_t)true  },
   {  NULL, -1 }
 };
-
-/**
- * @brief This functions gets the Enum mapping string.
- *
- * This functions gets the Enum mapping string.
- * &Todo: replace with ut control function
- */
-static char* ut_control_GetMapString(const ut_control_keyMapTable_t *conversionMap, int32_t key)
-{
-    int32_t count = 0;
-    while(conversionMap[count].string != NULL)
-    {
-        if(conversionMap[count].key == key) 
-        {
-            return conversionMap[count].string;
-        }
-        count++;
-    }
-    return "";
-}
 
 /**
  * @brief This function clears the stdin buffer.
@@ -187,8 +161,8 @@ void readInput(int *choice)
 static void compositeInConnectCB(dsCompositeInPort_t Port, bool isPortConnected)
 {
     UT_LOG_INFO("Received Connection status callback port: %s, Connection: %s",
-                 ut_control_GetMapString(dsCompositeInPortMappingTable, Port),
-                 ut_control_GetMapString(bool_mapTable, isPortConnected));
+                 UT_Control_GetMapString(dsCompositeInPortMappingTable, Port),
+                 UT_Control_GetMapString(bool_mapTable, isPortConnected));
 
     gConnectionStatus = isPortConnected;
 }
@@ -201,8 +175,8 @@ static void compositeInConnectCB(dsCompositeInPort_t Port, bool isPortConnected)
 static void compositeInSignalChangeCB(dsCompositeInPort_t port, dsCompInSignalStatus_t sigStatus)
 {
     UT_LOG_INFO("Received SignalChange status callback port: %s, sigstatus: %s",
-                 ut_control_GetMapString(dsCompositeInPortMappingTable, port),
-                 ut_control_GetMapString(dsCompInSignalStatusMappingTable, sigStatus));
+                 UT_Control_GetMapString(dsCompositeInPortMappingTable, port),
+                 UT_Control_GetMapString(dsCompInSignalStatusMappingTable, sigStatus));
 
     gSignalStatus = sigStatus;
 }
@@ -215,8 +189,8 @@ static void compositeInSignalChangeCB(dsCompositeInPort_t port, dsCompInSignalSt
 static void compositeInStatusChangeCB(dsCompositeInStatus_t inputStatus)
 {
     UT_LOG_INFO("Received statuschange callback isPresented: %s, activeport: %s",
-                 ut_control_GetMapString(bool_mapTable, inputStatus.isPresented),
-                 ut_control_GetMapString(dsCompositeInPortMappingTable, inputStatus.activePort));
+                 UT_Control_GetMapString(bool_mapTable, inputStatus.isPresented),
+                 UT_Control_GetMapString(dsCompositeInPortMappingTable, inputStatus.activePort));
 
     for(int i = 0 ; i < dsCOMPOSITE_IN_PORT_MAX ; i++) 
     {
@@ -224,8 +198,8 @@ static void compositeInStatusChangeCB(dsCompositeInStatus_t inputStatus)
                  continue;
 
          UT_LOG_INFO("Received statuschange callback isPortConnected: %s, activeport: %s",
-                 ut_control_GetMapString(bool_mapTable, inputStatus.isPortConnected[i]),
-                 ut_control_GetMapString(dsCompositeInPortMappingTable, inputStatus.activePort));
+                 UT_Control_GetMapString(bool_mapTable, inputStatus.isPortConnected[i]),
+                 UT_Control_GetMapString(dsCompositeInPortMappingTable, inputStatus.activePort));
     }
 
     gStatusChange = inputStatus;
@@ -253,28 +227,28 @@ void test_l3_CompositeIn_initialize(void)
     /* Initialize the CompositeIn Module */
     UT_LOG_INFO("Calling dsCompositeInInit()");
     ret = dsCompositeInInit(); 
-    UT_LOG_INFO("Result dsCompositeInInit() dsError_t:[%s]", ut_control_GetMapString(dsError_mapTable, ret));
+    UT_LOG_INFO("Result dsCompositeInInit() dsError_t:[%s]", UT_Control_GetMapString(dsError_mapTable, ret));
     ASSERT(ret == dsERR_NONE);
 
     /* Register connection status callback */
     UT_LOG_INFO("Calling dsCompositeInRegisterConnectCB(CBFunc:[0x%0X])", compositeInConnectCB);
     ret = dsCompositeInRegisterConnectCB(compositeInConnectCB);
     UT_LOG_INFO("Result dsCompositeInRegisterConnectCB(CBFunc:[0x%0X]) dsError_t:[%s]",
-                        compositeInConnectCB, ut_control_GetMapString(dsError_mapTable, ret));
+                        compositeInConnectCB, UT_Control_GetMapString(dsError_mapTable, ret));
     ASSERT(ret == dsERR_NONE);
 
     /* Register Signal change callback */
     UT_LOG_INFO("Calling dsCompositeInRegisterSignalChangeCB(cbFun:[0x%0X])", compositeInSignalChangeCB);
     ret = dsCompositeInRegisterSignalChangeCB(compositeInSignalChangeCB);
     UT_LOG_INFO("Result dsCompositeInRegisterSignalChangeCB(cbFun:[0x%0X]) dsError_t:[%s]",
-                        compositeInSignalChangeCB, ut_control_GetMapString(dsError_mapTable, ret));
+                        compositeInSignalChangeCB, UT_Control_GetMapString(dsError_mapTable, ret));
     ASSERT(ret == dsERR_NONE);
 
     /* Register Status change callback */
     UT_LOG_INFO("Calling dsCompositeInRegisterStatusChangeCB(cbFun:[0x%0X])", compositeInStatusChangeCB);
     ret = dsCompositeInRegisterStatusChangeCB(compositeInStatusChangeCB);
     UT_LOG_INFO("Result dsCompositeInRegisterStatusChangeCB(cbFun:[0x%0X]) dsError_t:[%s]",
-                        compositeInStatusChangeCB, ut_control_GetMapString(dsError_mapTable, ret));
+                        compositeInStatusChangeCB, UT_Control_GetMapString(dsError_mapTable, ret));
     ASSERT(ret == dsERR_NONE);
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -303,7 +277,7 @@ void test_l3_CompositeIn_get_inputports(void)
     UT_LOG_INFO("Calling dsCompositeInGetNumberOfInputs(OUT:numInputs:[])");
     ret = dsCompositeInGetNumberOfInputs(&numInputs);
     UT_LOG_INFO("Result: dsCompositeInGetNumberOfInputs(OUT:numInputs:[%d]) dsError_t:[%s]", numInputs, 
-                  ut_control_GetMapString(dsError_mapTable, ret));
+                  UT_Control_GetMapString(dsError_mapTable, ret));
     ASSERT(ret == dsERR_NONE);
 
     if(!numInputs)
@@ -334,13 +308,13 @@ void test_l3_CompositeIn_get_status(void)
 
     UT_LOG_INFO("Calling dsCompositeInGetStatus(OUT:inputstatus:[])");
     ret = dsCompositeInGetStatus(&inputstatus);
-    UT_LOG_INFO("Result dsCompositeInGetStatus dsError_t:[%s], ut_control_GetMapString(dsError_mapTable, ret)");
+    UT_LOG_INFO("Result dsCompositeInGetStatus dsError_t:[%s], UT_Control_GetMapString(dsError_mapTable, ret)");
     for(int i = 0 ; i < dsCOMPOSITE_IN_PORT_MAX ; i++) 
     {
         UT_LOG_INFO("Result dsCompositeInGetStatus(OUT:inputstatus[isPresented:%s, isPortConnected:%s, activeport:%s])",
-                ut_control_GetMapString(bool_mapTable, inputstatus.isPresented),
-                ut_control_GetMapString(bool_mapTable, inputstatus.isPortConnected[i]),
-                ut_control_GetMapString(dsCompositeInPortMappingTable, inputstatus.activePort));
+                UT_Control_GetMapString(bool_mapTable, inputstatus.isPresented),
+                UT_Control_GetMapString(bool_mapTable, inputstatus.isPortConnected[i]),
+                UT_Control_GetMapString(dsCompositeInPortMappingTable, inputstatus.activePort));
     }
     ASSERT(ret == dsERR_NONE);
 
@@ -377,7 +351,7 @@ void test_l3_CompositeIn_select_port(void)
     UT_LOG_INFO("\t#  %-20s","CompositeIn Port");
     for(int32_t i = 0; i < numInputPorts; i++)
     {
-        UT_LOG_INFO("\t%d.  %-20s", i, ut_control_GetMapString(dsCompositeInPortMappingTable, i));
+        UT_LOG_INFO("\t%d.  %-20s", i, UT_Control_GetMapString(dsCompositeInPortMappingTable, i));
     }
     UT_LOG_INFO("----------------------------------------------------------");
     UT_LOG_INFO("Enter the port to select: ");
@@ -386,19 +360,21 @@ void test_l3_CompositeIn_select_port(void)
     if(select <= 0 || select > numInputPorts) 
     {
        UT_LOG_ERROR("\nInvalid port selected\n");
+       goto exit;
     }
 
     port = (dsCompositeInPort_t)select;
 
     UT_LOG_INFO("Calling dsCompositeInSelectPort(IN:port[%d])",
-                ut_control_GetMapString(dsCompositeInPortMappingTable, port));
+                UT_Control_GetMapString(dsCompositeInPortMappingTable, port));
     ret = dsCompositeInSelectPort(port);
     UT_LOG_INFO("Result dsCompositeInSelectPort(IN:port[%d] dsError_t:[%s])",
-                ut_control_GetMapString(dsCompositeInPortMappingTable, port), 
-                ut_control_GetMapString(dsError_mapTable, ret));
+                UT_Control_GetMapString(dsCompositeInPortMappingTable, port), 
+                UT_Control_GetMapString(dsError_mapTable, ret));
     ASSERT(ret == dsERR_NONE);
 
-    UT_LOG_INFO("Out %s", __FUNCTION__);
+    exit:
+        UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -431,6 +407,7 @@ void test_l3_CompositeIn_scale_video(void)
     if(x < 0)
     {
         UT_LOG_ERROR("\n Invalid x coordinate selected \n");
+        goto exit;
     }
 
     UT_LOG_INFO("----------------------------------------------------------");
@@ -443,6 +420,7 @@ void test_l3_CompositeIn_scale_video(void)
     if(y < 0)
     {
         UT_LOG_ERROR("\n Invalid y coordinate selected \n");
+        goto exit;
     }
 
     UT_LOG_INFO("----------------------------------------------------------");
@@ -455,6 +433,7 @@ void test_l3_CompositeIn_scale_video(void)
     if(width < 0)
     {
         UT_LOG_ERROR("\n Invalid width selected \n");
+        goto exit;
     }
 
     UT_LOG_INFO("----------------------------------------------------------");
@@ -467,16 +446,18 @@ void test_l3_CompositeIn_scale_video(void)
     if(height < 0)
     {
         UT_LOG_ERROR("\n Invalid height selected \n");
+        goto exit;
     }
 
     UT_LOG_INFO("Calling dsCompositeInScaleVideo(IN:x[%d], IN:y[%d], IN:width[%d], IN:height[%d])",
                 x, y, width, height);
     ret = dsCompositeInScaleVideo(x, y, width, height);
     UT_LOG_INFO("Result : dsCompositeInScaleVideo(IN:x[%d], IN:y[%d], IN:width[%d], IN:height[%d]) dsError_t:[%s]",
-                x, y , width, height, ut_control_GetMapString(dsError_mapTable, ret));
+                x, y , width, height, UT_Control_GetMapString(dsError_mapTable, ret));
     ASSERT(ret == dsERR_NONE);
 
-    UT_LOG_INFO("Out %s", __FUNCTION__);
+    exit:
+        UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -500,7 +481,7 @@ void test_l3_dsCompositeIn_terminate(void)
 
     UT_LOG_INFO("Calling dsCompositeInTerm()");
     ret = dsCompositeInTerm();
-    UT_LOG_INFO("Result dsCompositeInTerm() dsError_t:[%s]", ut_control_GetMapString(dsError_mapTable, ret));
+    UT_LOG_INFO("Result dsCompositeInTerm() dsError_t:[%s]", UT_Control_GetMapString(dsError_mapTable, ret));
     ASSERT(ret == dsERR_NONE);
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
