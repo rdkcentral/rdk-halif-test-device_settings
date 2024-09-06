@@ -75,25 +75,25 @@
 #include <ut.h>
 #include <ut_log.h>
 #include <ut_kvp_profile.h>
+#include <ut_control_plane.h>
 #include "stdint.h"
 #include "dsDisplay.h"
 #include "test_parse_configuration.h"
 
+#define UT_LOG_MENU_INFO UT_LOG_INFO
+
+#define DS_ASSERT assert
+
 /* Global Variables */
+
 static int32_t gTestGroup = 3;
 static int32_t gTestID    = 1;
 static intptr_t displayHandle = 0;
 
+/* Enum mapping tables */
 
-// Define the Mapping struct
-typedef struct _stringkey_mapping
-{
-    char* stringValue;
-    int32_t keyCode;
-} stringkey_mapping;
-
-// Mapping table for dsError_t
-const static stringkey_mapping  errorMappingTable[] = {
+/* dsError_t */
+const static ut_control_keyStringMapping_t errorMappingTable[] = {
     {"dsERR_NONE", (int32_t)dsERR_NONE},
     {"dsERR_GENERAL", (int32_t)dsERR_GENERAL},
     {"dsERR_INVALID_PARAM", (int32_t)dsERR_INVALID_PARAM},
@@ -107,8 +107,8 @@ const static stringkey_mapping  errorMappingTable[] = {
     {NULL, -1}
 };
 
-// Mapping table for dsVideoPortType_t
-const static stringkey_mapping videoPortTypeMappingTable[] = {
+/* dsVideoPortType_t */
+const static ut_control_keyStringMapping_t videoPortTypeMappingTable[] = {
     {"dsVIDEOPORT_TYPE_RF", (int32_t)dsVIDEOPORT_TYPE_RF},
     {"dsVIDEOPORT_TYPE_BB", (int32_t)dsVIDEOPORT_TYPE_BB},
     {"dsVIDEOPORT_TYPE_SVIDEO", (int32_t)dsVIDEOPORT_TYPE_SVIDEO},
@@ -122,8 +122,8 @@ const static stringkey_mapping videoPortTypeMappingTable[] = {
     {NULL, -1}
 };
 
-// Mapping table for dsDisplayEvent_t
-const static stringkey_mapping displayEventMappingTable[] = {
+/* dsDisplayEvent_t */
+const static ut_control_keyStringMapping_t displayEventMappingTable[] = {
     {"dsDISPLAY_EVENT_CONNECTED", (int32_t)dsDISPLAY_EVENT_CONNECTED},
     {"dsDISPLAY_EVENT_DISCONNECTED", (int32_t)dsDISPLAY_EVENT_DISCONNECTED},
     {"dsDISPLAY_RXSENSE_ON", (int32_t)dsDISPLAY_RXSENSE_ON},
@@ -133,33 +133,13 @@ const static stringkey_mapping displayEventMappingTable[] = {
     {NULL, -1}
 };
 
-// Mapping table for dsVideoAspectRatio_t
-const static stringkey_mapping dsVideoAspect_RatioMappingTable[] = {
+/* dsVideoAspectRatio_t */
+const static ut_control_keyStringMapping_t dsVideoAspect_RatioMappingTable[] = {
     {"dsVIDEO_ASPECT_RATIO_4x3", (int32_t)dsVIDEO_ASPECT_RATIO_4x3},
     {"dsVIDEO_ASPECT_RATIO_16x9", (int32_t)dsVIDEO_ASPECT_RATIO_16x9},
     {"dsVIDEO_ASPECT_RATIO_MAX", (int32_t)dsVIDEO_ASPECT_RATIO_MAX},
     {NULL, -1}
 };
-
-/**
- * @brief This functions gets the Enum mapping string.
- *
- * This functions gets the Enum mapping string.
- *
- */
-static char* mapKeyToString(const stringkey_mapping* keyMappingTable, int32_t keyCode) {
-    if (keyMappingTable == NULL) {
-        return NULL;
-    }
-
-    for (int32_t i = 0; keyMappingTable[i].stringValue != NULL; i++) {
-        if (keyMappingTable[i].keyCode == keyCode) {
-            return keyMappingTable[i].stringValue;
-        }
-    }
-
-    return "Unknown value";
-}
 
 /**
  * @brief Callback function for display events.
@@ -168,7 +148,7 @@ static char* mapKeyToString(const stringkey_mapping* keyMappingTable, int32_t ke
  */
 void DisplayEventCallback(intptr_t handle, dsDisplayEvent_t event, void* eventData)
 {
-    UT_LOG_INFO("DisplayEventCallback dsDisplayEvent_t:[%s] ",mapKeyToString(displayEventMappingTable, event));
+    UT_LOG_INFO("DisplayEventCallback dsDisplayEvent_t:[%s] ", UT_Control_GetMapString(displayEventMappingTable, event));
 }
 
 /**
@@ -181,7 +161,7 @@ void DisplayEventCallback(intptr_t handle, dsDisplayEvent_t event, void* eventDa
  *
  * **Test Procedure:**
  * Refer to Test specification documentation
- * [ds-display_halSpec.md](../../docs/pages/ds-display_halSpec.md)
+ * [ds-display_L3_Low-Level_TestSpecification.md](../../docs/pages/ds-display_L3_Low-Level_TestSpecification.md)
  */
 void dsDisplay_Init()
 {
@@ -192,8 +172,10 @@ void dsDisplay_Init()
 
     UT_LOG_INFO("Calling dsDisplayInit()");
     status = dsDisplayInit();
-    UT_LOG_INFO("Result dsDisplayInit() dsError_t=[%s]", mapKeyToString(errorMappingTable, status));
-    UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
+    UT_LOG_INFO("Result dsDisplayInit() dsError_t=[%s]", UT_Control_GetMapString(errorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 
 }
 
@@ -207,7 +189,7 @@ void dsDisplay_Init()
  *
  * **Test Procedure:**
  * Refer to Test specification documentation
- * [ds-display_halSpec.md](../../docs/pages/ds-display_halSpec.md)
+ * [ds-display_L3_Low-Level_TestSpecification.md](../../docs/pages/ds-display_L3_Low-Level_TestSpecification.md)
  */
 void dsDisplay_Term()
 {
@@ -218,8 +200,10 @@ void dsDisplay_Term()
 
     UT_LOG_INFO("Calling dsDisplayTerm()");
     status = dsDisplayTerm();
-    UT_LOG_INFO("Result dsDisplayTerm() dsError_t=[%s]",  mapKeyToString(errorMappingTable, status));
-    UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
+    UT_LOG_INFO("Result dsDisplayTerm() dsError_t=[%s]", UT_Control_GetMapString(errorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -232,7 +216,7 @@ void dsDisplay_Term()
  *
  * **Test Procedure:**
  * Refer to Test specification documentation
- * [ds-display_halSpec.md](../../docs/pages/ds-display_halSpec.md)
+ * [ds-display_L3_Low-Level_TestSpecification.md](../../docs/pages/ds-display_L3_Low-Level_TestSpecification.md)
  */
 static void dsGetDisplay_getHandle()
 {
@@ -245,7 +229,7 @@ static void dsGetDisplay_getHandle()
     UT_LOG_INFO(" \t  Supported Video Port are:");
     UT_LOG_INFO("------------------------------------------");
     for (port = 0; port < gDSvideoPort_NumberOfPorts; port++) {
-        UT_LOG_INFO("\t%d.  %-20s\n", port+1, mapKeyToString(videoPortTypeMappingTable, gDSVideoPortConfiguration[port].typeid));
+        UT_LOG_INFO("\t%d.  %-20s\n", port+1, UT_Control_GetMapString(videoPortTypeMappingTable, gDSVideoPortConfiguration[port].typeid));
     }
     UT_LOG_INFO("------------------------------------------");
     UT_LOG_INFO(" Select the Video Port:");
@@ -257,14 +241,13 @@ static void dsGetDisplay_getHandle()
         return;
     }
 
-    UT_LOG_INFO("Calling dsGetDisplay(type:[%s],index:[%d])",mapKeyToString(videoPortTypeMappingTable, gDSVideoPortConfiguration[port].typeid));
-    UT_LOG_INFO("Typeid: %d ",gDSVideoPortConfiguration[port].typeid);
+    UT_LOG_INFO("Calling dsGetDisplay(IN:type:[%s],IN:index:[%d])", UT_Control_GetMapString(videoPortTypeMappingTable, gDSVideoPortConfiguration[port].typeid));
     status = dsGetDisplay(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &displayHandle);
-    UT_LOG_INFO("Result dsGetDisplay(Handle:[0x%0X]]) dsError_t=[%s]", displayHandle, mapKeyToString(errorMappingTable, status));
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
-    if (status != dsERR_NONE) {
-    UT_LOG_ERROR("dsGetDisplay failed with error: %d", status);
-    }
+
+    UT_LOG_INFO("Result dsGetDisplay(Handle:[0x%0X]]) dsError_t=[%s]", displayHandle, UT_Control_GetMapString(errorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 
 }
 
@@ -278,7 +261,7 @@ static void dsGetDisplay_getHandle()
  *
  * **Test Procedure:**
  * Refer to Test specification documentation
- * [ds-display_halSpec.md](../../docs/pages/ds-display_halSpec.md)
+ * [ds-display_L3_Low-Level_TestSpecification.md](../../docs/pages/ds-display_L3_Low-Level_TestSpecification.md)
  */
 void dsDisplay_GetEDID() 
 {
@@ -301,7 +284,7 @@ void dsDisplay_GetEDID()
         return;
     }
 
-    UT_LOG_INFO("Calling dsGetEDID(Handle:[0x%0X]])", displayHandle);
+    UT_LOG_INFO("Calling dsGetEDID(IN:handle:[0x%0X]])", displayHandle);
     status = dsGetEDID(displayHandle, edid);
 
     if (status != dsERR_NONE) {
@@ -312,9 +295,11 @@ void dsDisplay_GetEDID()
 
     UT_LOG_INFO("Result dsGetEDID(dsDisplayEDID_t(productCode:[%d], serialNumber:[%d], manufactureYear:[%d], manufactureWeek:[%d], hdmiDeviceType:[%s], isRepeater:[%s], physicalAddressA:[%u], physicalAddressB:[%u], physicalAddressC:[%u], physicalAddressD:[%u], numOfSupportedResolution:[%d], monitorName:[%s])", \
              edid->productCode, edid->serialNumber, edid->manufactureYear, edid->manufactureWeek, edid->hdmiDeviceType, edid->isRepeater, edid->physicalAddressA, edid->physicalAddressB, edid->physicalAddressC, edid->physicalAddressD, edid->numOfSupportedResolution, edid->monitorName);
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+    DS_ASSERT(status == dsERR_NONE);
 
     free(edid);
+
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -327,7 +312,7 @@ void dsDisplay_GetEDID()
  *
  * **Test Procedure:**
  * Refer to Test specification documentation
- * [ds-display_halSpec.md](../../docs/pages/ds-display_halSpec.md)
+ * [ds-display_L3_Low-Level_TestSpecification.md](../../docs/pages/ds-display_L3_Low-Level_TestSpecification.md)
  */
 void dsDisplay_GetEDIDBytes()
 {
@@ -343,8 +328,10 @@ void dsDisplay_GetEDIDBytes()
     UT_LOG_INFO("Calling dsGetEDID(Handle:[0x%0X]])", displayHandle);
     status = dsGetEDIDBytes(displayHandle, edid, &length);
 
-    UT_LOG_INFO("Result dsGetEDIDBytes()  dsError_t=[%s]", mapKeyToString(errorMappingTable, status));
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+    UT_LOG_INFO("Result dsGetEDIDBytes()  dsError_t=[%s]", UT_Control_GetMapString(errorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 
 }
 
@@ -358,7 +345,7 @@ void dsDisplay_GetEDIDBytes()
  *
  * **Test Procedure:**
  * Refer to Test specification documentation
- * [ds-display_halSpec.md](../../docs/pages/ds-display_halSpec.md)
+ * [ds-display_L3_Low-Level_TestSpecification.md](../../docs/pages/ds-display_L3_Low-Level_TestSpecification.md)
  */
 void GetDisplay_AspectRatio()
 {
@@ -370,12 +357,14 @@ void GetDisplay_AspectRatio()
   
     dsGetDisplay_getHandle();
 
-    UT_LOG_INFO("Calling dsGetEDID(Handle:[0x%0X]) ", displayHandle);
+    UT_LOG_INFO("Calling dsGetEDID(IN:handle:[0x%0X]) ", displayHandle);
     status = dsGetDisplayAspectRatio(displayHandle, &displayAspectRatio);
 
-    UT_LOG_INFO("Result dsGetDisplayAspectRatio(dsVideoAspectRatio_t:[%s], dsError_t=[%s])", mapKeyToString(dsVideoAspect_RatioMappingTable, displayAspectRatio), mapKeyToString(errorMappingTable, status));
+    UT_LOG_INFO("Result dsGetDisplayAspectRatio(dsVideoAspectRatio_t:[%s], dsError_t=[%s])", UT_Control_GetMapString(dsVideoAspect_RatioMappingTable, displayAspectRatio), UT_Control_GetMapString(errorMappingTable, status));
 
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+    DS_ASSERT(status == dsERR_NONE);
+
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 
 }
 
@@ -389,7 +378,7 @@ void GetDisplay_AspectRatio()
  *
  * **Test Procedure:**
  * Refer to Test specification documentation
- * [ds-display_halSpec.md](../../docs/pages/ds-display_halSpec.md)
+ * [ds-display_L3_Low-Level_TestSpecification.md](../../docs/pages/ds-display_L3_Low-Level_TestSpecification.md)
  */
 void RegisterDisplayEventCallback()
 {
@@ -400,13 +389,14 @@ void RegisterDisplayEventCallback()
 
     dsGetDisplay_getHandle();
 
-    UT_LOG_INFO("Calling dsGetEDID(Handle:[0x%0X]) ", displayHandle);
+    UT_LOG_INFO("Calling dsGetEDID(IN:handle:[0x%0X]) ", displayHandle);
 
     status = dsRegisterDisplayEventCallback(displayHandle,(dsDisplayEventCallback_t)DisplayEventCallback);
 
-    UT_LOG_INFO("Result dsRegisterDisplayEventCallback() dsError_t=[%s]",  mapKeyToString(errorMappingTable, status));
-    UT_ASSERT_EQUAL(status, dsERR_NONE);
+    UT_LOG_INFO("Result dsRegisterDisplayEventCallback() dsError_t=[%s]", UT_Control_GetMapString(errorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
 
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 static UT_test_suite_t * pSuite = NULL;
