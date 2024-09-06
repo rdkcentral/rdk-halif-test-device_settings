@@ -143,26 +143,6 @@ void readAndDiscardRestOfLine(FILE* in)
 }
 
 /**
- * @brief This functions gets the Enum mapping string.
- *
- * This functions gets the Enum mapping string.
- *
- */
-static char* UT_Control_GetMapString(const ut_control_keyStringMapping_t* keyMappingTable, int32_t keyCode) {
-    if (keyMappingTable == NULL) {
-        return NULL;
-    }
-
-    for (int32_t i = 0; keyMappingTable[i].stringValue != NULL; i++) {
-        if (keyMappingTable[i].keyCode == keyCode) {
-            return keyMappingTable[i].stringValue;
-        }
-    }
-
-    return "Unknown value";
-}
-
-/**
 * @brief Initialization of the Device settings - Front Panel Module
 *
 * This test provides a scope to Intialize the Front Panel module.
