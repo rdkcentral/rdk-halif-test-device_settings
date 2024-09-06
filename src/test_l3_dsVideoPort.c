@@ -78,9 +78,11 @@
 #include <ut_control_plane.h>
 #include <assert.h>
 
+
 #include "test_parse_configuration.h"
 #include "dsVideoPort.h"
 
+#define DS_ASSERT assert
 
 intptr_t gHandle = 0;
 
@@ -291,33 +293,40 @@ void readAndDiscardRestOfLine(FILE* in)
 /*callback*/
 void VideoFormatCallback(dsHDRStandard_t videoFormat)
 {
-    UT_LOG_INFO("VideoFormatCallback dsHDRStandard_t:[%s] ",UT_Control_GetMapString(dsHDRStandardMappingTable, videoFormat));
+    UT_LOG_INFO("Video Format Callback dsHDRStandard_t:[%s] ",UT_Control_GetMapString(dsHDRStandardMappingTable, videoFormat));
 
 }
 void HdcpStatusCallback(intptr_t handle, dsHdcpStatus_t status)
 {
-    UT_LOG_INFO("HdcpStatusCallback dsHdcpStatus_t:[%s] ",UT_Control_GetMapString(dsHdcpStatusMappingTable, status));
+    UT_LOG_INFO("HDCP Status Callback dsHdcpStatus_t:[%s] ",UT_Control_GetMapString(dsHdcpStatusMappingTable, status));
 }
 
 void dsVideoPort_Init()
 {
     dsError_t status   = dsERR_NONE;
 
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
+
     UT_LOG_INFO("Calling dsVideoPortInit()");
     status = dsVideoPortInit();
     UT_LOG_INFO("Result dsVideoPortInit() dsError_t=[%s]", UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
+    DS_ASSERT(status == dsERR_NONE);
 
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 void dsVideoPort_Term()
 {
     dsError_t status   = dsERR_NONE;
 
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
+
     UT_LOG_INFO("Calling dsVideoPort_Term()");
     status = dsVideoPortTerm();
     UT_LOG_INFO("Result dsVideoPortTerm() dsError_t=[%s]",  UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
+    DS_ASSERT(status == dsERR_NONE);
+
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 static void dsVideoPort_getHandle()
@@ -335,18 +344,19 @@ static void dsVideoPort_getHandle()
     scanf("%d", &choice);
     readAndDiscardRestOfLine(stdin);
     port = choice - 1;
-    UT_LOG_INFO("Port %d choice %d ",port,choice);
+
     if(choice < 1 || choice > gDSvideoPort_NumberOfPorts) {
         UT_LOG_ERROR("Invalid Port choice\n");
         return;
     }
 
-    UT_LOG_INFO("Calling dsGetVideoPort(type:[%s],index:[%d])",UT_Control_GetMapString(dsVideoPortMappingTable, gDSVideoPortConfiguration[port].typeid));
+    UT_LOG_INFO("Calling dsGetVideoPort(IN:type:[%s],IN:index:[%d], OUT:handle:[])",UT_Control_GetMapString(dsVideoPortMappingTable, gDSVideoPortConfiguration[port].typeid),\
+                    gDSVideoPortConfiguration[port].index);
 
     status = dsGetVideoPort(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &gHandle);
-    UT_LOG_INFO("Result dsGetVideoPort(Handle:[0x%0X]]) dsError_t=[%s]", gHandle, UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
-
+    UT_LOG_INFO("Result dsGetVideoPort(IN:type:[%s],IN:index:[%d], OUT:Handle:[0x%0X]) dsError_t=[%s]",UT_Control_GetMapString(dsVideoPortMappingTable, gDSVideoPortConfiguration[port].typeid),
+                    gDSVideoPortConfiguration[port].index, gHandle, UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
 }
 
 void dsVideoPort_EnablePort()
@@ -356,42 +366,48 @@ void dsVideoPort_EnablePort()
     bool connected  = false;
     bool active     = false;
 
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
+
     dsVideoPort_getHandle();
 
     UT_LOG_INFO("Calling dsVideoFormatUpdateRegisterCB()");
     status = dsVideoFormatUpdateRegisterCB(VideoFormatCallback);
     UT_LOG_INFO("Result dsVideoFormatUpdateRegisterCB() dsError_t=[%s]",  UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
+    DS_ASSERT(status == dsERR_NONE);
 
     UT_LOG_INFO("Calling dsRegisterHdcpStatusCallback()");
     status = dsRegisterHdcpStatusCallback(gHandle, HdcpStatusCallback);
     UT_LOG_INFO("Result dsRegisterHdcpStatusCallback() dsError_t=[%s]",  UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
+    DS_ASSERT(status == dsERR_NONE);
 
-    UT_LOG_INFO("Calling dsIsVideoPortEnabled(Handle:[0x%0X]]) ", gHandle);
+    UT_LOG_INFO("Calling dsIsVideoPortEnabled(IN:Handle:[0x%0X], OUT:enabled:[]) ", gHandle);
     status = dsIsVideoPortEnabled(gHandle, &enabled);
-    UT_LOG_INFO("Result dsIsVideoPortEnabled(enabled:[%s]) dsError_t=[%s]",UT_Control_GetMapString(boolMappingTable, enabled),  UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
+    UT_LOG_INFO("Result dsIsVideoPortEnabled(IN:Handle:[0x%0X], OUT:enabled:[%s]) dsError_t=[%s]",gHandle,
+                    UT_Control_GetMapString(boolMappingTable, enabled), UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
     if(!enabled){
-        UT_LOG_INFO("Calling dsEnableVideoPort(Handle:[0x%0X]],Enable:[true]) ", gHandle);
+        UT_LOG_INFO("Calling dsEnableVideoPort(IN:Handle:[0x%0X],IN:Enable:[true]) ", gHandle);
         status = dsEnableVideoPort(gHandle, true);
-        UT_LOG_INFO("Result dsEnableVideoPort() dsError_t=[%s]",  UT_Control_GetMapString(dsErrorMappingTable, status));
-        assert(status == dsERR_NONE);
-        UT_LOG_INFO("Calling dsIsVideoPortEnabled(Handle:[0x%0X]]) ", gHandle);
+        UT_LOG_INFO("Result dsEnableVideoPort(IN:Handle:[0x%0X],IN:Enable:[true]), dsError_t=[%s]", gHandle, UT_Control_GetMapString(dsErrorMappingTable, status));
+        DS_ASSERT(status == dsERR_NONE);
+        UT_LOG_INFO("Calling dsIsVideoPortEnabled(IN:Handle:[0x%0X], OUT:enabled:[]) ", gHandle);
         status = dsIsVideoPortEnabled(gHandle, &enabled);
-        UT_LOG_INFO("Result dsIsVideoPortEnabled(enabled:[%s]) dsError_t=[%s]",UT_Control_GetMapString(boolMappingTable, enabled),  UT_Control_GetMapString(dsErrorMappingTable, status));
-        assert(status == dsERR_NONE);
+        UT_LOG_INFO("Result dsIsVideoPortEnabled(IN:Handle:[0x%0X], OUT:enabled:[%s]) dsError_t=[%s]",gHandle,
+                        UT_Control_GetMapString(boolMappingTable, enabled), UT_Control_GetMapString(dsErrorMappingTable, status));
+        DS_ASSERT(status == dsERR_NONE);
     }
-    UT_LOG_INFO("Calling dsIsDisplayConnected(Handle:[0x%0X]]) ", gHandle);
+    UT_LOG_INFO("Calling dsIsDisplayConnected(IN:Handle:[0x%0X],OUT:connected[] ) ", gHandle);
     status = dsIsDisplayConnected(gHandle, &connected);
-    UT_LOG_INFO("Result dsIsDisplayConnected(connected[%s]) dsError_t=[%s]",UT_Control_GetMapString(boolMappingTable, enabled),  UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
+    UT_LOG_INFO("Result dsIsDisplayConnected(IN:Handle:[0x%0X],OUT:connected[%s]) dsError_t=[%s]",gHandle,
+                    UT_Control_GetMapString(boolMappingTable, connected),  UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
 
-    UT_LOG_INFO("Calling dsIsVideoPortActive(Handle:[0x%0X]]) ", gHandle);
+    UT_LOG_INFO("Calling dsIsVideoPortActive(IN:Handle:[0x%0X],OUT:active:[%s]) ", gHandle);
     status = dsIsVideoPortActive(gHandle, &active);
-    UT_LOG_INFO("Result dsIsVideoPortActive(active:[%s])  dsError_t=[%s]",UT_Control_GetMapString(boolMappingTable, enabled),  UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
-
+    UT_LOG_INFO("Result dsIsVideoPortActive(IN:Handle:[0x%0X],OUT:active:[%s])  dsError_t=[%s]",gHandle,
+                    UT_Control_GetMapString(boolMappingTable, active),  UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 void dsVideoPort_DisablePort()
@@ -401,32 +417,38 @@ void dsVideoPort_DisablePort()
     bool connected  = false;
     bool active     = false;
 
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
+
     dsVideoPort_getHandle();
 
-    UT_LOG_INFO("Calling dsIsVideoPortEnabled(Handle:[0x%0X]]) ", gHandle);
+    UT_LOG_INFO("Calling dsIsVideoPortEnabled(IN:Handle:[0x%0X], OUT:enabled:[]) ", gHandle);
     status = dsIsVideoPortEnabled(gHandle, &enabled);
-    UT_LOG_INFO("Result dsIsVideoPortEnabled(enabled:[%s]) dsError_t=[%s]",UT_Control_GetMapString(boolMappingTable, enabled),  UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
+    UT_LOG_INFO("Result dsIsVideoPortEnabled(IN:Handle:[0x%0X], OUT:enabled:[%s]) dsError_t=[%s]",gHandle,
+                    UT_Control_GetMapString(boolMappingTable, enabled), UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
     if(enabled){
-        UT_LOG_INFO("Calling dsEnableVideoPort(Handle:[0x%0X]],Enable:[false]) ", gHandle);
+        UT_LOG_INFO("Calling dsEnableVideoPort(IN:Handle:[0x%0X],OUT:Enable:[false]) ", gHandle);
         status = dsEnableVideoPort(gHandle, false);
-        UT_LOG_INFO("Result dsEnableVideoPort() dsError_t=[%s]",  UT_Control_GetMapString(dsErrorMappingTable, status));
-        assert(status == dsERR_NONE);
-        UT_LOG_INFO("Calling dsIsVideoPortEnabled(Handle:[0x%0X]]) ", gHandle);
+        UT_LOG_INFO("Result dsEnableVideoPort(IN:Handle:[0x%0X],OUT:Enable:[false]) dsError_t=[%s]", UT_Control_GetMapString(dsErrorMappingTable, status));
+        DS_ASSERT(status == dsERR_NONE);
+        UT_LOG_INFO("Calling dsIsVideoPortEnabled(IN:Handle:[0x%0X], OUT:enabled:[]) ", gHandle);
         status = dsIsVideoPortEnabled(gHandle, &enabled);
-        UT_LOG_INFO("Result dsIsVideoPortEnabled(enabled:[%s]) dsError_t=[%s]",UT_Control_GetMapString(boolMappingTable, enabled),  UT_Control_GetMapString(dsErrorMappingTable, status));
-        assert(status == dsERR_NONE);
+        UT_LOG_INFO("Result dsIsVideoPortEnabled(IN:Handle:[0x%0X], OUT:enabled:[%s]) dsError_t=[%s]",gHandle,
+                        UT_Control_GetMapString(boolMappingTable, enabled), UT_Control_GetMapString(dsErrorMappingTable, status));
+        DS_ASSERT(status == dsERR_NONE);
     }
-    UT_LOG_INFO("Calling dsIsDisplayConnected(Handle:[0x%0X]]) ", gHandle);
+    UT_LOG_INFO("Calling dsIsDisplayConnected(IN:Handle:[0x%0X],OUT:connected[] ) ", gHandle);
     status = dsIsDisplayConnected(gHandle, &connected);
-    UT_LOG_INFO("Result dsIsDisplayConnected(connected[%s]) dsError_t=[%s]",UT_Control_GetMapString(boolMappingTable, enabled),  UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
+    UT_LOG_INFO("Result dsIsDisplayConnected(IN:Handle:[0x%0X],OUT:connected[%s]) dsError_t=[%s]",gHandle,
+                    UT_Control_GetMapString(boolMappingTable, connected),  UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
 
-    UT_LOG_INFO("Calling dsIsVideoPortActive(Handle:[0x%0X]]) ", gHandle);
+    UT_LOG_INFO("Calling dsIsVideoPortActive(IN:Handle:[0x%0X],OUT:active:[%s]) ", gHandle);
     status = dsIsVideoPortActive(gHandle, &active);
-    UT_LOG_INFO("Result dsIsVideoPortActive(active:[%s])  dsError_t=[%s]",UT_Control_GetMapString(boolMappingTable, enabled),  UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
-
+    UT_LOG_INFO("Result dsIsVideoPortActive(IN:Handle:[0x%0X],OUT:active:[%s])  dsError_t=[%s]",gHandle,
+                    UT_Control_GetMapString(boolMappingTable, active),  UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 void dsVideoPort_EnableHDCP()
@@ -436,12 +458,15 @@ void dsVideoPort_EnableHDCP()
     char hdcpKey[HDCP_KEY_MAX_SIZE] = "ADEF";
     int keySize = HDCP_KEY_MAX_SIZE;
 
-    dsVideoPort_getHandle();
-    UT_LOG_INFO("Calling dsEnableHDCP(Handle:[0x%0X]],contentProtect[%s]) ", gHandle,UT_Control_GetMapString(boolMappingTable, enableHDCP));
-    status = dsEnableHDCP(gHandle, enableHDCP, hdcpKey, keySize);
-    UT_LOG_INFO("Result dsEnableHDCP()  dsError_t=[%s]", UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
 
+    dsVideoPort_getHandle();
+    UT_LOG_INFO("Calling dsEnableHDCP(IN:Handle:[0x%0X],IN:contentProtect[%s],IN:hdcpKey[],IN:keySize[]) ", gHandle,UT_Control_GetMapString(boolMappingTable, enableHDCP));
+    status = dsEnableHDCP(gHandle, enableHDCP, hdcpKey, keySize);
+    UT_LOG_INFO("Result dsEnableHDCP(IN:Handle:[0x%0X],IN:contentProtect[%s],IN:hdcpKey[],IN:keySize[]), dsError_t=[%s]",gHandle,
+                    UT_Control_GetMapString(boolMappingTable, enableHDCP), UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 void dsVideoPort_DisableHDCP()
@@ -451,12 +476,15 @@ void dsVideoPort_DisableHDCP()
     char hdcpKey[HDCP_KEY_MAX_SIZE] = "ADEF";
     int keySize = HDCP_KEY_MAX_SIZE;
 
-    dsVideoPort_getHandle();
-    UT_LOG_INFO("Calling dsEnableHDCP(Handle:[0x%0X]],contentProtect[%s]) ", gHandle,UT_Control_GetMapString(boolMappingTable, enableHDCP));
-    status = dsEnableHDCP(gHandle, enableHDCP, hdcpKey, keySize);
-    UT_LOG_INFO("Result dsEnableHDCP()  dsError_t=[%s]", UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
 
+    dsVideoPort_getHandle();
+    UT_LOG_INFO("Calling dsEnableHDCP(IN:Handle:[0x%0X],IN:contentProtect[%s],IN:hdcpKey[],IN:keySize[]) ", gHandle,UT_Control_GetMapString(boolMappingTable, enableHDCP));
+    status = dsEnableHDCP(gHandle, enableHDCP, hdcpKey, keySize);
+    UT_LOG_INFO("Result dsEnableHDCP(IN:Handle:[0x%0X],IN:contentProtect[%s],IN:hdcpKey[],IN:keySize[]), dsError_t=[%s]",gHandle,
+                    UT_Control_GetMapString(boolMappingTable, enableHDCP), UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 void dsVideoPort_CurrentOutputSettings()
@@ -468,20 +496,24 @@ void dsVideoPort_CurrentOutputSettings()
     unsigned int color_depth;
     dsDisplayQuantizationRange_t quant_range;
 
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
+
     dsVideoPort_getHandle();
 
-    UT_LOG_INFO("Calling dsGetCurrentOutputSettings(Handle:[0x%0X]]) ", gHandle);
+    UT_LOG_INFO("Calling dsGetCurrentOutputSettings(IN:Handle:[0x%0X],OUT:dsHDRStandard_t:[],OUT:dsDisplayMatrixCoefficients_t:[],\
+                        OUT:dsDisplayColorSpace_t:[],OUT:color_depth:[],OUT:dsDisplayQuantizationRange_t:[]) ", gHandle);
     status = dsGetCurrentOutputSettings(gHandle, &hdr_standard ,&matrix_coef, &color_space,\
                 &color_depth, &quant_range);
-    UT_LOG_INFO("Result dsGetCurrentOutputSettings(dsHDRStandard_t:[%s],dsDisplayMatrixCoefficients_t:[%s],",\
-                                                   UT_Control_GetMapString(dsHDRStandardMappingTable, hdr_standard),\
-                                                   UT_Control_GetMapString(dsDisplayMatrixCoefficientsMappingTable, matrix_coef));
-    UT_LOG_INFO("dsDisplayColorSpace_t:[%s], color_depth:[%s],dsDisplayQuantizationRange_t:[%s],dsError_t=[%s])",
-                                                   UT_Control_GetMapString(dsDisplayColorSpaceMappingTable, color_space),\
-                                                   UT_Control_GetMapString(dsDisplayColorDepthMappingTable, color_depth),\
-                                                   UT_Control_GetMapString(dsDisplayQuantizationRangeMappingTable, quant_range),\
-                                                    UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
+    UT_LOG_INFO("Result dsGetCurrentOutputSettings(IN:Handle:[0x%0X], OUT:dsHDRStandard_t:[%s],OUT:dsDisplayMatrixCoefficients_t:[%s],",gHandle, \
+                        UT_Control_GetMapString(dsHDRStandardMappingTable, hdr_standard),\
+                        UT_Control_GetMapString(dsDisplayMatrixCoefficientsMappingTable, matrix_coef));
+    UT_LOG_INFO("OUT:dsDisplayColorSpace_t:[%s],OUT:color_depth:[%s],OUT:dsDisplayQuantizationRange_t:[%s]),OUT:dsError_t=[%s])",
+                        UT_Control_GetMapString(dsDisplayColorSpaceMappingTable, color_space),\
+                        UT_Control_GetMapString(dsDisplayColorDepthMappingTable, color_depth),\
+                        UT_Control_GetMapString(dsDisplayQuantizationRangeMappingTable, quant_range),\
+                        UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 void dsVideoPort_GetSurroundMode()
@@ -490,21 +522,24 @@ void dsVideoPort_GetSurroundMode()
     bool surround   = false;
     int surround_mode = 0;
 
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
+
     dsVideoPort_getHandle();
 
-    UT_LOG_INFO("Calling dsIsDisplaySurround(Handle:[0x%0X]]) ", gHandle);
+    UT_LOG_INFO("Calling dsIsDisplaySurround(IN:Handle:[0x%0X],OUT:surround[]) ", gHandle);
     status = dsIsDisplaySurround(gHandle, &surround);
-    UT_LOG_INFO("Result dsIsDisplaySurround(surround: [%s]) ,dsError_t=[%s]", UT_Control_GetMapString(boolMappingTable, surround),\
-                                                                UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
+    UT_LOG_INFO("Result dsIsDisplaySurround(IN:Handle:[0x%0X],OUT:surround: [%s]) ,dsError_t=[%s]",gHandle, \
+                    UT_Control_GetMapString(boolMappingTable, surround),UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
 
     if(surround){
-        UT_LOG_INFO("Calling dsGetSurroundMode(Handle:[0x%0X]]) ", gHandle);
+        UT_LOG_INFO("Calling dsGetSurroundMode(IN:Handle:[0x%0X],OUT:surround[]) ", gHandle);
         status = dsGetSurroundMode(gHandle, &surround_mode);
-        UT_LOG_INFO("Result dsGetSurroundMode(dsSURROUNDMode_t:[%s]),dsError_t=[%s]", UT_Control_GetMapString(dsSURROUNDModeMappingTable, surround_mode),\
-                                                                           UT_Control_GetMapString(dsErrorMappingTable, status));
-        assert(status == dsERR_NONE);
+        UT_LOG_INFO("Result dsGetSurroundMode(IN:Handle:[0x%0X],OUT:dsSURROUNDMode_t:[%s]),dsError_t=[%s]",gHandle, \
+                        UT_Control_GetMapString(dsSURROUNDModeMappingTable, surround_mode), UT_Control_GetMapString(dsErrorMappingTable, status));
+        DS_ASSERT(status == dsERR_NONE);
     }
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 void dsVideoPort_GetResolution()
@@ -512,17 +547,21 @@ void dsVideoPort_GetResolution()
     dsError_t status   = dsERR_NONE;
     dsVideoPortResolution_t getResolution;
 
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
+
     dsVideoPort_getHandle();
 
-    UT_LOG_INFO("Calling dsGetResolution(Handle:[0x%0X]]) ", gHandle);
+    UT_LOG_INFO("Calling dsGetResolution(IN:Handle:[0x%0X],OUT:dsVideoPortResolution_t(name:[],dsVideoResolution_t:[],dsVideoAspectRatio_t:[] ", gHandle);
     status = dsGetResolution(gHandle, &getResolution);
-    UT_LOG_INFO("Result dsGetResolution(dsVideoPortResolution_t(name:[%s],dsVideoResolution_t:[%s],dsVideoAspectRatio_t:[%s] ", getResolution.name,UT_Control_GetMapString(dsVideoResolutionMappingTable, getResolution.pixelResolution),\
-                                                    UT_Control_GetMapString(dsVideoAspectRatioMappingTable, getResolution.aspectRatio));
+    UT_LOG_INFO("Result dsGetResolution(IN:Handle:[0x%0X],OUT:dsVideoPortResolution_t(name:[%s],dsVideoResolution_t:[%s],dsVideoAspectRatio_t:[%s] ",gHandle,\
+                    getResolution.name,UT_Control_GetMapString(dsVideoResolutionMappingTable, getResolution.pixelResolution),\
+                    UT_Control_GetMapString(dsVideoAspectRatioMappingTable, getResolution.aspectRatio));
     UT_LOG_INFO(" dsVideoStereoScopicMode_t:[%s],dsVideoFrameRate_t:[%s],interlaced:[%s],dsError_t=[%s])",UT_Control_GetMapString(dsVideoStereoScopicModeMappingTable, getResolution.stereoScopicMode),\
                                                     UT_Control_GetMapString(dsVideoFrameRateMappingTable, getResolution.frameRate),\
                                                     UT_Control_GetMapString(boolMappingTable, getResolution.interlaced),\
                                                      UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
+    DS_ASSERT(status == dsERR_NONE);
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 
@@ -531,14 +570,14 @@ void dsVideoPort_SetResolution()
     dsError_t status   = dsERR_NONE;
     int32_t choice,n=1,port,i;
 
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
+
     dsVideoPort_getHandle();
 
     UT_LOG_INFO("Supported Resolution");
     UT_LOG_INFO("------------------------------------------");
 
     for (port = 0; port < gDSvideoPort_NumberOfPorts; port++) {
-        UT_LOG_INFO("gDSvideoPort_NumberOfPorts: %d no :%d",gDSvideoPort_NumberOfPorts,gDSVideoPortConfiguration[port].numSupportedResolutions);
-
         for (i = 0; i < gDSVideoPortConfiguration[port].numSupportedResolutions; i++) {
             UT_LOG_INFO("\t%d.  %s frame rate:%s interlaced:%s \n",i,UT_Control_GetMapString(dsVideoResolutionMappingTable, gDSVideoPortConfiguration[port].supportedResolutions[i].pixelResolution),\
                                                 UT_Control_GetMapString(dsVideoFrameRateMappingTable, gDSVideoPortConfiguration[port].supportedResolutions[i].frameRate),\
@@ -552,11 +591,18 @@ void dsVideoPort_SetResolution()
     i = choice;
     port = port -1;
 
-    UT_LOG_INFO("Calling dsSetResolution(In:handle: [%ld],In:dsVideoPortResolution_t[dsVideoResolution_t:[%s]) ", gHandle,UT_Control_GetMapString(dsVideoResolutionMappingTable, gDSVideoPortConfiguration[port].supportedResolutions[i].pixelResolution));
+    UT_LOG_INFO("Calling dsSetResolution(IN:Handle:[0x%0X],In:dsVideoPortResolution_t(dsVideoResolution_t:[%s]) ", gHandle,\
+                    UT_Control_GetMapString(dsVideoResolutionMappingTable, gDSVideoPortConfiguration[port].supportedResolutions[i].pixelResolution));
+    UT_LOG_INFO("dsVideoFrameRate_t:[%s],interlaced:[%s])",UT_Control_GetMapString(dsVideoFrameRateMappingTable, gDSVideoPortConfiguration[port].supportedResolutions[i].frameRate),\
+                         UT_Control_GetMapString(dsVideoScanModeMappingTable, gDSVideoPortConfiguration[port].supportedResolutions[i].interlaced));
     status = dsSetResolution(gHandle, &gDSVideoPortConfiguration[port].supportedResolutions[i]);
-    UT_LOG_INFO("Result dsSetResolution(In:handle: [%ld],In:dsVideoPortResolution_t[dsVideoResolution_t:[%s], dsError_t=[%s]) ", gHandle,UT_Control_GetMapString(dsVideoResolutionMappingTable, gDSVideoPortConfiguration[port].supportedResolutions[i].pixelResolution),\
-                                                             UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
+    UT_LOG_INFO("Result dsSetResolution(IN:Handle:[0x%0X],In:dsVideoPortResolution_t(dsVideoResolution_t:[%s]) ", gHandle,\
+                    UT_Control_GetMapString(dsVideoResolutionMappingTable, gDSVideoPortConfiguration[port].supportedResolutions[i].pixelResolution));
+    UT_LOG_INFO("dsVideoFrameRate_t:[%s],interlaced:[%s]),dsError_t=[%s])",UT_Control_GetMapString(dsVideoFrameRateMappingTable, gDSVideoPortConfiguration[port].supportedResolutions[i].frameRate),\
+                         UT_Control_GetMapString(dsVideoScanModeMappingTable, gDSVideoPortConfiguration[port].supportedResolutions[i].interlaced),\
+                         UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 void dsVideoPort_GetVideoEOTF()
@@ -564,14 +610,15 @@ void dsVideoPort_GetVideoEOTF()
     dsError_t status   = dsERR_NONE;
     dsHDRStandard_t eotf;
 
-    dsVideoPort_getHandle();
-    UT_LOG_INFO("Calling dsGetVideoEOTF(Handle:[0x%0X]]) ", gHandle);
-    status = dsGetVideoEOTF(gHandle, &eotf);
-    UT_LOG_INFO("Result dsGetVideoEOTF(dsHDRStandard_t:[%s]) ,dsError_t=[%s]", UT_Control_GetMapString(dsHDRStandardMappingTable, eotf),\
-                                                         UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
-    UT_LOG_INFO("current HDR format %d",eotf);
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
 
+    dsVideoPort_getHandle();
+    UT_LOG_INFO("Calling dsGetVideoEOTF(IN:Handle:[0x%0X],OUT:dsHDRStandard_t:[]) ", gHandle);
+    status = dsGetVideoEOTF(gHandle, &eotf);
+    UT_LOG_INFO("Result dsGetVideoEOTF(IN:Handle:[0x%0X],OUT:dsHDRStandard_t:[%s]) ,dsError_t=[%s]",gHandle, UT_Control_GetMapString(dsHDRStandardMappingTable, eotf),\
+                    UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 void dsVideoPort_IsOutputHDR()
@@ -579,19 +626,23 @@ void dsVideoPort_IsOutputHDR()
     dsError_t status   = dsERR_NONE;
     bool hdr = false;
 
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
+
     dsVideoPort_getHandle();
-    UT_LOG_INFO("Calling dsIsOutputHDR(Handle:[0x%0X]]) ", gHandle);
+    UT_LOG_INFO("Calling dsIsOutputHDR(Handle:[0x%0X]) ", gHandle);
     status = dsIsOutputHDR(gHandle, &hdr);
     UT_LOG_INFO("Result dsIsOutputHDR(hdr: [%s]) ,dsError_t=[%s] ", UT_Control_GetMapString(boolMappingTable, hdr),\
                                          UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
-    UT_LOG_INFO("Is OUTPUT is HDR %d",hdr);
+    DS_ASSERT(status == dsERR_NONE);
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 void dsVideoPort_SetForceHDRMode()
 {
     dsError_t status   = dsERR_NONE;
     int32_t choice,i;
+
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
 
     dsVideoPort_getHandle();
 
@@ -606,11 +657,12 @@ void dsVideoPort_SetForceHDRMode()
     scanf("%d", &choice);
     readAndDiscardRestOfLine(stdin);
 
-    UT_LOG_INFO("Calling dsSetForceHDRMode(Handle:[0x%0X]] dsHDRStandard_t:[%s]) ", gHandle,UT_Control_GetMapString(dsHDRStandardMappingTable, choice));
+    UT_LOG_INFO("Calling dsSetForceHDRMode(IN:Handle:[0x%0X],IN:dsHDRStandard_t:[%s]) ", gHandle,UT_Control_GetMapString(dsHDRStandardMappingTable, choice));
     status = dsSetForceHDRMode(gHandle, (dsHDRStandard_t)choice);
-    UT_LOG_INFO("Result dsSetForceHDRMode() ,dsError_t=[%s] ", UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
-
+    UT_LOG_INFO("Result dsSetForceHDRMode(IN:Handle:[0x%0X],IN:dsHDRStandard_t:[%s]) ,dsError_t=[%s] ", gHandle,\
+                    UT_Control_GetMapString(dsHDRStandardMappingTable, choice), UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 void dsVideoPort_ResetOutputToSDR()
@@ -618,17 +670,20 @@ void dsVideoPort_ResetOutputToSDR()
     dsError_t status   = dsERR_NONE;
     bool hdr = false;
 
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
+
     dsVideoPort_getHandle();
 
-    UT_LOG_INFO("Calling dsResetOutputToSDR(Handle:[0x%0X]]) ", gHandle);
+    UT_LOG_INFO("Calling dsResetOutputToSDR(IN:Handle:[0x%0X]) ", gHandle);
     status = dsResetOutputToSDR();
-    UT_LOG_INFO("Result dsResetOutputToSDR() ,dsError_t=[%s] ", UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
+    UT_LOG_INFO("Result dsResetOutputToSDR(IN:Handle:[0x%0X]),dsError_t=[%s] ",gHandle, UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
 
-    UT_LOG_INFO("Calling dsIsOutputHDR(Handle:[0x%0X]]) ", gHandle);
+    UT_LOG_INFO("Calling dsIsOutputHDR(IN:Handle:[0x%0X],OUT:hdr[]) ", gHandle);
     status = dsIsOutputHDR(gHandle, &hdr);
-    UT_LOG_INFO("Result dsIsOutputHDR(hdr: [%s]) ,dsError_t=[%s] ", UT_Control_GetMapString(boolMappingTable, hdr),\
+    UT_LOG_INFO("Result dsIsOutputHDR(IN:Handle:[0x%0X],OUT:hdr:[%s]),dsError_t=[%s] ", gHandle,UT_Control_GetMapString(boolMappingTable, hdr),\
                                          UT_Control_GetMapString(dsErrorMappingTable, status));
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 void dsVideoPort_GetHDCPStatus()
@@ -636,14 +691,15 @@ void dsVideoPort_GetHDCPStatus()
     dsError_t      status = dsERR_NONE;
     dsHdcpStatus_t hdcpStatus;
 
-    dsVideoPort_getHandle();
-    UT_LOG_INFO("Calling dsGetHDCPStatus(Handle:[0x%0X]]) ", gHandle);
-    status = dsGetHDCPStatus(gHandle, &(hdcpStatus));
-    UT_LOG_INFO("Result dsGetHDCPStatus(dsHdcpStatus_t:[%s]) ,dsError_t=[%s] ", UT_Control_GetMapString(dsHdcpStatusMappingTable, hdcpStatus),\
-                                         UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
-    UT_LOG_INFO("HDCP Status %d",hdcpStatus);
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
 
+    dsVideoPort_getHandle();
+    UT_LOG_INFO("Calling dsGetHDCPStatus(IN:Handle:[0x%0X],OUT:dsHdcpStatus_t:[]) ", gHandle);
+    status = dsGetHDCPStatus(gHandle, &(hdcpStatus));
+    UT_LOG_INFO("Result dsGetHDCPStatus(IN:Handle:[0x%0X],OUT:dsHdcpStatus_t:[%s]) ,dsError_t=[%s] ", gHandle,UT_Control_GetMapString(dsHdcpStatusMappingTable, hdcpStatus),\
+                                         UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 void dsVideoPort_GetHDCPCurrentProtocol()
@@ -651,14 +707,15 @@ void dsVideoPort_GetHDCPCurrentProtocol()
     dsError_t status   = dsERR_NONE;
     dsHdcpProtocolVersion_t currentProtocol;
 
-    dsVideoPort_getHandle();
-    UT_LOG_INFO("Calling dsGetHDCPCurrentProtocol(Handle:[0x%0X]]) ", gHandle);
-    status = dsGetHDCPCurrentProtocol(gHandle, &currentProtocol);
-    UT_LOG_INFO("Result dsGetHDCPCurrentProtocol(dsHdcpProtocolVersion_t:[%s]) ,dsError_t=[%s] ", UT_Control_GetMapString(dsHdcpProtocolVersionMappingTable, currentProtocol),\
-                                         UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
-    UT_LOG_INFO("HDCP Current Protocol Version: %d", currentProtocol);
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
 
+    dsVideoPort_getHandle();
+    UT_LOG_INFO("Calling dsGetHDCPCurrentProtocol(IN:Handle:[0x%0X],OUT:dsHdcpProtocolVersion_t:[]) ", gHandle);
+    status = dsGetHDCPCurrentProtocol(gHandle, &currentProtocol);
+    UT_LOG_INFO("Result dsGetHDCPCurrentProtocol(IN:Handle:[0x%0X],OUT:dsHdcpProtocolVersion_t:[%s]) ,dsError_t=[%s] ",gHandle, UT_Control_GetMapString(dsHdcpProtocolVersionMappingTable, currentProtocol),\
+                                         UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 void dsVideoPort_GetHDCPReceiverProtocol()
@@ -666,14 +723,15 @@ void dsVideoPort_GetHDCPReceiverProtocol()
     dsError_t status   = dsERR_NONE;
     dsHdcpProtocolVersion_t protocolVersion;
 
-    dsVideoPort_getHandle();
-    UT_LOG_INFO("Calling dsGetHDCPCurrentProtocol(Handle:[0x%0X]]) ", gHandle);
-    status = dsGetHDCPReceiverProtocol(gHandle, &(protocolVersion));
-    UT_LOG_INFO("Result dsGetHDCPReceiverProtocol(dsHdcpProtocolVersion_t:[%s]) ,dsError_t=[%s] ", UT_Control_GetMapString(dsHdcpProtocolVersionMappingTable, protocolVersion),\
-                                         UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
-    UT_LOG_INFO("HDCP Receiver Protocol Version: %d", protocolVersion);
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
 
+    dsVideoPort_getHandle();
+    UT_LOG_INFO("Calling dsGetHDCPReceiverProtocol(IN:Handle:[0x%0X],OUT:dsHdcpProtocolVersion_t:[]) ", gHandle);
+    status = dsGetHDCPReceiverProtocol(gHandle, &(protocolVersion));
+    UT_LOG_INFO("Result dsGetHDCPReceiverProtocol(IN:Handle:[0x%0X],OUT:dsHdcpProtocolVersion_t:[%s]) ,dsError_t=[%s] ",gHandle,\
+                    UT_Control_GetMapString(dsHdcpProtocolVersionMappingTable, protocolVersion),UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 void dsVideoPort_GetIgnoreEDIDStatus()
@@ -681,14 +739,15 @@ void dsVideoPort_GetIgnoreEDIDStatus()
     dsError_t status   = dsERR_NONE;
     bool ignoreEDIDStatus;
 
-    dsVideoPort_getHandle();
-    UT_LOG_INFO("Calling dsGetIgnoreEDIDStatus(Handle:[0x%0X]]) ", gHandle);
-    status = dsGetIgnoreEDIDStatus(gHandle, &ignoreEDIDStatus);
-    UT_LOG_INFO("Result dsGetIgnoreEDIDStatus(status:[%s]) ,dsError_t=[%s] ", UT_Control_GetMapString(boolMappingTable, ignoreEDIDStatus),\
-                                         UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
-    UT_LOG_INFO("Ignore EDID Status: %d", ignoreEDIDStatus);
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
 
+    dsVideoPort_getHandle();
+    UT_LOG_INFO("Calling dsGetIgnoreEDIDStatus(IN:Handle:[0x%0X],OUT:status:[])", gHandle);
+    status = dsGetIgnoreEDIDStatus(gHandle, &ignoreEDIDStatus);
+    UT_LOG_INFO("Result dsGetIgnoreEDIDStatus(IN:Handle:[0x%0X],OUT:status:[%s]) ,dsError_t=[%s] ",gHandle, UT_Control_GetMapString(boolMappingTable, ignoreEDIDStatus),\
+                                         UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 void dsVideoPort_SetHdmiPreference()
@@ -696,6 +755,8 @@ void dsVideoPort_SetHdmiPreference()
     dsError_t status   = dsERR_NONE;
     int32_t choice,i;
     dsHdcpProtocolVersion_t hdcpCurrentProtocol;
+
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
 
     dsVideoPort_getHandle();
     UT_LOG_INFO("\t Supported HDCP Versions ");
@@ -710,11 +771,12 @@ void dsVideoPort_SetHdmiPreference()
     readAndDiscardRestOfLine(stdin);
 
     hdcpCurrentProtocol = (dsHdcpProtocolVersion_t)choice;
-    UT_LOG_INFO("Calling dsSetHdmiPreference(Handle:[0x%0X]]dsHdcpProtocolVersion_t:[%s]) ", gHandle,UT_Control_GetMapString(dsHdcpProtocolVersionMappingTable, hdcpCurrentProtocol));
+    UT_LOG_INFO("Calling dsSetHdmiPreference(IN:Handle:[0x%0X],IN:dsHdcpProtocolVersion_t:[%s]) ", gHandle,UT_Control_GetMapString(dsHdcpProtocolVersionMappingTable, hdcpCurrentProtocol));
     status = dsSetHdmiPreference(gHandle, &hdcpCurrentProtocol);
-    UT_LOG_INFO("Result dsSetHdmiPreference(),dsError_t=[%s] ",  UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
-
+    UT_LOG_INFO("Result dsSetHdmiPreference(IN:Handle:[0x%0X],IN:dsHdcpProtocolVersion_t:[%s]),dsError_t=[%s] ",gHandle,\
+                    UT_Control_GetMapString(dsHdcpProtocolVersionMappingTable, hdcpCurrentProtocol),UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 void dsVideoPort_GetHdmiPreference()
@@ -722,14 +784,15 @@ void dsVideoPort_GetHdmiPreference()
     dsError_t status   = dsERR_NONE;
     dsHdcpProtocolVersion_t  hdcpCurrentProtocol;
 
-    dsVideoPort_getHandle();
-    UT_LOG_INFO("Calling dsGetHdmiPreference(Handle:[0x%0X]]) ", gHandle);
-    status = dsGetHdmiPreference(gHandle, &hdcpCurrentProtocol);
-    UT_LOG_INFO("Result dsGetHdmiPreference(dsHdcpProtocolVersion_t:[%s],dsError_t=[%s]) ", UT_Control_GetMapString(dsHdcpProtocolVersionMappingTable, hdcpCurrentProtocol),\
-                                                         UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
-    UT_LOG_INFO("Get HDMI Preference: %d", hdcpCurrentProtocol);
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
 
+    dsVideoPort_getHandle();
+    UT_LOG_INFO("Calling dsGetHdmiPreference(IN:Handle:[0x%0X],OUT:dsHdcpProtocolVersion_t:[]) ", gHandle);
+    status = dsGetHdmiPreference(gHandle, &hdcpCurrentProtocol);
+    UT_LOG_INFO("Result dsGetHdmiPreference(IN:Handle:[0x%0X],OUT:dsHdcpProtocolVersion_t:[%s],dsError_t=[%s]) ",gHandle,\
+                    UT_Control_GetMapString(dsHdcpProtocolVersionMappingTable, hdcpCurrentProtocol),UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 void dsVideoPort_GetColorSpace()
@@ -737,14 +800,15 @@ void dsVideoPort_GetColorSpace()
     dsError_t status   = dsERR_NONE;
     dsDisplayColorSpace_t color_space;
 
-    dsVideoPort_getHandle();
-    UT_LOG_INFO("Calling dsGetColorSpace(Handle:[0x%0X]]) ", gHandle);
-    status = dsGetColorSpace(gHandle, &color_space);
-    UT_LOG_INFO("Result dsGetColorSpace(dsDisplayColorSpace_t:[%s], dsError_t=[%s]) ", UT_Control_GetMapString(dsDisplayColorSpaceMappingTable, color_space),\
-                                             UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
-    UT_LOG_INFO("Get Color Space: %d", color_space);
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
 
+    dsVideoPort_getHandle();
+    UT_LOG_INFO("Calling dsGetColorSpace(IN:Handle:[0x%0X],OUT:dsDisplayColorSpace_t:[]) ", gHandle);
+    status = dsGetColorSpace(gHandle, &color_space);
+    UT_LOG_INFO("Result dsGetColorSpace(IN:Handle:[0x%0X],OUT:dsDisplayColorSpace_t:[%s], dsError_t=[%s]) ", gHandle,\
+                    UT_Control_GetMapString(dsDisplayColorSpaceMappingTable, color_space),UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 void dsVideoPort_GetColorDepth()
@@ -752,20 +816,23 @@ void dsVideoPort_GetColorDepth()
     dsError_t status   = dsERR_NONE;
     unsigned int colorDepth;
 
-    dsVideoPort_getHandle();
-    UT_LOG_INFO("Calling dsGetColorDepth(Handle:[0x%0X]]) ", gHandle);
-    status = dsGetColorDepth(gHandle, &colorDepth);
-    UT_LOG_INFO("Result dsGetColorDepth(dsDisplayColorDepth_t:[%s], dsError_t=[%s]) ", UT_Control_GetMapString(dsDisplayColorDepthMappingTable, colorDepth),\
-                                             UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
-    UT_LOG_INFO("Get Color Depth: %d", colorDepth);
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
 
+    dsVideoPort_getHandle();
+    UT_LOG_INFO("Calling dsGetColorDepth(IN:Handle:[0x%0X],OUT:dsDisplayColorDepth_t:[]) ", gHandle);
+    status = dsGetColorDepth(gHandle, &colorDepth);
+    UT_LOG_INFO("Result dsGetColorDepth(IN:Handle:[0x%0X],OUT:dsDisplayColorDepth_t:[%s],dsError_t=[%s]) ",gHandle,\
+                    UT_Control_GetMapString(dsDisplayColorDepthMappingTable, colorDepth),UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 void dsVideoPort_SetPreferredColorDepth()
 {
     dsError_t status   = dsERR_NONE;
     int32_t choice,i;
+
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
 
     dsVideoPort_getHandle();
     UT_LOG_INFO("\t Supported display Color depth to set ");
@@ -779,11 +846,12 @@ void dsVideoPort_SetPreferredColorDepth()
     scanf("%d", &choice);
     readAndDiscardRestOfLine(stdin);
 
-    UT_LOG_INFO("Calling dsSetPreferredColorDepth(Handle:[0x%0X]],dsDisplayColorDepth_t:[%s]) ", gHandle,UT_Control_GetMapString(dsDisplayColorDepthMappingTable, (dsDisplayColorDepth_t)choice));
+    UT_LOG_INFO("Calling dsSetPreferredColorDepth(IN:Handle:[0x%0X],IN:dsDisplayColorDepth_t:[%s]) ", gHandle,UT_Control_GetMapString(dsDisplayColorDepthMappingTable, (dsDisplayColorDepth_t)choice));
     status = dsSetPreferredColorDepth(gHandle, (dsDisplayColorDepth_t)choice);
-    UT_LOG_INFO("Result dsGetColorDepth(),dsError_t=[%s] ",  UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
-
+    UT_LOG_INFO("Result dsSetPreferredColorDepth(IN:Handle:[0x%0X],IN:dsDisplayColorDepth_t:[%s]),dsError_t=[%s] ",gHandle,\
+                    UT_Control_GetMapString(dsDisplayColorDepthMappingTable, (dsDisplayColorDepth_t)choice),UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 void dsVideoPort_GetPreferredColorDepth()
@@ -791,20 +859,23 @@ void dsVideoPort_GetPreferredColorDepth()
     dsError_t status   = dsERR_NONE;
     unsigned int colorDepth;
 
-    dsVideoPort_getHandle();
-    UT_LOG_INFO("Calling dsGetPreferredColorDepth(Handle:[0x%0X]]) ", gHandle);
-    status = dsGetPreferredColorDepth(gHandle, &colorDepth);
-    UT_LOG_INFO("Result dsGetPreferredColorDepth(),dsError_t=[%s] ", UT_Control_GetMapString(dsDisplayColorDepthMappingTable, colorDepth),\
-                                                     UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
-    UT_LOG_INFO("Get Preferred Color Depth: %d", colorDepth);
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
 
+    dsVideoPort_getHandle();
+    UT_LOG_INFO("Calling dsGetPreferredColorDepth(IN:Handle:[0x%0X],OUT:dsDisplayColorDepth_t:[]) ", gHandle);
+    status = dsGetPreferredColorDepth(gHandle, &colorDepth);
+    UT_LOG_INFO("Result dsGetPreferredColorDepth(IN:Handle:[0x%0X],OUT:dsDisplayColorDepth_t:[%s]),dsError_t=[%s] ",gHandle,\
+                    UT_Control_GetMapString(dsDisplayColorDepthMappingTable, colorDepth),UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 void dsVideoPort_SetBackgroundColor()
 {
     dsError_t status   = dsERR_NONE;
     int32_t choice=0,i;
+
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
 
     dsVideoPort_getHandle();
     UT_LOG_INFO("\t Select Background Color to set ");
@@ -818,12 +889,12 @@ void dsVideoPort_SetBackgroundColor()
     scanf("%d", &choice);
     readAndDiscardRestOfLine(stdin);
 
-    UT_LOG_INFO("Invoking dsSetForceHDRMode() with HDR Mode:%d ",choice);
-    UT_LOG_INFO("Calling dsSetBackgroundColor(Handle:[0x%0X]],dsVideoBackgroundColor_t:[%s]) ", gHandle,UT_Control_GetMapString(dsVideoBackgroundColorMappingTable, (dsVideoBackgroundColor_t)choice));
+    UT_LOG_INFO("Calling dsSetBackgroundColor(IN:Handle:[0x%0X],IN:dsVideoBackgroundColor_t:[%s]) ", gHandle,UT_Control_GetMapString(dsVideoBackgroundColorMappingTable, (dsVideoBackgroundColor_t)choice));
     status = dsSetBackgroundColor(gHandle, (dsVideoBackgroundColor_t)choice);
-    UT_LOG_INFO("Result dsSetBackgroundColor(),dsError_t=[%s] ",  UT_Control_GetMapString(dsErrorMappingTable, status));
-    assert(status == dsERR_NONE);
-
+    UT_LOG_INFO("Result dsSetBackgroundColor(IN:Handle:[0x%0X],IN:dsVideoBackgroundColor_t:[%s]),dsError_t=[%s] ",gHandle,\
+                    UT_Control_GetMapString(dsVideoBackgroundColorMappingTable, (dsVideoBackgroundColor_t)choice),UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 static UT_test_suite_t * pSuite = NULL;
@@ -839,11 +910,11 @@ int test_l3_dsVideoPort_register(void)
     // Create the test suite
     if(gSourceType == 1)
     {
-        pSuite = UT_add_suite("[L3 dsVideoPort - Source]", NULL, NULL);
+        pSuite = UT_add_suite_withGroupID("[L3 dsVideoPort - Source]", NULL, NULL,UT_TESTS_L3);
     }
-    else
+    else if(gSourceType == 0)
     {
-        pSuite = UT_add_suite("[L3 dsVideoPort - Sink]", NULL, NULL);
+        pSuite = UT_add_suite_withGroupID("[L3 dsVideoPort - Sink]", NULL, NULL,UT_TESTS_L3);
     }
     if (pSuite == NULL)
     {
@@ -854,29 +925,16 @@ int test_l3_dsVideoPort_register(void)
     UT_add_test( pSuite, "VideoPort Term", dsVideoPort_Term);
     UT_add_test( pSuite, "Enable VideoPort", dsVideoPort_EnablePort);
     UT_add_test( pSuite, "Disable VideoPort", dsVideoPort_DisablePort);
-    UT_add_test( pSuite, "Get CurrentOutputSettings", dsVideoPort_CurrentOutputSettings);
-    UT_add_test( pSuite, "Get Resolution",dsVideoPort_GetResolution);
-    UT_add_test( pSuite, "Get VideoEOTF",dsVideoPort_GetVideoEOTF);
-    UT_add_test( pSuite, "IsOutputHDR",dsVideoPort_IsOutputHDR);
-    UT_add_test( pSuite, "Get HDCPStatus",dsVideoPort_GetHDCPStatus);
-    UT_add_test( pSuite, "Get HDCPCurrentProtocol",dsVideoPort_GetHDCPCurrentProtocol);
     UT_add_test( pSuite, "Set HdmiPreference",dsVideoPort_SetHdmiPreference);
-    UT_add_test( pSuite, "Get HdmiPreference",dsVideoPort_GetHdmiPreference);
-    UT_add_test( pSuite, "Get ColorSpace",dsVideoPort_GetColorSpace);
-    UT_add_test( pSuite, "Get ColorDepth",dsVideoPort_GetColorDepth);
     if(gSourceType == 1)
     {
         // add the test suite for source type
-        UT_add_test( pSuite, "Get SurroundMode",dsVideoPort_GetSurroundMode);
         UT_add_test( pSuite, "Enable HDCP",dsVideoPort_EnableHDCP);
         UT_add_test( pSuite, "Disable HDCP",dsVideoPort_DisableHDCP);
         UT_add_test( pSuite, "Set Resolution",dsVideoPort_SetResolution);
         UT_add_test( pSuite, "Set ForceHDRMode",dsVideoPort_SetForceHDRMode);
         UT_add_test( pSuite, "ResetOutputToSDR",dsVideoPort_ResetOutputToSDR);
-        UT_add_test( pSuite, "Get HDCPReceiverProtocol",dsVideoPort_GetHDCPReceiverProtocol);
-        UT_add_test( pSuite, "Get IgnoreEDIDStatus",dsVideoPort_GetIgnoreEDIDStatus);
         UT_add_test( pSuite, "Set PreferredColorDepth",dsVideoPort_SetPreferredColorDepth);
-        UT_add_test( pSuite, "Get PreferredColorDepth",dsVideoPort_GetPreferredColorDepth);
         UT_add_test( pSuite, "Set BackgroundColor",dsVideoPort_SetBackgroundColor);
     }
 
