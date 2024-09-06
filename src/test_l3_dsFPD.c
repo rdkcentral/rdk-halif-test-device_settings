@@ -90,6 +90,20 @@ typedef struct _stringkey_mapping
     int32_t keyCode;
 } stringkey_mapping;
 
+const static stringkey_mapping dsFrontPanelErrorCodeTable[] = {
+    {"dsERR_NONE", (int32_t)dsERR_NONE},
+    {"dsERR_GENERAL", (int32_t)dsERR_GENERAL},
+    {"dsERR_INVALID_PARAM", (int32_t)dsERR_INVALID_PARAM},
+    {"dsERR_INVALID_STATE", (int32_t)dsERR_INVALID_STATE},
+    {"dsERR_ALREADY_INITIALIZED", (int32_t)dsERR_ALREADY_INITIALIZED},
+    {"dsERR_NOT_INITIALIZED", (int32_t)dsERR_NOT_INITIALIZED},
+    {"dsERR_OPERATION_NOT_SUPPORTED", (int32_t)dsERR_OPERATION_NOT_SUPPORTED},
+    {"dsERR_RESOURCE_NOT_AVAILABLE", (int32_t)dsERR_RESOURCE_NOT_AVAILABLE},
+    {"dsERR_OPERATION_FAILED", (int32_t)dsERR_OPERATION_FAILED},
+    {"dsErr_MAX", (int32_t)dsErr_MAX},
+    {NULL, -1}
+};
+
 const static stringkey_mapping dsFrontPanelIndicatorTable[] = {
     {"dsFPD_INDICATOR_MESSAGE", (int32_t)dsFPD_INDICATOR_MESSAGE},
     {"dsFPD_INDICATOR_POWER", (int32_t)dsFPD_INDICATOR_POWER},
@@ -103,7 +117,8 @@ const static stringkey_mapping dsFrontPanelIndicatorTable[] = {
 const static stringkey_mapping dsFrontPanelStateTable[] = {
     {"dsFPD_STATE_OFF", (int32_t)dsFPD_STATE_OFF},
     {"dsFPD_STATE_ON", (int32_t)dsFPD_STATE_ON},
-    {"dsFPD_STATE_MAX", (int32_t)dsFPD_STATE_MAX}
+    {"dsFPD_STATE_MAX", (int32_t)dsFPD_STATE_MAX},
+    {NULL, -1}
 };
 const static stringkey_mapping dsFrontPanelColorTable[] = {
     {"dsFPD_COLOR_BLUE", (int32_t)(0x0000FF)},
@@ -174,8 +189,8 @@ void test_1_dsFPD_hal_Init(void)
    // Step 1: Call dsFPInit()
    UT_LOG_INFO("Calling dsFPInit()");
    status = dsFPInit();
+   UT_LOG_INFO("Result dsFPInit(OUT:dsError_t:[%s])",mapKeyToString(dsFrontPanelErrorCodeTable, status));
    assert(status == dsERR_NONE);
-   UT_LOG_INFO("Result dsFPInit(OUT:dsError_t:[dsERR_NONE])");
 
    UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -250,7 +265,7 @@ void test_2_dsFPD_hal_SetFPState(void)
 */
 void test_3_dsFPD_hal_GetFPState(void)
 {
-    gTestID = 2;
+    gTestID = 3;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
@@ -272,10 +287,11 @@ void test_3_dsFPD_hal_GetFPState(void)
     scanf("%d", &eIndicator);
 
     status = dsGetFPState((dsFPDIndicator_t)eIndicator,&eState);
+    UT_LOG_INFO("Result dsGetFPState(IN:Indicator:[0x%d], OUT:State:[%s] OUT: dsError_t:[%s]" \
+                                                ,eIndicator,mapKeyToString(dsFrontPanelStateTable, eState) \
+                                                , mapKeyToString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
     /* Check that the Indicator is valid */
-    UT_LOG_INFO("Result dsGetFPState(IN:Indicator:[0x%d], OUT:State:[%s] OUT: dsError_t:[dsERROR_NONE]" \
-                                                ,eIndicator,mapKeyToString(dsFrontPanelStateTable, eState));
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -298,7 +314,7 @@ void test_3_dsFPD_hal_GetFPState(void)
 */
 void test_4_dsFPD_hal_SetFPBlink(void)
 {
-    gTestID = 2;
+    gTestID = 4;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
@@ -353,7 +369,7 @@ void test_4_dsFPD_hal_SetFPBlink(void)
 */
 void test_5_dsFPD_hal_SetFPBrightness(void)
 {
-    gTestID = 2;
+    gTestID = 5;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
@@ -403,7 +419,7 @@ void test_5_dsFPD_hal_SetFPBrightness(void)
 */
 void test_6_dsFPD_hal_GetFPBrightness(void)
 {
-    gTestID = 2;
+    gTestID = 6;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
@@ -425,10 +441,10 @@ void test_6_dsFPD_hal_GetFPBrightness(void)
     scanf("%d", &eIndicator);
 
     status = dsGetFPBrightness((dsFPDIndicator_t)eIndicator,&brightness);
+    UT_LOG_INFO("Result dsGetFPState(IN:Indicator:[0x%d], OUT:Brightness:[%d] OUT: dsError_t:[%s]" \
+                                                ,eIndicator,brightness, mapKeyToString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
     /* Check that the Indicator is valid */
-    UT_LOG_INFO("Result dsGetFPState(IN:Indicator:[0x%d], OUT:Brightness:[%d] OUT: dsError_t:[dsERROR_NONE]" \
-                                                ,eIndicator,brightness);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -449,7 +465,7 @@ void test_6_dsFPD_hal_GetFPBrightness(void)
 */
 void test_7_dsFPD_hal_SetLEDState(void)
 {
-    gTestID = 2;
+    gTestID = 7;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
@@ -493,17 +509,17 @@ void test_7_dsFPD_hal_SetLEDState(void)
 */
 void test_8_dsFPD_hal_GetLEDState(void)
 {
-    gTestID = 2;
+    gTestID = 8;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
     dsFPDLedState_t state = 0;
 
     status = dsFPGetLEDState(&state);
+    UT_LOG_INFO("Result dsGetFPState(OUT:FP LED State:[%X] OUT: dsError_t:[%s]" \
+                                                ,state,mapKeyToString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
     /* Check that the Indicator is valid */
-    UT_LOG_INFO("Result dsGetFPState(OUT:FP LED State:[%X] OUT: dsError_t:[dsERROR_NONE]" \
-                                                ,state);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -524,7 +540,7 @@ void test_8_dsFPD_hal_GetLEDState(void)
 */
 void test_9_dsFPD_hal_SetFPColor(void)
 {
-    gTestID = 2;
+    gTestID = 9;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
@@ -594,7 +610,7 @@ void test_9_dsFPD_hal_SetFPColor(void)
 */
 void test_10_dsFPD_hal_GetFPColor(void)
 {
-    gTestID = 2;
+    gTestID = 10;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
@@ -616,10 +632,10 @@ void test_10_dsFPD_hal_GetFPColor(void)
     scanf("%d", &eIndicator);
 
     status = dsGetFPColor((dsFPDIndicator_t)eIndicator,&color);
+    UT_LOG_INFO("Result dsGetFPState(IN:Indicator:[0x%d], OUT:Brightness:[%d] OUT: dsError_t:[%s]" \
+                                                ,eIndicator,color,mapKeyToString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
     /* Check that the Indicator is valid */
-    UT_LOG_INFO("Result dsGetFPState(IN:Indicator:[0x%d], OUT:Brightness:[%d] OUT: dsError_t:[dsERROR_NONE]" \
-                                                ,eIndicator,color);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -640,7 +656,7 @@ void test_10_dsFPD_hal_GetFPColor(void)
 
 void test_11_dsFPD_hal_Term(void)
 {
-   gTestID = 1;
+   gTestID = 11;
    dsError_t status = dsERR_NONE;
 
    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -648,6 +664,7 @@ void test_11_dsFPD_hal_Term(void)
    // Step 1: Call dsFPInit()
    UT_LOG_INFO("Calling dsFPTerm()");
    status = dsFPTerm();
+   UT_LOG_INFO("Result dsFPTerm(OUT:dsError_t:[%s])",mapKeyToString(dsFrontPanelErrorCodeTable, status));
    assert(status == dsERR_NONE);
 
    UT_LOG_INFO("Out %s\n", __FUNCTION__);
