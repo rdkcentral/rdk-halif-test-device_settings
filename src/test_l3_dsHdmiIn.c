@@ -503,7 +503,7 @@ void test_l3_HdmiIn_get_status(void)
 
     for(int i = 0 ; i < dsHDMI_IN_PORT_MAX ; i++) {
 
-           UT_LOG_INFO("Result: HDMI port connected info port:%d , isPortConnected: %s",
+           UT_LOG_INFO("Result: HDMI port connected info port:%s , isPortConnected: %s",
                          UT_Control_GetMapString(dsHdmiInPort_mapTable, i),
                          UT_Control_GetMapString(bool_mapTable, inputstatus.isPortConnected[i]));
     }
@@ -796,7 +796,6 @@ void test_l3_HdmiIn_arc_port(void)
 
     iport = (select -1);
     ret = dsIsHdmiARCPort(iport , &isarcport);
-    if(ret != dsERR_NONE)
     UT_LOG_INFO("Result : Passed dsIsHdmiARCPort port type: %s, port isarc: %s , portnumber: %d",
                   UT_Control_GetMapString(dsHdmiInPort_mapTable, iport),
                   UT_Control_GetMapString(bool_mapTable, isarcport),iport);
@@ -840,7 +839,7 @@ void test_l3_HdmiIn_get_edid(void)
 
     port = (select - 1);
     ret = dsGetEDIDBytesInfo(port, edidbytes, &length);
-    UT_LOG_INFO("Result : dsGetEDIDBytesInfo port type: %s, \n portnumber: %d,\n\t"
+    UT_LOG_INFO("Result : dsGetEDIDBytesInfo port type: %s, portnumber: %d\t"
                          "edidinfo: %s", UT_Control_GetMapString(dsHdmiInPort_mapTable, port), port, edidbytes);
     assert(ret == dsERR_NONE);
 
@@ -940,7 +939,7 @@ void test_l3_HdmiIn_set_edidversion(void)
     ret = dsSetEdidVersion(port , edidver);
     UT_LOG_INFO("Result : Passed dsSetEdidVersion port type: %s, portnumber: %s\t"
                          "selected edid type: %s, edid version:%d\t",
-                 UT_Control_GetMapString(dsHdmiInPort_mapTable, port), port,
+                 UT_Control_GetMapString(dsHdmiInPort_mapTable, port), (port+1),
                  UT_Control_GetMapString(tv_hdmi_edid_version_mapTable, edidver) , edidver);
     assert(ret == dsERR_NONE);
 
@@ -983,7 +982,7 @@ void test_l3_HdmiIn_get_edidversion(void)
     ret = dsGetEdidVersion(port, &edidver);
     UT_LOG_INFO("Result : dsGetEdidVersion port type: %s, portnumber: %s\t"
                          "retrieved edid type: %s, edid version:%d",
-                 UT_Control_GetMapString(dsHdmiInPort_mapTable, port), port,
+                 UT_Control_GetMapString(dsHdmiInPort_mapTable, port), (port+1),
                  UT_Control_GetMapString(tv_hdmi_edid_version_mapTable, edidver) , edidver);
     assert(ret == dsERR_NONE);
 
@@ -1026,7 +1025,7 @@ void test_l3_HdmiIn_get_allmstatus(void)
     ret = dsGetAllmStatus(port , &allmstatus);
     UT_LOG_INFO("Result : Passed dsGetEdidVersion port type: %s, portnumber: %s\t"
                          "retrieved allm status: %s",
-                 UT_Control_GetMapString(dsHdmiInPort_mapTable, port), port,
+                 UT_Control_GetMapString(dsHdmiInPort_mapTable, port), (port+1),
                  UT_Control_GetMapString(bool_mapTable, allmstatus));
     assert(ret == dsERR_NONE);
 
@@ -1133,10 +1132,10 @@ void test_l3_HdmiIn_set_edid2allmsupport(void)
 
     port = (select-1);
 
-    UT_LOG_INFO("\n*******Enter the allmsupport to select*******\t"
-                     "Acceptable inputs are:\t"
-                     "true (i.e 1)\t"
-                     "false(i.e 0)\t"
+    UT_LOG_INFO("\n*******Enter the allmsupport to select*******\n\t"
+                     "\tAcceptable inputs are:\n\t"
+                     "\ttrue (i.e 1)\n\t"
+                     "\tfalse(i.e 0)\n\t"
                 "******************************************\n");
 
     readInput(&select);
@@ -1148,9 +1147,9 @@ void test_l3_HdmiIn_set_edid2allmsupport(void)
     allmsupport = (bool)select;
 
     ret = dsSetEdid2AllmSupport(port, allmsupport);
-    UT_LOG_INFO("Result : dsSetEdid2AllmSupport port type: %s, portnumber: %s\t"
+    UT_LOG_INFO("Result : dsSetEdid2AllmSupport port type: %s, portnumber: %d\t"
                   "allmsupport set: %s",
-                 UT_Control_GetMapString(dsHdmiInPort_mapTable, port), port,
+                 UT_Control_GetMapString(dsHdmiInPort_mapTable, port), (port+1),
                  UT_Control_GetMapString(bool_mapTable, allmsupport));
     assert(ret == dsERR_NONE);
 
@@ -1194,9 +1193,9 @@ void test_l3_HdmiIn_get_edid2allmsupport(void)
     port = (select - 1);
 
     ret = dsGetEdid2AllmSupport(port, &allmsupport);
-    UT_LOG_INFO("Result : dsSetEdid2AllmSupport port type: %s, portnumber: %s\t"
+    UT_LOG_INFO("Result : dsSetEdid2AllmSupport port type: %s, portnumber: %d\t"
                          "retrieved allmsupport: %s",
-                 UT_Control_GetMapString(dsHdmiInPort_mapTable, port), port,
+                 UT_Control_GetMapString(dsHdmiInPort_mapTable, port), (port+1),
                  UT_Control_GetMapString(bool_mapTable, allmsupport));
     assert(ret == dsERR_NONE);
 
