@@ -228,23 +228,23 @@ void test_l3_CompositeIn_initialize(void)
     ASSERT(ret == dsERR_NONE);
 
     /* Register connection status callback */
-    UT_LOG_INFO("Calling dsCompositeInRegisterConnectCB(CBFunc:[0x%0X])", compositeInConnectCB);
+    UT_LOG_INFO("Calling dsCompositeInRegisterConnectCB(IN:CBFunc:[0x%0X])", compositeInConnectCB);
     ret = dsCompositeInRegisterConnectCB(compositeInConnectCB);
-    UT_LOG_INFO("Result dsCompositeInRegisterConnectCB(CBFunc:[0x%0X]) dsError_t:[%s]",
+    UT_LOG_INFO("Result dsCompositeInRegisterConnectCB(IN:CBFunc:[0x%0X]) dsError_t:[%s]",
                         compositeInConnectCB, UT_Control_GetMapString(dsError_mapTable, ret));
     ASSERT(ret == dsERR_NONE);
 
     /* Register Signal change callback */
-    UT_LOG_INFO("Calling dsCompositeInRegisterSignalChangeCB(cbFun:[0x%0X])", compositeInSignalChangeCB);
+    UT_LOG_INFO("Calling dsCompositeInRegisterSignalChangeCB(IN:CBFunc:[0x%0X])", compositeInSignalChangeCB);
     ret = dsCompositeInRegisterSignalChangeCB(compositeInSignalChangeCB);
-    UT_LOG_INFO("Result dsCompositeInRegisterSignalChangeCB(cbFun:[0x%0X]) dsError_t:[%s]",
+    UT_LOG_INFO("Result dsCompositeInRegisterSignalChangeCB(IN:CBFunc:[0x%0X]) dsError_t:[%s]",
                         compositeInSignalChangeCB, UT_Control_GetMapString(dsError_mapTable, ret));
     ASSERT(ret == dsERR_NONE);
 
     /* Register Status change callback */
-    UT_LOG_INFO("Calling dsCompositeInRegisterStatusChangeCB(cbFun:[0x%0X])", compositeInStatusChangeCB);
+    UT_LOG_INFO("Calling dsCompositeInRegisterStatusChangeCB(IN:CBFunc:[0x%0X])", compositeInStatusChangeCB);
     ret = dsCompositeInRegisterStatusChangeCB(compositeInStatusChangeCB);
-    UT_LOG_INFO("Result dsCompositeInRegisterStatusChangeCB(cbFun:[0x%0X]) dsError_t:[%s]",
+    UT_LOG_INFO("Result dsCompositeInRegisterStatusChangeCB(IN:CBFunc:[0x%0X]) dsError_t:[%s]",
                         compositeInStatusChangeCB, UT_Control_GetMapString(dsError_mapTable, ret));
     ASSERT(ret == dsERR_NONE);
 
@@ -303,7 +303,7 @@ void test_l3_CompositeIn_select_and_scale_video(void)
     dsError_t ret   = dsERR_NONE;
     int32_t x = 0 , y = 0, width = 0 , height = 0;
     dsCompositeInPort_t port = dsCOMPOSITE_IN_PORT_MAX;
-    int32_t select; 
+    int32_t select = 0; 
     uint8_t numInputPorts = 0;
 
     UT_LOG_INFO("Calling dsCompositeInGetNumberOfInputs(OUT:numInputPorts:[])");
