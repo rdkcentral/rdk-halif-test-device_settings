@@ -204,7 +204,7 @@ void test_l3_dsDisplay_initialize(void)
  * Allows the user to select a video port and retrieves the corresponding display handle.
  *
  * **Test Group ID:** 03@n
- * **Test Case ID:** 003@n
+ * **Test Case ID:** 002@n
  *
  * **Test Procedure:**
  * Refer to Test specification documentation
@@ -212,7 +212,7 @@ void test_l3_dsDisplay_initialize(void)
  */
 void test_l3_dsDisplay_get_handle(void)
 {
-    gTestID = 3;
+    gTestID = 2;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status   = dsERR_NONE;
@@ -270,7 +270,7 @@ exit:
  * Retrieves the EDID information for the display associated with the selected handle.
  *
  * **Test Group ID:** 03@n
- * **Test Case ID:** 004@n
+ * **Test Case ID:** 003@n
  *
  * **Test Procedure:**
  * Refer to Test specification documentation
@@ -278,7 +278,7 @@ exit:
  */
 void test_l3_dsDisplay_get_edid(void) 
 {
-    gTestID = 4;
+    gTestID = 3;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
@@ -306,7 +306,7 @@ exit:
  * Retrieves the EDID data bytes for the display associated with the selected handle.
  *
  * **Test Group ID:** 03@n
- * **Test Case ID:** 005@n
+ * **Test Case ID:** 004@n
  *
  * **Test Procedure:**
  * Refer to Test specification documentation
@@ -314,7 +314,7 @@ exit:
  */
 void test_l3_dsDisplay_get_edidbytes(void)
 {
-    gTestID = 5;
+    gTestID = 4;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
@@ -346,7 +346,7 @@ void test_l3_dsDisplay_get_edidbytes(void)
  * Retrieves the aspect ratio of the display.
  *
  * **Test Group ID:** 03@n
- * **Test Case ID:** 006@n
+ * **Test Case ID:** 005@n
  *
  * **Test Procedure:**
  * Refer to Test specification documentation
@@ -354,7 +354,7 @@ void test_l3_dsDisplay_get_edidbytes(void)
  */
 void test_l3_dsDisplay_get_aspectratio(void)
 {
-    gTestID = 6;
+    gTestID = 5;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status   = dsERR_NONE;
@@ -378,7 +378,7 @@ void test_l3_dsDisplay_get_aspectratio(void)
  * This test function terminates the dsDisplay Module.
  *
  * **Test Group ID:** 03@n
- * **Test Case ID:** 002@n
+ * **Test Case ID:** 006@n
  *
  * **Test Procedure:**
  * Refer to Test specification documentation
@@ -386,7 +386,7 @@ void test_l3_dsDisplay_get_aspectratio(void)
  */
 void test_l3_dsDisplay_terminate(void)
 {
-    gTestID = 2;
+    gTestID = 6;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status   = dsERR_NONE;
