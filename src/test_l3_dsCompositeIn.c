@@ -213,9 +213,6 @@ static void compositeInStatusChangeCB(dsCompositeInStatus_t inputStatus)
 * **Test Group ID:** 03@n
 * **Test Case ID:** 001@n
 *
-* **Test Procedure:**
-* Refer to Test specification documentation
-* [dsCompositeIn_L3_Low-Level_TestSpecification.md](../docs/pages/ds-compositeIn_L3_Low-Level_TestSpecification.md)
 */
 void test_l3_CompositeIn_initialize(void)
 {
@@ -255,52 +252,17 @@ void test_l3_CompositeIn_initialize(void)
 }
 
 /**
-* @brief This test get number of input ports.
-*
-* This test function gets Composite Input ports on platform.
-*
-* **Test Group ID:** 03@n
-* **Test Case ID:** 002@n
-*
-* **Test Procedure:**
-* Refer to Test specification documentation
-* [dsCompositeIn_L3_Low-Level_TestSpecification.md](../docs/pages/ds-compositeIn_L3_Low-Level_TestSpecification.md)
-*/
-void test_l3_CompositeIn_get_inputports(void)
-{
-    gTestID = 2;
-    UT_LOG_INFO("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-    uint8_t numInputs = 0;
-    dsError_t ret   = dsERR_NONE;
-
-    UT_LOG_INFO("Calling dsCompositeInGetNumberOfInputs(OUT:numInputs:[])");
-    ret = dsCompositeInGetNumberOfInputs(&numInputs);
-    UT_LOG_INFO("Result: dsCompositeInGetNumberOfInputs(OUT:numInputs:[%d]) dsError_t:[%s]", numInputs, 
-                  UT_Control_GetMapString(dsError_mapTable, ret));
-    ASSERT(ret == dsERR_NONE);
-
-    if(!numInputs)
-        UT_LOG_INFO("Result: Platform does not supports CompositeIn Ports");
-
-    UT_LOG_INFO("Out %s", __FUNCTION__);
-}
-
-/**
 * @brief This test get status of CompositeIn ports.
 *
 * This test function gets status of CompositeIn ports on platform.
 *
 * **Test Group ID:** 03@n
-* **Test Case ID:** 003@n
+* **Test Case ID:** 002n
 *
-* **Test Procedure:**
-* Refer to Test specification documentation
-* [dsCompositeIn_L3_Low-Level_TestSpecification.md](../docs/pages/ds-compositeIn_L3_Low-Level_TestSpecification.md)
 */
 void test_l3_CompositeIn_get_status(void)
 {
-    gTestID = 3;
+    gTestID = 2;
     UT_LOG_INFO("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret   = dsERR_NONE;
@@ -322,28 +284,39 @@ void test_l3_CompositeIn_get_status(void)
 }
 
 /**
-* @brief This test to select port.
+* @brief This test to scale video.
 *
-* This test function selects CompositeIn port on platform.
+* This test function is to scale video of selected CompositeIn port on platform.
 *
 * **Test Group ID:** 03@n
-* **Test Case ID:** 004@n
+* **Test Case ID:** 003@n
 *
 * **Test Procedure:**
 * Refer to Test specification documentation
 * [dsCompositeIn_L3_Low-Level_TestSpecification.md](../docs/pages/ds-compositeIn_L3_Low-Level_TestSpecification.md)
 */
-void test_l3_CompositeIn_select_port(void)
+void test_l3_CompositeIn_select_and_scale_video(void)
 {
-    gTestID = 4;
+    gTestID = 3;
     UT_LOG_INFO("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret   = dsERR_NONE;
+    int32_t x = 0 , y = 0, width = 0 , height = 0;
     dsCompositeInPort_t port = dsCOMPOSITE_IN_PORT_MAX;
     int32_t select; 
     uint8_t numInputPorts = 0;
 
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsCompositeIn/composite_input_configurations/number_of_ports");
+    UT_LOG_INFO("Calling dsCompositeInGetNumberOfInputs(OUT:numInputPorts:[])");
+    ret = dsCompositeInGetNumberOfInputs(&numInputPorts);
+    UT_LOG_INFO("Result: dsCompositeInGetNumberOfInputs(OUT:numInputPorts:[%d]) dsError_t:[%s]", numInputPorts, 
+                  UT_Control_GetMapString(dsError_mapTable, ret));
+    ASSERT(ret == dsERR_NONE);
+
+    if(!numInputPorts)
+    {
+        UT_LOG_INFO("Result: Platform does not supports CompositeIn Ports");
+        goto exit;
+    }
 
     UT_LOG_INFO("----------------------------------------------------------");
     UT_LOG_INFO("Available CompositeIn Ports");
@@ -372,30 +345,6 @@ void test_l3_CompositeIn_select_port(void)
                 UT_Control_GetMapString(dsCompositeInPortMappingTable, port), 
                 UT_Control_GetMapString(dsError_mapTable, ret));
     ASSERT(ret == dsERR_NONE);
-
-    exit:
-        UT_LOG_INFO("Out %s", __FUNCTION__);
-}
-
-/**
-* @brief This test to scale video.
-*
-* This test function is to scale video of selected CompositeIn port on platform.
-*
-* **Test Group ID:** 03@n
-* **Test Case ID:** 005@n
-*
-* **Test Procedure:**
-* Refer to Test specification documentation
-* [dsCompositeIn_L3_Low-Level_TestSpecification.md](../docs/pages/ds-compositeIn_L3_Low-Level_TestSpecification.md)
-*/
-void test_l3_CompositeIn_scale_video(void)
-{
-    gTestID = 5;
-    UT_LOG_INFO("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-    dsError_t ret   = dsERR_NONE;
-    int32_t x = 0 , y = 0, width = 0 , height = 0;
 
     UT_LOG_INFO("----------------------------------------------------------");
     UT_LOG_INFO("\nAcceptable inputs for x coordinate:\t"
@@ -466,15 +415,12 @@ void test_l3_CompositeIn_scale_video(void)
 * This test function terminates the dsCompositeIn.
 *
 * **Test Group ID:** 03@n
-* **Test Case ID:** 018@n
+* **Test Case ID:** 004@n
 *
-* **Test Procedure:**
-* Refer to Test specification documentation
-* [dsCompositeIn_L3_Low-Level_TestSpecification.md](../docs/pages/ds-compositeIn_L3_Low-Level_TestSpecification.md)
 */
 void test_l3_dsCompositeIn_terminate(void)
 {
-    gTestID = 18;
+    gTestID = 4;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret = dsERR_NONE;
@@ -519,10 +465,8 @@ int test_l3_dsCompositeIn_register(void)
     }
 
     UT_add_test( pSuite, "Initialize CompositeIn" ,test_l3_CompositeIn_initialize );
-    UT_add_test( pSuite, "Get input ports" ,test_l3_CompositeIn_get_inputports );
     UT_add_test( pSuite, "Get status of ports" ,test_l3_CompositeIn_get_status );
-    UT_add_test( pSuite, "Select the input port" ,test_l3_CompositeIn_select_port );
-    UT_add_test( pSuite, "Scale the compositeIn video" ,test_l3_CompositeIn_scale_video );
+    UT_add_test( pSuite, "Scale the compositeIn video" ,test_l3_CompositeIn_select_and_scale_video );
     UT_add_test( pSuite, "Terminate CompositeIn" ,test_l3_dsCompositeIn_terminate );
 
 
