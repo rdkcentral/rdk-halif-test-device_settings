@@ -1188,7 +1188,7 @@ void test_l3_HdmiIn_get_edid2allmsupport(void)
     readInput(&select);
     if(select <= 0 || select > (numInputPorts -1))
     {
-        UT_LOG_INFO("\nInvalid port selected\n");
+        UT_LOG_ERROR("\nInvalid port selected\n");
     }
 
     port = (select - 1);
@@ -1248,21 +1248,23 @@ int test_l3_dsHdmiIn_register ( void )
     {
        UT_ASSERT_FATAL(status);
     } else {
-            if (!strncmp(gDeviceType, TEST_TYPE_SOURCE_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) {
-            // Create the test suite for source type
-            pSuite = UT_add_suite_withGroupID("[L3 dsHdmiIn - Source]", NULL, NULL,UT_TESTS_L3);
-            assert(pSuite != NULL);
+            if (!strncmp(gDeviceType, TEST_TYPE_SOURCE_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) 
+            {
+                // Create the test suite for source type
+                pSuite = UT_add_suite_withGroupID("[L3 dsHdmiIn - Source]", NULL, NULL,UT_TESTS_L3);
+                assert(pSuite != NULL);
 
-            gSourceType = 1;
-           } else if(gSourceType == 0) {
-            // Create the test suite for sink type
-            pSuite = UT_add_suite_withGroupID("[L3 dsHdmiIn - Sink]", NULL, NULL,UT_TESTS_L3);
-            assert(pSuite != NULL);
-         }
-         else {
-              UT_LOG_ERROR("Invalid platform type: %s", gDeviceType);
-              return -1;
-         }
+                gSourceType = 1;
+
+            } else if(gSourceType == 0) {
+                // Create the test suite for sink type
+                pSuite = UT_add_suite_withGroupID("[L3 dsHdmiIn - Sink]", NULL, NULL,UT_TESTS_L3);
+                assert(pSuite != NULL);
+            }
+            else {
+                UT_LOG_ERROR("Invalid platform type: %s", gDeviceType);
+                return -1;
+            }
     }
 
     UT_add_test( pSuite, "HdmiIn_Initialize" ,test_l3_HdmiIn_initialize );
