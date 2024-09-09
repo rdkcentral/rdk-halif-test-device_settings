@@ -267,11 +267,24 @@ void test_l3_CompositeIn_get_status(void)
 
     dsError_t ret   = dsERR_NONE;
     dsCompositeInStatus_t inputstatus;
+    uint8_t numInputPorts = 0;
+
+    UT_LOG_INFO("Calling dsCompositeInGetNumberOfInputs(OUT:numInputPorts:[])");
+    ret = dsCompositeInGetNumberOfInputs(&numInputPorts);
+    UT_LOG_INFO("Result: dsCompositeInGetNumberOfInputs(OUT:numInputPorts:[%d]) dsError_t:[%s]", numInputPorts, 
+                  UT_Control_GetMapString(dsError_mapTable, ret));
+    ASSERT(ret == dsERR_NONE);
+
+    if(!numInputPorts)
+    {
+        UT_LOG_INFO("Result: Platform does not supports CompositeIn Ports");
+        goto exit;
+    }
 
     UT_LOG_INFO("Calling dsCompositeInGetStatus(OUT:inputstatus:[])");
     ret = dsCompositeInGetStatus(&inputstatus);
-    UT_LOG_INFO("Result dsCompositeInGetStatus dsError_t:[%s], UT_Control_GetMapString(dsError_mapTable, ret)");
-    for(int i = 0 ; i < dsCOMPOSITE_IN_PORT_MAX ; i++) 
+    UT_LOG_INFO("Result dsCompositeInGetStatus dsError_t:[%s]", UT_Control_GetMapString(dsError_mapTable, ret));
+    for(int i = 0 ; i < numInputPorts ; i++) 
     {
         UT_LOG_INFO("Result dsCompositeInGetStatus(OUT:inputstatus[isPresented:%s, isPortConnected:%s, activeport:%s])",
                 UT_Control_GetMapString(bool_mapTable, inputstatus.isPresented),
@@ -280,7 +293,8 @@ void test_l3_CompositeIn_get_status(void)
     }
     ASSERT(ret == dsERR_NONE);
 
-    UT_LOG_INFO("Out %s", __FUNCTION__);
+    exit:
+        UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -330,7 +344,7 @@ void test_l3_CompositeIn_select_and_scale_video(void)
     UT_LOG_INFO("Enter the port to select: ");
     readInput(&select);
 
-    if(select <= 0 || select > numInputPorts) 
+    if(select < 0 || select > numInputPorts) 
     {
        UT_LOG_ERROR("\nInvalid port selected\n");
        goto exit;
