@@ -298,24 +298,20 @@ void test_l3_CompositeIn_get_status(void)
 }
 
 /**
-* @brief This test to scale video.
+* @brief This test selects the CompositeIn ports.
 *
-* This test function is to scale video of selected CompositeIn port on platform.
+* This test function selects the CompositeIn ports on platform.
 *
 * **Test Group ID:** 03@n
-* **Test Case ID:** 003@n
+* **Test Case ID:** 003n
 *
-* **Test Procedure:**
-* Refer to Test specification documentation
-* [dsCompositeIn_L3_Low-Level_TestSpecification.md](../docs/pages/ds-compositeIn_L3_Low-Level_TestSpecification.md)
 */
-void test_l3_CompositeIn_select_and_scale_video(void)
+void test_l3_CompositeIn_select_port(void)
 {
     gTestID = 3;
     UT_LOG_INFO("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret   = dsERR_NONE;
-    int32_t x = 0 , y = 0, width = 0 , height = 0;
     dsCompositeInPort_t port = dsCOMPOSITE_IN_PORT_MAX;
     int32_t select = 0; 
     uint8_t numInputPorts = 0;
@@ -359,6 +355,30 @@ void test_l3_CompositeIn_select_and_scale_video(void)
                 UT_Control_GetMapString(dsCompositeInPortMappingTable, port), 
                 UT_Control_GetMapString(dsError_mapTable, ret));
     ASSERT(ret == dsERR_NONE);
+
+    exit:
+        UT_LOG_INFO("Out %s", __FUNCTION__);
+}
+
+/**
+* @brief This test to scale video.
+*
+* This test function is to scale video of selected CompositeIn port on platform.
+*
+* **Test Group ID:** 03@n
+* **Test Case ID:** 004@n
+*
+* **Test Procedure:**
+* Refer to Test specification documentation
+* [dsCompositeIn_L3_Low-Level_TestSpecification.md](../docs/pages/ds-compositeIn_L3_Low-Level_TestSpecification.md)
+*/
+void test_l3_CompositeIn_scale_video(void)
+{
+    gTestID = 4;
+    UT_LOG_INFO("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t ret   = dsERR_NONE;
+    int32_t x = 0 , y = 0, width = 0 , height = 0;
 
     UT_LOG_INFO("----------------------------------------------------------");
     UT_LOG_INFO("\nAcceptable inputs for x coordinate:\t"
@@ -480,7 +500,8 @@ int test_l3_dsCompositeIn_register(void)
 
     UT_add_test( pSuite, "Initialize CompositeIn" ,test_l3_CompositeIn_initialize );
     UT_add_test( pSuite, "Get status of ports" ,test_l3_CompositeIn_get_status );
-    UT_add_test( pSuite, "Scale the compositeIn video" ,test_l3_CompositeIn_select_and_scale_video );
+    UT_add_test( pSuite, "select port" ,test_l3_CompositeIn_select_port );
+    UT_add_test( pSuite, "Scale the compositeIn video" ,test_l3_CompositeIn_scale_video );
     UT_add_test( pSuite, "Terminate CompositeIn" ,test_l3_dsCompositeIn_terminate );
 
 
