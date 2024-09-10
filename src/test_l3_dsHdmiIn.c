@@ -551,6 +551,7 @@ void test_l3_HdmiIn_select_port(void)
     if(select <= 0 || select > (numInputPorts-1)) 
     {
        UT_LOG_ERROR("\nInvalid port selected\n");
+       return;
     }
 
     port = (select - 1);
@@ -565,6 +566,7 @@ void test_l3_HdmiIn_select_port(void)
     if(select < 0 || select > 1)
     {
        UT_LOG_ERROR("\nInvalid audmix selected\n");
+       return;
     }
    
     audmix = (bool)select;
@@ -581,6 +583,7 @@ void test_l3_HdmiIn_select_port(void)
     if(select < 0 || select >= dsVideoPlane_MAX)
     {
        UT_LOG_ERROR("\nInvalid video plane type selected\n");
+       return;
     }
 
     videoplanetype = (dsVideoPlaneType_t)select;
@@ -595,6 +598,7 @@ void test_l3_HdmiIn_select_port(void)
     if(select < 0 || select > 1)
     {
        UT_LOG_ERROR("\nInvalid audmix selected\n");
+       return;
     }
     
     topmost = (bool)select;
@@ -650,6 +654,7 @@ void test_l3_HdmiIn_scale_video(void)
    if(x < 0)
    {
       UT_LOG_ERROR("\n invalid x coordinate selected \n");
+      return;
    }
 
    UT_LOG_INFO("\n*******Enter the y coordinate to select*******\n\t"
@@ -663,6 +668,7 @@ void test_l3_HdmiIn_scale_video(void)
    if(y < 0)
    {
       UT_LOG_ERROR("\n invalid y coordinate selected \n");
+      return;
    }
 
    UT_LOG_INFO("\n*******Enter the width to select***************\n\t"
@@ -676,6 +682,7 @@ void test_l3_HdmiIn_scale_video(void)
    if(width < 0)
    {
       UT_LOG_ERROR("\n invalid width selected \n");
+      return;
    }
 
    UT_LOG_INFO("\n*******Enter the height to select**************\t"
@@ -688,7 +695,8 @@ void test_l3_HdmiIn_scale_video(void)
    height = select;
    if(height < 0)
    {
-      UT_LOG_INFO("\n invalid height selected \n");
+      UT_LOG_ERROR("\n invalid height selected \n");
+      return;
    }
 
    UT_LOG_INFO("Calling dsHdmiInScaleVideo IN:x:[%d], IN:y:[%d], IN:width:[%d] , IN:height:[%d]",
@@ -736,6 +744,7 @@ void test_l3_HdmiIn_zoom_mode(void)
     if(select < 0 || select > dsVIDEO_ZOOM_MAX)
     {
       UT_LOG_ERROR("\n invalid zoom mode selected \n");
+      return;
     }  
     
     mode = (dsVideoZoom_t)select;
@@ -827,6 +836,7 @@ void test_l3_HdmiIn_arc_port(void)
     if(select <= 0 || select > (numInputPorts -1))
     {
       UT_LOG_ERROR("\n invalid port selected\n");
+      return;
     }
 
     iport = (select -1);
@@ -876,13 +886,14 @@ void test_l3_HdmiIn_get_edid(void)
     if(select <= 0 || select > (numInputPorts -1))
     {
       UT_LOG_ERROR("\n invalid port selected\n");
+      return;
     }
 
     port = (select - 1);
 
-    UT_LOG_INFO("Calling dsGetEDIDBytesInfo IN:port:[%s]:[%d], OUT:edidbytes:[%s]\t"
-                    "OUT:length:[%d]", UT_Control_GetMapString(dsHdmiInPort_mapTable, port), 
-                     (port+1), edidbytes, length);
+    UT_LOG_INFO("Calling dsGetEDIDBytesInfo IN:port:[%s]:[%d], OUT:edidbytes:[ ]\t"
+                    "OUT:length:[ ]", UT_Control_GetMapString(dsHdmiInPort_mapTable, port), 
+                     (port+1));
 
     ret = dsGetEDIDBytesInfo(port, edidbytes, &length);
 
@@ -924,11 +935,12 @@ void test_l3_HdmiIn_spd_info(void)
     if(select <= 0 || select >(numInputPorts - 1))
     {
       UT_LOG_ERROR("\n invalid port selected\n");
+      return;
     }
    
     port = (select - 1);
    
-    UT_LOG_INFO("Calling  dsGetHDMISPDInfo(IN:port:[%d] OUT:spdinfo:[%s])\n",(port+1),spdinfo);
+    UT_LOG_INFO("Calling  dsGetHDMISPDInfo(IN:port:[%d] OUT:spdinfo:[ ])\n",(port+1));
 
     ret = dsGetHDMISPDInfo(port, spdinfo);
 
@@ -968,6 +980,7 @@ void test_l3_HdmiIn_set_edidversion(void)
     if(select <= 0 || select > (numInputPorts -1))
     {
        UT_LOG_ERROR("\n invalid port selected\n");
+       return;
     }
 
     port = (select - 1);
@@ -983,6 +996,7 @@ void test_l3_HdmiIn_set_edidversion(void)
     if(select < HDMI_EDID_VER_14 || select > HDMI_EDID_VER_MAX)
     {
        UT_LOG_ERROR("\n invalid edid selected\n");
+       return;
     }
     
     edidver = (tv_hdmi_edid_version_t)select;
@@ -1031,12 +1045,12 @@ void test_l3_HdmiIn_get_edidversion(void)
     if(select <= 0 || select >(numInputPorts-1))
     {
       UT_LOG_ERROR("\n invalid port selected\n");
+      return;
     }
     port = (select - 1);
    
-    UT_LOG_INFO("Calling dsGetEdidVersion IN:port:[%s]:[%d] OUT:edidver:[%s]:[%d]\t",
-                   UT_Control_GetMapString(dsHdmiInPort_mapTable, port), (port+1),
-                   UT_Control_GetMapString(tv_hdmi_edid_version_mapTable, edidver) , edidver);
+    UT_LOG_INFO("Calling dsGetEdidVersion IN:port:[%s]:[%d] OUT:edidver:[ ]\t",
+                   UT_Control_GetMapString(dsHdmiInPort_mapTable, port), (port+1)),
 
     ret = dsGetEdidVersion(port, &edidver);
 
@@ -1078,12 +1092,12 @@ void test_l3_HdmiIn_get_allmstatus(void)
     if(select <= 0 || select > (numInputPorts -1))
     {
       UT_LOG_ERROR("\n invalid port selected\n");
+      return;
     }
     port = (select - 1);
 
-    UT_LOG_INFO("Calling  dsGetAllmStatus(IN:port:[%s]:[%d] ,OUT:allm:[%s])",
-                 UT_Control_GetMapString(dsHdmiInPort_mapTable, port), (port+1),
-                 UT_Control_GetMapString(bool_mapTable, allmstatus));
+    UT_LOG_INFO("Calling  dsGetAllmStatus(IN:port:[%s]:[%d] ,OUT:allm:[ ])",
+                 UT_Control_GetMapString(dsHdmiInPort_mapTable, port), (port+1));
 
     ret = dsGetAllmStatus(port , &allmstatus);
 
@@ -1116,8 +1130,7 @@ void test_l3_HdmiIn_get_gamefeatureslist(void)
     dsSupportedGameFeatureList_t features_list;
     char *token = NULL;
 
-    UT_LOG_INFO("Calling dsGetSupportedGameFeaturesList OUT:features_list:[%d]",
-                 features_list.gameFeatureCount);
+    UT_LOG_INFO("Calling dsGetSupportedGameFeaturesList OUT:features_list:[ ]");
 
     ret = dsGetSupportedGameFeaturesList( &features_list);
 
@@ -1155,8 +1168,7 @@ void test_l3_HdmiIn_get_avlatency(void)
     dsError_t ret   = dsERR_NONE;
     int audio_latency = 0, video_latency = 0;
    
-    UT_LOG_INFO("Calling dsGetAVLatency OUT:audio_latency:[%d ms], OUT:video_latency:[%d ms]",
-                         audio_latency , video_latency);
+    UT_LOG_INFO("Calling dsGetAVLatency OUT:audio_latency:[ ], OUT:video_latency:[ ]");
 
     ret = dsGetAVLatency(&audio_latency , &video_latency);
 
@@ -1199,6 +1211,7 @@ void test_l3_HdmiIn_set_edid2allmsupport(void)
     if(select <= 0 || select > (numInputPorts-1))
     {
        UT_LOG_ERROR("\nInvalid port selected\n");
+       return;
     }
 
     port = (select-1);
@@ -1213,6 +1226,7 @@ void test_l3_HdmiIn_set_edid2allmsupport(void)
     if(select < 0 || select > 1)
     {
        UT_LOG_ERROR("\nInvalid allmsupport value selected\n");
+       return;
     }
   
     allmsupport = (bool)select;
@@ -1263,13 +1277,13 @@ void test_l3_HdmiIn_get_edid2allmsupport(void)
     if(select <= 0 || select > (numInputPorts -1))
     {
         UT_LOG_ERROR("\nInvalid port selected\n");
+        return;
     }
 
     port = (select - 1);
 
-    UT_LOG_INFO("Calling dsSetEdid2AllmSupport IN:port:[%s]:[%d], OUT:allmsupport:[%s]",
-                 UT_Control_GetMapString(dsHdmiInPort_mapTable, port), (port+1),
-                 UT_Control_GetMapString(bool_mapTable, allmsupport));
+    UT_LOG_INFO("Calling dsSetEdid2AllmSupport IN:port:[%s]:[%d], OUT:allmsupport:[ ]",
+                 UT_Control_GetMapString(dsHdmiInPort_mapTable, port), (port+1)),
 
     ret = dsGetEdid2AllmSupport(port, &allmsupport);
 
