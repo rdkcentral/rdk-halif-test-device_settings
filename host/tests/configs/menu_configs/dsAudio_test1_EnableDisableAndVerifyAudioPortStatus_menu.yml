@@ -12,9 +12,9 @@ dsAudio:  # Prefix must always exist
             name: "Initialize dsAudio"
           menu_enable:
             name: "Enable Audio Port"
-            input: {"Select dsAudio Port": "dsAUDIOPORT_TYPE_SPEAKER"}
+            sub_menu: {"Select dsAudio Port": "dsAUDIOPORT_TYPE_SPEAKER"}
           menu_disable:
             name: "Disable Audio Port"
-            input: {"Select dsAudio Port": "dsAUDIOPORT_TYPE_SPEAKER"}
+            sub_menu: {"Select dsAudio Port": "dsAUDIOPORT_TYPE_SPEAKER"}
           menu_terminate:
             name: "Terminate dsAudio"
