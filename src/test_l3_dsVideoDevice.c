@@ -162,7 +162,8 @@ static void dsVideoDevice_getHandle()
     int32_t device;
 
     UT_LOG_MENU_INFO(" Supported Video Device:");
-    for (device = 0; device < gDSvideoDevice_NumVideoDevices; device++) {
+    for (device = 0; device < gDSvideoDevice_NumVideoDevices; device++)
+    {
         UT_LOG_MENU_INFO("\t%d.  VideoDevice%d ", device, device);
     }
     UT_LOG_MENU_INFO("------------------------------------------");
@@ -533,7 +534,8 @@ static UT_test_suite_t * pSuite = NULL;
 
 int test_l3_dsVideoDevice_register(void)
 {
-    if(gSourceType == 0) {
+    if(gSourceType == 0) 
+    {
         // Create the test suite
         pSuite = UT_add_suite("[L3 dsVideoDevice - Sink]", NULL, NULL);
     }
@@ -553,14 +555,16 @@ int test_l3_dsVideoDevice_register(void)
     UT_add_test( pSuite, "GetHDRCapabilities", dsVideoDevice_GetHDRCapabilities);
     UT_add_test( pSuite, "GetSupportedVideoCodingFormat", dsVideoDevice_GetSupportedVideoCodingFormat);
 
-    if(gSourceType == 0) {
+    if(gSourceType == 0) 
+    {
         UT_add_test( pSuite, "SetDisplayFramerate", dsVideoDevice_SetDisplayFramerate);
         UT_add_test( pSuite, "GetCurrentDisplayframerate", dsVideoDevice_dsGetCurrentDisplayframerate);
         UT_add_test( pSuite, "SetFRFMode", dsVideoDevice_SetFRFMode);
         UT_add_test( pSuite, "dsGetFRFMode", dsVideoDevice_dsGetFRFMode);
     }
 
-    if(gSourceType == 1) {
+    if(gSourceType == 1)
+    {
         UT_add_test( pSuite, "SetZoomMode", dsVideoDevice_SetZoomMode);
         UT_add_test( pSuite, "GetZoomMode", dsVideoDevice_dsGetZoomMode);
         UT_add_test( pSuite, "GetVideoCodecInfo", dsVideoDevice_GetVideoCodecInfo);
