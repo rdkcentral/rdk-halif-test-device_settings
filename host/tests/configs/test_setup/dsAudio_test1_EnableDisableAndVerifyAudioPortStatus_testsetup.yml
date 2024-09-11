@@ -5,25 +5,16 @@ dsAudio:  # Prefix must always exist
     test_prerequisite:
       Working_directory: "."
       test_bin:
-        source:
-          -  "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/V2.0.0/bin/hal_test"
-          -  "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/V2.0.0/bin/ut_contol.so"
-          -  "https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/main/profiles/sink/Sink_AudioSettings.yaml"
-        destination:
-          - "/opt/HAL_Test/"
-          - "/opt/HAL_Test/"
-          - "/opt/HAL_Test/"
+          -  "<URL>/hal_test" #URL Path to the bin files to copy
+          -  "<URL>/ut_contol.so" #URL Path to the .so files if any to copy
+          -  "<URL>/Sink_AudioSettings.yaml" #URL Path to the configuration files to copy
       test_asserts_target:
-        source:
-          - "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Streams/test_1.mp4"
-          - "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Streams/test_2.mp4"
-        destination:
-          - "/opt/HAL_Test/"
-          - "/opt/HAL_Test/"
+          - "<URL>/test_1.mp4" #URL path to the test streams
+          - "<URL>/test_2.mp4" #URL path to the test streams
       test_asserts_host:
-        menu_config_url: "https://github.com/rdkcentral/rdk-halif-test-device_settings/tree/main/host/tests/configs/menu_configs/dsAudio_test1_EnableDisableAndVerifyAudioPortStatus_menu.yml"
+        menu_config_url: "<URL>/dsAudio_test1_EnableDisableAndVerifyAudioPortStatus_menu.yml"
     test_pre_commands:
-      - "gst-play /opt/HAL_Test/test_1.mp4"
+      - "gst-play test_1.mp4"
       - "./hal_test -p Sink_AudioSettings.yaml"
 
 

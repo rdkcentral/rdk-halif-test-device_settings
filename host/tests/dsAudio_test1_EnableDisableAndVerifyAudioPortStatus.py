@@ -26,13 +26,14 @@ import sys
 
 from helpers.dsAudioTestHelper import dsAudioTestHelperClass
 
-test_setup="./configs/test_setup/dsAudio_test1_EnableDisableAndVerifyAudioPortStatus_testsetup.yml"
+test_setup="<PATH>/dsAudio_test1_EnableDisableAndVerifyAudioPortStatus_testsetup.yml" #path to test setup file
 
 class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(dsAudioTestHelperClass):
 
     def __init__(self):
 
-        super().__init__('test1_EnableDisableAndVerifyAudioPortStatus', '1', test_setup)
+        #TODO: read device from yaml file
+        super().__init__('test1_EnableDisableAndVerifyAudioPortStatus', '1', test_setup, "cpe1")
 
     def testFunction(self):
         """This function will test the Audio Port by enabling and disabling the ports
@@ -45,7 +46,18 @@ class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(dsAudioTestHelperClass
         self.dsAudioInitialise()
         self.dsAudioEnablePort()
         result = self.dsAudioVerifyAudio(True)
+        if result == True:
+            self.log.testResultMessage("Passed")
+        else :
+            self.log.testResultMessage("Failed")
+
         self.dsAudioDisablePort()
+        result = self.dsAudioVerifyAudio(True)
+        if result == False:
+            self.log.testResultMessage("Passed")
+        else :
+            self.log.testResultMessage("Failed")
+
         self.dsAudioTerminate()
 
         return result
