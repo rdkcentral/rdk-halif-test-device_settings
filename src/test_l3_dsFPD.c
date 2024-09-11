@@ -79,9 +79,12 @@
 #include "dsFPD.h"
 
 #define DS_FPD_KEY_SIZE 128
+#define DS_ASSERT assert
+#define UT_LOG_MENU_INFO UT_LOG_INFO
 
 static int gTestGroup = 3;
 static int gTestID = 1;
+static int32_t eIndicator;
 
 const static ut_control_keyStringMapping_t dsFrontPanelErrorCodeTable[] = {
     {"dsERR_NONE", (int32_t)dsERR_NONE},
@@ -136,10 +139,31 @@ const static ut_control_keyStringMapping_t dsFrontPanelLEDState[] = {
     {NULL, -1}
 };
 
-void readAndDiscardRestOfLine(FILE* in)
+static void readAndDiscardRestOfLine(FILE* in)
 {
     int c;
     while ( (c = fgetc(in)) != EOF && c != '\n');
+}
+
+
+static void selectIndicator()
+{
+    int32_t dsFPDNumberOfIndicators = UT_KVP_PROFILE_GET_UINT32("dsFPD/Number_of_Indicators");
+    int32_t indicatorType = 0;
+    char buffer[DS_FPD_KEY_SIZE];
+
+    UT_LOG_MENU_INFO(" \t  Supported Indicators are:");
+    UT_LOG_MENU_INFO("------------------------------------------");
+    for (int indicator = 1; indicator <= dsFPDNumberOfIndicators; indicator++)
+    {
+        snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", indicator);
+        indicatorType = UT_KVP_PROFILE_GET_UINT32(buffer);
+        UT_LOG_INFO("\t%d.  %-20s\n", indicatorType, UT_Control_GetMapString(dsFrontPanelIndicatorTable, indicatorType));
+    }
+    UT_LOG_MENU_INFO("----------------------------------------------------------");
+    UT_LOG_MENU_INFO("Select Indicator : ");
+    scanf("%d", &eIndicator);
+    readAndDiscardRestOfLine(stdin);
 }
 
 /**
@@ -162,11 +186,10 @@ void test_1_dsFPD_hal_Init(void)
    dsError_t status = dsERR_NONE;
 
    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
    // Step 1: Call dsFPInit()
    UT_LOG_INFO("Calling dsFPInit()");
    status = dsFPInit();
-   UT_LOG_INFO("Result dsFPInit(OUT:dsError_t:[%s])",UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
+   UT_LOG_INFO("Result dsFPInit() OUT:dsError_t:[%s]",UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
    assert(status == dsERR_NONE);
 
    UT_LOG_INFO("Out %s\n", __FUNCTION__);
@@ -189,42 +212,26 @@ void test_2_dsFPD_hal_SetFPState(void)
 {
     gTestID = 2;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
     dsError_t status = dsERR_NONE;
-    int32_t eIndicator;
-    int32_t indicatorType = 0;
     uint32_t uState = 0;
-    int32_t dsFPDNumberOfIndicators = UT_KVP_PROFILE_GET_UINT32("dsFPD/Number_of_Indicators");
-    char buffer[DS_FPD_KEY_SIZE];
 
-    UT_LOG_INFO(" \t  Supported Indicators are:");
-    UT_LOG_INFO("------------------------------------------");
-    for (int indicator = 1; indicator <= dsFPDNumberOfIndicators; indicator++) {
-        snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", indicator);
-        indicatorType = UT_KVP_PROFILE_GET_UINT32(buffer);
-        UT_LOG_INFO("\t%d.  %-20s\n", indicatorType, UT_Control_GetMapString(dsFrontPanelIndicatorTable, indicatorType));
+    selectIndicator();
+    UT_LOG_MENU_INFO(" \t  Supported Front Panel States are:");
+    UT_LOG_MENU_INFO("------------------------------------------");
+    for (int state = 0; state < ((sizeof(dsFrontPanelStateTable)/sizeof(dsFrontPanelStateTable[0]))-1); state++)
+    {
+        UT_LOG_MENU_INFO("\t%d.  %-20s\n", state, UT_Control_GetMapString(dsFrontPanelStateTable, state));
     }
-    UT_LOG_INFO("----------------------------------------------------------");
-    UT_LOG_INFO("Select Indicator : ");
-    scanf("%d", &eIndicator);
+    UT_LOG_MENU_INFO("----------------------------------------------------------");
+    UT_LOG_MENU_INFO("Select State : ");
+    scanf("%d", &uState);
     readAndDiscardRestOfLine(stdin);
-
-    UT_LOG_INFO(" \t  Supported Front Panel States are:");
-    UT_LOG_INFO("------------------------------------------");
-    for (int state = 0; state < ((sizeof(dsFrontPanelStateTable)/sizeof(dsFrontPanelStateTable[0]))-1); state++) {
-        UT_LOG_INFO("\t%d.  %-20s\n", state, UT_Control_GetMapString(dsFrontPanelStateTable, state));
-    }
-    UT_LOG_INFO("----------------------------------------------------------");
-    UT_LOG_INFO("Select State : ");
-    scanf("%d", &eIndicator);
-    readAndDiscardRestOfLine(stdin);
-
 
     /* Check that the Indicator is valid */
     UT_LOG_INFO("Calling dsSetFPState(IN:Indicator:[0x%d], IN:State:[%d]" \
                                                 ,eIndicator,uState);
     status = dsSetFPState((dsFPDIndicator_t)eIndicator,(dsFPDState_t)uState);
-    UT_LOG_INFO("Result dsSetFPState(OUT:dsError_t:[%s])",UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
+    UT_LOG_INFO("Result dsSetFPState()OUT:dsError_t:[%s]",UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
@@ -250,27 +257,13 @@ void test_3_dsFPD_hal_GetFPState(void)
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
-    int32_t eIndicator;
-    int32_t indicatorType = 0;
     dsFPDState_t eState = 0;
-    int32_t dsFPDNumberOfIndicators = UT_KVP_PROFILE_GET_UINT32("dsFPD/Number_of_Indicators");
-    char buffer[DS_FPD_KEY_SIZE];
 
-    UT_LOG_INFO(" \t  Supported Indicators are:");
-    UT_LOG_INFO("------------------------------------------");
-    for (int indicator = 1; indicator <= dsFPDNumberOfIndicators; indicator++) {
-        snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", indicator);
-        indicatorType = UT_KVP_PROFILE_GET_UINT32(buffer);
-        UT_LOG_INFO("\t%d.  %-20s\n", indicatorType, UT_Control_GetMapString(dsFrontPanelIndicatorTable, indicatorType));
-    }
-    UT_LOG_INFO("----------------------------------------------------------");
-    UT_LOG_INFO("Select Indicator : ");
-    scanf("%d", &eIndicator);
-    readAndDiscardRestOfLine(stdin);
-
-
+    selectIndicator();
+    UT_LOG_INFO("Calling dsGetFPState(IN:Indicator:[0x%d], OUT:State)" \
+                                                ,eIndicator);
     status = dsGetFPState((dsFPDIndicator_t)eIndicator,&eState);
-    UT_LOG_INFO("Result dsGetFPState(IN:Indicator:[0x%d], OUT:State:[%s] OUT: dsError_t:[%s]" \
+    UT_LOG_INFO("Result dsGetFPState(IN:Indicator:[0x%d], OUT:State:[%s]) OUT:dsError_t:[%s])" \
                                                 ,eIndicator,UT_Control_GetMapString(dsFrontPanelStateTable, eState) \
                                                 , UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
@@ -301,43 +294,26 @@ void test_4_dsFPD_hal_SetFPBlink(void)
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
-    int32_t eIndicator;
-    int32_t indicatorType = 0;
     uint32_t uBlinkDuration;
     uint32_t uBlinkIterations;
-    int32_t dsFPDNumberOfIndicators = UT_KVP_PROFILE_GET_UINT32("dsFPD/Number_of_Indicators");
-    char buffer[DS_FPD_KEY_SIZE];
 
-    UT_LOG_INFO(" \t  Supported Indicators are:");
-    UT_LOG_INFO("------------------------------------------");
-    for (int indicator = 1; indicator <= dsFPDNumberOfIndicators; indicator++) {
-        snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", indicator);
-        indicatorType = UT_KVP_PROFILE_GET_UINT32(buffer);
-        UT_LOG_INFO("\t%d.  %-20s\n", indicatorType, UT_Control_GetMapString(dsFrontPanelIndicatorTable, indicatorType));
-    }
-    UT_LOG_INFO("----------------------------------------------------------");
-    UT_LOG_INFO("Select Indicator : ");
-    scanf("%d", &eIndicator);
-    readAndDiscardRestOfLine(stdin);
-
-
-    UT_LOG_INFO("----------------------------------------------------------");
-    UT_LOG_INFO("Enter Blink Duration in ms: ");
+    selectIndicator();
+    UT_LOG_MENU_INFO("----------------------------------------------------------");
+    UT_LOG_MENU_INFO("Enter Blink Duration in ms: ");
     scanf("%d", &uBlinkDuration);
     readAndDiscardRestOfLine(stdin);
 
-
-    UT_LOG_INFO("----------------------------------------------------------");
-    UT_LOG_INFO("Enter Blink iteration: ");
+    UT_LOG_MENU_INFO("----------------------------------------------------------");
+    UT_LOG_MENU_INFO("Enter Blink iteration: ");
     scanf("%d", &uBlinkIterations);
     readAndDiscardRestOfLine(stdin);
 
 
     /* Check that the Indicator is valid */
-    UT_LOG_INFO("Calling dsSetFPBlink(IN:Indicator:[0x%d], IN:Blink Duration in ms:[%d], IN:Blink Iteration:[%d]" \
+    UT_LOG_INFO("Calling dsSetFPBlink(IN:Indicator:[0x%d], IN:Blink Duration in ms:[%d], IN:Blink Iteration:[%d])" \
                                         ,eIndicator,uBlinkDuration,uBlinkIterations);
     status = dsSetFPBlink((dsFPDIndicator_t)eIndicator,uBlinkDuration,uBlinkIterations);
-    UT_LOG_INFO("Result dsSetFPBlink(OUT:dsError_t:[%s])",UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
+    UT_LOG_INFO("Result dsSetFPBlink()OUT:dsError_t:[%s]",UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
@@ -363,36 +339,20 @@ void test_5_dsFPD_hal_SetFPBrightness(void)
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
-    int32_t eIndicator;
-    int32_t indicatorType = 0;
     uint32_t uBrightness;
-    int32_t dsFPDNumberOfIndicators = UT_KVP_PROFILE_GET_UINT32("dsFPD/Number_of_Indicators");
-    char buffer[DS_FPD_KEY_SIZE];
 
-    UT_LOG_INFO(" \t  Supported Indicators are:");
-    UT_LOG_INFO("------------------------------------------");
-    for (int indicator = 1; indicator <= dsFPDNumberOfIndicators; indicator++) {
-        snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", indicator);
-        indicatorType = UT_KVP_PROFILE_GET_UINT32(buffer);
-        UT_LOG_INFO("\t%d.  %-20s\n", indicatorType, UT_Control_GetMapString(dsFrontPanelIndicatorTable, indicatorType));
-    }
-    UT_LOG_INFO("----------------------------------------------------------");
-    UT_LOG_INFO("Select Indicator : ");
-    scanf("%d", &eIndicator);
-    readAndDiscardRestOfLine(stdin);
-
-
-    UT_LOG_INFO("----------------------------------------------------------");
-    UT_LOG_INFO("Enter LED Brightness (Range: 0-100): ");
+    selectIndicator();
+    UT_LOG_MENU_INFO("----------------------------------------------------------");
+    UT_LOG_MENU_INFO("Enter LED Brightness (Range: 0-100): ");
     scanf("%d", &uBrightness);
     readAndDiscardRestOfLine(stdin);
 
 
     /* Check that the Indicator is valid */
-    UT_LOG_INFO("Calling dsSetFPBrightness(IN:Indicator:[0x%d], IN:Brightness:[%d]" \
+    UT_LOG_INFO("Calling dsSetFPBrightness(IN:Indicator:[0x%d], IN:Brightness:[%d])" \
                                                 ,eIndicator,uBrightness);
     status = dsSetFPBrightness((dsFPDIndicator_t)eIndicator,uBrightness);
-    UT_LOG_INFO("Result dsSetFPBrightness(OUT:dsError_t:[%s])",UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
+    UT_LOG_INFO("Result dsSetFPBrightness()OUT:dsError_t:[%s]",UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
@@ -418,27 +378,13 @@ void test_6_dsFPD_hal_GetFPBrightness(void)
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
-    int32_t eIndicator;
-    int32_t indicatorType = 0;
     dsFPDBrightness_t brightness = 0;
-    int32_t dsFPDNumberOfIndicators = UT_KVP_PROFILE_GET_UINT32("dsFPD/Number_of_Indicators");
-    char buffer[DS_FPD_KEY_SIZE];
 
-    UT_LOG_INFO(" \t  Supported Indicators are:");
-    UT_LOG_INFO("------------------------------------------");
-    for (int indicator = 1; indicator <= dsFPDNumberOfIndicators; indicator++) {
-        snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", indicator);
-        indicatorType = UT_KVP_PROFILE_GET_UINT32(buffer);
-        UT_LOG_INFO("\t%d.  %-20s\n", indicatorType, UT_Control_GetMapString(dsFrontPanelIndicatorTable, indicatorType));
-    }
-    UT_LOG_INFO("----------------------------------------------------------");
-    UT_LOG_INFO("Select Indicator : ");
-    scanf("%d", &eIndicator);
-    readAndDiscardRestOfLine(stdin);
-
-
+    selectIndicator();
+    UT_LOG_INFO("Calling dsGetFPBrightness(IN:Indicator:[0x%d], OUT:Brightness)" \
+                                                ,eIndicator);
     status = dsGetFPBrightness((dsFPDIndicator_t)eIndicator,&brightness);
-    UT_LOG_INFO("Result dsGetFPState(IN:Indicator:[0x%d], OUT:Brightness:[%d] OUT: dsError_t:[%s]" \
+    UT_LOG_INFO("Result dsGetFPState(IN:Indicator:[0x%d], OUT:Brightness:[%d]) OUT: dsError_t:[%s]" \
                                                 ,eIndicator,brightness, UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
     /* Check that the Indicator is valid */
@@ -469,25 +415,26 @@ void test_7_dsFPD_hal_SetLEDState(void)
     uint32_t uLedState;
     uint32_t uSupportedLEDState= 0;
 
-    UT_LOG_INFO(" \t  Supported POWER LED States are:");
-    UT_LOG_INFO("------------------------------------------");
+    UT_LOG_MENU_INFO(" \t  Supported POWER LED States are:");
+    UT_LOG_MENU_INFO("------------------------------------------");
     uSupportedLEDState = UT_KVP_PROFILE_GET_UINT32("dsFPD/SupportedLEDStates");
 
-    for (int fpState = dsFPD_LED_DEVICE_NONE; fpState <= dsFPD_LED_DEVICE_MAX; fpState++) {
+    for (int fpState = dsFPD_LED_DEVICE_NONE; fpState <= dsFPD_LED_DEVICE_MAX; fpState++)
+    {
         if (!(uSupportedLEDState & (1 << fpState)))
             continue;
-        UT_LOG_INFO("\t%d.  %-20s\n", fpState, UT_Control_GetMapString(dsFrontPanelLEDState, fpState));
+        UT_LOG_MENU_INFO("\t%d.  %-20s\n", fpState, UT_Control_GetMapString(dsFrontPanelLEDState, fpState));
     }
-    UT_LOG_INFO("----------------------------------------------------------");
-    UT_LOG_INFO("Select State: ");
+    UT_LOG_MENU_INFO("----------------------------------------------------------");
+    UT_LOG_MENU_INFO("Select State: ");
     scanf("%X", &uLedState);
     readAndDiscardRestOfLine(stdin);
 
 
     /* Check that the Indicator is valid */
-    UT_LOG_INFO("Calling dsFPSetLEDState(IN state:[0x%X]",uLedState);
+    UT_LOG_INFO("Calling dsFPSetLEDState(IN state:[0x%X])",uLedState);
     status = dsFPSetLEDState((dsFPDLedState_t)uLedState);
-    UT_LOG_INFO("Result dsFPSetLEDState(OUT:dsError_t:[%s])",UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
+    UT_LOG_INFO("Result dsFPSetLEDState()OUT:dsError_t:[%s]",UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
@@ -515,8 +462,9 @@ void test_8_dsFPD_hal_GetLEDState(void)
     dsError_t status = dsERR_NONE;
     dsFPDLedState_t state = 0;
 
+    UT_LOG_INFO("Calling dsFPSetLEDState(OUT:state)");
     status = dsFPGetLEDState(&state);
-    UT_LOG_INFO("Result dsGetFPState(OUT:FP LED State:[%X] OUT: dsError_t:[%s]" \
+    UT_LOG_INFO("Result dsGetFPState(OUT:FP LED State:[%X]) OUT: dsError_t:[%s]" \
                                                 ,state,UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
     /* Check that the Indicator is valid */
@@ -544,56 +492,34 @@ void test_9_dsFPD_hal_SetFPColor(void)
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
-    int32_t eIndicator;
-    int32_t indicatorType = 0;
     uint32_t uColor;
     uint32_t uSupportedColor= 0;
     uint32_t numOfSupportedColors;
-    int32_t dsFPDNumberOfIndicators = UT_KVP_PROFILE_GET_UINT32("dsFPD/Number_of_Indicators");
     char buffer[DS_FPD_KEY_SIZE];
 
-    UT_LOG_INFO(" \t  Supported Indicators are:");
-    UT_LOG_INFO("------------------------------------------");
-    for (int indicator = 1; indicator <= dsFPDNumberOfIndicators; indicator++) {
-        snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", indicator);
-        indicatorType = UT_KVP_PROFILE_GET_UINT32(buffer);
-        UT_LOG_INFO("\t%d.  %-20s\n", indicatorType, UT_Control_GetMapString(dsFrontPanelIndicatorTable, indicatorType));
-    }
-    UT_LOG_INFO("----------------------------------------------------------");
-    UT_LOG_INFO("Select Indicator : ");
-    scanf("%d", &eIndicator);
-    readAndDiscardRestOfLine(stdin);
+    selectIndicator();
+    UT_LOG_MENU_INFO(" \t  Supported Front Panel color for the indicator %s are:",UT_Control_GetMapString(dsFrontPanelIndicatorTable, eIndicator));
+    UT_LOG_MENU_INFO("------------------------------------------");
 
-
-    UT_LOG_INFO(" \t  Supported Front Panel color for the indicaotr %s are:",UT_Control_GetMapString(dsFrontPanelIndicatorTable, eIndicator));
-    UT_LOG_INFO("------------------------------------------");
-
-    for (int indicator = 1; indicator <= dsFPDNumberOfIndicators; indicator++) {
-        snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", indicator);
-        indicatorType = UT_KVP_PROFILE_GET_UINT32(buffer);
-        if(indicatorType == eIndicator)
-        {
-            snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/supportedColors", eIndicator);
-            numOfSupportedColors = UT_KVP_PROFILE_GET_LIST_COUNT(buffer);
-            for (int j = 0; j < numOfSupportedColors; j++)
-            {
+    snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/supportedColors", eIndicator);
+    numOfSupportedColors = UT_KVP_PROFILE_GET_LIST_COUNT(buffer);
+    for (int j = 0; j < numOfSupportedColors; j++)
+    {
                 snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/supportedColors/%d", eIndicator,j);
                 uSupportedColor = UT_KVP_PROFILE_GET_UINT32(buffer);
-                UT_LOG_INFO("\t0X%06X.  %-20s\n", uSupportedColor, UT_Control_GetMapString(dsFrontPanelColorTable, uSupportedColor));
-            }
-        }
+                UT_LOG_MENU_INFO("\t0X%06X.  %-20s\n", uSupportedColor, UT_Control_GetMapString(dsFrontPanelColorTable, uSupportedColor));
     }
-    UT_LOG_INFO("----------------------------------------------------------");
-    UT_LOG_INFO("Select Color: ");
-    scanf("%X", &uColor);
+    UT_LOG_MENU_INFO("----------------------------------------------------------");
+    UT_LOG_MENU_INFO("Select Color: ");
+    scanf("%x", &uColor);
     readAndDiscardRestOfLine(stdin);
 
 
     /* Check that the Indicator is valid */
-    UT_LOG_INFO("Calling SetFPColor(IN:Indicator:[0x%d], IN:Color:[%X]" \
+    UT_LOG_INFO("Calling SetFPColor(IN:Indicator:[0x%d], IN:Color:[%X])" \
                                                 ,eIndicator,uColor);
     status = dsSetFPColor((dsFPDIndicator_t)eIndicator,uColor);
-    UT_LOG_INFO("Result dsSetFPColor(OUT:dsError_t:[%s])",UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
+    UT_LOG_INFO("Result dsSetFPColor()OUT:dsError_t:[%s]",UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
@@ -619,27 +545,12 @@ void test_10_dsFPD_hal_GetFPColor(void)
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
-    int32_t eIndicator;
-    int32_t indicatorType = 0;
     dsFPDColor_t color;
-    int32_t dsFPDNumberOfIndicators = UT_KVP_PROFILE_GET_UINT32("dsFPD/Number_of_Indicators");
-    char buffer[DS_FPD_KEY_SIZE];
 
-    UT_LOG_INFO(" \t  Supported Indicators are:");
-    UT_LOG_INFO("------------------------------------------");
-    for (int indicator = 1; indicator <= dsFPDNumberOfIndicators; indicator++) {
-        snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", indicator);
-        indicatorType = UT_KVP_PROFILE_GET_UINT32(buffer);
-        UT_LOG_INFO("\t%d.  %-20s\n", indicatorType, UT_Control_GetMapString(dsFrontPanelIndicatorTable, indicatorType));
-    }
-    UT_LOG_INFO("----------------------------------------------------------");
-    UT_LOG_INFO("Select Indicator : ");
-    scanf("%d", &eIndicator);
-    readAndDiscardRestOfLine(stdin);
-
-
+    selectIndicator();
+    UT_LOG_INFO("Calling dsGetFPColor(IN:Indicator:[0x%d], OUT:Color)",eIndicator);
     status = dsGetFPColor((dsFPDIndicator_t)eIndicator,&color);
-    UT_LOG_INFO("Result dsGetFPState(IN:Indicator:[0x%d], OUT:Brightness:[%d] OUT: dsError_t:[%s]" \
+    UT_LOG_INFO("Result dsGetFPColor(IN:Indicator:[0x%d], OUT:Color:[%d]) OUT: dsError_t:[%s]" \
                                                 ,eIndicator,color,UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
     /* Check that the Indicator is valid */
@@ -671,7 +582,7 @@ void test_11_dsFPD_hal_Term(void)
    // Step 1: Call dsFPInit()
    UT_LOG_INFO("Calling dsFPTerm()");
    status = dsFPTerm();
-   UT_LOG_INFO("Result dsFPTerm(OUT:dsError_t:[%s])",UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
+   UT_LOG_INFO("Result dsFPTerm()OUT:dsError_t:[%s]",UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
    assert(status == dsERR_NONE);
 
    UT_LOG_INFO("Out %s\n", __FUNCTION__);
