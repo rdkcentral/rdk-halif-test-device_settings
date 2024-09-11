@@ -89,7 +89,8 @@
 static int32_t gTestGroup = 3;
 static int32_t gTestID    = 1;
 static intptr_t gDisplayHandle = 0;
-static dsDisplayEDID_t edid = {0};
+static dsDisplayEDID_t gEdid = {0};
+static uint8_t gEdidBuffer[EDID_MAX_DATA_SIZE];
 
 /* Enum mapping tables */
 
@@ -160,7 +161,9 @@ void readAndDiscardRestOfLine(FILE* in)
  */
 static void displayEventCallback(int handle, dsDisplayEvent_t event, void* eventData)
 {
-    UT_LOG_INFO("Display EventCallback(IN:handle:[%d], dsDisplayEvent_t:[%s]", handle, UT_Control_GetMapString(displayEventMappingTable, event));
+    UT_LOG_INFO("Display EventCallback(IN:handle:[%d], dsDisplayEvent_t:[%s]", 
+                handle, 
+                UT_Control_GetMapString(displayEventMappingTable, event));
 
     if (eventData != NULL) {
         char* eventDataStr = (char*)eventData;
@@ -191,7 +194,9 @@ void test_l3_dsDisplay_initialize(void)
 
     UT_LOG_INFO("Calling dsDisplayInit()");
     status = dsDisplayInit();
-    UT_LOG_INFO("Result dsDisplayInit() dsError_t=[%s]", UT_Control_GetMapString(errorMappingTable, status));
+    UT_LOG_INFO("Result dsDisplayInit() dsError_t=[%s]", 
+                UT_Control_GetMapString(errorMappingTable, status));
+
     DS_ASSERT(status == dsERR_NONE);
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -215,8 +220,8 @@ void test_l3_dsDisplay_get_handle(void)
     gTestID = 2;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t status   = dsERR_NONE;
-    int32_t choice;
+    dsError_t status = dsERR_NONE;
+    int32_t choice = -1;
     uint8_t numInputPorts = 0;
     dsVideoPortType_t port = dsVIDEOPORT_TYPE_MAX;
 
@@ -241,10 +246,17 @@ void test_l3_dsDisplay_get_handle(void)
 
     port = choice - 1;
 
-    UT_LOG_INFO("Calling dsGetDisplay(IN:type:[%s], IN:index:[%d], OUT:handle:[])", UT_Control_GetMapString(videoPortTypeMappingTable, gDSVideoPortConfiguration[port].typeid), gDSVideoPortConfiguration[port].index);
+    UT_LOG_INFO("Calling dsGetDisplay(IN:type:[%s], IN:index:[%d], OUT:handle:[])", 
+                UT_Control_GetMapString(videoPortTypeMappingTable, gDSVideoPortConfiguration[port].typeid), 
+                gDSVideoPortConfiguration[port].index);
+
     status = dsGetDisplay(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &gDisplayHandle);
 
-    UT_LOG_INFO("Result dsGetDisplay(IN:type:[%s], IN:index:[%d], Handle:[0x%0X]) dsError_t=[%s]", UT_Control_GetMapString(videoPortTypeMappingTable, gDSVideoPortConfiguration[port].typeid), gDSVideoPortConfiguration[port].index, gDisplayHandle, UT_Control_GetMapString(errorMappingTable, status));
+    UT_LOG_INFO("Result dsGetDisplay(IN:type:[%s], IN:index:[%d], Handle:[0x%0X]) dsError_t=[%s]", 
+                UT_Control_GetMapString(videoPortTypeMappingTable, gDSVideoPortConfiguration[port].typeid),
+                gDSVideoPortConfiguration[port].index, 
+                gDisplayHandle,
+                UT_Control_GetMapString(errorMappingTable, status));
 
     DS_ASSERT(status == dsERR_NONE);
 
@@ -254,10 +266,12 @@ void test_l3_dsDisplay_get_handle(void)
 
     status = dsRegisterDisplayEventCallback(gDisplayHandle,displayEventCallback);
 
-    UT_LOG_INFO("Result dsRegisterDisplayEventCallback(IN:handle:[0x%0X], IN:cb[0x%0X]), dsError_t=[%s]", gDisplayHandle, displayEventCallback, UT_Control_GetMapString(errorMappingTable, status));
+    UT_LOG_INFO("Result dsRegisterDisplayEventCallback(IN:handle:[0x%0X], IN:cb[0x%0X]), dsError_t=[%s]", 
+                gDisplayHandle, 
+                displayEventCallback,
+                UT_Control_GetMapString(errorMappingTable, status));
 
     DS_ASSERT(status == dsERR_NONE);
-
 
 exit:
     UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -289,10 +303,16 @@ void test_l3_dsDisplay_get_edid(void)
     }
 
     UT_LOG_INFO("Calling dsGetEDID(IN:handle:[0x%0X], OUT:edid:[])", gDisplayHandle);
-    status = dsGetEDID(gDisplayHandle, &edid);
 
-    UT_LOG_INFO("Result dsGetEDID(dsDisplayEDID_t(productCode:[%d], serialNumber:[%d], manufactureYear:[%d], manufactureWeek:[%d], hdmiDeviceType:[%s], isRepeater:[%s], physicalAddressA:[%u], physicalAddressB:[%u], physicalAddressC:[%u], physicalAddressD:[%u], numOfSupportedResolution:[%d], monitorName:[%s])", \
-    edid.productCode, edid.serialNumber, edid.manufactureYear, edid.manufactureWeek, edid.hdmiDeviceType, edid.isRepeater, edid.physicalAddressA, edid.physicalAddressB, edid.physicalAddressC, edid.physicalAddressD, edid.numOfSupportedResolution, edid.monitorName);
+    status = dsGetEDID(gDisplayHandle, &gEdid);
+
+    UT_LOG_INFO("Result dsGetEDID(dsDisplayEDID_t(productCode:[%d], serialNumber:[%d], manufactureYear:[%d],manufactureWeek:[%d],hdmiDeviceType:[%s], isRepeater:[%s], physicalAddressA:[%u], physicalAddressB:[%u], physicalAddressC:[%u], physicalAddressD:[%u], numOfSupportedResolution:[%d], monitorName:[%s])", \
+                gEdid.productCode, gEdid.serialNumber, 
+                gEdid.manufactureYear, gEdid.manufactureWeek, 
+                gEdid.hdmiDeviceType, gEdid.isRepeater, 
+                gEdid.physicalAddressA, gEdid.physicalAddressB, 
+                gEdid.physicalAddressC, gEdid.physicalAddressD, 
+                gEdid.numOfSupportedResolution, gEdid.monitorName);
 
     DS_ASSERT(status == dsERR_NONE);
 
@@ -318,22 +338,22 @@ void test_l3_dsDisplay_get_edidbytes(void)
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
-    int length = 0;
-    unsigned char edidBuffer[EDID_MAX_DATA_SIZE];
+    int32_t length = 0;
 
     UT_LOG_INFO("Calling dsGetEDIDBytes(IN:Handle:[0x%0X], OUT:EDID:[], OUT:Length:[])", gDisplayHandle);
-    status = dsGetEDIDBytes(gDisplayHandle, edidBuffer, &length);
 
-    UT_LOG_INFO("Result dsGetEDIDBytes(IN:Handle:[0x%0X], OUT:EDID:[0x%0X], OUT:Length:[%d]) dsError_t=[%s]", gDisplayHandle, edidBuffer, length, UT_Control_GetMapString(errorMappingTable, status));
+    status = dsGetEDIDBytes(gDisplayHandle, gEdidBuffer, &length);
+
+    UT_LOG_INFO("Result dsGetEDIDBytes(IN:Handle:[0x%0X], OUT:EDID:[0x%0X], OUT:Length:[%d]) dsError_t=[%s]",
+                gDisplayHandle, gEdidBuffer, 
+                length, UT_Control_GetMapString(errorMappingTable, status));
+
     DS_ASSERT(status == dsERR_NONE);
 
-    if (status == dsERR_NONE) {
-        UT_LOG_INFO("EDID Bytes:");
-        for (int i = 0; i < length; i++) {
-        UT_LOG_INFO("%02X ", edidBuffer[i]);
-        }
-    } else {
-        UT_LOG_INFO("Failed to retrieve EDID bytes.");
+    UT_LOG_INFO("EDID Bytes:");
+    for (int32_t i = 0; i < length; i++)
+    {
+        UT_LOG_INFO("%02X ", gEdidBuffer[i]);
     }
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -359,12 +379,15 @@ void test_l3_dsDisplay_get_aspectratio(void)
 
     dsError_t status   = dsERR_NONE;
     dsVideoAspectRatio_t displayAspectRatio = dsVIDEO_ASPECT_RATIO_MAX;
-  
 
     UT_LOG_INFO("Calling dsGetDisplayAspectRatio(IN:handle:[0x%0X], OUT:aspectRatio:[]) ", gDisplayHandle);
+
     status = dsGetDisplayAspectRatio(gDisplayHandle, &displayAspectRatio);
 
-    UT_LOG_INFO("Result dsGetDisplayAspectRatio(handle:[0x%0X], dsVideoAspectRatio_t:[%s], dsError_t=[%s])", gDisplayHandle, UT_Control_GetMapString(dsVideoAspect_RatioMappingTable, displayAspectRatio), UT_Control_GetMapString(errorMappingTable, status));
+    UT_LOG_INFO("Result dsGetDisplayAspectRatio(handle:[0x%0X], dsVideoAspectRatio_t:[%s], dsError_t=[%s])",
+                gDisplayHandle,
+                UT_Control_GetMapString(dsVideoAspect_RatioMappingTable, displayAspectRatio), 
+                UT_Control_GetMapString(errorMappingTable, status));
 
     DS_ASSERT(status == dsERR_NONE);
 
@@ -389,11 +412,13 @@ void test_l3_dsDisplay_terminate(void)
     gTestID = 6;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
-    dsError_t status   = dsERR_NONE;
+    dsError_t status = dsERR_NONE;
 
     UT_LOG_INFO("Calling dsDisplayTerm()");
     status = dsDisplayTerm();
-    UT_LOG_INFO("Result dsDisplayTerm() dsError_t=[%s]", UT_Control_GetMapString(errorMappingTable, status));
+    UT_LOG_INFO("Result dsDisplayTerm() dsError_t=[%s]", 
+                UT_Control_GetMapString(errorMappingTable, status));
+
     DS_ASSERT(status == dsERR_NONE);
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
