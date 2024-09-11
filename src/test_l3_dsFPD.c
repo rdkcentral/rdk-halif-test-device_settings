@@ -200,7 +200,7 @@ void test_1_dsFPD_hal_Init(void)
 * This test case provides a scope to  set the State of FP indicator to ON and OFF.
 *
 * **Pre-Conditions:** @n
-* Front Panle Module should be intialized through Test 1 before calling this test.
+* Front panel Module should be intialized through Test 1 before calling this test.
 *
 * **Dependencies:** None@n
 *
@@ -243,7 +243,7 @@ void test_2_dsFPD_hal_SetFPState(void)
 * This test case provides a scope to  get the State of FP indicator to ON and OFF.
 *
 * **Pre-Conditions:** @n
-* Front Panle Module should be intialized through Test 1 before calling this test.
+* Front panel Module should be intialized through Test 1 before calling this test.
 *
 * **Dependencies:** None@n
 *
@@ -278,8 +278,8 @@ void test_3_dsFPD_hal_GetFPState(void)
 * of FP indicator.
 *
 * **Pre-Conditions:** @n
-* Front Panle Module should be intialized through Test 1 before calling this test.
-* Front Panle idicator state should be set to On through Test 2 before calling this test
+* Front panel Module should be intialized through Test 1 before calling this test.
+* Front panel idicator state should be set to On through Test 2 before calling this test
 *
 * **Dependencies:** None@n
 *
@@ -324,8 +324,8 @@ void test_4_dsFPD_hal_SetFPBlink(void)
 * This test case provides a scope to  set the Brightness of selected FP indicator.
 *
 * **Pre-Conditions:** @n
-* Front Panle Module should be intialized through Test 1 before calling this test.
-* Front Panle indicator state should be set to ON through Test 2 before calling this test
+* Front panel Module should be intialized through Test 1 before calling this test.
+* Front panel indicator state should be set to ON through Test 2 before calling this test
 *
 * **Dependencies:** None@n
 *
@@ -363,8 +363,8 @@ void test_5_dsFPD_hal_SetFPBrightness(void)
 * This test case provides a scope to  get the brightness of given Indicator.
 *
 * **Pre-Conditions:** @n
-* Front Panle Module should be intialized through Test 1 before calling this test.
-* Front Panle idicator state should be set to On through Test 2 before calling this test
+* Front panel Module should be intialized through Test 1 before calling this test.
+* Front panel idicator state should be set to On through Test 2 before calling this test
 *
 * **Dependencies:** None@n
 *
@@ -397,8 +397,8 @@ void test_6_dsFPD_hal_GetFPBrightness(void)
 * This test case provides a scope to  set the Power LED to differten FP States.
 *
 * **Pre-Conditions:** @n
-* Front Panle Module should be intialized through Test 1 before calling this test.
-* Front Panle indicator state should be set to ON through Test 2 before calling this test
+* Front panel Module should be intialized through Test 1 before calling this test.
+* Front panel indicator state should be set to ON through Test 2 before calling this test
 *
 * **Dependencies:** None@n
 *
@@ -445,8 +445,8 @@ void test_7_dsFPD_hal_SetLEDState(void)
 * This test case provides a scope to  get the State of FP Power LED.
 *
 * **Pre-Conditions:** @n
-* Front Panle Module should be intialized through Test 1 before calling this test.
-* Front Panle idicator state should be set to On through Test 2 before calling this test
+* Front panel Module should be intialized through Test 1 before calling this test.
+* Front panel idicator state should be set to On through Test 2 before calling this test
 *
 * **Dependencies:** None@n
 *
@@ -477,8 +477,8 @@ void test_8_dsFPD_hal_GetLEDState(void)
 * This test case provides a scope to  set the LED inicaotrs to different Supported Colors.
 *
 * **Pre-Conditions:** @n
-* Front Panle Module should be intialized through Test 1 before calling this test.
-* Front Panle indicator state should be set to ON through Test 2 before calling this test
+* Front panel Module should be intialized through Test 1 before calling this test.
+* Front panel indicator state should be set to ON through Test 2 before calling this test
 *
 * **Dependencies:** None@n
 *
@@ -530,8 +530,8 @@ void test_9_dsFPD_hal_SetFPColor(void)
 * This test case provides a scope to  get the Color of Given indicator
 *
 * **Pre-Conditions:** @n
-* Front Panle Module should be intialized through Test 1 before calling this test.
-* Front Panle indicator state should be set to ON through Test 2 before calling this test
+* Front panel Module should be intialized through Test 1 before calling this test.
+* Front panel indicator state should be set to ON through Test 2 before calling this test
 *
 * **Dependencies:** None@n
 *
@@ -558,12 +558,12 @@ void test_10_dsFPD_hal_GetFPColor(void)
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 /**
-* @brief This test provides a scope to Termnate Device Settings Front panle Module.
+* @brief This test provides a scope to Termnate Device Settings Front panel Module.
 *
 * This test case provides a scope to terminate front panel module.
 *
 * **Pre-Conditions:** @n
-* Front Panle Module should be intialized through Test 1 before calling this test.
+* Front panel Module should be intialized through Test 1 before calling this test.
 *
 * **Dependencies:** None@n
 *
