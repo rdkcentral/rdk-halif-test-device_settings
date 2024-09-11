@@ -81,6 +81,7 @@
 
 
 #define DS_ASSERT(actual,expected) assert(actual==expected)
+#define UT_LOG_MENU_INFO UT_LOG_INFO
 
 intptr_t gHandle = 0;
 int32_t gSelectedVideoDevice = 0;
@@ -229,7 +230,7 @@ void dsVideoDevice_Term()
     UT_LOG_INFO("Calling dsVideoDevice_Term()");
     status = dsVideoDeviceTerm();
     UT_LOG_INFO("Result dsVideoDeviceTerm() OUT:dsError_t=[%s]",  UT_Control_GetMapString(dsErrorMappingTable, status));
-    DS_ASSERT_FATAL(status, dsERR_NONE);
+    DS_ASSERT(status, dsERR_NONE);
 }
 
 /**
@@ -380,7 +381,7 @@ void dsVideoDevice_GetVideoCodecInfo()
     scanf("%d", &choice);
     readAndDiscardRestOfLine(stdin);
     UT_LOG_INFO("Calling dsGetVideoCodecInfo(IN:Handle:[0x%0X],IN:Codec[%s], OUT:CodecInfo)",gHandle,\
-                                    UT_Control_GetMapString(dsVideoCodingFormatMappingTable, choice);
+                                    UT_Control_GetMapString(dsVideoCodingFormatMappingTable, choice));
     status = dsGetVideoCodecInfo(gHandle, (dsVideoCodingFormat_t)choice, &codecInfo);
     UT_LOG_INFO("Result dsGetVideoCodecInfo(), OUT:dsError_t=[%s], OUT:number of Entires=[%d]", \
             UT_Control_GetMapString(dsErrorMappingTable, status),codecInfo.num_entries);
