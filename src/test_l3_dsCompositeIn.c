@@ -500,7 +500,7 @@ int test_l3_dsCompositeIn_register(void)
 
     UT_add_test( pSuite, "Initialize CompositeIn" ,test_l3_CompositeIn_initialize );
     UT_add_test( pSuite, "Get status of ports" ,test_l3_CompositeIn_get_status );
-    UT_add_test( pSuite, "select port" ,test_l3_CompositeIn_select_port );
+    UT_add_test( pSuite, "Select port" ,test_l3_CompositeIn_select_port );
     UT_add_test( pSuite, "Scale the compositeIn video" ,test_l3_CompositeIn_scale_video );
     UT_add_test( pSuite, "Terminate CompositeIn" ,test_l3_dsCompositeIn_terminate );
 
