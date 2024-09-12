@@ -8061,7 +8061,7 @@ void test_l1_dsAudio_positive_dsGetPrimaryLanguage(void) {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
             // Step 05 : compare the primaryLanguage arrays
-            UT_ASSERT_EQUAL(primaryLanguage, primaryLanguage1);
+            UT_ASSERT_STRING_EQUAL(primaryLanguage, primaryLanguage1);
     }
 
     // Step 06: Terminate audio ports
@@ -8309,7 +8309,7 @@ void test_l1_dsAudio_positive_dsGetSecondaryLanguage(void) {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
             // Step 05 : Get Secondary language in a new array
-            UT_ASSERT_EQUAL(languageCode, languageCode1);
+            UT_ASSERT_STRING_EQUAL(languageCode, languageCode1);
     }
 
     // Step 06: Terminate audio ports
