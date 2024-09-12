@@ -159,7 +159,7 @@ void readAndDiscardRestOfLine(FILE* in)
  *
  * This function is invoked when a display event occurs, providing information about the event type.
  */
-static void displayEventCallback(int handle, dsDisplayEvent_t event, void* eventData)
+static void displayEventCallback(int32_t handle, dsDisplayEvent_t event, void* eventData)
 {
     UT_LOG_INFO("Display EventCallback(IN:handle:[%d], dsDisplayEvent_t:[%s]", 
                 handle, 
@@ -193,7 +193,9 @@ void test_l3_dsDisplay_initialize(void)
     dsError_t status   = dsERR_NONE;
 
     UT_LOG_INFO("Calling dsDisplayInit()");
+
     status = dsDisplayInit();
+
     UT_LOG_INFO("Result dsDisplayInit() dsError_t=[%s]", 
                 UT_Control_GetMapString(errorMappingTable, status));
 
@@ -415,7 +417,9 @@ void test_l3_dsDisplay_terminate(void)
     dsError_t status = dsERR_NONE;
 
     UT_LOG_INFO("Calling dsDisplayTerm()");
+
     status = dsDisplayTerm();
+
     UT_LOG_INFO("Result dsDisplayTerm() dsError_t=[%s]", 
                 UT_Control_GetMapString(errorMappingTable, status));
 
