@@ -165,10 +165,13 @@ static void displayEventCallback(int32_t handle, dsDisplayEvent_t event, void* e
                 handle, 
                 UT_Control_GetMapString(displayEventMappingTable, event));
 
-    if (eventData != NULL) {
+    if (eventData != NULL) 
+    {
         char* eventDataStr = (char*)eventData;
         UT_LOG_INFO("Event Data: %s", eventDataStr);
-    } else {
+    } 
+    else 
+    {
         UT_LOG_INFO("No Event Data provided");
     }
 }
@@ -301,7 +304,8 @@ void test_l3_dsDisplay_get_edid(void)
 
     dsError_t status = dsERR_NONE;
 
-    if (gDisplayHandle == -1) {
+    if (gDisplayHandle == -1) 
+    {
         UT_LOG_ERROR("Failed to get display handle\n");
         goto exit;
     }
@@ -355,6 +359,7 @@ void test_l3_dsDisplay_get_edidbytes(void)
     DS_ASSERT(status == dsERR_NONE);
 
     UT_LOG_INFO("EDID Bytes:");
+
     for (int32_t i = 0; i < length; i++)
     {
         UT_LOG_INFO("%02X ", gEdidBuffer[i]);
