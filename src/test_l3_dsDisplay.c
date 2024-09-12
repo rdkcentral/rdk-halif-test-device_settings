@@ -233,7 +233,8 @@ void test_l3_dsDisplay_get_handle(void)
     UT_LOG_MENU_INFO(" \t  Supported Video Port are:");
     UT_LOG_MENU_INFO("----------------------------------------------------------");
     UT_LOG_MENU_INFO("\t#   %-30s%s","Video Port", "Index");
-    for (int32_t i = 0; i < numInputPorts; i++) {
+    for (int32_t i = 0; i < numInputPorts; i++) 
+    {
         UT_LOG_MENU_INFO("\t%d.  %-30s%-2d", i+1, UT_Control_GetMapString(videoPortTypeMappingTable, gDSVideoPortConfiguration[i].typeid), gDSVideoPortConfiguration[i].index);
     }
     UT_LOG_MENU_INFO("----------------------------------------------------------");
@@ -241,7 +242,8 @@ void test_l3_dsDisplay_get_handle(void)
     scanf("%d", &choice);
     readAndDiscardRestOfLine(stdin);
 
-    if(choice < 1 || choice > numInputPorts) {
+    if(choice < 1 || choice > numInputPorts)
+    {
         UT_LOG_ERROR("Invalid Port choice");
         goto exit;
     }
@@ -264,7 +266,7 @@ void test_l3_dsDisplay_get_handle(void)
 
     UT_LOG_MENU_INFO("Calling dsRegisterDisplayEventCallback");
 
-    UT_LOG_INFO("Calling dsGetEDID(IN:handle:[0x%0X], IN:cb[0x%0X]) ", gDisplayHandle, displayEventCallback);
+    UT_LOG_INFO("Calling dsRegisterDisplayEventCallback(IN:handle:[0x%0X], IN:cb[0x%0X]) ", gDisplayHandle, displayEventCallback);
 
     status = dsRegisterDisplayEventCallback(gDisplayHandle,displayEventCallback);
 
