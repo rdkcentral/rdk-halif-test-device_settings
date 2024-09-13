@@ -55,7 +55,7 @@
  *
  * ## Module's Role
  * This module includes Level 3 functional test interfaces.
- * This Test Interfaces provides a scope to create a User Test cases for Device Settigns Front Panel modules that can be either Manual or automated scripts.
+ * This Test Interface will provide the module functionalities with which the manual user or automation can create and execute the test cases.
  *
  * **Pre-Conditions:**  None@n
  * **Dependencies:** None@n
@@ -146,11 +146,12 @@ static void readAndDiscardRestOfLine(FILE* in)
 }
 
 
-static void selectIndicator()
+static int selectIndicator()
 {
     int32_t dsFPDNumberOfIndicators = UT_KVP_PROFILE_GET_UINT32("dsFPD/Number_of_Indicators");
     int32_t indicatorType = 0;
     char buffer[DS_FPD_KEY_SIZE];
+    bool isValidIndicator = false;
 
     UT_LOG_MENU_INFO(" \t  Supported Indicators are:");
     UT_LOG_MENU_INFO("------------------------------------------");
@@ -164,6 +165,22 @@ static void selectIndicator()
     UT_LOG_MENU_INFO("Select Indicator : ");
     scanf("%d", &eIndicator);
     readAndDiscardRestOfLine(stdin);
+    isValidIndicator = false;
+    for (int indicator = 1; indicator <= dsFPDNumberOfIndicators; indicator++)
+    {
+        snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", indicator);
+        indicatorType = UT_KVP_PROFILE_GET_UINT32(buffer);
+        if(indicatorType == eIndicator)
+        {
+            isValidIndicator = true;
+        }
+    }
+    if(!isValidIndicator )
+    {
+        UT_LOG_INFO("Unsupported Indicator %d",eIndicator);
+        return 1;
+    }
+    return 0;
 }
 
 /**
@@ -211,29 +228,39 @@ void test_1_dsFPD_hal_Init(void)
 void test_2_dsFPD_hal_SetFPState(void)
 {
     gTestID = 2;
+    int ret = 0;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsError_t status = dsERR_NONE;
-    uint32_t uState = 0;
+    int32_t iState = 0;
 
-    selectIndicator();
+    ret = selectIndicator();
+    if(!ret)
+    {
+        goto exit;
+    }
     UT_LOG_MENU_INFO(" \t  Supported Front Panel States are:");
     UT_LOG_MENU_INFO("------------------------------------------");
-    for (int state = 0; state < ((sizeof(dsFrontPanelStateTable)/sizeof(dsFrontPanelStateTable[0]))-1); state++)
+    for (int state = 0; state < dsFPD_STATE_MAX; state++)
     {
         UT_LOG_MENU_INFO("\t%d.  %-20s\n", state, UT_Control_GetMapString(dsFrontPanelStateTable, state));
     }
     UT_LOG_MENU_INFO("----------------------------------------------------------");
     UT_LOG_MENU_INFO("Select State : ");
-    scanf("%d", &uState);
+    scanf("%d", &iState);
     readAndDiscardRestOfLine(stdin);
+    if(iState < 0 || iState >= dsFPD_STATE_MAX)
+    {
+        UT_LOG_INFO("Unsupported State input : %u",iState);
+        goto exit;
+    }
 
     /* Check that the Indicator is valid */
     UT_LOG_INFO("Calling dsSetFPState(IN:Indicator:[0x%d], IN:State:[%d]" \
-                                                ,eIndicator,uState);
-    status = dsSetFPState((dsFPDIndicator_t)eIndicator,(dsFPDState_t)uState);
+                                                ,eIndicator,iState);
+    status = dsSetFPState((dsFPDIndicator_t)eIndicator,(dsFPDState_t)iState);
     UT_LOG_INFO("Result dsSetFPState()dsError_t:[%s]",UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
-
+    exit:
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
@@ -258,8 +285,13 @@ void test_3_dsFPD_hal_GetFPState(void)
 
     dsError_t status = dsERR_NONE;
     dsFPDState_t eState = 0;
+    int ret = 0;
 
-    selectIndicator();
+    ret = selectIndicator();
+    if(!ret)
+    {
+        goto exit;
+    }
     UT_LOG_INFO("Calling dsGetFPState(IN:Indicator:[0x%d], OUT:State)" \
                                                 ,eIndicator);
     status = dsGetFPState((dsFPDIndicator_t)eIndicator,&eState);
@@ -268,7 +300,7 @@ void test_3_dsFPD_hal_GetFPState(void)
                                                 , UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
     /* Check that the Indicator is valid */
-
+    exit:
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 /**
@@ -292,20 +324,22 @@ void test_4_dsFPD_hal_SetFPBlink(void)
 {
     gTestID = 4;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
+    int ret = 0;
     dsError_t status = dsERR_NONE;
     uint32_t uBlinkDuration;
     uint32_t uBlinkIterations;
 
-    selectIndicator();
+    ret = selectIndicator();
+    if(!ret)
+        goto exit;
     UT_LOG_MENU_INFO("----------------------------------------------------------");
     UT_LOG_MENU_INFO("Enter Blink Duration in ms: ");
-    scanf("%d", &uBlinkDuration);
+    scanf("%u", &uBlinkDuration);
     readAndDiscardRestOfLine(stdin);
 
     UT_LOG_MENU_INFO("----------------------------------------------------------");
     UT_LOG_MENU_INFO("Enter Blink iteration: ");
-    scanf("%d", &uBlinkIterations);
+    scanf("%u", &uBlinkIterations);
     readAndDiscardRestOfLine(stdin);
 
 
@@ -315,7 +349,7 @@ void test_4_dsFPD_hal_SetFPBlink(void)
     status = dsSetFPBlink((dsFPDIndicator_t)eIndicator,uBlinkDuration,uBlinkIterations);
     UT_LOG_INFO("Result dsSetFPBlink()dsError_t:[%s]",UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
-
+    exit:
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 /**
@@ -337,24 +371,29 @@ void test_5_dsFPD_hal_SetFPBrightness(void)
 {
     gTestID = 5;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
+    int ret = 0;
     dsError_t status = dsERR_NONE;
     uint32_t uBrightness;
 
-    selectIndicator();
+    ret = selectIndicator();
+    if(!ret)
+        goto exit;
     UT_LOG_MENU_INFO("----------------------------------------------------------");
     UT_LOG_MENU_INFO("Enter LED Brightness (Range: 0-100): ");
-    scanf("%d", &uBrightness);
+    scanf("%u", &uBrightness);
     readAndDiscardRestOfLine(stdin);
-
-
+    if(uBrightness<0 || uBrightness >100)
+    {
+        UT_LOG_INFO("Unsupported Brightness value : %u",uBrightness);
+        goto exit;
+    }
     /* Check that the Indicator is valid */
     UT_LOG_INFO("Calling dsSetFPBrightness(IN:Indicator:[0x%d], IN:Brightness:[%d])" \
                                                 ,eIndicator,uBrightness);
-    status = dsSetFPBrightness((dsFPDIndicator_t)eIndicator,uBrightness);
+    status = dsSetFPBrightness((dsFPDIndicator_t)eIndicator,(dsFPDBrightness_t)uBrightness);
     UT_LOG_INFO("Result dsSetFPBrightness()dsError_t:[%s]",UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
-
+    exit:
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 /**
@@ -376,11 +415,13 @@ void test_6_dsFPD_hal_GetFPBrightness(void)
 {
     gTestID = 6;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
+    int ret = 0;
     dsError_t status = dsERR_NONE;
     dsFPDBrightness_t brightness = 0;
 
-    selectIndicator();
+    ret = selectIndicator();
+    if(!ret)
+        goto exit;
     UT_LOG_INFO("Calling dsGetFPBrightness(IN:Indicator:[0x%d], OUT:Brightness)" \
                                                 ,eIndicator);
     status = dsGetFPBrightness((dsFPDIndicator_t)eIndicator,&brightness);
@@ -388,7 +429,7 @@ void test_6_dsFPD_hal_GetFPBrightness(void)
                                                 ,eIndicator,brightness, UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
     /* Check that the Indicator is valid */
-
+    exit:
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 /**
@@ -406,37 +447,75 @@ void test_6_dsFPD_hal_GetFPBrightness(void)
 * User or Automation tool should select the Test 7 and provide the FP state to check.
 *
 */
-void test_7_dsFPD_hal_SetLEDState(void)
+void test_7_dsFPD_hal_FPGetSupportedLEDStates(void)
 {
     gTestID = 7;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    dsError_t status = dsERR_NONE;
+    dsFPDLedState_t iLedState;
+    uint32_t iSupportedLEDState= 0;
+
+    iSupportedLEDState = UT_KVP_PROFILE_GET_UINT32("dsFPD/SupportedLEDStates");
+    UT_LOG_INFO("Calling dsFPGetSupportedLEDStates()");
+    status = dsFPGetSupportedLEDStates(&iLedState);
+    UT_LOG_INFO("Result dsFPGetSupportedLEDStates(OUT:uLEDState : %u)dsError_t:[%s]",iLedState,UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
+    assert(status == dsERR_NONE);
+    UT_LOG_INFO("Supported LED States: %u",iSupportedLEDState);
+    assert(iLedState == iSupportedLEDState);
+
+    /* Check that the Indicator is valid */
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
+}
+/**
+* @brief This test provides a scope to set Power LED state.
+*
+* This test case provides a scope to  set the Power LED to differten FP States.
+*
+* **Pre-Conditions:** @n
+* Front panel Module should be intialized through Test 1 before calling this test.
+* Front panel indicator state should be set to ON through Test 2 before calling this test
+*
+* **Dependencies:** None@n
+*
+* **User Interaction:** @n
+* User or Automation tool should select the Test 7 and provide the FP state to check.
+*
+*/
+void test_8_dsFPD_hal_SetLEDState(void)
+{
+    gTestID = 8;
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
-    uint32_t uLedState;
-    uint32_t uSupportedLEDState= 0;
+    int32_t iLedState;
+    int32_t iSupportedLEDState= 0;
 
     UT_LOG_MENU_INFO(" \t  Supported POWER LED States are:");
     UT_LOG_MENU_INFO("------------------------------------------");
-    uSupportedLEDState = UT_KVP_PROFILE_GET_UINT32("dsFPD/SupportedLEDStates");
+    iSupportedLEDState = UT_KVP_PROFILE_GET_UINT32("dsFPD/SupportedLEDStates");
 
     for (int fpState = dsFPD_LED_DEVICE_NONE; fpState <= dsFPD_LED_DEVICE_MAX; fpState++)
     {
-        if (!(uSupportedLEDState & (1 << fpState)))
+        if (!iSupportedLEDState & (1 << fpState))
             continue;
         UT_LOG_MENU_INFO("\t%d.  %-20s\n", fpState, UT_Control_GetMapString(dsFrontPanelLEDState, fpState));
     }
     UT_LOG_MENU_INFO("----------------------------------------------------------");
     UT_LOG_MENU_INFO("Select State: ");
-    scanf("%X", &uLedState);
+    scanf("%d", &iLedState);
     readAndDiscardRestOfLine(stdin);
-
+    if(! (iSupportedLEDState & (1<< iLedState)))
+    {
+        UT_LOG_INFO("Unsupported LED State")
+        goto exit;
+    }
 
     /* Check that the Indicator is valid */
-    UT_LOG_INFO("Calling dsFPSetLEDState(IN state:[0x%X])",uLedState);
-    status = dsFPSetLEDState((dsFPDLedState_t)uLedState);
+    UT_LOG_INFO("Calling dsFPSetLEDState(IN state:[0x%X])",iLedState);
+    status = dsFPSetLEDState((dsFPDLedState_t)iLedState);
     UT_LOG_INFO("Result dsFPSetLEDState()dsError_t:[%s]",UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
-
+    exit:
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 /**
@@ -454,9 +533,9 @@ void test_7_dsFPD_hal_SetLEDState(void)
 * User or Automation tool should select the Test 8 and provide indicator index.
 *
 */
-void test_8_dsFPD_hal_GetLEDState(void)
+void test_9_dsFPD_hal_GetLEDState(void)
 {
-    gTestID = 8;
+    gTestID = 9;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
@@ -486,18 +565,21 @@ void test_8_dsFPD_hal_GetLEDState(void)
 * User or Automation tool should select the Test 9 and provide indicator value and Color value.
 *
 */
-void test_9_dsFPD_hal_SetFPColor(void)
+void test_10_dsFPD_hal_SetFPColor(void)
 {
-    gTestID = 9;
+    gTestID = 10;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
+    int ret = 0;
     dsError_t status = dsERR_NONE;
     uint32_t uColor;
     uint32_t uSupportedColor= 0;
     uint32_t numOfSupportedColors;
     char buffer[DS_FPD_KEY_SIZE];
+    bool isValidColor = false;
 
-    selectIndicator();
+    ret = selectIndicator();
+    if(!ret)
+        goto exit;
     UT_LOG_MENU_INFO(" \t  Supported Front Panel color for the indicator %s are:",UT_Control_GetMapString(dsFrontPanelIndicatorTable, eIndicator));
     UT_LOG_MENU_INFO("------------------------------------------");
 
@@ -511,9 +593,21 @@ void test_9_dsFPD_hal_SetFPColor(void)
     }
     UT_LOG_MENU_INFO("----------------------------------------------------------");
     UT_LOG_MENU_INFO("Select Color: ");
-    scanf("%x", &uColor);
+    scanf("%u", &uColor);
     readAndDiscardRestOfLine(stdin);
-
+    isValidColor = false;
+    for (int j = 0; j < numOfSupportedColors; j++)
+    {
+                snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/supportedColors/%d", eIndicator,j);
+                uSupportedColor = UT_KVP_PROFILE_GET_UINT32(buffer);
+                if(uSupportedColor == uColor)
+                    isValidColor = true;
+    }
+    if(!isValidColor)
+    {
+        UT_LOG_INFO("Unsupported Color Input 0x%08X",uColor);
+        goto exit;
+    }
 
     /* Check that the Indicator is valid */
     UT_LOG_INFO("Calling SetFPColor(IN:Indicator:[0x%d], IN:Color:[%X])" \
@@ -521,7 +615,7 @@ void test_9_dsFPD_hal_SetFPColor(void)
     status = dsSetFPColor((dsFPDIndicator_t)eIndicator,uColor);
     UT_LOG_INFO("Result dsSetFPColor() dsError_t:[%s]",UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
-
+    exit:
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 /**
@@ -539,22 +633,25 @@ void test_9_dsFPD_hal_SetFPColor(void)
 * User or Automation tool should select the Test 10 and provide indicator index.
 *
 */
-void test_10_dsFPD_hal_GetFPColor(void)
+void test_11_dsFPD_hal_GetFPColor(void)
 {
-    gTestID = 10;
+    gTestID = 11;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
     dsFPDColor_t color;
+    int ret = 0;
 
-    selectIndicator();
+    ret = selectIndicator();
+    if(!ret)
+        goto exit;
     UT_LOG_INFO("Calling dsGetFPColor(IN:Indicator:[0x%d], OUT:Color)",eIndicator);
     status = dsGetFPColor((dsFPDIndicator_t)eIndicator,&color);
     UT_LOG_INFO("Result dsGetFPColor(IN:Indicator:[0x%d], OUT:Color:[%d]) dsError_t:[%s]" \
                                                 ,eIndicator,color,UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
     /* Check that the Indicator is valid */
-
+    exit:
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 /**
@@ -572,20 +669,20 @@ void test_10_dsFPD_hal_GetFPColor(void)
 *
 */
 
-void test_11_dsFPD_hal_Term(void)
+void test_12_dsFPD_hal_Term(void)
 {
-   gTestID = 11;
-   dsError_t status = dsERR_NONE;
+    gTestID = 12;
+    dsError_t status = dsERR_NONE;
 
-   UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-   // Step 1: Call dsFPInit()
-   UT_LOG_INFO("Calling dsFPTerm()");
-   status = dsFPTerm();
-   UT_LOG_INFO("Result dsFPTerm()dsError_t:[%s]",UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
-   assert(status == dsERR_NONE);
+    // Step 1: Call dsFPInit()
+    UT_LOG_INFO("Calling dsFPTerm()");
+    status = dsFPTerm();
+    UT_LOG_INFO("Result dsFPTerm()dsError_t:[%s]",UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
+    assert(status == dsERR_NONE);
 
-   UT_LOG_INFO("Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
 static UT_test_suite_t * pSuite = NULL;
@@ -611,11 +708,12 @@ int test_register_dsFPD_hal_l3_tests(void)
     UT_add_test( pSuite, "4_SetBlink_dsFPD", test_4_dsFPD_hal_SetFPBlink);
     UT_add_test( pSuite, "5_SetBrightness_dsFPD", test_5_dsFPD_hal_SetFPBrightness);
     UT_add_test( pSuite, "5_GetBrightness_dsFPD", test_6_dsFPD_hal_GetFPBrightness);
-    UT_add_test( pSuite, "7_SetFPState_dsFPD", test_7_dsFPD_hal_SetLEDState);
-    UT_add_test( pSuite, "8_GetFPState_dsFPD", test_8_dsFPD_hal_GetLEDState);
-    UT_add_test( pSuite, "9_SetColor_dsFPD", test_9_dsFPD_hal_SetFPColor);
-    UT_add_test( pSuite, "9_SetColor_dsFPD", test_10_dsFPD_hal_GetFPColor);
-    UT_add_test( pSuite, "11_Term_dsFPD", test_11_dsFPD_hal_Term);
+    UT_add_test( pSuite, "7_GetSupportedLEDStates_dsFPD", test_7_dsFPD_hal_FPGetSupportedLEDStates);
+    UT_add_test( pSuite, "8_SetLEDtate_dsFPD", test_8_dsFPD_hal_SetLEDState);
+    UT_add_test( pSuite, "9_GetLEDState_dsFPD", test_9_dsFPD_hal_GetLEDState);
+    UT_add_test( pSuite, "10_SetColor_dsFPD", test_10_dsFPD_hal_SetFPColor);
+    UT_add_test( pSuite, "11_GetColor_dsFPD", test_11_dsFPD_hal_GetFPColor);
+    UT_add_test( pSuite, "12_Term_dsFPD", test_12_dsFPD_hal_Term);
 
     return 0;
 }
