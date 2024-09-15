@@ -7,14 +7,16 @@ dsAudio:  # Prefix must always exist
     menu:
       type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
       groups: 
-          name: "L3 dsAudio - Sink"
+        - name: "L3 dsAudio - Sink"
           menu_initialize:
             name: "Initialize dsAudio"
           menu_enable:
             name: "Enable Audio Port"
-            sub_menu: {"Select dsAudio Port": "dsAUDIOPORT_TYPE_SPEAKER"}
           menu_disable:
             name: "Disable Audio Port"
-            sub_menu: {"Select dsAudio Port": "dsAUDIOPORT_TYPE_SPEAKER"}
+          menu_connection:
+            name: "Headphone Connection"
+          menu_audioCompression:
+            name: "Audio Compression"
           menu_terminate:
             name: "Terminate dsAudio"
