@@ -23,69 +23,53 @@
 import yaml
 import os
 import sys
-
+from enum import Enum, auto
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path+"/../")
 
 from raft.framework.plugins.ut_raft.utHelper import utHelperClass
-#from raft.framework.plugins.ut_raft.ut_core import UTCoreMenuNavigator
 
-#TODO: Read from yaml file
+#TODO: used by ut_core remove later after updating ut_core
 run_script="./bins/run.sh"
+
+class dsAudioPortType(Enum):
+    dsAUDIOPORT_TYPE_ID_LR     = 0
+    dsAUDIOPORT_TYPE_HDMI      = auto()
+    dsAUDIOPORT_TYPE_SPDIF     = auto()
+    dsAUDIOPORT_TYPE_SPEAKER   = auto()
+    dsAUDIOPORT_TYPE_HDMI_ARC  = auto()
+    dsAUDIOPORT_TYPE_HEADPHONE = auto()
 
 class dsAudioTestHelperClass(utHelperClass):
 
-    UT = None
-    test_config = None
-    menu_yaml = None
-    menu_dict = None
-
+    moduleName = "dsAudio"
     """
     Device Settings Audio Test Helper Code
 
     This module provides common extensions for device Settings Audio Module.
     """
-    def __init__(self, testName, qcId, test_config_path, device, log=None ):
-        super().__init__(testName, qcId, log=log )
-
-        test_config = self.load_yaml(test_config_path)
-
-        target_directory = self.config.deviceConfig.get(device).get("target_directory")
-
-        # Copy test binaries to the target
-        for source in test_config["dsAudio"]["test_prerequisite"]["test_bin"]:
-            self.downloadFileToDevice(source, target_directory)
-
-        # Copy test asserts to the target
-        for source in test_config["dsAudio"]["test_prerequisite"]["test_asserts_target"]:
-            self.downloadFileToDevice(source, target_directory)
-
-        # Download Menu config
-        menu_url = test_config["dsAudio"]["test_prerequisite"]["test_asserts_host"]["menu_config_url"]
-        menu_config = self.downloadFileToHost(menu_url)
-
-        #Set menu to UT Helper
-        menu_dict = self.config.decodeConfigIntoDictionary(menu_config)
-        self.setMenuConfiguration(menu_config)
-
-        self.groupControl = menu_dict["control"]["menu"]["groups"]
-
-        # Run Prerequisite commands on the target
-        for cmd in test_config["dsAudio"]["test_prerequisite"]["test_pre_commands"]:
-            self.writeCommandOnDevice(cmd)
-
-    def load_yaml(self, path):
+    def __init__(self, test_config, testGroup="", testName="", qcId="", device="cpe1", log=None ):
         """
-        Loads and parses a YAML file from the specified path.
+        Initializes the dsAudio test helper function.
 
         Args:
-            path (str): The file path to the YAML file.
-
-        Returns:
-            dict: The parsed YAML content.
+            test_config (str): test configuration file.
+            testGroup (str, optional): test group name. Defaults to "".
+            testName (str, optional): Name of the test. Defaults to "".
+            qcId (str, optional): QC ID of the test. Defaults to "".
+            device (str, optional): Device name. Defaults to cpe1.
+            log (class, optional): Parent log class. Defaults to None.
         """
-        with open(path, 'r') as file:
-            return yaml.safe_load(file)
+        super().__init__(test_config, self.moduleName, testGroup, testName, qcId, device, log=log )
+
+        # Download Assets on device
+        self.downloadAssetsToDevice()
+
+        # Run Prerequisite commands on the device
+        self.runPrerequisiteOnDevice()
+
+        # Initialize the dsAudio
+        self.dsAudioInitialise()
 
     def dsAudioInitialise(self):
         """
@@ -97,52 +81,50 @@ class dsAudioTestHelperClass(utHelperClass):
         Returns:
             None
         """
-        self.UT.run_tests(run_script, self.groupControl["name"], self.groupControl["menu_initialize"]["name"])
+        self.UT.run_tests(run_script, self.testGroup, "Initialize dsAudio")
 
-    def dsAudioEnablePort(self):
+    def dsAudioEnablePort(self, audio_port):
         """
         Enables the audio port.
 
         Args:
-            None.
+            audio_port (str): name of the audio port. Refer dsAudioPortType enum
 
         Returns:
             None
         """
-        output = self.UT.select_menu(self.groupControl["menu_enable"])
+        output = self.selectGroupTest("menu_enable", self.queryPrompt)
+        self.selectGroupMenus(output, audio_port)
 
     def dsAudioVerifyAudio(self, manual=True):
         """
         Verifies whether the audio is fine or not.
 
         Args:
-            None.
+            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
+                                     Defaults to manual verification
 
         Returns:
             bool
         """
         if manual == True:
-            print("Is Audio playing fine[y/n]:")
-            pass_res = self.getUserInputFromHostControl()
-            if pass_res == 'y' or pass_res == 'Y' :
-                return True
-            else:
-                return False
+            return self.hostUserResponse.getUserYNFromHost("Is Audio playing fine[y/n]")
         else :
             #TOD: Add automation verification methods
             return False
 
-    def dsAudioDisablePort(self):
+    def dsAudioDisablePort(self, audio_port):
         """
         Enables the audio port.
 
         Args:
-            None.
+            audio_port (str): name of the audio port. Refer dsAudioPortType enum
 
         Returns:
             None
         """
-        output = self.UT.select_menu(self.groupControl["menu_disable"])
+        output = self.selectGroupTest("menu_disable", self.queryPrompt)
+        self.selectGroupMenus(output, audio_port)
 
     def dsAudioTerminate(self):
         """
@@ -154,4 +136,66 @@ class dsAudioTestHelperClass(utHelperClass):
         Returns:
             None
         """
-        output = self.UT.select_menu(self.groupControl["menu_terminate"])
+        output = self.selectGroupTest("menu_menu_terminate", self.queryPrompt)
+
+    def dsAudioGetSupportedPorts(self):
+        """
+        Returns the supported audio ports on device.
+
+        Args:
+            None.
+
+        Returns:
+            returns the list of supported audio ports
+        """
+        ports = self.deviceProfile.get("PortTypes")
+
+        return [dsAudioPortType(value).name for value in ports] if ports is not None else []
+
+    def dsAudioGetStreams(self):
+        """
+        Returns the streams copied to the device.
+
+        Args:
+            None.
+
+        Returns:
+            returns the list of steams
+        """
+        return self.testStreams
+
+    def dsAudioPlay(self, stream):
+        """
+        Start of Playback of the stream.
+
+        Args:
+            None.
+
+        Returns:
+            None
+        """
+        self.player.utStartPlay(stream)
+
+    def dsAudioPlayStop(self, stream):
+        """
+        Stops of Playback of the stream.
+
+        Args:
+            None.
+
+        Returns:
+            None
+        """
+        self.player.utStopPlay()
+
+    def __del__(self):
+        """
+        De-Initializes the dsAudio helper function.
+
+        Args:
+            None.
+
+        Returns:
+            None
+        """
+        self.dsAudioTerminate()

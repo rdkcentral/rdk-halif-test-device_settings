@@ -26,14 +26,23 @@ import sys
 
 from helpers.dsAudioTestHelper import dsAudioTestHelperClass
 
-test_setup="<PATH>/dsAudio_test1_EnableDisableAndVerifyAudioPortStatus_testsetup.yml" #path to test setup file
+#TODO: Read from command line argument
+test_config="../../assets/dsAudio_L3_testSetup.yml" #path to test setup file
+device="cpe1"
+testGroup = "L3 dsAudio - Sink"
 
 class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(dsAudioTestHelperClass):
 
-    def __init__(self):
+    testName = "test1_EnableDisableAndVerifyAudioPortStatus"
 
-        #TODO: read device from yaml file
-        super().__init__('test1_EnableDisableAndVerifyAudioPortStatus', '1', test_setup, "cpe1")
+    def __init__(self):
+        """
+        Initializes the test1_EnableDisableAndVerifyAudioPortStatus test .
+
+        Args:
+            None.
+        """
+        super().__init__(test_config, testGroup, self.testName, '1', device)
 
     def testFunction(self):
         """This function will test the Audio Port by enabling and disabling the ports
@@ -41,24 +50,35 @@ class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(dsAudioTestHelperClass
         Returns:
             bool: true
         """
-        print("dsAudio_test1_EnableDisableAndVerifyAudioPortStatus")
 
-        self.dsAudioInitialise()
-        self.dsAudioEnablePort()
-        result = self.dsAudioVerifyAudio(True)
-        if result == True:
-            self.log.testResultMessage("Passed")
-        else :
-            self.log.testResultMessage("Failed")
+        streams = self.dsAudioGetStreams()
+        self.dsAudioPlay(streams[0])
 
-        self.dsAudioDisablePort()
-        result = self.dsAudioVerifyAudio(True)
-        if result == False:
-            self.log.testResultMessage("Passed")
-        else :
-            self.log.testResultMessage("Failed")
+        self.log.testStart("test1_EnableDisableAndVerifyAudioPortStatus", '1')
+        for port in self.dsAudioGetSupportedPorts():
+            self.log.stepStart(f'Enable {port} Port')
+            self.log.step(f'Enable {port} Port')
 
-        self.dsAudioTerminate()
+            enable_input = [port, "dsAUDIOARCSUPPORT_eARC"] if port == "dsAUDIOPORT_TYPE_HDMI_ARC" else [port]
+
+            self.dsAudioEnablePort(enable_input)
+
+            self.log.step(f'Verify {port} Port')
+            result = self.dsAudioVerifyAudio(True)
+
+            self.log.stepResult(result, f'Audio Verification {port} Port')
+
+            self.log.stepStart(f'Disable {port} Port')
+
+            self.dsAudioDisablePort([port])
+
+            self.log.step(f'Verify {port} Port')
+            result = self.dsAudioVerifyAudio(True)
+
+            self.log.stepResult(not result, f'Audio Verification {port} Port')
+        self.log.testResult("test1_EnableDisableAndVerifyAudioPortStatus")
+
+        self.dsAudioPlayStop()
 
         return result
 
