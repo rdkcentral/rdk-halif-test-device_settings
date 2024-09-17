@@ -937,6 +937,21 @@ int test_l3_dsVideoPort_register(void)
         UT_add_test( pSuite, "Set PreferredColorDepth",dsVideoPort_SetPreferredColorDepth);
         UT_add_test( pSuite, "Set BackgroundColor",dsVideoPort_SetBackgroundColor);
     }
+    UT_add_test( pSuite, "Get CurrentOutputSettings", dsVideoPort_CurrentOutputSettings);
+    UT_add_test( pSuite, "Get Resolution",dsVideoPort_GetResolution);
+    UT_add_test( pSuite, "Get VideoEOTF",dsVideoPort_GetVideoEOTF);
+    UT_add_test( pSuite, "IsOutputHDR",dsVideoPort_IsOutputHDR);
+    UT_add_test( pSuite, "Get HDCPStatus",dsVideoPort_GetHDCPStatus);
+    UT_add_test( pSuite, "Get HDCPCurrentProtocol",dsVideoPort_GetHDCPCurrentProtocol);
+    UT_add_test( pSuite, "Get HdmiPreference",dsVideoPort_GetHdmiPreference);
+    UT_add_test( pSuite, "Get ColorSpace",dsVideoPort_GetColorSpace);
+    UT_add_test( pSuite, "Get ColorDepth",dsVideoPort_GetColorDepth);
+    if(gSourceType == 1)
+    {
+        UT_add_test( pSuite, "Get HDCPReceiverProtocol",dsVideoPort_GetHDCPReceiverProtocol);
+        UT_add_test( pSuite, "Get IgnoreEDIDStatus",dsVideoPort_GetIgnoreEDIDStatus);
+        UT_add_test( pSuite, "Get PreferredColorDepth",dsVideoPort_GetPreferredColorDepth);
+    }
 
     return 0;
 }
