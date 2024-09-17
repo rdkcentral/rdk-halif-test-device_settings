@@ -2,38 +2,125 @@
 
 ## Table of Contents
 
-- [Overview](#overview)
 - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
+- [Overview](#overview)
+- [Definitions](#definitions)
 - [References](#references)
-- [Level 3 Test cases High Level Overview](#level-3-test-cases-high-level-overview)
-
-## Overview
-
-This document describes the L3 Low Level Test Specification and Procedure Documentation for the Device Settings Composite Input module.
+- [Level 3 Test Procedure](#level-3-test-procedure)
 
 ### Acronyms, Terms and Abbreviations
 
-- `HAL` \- Hardware Abstraction Layer, may include some common components
-- `API` \- Application Programming Interface
-- `UT`  \- Unit Test(s)
-- `OEM` \- Original Equipment Manufacture
-- `SoC` \- System on a Chip
-- `NA`  \- Not Applicable
-- `DUT` \- Device Under Test
-- `RAFT`\- Rapid Automation Framework for Testing
+- `HAL`    - Hardware Abstraction Layer
+- `API`    - Application Programming Interface
+- `L2`     - Level 2 Testing
+- `L3`     - Level 3 Testing
+- `DS`     - Device Settings
+- `UT`     - Unit Test(s)
+- `OEM`    - Original Equipment Manufacture
+- `SoC`    - System on a Chip
+- `NA`     - Not Applicable
+- `DUT`    - Device Under Test
+- `RAFT`   - Rapid Automation Framework for Testing
 
-### References
+## Overview
+
+This document describes the Low Level L2 Test Specification and Procedure for the Device Settings Composite Input module.
+
+## Definitions
+
+- `ut-core` \- Common Testing Framework [ut-core](https://github.com/rdkcentral/ut-core), which wraps a open-source framework that can be expanded to the requirements for future framework.
+- `user` \- Refers to either human or the test automation framework like `RAFT`
+
+## References
 
 - `High Level Test Specification` - [ds-compositeIn-High-Level_TestSpec.md](https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/main/docs/pages/ds-compositeIn-High-Level_TestSpec.md)
-
 - `HAL Interface file` - [dsCompositeIn Header](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsCompositeIn.h)
 
-## Level 3 Test Cases High Level Overview
+## Level 3 Test Procedure
 
-|#|TestName|Description|
-|-|--------|-----------|
-|1|Verify the CompositeIn port connection with callbacks|Connect/disconnect the CompositeIn source device and check the callbacks is triggered when the connection status changes|
-|2|Select the CompositeIn port |Select the composite input port and verify the status|
-|3|Verify the CompositeIn active port status with callbacks|Select the CompositeIn port and check the callbacks is triggered when the active status changes|
-|4|Scale the video and verify |Play a video in CompositeIn source device and scale the video resolution|
-|5|Verify the status information of CompositeIn port |Play a video in CompositeIn source device connected to the active CompositeIn port and verify the status|
+The following functions are expecting to test the module operates correctly.
+
+### Test 1
+
+|Title|Details|
+|-----|-------|
+|Test Name|`test1_VerifyCompositeInPortConnectionAndStatus`|
+|Description|Verify the COMPOSITE Input port connection status|
+
+**Pre-Conditions :**
+None
+
+**Dependencies :**
+None
+
+**User Interaction :**
+- Connect/disconnect the CompisiteIn source device
+
+#### Test Procedure - Test 1
+
+|Variation / Steps|Description|
+|-----------------|-----------|
+|01|Initialize dsCompositeIn|
+|02|Connect the CompisiteIn source device to `DUT` |
+|03|Check the connection status|
+|04|Disconnect the CompisiteIn source device from `DUT`|
+|05|Check the connection status|
+|06|De-Initialize the dsCompositeIn|
+
+### Test 2
+
+|Title|Details|
+|-----|-------|
+|Test Name|`test2_VerifyCompositeInPortSelectionAndStatus`|
+|Description|Sets the COMPOSITE Input port as active for presentation and verifY the status|
+
+**Pre-Conditions :**
+
+None
+
+**Dependencies :**
+None
+
+**User Interaction :**
+None
+
+#### Test Procedure - Test 2
+
+|Variation / Steps|Description|
+|-----------------|-----------|
+|01|Initialize dsCompositeIn|
+|02|Get the supported CompositeIn Input ports|
+|03|Specify the port to select |
+|04|Set the input port to active|
+|05|Check status on input port|
+|06|De-Initialize the dsCompositeIn|
+
+### Test 3
+
+|Title|Details|
+|-----|-------|
+|Test Name|`test3_ScaleCompositeInVideoAndVerifyStatus`|
+|Description|Scales the COMPOSITE In video and checks for the presented status|
+
+**Pre-Conditions :**
+- Connect compositeIn source device and play video.
+
+**Dependencies :**
+None
+
+**User Interaction :**
+
+None
+
+#### Test Procedure - Test 3
+
+|Variation / Steps|Description|
+|-----------------|-----------|
+|01|Initialize dsCompositeIn|
+|02|Get the supported CompositeIn Input ports|
+|03|Specify the port to select |
+|04|Set the input port to active|
+|05|Check status on input port|
+|06| Scale the video
+|07|Check status on input port|
+|08|De-Initialize the dsCompositeIn|
