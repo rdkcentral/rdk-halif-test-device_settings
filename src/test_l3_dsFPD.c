@@ -496,7 +496,7 @@ void test_8_dsFPD_hal_SetLEDState(void)
 
     for (int fpState = dsFPD_LED_DEVICE_NONE; fpState <= dsFPD_LED_DEVICE_MAX; fpState++)
     {
-        if (!iSupportedLEDState & (1 << fpState))
+        if (!(iSupportedLEDState & (1 << fpState)))
             continue;
         UT_LOG_MENU_INFO("\t%d.  %-20s\n", fpState, UT_Control_GetMapString(dsFrontPanelLEDState, fpState));
     }
@@ -506,7 +506,7 @@ void test_8_dsFPD_hal_SetLEDState(void)
     readAndDiscardRestOfLine(stdin);
     if(! (iSupportedLEDState & (1<< iLedState)))
     {
-        UT_LOG_INFO("Unsupported LED State")
+        UT_LOG_INFO("Unsupported LED State");
         goto exit;
     }
 
