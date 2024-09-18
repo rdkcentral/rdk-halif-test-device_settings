@@ -24,6 +24,7 @@ import yaml
 import os
 import sys
 from enum import Enum, auto
+
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path+"/../")
 
@@ -33,14 +34,14 @@ from raft.framework.plugins.ut_raft.utHelper import utHelperClass
 run_script="./bins/run.sh"
 
 class dsAudioPortType(Enum):
-    dsAUDIOPORT_TYPE_ID_LR     = 0
-    dsAUDIOPORT_TYPE_HDMI      = auto()
-    dsAUDIOPORT_TYPE_SPDIF     = auto()
-    dsAUDIOPORT_TYPE_SPEAKER   = auto()
-    dsAUDIOPORT_TYPE_HDMI_ARC  = auto()
-    dsAUDIOPORT_TYPE_HEADPHONE = auto()
+    ID_LR     = 0
+    HDMI      = auto()
+    SPDIF     = auto()
+    SPEAKER   = auto()
+    ARC  = auto()
+    HEADPHONE = auto()
 
-class dsAudioTestHelperClass(utHelperClass):
+class dsAudioClass():
 
     moduleName = "dsAudio"
     """
@@ -48,7 +49,7 @@ class dsAudioTestHelperClass(utHelperClass):
 
     This module provides common extensions for device Settings Audio Module.
     """
-    def __init__(self, test_config, testGroup="", testName="", qcId="", device="cpe1", log=None ):
+    def __init__(self, testName, qcId, log=None ):
         """
         Initializes the dsAudio test helper function.
 
@@ -60,18 +61,10 @@ class dsAudioTestHelperClass(utHelperClass):
             device (str, optional): Device name. Defaults to cpe1.
             log (class, optional): Parent log class. Defaults to None.
         """
-        super().__init__(test_config, self.moduleName, testGroup, testName, qcId, device, log=log )
+        super().__init__(testName, qcId, log=log )
+        # Need to load menuconfig & module profile
 
-        # Download Assets on device
-        self.downloadAssetsToDevice()
-
-        # Run Prerequisite commands on the device
-        self.runPrerequisiteOnDevice()
-
-        # Initialize the dsAudio
-        self.dsAudioInitialise()
-
-    def dsAudioInitialise(self):
+    def dsAudioInitialise(self, testConfig):
         """
         Initializes the device settings Audio module.
 
@@ -82,6 +75,7 @@ class dsAudioTestHelperClass(utHelperClass):
             None
         """
         self.UT.run_tests(run_script, self.testGroup, "Initialize dsAudio")
+        utHelperClass()
 
     def dsAudioEnablePort(self, audio_port):
         """
@@ -93,8 +87,10 @@ class dsAudioTestHelperClass(utHelperClass):
         Returns:
             None
         """
-        output = self.selectGroupTest("menu_enable", self.queryPrompt)
-        self.selectGroupMenus(output, audio_port)
+        # Validate the video 
+        self.select_menu("")
+        output = self.menu_select("menu_enable", self.queryPrompt)
+        self.menu_select(output, audio_port)
 
     def dsAudioVerifyAudio(self, manual=True):
         """
@@ -123,8 +119,7 @@ class dsAudioTestHelperClass(utHelperClass):
         Returns:
             None
         """
-        output = self.selectGroupTest("menu_disable", self.queryPrompt)
-        self.selectGroupMenus(output, audio_port)
+        self.menu_select("menu_disable", audio_port, self.queryPrompt)
 
     def dsAudioTerminate(self):
         """
@@ -149,6 +144,7 @@ class dsAudioTestHelperClass(utHelperClass):
             returns the list of supported audio ports
         """
         ports = self.deviceProfile.get("PortTypes")
+        return ports
 
         return [dsAudioPortType(value).name for value in ports] if ports is not None else []
 

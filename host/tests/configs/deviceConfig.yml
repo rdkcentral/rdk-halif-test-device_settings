@@ -27,9 +27,9 @@ deviceConfig:
         platform:   "llama.uk"
         model:      "65"
         target_directory: "/tmp"
+        profile: "../../../assets/dsAudio/Sink_AudioSettings.yaml"   # Default validation profile
         test:
             #TODO: Use the single system wise configuration file which contains all details (ds, hdmi, etc)
-            profile: "../..//assets/Sink_AudioSettings.yaml"
             queryPrompt: "[$RFSG]:"
             player:
                 tool: "gstreamer"

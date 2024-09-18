@@ -66,8 +66,8 @@ class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(dsAudioTestHelperClass
             self.log.step(f'Verify {port} Port')
             result = self.dsAudioVerifyAudio(True)
 
+            ## How will this test validate the audio
             self.log.stepResult(result, f'Audio Verification {port} Port')
-
             self.log.stepStart(f'Disable {port} Port')
 
             self.dsAudioDisablePort([port])
@@ -76,7 +76,6 @@ class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(dsAudioTestHelperClass
             result = self.dsAudioVerifyAudio(True)
 
             self.log.stepResult(not result, f'Audio Verification {port} Port')
-        self.log.testResult("test1_EnableDisableAndVerifyAudioPortStatus")
 
         self.dsAudioPlayStop()
 
