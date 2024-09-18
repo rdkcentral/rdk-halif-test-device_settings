@@ -34,11 +34,6 @@
 
 This document describes the L3 Test Procedure for the Device Settings Audio module.
 
-## Definitions
-
-- `ut-core` \- Common Testing Framework [ut-core](https://github.com/rdkcentral/ut-core), which wraps a open-source framework that can be expanded to the requirements for future framework.
-- `user` \- Refers to either human or the test automation framework like `RAFT`
-
 ## References
 
 - dsAudio HAL Interface - [dsAudio.h](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsAudio.h)
@@ -46,105 +41,31 @@ This document describes the L3 Test Procedure for the Device Settings Audio modu
 
 ## Audio Streams Requirement
 
-|ID|Description|Audio Format|Samplerate|Channels|Bitrate(kbps)|Stream Path|
-|--|-----------|------------|----------|--------|-------------|-----------|
-|001|400Hz sine tone|`PCM` with `WAV` header|48000|2|1536|`TBD`|
-|002|AAC stream|aac with `ADTS`|48000|2|256|`TBD`|
-|003|Vorbis stream|vorbis with `ogg`|48000|2|256|`TBD`|
-|004|wma stream|wma|48000|2|256|`TBD`|
-|005|Dolby AC3 (Dolby digital)|ac3|48000|2|256|`TBD`|
-|006|Dolby EAC3 (Dolby Digital plus)|ac3|48000|2|256|`TBD`|
-|007|Dolby AC4|ac4|48000|2|256|`TBD`|
-|008|Dolby MAT|MAT|48000|2|256|`TBD`|
-|009|Dolby TrueHD|ac3|48000|2|256|`TBD`|
-|010|Dolby EAC3 Atmos|eac3|48000|2|256|`TBD`|
-|011|Dolby TRUEHD Atmos|ac3|48000|2|256|`TBD`|
-|012|Dolby MAT Atmos|MAT|48000|2|256|`TBD`|
-|013|Dolby AC4 Atmos|ac4|48000|2|256|`TBD`|
+|#|Stream|Description|
+|-|------|-----------|
+|001|400Hz_sine_tone|File: `WAV`, Format: `PCM`, SampleRate: 48000, Channels: 2|
+|002|AAC_stream|File: `mp4`, Format: `AAC`, SampleRate: 48000, Channels: 2|
+|003|Vorbis_stream|File: `ogg`, Format: `vorbis`, SampleRate: 48000, Channels: 2|
+|004|wma_stream|File: `wma`, Format: `wma`, SampleRate: 48000, Channels: 2|
+|005|Dolby_Streams|`TBD`|
+|006|Dolby_MS12_Streams|`TBD`|
 
-## Level 3 Test Procedure
+## Level 3 Test Cases High Level Overview
 
-The following functions are expecting to test the module operates correctly.
+Below are top test use-case for the audio port.
 
-### Test 1
-
-|Title|Details|
-|-----|-------|
-|Test Name|`test1_EnableDisableAndVerifyAudioPortStatus`|
-|Description|Enable/disable audio ports and verifY the status|
-
-**Pre-Conditions :**
-
-- Play the audio stream ID `001` [audio-streams-requirement](#audio-streams-requirement) on `DUT`
-
-**Dependencies :**
-None
-
-**User Interaction :**
-None
-
-#### Test Procedure - Test 1
-
-|Variation / Steps|Description|
-|-----------------|-----------|
-|01|Initialize dsAudio|
-|02|Enable the Port|
-|03|Check playback status on enabled port|
-|04|Disable the port|
-|05|Check playback status on disabled port|
-|06|De-Initialize the dsAudio|
-
-### Test 2
-
-|Title|Details|
-|-----|-------|
-|Test Name|`test2_CheckHeadphoneConnectionStatus`|
-|Description|Checks headphone connection status|
-
-**Pre-Conditions :**
-None
-
-**Dependencies :**
-None
-
-**User Interaction :**
-
-- Connect/disconnect the headphone
-
-#### Test Procedure - Test 2
-
-|Variation / Steps|Description|
-|-----------------|-----------|
-|01|Initialize dsAudio|
-|02|Enable the Port|
-|03|Connect the headphone to `DUT`|
-|04|Check the connection status|
-|05|Disconnect the headphone from `DUT`|
-|06|Check the connection status|
-|07|De-Initialize the dsAudio|
-
-### Test 3
-
-|Title|Details|
-|-----|-------|
-|Test Name|`test3_CheckAudioFormat`|
-|Description|Checks audio format of playback stream|
-
-**Pre-Conditions :**
-
-- Play audio streams [audio-streams-requirement](#audio-streams-requirement) on `DUT`
-
-**Dependencies :**
-None
-
-**User Interaction :**
-None
-
-#### Test Procedure - Test 3
-
-|Variation / Steps|Description|
-|-----------------|-----------|
-|01|Initialize dsAudio|
-|02|Play the audio stream|
-|03|Check the audio format in call back and with API|
-|04|De-Initialize the dsAudio|
+|#|Test-case|Description|HAL APIs|Source|Sink|Streams Number|
+|-|---------|-----------|--------|------|----|--------------|
+|1|Enable/disable audio ports|Play the predefined audio streams. Iterate through the supported audio ports, enabling or disabling them, and check if the stream is being played through each port| `dsEnableAudioPort()`|`Y`|`Y`|001|
+|2|Verify the Headphone connection status|Enable the headphone port and verify the connection status by disconnecting and reconnecting the port. Additionally, confirm if the callback is triggered| `dsAudioOutIsConnected()`|`N`|`Y`|`NA`|
+|3|Verify MS12 `DAP` Capabilities|Loop through the ports which supports `MS12` `DAP` Capabilities and verify the `DAP` features: Audio compression, Dialog enhancement, Dolby Volume mode, Intelligent Equalizer, Volume leveller, Bass enhancer, Surround Decoder, `DRC` Mode, Surround Virtualizer, `MI` Steering, Graphics Equalizer, `LE` Config| `dsSetAudioCompression()`, `dsSetDialogEnhancement()`, `dsSetDolbyVolumeMode()`, `dsSetIntelligentEqualizerMode()`, `dsSetVolumeLeveller()`, `dsSetBassEnhancer()`, `dsEnableSurroundDecoder()`, `dsSetDRCMode()`, `dsSetSurroundVirtualizer()`, `dsSetMISteering()`, `dsSetGraphicEqualizerMode()`, `dsEnableLEConfig()`|`Y`|`Y`|006|
+|4|Test `ARC` Port|Enable the `ARC` port, retrieve the connected device's capabilities, and verify them| `dsGetSupportedARCTypes()`|`N`|`Y`|`NA`|
+|5|Test `ARC` Port `SAD`|Enable the `ARC` port, set the set the `SAD` and verify| `dsAudioSetSAD()`|`N`|`Y`|`NA`|
+|6|Test output mode|Play the predefined audio streams. Iterate through the audio ports which supports stereo modes, set various stereo modes and verify| `dsSetStereoMode()`|`Y`|`Y`|001, 002, 005|
+|7|Test Audio Gain|Play the predefined audio streams. Iterate through the audio ports, set the gain and verify| `dsSetAudioGain()`, `dsSetAudioLevel()`|`N`|`Y`|001, 005|
+|8|Test Audio Mute|Play the predefined audio streams. Iterate through the audio ports, set the Mute, Un-mute and verify| `dsSetAudioMute()`|`Y`|`Y`|001, 005|
+|9|Test Audio Delay|Play the predefined audio streams. Iterate through the audio ports, set the delay and verify| `dsSetAudioDelay()`|`Y`|`Y`|001, 005|
+|10|Test Audio Format|Play the predefined audio streams. verify the audio format using `API`. Additionally, confirm if the callback is triggered| `dsGetAudioFormat()`|`Y`|`Y`|001, 002, 003, 004, 005|
+|11|Test Associated Audio Mixing|Play the predefined audio streams. Set the mixer levels and verify| `dsSetAssociatedAudioMixing()`, `dsSetFaderControl()`|`Y`|`Y`|005|
+|12|Test Primary/Secondary Language|Play the predefined audio streams. Set the primary and secondary languages and verify| `dsSetPrimaryLanguage()`, `dsSetSecondaryLanguage()`|`Y`|`Y`|005|
+|13|Test Audio Mixer Levels|Play the predefined audio streams. Set the mixer levels for primary and system audio and verify| `dsSetAudioMixerLevels()`|`N`|`Y`|005|
