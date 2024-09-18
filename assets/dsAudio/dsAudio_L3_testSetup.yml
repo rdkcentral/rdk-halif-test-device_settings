@@ -19,7 +19,7 @@ dsAudio:  # Prefix must always exist
         streams:
 
     host:
-      menu_config: "../../assets/dsAudio_L3_menu.yml"
+      menu_config: "dsAudio_L3_menu.yml"
 
 
 
