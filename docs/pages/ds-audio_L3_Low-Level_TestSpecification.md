@@ -4,10 +4,9 @@
 
 - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
 - [Overview](#overview)
-- [Definitions](#definitions)
 - [References](#references)
 - [Audio Streams Requirement](#audio-streams-requirement)
-- [Level 3 Test Procedure](#level-3-test-procedure)
+- [Level 3 Test Procedure](#level-3-test-cases-high-level-overview)
 
 ### Acronyms, Terms and Abbreviations
 
