@@ -26,6 +26,8 @@ This document describes the L3 Test Procedure for the Device Settings Audio modu
 
 - dsAudio HAL Interface - [dsAudio.h](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsAudio.h)
 - High Level Test Specification - [ds-audio_High-Level_TestSpecification.md](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/docs/pages/ds-audio_High-Level_TestSpecification.md)
+- `RAFT` - [`RAFT`](https://github.com/rdkcentral/python_raft/)
+- ut_raft - [ut_raft](https://github.com/rdkcentral/ut-raft)
 
 ## Level 3 Python Test Cases High Level Overview
 
@@ -42,13 +44,13 @@ classDiagram
         class~utUserResponse~ useResponse
         class~utPlayer~ player
         class~utConfigurationReader~ configReader
-    } 
+    }
     ut_raft <|-- dsAudio
-    dsAudio <|-- L3Testclass
+    dsAudio <|-- L3TestClasses
 
 ```
 
-- **testControl**: Test Control Module for running rack Testing. This class is defined in `RAFT` framework [testControl](https://github.com/rdkcentral/python_raft/blob/master/framework/core/testControl.py)
+- **testControl**: Test Control Module for running rack Testing. This module configures the `DUT` based on the rack configuration file provided to the test. This class is defined in `RAFT` framework. For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/master/README.md)
 - **ut_raft**: Python based testing framework for writing engineering tests. It provides a modular, config driven, low level testing framework. [ut-raft](https://github.com/rdkcentral/ut-raft). It has below sub-classes
 
 |#|Class Name|Description|
@@ -58,8 +60,8 @@ classDiagram
 |3|UtPlayer|Provides the interfaces to play the test streams on `DUT`|
 |4|utConfigurationReader|Provides the interfaces to parse the configuration files|
 
-- **dsAudio**: This is test helper class which communicates with the `L3` C/C++ test running on the `DUT`
-- **L3Testclass**: These are the L3 test case classes
+- **dsAudio**: This is test helper class which communicates with the `L3` C/C++ test running on the `DUT` through menu
+- **L3TestClasses**: These are the L3 test case classes
 
 |#|Class Name|Description|
 |-|----------|-----------|
@@ -76,3 +78,66 @@ classDiagram
 |11|dsAudio_test11_AssociateAudioMixing|Tests the associate audio mixing|
 |12|dsAudio_test12_PrimarySecondaryLanguage|Tests the primary secondary language|
 |13|dsAudio_test13_AudioMixerLevels|Tests the primary and system mixer levels|
+
+## Configuration Files
+
+**Test Setup Configuration** - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams, setting environment variables etc. Example configuration file listed below:
+
+```yaml
+dsAudio:
+  description: "dsAudio Device Settings test setup"
+  assets:
+    device:
+      Common: #List of common requirements for all the tests
+        artifacts:
+          -  "<URL>/hal_test" #URL Path to the bin files to copy
+          -  "<URL>/ut_contol.so" #URL Path to the .so files if any to copy
+          -  "<URL>/run.sh"
+        execute:
+          - ""  #prerequisites commands if required
+        streams:
+      test1_EnableDisableAndVerifyAudioPortStatus: #Requirements for specific test
+        artifacts:
+        execute:
+        streams:
+          - "<URL>/test_3.mp4" #URL path to the test streams
+          - "<URL>/test_4.mp4" #URL path to the test streams
+      test2_PortConnectionStatus:
+        artifacts:
+        execute:
+        streams:
+          - "<URL>/test_3.mp4" #URL path to the test streams
+          - "<URL>/test_4.mp4" #URL path to the test streams
+    host:
+      menu_config: "../../assets/dsAudio_L3_menu.yml" #Menu configuration file
+```
+
+**Menu Configuration** - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`. Example configuration file listed below:
+
+```yaml
+dsAudio:
+  description: "dsAudio Device Settings testing profile / menu system for UT"
+  test:
+  control:
+    menu:
+      type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
+      groups: 
+          name: "L3 dsAudio - Sink"
+          menu_initialize:
+            name: "Initialize dsAudio"
+          menu_enable:
+            name: "Enable Audio Port"
+            input: 
+                - "Select dsAudio Port"
+                - "Select ARC Type"
+          menu_disable:
+            name: "Disable Audio Port"
+            input:
+                - "Select dsAudio Port"
+```
+
+**Rack Configuration** - This configuration file is used to define the setup your `DUT`. For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/master/README.md) and [example_rack_config.yml](https://github.com/rdkcentral/python_raft/blob/master/examples/configs/example_rack_config.yml)
+
+**Device Configuration** - This configuration is used to define device types. For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/master/README.md) and [example_device_config.yml](https://github.com/rdkcentral/python_raft/blob/master/examples/configs/example_device_config.yml)
+
+**`DUT` Capabilities** - This configuration file gives the capabilities of the `DUT`. Example configuration file [dsAudio_Settings](https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/main/profiles/sink/Sink_AudioSettings.yaml)
