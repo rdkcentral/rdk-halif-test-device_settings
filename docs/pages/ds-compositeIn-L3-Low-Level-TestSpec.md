@@ -29,13 +29,13 @@ This document describes the L3 Low Level Test Specification and Procedure Docume
 
 ## Level 3 Test Cases High Level Overview
 
-Below are top test use-case for the compositeIn.
+Below are top test use-case for the Composite Input.
 
-|#|Test-case|Description|Focus APIs|Source|Sink|
-|-|---------|-----------|--------|------|----|
-|1|Verify the CompositeIn port connection with callbacks|Connect/disconnect the CompositeIn source device and check the callbacks is triggered when the connection status changes|`dsCompositeInRegisterConnectCB()`|`N`|`Y`|
-|2|Select the CompositeIn port |Select the composite input port and verify the status|`dsCompositeInSelectPort()`|`N`|`Y`|
-|3|Verify the CompositeIn active port status with callbacks|Select the CompositeIn port and check the callbacks is triggered when the active status changes|`dsCompositeInRegisterStatusChangeCB()`|`N`|`Y`|
-|4|Scale the video and verify |Play a video in CompositeIn source device and scale the video resolution|`dsCompositeInScaleVideo()`|`N`|`Y`|
-|5|Verify the status information of CompositeIn port |Play a video in CompositeIn source device connected to the active CompositeIn port and verify the status| `dsCompositeInGetStatus()`|`N`|`Y`|
-|6|Verify the CompositeIn Signal change with callback|Select the CompositeIn port and check the callback is triggered when the change in signal status occurs|`dsCompositeInRegisterSignalChangeCB()`|`N`|`Y`|
+|#|Test-case|Description|Focus APIs|
+|-|---------|-----------|--------|
+|1|Verify the CompositeIn port connection with callbacks|Connect/disconnect the CompositeIn source device and check the callbacks is triggered when the connection status changes|`dsCompositeInRegisterConnectCB()`|
+|2|Select the CompositeIn port |Select the composite input port and verify the status|`dsCompositeInSelectPort()`|
+|3|Verify the CompositeIn active port status with callbacks|Select the CompositeIn port and check the callbacks is triggered when the active status changes|`dsCompositeInRegisterStatusChangeCB()`|
+|4|Scale the video and verify |Play a video in CompositeIn source device and scale the video resolution|`dsCompositeInScaleVideo()`|
+|5|Verify the status information of CompositeIn port |Play a video in CompositeIn source device connected to the active CompositeIn port and verify the status| `dsCompositeInGetStatus()`|
+|6|Verify the CompositeIn Signal change with callback|Select the CompositeIn port and check the callback is triggered when the change in signal status occurs|`dsCompositeInRegisterSignalChangeCB()`|
