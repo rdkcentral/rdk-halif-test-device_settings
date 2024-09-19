@@ -36,5 +36,16 @@ dsVideoDevice:
       #dsVIDEO_CODEC_MAX         = (0x01 << 3)    /*!< Out of range */
       SupportedVideoCodingFormats: 0x06  #dsVIDEO_CODEC_MPEG2|dsVIDEO_CODEC_MPEG4PART10
       SupportedDisplayFramerate:
+        - "720x480x30"
+        - "720x480x60"
+        - "720x576x50"
+        - "1280x720x60"
+        - "1280x720x50"
+        - "1366x768x60"
+        - "1920x1080x24"
+        - "1920x1080px50"
+        - "1920x1080px60"
+        - "3840x2160px30"
         - "3840x2160px60"
+        - "3840x2160px48"
       VideoCodecInfo: 0 #Not supported
