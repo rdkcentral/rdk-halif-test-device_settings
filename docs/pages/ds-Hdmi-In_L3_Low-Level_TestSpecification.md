@@ -25,7 +25,7 @@ This document describes the L3 Low Level Test Specification and Procedure Docume
 ### References
 
 - `High Level Test Specification` - [dsHdmiIn High Level TestSpec](ds-hdmi-in_L3_High-Level_TestSpecification.md)
-- `Interface header` - [dsHdmiIn HAL header](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsHdmiIn.h)
+- `Interface header` - [dsHdmiIn HAL header 4.0.0](https://github.com/rdkcentral/rdk-halif-device_settings/blob/4.0.0/include/dsHdmiIn.h)
 
 ## Level 3 Test Cases High Level Overview
 
@@ -40,8 +40,8 @@ This document describes the L3 Low Level Test Specification and Procedure Docume
 Each test case need to verify with the each HdmiIn port.
 Below are top test use-case for the HdmiIn port.
 
-|#|Test-case|Description|HAL APIs|Source|Sink|Streams|
-|-|---------|-----------|--------|------|----|-------|
+|#|Test-case|Description|Focus APIs|Source|Sink|Streams|
+|-|---------|-----------|----------|------|----|-------|
 |1|Verify the HdmiIn Connect status with callback|Connect or Disconnect Hdmi input device on any of the hdmi input ports and check the hdmiInConnectCB callback is triggered|dsHdmiInRegisterConnectCB()|`Y`|`Y`|`NA`|
 |2|Verify the HdmiIn Signal change with callback|Select the HdmiInput port and check the callback is triggered when the change in signal status occurs|dsHdmiInRegisterSignalChangeCB()|`NA`|`Y`|`NA`|
 |3|Verify the HdmiIn Status change with callback|Select the HdmiInput port and check the callback is triggered when the status change occurs(i.e like isPresented, activeport) and  check the callbacks is triggered|dsHdmiInRegisterStatusChangeCB()|`NA`|`Y`|`NA`|
