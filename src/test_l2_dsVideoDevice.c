@@ -502,6 +502,7 @@ int test_l2_dsVideoDevice_register(void)
 
     if(gSourceType == 0) {
         UT_add_test( pSuite, "L2_SetAndVerifyDisplayframerate_Sink", test_l2_dsVideoDevice_SetAndVerifyDisplayframerate_sink);
+        UT_add_test( pSuite, "L2_SetAndVerifyFRFMode_Sink", test_l2_dsVideoDevice_SetAndVerifyFRFMode_sink);
     }
 
     if(gSourceType == 1) {
