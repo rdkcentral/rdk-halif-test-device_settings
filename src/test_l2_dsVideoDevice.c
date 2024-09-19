@@ -459,7 +459,7 @@ void test_l2_dsVideoDevice_SetAndVerifyFRFMode_sink(void)
             UT_LOG_DEBUG("Invoking dsGetFRFMode with handle: %ld", handle);
             ret = dsGetFRFMode(handle, &FRFMode);
             UT_ASSERT_EQUAL(ret, dsERR_NONE);
-            UT_LOG_DEBUG("dsGetFRFMode return status: %d, framerate: %s", ret, FRFMode);
+            UT_LOG_DEBUG("dsGetFRFMode return status: %d, framerate: %d", ret, FRFMode);
             UT_ASSERT_EQUAL(j,FRFMode);
         } /* for(j) */
     } /* for(i) */
