@@ -1,4 +1,4 @@
-# Device Settings Front Panel Deisplay L3 Low Level Test Specification and Procedure Documentation
+# Device Settings Front Panel Display L3 Low Level Test Specification and Procedure Documentation
 
 ## Table of Contents
 
@@ -9,7 +9,7 @@
 
 ## Overview
 
-This document describes the L3 Low Level Test Specification and Procedure Documentation for the Device Settings Video Port module.
+This document describes the L3 Low Level Test Specification and Procedure Documentation for the Device Settings Front Panel Display module.
 
 ### Acronyms, Terms and Abbreviations
 
@@ -25,7 +25,7 @@ This document describes the L3 Low Level Test Specification and Procedure Docume
 ### References
 
 - `High Level Test Specification` - [dsFrontPanelDevice High Level TestSpec](ds-front-panel-display_High-Level_TestSpec.md)
-- `Interface header` - [dsFPD HAL header](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsFPD.h)
+- `Interface header [4.0.0]` - [dsFPD HAL header](https://github.com/rdkcentral/rdk-halif-device_settings/blob/4.0.0/include/dsFPD.h)
 
 ## Level 3 Test Cases High Level Overview
 
