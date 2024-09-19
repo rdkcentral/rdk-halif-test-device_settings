@@ -36,8 +36,8 @@ This document describes the L3 Test Procedure for the Device Settings Audio modu
 
 ## References
 
-- dsAudio HAL Interface - [dsAudio.h](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsAudio.h)
-- High Level Test Specification - [ds-audio_High-Level_TestSpecification.md](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/docs/pages/ds-audio_High-Level_TestSpecification.md)
+- dsAudio HAL Interface - [dsAudio.h](https://github.com/rdkcentral/rdk-halif-device_settings/blob/4.0.0/include/dsAudio.h)
+- High Level Test Specification - [ds-audio_High-Level_TestSpecification.md](./ds-audio_High-Level_TestSpecification.md)
 
 ## Audio Streams Requirement
 
@@ -89,7 +89,7 @@ classDiagram
 
 - **testControl**
   - Test Control Module for running rack Testing. This module configures the `DUT` based on the rack configuration file provided to the test.
-  - This class is defined in `RAFT` framework. For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/master/README.md)
+  - This class is defined in `RAFT` framework. For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md)
 - **ut_raft**
   - Python based testing framework for writing engineering tests.
   - It provides common functionalities like menu navigation, configuration reader, reading user response etc.
