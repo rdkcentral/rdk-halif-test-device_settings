@@ -29,7 +29,7 @@ This document describes the L3 Low Level Test Specification and Procedure Docume
 
 |#|Test-case|Description|HAL APIs|Source|Sink|
 |-|---------|-----------|--------|------|----|
-|1|Verify Display Events with callbacks|Monitor and verify that the callbacks are triggered correctly for each display event |`dsRegisterDisplayEventCallback`|`Y`|`Y`|
+|1|Verify Display Events with callbacks|Monitor and verify that the callbacks are triggered correctly for each display event |`dsRegisterDisplayEventCallback()`|`Y`|`Y`|
 |2|Gets the EDID information|Verify the functionality of retrieving the EDID information of a display |`dsGetEDID()`|`Y`|`Y`|
 |3|Gets the EDID buffer and EDID length|Verify the functionality of retrieving the EDID bytes of a display |`dsGetEDIDBytes()`|`Y`|`Y`|
 |4|Gets Aspect Ratio | Verify the functionality of retrieving the aspect ratio of a display | `dsGetDisplayAspectRatio()` |`Y`|`NA`|
