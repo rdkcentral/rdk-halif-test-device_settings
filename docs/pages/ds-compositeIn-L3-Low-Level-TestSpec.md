@@ -1,4 +1,4 @@
-# Device Settings Composite Input L3 High Level Test Specification and Procedure Documentation
+# Device Settings Composite Input L3 Low Level Test Specification and Procedure Documentation
 
 ## Table of Contents
 
@@ -9,7 +9,7 @@
 
 ## Overview
 
-This document describes the L3 High Level Test Specification and Procedure Documentation for the Device Settings Composite Input module.
+This document describes the L3 Low Level Test Specification and Procedure Documentation for the Device Settings Composite Input module.
 
 ### Acronyms, Terms and Abbreviations
 
@@ -38,4 +38,4 @@ Below are top test use-case for the compositeIn.
 |3|Verify the CompositeIn active port status with callbacks|Select the CompositeIn port and check the callbacks is triggered when the active status changes|`dsCompositeInRegisterStatusChangeCB()`|`N`|`Y`|
 |4|Scale the video and verify |Play a video in CompositeIn source device and scale the video resolution|`dsCompositeInScaleVideo()`|`N`|`Y`|
 |5|Verify the status information of CompositeIn port |Play a video in CompositeIn source device connected to the active CompositeIn port and verify the status| `dsCompositeInGetStatus()`|`N`|`Y`|
-|6|Verify the CompositeIn Signal change with callback|Select the CompositeIn port and check the callback is triggered when the change in signal status occurs|`dsCompositeInRegisterSignalChangeCB`|`N`|`Y`|
+|6|Verify the CompositeIn Signal change with callback|Select the CompositeIn port and check the callback is triggered when the change in signal status occurs|`dsCompositeInRegisterSignalChangeCB()`|`N`|`Y`|
