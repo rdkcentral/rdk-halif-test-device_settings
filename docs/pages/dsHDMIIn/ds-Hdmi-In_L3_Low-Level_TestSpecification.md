@@ -21,10 +21,14 @@ This document describes the L3 Low Level Test Specification and Procedure Docume
 - `HDR` \- High Dynamic Range
 - `HLG` \- Hybrid Log-Gamma
 - `SDR` \- Standard Dynamic Range
+- `EDID`\- Extended Display Identification Data
+- `ALLM`\- Auto Low Latency Mode
+- `AVI` \- Audio Video Interleave
+- `SPD` \- Source Product Descriptor
 
 ### References
 
-- `High Level Test Specification` - [dsHdmiIn High Level TestSpec](ds-hdmi-in_L3_High-Level_TestSpecification.md)
+- `High Level Test Specification` - [dsHdmiIn High Level TestSpec](https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/3.1.4/docs/pages/ds-hdmi-in-High-Level_TestSpec.md)
 - `Interface header` - [dsHdmiIn HAL header 4.0.0](https://github.com/rdkcentral/rdk-halif-device_settings/blob/4.0.0/include/dsHdmiIn.h)
 
 ## Level 3 Test Cases High Level Overview
@@ -53,14 +57,12 @@ Below are top test use-case for the HdmiIn port.
 |9|Scale HdmiIn video of the selected port|Select the Hdmi Input and scale the video on the selcted port verify video scaled or not|`dsHdmiInScaleVideo()`|`Y`|`Y`|
 |10|Check and verify Zoom mode selected|Select the Zoom mode from the available inputs and verify its set or not|`dsHdmiInSelectZoomMode()`|`Y`|`NA`|
 |11|Get Current video mode of slected input port|Play the video from the selected Hdmi Input port and get the current video mode|`dsHdmiInGetCurrentVideoMode()`|`Y`|`Y`|
-|12|Check and verify the slected port is ARC|Select the HdmiInput port and check whether the selected port ARC or not|`dsIsHdmiARCPort()`|`NA`|`Y`|
-|13|Get and verify the edid of selected port|Select the HdmiInput and get the edid for that particular Input port|`dsGetEDIDBytesInfo()`|`NA`|`Y`|
-|14|Get and verify the spdinfo of selected port|Select the HdmiInput and get the spdinfo for that particular Input port|`dsGetHDMISPDInfo()`|`NA`|`Y`|
-|15|Set and verify the edid version on selected port|Set the edid version and verify by retrieving the edid version|`dsSetEdidVersion()`,`dsGetEdidVersion()`|`NA`|`Y`|
-|16|Get the allm status of selected port|Select the HdmiInput and get the allm status for that particular Input port|`dsGetAllmStatus()`|`NA`|`Y`|
-|17|Get the SupportedGame features list |Lists all the supported game features list on sink device|`dsGetSupportedGameFeaturesList()`|`NA`|`Y`|
-|18|Get audio video latency of current video|Play the video on selected Hdmi Input port and get the audio video latency of current content|`dsGetAVLatency()`|`NA`|`Y`|
-|19|Set and verify edid allm support on selected port|Set and retrieve allm on selected port|`dsSetEdid2AllmSupport()`,`dsGetEdid2AllmSupport()`|`NA`|`Y`|
+|12|Get and verify the edid of selected port|Select the HdmiInput and get the edid for that particular Input port|`dsGetEDIDBytesInfo()`|`NA`|`Y`|
+|13|Get and verify the spdinfo of selected port|Select the HdmiInput and get the spdinfo for that particular Input port|`dsGetHDMISPDInfo()`|`NA`|`Y`|
+|14|Set and verify the edid version on selected port|Set the edid version and verify by retrieving the edid version|`dsSetEdidVersion()`,`dsGetEdidVersion()`|`NA`|`Y`|
+|15|Get the allm status of selected port|Select the HdmiInput and get the allm status for that particular Input port|`dsGetAllmStatus()`|`NA`|`Y`|
+|16|Get audio video latency of current video|Play the video on selected Hdmi Input port and get the audio video latency of current content|`dsGetAVLatency()`|`NA`|`Y`|
+|17|Set and verify edid allm support on selected port|Set and retrieve allm on selected port connected with game controller on 4k supported panel|`dsSetEdid2AllmSupport()`,`dsGetEdid2AllmSupport()`|`NA`|`Y`|
 
 ## Level 3 Python Test Cases High Level Overview
 
@@ -95,7 +97,7 @@ classDiagram
 
 ```mermaid
 ---
-title: dsHdmiIm - YAML
+title: dsHdmiIn - YAML
 ---
 classDiagram
     class Config {
@@ -148,7 +150,7 @@ dsHdmiIn:
       Common: #List of common requirements for all the tests
         artifacts:
           -  "<URL>/hal_test" #URL Path to the bin files to copy
-          -  "<URL>/ut_contol.so" #URL Path to the .so files if any to copy
+          -  "<URL>/ut_control.so" #URL Path to the .so files if any to copy
           -  "<URL>/run.sh"
         execute:
           - ""  #prerequisites commands if required
@@ -187,7 +189,7 @@ dsHdmiIn:
             name: "dsHdmiIn Select Port"
             input:
                 - "Select dsHdmiIn Port"
-                - "Select audiimix"
+                - "Select audiomix"
                 - "Select Videoplane"
                 - "Select topmost"
 ```
