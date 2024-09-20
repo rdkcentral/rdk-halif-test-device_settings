@@ -27,18 +27,18 @@ deviceConfig:
         platform:   "llama.uk"
         model:      "65"
         target_directory: "/tmp"
-        profile: "../../../assets/dsAudio/Sink_AudioSettings.yaml"   # Default validation profile
+        profile: "../../../assets/dsAudio/Sink_AudioSettings.yaml"   # #TODO: Use the single profile file which contains all details (ds, hdmi, etc)
         test:
-            #TODO: Use the single system wise configuration file which contains all details (ds, hdmi, etc)
             queryPrompt: "[$RFSG]:"
-            player:
-                tool: "gstreamer"
-                prerequisites:
-                    - "export $EXP=test" # pre commands required to play the stream
     cpe2:
         platform: "test"
         model: "test"
         target_directory: "/tmp"
+        profile: ""
         test:
-            profile: ""
 
+    cp3:
+        platform: "pi4.ubuntu"
+        model: "ubuntu"
+        target_directory: "/tmp"
+        profile: ""   # Assumed to be provided in override

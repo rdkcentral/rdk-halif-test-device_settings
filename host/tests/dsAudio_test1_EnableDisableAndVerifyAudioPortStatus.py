@@ -24,14 +24,14 @@
 import os
 import sys
 
-from helpers.dsAudioTestHelper import dsAudioTestHelperClass
+from tests.helpers.dsAudio import dsAudioTestHelperClass
 
 #TODO: Read from command line argument
 test_config="../../assets/dsAudio_L3_testSetup.yml" #path to test setup file
 device="cpe1"
 testGroup = "L3 dsAudio - Sink"
 
-class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(dsAudioTestHelperClass):
+class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
 
     testName = "test1_EnableDisableAndVerifyAudioPortStatus"
 
@@ -51,6 +51,9 @@ class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(dsAudioTestHelperClass
             bool: true
         """
 
+        profile = selfCPEField( "profile " )
+        self.dsAudio = dsAudioClass( profile )
+        self.dsVideo = dsVideoClass( profile )
         streams = self.dsAudioGetStreams()
         self.dsAudioPlay(streams[0])
 
