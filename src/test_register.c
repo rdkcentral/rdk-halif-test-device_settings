@@ -90,11 +90,13 @@ extern int test_l2_dsVideoDevice_register( void );
 extern int test_l2_dsHdmiIn_register( void );
 extern int test_l2_dsFPD_register( void );
 extern int test_l2_dsVideoPort_register( void );
+
 extern int test_l2_dsCompositeIn_register( void );
 extern int test_l2_dsDisplay_register( void );
 
 /* L3 Testing Functions */
 extern int test_l3_dsAudio_register( void );
+extern int test_l3_dsVideoPort_register( void );
 
 int UT_register_APIDEF_l1_tests( void )
 {
@@ -152,6 +154,9 @@ int UT_register_APIDEF_l3_tests( void )
 
     if(gDSModule & dsAudioPort)
         registerFailed |= test_l3_dsAudio_register();
+
+    if(gDSModule & dsVideoPort)
+        registerFailed |= test_l3_dsVideoPort_register();
 
     return registerFailed;
 }
