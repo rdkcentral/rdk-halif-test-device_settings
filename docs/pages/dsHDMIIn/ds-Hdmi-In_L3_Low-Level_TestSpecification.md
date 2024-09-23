@@ -29,7 +29,7 @@ This document describes the L3 Low Level Test Specification and Procedure Docume
 
 ### References
 
-- `High Level Test Specification` - [dsHdmiIn High Level TestSpec](https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/3.1.4/docs/pages/ds-hdmi-in-High-Level_TestSpec.md)
+- `High Level Test Specification` - [dsHdmiIn High Level TestSpec](ds-hdmi-in-High-Level_TestSpec.md)
 - `Interface header` - [dsHdmiIn HAL header](https://github.com/rdkcentral/rdk-halif-device_settings/blob/4.0.0/include/dsHdmiIn.h)
 
 ## Level 3 Test Cases High Level Overview
