@@ -60,7 +60,7 @@ Below are top test use-case for the HdmiIn port.
 |12|Get and verify the `EDID` of selected port|Select the HdmiInput and get the `EDID` for that particular Input port|`dsGetEDIDBytesInfo()`|`NA`|`Y`|
 |13|Get and verify the `SPD` info of selected port|Select the HdmiInput and get the `SPD` info for that particular Input port|`dsGetHDMISPDInfo()`|`NA`|`Y`|
 |14|Set and verify the `EDID` version on selected port|Set the `EDID` version and verify by retrieving the `EDID` version|`dsSetEdidVersion()`,`dsGetEdidVersion()`|`NA`|`Y`|
-|15|Get the `ALLM`status of selected port|Select the HdmiInput and get the `ALLM` status for that particular Input port|`dsGetAllmStatus()`|`NA`|`Y`|
+|15|Get the `ALLM`status of selected port|Select the HdmiInput connected with game controller on 4k supported panel  and get the `ALLM` status for that particular Input port|`dsGetAllmStatus()`|`NA`|`Y`|
 |16|Get audio video latency of current video|Play the video on selected HdmiInput port and get the audio video latency of current content|`dsGetAVLatency()`|`NA`|`Y`|
 |17|Set and verify `EDID` to `ALLM` support on selected port|Set and retrieve `ALLM` on selected port connected with game controller on 4k supported panel|`dsSetEdid2AllmSupport()`,`dsGetEdid2AllmSupport()`|`NA`|`Y`|
 
