@@ -47,11 +47,11 @@
  */
 
 /**
- * @defgroup DS_Host_HALTEST_L2 Device Settings Host HAL Tests L2 File
+ * @defgroup DS_Host_HALTEST_L3 Device Settings Host HAL Tests L3 File
  * @{
  * @parblock
  *
- * ### L2 Tests for DS Host HAL :
+ * ### L3 Tests for DS Host HAL :
  *
  * Level 2 unit test cases for all APIs of Device Settings Host HAL
  *
@@ -65,7 +65,7 @@
 
 
 /**
- * @file test_l2_dsAudio.c
+ * @file test_l3_dsAudio.c
  *
  */
 #include <ut.h>
@@ -123,6 +123,7 @@ void test_l3_dsHost_hal_Init(void)
    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
    // Step 1: Call dsHostInit()
+   UT_LOG_INFO("Calling dsHostInit()");
    status = dsHostInit();
    UT_LOG_INFO("Result dsHostInit: dsError_t:[%s]",
                  UT_Control_GetMapString(dsError_mapTable, status));
@@ -159,6 +160,7 @@ void test_l3_dsHost_hal_get_Temperature(void)
    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
    // Step 1: Call dsGetCPUTemperature()
+   UT_LOG_INFO("Calling dsGetCPUTemperature()");
    status = dsGetCPUTemperature(&cpuTemperature);
    UT_LOG_INFO("Result dsGetCPUTemperature: dsError_t:[%s]",
                  UT_Control_GetMapString(dsError_mapTable, status));
@@ -210,6 +212,7 @@ void test_l3_dsHost_hal_get_SocID(void)
    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
    // Step 1: Call dsGetSoCId()
+   UT_LOG_INFO("Calling dsGetSoCId()");
    status = dsGetSoCId(socID, DSHOST_SOC_LENGTH);
    UT_LOG_INFO("Result dsGetSoCId: dsError_t:[%s]",
                  UT_Control_GetMapString(dsError_mapTable, status));
@@ -247,6 +250,7 @@ void test_l3_dsHost_hal_get_hostEdid(void)
    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
    // Step 1: Call dsGetHostEDID()
+   UT_LOG_INFO("Calling dsGetHostEDID()");
    status = dsGetHostEDID(hostEdid, DS_HOST_KVP_SIZE);
    UT_LOG_INFO("Result dsGetHostEDID: dsError_t:[%s]",
                  UT_Control_GetMapString(dsError_mapTable, status));
@@ -282,6 +286,7 @@ void test_l3_dsHost_hal_Term(void)
    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
    // Step 1: Call dsHostTerm()
+   UT_LOG_INFO("Calling dsHostTerm()");
    status = dsHostTerm();
    UT_LOG_INFO("Result dsHostTerm: dsError_t:[%s]",
                  UT_Control_GetMapString(dsError_mapTable, status));
@@ -318,7 +323,7 @@ int test_register_dsHost_hal_l3_tests(void)
     return 0;
 }
 
-/** @} */ // End of DS_Host_HALTEST_L2
+/** @} */ // End of DS_Host_HALTEST_L3
 /** @} */ // End of DS_Host_HALTEST
 /** @} */ // End of Device_Settings_HALTEST
 /** @} */ // End of Device_Settings
