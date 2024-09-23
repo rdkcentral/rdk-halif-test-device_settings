@@ -30,40 +30,36 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path+"/../")
 
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
-from raft.framework.plugins.ut_raft.utMenuNavigator import UTMenuNavigatorClass
+from host.tests.raft.framework.plugins.ut_raft.utSuiteNavigator import UTSuiteNavigatorClass
 from raft.framework.plugins.ut_raft.interactiveShell import InteractiveShell
 
-#TODO: used by ut_core remove later after updating ut_core
-run_script="./bin/run.sh"
-
-class dsAudioPortType(Enum):
+class PortType(Enum):
     ID_LR     = 0
-    HDMI      = auto()
-    SPDIF     = auto()
-    SPEAKER   = auto()
-    ARC  = auto()
-    HEADPHONE = auto()
+    HDMI      = 1
+    SPDIF     = 2
+    SPEAKER   = 3
+    HDMI_ARC  = 4
+    HEADPHONE = 5
 
 class dsAudioClass():
 
-    moduleName = "dsAudio"
-    L3TestParent="L3 dsAudio"
     """
     Device Settings Audio Class
 
     This module provides common extensions for device Settings Audio Module.
     """
-    def __init__(self, profile:str, session=None ):
+    def __init__(self, profile:str, session:object=None ):
         """
         Initializes the dsAudio class function.
         """
-        menuConfig="./dsAudio_L3_menu.yaml"
+        suiteConfig="./dsAudio_test_suite.yaml"
         self.profile = ConfigRead( profile, "dsAudio:" )
-        self.utMenu = UTMenuNavigatorClass(menuConfig, session)
-        self.testGroup = self.L3TestParent
-        self.utMenu.launch_test(run_script)
+        testSuite="L3 dsAudio"
+        script_directory = os.path.dirname(os.path.abspath(__file__)) + suiteConfig
+        self.utMenu = UTSuiteNavigatorClass(script_directory, "dsAudio:", session)
+        self.utMenu.start()
 
-    def dsAudioInitialise(self):
+    def initialise(self):
         """
         Initializes the device settings Audio module.
 
@@ -73,10 +69,9 @@ class dsAudioClass():
         Returns:
             None
         """
-        self.utMenu.menu_select(self.testGroup, "Initialize dsAudio")
-        self.utMenu.session.write("U") # Cheat for menu select
+        self.utMenu.select(self.testSuite,"test_initialise_audio")
 
-    def dsAudioEnablePort(self, audio_port:str):
+    def enablePort(self, audio_port:str):
         """
         Enables the audio port.
 
@@ -90,9 +85,9 @@ class dsAudioClass():
             self.log.error("Port Issue")
 
         # Validate the video 
-        self.utMenu.menu_select(self.testGroup, "menu_enable", audio_port)
+        self.utMenu.select(self.testSuite, "test_enable_audio_port", audio_port)
 
-    def dsAudioDisablePort(self, audio_port):
+    def disablePort(self, audio_port):
         """
         Enables the audio port.
 
@@ -102,9 +97,9 @@ class dsAudioClass():
         Returns:
             None
         """
-        self.menu_select(self.testGroup, "menu_disable", audio_port)
+        self.utMenu.select(self.testSuite, "test_disable_audio_port", audio_port)
 
-    def dsAudioTerminate(self):
+    def terminate(self):
         """
         Enables the audio port.
 
@@ -114,9 +109,9 @@ class dsAudioClass():
         Returns:
             None
         """
-        self.menu_select(self.testGroup, "menu_menu_terminate")
+        self.utMenu.select(self.testSuite, "test_terminate_audio")
 
-    def dsAudioGetSupportedPorts(self):
+    def getSupportedPorts(self):
         """
         Returns the supported audio ports on device.
 
@@ -126,10 +121,10 @@ class dsAudioClass():
         Returns:
             returns the list of supported audio ports
         """
-        ports = self.profile.PortTypes
-        return ports
-
-        return [dsAudioPortType(value).name for value in ports] if ports is not None else []
+        #TODO: Unclear if this is correct for this function, but I would expand the return to be specific about what is returned.
+        #      You may want to translate it into something simplier for the caller depending on usage.
+        portsTypes = self.profile.PortTypes
+        return portsTypes
 
     def __del__(self):
         """
@@ -456,11 +451,12 @@ if __name__ == '__main__':
     shell.open()
 
     # test the class assuming that it's optional
-    test = dsAudioClass(platformProfile, shell)
-    test.dsAudioInitialise()
-    test.dsAudioEnablePort()
-    test.dsAudioDisablePort()
-    test.dsAudioGetSupportedPorts()
-    test.dsAudioTerminate()
+    audio = dsAudioClass(platformProfile, shell)
+    audio.initialise()
+    audio.enablePort("dsAUDIOPORT_TYPE_SPEAKER")
+    audio.disablePort("dsAUDIOPORT_TYPE_SPEAKER")
+    ports = audio.getSupportedPorts()
+    print(ports)
+    audio.Terminate()
 
     shell.close()
