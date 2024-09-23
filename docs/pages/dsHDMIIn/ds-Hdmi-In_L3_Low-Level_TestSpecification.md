@@ -6,6 +6,7 @@
 - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
 - [References](#references)
 - [Level 3 Test cases High Level Overview](#level-3-test-cases-high-level-overview)
+- [Level 3 Python Test Cases High Level Overview](#level-3-Python-test-cases-high-level-overview)
 
 ## Overview
 
@@ -29,7 +30,7 @@ This document describes the L3 Low Level Test Specification and Procedure Docume
 ### References
 
 - `High Level Test Specification` - [dsHdmiIn High Level TestSpec](https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/3.1.4/docs/pages/ds-hdmi-in-High-Level_TestSpec.md)
-- `Interface header` - [dsHdmiIn HAL header 4.0.0](https://github.com/rdkcentral/rdk-halif-device_settings/blob/4.0.0/include/dsHdmiIn.h)
+- `Interface header` - [dsHdmiIn HAL header](https://github.com/rdkcentral/rdk-halif-device_settings/blob/4.0.0/include/dsHdmiIn.h)
 
 ## Level 3 Test Cases High Level Overview
 
@@ -47,22 +48,19 @@ Below are top test use-case for the HdmiIn port.
 |#|Test-case|Description|Focus APIs|Source|Sink|
 |-|---------|-----------|----------|------|----|
 |1|Verify the HdmiIn Connect status with callback|Connect or Disconnect HdmiInput device on each of the HdmiInput ports and check the hdmiInConnectCB callback is triggered|`dsHdmiInRegisterConnectCB()`|`Y`|`Y`|
-|2|Verify the HdmiIn Signal change with callback|Select the HdmiInput port and check the callback is triggered when the change in signal status occurs|`dsHdmiInRegisterSignalChangeCB()`|`NA`|`Y`|
+|2|Verify the HdmiIn Signal change with callback|Select the HdmiInput port and check the callback is triggered when the change in signal status occurs(i.e like no signal , unstable signal, stable signal|`dsHdmiInRegisterSignalChangeCB()`|`NA`|`Y`|
 |3|Verify the HdmiIn Status change with callback|Select the HdmiInput port and check the callback is triggered when the status change occurs(i.e like isPresented, activeport) and  check the callbacks is triggered|`dsHdmiInRegisterStatusChangeCB()`|`NA`|`Y`|
-|4|Verify the HdmiIn Video Mode update  with callback|Play the streams from Hdminput device video content with any format(like `HDR`,`HLG`,`DolbyVision`,`SDR`,...) and check the callbacks is triggered when we change the resolution|`dsHdmiInRegisterVideoModeUpdateCB()`|`NA`|`Y`|
+|4|Verify the HdmiIn Video Mode update  with callback|Play the streams from Hdminput device with different resolutions , aspect ratio  and check the callbacks is triggered and outputs the same resolution , aspect ratio|`dsHdmiInRegisterVideoModeUpdateCB()`|`NA`|`Y`|
 |5|Verify the HdmiIn `ALLM` change  with callback|Change the `ALLM` option to TRUE/FALSE after connecting game controller on 4k supported panel and check the callbacks is triggered when the `ALLM` status change occurs|`dsHdmiInRegisterAllmChangeCB()`|`NA`|`Y`|
 |6|Verify the  HdmiIn Audio Video lateny with callback|Play the streams from Hdminput device video content with any format(like `HDR`,`HLG`,`DolbyVision`,`SDR`,...) and check the callbacks is triggered when there is latency change|`dsHdmiInRegisterAVLatencyChangeCB()`|`NA`|`Y`|
-|7|Verify the HdmiIn `AVI` content change with callbacks|Play the streams from Hdminput device video content with any format(like `HDR`,`HLG`,`DolbyVision`,`SDR`,...) and check the callbacks is triggered there is `AVI` content change|`dsHdmiInRegisterAviContentTypeChangeCB()`|`NA`|`Y`|
+|7|Verify the HdmiIn `AVI` content change with callbacks|Play the streams from Hdminput device with differenct formats(like `GRAPHICS`,`PHOTO`,`CINEMA`,`GAME`,...) and check the callbacks is triggered when there is `AVI` content change|`dsHdmiInRegisterAviContentTypeChangeCB()`|`NA`|`Y`|
 |8|Get HdmiIn status of the selected port|Select the HdmiInput and verify the status whether selected port active or not|`dsHdmiInSelectPort()`,`dsHdmiInGetStatus()`|`Y`|`Y`|
 |9|Scale HdmiIn video of the selected port|Select the HdmiInput and scale the video on the selcted port verify video scaled or not|`dsHdmiInScaleVideo()`|`Y`|`Y`|
 |10|Check and verify Zoom mode selected|Select the Zoom mode from the available inputs and verify its set or not|`dsHdmiInSelectZoomMode()`|`Y`|`NA`|
-|11|Get Current video mode of slected input port|Play the video with any format(like `HDR`,`HLG`,`DolbyVision`,`SDR`,...) from the selected HdmiInput port and get the current video mode|`dsHdmiInGetCurrentVideoMode()`|`Y`|`Y`|
-|12|Get and verify the `EDID` of selected port|Select the HdmiInput and get the `EDID` for that particular Input port|`dsGetEDIDBytesInfo()`|`NA`|`Y`|
-|13|Get and verify the `SPD` info of selected port|Select the HdmiInput and get the `SPD` info for that particular Input port|`dsGetHDMISPDInfo()`|`NA`|`Y`|
-|14|Set and verify the `EDID` version on selected port|Set the `EDID` version and verify by retrieving the `EDID` version|`dsSetEdidVersion()`,`dsGetEdidVersion()`|`NA`|`Y`|
-|15|Get the `ALLM`status of selected port|Select the HdmiInput connected with game controller on 4k supported panel  and get the `ALLM` status for that particular Input port|`dsGetAllmStatus()`|`NA`|`Y`|
-|16|Get audio video latency of current video|Play the video on selected HdmiInput port and get the audio video latency of current content|`dsGetAVLatency()`|`NA`|`Y`|
-|17|Set and verify `EDID` to `ALLM` support on selected port|Set and retrieve `ALLM` on selected port connected with game controller on 4k supported panel|`dsSetEdid2AllmSupport()`,`dsGetEdid2AllmSupport()`|`NA`|`Y`|
+|11|Get and verify the `EDID` of selected port|Select the HdmiInput and get the `EDID` for that particular Input port|`dsGetEDIDBytesInfo()`|`NA`|`Y`|
+|12|Get and verify the `SPD` info of selected port|Select the HdmiInput and get the `SPD` info for that particular Input port|`dsGetHDMISPDInfo()`|`NA`|`Y`|
+|13|Set and verify the `EDID` version on selected port|Set the `EDID` version and verify by retrieving the `EDID` version|`dsSetEdidVersion()`,`dsGetEdidVersion()`|`NA`|`Y`|
+|14|Set and verify `EDID` to `ALLM` support on selected port|Set and retrieve `ALLM` on selected port connected with game controller on 4k supported panel|`dsSetEdid2AllmSupport()`,`dsGetEdid2AllmSupport()`|`NA`|`Y`|
 
 ## Level 3 Python Test Cases High Level Overview
 
