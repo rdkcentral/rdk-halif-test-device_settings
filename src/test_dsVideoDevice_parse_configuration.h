@@ -69,8 +69,8 @@
 
 #define DS_VIDEO_DEVICE_KVP_SIZE              128
 #define DS_VIDEO_DEVICE_PORT_NAME_SIZE        32
-#define DS_VIDEO_DEVICE_MAX_MS12_PROFILE_LIST 10
-#define DS_VIDEO_DEVICE_MAX_MS12_PROFILE_LEN  32
+#define DS_VIDEO_DEVICE_MAX_FRAMERATE_LIST 10
+#define DS_VIDEO_DEVICE_MAX_FRAMERATE_LEN  32
 #define DS_VIDEO_DEVICE_NAME_SIZE             64
 
 #define DS_VIDEO_DEVICE_MODULE_NAME    "dsVideoDevice"
@@ -83,7 +83,8 @@ typedef struct _dsVideoDeviceConfiguration_t {
     int32_t  HDRCapabilities;
     uint32_t SupportedVideoCodingFormats;
     int32_t  NoOfSupportedDFR;
-    char     SupportedDisplayFramerate[dsVIDEO_FRAMERATE_MAX];
+    char     SupportedDisplayFramerate[DS_VIDEO_DEVICE_MAX_FRAMERATE_LIST] \
+                                    [DS_VIDEO_DEVICE_MAX_FRAMERATE_LEN];
     int32_t  num_codec_entries;
     float    level;
     dsVideoCodecHevcProfiles_t  profile;
