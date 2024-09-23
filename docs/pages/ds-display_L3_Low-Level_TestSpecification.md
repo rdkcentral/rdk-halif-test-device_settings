@@ -6,6 +6,7 @@
 - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
 - [References](#references)
 - [Level 3 Test cases High Level Overview](#level-3-test-cases-high-level-overview)
+- [Level 3 Python Test Cases High Level Overview](#level-3-python-test-cases-high-level-overview)
 
 ## Overview
 
@@ -16,9 +17,14 @@ This document describes the L3 Low Level Test Specification and Procedure Docume
 - `HAL`  \- Hardware Abstraction Layer, may include some common components
 - `UT`   \- Unit Test(s)
 - `OEM`  \- Original Equipment Manufacture
+- `L3`   \- Level 3 Testing
+- `DS`   \- Device Settings
 - `EDID` \- Extended Display Identification Data
+- `DUT`  \- Device Under Test
+- `RAFT` \- Rapid Automation Framework for Testing
 - `Y`    \- yes supported
 - `NA`   \- Not Supported
+
 
 ### References
 
@@ -30,12 +36,12 @@ This document describes the L3 Low Level Test Specification and Procedure Docume
 
 Below are the top test use cases for the display.
 
-|#|Test-case|Description|Focus APIs|
-|-|---------|-----------|----------|
-|1|Verify Display Events with callbacks|Monitor and verify that the callbacks are triggered correctly for each display event |`dsRegisterDisplayEventCallback()`|
-|2|Gets the EDID information|Verify the functionality of retrieving the EDID information of a display |`dsGetEDID()`|
-|3|Gets the EDID buffer and EDID length|Verify the functionality of retrieving the EDID bytes of a display |`dsGetEDIDBytes()`|
-|4|Gets Aspect Ratio | Verify the functionality of retrieving the aspect ratio of a display | `dsGetDisplayAspectRatio()`|
+|#|Test-case|Description|Focus APIs|Source|Sink|
+|-|---------|-----------|----------|------|----|
+|1|Verify Display Events with callbacks|Monitor and verify that the callbacks are triggered correctly for each display event |`dsRegisterDisplayEventCallback()`|`Y`|`Y`|
+|2|Gets the EDID information|Verify the functionality of retrieving the EDID information of a display |`dsGetEDID()`|`Y`|`Y`|
+|3|Gets the EDID buffer and EDID length|Verify the functionality of retrieving the EDID bytes of a display |`dsGetEDIDBytes()`|`Y`|`Y`|
+|4|Gets Aspect Ratio | Verify the functionality of retrieving the aspect ratio of a display | `dsGetDisplayAspectRatio()`|`Y`|`NA`|
 
 ## Level 3 Python Test Cases High Level Overview
 
@@ -150,7 +156,7 @@ dsDisplay:
           name: "L3 dsDisplay - Sink"
           menu_initialize:
             name: "Initialize dsDisplay"
-          menu_enable:
+          menu_select:
             name: "Select Port"
             input:
                 - "Select video Port"
