@@ -1,5 +1,5 @@
 dsAudio:  # Prefix must always exist
-    description: "dsAudio Device Settings testing profile / menu system for UT"
+    description: "dsAudio Device Settings testing suites"
     test:
         execute: "~/Downloads/dsAudio/run.sh -p ~/Downloads/dsAudio/Sink_AudioSettings.yaml"
         type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
