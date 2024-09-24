@@ -158,7 +158,7 @@ dsCompositeIn:
           name: "L3 dsCompositeIn - Sink"
           menu_initialize:
             name: "Initialize dsCompositeIn"
-          menu_enable:
+          menu_select:
             name: "Select Port"
             input:
                 - "Select CompositeIn Port"
