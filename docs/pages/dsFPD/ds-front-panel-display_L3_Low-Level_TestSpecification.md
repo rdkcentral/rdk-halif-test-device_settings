@@ -6,6 +6,7 @@
 - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
 - [References](#references)
 - [Level 3 Test cases High Level Overview](#level-3-test-cases-high-level-overview)
+- [Level 3 Python Test Cases High Level Overview](#level-3-python-test-casesc-high-level-overview)
 
 ## Overview
 
@@ -31,11 +32,11 @@ This document describes the L3 Low Level Test Specification and Procedure Docume
 
 |#|Test-case|Description|HAL APIs|Source|Sink|
 |-|---------|-----------|--------|------|----|
-|1|Verify LED can be set On and OFF|Verify each LED can be powered on or off |`dsSetFPState()`|`Y`|`Y`|
-|2|Check Brightness Control|Verify the LED brightness control by changing the brightness |`dsSetFPBrightness()`|`Y`|`Y`|
-|3|Check LED Blink funciton|Verify the LED can be set with specified Blink rate |`dsSetFPState()`|`Y`|`Y`|
-|4|Verify LED Color support  | Verify the Front panel LED can be set to supported colors | `dsSetFPColor()` | `Y` | `Y`|
-|5|Verify All the Supported State pattern of LED | Verify the Front Panel LED can set all the pattern to be shown during different state of the device | `dsFPSetLEDState()`|`Y`|`Y`|
+|1|Verify LED can be set On and OFF|Verify all the supported LED on the DUT can be powered on or off. The User to vaidate the same reflected in DUT. |`dsSetFPState()`|`Y`|`Y`|
+|2|Check Brightness Control|Verify the brightness control for all the supported LED on the DUT by changing the brightness Settings. The User to vaidate the same reflected in DUT. |`dsSetFPBrightness()`|`Y`|`Y`|
+|3|Check LED Blink funciton|Verify all the supported LED on the DUT can be set with supported Blink rates. The User to vaidate the same reflected in DUT. |`dsSetFPBlink()`|`Y`|`Y`|
+|4|Verify LED Color support  | Verify all the supported LED on the DUT can be set to supported colors. The User to vaidate the same reflected in DUT. | `dsSetFPColor()` | `Y` | `Y`|
+|5|Verify All the Supported State pattern of LED | Verify the Front Panel LED can all the supported states on the DUT. The User to vaidate the same reflected in DUT. | `dsFPSetLEDState()`|`Y`|`Y`|
 
 ## Level 3 Python Test Cases High Level Overview
 
@@ -109,7 +110,7 @@ classDiagram
 - **componentProfile.yaml/platformProfile.yaml**
   - Contains component-specific configurations
   - Contains platform wide configuration broken down into separate components
-  - Example configuration file [dsVideoPort_Settings](https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/main/profiles/sink/Sink_4K_VideoPort.yaml)
+  - Example configuration file [dsFPD_Settings](https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/main/profiles/sink/Sink_FPD.yaml)
 
 - **testSetupConfig.yaml**
   - This configuration file contains the list of requirements for tests to execute. Eg: Setting up the extenal devices, setting environment variables etc.
