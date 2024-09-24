@@ -90,6 +90,7 @@ extern int test_l2_dsVideoDevice_register( void );
 extern int test_l2_dsHdmiIn_register( void );
 extern int test_l2_dsFPD_register( void );
 extern int test_l2_dsVideoPort_register( void );
+
 extern int test_l2_dsCompositeIn_register( void );
 extern int test_l2_dsDisplay_register( void );
 
