@@ -36,9 +36,9 @@ Below are top test use-case for the Composite Input.
 |#|Test-case|Description|Focus APIs|
 |-|---------|-----------|--------|
 |1|Verify the CompositeIn port connection with callbacks|Connect/disconnect the CompositeIn source device on each of compositeIn port and check the callbacks is triggered when the connection status changes|`dsCompositeInRegisterConnectCB()`|
-|2|Verify the CompositeIn active port status with callbacks|Select the CompositeIn port and check the callbacks is triggered when the active status changes|`dsCompositeInRegisterStatusChangeCB()`|
+|2|Verify the CompositeIn active port status with callbacks|Select the CompositeIn port and check the callbacks is triggered when the active status changes(i.e like isPresented, activeport)|`dsCompositeInRegisterStatusChangeCB()`|
 |3|Scale the video and verify |Play a video in CompositeIn source device connected to the active CompositeIn port and scale the video resolution|`dsCompositeInScaleVideo()`|
-|4|Verify the CompositeIn Signal change with callback|Select the CompositeIn port and check the callback is triggered when the change in signal status occurs|`dsCompositeInRegisterSignalChangeCB()`|
+|4|Verify the CompositeIn Signal change with callback|Select the CompositeIn port and check the callback is triggered when the change in signal status occurs(i.e like no signal , unstable signal, stable signal)|`dsCompositeInRegisterSignalChangeCB()`|
 
 ## Level 3 Python Test Cases High Level Overview
 
@@ -126,7 +126,7 @@ dsCompositeIn:
       Common: #List of common requirements for all the tests
         artifacts:
           -  "<URL>/hal_test" #URL Path to the bin files to copy
-          -  "<URL>/ut_contol.so" #URL Path to the .so files if any to copy
+          -  "<URL>/ut_control.so" #URL Path to the .so files if any to copy
           -  "<URL>/run.sh"
         execute:
           - ""  #prerequisites commands if required
