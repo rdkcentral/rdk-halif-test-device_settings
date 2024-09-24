@@ -28,7 +28,7 @@ This document describes the L3 Low Level Test Specification and Procedure Docume
 
 ### References
 
-- `High Level Test Specification` - [dsDisplay High Level TestSpec](ds-display-high-Level_TestSpec.md)
+- `High Level Test Specification` - [dsDisplay High Level TestSpec](https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/3.1.4/docs/pages/ds-display-high-Level_TestSpec.md)
 
 - `HAL Interface file` - [dsDisplay Header 4.0.0](https://github.com/rdkcentral/rdk-halif-device_settings/blob/4.0.0/include/dsDisplay.h)
 
@@ -39,9 +39,9 @@ Below are the top test use cases for the display.
 |#|Test-case|Description|Focus APIs|Source|Sink|
 |-|---------|-----------|----------|------|----|
 |1|Verify Display Events with callbacks|Monitor and verify that the callbacks are triggered correctly for each display event |`dsRegisterDisplayEventCallback()`|`Y`|`Y`|
-|2|Gets the EDID information|Verify the functionality of retrieving the EDID information of a display |`dsGetEDID()`|`Y`|`Y`|
-|3|Gets the EDID buffer and EDID length|Verify the functionality of retrieving the EDID bytes of a display |`dsGetEDIDBytes()`|`Y`|`Y`|
-|4|Gets Aspect Ratio | Verify the functionality of retrieving the aspect ratio of a display | `dsGetDisplayAspectRatio()`|`Y`|`NA`|
+|2|Retrieves and interprets EDID information|Verify the functionality of retrieving and accurately interpreting the EDID information, providing essential data about the display's capabilities and characteristics |`dsGetEDID()`|`Y`|`Y`|
+|3|Gets the EDID buffer and EDID length|Verify that the edid buffer contains the expected EDID data, and the length is accurate |`dsGetEDIDBytes()`|`Y`|`Y`|
+|4|Gets Aspect Ratio |Verify that the aspect ratio of the display is correctly retrieved and matches the expected value for a given configuration |`dsGetDisplayAspectRatio()`|`Y`|`NA`|
 
 ## Level 3 Python Test Cases High Level Overview
 
@@ -115,7 +115,7 @@ classDiagram
 - **componentProfile.yaml/platformProfile.yaml**
   - Contains component-specific configurations
   - Contains platform wide configuration broken down into separate components
-  - Example configuration file [dsDisplay_Settings](https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/3.0.0/profiles/sink/Sink_4K_Display.yaml)
+  - Example configuration file [dsDisplay_Settings](https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/3.1.4/profiles/sink/Sink_4K_Display.yaml)
 
 - **testSetupConfig.yaml**
   - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams, setting environment variables etc.
@@ -134,7 +134,7 @@ dsAudio:
         execute:
           - ""  #prerequisites commands if required
         streams:
-      test1_VerifyPortSelectionAndStatus: #Requirements for specific test
+      test1_GetDisplayHandle: #Requirements for specific test
         artifacts:
         execute:
         streams:
@@ -156,10 +156,12 @@ dsDisplay:
           name: "L3 dsDisplay - Sink"
           menu_initialize:
             name: "Initialize dsDisplay"
-          menu_select:
-            name: "Select Port"
+          menu_handle:
+            name: "Get display handle"
             input:
                 - "Select video Port"
+          menu_EDID:
+            name: "Get display EDID"
 ```
 
 ## Test Execution
