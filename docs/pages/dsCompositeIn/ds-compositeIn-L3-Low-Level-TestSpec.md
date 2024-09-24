@@ -24,7 +24,7 @@ This document describes the L3 Low Level Test Specification and Procedure Docume
 
 ### References
 
-- `High Level Test Specification` - [ds-compositeIn-High-Level_TestSpec.md](https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/3.1.4/docs/pages/ds-compositeIn-High-Level_TestSpec.md)
+- `High Level Test Specification` - [ds-compositeIn-High-Level_TestSpec.md](ds-compositeIn-High-Level_TestSpec.md)
 
 - `HAL Interface file` - [dsCompositeIn Header 4.0.0](https://github.com/rdkcentral/rdk-halif-device_settings/blob/4.0.0/include/dsCompositeIn.h)
 
@@ -36,10 +36,9 @@ Below are top test use-case for the Composite Input.
 |#|Test-case|Description|Focus APIs|
 |-|---------|-----------|--------|
 |1|Verify the CompositeIn port connection with callbacks|Connect/disconnect the CompositeIn source device on each of compositeIn port and check the callbacks is triggered when the connection status changes|`dsCompositeInRegisterConnectCB()`|
-|2|Select the CompositeIn port |Select the composite input port and verify the status|`dsCompositeInSelectPort() dsCompositeInGetStatus()`|
-|3|Verify the CompositeIn active port status with callbacks|Select the CompositeIn port and check the callbacks is triggered when the active status changes|`dsCompositeInRegisterStatusChangeCB()`|
-|4|Scale the video and verify |Play a video in CompositeIn source device connected to the active CompositeIn port and scale the video resolution|`dsCompositeInScaleVideo()`|
-|5|Verify the CompositeIn Signal change with callback|Select the CompositeIn port and check the callback is triggered when the change in signal status occurs|`dsCompositeInRegisterSignalChangeCB()`|
+|2|Verify the CompositeIn active port status with callbacks|Select the CompositeIn port and check the callbacks is triggered when the active status changes|`dsCompositeInRegisterStatusChangeCB()`|
+|3|Scale the video and verify |Play a video in CompositeIn source device connected to the active CompositeIn port and scale the video resolution|`dsCompositeInScaleVideo()`|
+|4|Verify the CompositeIn Signal change with callback|Select the CompositeIn port and check the callback is triggered when the change in signal status occurs|`dsCompositeInRegisterSignalChangeCB()`|
 
 ## Level 3 Python Test Cases High Level Overview
 
