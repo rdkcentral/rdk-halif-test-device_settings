@@ -810,7 +810,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetCurrentVideoMode(void) {
 
         // Step 3: Ensure returned values are the same
         UT_LOG("\n In %s Name: [%d,%d]\n", __FUNCTION__, resolution1.name, resolution2.name);
-        UT_ASSERT_EQUAL(resolution1.name, resolution2.name);
+        UT_ASSERT_STRING_EQUAL(resolution1.name, resolution2.name);
         UT_LOG("\n In %s pixelResolution: [%d,%d]\n", __FUNCTION__, resolution1.pixelResolution, resolution2.pixelResolution);
         UT_ASSERT_EQUAL(resolution1.pixelResolution, resolution2.pixelResolution);
         UT_LOG("\n In %s aspectRatio: [%d,%d]\n", __FUNCTION__, resolution1.aspectRatio, resolution2.aspectRatio);
