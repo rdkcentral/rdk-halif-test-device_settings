@@ -2971,68 +2971,35 @@ static UT_test_suite_t *pSuite = NULL;
 
 int32_t test_l3_dsAudio_register(void)
 {
-    if (gSourceType == 1)
+    // Create the test suite for source type
+    pSuite = UT_add_suite("[L3 dsAudio]", NULL, NULL);
+    if (pSuite == NULL)
     {
-        // Create the test suite for source type
-        pSuite = UT_add_suite("[L3 dsAudio - Source]", NULL, NULL);
-        if (pSuite == NULL)
-        {
-            UT_LOG_ERROR("Failed to create the test suite");
-            return -1;
-        }
-    }
-    else if (gSourceType == 0)
-    {
-        // Create the test suite for sink type
-        pSuite = UT_add_suite("[L3 dsAudio - Sink]", NULL, NULL);
-        if (pSuite == NULL)
-        {
-            UT_LOG_ERROR("Failed to create the test suite");
-            return -1;
-        }
-    }
-    else
-    {
-        UT_LOG_ERROR("Invalid platform type");
+        UT_LOG_ERROR("Failed to create the test suite");
         return -1;
     }
 
     UT_add_test(pSuite, "Initialize dsAudio", test_l3_dsAudio_initialize);
     UT_add_test(pSuite, "Enable Audio Port", test_l3_dsAudio_enable_port);
     UT_add_test(pSuite, "Disable Audio Port", test_l3_dsAudio_disable_port);
-    if (gSourceType == 0)
-    {
-        UT_add_test(pSuite, "Headphone Connection", test_l3_dsAudio_headphone_connection);
-    }
+    UT_add_test(pSuite, "Headphone Connection", test_l3_dsAudio_headphone_connection);
     UT_add_test(pSuite, "Audio Compression", test_l3_dsAudio_audio_compression);
     UT_add_test(pSuite, "MS12 DAP Features", test_l3_dsAudio_ms12_dap);
     UT_add_test(pSuite, "Set Stereo Mode", test_l3_dsAudio_stereo_mode);
-    if (gSourceType == 0)
-    {
-        UT_add_test(pSuite, "Enable/Disable Stereo Auto", test_l3_dsAudio_stereo_auto_mode);
-        UT_add_test(pSuite, "Set Audio Level", test_l3_dsAudio_set_audio_level);
-        UT_add_test(pSuite, "Set Audio Gain For Speaker", test_l3_dsAudio_set_audio_gain);
-    }
+    UT_add_test(pSuite, "Enable/Disable Stereo Auto", test_l3_dsAudio_stereo_auto_mode);
+    UT_add_test(pSuite, "Set Audio Level", test_l3_dsAudio_set_audio_level);
+    UT_add_test(pSuite, "Set Audio Gain For Speaker", test_l3_dsAudio_set_audio_gain);
     UT_add_test(pSuite, "Audio Mute/UnMute", test_l3_dsAudio_set_audio_mute);
     UT_add_test(pSuite, "Set Audio Delay", test_l3_dsAudio_set_audio_delay);
     UT_add_test(pSuite, "Get Audio Format", test_l3_dsAudio_get_audio_format);
     UT_add_test(pSuite, "Set ATMOS Output Mode", test_l3_dsAudio_set_atmos_mode);
     UT_add_test(pSuite, "Get ATMOS Capabilities", test_l3_dsAudio_getConnected_atmoscaps);
-    if (gSourceType == 0)
-    {
-        UT_add_test(pSuite, "Set MS12 Profiles", test_l3_dsAudio_ms12Profile);
-    }
+    UT_add_test(pSuite, "Set MS12 Profiles", test_l3_dsAudio_ms12Profile);
     UT_add_test(pSuite, "Set Associate Audio Mixing", test_l3_dsAudio_set_associate_audio_mixing);
-    if (gSourceType == 0)
-    {
-        UT_add_test(pSuite, "Set Audio Mixer Levels", test_l3_dsAudio_set_audio_mixerlevels);
-    }
+    UT_add_test(pSuite, "Set Audio Mixer Levels", test_l3_dsAudio_set_audio_mixerlevels);
     UT_add_test(pSuite, "Primary/Secondary Language", test_l3_dsAudio_set_language);
-    if (gSourceType == 0)
-    {
-        UT_add_test(pSuite, "Get ARC Type", test_l3_dsAudio_getArc_type);
-        UT_add_test(pSuite, "Set SAD List", test_l3_dsAudio_setSAD);
-    }
+    UT_add_test(pSuite, "Get ARC Type", test_l3_dsAudio_getArc_type);
+    UT_add_test(pSuite, "Set SAD List", test_l3_dsAudio_setSAD);
     UT_add_test(pSuite, "Terminate dsAudio", test_l3_dsAudio_terminate);
 
     return 0;
