@@ -287,7 +287,7 @@ static void hdmiInSignalChangeCB(dsHdmiInPort_t port, dsHdmiInSignalStatus_t sig
  */
 static void hdmiInStatusChangeCB(dsHdmiInStatus_t inputStatus)
 {
-    UT_LOG_INFO("Received statuschange callback isPresented: %s, activeport: %s",
+    UT_LOG_INFO("Received statuschange callback isPresented:%s, activeport: %s",
                  UT_Control_GetMapString(bool_mapTable, inputStatus.isPresented),
                  UT_Control_GetMapString(dsHdmiInPort_mapTable, inputStatus.activePort));
 
@@ -295,8 +295,8 @@ static void hdmiInStatusChangeCB(dsHdmiInStatus_t inputStatus)
     {
          
          UT_LOG_INFO("Received statuschange callback port:%d , isPortConnected: %s",
-                 UT_Control_GetMapString(dsHdmiInPort_mapTable, i),
-                 UT_Control_GetMapString(bool_mapTable, inputStatus.isPortConnected[i]));
+                      UT_Control_GetMapString(dsHdmiInPort_mapTable, i),
+                      UT_Control_GetMapString(bool_mapTable, inputStatus.isPortConnected[i]));
     }
 
     gStatusChange = inputStatus;
@@ -309,18 +309,18 @@ static void hdmiInStatusChangeCB(dsHdmiInStatus_t inputStatus)
  */
 static void hdmiInVideoModeUpdateCB(dsHdmiInPort_t port, dsVideoPortResolution_t videoResolution)
 {
-    UT_LOG_INFO("Received videomode change callback port:%s resolution name: %s, pixelResolution: %s\t" 
-                 "aspectRatio:%s, stereoScopicMode:%s, frameRate:%s, interlaced:%s\t",
-                 UT_Control_GetMapString(dsHdmiInPort_mapTable, port),
-                 videoResolution.name, 
-                 UT_Control_GetMapString(dsVideoResolution_mapTable, videoResolution.pixelResolution),
-                 UT_Control_GetMapString(dsVideoAspectRatio_mapTable, videoResolution.aspectRatio),
-                 UT_Control_GetMapString(dsVideoStereoScopicMode_mapTable, videoResolution.stereoScopicMode),
-                 UT_Control_GetMapString(dsVideoFrameRate_mapTable, videoResolution.frameRate),
-                 UT_Control_GetMapString(bool_mapTable, videoResolution.interlaced));
+    UT_LOG_INFO("Result dsHdmiInGetCurrentVideoMode OUT:resolution:(resolution name:[%s], pixelResolution:[%s] ,aspectRatio:[%s])",
+                      videoResolution.name,
+                      UT_Control_GetMapString(dsVideoResolution_mapTable, videoResolution.pixelResolution),
+                      UT_Control_GetMapString(dsVideoAspectRatio_mapTable, videoResolution.aspectRatio));
 
-                 gVideoresolution = videoResolution;
-}
+    UT_LOG_INFO("Result dsHdmiInGetCurrentVideoMode OUT:resolution:(stereoScopicMode:[%s], frameRate:[%s], interlaced:[%s])",
+                      UT_Control_GetMapString(dsVideoStereoScopicMode_mapTable, videoResolution.stereoScopicMode),
+                      UT_Control_GetMapString(dsVideoFrameRate_mapTable, videoResolution.frameRate),
+                      UT_Control_GetMapString(bool_mapTable, videoResolution.interlaced));
+
+    gVideoresolution = videoResolution;
+} 
 
 /**
  * @brief Callback function for HdmiIn Allmmode change.
@@ -562,7 +562,7 @@ void test_l3_HdmiIn_select_port(void)
                      "\tAcceptable inputs are:\n\t"
                      "\ttrue (i.e 1)\n\t"
                      "\tfalse(i.e 0)\n\t"                    
-                "\n******************************************\n");
+                     "\n******************************************\n");
 
     readInput(&select);
     if(select < 0 || select > 1)
@@ -577,7 +577,7 @@ void test_l3_HdmiIn_select_port(void)
     UT_LOG_INFO("\n*******Enter the videoplanetype to select*******\n");
     for(dsVideoPlaneType_t i = dsVideoPlane_PRIMARY ; i < dsVideoPlane_MAX ; i++)
     {
-          UT_LOG_INFO("\n Available videoplane type: %s, videoplane number: %d \n",
+          UT_LOG_INFO("\n Available videoplane type:[%s], videoplane number:[%d] \n",
                  UT_Control_GetMapString(dsVideoPlaneType_mapTable,i),i);
     }
     UT_LOG_INFO("\n**************************************************\n");
@@ -650,7 +650,7 @@ void test_l3_HdmiIn_scale_video(void)
                      "\tAcceptable inputs are:\n\t"
                      "\tMin is 0\n\t"
                      "\tMax is based on the current resolution\n\t"
-                "\n**********************************************\n");
+                     "\n**********************************************\n");
 
    readInput(&select);
    x = select;
@@ -771,9 +771,9 @@ void test_l3_HdmiIn_zoom_mode(void)
 }
 
 /**
-* @brief This test to get current video mode.
+* @brief This test to get edid.
 *
-* This test function is to get current video mode of selected HdmiInput port on platform.
+* This test function is to get edid bytes of  selected HdmiInput port on platform.
 *
 * **Test Group ID:** 03@n
 * **Test Case ID:** 007@n
@@ -782,96 +782,9 @@ void test_l3_HdmiIn_zoom_mode(void)
 * Refer to Test specification documentation
 * [ds-hdmi-in_halSpec.md](../../docs/pages/ds-hdmi-in_halSpec.md)
 */
-void test_l3_HdmiIn_video_mode(void)
-{
-    gTestID = 7;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-    dsError_t ret   = dsERR_NONE;
-    dsVideoPortResolution_t resolution = {0};
-    
-    UT_LOG_INFO("Calling dsHdmiInGetCurrentVideoMode OUT:resolution:(resolution name:[ ], pixelResolution:[ ]\t"
-                      "aspectRatio:[ ], stereoScopicMode:[ ] , frameRate:[ ], interlaced:[ ])");
-
-    ret = dsHdmiInGetCurrentVideoMode(&resolution);
-
-    UT_LOG_INFO("Result dsHdmiInGetCurrentVideoMode OUT:resolution:(resolution name:[%s], pixelResolution:[%s]\t"
-                      "aspectRatio:[%s], stereoScopicMode:[%s], frameRate:[%s], interlaced:[%s])",
-                      resolution.name,
-                      UT_Control_GetMapString(dsVideoResolution_mapTable, resolution.pixelResolution),
-                      UT_Control_GetMapString(dsVideoAspectRatio_mapTable, resolution.aspectRatio),
-                      UT_Control_GetMapString(dsVideoStereoScopicMode_mapTable, resolution.stereoScopicMode),
-                      UT_Control_GetMapString(dsVideoFrameRate_mapTable, resolution.frameRate),
-                      UT_Control_GetMapString(bool_mapTable, resolution.interlaced));
-    DS_ASSERT(ret == dsERR_NONE);
-
-    UT_LOG_INFO("Out %s", __FUNCTION__);
-}
-
-/**
-* @brief This test to check ARC port.
-*
-* This test function is to check selected HdmiInput port on platform is ARC or not.
-*
-* **Test Group ID:** 03@n
-* **Test Case ID:** 008@n
-*
-* **Test Procedure:**
-* Refer to Test specification documentation
-* [ds-hdmi-in_halSpec.md](../../docs/pages/ds-hdmi-in_halSpec.md)
-*/
-void test_l3_HdmiIn_arc_port(void)
-{
-    gTestID = 8;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-    dsError_t ret   = dsERR_NONE;
-    int32_t select = 0;
-    dsHdmiInPort_t iport = dsHDMI_IN_PORT_NONE;
-    bool isarcport = false;
-    uint8_t numInputPorts = 0;
-
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
-    UT_LOG_MENU_INFO("\n**********Please select port***********\n");
-
-    readInput(&select);
-    if(select <= 0 || select > numInputPorts)
-    {
-      UT_LOG_ERROR("\n invalid port selected\n");
-      UT_LOG_INFO("Out %s", __FUNCTION__);
-      return;
-    }
-
-    iport = (select -1);
-
-    UT_LOG_INFO("Calling dsIsHdmiARCPort(IN:iport:[%s]:[%d] IN:isarc:[]",
-                  UT_Control_GetMapString(dsHdmiInPort_mapTable, iport),(iport+1));
-
-    ret = dsIsHdmiARCPort(iport , &isarcport);
-
-    UT_LOG_INFO("Result dsIsHdmiARCPort(IN:iport:[%s]:[%d] IN:isarc: %s",
-                  UT_Control_GetMapString(dsHdmiInPort_mapTable, iport),(iport+1),
-                  UT_Control_GetMapString(bool_mapTable, isarcport));
-    DS_ASSERT(ret == dsERR_NONE);
-
-    UT_LOG_INFO("Out %s", __FUNCTION__);
-}
-
-/**
-* @brief This test to get edid.
-*
-* This test function is to get edid bytes of  selected HdmiInput port on platform.
-*
-* **Test Group ID:** 03@n
-* **Test Case ID:** 009@n
-*
-* **Test Procedure:**
-* Refer to Test specification documentation
-* [ds-hdmi-in_halSpec.md](../../docs/pages/ds-hdmi-in_halSpec.md)
-*/
 void test_l3_HdmiIn_get_edid(void)
 {
-    gTestID = 9;
+    gTestID = 7;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret   = dsERR_NONE;
@@ -900,9 +813,13 @@ void test_l3_HdmiIn_get_edid(void)
 
     ret = dsGetEDIDBytesInfo(port, edidbytes, &length);
 
-    UT_LOG_INFO("Result dsGetEDIDBytesInfo IN:port:[%s]:[%d], OUT:edidbytes:[%s]\t"
-                    "OUT:length:[%d]", UT_Control_GetMapString(dsHdmiInPort_mapTable, port), 
-                     (port+1), edidbytes, length);
+    UT_LOG_INFO("Result dsGetEDIDBytesInfo IN:port:[%s]:[%d] OUT:length:[%d]", 
+                     UT_Control_GetMapString(dsHdmiInPort_mapTable, port), 
+                     (port+1), length);
+
+    for (int itr = 0; itr < length; itr++) {
+        UT_LOG_INFO("OUT:edidbytes:[%02x] ", edidbytes[itr]);
+    }
     DS_ASSERT(ret == dsERR_NONE);
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -914,7 +831,7 @@ void test_l3_HdmiIn_get_edid(void)
 * This test function is to get spdinfo of  selected HdmiInput port on platform.
 *
 * **Test Group ID:** 03@n
-* **Test Case ID:** 010@n
+* **Test Case ID:** 008@n
 *
 * **Test Procedure:**
 * Refer to Test specification documentation
@@ -922,7 +839,7 @@ void test_l3_HdmiIn_get_edid(void)
 */
 void test_l3_HdmiIn_spd_info(void)
 {
-    gTestID = 10;
+    gTestID = 8;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret   = dsERR_NONE;
@@ -960,7 +877,7 @@ void test_l3_HdmiIn_spd_info(void)
 * This test function is to set edidversion of HdmiInput port on platform.
 *
 * **Test Group ID:** 03@n
-* **Test Case ID:** 011@n
+* **Test Case ID:** 009@n
 *
 * **Test Procedure:**
 * Refer to Test specification documentation
@@ -968,7 +885,7 @@ void test_l3_HdmiIn_spd_info(void)
 */
 void test_l3_HdmiIn_set_edidversion(void)
 {
-    gTestID = 11;
+    gTestID = 9;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret   = dsERR_NONE;
@@ -1027,7 +944,7 @@ void test_l3_HdmiIn_set_edidversion(void)
 * This test function is to get edidversion of HdmiInput port on platform.
 *
 * **Test Group ID:** 03@n
-* **Test Case ID:** 012@n
+* **Test Case ID:** 010@n
 *
 * **Test Procedure:**
 * Refer to Test specification documentation
@@ -1035,7 +952,7 @@ void test_l3_HdmiIn_set_edidversion(void)
 */
 void test_l3_HdmiIn_get_edidversion(void)
 {
-    gTestID = 12;
+    gTestID = 10;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret   = dsERR_NONE;
@@ -1070,130 +987,12 @@ void test_l3_HdmiIn_get_edidversion(void)
 }
 
 /**
-* @brief This test to get allmstatus.
-*
-* This test function is to get allmstatus of HdmiInput port on platform.
-*
-* **Test Group ID:** 03@n
-* **Test Case ID:** 013@n
-*
-* **Test Procedure:**
-* Refer to Test specification documentation
-* [ds-hdmi-in_halSpec.md](../../docs/pages/ds-hdmi-in_halSpec.md)
-*/
-void test_l3_HdmiIn_get_allmstatus(void)
-{
-    gTestID = 13;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-    dsError_t ret   = dsERR_NONE;
-    int32_t select = 0;
-    dsHdmiInPort_t port = dsHDMI_IN_PORT_NONE;
-    bool allmstatus = false;
-    uint8_t numInputPorts = 0;
-
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
-    UT_LOG_MENU_INFO("\n**********Please select port***********\n");
-
-    readInput(&select);
-    if(select <= 0 || select > numInputPorts)
-    {
-      UT_LOG_ERROR("\n invalid port selected\n");
-      UT_LOG_INFO("Out %s", __FUNCTION__);
-      return;
-    }
-    port = (select - 1);
-
-    UT_LOG_INFO("Calling  dsGetAllmStatus(IN:port:[%s]:[%d] ,OUT:allm:[ ])",
-                 UT_Control_GetMapString(dsHdmiInPort_mapTable, port), (port+1));
-
-    ret = dsGetAllmStatus(port , &allmstatus);
-
-    UT_LOG_INFO("Result  dsGetAllmStatus(IN:port:[%s]:[%d] ,OUT:allm:[%s])",
-                 UT_Control_GetMapString(dsHdmiInPort_mapTable, port), (port+1),
-                 UT_Control_GetMapString(bool_mapTable, allmstatus));
-    DS_ASSERT(ret == dsERR_NONE);
-
-    UT_LOG_INFO("Out %s", __FUNCTION__);
-}
-
-/**
-* @brief This test to get supported game features list.
-*
-* This test function is to get supported game features list of HdmiInput port on platform.
-*
-* **Test Group ID:** 03@n
-* **Test Case ID:** 014@n
-*
-* **Test Procedure:**
-* Refer to Test specification documentation
-* [ds-hdmi-in_halSpec.md](../../docs/pages/ds-hdmi-in_halSpec.md)
-*/
-void test_l3_HdmiIn_get_gamefeatureslist(void)
-{
-    gTestID = 14;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-    dsError_t ret   = dsERR_NONE;
-    dsSupportedGameFeatureList_t features_list;
-    char *token = NULL;
-
-    UT_LOG_INFO("Calling dsGetSupportedGameFeaturesList OUT:features_list:[ ]");
-
-    ret = dsGetSupportedGameFeaturesList( &features_list);
-
-    UT_LOG_INFO("Result dsGetSupportedGameFeaturesList OUT:features_list:[%d]",
-                 features_list.gameFeatureCount);
-    DS_ASSERT(ret == dsERR_NONE);
-          
-    token = strtok(features_list.gameFeatureList , ",");
-    while(token != NULL)
-    {
-       UT_LOG_INFO("Result dsGetSupportedGameFeaturesList:[%s]", token);
-       token = strtok(NULL , ",");
-    }
-
-    UT_LOG_INFO("Out %s", __FUNCTION__);
-}
-
-/**
-* @brief This test to get AV latency.
-*
-* This test function is to get AV latency of HdmiInput port on platform.
-*
-* **Test Group ID:** 03@n
-* **Test Case ID:** 015@n
-*
-* **Test Procedure:**
-* Refer to Test specification documentation
-* [ds-hdmi-in_halSpec.md](../../docs/pages/ds-hdmi-in_halSpec.md)
-*/
-void test_l3_HdmiIn_get_avlatency(void)
-{
-    gTestID = 15;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-    dsError_t ret   = dsERR_NONE;
-    int audio_latency = 0, video_latency = 0;
-   
-    UT_LOG_INFO("Calling dsGetAVLatency OUT:audio_latency:[ ], OUT:video_latency:[ ]");
-
-    ret = dsGetAVLatency(&audio_latency , &video_latency);
-
-    UT_LOG_INFO("Result dsGetAVLatency OUT:audio_latency:[%d ms], OUT:video_latency:[%d ms]",
-                         audio_latency , video_latency);
-    DS_ASSERT(ret == dsERR_NONE);
-
-    UT_LOG_INFO("Out %s", __FUNCTION__);
-}
-
-/**
 * @brief This test to set allmsupport.
 *
 * This test function to set allmsupport of HdmiInput port on platform.
 *
 * **Test Group ID:** 03@n
-* **Test Case ID:** 016@n
+* **Test Case ID:** 011@n
 *
 * **Test Procedure:**
 * Refer to Test specification documentation
@@ -1201,7 +1000,7 @@ void test_l3_HdmiIn_get_avlatency(void)
 */
 void test_l3_HdmiIn_set_edid2allmsupport(void)
 {
-    gTestID = 16;
+    gTestID = 11;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret   = dsERR_NONE;
@@ -1261,7 +1060,7 @@ void test_l3_HdmiIn_set_edid2allmsupport(void)
 * This test function gets allmsupport of HdmiInput port on platform.
 *
 * **Test Group ID:** 03@n
-* **Test Case ID:** 017@n
+* **Test Case ID:** 012@n
 *
 * **Test Procedure:**
 * Refer to Test specification documentation
@@ -1269,7 +1068,7 @@ void test_l3_HdmiIn_set_edid2allmsupport(void)
 */
 void test_l3_HdmiIn_get_edid2allmsupport(void)
 {
-    gTestID = 17;
+    gTestID = 12;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret   = dsERR_NONE;
@@ -1313,7 +1112,7 @@ void test_l3_HdmiIn_get_edid2allmsupport(void)
 * This test function terminates the dsHdmiIn.
 *
 * **Test Group ID:** 03@n
-* **Test Case ID:** 018@n
+* **Test Case ID:** 013@n
 *
 * **Test Procedure:**
 * Refer to Test specification documentation
@@ -1321,7 +1120,7 @@ void test_l3_HdmiIn_get_edid2allmsupport(void)
 */
 void test_l3_dsHdmiIn_terminate(void)
 {
-    gTestID = 18;
+    gTestID = 13;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret = dsERR_NONE;
@@ -1381,17 +1180,12 @@ int test_l3_dsHdmiIn_register ( void )
     {
          UT_add_test( pSuite, "HdmiIn_zoom_mode" ,test_l3_HdmiIn_zoom_mode );
     }
-    UT_add_test( pSuite, "HdmiIn_video_mode" ,test_l3_HdmiIn_video_mode );
     if(gSourceType == 0)
     {
-        UT_add_test( pSuite, "HdmiIn_arc_port" ,test_l3_HdmiIn_arc_port );
         UT_add_test( pSuite, "HdmiIn_get_edid" ,test_l3_HdmiIn_get_edid );
         UT_add_test( pSuite, "HdmiIn_spd_info" ,test_l3_HdmiIn_spd_info );
         UT_add_test( pSuite, "HdmiIn_set_edidversion" ,test_l3_HdmiIn_set_edidversion );
         UT_add_test( pSuite, "HdmiIn_get_edidversion" ,test_l3_HdmiIn_get_edidversion );
-        UT_add_test( pSuite, "HdmiIn_get_allmstatus" ,test_l3_HdmiIn_get_allmstatus );
-        UT_add_test( pSuite, "HdmiIn_get_gamefeatureslist" ,test_l3_HdmiIn_get_gamefeatureslist );
-        UT_add_test( pSuite, "HdmiIn_get_avlatency" ,test_l3_HdmiIn_get_avlatency );
         UT_add_test( pSuite, "HdmiIn_set_edid2allmsupport" ,test_l3_HdmiIn_set_edid2allmsupport );
         UT_add_test( pSuite, "HdmiIn_get_edid2allmsupport" ,test_l3_HdmiIn_get_edid2allmsupport );
     }
