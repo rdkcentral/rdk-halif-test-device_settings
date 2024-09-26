@@ -80,7 +80,7 @@
 
 
 #include "test_parse_configuration.h"
-#include <dsVideoPort.h>
+#include "dsVideoPort.h"
 
 #define DS_ASSERT assert
 
@@ -908,24 +908,35 @@ static UT_test_suite_t * pSuite = NULL;
 int test_l3_dsVideoPort_register(void)
 {
     // Create the test suite
-    pSuite = UT_add_suite("[L3 dsVideoPort]", NULL, NULL);
-
-    // NOTE: All tests are enabled at all times, the API doesn't disappear based on platform.
-
+    if(gSourceType == 1)
+    {
+        pSuite = UT_add_suite_withGroupID("[L3 dsVideoPort - Source]", NULL, NULL,UT_TESTS_L3);
+    }
+    else if(gSourceType == 0)
+    {
+        pSuite = UT_add_suite_withGroupID("[L3 dsVideoPort - Sink]", NULL, NULL,UT_TESTS_L3);
+    }
+    if (pSuite == NULL)
+    {
+        return -1;
+    }
     // Create the test suite
     UT_add_test( pSuite, "VideoPort Init", dsVideoPort_Init);
     UT_add_test( pSuite, "VideoPort Term", dsVideoPort_Term);
     UT_add_test( pSuite, "Enable VideoPort", dsVideoPort_EnablePort);
     UT_add_test( pSuite, "Disable VideoPort", dsVideoPort_DisablePort);
     UT_add_test( pSuite, "Set HdmiPreference",dsVideoPort_SetHdmiPreference);
-    // add the test suite for source type
-    UT_add_test( pSuite, "Enable HDCP",dsVideoPort_EnableHDCP);
-    UT_add_test( pSuite, "Disable HDCP",dsVideoPort_DisableHDCP);
-    UT_add_test( pSuite, "Set Resolution",dsVideoPort_SetResolution);
-    UT_add_test( pSuite, "Set ForceHDRMode",dsVideoPort_SetForceHDRMode);
-    UT_add_test( pSuite, "ResetOutputToSDR",dsVideoPort_ResetOutputToSDR);
-    UT_add_test( pSuite, "Set PreferredColorDepth",dsVideoPort_SetPreferredColorDepth);
-    UT_add_test( pSuite, "Set BackgroundColor",dsVideoPort_SetBackgroundColor);
+    if(gSourceType == 1)
+    {
+        // add the test suite for source type
+        UT_add_test( pSuite, "Enable HDCP",dsVideoPort_EnableHDCP);
+        UT_add_test( pSuite, "Disable HDCP",dsVideoPort_DisableHDCP);
+        UT_add_test( pSuite, "Set Resolution",dsVideoPort_SetResolution);
+        UT_add_test( pSuite, "Set ForceHDRMode",dsVideoPort_SetForceHDRMode);
+        UT_add_test( pSuite, "ResetOutputToSDR",dsVideoPort_ResetOutputToSDR);
+        UT_add_test( pSuite, "Set PreferredColorDepth",dsVideoPort_SetPreferredColorDepth);
+        UT_add_test( pSuite, "Set BackgroundColor",dsVideoPort_SetBackgroundColor);
+    }
     UT_add_test( pSuite, "Get CurrentOutputSettings", dsVideoPort_CurrentOutputSettings);
     UT_add_test( pSuite, "Get Resolution",dsVideoPort_GetResolution);
     UT_add_test( pSuite, "Get VideoEOTF",dsVideoPort_GetVideoEOTF);
@@ -935,9 +946,12 @@ int test_l3_dsVideoPort_register(void)
     UT_add_test( pSuite, "Get HdmiPreference",dsVideoPort_GetHdmiPreference);
     UT_add_test( pSuite, "Get ColorSpace",dsVideoPort_GetColorSpace);
     UT_add_test( pSuite, "Get ColorDepth",dsVideoPort_GetColorDepth);
-    UT_add_test( pSuite, "Get HDCPReceiverProtocol",dsVideoPort_GetHDCPReceiverProtocol);
-    UT_add_test( pSuite, "Get IgnoreEDIDStatus",dsVideoPort_GetIgnoreEDIDStatus);
-    UT_add_test( pSuite, "Get PreferredColorDepth",dsVideoPort_GetPreferredColorDepth);
+    if(gSourceType == 1)
+    {
+        UT_add_test( pSuite, "Get HDCPReceiverProtocol",dsVideoPort_GetHDCPReceiverProtocol);
+        UT_add_test( pSuite, "Get IgnoreEDIDStatus",dsVideoPort_GetIgnoreEDIDStatus);
+        UT_add_test( pSuite, "Get PreferredColorDepth",dsVideoPort_GetPreferredColorDepth);
+    }
 
     return 0;
 }
