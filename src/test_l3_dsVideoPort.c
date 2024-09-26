@@ -78,7 +78,6 @@
 #include <ut_control_plane.h>
 #include <assert.h>
 
-
 #include "test_parse_configuration.h"
 #include "dsVideoPort.h"
 

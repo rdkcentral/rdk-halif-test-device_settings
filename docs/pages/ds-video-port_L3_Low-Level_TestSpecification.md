@@ -8,7 +8,7 @@
 - [Level 3 Test Procedure](#level-3-test-procedure)
   - [RAFT/Human](#rafthuman)
   - [Verify the Video content Formats with callbacks](#verify-the-video-content-formats-with-callbacks)
-  - [CheckDisplayConnected](#checkdisplayconnected)
+  - [Check Enable and Disable the port](#check-enable-and-disable-the-port)
   - [Verify the Resolution](#verify-the-resolution)
   - [Verify the HDCP status using callbacks for Source](#verify-the-hdcp-status-using-callbacks-for-source)
   - [Verify CurrentOutputSettings](#verify-currentoutputsettings)
@@ -49,9 +49,7 @@ The following functions are expecting to test the module operates correctly.
 |Title|Details|
 |--|--|
 |Test Name|`Verify the Video content Formats with callbacks`|
-|Description| Play the pre-defined streams different video content format and check the callbacks is triggered when the video content format changes |
-|Test Group| 03 |
-|Priority| high |
+|Description| Play the pre-defined streams different video content format(HDR,HLG,DolbyVision,..) and check the callbacks is triggered when the video content format changes |
 
 **Pre-Conditions :**
 
@@ -68,67 +66,20 @@ Configuration YAML file contains all info
 
 **User Interaction :**
 
-Check AV is displayed
-
-- Read proc info to confirm is HDR/SDR stream is played.
-- User can check the stream content formate using analyzer and confirm.
+N/A
 
 | # | Description |
 | - | ----------- |
 | 01 | [RAFT/Human](#rafthuman) Need to start the test|
-| 02 | Loop through supported Video Ports and get port handle using`dsGetVideoPort()`type = `dsVideoPort/Ports/[port no]/Typeid` index = `dsVideoPort/Ports/[port no]/Index`|
-| 03 | If the video port is not active(`dsIsVideoPortActive()`), enable the video port `dsEnableVideoPort()`  |
-| 04 | Verify if the display is connected `dsIsDisplayConnected()`|
-| 05 | Check Video content Formats and verify callbacks 1.Play HDR stream 2. Play SDR Stream`dsVideoFormatUpdateRegisterCB(),dsGetVideoEOTF(),dsIsOutputHDR()`|
+| 02 | Run the Enable VideoPort test case option and select the Video Ports from Supported ports |
+| 03 | Play Different Video content Formats and verify callbacks received right format 1.`HDR` stream 2. `HLG` stream 3. `DolbyVision` 4. `HDR10` stream 5.`SDR stream`|
 
-```mermaid
-sequenceDiagram
-    participant DUT
-    participant RAFT/User
-    activate RAFT/User
-    RAFT/User->>DUT: Boot the vendor layer test image <br> & wait for cmd promote
-    RAFT/User->>DUT: Launch AV playback with pre-defined streams
-    RAFT/User->>DUT: Initializes the Video Port module if not initialized
-    deactivate RAFT/User
-    activate DUT
-    Loop the supported Video Ports
-        DUT->>DUT: dsGetVideoPort
-        DUT->>DUT: dsIsVideoPortActive
-        DUT->>DUT: dsEnableVideoPort (enable the video port if not)
-        DUT->>DUT: dsIsDisplayConnected (is display connected)
-        deactivate DUT
-        DUT->>DUT: Await RAFT/User confirmation of Displayed
-        opt confirmation of Displayed
-            DUT->>RAFT/User: Read the Query
-            activate RAFT/User
-            RAFT/User-->>DUT: Response back to DUT
-            deactivate RAFT/User
-        end
-        RAFT/User->>DUT: playback the HDR streams
-        opt is playback stream is HDR
-           DUT->>RAFT/User:[Query] is playback stream HDR
-           activate RAFT/User
-           RAFT/User-->>DUT: Response to the playback status
-           deactivate RAFT/User
-        end
-        RAFT/User->>DUT: playback the SDR streams
-        opt is playback stream is SDR
-           DUT->>RAFT/User: Read the Query
-           activate RAFT/User
-           RAFT/User-->>DUT: Response to the playback status
-           deactivate RAFT/User
-        end
-    End
-```
-
-### CheckDisplayConnected
+### Check Enable and Disable the port
 
 |Title|Details|
 |--|--|
 |Test Name|`CheckDisplayConnected`|
-|Description| Verify the Display connected/disconnected and check status of each supported video port |
-|Test Group| 03 |
-|Priority| high |
+|Description| Verify the video Display by enable and disable port |
 
 **Pre-Conditions :**
 
