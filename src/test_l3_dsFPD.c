@@ -148,34 +148,18 @@ static void readAndDiscardRestOfLine(FILE* in)
 
 static int selectIndicator()
 {
-    int32_t dsFPDNumberOfIndicators = UT_KVP_PROFILE_GET_UINT32("dsFPD/Number_of_Indicators");
-    int32_t indicatorType = 0;
-    char buffer[DS_FPD_KEY_SIZE];
-    bool isValidIndicator = false;
 
     UT_LOG_MENU_INFO(" \t  Supported Indicators are:");
     UT_LOG_MENU_INFO("------------------------------------------");
-    for (int indicator = 1; indicator <= dsFPDNumberOfIndicators; indicator++)
+    for (int indicator = 0; indicator <= dsFPD_INDICATOR_MAX; indicator++)
     {
-        snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", indicator);
-        indicatorType = UT_KVP_PROFILE_GET_UINT32(buffer);
-        UT_LOG_INFO("\t%d.  %-20s\n", indicatorType, UT_Control_GetMapString(dsFrontPanelIndicatorTable, indicatorType));
+        UT_LOG_INFO("\t%d.  %-20s\n", indicator, UT_Control_GetMapString(dsFrontPanelIndicatorTable, indicator));
     }
     UT_LOG_MENU_INFO("----------------------------------------------------------");
     UT_LOG_MENU_INFO("Select Indicator : ");
     scanf("%d", &eIndicator);
     readAndDiscardRestOfLine(stdin);
-    isValidIndicator = false;
-    for (int indicator = 1; indicator <= dsFPDNumberOfIndicators; indicator++)
-    {
-        snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", indicator);
-        indicatorType = UT_KVP_PROFILE_GET_UINT32(buffer);
-        if(indicatorType == eIndicator)
-        {
-            isValidIndicator = true;
-        }
-    }
-    if(!isValidIndicator )
+    if(eIndicator < dsFPD_INDICATOR_MESSAGE || eIndicator >=dsFPD_INDICATOR_MAX )
     {
         UT_LOG_INFO("Unsupported Indicator %d",eIndicator);
         return 1;
@@ -453,15 +437,10 @@ void test_7_dsFPD_hal_FPGetSupportedLEDStates(void)
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsError_t status = dsERR_NONE;
     dsFPDLedState_t iLedState;
-    uint32_t iSupportedLEDState= 0;
 
-    iSupportedLEDState = UT_KVP_PROFILE_GET_UINT32("dsFPD/SupportedLEDStates");
-    UT_LOG_INFO("Calling dsFPGetSupportedLEDStates()");
     status = dsFPGetSupportedLEDStates(&iLedState);
     UT_LOG_INFO("Result dsFPGetSupportedLEDStates(OUT:uLEDState : %u)dsError_t:[%s]",iLedState,UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
-    UT_LOG_INFO("Supported LED States: %u",iSupportedLEDState);
-    assert(iLedState == iSupportedLEDState);
 
     /* Check that the Indicator is valid */
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
@@ -488,23 +467,19 @@ void test_8_dsFPD_hal_SetLEDState(void)
 
     dsError_t status = dsERR_NONE;
     int32_t iLedState;
-    int32_t iSupportedLEDState= 0;
 
     UT_LOG_MENU_INFO(" \t  Supported POWER LED States are:");
     UT_LOG_MENU_INFO("------------------------------------------");
-    iSupportedLEDState = UT_KVP_PROFILE_GET_UINT32("dsFPD/SupportedLEDStates");
 
-    for (int fpState = dsFPD_LED_DEVICE_NONE; fpState <= dsFPD_LED_DEVICE_MAX; fpState++)
+    for (int fpState = dsFPD_LED_DEVICE_NONE; fpState < dsFPD_LED_DEVICE_MAX; fpState++)
     {
-        if (!(iSupportedLEDState & (1 << fpState)))
-            continue;
         UT_LOG_MENU_INFO("\t%d.  %-20s\n", fpState, UT_Control_GetMapString(dsFrontPanelLEDState, fpState));
     }
     UT_LOG_MENU_INFO("----------------------------------------------------------");
     UT_LOG_MENU_INFO("Select State: ");
     scanf("%d", &iLedState);
     readAndDiscardRestOfLine(stdin);
-    if(! (iSupportedLEDState & (1<< iLedState)))
+    if(iLedState < dsFPD_LED_DEVICE_NONE || iLedState >=dsFPD_LED_DEVICE_MAX)
     {
         UT_LOG_INFO("Unsupported LED State");
         goto exit;
@@ -572,9 +547,6 @@ void test_10_dsFPD_hal_SetFPColor(void)
     int ret = 0;
     dsError_t status = dsERR_NONE;
     uint32_t uColor;
-    uint32_t uSupportedColor= 0;
-    uint32_t numOfSupportedColors;
-    char buffer[DS_FPD_KEY_SIZE];
     bool isValidColor = false;
 
     ret = selectIndicator();
@@ -583,24 +555,18 @@ void test_10_dsFPD_hal_SetFPColor(void)
     UT_LOG_MENU_INFO(" \t  Supported Front Panel color for the indicator %s are:",UT_Control_GetMapString(dsFrontPanelIndicatorTable, eIndicator));
     UT_LOG_MENU_INFO("------------------------------------------");
 
-    snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/supportedColors", eIndicator);
-    numOfSupportedColors = UT_KVP_PROFILE_GET_LIST_COUNT(buffer);
-    for (int j = 0; j < numOfSupportedColors; j++)
+    for (int j = 0; j < dsFPD_COLOR_MAX; j++)
     {
-                snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/supportedColors/%d", eIndicator,j);
-                uSupportedColor = UT_KVP_PROFILE_GET_UINT32(buffer);
-                UT_LOG_MENU_INFO("\t0X%06X.  %-20s\n", uSupportedColor, UT_Control_GetMapString(dsFrontPanelColorTable, uSupportedColor));
+        UT_LOG_MENU_INFO("\t0X%06X.  %-20s\n", dsFrontPanelColorTable[j].value, dsFrontPanelColorTable[j].string);
     }
     UT_LOG_MENU_INFO("----------------------------------------------------------");
     UT_LOG_MENU_INFO("Select Color: ");
     scanf("%u", &uColor);
     readAndDiscardRestOfLine(stdin);
     isValidColor = false;
-    for (int j = 0; j < numOfSupportedColors; j++)
+    for (int j = 0; j < dsFPD_COLOR_MAX; j++)
     {
-                snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/supportedColors/%d", eIndicator,j);
-                uSupportedColor = UT_KVP_PROFILE_GET_UINT32(buffer);
-                if(uSupportedColor == uColor)
+                if( dsFrontPanelColorTable[j].value == uColor)
                     isValidColor = true;
     }
     if(!isValidColor)
