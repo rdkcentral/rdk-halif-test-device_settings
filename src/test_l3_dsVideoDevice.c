@@ -255,10 +255,10 @@ void dsVideoDevice_SetZoomMode()
 
     dsVideoDevice_getHandle();
     UT_LOG_MENU_INFO(" \t  Supported Zoom Modes are:");
-    for (j = 0; j < gDSVideoDeviceConfiguration[gSelectedVideoDevice].NoOfSupportedDFCs; ++j)
+    for (j = 0; j <= dsVIDEO_ZOOM_MAX; j++)
     {
-        UT_LOG_MENU_INFO("\t%d.  %-20s ", gDSVideoDeviceConfiguration[gSelectedVideoDevice].SupportedDFCs[j], \
-                    UT_Control_GetMapString(dsVideoZoomMappingTable, gDSVideoDeviceConfiguration[gSelectedVideoDevice].SupportedDFCs[j]));
+        UT_LOG_MENU_INFO("\t%d.  %-20s ", j, \
+                    UT_Control_GetMapString(dsVideoZoomMappingTable, j));
     }
 
     UT_LOG_MENU_INFO("------------------------------------------");
