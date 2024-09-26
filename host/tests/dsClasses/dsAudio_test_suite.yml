@@ -13,7 +13,7 @@ dsAudio:  # Prefix must always exist
                 name: "L2 dsAudio - Sink"
                 tests:
             2:
-                name: "L3 dsAudio - Sink"
+                name: "L3 dsAudio"
                 tests:
                     - "Initialize dsAudio"
                     - "Enable Audio Port"
