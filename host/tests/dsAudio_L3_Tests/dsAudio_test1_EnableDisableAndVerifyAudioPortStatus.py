@@ -52,8 +52,11 @@ class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
-        # Open Session of player
+        # Open Session for player
         self.player_session = self.dut.getConsoleSession("ssh_player")
+
+        # Open Session for hal test
+        self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
 
         player = self.cpe.get("test").get("player")
 
@@ -88,8 +91,17 @@ class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
         url = self.testSetup.assets.device.test1_EnableDisableAndVerifyAudioPortStatus.streams
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-        for streampath in url:
-            self.testStreams.append(self.deviceDownloadPath + "/" + os.path.basename(streampath))
+            for streampath in url:
+                self.testStreams.append(self.deviceDownloadPath + "/" + os.path.basename(streampath))
+
+    def testCleanAssets(self):
+        """
+        Removes the assets copied to the dut.
+
+        Args:
+            None.
+        """
+        self.deleteFromDevice(self.testStreams)
 
     def testRunPrerequisites(self):
         """
@@ -101,8 +113,9 @@ class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
 
         #Run test specific commands
         cmds = self.testSetup.assets.device.test1_EnableDisableAndVerifyAudioPortStatus.execute
-        for cmd in cmds:
-            self.writeCommands(cmd)
+        if cmds is not None:
+            for cmd in cmds:
+                self.writeCommands(cmd)
 
     def testVerifyAudio(self, manual=False):
         """
@@ -136,7 +149,7 @@ class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
         self.testPlayer.play(self.testStreams[0])
 
         # Create the dsAudio class
-        self.testdsAudio = dsAudioClass(self.deviceProfile, self.session)
+        self.testdsAudio = dsAudioClass(self.deviceProfile, self.hal_session)
 
         self.log.testStart("test1_EnableDisableAndVerifyAudioPortStatus", '1')
 
@@ -161,7 +174,11 @@ class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
 
             self.log.stepResult(not result, f'Audio Verification {port} Port')
 
-        self.dsAudioPlayStop()
+        self.testPlayer.stop()
+
+        self.testCleanAssets()
+
+        del self.testdsAudio
 
         return result
 
