@@ -6,9 +6,9 @@ dsAudio:  # Prefix must always exist
   assets:
     device:
       test1_EnableDisableAndVerifyAudioPortStatus:
-        artifacts:
-        execute:
-        streams:
+        artifacts: #list of artifacts to be copied to device
+        execute: #list of commands to be executed on device
+        streams: #list of streams to be copied to device
       test2_PortConnectionStatus:
         artifacts:
         execute:
