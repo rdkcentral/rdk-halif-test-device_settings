@@ -16,9 +16,10 @@
             "request": "launch",
             "stopAtEntry": false,
             "externalConsole": false,
-            "cwd": "${workspaceFolder}/bin/",
-            "program": "${workspaceFolder}/bin/run.sh",
-            "args": [ "-l", "${workspaceFolder}/logs/", "-p", "${workspaceFolder}/profile/assets/test_kvp.yaml" ],
+            "cwd": "${workspaceFolder}",
+            "program": "${workspaceFolder}/bin/hal_test",
+            "environment": [ {"name": "LD_LIBRARY_PATH", "value":"${workspaceFolder}/bin/"} ],
+            "args": [ "-l", "${workspaceFolder}/logs/", "-p", "${workspaceFolder}/profiles/sink/Sink_AudioSettings.yaml" ],
             "MIMode": "gdb",
             "miDebuggerPath": "gdb",
             "setupCommands": [
