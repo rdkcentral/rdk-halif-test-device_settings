@@ -3080,7 +3080,7 @@ void test_l1_dsFPD_negative_dsFPSetLEDState(void)
  * |02|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |03|Call dsFPSetLEDState() with valid value|state: dsFPD_LED_DEVICE_ACTIVE|dsERR_NONE|The LED state should be set successfully|
  * |04|Call dsFPGetLEDState() with a valid parameter|state: dsFPDLedState_t*|dsERR_NONE|API should retrieve the current state successfully|
- * |05|Compare the retrieved LED state with the expected value from the profile file
+ * |05|Compare the retrieved LED state with the with the set value in step 03
  * |06|Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState() |eIndicator: [Valid Indicator], state: dsFPD_STATE_OFF|dsERR_NONE | Validate invalid parameter handling for eIndicator|
  * |07|Terminate using dsFPTerm()||dsERR_NONE|Ensure the system is terminated|
  *
@@ -3110,8 +3110,8 @@ void test_l1_dsFPD_positive_dsFPGetLEDState(void)
     result = dsFPGetLEDState(&ledState1);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-    // Step 05: Compare the retrieved LED state with the expected value from the profile file
-    UT_ASSERT_KVP_EQUAL_PROFILE_UINT32(ledState1, "dsFPD/SupportedLEDStates");
+    // Step 05: Compare the retrieved LED state with the set value in step 03
+    UT_ASSERT_EQUAL(ledState1, dsFPD_LED_DEVICE_ACTIVE);
 
     // Step 06: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
     disableFPDIndicators(count);
