@@ -79,7 +79,7 @@
 
 #define DS_ASSERT assert
 
-static int gTestGroup = 2;
+static int gTestGroup = 3;
 static int gTestID = 1;
 
 int prevTemp = 0;
