@@ -77,6 +77,8 @@
 #define DSHOST_SOC_LENGTH    20
 #define DS_HOST_KVP_SIZE     128
 
+#define DS_ASSERT assert
+
 static int gTestGroup = 2;
 static int gTestID = 1;
 
@@ -128,7 +130,7 @@ void test_l3_dsHost_hal_Init(void)
     UT_LOG_INFO("Result dsHostInit: dsError_t:[%s]",
                   UT_Control_GetMapString(dsError_mapTable, status));
 
-    assert(status, dsERR_NONE);
+    assert(status == dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -166,7 +168,7 @@ void test_l3_dsHost_hal_get_Temperature(void)
                   UT_Control_GetMapString(dsError_mapTable, status));
     UT_LOG_INFO("CPU Temperature: %f\n", cpuTemperature);
 
-    assert(status, dsERR_NONE);
+    assert(status == dsERR_NONE);
 
     if(prevTemp == 0)
     {
@@ -178,7 +180,7 @@ void test_l3_dsHost_hal_get_Temperature(void)
         {
             UT_LOG_ERROR("Temperature is not same as previous value within reasonable variability. 
                          PrevTemp: %d, currentTemp: %d\n", prevTemp, cpuTemperature);
-            assert(cpuTemperature, prevTemp);
+            assert(cpuTemperature == prevTemp);
         }
     }
 
@@ -218,7 +220,7 @@ void test_l3_dsHost_hal_get_SocID(void)
                   UT_Control_GetMapString(dsError_mapTable, status));
     UT_LOG_INFO("SoC ID: %s\n", socID);
 
-    assert(status, dsERR_NONE);
+    assert(status == dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -256,7 +258,7 @@ void test_l3_dsHost_hal_get_hostEdid(void)
                   UT_Control_GetMapString(dsError_mapTable, status));
     UT_LOG_INFO("Host EDID: %s\n", hostEdid);
 
-    assert(status, dsERR_NONE);
+    assert(status == dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -291,7 +293,7 @@ void test_l3_dsHost_hal_Term(void)
     UT_LOG_INFO("Result dsHostTerm: dsError_t:[%s]",
                   UT_Control_GetMapString(dsError_mapTable, status));
 
-    assert(status, dsERR_NONE);
+    assert(status == dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
