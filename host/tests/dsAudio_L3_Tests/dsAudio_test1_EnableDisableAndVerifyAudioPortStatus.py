@@ -55,14 +55,16 @@ class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
         # Open Session of player
         self.player_session = self.dut.getConsoleSession("ssh_player")
 
+        player = self.cpe.get("test").get("player")
+
         # Create player Class
-        self.testPlayer = utPlayer(self.player_session)
+        self.testPlayer = utPlayer(self.player_session, player)
 
          # Create user response Class
         self.testUserResponse = utUserResponse()
 
         # Get path to device profile file
-        self.deviceProfile = self.cpe.get("test").get("profile")
+        self.deviceProfile = dir_path + "/" + self.cpe.get("test").get("profile")
 
     def testDownloadAssets(self):
         """
@@ -86,7 +88,8 @@ class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
         url = self.testSetup.assets.device.test1_EnableDisableAndVerifyAudioPortStatus.streams
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            self.testStreams.append(self.deviceDownloadPath + "/" + os.path.basename(url))
+        for streampath in url:
+            self.testStreams.append(self.deviceDownloadPath + "/" + os.path.basename(streampath))
 
     def testRunPrerequisites(self):
         """
@@ -98,8 +101,8 @@ class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
 
         #Run test specific commands
         cmds = self.testSetup.assets.device.test1_EnableDisableAndVerifyAudioPortStatus.execute
-        if cmds is not None:
-            self.writeCommandsOnDevice(cmds, None, self.rackDevice)
+        for cmd in cmds:
+            self.writeCommands(cmd)
 
     def testVerifyAudio(self, manual=False):
         """
@@ -137,7 +140,7 @@ class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
 
         self.log.testStart("test1_EnableDisableAndVerifyAudioPortStatus", '1')
 
-        self.testdsAudio.initialise()
+        self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
         for port,index in self.testdsAudio.getSupportedPorts():
             self.log.stepStart(f'Enable {port} Port')
