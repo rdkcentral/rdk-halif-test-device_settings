@@ -309,7 +309,7 @@ static UT_test_suite_t * pSuite = NULL;
 int test_register_dsHost_hal_l3_tests(void)
 {
     // Create the test suite
-    pSuite = UT_add_suite("[Devicesettings Host Functions] ", NULL, NULL);
+    pSuite = UT_add_suite("[L3 Devicesettings Host Functions] ", NULL, NULL);
     if (pSuite == NULL)
     {
         return -1;
