@@ -486,9 +486,9 @@ void test_l1_dsFPD_positive_dsSetFPBlink (void)
 
     // Step 02: Retrieve the number of indicators from the profile file
     count = UT_KVP_PROFILE_GET_UINT8("dsFPD/Number_of_Indicators");
+    // Step 03: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
     enableFPDIndicators(count);
 
-    // Step 03: Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()
     // Step 04: Call dsSetFPBlink() and loop through all valid indicators
     for (int i = 1; i <= count; i++)
     {
@@ -522,8 +522,8 @@ void test_l1_dsFPD_positive_dsSetFPBlink (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsSetFPBlink() without calling dsFPInit() |eIndicator: dsFPD_INDICATOR_POWER, uBlinkDuration: 500, uBlinkIterations: 10 |dsERR_NOT_INITIALIZED|Should validate that the function handles call without initialization|
- * |02| Retrieve the number of indicators from the profile file
+ * |01| Retrieve the number of indicators from the profile file
+ * |02|Call dsSetFPBlink() without calling dsFPInit() |eIndicator: dsFPD_INDICATOR_POWER, uBlinkDuration: 500, uBlinkIterations: 10 |dsERR_NOT_INITIALIZED|Should validate that the function handles call without initialization|
  * |03|Initialize with dsFPInit()| |dsERR_NONE|Ensure the system is initialized|
  * |04|Set all valid indicators to dsFPD_STATE_ON using dsSetFPState()|eIndicator: [Valid Indicator], state: dsFPD_STATE_ON |dsERR_NONE|Ensure the system is initialized|
  * |05|Pass an invalid uBlinkDuration parameter to dsSetFPBlink() for all valid indicators|eIndicator: [Valid Indicator], uBlinkDuration: 20000, uBlinkIterations: 10 |dsERR_INVALID_PARAM|Should validate that the function handles invalid blink duration gracefully|
@@ -546,9 +546,9 @@ void test_l1_dsFPD_negative_dsSetFPBlink (void)
     uint8_t count = 0;
     char buffer[DS_FPD_KEY_SIZE];
 
-    // Step 01: Call dsSetFPBlink() without calling dsFPInit()
-    // Step 02: Retrieve the number of valid indicators from the profile file
+    // Step 01: Retrieve the number of valid indicators from the profile file
     count = UT_KVP_PROFILE_GET_UINT8("dsFPD/Number_of_Indicators");
+    // Step 02: Call dsSetFPBlink() without calling dsFPInit()
     for (int i = 1; i <= count; i++)
     {
         snprintf(buffer, DS_FPD_KEY_SIZE, "dsFPD/SupportedFPDIndicators/%d/Indicator_Type", i);
