@@ -321,7 +321,6 @@ exit:
 
 static int32_t dsAudio_list_select_ports(dsAudioPortType_t *pAudioPort, int32_t *pIndex)
 {
-    int32_t numberOfPorts = sizeof(dsAudioPortType_mapTable)/sizeof(ut_control_keyStringMapping_t);
     int32_t choice = -1;
 
     UT_LOG_MENU_INFO("----------------------------------------------------------");
@@ -404,7 +403,6 @@ void test_l3_dsAudio_enable_port(void)
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret = dsERR_NONE;
-    int32_t choice = -1;
     intptr_t handle = (intptr_t)NULL;
     bool enabled = false;
     dsAudioPortType_t port = dsAUDIOPORT_TYPE_MAX;
@@ -505,11 +503,8 @@ void test_l3_dsAudio_disable_port(void)
 
     dsError_t ret = dsERR_NONE;
 
-    int32_t count = 0;
-    int32_t choice = -1;
     intptr_t handle = (intptr_t)NULL;
     bool enabled = false;
-    int32_t enable_port[DS_AUDIO_MAX_PORTS] = {0};
     dsAudioPortType_t port = dsAUDIOPORT_TYPE_MAX;
     int32_t portIndex = 0;
 
@@ -588,8 +583,6 @@ void test_l3_dsAudio_headphone_connection(void)
     intptr_t handle = (intptr_t)NULL;
     bool isConnected = false;
     bool enabled = false;
-    dsAudioPortType_t port = dsAUDIOPORT_TYPE_MAX;
-    int32_t portIndex = 0;
 
     handle = dsAudio_getPort(dsAUDIOPORT_TYPE_HEADPHONE, 0, &enabled);
 
@@ -632,14 +625,10 @@ void test_l3_dsAudio_audio_compression(void)
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret = dsERR_NONE;
-
-    int32_t count = 0;
     int32_t compression = 0;
     int32_t compression_g = 0;
-    int32_t choice = -1;
     intptr_t handle = (intptr_t)NULL;
     bool enabled = false;
-    int32_t enable_port[DS_AUDIO_MAX_PORTS] = {0};
     dsAudioPortType_t port = dsAUDIOPORT_TYPE_MAX;
     int32_t portIndex = 0;
 
@@ -707,11 +696,9 @@ void test_l3_dsAudio_ms12_dap(void)
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret = dsERR_NONE;
-    int32_t count = 0;
     int32_t choice = -1;
     intptr_t handle = (intptr_t)NULL;
     bool enabled = false;
-    int32_t enable_port[DS_AUDIO_MAX_PORTS] = {0};
     dsAudioPortType_t port = dsAUDIOPORT_TYPE_MAX;
     int32_t portIndex = 0;
 
@@ -1218,14 +1205,11 @@ void test_l3_dsAudio_stereo_mode(void)
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret = dsERR_NONE;
-    int32_t count = 0;
     int32_t mode = 0;
     int32_t mode_g = 0;
-    int32_t choice = -1;
     intptr_t handle = (intptr_t)NULL;
     bool enabled = false;
     dsAudioPortType_t port = dsAUDIOPORT_TYPE_MAX;
-    int32_t enable_port[DS_AUDIO_MAX_PORTS] = {0};
     int32_t portIndex = 0;
 
     if(dsAudio_list_select_ports(&port, &portIndex))
@@ -1304,13 +1288,11 @@ void test_l3_dsAudio_stereo_auto_mode(void)
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret = dsERR_NONE;
-    int32_t count = 0;
     int32_t mode = 0;
     int32_t mode_g = 0;
     int32_t choice = -1;
     intptr_t handle = (intptr_t)NULL;
     bool enabled = false;
-    int32_t enable_port[DS_AUDIO_MAX_PORTS] = {0};
     dsAudioPortType_t port = dsAUDIOPORT_TYPE_MAX;
     int32_t portIndex = 0;
 
@@ -1383,13 +1365,10 @@ void test_l3_dsAudio_set_audio_level(void)
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret = dsERR_NONE;
-    int32_t count = 0;
     float_t gain_level = 0;
     float_t gain_level_g = 0;
-    int32_t choice = -1;
     intptr_t handle = (intptr_t)NULL;
     bool enabled = false;
-    int32_t enable_port[DS_AUDIO_MAX_PORTS] = {0};
     dsAudioPortType_t port = dsAUDIOPORT_TYPE_MAX;
     int32_t portIndex = 0;
 
@@ -1462,7 +1441,6 @@ void test_l3_dsAudio_set_audio_gain(void)
     bool enabled = false;
     float_t gain = 0.0;
     float_t gain_g = 0.0;
-    int32_t portIndex = 0;
 
     handle = dsAudio_getPort(dsAUDIOPORT_TYPE_SPEAKER, 0, &enabled);
 
@@ -1525,12 +1503,10 @@ void test_l3_dsAudio_set_audio_mute(void)
 
     dsError_t ret = dsERR_NONE;
     int32_t choice = -1;
-    int32_t count = 0;
     bool mute = false;
     bool mute_g  = false;
     intptr_t handle = (intptr_t)NULL;
     bool enabled = false;
-    int32_t enable_port[DS_AUDIO_MAX_PORTS] = {0};
     dsAudioPortType_t port = dsAUDIOPORT_TYPE_MAX;
     int32_t portIndex = 0;
 
@@ -1604,13 +1580,10 @@ void test_l3_dsAudio_set_audio_delay(void)
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret = dsERR_NONE;
-    int32_t choice = -1;
     intptr_t handle = (intptr_t)NULL;
     bool enabled = false;
-    int32_t count = 0;
-    uint32_t audioDelayMs = 0;
+    int32_t audioDelayMs = 0;
     uint32_t audioDelayMs_g = 0;
-    int32_t enable_port[DS_AUDIO_MAX_PORTS] = {0};
     dsAudioPortType_t port = dsAUDIOPORT_TYPE_MAX;
     int32_t portIndex = 0;
 
@@ -1772,11 +1745,8 @@ void test_l3_dsAudio_getConnected_atmoscaps(void)
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret = dsERR_NONE;
-    int32_t choice = -1;
     intptr_t handle = (intptr_t)NULL;
     bool enabled = false;
-    int32_t count = 0;
-    int32_t enable_port[DS_AUDIO_MAX_PORTS] = {0};
     dsATMOSCapability_t capability = dsAUDIO_ATMOS_NOTSUPPORTED;
     dsAudioPortType_t port         = dsAUDIOPORT_TYPE_MAX;
     int32_t portIndex = 0;
@@ -1828,11 +1798,9 @@ void test_l3_dsAudio_ms12Profile(void)
     int32_t choice = -1;
     intptr_t handle = (intptr_t)NULL;
     bool enabled = false;
-    int32_t count = 0;
     dsMS12AudioProfileList_t profiles = {0};
     char *profileList[DS_AUDIO_MAX_MS12_PROFILES] = {NULL};
     char profile[DS_AUDIO_MAX_MS12_LENGTH]  = {0};
-    int32_t enable_port[DS_AUDIO_MAX_PORTS] = {0};
     dsAudioPortType_t port = dsAUDIOPORT_TYPE_MAX;
     int32_t portIndex = 0;
 
