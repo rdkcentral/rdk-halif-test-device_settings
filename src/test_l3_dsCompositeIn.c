@@ -284,7 +284,7 @@ void test_l3_CompositeIn_get_status(void)
     UT_LOG_INFO("Calling dsCompositeInGetStatus(OUT:inputstatus:[])");
     ret = dsCompositeInGetStatus(&inputstatus);
     UT_LOG_INFO("Result dsCompositeInGetStatus dsError_t:[%s]", UT_Control_GetMapString(dsError_mapTable, ret));
-    for(int i = 0 ; i < numInputPorts ; i++) 
+    for(int i = 0 ; i < dsCOMPOSITE_IN_PORT_MAX ; i++) 
     {
         UT_LOG_INFO("Result dsCompositeInGetStatus(OUT:inputstatus[isPresented:%s, isPortConnected:%s, activeport:%s])",
                 UT_Control_GetMapString(bool_mapTable, inputstatus.isPresented),
@@ -296,6 +296,7 @@ void test_l3_CompositeIn_get_status(void)
     exit:
         UT_LOG_INFO("Out %s", __FUNCTION__);
 }
+
 
 /**
 * @brief This test selects the CompositeIn ports.
@@ -316,23 +317,11 @@ void test_l3_CompositeIn_select_port(void)
     int32_t select = 0; 
     uint8_t numInputPorts = 0;
 
-    UT_LOG_INFO("Calling dsCompositeInGetNumberOfInputs(OUT:numInputPorts:[])");
-    ret = dsCompositeInGetNumberOfInputs(&numInputPorts);
-    UT_LOG_INFO("Result: dsCompositeInGetNumberOfInputs(OUT:numInputPorts:[%d]) dsError_t:[%s]", numInputPorts, 
-                  UT_Control_GetMapString(dsError_mapTable, ret));
-    ASSERT(ret == dsERR_NONE);
-
-    if(!numInputPorts)
-    {
-        UT_LOG_INFO("Result: Platform does not supports CompositeIn Ports");
-        goto exit;
-    }
-
     UT_LOG_INFO("----------------------------------------------------------");
     UT_LOG_INFO("Available CompositeIn Ports");
     UT_LOG_INFO("----------------------------------------------------------");
     UT_LOG_INFO("\t#  %-20s","CompositeIn Port");
-    for(int32_t i = 0; i < numInputPorts; i++)
+    for(int32_t i = 0; i < dsCOMPOSITE_IN_PORT_MAX; i++)
     {
         UT_LOG_INFO("\t%d.  %-20s", i, UT_Control_GetMapString(dsCompositeInPortMappingTable, i));
     }
@@ -340,7 +329,7 @@ void test_l3_CompositeIn_select_port(void)
     UT_LOG_INFO("Enter the port to select: ");
     readInput(&select);
 
-    if(select < 0 || select > numInputPorts) 
+    if(select < 0 || select >= dsCOMPOSITE_IN_PORT_MAX) 
     {
        UT_LOG_ERROR("\nInvalid port selected\n");
        goto exit;
@@ -477,26 +466,9 @@ static UT_test_suite_t * pSuite = NULL;
 
 int test_l3_dsCompositeIn_register(void)
 {
-    ut_kvp_status_t status = UT_KVP_STATUS_SUCCESS;
-
-    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsCompositeIn.Type", gDeviceType, TEST_DS_DEVICE_TYPE_SIZE);
-    if (status != UT_KVP_STATUS_SUCCESS ) 
-    {
-        UT_ASSERT_FATAL(status);
-    } else 
-    {
-        if (!strncmp(gDeviceType, TEST_TYPE_SINK_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) 
-        {
-            // Create the test suite for sink type
-            pSuite = UT_add_suite_withGroupID("[L3 dsCompositeIn - Sink]", NULL, NULL, UT_TESTS_L3);
-            ASSERT( pSuite != NULL );
-        }
-        else 
-        {
-            UT_LOG_ERROR("Invalid platform type: %s", gDeviceType);
-            return -1;
-        }
-    }
+    // Create the test suite for sink type
+    pSuite = UT_add_suite_withGroupID("[L3 dsCompositeIn - Sink]", NULL, NULL, UT_TESTS_L3);
+    ASSERT( pSuite != NULL );
 
     UT_add_test( pSuite, "Initialize CompositeIn" ,test_l3_CompositeIn_initialize );
     UT_add_test( pSuite, "Get status of ports" ,test_l3_CompositeIn_get_status );
