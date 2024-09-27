@@ -7,7 +7,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",
-            "args": [ "--config", "/home/gweatherup/git/fast/comcast/code/opensource/raft/rdk-halif-device_settings/ut/"],
+            "args": [ "--config", "rdk-halif-device_settings/ut/"],
             "console": "integratedTerminal"
         },
         {
