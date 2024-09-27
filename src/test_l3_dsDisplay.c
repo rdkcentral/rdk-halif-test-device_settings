@@ -190,7 +190,6 @@ static void displayEventCallback(int32_t handle, dsDisplayEvent_t event, void* e
 
 static int32_t dsDisplay_list_select_ports(dsVideoPortType_t *pVideoPort, int32_t *pIndex)
 {
-    int32_t  numInputPorts = sizeof(videoPortTypeMappingTable)/sizeof(ut_control_keyStringMapping_t);
     int32_t choice = -1;
 
     UT_LOG_MENU_INFO("----------------------------------------------------------");
@@ -233,7 +232,7 @@ static intptr_t dsDisplay_getandle(dsAudioPortType_t videoPort, int32_t index, i
     UT_LOG_INFO("Calling dsGetDisplay(IN:type:[%s], IN:index:[%d], OUT:handle:[])",
                  UT_Control_GetMapString(videoPortTypeMappingTable, videoPort), index);
 
-    ret = dsGetDisplay(videoPort, index, &handle);
+    ret = dsGetDisplay(videoPort, index, (intptr_t *)&handle);
 
     UT_LOG_INFO("Result dsGetDisplay(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
                  UT_Control_GetMapString(videoPortTypeMappingTable, videoPort), index,
@@ -246,16 +245,16 @@ static intptr_t dsDisplay_getandle(dsAudioPortType_t videoPort, int32_t index, i
 
     UT_LOG_INFO("Calling dsRegisterDisplayEventCallback(IN:handle:[0x%0X], IN:cb[0x%0X]) ", gDisplayHandle, displayEventCallback);
 
-    status = dsRegisterDisplayEventCallback(gDisplayHandle,displayEventCallback);
+    ret = dsRegisterDisplayEventCallback(gDisplayHandle,displayEventCallback);
 
     UT_LOG_INFO("Result dsRegisterDisplayEventCallback(IN:handle:[0x%0X], IN:cb[0x%0X]), dsError_t=[%s]", 
                 gDisplayHandle, 
                 displayEventCallback,
-                UT_Control_GetMapString(errorMappingTable, status));
+                UT_Control_GetMapString(errorMappingTable, ret));
 
-    DS_ASSERT(status == dsERR_NONE);
+    DS_ASSERT(ret == dsERR_NONE);
 
-    return handle;
+    return *handle;
 }
 
 /**
@@ -310,13 +309,14 @@ void test_l3_dsDisplay_get_edid(void)
     dsError_t status = dsERR_NONE;
     int32_t portIndex = 0;
     dsVideoPortType_t port = dsVIDEOPORT_TYPE_MAX;
+    intptr_t handle = (intptr_t)NULL;
 
     if(dsDisplay_list_select_ports(&port, &portIndex))
     {
         goto exit;
     }
 
-   gDisplayHandle = dsDisplay_getandle(port,portIndex);
+   gDisplayHandle = dsDisplay_getandle(port,portIndex,&handle);
     
     UT_LOG_INFO("Calling dsGetEDID(IN:handle:[0x%0X], OUT:edid:[])", gDisplayHandle);
 
@@ -357,13 +357,14 @@ void test_l3_dsDisplay_get_edidbytes(void)
     int32_t length = 0;
     int32_t portIndex = 0;
     dsVideoPortType_t port = dsVIDEOPORT_TYPE_MAX;
+    intptr_t handle = (intptr_t)NULL;
 
     if(dsDisplay_list_select_ports(&port, &portIndex))
     {
         goto exit;
     }
 
-   gDisplayHandle = dsDisplay_getandle(port,portIndex);
+    gDisplayHandle = dsDisplay_getandle(port,portIndex,&handle);
 
     UT_LOG_INFO("Calling dsGetEDIDBytes(IN:Handle:[0x%0X], OUT:EDID:[], OUT:Length:[])", gDisplayHandle);
 
@@ -382,6 +383,7 @@ void test_l3_dsDisplay_get_edidbytes(void)
         UT_LOG_INFO("%02X ", gEdidBuffer[i]);
     }
 
+exit:
     UT_LOG_INFO("Out %s", __FUNCTION__);
 
 }
@@ -406,6 +408,7 @@ void test_l3_dsDisplay_get_aspectratio(void)
     dsError_t status   = dsERR_NONE;
     dsVideoAspectRatio_t displayAspectRatio = dsVIDEO_ASPECT_RATIO_MAX;
     int32_t portIndex = 0;
+    intptr_t handle = (intptr_t)NULL;
     dsVideoPortType_t port = dsVIDEOPORT_TYPE_MAX;
 
     if(dsDisplay_list_select_ports(&port, &portIndex))
@@ -413,7 +416,7 @@ void test_l3_dsDisplay_get_aspectratio(void)
         goto exit;
     }
 
-   gDisplayHandle = dsDisplay_getandle(port,portIndex);
+    gDisplayHandle = dsDisplay_getandle(port,portIndex,&handle);
 
     UT_LOG_INFO("Calling dsGetDisplayAspectRatio(IN:handle:[0x%0X], OUT:aspectRatio:[]) ", gDisplayHandle);
 
@@ -426,6 +429,7 @@ void test_l3_dsDisplay_get_aspectratio(void)
 
     DS_ASSERT(status == dsERR_NONE);
 
+exit:
     UT_LOG_INFO("Out %s", __FUNCTION__);
 
 }
