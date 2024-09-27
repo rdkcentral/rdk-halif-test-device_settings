@@ -79,27 +79,15 @@ The class diagram below illustrates the flow of dsAudio L3 Python test cases:
 title: dsAudio - Python Class Flow
 ---
 classDiagram
-    testControl <|-- ut_raft
+    testControl <|-- ut_raft : inherits
     class ut_raft{
     }
-    ut_raft <|-- L3_TestClasses
+    ut_raft <|-- L3_TestClasses : inherits
     L3_TestClasses ..> dsAudio : uses
     note for testControl "uses rackConfig.yaml and deviceConfig.yaml"
     note for dsAudio "uses platformProfile.yaml"
     note for L3_TestClasses "uses testSetupConfig.yaml"
     note for ut_raft "suite Navigator uses testSuite.yaml"
-    ClassA --> setupyaml : uses
-```
-
-```mermaid
-classDiagram
-    class ClassA {
-        // ...
-    }
-
-    note right of ClassA: "setup.yaml (input file)"
-
-    ClassA --> setup.yaml : uses
 ```
 
 - **testControl**
@@ -136,8 +124,8 @@ classDiagram
 
 - **testSetupConfig.yaml**
   - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams, setting environment variables etc.
-  - Example configuration file [dsAudio_L3_testSetup.yml](../../../../host/tests/dsAudio_L3_Tests/dsAudio_L3_testSetup.yml)
+  - Example configuration file [dsAudio_L3_testSetup.yml](../../../host/tests/dsAudio_L3_Tests/dsAudio_L3_testSetup.yml)
 
 - **testSuite.yaml**
   - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
-  - Example configuration file [dsAudio_test_suite.yml](../../../../host/tests/dsClasses/dsAudio_test_suite.yml)
+  - Example configuration file [dsAudio_test_suite.yml](../../../host/tests/dsClasses/dsAudio_test_suite.yml)
