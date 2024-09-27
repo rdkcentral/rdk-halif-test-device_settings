@@ -79,7 +79,28 @@ extern char gDeviceType[TEST_DS_DEVICE_TYPE_SIZE];
 extern int32_t gSourceType;
 extern int32_t gDSModule;
 
-typedef enum _dsModule_t {
+/* CODING STANDARDS: Use Typedef or enum/struct not BOTH
+
+// Correctly defined typedef
+typedef enum
+{
+...
+}dsModule_t; // This a typedef
+
+usage `dsModule_t variable;`
+...
+enum _dsModule_t
+{
+...
+};
+
+usage `enum _dsModule_t variable;`
+
+usage
+*/
+
+typedef enum 
+{
     dsNone        = (0x0 << 0),
     dsAudioPort   = (0x1 << 0),
     dsVideoPort   = (0x1 << 1),
