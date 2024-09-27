@@ -76,7 +76,6 @@
 #include <ut_log.h>
 #include <ut_kvp_profile.h>
 #include <ut_control_plane.h>
-#include "test_parse_configuration.h"
 
 #define DS_ASSERT assert
 #define UT_LOG_MENU_INFO UT_LOG_INFO
@@ -96,7 +95,8 @@ static dsHdmiInStatus_t        gStatusChange;
 
 /* Enum mapping tables */
 /* dsHdmiInPort_t */
-const static ut_control_keyStringMapping_t dsHdmiInPort_mapTable [] = {
+const static ut_control_keyStringMapping_t dsHdmiInPort_mapTable [] =
+{
   { "dsHDMI_IN_PORT_NONE",     (int32_t)dsHDMI_IN_PORT_NONE },
   { "dsHDMI_IN_PORT_0",        (int32_t)dsHDMI_IN_PORT_0    },
   { "dsHDMI_IN_PORT_1",        (int32_t)dsHDMI_IN_PORT_1    },
@@ -106,7 +106,8 @@ const static ut_control_keyStringMapping_t dsHdmiInPort_mapTable [] = {
 };
 
 /* dsHdmiInSignalStatus_t */
-const static ut_control_keyStringMapping_t dsHdmiInSignalStatus_mapTable [] = {
+const static ut_control_keyStringMapping_t dsHdmiInSignalStatus_mapTable [] =
+{
   { "dsHDMI_IN_SIGNAL_STATUS_NONE",            (int32_t)dsHDMI_IN_SIGNAL_STATUS_NONE         },
   { "dsHDMI_IN_SIGNAL_STATUS_NOSIGNAL",        (int32_t)dsHDMI_IN_SIGNAL_STATUS_NOSIGNAL     },
   { "dsHDMI_IN_SIGNAL_STATUS_UNSTABLE",        (int32_t)dsHDMI_IN_SIGNAL_STATUS_UNSTABLE     },
@@ -117,7 +118,8 @@ const static ut_control_keyStringMapping_t dsHdmiInSignalStatus_mapTable [] = {
 };
 
 /* dsError_t */
-const static ut_control_keyStringMapping_t dsError_mapTable [] = {
+const static ut_control_keyStringMapping_t dsError_mapTable [] =
+{
   { "dsERR_NONE",                    (int32_t)dsERR_NONE                    },
   { "dsERR_GENERAL",                 (int32_t)dsERR_GENERAL                 },
   { "dsERR_INVALID_PARAM",           (int32_t)dsERR_INVALID_PARAM           },
@@ -132,7 +134,8 @@ const static ut_control_keyStringMapping_t dsError_mapTable [] = {
 };
 
 /* dsVideoResolution_t */
-const static ut_control_keyStringMapping_t dsVideoResolution_mapTable [] = {
+const static ut_control_keyStringMapping_t dsVideoResolution_mapTable [] =
+{
   { "dsVIDEO_PIXELRES_720x480",      (int32_t)dsVIDEO_PIXELRES_720x480   },
   { "dsVIDEO_PIXELRES_720x576",      (int32_t)dsVIDEO_PIXELRES_720x576   },
   { "dsVIDEO_PIXELRES_1280x720",     (int32_t)dsVIDEO_PIXELRES_1280x720  },
@@ -145,7 +148,8 @@ const static ut_control_keyStringMapping_t dsVideoResolution_mapTable [] = {
 };
 
 /* dsVideoAspectRatio_t */
-const static ut_control_keyStringMapping_t dsVideoAspectRatio_mapTable [] = {
+const static ut_control_keyStringMapping_t dsVideoAspectRatio_mapTable [] =
+{
   { "dsVIDEO_ASPECT_RATIO_4x3",     (int32_t)dsVIDEO_ASPECT_RATIO_4x3  },
   { "dsVIDEO_ASPECT_RATIO_16x9",    (int32_t)dsVIDEO_ASPECT_RATIO_16x9 },
   { "dsVIDEO_ASPECT_RATIO_MAX",     (int32_t)dsVIDEO_ASPECT_RATIO_MAX  },
@@ -153,7 +157,8 @@ const static ut_control_keyStringMapping_t dsVideoAspectRatio_mapTable [] = {
 };
 
 /* dsVideoStereoScopicMode_t */
-const static ut_control_keyStringMapping_t dsVideoStereoScopicMode_mapTable [] = {
+const static ut_control_keyStringMapping_t dsVideoStereoScopicMode_mapTable [] =
+{
   { "dsVIDEO_SSMODE_UNKNOWN",            (int32_t)dsVIDEO_SSMODE_UNKNOWN            },
   { "dsVIDEO_SSMODE_2D",                 (int32_t)dsVIDEO_SSMODE_2D                 },
   { "dsVIDEO_SSMODE_3D_SIDE_BY_SIDE",    (int32_t)dsVIDEO_SSMODE_3D_SIDE_BY_SIDE    },
@@ -163,7 +168,8 @@ const static ut_control_keyStringMapping_t dsVideoStereoScopicMode_mapTable [] =
 };
 
 /* dsVideoFrameRate_t */
-const static ut_control_keyStringMapping_t dsVideoFrameRate_mapTable [] = {
+const static ut_control_keyStringMapping_t dsVideoFrameRate_mapTable [] =
+{
   { "dsVIDEO_FRAMERATE_UNKNOWN",         (int32_t)dsVIDEO_FRAMERATE_UNKNOWN },
   { "dsVIDEO_FRAMERATE_24",              (int32_t)dsVIDEO_FRAMERATE_24      },
   { "dsVIDEO_FRAMERATE_25",              (int32_t)dsVIDEO_FRAMERATE_25      },
@@ -178,7 +184,8 @@ const static ut_control_keyStringMapping_t dsVideoFrameRate_mapTable [] = {
 };
 
 /* dsAviContentType_t */
-const static ut_control_keyStringMapping_t dsAviContentType_mapTable [] = {
+const static ut_control_keyStringMapping_t dsAviContentType_mapTable [] =
+{
   { "dsAVICONTENT_TYPE_GRAPHICS",    (int32_t)dsAVICONTENT_TYPE_GRAPHICS },
   { "dsAVICONTENT_TYPE_PHOTO",       (int32_t)dsAVICONTENT_TYPE_PHOTO    },
   { "dsAVICONTENT_TYPE_CINEMA",      (int32_t)dsAVICONTENT_TYPE_CINEMA   },
@@ -189,7 +196,8 @@ const static ut_control_keyStringMapping_t dsAviContentType_mapTable [] = {
 };
 
 /* dsVideoPlaneType_t */
-const static ut_control_keyStringMapping_t dsVideoPlaneType_mapTable [] = {
+const static ut_control_keyStringMapping_t dsVideoPlaneType_mapTable [] =
+{
   { "dsVideoPlane_PRIMARY",     (int32_t)dsVideoPlane_PRIMARY   },
   { "dsVideoPlane_SECONDARY",   (int32_t)dsVideoPlane_SECONDARY },
   { "dsVideoPlane_MAX",         (int32_t)dsVideoPlane_MAX       },
@@ -197,7 +205,8 @@ const static ut_control_keyStringMapping_t dsVideoPlaneType_mapTable [] = {
 };
 
 /* dsVideoZoom_t */
-const static ut_control_keyStringMapping_t dsVideoZoom_mapTable [] = {
+const static ut_control_keyStringMapping_t dsVideoZoom_mapTable [] =
+{
   { "dsVIDEO_ZOOM_UNKNOWN",          (int32_t)dsVIDEO_ZOOM_UNKNOWN           },
   { "dsVIDEO_ZOOM_NONE",             (int32_t)dsVIDEO_ZOOM_NONE              },
   { "dsVIDEO_ZOOM_FULL",             (int32_t)dsVIDEO_ZOOM_FULL              },
@@ -216,7 +225,8 @@ const static ut_control_keyStringMapping_t dsVideoZoom_mapTable [] = {
 };
 
 /* tv_hdmi_edid_version_t */
-const static ut_control_keyStringMapping_t tv_hdmi_edid_version_mapTable [] = {
+const static ut_control_keyStringMapping_t tv_hdmi_edid_version_mapTable [] =
+{
   { "HDMI_EDID_VER_14",     (int32_t)HDMI_EDID_VER_14  },
   { "HDMI_EDID_VER_20",     (int32_t)HDMI_EDID_VER_20  },
   { "HDMI_EDID_VER_MAX",    (int32_t)HDMI_EDID_VER_MAX },
@@ -224,7 +234,8 @@ const static ut_control_keyStringMapping_t tv_hdmi_edid_version_mapTable [] = {
 };
 
 /* bool */
-const static ut_control_keyStringMapping_t bool_mapTable [] = {
+const static ut_control_keyStringMapping_t bool_mapTable [] =
+{
   { "false", (int32_t)false },
   { "true",  (int32_t)true  },
   {  NULL, -1 }
@@ -396,9 +407,19 @@ static void hdmiInAviContentTypeChangeCB(dsHdmiInPort_t port, dsAviContentType_t
 void test_l3_HdmiIn_initialize(void)
 {
     gTestID = 1;
+    int32_t select = -1;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret = dsERR_NONE;
+
+    UT_LOG_INFO("Select Device type Sink: 0 or Source: 1");
+    readInput(&select);
+
+    if(select < 0 || select > 1)
+    {
+       UT_LOG_INFO("Out %s", __FUNCTION__);
+       return;
+    }
 
     /* Initialize the HdmiIn Module */
     UT_LOG_INFO("Calling dsHdmiInInit()");
@@ -414,7 +435,7 @@ void test_l3_HdmiIn_initialize(void)
     DS_ASSERT(ret == dsERR_NONE);
 
     /* Register Signal change callback */
-    if(gSourceType == 0)
+    if(select == 0)
     {
         UT_LOG_INFO("Calling dsHdmiInRegisterSignalChangeCB(IN:CBFun:[0x%0X])", hdmiInSignalChangeCB);
         ret = dsHdmiInRegisterSignalChangeCB(hdmiInSignalChangeCB);
@@ -1161,51 +1182,27 @@ static UT_test_suite_t * pSuite = NULL;
  */
 int test_l3_dsHdmiIn_register ( void )
 {
-    ut_kvp_status_t status = UT_KVP_STATUS_SUCCESS;
+   // Create the test suite
+   pSuite = UT_add_suite("[L3 dsHdmiIn]", NULL, NULL);
+   if (pSuite == NULL)
+   {
+       UT_LOG_ERROR("Failed to create the test suite");
+       return -1;
+   }
 
-    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsHdmiIn.Type", gDeviceType, TEST_DS_DEVICE_TYPE_SIZE);
-    if(status != UT_KVP_STATUS_SUCCESS)
-    {
-       UT_ASSERT_FATAL(status);
-    } else {
-            if (!strncmp(gDeviceType, TEST_TYPE_SOURCE_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) 
-            {
-                // Create the test suite for source type
-                pSuite = UT_add_suite_withGroupID("[L3 dsHdmiIn - Source]", NULL, NULL,UT_TESTS_L3);
-                DS_ASSERT(pSuite != NULL);
-
-                gSourceType = 1;
-
-            } else if(gSourceType == 0) {
-                // Create the test suite for sink type
-                pSuite = UT_add_suite_withGroupID("[L3 dsHdmiIn - Sink]", NULL, NULL,UT_TESTS_L3);
-                DS_ASSERT(pSuite != NULL);
-            }
-            else {
-                UT_LOG_ERROR("Invalid platform type: %s", gDeviceType);
-                return -1;
-            }
-    }
-
-    UT_add_test( pSuite, "HdmiIn_Initialize" ,test_l3_HdmiIn_initialize );
-    UT_add_test( pSuite, "HdmiIn_get_inputport" ,test_l3_HdmiIn_get_inputports );
-    UT_add_test( pSuite, "HdmiIn_get_status" ,test_l3_HdmiIn_get_status);
-    UT_add_test( pSuite, "HdmiIn_select_port" ,test_l3_HdmiIn_select_port );
-    UT_add_test( pSuite, "HdmiIn_scale_video" ,test_l3_HdmiIn_scale_video );
-    if(gSourceType)
-    {
-         UT_add_test( pSuite, "HdmiIn_zoom_mode" ,test_l3_HdmiIn_zoom_mode );
-    }
-    if(gSourceType == 0)
-    {
-        UT_add_test( pSuite, "HdmiIn_get_edid" ,test_l3_HdmiIn_get_edid );
-        UT_add_test( pSuite, "HdmiIn_spd_info" ,test_l3_HdmiIn_spd_info );
-        UT_add_test( pSuite, "HdmiIn_set_edidversion" ,test_l3_HdmiIn_set_edidversion );
-        UT_add_test( pSuite, "HdmiIn_get_edidversion" ,test_l3_HdmiIn_get_edidversion );
-        UT_add_test( pSuite, "HdmiIn_set_edid2allmsupport" ,test_l3_HdmiIn_set_edid2allmsupport );
-        UT_add_test( pSuite, "HdmiIn_get_edid2allmsupport" ,test_l3_HdmiIn_get_edid2allmsupport );
-    }
-    UT_add_test( pSuite, "dsHdmiIn_terminate" ,test_l3_dsHdmiIn_terminate );
+   UT_add_test( pSuite, "HdmiIn_Initialize" ,test_l3_HdmiIn_initialize );
+   UT_add_test( pSuite, "HdmiIn_get_inputport" ,test_l3_HdmiIn_get_inputports );
+   UT_add_test( pSuite, "HdmiIn_get_status" ,test_l3_HdmiIn_get_status);
+   UT_add_test( pSuite, "HdmiIn_select_port" ,test_l3_HdmiIn_select_port );
+   UT_add_test( pSuite, "HdmiIn_scale_video" ,test_l3_HdmiIn_scale_video );
+   UT_add_test( pSuite, "HdmiIn_zoom_mode" ,test_l3_HdmiIn_zoom_mode );
+   UT_add_test( pSuite, "HdmiIn_get_edid" ,test_l3_HdmiIn_get_edid );
+   UT_add_test( pSuite, "HdmiIn_spd_info" ,test_l3_HdmiIn_spd_info );
+   UT_add_test( pSuite, "HdmiIn_set_edidversion" ,test_l3_HdmiIn_set_edidversion );
+   UT_add_test( pSuite, "HdmiIn_get_edidversion" ,test_l3_HdmiIn_get_edidversion );
+   UT_add_test( pSuite, "HdmiIn_set_edid2allmsupport" ,test_l3_HdmiIn_set_edid2allmsupport );
+   UT_add_test( pSuite, "HdmiIn_get_edid2allmsupport" ,test_l3_HdmiIn_get_edid2allmsupport );
+   UT_add_test( pSuite, "dsHdmiIn_terminate" ,test_l3_dsHdmiIn_terminate );
 
    return 0;
 }
