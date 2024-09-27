@@ -117,6 +117,7 @@ class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
             for cmd in cmds:
                 self.writeCommands(cmd)
 
+    #TODO: Current version supports only manual verification.
     def testVerifyAudio(self, manual=False):
         """
         Verifies whether the audio is fine or not.
@@ -131,7 +132,7 @@ class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
         if manual == True:
             return self.testUserResponse.getUserYN("Is audio playing on the port? (Y/N):")
         else :
-            #TOD: Add automation verification methods
+            #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
@@ -141,8 +142,10 @@ class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
             bool
         """
 
-        # Download the assets
+        # Download the assets listed in test setup configuration file
         self.testDownloadAssets()
+
+        # Run Prerequisites listed in the test setup configuration file
         self.testRunPrerequisites()
 
         # Start the stream playback
@@ -153,12 +156,15 @@ class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
 
         self.log.testStart("test1_EnableDisableAndVerifyAudioPortStatus", '1')
 
+        # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
+        # Loop through the supported audio ports
         for port,index in self.testdsAudio.getSupportedPorts():
             self.log.stepStart(f'Enable {port} Port')
             self.log.step(f'Enable {port} Port')
 
+            # Enable the audio port
             self.testdsAudio.enablePort(port, index)
 
             self.log.step(f'Verify {port} Port')
@@ -167,6 +173,7 @@ class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
             self.log.stepResult(result, f'Audio Verification {port} Port')
             self.log.stepStart(f'Disable {port} Port')
 
+            # Disable the audio port
             self.testdsAudio.disablePort(port, index)
 
             self.log.step(f'Verify {port} Port')
@@ -174,10 +181,13 @@ class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
 
             self.log.stepResult(not result, f'Audio Verification {port} Port')
 
+        # Stop the stream playback
         self.testPlayer.stop()
 
+        # Clean the assets downloaded to the device
         self.testCleanAssets()
 
+        # Delete the dsAudio class
         del self.testdsAudio
 
         return result

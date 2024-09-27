@@ -82,9 +82,24 @@ classDiagram
     testControl <|-- ut_raft
     class ut_raft{
     }
-    ut_raft <|-- dsAudio
-    dsAudio <|-- L3TestClasses
+    ut_raft <|-- L3_TestClasses
+    L3_TestClasses ..> dsAudio : uses
+    note for testControl "uses rackConfig.yaml and deviceConfig.yaml"
+    note for dsAudio "uses platformProfile.yaml"
+    note for L3_TestClasses "uses testSetupConfig.yaml"
+    note for ut_raft "suite Navigator uses testSuite.yaml"
+    ClassA --> setupyaml : uses
+```
 
+```mermaid
+classDiagram
+    class ClassA {
+        // ...
+    }
+
+    note right of ClassA: "setup.yaml (input file)"
+
+    ClassA --> setup.yaml : uses
 ```
 
 - **testControl**
@@ -96,43 +111,13 @@ classDiagram
   - For more details [ut-raft](https://github.com/rdkcentral/ut-raft).
 - **dsAudio**
   - This is test helper class which communicates with the `L3` C/C++ test running on the `DUT` through menu
-- **L3TestClasses**
+- **L3_TestClasses**
   - These are the L3 test case classes
   - Each class covers the each test use-case defined in [L3 Test use-cases](#level-3-test-cases-high-level-overview) table
 
-## YAML File Inputs
+### YAML File Inputs
 
-```mermaid
----
-title: dsAudio - YAML
----
-classDiagram
-    class Config {
-        - rackConfiguration
-        - platform
-    }
-
-    class DeviceConfig {
-        - cpePlatformConfiguration
-    }
-
-    class PlatformProfile {
-        - componentConfigurations
-    }
-    PlatformProfile <|-- DeviceConfig
-    DeviceConfig <|-- Config
-
-    class TestSetupConfig {
-        - testSetupConfiguration
-    }
-
-    class MenuConfig {
-        - menuConfiguration
-    }
-    MenuConfig <|-- TestSetupConfig
-```
-
-- **config.yaml**
+- **rackConfig.yaml**
   - Identifies the rack configuration and platform used
   - References platform-specific config from `deviceConfig.yaml`
   - For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_rack_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_rack_config.yml)
@@ -151,82 +136,8 @@ classDiagram
 
 - **testSetupConfig.yaml**
   - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams, setting environment variables etc.
-  - Example configuration file listed below:
+  - Example configuration file [dsAudio_L3_testSetup.yml](../../../../host/tests/dsAudio_L3_Tests/dsAudio_L3_testSetup.yml)
 
-```yaml
-dsAudio:
-  description: "dsAudio Device Settings test setup"
-  assets:
-    device:
-      Common: #List of common requirements for all the tests
-        artifacts:
-          -  "<URL>/hal_test" #URL Path to the bin files to copy
-          -  "<URL>/ut_contol.so" #URL Path to the .so files if any to copy
-          -  "<URL>/run.sh"
-        execute:
-          - ""  #prerequisites commands if required
-        streams:
-      test1_EnableDisableAndVerifyAudioPortStatus: #Requirements for specific test
-        artifacts:
-        execute:
-        streams:
-          - "<URL>/test_3.mp4" #URL path to the test streams
-          - "<URL>/test_4.mp4" #URL path to the test streams
-      test2_PortConnectionStatus:
-        artifacts:
-        execute:
-        streams:
-          - "<URL>/test_3.mp4" #URL path to the test streams
-          - "<URL>/test_4.mp4" #URL path to the test streams
-    host:
-      menu_config: "../../assets/dsAudio_L3_menu.yml" #Menu configuration file
-```
-
-- **menuConfig**
+- **testSuite.yaml**
   - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
-  - Example configuration file listed below:
-
-```yaml
-dsAudio:
-  description: "dsAudio Device Settings testing profile / menu system for UT"
-  test:
-  control:
-    menu:
-      type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
-      groups:
-          name: "L3 dsAudio - Sink"
-          menu_initialize:
-            name: "Initialize dsAudio"
-          menu_enable:
-            name: "Enable Audio Port"
-            input:
-                - "Select dsAudio Port"
-                - "Select ARC Type"
-          menu_disable:
-            name: "Disable Audio Port"
-            input:
-                - "Select dsAudio Port"
-```
-
-## Test Execution
-
-- Folder Structure
-  - assets
-    - testSetupConfig.yaml
-    - menuConfig.yaml
-  - host
-    - tests
-      - helpers
-        - dsAudioTestHelper.py
-      - dsAudio_test1_XYZ.py
-      - dsAudio_test2_XYZ.py
-
-- User runs test (eg: test1_XYZ.py)
-  - Chooses platform via --config config.yaml and config file
-  - --slot 1 is default (optional)
-  - Test reads the testSetupConfig.yaml from the assets folder
-- Test extracts
-  - Specific component configuration
-  - validationProfile for the platform
-  - Specific test setup requirements
-  - Specific test menu configurations
+  - Example configuration file [dsAudio_test_suite.yml](../../../../host/tests/dsClasses/dsAudio_test_suite.yml)
