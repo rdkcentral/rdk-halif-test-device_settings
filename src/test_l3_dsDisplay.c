@@ -83,12 +83,13 @@
 #define UT_LOG_MENU_INFO UT_LOG_INFO
 #define DS_ASSERT assert
 #define EDID_MAX_DATA_SIZE 256
+#define DS_VIDEO_MAX_INDEX 10
 
 /* Global Variables */
 
 static int32_t gTestGroup = 3;
 static int32_t gTestID    = 1;
-static intptr_t gDisplayHandle = 0;
+static intptr_t gDisplayHandle = (intptr_t)NULL;
 static dsDisplayEDID_t gEdid = {0};
 static uint8_t gEdidBuffer[EDID_MAX_DATA_SIZE];
 
@@ -144,6 +145,17 @@ const static ut_control_keyStringMapping_t dsVideoAspect_RatioMappingTable[] = {
 };
 
 /**
+ * @brief Reads an integer input.
+ *
+ * Reads an integer input from the standard input stream.
+ */
+static void readInt(int32_t *choice)
+{
+    scanf("%d", choice);
+    readAndDiscardRestOfLine(stdin);
+}
+
+/**
  * @brief This function clears the stdin buffer.
  *
  * This function clears the stdin buffer.
@@ -174,6 +186,76 @@ static void displayEventCallback(int32_t handle, dsDisplayEvent_t event, void* e
     {
         UT_LOG_INFO("No Event Data provided");
     }
+}
+
+static int32_t dsDisplay_list_select_ports(dsVideoPortType_t *pVideoPort, int32_t *pIndex)
+{
+    int32_t  numInputPorts = sizeof(videoPortTypeMappingTable)/sizeof(ut_control_keyStringMapping_t);
+    int32_t choice = -1;
+
+    UT_LOG_MENU_INFO("----------------------------------------------------------");
+    UT_LOG_MENU_INFO("\t\tdsVideo Port");
+    UT_LOG_MENU_INFO("----------------------------------------------------------");
+    UT_LOG_MENU_INFO("\t#   %-30s","Video Port");
+    for(int32_t i = dsVIDEOPORT_TYPE_RF; i < dsVIDEOPORT_TYPE_MAX; i++)
+    {
+        UT_LOG_MENU_INFO("\t%d.  %-30s", i, UT_Control_GetMapString(videoPortTypeMappingTable, i));
+    }
+    UT_LOG_MENU_INFO("----------------------------------------------------------");
+
+    UT_LOG_MENU_INFO("Select dsVideo Port: ");
+    readInt(&choice);
+    if(choice < dsVIDEOPORT_TYPE_RF || choice >= dsVIDEOPORT_TYPE_MAX)
+    {
+        UT_LOG_ERROR("Invalid Port choice");
+        return -1;
+    }
+
+    *pVideoPort = choice;
+
+    UT_LOG_MENU_INFO("Select dsVideo Port Index[0-%d]: ", DS_VIDEO_MAX_INDEX);
+    readInt(&choice);
+    if(choice < 0 || choice > DS_VIDEO_MAX_INDEX)
+    {
+        UT_LOG_ERROR("Invalid Port choice");
+        return -1;
+    }
+
+    *pIndex = choice;
+
+    return 0;
+}
+
+static intptr_t dsDisplay_getandle(dsAudioPortType_t videoPort, int32_t index, intptr_t *handle)
+{
+    int32_t ret;
+
+    UT_LOG_INFO("Calling dsGetDisplay(IN:type:[%s], IN:index:[%d], OUT:handle:[])",
+                 UT_Control_GetMapString(videoPortTypeMappingTable, videoPort), index);
+
+    ret = dsGetDisplay(videoPort, index, &handle);
+
+    UT_LOG_INFO("Result dsGetDisplay(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
+                 UT_Control_GetMapString(videoPortTypeMappingTable, videoPort), index,
+                 handle,
+                 UT_Control_GetMapString(errorMappingTable, ret));
+
+    DS_ASSERT(ret == dsERR_NONE);
+
+    UT_LOG_MENU_INFO("Calling dsRegisterDisplayEventCallback");
+
+    UT_LOG_INFO("Calling dsRegisterDisplayEventCallback(IN:handle:[0x%0X], IN:cb[0x%0X]) ", gDisplayHandle, displayEventCallback);
+
+    status = dsRegisterDisplayEventCallback(gDisplayHandle,displayEventCallback);
+
+    UT_LOG_INFO("Result dsRegisterDisplayEventCallback(IN:handle:[0x%0X], IN:cb[0x%0X]), dsError_t=[%s]", 
+                gDisplayHandle, 
+                displayEventCallback,
+                UT_Control_GetMapString(errorMappingTable, status));
+
+    DS_ASSERT(status == dsERR_NONE);
+
+    return handle;
 }
 
 /**
@@ -209,89 +291,12 @@ void test_l3_dsDisplay_initialize(void)
 }
 
 /**
- * @brief Retrieves the display handle based on user-selected video port.
- *
- * Allows the user to select a video port and retrieves the corresponding display handle.
- *
- * **Test Group ID:** 03@n
- * **Test Case ID:** 002@n
- *
- * **Test Procedure:**
- * Refer to Test specification documentation
- * [ds-display_L3_Low-Level_TestSpecification.md](../../docs/pages/ds-display_L3_Low-Level_TestSpecification.md)
- */
-void test_l3_dsDisplay_get_handle(void)
-{
-    gTestID = 2;
-    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
-
-    dsError_t status = dsERR_NONE;
-    int32_t choice = -1;
-    uint8_t numInputPorts = 0;
-    dsVideoPortType_t port = dsVIDEOPORT_TYPE_MAX;
-
-    numInputPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
-
-    UT_LOG_MENU_INFO("----------------------------------------------------------");
-    UT_LOG_MENU_INFO(" \t  Supported Video Port are:");
-    UT_LOG_MENU_INFO("----------------------------------------------------------");
-    UT_LOG_MENU_INFO("\t#   %-30s%s","Video Port", "Index");
-    for (int32_t i = 0; i < numInputPorts; i++) 
-    {
-        UT_LOG_MENU_INFO("\t%d.  %-30s%-2d", i+1, UT_Control_GetMapString(videoPortTypeMappingTable, gDSVideoPortConfiguration[i].typeid), gDSVideoPortConfiguration[i].index);
-    }
-    UT_LOG_MENU_INFO("----------------------------------------------------------");
-    UT_LOG_MENU_INFO(" Select the Video Port:");
-    scanf("%d", &choice);
-    readAndDiscardRestOfLine(stdin);
-
-    if(choice < 1 || choice > numInputPorts)
-    {
-        UT_LOG_ERROR("Invalid Port choice");
-        goto exit;
-    }
-
-    port = choice - 1;
-
-    UT_LOG_INFO("Calling dsGetDisplay(IN:type:[%s], IN:index:[%d], OUT:handle:[])", 
-                UT_Control_GetMapString(videoPortTypeMappingTable, gDSVideoPortConfiguration[port].typeid), 
-                gDSVideoPortConfiguration[port].index);
-
-    status = dsGetDisplay(gDSVideoPortConfiguration[port].typeid, gDSVideoPortConfiguration[port].index, &gDisplayHandle);
-
-    UT_LOG_INFO("Result dsGetDisplay(IN:type:[%s], IN:index:[%d], Handle:[0x%0X]) dsError_t=[%s]", 
-                UT_Control_GetMapString(videoPortTypeMappingTable, gDSVideoPortConfiguration[port].typeid),
-                gDSVideoPortConfiguration[port].index, 
-                gDisplayHandle,
-                UT_Control_GetMapString(errorMappingTable, status));
-
-    DS_ASSERT(status == dsERR_NONE);
-
-    UT_LOG_MENU_INFO("Calling dsRegisterDisplayEventCallback");
-
-    UT_LOG_INFO("Calling dsRegisterDisplayEventCallback(IN:handle:[0x%0X], IN:cb[0x%0X]) ", gDisplayHandle, displayEventCallback);
-
-    status = dsRegisterDisplayEventCallback(gDisplayHandle,displayEventCallback);
-
-    UT_LOG_INFO("Result dsRegisterDisplayEventCallback(IN:handle:[0x%0X], IN:cb[0x%0X]), dsError_t=[%s]", 
-                gDisplayHandle, 
-                displayEventCallback,
-                UT_Control_GetMapString(errorMappingTable, status));
-
-    DS_ASSERT(status == dsERR_NONE);
-
-exit:
-    UT_LOG_INFO("Out %s", __FUNCTION__);
-
-}
-
-/**
  * @brief Retrieves Extended Display Identification Data (EDID) for the display.
  *
  * Retrieves the EDID information for the display associated with the selected handle.
  *
  * **Test Group ID:** 03@n
- * **Test Case ID:** 003@n
+ * **Test Case ID:** 002@n
  *
  * **Test Procedure:**
  * Refer to Test specification documentation
@@ -303,13 +308,16 @@ void test_l3_dsDisplay_get_edid(void)
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
+    int32_t portIndex = 0;
+    dsVideoPortType_t port = dsVIDEOPORT_TYPE_MAX;
 
-    if (gDisplayHandle == -1) 
+    if(dsDisplay_list_select_ports(&port, &portIndex))
     {
-        UT_LOG_ERROR("Failed to get display handle\n");
         goto exit;
     }
 
+   gDisplayHandle = dsDisplay_getandle(port,portIndex);
+    
     UT_LOG_INFO("Calling dsGetEDID(IN:handle:[0x%0X], OUT:edid:[])", gDisplayHandle);
 
     status = dsGetEDID(gDisplayHandle, &gEdid);
@@ -334,7 +342,7 @@ exit:
  * Retrieves the EDID data bytes for the display associated with the selected handle.
  *
  * **Test Group ID:** 03@n
- * **Test Case ID:** 004@n
+ * **Test Case ID:** 003@n
  *
  * **Test Procedure:**
  * Refer to Test specification documentation
@@ -347,6 +355,15 @@ void test_l3_dsDisplay_get_edidbytes(void)
 
     dsError_t status = dsERR_NONE;
     int32_t length = 0;
+    int32_t portIndex = 0;
+    dsVideoPortType_t port = dsVIDEOPORT_TYPE_MAX;
+
+    if(dsDisplay_list_select_ports(&port, &portIndex))
+    {
+        goto exit;
+    }
+
+   gDisplayHandle = dsDisplay_getandle(port,portIndex);
 
     UT_LOG_INFO("Calling dsGetEDIDBytes(IN:Handle:[0x%0X], OUT:EDID:[], OUT:Length:[])", gDisplayHandle);
 
@@ -375,7 +392,7 @@ void test_l3_dsDisplay_get_edidbytes(void)
  * Retrieves the aspect ratio of the display.
  *
  * **Test Group ID:** 03@n
- * **Test Case ID:** 005@n
+ * **Test Case ID:** 004@n
  *
  * **Test Procedure:**
  * Refer to Test specification documentation
@@ -388,6 +405,15 @@ void test_l3_dsDisplay_get_aspectratio(void)
 
     dsError_t status   = dsERR_NONE;
     dsVideoAspectRatio_t displayAspectRatio = dsVIDEO_ASPECT_RATIO_MAX;
+    int32_t portIndex = 0;
+    dsVideoPortType_t port = dsVIDEOPORT_TYPE_MAX;
+
+    if(dsDisplay_list_select_ports(&port, &portIndex))
+    {
+        goto exit;
+    }
+
+   gDisplayHandle = dsDisplay_getandle(port,portIndex);
 
     UT_LOG_INFO("Calling dsGetDisplayAspectRatio(IN:handle:[0x%0X], OUT:aspectRatio:[]) ", gDisplayHandle);
 
@@ -410,7 +436,7 @@ void test_l3_dsDisplay_get_aspectratio(void)
  * This test function terminates the dsDisplay Module.
  *
  * **Test Group ID:** 03@n
- * **Test Case ID:** 006@n
+ * **Test Case ID:** 005@n
  *
  * **Test Procedure:**
  * Refer to Test specification documentation
@@ -452,7 +478,6 @@ int test_l3_dsDisplay_register (void)
     }
 
     UT_add_test( pSuite, "Initialize dsDisplay", test_l3_dsDisplay_initialize);
-    UT_add_test( pSuite, "Get display handle",test_l3_dsDisplay_get_handle);
     UT_add_test( pSuite, "Get display EDID", test_l3_dsDisplay_get_edid);
     UT_add_test( pSuite, "Get display EDIDBytes", test_l3_dsDisplay_get_edidbytes);
     UT_add_test( pSuite, "Get display AspectRatio",test_l3_dsDisplay_get_aspectratio);
