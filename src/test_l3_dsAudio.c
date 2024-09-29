@@ -73,6 +73,9 @@
 #include <ut_kvp_profile.h>
 #include <ut_control_plane.h>
 #include <stdlib.h>
+#include <sys/time.h>
+#include <time.h>
+#include <pthread.h>
 #include "dsAudio.h"
 
 #define DS_AUDIO_MAX_PORTS 20
@@ -80,6 +83,8 @@
 #define DS_AUDIO_MAX_DAP 20
 #define DS_AUDIO_MAX_MS12_PROFILES 10
 #define DS_AUDIO_MAX_MS12_LENGTH 32
+
+#define DS_CALLBACK_LOG "dsAudio_callback.txt"
 
 #define UT_LOG_MENU_INFO UT_LOG_INFO
 
@@ -94,6 +99,7 @@ static bool gAtmosStatus = false;
 static dsAudioFormat_t gAudioFormat = dsAUDIO_FORMAT_NONE;
 static dsATMOSCapability_t gAtosCapablity = dsAUDIO_ATMOS_NOTSUPPORTED;
 static dsAudioARCStatus_t gARCStatus = {0};
+static pthread_mutex_t gCallbackMutex = PTHREAD_MUTEX_INITIALIZER;
 
 /* Enum mapping tables */
 
@@ -219,6 +225,45 @@ static void readString(char *choice)
     readAndDiscardRestOfLine(stdin);
 }
 
+static void writeCallbackLog(const char *format, ...)
+{
+    va_list args;
+    va_start(args, format);
+
+
+    // Get the current timestamp in seconds and microseconds
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+
+    // Format the timestamp with year, month, day, time, and microseconds
+    char timestamp[64];
+    strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S", localtime(&tv.tv_sec));
+
+    // Append the microseconds to the timestamp
+    snprintf(&timestamp[strlen(timestamp)], sizeof(timestamp) - strlen(timestamp), ".%06ld", tv.tv_usec);
+
+    pthread_mutex_lock(&gCallbackMutex);
+
+    // Open the log file in append mode
+    FILE *fp = fopen(DS_CALLBACK_LOG, "a");
+    if (fp == NULL) {
+        fprintf(stderr, "Error opening log file: %s\n", strerror(errno));
+        return;
+    }
+
+    // Print the timestamp and formatted message
+    fprintf(fp, "[%s] ", timestamp);
+    vfprintf(fp, format, args);
+    fprintf(fp, "\n");
+
+    // Close the log file
+    fclose(fp);
+
+    pthread_mutex_unlock(&gCallbackMutex);
+
+    va_end(args);
+}
+
 /**
  * @brief Callback function for Headphone connection status.
  *
@@ -229,6 +274,11 @@ static void audioOutPortConnectCB(dsAudioPortType_t portType, uint32_t uiPortNo,
     UT_LOG_INFO("Received Connection status callback port: %s, port number: %d, Connection: %s",
                  UT_Control_GetMapString(dsAudioPortType_mapTable, portType),uiPortNo,
                  UT_Control_GetMapString(bool_mapTable, isPortCon));
+
+    writeCallbackLog("Received Connection status callback port: %s, port number: %d, Connection: %s",
+                     UT_Control_GetMapString(dsAudioPortType_mapTable, portType),uiPortNo,
+                     UT_Control_GetMapString(bool_mapTable, isPortCon));
+
     gConnectionStatus = isPortCon;
 }
 
@@ -240,6 +290,9 @@ static void audioOutPortConnectCB(dsAudioPortType_t portType, uint32_t uiPortNo,
 static void audioFormatUpdateCB(dsAudioFormat_t audioFormat)
 {
     UT_LOG_INFO("Received Format update callback : %s", UT_Control_GetMapString(dsAudioFormat_mapTable, audioFormat));
+
+    writeCallbackLog("Received Format update callback : %s", UT_Control_GetMapString(dsAudioFormat_mapTable, audioFormat));
+
     gAudioFormat = audioFormat;
 }
 
@@ -253,6 +306,11 @@ static void atmosCapsChange(dsATMOSCapability_t atmosCaps, bool status)
     UT_LOG_INFO("Received ATMOS Capablity Change callback, Capability: %s, Status: %s",
                  UT_Control_GetMapString(dsATMOSCapability_mapTable, atmosCaps),
                  UT_Control_GetMapString(bool_mapTable, status));
+
+    writeCallbackLog("Received ATMOS Capablity Change callback, Capability: %s, Status: %s",
+                 UT_Control_GetMapString(dsATMOSCapability_mapTable, atmosCaps),
+                 UT_Control_GetMapString(bool_mapTable, status));
+
     gAtosCapablity = atmosCaps;
     gAtmosStatus = status;
 }

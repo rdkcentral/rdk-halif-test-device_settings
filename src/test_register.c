@@ -90,7 +90,6 @@ extern int test_l2_dsVideoDevice_register( void );
 extern int test_l2_dsHdmiIn_register( void );
 extern int test_l2_dsFPD_register( void );
 extern int test_l2_dsVideoPort_register( void );
-
 extern int test_l2_dsCompositeIn_register( void );
 extern int test_l2_dsDisplay_register( void );
 
@@ -98,68 +97,93 @@ extern int test_l2_dsDisplay_register( void );
 extern int test_l3_dsAudio_register( void );
 extern int test_l3_dsVideoPort_register( void );
 
+static void dsAudio_register()
+{
+    if (gDSModule & dsAudioPort)
+    {
+        test_l1_dsAudio_register();
+        test_l2_dsAudio_register();
+        test_l3_dsAudio_register();
+    }
+}
+
+static void dsVideoPort_register()
+{
+    if (gDSModule & dsVideoPort)
+    {
+        test_l1_dsVideoPort_register();
+        test_l2_dsVideoPort_register();
+        test_l3_dsVideoPort_register();
+    }
+}
+
+static void dsHost_register()
+{
+    if (gDSModule & dsHost)
+    {
+        /* TODO: Have a dsHost Register function and call it always */
+        test_l1_dsHost_register();
+        test_l2_dsHost_register();
+    }
+}
+
+static void dsVideo_register()
+{
+    if (gDSModule & dsVideoDevice)
+    {
+        test_l1_dsVideoDevice_register();
+        test_l2_dsVideoDevice_register();
+    }
+}
+
+static void dsHdmiIn_regsiter()
+{
+    if (gDSModule & dsHdmiIn)
+    {
+        test_l1_dsHdmiIn_register();
+        test_l2_dsHdmiIn_register();
+    }
+}
+
+static void dsFPD_register()
+{
+    if (gDSModule & dsFPD)
+    {
+        test_l1_dsFPD_register();
+        test_l2_dsFPD_register();
+    }
+}
+
+static void dsCompositeIn_register()
+{
+    if (gDSModule & dsComposite)
+    {
+        test_l1_dsCompositeIn_register();
+        test_l2_dsCompositeIn_register();
+    }
+}
+
+static void dsDisplay_register()
+{
+    if (gDSModule & dsDisplay)
+    {
+        test_l1_dsDisplay_register();
+        test_l2_dsDisplay_register();
+    }
+}
+
 int UT_register_tests(void)
 {
     int registerFailed = 0;
 
-/*
-    FIXME: Upgrade this function to simplify
-            each function internally must deal with it's own daemons and configuration
-            L1-L3+ is outside of scope for this file, which it's requirement is to register all the tests
-    NOTE: Register will NEVER Fail, no requirement to check it, check failure with assert() in each of the regsiter functions.
-
     dsHost_register();
     dsAudio_register();
-    dsVideo_register()
-    dsHdmiIn_regsiter()
+    dsVideo_register();
+    dsHdmiIn_regsiter();
     dsFPD_register();
     dsVideoPort_register();
     dsCompositeIn_register();
     dsDisplay_register();
-*/
-    if (gDSModule & dsHost)
-    {
-        /* TODO: Have a dsHost Register function and call it always */
-        registerFailed |= test_l1_dsHost_register();
-        registerFailed |= test_l2_dsHost_register();
-    }
-    if (gDSModule & dsAudioPort)
-    {
-        registerFailed |= test_l1_dsAudio_register();
-        registerFailed |= test_l2_dsAudio_register();
-        registerFailed |= test_l3_dsAudio_register();
-    }
-    if (gDSModule & dsVideoDevice)
-    {
-        registerFailed |= test_l1_dsVideoDevice_register();
-        registerFailed |= test_l2_dsVideoDevice_register();
-    }
-    if (gDSModule & dsHdmiIn)
-    {
-        registerFailed |= test_l1_dsHdmiIn_register();
-        registerFailed |= test_l2_dsHdmiIn_register();
-    }
-    if (gDSModule & dsFPD)
-    {
-        registerFailed |= test_l1_dsFPD_register();
-        registerFailed |= test_l2_dsFPD_register();
-    }
-    if (gDSModule & dsVideoPort)
-    {
-        registerFailed |= test_l1_dsVideoPort_register();
-        registerFailed |= test_l2_dsVideoPort_register();
-        registerFailed |= test_l3_dsVideoPort_register();
-    }
-    if (gDSModule & dsComposite)
-    {
-        registerFailed |= test_l1_dsCompositeIn_register();
-        registerFailed |= test_l2_dsCompositeIn_register();
-    }
-    if (gDSModule & dsDisplay)
-    {
-        registerFailed |= test_l1_dsDisplay_register();
-        registerFailed |= test_l2_dsDisplay_register();
-    }
 
     return registerFailed;
 }
