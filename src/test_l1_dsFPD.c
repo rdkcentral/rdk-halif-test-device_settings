@@ -767,7 +767,7 @@ void test_l1_dsFPD_negative_dsSetFPBrightness (void)
     }
 
     // Step 05: Pass an invalid eIndicator parameter to dsSetFPBrightness()
-    result = dsSetFPBlink(dsFPD_INDICATOR_MAX, avgBrightness);
+    result = dsSetFPBrightness(dsFPD_INDICATOR_MAX, avgBrightness);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 06: Set all valid indicators to dsFPD_STATE_OFF using dsSetFPState()
@@ -823,6 +823,7 @@ void test_l1_dsFPD_positive_dsGetFPBrightness (void)
     dsError_t result;
     dsFPDBrightness_t brightness_power_indicator;
     dsFPDBrightness_t brightness_all_indicators[dsFPD_INDICATOR_MAX];
+    dsFPDBrightness_t brightness;
     uint8_t count = 0;
     dsFPDIndicator_t eIndicator;
     char buffer[DS_FPD_KEY_SIZE];
@@ -2903,7 +2904,6 @@ void test_l1_dsFPD_positive_dsFPSetLEDState(void)
     gTestID = 39;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsError_t result;
-    uint8_t count=0;
     unsigned int supportedStates;
     dsFPDLedState_t state;
 
@@ -2959,7 +2959,6 @@ void test_l1_dsFPD_negative_dsFPSetLEDState(void)
     gTestID = 40;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsError_t result;
-    uint8_t count=0;
 
     // Step 01: Call dsFPSetLEDState() before initialization
     result = dsFPSetLEDState(dsFPD_LED_DEVICE_ACTIVE);
@@ -3012,8 +3011,6 @@ void test_l1_dsFPD_positive_dsFPGetLEDState(void)
     dsError_t result;
     dsFPDLedState_t ledState1;
     unsigned int supportedStates;
-    bool isValidState;
-    uint8_t count=0;
 
     // Step 01: Initialize using dsFPInit()
     result = dsFPInit();
@@ -3066,7 +3063,6 @@ void test_l1_dsFPD_negative_dsFPGetLEDState(void)
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsError_t result;
     dsFPDLedState_t ledState;
-    uint8_t count =0;
 
     // Step 01: Call dsFPGetLEDState() before initialization
     result = dsFPGetLEDState(&ledState);
