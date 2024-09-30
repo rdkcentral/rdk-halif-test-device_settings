@@ -181,7 +181,7 @@ static int selectIndicator()
 *
 */
 
-void test_1_dsFPD_hal_Init(void)
+void test_l3_dsFPD_hal_Init(void)
 {
    gTestID = 1;
    dsError_t status = dsERR_NONE;
@@ -209,7 +209,7 @@ void test_1_dsFPD_hal_Init(void)
 * User or Automation tool should select the Test 2 and provide indicator index and State to be set.
 *
 */
-void test_2_dsFPD_hal_SetFPState(void)
+void test_l3_dsFPD_hal_SetFPState(void)
 {
     gTestID = 2;
     int ret = 0;
@@ -262,7 +262,7 @@ void test_2_dsFPD_hal_SetFPState(void)
 * User or Automation tool should select the Test 3 and provide indicator index.
 *
 */
-void test_3_dsFPD_hal_GetFPState(void)
+void test_l3_dsFPD_hal_GetFPState(void)
 {
     gTestID = 3;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -304,7 +304,7 @@ void test_3_dsFPD_hal_GetFPState(void)
 * and Blink iteration.
 *
 */
-void test_4_dsFPD_hal_SetFPBlink(void)
+void test_l3_dsFPD_hal_SetFPBlink(void)
 {
     gTestID = 4;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -351,7 +351,7 @@ void test_4_dsFPD_hal_SetFPBlink(void)
 * User or Automation tool should select the Test 5 and provide indicator index and Brightness value.
 *
 */
-void test_5_dsFPD_hal_SetFPBrightness(void)
+void test_l3_dsFPD_hal_SetFPBrightness(void)
 {
     gTestID = 5;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -395,7 +395,7 @@ void test_5_dsFPD_hal_SetFPBrightness(void)
 * User or Automation tool should select the Test 6 and provide indicator index.
 *
 */
-void test_6_dsFPD_hal_GetFPBrightness(void)
+void test_l3_dsFPD_hal_GetFPBrightness(void)
 {
     gTestID = 6;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -431,7 +431,7 @@ void test_6_dsFPD_hal_GetFPBrightness(void)
 * User or Automation tool should select the Test 7 and provide the FP state to check.
 *
 */
-void test_7_dsFPD_hal_FPGetSupportedLEDStates(void)
+void test_l3_dsFPD_hal_FPGetSupportedLEDStates(void)
 {
     gTestID = 7;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -460,7 +460,7 @@ void test_7_dsFPD_hal_FPGetSupportedLEDStates(void)
 * User or Automation tool should select the Test 7 and provide the FP state to check.
 *
 */
-void test_8_dsFPD_hal_SetLEDState(void)
+void test_l3_dsFPD_hal_SetLEDState(void)
 {
     gTestID = 8;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -508,7 +508,7 @@ void test_8_dsFPD_hal_SetLEDState(void)
 * User or Automation tool should select the Test 8 and provide indicator index.
 *
 */
-void test_9_dsFPD_hal_GetLEDState(void)
+void test_l3_dsFPD_hal_GetLEDState(void)
 {
     gTestID = 9;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -540,7 +540,7 @@ void test_9_dsFPD_hal_GetLEDState(void)
 * User or Automation tool should select the Test 9 and provide indicator value and Color value.
 *
 */
-void test_10_dsFPD_hal_SetFPColor(void)
+void test_l3_dsFPD_hal_SetFPColor(void)
 {
     gTestID = 10;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -599,7 +599,7 @@ void test_10_dsFPD_hal_SetFPColor(void)
 * User or Automation tool should select the Test 10 and provide indicator index.
 *
 */
-void test_11_dsFPD_hal_GetFPColor(void)
+void test_l3_dsFPD_hal_GetFPColor(void)
 {
     gTestID = 11;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
@@ -635,7 +635,7 @@ void test_11_dsFPD_hal_GetFPColor(void)
 *
 */
 
-void test_12_dsFPD_hal_Term(void)
+void test_l3_dsFPD_hal_Term(void)
 {
     gTestID = 12;
     dsError_t status = dsERR_NONE;
@@ -668,18 +668,18 @@ int test_register_dsFPD_hal_l3_tests(void)
     }
     // List of test function names and strings
 
-    UT_add_test( pSuite, "1_Init_dsFPD", test_1_dsFPD_hal_Init);
-    UT_add_test( pSuite, "2_SetState_dsFPD", test_2_dsFPD_hal_SetFPState);
-    UT_add_test( pSuite, "3_GetState_dsFPD", test_3_dsFPD_hal_GetFPState);
-    UT_add_test( pSuite, "4_SetBlink_dsFPD", test_4_dsFPD_hal_SetFPBlink);
-    UT_add_test( pSuite, "5_SetBrightness_dsFPD", test_5_dsFPD_hal_SetFPBrightness);
-    UT_add_test( pSuite, "5_GetBrightness_dsFPD", test_6_dsFPD_hal_GetFPBrightness);
-    UT_add_test( pSuite, "7_GetSupportedLEDStates_dsFPD", test_7_dsFPD_hal_FPGetSupportedLEDStates);
-    UT_add_test( pSuite, "8_SetLEDtate_dsFPD", test_8_dsFPD_hal_SetLEDState);
-    UT_add_test( pSuite, "9_GetLEDState_dsFPD", test_9_dsFPD_hal_GetLEDState);
-    UT_add_test( pSuite, "10_SetColor_dsFPD", test_10_dsFPD_hal_SetFPColor);
-    UT_add_test( pSuite, "11_GetColor_dsFPD", test_11_dsFPD_hal_GetFPColor);
-    UT_add_test( pSuite, "12_Term_dsFPD", test_12_dsFPD_hal_Term);
+    UT_add_test( pSuite, "1_Init_dsFPD", test_l3_dsFPD_hal_Init);
+    UT_add_test( pSuite, "2_SetState_dsFPD", test_l3_dsFPD_hal_SetFPState);
+    UT_add_test( pSuite, "3_GetState_dsFPD", test_l3_dsFPD_hal_GetFPState);
+    UT_add_test( pSuite, "4_SetBlink_dsFPD", test_l3_dsFPD_hal_SetFPBlink);
+    UT_add_test( pSuite, "5_SetBrightness_dsFPD", test_l3_dsFPD_hal_SetFPBrightness);
+    UT_add_test( pSuite, "5_GetBrightness_dsFPD", test_l3_dsFPD_hal_GetFPBrightness);
+    UT_add_test( pSuite, "7_GetSupportedLEDStates_dsFPD", test_l3_dsFPD_hal_FPGetSupportedLEDStates);
+    UT_add_test( pSuite, "8_SetLEDtate_dsFPD", test_l3_dsFPD_hal_SetLEDState);
+    UT_add_test( pSuite, "9_GetLEDState_dsFPD", test_l3_dsFPD_hal_GetLEDState);
+    UT_add_test( pSuite, "10_SetColor_dsFPD", test_l3_dsFPD_hal_SetFPColor);
+    UT_add_test( pSuite, "11_GetColor_dsFPD", test_l3_dsFPD_hal_GetFPColor);
+    UT_add_test( pSuite, "12_Term_dsFPD", test_l3_dsFPD_hal_Term);
 
     return 0;
 }
