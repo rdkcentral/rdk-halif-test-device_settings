@@ -40,18 +40,22 @@ This document describes the L3 Low Level Test Specification and Procedure Docume
 
 ## Level 3 Python Test Cases High Level Overview
 
-The class diagram below illustrates the flow of dsFPD L3 Python test cases:
+The class diagram below illustrates the flow of dsAudio L3 Python test cases:
 
 ```mermaid
 ---
 title: dsFPD - Python Class Flow
 ---
 classDiagram
-    testControl <|-- ut_raft
+    testControl <|-- ut_raft : inherits
     class ut_raft{
     }
-    ut_raft <|-- dsFPD
-    dsFPD <|-- L3TestClasses
+    ut_raft <|-- L3_TestClasses : inherits
+    L3_TestClasses ..> dsFPD : uses
+    note for testControl "uses rackConfig.yaml and deviceConfig.yaml"
+    note for dsAudio "uses platformProfile.yaml"
+    note for L3_TestClasses "uses testSetupConfig.yaml"
+    note for ut_raft "suite Navigator uses testSuite.yaml"
 ```
 
 - **testControl**
@@ -63,9 +67,33 @@ classDiagram
   - For more details [ut-raft](https://github.com/rdkcentral/ut-raft).
 - **dsFPD**
   - This is test helper class which communicates with the `L3` C/C++ test running on the `DUT` through menu
-- **L3TestClasses**
+- **L3_TestClasses**
   - These are the L3 test case classes
   - Each class covers the each test use-case defined in [L3 Test use-cases](#level-3-test-cases-high-level-overview) table
 
-## YAML File Inputs
-**TODO: Configuration examples with class diagrams will be added at a later stage.**
+### YAML File Inputs
+
+- **rackConfig.yaml**
+  - Identifies the rack configuration and platform used
+  - References platform-specific config from `deviceConfig.yaml`
+  - For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_rack_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_rack_config.yml)
+
+- **deviceConfig.yaml**
+  - Specifies overall configuration for the platform
+  - Can be overridden by:
+    - Changing locally .yaml file directory
+    - Using --deviceConfig command line switch
+  - For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_device_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_device_config.yml)
+
+- **componentProfile.yaml/platformProfile.yaml**
+  - Contains component-specific configurations
+  - Contains platform wide configuration broken down into separate components
+  - Example configuration file [dsFPD_Settings](https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/3.0.0/profiles/sink/Sink_FPD.yaml)
+
+- **testSetupConfig.yaml**
+  - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams, setting environment variables etc.
+  - Example configuration file [dsFPD_L3_testSetup.yml](../../../host/tests/dsFPD_L3_Tests/dsFPD_L3_testSetup.yml)
+
+- **testSuite.yaml**
+  - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
+  - Example configuration file [dsFPD_test_suite.yml](../../../host/tests/dsClasses/dsFPD_test_suite.yml)
