@@ -225,9 +225,9 @@ static void dsVideoDevice_getHandle()
 */
 void test_l3_dsVideoDevice_Init()
 {
-    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     gTestID = 1;
     dsError_t status   = dsERR_NONE;
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     UT_LOG_INFO("Calling dsVideoDeviceInit()");
     status = dsVideoDeviceInit();
