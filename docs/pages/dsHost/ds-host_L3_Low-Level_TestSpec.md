@@ -82,6 +82,11 @@ classDiagram
     - Using --deviceConfig command line switch
   - For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_device_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_device_config.yml)
 
+   **componentProfile.yaml/platformProfile.yaml**
+  - Contains component-specific configurations
+  - Contains platform wide configuration broken down into separate components
+  - Example configuration file [dsHost_Settings](https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/3.0.0/profiles/sink/Sink_HostSettings.yaml)
+
 - **testSetupConfig.yaml**
   - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams, setting environment variables etc.
   - Example configuration file [dsHost_L3_testSetup.yml](../../../host/tests/dsHost_L3_Tests/dsHost_L3_testSetup.yml)
