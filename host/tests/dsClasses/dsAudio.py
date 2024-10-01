@@ -35,12 +35,12 @@ from raft.framework.plugins.ut_raft.utSuiteNavigator import UTSuiteNavigatorClas
 from raft.framework.plugins.ut_raft.interactiveShell import InteractiveShell
 
 class dsAudioPortType(Enum):
-    ID_LR     = 0
-    HDMI      = auto()
-    SPDIF     = auto()
-    SPEAKER   = auto()
-    ARC       = auto()
-    HEADPHONE = auto()
+    dsAUDIOPORT_TYPE_ID_LR     = 0
+    dsAUDIOPORT_TYPE_HDMI      = auto()
+    dsAUDIOPORT_TYPE_SPDIF     = auto()
+    dsAUDIOPORT_TYPE_SPEAKER   = auto()
+    dsAUDIOPORT_TYPE_HDMI_ARC  = auto()
+    dsAUDIOPORT_TYPE_HEADPHONE = auto()
 
 class dsAudioClass():
 
@@ -72,10 +72,14 @@ class dsAudioClass():
         Returns:
             None
         """
-        promptWithAnswers = {
-            "Select Device Type[0: Sink, 1: Source]:":"0"
-        }
-        promptWithAnswers["Select Device Type[0: Sink, 1: Source]:"] = str(device_type)
+        promptWithAnswers = [
+                {
+                    "query_type": "direct",
+                    "query": "Select Device Type[0: Sink, 1: Source]:",
+                    "input": "0"
+                }
+        ]
+        promptWithAnswers[0]["input"] = str(device_type)
         result = self.utMenu.select( self.testSuite, "Initialize dsAudio", promptWithAnswers)
 
     def enablePort(self, audio_port:int, port_index:int=0, arc_type:int=2):
@@ -90,28 +94,31 @@ class dsAudioClass():
         Returns:
             None
         """
-        promptWithAnswers = {
-            "Ports": {
-                "Select dsAudio Port:": "1",
-                "Select dsAudio Port Index[0-10]:": "0"
-            },
-            "ARC": {
-                "Select dsAudio Port:": "2",
-                "Select dsAudio Port Index[0-10]:": "0",
-                "Select ARC Type:": "2"
-            }
-        }
-        if audio_port == dsAudioPortType.ARC.value:
-            promptWithAnswers["ARC"]["Select dsAudio Port:"] = str(audio_port)
-            promptWithAnswers["ARC"]["Select dsAudio Port Index[0-10]:"] = str(port_index)
-            promptWithAnswers["ARC"]["Select ARC Type:"] = str(arc_type)
-            input = promptWithAnswers["ARC"]
+        promptWithAnswers = [
+                {
+                    "query_type": "menu",
+                    "query": "Select dsAudio Port:",
+                    "input": "dsAUDIOPORT_TYPE_SPEAKER"
+                },
+                {
+                    "query_type": "direct",
+                    "query": "Select dsAudio Port Index[0-10]:",
+                    "input": "0"
+                },
+                {
+                    "query_type": "direct",
+                    "query": "Select ARC Type:",
+                    "input": "0"
+                }
+        ]
+        promptWithAnswers[0]["input"] = audio_port
+        promptWithAnswers[1]["input"] = str(port_index)
+        if audio_port == dsAudioPortType.dsAUDIOPORT_TYPE_HDMI_ARC.name:
+            promptWithAnswers[2]["input"] = str(arc_type)
         else:
-            promptWithAnswers["Ports"]["Select dsAudio Port:"] = str(audio_port)
-            promptWithAnswers["Ports"]["Select dsAudio Port Index[0-10]:"] = str(port_index)
-            input = promptWithAnswers["Ports"]
+            promptWithAnswers.pop(2)
 
-        result = self.utMenu.select(self.testSuite, "Enable Audio Port", input)
+        result = self.utMenu.select(self.testSuite, "Enable Audio Port", promptWithAnswers)
 
     def disablePort(self, audio_port:int, port_index:int=0):
         """
@@ -123,13 +130,21 @@ class dsAudioClass():
         Returns:
             None
         """
-        promptWithAnswers = {
-            "Select dsAudio Port:": "1",
-            "Select dsAudio Port Index[0-10]:": "0"
-        }
+        promptWithAnswers = [
+                {
+                    "query_type": "menu",
+                    "query": "Select dsAudio Port:",
+                    "input": "dsAUDIOPORT_TYPE_SPEAKER"
+                },
+                {
+                    "query_type": "direct",
+                    "query": "Select dsAudio Port Index[0-10]:",
+                    "input": "0"
+                }
+        ]
 
-        promptWithAnswers["Select dsAudio Port:"] = str(audio_port)
-        promptWithAnswers["Select dsAudio Port Index[0-10]:"] = str(port_index)
+        promptWithAnswers[0]["input"] = audio_port
+        promptWithAnswers[1]["input"] = str(port_index)
 
         result = self.utMenu.select(self.testSuite, "Disable Audio Port", promptWithAnswers)
 
@@ -160,7 +175,7 @@ class dsAudioClass():
         ports = self.deviceProfile.get("Ports")
         for i in range(1, len(ports)+1):
             entry = ports[i]
-            portLists.append([entry['Typeid'], entry['Index']])
+            portLists.append([dsAudioPortType(entry['Typeid']).name, entry['Index']])
 
         return portLists
 
