@@ -96,7 +96,7 @@ class dsAudioClass():
         """
         promptWithAnswers = [
                 {
-                    "query_type": "menu",
+                    "query_type": "list",
                     "query": "Select dsAudio Port:",
                     "input": "dsAUDIOPORT_TYPE_SPEAKER"
                 },
@@ -132,7 +132,7 @@ class dsAudioClass():
         """
         promptWithAnswers = [
                 {
-                    "query_type": "menu",
+                    "query_type": "list",
                     "query": "Select dsAudio Port:",
                     "input": "dsAUDIOPORT_TYPE_SPEAKER"
                 },
