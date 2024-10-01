@@ -65,7 +65,7 @@
 #ifndef __TEST_DSAUDIO_PARSE_CONFIG_H__
 #define __TEST_DSAUDIO_PARSE_CONFIG_H__
 
-#include "dsAudio.h"
+#include <dsAudio.h>
 
 #define DS_AUDIO_KVP_SIZE              128
 #define DS_AUDIO_PORT_NAME_SIZE        32
@@ -75,7 +75,8 @@
 
 #define DS_AUDIO_MOULE_NAME             "dsAudio"
 
-typedef struct _dsAudioPortConfiguration_t {
+typedef struct 
+{
     uint16_t typeid;
     uint16_t index;
     char     port_name[DS_AUDIO_PORT_NAME_SIZE];
