@@ -568,7 +568,7 @@ void dsVideoPort_GetResolution()
 void dsVideoPort_SetResolution()
 {
     dsError_t status   = dsERR_NONE;
-    int32_t choice,n=1,port,i;
+    int32_t choice,port,i;
 
     UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
 

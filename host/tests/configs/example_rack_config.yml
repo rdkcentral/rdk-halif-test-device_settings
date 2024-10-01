@@ -72,10 +72,18 @@ rackConfig:
                         - default:
                             type: "serial"
                             port: "/dev/ttyUSB0"
-                        - ssh:
-                            port: 22
+                        - ssh_player:
+                            type: "ssh"
+                            port: 20022
                             username: "root"
-                            ip: "192.168.99.1"
+                            ip: "" #IP address
+                            password: ''
+                        - ssh_hal_test:
+                            type: "ssh"
+                            port: 20022
+                            username: "root"
+                            ip: "" #IP address
+                            password: ''
                     remoteController:
                         # [ remoteController: ]
                         # [ type: "olimex" ip: "192.168.0.17" port: 7 map: "llama_rc6", config: "remote_commander.yml" ]
