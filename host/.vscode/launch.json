@@ -10,8 +10,6 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "args":[ "--config", "${cwd}/tests/configs/ulConfig.yml", 
-            "--deviceConfig", "${cwd}/tests/configs/deviceConfig.yml"
             ]
         },
         {
