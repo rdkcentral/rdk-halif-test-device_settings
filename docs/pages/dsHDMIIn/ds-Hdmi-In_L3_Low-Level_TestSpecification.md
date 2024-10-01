@@ -50,9 +50,9 @@ Below are top test use-case for the HdmiIn port.
 |1|Verify the HdmiIn Connect status with callback|Connect or Disconnect HdmiInput device on each of the HdmiInput ports and check the hdmiInConnectCB callback is triggered|`dsHdmiInRegisterConnectCB()`|`Y`|`Y`|
 |2|Verify the HdmiIn Signal change with callback|Select the HdmiInput port and check the callback is triggered when the change in signal status occurs(i.e like no signal , unstable signal, stable signal|`dsHdmiInRegisterSignalChangeCB()`|`NA`|`Y`|
 |3|Verify the HdmiIn Status change with callback|Select the HdmiInput port and check the callback is triggered when the status change occurs(i.e like isPresented, activeport) and  check the callbacks is triggered|`dsHdmiInRegisterStatusChangeCB()`|`NA`|`Y`|
-|4|Verify the HdmiIn Video Mode update  with callback|Play the streams from Hdminput device with different resolutions , aspect ratio  and check the callbacks is triggered and outputs the same resolution , aspect ratio|`dsHdmiInRegisterVideoModeUpdateCB()`|`NA`|`Y`|
+|4|Verify the HdmiIn Video Mode update  with callback|Select the Hdminput device with different resolutions , aspect ratio  and check the callbacks is triggered and outputs the same resolution , aspect ratio|`dsHdmiInRegisterVideoModeUpdateCB()`|`NA`|`Y`|
 |5|Verify the HdmiIn `ALLM` change  with callback|Change the `ALLM` option to TRUE/FALSE after connecting game controller on 4k supported panel and check the callbacks is triggered when the `ALLM` status change occurs|`dsHdmiInRegisterAllmChangeCB()`|`NA`|`Y`|
-|6|Verify the  HdmiIn Audio Video lateny with callback|Play the streams from Hdminput device video content with any format(like `HDR`,`HLG`,`DolbyVision`,`SDR`,...) and check the callbacks is triggered when there is latency change|`dsHdmiInRegisterAVLatencyChangeCB()`|`NA`|`Y`|
+|6|Verify the  HdmiIn Audio Video lateny with callback|Select the Hdminput device with available resolutions (like `HDR`,`HLG`,`DolbyVision`,`SDR`,...) and check the callbacks is triggered when there is latency change|`dsHdmiInRegisterAVLatencyChangeCB()`|`NA`|`Y`|
 |7|Verify the HdmiIn `AVI` content change with callbacks|Play the streams from Hdminput device with differenct formats(like `GRAPHICS`,`PHOTO`,`CINEMA`,`GAME`,...) and check the callbacks is triggered when there is `AVI` content change|`dsHdmiInRegisterAviContentTypeChangeCB()`|`NA`|`Y`|
 |8|Get HdmiIn status of the selected port|Select the HdmiInput and verify the status whether selected port active or not|`dsHdmiInSelectPort()`,`dsHdmiInGetStatus()`|`Y`|`Y`|
 |9|Scale HdmiIn video of the selected port|Select the HdmiInput and scale the video on the selcted port verify video scaled or not|`dsHdmiInScaleVideo()`|`Y`|`Y`|
@@ -71,11 +71,15 @@ The class diagram below illustrates the flow of dsHdmiIn L3 Python test cases:
 title: dsHdmiIn - Python Class Flow
 ---
 classDiagram
-    testControl <|-- ut_raft
+    testControl <|-- ut_raft : inherits
     class ut_raft{
     }
-    ut_raft <|-- dsHdmiIn
-    dsHdmiIn <|-- L3TestClasses
+    ut_raft <|-- L3_TestClasses : inherits
+    L3_TestClasses ..> dsHdmiIn : uses
+    note for testControl "uses rackConfig.yaml and deviceConfig.yaml"
+    note for dsHdmiIn "uses platformProfile.yaml"
+    note for L3_TestClasses "uses testSetupConfig.yaml"
+    note for ut_raft "suite Navigator uses testSuite.yaml"
 ```
 
 - **testControl**
@@ -91,8 +95,29 @@ classDiagram
   - These are the L3 test case classes
   - Each class covers the each test use-case defined in [L3 Test use-cases](#level-3-test-cases-high-level-overview) table
 
-# TODO: Configuration examples with class diagrams will be added at a later stage.
+## YAML File Inputs
 
-## Test Execution
-#TODO: Execution steps will be added later.
+- **rackConfig.yaml**
+  - Identifies the rack configuration and platform used
+  - References platform-specific config from `deviceConfig.yaml`
+  - For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_rack_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_rack_config.yml)
 
+- **deviceConfig.yaml**
+  - Specifies overall configuration for the platform
+  - Can be overridden by:
+    - Changing locally .yaml file directory
+    - Using --deviceConfig command line switch
+  - For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_device_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_device_config.yml)
+
+- **componentProfile.yaml/platformProfile.yaml**
+  - Contains component-specific configurations
+  - Contains platform wide configuration broken down into separate components
+  - Example configuration file [dsHdmiIn_Settings](https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/3.0.0/profiles/sink/Sink_HDMIIN.yaml)
+
+- **testSetupConfig.yaml**
+  - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams, setting environment variables etc.
+  - Example configuration file [dsHdmiIn_L3_testSetup.yml](../../../host/tests/dsHdmiIn_L3_Tests/dsHdmiIn_L3_testSetup.yml)
+
+- **testSuite.yaml**
+  - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
+  - Example configuration file [dsHdmiIn_test_suite.yml](../../../host/tests/dsClasses/dsHdmiIn_test_suite.yml)
