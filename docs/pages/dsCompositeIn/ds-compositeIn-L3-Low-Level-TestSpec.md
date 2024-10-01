@@ -38,7 +38,7 @@ Below are top test use-case for the Composite Input.
 |1|Verify the CompositeIn port connection with callbacks|Connect/disconnect the CompositeIn source device on each of compositeIn port and check the callbacks is triggered when the connection status changes|`dsCompositeInRegisterConnectCB()`|
 |2|Verify the CompositeIn active port status with callbacks|Select the CompositeIn port and check the callbacks is triggered when the active status changes(i.e like isPresented, activeport)|`dsCompositeInRegisterStatusChangeCB()`|
 |3|Scale the video and verify |Play a video in CompositeIn source device connected to the active CompositeIn port and scale the video resolution|`dsCompositeInScaleVideo()`|
-|4|Verify the CompositeIn Signal change with callback|Select the CompositeIn port and check the callback is triggered when the change in signal status occurs(i.e like no signal , unstable signal, stable signal)|`dsCompositeInRegisterSignalChangeCB()`|
+|4|Verify the CompositeIn Signal change with callback|Select the CompositeIn port, play a video in CompositeIn source device connected to the active CompositeIn port and check the callback is triggered when the change in signal status occurs(i.e like no signal , unstable signal, stable signal)|`dsCompositeInRegisterSignalChangeCB()`|
 
 ## Level 3 Python Test Cases High Level Overview
 
@@ -49,11 +49,15 @@ The class diagram below illustrates the flow of dsCompositeIn L3 Python test cas
 title: dsCompositeIn - Python Class Flow
 ---
 classDiagram
-    testControl <|-- ut_raft
+    testControl <|-- ut_raft : inherits
     class ut_raft{
     }
-    ut_raft <|-- dsCompositeIn
-    dsCompositeIn <|-- L3TestClasses
+    ut_raft <|-- L3_TestClasses : inherits
+    L3_TestClasses ..> dsCompositeIn : uses
+    note for testControl "uses rackConfig.yaml and deviceConfig.yaml"
+    note for dsCompositeIn "uses platformProfile.yaml"
+    note for L3_TestClasses "uses testSetupConfig.yaml"
+    note for ut_raft "suite Navigator uses testSuite.yaml"
 ```
 
 - **testControl**
@@ -65,39 +69,13 @@ classDiagram
   - For more details [ut-raft](https://github.com/rdkcentral/ut-raft).
 - **dsCompositeIn**
   - This is test helper class which communicates with the `L3` C/C++ test running on the `DUT` through menu
-- **L3TestClasses**
+- **L3_TestClasses**
   - These are the L3 test case classes
   - Each class covers the each test use-case defined in [L3 Test use-cases](#level-3-test-cases-high-level-overview) table
 
 ## YAML File Inputs
 
-```mermaid
----
-title: dsCompositeIn - YAML
----
-classDiagram
-    class Config {
-        - rackConfiguration
-        - platform
-    }
-    class DeviceConfig {
-        - cpePlatformConfiguration
-    }
-    class PlatformProfile {
-        - componentConfigurations
-    }
-    PlatformProfile <|-- DeviceConfig
-    DeviceConfig <|-- Config
-    class TestSetupConfig {
-        - testSetupConfiguration
-    }
-    class MenuConfig {
-        - menuConfiguration
-    }
-    MenuConfig <|-- TestSetupConfig
-```
-
-- **config.yaml**
+- **rackConfig.yaml**
   - Identifies the rack configuration and platform used
   - References platform-specific config from `deviceConfig.yaml`
   - For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_rack_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_rack_config.yml)
@@ -116,80 +94,8 @@ classDiagram
 
 - **testSetupConfig.yaml**
   - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams, setting environment variables etc.
-  - Example configuration file listed below:
+  - Example configuration file [dsAudio_L3_testSetup.yml](../../../host/tests/dsCompositeIn_L3_Tests/dsCompositeIn_L3_testSetup.yml)
 
-```yaml
-dsCompositeIn:
-  description: "dsCompositeIn Device Settings test setup"
-  assets:
-    device:
-      Common: #List of common requirements for all the tests
-        artifacts:
-          -  "<URL>/hal_test" #URL Path to the bin files to copy
-          -  "<URL>/ut_control.so" #URL Path to the .so files if any to copy
-          -  "<URL>/run.sh"
-        execute:
-          - ""  #prerequisites commands if required
-        streams:
-          - "" #URL path to the test streams
-      test1_VerifyCompositeInPortConnectionAndStatus: #Requirements for specific test
-        artifacts:
-        execute:
-        streams:
-      test2_ScaleCompositeInVideoAndVerifyStatus:
-        artifacts:
-        execute:
-        streams:
-    host:
-      menu_config: "../../assets/dsCompositeIn_L3_menu.yml" #Menu configuration file
-```
-- **menuConfig**
+- **testSuite.yaml**
   - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
-  - Example configuration file listed below:
-
-```yaml
-dsCompositeIn:
-  description: "dsCompositeIn Device Settings testing profile / menu system for UT"
-  test:
-  control:
-    menu:
-      type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
-      groups:
-          name: "L3 dsCompositeIn - Sink"
-          menu_initialize:
-            name: "Initialize dsCompositeIn"
-          menu_select:
-            name: "Select Port"
-            input:
-                - "Select CompositeIn Port"
-          menu_scaleVideo:
-            name: "Scale Video"
-            input:
-                - "Select x coordinate"
-                - "Select y coordinate"
-                - "Select width"
-                - "Select height"
-```
-
-## Test Execution
-
-- Folder Structure
-  - assets
-    - testSetupConfig.yaml
-    - menuConfig.yaml
-  - host
-    - tests
-      - helpers
-        - dsCompositeInTestHelper.py
-      - dsCompositeIn_test1_XYZ.py
-      - dsCompositeIn_test2_XYZ.py
-
-- User runs test (eg: test1_XYZ.py)
-  - Chooses platform via --config config.yaml and config file
-  - --slot 1 is default (optional)
-  - Test reads the testSetupConfig.yaml from the assets folder
-- Test extracts
-  - Specific component configuration
-  - validationProfile for the platform
-  - Specific test setup requirements
-  - Specific test menu configurations
+  - Example configuration file [dsCompositeIn_test_suite.yml](../../../host/tests/dsClasses/dsCompositeIn_test_suite.yml)
