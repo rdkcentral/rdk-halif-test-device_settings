@@ -31,14 +31,18 @@ This document describes the L3 Low Level Test Specification and Procedure Docume
 
 ## Level 3 Test Cases High Level Overview
 
+|#|Streams Name|Streams description|
+|-|------------|-------------------|
+|1|vts_SDR_stream|Format: SDR,Resolution: 1920 x 1080|
+
 Below are top test use-case for the Composite Input.
 
 |#|Test-case|Description|Focus APIs|
 |-|---------|-----------|--------|
 |1|Verify the CompositeIn port connection with callbacks|Connect/disconnect the CompositeIn source device on each of compositeIn port and check the callbacks is triggered when the connection status changes|`dsCompositeInRegisterConnectCB()`|
 |2|Verify the CompositeIn active port status with callbacks|Connect a CompositeIn source device, select the CompositeIn port and check the callbacks is triggered when the active status changes(i.e like isPresented, activeport)|`dsCompositeInRegisterStatusChangeCB()`|
-|3|Scale the video and verify |Play a video in CompositeIn source device connected to the active CompositeIn port and scale the video resolution|`dsCompositeInScaleVideo()`|
-|4|Verify the CompositeIn Signal change with callback|Select the CompositeIn port, play a video in CompositeIn source device connected to the active CompositeIn port and check the callback is triggered when the change in signal status occurs(i.e like no signal , unstable signal, stable signal)|`dsCompositeInRegisterSignalChangeCB()`|
+|3|Scale the video and verify |Play the video stream(`vts_SDR_stream`) in CompositeIn source device connected to the active CompositeIn port and scale the video resolution|`dsCompositeInScaleVideo()`|
+|4|Verify the CompositeIn Signal change with callback| Connect a CompositeIn source device, select the CompositeIn port and check the callback is triggered when the change in signal status occurs(i.e like no signal , unstable signal, stable signal)|`dsCompositeInRegisterSignalChangeCB()`|
 
 ## Level 3 Python Test Cases High Level Overview
 
