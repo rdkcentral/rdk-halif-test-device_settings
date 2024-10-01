@@ -267,19 +267,6 @@ void test_l3_CompositeIn_get_status(void)
 
     dsError_t ret   = dsERR_NONE;
     dsCompositeInStatus_t inputstatus;
-    uint8_t numInputPorts = 0;
-
-    UT_LOG_INFO("Calling dsCompositeInGetNumberOfInputs(OUT:numInputPorts:[])");
-    ret = dsCompositeInGetNumberOfInputs(&numInputPorts);
-    UT_LOG_INFO("Result: dsCompositeInGetNumberOfInputs(OUT:numInputPorts:[%d]) dsError_t:[%s]", numInputPorts, 
-                  UT_Control_GetMapString(dsError_mapTable, ret));
-    ASSERT(ret == dsERR_NONE);
-
-    if(!numInputPorts)
-    {
-        UT_LOG_INFO("Result: Platform does not supports CompositeIn Ports");
-        goto exit;
-    }
 
     UT_LOG_INFO("Calling dsCompositeInGetStatus(OUT:inputstatus:[])");
     ret = dsCompositeInGetStatus(&inputstatus);
@@ -293,8 +280,7 @@ void test_l3_CompositeIn_get_status(void)
     }
     ASSERT(ret == dsERR_NONE);
 
-    exit:
-        UT_LOG_INFO("Out %s", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 
@@ -315,7 +301,6 @@ void test_l3_CompositeIn_select_port(void)
     dsError_t ret   = dsERR_NONE;
     dsCompositeInPort_t port = dsCOMPOSITE_IN_PORT_MAX;
     int32_t select = 0; 
-    uint8_t numInputPorts = 0;
 
     UT_LOG_INFO("----------------------------------------------------------");
     UT_LOG_INFO("Available CompositeIn Ports");
