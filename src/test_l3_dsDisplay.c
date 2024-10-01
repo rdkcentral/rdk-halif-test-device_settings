@@ -96,7 +96,7 @@ static uint8_t gEdidBuffer[EDID_MAX_DATA_SIZE];
 /* Enum mapping tables */
 
 /* dsError_t */
-const static ut_control_keyStringMapping_t errorMappingTable[] = {
+const static ut_control_keyStringMapping_t dsDisplayError_mapTable[] = {
     {"dsERR_NONE", (int32_t)dsERR_NONE},
     {"dsERR_GENERAL", (int32_t)dsERR_GENERAL},
     {"dsERR_INVALID_PARAM", (int32_t)dsERR_INVALID_PARAM},
@@ -111,7 +111,7 @@ const static ut_control_keyStringMapping_t errorMappingTable[] = {
 };
 
 /* dsVideoPortType_t */
-const static ut_control_keyStringMapping_t videoPortTypeMappingTable[] = {
+const static ut_control_keyStringMapping_t dsVideoPortType_mapTable[] = {
     {"dsVIDEOPORT_TYPE_RF", (int32_t)dsVIDEOPORT_TYPE_RF},
     {"dsVIDEOPORT_TYPE_BB", (int32_t)dsVIDEOPORT_TYPE_BB},
     {"dsVIDEOPORT_TYPE_SVIDEO", (int32_t)dsVIDEOPORT_TYPE_SVIDEO},
@@ -126,7 +126,7 @@ const static ut_control_keyStringMapping_t videoPortTypeMappingTable[] = {
 };
 
 /* dsDisplayEvent_t */
-const static ut_control_keyStringMapping_t displayEventMappingTable[] = {
+const static ut_control_keyStringMapping_t dsDisplayEvent_mapTable[] = {
     {"dsDISPLAY_EVENT_CONNECTED", (int32_t)dsDISPLAY_EVENT_CONNECTED},
     {"dsDISPLAY_EVENT_DISCONNECTED", (int32_t)dsDISPLAY_EVENT_DISCONNECTED},
     {"dsDISPLAY_RXSENSE_ON", (int32_t)dsDISPLAY_RXSENSE_ON},
@@ -137,23 +137,12 @@ const static ut_control_keyStringMapping_t displayEventMappingTable[] = {
 };
 
 /* dsVideoAspectRatio_t */
-const static ut_control_keyStringMapping_t dsVideoAspect_RatioMappingTable[] = {
+const static ut_control_keyStringMapping_t dsVideoAspectRatio_mapTable[] = {
     {"dsVIDEO_ASPECT_RATIO_4x3", (int32_t)dsVIDEO_ASPECT_RATIO_4x3},
     {"dsVIDEO_ASPECT_RATIO_16x9", (int32_t)dsVIDEO_ASPECT_RATIO_16x9},
     {"dsVIDEO_ASPECT_RATIO_MAX", (int32_t)dsVIDEO_ASPECT_RATIO_MAX},
     {NULL, -1}
 };
-
-/**
- * @brief Reads an integer input.
- *
- * Reads an integer input from the standard input stream.
- */
-static void readInt(int32_t *choice)
-{
-    scanf("%d", choice);
-    readAndDiscardRestOfLine(stdin);
-}
 
 /**
  * @brief This function clears the stdin buffer.
@@ -167,6 +156,17 @@ void readAndDiscardRestOfLine(FILE* in)
 }
 
 /**
+ * @brief Reads an integer input.
+ *
+ * Reads an integer input from the standard input stream.
+ */
+static void readInt(int32_t *choice)
+{
+    scanf("%d", choice);
+    readAndDiscardRestOfLine(stdin);
+}
+
+/**
  * @brief Callback function for display events.
  *
  * This function is invoked when a display event occurs, providing information about the event type.
@@ -175,7 +175,7 @@ static void displayEventCallback(int32_t handle, dsDisplayEvent_t event, void* e
 {
     UT_LOG_INFO("Display EventCallback(IN:handle:[%d], dsDisplayEvent_t:[%s]", 
                 handle, 
-                UT_Control_GetMapString(displayEventMappingTable, event));
+                UT_Control_GetMapString(dsDisplayEvent_mapTable, event));
 
     if (eventData != NULL) 
     {
@@ -198,7 +198,7 @@ static int32_t dsDisplay_list_select_ports(dsVideoPortType_t *pVideoPort, int32_
     UT_LOG_MENU_INFO("\t#   %-30s","Video Port");
     for(int32_t i = dsVIDEOPORT_TYPE_RF; i < dsVIDEOPORT_TYPE_MAX; i++)
     {
-        UT_LOG_MENU_INFO("\t%d.  %-30s", i, UT_Control_GetMapString(videoPortTypeMappingTable, i));
+        UT_LOG_MENU_INFO("\t%d.  %-30s", i, UT_Control_GetMapString(dsVideoPortType_mapTable, i));
     }
     UT_LOG_MENU_INFO("----------------------------------------------------------");
 
@@ -230,14 +230,14 @@ static intptr_t dsDisplay_getandle(dsAudioPortType_t videoPort, int32_t index, i
     int32_t ret;
 
     UT_LOG_INFO("Calling dsGetDisplay(IN:type:[%s], IN:index:[%d], OUT:handle:[])",
-                 UT_Control_GetMapString(videoPortTypeMappingTable, videoPort), index);
+                 UT_Control_GetMapString(dsVideoPortType_mapTable, videoPort), index);
 
     ret = dsGetDisplay(videoPort, index, (intptr_t *)&handle);
 
     UT_LOG_INFO("Result dsGetDisplay(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
-                 UT_Control_GetMapString(videoPortTypeMappingTable, videoPort), index,
+                 UT_Control_GetMapString(dsVideoPortType_mapTable, videoPort), index,
                  handle,
-                 UT_Control_GetMapString(errorMappingTable, ret));
+                 UT_Control_GetMapString(dsDisplayError_mapTable, ret));
 
     DS_ASSERT(ret == dsERR_NONE);
 
@@ -250,7 +250,7 @@ static intptr_t dsDisplay_getandle(dsAudioPortType_t videoPort, int32_t index, i
     UT_LOG_INFO("Result dsRegisterDisplayEventCallback(IN:handle:[0x%0X], IN:cb[0x%0X]), dsError_t=[%s]", 
                 gDisplayHandle, 
                 displayEventCallback,
-                UT_Control_GetMapString(errorMappingTable, ret));
+                UT_Control_GetMapString(dsDisplayError_mapTable, ret));
 
     DS_ASSERT(ret == dsERR_NONE);
 
@@ -281,7 +281,7 @@ void test_l3_dsDisplay_initialize(void)
     status = dsDisplayInit();
 
     UT_LOG_INFO("Result dsDisplayInit() dsError_t=[%s]", 
-                UT_Control_GetMapString(errorMappingTable, status));
+                UT_Control_GetMapString(dsDisplayError_mapTable, status));
 
     DS_ASSERT(status == dsERR_NONE);
 
@@ -372,7 +372,7 @@ void test_l3_dsDisplay_get_edidbytes(void)
 
     UT_LOG_INFO("Result dsGetEDIDBytes(IN:Handle:[0x%0X], OUT:EDID:[0x%0X], OUT:Length:[%d]) dsError_t=[%s]",
                 gDisplayHandle, gEdidBuffer, 
-                length, UT_Control_GetMapString(errorMappingTable, status));
+                length, UT_Control_GetMapString(dsDisplayError_mapTable, status));
 
     DS_ASSERT(status == dsERR_NONE);
 
@@ -424,8 +424,8 @@ void test_l3_dsDisplay_get_aspectratio(void)
 
     UT_LOG_INFO("Result dsGetDisplayAspectRatio(handle:[0x%0X], dsVideoAspectRatio_t:[%s], dsError_t=[%s])",
                 gDisplayHandle,
-                UT_Control_GetMapString(dsVideoAspect_RatioMappingTable, displayAspectRatio), 
-                UT_Control_GetMapString(errorMappingTable, status));
+                UT_Control_GetMapString(dsVideoAspectRatio_mapTable, displayAspectRatio), 
+                UT_Control_GetMapString(dsDisplayError_mapTable, status));
 
     DS_ASSERT(status == dsERR_NONE);
 
@@ -458,7 +458,7 @@ void test_l3_dsDisplay_terminate(void)
     status = dsDisplayTerm();
 
     UT_LOG_INFO("Result dsDisplayTerm() dsError_t=[%s]", 
-                UT_Control_GetMapString(errorMappingTable, status));
+                UT_Control_GetMapString(dsDisplayError_mapTable, status));
 
     DS_ASSERT(status == dsERR_NONE);
 
