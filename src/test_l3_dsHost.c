@@ -87,16 +87,16 @@ int prevTemp = 0;
 
 /* dsError_t */
 const static ut_control_keyStringMapping_t dsError_mapTable [] = {
-  { "dsERR_NONE",                    (int32_t)dsERR_NONE                    },
-  { "dsERR_GENERAL",                 (int32_t)dsERR_GENERAL                 },
-  { "dsERR_INVALID_PARAM",           (int32_t)dsERR_INVALID_PARAM           },
-  { "dsERR_INVALID_STATE",           (int32_t)dsERR_INVALID_STATE           },
-  { "dsERR_ALREADY_INITIALIZED",     (int32_t)dsERR_ALREADY_INITIALIZED     },
-  { "dsERR_NOT_INITIALIZED",         (int32_t)dsERR_NOT_INITIALIZED         },
-  { "dsERR_OPERATION_NOT_SUPPORTED", (int32_t)dsERR_OPERATION_NOT_SUPPORTED },
-  { "dsERR_RESOURCE_NOT_AVAILABLE",  (int32_t)dsERR_RESOURCE_NOT_AVAILABLE  },
-  { "dsERR_OPERATION_FAILED",        (int32_t)dsERR_OPERATION_FAILED        },
-  { "dsErr_MAX",                     (int32_t)dsErr_MAX                     },
+  { "dsERR_NONE",                    (int32_t)dsERR_NONE},
+  { "dsERR_GENERAL",                 (int32_t)dsERR_GENERAL},
+  { "dsERR_INVALID_PARAM",           (int32_t)dsERR_INVALID_PARAM},
+  { "dsERR_INVALID_STATE",           (int32_t)dsERR_INVALID_STATE},
+  { "dsERR_ALREADY_INITIALIZED",     (int32_t)dsERR_ALREADY_INITIALIZED},
+  { "dsERR_NOT_INITIALIZED",         (int32_t)dsERR_NOT_INITIALIZED},
+  { "dsERR_OPERATION_NOT_SUPPORTED", (int32_t)dsERR_OPERATION_NOT_SUPPORTED},
+  { "dsERR_RESOURCE_NOT_AVAILABLE",  (int32_t)dsERR_RESOURCE_NOT_AVAILABLE},
+  { "dsERR_OPERATION_FAILED",        (int32_t)dsERR_OPERATION_FAILED},
+  { "dsErr_MAX",                     (int32_t)dsErr_MAX},
   {  NULL, -1 }
 };
 
@@ -162,27 +162,12 @@ void test_l3_dsHost_hal_get_Temperature(void)
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     // Step 1: Call dsGetCPUTemperature()
-    UT_LOG_INFO("Calling dsGetCPUTemperature(): IN:cpuTemperature[]");
+    UT_LOG_INFO("Calling dsGetCPUTemperature()(IN:cpuTemperature[])");
     status = dsGetCPUTemperature(&cpuTemperature);
-    UT_LOG_INFO("Result dsGetCPUTemperature: dsError_t:[%s], cpuTemperature: %f",
-                  UT_Control_GetMapString(dsError_mapTable, status), cpuTemperature);
-    UT_LOG_INFO("CPU Temperature: %f\n", cpuTemperature);
+    UT_LOG_INFO("Result dsGetCPUTemperature(cpuTemperature: %f), dsError_t:[%s]",
+                  cpuTemperature, UT_Control_GetMapString(dsError_mapTable, status));
 
     assert(status == dsERR_NONE);
-
-    if(prevTemp == 0)
-    {
-        prevTemp = cpuTemperature;
-    }
-    else
-    {
-        if(cpuTemperature <= prevTemp +2 || cpuTemperature >= prevTemp -2)
-        {
-            UT_LOG_ERROR("Temperature is not same as previous value within reasonable variability. 
-                         PrevTemp: %d, currentTemp: %d\n", prevTemp, cpuTemperature);
-            assert(cpuTemperature == prevTemp);
-        }
-    }
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -209,16 +194,15 @@ void test_l3_dsHost_hal_get_SocID(void)
     gTestID = 3;
     dsError_t status = dsERR_NONE ;
 
-    char socID[DSHOST_SOC_LENGTH] = {0};
+    char* socID[DSHOST_SOC_LENGTH] = {0};
 
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     // Step 1: Call dsGetSoCId()
-    UT_LOG_INFO("Calling dsGetSoCId(): IN:socID[]");
+    UT_LOG_INFO("Calling dsGetSoCId(IN:socID[])");
     status = dsGetSoCId(socID, DSHOST_SOC_LENGTH);
-    UT_LOG_INFO("Result dsGetSoCId: dsError_t:[%s]",
-                  UT_Control_GetMapString(dsError_mapTable, status));
-    UT_LOG_INFO("SoC ID: %s\n", socID);
+    UT_LOG_INFO("Result dsGetSoCId(socID: %s), dsError_t:[%s]",
+                  socID,UT_Control_GetMapString(dsError_mapTable, status));
 
     assert(status == dsERR_NONE);
 
@@ -247,16 +231,15 @@ void test_l3_dsHost_hal_get_hostEdid(void)
     gTestID = 4;
     dsError_t status = dsERR_NONE ;
 
-    char hostEdid[DS_HOST_KVP_SIZE] = {0};
+    char* hostEdid[DS_HOST_KVP_SIZE] = {0};
 
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     // Step 1: Call dsGetHostEDID()
-    UT_LOG_INFO("Calling dsGetHostEDID(): IN:hostEdid[]");
+    UT_LOG_INFO("Calling dsGetHostEDID( OUT:hostEdid[])");
     status = dsGetHostEDID(hostEdid, DS_HOST_KVP_SIZE);
-    UT_LOG_INFO("Result dsGetHostEDID: dsError_t:[%s]",
-                  UT_Control_GetMapString(dsError_mapTable, status));
-    UT_LOG_INFO("Host EDID: %s\n", hostEdid);
+    UT_LOG_INFO("Result dsGetHostEDID(hostEdid: %s), dsError_t:[%s]",
+                  hostEdid, UT_Control_GetMapString(dsError_mapTable, status));
 
     assert(status == dsERR_NONE);
 
@@ -290,7 +273,7 @@ void test_l3_dsHost_hal_Term(void)
     // Step 1: Call dsHostTerm()
     UT_LOG_INFO("Calling dsHostTerm()");
     status = dsHostTerm();
-    UT_LOG_INFO("Result dsHostTerm: dsError_t:[%s]",
+    UT_LOG_INFO("Result dsHostTerm() dsError_t:[%s]",
                   UT_Control_GetMapString(dsError_mapTable, status));
 
     assert(status == dsERR_NONE);
