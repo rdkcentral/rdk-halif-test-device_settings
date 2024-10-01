@@ -7,10 +7,10 @@ dsAudio:  # Prefix must always exist
         type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
         suites:
             0:
-                name: "L1 dsAudio - Sink"
+                name: "L1 dsCompositeIn - Sink"
                 tests:
             1:
-                name: "L2 dsAudio - Sink"
+                name: "L2 dsCompositeIn - Sink"
                 tests:
             2:
                 name: "L3 dsCompositeIn"
