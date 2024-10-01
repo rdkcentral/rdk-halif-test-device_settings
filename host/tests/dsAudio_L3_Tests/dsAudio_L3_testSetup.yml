@@ -5,16 +5,47 @@ dsAudio:  # Prefix must always exist
   description: "dsAudio Device Settings test setup"
   assets:
     device:
-      test1_EnableDisableAndVerifyAudioPortStatus:
-        artifacts: #list of artifacts to be copied to device
-        execute: #list of commands to be executed on device
-        streams: #list of streams to be copied to device
-      test2_PortConnectionStatus:
-        artifacts:
-        execute:
-        streams:
-
-
-
+      test01_EnableDisableAndVerifyAudioPortStatus:
+        artifacts: ["http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/bin/hal_test",
+                    "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/bin/libut_control.so",
+                    "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/bin/Sink_AudioSettings.yaml",
+                    "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/bin/run.sh"]
+        execute: ["chmod +x /opt/bhanu/hal_test", "chmod +x run.sh"]
+        streams: ["http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/streams/music_lowdb.ac3"]
+      test02_PortConnectionStatus:
+        artifacts: ["http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/bin/hal_test",
+                    "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/bin/libut_control.so",
+                    "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/bin/Sink_AudioSettings.yaml",
+                    "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/bin/run.sh"]
+        execute: ["chmod +x /opt/bhanu/hal_test", "chmod +x run.sh"]
+        streams: []
+      test07_TestAudioLevel:
+        artifacts: ["http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/bin/hal_test",
+                    "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/bin/libut_control.so",
+                    "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/bin/Sink_AudioSettings.yaml",
+                    "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/bin/run.sh"]
+        execute: ["chmod +x /opt/bhanu/hal_test", "chmod +x run.sh"]
+        streams: ["http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/streams/music_lowdb.ac3"]
+      test08_TestAudioGain:
+        artifacts: ["http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/bin/hal_test",
+                    "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/bin/libut_control.so",
+                    "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/bin/Sink_AudioSettings.yaml",
+                    "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/bin/run.sh"]
+        execute: ["chmod +x /opt/bhanu/hal_test", "chmod +x run.sh"]
+        streams: ["http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/streams/music_lowdb.ac3"]
+      test09_TestMute:
+        artifacts: ["http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/bin/hal_test",
+                    "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/bin/libut_control.so",
+                    "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/bin/Sink_AudioSettings.yaml",
+                    "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/bin/run.sh"]
+        execute: ["chmod +x /opt/bhanu/hal_test", "chmod +x run.sh"]
+        streams: ["http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/streams/music_lowdb.ac3"]
+      test10_TestAudioFormat:
+        artifacts: ["http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/bin/hal_test",
+                    "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/bin/libut_control.so",
+                    "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/bin/Sink_AudioSettings.yaml",
+                    "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/bin/run.sh"]
+        execute: ["chmod +x /opt/bhanu/hal_test", "chmod +x run.sh"]
+        streams: ["http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/streams/music_lowdb.ac3"]
 
 

@@ -25,6 +25,7 @@ import yaml
 import os
 import sys
 from enum import Enum, auto
+import re
 
 # Add parent outside of the class directory
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -62,6 +63,12 @@ class dsAudioClass():
 
         self.utMenu.start()
 
+    def searchPattern(self, haystack, pattern):
+        match = re.search(pattern, haystack)
+        if match:
+            return match.group(1)
+        return None
+
     def initialise(self, device_type:int=0):
         """
         Initializes the device settings Audio module.
@@ -82,13 +89,25 @@ class dsAudioClass():
         promptWithAnswers[0]["input"] = str(device_type)
         result = self.utMenu.select( self.testSuite, "Initialize dsAudio", promptWithAnswers)
 
+    def terminate(self):
+        """
+        Enables the audio port.
+
+        Args:
+            None.
+
+        Returns:
+            None
+        """
+        result = self.utMenu.select(self.testSuite, "test_terminate_audio")
+
     def enablePort(self, audio_port:int, port_index:int=0, arc_type:int=2):
         """
         Enables the audio port.
 
         Args:
             audio_port (int): audio port enum value
-            port_index (int): port index
+            port_index (int, optional): port index. Defaults to 0
             arc_type (int, optional): Type of ARC. Defaults to eArc.
 
         Returns:
@@ -126,6 +145,7 @@ class dsAudioClass():
 
         Args:
             audio_port (str): name of the audio port. Refer dsAudioPortType enum
+            port_index (int, optional): port index. Defaults to 0
 
         Returns:
             None
@@ -148,17 +168,137 @@ class dsAudioClass():
 
         result = self.utMenu.select(self.testSuite, "Disable Audio Port", promptWithAnswers)
 
-    def terminate(self):
+    def setGainLevel(self, audio_port:int, port_index:int=0, gainLevel:float=0.0):
         """
         Enables the audio port.
+
+        Args:
+            audio_port (str): name of the audio port. Refer dsAudioPortType enum
+            port_index (int, optional): port index. Defaults to 0
+            gainLevel (float, optional): Gain level to be applied. Ranges from 0.0 to 100.0. Defaults to 0.0
+
+        Returns:
+            None
+        """
+        promptWithAnswers = [
+                {
+                    "query_type": "list",
+                    "query": "Select dsAudio Port:",
+                    "input": "dsAUDIOPORT_TYPE_SPEAKER"
+                },
+                {
+                    "query_type": "direct",
+                    "query": "Select dsAudio Port Index[0-10]:",
+                    "input": "0"
+                },
+                {
+                    "query_type": "direct",
+                    "query": "Enter Gain Level[0.0 to 100.0]:",
+                    "input": "0"
+                }
+        ]
+
+        promptWithAnswers[0]["input"] = audio_port
+        promptWithAnswers[1]["input"] = str(port_index)
+        promptWithAnswers[2]["input"] = str(gainLevel)
+
+        result = self.utMenu.select(self.testSuite, "Set Audio Level", promptWithAnswers)
+
+    def setSpeakerGain(self, audio_port:int, port_index:int=0, gain:float=0.0):
+        """
+        Enables the audio port.
+
+        Args:
+            audio_port (str): name of the audio port. Refer dsAudioPortType enum
+            port_index (int, optional): port index. Defaults to 0
+            gain (float, optional): Gain value to be applied. Ranges from -2080.0 to 480.0. Defaults to 0.0
+
+        Returns:
+            None
+        """
+        promptWithAnswers = [
+                {
+                    "query_type": "direct",
+                    "query": "Enter Gain[-2080.0 to 480.0]:",
+                    "input": "0"
+                }
+        ]
+
+        promptWithAnswers[0]["input"] = str(gain)
+
+        result = self.utMenu.select(self.testSuite, "Set Audio Gain For Speaker", promptWithAnswers)
+
+    def setAudioMute(self, audio_port:int, port_index:int=0, mute:bool=True):
+        """
+        Enables the audio port.
+
+        Args:
+            audio_port (str): name of the audio port. Refer dsAudioPortType enum
+            port_index (int, optional): port index. Defaults to 0
+            mute (bool, optional): True - Mutes, False - Unmutes. Defaults to True
+
+        Returns:
+            None
+        """
+        promptWithAnswers = [
+                {
+                    "query_type": "list",
+                    "query": "Select dsAudio Port:",
+                    "input": "dsAUDIOPORT_TYPE_SPEAKER"
+                },
+                {
+                    "query_type": "direct",
+                    "query": "Select dsAudio Port Index[0-10]:",
+                    "input": "0"
+                },
+                {
+                    "query_type": "direct",
+                    "query": "Audio Mute/UnMute[1:Mute, 2:UnMute]:",
+                    "input": "1"
+                }
+        ]
+
+        promptWithAnswers[0]["input"] = audio_port
+        promptWithAnswers[1]["input"] = str(port_index)
+        if mute == True:
+            promptWithAnswers[2]["input"] = "1"
+        else:
+            promptWithAnswers[2]["input"] = "2"
+
+        result = self.utMenu.select(self.testSuite, "Audio Mute/UnMute", promptWithAnswers)
+
+    def getHeadphoneConnectionStatus(self):
+        """
+        Gets the headphone connection status.
 
         Args:
             None.
 
         Returns:
-            None
+            bool : connection status
         """
-        result = self.utMenu.select(self.testSuite, "test_terminate_audio")
+        result = self.utMenu.select( self.testSuite, "Headphone Connection")
+        connectionStatusPattern = r"Result dsAudioOutIsConnected\(IN:handle:\[.*\], OUT:isConnected:\[(true|false)\]\)"
+        isConnected = self.searchPattern(result, connectionStatusPattern)
+        if(isConnected == "true"):
+            return True
+        return False
+
+    def getAudioFormat(self):
+        """
+        Gets the audio format.
+
+        Args:
+            None.
+
+        Returns:
+            str : audio format
+        """
+        result = self.utMenu.select( self.testSuite, "Get Audio Format")
+        audioFormatPattern = r"dsGetAudioFormat\(IN:handle:\[.*\], OUT:audioFormat:\[(dsAUDIO_FORMAT_\w+)\]\)"
+        audioFormat = self.searchPattern(result, audioFormatPattern)
+
+        return audioFormat
 
     def getSupportedPorts(self):
         """
@@ -196,7 +336,6 @@ class dsAudioClass():
             return 0
         elif type == "source":
             return 1
-
 
     def __del__(self):
         """
