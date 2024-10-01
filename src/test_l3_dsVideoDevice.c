@@ -86,6 +86,13 @@
 intptr_t gHandle = 0;
 int32_t gSelectedVideoDevice = 0;
 
+/* currently it support only one video deice as per HAL spec*/
+int num_of_devices = 1; 
+
+/* Global Variables */
+static int32_t gTestGroup = 3;
+static int32_t gTestID    = 1;
+
 // Mapping table for dsError_t
 const static ut_control_keyStringMapping_t  dsErrorMappingTable[] = {
     {"dsERR_NONE", (int32_t)dsERR_NONE},
@@ -138,6 +145,26 @@ const static ut_control_keyStringMapping_t dsVideoCodecHevcProfilesMappingTable[
     {NULL, -1}
 };
 
+// Mapping table for dsVideoFrameRate_t
+const static ut_control_keyStringMapping_t dsVideoFrameRateTable[] = {
+    {"dsVIDEO_FRAMERATE_UNKNOWN", (int32_t)dsVIDEO_FRAMERATE_UNKNOWN},
+    {"dsVIDEO_FRAMERATE_24", (int32_t)dsVIDEO_FRAMERATE_24},
+    {"dsVIDEO_FRAMERATE_25", (int32_t)dsVIDEO_FRAMERATE_25},
+    {"dsVIDEO_FRAMERATE_30", (int32_t)dsVIDEO_FRAMERATE_30},
+    {"dsVIDEO_FRAMERATE_60", (int32_t)dsVIDEO_FRAMERATE_60},
+    {"dsVIDEO_FRAMERATE_23dot98", (int32_t)dsVIDEO_FRAMERATE_23dot98},
+    {"dsVIDEO_FRAMERATE_29dot97", (int32_t)dsVIDEO_FRAMERATE_29dot97},
+    {"dsVIDEO_FRAMERATE_50", (int32_t)dsVIDEO_FRAMERATE_50},
+    {"dsVIDEO_FRAMERATE_59dot94", (int32_t)dsVIDEO_FRAMERATE_59dot94},
+    {"dsVIDEO_FRAMERATE_MAX", (int32_t)dsVIDEO_FRAMERATE_MAX},
+    {NULL, -1}
+};
+
+/**
+ * @brief This function clears the stdin buffer.
+ *
+ * This function clears the stdin buffer.
+ */
 void readAndDiscardRestOfLine(FILE* in)
 {
     int c;
@@ -162,7 +189,7 @@ static void dsVideoDevice_getHandle()
     int32_t device;
 
     UT_LOG_MENU_INFO(" Supported Video Device:");
-    for (device = 0; device < gDSvideoDevice_NumVideoDevices; device++)
+    for (device = 0; device < num_of_devices; device++)
     {
         UT_LOG_MENU_INFO("\t%d.  VideoDevice%d ", device, device);
     }
@@ -185,6 +212,9 @@ static void dsVideoDevice_getHandle()
 * @brief Initialization of the Device settings - Video Device Module
 *
 * This test provides a scope to Intialize the Video Device module.
+* **Test Group ID:** 03@n
+* **Test Case ID:** 001@n
+*
 * **Pre-Conditions:** None@n
 *
 * **Dependencies:** None@n
@@ -193,8 +223,10 @@ static void dsVideoDevice_getHandle()
 * User or Automation tool should select VideoDevice_Init before running any test.
 *
 */
-void dsVideoDevice_Init()
+void test_l3_dsVideoDevice_Init()
 {
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
+    gTestID = 1;
     dsError_t status   = dsERR_NONE;
 
     UT_LOG_INFO("Calling dsVideoDeviceInit()");
@@ -209,13 +241,15 @@ void dsVideoDevice_Init()
     status = dsRegisterFrameratePostChangeCB(dsVideoDevice_FrameratePostChange);
     UT_LOG_INFO("Result dsRegisterFrameratePostChangeCB() OUT:dsError_t=[%s]", UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status, dsERR_NONE);
-
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
 * @brief Termination of the Device settings - Video Device Module
 *
 * This test provides a scope to Terminate the Video Device module.
+* **Test Group ID:** 03@n
+* **Test Case ID:** 011@n
 * **Pre-Conditions:** None@n
 *
 * **Dependencies:** None@n
@@ -224,20 +258,25 @@ void dsVideoDevice_Init()
 * User or Automation tool should select VideoDevice_Term at end of every test.
 *
 */
-void dsVideoDevice_Term()
+void test_l3_dsVideoDevice_Term()
 {
+    gTestID = 11;
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     dsError_t status   = dsERR_NONE;
 
     UT_LOG_INFO("Calling dsVideoDevice_Term()");
     status = dsVideoDeviceTerm();
     UT_LOG_INFO("Result dsVideoDeviceTerm() OUT:dsError_t=[%s]",  UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status, dsERR_NONE);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
 * @brief Set Zoom mode of Source device
 *
 * This test sets zoom mode of video device seected.
+* **Test Group ID:** 03@n
+* **Test Case ID:** 002@n
 * **Pre-Conditions:** None@n
 * VideoDevice_init Should be called before calling this test
 *
@@ -248,9 +287,11 @@ void dsVideoDevice_Term()
 *
 */
 
-void dsVideoDevice_SetZoomMode()
+void test_l3_dsVideoDevice_SetZoomMode()
 {
     dsError_t status   = dsERR_NONE;
+    gTestID = 2;
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     int32_t choice,j;
 
     dsVideoDevice_getHandle();
@@ -271,12 +312,15 @@ void dsVideoDevice_SetZoomMode()
     status = dsSetDFC(gHandle, choice);
     UT_LOG_INFO("Result dsSetDFC(), OUT:dsError_t=[%s]", UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status, dsERR_NONE);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
 * @brief Set Device Frame Rate of Sink device
 *
 * This test sets frame rate of video device selected.
+* **Test Group ID:** 03@n
+* **Test Case ID:** 003@n
 * **Pre-Conditions:** None@n
 * VideoDevice_init Should be called before calling this test
 *
@@ -286,16 +330,18 @@ void dsVideoDevice_SetZoomMode()
 * User or Automation tool should select SetDisplayFrameRate from list
 *
 */
-void dsVideoDevice_SetDisplayFramerate()
+void test_l3_dsVideoDevice_SetDisplayFramerate()
 {
+    gTestID = 3;
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     dsError_t status   = dsERR_NONE;
     int32_t choice,j;
 
     dsVideoDevice_getHandle();
     UT_LOG_MENU_INFO(" \t  Supported Display Framerate are:");
-    for (j = 0; j < gDSVideoDeviceConfiguration[gSelectedVideoDevice].NoOfSupportedDFR; j++)
+    for (j = 0; j <= dsVIDEO_FRAMERATE_MAX; j++)
     {
-        UT_LOG_MENU_INFO("\t%d.  %-20s ", j, gDSVideoDeviceConfiguration[gSelectedVideoDevice].SupportedDisplayFramerate[j]);
+        UT_LOG_MENU_INFO("\t%d.  %-20s ", j, UT_Control_GetMapString(dsVideoFrameRateTable, j));
     }
 
     UT_LOG_MENU_INFO("------------------------------------------");
@@ -304,16 +350,21 @@ void dsVideoDevice_SetDisplayFramerate()
     readAndDiscardRestOfLine(stdin);
 
     UT_LOG_INFO("Calling dsSetDisplayframerate(IN:Handle:[0x%0X],IN:framerate:[%s])",gHandle, \
-                        gDSVideoDeviceConfiguration[gSelectedVideoDevice].SupportedDisplayFramerate[choice]);
-    status = dsSetDisplayframerate(gHandle, gDSVideoDeviceConfiguration[gSelectedVideoDevice].SupportedDisplayFramerate[choice]);
+                        UT_Control_GetMapString(dsVideoFrameRateTable, choice));
+
+    // This need to check
+    status = dsSetDisplayframerate(gHandle, UT_Control_GetMapString(dsVideoFrameRateTable, choice));
     UT_LOG_INFO("Result dsSetDisplayframerate(), OUT:dsError_t=[%s]", UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status, dsERR_NONE);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
 * @brief Set Frame Rate Mode of Sink device
 *
-* This test sets Frame rate mode of video device seected.
+* This test sets Frame rate mode of video device selected.
+* **Test Group ID:** 03@n
+* **Test Case ID:** 004@n
 * **Pre-Conditions:** None@n
 * VideoDevice_init Should be called before calling this test
 *
@@ -323,8 +374,10 @@ void dsVideoDevice_SetDisplayFramerate()
 * User or Automation tool should select SetFRFMode from list
 *
 */
-void dsVideoDevice_SetFRFMode()
+void test_l3_dsVideoDevice_SetFRFMode()
 {
+    gTestID = 4;
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     dsError_t status   = dsERR_NONE;
     int32_t choice,j;
 
@@ -345,12 +398,15 @@ void dsVideoDevice_SetFRFMode()
     status = dsSetFRFMode(gHandle, choice);
     UT_LOG_INFO("Result dsSetFRFMode(), OUT:dsError_t=[%s]", UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status, dsERR_NONE);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
 * @brief Get Video Codec info from source device
 *
 * This test gets Video Codec Info of video device seected.
+* **Test Group ID:** 03@n
+* **Test Case ID:** 005@n
 * **Pre-Conditions:** None@n
 * VideoDevice_init Should be called before calling this test
 *
@@ -360,22 +416,20 @@ void dsVideoDevice_SetFRFMode()
 * User or Automation tool should select GetVideoCodecInfo from list
 *
 */
-void dsVideoDevice_GetVideoCodecInfo()
+void test_l3_dsVideoDevice_GetVideoCodecInfo()
 {
+    gTestID = 5;
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     dsError_t status   = dsERR_NONE;
     dsVideoCodingFormat_t codec = dsVIDEO_CODEC_MPEGHPART2;
     dsVideoCodecInfo_t codecInfo;
-    int32_t choice,j;
+    int32_t choice,i,j;
 
     dsVideoDevice_getHandle();
-    UT_LOG_MENU_INFO(" \t  Supported Display Framerate are:");
-    for (codec = dsVIDEO_CODEC_MPEGHPART2; codec < dsVIDEO_CODEC_MAX;)
-    {
-        if ((gDSVideoDeviceConfiguration[gSelectedVideoDevice].SupportedVideoCodingFormats & codec))
-        {
-            UT_LOG_MENU_INFO("\t%d.  %-20s ", codec, UT_Control_GetMapString(dsVideoCodingFormatMappingTable, gDSVideoDeviceConfiguration[gSelectedVideoDevice].SupportedVideoCodingFormats));
-            continue;
-        }
+    UT_LOG_MENU_INFO(" \t  Supported Video Codec Info:");
+    for (i = 0; i <= dsVIDEO_CODEC_MAX;i++)
+    {        
+            UT_LOG_MENU_INFO("\t%d.  %-20s ", codec, UT_Control_GetMapString(dsVideoCodingFormatMappingTable, i));
     }
     UT_LOG_MENU_INFO("------------------------------------------");
     UT_LOG_MENU_INFO(" Select the Codec for Info :");
@@ -392,12 +446,15 @@ void dsVideoDevice_GetVideoCodecInfo()
                                                (int32_t)codecInfo.entries[j].profile));
     }
     DS_ASSERT(status, dsERR_NONE);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
 * @brief Get Supported Video Coding formats
 *
 * This test gets supported video coding formats of the device
+* **Test Group ID:** 03@n
+* **Test Case ID:** 006@n
 * **Pre-Conditions:** None@n
 * VideoDevice_init Should be called before calling this test
 *
@@ -407,8 +464,10 @@ void dsVideoDevice_GetVideoCodecInfo()
 * User or Automation tool should select GetSupportedVideoCodingFormat from list
 *
 */
-void dsVideoDevice_GetSupportedVideoCodingFormat()
+void test_l3_dsVideoDevice_GetSupportedVideoCodingFormat()
 {
+    gTestID = 6;
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     dsError_t status   = dsERR_NONE;
     uint32_t supportedFormat = 0;
 
@@ -418,12 +477,15 @@ void dsVideoDevice_GetSupportedVideoCodingFormat()
     UT_LOG_INFO("Result dsGetSupportedVideoCodingFormats(), OUT:dsError_t=[%s] OUT:supportedFormat=[0x08%x]", \
                                                 UT_Control_GetMapString(dsErrorMappingTable, status), supportedFormat);
     DS_ASSERT(status, dsERR_NONE);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
 * @brief Get Supported HDR capabilities
 *
 * This test gets supported HDR capabilities of the device
+* **Test Group ID:** 03@n
+* **Test Case ID:** 007@n
 * **Pre-Conditions:** None@n
 * VideoDevice_init Should be called before calling this test
 *
@@ -433,8 +495,10 @@ void dsVideoDevice_GetSupportedVideoCodingFormat()
 * User or Automation tool should select GetHDRCapabilities from list
 *
 */
-void dsVideoDevice_GetHDRCapabilities()
+void test_l3_dsVideoDevice_GetHDRCapabilities()
 {
+    gTestID = 7;
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     dsError_t status   = dsERR_NONE;
     int32_t HDRCapabilities = 0;
 
@@ -444,12 +508,15 @@ void dsVideoDevice_GetHDRCapabilities()
     UT_LOG_INFO("Result dsGetSupportedVideoCodingFormats(), OUT:dsError_t=[%s] OUT:HDRCapabilites=[0x08%x]", \
                                                 UT_Control_GetMapString(dsErrorMappingTable, status), HDRCapabilities);
     DS_ASSERT(status, dsERR_NONE);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
  * @brief Get Current Frame Rate Mode
  *
  * This test gets Current Frame Rate mode of the device
+ * **Test Group ID:** 03@n
+ * **Test Case ID:** 008@n
  * **Pre-Conditions:** None@n
  * VideoDevice_init Should be called before calling this test
  *
@@ -459,8 +526,10 @@ void dsVideoDevice_GetHDRCapabilities()
  * User or Automation tool should selected GetFRFMode from list
  *
  */
-void dsVideoDevice_dsGetFRFMode()
+void test_l3_dsVideoDevice_dsGetFRFMode()
 {
+    gTestID = 8;
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     dsError_t status   = dsERR_NONE;
     int32_t frfMode = 0;
 
@@ -470,12 +539,15 @@ void dsVideoDevice_dsGetFRFMode()
     UT_LOG_INFO("Result dsGetSupportedVideoCodingFormats(), OUT:dsError_t=[%s] OUT:FRFMode=[0x08%d]", \
                                                 UT_Control_GetMapString(dsErrorMappingTable, status), frfMode);
     DS_ASSERT(status, dsERR_NONE);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
  * @brief Get Current Frame Rate 
  *
  * This test gets Current Frame Rate of the device
+ * **Test Group ID:** 03@n
+ * **Test Case ID:** 009@n
  * **Pre-Conditions:** None@n
  * VideoDevice_init Should be called before calling this test
  *
@@ -485,8 +557,10 @@ void dsVideoDevice_dsGetFRFMode()
  * User or Automation tool should selected GetCurrentDisplayframerate from list
  *
  */
-void dsVideoDevice_dsGetCurrentDisplayframerate()
+void test_l3_dsVideoDevice_dsGetCurrentDisplayframerate()
 {
+    gTestID = 9;
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     dsError_t status   = dsERR_NONE;
     char currentFrameRate[dsVIDEO_FRAMERATE_MAX];
 
@@ -496,12 +570,15 @@ void dsVideoDevice_dsGetCurrentDisplayframerate()
     UT_LOG_INFO("Result dsGetSupportedVideoCodingFormats(), OUT:dsError_t=[%s] OUT:currentFrameRate=[%s]", \
                                                 UT_Control_GetMapString(dsErrorMappingTable, status), currentFrameRate);
     DS_ASSERT(status, dsERR_NONE);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
  * @brief Get Current Zoom Mode 
  *
  * This test gets Current Zoom Mode of the device
+ * **Test Group ID:** 03@n
+ * **Test Case ID:** 010@n
  * **Pre-Conditions:** None@n
  * VideoDevice_init Should be called before calling this test
  *
@@ -511,8 +588,10 @@ void dsVideoDevice_dsGetCurrentDisplayframerate()
  * User or Automation tool should selected GetZoomMode from list
  *
  */
-void dsVideoDevice_dsGetZoomMode()
+void test_l3_dsVideoDevice_dsGetZoomMode()
 {
+    gTestID = 10;
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     dsError_t status   = dsERR_NONE;
     dsVideoZoom_t dfc;
 
@@ -523,6 +602,7 @@ void dsVideoDevice_dsGetZoomMode()
                                                 UT_Control_GetMapString(dsErrorMappingTable, status), \
                                                 UT_Control_GetMapString(dsVideoZoomMappingTable,(int32_t) dfc));
     DS_ASSERT(status, dsERR_NONE);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 static UT_test_suite_t * pSuite = NULL;
 
@@ -550,24 +630,24 @@ int test_l3_dsVideoDevice_register(void)
         return -1;
     }
 
-    UT_add_test( pSuite, "VideoDevice_Init", dsVideoDevice_Init);
-    UT_add_test( pSuite, "VideoDevice_Term", dsVideoDevice_Term);
-    UT_add_test( pSuite, "GetHDRCapabilities", dsVideoDevice_GetHDRCapabilities);
-    UT_add_test( pSuite, "GetSupportedVideoCodingFormat", dsVideoDevice_GetSupportedVideoCodingFormat);
+    UT_add_test( pSuite, "VideoDevice_Init", test_l3_dsVideoDevice_Init);
+    UT_add_test( pSuite, "VideoDevice_Term", test_l3_dsVideoDevice_Term);
+    UT_add_test( pSuite, "GetHDRCapabilities", test_l3_dsVideoDevice_GetHDRCapabilities);
+    UT_add_test( pSuite, "GetSupportedVideoCodingFormat", test_l3_dsVideoDevice_GetSupportedVideoCodingFormat);
 
     if(gSourceType == 0) 
     {
-        UT_add_test( pSuite, "SetDisplayFramerate", dsVideoDevice_SetDisplayFramerate);
-        UT_add_test( pSuite, "GetCurrentDisplayframerate", dsVideoDevice_dsGetCurrentDisplayframerate);
-        UT_add_test( pSuite, "SetFRFMode", dsVideoDevice_SetFRFMode);
-        UT_add_test( pSuite, "dsGetFRFMode", dsVideoDevice_dsGetFRFMode);
+        UT_add_test( pSuite, "SetDisplayFramerate", test_l3_dsVideoDevice_SetDisplayFramerate);
+        UT_add_test( pSuite, "GetCurrentDisplayframerate", test_l3_dsVideoDevice_dsGetCurrentDisplayframerate);
+        UT_add_test( pSuite, "SetFRFMode", test_l3_dsVideoDevice_SetFRFMode);
+        UT_add_test( pSuite, "dsGetFRFMode", test_l3_dsVideoDevice_dsGetFRFMode);
     }
 
     if(gSourceType == 1)
     {
-        UT_add_test( pSuite, "SetZoomMode", dsVideoDevice_SetZoomMode);
-        UT_add_test( pSuite, "GetZoomMode", dsVideoDevice_dsGetZoomMode);
-        UT_add_test( pSuite, "GetVideoCodecInfo", dsVideoDevice_GetVideoCodecInfo);
+        UT_add_test( pSuite, "SetZoomMode", test_l3_dsVideoDevice_SetZoomMode);
+        UT_add_test( pSuite, "GetZoomMode", test_l3_dsVideoDevice_dsGetZoomMode);
+        UT_add_test( pSuite, "GetVideoCodecInfo", test_l3_dsVideoDevice_GetVideoCodecInfo);
     }
 
     return 0;
