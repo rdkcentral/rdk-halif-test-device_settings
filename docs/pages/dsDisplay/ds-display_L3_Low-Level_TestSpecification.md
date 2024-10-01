@@ -36,8 +36,8 @@ Below are the top test use cases for the display.
 
 |#|Test-case|Description|HAL APIs|Source|Sink|
 |-|---------|-----------|--------|------|----|
-|1|Verify Display Events with callbacks|Monitor and verify that the callbacks are triggered correctly for each display event |`dsRegisterDisplayEventCallback()`|`Y`|`Y`|
-|2|Retrieves and interprets EDID information|Verify the functionality of retrieving and accurately interpreting the EDID information, providing essential data about the display's capabilities and characteristics |`dsGetEDID()`|`Y`|`Y`|
+|1|Verify Display Events with callbacks|Connect/disconnect the display device on each port and verify that the callbacks are triggered for connection status changes and other display events (e.g., Rx Sense ON/OFF, HDCP protocol version change) |`dsRegisterDisplayEventCallback()`|`Y`|`Y`|
+|2|Retrieves and interprets EDID information|Connect various pre-defined displays to the device, retrieve their EDID information, and compare it against the expected EDID data |`dsGetEDID()`|`Y`|`Y`|
 |3|Gets the EDID buffer and EDID length|Verify that the edid buffer contains the expected EDID data, and the length is accurate |`dsGetEDIDBytes()`|`Y`|`Y`|
 |4|Gets Aspect Ratio |Verify that the aspect ratio of the display is correctly retrieved and matches the expected value for a given configuration |`dsGetDisplayAspectRatio()`|`Y`|`NA`|
 
