@@ -658,7 +658,7 @@ static UT_test_suite_t * pSuite = NULL;
  *
  * @return int - 0 on success, otherwise failure
  */
-int test_register_dsFPD_hal_l3_tests(void)
+int test_l3_dsFPD_register(void)
 {
     // Create the test suite
     pSuite = UT_add_suite("[L3 Front Panel Functions] ", NULL, NULL);
