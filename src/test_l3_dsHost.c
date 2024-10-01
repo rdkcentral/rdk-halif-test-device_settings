@@ -199,8 +199,8 @@ void test_l3_dsHost_hal_get_SocID(void)
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     // Step 1: Call dsGetSocIDFromSDK()
-    UT_LOG_INFO("Calling dsGetSoCId(IN:socID[])");
-    status = dsGetSocIDFromSDK(socID, DSHOST_SOC_LENGTH);
+    UT_LOG_INFO("Calling dsGetSocIDFromSDK(IN:socID[])");
+    status = dsGetSocIDFromSDK(socID);
     UT_LOG_INFO("Result dsGetSocIDFromSDK(socID: %s), dsError_t:[%s]",
                   socID,UT_Control_GetMapString(dsError_mapTable, status));
 
@@ -236,7 +236,7 @@ void test_l3_dsHost_hal_get_hostEdid(void)
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     // Step 1: Call dsGetHostEDID()
-    UT_LOG_INFO("Calling dsGetHostEDID( OUT:hostEdid[])");
+    UT_LOG_INFO("Calling dsGetHostEDID( OUT:hostEdid[] IN:length[%d])", DS_HOST_KVP_SIZE);
     status = dsGetHostEDID(hostEdid, DS_HOST_KVP_SIZE);
     UT_LOG_INFO("Result dsGetHostEDID(hostEdid: %s), dsError_t:[%s]",
                   hostEdid, UT_Control_GetMapString(dsError_mapTable, status));
