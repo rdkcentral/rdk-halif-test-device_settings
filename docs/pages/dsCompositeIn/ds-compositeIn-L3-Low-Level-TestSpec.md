@@ -36,7 +36,7 @@ Below are top test use-case for the Composite Input.
 |#|Test-case|Description|Focus APIs|
 |-|---------|-----------|--------|
 |1|Verify the CompositeIn port connection with callbacks|Connect/disconnect the CompositeIn source device on each of compositeIn port and check the callbacks is triggered when the connection status changes|`dsCompositeInRegisterConnectCB()`|
-|2|Verify the CompositeIn active port status with callbacks|Select the CompositeIn port and check the callbacks is triggered when the active status changes(i.e like isPresented, activeport)|`dsCompositeInRegisterStatusChangeCB()`|
+|2|Verify the CompositeIn active port status with callbacks|Connect a CompositeIn source device, select the CompositeIn port and check the callbacks is triggered when the active status changes(i.e like isPresented, activeport)|`dsCompositeInRegisterStatusChangeCB()`|
 |3|Scale the video and verify |Play a video in CompositeIn source device connected to the active CompositeIn port and scale the video resolution|`dsCompositeInScaleVideo()`|
 |4|Verify the CompositeIn Signal change with callback|Select the CompositeIn port, play a video in CompositeIn source device connected to the active CompositeIn port and check the callback is triggered when the change in signal status occurs(i.e like no signal , unstable signal, stable signal)|`dsCompositeInRegisterSignalChangeCB()`|
 
@@ -94,7 +94,7 @@ classDiagram
 
 - **testSetupConfig.yaml**
   - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams, setting environment variables etc.
-  - Example configuration file [dsAudio_L3_testSetup.yml](../../../host/tests/dsCompositeIn_L3_Tests/dsCompositeIn_L3_testSetup.yml)
+  - Example configuration file [dsCompositeIn_L3_testSetup.yml](../../../host/tests/dsCompositeIn_L3_Tests/dsCompositeIn_L3_testSetup.yml)
 
 - **testSuite.yaml**
   - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
