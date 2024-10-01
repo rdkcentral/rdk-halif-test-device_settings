@@ -198,10 +198,10 @@ void test_l3_dsHost_hal_get_SocID(void)
 
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    // Step 1: Call dsGetSoCId()
+    // Step 1: Call dsGetSocIDFromSDK()
     UT_LOG_INFO("Calling dsGetSoCId(IN:socID[])");
-    status = dsGetSoCId(socID, DSHOST_SOC_LENGTH);
-    UT_LOG_INFO("Result dsGetSoCId(socID: %s), dsError_t:[%s]",
+    status = dsGetSocIDFromSDK(socID, DSHOST_SOC_LENGTH);
+    UT_LOG_INFO("Result dsGetSocIDFromSDK(socID: %s), dsError_t:[%s]",
                   socID,UT_Control_GetMapString(dsError_mapTable, status));
 
     assert(status == dsERR_NONE);
