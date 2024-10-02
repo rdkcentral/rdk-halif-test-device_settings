@@ -34,6 +34,7 @@ $(info TARGET NOT SET )
 $(info TARGET FORCED TO Linux)
 TARGET=linux
 SRC_DIRS += $(ROOT_DIR)/skeletons/src
+CC := gcc -ggdb -o0 -Wall
 endif
 
 $(info TARGET [$(TARGET)])
