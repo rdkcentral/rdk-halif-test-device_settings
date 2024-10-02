@@ -3,7 +3,7 @@
 dsAudio:  # Prefix must always exist
     description: "dsAudio Device Settings testing profile / menu system for UT"
     test:
-        execute: "" #Execute command
+        execute: "/opt/bhanu/run.sh -p /opt/bhanu/Sink_AudioSettings.yaml" #Execute command
         type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
         suites:
             0:

@@ -167,7 +167,7 @@ class dsAudio_test07_TestAudioLevel(utHelperClass):
 
         # Loop through the supported audio ports
         for port,index in self.testdsAudio.getSupportedPorts():
-            if "SPEAKER" in port or "HEADPHONE" in port:
+            if "HEADPHONE" in port or "SPEAKER" in port:
                 # Enable the audio port
                 self.testdsAudio.enablePort(port, index)
 

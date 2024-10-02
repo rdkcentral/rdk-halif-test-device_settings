@@ -23,6 +23,7 @@
 
 import os
 import sys
+import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path+"/../")
@@ -33,16 +34,17 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test09_TestMute(utHelperClass):
+class dsAudio_test12_TestAssociateMix(utHelperClass):
 
-    testName  = "test09_TestMute"
+    testName  = "test12_TestAssociateMix"
     testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
     moduleName = "dsAudio"
     rackDevice = "dut"
+    faderValues = [-32, -15, 0, 15, 32]
 
     def __init__(self):
         """
-        Initializes the test09_TestMute test .
+        Initializes the test12_TestAssociateMix test .
 
         Args:
             None.
@@ -121,12 +123,13 @@ class dsAudio_test09_TestMute(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyAudio(self, port, manual=False):
+    def testVerifyAudio(self, mixer_status, fader, manual=False):
         """
         Verifies whether the audio is fine or not.
 
         Args:
-            port (str) : Audio port to verify
+            mixer_status (bool) : True: Enabled associate audio mixing, False: Disabled
+            fader (int): Fader Control,-32:mute associated audio) to 32:mute main audio
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
                                      Defaults to other verification methods
 
@@ -134,7 +137,7 @@ class dsAudio_test09_TestMute(utHelperClass):
             bool : returns the status of audio
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Is audio playing on the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Is Audio playing as expected with Mixing: {mixer_status} fader: {fader}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
@@ -152,9 +155,6 @@ class dsAudio_test09_TestMute(utHelperClass):
         # Run Prerequisites listed in the test setup configuration file
         self.testRunPrerequisites()
 
-        # Start the stream playback
-        self.testPlayer.play(self.testStreams[0])
-
         # Create the dsAudio class
         self.testdsAudio = dsAudioClass(self.deviceProfile, self.hal_session)
 
@@ -163,39 +163,30 @@ class dsAudio_test09_TestMute(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        # Loop through the supported audio ports
-        for port,index in self.testdsAudio.getSupportedPorts():
+        for stream in self.testStreams:
 
-            # Enable the audio port
-            self.testdsAudio.enablePort(port, index)
+            self.log.stepStart(f'Associate Mixing Disabled, Stream: {stream} Fader: {fade}')
 
-            self.log.stepStart(f'Mute {port} Port')
-            self.log.step(f'Set Mute for {port} Port')
+            self.testdsAudio.enableAssociateAudioMixig(False)
 
-            # Mute the Audio
-            self.testdsAudio.setAudioMute(port, index, True)
+            # Start the stream playback
+            self.testPlayer.play(stream)
 
-            self.log.step(f'Verify the Audio for {port} Port')
-            result = self.testVerifyAudio(port, True)
+            result = self.testVerifyAudio(False, 0, True)
 
-            self.log.stepResult(result, f'Mute Verification for {port} Port')
+            self.log.stepResult(result, f'Associate Mixing Disabled, Stream: {stream} Fader: {fade}')
 
-            self.log.stepStart(f'UnMute {port} Port')
-            self.log.step(f'Set UnMute for {port} Port')
+            for fade in self.faderValues:
+                self.log.stepStart(f'Associate Mixing Stream: {stream} Fader: {fade}')
 
-            # UnMute the Audio
-            self.testdsAudio.setAudioMute(port, index, False)
+                self.testdsAudio.enableAssociateAudioMixig(True, fade)
 
-            self.log.step(f'Verify the Audio for {port} Port')
-            result = self.testVerifyAudio(port, True)
+                result = self.testVerifyAudio(True, fade, True)
 
-            self.log.stepResult(not result, f'UnMute Verification for {port} Port')
+                self.log.stepResult(result, f'Associate Mixing Stream: {stream} Fader: {fade}')
 
-            # Disable the audio port
-            self.testdsAudio.disablePort(port, index)
-
-        # Stop the stream playback
-        self.testPlayer.stop()
+            # Stop the stream playback
+            self.testPlayer.stop()
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
@@ -203,8 +194,8 @@ class dsAudio_test09_TestMute(utHelperClass):
         # Delete the dsAudio class
         del self.testdsAudio
 
-        return result
+        return True
 
 if __name__ == '__main__':
-    test = dsAudio_test09_TestMute()
+    test = dsAudio_test12_TestAssociateMix()
     test.run(False)
