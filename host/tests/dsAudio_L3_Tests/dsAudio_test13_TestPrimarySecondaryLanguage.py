@@ -23,6 +23,7 @@
 
 import os
 import sys
+import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path+"/../")
@@ -33,18 +34,19 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test10_TestAudioFormat(utHelperClass):
+class dsAudio_test13_TestPrimarySecondaryLanguage(utHelperClass):
 
-    testName  = "test10_TestAudioFormat"
+    testName  = "test13_TestPrimarySecondaryLanguage"
     testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
     moduleName = "dsAudio"
     rackDevice = "dut"
-    audioFormats = ["NONE", "PCM", "AC3", "EAC3", "AC4", "MAT", "TRUEHD", "EAC3_ATMOS",
-                    "TRUEHD_ATMOS","MAT_ATMOS", "AC4_ATMOS", "AAC", "VORBIS", "WMA"]
+    streamLanguage = [{"Primary": ["eng", "ger"], "Secondary": ["eng", "spa"]},
+                      {"Primary": ["eng", "ger"], "Secondary": ["eng", "spa"]},
+                      {"Primary": ["eng", "ger"], "Secondary": ["eng", "spa"]}]
 
     def __init__(self):
         """
-        Initializes the test10_TestAudioFormat test .
+        Initializes the test13_TestPrimarySecondaryLanguage test .
 
         Args:
             None.
@@ -54,8 +56,16 @@ class dsAudio_test10_TestAudioFormat(utHelperClass):
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
+        # Open Session for player
+        self.player_session = self.dut.getConsoleSession("ssh_player")
+
         # Open Session for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
+
+        player = self.cpe.get("test").get("player")
+
+        # Create player Class
+        self.testPlayer = utPlayer(self.player_session, player)
 
          # Create user response Class
         self.testUserResponse = utUserResponse()
@@ -114,24 +124,22 @@ class dsAudio_test10_TestAudioFormat(utHelperClass):
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    #TODO: Current version supports only manual.
-    def testWaitForConnectionChange(self, connection, manual=False):
+    #TODO: Current version supports only manual verification.
+    def testVerifyAudio(self, language_type:str, language:str, manual=False):
         """
-        Wait for the port connection, disconnection.
+        Verifies whether the audio is fine or not.
 
         Args:
-            connection (bool) : If True connect the port, otherwise disconnect the port
-            manual (bool, optional): Manual Control (True: manual, False: other disconnect/connect methods).
-                                     Defaults to other
+            language_type (str): Primary:Primary language, Secondary:Secondary language.
+            language (str): 3 letter long language as per ISO 639-3. eg: eng - English
+            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
+                                     Defaults to other verification methods
 
         Returns:
-            None
+            bool : returns the status of audio
         """
         if manual == True:
-            if connection == True:
-                self.testUserResponse.getUserYN(f"Connect the port and press Enter:")
-            else:
-                self.testUserResponse.getUserYN(f"Disconnect the port and press Enter:")
+            return self.testUserResponse.getUserYN(f"Is Audio playing as expected with {language_type} {language} Language? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
@@ -149,28 +157,48 @@ class dsAudio_test10_TestAudioFormat(utHelperClass):
         # Run Prerequisites listed in the test setup configuration file
         self.testRunPrerequisites()
 
+        # Create the dsAudio class
+        self.testdsAudio = dsAudioClass(self.deviceProfile, self.hal_session)
+
+        self.log.testStart(self.testName, '1')
+
+        # Initialize the dsAudio module
+        self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
+
         i = 0
-        for format in self.audioFormats:
+        for stream in self.testStreams:
+
+            self.testdsAudio.enableAssociateAudioMixig(False)
+
             # Start the stream playback
-            self.testPlayer.play(self.testStreams[i])
-            i += 1
+            self.testPlayer.play(stream)
 
-            # Create the dsAudio class
-            self.testdsAudio = dsAudioClass(self.deviceProfile, self.hal_session)
+            self.testdsAudio.enableAssociateAudioMixig(True, -32)
 
-            self.log.testStart(self.testName, '1')
+            for primary in self.streamLanguage[i]["Primary"]:
+                self.log.stepStart(f'Primary Language Test Stream: {stream} Language: {primary}')
 
-            # Initialize the dsAudio module
-            self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
+                self.testdsAudio.setPrimarySecondaryLanguage("Primary", primary)
 
-            self.log.stepStart('Audio Format {format} Test')
+                result = self.testVerifyAudio("Primary", primary, True)
 
-            audioFormat = self.testdsAudio.getAudioFormat()
+                self.log.stepResult(result, f'Primary Language Test Stream: {stream} Language: {primary}')
 
-            self.log.stepResult(format in audioFormat, 'Audio Format {format} Test')
+            self.testdsAudio.enableAssociateAudioMixig(True, 32)
+
+            for secondary in self.streamLanguage[i]["Secondary"]:
+                self.log.stepStart(f'Secondary Language Test Stream: {stream} Language: {secondary}')
+
+                self.testdsAudio.setPrimarySecondaryLanguage("Secondary", secondary)
+
+                result = self.testVerifyAudio("Secondary", secondary, True)
+
+                self.log.stepResult(result, f'Secondary Language Test Stream: {stream} Language: {secondary}')
 
             # Stop the stream playback
             self.testPlayer.stop()
+
+            i += 1
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
@@ -181,5 +209,5 @@ class dsAudio_test10_TestAudioFormat(utHelperClass):
         return True
 
 if __name__ == '__main__':
-    test = dsAudio_test10_TestAudioFormat()
+    test = dsAudio_test13_TestPrimarySecondaryLanguage()
     test.run(False)

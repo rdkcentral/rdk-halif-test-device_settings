@@ -23,6 +23,7 @@
 
 import os
 import sys
+import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path+"/../")
@@ -33,16 +34,18 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test09_TestMute(utHelperClass):
+class dsAudio_test11_TestAudioFormat(utHelperClass):
 
-    testName  = "test09_TestMute"
+    testName  = "test11_TestAudioFormat"
     testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
     moduleName = "dsAudio"
     rackDevice = "dut"
+    audioFormats = ["NONE", "PCM", "AC3", "EAC3", "AAC", "VORBIS", "WMA"]
+    dolbyStreams = ["AC4", "MAT", "TRUEHD", "EAC3_ATMOS", "TRUEHD_ATMOS", "MAT_ATMOS", "AC4_ATMOS"]
 
     def __init__(self):
         """
-        Initializes the test09_TestMute test .
+        Initializes the test11_TestAudioFormat test .
 
         Args:
             None.
@@ -120,21 +123,24 @@ class dsAudio_test09_TestMute(utHelperClass):
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    #TODO: Current version supports only manual verification.
-    def testVerifyAudio(self, port, manual=False):
+    #TODO: Current version supports only manual.
+    def testWaitForConnectionChange(self, connection, manual=False):
         """
-        Verifies whether the audio is fine or not.
+        Wait for the port connection, disconnection.
 
         Args:
-            port (str) : Audio port to verify
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            connection (bool) : If True connect the port, otherwise disconnect the port
+            manual (bool, optional): Manual Control (True: manual, False: other disconnect/connect methods).
+                                     Defaults to other
 
         Returns:
-            bool : returns the status of audio
+            None
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Is audio playing on the {port}? (Y/N):")
+            if connection == True:
+                self.testUserResponse.getUserYN(f"Connect the port and press Enter:")
+            else:
+                self.testUserResponse.getUserYN(f"Disconnect the port and press Enter:")
         else :
             #TODO: Add automation verification methods
             return False
@@ -152,9 +158,6 @@ class dsAudio_test09_TestMute(utHelperClass):
         # Run Prerequisites listed in the test setup configuration file
         self.testRunPrerequisites()
 
-        # Start the stream playback
-        self.testPlayer.play(self.testStreams[0])
-
         # Create the dsAudio class
         self.testdsAudio = dsAudioClass(self.deviceProfile, self.hal_session)
 
@@ -163,39 +166,23 @@ class dsAudio_test09_TestMute(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        # Loop through the supported audio ports
-        for port,index in self.testdsAudio.getSupportedPorts():
+        i = 0
+        for format in self.audioFormats:
+            # Start the stream playback
+            if format is not "NONE":
+                self.testPlayer.play(self.testStreams[i])
+                i += 1
+                time.sleep(3)
 
-            # Enable the audio port
-            self.testdsAudio.enablePort(port, index)
+            self.log.stepStart(f'Audio Format {format} Test')
 
-            self.log.stepStart(f'Mute {port} Port')
-            self.log.step(f'Set Mute for {port} Port')
+            audioFormat = self.testdsAudio.getAudioFormat()
 
-            # Mute the Audio
-            self.testdsAudio.setAudioMute(port, index, True)
+            self.log.stepResult(format in audioFormat, f'Audio Format {format} Test')
 
-            self.log.step(f'Verify the Audio for {port} Port')
-            result = self.testVerifyAudio(port, True)
-
-            self.log.stepResult(result, f'Mute Verification for {port} Port')
-
-            self.log.stepStart(f'UnMute {port} Port')
-            self.log.step(f'Set UnMute for {port} Port')
-
-            # UnMute the Audio
-            self.testdsAudio.setAudioMute(port, index, False)
-
-            self.log.step(f'Verify the Audio for {port} Port')
-            result = self.testVerifyAudio(port, True)
-
-            self.log.stepResult(not result, f'UnMute Verification for {port} Port')
-
-            # Disable the audio port
-            self.testdsAudio.disablePort(port, index)
-
-        # Stop the stream playback
-        self.testPlayer.stop()
+            if format is not "NONE":
+                # Stop the stream playback
+                self.testPlayer.stop()
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
@@ -203,8 +190,8 @@ class dsAudio_test09_TestMute(utHelperClass):
         # Delete the dsAudio class
         del self.testdsAudio
 
-        return result
+        return True
 
 if __name__ == '__main__':
-    test = dsAudio_test09_TestMute()
+    test = dsAudio_test11_TestAudioFormat()
     test.run(False)

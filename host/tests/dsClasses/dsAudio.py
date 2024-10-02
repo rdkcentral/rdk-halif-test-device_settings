@@ -60,7 +60,7 @@ class dsAudioClass():
         """
         self.deviceProfile = ConfigRead( deviceProfilePath, self.moduleName)
         self.utMenu        = UTSuiteNavigatorClass(self.menuConfig, self.moduleName, session)
-
+        self.testSession   = session
         self.utMenu.start()
 
     def searchPattern(self, haystack, pattern):
@@ -117,7 +117,7 @@ class dsAudioClass():
                 {
                     "query_type": "list",
                     "query": "Select dsAudio Port:",
-                    "input": "dsAUDIOPORT_TYPE_SPEAKER"
+                    "input": ""
                 },
                 {
                     "query_type": "direct",
@@ -141,7 +141,7 @@ class dsAudioClass():
 
     def disablePort(self, audio_port:int, port_index:int=0):
         """
-        Enables the audio port.
+        Disables the audio port.
 
         Args:
             audio_port (str): name of the audio port. Refer dsAudioPortType enum
@@ -154,7 +154,7 @@ class dsAudioClass():
                 {
                     "query_type": "list",
                     "query": "Select dsAudio Port:",
-                    "input": "dsAUDIOPORT_TYPE_SPEAKER"
+                    "input": ""
                 },
                 {
                     "query_type": "direct",
@@ -170,7 +170,7 @@ class dsAudioClass():
 
     def setGainLevel(self, audio_port:int, port_index:int=0, gainLevel:float=0.0):
         """
-        Enables the audio port.
+        Sets audio gain level.
 
         Args:
             audio_port (str): name of the audio port. Refer dsAudioPortType enum
@@ -184,7 +184,7 @@ class dsAudioClass():
                 {
                     "query_type": "list",
                     "query": "Select dsAudio Port:",
-                    "input": "dsAUDIOPORT_TYPE_SPEAKER"
+                    "input": ""
                 },
                 {
                     "query_type": "direct",
@@ -206,7 +206,7 @@ class dsAudioClass():
 
     def setSpeakerGain(self, audio_port:int, port_index:int=0, gain:float=0.0):
         """
-        Enables the audio port.
+        Sets speaker gain.
 
         Args:
             audio_port (str): name of the audio port. Refer dsAudioPortType enum
@@ -230,7 +230,7 @@ class dsAudioClass():
 
     def setAudioMute(self, audio_port:int, port_index:int=0, mute:bool=True):
         """
-        Enables the audio port.
+        Mutes/Unmutes the audio.
 
         Args:
             audio_port (str): name of the audio port. Refer dsAudioPortType enum
@@ -244,7 +244,7 @@ class dsAudioClass():
                 {
                     "query_type": "list",
                     "query": "Select dsAudio Port:",
-                    "input": "dsAUDIOPORT_TYPE_SPEAKER"
+                    "input": ""
                 },
                 {
                     "query_type": "direct",
@@ -266,6 +266,135 @@ class dsAudioClass():
             promptWithAnswers[2]["input"] = "2"
 
         result = self.utMenu.select(self.testSuite, "Audio Mute/UnMute", promptWithAnswers)
+
+    def setAudioDelay(self, audio_port:int, port_index:int=0, delay:int=0):
+        """
+        Set the audio delay.
+
+        Args:
+            audio_port (str): name of the audio port. Refer dsAudioPortType enum
+            port_index (int, optional): port index. Defaults to 0
+            delay (int, optional): audio delay to be applied. Ranges from 0 to 200. Defaults to 0
+
+        Returns:
+            None
+        """
+        promptWithAnswers = [
+                {
+                    "query_type": "list",
+                    "query": "Select dsAudio Port:",
+                    "input": ""
+                },
+                {
+                    "query_type": "direct",
+                    "query": "Select dsAudio Port Index[0-10]:",
+                    "input": "0"
+                },
+                {
+                    "query_type": "direct",
+                    "query": "Enter Audio Delay in milli seconds[0 to 200]:",
+                    "input": "0"
+                }
+        ]
+        promptWithAnswers[0]["input"] = audio_port
+        promptWithAnswers[1]["input"] = str(port_index)
+        promptWithAnswers[2]["input"] = str(delay)
+
+        result = self.utMenu.select(self.testSuite, "Set Audio Delay", promptWithAnswers)
+
+    def enableAssociateAudioMixig(self, enable:bool = True, fader:int = 0):
+        """
+        Enable Associate Audio Mixing.
+
+        Args:
+            enable (bool, optional): enables the associate audio mixing. Defaults to True
+            fader (bool, optional): Fader Control,-32:mute associated audio) to 32:mute main audio. Defaults to 0
+
+        Returns:
+            None
+        """
+        promptWithAnswers = [
+                {
+                    "query_type": "direct",
+                    "query": "Enable/Disable Associated Audio Mixing[1:Enable, 2:Disable]:",
+                    "input": "1"
+                },
+                {
+                    "query_type": "direct",
+                    "query": "Set Fader Control[-32(mute associated audio) to 32(mute main audio)]:",
+                    "input": "0"
+                }
+        ]
+        if enable:
+            promptWithAnswers[0]["input"] = "1"
+            promptWithAnswers[1]["input"] = str(fader)
+        else:
+            promptWithAnswers[0]["input"] = "2"
+            promptWithAnswers.pop(1)
+
+        result = self.utMenu.select(self.testSuite, "Set Associate Audio Mixing", promptWithAnswers)
+
+    def setAudioMixerLevels(self, mixer_input:str, volume:int = 0):
+        """
+        Sets mixer levels for primary and system audio.
+
+        Args:
+            mixer_input (str): primary:Sets the volume for primary audio, "system":Sets the volume for system audio.
+            volume (int, optional): volume ranges 0-100. Defaults to 0
+
+        Returns:
+            None
+        """
+        promptWithAnswers = [
+                {
+                    "query_type": "list",
+                    "query": "Select Mixer Input:",
+                    "input": ""
+                },
+                {
+                    "query_type": "direct",
+                    "query": "Set the Volume[0 to 100]:",
+                    "input": "0"
+                }
+        ]
+
+        promptWithAnswers[0]["input"] = mixer_input
+        promptWithAnswers[1]["input"] = str(volume)
+
+        result = self.utMenu.select(self.testSuite, "Set Audio Mixer Levels", promptWithAnswers)
+
+    def setPrimarySecondaryLanguage(self, language_type:str, language:str):
+        """
+        Sets mixer levels for primary and system audio.
+
+        Args:
+            language_type (str): Primary:Primary language, Secondary:Secondary language.
+            language (str): 3 letter long language as per ISO 639-3. eg: eng - English
+
+        Returns:
+            None
+        """
+        promptWithAnswers = [
+                {
+                    "query_type": "direct",
+                    "query": "Select the Language Type[1: Primary, 2: Secondary]:",
+                    "input": "1"
+                },
+                {
+                    "query_type": "direct",
+                    "query": "Enter 3 letter long language as per ISO 639-3:",
+                    "input": "eng"
+                }
+        ]
+
+        if (language_type == "Primary"):
+            promptWithAnswers[0]["input"] = "1"
+        else:
+            promptWithAnswers[0]["input"] = "2"
+
+        promptWithAnswers[1]["input"] = language
+
+        result = self.utMenu.select(self.testSuite, "Primary/Secondary Language", promptWithAnswers)
 
     def getHeadphoneConnectionStatus(self):
         """

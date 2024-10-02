@@ -1711,13 +1711,8 @@ void test_l3_dsAudio_get_audio_format(void)
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret = dsERR_NONE;
-    int32_t port = dsAUDIOPORT_TYPE_SPEAKER;
     intptr_t handle = (intptr_t)NULL;
     dsAudioFormat_t getAudioFormat = dsAUDIO_FORMAT_NONE;
-    int32_t portIndex = 0;
-    bool enabled = false;
-
-    handle = dsAudio_getPort(port, portIndex, &enabled);
 
     UT_LOG_INFO("Calling dsGetAudioFormat(IN:handle:[0x%0X], OUT:audioFormat:[])", handle);
 
@@ -1751,14 +1746,9 @@ void test_l3_dsAudio_set_atmos_mode(void)
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret = dsERR_NONE;
-    int32_t port = dsAUDIOPORT_TYPE_SPEAKER;
     intptr_t handle = (intptr_t)NULL;
     int32_t choice = 0;
     bool enable = false;
-    int32_t portIndex = 0;
-    bool enabled = false;
-
-    handle = dsAudio_getPort(port, portIndex, &enabled);
 
     UT_LOG_MENU_INFO("Enable/Disable ATMOS Mode[1:Enable, 2:Disable]: ");
     readInt(&choice);
@@ -1954,15 +1944,10 @@ void test_l3_dsAudio_set_associate_audio_mixing(void)
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret = dsERR_NONE;
-    int32_t port = dsAUDIOPORT_TYPE_SPEAKER;
     intptr_t handle = (intptr_t)NULL;
     int32_t choice = -1;
     bool mixing = false;
     bool mixing_g = false;
-    int32_t portIndex = 0;
-    bool enabled = false;
-
-    handle = dsAudio_getPort(port, portIndex, &enabled);
 
     UT_LOG_MENU_INFO("Enable/Disable Associated Audio Mixing[1:Enable, 2:Disable]: ");
     readInt(&choice);
@@ -2055,14 +2040,9 @@ void test_l3_dsAudio_set_audio_mixerlevels(void)
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret = dsERR_NONE;
-    int32_t port = dsAUDIOPORT_TYPE_SPEAKER;
     intptr_t handle = (intptr_t)NULL;
     int32_t volume = 0;
     int32_t aInput = 0;
-    int32_t portIndex = 0;
-    bool enabled = false;
-
-    handle = dsAudio_getPort(port, portIndex, &enabled);
 
     UT_LOG_MENU_INFO("----------------------------------------------------------");
     UT_LOG_MENU_INFO("Mixer Input");
@@ -2125,15 +2105,10 @@ void test_l3_dsAudio_set_language(void)
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret = dsERR_NONE;
-    int32_t port = dsAUDIOPORT_TYPE_SPEAKER;
     intptr_t handle = (intptr_t)NULL;
     int32_t language_type = 0;
     char language[4] = {0};
     char language_g[4] = {0};
-    int32_t portIndex = 0;
-    bool enabled = false;
-
-    handle = dsAudio_getPort(port, portIndex, &enabled);
 
     UT_LOG_MENU_INFO("Select the Language Type[1: Primary, 2: Secondary]: ");
     readInt(&language_type);
