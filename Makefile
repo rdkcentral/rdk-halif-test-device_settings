@@ -39,6 +39,7 @@ endif
 $(info TARGET [$(TARGET)])
 
 ifeq ($(TARGET),arm)
+# Build and link a skeleton library which can be overriden by the real one
 HAL_LIB_DIR := $(ROOT_DIR)/libs
 YLDFLAGS = -Wl,-rpath,$(HAL_LIB_DIR) -L$(HAL_LIB_DIR) -l$(HAL_LIB)
 ifeq ("$(wildcard $(HAL_LIB_DIR)/lib$(HAL_LIB).so)","")
@@ -56,25 +57,30 @@ export TARGET
 export TOP_DIR
 export HAL_LIB_DIR
 
-.PHONY: clean list build
+.PHONY: clean list build cleanlibs clean cleanall skeleton
 
 build: $(SETUP_SKELETON_LIBS)
 	@echo UT [$@]
-	make -C ./ut-core framework
-	make -C ./ut-core test
+	make -C ./ut-core
 
 #Build against the real library leads to the SOC library dependency also.SOC lib dependency cannot be specified in the ut Makefile, since it is supposed to be common across may platforms. So in order to over come this situation, creating a template SKELETON library with empty templates so that the template library wont have any other Soc dependency. And in the real platform mount copy bind with the actual library will work fine.
 skeleton:
-	echo $(CC)
+	@echo Skeleton Building [$@]
 	mkdir -p $(HAL_LIB_DIR)
 	$(CC) -fPIC -shared -I$(ROOT_DIR)/../include $(SKELETON_SRCS) -o $(HAL_LIB_DIR)/lib$(HAL_LIB).so
 
 list:
-	@echo UT [$@]
+	@echo list [$@]
 	make -C ./ut-core list
 
-clean:
-	@echo UT [$@]
-	make -C ./ut-core cleanall
+cleanlibs:
 	rm -rf $(BIN_DIR)/lib$(HAL_LIB).so
-	rm -rf $(ROOT_DIR)/libs/lib$(HAL_LIB).so
+	rm -rf $(HAL_LIB_DIR)/libs/lib$(HAL_LIB).so
+
+clean: cleanlibs
+	@echo clean [$@]
+	make -C ./ut-core clean
+
+cleanall: cleanlibs
+	@echo cleanall [$@]
+	make -C ./ut-core cleanall
