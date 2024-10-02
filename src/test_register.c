@@ -123,6 +123,7 @@ int UT_register_tests(void)
         /* TODO: Have a dsHost Register function and call it always */
         registerFailed |= test_l1_dsHost_register();
         registerFailed |= test_l2_dsHost_register();
+        registerFailed |= test_l3_dsHost_register();
     }
     if (gDSModule & dsAudioPort)
     {
