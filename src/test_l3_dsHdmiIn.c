@@ -268,10 +268,10 @@ void readInput(int *choice)
 *This function prints the available ports
 */
 
-void list_ports()
+void listPorts()
 {
     UT_LOG_MENU_INFO(" \n----------------AVailable Ports------------------\n");
-    for(int i = 0 ; i < dsHDMI_IN_PORT_MAX ; i++)
+    for(int i = dsHDMI_IN_PORT_0 ; i < dsHDMI_IN_PORT_MAX ; i++)
     {
         UT_LOG_MENU_INFO("%d. %s\n",i,UT_Control_GetMapString(dsHdmiInPort_mapTable,i));
     }
@@ -318,7 +318,7 @@ static void hdmiInStatusChangeCB(dsHdmiInStatus_t inputStatus)
                  UT_Control_GetMapString(bool_mapTable, inputStatus.isPresented),
                  UT_Control_GetMapString(dsHdmiInPort_mapTable, inputStatus.activePort));
 
-    for(int i = 0 ; i < dsHDMI_IN_PORT_MAX ; i++) 
+    for(int i = dsHDMI_IN_PORT_0 ; i < dsHDMI_IN_PORT_MAX ; i++) 
     {
          
          UT_LOG_INFO("Received statuschange callback port:%d , isPortConnected: %s",
@@ -544,7 +544,7 @@ void test_l3_HdmiIn_get_status(void)
                  UT_Control_GetMapString(dsHdmiInPort_mapTable, inputstatus.activePort));
     DS_ASSERT(ret == dsERR_NONE);
 
-    for(int i = 0 ; i < dsHDMI_IN_PORT_MAX ; i++) 
+    for(int i = dsHDMI_IN_PORT_0 ; i < dsHDMI_IN_PORT_MAX ; i++) 
     {
 
            UT_LOG_INFO("Result dsHdmiInGetStatus(OUT:inputstatus:[ port:[%s]:[%d], isPortConnected:[%s])",
@@ -581,9 +581,9 @@ void test_l3_HdmiIn_select_port(void)
 
     UT_LOG_MENU_INFO(" \n================Please Select Inputs==================\n");
     UT_LOG_MENU_INFO("\n*******Enter the port number to select*******\n");
-    list_ports();
+    listPorts();
     readInput(&select);
-    if(select < 0 || select >= dsHDMI_IN_PORT_MAX)
+    if(select < dsHDMI_IN_PORT_0 || select >= dsHDMI_IN_PORT_MAX)
     {
        UT_LOG_ERROR("\nInvalid port selected\n");
        UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -784,7 +784,7 @@ void test_l3_HdmiIn_zoom_mode(void)
     UT_LOG_MENU_INFO("\n--------------------------------------------------------\n");
 
     readInput(&select);
-    if(select < 0 || select > dsVIDEO_ZOOM_MAX)
+    if(select < dsVIDEO_ZOOM_NONE || select > dsVIDEO_ZOOM_MAX)
     {
       UT_LOG_ERROR("\n invalid zoom mode selected \n");
       UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -824,15 +824,15 @@ void test_l3_HdmiIn_get_edid(void)
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret   = dsERR_NONE;
-    int length = 0;
+    int32_t length = 0;
     unsigned char edidbytes[255] = {0};
     int32_t select = 0;
     dsHdmiInPort_t port = dsHDMI_IN_PORT_NONE;
 
     UT_LOG_MENU_INFO("\n**********Please select port***********\n");
-    list_ports();
+    listPorts();
     readInput(&select);
-    if(select < 0 || select >= dsHDMI_IN_PORT_MAX)
+    if(select < dsHDMI_IN_PORT_0 || select >= dsHDMI_IN_PORT_MAX)
     {
       UT_LOG_ERROR("\n invalid port selected\n");
       UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -882,9 +882,9 @@ void test_l3_HdmiIn_spd_info(void)
     int32_t select = 0;
     
     UT_LOG_MENU_INFO("\n**********Please select port***********\n");
-    list_ports();
+    listPorts();
     readInput(&select);
-    if(select < 0 || select >= dsHDMI_IN_PORT_MAX)
+    if(select < dsHDMI_IN_PORT_0 || select >= dsHDMI_IN_PORT_MAX)
     {
       UT_LOG_ERROR("\n invalid port selected\n");
       UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -926,9 +926,9 @@ void test_l3_HdmiIn_set_edidversion(void)
     tv_hdmi_edid_version_t edidver = HDMI_EDID_VER_MAX;
 
     UT_LOG_MENU_INFO("\n**********Please select port***********\n");
-    list_ports();
+    listPorts();
     readInput(&select);
-    if(select < 0 || select >= dsHDMI_IN_PORT_MAX)
+    if(select < dsHDMI_IN_PORT_0 || select >= dsHDMI_IN_PORT_MAX)
     {
        UT_LOG_ERROR("\n invalid port selected\n");
        UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -991,9 +991,9 @@ void test_l3_HdmiIn_get_edidversion(void)
     tv_hdmi_edid_version_t edidver = HDMI_EDID_VER_MAX;
 
     UT_LOG_MENU_INFO("\n**********Please select port***********\n");
-    list_ports();
+    listPorts();
     readInput(&select);
-    if(select < 0 || select >= dsHDMI_IN_PORT_MAX)
+    if(select < dsHDMI_IN_PORT_0 || select >= dsHDMI_IN_PORT_MAX)
     {
       UT_LOG_ERROR("\n invalid port selected\n");
       UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -1046,9 +1046,9 @@ void test_l3_HdmiIn_set_edid2allmsupport(void)
     UT_LOG_MENU_INFO(" \n================Please Select Inputs==================\n");
 
     UT_LOG_MENU_INFO("\n*******Enter the port number to select*******\n");
-    list_ports();
+    listPorts();
     readInput(&select);
-    if(select < 0 || select >= dsHDMI_IN_PORT_MAX)
+    if(select < dsHDMI_IN_PORT_0 || select >= dsHDMI_IN_PORT_MAX)
     {
        UT_LOG_ERROR("\nInvalid port selected\n");
        UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -1112,9 +1112,9 @@ void test_l3_HdmiIn_get_edid2allmsupport(void)
     UT_LOG_MENU_INFO(" \n================Please Select Inputs==================\n");
 
     UT_LOG_MENU_INFO(" \n*******Enter the port number to select*******\n");
-    list_ports();
+    listPorts();
     readInput(&select);
-    if(select < 0 || select >= dsHDMI_IN_PORT_MAX)
+    if(select < dsHDMI_IN_PORT_0 || select >= dsHDMI_IN_PORT_MAX)
     {
         UT_LOG_ERROR("\nInvalid port selected\n");
         UT_LOG_INFO("Out %s", __FUNCTION__);
