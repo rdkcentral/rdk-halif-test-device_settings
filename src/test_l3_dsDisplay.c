@@ -149,7 +149,7 @@ const static ut_control_keyStringMapping_t dsVideoAspectRatio_mapTable[] = {
  *
  * This function clears the stdin buffer.
  */
-void readAndDiscardRestOfLine(FILE* in)
+static void readAndDiscardRestOfLine(FILE* in)
 {
    int c;
    while ( (c = fgetc(in)) != EOF && c != '\n');
