@@ -33,17 +33,17 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test19_AudioLevel(utHelperClass):
+class dsAudio_test09_MS12SurroundDecoder(utHelperClass):
 
-    testName  = "test19_AudioLevel"
+    testName  = "test09_MS12SurroundDecoder"
     testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
     moduleName = "dsAudio"
     rackDevice = "dut"
-    gainLevels = [0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0]
+    ms12DAPFeature = "SurroundDecoder"
 
     def __init__(self):
         """
-        Initializes the test19_AudioLevel test .
+        Initializes the test09_MS12SurroundDecoder test .
 
         Args:
             None.
@@ -122,13 +122,14 @@ class dsAudio_test19_AudioLevel(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyAudioGainLevel(self, port, gain, manual=False):
+    def testVerifySurroundDecoder(self, stream, port, mode, manual=False):
         """
         Verifies whether the audio is fine or not.
 
         Args:
+            stream (str) : Stream used for testing
             port (str) : Audio port to verify
-            gain (float) : gain value
+            mode (bool): SurroundDecoder mode
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
                                      Defaults to other verification methods
 
@@ -136,13 +137,13 @@ class dsAudio_test19_AudioLevel(utHelperClass):
             bool : returns the status of audio
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has audio gain level {gain} applied to the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} {mode} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
-        """This function will test the Audio Ports by enabling and disabling the ports
+        """This function tests the MS12 SurroundDecoder
 
         Returns:
             bool
@@ -168,19 +169,27 @@ class dsAudio_test19_AudioLevel(utHelperClass):
 
             # Loop through the supported audio ports
             for port,index in self.testdsAudio.getSupportedPorts():
-                if "HEADPHONE" in port or "SPEAKER" in port:
+                if self.testdsAudio.getMS12DAPFeatureSupport(port, index, self.ms12DAPFeature):
                     # Enable the audio port
                     self.testdsAudio.enablePort(port, index)
 
-                    for gain in self.gainLevels:
-                        self.log.stepStart(f'Gain Level:{gain} Port:{port} Index:{index} Stream:{stream}')
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
 
-                        # Set the gain level
-                        self.testdsAudio.setGainLevel(port, index, gain)
+                    # Enable SurroundDecoder mode
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":True})
 
-                        result = self.testVerifyAudioGainLevel(port, gain, True)
+                    result = self.testVerifyDolbyVolume(stream, port, True, True)
 
-                        self.log.stepResult(result, f'Gain Level:{gain} Port:{port} Index:{index} Stream:{stream}')
+                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
+
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
+
+                    # Disable SurroundDecoder mode
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":False})
+
+                    result = self.testVerifyDolbyVolume(stream, port, False, True)
+
+                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{False} Port:{port} Index:{index} Stream:{stream}')
 
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)
@@ -200,5 +209,5 @@ class dsAudio_test19_AudioLevel(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test19_AudioLevel()
+    test = dsAudio_test09_MS12SurroundDecoder()
     test.run(False)

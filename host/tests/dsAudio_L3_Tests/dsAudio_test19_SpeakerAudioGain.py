@@ -33,18 +33,17 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
+class dsAudio_test19_AudioGain(utHelperClass):
 
-    testName  = "test06_MS12IntelligentEqualizer"
+    testName  = "test19_AudioGain"
     testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
     moduleName = "dsAudio"
     rackDevice = "dut"
-    ms12DAPFeature = "IntelligentEqualizer"
-    equalizerModes = ["OFF", "Open", "Rich", "Focused", "Balanced", "Warm", "Detailed"]
+    gainValues = [-2080.0, -1500.0, -1000.0, -500.0, -100.0, 0.0, 100.0, 200.0, 300.0, 480.0]
 
     def __init__(self):
         """
-        Initializes the test06_MS12IntelligentEqualizer test .
+        Initializes the test19_AudioGain test .
 
         Args:
             None.
@@ -123,14 +122,13 @@ class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyIntelligentEqualizer(self, stream, port, mode, manual=False):
+    def testVerifyAudioGainLevel(self, port, gain, manual=False):
         """
         Verifies whether the audio is fine or not.
 
         Args:
-            stream (str) : Stream used for testing
             port (str) : Audio port to verify
-            mode (str): IntelligentEqualizer modes
+            gain (float) : gain value
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
                                      Defaults to other verification methods
 
@@ -138,13 +136,13 @@ class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
             bool : returns the status of audio
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} mode {mode} applied to the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has audio gain level {gain} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
-        """This function tests the MS12 IntelligentEqualizer
+        """This function tests the Audio Gain
 
         Returns:
             bool
@@ -170,19 +168,19 @@ class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
 
             # Loop through the supported audio ports
             for port,index in self.testdsAudio.getSupportedPorts():
-                if self.testdsAudio.getMS12DAPFeatureSupport(port, index, self.ms12DAPFeature):
+                if "SPEAKER" in port:
                     # Enable the audio port
                     self.testdsAudio.enablePort(port, index)
 
-                    for mode in self.equalizerModes:
-                        self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} Port:{port} Index:{index} Stream:{stream}')
+                    for gain in self.gainValues:
+                        self.log.stepStart(f'Gain:{gain} Port:{port} Index:{index} Stream:{stream}')
 
-                        # Set the Interlligent equalizer mode
-                        self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":mode})
+                        # Set the gain level
+                        self.testdsAudio.setSpeakerGain(port, index, gain)
 
-                        result = self.testVerifyIntelligentEqualizer(stream, port, mode, True)
+                        result = self.testVerifyAudioGainLevel(port, gain, True)
 
-                        self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} Port:{port} Index:{index} Stream:{stream}')
+                        self.log.stepResult(result, f'Gain:{gain} Port:{port} Index:{index} Stream:{stream}')
 
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)
@@ -202,5 +200,5 @@ class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test06_MS12IntelligentEqualizer()
+    test = dsAudio_test19_AudioGain()
     test.run(False)

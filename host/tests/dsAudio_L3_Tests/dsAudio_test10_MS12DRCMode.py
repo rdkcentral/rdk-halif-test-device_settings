@@ -23,7 +23,6 @@
 
 import os
 import sys
-import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path+"/../")
@@ -34,17 +33,17 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test24_AssociateMix(utHelperClass):
+class dsAudio_test10_MS12DRCMode(utHelperClass):
 
-    testName  = "test24_AssociateMix"
+    testName  = "test10_MS12DRCMode"
     testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
     moduleName = "dsAudio"
     rackDevice = "dut"
-    faderValues = [-32, -15, 0, 15, 32]
+    ms12DAPFeature = "DRCMode"
 
     def __init__(self):
         """
-        Initializes the test24_AssociateMix test .
+        Initializes the test10_MS12DRCMode test .
 
         Args:
             None.
@@ -123,13 +122,14 @@ class dsAudio_test24_AssociateMix(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyAudio(self, mixer_status, fader, manual=False):
+    def testVerifyDRCMode(self, stream, port, mode, manual=False):
         """
         Verifies whether the audio is fine or not.
 
         Args:
-            mixer_status (bool) : True: Enabled associate audio mixing, False: Disabled
-            fader (int): Fader Control,-32:mute associated audio) to 32:mute main audio
+            stream (str) : Stream used for testing
+            port (str) : Audio port to verify
+            mode (bool): Dolby DRCMode
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
                                      Defaults to other verification methods
 
@@ -137,13 +137,13 @@ class dsAudio_test24_AssociateMix(utHelperClass):
             bool : returns the status of audio
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Is Audio playing as expected with Mixing: {mixer_status} fader: {fader}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} {mode} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
-        """This function will test the Audio Ports by enabling and disabling the ports
+        """This function tests the MS12 DRCMode
 
         Returns:
             bool
@@ -164,26 +164,35 @@ class dsAudio_test24_AssociateMix(utHelperClass):
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
         for stream in self.testStreams:
-
-            self.log.stepStart(f'Associate Mixing Disabled, Stream: {stream} Fader: 0')
-
-            self.testdsAudio.enableAssociateAudioMixig(False)
-
             # Start the stream playback
             self.testPlayer.play(stream)
 
-            result = self.testVerifyAudio(False, 0, True)
+            # Loop through the supported audio ports
+            for port,index in self.testdsAudio.getSupportedPorts():
+                if self.testdsAudio.getMS12DAPFeatureSupport(port, index, self.ms12DAPFeature):
+                    # Enable the audio port
+                    self.testdsAudio.enablePort(port, index)
 
-            self.log.stepResult(result, f'Associate Mixing Disabled, Stream: {stream} Fader: 0')
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:DRC Line Mode Port:{port} Index:{index} Stream:{stream}')
 
-            for fade in self.faderValues:
-                self.log.stepStart(f'Associate Mixing Stream: {stream} Fader: {fade}')
+                    # Set DRC Line Mode
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":0})
 
-                self.testdsAudio.enableAssociateAudioMixig(True, fade)
+                    result = self.testVerifyDolbyVolume(stream, port, 0, True)
 
-                result = self.testVerifyAudio(True, fade, True)
+                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:DRC RF Mode Port:{port} Index:{index} Stream:{stream}')
 
-                self.log.stepResult(result, f'Associate Mixing Stream: {stream} Fader: {fade}')
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
+
+                    # Set DRC RF Mode
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":1})
+
+                    result = self.testVerifyDolbyVolume(stream, port, 1, True)
+
+                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{False} Port:{port} Index:{index} Stream:{stream}')
+
+                    # Disable the audio port
+                    self.testdsAudio.disablePort(port, index)
 
             # Stop the stream playback
             self.testPlayer.stop()
@@ -197,8 +206,8 @@ class dsAudio_test24_AssociateMix(utHelperClass):
         # Delete the dsAudio class
         del self.testdsAudio
 
-        return True
+        return result
 
 if __name__ == '__main__':
-    test = dsAudio_test24_AssociateMix()
+    test = dsAudio_test10_MS12DRCMode()
     test.run(False)

@@ -135,7 +135,7 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function will test the Audio Ports by enabling and disabling the ports
+        """This function tests the Headphone connection
 
         Returns:
             bool
@@ -156,7 +156,6 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
         self.log.stepStart('Headphone Connect Test')
-        self.log.step('Connect Headphone')
 
         # Wait for headphone connection
         self.testWaitForConnectionChange(True, True)
@@ -166,7 +165,6 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
         self.log.stepResult(connectionStatus, 'Headphone Connect Test')
 
         self.log.stepStart('Headphone Disconnect Test')
-        self.log.step('Disconnect Headphone')
 
         # Wait for headphone disconnection
         self.testWaitForConnectionChange(False, True)
@@ -174,9 +172,6 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
         connectionStatus = self.testdsAudio.getHeadphoneConnectionStatus()
 
         self.log.stepResult(not connectionStatus, 'Headphone Disconnect Test')
-
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
 
         # Terminate dsAudio Module
         self.testdsAudio.terminate()

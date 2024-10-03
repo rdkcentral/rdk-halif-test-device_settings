@@ -33,18 +33,17 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
+class dsAudio_test12_MS12MISteering(utHelperClass):
 
-    testName  = "test06_MS12IntelligentEqualizer"
+    testName  = "test12_MS12MISteering"
     testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
     moduleName = "dsAudio"
     rackDevice = "dut"
-    ms12DAPFeature = "IntelligentEqualizer"
-    equalizerModes = ["OFF", "Open", "Rich", "Focused", "Balanced", "Warm", "Detailed"]
+    ms12DAPFeature = "MISteering"
 
     def __init__(self):
         """
-        Initializes the test06_MS12IntelligentEqualizer test .
+        Initializes the test12_MS12MISteering test .
 
         Args:
             None.
@@ -123,14 +122,14 @@ class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyIntelligentEqualizer(self, stream, port, mode, manual=False):
+    def testVerifyMISteering(self, stream, port, mode, manual=False):
         """
         Verifies whether the audio is fine or not.
 
         Args:
             stream (str) : Stream used for testing
             port (str) : Audio port to verify
-            mode (str): IntelligentEqualizer modes
+            mode (bool): MISteering
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
                                      Defaults to other verification methods
 
@@ -138,13 +137,13 @@ class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
             bool : returns the status of audio
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} mode {mode} applied to the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} {mode} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
-        """This function tests the MS12 IntelligentEqualizer
+        """This function tests the MS12 MISteering
 
         Returns:
             bool
@@ -174,15 +173,23 @@ class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
                     # Enable the audio port
                     self.testdsAudio.enablePort(port, index)
 
-                    for mode in self.equalizerModes:
-                        self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} Port:{port} Index:{index} Stream:{stream}')
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
 
-                        # Set the Interlligent equalizer mode
-                        self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":mode})
+                    # Enable MISteering
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":True})
 
-                        result = self.testVerifyIntelligentEqualizer(stream, port, mode, True)
+                    result = self.testVerifyDolbyVolume(stream, port, True, True)
 
-                        self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} Port:{port} Index:{index} Stream:{stream}')
+                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
+
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
+
+                    # Disable MISteering
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":False})
+
+                    result = self.testVerifyDolbyVolume(stream, port, False, True)
+
+                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{False} Port:{port} Index:{index} Stream:{stream}')
 
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)
@@ -202,5 +209,5 @@ class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test06_MS12IntelligentEqualizer()
+    test = dsAudio_test12_MS12MISteering()
     test.run(False)

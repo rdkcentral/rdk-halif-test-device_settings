@@ -146,7 +146,7 @@ class dsAudio_test07_MS12Volumeleveller(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function will test the Audio Ports by enabling and disabling the ports
+        """This function tests the MS12 Volumeleveller
 
         Returns:
             bool
@@ -176,18 +176,35 @@ class dsAudio_test07_MS12Volumeleveller(utHelperClass):
                     # Enable the audio port
                     self.testdsAudio.enablePort(port, index)
 
-                    for mode in self.volumeModes:
-                        for level in self.volumeLevels:
-                            if (mode == 0 and level > 0):
-                                continue
-                            self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} level:{level} Port:{port} Index:{index} Stream:{stream}')
+                    mode = 0 #leveller is OFF
+                    level = 0
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} level:{level} Port:{port} Index:{index} Stream:{stream}')
 
-                            # Set the Interlligent equalizer mode
-                            self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, level]})
+                    # Set the volume leveller
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, level]})
 
-                            result = self.testVerifyVolumeleveller(stream, port, mode, level, True)
+                    result = self.testVerifyVolumeleveller(stream, port, mode, level, True)
 
-                            self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} level:{level} Port:{port} Index:{index} Stream:{stream}')
+                    mode = 2 #leveller is Auto
+                    level = 0
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} level:{level} Port:{port} Index:{index} Stream:{stream}')
+
+                    # Set the volume leveller
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, level]})
+
+                    result = self.testVerifyVolumeleveller(stream, port, mode, level, True)
+
+                    mode = 1 #leveller is On
+                    level = 0
+                    for level in self.volumeLevels:
+                        self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} level:{level} Port:{port} Index:{index} Stream:{stream}')
+
+                        # Set the volume leveller
+                        self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, level]})
+
+                        result = self.testVerifyVolumeleveller(stream, port, mode, level, True)
+
+                        self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} level:{level} Port:{port} Index:{index} Stream:{stream}')
 
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)

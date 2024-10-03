@@ -34,9 +34,9 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test25_PrimarySecondaryLanguage(utHelperClass):
+class dsAudio_test24_PrimarySecondaryLanguage(utHelperClass):
 
-    testName  = "test25_PrimarySecondaryLanguage"
+    testName  = "test24_PrimarySecondaryLanguage"
     testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
     moduleName = "dsAudio"
     rackDevice = "dut"
@@ -46,7 +46,7 @@ class dsAudio_test25_PrimarySecondaryLanguage(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test25_PrimarySecondaryLanguage test .
+        Initializes the test24_PrimarySecondaryLanguage test .
 
         Args:
             None.
@@ -145,7 +145,7 @@ class dsAudio_test25_PrimarySecondaryLanguage(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function will test the Audio Ports by enabling and disabling the ports
+        """This function tests the Primary and Secondary language
 
         Returns:
             bool
@@ -212,5 +212,5 @@ class dsAudio_test25_PrimarySecondaryLanguage(utHelperClass):
         return True
 
 if __name__ == '__main__':
-    test = dsAudio_test25_PrimarySecondaryLanguage()
+    test = dsAudio_test24_PrimarySecondaryLanguage()
     test.run(False)

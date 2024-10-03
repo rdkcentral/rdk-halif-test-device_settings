@@ -33,18 +33,19 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
+class dsAudio_test11_MS12SurroundVirtualizer(utHelperClass):
 
-    testName  = "test06_MS12IntelligentEqualizer"
+    testName  = "test11_MS12SurroundVirtualizer"
     testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
     moduleName = "dsAudio"
     rackDevice = "dut"
-    ms12DAPFeature = "IntelligentEqualizer"
-    equalizerModes = ["OFF", "Open", "Rich", "Focused", "Balanced", "Warm", "Detailed"]
+    ms12DAPFeature = "SurroundVirtualizer"
+    volumeModes = [0, 1, 2]
+    boostValues = [0, 20, 40, 60, 80, 96]
 
     def __init__(self):
         """
-        Initializes the test06_MS12IntelligentEqualizer test .
+        Initializes the test11_MS12SurroundVirtualizer test .
 
         Args:
             None.
@@ -123,14 +124,15 @@ class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyIntelligentEqualizer(self, stream, port, mode, manual=False):
+    def testVerifySurroundVirtualizer(self, stream, port, mode, level, manual=False):
         """
         Verifies whether the audio is fine or not.
 
         Args:
             stream (str) : Stream used for testing
             port (str) : Audio port to verify
-            mode (str): IntelligentEqualizer modes
+            mode (str): SurroundVirtualizer modes
+            level (int): SurroundVirtualizer level
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
                                      Defaults to other verification methods
 
@@ -138,13 +140,13 @@ class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
             bool : returns the status of audio
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} mode {mode} applied to the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} mode {mode} level {level} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
-        """This function tests the MS12 IntelligentEqualizer
+        """This function tests the MS12 SurroundVirtualizer
 
         Returns:
             bool
@@ -174,15 +176,35 @@ class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
                     # Enable the audio port
                     self.testdsAudio.enablePort(port, index)
 
-                    for mode in self.equalizerModes:
-                        self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} Port:{port} Index:{index} Stream:{stream}')
+                    mode = 0 #SurroundVirtualizer is OFF
+                    boost = 0
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} boost:{boost} Port:{port} Index:{index} Stream:{stream}')
 
-                        # Set the Interlligent equalizer mode
-                        self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":mode})
+                    # Set the SurroundVirtualizer
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, boost]})
 
-                        result = self.testVerifyIntelligentEqualizer(stream, port, mode, True)
+                    result = self.testVerifyVolumeleveller(stream, port, mode, boost, True)
 
-                        self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} Port:{port} Index:{index} Stream:{stream}')
+                    mode = 2 #leveller is Auto
+                    boost = 0
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} boost:{boost} Port:{port} Index:{index} Stream:{stream}')
+
+                    # Set the SurroundVirtualizer
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, boost]})
+
+                    result = self.testVerifyVolumeleveller(stream, port, mode, boost, True)
+
+                    mode = 1 #SurroundVirtualizer is On
+                    boost = 0
+                    for boost in self.boostValues:
+                        self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} boost:{boost} Port:{port} Index:{index} Stream:{stream}')
+
+                        # Set the SurroundVirtualizer
+                        self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, boost]})
+
+                        result = self.testVerifyVolumeleveller(stream, port, mode, boost, True)
+
+                        self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} boost:{boost} Port:{port} Index:{index} Stream:{stream}')
 
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)
@@ -202,5 +224,5 @@ class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test06_MS12IntelligentEqualizer()
+    test = dsAudio_test11_MS12SurroundVirtualizer()
     test.run(False)

@@ -140,7 +140,7 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function will test the Audio Ports by enabling and disabling the ports
+        """This function tests the Audio Ports by enabling and disabling the ports
 
         Returns:
             bool
