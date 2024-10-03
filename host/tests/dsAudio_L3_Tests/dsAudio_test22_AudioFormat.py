@@ -23,6 +23,7 @@
 
 import os
 import sys
+import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path+"/../")
@@ -33,17 +34,18 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test22_AudioDelay(utHelperClass):
+class dsAudio_test22_AudioFormat(utHelperClass):
 
-    testName  = "test22_AudioDelay"
+    testName  = "test22_AudioFormat"
     testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
     moduleName = "dsAudio"
     rackDevice = "dut"
-    delayList = [0, 50, 100, 150, 200]
+    audioFormats = ["NONE", "PCM", "AC3", "EAC3", "AAC", "VORBIS", "WMA"]
+    dolbyStreams = ["AC4", "MAT", "TRUEHD", "EAC3_ATMOS", "TRUEHD_ATMOS", "MAT_ATMOS", "AC4_ATMOS"]
 
     def __init__(self):
         """
-        Initializes the test22_AudioDelay test .
+        Initializes the test22_AudioFormat test .
 
         Args:
             None.
@@ -121,28 +123,30 @@ class dsAudio_test22_AudioDelay(utHelperClass):
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    #TODO: Current version supports only manual verification.
-    def testVerifyAudioDelay(self, port, delay, manual=False):
+    #TODO: Current version supports only manual.
+    def testWaitForConnectionChange(self, connection, manual=False):
         """
-        Verifies whether the audio is fine or not.
+        Wait for the port connection, disconnection.
 
         Args:
-            port (str) : Audio port to verify
-            delay (float) : delay value
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            connection (bool) : If True connect the port, otherwise disconnect the port
+            manual (bool, optional): Manual Control (True: manual, False: other disconnect/connect methods).
+                                     Defaults to other
 
         Returns:
-            bool : returns the status of audio
+            None
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has Audio Delay {delay} applied to the {port}? (Y/N):")
+            if connection == True:
+                self.testUserResponse.getUserYN(f"Connect the port and press Enter:")
+            else:
+                self.testUserResponse.getUserYN(f"Disconnect the port and press Enter:")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
-        """This function will test the Audio Ports by enabling and disabling the ports
+        """This function tests the Audio Format
 
         Returns:
             bool
@@ -162,31 +166,24 @@ class dsAudio_test22_AudioDelay(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        for stream in self.testStreams:
+        i = 0
+        for format in self.audioFormats:
             # Start the stream playback
-            self.testPlayer.play(stream)
+            if format is not "NONE":
+                self.testPlayer.play(self.testStreams[i])
+                i += 1
+                time.sleep(3)
 
-            # Loop through the supported audio ports
-            for port,index in self.testdsAudio.getSupportedPorts():
-                if "ARC" in port or "SPDIF" in port or "HDMI" in port:
-                    # Enable the audio port
-                    self.testdsAudio.enablePort(port, index)
+            self.log.stepStart(f'Audio Format {format} Test')
 
-                    for delay in self.delayList:
-                        self.log.stepStart(f'Audio Delay {delay} Port:{port} Index:{index} Stream:{stream}')
+            # Get the Audio Format
+            audioFormat = self.testdsAudio.getAudioFormat()
 
-                        # Set the Audio Delay
-                        self.testdsAudio.setAudioDelay(port, index, delay)
+            self.log.stepResult(format in audioFormat, f'Audio Format {format} Test')
 
-                        result = self.testVerifyAudioDelay(port, delay, True)
-
-                        self.log.stepResult(result, f'Audio Delay {delay} Port:{port} Index:{index} Stream:{stream}')
-
-                    # Disable the audio port
-                    self.testdsAudio.disablePort(port, index)
-
-            # Stop the stream playback
-            self.testPlayer.stop()
+            if format is not "NONE":
+                # Stop the stream playback
+                self.testPlayer.stop()
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
@@ -197,8 +194,8 @@ class dsAudio_test22_AudioDelay(utHelperClass):
         # Delete the dsAudio class
         del self.testdsAudio
 
-        return result
+        return True
 
 if __name__ == '__main__':
-    test = dsAudio_test22_AudioDelay()
+    test = dsAudio_test22_AudioFormat()
     test.run(False)

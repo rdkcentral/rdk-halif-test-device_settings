@@ -43,7 +43,7 @@ class dsAudio_test03_MS12AudioCompression(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test03_MS12AudioCompression test .
+        Initializes the test03_MS12AudioCompression test.
 
         Args:
             None.
@@ -143,7 +143,7 @@ class dsAudio_test03_MS12AudioCompression(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function will test the Audio Ports by enabling and disabling the ports
+        """This function tests Audio Compression
 
         Returns:
             bool
@@ -176,7 +176,7 @@ class dsAudio_test03_MS12AudioCompression(utHelperClass):
                     for compression in self.compressionValues:
                         self.log.stepStart(f'Audio Compression:{compression} Port:{port} Index:{index} Stream:{stream}')
 
-                        # Set the gain level
+                        # Set audio compression value
                         self.testdsAudio.setAudioCompression(port, index, compression)
 
                         result = self.testVerifyCompressionLevel(stream, port, compression, True)

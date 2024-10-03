@@ -34,18 +34,17 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test23_AudioFormat(utHelperClass):
+class dsAudio_test23_AssociateMix(utHelperClass):
 
-    testName  = "test23_AudioFormat"
+    testName  = "test23_AssociateMix"
     testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
     moduleName = "dsAudio"
     rackDevice = "dut"
-    audioFormats = ["NONE", "PCM", "AC3", "EAC3", "AAC", "VORBIS", "WMA"]
-    dolbyStreams = ["AC4", "MAT", "TRUEHD", "EAC3_ATMOS", "TRUEHD_ATMOS", "MAT_ATMOS", "AC4_ATMOS"]
+    faderValues = [-32, -15, 0, 15, 32]
 
     def __init__(self):
         """
-        Initializes the test23_AudioFormat test .
+        Initializes the test23_AssociateMix test .
 
         Args:
             None.
@@ -123,30 +122,28 @@ class dsAudio_test23_AudioFormat(utHelperClass):
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    #TODO: Current version supports only manual.
-    def testWaitForConnectionChange(self, connection, manual=False):
+    #TODO: Current version supports only manual verification.
+    def testVerifyAudio(self, mixer_status, fader, manual=False):
         """
-        Wait for the port connection, disconnection.
+        Verifies whether the audio is fine or not.
 
         Args:
-            connection (bool) : If True connect the port, otherwise disconnect the port
-            manual (bool, optional): Manual Control (True: manual, False: other disconnect/connect methods).
-                                     Defaults to other
+            mixer_status (bool) : True: Enabled associate audio mixing, False: Disabled
+            fader (int): Fader Control,-32:mute associated audio) to 32:mute main audio
+            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
+                                     Defaults to other verification methods
 
         Returns:
-            None
+            bool : returns the status of audio
         """
         if manual == True:
-            if connection == True:
-                self.testUserResponse.getUserYN(f"Connect the port and press Enter:")
-            else:
-                self.testUserResponse.getUserYN(f"Disconnect the port and press Enter:")
+            return self.testUserResponse.getUserYN(f"Is Audio playing as expected with Mixing: {mixer_status} fader: {fader}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
-        """This function will test the Audio Ports by enabling and disabling the ports
+        """This function tests the Associate Mixing
 
         Returns:
             bool
@@ -166,23 +163,30 @@ class dsAudio_test23_AudioFormat(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        i = 0
-        for format in self.audioFormats:
+        for stream in self.testStreams:
+
+            self.log.stepStart(f'Associate Mixing Disabled, Stream: {stream} Fader: 0')
+
+            self.testdsAudio.enableAssociateAudioMixig(False)
+
             # Start the stream playback
-            if format is not "NONE":
-                self.testPlayer.play(self.testStreams[i])
-                i += 1
-                time.sleep(3)
+            self.testPlayer.play(stream)
 
-            self.log.stepStart(f'Audio Format {format} Test')
+            result = self.testVerifyAudio(False, 0, True)
 
-            audioFormat = self.testdsAudio.getAudioFormat()
+            self.log.stepResult(result, f'Associate Mixing Disabled, Stream: {stream} Fader: 0')
 
-            self.log.stepResult(format in audioFormat, f'Audio Format {format} Test')
+            for fade in self.faderValues:
+                self.log.stepStart(f'Associate Mixing Stream: {stream} Fader: {fade}')
 
-            if format is not "NONE":
-                # Stop the stream playback
-                self.testPlayer.stop()
+                self.testdsAudio.enableAssociateAudioMixig(True, fade)
+
+                result = self.testVerifyAudio(True, fade, True)
+
+                self.log.stepResult(result, f'Associate Mixing Stream: {stream} Fader: {fade}')
+
+            # Stop the stream playback
+            self.testPlayer.stop()
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
@@ -196,5 +200,5 @@ class dsAudio_test23_AudioFormat(utHelperClass):
         return True
 
 if __name__ == '__main__':
-    test = dsAudio_test23_AudioFormat()
+    test = dsAudio_test23_AssociateMix()
     test.run(False)

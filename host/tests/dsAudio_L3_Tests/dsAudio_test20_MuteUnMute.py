@@ -33,16 +33,16 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test21_MuteUnMute(utHelperClass):
+class dsAudio_test20_MuteUnMute(utHelperClass):
 
-    testName  = "test21_MuteUnMute"
+    testName  = "test20_MuteUnMute"
     testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
     moduleName = "dsAudio"
     rackDevice = "dut"
 
     def __init__(self):
         """
-        Initializes the test21_MuteUnMute test .
+        Initializes the test20_MuteUnMute test .
 
         Args:
             None.
@@ -140,7 +140,7 @@ class dsAudio_test21_MuteUnMute(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function will test the Audio Ports by enabling and disabling the ports
+        """This function tests the Audio Mute and UnMute
 
         Returns:
             bool
@@ -205,5 +205,5 @@ class dsAudio_test21_MuteUnMute(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test21_MuteUnMute()
+    test = dsAudio_test20_MuteUnMute()
     test.run(False)

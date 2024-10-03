@@ -23,7 +23,6 @@
 
 import os
 import sys
-import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path+"/../")
@@ -34,18 +33,18 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test26_AudioMix(utHelperClass):
+class dsAudio_test13_MS12GraphicEqualizer(utHelperClass):
 
-    testName  = "test26_AudioMix"
+    testName  = "test13_MS12GraphicEqualizer"
     testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
     moduleName = "dsAudio"
     rackDevice = "dut"
-    primaryVolume = [0, 25, 50, 75, 100]
-    systemVolume = [0, 25, 50, 75, 100]
+    ms12DAPFeature = "GraphicEqualizer"
+    equalizerModes = [0, 1, 2, 3]
 
     def __init__(self):
         """
-        Initializes the test26_AudioMix test .
+        Initializes the test13_MS12GraphicEqualizer test .
 
         Args:
             None.
@@ -124,13 +123,14 @@ class dsAudio_test26_AudioMix(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyAudio(self, primary_volume, system_volume, manual=False):
+    def testVerifyGraphicEqualizer(self, stream, port, mode, manual=False):
         """
         Verifies whether the audio is fine or not.
 
         Args:
-            primary_volume (int) : volume ranges 0-100
-            system_volume (int): volume ranges 0-100
+            stream (str) : Stream used for testing
+            port (str) : Audio port to verify
+            mode (int): GraphicEqualizer mode.
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
                                      Defaults to other verification methods
 
@@ -138,13 +138,13 @@ class dsAudio_test26_AudioMix(utHelperClass):
             bool : returns the status of audio
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Is Audio playing as expected with Mixing: Primary Volume: {primary_volume} System Volume: {system_volume}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} mode {mode} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
-        """This function will test the Audio Ports by enabling and disabling the ports
+        """This function tests the MS12 GraphicEqualizer
 
         Returns:
             bool
@@ -168,17 +168,24 @@ class dsAudio_test26_AudioMix(utHelperClass):
             # Start the stream playback
             self.testPlayer.play(stream)
 
-            for prime in self.primaryVolume:
-                for system in self.systemVolume:
-                    self.log.stepStart(f'Audio Mixing Stream: {stream} Primary Voulem: {prime}, System Volume: {system}')
+            # Loop through the supported audio ports
+            for port,index in self.testdsAudio.getSupportedPorts():
+                if self.testdsAudio.getMS12DAPFeatureSupport(port, index, self.ms12DAPFeature):
+                    # Enable the audio port
+                    self.testdsAudio.enablePort(port, index)
 
-                    self.testdsAudio.setAudioMixerLevels("dsAUDIO_INPUT_PRIMARY", prime)
+                    for mode in self.equalizerModes:
+                        self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} Port:{port} Index:{index} Stream:{stream}')
 
-                    self.testdsAudio.setAudioMixerLevels("dsAUDIO_INPUT_SYSTEM", system)
+                        # Set the GraphicEqualizer
+                        self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":mode})
 
-                    result = self.testVerifyAudio(prime, system, True)
+                        result = self.testVerifyBassEnhancer(stream, port, mode, True)
 
-                    self.log.stepResult(result, f'Audio Mixing Stream: {stream} Primary Voulem: {prime}, System Volume: {system}')
+                        self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} Port:{port} Index:{index} Stream:{stream}')
+
+                    # Disable the audio port
+                    self.testdsAudio.disablePort(port, index)
 
             # Stop the stream playback
             self.testPlayer.stop()
@@ -192,8 +199,8 @@ class dsAudio_test26_AudioMix(utHelperClass):
         # Delete the dsAudio class
         del self.testdsAudio
 
-        return True
+        return result
 
 if __name__ == '__main__':
-    test = dsAudio_test26_AudioMix()
+    test = dsAudio_test13_MS12GraphicEqualizer()
     test.run(False)

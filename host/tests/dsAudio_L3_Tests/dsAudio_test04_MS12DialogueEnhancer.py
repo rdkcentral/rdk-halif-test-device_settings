@@ -144,7 +144,7 @@ class dsAudio_test04_MS12DialogueEnhancer(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function will test the Audio Ports by enabling and disabling the ports
+        """This function tests the MS12 DialogueEnhancer
 
         Returns:
             bool
@@ -177,7 +177,7 @@ class dsAudio_test04_MS12DialogueEnhancer(utHelperClass):
                     for level in self.dialogueEnhance:
                         self.log.stepStart(f'MS12 {self.ms12DAPFeature} level:{level} Port:{port} Index:{index} Stream:{stream}')
 
-                        # Set the gain level
+                        # Set the DialogueEnhancer
                         self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":level})
 
                         result = self.testVerifyDialogueEnhance(stream, port, level, True)

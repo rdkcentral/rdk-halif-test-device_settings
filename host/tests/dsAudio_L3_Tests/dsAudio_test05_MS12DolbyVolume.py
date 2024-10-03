@@ -137,13 +137,13 @@ class dsAudio_test05_MS12DolbyVolume(utHelperClass):
             bool : returns the status of audio
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has MS12 Dolby Volume mode {mode} applied to the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} {mode} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
-        """This function will test the MS12 Dolby volume mode
+        """This function tests the MS12 DolbyVolume
 
         Returns:
             bool

@@ -33,17 +33,18 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test20_AudioGain(utHelperClass):
+class dsAudio_test08_MS12BassEnhancer(utHelperClass):
 
-    testName  = "test20_AudioGain"
+    testName  = "test08_MS12BassEnhancer"
     testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
     moduleName = "dsAudio"
     rackDevice = "dut"
-    gainValues = [-2080.0, -1500.0, -1000.0, -500.0, -100.0, 0.0, 100.0, 200.0, 300.0, 480.0]
+    ms12DAPFeature = "BassEnhancer"
+    boostValues = [0, 20, 40, 60, 80, 100]
 
     def __init__(self):
         """
-        Initializes the test20_AudioGain test .
+        Initializes the test08_MS12BassEnhancer test .
 
         Args:
             None.
@@ -122,13 +123,14 @@ class dsAudio_test20_AudioGain(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyAudioGainLevel(self, port, gain, manual=False):
+    def testVerifyBassEnhancer(self, stream, port, boost, manual=False):
         """
         Verifies whether the audio is fine or not.
 
         Args:
+            stream (str) : Stream used for testing
             port (str) : Audio port to verify
-            gain (float) : gain value
+            boost (int): BassEnhancer boost. Ranges from 0-100
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
                                      Defaults to other verification methods
 
@@ -136,13 +138,13 @@ class dsAudio_test20_AudioGain(utHelperClass):
             bool : returns the status of audio
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has audio gain level {gain} applied to the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} boost {boost} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
-        """This function will test the Audio Ports by enabling and disabling the ports
+        """This function tests the MS12 BassEnhancer
 
         Returns:
             bool
@@ -168,19 +170,19 @@ class dsAudio_test20_AudioGain(utHelperClass):
 
             # Loop through the supported audio ports
             for port,index in self.testdsAudio.getSupportedPorts():
-                if "SPEAKER" in port:
+                if self.testdsAudio.getMS12DAPFeatureSupport(port, index, self.ms12DAPFeature):
                     # Enable the audio port
                     self.testdsAudio.enablePort(port, index)
 
-                    for gain in self.gainValues:
-                        self.log.stepStart(f'Gain:{gain} Port:{port} Index:{index} Stream:{stream}')
+                    for boot in self.boostValues:
+                        self.log.stepStart(f'MS12 {self.ms12DAPFeature} boot:{boot} Port:{port} Index:{index} Stream:{stream}')
 
-                        # Set the gain level
-                        self.testdsAudio.setSpeakerGain(port, index, gain)
+                        # Set the BassEnhancer
+                        self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":boot})
 
-                        result = self.testVerifyAudioGainLevel(port, gain, True)
+                        result = self.testVerifyBassEnhancer(stream, port, boot, True)
 
-                        self.log.stepResult(result, f'Gain:{gain} Port:{port} Index:{index} Stream:{stream}')
+                        self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} level:{boot} Port:{port} Index:{index} Stream:{stream}')
 
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)
@@ -200,5 +202,5 @@ class dsAudio_test20_AudioGain(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test20_AudioGain()
+    test = dsAudio_test08_MS12BassEnhancer()
     test.run(False)
