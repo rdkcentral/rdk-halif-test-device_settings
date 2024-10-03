@@ -393,7 +393,7 @@ void test_l3_dsVideoDevice_SetFRFMode()
     scanf("%d", &choice);
     readAndDiscardRestOfLine(stdin);
 
-    UT_LOG_INFO("Calling dsSetDisplayframerate(IN:Handle:[0x%0X],IN:framerate:[%s])",gHandle, \
+    UT_LOG_INFO("Calling dsSetFRFMode(IN:Handle:[0x%0X],IN:framerate:[%s])",gHandle, \
                                                                 ((choice==0)?"Disable":"Enable"));
     status = dsSetFRFMode(gHandle, choice);
     UT_LOG_INFO("Result dsSetFRFMode(), OUT:dsError_t=[%s]", UT_Control_GetMapString(dsErrorMappingTable, status));
@@ -421,7 +421,6 @@ void test_l3_dsVideoDevice_GetVideoCodecInfo()
     gTestID = 5;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     dsError_t status   = dsERR_NONE;
-    dsVideoCodingFormat_t codec = dsVIDEO_CODEC_MPEGHPART2;
     dsVideoCodecInfo_t codecInfo;
     int32_t choice,i,j;
 
@@ -429,7 +428,7 @@ void test_l3_dsVideoDevice_GetVideoCodecInfo()
     UT_LOG_MENU_INFO(" \t  Supported Video Codec Info:");
     for (i = 0; i <= dsVIDEO_CODEC_MAX;i++)
     {        
-            UT_LOG_MENU_INFO("\t%d.  %-20s ", codec, UT_Control_GetMapString(dsVideoCodingFormatMappingTable, i));
+            UT_LOG_MENU_INFO("\t%d.  %-20s ", i, UT_Control_GetMapString(dsVideoCodingFormatMappingTable, i));
     }
     UT_LOG_MENU_INFO("------------------------------------------");
     UT_LOG_MENU_INFO(" Select the Codec for Info :");
@@ -505,7 +504,7 @@ void test_l3_dsVideoDevice_GetHDRCapabilities()
     dsVideoDevice_getHandle();
     UT_LOG_INFO("Calling dsGetHDRCapabilities(IN:Handle[%d],OUT:HDRCapabilities)",gHandle);
     status = dsGetHDRCapabilities(gHandle, &HDRCapabilities);
-    UT_LOG_INFO("Result dsGetSupportedVideoCodingFormats(), OUT:dsError_t=[%s] OUT:HDRCapabilites=[0x08%x]", \
+    UT_LOG_INFO("Result dsGetHDRCapabilities(), OUT:dsError_t=[%s] OUT:HDRCapabilites=[0x08%x]", \
                                                 UT_Control_GetMapString(dsErrorMappingTable, status), HDRCapabilities);
     DS_ASSERT(status, dsERR_NONE);
     UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -536,7 +535,7 @@ void test_l3_dsVideoDevice_dsGetFRFMode()
     dsVideoDevice_getHandle();
     UT_LOG_INFO("Calling dsGetFRFMode(IN:Handle[%d],OUT:frfMode)",gHandle);
     status = dsGetFRFMode(gHandle, &frfMode);
-    UT_LOG_INFO("Result dsGetSupportedVideoCodingFormats(), OUT:dsError_t=[%s] OUT:FRFMode=[0x08%d]", \
+    UT_LOG_INFO("Result dsGetFRFMode(), OUT:dsError_t=[%s] OUT:frfMode=[0x08%d]", \
                                                 UT_Control_GetMapString(dsErrorMappingTable, status), frfMode);
     DS_ASSERT(status, dsERR_NONE);
     UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -567,7 +566,7 @@ void test_l3_dsVideoDevice_dsGetCurrentDisplayframerate()
     dsVideoDevice_getHandle();
     UT_LOG_INFO("Calling dsGetCurrentDisplayframerate(IN:Handle[%d],OUT:currentFrameRate)",gHandle);
     status = dsGetCurrentDisplayframerate(gHandle, currentFrameRate);
-    UT_LOG_INFO("Result dsGetSupportedVideoCodingFormats(), OUT:dsError_t=[%s] OUT:currentFrameRate=[%s]", \
+    UT_LOG_INFO("Result dsGetCurrentDisplayframerate(), OUT:dsError_t=[%s] OUT:currentFrameRate=[%s]", \
                                                 UT_Control_GetMapString(dsErrorMappingTable, status), currentFrameRate);
     DS_ASSERT(status, dsERR_NONE);
     UT_LOG_INFO("Out %s", __FUNCTION__);
