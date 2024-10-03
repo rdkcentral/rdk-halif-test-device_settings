@@ -438,8 +438,9 @@ void test_l3_dsFPD_hal_FPGetSupportedLEDStates(void)
     dsError_t status = dsERR_NONE;
     dsFPDLedState_t iLedState;
 
+    UT_LOG_INFO("Calling dsFPGetSupportedLEDStates(OUT:iLEDState)");
     status = dsFPGetSupportedLEDStates(&iLedState);
-    UT_LOG_INFO("Result dsFPGetSupportedLEDStates(OUT:uLEDState : %u)dsError_t:[%s]",iLedState,UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
+    UT_LOG_INFO("Result dsFPGetSupportedLEDStates(OUT:iLEDState : %d)dsError_t:[%s]",iLedState,UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
 
     /* Check that the Indicator is valid */
@@ -516,9 +517,9 @@ void test_l3_dsFPD_hal_GetLEDState(void)
     dsError_t status = dsERR_NONE;
     dsFPDLedState_t state = 0;
 
-    UT_LOG_INFO("Calling dsFPSetLEDState(OUT:state)");
+    UT_LOG_INFO("Calling dsFPGetLEDState(OUT:state)");
     status = dsFPGetLEDState(&state);
-    UT_LOG_INFO("Result dsGetFPState(OUT:FP LED State:[%X]) dsError_t:[%s]" \
+    UT_LOG_INFO("Result dsFPGetLEDState(OUT:FP LED State:[%X]) dsError_t:[%s]" \
                                                 ,state,UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
     /* Check that the Indicator is valid */
@@ -576,7 +577,7 @@ void test_l3_dsFPD_hal_SetFPColor(void)
     }
 
     /* Check that the Indicator is valid */
-    UT_LOG_INFO("Calling SetFPColor(IN:Indicator:[0x%d], IN:Color:[%X])" \
+    UT_LOG_INFO("Calling dsSetFPColor(IN:Indicator:[0x%d], IN:Color:[%X])" \
                                                 ,eIndicator,uColor);
     status = dsSetFPColor((dsFPDIndicator_t)eIndicator,uColor);
     UT_LOG_INFO("Result dsSetFPColor() dsError_t:[%s]",UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
