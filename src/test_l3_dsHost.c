@@ -291,7 +291,7 @@ static UT_test_suite_t * pSuite = NULL;
  *
  * @return int - 0 on success, otherwise failure
  */
-int test_register_dsHost_hal_l3_tests(void)
+int test_l3_dsHost_register(void)
 {
     // Create the test suite
     pSuite = UT_add_suite("[L3 Devicesettings Host Functions] ", NULL, NULL);
