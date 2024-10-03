@@ -23,7 +23,6 @@
 
 import os
 import sys
-import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path+"/../")
@@ -34,18 +33,18 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test14_TestAudioMix(utHelperClass):
+class dsAudio_test04_MS12DialogueEnhancer(utHelperClass):
 
-    testName  = "test14_TestAudioMix"
+    testName  = "test04_MS12DialogueEnhancer"
     testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
     moduleName = "dsAudio"
     rackDevice = "dut"
-    primaryVolume = [0, 25, 50, 75, 100]
-    systemVolume = [0, 25, 50, 75, 100]
+    ms12DAPFeature = "DialogueEnhancer"
+    dialogueEnhance = [0, 4, 8, 12, 16]
 
     def __init__(self):
         """
-        Initializes the test14_TestAudioMix test .
+        Initializes the test04_MS12DialogueEnhancer test .
 
         Args:
             None.
@@ -124,13 +123,14 @@ class dsAudio_test14_TestAudioMix(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyAudio(self, primary_volume, system_volume, manual=False):
+    def testVerifyDialogueEnhance(self, stream, port, level, manual=False):
         """
         Verifies whether the audio is fine or not.
 
         Args:
-            primary_volume (int) : volume ranges 0-100
-            system_volume (int): volume ranges 0-100
+            stream (str) : Stream used for testing
+            port (str) : Audio port to verify
+            level (int): Dialogue Enhancer level. Ranges from 0-16
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
                                      Defaults to other verification methods
 
@@ -138,7 +138,7 @@ class dsAudio_test14_TestAudioMix(utHelperClass):
             bool : returns the status of audio
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Is Audio playing as expected with Mixing: Primary Volume: {primary_volume} System Volume: {system_volume}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} level {level} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
@@ -168,17 +168,24 @@ class dsAudio_test14_TestAudioMix(utHelperClass):
             # Start the stream playback
             self.testPlayer.play(stream)
 
-            for prime in self.primaryVolume:
-                for system in self.systemVolume:
-                    self.log.stepStart(f'Audio Mixing Stream: {stream} Primary Voulem: {prime}, System Volume: {system}')
+            # Loop through the supported audio ports
+            for port,index in self.testdsAudio.getSupportedPorts():
+                if self.testdsAudio.getMS12DAPFeatureSupport(port, index, self.ms12DAPFeature):
+                    # Enable the audio port
+                    self.testdsAudio.enablePort(port, index)
 
-                    self.testdsAudio.setAudioMixerLevels("dsAUDIO_INPUT_PRIMARY", prime)
+                    for level in self.dialogueEnhance:
+                        self.log.stepStart(f'MS12 {self.ms12DAPFeature} level:{level} Port:{port} Index:{index} Stream:{stream}')
 
-                    self.testdsAudio.setAudioMixerLevels("dsAUDIO_INPUT_SYSTEM", system)
+                        # Set the gain level
+                        self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":level})
 
-                    result = self.testVerifyAudio(prime, system, True)
+                        result = self.testVerifyDialogueEnhance(stream, port, level, True)
 
-                    self.log.stepResult(result, f'Audio Mixing Stream: {stream} Primary Voulem: {prime}, System Volume: {system}')
+                        self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} level:{level} Port:{port} Index:{index} Stream:{stream}')
+
+                    # Disable the audio port
+                    self.testdsAudio.disablePort(port, index)
 
             # Stop the stream playback
             self.testPlayer.stop()
@@ -186,11 +193,14 @@ class dsAudio_test14_TestAudioMix(utHelperClass):
         # Clean the assets downloaded to the device
         self.testCleanAssets()
 
+        # Terminate dsAudio Module
+        self.testdsAudio.terminate()
+
         # Delete the dsAudio class
         del self.testdsAudio
 
-        return True
+        return result
 
 if __name__ == '__main__':
-    test = dsAudio_test14_TestAudioMix()
+    test = dsAudio_test04_MS12DialogueEnhancer()
     test.run(False)

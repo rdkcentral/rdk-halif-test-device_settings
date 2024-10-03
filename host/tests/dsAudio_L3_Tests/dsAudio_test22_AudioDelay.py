@@ -33,16 +33,17 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test02_PortConnectionStatus(utHelperClass):
+class dsAudio_test22_AudioDelay(utHelperClass):
 
-    testName  = "test02_PortConnectionStatus"
+    testName  = "test22_AudioDelay"
     testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
     moduleName = "dsAudio"
     rackDevice = "dut"
+    delayList = [0, 50, 100, 150, 200]
 
     def __init__(self):
         """
-        Initializes the test02_PortConnectionStatus test .
+        Initializes the test22_AudioDelay test .
 
         Args:
             None.
@@ -52,8 +53,16 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
+        # Open Session for player
+        self.player_session = self.dut.getConsoleSession("ssh_player")
+
         # Open Session for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
+
+        player = self.cpe.get("test").get("player")
+
+        # Create player Class
+        self.testPlayer = utPlayer(self.player_session, player)
 
          # Create user response Class
         self.testUserResponse = utUserResponse()
@@ -112,24 +121,22 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    #TODO: Current version supports only manual.
-    def testWaitForConnectionChange(self, connection, manual=False):
+    #TODO: Current version supports only manual verification.
+    def testVerifyAudioDelay(self, port, delay, manual=False):
         """
-        Wait for the port connection, disconnection.
+        Verifies whether the audio is fine or not.
 
         Args:
-            connection (bool) : If True connect the port, otherwise disconnect the port
-            manual (bool, optional): Manual Control (True: manual, False: other disconnect/connect methods).
-                                     Defaults to other
+            port (str) : Audio port to verify
+            delay (float) : delay value
+            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
+                                     Defaults to other verification methods
 
         Returns:
-            None
+            bool : returns the status of audio
         """
         if manual == True:
-            if connection == True:
-                self.testUserResponse.getUserYN(f"Connect the port and press Enter:")
-            else:
-                self.testUserResponse.getUserYN(f"Disconnect the port and press Enter:")
+            return self.testUserResponse.getUserYN(f"Has Audio Delay {delay} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
@@ -155,25 +162,31 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        self.log.stepStart('Headphone Connect Test')
-        self.log.step('Connect Headphone')
+        for stream in self.testStreams:
+            # Start the stream playback
+            self.testPlayer.play(stream)
 
-        # Wait for headphone connection
-        self.testWaitForConnectionChange(True, True)
+            # Loop through the supported audio ports
+            for port,index in self.testdsAudio.getSupportedPorts():
+                if "ARC" in port or "SPDIF" in port or "HDMI" in port:
+                    # Enable the audio port
+                    self.testdsAudio.enablePort(port, index)
 
-        connectionStatus = self.testdsAudio.getHeadphoneConnectionStatus()
+                    for delay in self.delayList:
+                        self.log.stepStart(f'Audio Delay {delay} Port:{port} Index:{index} Stream:{stream}')
 
-        self.log.stepResult(connectionStatus, 'Headphone Connect Test')
+                        # Set the Audio Delay
+                        self.testdsAudio.setAudioDelay(port, index, delay)
 
-        self.log.stepStart('Headphone Disconnect Test')
-        self.log.step('Disconnect Headphone')
+                        result = self.testVerifyAudioDelay(port, delay, True)
 
-        # Wait for headphone disconnection
-        self.testWaitForConnectionChange(False, True)
+                        self.log.stepResult(result, f'Audio Delay {delay} Port:{port} Index:{index} Stream:{stream}')
 
-        connectionStatus = self.testdsAudio.getHeadphoneConnectionStatus()
+                    # Disable the audio port
+                    self.testdsAudio.disablePort(port, index)
 
-        self.log.stepResult(not connectionStatus, 'Headphone Disconnect Test')
+            # Stop the stream playback
+            self.testPlayer.stop()
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
@@ -184,8 +197,8 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
         # Delete the dsAudio class
         del self.testdsAudio
 
-        return True
+        return result
 
 if __name__ == '__main__':
-    test = dsAudio_test02_PortConnectionStatus()
+    test = dsAudio_test22_AudioDelay()
     test.run(False)

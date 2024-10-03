@@ -23,6 +23,7 @@
 
 import os
 import sys
+import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path+"/../")
@@ -33,16 +34,18 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test02_PortConnectionStatus(utHelperClass):
+class dsAudio_test23_AudioFormat(utHelperClass):
 
-    testName  = "test02_PortConnectionStatus"
+    testName  = "test23_AudioFormat"
     testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
     moduleName = "dsAudio"
     rackDevice = "dut"
+    audioFormats = ["NONE", "PCM", "AC3", "EAC3", "AAC", "VORBIS", "WMA"]
+    dolbyStreams = ["AC4", "MAT", "TRUEHD", "EAC3_ATMOS", "TRUEHD_ATMOS", "MAT_ATMOS", "AC4_ATMOS"]
 
     def __init__(self):
         """
-        Initializes the test02_PortConnectionStatus test .
+        Initializes the test23_AudioFormat test .
 
         Args:
             None.
@@ -52,8 +55,16 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
+        # Open Session for player
+        self.player_session = self.dut.getConsoleSession("ssh_player")
+
         # Open Session for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
+
+        player = self.cpe.get("test").get("player")
+
+        # Create player Class
+        self.testPlayer = utPlayer(self.player_session, player)
 
          # Create user response Class
         self.testUserResponse = utUserResponse()
@@ -155,25 +166,23 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        self.log.stepStart('Headphone Connect Test')
-        self.log.step('Connect Headphone')
+        i = 0
+        for format in self.audioFormats:
+            # Start the stream playback
+            if format is not "NONE":
+                self.testPlayer.play(self.testStreams[i])
+                i += 1
+                time.sleep(3)
 
-        # Wait for headphone connection
-        self.testWaitForConnectionChange(True, True)
+            self.log.stepStart(f'Audio Format {format} Test')
 
-        connectionStatus = self.testdsAudio.getHeadphoneConnectionStatus()
+            audioFormat = self.testdsAudio.getAudioFormat()
 
-        self.log.stepResult(connectionStatus, 'Headphone Connect Test')
+            self.log.stepResult(format in audioFormat, f'Audio Format {format} Test')
 
-        self.log.stepStart('Headphone Disconnect Test')
-        self.log.step('Disconnect Headphone')
-
-        # Wait for headphone disconnection
-        self.testWaitForConnectionChange(False, True)
-
-        connectionStatus = self.testdsAudio.getHeadphoneConnectionStatus()
-
-        self.log.stepResult(not connectionStatus, 'Headphone Disconnect Test')
+            if format is not "NONE":
+                # Stop the stream playback
+                self.testPlayer.stop()
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
@@ -187,5 +196,5 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
         return True
 
 if __name__ == '__main__':
-    test = dsAudio_test02_PortConnectionStatus()
+    test = dsAudio_test23_AudioFormat()
     test.run(False)

@@ -34,18 +34,18 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test11_TestAudioFormat(utHelperClass):
+class dsAudio_test26_AudioMix(utHelperClass):
 
-    testName  = "test11_TestAudioFormat"
+    testName  = "test26_AudioMix"
     testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
     moduleName = "dsAudio"
     rackDevice = "dut"
-    audioFormats = ["NONE", "PCM", "AC3", "EAC3", "AAC", "VORBIS", "WMA"]
-    dolbyStreams = ["AC4", "MAT", "TRUEHD", "EAC3_ATMOS", "TRUEHD_ATMOS", "MAT_ATMOS", "AC4_ATMOS"]
+    primaryVolume = [0, 25, 50, 75, 100]
+    systemVolume = [0, 25, 50, 75, 100]
 
     def __init__(self):
         """
-        Initializes the test11_TestAudioFormat test .
+        Initializes the test26_AudioMix test .
 
         Args:
             None.
@@ -123,24 +123,22 @@ class dsAudio_test11_TestAudioFormat(utHelperClass):
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    #TODO: Current version supports only manual.
-    def testWaitForConnectionChange(self, connection, manual=False):
+    #TODO: Current version supports only manual verification.
+    def testVerifyAudio(self, primary_volume, system_volume, manual=False):
         """
-        Wait for the port connection, disconnection.
+        Verifies whether the audio is fine or not.
 
         Args:
-            connection (bool) : If True connect the port, otherwise disconnect the port
-            manual (bool, optional): Manual Control (True: manual, False: other disconnect/connect methods).
-                                     Defaults to other
+            primary_volume (int) : volume ranges 0-100
+            system_volume (int): volume ranges 0-100
+            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
+                                     Defaults to other verification methods
 
         Returns:
-            None
+            bool : returns the status of audio
         """
         if manual == True:
-            if connection == True:
-                self.testUserResponse.getUserYN(f"Connect the port and press Enter:")
-            else:
-                self.testUserResponse.getUserYN(f"Disconnect the port and press Enter:")
+            return self.testUserResponse.getUserYN(f"Is Audio playing as expected with Mixing: Primary Volume: {primary_volume} System Volume: {system_volume}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
@@ -166,26 +164,30 @@ class dsAudio_test11_TestAudioFormat(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        i = 0
-        for format in self.audioFormats:
+        for stream in self.testStreams:
             # Start the stream playback
-            if format is not "NONE":
-                self.testPlayer.play(self.testStreams[i])
-                i += 1
-                time.sleep(3)
+            self.testPlayer.play(stream)
 
-            self.log.stepStart(f'Audio Format {format} Test')
+            for prime in self.primaryVolume:
+                for system in self.systemVolume:
+                    self.log.stepStart(f'Audio Mixing Stream: {stream} Primary Voulem: {prime}, System Volume: {system}')
 
-            audioFormat = self.testdsAudio.getAudioFormat()
+                    self.testdsAudio.setAudioMixerLevels("dsAUDIO_INPUT_PRIMARY", prime)
 
-            self.log.stepResult(format in audioFormat, f'Audio Format {format} Test')
+                    self.testdsAudio.setAudioMixerLevels("dsAUDIO_INPUT_SYSTEM", system)
 
-            if format is not "NONE":
-                # Stop the stream playback
-                self.testPlayer.stop()
+                    result = self.testVerifyAudio(prime, system, True)
+
+                    self.log.stepResult(result, f'Audio Mixing Stream: {stream} Primary Voulem: {prime}, System Volume: {system}')
+
+            # Stop the stream playback
+            self.testPlayer.stop()
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
+
+        # Terminate dsAudio Module
+        self.testdsAudio.terminate()
 
         # Delete the dsAudio class
         del self.testdsAudio
@@ -193,5 +195,5 @@ class dsAudio_test11_TestAudioFormat(utHelperClass):
         return True
 
 if __name__ == '__main__':
-    test = dsAudio_test11_TestAudioFormat()
+    test = dsAudio_test26_AudioMix()
     test.run(False)

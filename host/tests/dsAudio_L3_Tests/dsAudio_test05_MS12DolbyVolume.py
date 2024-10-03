@@ -33,17 +33,17 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test10_TestAudioDelay(utHelperClass):
+class dsAudio_test05_MS12DolbyVolume(utHelperClass):
 
-    testName  = "test10_TestAudioDelay"
+    testName  = "test05_MS12DolbyVolume"
     testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
     moduleName = "dsAudio"
     rackDevice = "dut"
-    delayList = [0, 50, 100, 150, 200]
+    ms12DAPFeature = "DolbyVolume"
 
     def __init__(self):
         """
-        Initializes the test10_TestAudioDelay test .
+        Initializes the test05_MS12DolbyVolume test .
 
         Args:
             None.
@@ -122,13 +122,14 @@ class dsAudio_test10_TestAudioDelay(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyAudioDelay(self, port, delay, manual=False):
+    def testVerifyDolbyVolume(self, stream, port, mode, manual=False):
         """
         Verifies whether the audio is fine or not.
 
         Args:
+            stream (str) : Stream used for testing
             port (str) : Audio port to verify
-            delay (float) : delay value
+            mode (bool): Dolby volume mode
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
                                      Defaults to other verification methods
 
@@ -136,13 +137,13 @@ class dsAudio_test10_TestAudioDelay(utHelperClass):
             bool : returns the status of audio
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has Audio Delay {delay} applied to the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has MS12 Dolby Volume mode {mode} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
-        """This function will test the Audio Ports by enabling and disabling the ports
+        """This function will test the MS12 Dolby volume mode
 
         Returns:
             bool
@@ -154,9 +155,6 @@ class dsAudio_test10_TestAudioDelay(utHelperClass):
         # Run Prerequisites listed in the test setup configuration file
         self.testRunPrerequisites()
 
-        # Start the stream playback
-        self.testPlayer.play(self.testStreams[0])
-
         # Create the dsAudio class
         self.testdsAudio = dsAudioClass(self.deviceProfile, self.hal_session)
 
@@ -165,32 +163,45 @@ class dsAudio_test10_TestAudioDelay(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        # Loop through the supported audio ports
-        for port,index in self.testdsAudio.getSupportedPorts():
-            if "ARC" in port or "SPDIF" in port or "HDMI" in port:
-                # Enable the audio port
-                self.testdsAudio.enablePort(port, index)
+        for stream in self.testStreams:
+            # Start the stream playback
+            self.testPlayer.play(stream)
 
-                for delay in self.delayList:
-                    self.log.stepStart(f'Audio Delay {delay} for {port} Port')
-                    self.log.step(f'Set Audio Delay {delay} for {port} Port')
+            # Loop through the supported audio ports
+            for port,index in self.testdsAudio.getSupportedPorts():
+                if self.testdsAudio.getMS12DAPFeatureSupport(port, index, self.ms12DAPFeature):
+                    # Enable the audio port
+                    self.testdsAudio.enablePort(port, index)
 
-                    # Set the Audio Delay
-                    self.testdsAudio.setAudioDelay(port, index, delay)
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
 
-                    self.log.step(f'Verify Audio Delay {delay} for {port} Port')
-                    result = self.testVerifyAudioDelay(port, delay, True)
+                    # Enable Dolby Volume mode
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":True})
 
-                    self.log.stepResult(result, f'Audio Delay {delay} Verification for {port} Port')
+                    result = self.testVerifyDolbyVolume(stream, port, True, True)
 
-                # Disable the audio port
-                self.testdsAudio.disablePort(port, index)
+                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
 
-        # Stop the stream playback
-        self.testPlayer.stop()
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
+
+                    # Disable Dolby Volume mode
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":False})
+
+                    result = self.testVerifyDolbyVolume(stream, port, False, True)
+
+                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{False} Port:{port} Index:{index} Stream:{stream}')
+
+                    # Disable the audio port
+                    self.testdsAudio.disablePort(port, index)
+
+            # Stop the stream playback
+            self.testPlayer.stop()
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
+
+        # Terminate dsAudio Module
+        self.testdsAudio.terminate()
 
         # Delete the dsAudio class
         del self.testdsAudio
@@ -198,5 +209,5 @@ class dsAudio_test10_TestAudioDelay(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test10_TestAudioDelay()
+    test = dsAudio_test05_MS12DolbyVolume()
     test.run(False)

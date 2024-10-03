@@ -23,6 +23,7 @@
 
 import os
 import sys
+import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path+"/../")
@@ -33,16 +34,19 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test02_PortConnectionStatus(utHelperClass):
+class dsAudio_test25_PrimarySecondaryLanguage(utHelperClass):
 
-    testName  = "test02_PortConnectionStatus"
+    testName  = "test25_PrimarySecondaryLanguage"
     testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
     moduleName = "dsAudio"
     rackDevice = "dut"
+    streamLanguage = [{"Primary": ["eng", "ger"], "Secondary": ["eng", "spa"]},
+                      {"Primary": ["eng", "ger"], "Secondary": ["eng", "spa"]},
+                      {"Primary": ["eng", "ger"], "Secondary": ["eng", "spa"]}]
 
     def __init__(self):
         """
-        Initializes the test02_PortConnectionStatus test .
+        Initializes the test25_PrimarySecondaryLanguage test .
 
         Args:
             None.
@@ -52,8 +56,16 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
+        # Open Session for player
+        self.player_session = self.dut.getConsoleSession("ssh_player")
+
         # Open Session for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
+
+        player = self.cpe.get("test").get("player")
+
+        # Create player Class
+        self.testPlayer = utPlayer(self.player_session, player)
 
          # Create user response Class
         self.testUserResponse = utUserResponse()
@@ -112,24 +124,22 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    #TODO: Current version supports only manual.
-    def testWaitForConnectionChange(self, connection, manual=False):
+    #TODO: Current version supports only manual verification.
+    def testVerifyAudio(self, language_type:str, language:str, manual=False):
         """
-        Wait for the port connection, disconnection.
+        Verifies whether the audio is fine or not.
 
         Args:
-            connection (bool) : If True connect the port, otherwise disconnect the port
-            manual (bool, optional): Manual Control (True: manual, False: other disconnect/connect methods).
-                                     Defaults to other
+            language_type (str): Primary:Primary language, Secondary:Secondary language.
+            language (str): 3 letter long language as per ISO 639-3. eg: eng - English
+            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
+                                     Defaults to other verification methods
 
         Returns:
-            None
+            bool : returns the status of audio
         """
         if manual == True:
-            if connection == True:
-                self.testUserResponse.getUserYN(f"Connect the port and press Enter:")
-            else:
-                self.testUserResponse.getUserYN(f"Disconnect the port and press Enter:")
+            return self.testUserResponse.getUserYN(f"Is Audio playing as expected with {language_type} {language} Language? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
@@ -155,25 +165,40 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        self.log.stepStart('Headphone Connect Test')
-        self.log.step('Connect Headphone')
+        i = 0
+        for stream in self.testStreams:
 
-        # Wait for headphone connection
-        self.testWaitForConnectionChange(True, True)
+            self.testdsAudio.enableAssociateAudioMixig(False)
 
-        connectionStatus = self.testdsAudio.getHeadphoneConnectionStatus()
+            # Start the stream playback
+            self.testPlayer.play(stream)
 
-        self.log.stepResult(connectionStatus, 'Headphone Connect Test')
+            self.testdsAudio.enableAssociateAudioMixig(True, -32)
 
-        self.log.stepStart('Headphone Disconnect Test')
-        self.log.step('Disconnect Headphone')
+            for primary in self.streamLanguage[i]["Primary"]:
+                self.log.stepStart(f'Primary Language Test Stream: {stream} Language: {primary}')
 
-        # Wait for headphone disconnection
-        self.testWaitForConnectionChange(False, True)
+                self.testdsAudio.setPrimarySecondaryLanguage("Primary", primary)
 
-        connectionStatus = self.testdsAudio.getHeadphoneConnectionStatus()
+                result = self.testVerifyAudio("Primary", primary, True)
 
-        self.log.stepResult(not connectionStatus, 'Headphone Disconnect Test')
+                self.log.stepResult(result, f'Primary Language Test Stream: {stream} Language: {primary}')
+
+            self.testdsAudio.enableAssociateAudioMixig(True, 32)
+
+            for secondary in self.streamLanguage[i]["Secondary"]:
+                self.log.stepStart(f'Secondary Language Test Stream: {stream} Language: {secondary}')
+
+                self.testdsAudio.setPrimarySecondaryLanguage("Secondary", secondary)
+
+                result = self.testVerifyAudio("Secondary", secondary, True)
+
+                self.log.stepResult(result, f'Secondary Language Test Stream: {stream} Language: {secondary}')
+
+            # Stop the stream playback
+            self.testPlayer.stop()
+
+            i += 1
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
@@ -187,5 +212,5 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
         return True
 
 if __name__ == '__main__':
-    test = dsAudio_test02_PortConnectionStatus()
+    test = dsAudio_test25_PrimarySecondaryLanguage()
     test.run(False)

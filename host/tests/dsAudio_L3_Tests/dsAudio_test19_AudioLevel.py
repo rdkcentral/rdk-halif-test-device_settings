@@ -33,9 +33,9 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test07_TestAudioLevel(utHelperClass):
+class dsAudio_test19_AudioLevel(utHelperClass):
 
-    testName  = "test07_TestAudioLevel"
+    testName  = "test19_AudioLevel"
     testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
     moduleName = "dsAudio"
     rackDevice = "dut"
@@ -43,7 +43,7 @@ class dsAudio_test07_TestAudioLevel(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test07_TestAudioLevel test .
+        Initializes the test19_AudioLevel test .
 
         Args:
             None.
@@ -154,9 +154,6 @@ class dsAudio_test07_TestAudioLevel(utHelperClass):
         # Run Prerequisites listed in the test setup configuration file
         self.testRunPrerequisites()
 
-        # Start the stream playback
-        self.testPlayer.play(self.testStreams[0])
-
         # Create the dsAudio class
         self.testdsAudio = dsAudioClass(self.deviceProfile, self.hal_session)
 
@@ -165,32 +162,37 @@ class dsAudio_test07_TestAudioLevel(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        # Loop through the supported audio ports
-        for port,index in self.testdsAudio.getSupportedPorts():
-            if "HEADPHONE" in port or "SPEAKER" in port:
-                # Enable the audio port
-                self.testdsAudio.enablePort(port, index)
+        for stream in self.testStreams:
+            # Start the stream playback
+            self.testPlayer.play(stream)
 
-                for gain in self.gainLevels:
-                    self.log.stepStart(f'Gain Level {gain} for {port} Port')
-                    self.log.step(f'Set Gain Level {gain} for {port} Port')
+            # Loop through the supported audio ports
+            for port,index in self.testdsAudio.getSupportedPorts():
+                if "HEADPHONE" in port or "SPEAKER" in port:
+                    # Enable the audio port
+                    self.testdsAudio.enablePort(port, index)
 
-                    # Set the gain level
-                    self.testdsAudio.setGainLevel(port, index, gain)
+                    for gain in self.gainLevels:
+                        self.log.stepStart(f'Gain Level:{gain} Port:{port} Index:{index} Stream:{stream}')
 
-                    self.log.step(f'Verify Gain Level {gain} for {port} Port')
-                    result = self.testVerifyAudioGainLevel(port, gain, True)
+                        # Set the gain level
+                        self.testdsAudio.setGainLevel(port, index, gain)
 
-                    self.log.stepResult(result, f'Audio Gain Level {gain} Verification for {port} Port')
+                        result = self.testVerifyAudioGainLevel(port, gain, True)
 
-                # Disable the audio port
-                self.testdsAudio.disablePort(port, index)
+                        self.log.stepResult(result, f'Gain Level:{gain} Port:{port} Index:{index} Stream:{stream}')
 
-        # Stop the stream playback
-        self.testPlayer.stop()
+                    # Disable the audio port
+                    self.testdsAudio.disablePort(port, index)
+
+            # Stop the stream playback
+            self.testPlayer.stop()
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
+
+        # Terminate dsAudio Module
+        self.testdsAudio.terminate()
 
         # Delete the dsAudio class
         del self.testdsAudio
@@ -198,5 +200,5 @@ class dsAudio_test07_TestAudioLevel(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test07_TestAudioLevel()
+    test = dsAudio_test19_AudioLevel()
     test.run(False)
