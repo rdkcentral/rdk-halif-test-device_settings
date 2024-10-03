@@ -6,7 +6,7 @@
 - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
 - [References](#references)
 - [Level 3 Test cases High Level Overview](#level-3-test-cases-high-level-overview)
-- [Level 3 Python Test Cases High Level Overview](#level-3-python-test-casesc-high-level-overview)
+- [Level 3 Python Test Cases High Level Overview](#level-3-python-test-cases-high-level-overview)
 
 ## Overview
 
@@ -53,7 +53,7 @@ classDiagram
     ut_raft <|-- L3_TestClasses : inherits
     L3_TestClasses ..> dsFPD : uses
     note for testControl "uses rackConfig.yaml and deviceConfig.yaml"
-    note for dsAudio "uses platformProfile.yaml"
+    note for dsFPD "uses platformProfile.yaml"
     note for L3_TestClasses "uses testSetupConfig.yaml"
     note for ut_raft "suite Navigator uses testSuite.yaml"
 ```
