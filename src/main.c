@@ -93,13 +93,6 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    registerReturn = UT_register_APIDEF_l3_tests();
-    if ( registerReturn == -1 )
-    {
-        printf("\n UT_register_APIDEF_l3_tests() returned failure");
-        return -1;
-    }
-
     /* Begin test executions */
     UT_run_tests();
 
