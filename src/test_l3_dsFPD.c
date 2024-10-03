@@ -82,8 +82,8 @@
 #define DS_ASSERT assert
 #define UT_LOG_MENU_INFO UT_LOG_INFO
 
-static int gTestGroup = 3;
-static int gTestID = 1;
+static int32_t gTestGroup = 3;
+static int32_t gTestID = 1;
 static int32_t eIndicator;
 
 const static ut_control_keyStringMapping_t dsFrontPanelErrorCodeTable[] = {
@@ -141,17 +141,17 @@ const static ut_control_keyStringMapping_t dsFrontPanelLEDState[] = {
 
 static void readAndDiscardRestOfLine(FILE* in)
 {
-    int c;
+    int32_t c;
     while ( (c = fgetc(in)) != EOF && c != '\n');
 }
 
 
-static int selectIndicator()
+static int32_t selectIndicator()
 {
 
     UT_LOG_MENU_INFO(" \t  Supported Indicators are:");
     UT_LOG_MENU_INFO("------------------------------------------");
-    for (int indicator = 0; indicator <= dsFPD_INDICATOR_MAX; indicator++)
+    for (int32_t indicator = 0; indicator <= dsFPD_INDICATOR_MAX; indicator++)
     {
         UT_LOG_INFO("\t%d.  %-20s\n", indicator, UT_Control_GetMapString(dsFrontPanelIndicatorTable, indicator));
     }
@@ -212,7 +212,7 @@ void test_l3_dsFPD_hal_Init(void)
 void test_l3_dsFPD_hal_SetFPState(void)
 {
     gTestID = 2;
-    int ret = 0;
+    int32_t ret = 0;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsError_t status = dsERR_NONE;
     int32_t iState = 0;
@@ -224,7 +224,7 @@ void test_l3_dsFPD_hal_SetFPState(void)
     }
     UT_LOG_MENU_INFO(" \t  Supported Front Panel States are:");
     UT_LOG_MENU_INFO("------------------------------------------");
-    for (int state = 0; state < dsFPD_STATE_MAX; state++)
+    for (int32_t state = 0; state < dsFPD_STATE_MAX; state++)
     {
         UT_LOG_MENU_INFO("\t%d.  %-20s\n", state, UT_Control_GetMapString(dsFrontPanelStateTable, state));
     }
@@ -269,7 +269,7 @@ void test_l3_dsFPD_hal_GetFPState(void)
 
     dsError_t status = dsERR_NONE;
     dsFPDState_t eState = 0;
-    int ret = 0;
+    int32_t ret = 0;
 
     ret = selectIndicator();
     if(!ret)
@@ -308,7 +308,7 @@ void test_l3_dsFPD_hal_SetFPBlink(void)
 {
     gTestID = 4;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    int ret = 0;
+    int32_t ret = 0;
     dsError_t status = dsERR_NONE;
     uint32_t uBlinkDuration;
     uint32_t uBlinkIterations;
@@ -355,7 +355,7 @@ void test_l3_dsFPD_hal_SetFPBrightness(void)
 {
     gTestID = 5;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    int ret = 0;
+    int32_t ret = 0;
     dsError_t status = dsERR_NONE;
     uint32_t uBrightness;
 
@@ -399,7 +399,7 @@ void test_l3_dsFPD_hal_GetFPBrightness(void)
 {
     gTestID = 6;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    int ret = 0;
+    int32_t ret = 0;
     dsError_t status = dsERR_NONE;
     dsFPDBrightness_t brightness = 0;
 
@@ -471,7 +471,7 @@ void test_l3_dsFPD_hal_SetLEDState(void)
     UT_LOG_MENU_INFO(" \t  Supported POWER LED States are:");
     UT_LOG_MENU_INFO("------------------------------------------");
 
-    for (int fpState = dsFPD_LED_DEVICE_NONE; fpState < dsFPD_LED_DEVICE_MAX; fpState++)
+    for (int32_t fpState = dsFPD_LED_DEVICE_NONE; fpState < dsFPD_LED_DEVICE_MAX; fpState++)
     {
         UT_LOG_MENU_INFO("\t%d.  %-20s\n", fpState, UT_Control_GetMapString(dsFrontPanelLEDState, fpState));
     }
@@ -544,7 +544,7 @@ void test_l3_dsFPD_hal_SetFPColor(void)
 {
     gTestID = 10;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    int ret = 0;
+    int32_t ret = 0;
     dsError_t status = dsERR_NONE;
     uint32_t uColor;
     bool isValidColor = false;
@@ -555,7 +555,7 @@ void test_l3_dsFPD_hal_SetFPColor(void)
     UT_LOG_MENU_INFO(" \t  Supported Front Panel color for the indicator %s are:",UT_Control_GetMapString(dsFrontPanelIndicatorTable, eIndicator));
     UT_LOG_MENU_INFO("------------------------------------------");
 
-    for (int j = 0; j < dsFPD_COLOR_MAX; j++)
+    for (int32_t j = 0; j < dsFPD_COLOR_MAX; j++)
     {
         UT_LOG_MENU_INFO("\t0X%06X.  %-20s\n", dsFrontPanelColorTable[j].value, dsFrontPanelColorTable[j].string);
     }
@@ -564,7 +564,7 @@ void test_l3_dsFPD_hal_SetFPColor(void)
     scanf("%u", &uColor);
     readAndDiscardRestOfLine(stdin);
     isValidColor = false;
-    for (int j = 0; j < dsFPD_COLOR_MAX; j++)
+    for (int32_t j = 0; j < dsFPD_COLOR_MAX; j++)
     {
                 if( dsFrontPanelColorTable[j].value == uColor)
                     isValidColor = true;
@@ -606,7 +606,7 @@ void test_l3_dsFPD_hal_GetFPColor(void)
 
     dsError_t status = dsERR_NONE;
     dsFPDColor_t color;
-    int ret = 0;
+    int32_t ret = 0;
 
     ret = selectIndicator();
     if(!ret)
@@ -656,9 +656,9 @@ static UT_test_suite_t * pSuite = NULL;
 /**
  * @brief Register the main tests for this module
  *
- * @return int - 0 on success, otherwise failure
+ * @return int32_t - 0 on success, otherwise failure
  */
-int test_l3_dsFPD_register(void)
+int32_t test_l3_dsFPD_register(void)
 {
     // Create the test suite
     pSuite = UT_add_suite("[L3 Front Panel Functions] ", NULL, NULL);
