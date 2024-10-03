@@ -33,16 +33,18 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test09_TestMute(utHelperClass):
+class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
 
-    testName  = "test09_TestMute"
+    testName  = "test06_MS12IntelligentEqualizer"
     testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
     moduleName = "dsAudio"
     rackDevice = "dut"
+    ms12DAPFeature = "IntelligentEqualizer"
+    equalizerModes = ["OFF", "Open", "Rich", "Focused", "Balanced", "Warm", "Detailed"]
 
     def __init__(self):
         """
-        Initializes the test09_TestMute test .
+        Initializes the test06_MS12IntelligentEqualizer test .
 
         Args:
             None.
@@ -121,12 +123,14 @@ class dsAudio_test09_TestMute(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyAudio(self, port, manual=False):
+    def testVerifyIntelligentEqualizer(self, stream, port, mode, manual=False):
         """
         Verifies whether the audio is fine or not.
 
         Args:
+            stream (str) : Stream used for testing
             port (str) : Audio port to verify
+            mode (str): IntelligentEqualizer modes
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
                                      Defaults to other verification methods
 
@@ -134,7 +138,7 @@ class dsAudio_test09_TestMute(utHelperClass):
             bool : returns the status of audio
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Is audio playing on the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} mode {mode} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
@@ -152,9 +156,6 @@ class dsAudio_test09_TestMute(utHelperClass):
         # Run Prerequisites listed in the test setup configuration file
         self.testRunPrerequisites()
 
-        # Start the stream playback
-        self.testPlayer.play(self.testStreams[0])
-
         # Create the dsAudio class
         self.testdsAudio = dsAudioClass(self.deviceProfile, self.hal_session)
 
@@ -163,42 +164,37 @@ class dsAudio_test09_TestMute(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        # Loop through the supported audio ports
-        for port,index in self.testdsAudio.getSupportedPorts():
+        for stream in self.testStreams:
+            # Start the stream playback
+            self.testPlayer.play(stream)
 
-            # Enable the audio port
-            self.testdsAudio.enablePort(port, index)
+            # Loop through the supported audio ports
+            for port,index in self.testdsAudio.getSupportedPorts():
+                if self.testdsAudio.getMS12DAPFeatureSupport(port, index, self.ms12DAPFeature):
+                    # Enable the audio port
+                    self.testdsAudio.enablePort(port, index)
 
-            self.log.stepStart(f'Mute {port} Port')
-            self.log.step(f'Set Mute for {port} Port')
+                    for mode in self.equalizerModes:
+                        self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} Port:{port} Index:{index} Stream:{stream}')
 
-            # Mute the Audio
-            self.testdsAudio.setAudioMute(port, index, True)
+                        # Set the Interlligent equalizer mode
+                        self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":mode})
 
-            self.log.step(f'Verify the Audio for {port} Port')
-            result = self.testVerifyAudio(port, True)
+                        result = self.testVerifyIntelligentEqualizer(stream, port, mode, True)
 
-            self.log.stepResult(result, f'Mute Verification for {port} Port')
+                        self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} Port:{port} Index:{index} Stream:{stream}')
 
-            self.log.stepStart(f'UnMute {port} Port')
-            self.log.step(f'Set UnMute for {port} Port')
+                    # Disable the audio port
+                    self.testdsAudio.disablePort(port, index)
 
-            # UnMute the Audio
-            self.testdsAudio.setAudioMute(port, index, False)
-
-            self.log.step(f'Verify the Audio for {port} Port')
-            result = self.testVerifyAudio(port, True)
-
-            self.log.stepResult(not result, f'UnMute Verification for {port} Port')
-
-            # Disable the audio port
-            self.testdsAudio.disablePort(port, index)
-
-        # Stop the stream playback
-        self.testPlayer.stop()
+            # Stop the stream playback
+            self.testPlayer.stop()
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
+
+        # Terminate dsAudio Module
+        self.testdsAudio.terminate()
 
         # Delete the dsAudio class
         del self.testdsAudio
@@ -206,5 +202,5 @@ class dsAudio_test09_TestMute(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test09_TestMute()
+    test = dsAudio_test06_MS12IntelligentEqualizer()
     test.run(False)

@@ -23,7 +23,6 @@
 
 import os
 import sys
-import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path+"/../")
@@ -34,19 +33,16 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test13_TestPrimarySecondaryLanguage(utHelperClass):
+class dsAudio_test21_MuteUnMute(utHelperClass):
 
-    testName  = "test13_TestPrimarySecondaryLanguage"
+    testName  = "test21_MuteUnMute"
     testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
     moduleName = "dsAudio"
     rackDevice = "dut"
-    streamLanguage = [{"Primary": ["eng", "ger"], "Secondary": ["eng", "spa"]},
-                      {"Primary": ["eng", "ger"], "Secondary": ["eng", "spa"]},
-                      {"Primary": ["eng", "ger"], "Secondary": ["eng", "spa"]}]
 
     def __init__(self):
         """
-        Initializes the test13_TestPrimarySecondaryLanguage test .
+        Initializes the test21_MuteUnMute test .
 
         Args:
             None.
@@ -125,13 +121,12 @@ class dsAudio_test13_TestPrimarySecondaryLanguage(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyAudio(self, language_type:str, language:str, manual=False):
+    def testVerifyAudio(self, port, manual=False):
         """
         Verifies whether the audio is fine or not.
 
         Args:
-            language_type (str): Primary:Primary language, Secondary:Secondary language.
-            language (str): 3 letter long language as per ISO 639-3. eg: eng - English
+            port (str) : Audio port to verify
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
                                      Defaults to other verification methods
 
@@ -139,7 +134,7 @@ class dsAudio_test13_TestPrimarySecondaryLanguage(utHelperClass):
             bool : returns the status of audio
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Is Audio playing as expected with {language_type} {language} Language? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Is audio playing on the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
@@ -165,49 +160,50 @@ class dsAudio_test13_TestPrimarySecondaryLanguage(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        i = 0
         for stream in self.testStreams:
-
-            self.testdsAudio.enableAssociateAudioMixig(False)
-
             # Start the stream playback
             self.testPlayer.play(stream)
+            # Loop through the supported audio ports
+            for port,index in self.testdsAudio.getSupportedPorts():
 
-            self.testdsAudio.enableAssociateAudioMixig(True, -32)
+                # Enable the audio port
+                self.testdsAudio.enablePort(port, index)
 
-            for primary in self.streamLanguage[i]["Primary"]:
-                self.log.stepStart(f'Primary Language Test Stream: {stream} Language: {primary}')
+                self.log.stepStart(f'Mute Test Port:{port} Index:{index} Stream:{stream}')
 
-                self.testdsAudio.setPrimarySecondaryLanguage("Primary", primary)
+                # Mute the Audio
+                self.testdsAudio.setAudioMute(port, index, True)
 
-                result = self.testVerifyAudio("Primary", primary, True)
+                result = self.testVerifyAudio(port, True)
 
-                self.log.stepResult(result, f'Primary Language Test Stream: {stream} Language: {primary}')
+                self.log.stepResult(result, f'Mute Test Port:{port} Index:{index} Stream:{stream}')
 
-            self.testdsAudio.enableAssociateAudioMixig(True, 32)
+                self.log.stepStart(f'UnMute Test Port:{port} Index:{index} Stream:{stream}')
 
-            for secondary in self.streamLanguage[i]["Secondary"]:
-                self.log.stepStart(f'Secondary Language Test Stream: {stream} Language: {secondary}')
+                # UnMute the Audio
+                self.testdsAudio.setAudioMute(port, index, False)
 
-                self.testdsAudio.setPrimarySecondaryLanguage("Secondary", secondary)
+                result = self.testVerifyAudio(port, True)
 
-                result = self.testVerifyAudio("Secondary", secondary, True)
+                self.log.stepResult(not result, f'UnMute Test Port:{port} Index:{index} Stream:{stream}')
 
-                self.log.stepResult(result, f'Secondary Language Test Stream: {stream} Language: {secondary}')
+                # Disable the audio port
+                self.testdsAudio.disablePort(port, index)
 
             # Stop the stream playback
             self.testPlayer.stop()
 
-            i += 1
-
         # Clean the assets downloaded to the device
         self.testCleanAssets()
+
+        # Terminate dsAudio Module
+        self.testdsAudio.terminate()
 
         # Delete the dsAudio class
         del self.testdsAudio
 
-        return True
+        return result
 
 if __name__ == '__main__':
-    test = dsAudio_test13_TestPrimarySecondaryLanguage()
+    test = dsAudio_test21_MuteUnMute()
     test.run(False)

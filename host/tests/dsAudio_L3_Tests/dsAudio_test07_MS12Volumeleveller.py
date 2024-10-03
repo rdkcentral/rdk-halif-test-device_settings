@@ -23,7 +23,6 @@
 
 import os
 import sys
-import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path+"/../")
@@ -34,17 +33,19 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test12_TestAssociateMix(utHelperClass):
+class dsAudio_test07_MS12Volumeleveller(utHelperClass):
 
-    testName  = "test12_TestAssociateMix"
+    testName  = "test07_MS12Volumeleveller"
     testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
     moduleName = "dsAudio"
     rackDevice = "dut"
-    faderValues = [-32, -15, 0, 15, 32]
+    ms12DAPFeature = "Volumeleveller"
+    volumeModes = [0, 1, 2]
+    volumeLevels = [0, 2, 4, 6, 8, 10]
 
     def __init__(self):
         """
-        Initializes the test12_TestAssociateMix test .
+        Initializes the test07_MS12Volumeleveller test .
 
         Args:
             None.
@@ -123,13 +124,15 @@ class dsAudio_test12_TestAssociateMix(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyAudio(self, mixer_status, fader, manual=False):
+    def testVerifyVolumeleveller(self, stream, port, mode, level, manual=False):
         """
         Verifies whether the audio is fine or not.
 
         Args:
-            mixer_status (bool) : True: Enabled associate audio mixing, False: Disabled
-            fader (int): Fader Control,-32:mute associated audio) to 32:mute main audio
+            stream (str) : Stream used for testing
+            port (str) : Audio port to verify
+            mode (str): Volumeleveller modes
+            level (int): Volumeleveller level
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
                                      Defaults to other verification methods
 
@@ -137,7 +140,7 @@ class dsAudio_test12_TestAssociateMix(utHelperClass):
             bool : returns the status of audio
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Is Audio playing as expected with Mixing: {mixer_status} fader: {fader}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} mode {mode} level {level} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
@@ -164,26 +167,30 @@ class dsAudio_test12_TestAssociateMix(utHelperClass):
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
         for stream in self.testStreams:
-
-            self.log.stepStart(f'Associate Mixing Disabled, Stream: {stream} Fader: {fade}')
-
-            self.testdsAudio.enableAssociateAudioMixig(False)
-
             # Start the stream playback
             self.testPlayer.play(stream)
 
-            result = self.testVerifyAudio(False, 0, True)
+            # Loop through the supported audio ports
+            for port,index in self.testdsAudio.getSupportedPorts():
+                if self.testdsAudio.getMS12DAPFeatureSupport(port, index, self.ms12DAPFeature):
+                    # Enable the audio port
+                    self.testdsAudio.enablePort(port, index)
 
-            self.log.stepResult(result, f'Associate Mixing Disabled, Stream: {stream} Fader: {fade}')
+                    for mode in self.volumeModes:
+                        for level in self.volumeLevels:
+                            if (mode == 0 and level > 0):
+                                continue
+                            self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} level:{level} Port:{port} Index:{index} Stream:{stream}')
 
-            for fade in self.faderValues:
-                self.log.stepStart(f'Associate Mixing Stream: {stream} Fader: {fade}')
+                            # Set the Interlligent equalizer mode
+                            self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, level]})
 
-                self.testdsAudio.enableAssociateAudioMixig(True, fade)
+                            result = self.testVerifyVolumeleveller(stream, port, mode, level, True)
 
-                result = self.testVerifyAudio(True, fade, True)
+                            self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} level:{level} Port:{port} Index:{index} Stream:{stream}')
 
-                self.log.stepResult(result, f'Associate Mixing Stream: {stream} Fader: {fade}')
+                    # Disable the audio port
+                    self.testdsAudio.disablePort(port, index)
 
             # Stop the stream playback
             self.testPlayer.stop()
@@ -191,11 +198,14 @@ class dsAudio_test12_TestAssociateMix(utHelperClass):
         # Clean the assets downloaded to the device
         self.testCleanAssets()
 
+        # Terminate dsAudio Module
+        self.testdsAudio.terminate()
+
         # Delete the dsAudio class
         del self.testdsAudio
 
-        return True
+        return result
 
 if __name__ == '__main__':
-    test = dsAudio_test12_TestAssociateMix()
+    test = dsAudio_test07_MS12Volumeleveller()
     test.run(False)

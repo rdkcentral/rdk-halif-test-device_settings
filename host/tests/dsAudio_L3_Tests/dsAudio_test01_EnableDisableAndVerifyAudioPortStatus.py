@@ -191,6 +191,9 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
         # Clean the assets downloaded to the device
         self.testCleanAssets()
 
+        # Terminate dsAudio Module
+        self.testdsAudio.terminate()
+
         # Delete the dsAudio class
         del self.testdsAudio
 

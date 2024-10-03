@@ -43,6 +43,19 @@ class dsAudioPortType(Enum):
     dsAUDIOPORT_TYPE_HDMI_ARC  = auto()
     dsAUDIOPORT_TYPE_HEADPHONE = auto()
 
+class dsMS12Capabilities(Enum):
+    DolbyVolume          = 0x01
+    IntelligentEqualizer = 0x02
+    DialogueEnhancer     = 0x04
+    Volumeleveller       = 0x08
+    BassEnhancer         = 0x10
+    SurroundDecoder      = 0x20
+    DRCMode              = 0x40
+    SurroundVirtualizer  = 0x80
+    MISteering           = 0x100
+    GraphicEqualizer     = 0x200
+    LEConfig             = 0x400
+
 class dsAudioClass():
 
     moduleName = "dsAudio"
@@ -99,14 +112,14 @@ class dsAudioClass():
         Returns:
             None
         """
-        result = self.utMenu.select(self.testSuite, "test_terminate_audio")
+        result = self.utMenu.select(self.testSuite, "Terminate dsAudio")
 
-    def enablePort(self, audio_port:int, port_index:int=0, arc_type:int=2):
+    def enablePort(self, audio_port:str, port_index:int=0, arc_type:int=2):
         """
         Enables the audio port.
 
         Args:
-            audio_port (int): audio port enum value
+            audio_port (str): audio port
             port_index (int, optional): port index. Defaults to 0
             arc_type (int, optional): Type of ARC. Defaults to eArc.
 
@@ -117,29 +130,25 @@ class dsAudioClass():
                 {
                     "query_type": "list",
                     "query": "Select dsAudio Port:",
-                    "input": ""
+                    "input": audio_port
                 },
                 {
                     "query_type": "direct",
                     "query": "Select dsAudio Port Index[0-10]:",
-                    "input": "0"
-                },
-                {
-                    "query_type": "direct",
-                    "query": "Select ARC Type:",
-                    "input": "0"
+                    "input": str(port_index)
                 }
         ]
-        promptWithAnswers[0]["input"] = audio_port
-        promptWithAnswers[1]["input"] = str(port_index)
+
         if audio_port == dsAudioPortType.dsAUDIOPORT_TYPE_HDMI_ARC.name:
-            promptWithAnswers[2]["input"] = str(arc_type)
-        else:
-            promptWithAnswers.pop(2)
+            promptWithAnswers.append({
+                    "query_type": "direct",
+                    "query": "Select ARC Type:",
+                    "input": str(arc_type)
+                })
 
         result = self.utMenu.select(self.testSuite, "Enable Audio Port", promptWithAnswers)
 
-    def disablePort(self, audio_port:int, port_index:int=0):
+    def disablePort(self, audio_port:str, port_index:int=0):
         """
         Disables the audio port.
 
@@ -154,21 +163,18 @@ class dsAudioClass():
                 {
                     "query_type": "list",
                     "query": "Select dsAudio Port:",
-                    "input": ""
+                    "input": audio_port
                 },
                 {
                     "query_type": "direct",
                     "query": "Select dsAudio Port Index[0-10]:",
-                    "input": "0"
+                    "input": str(port_index)
                 }
         ]
 
-        promptWithAnswers[0]["input"] = audio_port
-        promptWithAnswers[1]["input"] = str(port_index)
-
         result = self.utMenu.select(self.testSuite, "Disable Audio Port", promptWithAnswers)
 
-    def setGainLevel(self, audio_port:int, port_index:int=0, gainLevel:float=0.0):
+    def setGainLevel(self, audio_port:str, port_index:int=0, gainLevel:float=0.0):
         """
         Sets audio gain level.
 
@@ -184,27 +190,23 @@ class dsAudioClass():
                 {
                     "query_type": "list",
                     "query": "Select dsAudio Port:",
-                    "input": ""
+                    "input": audio_port
                 },
                 {
                     "query_type": "direct",
                     "query": "Select dsAudio Port Index[0-10]:",
-                    "input": "0"
+                    "input": str(port_index)
                 },
                 {
                     "query_type": "direct",
                     "query": "Enter Gain Level[0.0 to 100.0]:",
-                    "input": "0"
+                    "input": str(gainLevel)
                 }
         ]
 
-        promptWithAnswers[0]["input"] = audio_port
-        promptWithAnswers[1]["input"] = str(port_index)
-        promptWithAnswers[2]["input"] = str(gainLevel)
-
         result = self.utMenu.select(self.testSuite, "Set Audio Level", promptWithAnswers)
 
-    def setSpeakerGain(self, audio_port:int, port_index:int=0, gain:float=0.0):
+    def setSpeakerGain(self, audio_port:str, port_index:int=0, gain:float=0.0):
         """
         Sets speaker gain.
 
@@ -220,15 +222,13 @@ class dsAudioClass():
                 {
                     "query_type": "direct",
                     "query": "Enter Gain[-2080.0 to 480.0]:",
-                    "input": "0"
+                    "input": str(gain)
                 }
         ]
 
-        promptWithAnswers[0]["input"] = str(gain)
-
         result = self.utMenu.select(self.testSuite, "Set Audio Gain For Speaker", promptWithAnswers)
 
-    def setAudioMute(self, audio_port:int, port_index:int=0, mute:bool=True):
+    def setAudioMute(self, audio_port:str, port_index:int=0, mute:bool=True):
         """
         Mutes/Unmutes the audio.
 
@@ -244,30 +244,23 @@ class dsAudioClass():
                 {
                     "query_type": "list",
                     "query": "Select dsAudio Port:",
-                    "input": ""
+                    "input": audio_port
                 },
                 {
                     "query_type": "direct",
                     "query": "Select dsAudio Port Index[0-10]:",
-                    "input": "0"
+                    "input": str(port_index)
                 },
                 {
                     "query_type": "direct",
                     "query": "Audio Mute/UnMute[1:Mute, 2:UnMute]:",
-                    "input": "1"
+                    "input": self.boolToString(mute)
                 }
         ]
 
-        promptWithAnswers[0]["input"] = audio_port
-        promptWithAnswers[1]["input"] = str(port_index)
-        if mute == True:
-            promptWithAnswers[2]["input"] = "1"
-        else:
-            promptWithAnswers[2]["input"] = "2"
-
         result = self.utMenu.select(self.testSuite, "Audio Mute/UnMute", promptWithAnswers)
 
-    def setAudioDelay(self, audio_port:int, port_index:int=0, delay:int=0):
+    def setAudioDelay(self, audio_port:str, port_index:int=0, delay:int=0):
         """
         Set the audio delay.
 
@@ -283,24 +276,177 @@ class dsAudioClass():
                 {
                     "query_type": "list",
                     "query": "Select dsAudio Port:",
-                    "input": ""
+                    "input": audio_port
                 },
                 {
                     "query_type": "direct",
                     "query": "Select dsAudio Port Index[0-10]:",
-                    "input": "0"
+                    "input": str(port_index)
                 },
                 {
                     "query_type": "direct",
                     "query": "Enter Audio Delay in milli seconds[0 to 200]:",
-                    "input": "0"
+                    "input": str(delay)
                 }
         ]
-        promptWithAnswers[0]["input"] = audio_port
-        promptWithAnswers[1]["input"] = str(port_index)
-        promptWithAnswers[2]["input"] = str(delay)
 
         result = self.utMenu.select(self.testSuite, "Set Audio Delay", promptWithAnswers)
+
+    def setAudioCompression(self, audio_port:str, port_index:int=0, compression:int=0):
+        """
+        Set the audio compression.
+
+        Args:
+            audio_port (str): name of the audio port. Refer dsAudioPortType enum
+            port_index (int, optional): port index. Defaults to 0
+            compression (int, optional): audio compression to be applied. Ranges from 0 to 10. Defaults to 0
+
+        Returns:
+            None
+        """
+        promptWithAnswers = [
+                {
+                    "query_type": "list",
+                    "query": "Select dsAudio Port:",
+                    "input": audio_port
+                },
+                {
+                    "query_type": "direct",
+                    "query": "Select dsAudio Port Index[0-10]:",
+                    "input": str(port_index)
+                },
+                {
+                    "query_type": "direct",
+                    "query": "Select Compression[0-10]:",
+                    "input": str(compression)
+                }
+        ]
+
+        result = self.utMenu.select(self.testSuite, "Audio Compression", promptWithAnswers)
+
+    def setMS12Feature(self, audio_port:str, port_index:int=0, feature:dict = None):
+        """
+        Sets the audio compression.
+
+        Args:
+            audio_port (str): Name of the audio port (refer to dsAudioPortType enum).
+            port_index (int, optional): Port index. Defaults to 0.
+            feature (dict, optional): Dictionary containing the feature to be enabled and its value.
+                        Keys should be feature names (e.g., "DolbyVolume", "IntelligentEqualizer" refer: dsMS12Capabilities).
+                        Values depend on the feature:
+                            - Boolean features: True/False
+                            - Single-value features: String or int representing the value
+                            - Multi-value features: List containing two values (e.g., [mode, level])
+                        Defaults to None.
+
+        Returns:
+            None
+        """
+
+        if not feature or len(feature) != 2:
+            return False  # Handle missing or invalid feature data
+
+        feature_name = feature["name"]
+        feature_value = feature["value"]
+
+        promptWithAnswers = [
+                {
+                    "query_type": "list",
+                    "query": "Select dsAudio Port:",
+                    "input": str(audio_port)
+                },
+                {
+                    "query_type": "direct",
+                    "query": "Select dsAudio Port Index[0-10]:",
+                    "input": str(port_index)
+                },
+                {
+                    "query_type": "list",
+                    "query": "Select MS12 DAP Feature:",
+                    "input": feature_name
+                }
+        ]
+
+        if(feature_name == "DolbyVolume"):
+            promptWithAnswers.append({
+                    "query_type": "direct",
+                    "query": "Dolby Volume[1:Enable, 2:Disable]:",
+                    "input": self.boolToString(feature_value)
+                })
+        elif(feature_name == "IntelligentEqualizer"):
+            promptWithAnswers.append({
+                    "query_type": "list",
+                    "query": "Select IntelligentEqualizer Mode:",
+                    "input": feature_value
+                })
+        elif(feature_name == "DialogueEnhancer"):
+            promptWithAnswers.append({
+                    "query_type": "direct",
+                    "query": "Select DialogueEnhancer Level[0-16]:",
+                    "input": str(feature_value)
+                })
+        elif(feature_name == "Volumeleveller"):
+            promptWithAnswers.append({
+                    "query_type": "direct",
+                    "query": "Select Volumeleveller Mode[0:Off, 1:On, 2:Auto]:",
+                    "input": str(feature_value[0])
+                })
+            promptWithAnswers.append({
+                    "query_type": "direct",
+                    "query": "Select Volumeleveller Level[0-10]:",
+                    "input": str(feature_value[1])
+                })
+        elif(feature_name == "BassEnhancer"):
+            promptWithAnswers.append({
+                    "query_type": "direct",
+                    "query": "Select BassEnhancer Boost[0-100]:",
+                    "input": str(feature_value)
+                })
+        elif(feature_name == "SurroundDecoder"):
+            promptWithAnswers.append({
+                    "query_type": "direct",
+                    "query": "Surround Decoder[1:Enable, 2:Disable]:",
+                    "input": self.boolToString(feature_value)
+                })
+        elif(feature_name == "DRCMode"):
+            promptWithAnswers.append({
+                    "query_type": "direct",
+                    "query": "Select DRC Mode[0: DRC Line Mode, 1: DRC RF Mode]:",
+                    "input": str(feature_value)
+                })
+        elif(feature_name == "SurroundVirtualizer"):
+            promptWithAnswers.append({
+                    "query_type": "direct",
+                    "query": "Select SurroundVirtualizer Mode[0:Off, 1:On, 2:Auto]:",
+                    "input": str(feature_value[0])
+                })
+            promptWithAnswers.append({
+                    "query_type": "direct",
+                    "query": "Select SurroundVirtualizer Boost[0-96]:",
+                    "input": str(feature_value[1])
+                })
+        elif(feature_name == "MISteering"):
+            promptWithAnswers.append({
+                    "query_type": "direct",
+                    "query": "MI Steering[1:Enable, 2:Disable]:",
+                    "input": self.boolToString(feature_value)
+                })
+        elif(feature_name == "GraphicEqualizer"):
+            promptWithAnswers.append({
+                    "query_type": "direct",
+                    "query": "Select GraphicEqualizer Mode[0: OFF, 1: EQ Open, 2: EQ Rich, 3: EQ Focused]:",
+                    "input": str(feature_value)
+                })
+        elif(feature_name == "LEConfig"):
+            promptWithAnswers.append({
+                    "query_type": "direct",
+                    "query": "LE Configuration[1:Enable, 2:Disable]:",
+                    "input": self.boolToString(feature_value)
+                })
+        else:
+            return
+
+        result = self.utMenu.select(self.testSuite, "MS12 DAP Features", promptWithAnswers)
 
     def enableAssociateAudioMixig(self, enable:bool = True, fader:int = 0):
         """
@@ -317,20 +463,16 @@ class dsAudioClass():
                 {
                     "query_type": "direct",
                     "query": "Enable/Disable Associated Audio Mixing[1:Enable, 2:Disable]:",
-                    "input": "1"
-                },
-                {
-                    "query_type": "direct",
-                    "query": "Set Fader Control[-32(mute associated audio) to 32(mute main audio)]:",
-                    "input": "0"
+                    "input": self.boolToString(enable)
                 }
         ]
+
         if enable:
-            promptWithAnswers[0]["input"] = "1"
-            promptWithAnswers[1]["input"] = str(fader)
-        else:
-            promptWithAnswers[0]["input"] = "2"
-            promptWithAnswers.pop(1)
+            promptWithAnswers.append({
+                    "query_type": "direct",
+                    "query": "Set Fader Control[-32(mute associated audio) to 32(mute main audio)]:",
+                    "input": str(fader)
+                })
 
         result = self.utMenu.select(self.testSuite, "Set Associate Audio Mixing", promptWithAnswers)
 
@@ -349,17 +491,14 @@ class dsAudioClass():
                 {
                     "query_type": "list",
                     "query": "Select Mixer Input:",
-                    "input": ""
+                    "input": mixer_input
                 },
                 {
                     "query_type": "direct",
                     "query": "Set the Volume[0 to 100]:",
-                    "input": "0"
+                    "input": str(volume)
                 }
         ]
-
-        promptWithAnswers[0]["input"] = mixer_input
-        promptWithAnswers[1]["input"] = str(volume)
 
         result = self.utMenu.select(self.testSuite, "Set Audio Mixer Levels", promptWithAnswers)
 
@@ -383,7 +522,7 @@ class dsAudioClass():
                 {
                     "query_type": "direct",
                     "query": "Enter 3 letter long language as per ISO 639-3:",
-                    "input": "eng"
+                    "input": language
                 }
         ]
 
@@ -391,8 +530,6 @@ class dsAudioClass():
             promptWithAnswers[0]["input"] = "1"
         else:
             promptWithAnswers[0]["input"] = "2"
-
-        promptWithAnswers[1]["input"] = language
 
         result = self.utMenu.select(self.testSuite, "Primary/Secondary Language", promptWithAnswers)
 
@@ -429,24 +566,32 @@ class dsAudioClass():
 
         return audioFormat
 
+    def boolToString(self, val:bool):
+        if(val):
+            return "1"
+        else:
+            return "2"
+
     def getSupportedPorts(self):
         """
-        Returns the supported audio ports on device.
+        Returns a list of supported audio ports on the device.
 
         Args:
-            None.
+            None
 
         Returns:
-            returns the list of supported audio ports
+            list: A list of tuples containing the port name and index.
         """
-        portLists = []
 
         ports = self.deviceProfile.get("Ports")
-        for i in range(1, len(ports)+1):
-            entry = ports[i]
-            portLists.append([dsAudioPortType(entry['Typeid']).name, entry['Index']])
+        if not ports:
+            return []  # Handle empty ports list
 
-        return portLists
+        supported_ports = []
+        for entry in ports.values():
+            supported_ports.append((dsAudioPortType(entry['Typeid']).name, entry['Index']))
+
+        return supported_ports
 
     def getDeviceType(self):
         """
@@ -458,13 +603,63 @@ class dsAudioClass():
         Returns:
             returns the device type (0-Sink device, 1-Source device)
         """
-        portLists = []
 
         type = self.deviceProfile.get("Type")
         if type == "sink":
             return 0
         elif type == "source":
             return 1
+        else:
+            return None
+
+    def getMS12DAPFeatureSupport(self, audio_port: str, port_index: int = 0, feature: str = ""):
+        """
+        Checks if the specified audio port supports the given MS12 feature.
+
+        Args:
+            audio_port (str): The name of the audio port.
+            port_index (int, optional): The port index. Defaults to 0.
+            feature (str, optional): The MS12 feature to check.
+
+        Returns:
+            bool: True if the feature is supported, False otherwise.
+        """
+
+        ports = self.deviceProfile.get("Ports")
+        if not ports:
+            return False  # Handle empty ports list
+
+        for entry in ports.values():
+            if (dsAudioPortType(entry['Typeid']).name == audio_port
+                and entry['Index'] == port_index
+                and entry["MS12_Capabilities"] & dsMS12Capabilities[feature].value):
+                return True
+
+        return False
+
+    def getAudioCompressionSupport(self, audio_port: str, port_index: int = 0):
+        """
+        Checks if the specified audio port supports audio compression.
+
+        Args:
+            audio_port (str): The name of the audio port.
+            port_index (int, optional): The port index. Defaults to 0.
+
+        Returns:
+            bool: True if the port supports audio compression, False otherwise.
+        """
+
+        ports = self.deviceProfile.get("Ports")
+        if not ports:
+            return False  # Handle empty ports list
+
+        for entry in ports.values():
+            if (dsAudioPortType(entry['Typeid']).name == audio_port
+                and entry['Index'] == port_index
+                and entry["number_of_supported_compressions"] > 0 ):
+                return True
+
+        return False
 
     def __del__(self):
         """
