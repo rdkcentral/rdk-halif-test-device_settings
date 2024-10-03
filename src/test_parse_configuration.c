@@ -1,21 +1,21 @@
 /**
-*  If not stated otherwise in this file or this component's LICENSE
-*  file the following copyright and licenses apply:
-*
-*  Copyright 2024 RDK Management
-*
-*  Licensed under the Apache License, Version 2.0 (the License);
-*  you may not use this file except in compliance with the License.
-*  You may obtain a copy of the License at
-*
-*  http://www.apache.org/licenses/LICENSE-2.0
-*
-*  Unless required by applicable law or agreed to in writing, software
-*  distributed under the License is distributed on an AS IS BASIS,
-*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-*  See the License for the specific language governing permissions and
-*  limitations under the License.
-*/
+ *  If not stated otherwise in this file or this component's LICENSE
+ *  file the following copyright and licenses apply:
+ *
+ *  Copyright 2024 RDK Management
+ *
+ *  Licensed under the Apache License, Version 2.0 (the License);
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an AS IS BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 /**
  * @addtogroup HPK Hardware Porting Kit
@@ -42,13 +42,13 @@
  */
 
 /**
- * @defgroup Device_Settings_PARSE_CONFIG Device Settings HAL Tests parse configuraion File
+ * @defgroup Device_Settings_PARSE_CONFIG Device Settings HAL Tests parse configuration File
  * @{
  * @parblock
  *
- * ### Parse configuraion functions for Device Settings HAL :
+ * ### Parse configuration functions for Device Settings HAL :
  *
- * Parse configuraion functions required for the module across all vendors.
+ * Parse configuration functions required for the module across all vendors.
  *
  * **Pre-Conditions:**  None @n
  * **Dependencies:** None @n
@@ -58,9 +58,9 @@
  */
 
 /**
-* @file test_parse_configuration.c
-*
-*/
+ * @file test_parse_configuration.c
+ *
+ */
 #include <ut.h>
 #include <ut_log.h>
 #include <ut_kvp_profile.h>
@@ -68,70 +68,92 @@
 
 #include "test_parse_configuration.h"
 
-/* Global Vairables */
+/* Global Variables */
 int32_t gSourceType = -1;
 int32_t gDSModule = dsNone;
 
-char gDeviceType[TEST_DS_DEVICE_TYPE_SIZE]      = {0};
+char gDeviceType[TEST_DS_DEVICE_TYPE_SIZE] = {0};
 
 /* Parse configuration file */
 int test_parse_configuration()
 {
+    bool nodeStatus = false;
     ut_kvp_status_t status;
-    char szReturnedString[UT_KVP_MAX_ELEMENT_SIZE];
 
-    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsAudio/Type", szReturnedString, UT_KVP_MAX_ELEMENT_SIZE);
-    if(status == UT_KVP_STATUS_SUCCESS) {
+    /* CODING STANDARDS: K&R Brackets are not allowed,
+        if ( blah ){
+        ...
+        }
+    Requirement
+        if ( blah )
+        {
+        ...
+        }
+
+    */
+    nodeStatus = ut_kvp_fieldPresent(ut_kvp_profile_getInstance(), "dsAudio");
+    if (nodeStatus == true)
+    {
         gDSModule |= dsAudioPort;
         status = test_dsAudio_parse_configuration();
-        if(status != UT_KVP_STATUS_SUCCESS) {
+        if (status != UT_KVP_STATUS_SUCCESS)
+        {
             UT_LOG_ERROR("Failed to parse audio configuration file");
             return -1;
         }
     }
 
-    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsVideoDevice/Type", szReturnedString, UT_KVP_MAX_ELEMENT_SIZE);
-    if(status == UT_KVP_STATUS_SUCCESS) {
+    nodeStatus = ut_kvp_fieldPresent(ut_kvp_profile_getInstance(), "dsVideoDevice");
+    if (nodeStatus == true)
+    {
         gDSModule |= dsVideoDevice;
         status = test_dsVideoDevice_parse_configuration();
-        if(status != UT_KVP_STATUS_SUCCESS) {
+        if (status != UT_KVP_STATUS_SUCCESS)
+        {
             UT_LOG_ERROR("Failed to parse video device configuration file");
             return -1;
         }
     }
 
-    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsVideoPort/Type", szReturnedString, UT_KVP_MAX_ELEMENT_SIZE);
-    if(status == UT_KVP_STATUS_SUCCESS) {
+    nodeStatus = ut_kvp_fieldPresent(ut_kvp_profile_getInstance(), "dsVideoPort");
+    if (nodeStatus == true)
+    {
         gDSModule |= dsVideoPort;
         status = test_dsVideoPort_parse_configuration();
-        if(status != UT_KVP_STATUS_SUCCESS) {
+        if (status != UT_KVP_STATUS_SUCCESS)
+        {
             UT_LOG_ERROR("Failed to parse video port configuration file");
             return -1;
         }
     }
 
-    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsCompositeIn/Type", szReturnedString, UT_KVP_MAX_ELEMENT_SIZE);
-    if(status == UT_KVP_STATUS_SUCCESS) {
+    nodeStatus = ut_kvp_fieldPresent(ut_kvp_profile_getInstance(), "dsCompositeIn");
+    if (nodeStatus == true)
+    {
         gDSModule |= dsComposite;
     }
 
-    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsFPD/Type", szReturnedString, UT_KVP_MAX_ELEMENT_SIZE);
-    if(status == UT_KVP_STATUS_SUCCESS) {
+    nodeStatus = ut_kvp_fieldPresent(ut_kvp_profile_getInstance(), "dsFPD");
+    if (nodeStatus == true)
+    {
         gDSModule |= dsFPD;
     }
 
-    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsDisplay/Type", szReturnedString, UT_KVP_MAX_ELEMENT_SIZE);
-    if(status == UT_KVP_STATUS_SUCCESS) {
+    nodeStatus = ut_kvp_fieldPresent(ut_kvp_profile_getInstance(), "dsDisplay");
+    if (nodeStatus == true)
+    {
         gDSModule |= dsDisplay;
     }
 
-    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsHost/Type", szReturnedString, UT_KVP_MAX_ELEMENT_SIZE);
-    if(status == UT_KVP_STATUS_SUCCESS) {
+    nodeStatus = ut_kvp_fieldPresent(ut_kvp_profile_getInstance(), "dsHost");
+    if (nodeStatus == true)
+    {
         gDSModule |= dsHost;
     }
 
-    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsHdmiIn/Type", szReturnedString, UT_KVP_MAX_ELEMENT_SIZE);
-    if(status == UT_KVP_STATUS_SUCCESS) {
+    nodeStatus = ut_kvp_fieldPresent(ut_kvp_profile_getInstance(), "dsHdmiIn");
+    if (nodeStatus == true)
+    {
         gDSModule |= dsHdmiIn;
     }
 

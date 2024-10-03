@@ -168,27 +168,6 @@ int UT_register_tests(void)
     return registerFailed;
 }
 
-/* Register UT Functions */
-int UT_register_APIDEF_l3_tests( void )
-{
-    int registerFailed=0;
-
-    if(gDSModule & dsAudioPort)
-        registerFailed |= test_l3_dsAudio_register();
-
-    if(gDSModule & dsVideoPort)
-        registerFailed |= test_l3_dsVideoPort_register();
-
-    if(gDSModule & dsHost)
-        registerFailed |= test_register_dsHost_hal_l3_tests();
-
-    if(gDSModule & dsDisplay)
-        registerFailed |= test_l3_dsDisplay_register();
-
-    return registerFailed;
-}
-
-
 
 /** @} */ // End of Device_Settings_REGISTER
 /** @} */ // End of Device_Settings_HALTEST
