@@ -225,7 +225,7 @@ static int32_t dsDisplay_list_select_ports(dsVideoPortType_t *pVideoPort, int32_
     return 0;
 }
 
-static intptr_t dsDisplay_getandle(dsAudioPortType_t videoPort, int32_t index, intptr_t *handle)
+static intptr_t dsDisplay_gethandle(dsAudioPortType_t videoPort, int32_t index, intptr_t *handle)
 {
     int32_t ret;
 
@@ -316,7 +316,7 @@ void test_l3_dsDisplay_get_edid(void)
         goto exit;
     }
 
-   gDisplayHandle = dsDisplay_getandle(port,portIndex,&handle);
+   gDisplayHandle = dsDisplay_gethandle(port,portIndex,&handle);
     
     UT_LOG_INFO("Calling dsGetEDID(IN:handle:[0x%0X], OUT:edid:[])", gDisplayHandle);
 
@@ -364,7 +364,7 @@ void test_l3_dsDisplay_get_edidbytes(void)
         goto exit;
     }
 
-    gDisplayHandle = dsDisplay_getandle(port,portIndex,&handle);
+    gDisplayHandle = dsDisplay_gethandle(port,portIndex,&handle);
 
     UT_LOG_INFO("Calling dsGetEDIDBytes(IN:Handle:[0x%0X], OUT:EDID:[], OUT:Length:[])", gDisplayHandle);
 
@@ -416,7 +416,7 @@ void test_l3_dsDisplay_get_aspectratio(void)
         goto exit;
     }
 
-    gDisplayHandle = dsDisplay_getandle(port,portIndex,&handle);
+    gDisplayHandle = dsDisplay_gethandle(port,portIndex,&handle);
 
     UT_LOG_INFO("Calling dsGetDisplayAspectRatio(IN:handle:[0x%0X], OUT:aspectRatio:[]) ", gDisplayHandle);
 
