@@ -426,7 +426,7 @@ void test_l3_dsFPD_hal_GetFPBrightness(void)
 /**
 * @brief This test provides a scope to set Power LED state.
 *
-* This test case provides a scope to  set the Power LED to differten FP States.
+* This test case provides a scope to  set the Power LED to different FP States.
 *
 * **Pre-Conditions:** @n
 * Front panel Module should be intialized through Test 1 before calling this test.
