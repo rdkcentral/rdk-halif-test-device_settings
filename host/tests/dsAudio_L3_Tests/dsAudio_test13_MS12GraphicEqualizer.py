@@ -180,7 +180,7 @@ class dsAudio_test13_MS12GraphicEqualizer(utHelperClass):
                         # Set the GraphicEqualizer
                         self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":mode})
 
-                        result = self.testVerifyBassEnhancer(stream, port, mode, True)
+                        result = self.testVerifyGraphicEqualizer(stream, port, mode, True)
 
                         self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} Port:{port} Index:{index} Stream:{stream}')
 

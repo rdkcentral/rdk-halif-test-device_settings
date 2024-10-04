@@ -178,7 +178,7 @@ class dsAudio_test10_MS12DRCMode(utHelperClass):
                     # Set DRC Line Mode
                     self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":0})
 
-                    result = self.testVerifyDolbyVolume(stream, port, 0, True)
+                    result = self.testVerifyDRCMode(stream, port, 0, True)
 
                     self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:DRC RF Mode Port:{port} Index:{index} Stream:{stream}')
 
@@ -187,7 +187,7 @@ class dsAudio_test10_MS12DRCMode(utHelperClass):
                     # Set DRC RF Mode
                     self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":1})
 
-                    result = self.testVerifyDolbyVolume(stream, port, 1, True)
+                    result = self.testVerifyDRCMode(stream, port, 1, True)
 
                     self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{False} Port:{port} Index:{index} Stream:{stream}')
 
