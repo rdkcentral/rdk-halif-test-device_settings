@@ -83,8 +83,7 @@
 #define DS_AUDIO_MAX_DAP 20
 #define DS_AUDIO_MAX_MS12_PROFILES 10
 #define DS_AUDIO_MAX_MS12_LENGTH 32
-
-#define DS_CALLBACK_LOG "dsAudio_callback.txt"
+#define DS_MAX_FILE_SIZE 64
 
 #define UT_LOG_MENU_INFO UT_LOG_INFO
 
@@ -100,6 +99,10 @@ static dsAudioFormat_t gAudioFormat = dsAUDIO_FORMAT_NONE;
 static dsATMOSCapability_t gAtosCapablity = dsAUDIO_ATMOS_NOTSUPPORTED;
 static dsAudioARCStatus_t gARCStatus = {0};
 static pthread_mutex_t gCallbackMutex = PTHREAD_MUTEX_INITIALIZER;
+
+static char gConnectionCBFile[DS_MAX_FILE_SIZE];
+static char gFormatCBFile[DS_MAX_FILE_SIZE];
+static char gATMOSCapsCBFile[DS_MAX_FILE_SIZE];
 
 /* Enum mapping tables */
 
@@ -221,11 +224,11 @@ static void readFloat(float_t *choice)
 
 static void readString(char *choice)
 {
-    fgets(choice, 4, stdin);
+    scanf("%s", choice);
     readAndDiscardRestOfLine(stdin);
 }
 
-static void writeCallbackLog(const char *format, ...)
+static void writeCallbackLog(char *logPath, const char *format, ...)
 {
     va_list args;
     va_start(args, format);
@@ -245,7 +248,7 @@ static void writeCallbackLog(const char *format, ...)
     pthread_mutex_lock(&gCallbackMutex);
 
     // Open the log file in append mode
-    FILE *fp = fopen(DS_CALLBACK_LOG, "a");
+    FILE *fp = fopen(logPath, "a");
     if (fp == NULL) {
         fprintf(stderr, "Error opening log file: %s\n", strerror(errno));
         return;
@@ -275,7 +278,7 @@ static void audioOutPortConnectCB(dsAudioPortType_t portType, uint32_t uiPortNo,
                  UT_Control_GetMapString(dsAudioPortType_mapTable, portType),uiPortNo,
                  UT_Control_GetMapString(bool_mapTable, isPortCon));
 
-    writeCallbackLog("Received Connection status callback port: %s, port number: %d, Connection: %s",
+    writeCallbackLog(gConnectionCBFile, "Received Connection status callback port: %s, port number: %d, Connection: %s",
                      UT_Control_GetMapString(dsAudioPortType_mapTable, portType),uiPortNo,
                      UT_Control_GetMapString(bool_mapTable, isPortCon));
 
@@ -291,7 +294,7 @@ static void audioFormatUpdateCB(dsAudioFormat_t audioFormat)
 {
     UT_LOG_INFO("Received Format update callback : %s", UT_Control_GetMapString(dsAudioFormat_mapTable, audioFormat));
 
-    writeCallbackLog("Received Format update callback : %s", UT_Control_GetMapString(dsAudioFormat_mapTable, audioFormat));
+    writeCallbackLog(gFormatCBFile, "Received Format update callback : %s", UT_Control_GetMapString(dsAudioFormat_mapTable, audioFormat));
 
     gAudioFormat = audioFormat;
 }
@@ -307,7 +310,7 @@ static void atmosCapsChange(dsATMOSCapability_t atmosCaps, bool status)
                  UT_Control_GetMapString(dsATMOSCapability_mapTable, atmosCaps),
                  UT_Control_GetMapString(bool_mapTable, status));
 
-    writeCallbackLog("Received ATMOS Capablity Change callback, Capability: %s, Status: %s",
+    writeCallbackLog(gATMOSCapsCBFile, "Received ATMOS Capablity Change callback, Capability: %s, Status: %s",
                  UT_Control_GetMapString(dsATMOSCapability_mapTable, atmosCaps),
                  UT_Control_GetMapString(bool_mapTable, status));
 
@@ -343,6 +346,15 @@ void test_l3_dsAudio_initialize(void)
         goto exit;
     }
 
+    UT_LOG_MENU_INFO("Enter file name with path to log connection status callbacks:");
+    readString(gConnectionCBFile);
+
+    UT_LOG_MENU_INFO("Enter file name with path to log audio format callbacks:");
+    readString(gFormatCBFile);
+
+    UT_LOG_MENU_INFO("Enter file name with path to log ATMOS Caps callbacks:");
+    readString(gATMOSCapsCBFile);
+
     /* Initialize the dsAudio Module */
     UT_LOG_INFO("Calling dsAudioPortInit()");
     ret = dsAudioPortInit();
@@ -372,7 +384,6 @@ void test_l3_dsAudio_initialize(void)
     UT_LOG_INFO("Result dsAudioFormatUpdateRegisterCB(IN:cbFun:[0x%0X]) dsError_t:[%s]",
                  audioFormatUpdateCB, UT_Control_GetMapString(dsError_mapTable, ret));
     DS_ASSERT(ret == dsERR_NONE);
-
 exit:
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
