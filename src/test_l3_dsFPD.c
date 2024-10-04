@@ -447,7 +447,7 @@ void test_l3_dsFPD_hal_FPGetSupportedLEDStates(void)
 
     UT_LOG_INFO("Calling dsFPGetSupportedLEDStates(OUT:uLEDStates[])");
     status = dsFPGetSupportedLEDStates(&uLedStates);
-    UT_LOG_INFO("Result dsFPGetSupportedLEDStates(OUT:iLEDState:[%X])dsError_t:[%s]" \ 
+    UT_LOG_INFO("Result dsFPGetSupportedLEDStates(OUT:iLEDState:[%X])dsError_t:[%s]" \
                         ,uLedStates,UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
     DS_ASSERT(status == dsERR_NONE);
 
