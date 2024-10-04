@@ -43,6 +43,14 @@ class dsAudioPortType(Enum):
     dsAUDIOPORT_TYPE_HDMI_ARC  = auto()
     dsAUDIOPORT_TYPE_HEADPHONE = auto()
 
+class dsAudioStereoMode(Enum):
+    dsAUDIO_STEREO_MONO     = 1
+    dsAUDIO_STEREO_STEREO   = auto()
+    dsAUDIO_STEREO_SURROUND = auto()
+    dsAUDIO_STEREO_PASSTHRU = auto()
+    dsAUDIO_STEREO_DD       = auto()
+    dsAUDIO_STEREO_DDPLUS   = auto()
+
 class dsMS12Capabilities(Enum):
     DolbyVolume          = 0x01
     IntelligentEqualizer = 0x02
@@ -324,6 +332,38 @@ class dsAudioClass():
 
         result = self.utMenu.select(self.testSuite, "Audio Compression", promptWithAnswers)
 
+    def setOutputMode(self, audio_port:str, port_index:int=0, mode:str = "dsAUDIO_STEREO_PASSTHRU"):
+        """
+        Sets the output port mode.
+
+        Args:
+            audio_port (str): Name of the audio port (refer to dsAudioPortType enum).
+            port_index (int, optional): Port index. Defaults to 0.
+            mode (str, optional): port output mode. refer dsAudioStereoMode
+
+        Returns:
+            None
+        """
+        promptWithAnswers = [
+                {
+                    "query_type": "list",
+                    "query": "Select dsAudio Port:",
+                    "input": audio_port
+                },
+                {
+                    "query_type": "direct",
+                    "query": "Select dsAudio Port Index[0-10]:",
+                    "input": str(port_index)
+                },
+                {
+                    "query_type": "list",
+                    "query": "Select Stereo Mode:",
+                    "input": mode
+                }
+        ]
+
+        result = self.utMenu.select(self.testSuite, "Set Stereo Mode", promptWithAnswers)
+
     def setMS12Feature(self, audio_port:str, port_index:int=0, feature:dict = None):
         """
         Sets the audio compression.
@@ -533,6 +573,38 @@ class dsAudioClass():
 
         result = self.utMenu.select(self.testSuite, "Primary/Secondary Language", promptWithAnswers)
 
+    def setARCSAD(self, sadList:list=[]):
+        """
+        Sets the ARC SAD (short audio descript).
+
+        Args:
+            sadList (list): List of SAD values to set.
+
+        Returns:
+            None
+        """
+        if (len(sadList) == 0):
+            return
+
+        promptWithAnswers = [
+                {
+                    "query_type": "direct",
+                    "query": "Enter SAD List count[1-15]:",
+                    "input": str(len(sadList))
+                }
+        ]
+
+        i = 0
+        for sad in sadList:
+            promptWithAnswers.append({
+                    "query_type": "direct",
+                    "query": f"Enter {0} SAD Value:",
+                    "input": str(sad)
+                })
+            i += 1
+
+        result = self.utMenu.select(self.testSuite, "Set SAD List", promptWithAnswers)
+
     def getHeadphoneConnectionStatus(self):
         """
         Gets the headphone connection status.
@@ -561,10 +633,30 @@ class dsAudioClass():
             str : audio format
         """
         result = self.utMenu.select( self.testSuite, "Get Audio Format")
-        audioFormatPattern = r"dsGetAudioFormat\(IN:handle:\[.*\], OUT:audioFormat:\[(dsAUDIO_FORMAT_\w+)\]\)"
+        audioFormatPattern = r"Result dsGetAudioFormat\(IN:handle:\[.*\], OUT:audioFormat:\[(dsAUDIO_FORMAT_\w+)\]\)"
         audioFormat = self.searchPattern(result, audioFormatPattern)
 
         return audioFormat
+
+    def getConnectedARCType(self):
+        """
+        Gets the ARC type (ARC, eARC, NONE) of connected device.
+
+        Args:
+            None.
+
+        Returns:
+            str : device type (ARC, eARC, NONE)
+        """
+        result = self.utMenu.select( self.testSuite, "Get ARC Type")
+        typeStatusPattern = r"Result dsGetSupportedARCTypes\(IN:handle:\[.*\], OUT:types:\[(dsAUDIOARCSUPPORT_\w+)\]\)"
+        type = self.searchPattern(result, typeStatusPattern)
+        if("eARC" in type):
+            return "eARC"
+        elif("ARC" in type):
+            return "ARC"
+        else:
+            return "NONE"
 
     def boolToString(self, val:bool):
         if(val):
@@ -627,7 +719,7 @@ class dsAudioClass():
 
         ports = self.deviceProfile.get("Ports")
         if not ports:
-            return False  # Handle empty ports list
+            return False
 
         for entry in ports.values():
             if (dsAudioPortType(entry['Typeid']).name == audio_port
@@ -651,7 +743,7 @@ class dsAudioClass():
 
         ports = self.deviceProfile.get("Ports")
         if not ports:
-            return False  # Handle empty ports list
+            return False
 
         for entry in ports.values():
             if (dsAudioPortType(entry['Typeid']).name == audio_port
@@ -660,6 +752,29 @@ class dsAudioClass():
                 return True
 
         return False
+
+    def getSupportedOutputModes(self, audio_port: str, port_index: int = 0):
+        """
+        Returns a list of supported output modes refer dsAudioStereoMode.
+
+        Args:
+            audio_port (str): The name of the audio port.
+            port_index (int, optional): The port index. Defaults to 0.
+
+        Returns:
+            l
+        """
+        ports = self.deviceProfile.get("Ports")
+        if not ports:
+            return []
+
+        output = []
+        for entry in ports.values():
+            if (dsAudioPortType(entry['Typeid']).name == audio_port
+                and entry['Index'] == port_index):
+                for mode in entry['stereo_modes']:
+                    output.append(dsAudioStereoMode(mode).name)
+        return output
 
     def __del__(self):
         """

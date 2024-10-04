@@ -178,7 +178,7 @@ class dsAudio_test12_MS12MISteering(utHelperClass):
                     # Enable MISteering
                     self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":True})
 
-                    result = self.testVerifyDolbyVolume(stream, port, True, True)
+                    result = self.testVerifyMISteering(stream, port, True, True)
 
                     self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
 
@@ -187,7 +187,7 @@ class dsAudio_test12_MS12MISteering(utHelperClass):
                     # Disable MISteering
                     self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":False})
 
-                    result = self.testVerifyDolbyVolume(stream, port, False, True)
+                    result = self.testVerifyMISteering(stream, port, False, True)
 
                     self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{False} Port:{port} Index:{index} Stream:{stream}')
 

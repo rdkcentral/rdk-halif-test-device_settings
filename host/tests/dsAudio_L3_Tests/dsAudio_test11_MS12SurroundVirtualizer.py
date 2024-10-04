@@ -183,7 +183,7 @@ class dsAudio_test11_MS12SurroundVirtualizer(utHelperClass):
                     # Set the SurroundVirtualizer
                     self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, boost]})
 
-                    result = self.testVerifyVolumeleveller(stream, port, mode, boost, True)
+                    result = self.testVerifySurroundVirtualizer(stream, port, mode, boost, True)
 
                     mode = 2 #leveller is Auto
                     boost = 0
@@ -192,7 +192,7 @@ class dsAudio_test11_MS12SurroundVirtualizer(utHelperClass):
                     # Set the SurroundVirtualizer
                     self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, boost]})
 
-                    result = self.testVerifyVolumeleveller(stream, port, mode, boost, True)
+                    result = self.testVerifySurroundVirtualizer(stream, port, mode, boost, True)
 
                     mode = 1 #SurroundVirtualizer is On
                     boost = 0
@@ -202,7 +202,7 @@ class dsAudio_test11_MS12SurroundVirtualizer(utHelperClass):
                         # Set the SurroundVirtualizer
                         self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, boost]})
 
-                        result = self.testVerifyVolumeleveller(stream, port, mode, boost, True)
+                        result = self.testVerifySurroundVirtualizer(stream, port, mode, boost, True)
 
                         self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} boost:{boost} Port:{port} Index:{index} Stream:{stream}')
 

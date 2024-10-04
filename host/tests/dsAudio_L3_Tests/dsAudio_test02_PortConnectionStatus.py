@@ -127,9 +127,9 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
         """
         if manual == True:
             if connection == True:
-                self.testUserResponse.getUserYN(f"Connect the port and press Enter:")
+                self.testUserResponse.getUserYN(f"Connect the HEADPONE and press Enter:")
             else:
-                self.testUserResponse.getUserYN(f"Disconnect the port and press Enter:")
+                self.testUserResponse.getUserYN(f"Disconnect the HEADPONE and press Enter:")
         else :
             #TODO: Add automation verification methods
             return False

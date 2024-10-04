@@ -178,7 +178,7 @@ class dsAudio_test09_MS12SurroundDecoder(utHelperClass):
                     # Enable SurroundDecoder mode
                     self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":True})
 
-                    result = self.testVerifyDolbyVolume(stream, port, True, True)
+                    result = self.testVerifySurroundDecoder(stream, port, True, True)
 
                     self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
 
@@ -187,7 +187,7 @@ class dsAudio_test09_MS12SurroundDecoder(utHelperClass):
                     # Disable SurroundDecoder mode
                     self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":False})
 
-                    result = self.testVerifyDolbyVolume(stream, port, False, True)
+                    result = self.testVerifySurroundDecoder(stream, port, False, True)
 
                     self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{False} Port:{port} Index:{index} Stream:{stream}')
 
