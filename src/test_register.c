@@ -100,6 +100,7 @@ extern int test_l3_dsVideoPort_register( void );
 extern int test_l3_dsCompositeIn_register( void );
 extern int test_l3_dsHost_register( void );
 extern int test_l3_dsDisplay_register( void );
+extern int test_l3_dsVideoDevice_register( void );
 
 
 int UT_register_tests(void)
@@ -138,6 +139,7 @@ int UT_register_tests(void)
     {
         registerFailed |= test_l1_dsVideoDevice_register();
         registerFailed |= test_l2_dsVideoDevice_register();
+        registerFailed |= test_l3_dsVideoDevice_register();
     }
     if (gDSModule & dsHdmiIn)
     {
