@@ -246,7 +246,7 @@ const static ut_control_keyStringMapping_t bool_mapTable [] =
  *
  * This function clears the stdin buffer.
  */
-void readAndDiscardRestOfLine(FILE* in)
+static void readAndDiscardRestOfLine(FILE* in)
 {
    int c;
    while ( (c = fgetc(in)) != EOF && c != '\n');
@@ -257,7 +257,7 @@ void readAndDiscardRestOfLine(FILE* in)
 *This function read the input from the stdin.
 */
 
-void readInput(int *choice)
+static void readInput(int *choice)
 {
     scanf("%d",choice);
     readAndDiscardRestOfLine(stdin);
@@ -268,7 +268,7 @@ void readInput(int *choice)
 *This function prints the available ports
 */
 
-void listPorts()
+static void listPorts()
 {
     UT_LOG_MENU_INFO(" \n----------------AVailable Ports------------------\n");
     for(int i = dsHDMI_IN_PORT_0 ; i < dsHDMI_IN_PORT_MAX ; i++)
