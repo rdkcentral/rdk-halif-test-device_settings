@@ -71,6 +71,7 @@
 #include <ut.h>
 #include <ut_log.h>
 #include <ut_kvp_profile.h>
+#include <ut_control_plane.h>
 #include "dsHost.h"
 #include "test_parse_configuration.h"
 
@@ -194,7 +195,7 @@ void test_l3_dsHost_hal_get_SocID(void)
     gTestID = 3;
     dsError_t status = dsERR_NONE ;
 
-    char* socID[DSHOST_SOC_LENGTH] = {0};
+    char socID[DSHOST_SOC_LENGTH] = {0};
 
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
@@ -231,15 +232,16 @@ void test_l3_dsHost_hal_get_hostEdid(void)
     gTestID = 4;
     dsError_t status = dsERR_NONE ;
 
-    char* hostEdid[DS_HOST_KVP_SIZE] = {0};
+    unsigned char hostEdid[DS_HOST_KVP_SIZE] = {0};
+    int length;
 
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     // Step 1: Call dsGetHostEDID()
-    UT_LOG_INFO("Calling dsGetHostEDID( OUT:hostEdid[] IN:length[%d])", DS_HOST_KVP_SIZE);
-    status = dsGetHostEDID(hostEdid, DS_HOST_KVP_SIZE);
-    UT_LOG_INFO("Result dsGetHostEDID(hostEdid: %s), dsError_t:[%s]",
-                  hostEdid, UT_Control_GetMapString(dsError_mapTable, status));
+    UT_LOG_INFO("Calling dsGetHostEDID( OUT:hostEdid[] OUT:length[])");
+    status = dsGetHostEDID(hostEdid, &length);
+    UT_LOG_INFO("Result dsGetHostEDID(hostEdid[%s], length[%d]), dsError_t:[%s]",
+                  hostEdid, length, UT_Control_GetMapString(dsError_mapTable, status));
 
     assert(status == dsERR_NONE);
 
@@ -289,7 +291,7 @@ static UT_test_suite_t * pSuite = NULL;
  *
  * @return int - 0 on success, otherwise failure
  */
-int test_register_dsHost_hal_l3_tests(void)
+int test_l3_dsHost_register(void)
 {
     // Create the test suite
     pSuite = UT_add_suite("[L3 Devicesettings Host Functions] ", NULL, NULL);
