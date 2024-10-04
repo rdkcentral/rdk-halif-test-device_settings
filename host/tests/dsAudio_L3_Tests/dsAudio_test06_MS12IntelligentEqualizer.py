@@ -25,7 +25,7 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(dir_path+"/../")
+sys.path.append(os.path.join(dir_path, "../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -36,7 +36,7 @@ from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
 
     testName  = "test06_MS12IntelligentEqualizer"
-    testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
+    testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
     ms12DAPFeature = "IntelligentEqualizer"
@@ -54,6 +54,10 @@ class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
+        self.connectionCB = self.testSetup.get("callback").get("connection_status")
+        self.formatCB = self.testSetup.get("callback").get("format_status")
+        self.atmosCB = self.testSetup.get("callback").get("atmos_status")
+
         # Open Session for player
         self.player_session = self.dut.getConsoleSession("ssh_player")
 
@@ -69,7 +73,7 @@ class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
         self.testUserResponse = utUserResponse()
 
         # Get path to device profile file
-        self.deviceProfile = dir_path + "/" + self.cpe.get("test").get("profile")
+        self.deviceProfile = os.path.join(dir_path, self.cpe.get("test").get("profile"))
 
     def testDownloadAssets(self):
         """
@@ -96,7 +100,7 @@ class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
             for streampath in url:
-                self.testStreams.append(self.deviceDownloadPath + "/" + os.path.basename(streampath))
+                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
 
     def testCleanAssets(self):
         """
@@ -162,7 +166,7 @@ class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
         self.log.testStart(self.testName, '1')
 
         # Initialize the dsAudio module
-        self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
+        self.testdsAudio.initialise(self.testdsAudio.getDeviceType(), self.connectionCB, self.formatCB, self.atmosCB)
 
         for stream in self.testStreams:
             # Start the stream playback

@@ -25,7 +25,7 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(dir_path+"/../")
+sys.path.append(os.path.join(dir_path, "../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -36,7 +36,7 @@ from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
 
     testName  = "test01_EnableDisableAndVerifyAudioPortStatus"
-    testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
+    testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
 
@@ -52,10 +52,12 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
-        # Open Session for player
-        self.player_session = self.dut.getConsoleSession("ssh_player")
+        self.connectionCB = self.testSetup.get("callback").get("connection_status")
+        self.formatCB = self.testSetup.get("callback").get("format_status")
+        self.atmosCB = self.testSetup.get("callback").get("atmos_status")
 
-        # Open Session for hal test
+        # Open Sessions for player and hal test
+        self.player_session = self.dut.getConsoleSession("ssh_player")
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
 
         player = self.cpe.get("test").get("player")
@@ -67,7 +69,7 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
         self.testUserResponse = utUserResponse()
 
         # Get path to device profile file
-        self.deviceProfile = dir_path + "/" + self.cpe.get("test").get("profile")
+        self.deviceProfile = os.path.join(dir_path, self.cpe.get("test").get("profile"))
 
     def testDownloadAssets(self):
         """
@@ -84,17 +86,17 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
 
         test = self.testSetup.get("assets").get("device").get(self.testName)
 
-        #download test artifacts to device
+        # Download test artifacts to device
         url = test.get("artifacts")
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
 
-        #download test streams to device
+        # Download test streams to device
         url =  test.get("streams")
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
             for streampath in url:
-                self.testStreams.append(self.deviceDownloadPath + "/" + os.path.basename(streampath))
+                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
 
     def testCleanAssets(self):
         """
@@ -123,15 +125,15 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifyAudio(self, port, manual=False):
         """
-        Verifies whether the audio is fine or not.
+        Verifies whether the audio is working on the specified port.
 
         Args:
             port (str) : Audio port to verify
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            manual (bool, optional): Manual verification (True: manual, False: automated).
+                                     Defaults to False
 
         Returns:
-            bool : returns the status of audio
+            bool : Returns the status of the audio verification.
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Is audio playing on the {port}? (Y/N):")
@@ -140,10 +142,10 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function tests the Audio Ports by enabling and disabling the ports
+        """Tests the Audio Ports by enabling and disabling the ports.
 
         Returns:
-            bool
+            bool: Final result of the test.
         """
 
         # Download the assets listed in test setup configuration file
@@ -161,28 +163,22 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
         self.log.testStart(self.testName, '1')
 
         # Initialize the dsAudio module
-        self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
+        self.testdsAudio.initialise(self.testdsAudio.getDeviceType(), self.connectionCB, self.formatCB, self.atmosCB)
 
         # Loop through the supported audio ports
         for port,index in self.testdsAudio.getSupportedPorts():
+            # Port Enable test
             self.log.stepStart(f'Enable {port} Port')
-            self.log.step(f'Enable {port} Port')
-
             # Enable the audio port
             self.testdsAudio.enablePort(port, index)
-
-            self.log.step(f'Verify {port} Port')
             result = self.testVerifyAudio(port, True)
-
             self.log.stepResult(result, f'Audio Verification {port} Port')
-            self.log.stepStart(f'Disable {port} Port')
 
+            # Port Disable test
+            self.log.stepStart(f'Disable {port} Port')
             # Disable the audio port
             self.testdsAudio.disablePort(port, index)
-
-            self.log.step(f'Verify {port} Port')
             result = self.testVerifyAudio(port, True)
-
             self.log.stepResult(not result, f'Audio Verification {port} Port')
 
         # Stop the stream playback
@@ -194,7 +190,7 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
         # Terminate dsAudio Module
         self.testdsAudio.terminate()
 
-        # Delete the dsAudio class
+        # Clean up the dsAudio instance
         del self.testdsAudio
 
         return result
