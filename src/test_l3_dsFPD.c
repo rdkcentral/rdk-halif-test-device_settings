@@ -84,7 +84,7 @@
 
 static int32_t gTestGroup = 3;
 static int32_t gTestID = 1;
-static int32_t eIndicator;
+static int32_t eIndicator = 0;
 
 const static ut_control_keyStringMapping_t dsFrontPanelErrorCodeTable[] = {
     {"dsERR_NONE", (int32_t)dsERR_NONE},
@@ -312,8 +312,8 @@ void test_l3_dsFPD_hal_SetFPBlink(void)
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     int32_t ret = 0;
     dsError_t status = dsERR_NONE;
-    uint32_t uBlinkDuration;
-    uint32_t uBlinkIterations;
+    uint32_t uBlinkDuration = 0;
+    uint32_t uBlinkIterations = 0;
 
     ret = selectIndicator();
     if(!ret)
@@ -361,7 +361,7 @@ void test_l3_dsFPD_hal_SetFPBrightness(void)
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     int32_t ret = 0;
     dsError_t status = dsERR_NONE;
-    uint32_t uBrightness;
+    uint32_t uBrightness = 0;
 
     ret = selectIndicator();
     if(!ret)
@@ -443,12 +443,12 @@ void test_l3_dsFPD_hal_FPGetSupportedLEDStates(void)
     gTestID = 7;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsError_t status = dsERR_NONE;
-    dsFPDLedState_t iLedState;
+    uint32_t uLedStates = 0;
 
-    UT_LOG_INFO("Calling dsFPGetSupportedLEDStates(OUT:iLEDState[])");
-    status = dsFPGetSupportedLEDStates(&iLedState);
-    UT_LOG_INFO("Result dsFPGetSupportedLEDStates(OUT:iLEDState:[%d])dsError_t:[%s]" \ 
-                        ,iLedState,UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
+    UT_LOG_INFO("Calling dsFPGetSupportedLEDStates(OUT:uLEDStates[])");
+    status = dsFPGetSupportedLEDStates(&uLedStates);
+    UT_LOG_INFO("Result dsFPGetSupportedLEDStates(OUT:iLEDState:[%X])dsError_t:[%s]" \ 
+                        ,uLedStates,UT_Control_GetMapString(dsFrontPanelErrorCodeTable, status));
     assert(status == dsERR_NONE);
 
     /* Check that the Indicator is valid */
@@ -475,7 +475,7 @@ void test_l3_dsFPD_hal_SetLEDState(void)
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
-    int32_t iLedState;
+    int32_t iLedState = 0;
 
     UT_LOG_MENU_INFO(" \t  Supported POWER LED States are:");
     UT_LOG_MENU_INFO("------------------------------------------");
@@ -556,7 +556,7 @@ void test_l3_dsFPD_hal_SetFPColor(void)
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     int32_t ret = 0;
     dsError_t status = dsERR_NONE;
-    uint32_t uColor;
+    uint32_t uColor = 0xffffff; //White color as default value
     bool isValidColor = false;
 
     ret = selectIndicator();
@@ -617,7 +617,7 @@ void test_l3_dsFPD_hal_GetFPColor(void)
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
-    dsFPDColor_t color;
+    dsFPDColor_t color = dsFPD_COLOR_WHITE;
     int32_t ret = 0;
 
     ret = selectIndicator();
