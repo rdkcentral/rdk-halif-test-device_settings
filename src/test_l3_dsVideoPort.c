@@ -577,7 +577,7 @@ void dsVideoPort_GetResolution()
 void dsVideoPort_SetResolution()
 {
     dsError_t status   = dsERR_NONE;
-    int32_t choice,pixelResolution,frameRate,interlaced;
+    int32_t choice,pixelResolution,frameRate,interlaced,aspectRatio,stereoScopicMode;
     dsVideoPortResolution_t setResolution;
 
     UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
@@ -596,6 +596,31 @@ void dsVideoPort_SetResolution()
     scanf("%d", &choice);
     readAndDiscardRestOfLine(stdin);
     setResolution.pixelResolution = choice;
+
+    UT_LOG_INFO("Supported Aspect Ratio");
+    UT_LOG_INFO("------------------------------------------");
+    for (aspectRatio = 0; aspectRatio < dsVIDEO_ASPECT_RATIO_MAX; aspectRatio++)
+    {
+        UT_LOG_INFO("\t%d. %s",aspectRatio,UT_Control_GetMapString(dsVideoAspectRatioMappingTable, aspectRatio));
+    }
+
+    UT_LOG_INFO("Enter your choice: ");
+    scanf("%d", &choice);
+    readAndDiscardRestOfLine(stdin);
+    setResolution.aspectRatio = choice;
+
+
+    UT_LOG_INFO("Supported Stereo ScopicMode");
+    UT_LOG_INFO("------------------------------------------");
+    for (stereoScopicMode = 0; stereoScopicMode < dsVIDEO_SSMODE_MAX; stereoScopicMode++)
+    {
+        UT_LOG_INFO("\t%d. %s",stereoScopicMode,UT_Control_GetMapString(dsVideoStereoScopicModeMappingTable, stereoScopicMode));
+    }
+
+    UT_LOG_INFO("Enter your choice: ");
+    scanf("%d", &choice);
+    readAndDiscardRestOfLine(stdin);
+    setResolution.stereoScopicMode = choice;
 
     UT_LOG_INFO("Supported Frame Rates");
     UT_LOG_INFO("------------------------------------------");
@@ -623,11 +648,15 @@ void dsVideoPort_SetResolution()
 
     UT_LOG_INFO("Calling dsSetResolution(IN:Handle:[0x%0X],In:dsVideoPortResolution_t(dsVideoResolution_t:[%s]) ", gHandle,\
                     UT_Control_GetMapString(dsVideoResolutionMappingTable, setResolution.pixelResolution));
+    UT_LOG_INFO("dsVideoAspectRatio_t:[%s],dsVideoStereoScopicMode_t:[%s])",UT_Control_GetMapString(dsVideoAspectRatioMappingTable, setResolution.aspectRatio),\
+                         UT_Control_GetMapString(dsVideoStereoScopicModeMappingTable, setResolution.stereoScopicMode));
     UT_LOG_INFO("dsVideoFrameRate_t:[%s],interlaced:[%s])",UT_Control_GetMapString(dsVideoFrameRateMappingTable, setResolution.frameRate),\
                          UT_Control_GetMapString(dsVideoScanModeMappingTable, setResolution.interlaced));
     status = dsSetResolution(gHandle, &setResolution);
     UT_LOG_INFO("Result dsSetResolution(IN:Handle:[0x%0X],In:dsVideoPortResolution_t(dsVideoResolution_t:[%s]) ", gHandle,\
                     UT_Control_GetMapString(dsVideoResolutionMappingTable, setResolution.pixelResolution));
+    UT_LOG_INFO("dsVideoAspectRatio_t:[%s],dsVideoStereoScopicMode_t:[%s])",UT_Control_GetMapString(dsVideoAspectRatioMappingTable, setResolution.aspectRatio),\
+                         UT_Control_GetMapString(dsVideoStereoScopicModeMappingTable, setResolution.stereoScopicMode));
     UT_LOG_INFO("dsVideoFrameRate_t:[%s],interlaced:[%s]),dsError_t=[%s])",UT_Control_GetMapString(dsVideoFrameRateMappingTable, setResolution.frameRate),\
                          UT_Control_GetMapString(dsVideoScanModeMappingTable, setResolution.interlaced),\
                          UT_Control_GetMapString(dsErrorMappingTable, status));
