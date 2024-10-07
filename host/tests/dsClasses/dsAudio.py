@@ -90,7 +90,7 @@ class dsAudioClass():
             return match.group(1)
         return None
 
-    def initialise(self, device_type:int=0):
+    def initialise(self, device_type:int=0, connectionCBFile:str="", formatCBFile:str="", atmosCBFile:str=""):
         """
         Initializes the device settings Audio module.
 
@@ -104,10 +104,24 @@ class dsAudioClass():
                 {
                     "query_type": "direct",
                     "query": "Select Device Type[0: Sink, 1: Source]:",
-                    "input": "0"
+                    "input": str(device_type)
+                },
+                {
+                    "query_type": "direct",
+                    "query": "Enter file name with path to log connection status callbacks:",
+                    "input": connectionCBFile
+                },
+                {
+                    "query_type": "direct",
+                    "query": "Enter file name with path to log audio format callbacks:",
+                    "input": formatCBFile
+                },
+                {
+                    "query_type": "direct",
+                    "query": "Enter file name with path to log ATMOS Caps callbacks:",
+                    "input": atmosCBFile
                 }
         ]
-        promptWithAnswers[0]["input"] = str(device_type)
         result = self.utMenu.select( self.testSuite, "Initialize dsAudio", promptWithAnswers)
 
     def terminate(self):
@@ -488,6 +502,38 @@ class dsAudioClass():
 
         result = self.utMenu.select(self.testSuite, "MS12 DAP Features", promptWithAnswers)
 
+    def setMS12AudioProfile(self, audio_port:str, port_index:int=0, profile:str='Off'):
+        """
+        Sets the MS12 Audio Profile.
+
+        Args:
+            audio_port (str): Name of the audio port (refer to dsAudioPortType enum).
+            port_index (int, optional): Port index. Defaults to 0.
+            profile (str, optional): MS12 profile to be set. Supported profiles are: Off, Music, Movie, Sports, Entertainment, Night, Party, User
+                                     Defaults to 'Off'.
+
+        Returns:
+            None
+        """
+        promptWithAnswers = [
+                {
+                    "query_type": "list",
+                    "query": "Select dsAudio Port:",
+                    "input": str(audio_port)
+                },
+                {
+                    "query_type": "direct",
+                    "query": "Select dsAudio Port Index[0-10]:",
+                    "input": str(port_index)
+                },
+                {
+                    "query_type": "list",
+                    "query": "Select MS12 Profile:",
+                    "input": profile
+                }
+        ]
+        result = self.utMenu.select(self.testSuite, "Set MS12 Profiles", promptWithAnswers)
+
     def enableAssociateAudioMixig(self, enable:bool = True, fader:int = 0):
         """
         Enable Associate Audio Mixing.
@@ -774,6 +820,28 @@ class dsAudioClass():
                 and entry['Index'] == port_index):
                 for mode in entry['stereo_modes']:
                     output.append(dsAudioStereoMode(mode).name)
+        return output
+
+    def getSupportedMS12Profiles(self, audio_port: str, port_index: int = 0):
+        """
+        Returns a list of supported output modes refer dsAudioStereoMode.
+
+        Args:
+            audio_port (str): The name of the audio port.
+            port_index (int, optional): The port index. Defaults to 0.
+
+        Returns:
+            l
+        """
+        ports = self.deviceProfile.get("Ports")
+        if not ports:
+            return []
+
+        output = []
+        for entry in ports.values():
+            if (dsAudioPortType(entry['Typeid']).name == audio_port
+                and entry['Index'] == port_index):
+                return entry['MS12_AudioProfiles']
         return output
 
     def __del__(self):

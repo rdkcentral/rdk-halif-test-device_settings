@@ -81,6 +81,7 @@ Below are top test use-case for the audio port.
 |23|Test Associated Audio Mixing|Play the predefined audio streams. Set the mixer levels and verify| `dsSetAssociatedAudioMixing()`, `dsSetFaderControl()`|`Y`|`Y`|005|
 |24|Test Primary/Secondary Language|Play the predefined audio streams. Set the primary and secondary languages and verify| `dsSetPrimaryLanguage()`, `dsSetSecondaryLanguage()`|`Y`|`Y`|005|
 |25|Test Audio Mixer Levels|Play the predefined audio streams. Set the mixer levels for primary and system audio and verify| `dsSetAudioMixerLevels()`|`N`|`Y`|005|
+|26|Test MS12 Audio Profiles|Play the predefined audio streams. Set the MS12 profiles and verify| `dsSetAudioMixerLevels()`|`N`|`Y`|005|
 
 ## Level 3 Python Test Cases High Level Overview
 

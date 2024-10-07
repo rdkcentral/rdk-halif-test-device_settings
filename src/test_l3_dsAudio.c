@@ -1857,11 +1857,11 @@ void test_l3_dsAudio_ms12Profile(void)
     int32_t choice = -1;
     intptr_t handle = (intptr_t)NULL;
     bool enabled = false;
-    dsMS12AudioProfileList_t profiles = {0};
-    char *profileList[DS_AUDIO_MAX_MS12_PROFILES] = {NULL};
-    char profile[DS_AUDIO_MAX_MS12_LENGTH]  = {0};
+    char *profileList[] = {"Off", "Music" ,"Movie", "Sports" , "Entertainment", "Night", "Party" , "User"};
     dsAudioPortType_t port = dsAUDIOPORT_TYPE_MAX;
     int32_t portIndex = 0;
+    int32_t profileSize = sizeof(profileList)/sizeof(char *);
+    char profile[DS_AUDIO_MAX_MS12_LENGTH]  = {0};
 
     if(dsAudio_list_select_ports(&port, &portIndex))
     {
@@ -1876,36 +1876,19 @@ void test_l3_dsAudio_ms12Profile(void)
         goto exit;
     }
 
-    UT_LOG_INFO("Calling dsGetMS12AudioProfileList(IN:handle:[0x%0X], OUT:profile:[])", handle);
-
-    ret = dsGetMS12AudioProfileList(handle, &profiles);
-
-    UT_LOG_INFO("Result dsGetMS12AudioProfileList(IN:handle:[0x%0X], OUT:profile:[audioProfileList: %s, audioProfileCount: %d] dsError_t:[%s])",
-                handle,
-                profiles.audioProfileList, profiles.audioProfileCount,
-                UT_Control_GetMapString(dsError_mapTable, ret));
-
-    DS_ASSERT(ret == dsERR_NONE);
-
-    char* token = strtok(profiles.audioProfileList, ",");
-    int32_t i = 0;
-
     UT_LOG_MENU_INFO("----------------------------------------------------------");
     UT_LOG_MENU_INFO("MS12 Profile");
     UT_LOG_MENU_INFO("----------------------------------------------------------");
     UT_LOG_MENU_INFO("\t#  %-20s","MS12 Profile");
-    while (token != NULL)
+    for (int i = 0; i < profileSize; i++)
     {
-        profileList[i] = token;
-        UT_LOG_MENU_INFO("\t%d.  %-20s", i+1, profileList[i]);
-        token = strtok(NULL, ",");
-        i++;
+        UT_LOG_MENU_INFO("\t%d.  %-20s", i, profileList[i]);
     }
     UT_LOG_MENU_INFO("----------------------------------------------------------");
 
     UT_LOG_MENU_INFO("Select MS12 Profile: ");
     readInt(&choice);
-    if(choice < 1 || choice > profiles.audioProfileCount)
+    if(choice < 0 || choice >= profileSize)
     {
         UT_LOG_ERROR("Invalid profile choice");
         goto exit;
@@ -1914,7 +1897,7 @@ void test_l3_dsAudio_ms12Profile(void)
     UT_LOG_INFO("Calling dsSetMS12AudioProfile(IN:handle:[0x%0X], IN:profile:[%s])",
                  handle, profileList[choice-1]);
 
-    ret = dsSetMS12AudioProfile(handle, profileList[choice-1]);
+    ret = dsSetMS12AudioProfile(handle, profileList[choice]);
 
     UT_LOG_INFO("Result dsSetMS12AudioProfile(IN:handle:[0x%0X], IN:profile:[%s]) dsError_t:[%s]",
                 handle, profileList[choice-1],
@@ -1931,7 +1914,7 @@ void test_l3_dsAudio_ms12Profile(void)
                 UT_Control_GetMapString(dsError_mapTable, ret));
 
     DS_ASSERT(ret == dsERR_NONE);
-    DS_ASSERT(!strcmp(profile, profileList[choice-1]));
+    DS_ASSERT(!strcmp(profile, profileList[choice]));
 
 exit:
     UT_LOG_INFO("Out %s", __FUNCTION__);
