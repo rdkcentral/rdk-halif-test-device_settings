@@ -147,7 +147,7 @@ static void readAndDiscardRestOfLine(FILE* in)
 *
 *This function read the input from the stdin.
 */
-void readInput(int *choice)
+static void readInput(int *choice)
 {
     scanf("%d",choice);
     readAndDiscardRestOfLine(stdin);
