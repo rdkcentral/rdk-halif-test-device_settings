@@ -76,7 +76,6 @@
 #include <ut_control_plane.h>
 #include <ut_kvp.h>
 
-#include "test_parse_configuration.h"
 #include "dsVideoDevice.h"
 
 
@@ -164,7 +163,7 @@ const static ut_control_keyStringMapping_t dsVideoFrameRateTable[] = {
  *
  * This function clears the stdin buffer.
  */
-void readAndDiscardRestOfLine(FILE* in)
+static void readAndDiscardRestOfLine(FILE* in)
 {
     int c;
     while ( (c = fgetc(in)) != EOF && c != '\n');
@@ -185,8 +184,8 @@ void dsVideoDevice_FrameratePostChange(unsigned int tSecond)
 static void dsVideoDevice_getHandle()
 {
     dsError_t status   = dsERR_NONE;
-    int32_t device, selectedVideoDevice;
-     UT_LOG_INFO("In %s [%02d]", __FUNCTION__, gTestGroup);
+    int32_t device = 0, selectedVideoDevice = 0;
+    UT_LOG_INFO("In %s [%02d]", __FUNCTION__, gTestGroup);
 
     UT_LOG_MENU_INFO(" Supported Video Device:");
     for (device = 0; device < num_of_devices; device++)
@@ -297,11 +296,12 @@ void test_l3_dsVideoDevice_SetZoomMode()
     dsError_t status   = dsERR_NONE;
     gTestID = 2;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
-    int32_t choice,j;
+    int32_t choice = 0;
+    int32_t j=0;
 
     dsVideoDevice_getHandle();
     UT_LOG_MENU_INFO(" \t  Supported Zoom Modes are:");
-    for (j = 0; j <= dsVIDEO_ZOOM_MAX; j++)
+    for (j = dsVIDEO_ZOOM_NONE; j < dsVIDEO_ZOOM_MAX; j++)
     {
         UT_LOG_MENU_INFO("\t%d.  %-20s ", j, \
                     UT_Control_GetMapString(dsVideoZoomMappingTable, j));
@@ -350,11 +350,12 @@ void test_l3_dsVideoDevice_SetDisplayFramerate()
     gTestID = 3;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     dsError_t status   = dsERR_NONE;
-    int32_t choice,j;
+    int32_t choice= 0;
+    int32_t j = 0;
 
     dsVideoDevice_getHandle();
     UT_LOG_MENU_INFO(" \t  Supported Display Framerate are:");
-    for (j = 0; j <= dsVIDEO_FRAMERATE_MAX; j++)
+    for (j = dsVIDEO_FRAMERATE_24; j < dsVIDEO_FRAMERATE_MAX; j++)
     {
         UT_LOG_MENU_INFO("\t%d.  %-20s ", j, UT_Control_GetMapString(dsVideoFrameRateTable, j));
     }
@@ -373,7 +374,6 @@ void test_l3_dsVideoDevice_SetDisplayFramerate()
     UT_LOG_INFO("Calling dsSetDisplayframerate(IN:Handle:[0x%0X],IN:framerate:[%s])",gdeviceHandle, \
                         UT_Control_GetMapString(dsVideoFrameRateTable, choice));
 
-    // This need to check
     status = dsSetDisplayframerate(gdeviceHandle, UT_Control_GetMapString(dsVideoFrameRateTable, choice));
     UT_LOG_INFO("Result dsSetDisplayframerate(IN:Handle:[0x%0X],IN:framerate:[%s]), dsError_t=[%s]",gdeviceHandle, \
                         UT_Control_GetMapString(dsVideoFrameRateTable, choice), UT_Control_GetMapString(dsErrorMappingTable, status));
@@ -403,7 +403,8 @@ void test_l3_dsVideoDevice_SetFRFMode()
     gTestID = 4;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     dsError_t status   = dsERR_NONE;
-    int32_t choice,j;
+    int32_t choice = 0;
+    int32_t j = 0;
 
     dsVideoDevice_getHandle();
     UT_LOG_MENU_INFO(" \t  Supported Display FRF Mode are:");
@@ -455,11 +456,13 @@ void test_l3_dsVideoDevice_GetVideoCodecInfo()
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     dsError_t status   = dsERR_NONE;
     dsVideoCodecInfo_t codecInfo;
-    int32_t choice,i,j;
+    int32_t choice = 0;
+    int32_t i = 0;
+    int32_t j = 0;
 
     dsVideoDevice_getHandle();
     UT_LOG_MENU_INFO(" \t  Supported Video Codec Info:");
-    for (i = 0; i <= dsVIDEO_CODEC_MAX;i++)
+    for (i = dsVIDEO_CODEC_MPEGHPART2; i < dsVIDEO_CODEC_MAX;i++)
     {        
             UT_LOG_MENU_INFO("\t%d.  %-20s ", i, UT_Control_GetMapString(dsVideoCodingFormatMappingTable, i));
     }
@@ -543,7 +546,7 @@ void test_l3_dsVideoDevice_GetHDRCapabilities()
 {
     gTestID = 7;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
-    dsError_t status   = dsERR_NONE;
+    dsError_t status = dsERR_NONE;
     int32_t HDRCapabilities = 0;
 
     dsVideoDevice_getHandle();
@@ -606,7 +609,7 @@ void test_l3_dsVideoDevice_dsGetCurrentDisplayframerate()
     gTestID = 9;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     dsError_t status   = dsERR_NONE;
-    char currentFrameRate[dsVIDEO_FRAMERATE_MAX];
+    char currentFrameRate[dsVIDEO_FRAMERATE_MAX] = {0};
 
     dsVideoDevice_getHandle();
     UT_LOG_INFO("Calling dsGetCurrentDisplayframerate(IN:Handle[0x%0X],OUT:currentFrameRate[])",gdeviceHandle);
