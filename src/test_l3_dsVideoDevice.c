@@ -83,8 +83,7 @@
 #define DS_ASSERT(actual,expected) assert(actual==expected)
 #define UT_LOG_MENU_INFO UT_LOG_INFO
 
-intptr_t gHandle = 0;
-//int32_t gSelectedVideoDevice = 0;
+intptr_t gdeviceHandle = 0;
 
 /* currently it support only one video deice as per HAL spec*/
 int num_of_devices = 1; 
@@ -186,7 +185,7 @@ void dsVideoDevice_FrameratePostChange(unsigned int tSecond)
 static void dsVideoDevice_getHandle()
 {
     dsError_t status   = dsERR_NONE;
-    int32_t device, gSelectedVideoDevice;
+    int32_t device, selectedVideoDevice;
      UT_LOG_INFO("In %s [%02d]", __FUNCTION__, gTestGroup);
 
     UT_LOG_MENU_INFO(" Supported Video Device:");
@@ -196,19 +195,19 @@ static void dsVideoDevice_getHandle()
     }
     UT_LOG_MENU_INFO("------------------------------------------");
     UT_LOG_MENU_INFO(" Select the Video Device:");
-    scanf("%d", &gSelectedVideoDevice);
+    scanf("%d", &selectedVideoDevice);
     readAndDiscardRestOfLine(stdin);
     
-    if(gSelectedVideoDevice < 0 || gSelectedVideoDevice >= 1) 
+    if(selectedVideoDevice < 0 || selectedVideoDevice >= 1) 
     {
        UT_LOG_ERROR("\nInvalid option selected\n");
        goto exit;
     }
 
-    UT_LOG_INFO("Calling dsGetVideoDevice(IN:index:[%d], OUT:Handle[%p])", gSelectedVideoDevice, &gHandle);
-    status = dsGetVideoDevice(gSelectedVideoDevice, &gHandle);
-    UT_LOG_INFO("Result dsGetVideodevice(IN:index:[0x%0d], OUT:Handle[%p]) dsError_t=[%s]",gSelectedVideoDevice, \
-                                    gHandle, UT_Control_GetMapString(dsErrorMappingTable, status));
+    UT_LOG_INFO("Calling dsGetVideoDevice(IN:index:[%d], OUT:Handle[])", selectedVideoDevice);
+    status = dsGetVideoDevice(selectedVideoDevice, &gdeviceHandle);
+    UT_LOG_INFO("Result dsGetVideodevice(IN:index:[0x%0d], OUT:Handle[0x%0X]) dsError_t=[%s]",selectedVideoDevice, \
+                                    gdeviceHandle, UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status, dsERR_NONE);
     exit:
         UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -237,15 +236,15 @@ void test_l3_dsVideoDevice_Init()
 
     UT_LOG_INFO("Calling dsVideoDeviceInit()");
     status = dsVideoDeviceInit();
-    UT_LOG_INFO("Result dsVideoDeviceInit() OUT: dsError_t=[%s]", UT_Control_GetMapString(dsErrorMappingTable, status));
+    UT_LOG_INFO("Result dsVideoDeviceInit(), dsError_t=[%s]", UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status, dsERR_NONE);
     UT_LOG_INFO("Calling dsRegisterFrameratePreChangeCB()");
     status = dsRegisterFrameratePreChangeCB(dsVideoDevice_FrameratePreChange);
-    UT_LOG_INFO("Result dsRegisterFrameratePreChangeCB() OUT:dsError_t=[%s]", UT_Control_GetMapString(dsErrorMappingTable, status));
+    UT_LOG_INFO("Result dsRegisterFrameratePreChangeCB(), dsError_t=[%s]", UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status, dsERR_NONE);
     UT_LOG_INFO("Calling dsRegisterFrameratePostChangeCB()");
     status = dsRegisterFrameratePostChangeCB(dsVideoDevice_FrameratePostChange);
-    UT_LOG_INFO("Result dsRegisterFrameratePostChangeCB() OUT:dsError_t=[%s]", UT_Control_GetMapString(dsErrorMappingTable, status));
+    UT_LOG_INFO("Result dsRegisterFrameratePostChangeCB(), dsError_t=[%s]", UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status, dsERR_NONE);
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
@@ -319,10 +318,10 @@ void test_l3_dsVideoDevice_SetZoomMode()
        goto exit;
     }
 
-    UT_LOG_INFO("Calling dsSetDFC(IN:Handle:[0x%0X],IN:dsVideoZoom_t:[%s])",gHandle, \
+    UT_LOG_INFO("Calling dsSetDFC(IN:Handle:[0x%0X],IN:dsVideoZoom_t:[%s])",gdeviceHandle, \
                     UT_Control_GetMapString(dsVideoZoomMappingTable, choice));
-    status = dsSetDFC(gHandle, choice);
-    UT_LOG_INFO("Result dsSetDFC(IN:Handle:[0x%0X],IN:dsVideoZoom_t:[%s]), dsError_t=[%s]", gHandle, \
+    status = dsSetDFC(gdeviceHandle, choice);
+    UT_LOG_INFO("Result dsSetDFC(IN:Handle:[0x%0X],IN:dsVideoZoom_t:[%s]), dsError_t=[%s]", gdeviceHandle, \
                     UT_Control_GetMapString(dsVideoZoomMappingTable, choice), \
                     UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status, dsERR_NONE);
@@ -371,12 +370,12 @@ void test_l3_dsVideoDevice_SetDisplayFramerate()
        goto exit;
     }
 
-    UT_LOG_INFO("Calling dsSetDisplayframerate(IN:Handle:[0x%0X],IN:framerate:[%s])",gHandle, \
+    UT_LOG_INFO("Calling dsSetDisplayframerate(IN:Handle:[0x%0X],IN:framerate:[%s])",gdeviceHandle, \
                         UT_Control_GetMapString(dsVideoFrameRateTable, choice));
 
     // This need to check
-    status = dsSetDisplayframerate(gHandle, UT_Control_GetMapString(dsVideoFrameRateTable, choice));
-    UT_LOG_INFO("Result dsSetDisplayframerate(IN:Handle:[0x%0X],IN:framerate:[%s]), dsError_t=[%s]",gHandle, \
+    status = dsSetDisplayframerate(gdeviceHandle, UT_Control_GetMapString(dsVideoFrameRateTable, choice));
+    UT_LOG_INFO("Result dsSetDisplayframerate(IN:Handle:[0x%0X],IN:framerate:[%s]), dsError_t=[%s]",gdeviceHandle, \
                         UT_Control_GetMapString(dsVideoFrameRateTable, choice), UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status, dsERR_NONE);
     
@@ -424,10 +423,10 @@ void test_l3_dsVideoDevice_SetFRFMode()
        goto exit;
     }
 
-    UT_LOG_INFO("Calling dsSetFRFMode(IN:Handle:[0x%0X],IN:framerate:[%s])",gHandle, \
+    UT_LOG_INFO("Calling dsSetFRFMode(IN:Handle:[0x%0X],IN:framerate:[%s])",gdeviceHandle, \
                                                                 ((choice==0)?"Disable":"Enable"));
-    status = dsSetFRFMode(gHandle, choice);
-    UT_LOG_INFO("Result dsSetFRFMode(IN:Handle:[0x%0X],IN:framerate:[%s]) OUT:dsError_t=[%s]",gHandle, \
+    status = dsSetFRFMode(gdeviceHandle, choice);
+    UT_LOG_INFO("Result dsSetFRFMode(IN:Handle:[0x%0X],IN:framerate:[%s]) dsError_t=[%s]",gdeviceHandle, \
                                                                 ((choice==0)?"Disable":"Enable"), UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status, dsERR_NONE);
 
@@ -476,12 +475,12 @@ void test_l3_dsVideoDevice_GetVideoCodecInfo()
     }
 
 
-    UT_LOG_INFO("Calling dsGetVideoCodecInfo(IN:Handle:[0x%0X],IN:Codec[%s]), OUT:CodecInfo)",gHandle,\
+    UT_LOG_INFO("Calling dsGetVideoCodecInfo(IN:Handle:[0x%0X],IN:Codec[%s], OUT:CodecInfo[]))",gdeviceHandle,\
                                     UT_Control_GetMapString(dsVideoCodingFormatMappingTable, choice));
-    status = dsGetVideoCodecInfo(gHandle, (dsVideoCodingFormat_t)choice, &codecInfo);
-    UT_LOG_INFO("Result dsGetVideoCodecInfo(IN:Handle:[0x%0X],IN:Codec[%s]), dsError_t=[%s], OUT:Codec number of Entires=[%d]",gHandle,\
+    status = dsGetVideoCodecInfo(gdeviceHandle, (dsVideoCodingFormat_t)choice, &codecInfo);
+    UT_LOG_INFO("Result dsGetVideoCodecInfo(IN:Handle:[0x%0X],IN:Codec[%s], OUT:Codec number of Entires[%d]), dsError_t=[%s] ",gdeviceHandle,\
                                     UT_Control_GetMapString(dsVideoCodingFormatMappingTable, choice), \
-            UT_Control_GetMapString(dsErrorMappingTable, status),codecInfo.num_entries);
+            codecInfo.num_entries, UT_Control_GetMapString(dsErrorMappingTable, status));
 
     for(j = 0; j< codecInfo.num_entries; j++)
     {
@@ -517,9 +516,9 @@ void test_l3_dsVideoDevice_GetSupportedVideoCodingFormat()
     uint32_t supportedFormat = 0;
 
     dsVideoDevice_getHandle();
-    UT_LOG_INFO("Calling dsGetSupportedVideoCodingFormats(IN:Handle[0x%0X],OUT:supportedFormat)",gHandle);
-    status = dsGetSupportedVideoCodingFormats(gHandle, &supportedFormat);
-    UT_LOG_INFO("Result dsGetSupportedVideoCodingFormats(IN:Handle[0x%0X],OUT:supportedFormat=[0x08%x]), dsError_t=[%s]",gHandle, \
+    UT_LOG_INFO("Calling dsGetSupportedVideoCodingFormats(IN:Handle[0x%0X],OUT:supportedFormat[])",gdeviceHandle);
+    status = dsGetSupportedVideoCodingFormats(gdeviceHandle, &supportedFormat);
+    UT_LOG_INFO("Result dsGetSupportedVideoCodingFormats(IN:Handle[0x%0X],OUT:supportedFormat[0x08%x]), dsError_t=[%s]",gdeviceHandle, \
                                                 supportedFormat,UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status, dsERR_NONE);
     UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -548,9 +547,9 @@ void test_l3_dsVideoDevice_GetHDRCapabilities()
     int32_t HDRCapabilities = 0;
 
     dsVideoDevice_getHandle();
-    UT_LOG_INFO("Calling dsGetHDRCapabilities(IN:Handle[0x%0X],OUT:HDRCapabilities)",gHandle);
-    status = dsGetHDRCapabilities(gHandle, &HDRCapabilities);
-    UT_LOG_INFO("Result dsGetHDRCapabilities(IN:Handle[0x%0X],OUT:HDRCapabilites=[0x08%x]), dsError_t=[%s] ",gHandle, \
+    UT_LOG_INFO("Calling dsGetHDRCapabilities(IN:Handle[0x%0X],OUT:HDRCapabilities[])",gdeviceHandle);
+    status = dsGetHDRCapabilities(gdeviceHandle, &HDRCapabilities);
+    UT_LOG_INFO("Result dsGetHDRCapabilities(IN:Handle[0x%0X],OUT:HDRCapabilites[0x08%x]), dsError_t=[%s] ",gdeviceHandle, \
                                                HDRCapabilities, UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status, dsERR_NONE);
     UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -579,9 +578,9 @@ void test_l3_dsVideoDevice_dsGetFRFMode()
     int32_t frfMode = 0;
 
     dsVideoDevice_getHandle();
-    UT_LOG_INFO("Calling dsGetFRFMode(IN:Handle[0x%0X],OUT:frfMode)",gHandle);
-    status = dsGetFRFMode(gHandle, &frfMode);
-    UT_LOG_INFO("Result dsGetFRFMode(IN:Handle[0x%0X],OUT:frfMode=[0x08%d]), dsError_t=[%s] ",gHandle, \
+    UT_LOG_INFO("Calling dsGetFRFMode(IN:Handle[0x%0X],OUT:frfMode[])",gdeviceHandle);
+    status = dsGetFRFMode(gdeviceHandle, &frfMode);
+    UT_LOG_INFO("Result dsGetFRFMode(IN:Handle[0x%0X],OUT:frfMode[0x08%d]), dsError_t=[%s] ",gdeviceHandle, \
                                                 frfMode,UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status, dsERR_NONE);
     UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -610,9 +609,9 @@ void test_l3_dsVideoDevice_dsGetCurrentDisplayframerate()
     char currentFrameRate[dsVIDEO_FRAMERATE_MAX];
 
     dsVideoDevice_getHandle();
-    UT_LOG_INFO("Calling dsGetCurrentDisplayframerate(IN:Handle[0x%0X],OUT:currentFrameRate)",gHandle);
-    status = dsGetCurrentDisplayframerate(gHandle, currentFrameRate);
-    UT_LOG_INFO("Result dsGetCurrentDisplayframerate(IN:Handle[0x%0X],OUT:currentFrameRate=[%s]), dsError_t=[%s]",gHandle, \
+    UT_LOG_INFO("Calling dsGetCurrentDisplayframerate(IN:Handle[0x%0X],OUT:currentFrameRate[])",gdeviceHandle);
+    status = dsGetCurrentDisplayframerate(gdeviceHandle, currentFrameRate);
+    UT_LOG_INFO("Result dsGetCurrentDisplayframerate(IN:Handle[0x%0X],OUT:currentFrameRate[%s]), dsError_t=[%s]",gdeviceHandle, \
                                                 currentFrameRate, UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status, dsERR_NONE);
     UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -641,9 +640,9 @@ void test_l3_dsVideoDevice_dsGetZoomMode()
     dsVideoZoom_t dfc;
 
     dsVideoDevice_getHandle();
-    UT_LOG_INFO("Calling dsGetDFC(IN:Handle[0x%0X],OUT:CurrentZoomMode[])",gHandle);
-    status = dsGetDFC(gHandle, &dfc);
-    UT_LOG_INFO("Result dsGetDFC((IN:Handle[0x%0X],OUT:CurrentZoomMode=[%s]), dsError_t=[%s]",gHandle, \
+    UT_LOG_INFO("Calling dsGetDFC(IN:Handle[0x%0X],OUT:CurrentZoomMode[])",gdeviceHandle);
+    status = dsGetDFC(gdeviceHandle, &dfc);
+    UT_LOG_INFO("Result dsGetDFC((IN:Handle[0x%0X],OUT:CurrentZoomMode[%s]), dsError_t=[%s]",gdeviceHandle, \
                                                 UT_Control_GetMapString(dsVideoZoomMappingTable,(int32_t) dfc), \
                                                 UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status, dsERR_NONE);
@@ -659,7 +658,7 @@ static UT_test_suite_t * pSuite = NULL;
 
 int test_l3_dsVideoDevice_register(void)
 {
-    pSuite = UT_add_suite("[L3 dsVideodevice]", NULL, NULL);
+    pSuite = UT_add_suite_withGroupID("[L3 dsVideoDevice]", NULL, NULL,UT_TESTS_L3);
     if (pSuite == NULL)
     {
         UT_LOG_ERROR("Failed to create the test suite");
