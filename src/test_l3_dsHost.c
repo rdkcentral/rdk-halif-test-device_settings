@@ -301,11 +301,11 @@ int test_l3_dsHost_register(void)
     }
     // List of test function names and strings
 
-    UT_add_test( pSuite, "Initialize Devicesettings Host", test_l3_dsHost_hal_Init);
-    UT_add_test( pSuite, "Get Temperature", test_l3_dsHost_hal_get_Temperature);
+    UT_add_test( pSuite, "Initialize dsHost", test_l3_dsHost_hal_Init);
+    UT_add_test( pSuite, "Get CPU Temperature", test_l3_dsHost_hal_get_Temperature);
     UT_add_test( pSuite, "Get SoC ID", test_l3_dsHost_hal_get_SocID);
     UT_add_test( pSuite, "Get Host EDID", test_l3_dsHost_hal_get_hostEdid);
-    UT_add_test( pSuite, "Terminate Devicesettings Host", test_l3_dsHost_hal_Term);
+    UT_add_test( pSuite, "Terminate dsHost", test_l3_dsHost_hal_Term);
 
     return 0;
 }
