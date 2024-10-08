@@ -156,8 +156,9 @@ class dsVideoPort_test2_Check_DisplayConnected_VideoPort(utHelperClass):
 
         self.log.testStart("test2_Check_DisplayConnected_VideoPort", '1')
 
-        # Initialize the dsVideoPort module
-        #self.testdsVideoPort.initialise()
+        # Initialize the dsVideoPort module only for sink
+        if not self.testdsVideoPort.getDeviceType():
+            self.testdsVideoPort.initialise()
 
         # Loop through the supported Video ports
         for port,index in self.testdsVideoPort.getSupportedPorts():
@@ -166,6 +167,10 @@ class dsVideoPort_test2_Check_DisplayConnected_VideoPort(utHelperClass):
 
             # Enable the Video port
             self.testdsVideoPort.enablePort(port, index)
+
+            # Enable the HDCP only for source devices
+            if self.testdsVideoPort.getDeviceType():
+                self.testdsVideoPort.enable_HDCP(port, index)
 
             self.log.step(f'Verify {port} Port')
             result = self.testVerifyDisplay(True)

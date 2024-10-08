@@ -161,8 +161,8 @@ int UT_register_tests(void)
     {
         registerFailed |= test_l1_dsVideoPort_register();
         registerFailed |= test_l2_dsVideoPort_register();
-        registerFailed |= test_l3_dsVideoPort_register();
     }
+    registerFailed |= test_l3_dsVideoPort_register();
     if (gDSModule & dsComposite)
     {
         registerFailed |= test_l1_dsCompositeIn_register();

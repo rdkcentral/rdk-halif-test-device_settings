@@ -117,7 +117,7 @@ class dsVideoPort_test9_VerifyBackgroundColor(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyHDCPVersion(self, manual=False):
+    def testVerifyBackGroundColor(self, manual=False,backgroundColor:str=0):
         """
         Verifies the HDCP Version .
 
@@ -129,8 +129,7 @@ class dsVideoPort_test9_VerifyBackgroundColor(utHelperClass):
             bool
         """
         if manual == True:
-            hdcpVersion = self.testdsVideoPort.getHDCPVersion()
-            return self.testUserResponse.getUserYN(f'is {hdcpVersion} HDCP Version displayed on Analyzer (Y/N): ')
+            return self.testUserResponse.getUserYN(f'is {backgroundColor} displayed on Analyzer (Y/N): ')
         else :
             #TODO: Add automation verification methods
             return False
@@ -164,14 +163,16 @@ class dsVideoPort_test9_VerifyBackgroundColor(utHelperClass):
             # Enable the Video port
             self.testdsVideoPort.enablePort(port, index)
 
+            # Enable the HDCP only for source devices
+            if self.testdsVideoPort.getDeviceType():
+                self.testdsVideoPort.enable_HDCP(port, index)
+
             for backgroundColor in list(dsVideoBackgroundColor):
                 if backgroundColor != dsVideoBackgroundColor.dsVIDEO_BGCOLOR_MAX:
-                    self.testdsVideoPort.select_BackgroundColor(port, index, backgroundColor)
+                    self.testdsVideoPort.select_BackgroundColor(port, index, dsVideoBackgroundColor(backgroundColor).name)
+                    result = self.testVerifyBackGroundColor(True,dsVideoBackgroundColor(backgroundColor).name)
 
-            self.log.step(f'Verify {self.testdsVideoPort.getHDCPVersion()} Version')
-            result = self.testVerifyHDCPVersion(True)
-
-            self.log.stepResult(result, f'Verified the {self.testdsVideoPort.getHDCPVersion()} Version')
+            self.log.stepResult(result, "All parameters verified using HDMI Analyzer")
 
 
         # Clean the assets downloaded to the device
