@@ -24,7 +24,9 @@
 import yaml
 import os
 import sys
+import time
 from enum import Enum, auto
+import re
 
 # Add parent outside of the class directory
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -35,12 +37,38 @@ from raft.framework.plugins.ut_raft.utSuiteNavigator import UTSuiteNavigatorClas
 from raft.framework.plugins.ut_raft.interactiveShell import InteractiveShell
 
 class dsFPDIndicatorType(Enum):
-    ID_LR     = 0
-    HDMI      = auto()
-    SPDIF     = auto()
-    SPEAKER   = auto()
-    ARC       = auto()
-    HEADPHONE = auto()
+    dsFPD_INDICATOR_MESSAGE   = 0
+    dsFPD_INDICATOR_POWER     = auto()
+    dsFPD_INDICATOR_RECORD    = auto()
+    dsFPD_INDICATOR_REMOTE    = auto()
+    dsFPD_INDICATOR_RFBYPASS  = auto() 
+    dsFPD_INDICATOR_MAX       = auto()
+
+class dsFPDState(Enum):
+    dsFPD_STATE_OFF  = 0
+    dsFPD_STATE_ON   = auto()
+    dsFPD_STATE_MAX  = auto()
+
+class dsFPDLedState(Enum):
+    dsFPD_LED_DEVICE_NONE                    = 0
+    dsFPD_LED_DEVICE_ACTIVE                  = auto()
+    dsFPD_LED_DEVICE_STANDBY                 = auto()
+    dsFPD_LED_DEVICE_WPS_CONNECTING          = auto()
+    dsFPD_LED_DEVICE_WPS_CONNECTED           = auto()
+    dsFPD_LED_DEVICE_WPS_ERROR               = auto()
+    dsFPD_LED_DEVICE_FACTORY_RESET           = auto()
+    dsFPD_LED_DEVICE_USB_UPGRADE             = auto()
+    dsFPD_LED_DEVICE_SOFTWARE_DOWNLOAD_ERROR = auto()
+    dsFPD_LED_DEVICE_MAX                     = auto()
+
+class dsFPDColor(Enum):
+    dsFPD_COLOR_BLUE   = 0x0000FF
+    dsFPD_COLOR_GREEN  = 0x00FF00
+    dsFPD_COLOR_RED    = 0xFF0000
+    dsFPD_COLOR_YELLOW = 0xFFFFE0
+    dsFPD_COLOR_ORANGE = 0xFF8C00
+    dsFPD_COLOR_WHITE  = 0xFFFFFF
+    dsFPD_COLOR_MAX    = 6  
 
 class dsFPDClass():
 
@@ -62,79 +90,286 @@ class dsFPDClass():
 
         self.utMenu.start()
 
+    def searchPattern(self, haystack, pattern):
+        match = re.search(pattern, haystack)
+        if match:
+            return match.group(1)
+        return None
+
     def initialise(self, device_type:int=0):
         """
         Initializes the device settings Front Panel Device module.
 
         Args:
-            device_type (int, optional): 0 - sink device, 1 - source device. Defaults to sink.
-
+            None
         Returns:
             None
         """
-        promptWithAnswers = {
-            "Select Device Type[0: Sink, 1: Source]:":"0"
-        }
-        promptWithAnswers["Select Device Type[0: Sink, 1: Source]:"] = str(device_type)
-        result = self.utMenu.select( self.testSuite, "Initialize dsFPD", promptWithAnswers)
+        result = self.utMenu.select( self.testSuite, "Initialize dsFPD")
 
-    def setState(self, fdp_indicator:int, indicator_state:int=2):
+    def setState(self, fdp_indicator:int=1, indicator_state:int=1):
         """
-        Enables the audio port.
+        Set the LED Indicator State.
 
         Args:
-            fpd_indicator (int): front panle device indicator value enum
-            indicator_state (int): state to set 0 -OFF 1 -ON
+            fdp_indicator (int): fpd indicator value enum
+            indicator_state (int): fpd indicator state value enum.
 
         Returns:
             None
         """
-        promptWithAnswers = {
-            "Ports": {
-                "Select dsAudio Port:": "1",
-                "Select dsAudio Port Index[0-10]:": "0"
+        promptWithAnswers = [
+            {
+                "query_type": "list",
+                "query": "Select Indicator : ",
+                "input": "dsFPD_INDICATOR_POWER"
             },
-            "ARC": {
-                "Select dsAudio Port:": "2",
-                "Select dsAudio Port Index[0-10]:": "0",
-                "Select ARC Type:": "2"
+            {
+                "query_type": "list",
+                "query": "Select State : ",
+                "input": "dsFPD_STATE_ON"
             }
-        }
-        if audio_port == dsAudioPortType.ARC.value:
-            promptWithAnswers["ARC"]["Select dsAudio Port:"] = str(audio_port)
-            promptWithAnswers["ARC"]["Select dsAudio Port Index[0-10]:"] = str(port_index)
-            promptWithAnswers["ARC"]["Select ARC Type:"] = str(arc_type)
-            input = promptWithAnswers["ARC"]
-        else:
-            promptWithAnswers["Ports"]["Select dsAudio Port:"] = str(audio_port)
-            promptWithAnswers["Ports"]["Select dsAudio Port Index[0-10]:"] = str(port_index)
-            input = promptWithAnswers["Ports"]
+        ]
+        promptWithAnswers[0]["input"] = str(fdp_indicator)
+        promptWithAnswers[1]["input"] = str(indicator_state)
+        result = self.utMenu.select(self.testSuite, "Set Front Panel Indicator State", promptWithAnswers)
 
-        result = self.utMenu.select(self.testSuite, "Enable Audio Port", input)
-
-    def disablePort(self, audio_port:int, port_index:int=0):
+    def getState(self, fdp_indicator:int=1):
         """
-        Enables the audio port.
+        Get the LED Indicator State.
 
         Args:
-            audio_port (str): name of the audio port. Refer dsAudioPortType enum
+            fdp_indicator (int): fpd indicator value enum
+
+        Returns:
+            fpd indicator state value enum.
+            None
+        """
+        promptWithAnswers = [
+            {
+                "query_type": "list",
+                "query": "Select Indicator : ",
+                "input": "dsFPD_INDICATOR_POWER"
+            }
+        ]
+        promptWithAnswers[0]["input"] = str(fdp_indicator)
+
+        result = self.utMenu.select(self.testSuite, "Get Front Panel Indicator State", promptWithAnswers)
+        LedStatePattern = r"Result dsGetFPState\(IN:Indicator:\[.*\], OUT:State:\[(dsFPD_INDICATOR_\w+)\]\)"
+        ledState = self.searchPattern(result,LedStatePattern)
+
+        return ledState
+
+    def blinkIndicator(self, fdp_indicator:int=1, blink_duration:int=1000, blink_iteration:int=3):
+        """
+        Set the FPD indicator to defined Blink pattern.
+
+        Args:
+            fdp_indicator (int):   fpd indicator value enum
+            blink_duration (int):  duration of On and off state
+            blink_iteration (int): iteration of Blink
 
         Returns:
             None
         """
-        promptWithAnswers = {
-            "Select dsAudio Port:": "1",
-            "Select dsAudio Port Index[0-10]:": "0"
-        }
+        promptWithAnswers = [
+            {
+                "query_type": "list",
+                "query": "Select Indicator :",
+                "input": "dsFPD_INDICATOR_POWER"
+            },
+            {
+                "query_type": "direct",
+                "query": "Enter Blink Duration in ms: ",
+                "input": "1000"
+            },
+            {
+                "query_type": "direct",
+                "query": "Enter Blink iteration: ",
+                "input": "3"
+            }
+        ]
+        promptWithAnswers[0]["input"] = str(fdp_indicator)
+        promptWithAnswers[1]["input"] = str(blink_duration)
+        promptWithAnswers[1]["input"] = str(blink_iteration)
+        result = self.utMenu.select(self.testSuite, "Blink Front Panel Indicator", promptWithAnswers)
 
-        promptWithAnswers["Select dsAudio Port:"] = str(audio_port)
-        promptWithAnswers["Select dsAudio Port Index[0-10]:"] = str(port_index)
+    def setBrightness(self, fdp_indicator:int=1, brightness:int=100):
+        """
+        Set the FPD indicator to defined Blink pattern.
 
-        result = self.utMenu.select(self.testSuite, "Disable Audio Port", promptWithAnswers)
+        Args:
+            fdp_indicator (int):   fpd indicator value enum
+            brightness (int):  brightness of indicator [0-100]
+
+        Returns:
+            None
+        """
+        promptWithAnswers = [
+            {
+                "query_type": "list",
+                "query": "Select Indicator :",
+                "input": "dsFPD_INDICATOR_POWER"
+            },
+            {
+                "query_type": "direct",
+                "query": "Enter LED Brightness (Range: 0-100): ",
+                "input": "100"
+            }
+        ]
+        promptWithAnswers[0]["input"] = str(fdp_indicator)
+        promptWithAnswers[1]["input"] = str(brightness)
+        result = self.utMenu.select(self.testSuite, "Set Front Panel Indicaor Brightness", promptWithAnswers)
+
+    def getBrightness(self, fdp_indicator:int=1):
+        """
+        Get the FPD indicator to defined Blink pattern.
+
+        Args:
+            fdp_indicator (int):   fpd indicator value enum
+
+        Returns:
+            brightness of indicator [0-100]
+        """
+        promptWithAnswers = [
+            {
+                "query_type": "list",
+                "query": "Select Indicator :",
+                "input": "dsFPD_INDICATOR_POWER"
+            }
+        ]
+        promptWithAnswers[0]["input"] = str(fdp_indicator)
+        result = self.utMenu.select(self.testSuite, "Get Front Panel Indicaor Brightness", promptWithAnswers)
+        
+        LedBrightnessPattern = r"Result dsGetFPBrightness\(IN:Indicator:\[.*\], OUT:Brightness:\[(\d+)\]\)"
+        ledBrightness = self.searchPattern(result,LedBrightnessPattern)
+
+        return ledBrightness
+
+    def setIndicatorColor(self, fdp_indicator:int=1, color:int=0xFFFFFF):
+        """
+        Set the FPD indicator to defined Blink pattern.
+
+        Args:
+            fdp_indicator (int):   fpd indicator value enum
+            color (int):  Front panel indicator color.
+
+        Returns:
+            None
+        """
+        promptWithAnswers = [
+            {
+                "query_type": "list",
+                "query": "Select Indicator :",
+                "input": "dsFPD_INDICATOR_POWER"
+            },
+            {
+                "query_type": "list",
+                "query": "Select Color: ",
+                "input": "dsFPD_COLOR_WHITE"
+            }
+        ]
+        promptWithAnswers[0]["input"] = str(fdp_indicator)
+        promptWithAnswers[1]["input"] = str(color)
+        result = self.utMenu.select(self.testSuite, "Set Front Panel State Pattern", promptWithAnswers)
+
+    def getIndicatorColor(self, fdp_indicator:int=1):
+        """
+        Get the FPD indicator to defined Blink pattern.
+
+        Args:
+            fdp_indicator (int):   fpd indicator value enum
+
+        Returns:
+            Front panel indicator color.
+        """
+        promptWithAnswers = [
+            {
+                "query_type": "list",
+                "query": "Select Indicator :",
+                "input": "dsFPD_INDICATOR_POWER"
+            }
+        ]
+        promptWithAnswers[0]["input"] = str(fdp_indicator)
+        result = self.utMenu.select(self.testSuite, "Get Front Panel Indicator Color", promptWithAnswers)
+
+        LedColorPattern = r"Result dsGetFPColor(IN:Indicator:\[.*\], OUT:Color:\[(dsFPD_COLOR_\w+)\]\)"
+        ledColor = self.searchPattern(result,LedColorPattern)
+
+        return ledColor
+
+
+    def setLedStatPattern(self, fdp_indicator:int=1, pattern:int=1):
+        """
+        Set the FPD indicator to defined Blink pattern.
+
+        Args:
+            fdp_indicator (int):   fpd indicator value enum
+            pattern (int):  Front panel state for different fucnitons.
+
+        Returns:
+            None
+        """
+        promptWithAnswers = [
+            {
+                "query_type": "list",
+                "query": "Select Indicator :",
+                "input": "dsFPD_INDICATOR_POWER"
+            },
+            {
+                "query_type": "list",
+                "query": "Select State: ",
+                "input": "dsFPD_LED_DEVICE_ACTIVE"
+            }
+        ]
+        promptWithAnswers[0]["input"] = str(fdp_indicator)
+        promptWithAnswers[1]["input"] = str(pattern)
+        result = self.utMenu.select(self.testSuite, "Set Front Panel State Pattern", promptWithAnswers)
+
+    def getLedStatPattern(self, fdp_indicator:int=1):
+        """
+        Get the FPD indicator to defined Blink pattern.
+
+        Args:
+            fdp_indicator (int):   fpd indicator value enum
+
+        Returns:
+            Front panel pattern states.
+        """
+        promptWithAnswers = [
+            {
+                "query_type": "list",
+                "query": "Select Indicator :",
+                "input": "dsFPD_INDICATOR_POWER"
+            }
+        ]
+        promptWithAnswers[0]["input"] = str(fdp_indicator)
+        result = self.utMenu.select(self.testSuite, "Get Front Panel State Pattern", promptWithAnswers)
+
+        FPStatePattern = r"Result dsFPGetLEDState(OUT:FP LED State:\[(dsFPD_LED_DEVICE_\w+)\]\)"
+        fpState = self.searchPattern(result,FPStatePattern)
+
+        return fpState
+
+    def getSupportedFPStates(self):
+        """
+        Get Supported Front Panel State patterns.
+
+        Args:
+            None.
+
+        Returns:
+            All supported Front panel pattern States.
+        """
+        result = self.utMenu.select(self.testSuite, "Get Supported Front Panel State Patterns")
+        SupportedStatesPattern = r"Result dsFPGetSupportedLEDStates\(OUT:states:\[(0x\w+)\]\)"
+        supportedStates = self.searchPattern(result,SupportedStatesPattern)
+
+        return supportedStates
 
     def terminate(self):
         """
-        Enables the audio port.
+        Terminate Front Panle Device.
 
         Args:
             None.
@@ -142,49 +377,11 @@ class dsFPDClass():
         Returns:
             None
         """
-        result = self.utMenu.select(self.testSuite, "test_terminate_audio")
-
-    def getSupportedPorts(self):
-        """
-        Returns the supported audio ports on device.
-
-        Args:
-            None.
-
-        Returns:
-            returns the list of supported audio ports
-        """
-        portLists = []
-
-        ports = self.deviceProfile.get("Ports")
-        for i in range(1, len(ports)+1):
-            entry = ports[i]
-            portLists.append([entry['Typeid'], entry['Index']])
-
-        return portLists
-
-    def getDeviceType(self):
-        """
-        Returns the supported audio ports on device.
-
-        Args:
-            None.
-
-        Returns:
-            returns the device type (0-Sink device, 1-Source device)
-        """
-        portLists = []
-
-        type = self.deviceProfile.get("Type")
-        if type == "sink":
-            return 0
-        elif type == "source":
-            return 1
-
+        result = self.utMenu.select(self.testSuite, "Terminate dsFPD")
 
     def __del__(self):
         """
-        De-Initializes the dsAudio helper function.
+        De-Initializes the dsFPD helper function.
 
         Args:
             None.
@@ -200,15 +397,17 @@ if __name__ == '__main__':
     shell = InteractiveShell()
     shell.open()
 
-    platformProfile = dir_path + "/../../../profiles/sink/Sink_AudioSettings.yaml"
+    platformProfile = dir_path + "/../../../profiles/sink/Sink_FPD.yaml"
     # test the class assuming that it's optional
-    test = dsAudioClass(platformProfile, shell)
+    test = dsFPDClass(platformProfile, shell)
 
     test.initialise()
-    ports = test.getSupportedPorts()
+    test.setState(dsFPDIndicatorType.dsFPD_INDICATOR_POWER.value,dsFPDState.dsFPD_STATE_ON.value)
+    test.blinkIndicator(dsFPDIndicatorType.dsFPD_INDICATOR_POWER.value,1000,3)
+    time.sleep(10)
+    test.setState(dsFPDIndicatorType.dsFPD_INDICATOR_POWER.value,dsFPDState.dsFPD_STATE_OFF.value)
+    test.setState(dsFPDIndicatorType.dsFPD_INDICATOR_POWER.value,dsFPDState.dsFPD_STATE_ON.value)
 
-    test.enablePort(ports[0][0], ports[0][1])
-    test.disablePort(ports[0][0], ports[0][1])
 
     test.terminate()
 
