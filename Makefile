@@ -23,6 +23,8 @@ ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 BIN_DIR := $(ROOT_DIR)/bin
 TOP_DIR := $(ROOT_DIR)
 
+ECHOE = /bin/echo -e
+
 SRC_DIRS = $(ROOT_DIR)/src
 INC_DIRS := $(ROOT_DIR)/../include
 INC_DIRS += $(ROOT_DIR)/profiles/include
@@ -71,8 +73,28 @@ skeleton:
 	$(CC) -fPIC -shared -I$(ROOT_DIR)/../include $(SKELETON_SRCS) -o $(HAL_LIB_DIR)/lib$(HAL_LIB).so
 
 list:
-	@echo list [$@]
-	make -C ./ut-core list
+	@${ECHOE} --------- ut - list ----------------
+	@${ECHOE}
+	@${ECHOE} ${YELLOW}CC:${NC} $(CC)
+	@${ECHOE}
+	@${ECHOE} ${YELLOW}TOP_DIR:${NC} $(TOP_DIR)
+	@${ECHOE}
+	@${ECHOE} ${YELLOW}BIN_DIR:${NC} $(BIN_DIR)
+	@${ECHOE}
+	@${ECHOE} ${YELLOW}HAL_LIB_DIR:${NC} $(HAL_LIB_DIR)
+	@${ECHOE}
+	@${ECHOE} ${YELLOW}YLDFLAGS:${NC} $(YLDFLAGS)
+	@${ECHOE}
+	@${ECHOE} ${YELLOW}TARGET:${NC} $(TARGET)
+	@${ECHOE}
+	make -C ./ut-core TARGET=${TARGET} list
+
+printenv:
+	@echo "Environment variables: [UT]"
+	@echo "---------------------------"
+	@$(foreach v, $(.VARIABLES), $(info $(v) = $($(v))))
+	@echo "---------------------------"
+	make -C ./ut-core TARGET=${TARGET} printenv
 
 cleanlibs:
 	rm -rf $(BIN_DIR)/lib$(HAL_LIB).so
