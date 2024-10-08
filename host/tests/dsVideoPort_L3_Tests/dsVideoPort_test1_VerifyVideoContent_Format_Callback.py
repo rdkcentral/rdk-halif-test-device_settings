@@ -23,6 +23,7 @@
 
 import os
 import sys
+import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path+"/../")
@@ -39,6 +40,7 @@ class dsVideoPort_test1_VerifyVideoContent_Formats(utHelperClass):
     testSetupPath = dir_path + "/dsVideoPort_L3_testSetup.yml"
     moduleName = "dsVideoPort"
     rackDevice = "dut"
+    HDRFormats = ["NONE", "HDR10", "HLG", "DolbyVision", "TechnicolorPrime", "HDR10PLUS", "SDR"]
 
     def __init__(self):
         """
@@ -118,22 +120,10 @@ class dsVideoPort_test1_VerifyVideoContent_Formats(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyDisplay(self, manual=False):
-        """
-        Verifies whether the Video&audio displayed or not.
-
-        Args:
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
-
-        Returns:
-            bool
-        """
-        if manual == True:
-            return self.testUserResponse.getUserYN("Is Video Display on the port? (Y/N):")
-        else :
-            #TODO: Add automation verification methods
-            return False
+    def find_VideoFormat_Status(self, input_str: str, status: str) -> bool:
+        if status in input_str:
+            return True
+        return False
 
     def testFunction(self):
         """This function will test the Video Ports by enabling and disabling the ports
@@ -165,29 +155,26 @@ class dsVideoPort_test1_VerifyVideoContent_Formats(utHelperClass):
             # Enable the Video port
             self.testdsVideoPort.enablePort(port, index)
 
-            # Start the stream playback
-            self.testPlayer.play(self.testStreams[0])
+            i = 0
+            for formats in self.HDRFormats:
+                # Start the stream playback
+                if formats not in ["NONE", "TechnicolorPrime"]:
+                    self.testPlayer.play(self.testStreams[i])
+                    i+=1
+                    # Pause execution for 0.5 second
+                    time.sleep(1)
 
-            result = self.hal_session.read_until("Video Format Callback dsHDRStandard_t:")
-            print(result)
-
-            self.log.step(f'Verify {port} Port')
-            print(result)
-            result = self.testVerifyDisplay(True)
-
-            self.log.stepResult(result, f'VideoPort Verification {port} Port')
-            self.log.stepStart(f'Disable {port} Port')
-
-            # Disable the Video port
-            self.testdsVideoPort.disablePort(port, index)
-
-            self.log.step(f'Verify {port} Port')
-            result = self.testVerifyDisplay(True)
-
-            self.log.stepResult(not result, f'Video Verification {port} Port')
-
-        # Stop the stream playback
-        self.testPlayer.stop()
+                result = self.testdsVideoPort.read_Callbacks("Video Format Callback dsHDRStandard_t:")
+                print(result)
+                if formats not in "TechnicolorPrime":
+                    if self.find_VideoFormat_Status(result, f'dsHDRSTANDARD_{formats}'):
+                        self.log.stepResult(True,f'{formats} VideoFormat Callback found')
+                    else:
+                        self.log.stepResult(False,f'{formats} VideoFormat Callback found')
+                if formats not in ["NONE", "TechnicolorPrime"]:
+                    # Stop the stream playback
+                    self.testPlayer.stop()
+                    time.sleep(0.1)
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()

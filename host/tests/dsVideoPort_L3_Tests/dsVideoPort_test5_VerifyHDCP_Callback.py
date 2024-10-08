@@ -138,7 +138,7 @@ class dsVideoPort_test5_VerifyHDCP_Callback(utHelperClass):
             #TODO: Add automation verification methods
             return False
 
-    def find_hdcp_status(self, input_str: str, status: str) -> bool:
+    def find_HDCPStatus(self, input_str: str, status: str) -> bool:
         if status in input_str:
             return True
         return False
@@ -173,39 +173,26 @@ class dsVideoPort_test5_VerifyHDCP_Callback(utHelperClass):
             # Enable the Video port
             self.testdsVideoPort.enablePort(port, index)
 
+            # Enable the HDCP
             self.testdsVideoPort.enable_HDCP(port, index)
 
             result = self.testUnplugHDMI(True,True)
 
-            result = self.hal_session.read_until("HDCP Status Callback dsHdcpStatus_t:")
+            result = self.testdsVideoPort.read_Callbacks("HDCP Status Callback dsHdcpStatus_t:")
             print(result)
-            if self.find_hdcp_status(result,"dsHDCP_STATUS_UNPOWERED"):
-                print("HDMI is Unplug Callback found")
+            if self.find_HDCPStatus(result,"dsHDCP_STATUS_UNPOWERED"):
+                self.log.stepResult(True,"HDMI is Unplug Callback found")
             else:
-                print("HDMI is Unplug Callback Not found")
+                self.log.stepResult(False,"HDMI is Unplug Callback Not found")
 
             result = self.testUnplugHDMI(False,True)
-            result = self.hal_session.read_until("HDCP Status Callback dsHdcpStatus_t:")
+            result = self.testdsVideoPort.read_Callbacks("HDCP Status Callback dsHdcpStatus_t:")
             print(result)
-            if self.find_hdcp_status(result,"dsHDCP_STATUS_AUTHENTICATED"):
-                print("HDMI is Unplug Callback found")
+            if self.find_HDCPStatus(result,"dsHDCP_STATUS_AUTHENTICATED"):
+                self.log.stepResult(True,"HDMI is plug Callback found")
             else:
-                print("HDMI is Unplug Callback Not found")
+                self.log.stepResult(False, "HDMI is plug Callback Not found")
 
-
-            self.log.stepResult(result, f'VideoPort Verification {port} Port')
-            self.log.stepStart(f'Disable {port} Port')
-
-            # Disable the Video port
-            self.testdsVideoPort.disablePort(port, index)
-
-            self.log.step(f'Verify {port} Port')
-            result = self.testVerifyDisplay(True)
-
-            self.log.stepResult(not result, f'Video Verification {port} Port')
-
-        # Stop the stream playback
-        self.testPlayer.stop()
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()

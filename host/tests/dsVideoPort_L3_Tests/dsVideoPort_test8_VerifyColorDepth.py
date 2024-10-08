@@ -110,9 +110,9 @@ class dsVideoPort_test8_VerifyColorDepth(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyHDCPVersion(self, manual=False):
+    def testVerifyColorDepth(self, manual=False):
         """
-        Verifies the HDCP Version .
+        Verifies the Color Depth .
 
         Args:
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
@@ -122,8 +122,7 @@ class dsVideoPort_test8_VerifyColorDepth(utHelperClass):
             bool
         """
         if manual == True:
-            hdcpVersion = self.testdsVideoPort.getHDCPVersion()
-            return self.testUserResponse.getUserYN(f'is {hdcpVersion} HDCP Version displayed on Analyzer (Y/N): ')
+            return self.testUserResponse.getUserYN(f'is {self.testdsVideoPort.getColorDepth()} is same displayed on Analyzer (Y/N): ')
         else :
             #TODO: Add automation verification methods
             return False
@@ -157,13 +156,16 @@ class dsVideoPort_test8_VerifyColorDepth(utHelperClass):
             # Enable the Video port
             self.testdsVideoPort.enablePort(port, index)
 
-            # Enable the Video port
+            # Enable the HDCP only for source devices
+            if self.testdsVideoPort.getDeviceType():
+                self.testdsVideoPort.enable_HDCP(port, index)
+
             self.testdsVideoPort.select_PreferredColorDepth(port, index, self.testdsVideoPort.getColorDepth())
 
-            self.log.step(f'Verify {self.testdsVideoPort.getHDCPVersion()} Version')
-            result = self.testVerifyHDCPVersion(True)
+            self.log.step(f'Verify {self.testdsVideoPort.getColorDepth()} using Analyzer ')
+            result = self.testVerifyColorDepth(True)
 
-            self.log.stepResult(result, f'Verified the {self.testdsVideoPort.getHDCPVersion()} Version')
+            self.log.stepResult(result, "All parameters verified using HDMI Analyzer")
 
 
         # Clean the assets downloaded to the device

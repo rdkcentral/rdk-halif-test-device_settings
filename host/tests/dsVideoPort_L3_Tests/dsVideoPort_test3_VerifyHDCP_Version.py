@@ -157,7 +157,10 @@ class dsVideoPort_test3_VerifyHDCP_Version(utHelperClass):
             # Enable the Video port
             self.testdsVideoPort.enablePort(port, index)
 
-            # Enable the Video port
+            # Enable the HDCP only for source devices
+            if self.testdsVideoPort.getDeviceType():
+                self.testdsVideoPort.enable_HDCP(port, index)
+
             self.testdsVideoPort.select_HdmiPreference(port, index, self.testdsVideoPort.getHDCPVersion())
 
             self.log.step(f'Verify {self.testdsVideoPort.getHDCPVersion()} Version')
