@@ -38,7 +38,7 @@ TEST_REPO=git@github.com:rdkcentral/ut-core.git
 # This function checks the latest version of UT core and recommends an upgrade if reuqired
 function check_next_revision()
 {
-    pushd ./ut-core
+    pushd ./ut-core > /dev/null
     # Set default UT_CORE_PROJECT_VERSION to next revision, if it's set then we don't need to tell you again
     if [ -v ${UT_CORE_PROJECT_VERSION} ]; then
         UT_CORE_PROJECT_VERSION=$(git tag | grep ${UT_PROJECT_MAJOR_VERSION} | sort -r | head -n1)
@@ -48,7 +48,7 @@ function check_next_revision()
             echo -e ${RED}--- New Version of ut-core released [${UT_NEXT_VERSION}] consider upgrading ---${NC}
         fi
     fi
-    popd
+    popd > /dev/null
 }
 
 # Check if the common document configuration is present, if not clone it
