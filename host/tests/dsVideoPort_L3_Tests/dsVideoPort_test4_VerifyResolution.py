@@ -110,9 +110,9 @@ class dsVideoPort_test4_VerifyResolution(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyHDCPVersion(self, manual=False):
+    def testVerifyResolution(self, manual=False,resolution:dict= None):
         """
-        Verifies the HDCP Version .
+        Verifies the Resolutions .
 
         Args:
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
@@ -122,8 +122,14 @@ class dsVideoPort_test4_VerifyResolution(utHelperClass):
             bool
         """
         if manual == True:
-            hdcpVersion = self.testdsVideoPort.getHDCPVersion()
-            return self.testUserResponse.getUserYN(f'is {hdcpVersion} HDCP Version displayed on Analyzer (Y/N): ')
+            # Query user confirmation for each resolution attribute and combine results logically
+            result = True
+            result &= self.testUserResponse.getUserYN(f'is {resolution.get("pixelResolution")} on HDMI Analyzer (Y/N): ')
+            result &= self.testUserResponse.getUserYN(f'is {resolution.get("aspectRatio")} on HDMI Analyzer (Y/N): ')
+            result &= self.testUserResponse.getUserYN(f'is {resolution.get("stereoScopicMode")} on HDMI Analyzer (Y/N): ')
+            result &= self.testUserResponse.getUserYN(f'is {resolution.get("frameRate")} on HDMI Analyzer (Y/N): ')
+            result &= self.testUserResponse.getUserYN(f'is {resolution.get("interlaced")} on HDMI Analyzer (Y/N): ')
+            return result
         else :
             #TODO: Add automation verification methods
             return False
@@ -157,14 +163,22 @@ class dsVideoPort_test4_VerifyResolution(utHelperClass):
             # Enable the Video port
             self.testdsVideoPort.enablePort(port, index)
 
+            # Enable the HDCP only for source devices
+            if self.testdsVideoPort.getDeviceType():
+                self.testdsVideoPort.enable_HDCP(port, index)
+
             # Enable the Video port
-            self.testdsVideoPort.select_Resolution(port, index, self.testdsVideoPort.getHDCPVersion())
-
-            self.log.step(f'Verify {self.testdsVideoPort.getHDCPVersion()} Version')
-            result = self.testVerifyHDCPVersion(True)
-
-            self.log.stepResult(result, f'Verified the {self.testdsVideoPort.getHDCPVersion()} Version')
-
+            for resolution in self.testdsVideoPort.getResolutions():
+                self.testdsVideoPort.select_Resolution(port, index, resolution)
+                result = self.testVerifyResolution(True,resolution)
+                """
+                result = self.testUserResponse.getUserYN(f'is {resolution.get("pixelResolution")} on HDMI Analyzer (Y/N): ')
+                result &= self.testUserResponse.getUserYN(f'is {resolution.get("aspectRatio")} on HDMI Analyzer (Y/N): ')
+                result &= self.testUserResponse.getUserYN(f'is {resolution.get("stereoScopicMode")} on HDMI Analyzer (Y/N): ')
+                result &= self.testUserResponse.getUserYN(f'is {resolution.get("frameRate")} on HDMI Analyzer (Y/N): ')
+                result &= self.testUserResponse.getUserYN(f'is {resolution.get("interlaced")} on HDMI Analyzer (Y/N): ')
+                """
+            self.log.stepResult(result, "All parameters verified using HDMI Analyzer")
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()

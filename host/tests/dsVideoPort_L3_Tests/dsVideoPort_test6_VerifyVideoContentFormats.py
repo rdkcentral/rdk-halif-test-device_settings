@@ -33,16 +33,16 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsVideoPort_test6_VerifyVideoContentFormates(utHelperClass):
+class dsVideoPort_test6_VerifyVideoContentFormats(utHelperClass):
 
-    testName  = "test6_VerifyVideoContentFormates"
+    testName  = "test6_VerifyVideoContentFormats"
     testSetupPath = dir_path + "/dsVideoPort_L3_testSetup.yml"
     moduleName = "dsVideoPort"
     rackDevice = "dut"
 
     def __init__(self):
         """
-        Initializes the test6_VerifyVideoContentFormates test .
+        Initializes the test6_VerifyVideoContentFormats test .
 
         Args:
             None.
@@ -75,12 +75,12 @@ class dsVideoPort_test6_VerifyVideoContentFormates(utHelperClass):
         self.deviceDownloadPath = self.cpe.get("target_directory")
 
         #download test artifacts to device
-        url = self.testSetup.assets.device.test6_VerifyVideoContentFormates.artifacts
+        url = self.testSetup.assets.device.test6_VerifyVideoContentFormats.artifacts
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
 
         #download test streams to device
-        url = self.testSetup.assets.device.test6_VerifyVideoContentFormates.streams
+        url = self.testSetup.assets.device.test6_VerifyVideoContentFormats.streams
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
             for streampath in url:
@@ -104,15 +104,15 @@ class dsVideoPort_test6_VerifyVideoContentFormates(utHelperClass):
         """
 
         #Run test specific commands
-        cmds = self.testSetup.assets.device.test6_VerifyVideoContentFormates.execute
+        cmds = self.testSetup.assets.device.test6_VerifyVideoContentFormats.execute
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyHDCPVersion(self, manual=False):
+    def testVerifyHDRFormat(self, manual=False,hdr_mode:str=0):
         """
-        Verifies the HDCP Version .
+        Verifies the HDR Format .
 
         Args:
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
@@ -122,8 +122,7 @@ class dsVideoPort_test6_VerifyVideoContentFormates(utHelperClass):
             bool
         """
         if manual == True:
-            hdcpVersion = self.testdsVideoPort.getHDCPVersion()
-            return self.testUserResponse.getUserYN(f'is {hdcpVersion} HDCP Version displayed on Analyzer (Y/N): ')
+            return self.testUserResponse.getUserYN(f'is {hdr_mode} displayed on Analyzer (Y/N): ')
         else :
             #TODO: Add automation verification methods
             return False
@@ -144,7 +143,7 @@ class dsVideoPort_test6_VerifyVideoContentFormates(utHelperClass):
         # Create the dsVideoPort class
         self.testdsVideoPort = dsVideoPortClass(self.deviceProfile, self.hal_session)
 
-        self.log.testStart("test6_VerifyVideoContentFormates", '1')
+        self.log.testStart("test6_VerifyVideoContentFormats", '1')
 
         # Initialize the dsVideoPort module
         self.testdsVideoPort.initialise()
@@ -157,13 +156,19 @@ class dsVideoPort_test6_VerifyVideoContentFormates(utHelperClass):
             # Enable the Video port
             self.testdsVideoPort.enablePort(port, index)
 
+            # Enable the HDCP only for source devices
+            if self.testdsVideoPort.getDeviceType():
+                self.testdsVideoPort.enable_HDCP(port, index)
+
             # Enable the Video port
-            self.testdsVideoPort.select_HDRModes(port, index, self.testdsVideoPort.getHDRCapabilities())
+            supported_formats = self.testdsVideoPort.getHDRCapabilities()
+            if supported_formats:
+                for format in supported_formats:
+                    self.testdsVideoPort.select_HDRModes(port, index, format)
+                    self.log.step(f'Verify HDR {format} with Analyzer')
+                    result = self.testVerifyHDRFormat(True,format)
 
-            self.log.step(f'Verify {self.testdsVideoPort.getHDCPVersion()} Version')
-            result = self.testVerifyHDCPVersion(True)
-
-            self.log.stepResult(result, f'Verified the {self.testdsVideoPort.getHDCPVersion()} Version')
+            self.log.stepResult(result, "All parameters successfully verified using HDMI Analyzer")
 
 
         # Clean the assets downloaded to the device
@@ -175,5 +180,5 @@ class dsVideoPort_test6_VerifyVideoContentFormates(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsVideoPort_test6_VerifyVideoContentFormates()
+    test = dsVideoPort_test6_VerifyVideoContentFormats()
     test.run(False)

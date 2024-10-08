@@ -391,18 +391,12 @@ void dsVideoPort_EnablePort()
     UT_LOG_INFO("Result dsIsVideoPortEnabled(IN:Handle:[0x%0X], OUT:enabled:[%s]) dsError_t=[%s]",gHandle,
                     UT_Control_GetMapString(boolMappingTable, enabled), UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status == dsERR_NONE);
-    if(!enabled)
-    {
-        UT_LOG_INFO("Calling dsEnableVideoPort(IN:Handle:[0x%0X],IN:Enable:[true]) ", gHandle);
-        status = dsEnableVideoPort(gHandle, true);
-        UT_LOG_INFO("Result dsEnableVideoPort(IN:Handle:[0x%0X],IN:Enable:[true]), dsError_t=[%s]", gHandle, UT_Control_GetMapString(dsErrorMappingTable, status));
-        DS_ASSERT(status == dsERR_NONE);
-        UT_LOG_INFO("Calling dsIsVideoPortEnabled(IN:Handle:[0x%0X], OUT:enabled:[]) ", gHandle);
-        status = dsIsVideoPortEnabled(gHandle, &enabled);
-        UT_LOG_INFO("Result dsIsVideoPortEnabled(IN:Handle:[0x%0X], OUT:enabled:[%s]) dsError_t=[%s]",gHandle,
-                        UT_Control_GetMapString(boolMappingTable, enabled), UT_Control_GetMapString(dsErrorMappingTable, status));
-        DS_ASSERT(status == dsERR_NONE);
-    }
+
+    UT_LOG_INFO("Calling dsEnableVideoPort(IN:Handle:[0x%0X],IN:Enable:[true]) ", gHandle);
+    status = dsEnableVideoPort(gHandle, true);
+    UT_LOG_INFO("Result dsEnableVideoPort(IN:Handle:[0x%0X],IN:Enable:[true]), dsError_t=[%s]", gHandle, UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+
     UT_LOG_INFO("Calling dsIsDisplayConnected(IN:Handle:[0x%0X],OUT:connected[] ) ", gHandle);
     status = dsIsDisplayConnected(gHandle, &connected);
     UT_LOG_INFO("Result dsIsDisplayConnected(IN:Handle:[0x%0X],OUT:connected[%s]) dsError_t=[%s]",gHandle,
@@ -433,18 +427,17 @@ void dsVideoPort_DisablePort()
     UT_LOG_INFO("Result dsIsVideoPortEnabled(IN:Handle:[0x%0X], OUT:enabled:[%s]) dsError_t=[%s]",gHandle,
                     UT_Control_GetMapString(boolMappingTable, enabled), UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status == dsERR_NONE);
-    if(enabled)
-    {
-        UT_LOG_INFO("Calling dsEnableVideoPort(IN:Handle:[0x%0X],OUT:Enable:[false]) ", gHandle);
-        status = dsEnableVideoPort(gHandle, false);
-        UT_LOG_INFO("Result dsEnableVideoPort(IN:Handle:[0x%0X],OUT:Enable:[false]) dsError_t=[%s]", UT_Control_GetMapString(dsErrorMappingTable, status));
-        DS_ASSERT(status == dsERR_NONE);
-        UT_LOG_INFO("Calling dsIsVideoPortEnabled(IN:Handle:[0x%0X], OUT:enabled:[]) ", gHandle);
-        status = dsIsVideoPortEnabled(gHandle, &enabled);
-        UT_LOG_INFO("Result dsIsVideoPortEnabled(IN:Handle:[0x%0X], OUT:enabled:[%s]) dsError_t=[%s]",gHandle,
-                        UT_Control_GetMapString(boolMappingTable, enabled), UT_Control_GetMapString(dsErrorMappingTable, status));
-        DS_ASSERT(status == dsERR_NONE);
-    }
+
+    UT_LOG_INFO("Calling dsEnableVideoPort(IN:Handle:[0x%0X],OUT:Enable:[false]) ", gHandle);
+    status = dsEnableVideoPort(gHandle, false);
+    UT_LOG_INFO("Result dsEnableVideoPort(IN:Handle:[0x%0X],OUT:Enable:[false]) dsError_t=[%s]", UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+    UT_LOG_INFO("Calling dsIsVideoPortEnabled(IN:Handle:[0x%0X], OUT:enabled:[]) ", gHandle);
+    status = dsIsVideoPortEnabled(gHandle, &enabled);
+    UT_LOG_INFO("Result dsIsVideoPortEnabled(IN:Handle:[0x%0X], OUT:enabled:[%s]) dsError_t=[%s]",gHandle,
+                  UT_Control_GetMapString(boolMappingTable, enabled), UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+
     UT_LOG_INFO("Calling dsIsDisplayConnected(IN:Handle:[0x%0X],OUT:connected[] ) ", gHandle);
     status = dsIsDisplayConnected(gHandle, &connected);
     UT_LOG_INFO("Result dsIsDisplayConnected(IN:Handle:[0x%0X],OUT:connected[%s]) dsError_t=[%s]",gHandle,
@@ -562,10 +555,10 @@ void dsVideoPort_GetResolution()
 
     UT_LOG_INFO("Calling dsGetResolution(IN:Handle:[0x%0X],OUT:dsVideoPortResolution_t(name:[],dsVideoResolution_t:[],dsVideoAspectRatio_t:[] ", gHandle);
     status = dsGetResolution(gHandle, &getResolution);
-    UT_LOG_INFO("Result dsGetResolution(IN:Handle:[0x%0X],OUT:dsVideoPortResolution_t(name:[%s],dsVideoResolution_t:[%s],dsVideoAspectRatio_t:[%s] ",gHandle,\
+    UT_LOG_INFO("Result dsGetResolution(IN:Handle:[0x%0X],OUT:dsVideoPortResolution_tname:[%s],OUT:dsVideoResolution_t:[%s],OUT:dsVideoAspectRatio_t:[%s],",gHandle,\
                     getResolution.name,UT_Control_GetMapString(dsVideoResolutionMappingTable, getResolution.pixelResolution),\
                     UT_Control_GetMapString(dsVideoAspectRatioMappingTable, getResolution.aspectRatio));
-    UT_LOG_INFO(" dsVideoStereoScopicMode_t:[%s],dsVideoFrameRate_t:[%s],interlaced:[%s],dsError_t=[%s])",UT_Control_GetMapString(dsVideoStereoScopicModeMappingTable, getResolution.stereoScopicMode),\
+    UT_LOG_INFO("OUT:dsVideoStereoScopicMode_t:[%s],OUT:dsVideoFrameRate_t:[%s],OUT:interlaced:[%s],dsError_t=[%s])",UT_Control_GetMapString(dsVideoStereoScopicModeMappingTable, getResolution.stereoScopicMode),\
                                                     UT_Control_GetMapString(dsVideoFrameRateMappingTable, getResolution.frameRate),\
                                                     UT_Control_GetMapString(boolMappingTable, getResolution.interlaced),\
                                                      UT_Control_GetMapString(dsErrorMappingTable, status));
@@ -592,7 +585,7 @@ void dsVideoPort_SetResolution()
         UT_LOG_INFO("\t%d.  %s ",pixelResolution,UT_Control_GetMapString(dsVideoResolutionMappingTable, pixelResolution));
     }
 
-    UT_LOG_INFO("Enter your choice: ");
+    UT_LOG_INFO("Select Resolution: ");
     scanf("%d", &choice);
     readAndDiscardRestOfLine(stdin);
     setResolution.pixelResolution = choice;
@@ -604,7 +597,7 @@ void dsVideoPort_SetResolution()
         UT_LOG_INFO("\t%d. %s",aspectRatio,UT_Control_GetMapString(dsVideoAspectRatioMappingTable, aspectRatio));
     }
 
-    UT_LOG_INFO("Enter your choice: ");
+    UT_LOG_INFO("Select Aspect Ratio: ");
     scanf("%d", &choice);
     readAndDiscardRestOfLine(stdin);
     setResolution.aspectRatio = choice;
@@ -617,7 +610,7 @@ void dsVideoPort_SetResolution()
         UT_LOG_INFO("\t%d. %s",stereoScopicMode,UT_Control_GetMapString(dsVideoStereoScopicModeMappingTable, stereoScopicMode));
     }
 
-    UT_LOG_INFO("Enter your choice: ");
+    UT_LOG_INFO("Select Stereo ScopicMode: ");
     scanf("%d", &choice);
     readAndDiscardRestOfLine(stdin);
     setResolution.stereoScopicMode = choice;
@@ -629,7 +622,7 @@ void dsVideoPort_SetResolution()
         UT_LOG_INFO("\t%d. %s",frameRate,UT_Control_GetMapString(dsVideoFrameRateMappingTable, frameRate));
     }
 
-    UT_LOG_INFO("Enter your choice: ");
+    UT_LOG_INFO("Select Frame Rates: ");
     scanf("%d", &choice);
     readAndDiscardRestOfLine(stdin);
     setResolution.frameRate = choice;
@@ -641,7 +634,7 @@ void dsVideoPort_SetResolution()
         UT_LOG_INFO("\t%d. %s",interlaced,UT_Control_GetMapString(dsVideoScanModeMappingTable, interlaced));
     }
 
-    UT_LOG_INFO("Enter your choice: ");
+    UT_LOG_INFO("Select Scan modes: ");
     scanf("%d", &choice);
     readAndDiscardRestOfLine(stdin);
     setResolution.interlaced = choice;
@@ -691,7 +684,7 @@ void dsVideoPort_IsOutputHDR()
     dsVideoPort_getHandle();
     UT_LOG_INFO("Calling dsIsOutputHDR(Handle:[0x%0X]) ", gHandle);
     status = dsIsOutputHDR(gHandle, &hdr);
-    UT_LOG_INFO("Result dsIsOutputHDR(hdr: [%s]) ,dsError_t=[%s] ", UT_Control_GetMapString(boolMappingTable, hdr),\
+    UT_LOG_INFO("Result dsIsOutputHDR(OUT:hdr:[%s]) ,dsError_t=[%s] ", UT_Control_GetMapString(boolMappingTable, hdr),\
                                          UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status == dsERR_NONE);
     UT_LOG_INFO("OUT %s ",__FUNCTION__);
@@ -713,7 +706,7 @@ void dsVideoPort_SetForceHDRMode()
         UT_LOG_INFO("\t%d.  %s\n",i,UT_Control_GetMapString(dsHDRStandardMappingTable, i));
     }
 
-    UT_LOG_INFO("Enter your choice: ");
+    UT_LOG_INFO("Select HDR modes: ");
     scanf("%d", &choice);
     readAndDiscardRestOfLine(stdin);
 
@@ -902,7 +895,7 @@ void dsVideoPort_SetPreferredColorDepth()
         UT_LOG_INFO("\t%d.  %s\n",i,UT_Control_GetMapString(dsDisplayColorDepthMappingTable, i));
     }
 
-    UT_LOG_INFO("Enter your choice: ");
+    UT_LOG_INFO("Select Color depth to set: ");
     scanf("%d", &choice);
     readAndDiscardRestOfLine(stdin);
 
@@ -938,14 +931,14 @@ void dsVideoPort_SetBackgroundColor()
     UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
 
     dsVideoPort_getHandle();
-    UT_LOG_INFO("\t Select Background Color to set ");
+    UT_LOG_INFO("\t Supported Background Color to set ");
     UT_LOG_INFO("------------------------------------------");
     for(i=0;i<=dsVIDEO_BGCOLOR_MAX ;i++)
     {
         UT_LOG_INFO("\t%d.  %s\n",i,UT_Control_GetMapString(dsVideoBackgroundColorMappingTable, i));
     }
 
-    UT_LOG_INFO("Enter your choice: ");
+    UT_LOG_INFO("Supported Background Color: ");
     scanf("%d", &choice);
     readAndDiscardRestOfLine(stdin);
 

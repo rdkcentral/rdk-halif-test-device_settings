@@ -118,7 +118,7 @@ class dsVideoPort_test7_ResetToSDRMode(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyDisplay(self, manual=False):
+    def testVerifyPlayback(self, manual=False):
         """
         Verifies whether the Video&audio displayed or not.
 
@@ -130,7 +130,7 @@ class dsVideoPort_test7_ResetToSDRMode(utHelperClass):
             bool
         """
         if manual == True:
-            return self.testUserResponse.getUserYN("Is Video Display on the port? (Y/N):")
+            return self.testUserResponse.getUserYN("Is Video PlayBack is HDR on the port? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
@@ -167,7 +167,13 @@ class dsVideoPort_test7_ResetToSDRMode(utHelperClass):
             # Enable the Video port
             self.testdsVideoPort.enablePort(port, index)
 
+            # Enable the HDCP only for source devices
+            if self.testdsVideoPort.getDeviceType():
+                self.testdsVideoPort.enable_HDCP(port, index)
+
             self.testdsVideoPort.resetOutputToSDR(port, index)
+            result = self.testVerifyPlayback(True)
+            self.log.stepResult(not result, "All parameters verified using HDMI Analyzer")
 
         # Stop the stream playback
         self.testPlayer.stop()
