@@ -379,6 +379,106 @@ class dsFPDClass():
         """
         result = self.utMenu.select(self.testSuite, "Terminate dsFPD")
 
+    def getNumberOfIndicators(self):
+        """
+        Get number of indicators available from proifle.
+
+        Args:
+            None.
+
+        Returns:
+            Number of Indicators in Profile
+        """
+        totlaIndicators = self.deviceProfile.get("Number_of_Indicators")
+        return totlaIndicators
+
+    def getTypeOfIndicator(self, index:int = 1):
+        """
+        Get Indicator type at the given index.
+
+        Args:
+            index:int - index of the indicator.
+
+        Returns:
+            indicator Type
+        """
+        indicators = self.deviceProfile.get("SupportedFPDIndicators")
+        if not indicators:
+            return []
+
+        indicatorType = indicators['index'].Indicator_Type
+        return indicatorType
+
+    def getSupportedColors(self, index:int = 1):
+        """
+        Get Supported color of indicator at the given index.
+
+        Args:
+            index:int - index of the indicator.
+
+        Returns:
+            Array of Supported colors
+        """
+        indicators = self.deviceProfile.get("SupportedFPDIndicators")
+        if not indicators:
+            return []
+
+        supportedColors = indicators['index'].supportedColors
+        if not supportedColors:
+            return []
+        return supportedColors
+
+    def getDefaultColorMode(self, index:int = 1):
+        """
+        Get Default Color mode of the indicator at the given index.
+
+        Args:
+            index:int - index of the indicator.
+
+        Returns:
+            default color mode : 0 Single Color, 1: Multicolor 
+        """
+        indicators = self.deviceProfile.get("SupportedFPDIndicators")
+        if not indicators:
+            return []
+
+        colorMode = indicators['index'].DEFAULT_COLOR_MODE
+        return colorMode
+
+    def getMAxBrightnessValue(self, index:int = 1):
+        """
+        Get Maximum brightness of indicator at the given index.
+
+        Args:
+            index:int - index of the indicator.
+
+        Returns:
+            Maximum brightness value 
+        """
+        indicators = self.deviceProfile.get("SupportedFPDIndicators")
+        if not indicators:
+            return []
+
+        maxBrightness = indicators['index'].MAX_BRIGHTNESS
+        return maxBrightness
+
+    def getMinBrightnessValue(self, index:int = 1):
+        """
+        Get Minimum brightness of indicator at the given index.
+
+        Args:
+            index:int - index of the indicator.
+
+        Returns:
+            Minimum brightness value 
+        """
+        indicators = self.deviceProfile.get("SupportedFPDIndicators")
+        if not indicators:
+            return []
+
+        minBrightness = indicators['index'].MIN_BRIGHTNESS
+        return minBrightness
+
     def __del__(self):
         """
         De-Initializes the dsFPD helper function.
