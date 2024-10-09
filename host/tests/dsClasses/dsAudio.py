@@ -80,9 +80,13 @@ class dsAudioClass():
         Initializes the dsAudio class function.
         """
         self.deviceProfile = ConfigRead( deviceProfilePath, self.moduleName)
+        self.suitConfig    = ConfigRead(self.menuConfig, self.moduleName)
         self.utMenu        = UTSuiteNavigatorClass(self.menuConfig, self.moduleName, session)
         self.testSession   = session
         self.utMenu.start()
+        self.connectionCB = self.suitConfig.get("test").get("callback").get("connection_status")
+        self.formatCB = self.suitConfig.get("test").get("callback").get("format_status")
+        self.atmosCB = self.suitConfig.get("test").get("callback").get("atmos_status")
 
     def searchPattern(self, haystack, pattern):
         match = re.search(pattern, haystack)
@@ -90,7 +94,7 @@ class dsAudioClass():
             return match.group(1)
         return None
 
-    def initialise(self, device_type:int=0, connectionCBFile:str="", formatCBFile:str="", atmosCBFile:str=""):
+    def initialise(self, device_type:int=0):
         """
         Initializes the device settings Audio module.
 
@@ -109,17 +113,17 @@ class dsAudioClass():
                 {
                     "query_type": "direct",
                     "query": "Enter file name with path to log connection status callbacks:",
-                    "input": connectionCBFile
+                    "input": self.connectionCB
                 },
                 {
                     "query_type": "direct",
                     "query": "Enter file name with path to log audio format callbacks:",
-                    "input": formatCBFile
+                    "input": self.formatCB
                 },
                 {
                     "query_type": "direct",
                     "query": "Enter file name with path to log ATMOS Caps callbacks:",
-                    "input": atmosCBFile
+                    "input": self.atmosCB
                 }
         ]
         result = self.utMenu.select( self.testSuite, "Initialize dsAudio", promptWithAnswers)

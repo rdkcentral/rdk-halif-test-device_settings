@@ -39,7 +39,20 @@ class dsAudio_test16_ARCSAD(utHelperClass):
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    sadList = [[0x20],[0x20, 0x30]]
+    """
+    Summary of the 3-byte SAD Format:
+    Byte    Bit Fields  Description
+    Byte 1  Bits 0-2:   Audio Format Code: Type of audio format (PCM, AC-3, DTS, etc.)
+            Bits 3-6:   Maximum Number of Channels	Number of audio channels supported
+            Bit 7:      Reserved
+    Byte 2	Bits 0-6:   Sampling Frequencies: Supported sampling frequencies (32 kHz, 48 kHz, etc.)
+            Bit 7:      Reserved
+    Byte 3	For LPCM: Bit Depths (16, 20, 24-bit) Supported bit depths for PCM
+            For Compressed Formats: Maximum Bitrate	Maximum supported bitrate for compressed formats
+    """
+    # 0x0040382A - AC3 6 channels sampling rates (48, 96, 192 kHz), Max bitrate (512 kbps)
+    # 0x00070709 - PCM 2 channels sampling rates (32, 44.1, 48 kHz), bit depth (16, 20, 24 bit per sample)
+    sadList = [[0x00070709],[0x0040382A]]
 
     def __init__(self):
         """
@@ -52,10 +65,6 @@ class dsAudio_test16_ARCSAD(utHelperClass):
 
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
-
-        self.connectionCB = self.testSetup.get("callback").get("connection_status")
-        self.formatCB = self.testSetup.get("callback").get("format_status")
-        self.atmosCB = self.testSetup.get("callback").get("atmos_status")
 
         # Open Session for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
@@ -110,6 +119,9 @@ class dsAudio_test16_ARCSAD(utHelperClass):
         """
         self.deleteFromDevice(self.testStreams)
 
+        # remove the callback log files
+        self.deleteFromDevice([self.connectionCB, self.formatCB, self.atmosCB])
+
     def testRunPrerequisites(self):
         """
         Runs Prerequisite commands listed in test-setup configuration file on the dut.
@@ -163,10 +175,10 @@ class dsAudio_test16_ARCSAD(utHelperClass):
         self.log.testStart(self.testName, '1')
 
         # Initialize the dsAudio module
-        self.testdsAudio.initialise(self.testdsAudio.getDeviceType(), self.connectionCB, self.formatCB, self.atmosCB)
+        self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
         # Start the stream playback
-        #self.testPlayer.play(self.testStreams[0])
+        self.testPlayer.play(self.testStreams[0])
 
         # Loop through the supported audio ports and initialize ARC port
         for port,index in self.testdsAudio.getSupportedPorts():

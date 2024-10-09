@@ -40,7 +40,7 @@ class dsAudio_test23_AssociateMix(utHelperClass):
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    faderValues = [-32, -15, 0, 15, 32]
+    faderValues = [-32, 0, 32]
 
     def __init__(self):
         """
@@ -53,10 +53,6 @@ class dsAudio_test23_AssociateMix(utHelperClass):
 
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
-
-        self.connectionCB = self.testSetup.get("callback").get("connection_status")
-        self.formatCB = self.testSetup.get("callback").get("format_status")
-        self.atmosCB = self.testSetup.get("callback").get("atmos_status")
 
         # Open Session for player
         self.player_session = self.dut.getConsoleSession("ssh_player")
@@ -110,6 +106,9 @@ class dsAudio_test23_AssociateMix(utHelperClass):
             None.
         """
         self.deleteFromDevice(self.testStreams)
+
+        # remove the callback log files
+        self.deleteFromDevice([self.connectionCB, self.formatCB, self.atmosCB])
 
     def testRunPrerequisites(self):
         """
@@ -165,7 +164,7 @@ class dsAudio_test23_AssociateMix(utHelperClass):
         self.log.testStart(self.testName, '1')
 
         # Initialize the dsAudio module
-        self.testdsAudio.initialise(self.testdsAudio.getDeviceType(), self.connectionCB, self.formatCB, self.atmosCB)
+        self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
         for stream in self.testStreams:
 

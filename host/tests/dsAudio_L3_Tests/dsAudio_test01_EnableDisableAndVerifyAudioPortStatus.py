@@ -52,10 +52,6 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
-        self.connectionCB = self.testSetup.get("callback").get("connection_status")
-        self.formatCB = self.testSetup.get("callback").get("format_status")
-        self.atmosCB = self.testSetup.get("callback").get("atmos_status")
-
         # Open Sessions for player and hal test
         self.player_session = self.dut.getConsoleSession("ssh_player")
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
@@ -107,6 +103,9 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
         """
         self.deleteFromDevice(self.testStreams)
 
+        # remove the callback log files
+        self.deleteFromDevice([self.connectionCB, self.formatCB, self.atmosCB])
+
     def testRunPrerequisites(self):
         """
         Runs Prerequisite commands listed in test-setup configuration file on the dut.
@@ -117,7 +116,7 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
 
         #Run test specific commands
         test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("execute");
+        cmds = test.get("execute")
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
@@ -154,19 +153,19 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
         # Run Prerequisites listed in the test setup configuration file
         self.testRunPrerequisites()
 
-        # Start the stream playback
-        self.testPlayer.play(self.testStreams[0])
-
         # Create the dsAudio class
         self.testdsAudio = dsAudioClass(self.deviceProfile, self.hal_session)
 
         self.log.testStart(self.testName, '1')
 
         # Initialize the dsAudio module
-        self.testdsAudio.initialise(self.testdsAudio.getDeviceType(), self.connectionCB, self.formatCB, self.atmosCB)
+        self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
         # Loop through the supported audio ports
         for port,index in self.testdsAudio.getSupportedPorts():
+            # Start the stream playback
+            self.testPlayer.play(self.testStreams[0])
+
             # Port Enable test
             self.log.stepStart(f'Enable {port} Port')
             # Enable the audio port
@@ -181,8 +180,8 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
             result = self.testVerifyAudio(port, True)
             self.log.stepResult(not result, f'Audio Verification {port} Port')
 
-        # Stop the stream playback
-        self.testPlayer.stop()
+            # Stop the stream playback
+            self.testPlayer.stop()
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()

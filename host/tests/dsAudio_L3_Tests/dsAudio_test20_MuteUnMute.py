@@ -52,10 +52,6 @@ class dsAudio_test20_MuteUnMute(utHelperClass):
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
-        self.connectionCB = self.testSetup.get("callback").get("connection_status")
-        self.formatCB = self.testSetup.get("callback").get("format_status")
-        self.atmosCB = self.testSetup.get("callback").get("atmos_status")
-
         # Open Session for player
         self.player_session = self.dut.getConsoleSession("ssh_player")
 
@@ -108,6 +104,9 @@ class dsAudio_test20_MuteUnMute(utHelperClass):
             None.
         """
         self.deleteFromDevice(self.testStreams)
+
+        # remove the callback log files
+        self.deleteFromDevice([self.connectionCB, self.formatCB, self.atmosCB])
 
     def testRunPrerequisites(self):
         """
@@ -162,7 +161,7 @@ class dsAudio_test20_MuteUnMute(utHelperClass):
         self.log.testStart(self.testName, '1')
 
         # Initialize the dsAudio module
-        self.testdsAudio.initialise(self.testdsAudio.getDeviceType(), self.connectionCB, self.formatCB, self.atmosCB)
+        self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
         for stream in self.testStreams:
             # Start the stream playback
@@ -180,7 +179,7 @@ class dsAudio_test20_MuteUnMute(utHelperClass):
 
                 result = self.testVerifyAudio(port, True)
 
-                self.log.stepResult(result, f'Mute Test Port:{port} Index:{index} Stream:{stream}')
+                self.log.stepResult(not result, f'Mute Test Port:{port} Index:{index} Stream:{stream}')
 
                 self.log.stepStart(f'UnMute Test Port:{port} Index:{index} Stream:{stream}')
 
@@ -189,7 +188,7 @@ class dsAudio_test20_MuteUnMute(utHelperClass):
 
                 result = self.testVerifyAudio(port, True)
 
-                self.log.stepResult(not result, f'UnMute Test Port:{port} Index:{index} Stream:{stream}')
+                self.log.stepResult(result, f'UnMute Test Port:{port} Index:{index} Stream:{stream}')
 
                 # Disable the audio port
                 self.testdsAudio.disablePort(port, index)

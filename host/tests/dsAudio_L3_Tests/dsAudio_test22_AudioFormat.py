@@ -40,8 +40,7 @@ class dsAudio_test22_AudioFormat(utHelperClass):
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    audioFormats = ["NONE", "PCM", "AC3", "EAC3", "AAC", "VORBIS", "WMA"]
-    dolbyStreams = ["AC4", "MAT", "TRUEHD", "EAC3_ATMOS", "TRUEHD_ATMOS", "MAT_ATMOS", "AC4_ATMOS"]
+    audioFormats = ["PCM", "AC3", "EAC3", "AAC", "VORBIS", "WMA", "AC4", "MAT", "TRUEHD", "EAC3_ATMOS", "TRUEHD_ATMOS", "MAT_ATMOS", "AC4_ATMOS"]
 
     def __init__(self):
         """
@@ -54,10 +53,6 @@ class dsAudio_test22_AudioFormat(utHelperClass):
 
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
-
-        self.connectionCB = self.testSetup.get("callback").get("connection_status")
-        self.formatCB = self.testSetup.get("callback").get("format_status")
-        self.atmosCB = self.testSetup.get("callback").get("atmos_status")
 
         # Open Session for player
         self.player_session = self.dut.getConsoleSession("ssh_player")
@@ -111,6 +106,9 @@ class dsAudio_test22_AudioFormat(utHelperClass):
             None.
         """
         self.deleteFromDevice(self.testStreams)
+
+        # remove the callback log files
+        self.deleteFromDevice([self.connectionCB, self.formatCB, self.atmosCB])
 
     def testRunPrerequisites(self):
         """
@@ -168,15 +166,19 @@ class dsAudio_test22_AudioFormat(utHelperClass):
         self.log.testStart(self.testName, '1')
 
         # Initialize the dsAudio module
-        self.testdsAudio.initialise(self.testdsAudio.getDeviceType(), self.connectionCB, self.formatCB, self.atmosCB)
+        self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        i = 0
-        for format in self.audioFormats:
+        self.log.stepStart(f'Audio Format NONE Test')
+
+        # Get the Audio Format
+        audioFormat = self.testdsAudio.getAudioFormat()
+
+        self.log.stepResult("NONE" in audioFormat, f'Audio Format NONE Test')
+
+        for format, stream in zip(self.audioFormats, self.testStreams):
             # Start the stream playback
-            if format is not "NONE":
-                self.testPlayer.play(self.testStreams[i])
-                i += 1
-                time.sleep(3)
+            self.testPlayer.play(stream)
+            time.sleep(3)
 
             self.log.stepStart(f'Audio Format {format} Test')
 
@@ -185,9 +187,8 @@ class dsAudio_test22_AudioFormat(utHelperClass):
 
             self.log.stepResult(format in audioFormat, f'Audio Format {format} Test')
 
-            if format is not "NONE":
-                # Stop the stream playback
-                self.testPlayer.stop()
+            # Stop the stream playback
+            self.testPlayer.stop()
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()

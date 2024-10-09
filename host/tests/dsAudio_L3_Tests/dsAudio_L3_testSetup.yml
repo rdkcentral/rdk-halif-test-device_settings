@@ -1,197 +1,120 @@
 dsAudio:
   description: "dsAudio Device Settings test setup"
-  callback:
-    connection_status: "/opt/HAL_L3/dsAudio_connectionStatus.txt"
-    format_status: "/opt/HAL_L3/dsAudio_formatStatus.txt"
-    atmos_status: "/opt/HAL_L3/dsAudio_atmosStatus.txt"
   assets:
     device:
+      defaults: &defaults
+        artifacts:
+          - "<PATH>/bin/hal_test"
+          - "<PATH>/bin/libut_control.so"
+          - "<PATH>/bin/Sink_AudioSettings.yaml"
+          - "<PATH>/bin/run.sh"
+        execute:
+          - "chmod +x <PATH>/hal_test"
+          - "chmod +x <PATH>/run.sh"
+        streams:
       test01_EnableDisableAndVerifyAudioPortStatus:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
-        streams: ["<PATH>/streams/tones_string_48k_stereo.ac3"]
+        <<: *defaults
+        streams:
+          - "<PATH>/streams/tones_string_48k_stereo.ac3"
       test02_PortConnectionStatus:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
-        streams: []
+        <<: *defaults
+        streams:
       test03_MS12AudioCompression:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
-        streams: ["<PATH>/streams/tones_string_48k_stereo.ac3"]
+        <<: *defaults
+        streams:
+          - "<PATH>/streams/tones_string_48k_stereo.ac3"
       test04_MS12DialogueEnhancer:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
-        streams: ["<PATH>/streams/tones_string_48k_stereo.ac3"]
+        <<: *defaults
+        streams:
+          - "<PATH>/streams/tones_string_48k_stereo.ac3"
       test05_MS12DolbyVolume:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
-        streams: ["<PATH>/streams/tones_string_48k_stereo.ac3"]
+        <<: *defaults
+        streams:
+          - "<PATH>/streams/tones_string_48k_stereo.ac3"
       test06_MS12IntelligentEqualizer:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
-        streams: ["<PATH>/streams/tones_string_48k_stereo.ac3"]
+        <<: *defaults
+        streams:
+          - "<PATH>/streams/tones_string_48k_stereo.ac3"
       test07_MS12Volumeleveller:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
-        streams: ["<PATH>/streams/tones_string_48k_stereo.ac3"]
+        <<: *defaults
+        streams:
+          - "<PATH>/streams/tones_string_48k_stereo.ac3"
       test08_MS12BassEnhancer:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
-        streams: ["<PATH>/streams/tones_string_48k_stereo.ac3"]
+        <<: *defaults
+        streams:
+          - "<PATH>/streams/tones_string_48k_stereo.ac3"
       test09_MS12SurroundDecoder:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
-        streams: ["<PATH>/streams/tones_string_48k_stereo.ac3"]
+        <<: *defaults
+        streams:
+          - "<PATH>/streams/tones_string_48k_stereo.ac3"
       test10_MS12DRCMode:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
-        streams: ["<PATH>/streams/tones_string_48k_stereo.ac3"]
+        <<: *defaults
+        streams:
+          - "<PATH>/streams/tones_string_48k_stereo.ac3"
       test11_MS12SurroundVirtualizer:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
-        streams: ["<PATH>/streams/tones_string_48k_stereo.ac3"]
+        <<: *defaults
+        streams:
+          - "<PATH>/streams/tones_string_48k_stereo.ac3"
       test12_MS12MISteering:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
-        streams: ["<PATH>/streams/tones_string_48k_stereo.ac3"]
+        <<: *defaults
+        streams:
+          - "<PATH>/streams/tones_string_48k_stereo.ac3"
       test13_MS12GraphicEqualizer:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
-        streams: ["<PATH>/streams/tones_string_48k_stereo.ac3"]
+        <<: *defaults
+        streams:
+          - "<PATH>/streams/tones_string_48k_stereo.ac3"
       test14_MS12LEConfig:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
-        streams: ["<PATH>/streams/tones_string_48k_stereo.ac3"]
+        <<: *defaults
+        streams:
+          - "<PATH>/streams/tones_string_48k_stereo.ac3"
       test15_ARCPort:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
+        <<: *defaults
         streams: []
       test16_ARCSAD:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
-        streams: ["<PATH>/streams/tones_string_48k_stereo.ac3"]
+        <<: *defaults
+        streams:
+          - "<PATH>/streams/tones_string_48k_stereo.ac3"
       test17_OutputMode:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
-        streams: ["<PATH>/streams/tones_string_48k_stereo.wav",
-                  "<PATH>/streams/tones_string_48k_stereo.ac3",
-                  "<PATH>/streams/tones_string_48k_stereo.eac3"]
+        <<: *defaults
+        streams:
+          - "<PATH>/streams/tones_string_48k_stereo.wav"
+          - "<PATH>/streams/tones_string_48k_stereo.ac3"
+          - "<PATH>/streams/tones_string_48k_stereo.eac3"
       test18_AudioLevel:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
-        streams: ["<PATH>/streams/tones_string_48k_stereo.ac3"]
+        <<: *defaults
+        streams:
+          - "<PATH>/streams/tones_string_48k_stereo.ac3"
       test19_AudioGain:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
-        streams: ["<PATH>/streams/tones_string_48k_stereo.ac3"]
+        <<: *defaults
+        streams:
+          - "<PATH>/streams/tones_string_48k_stereo.ac3"
       test20_MuteUnMute:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
-        streams: ["<PATH>/streams/tones_string_48k_stereo.ac3"]
+        <<: *defaults
+        streams:
+          - "<PATH>/streams/tones_string_48k_stereo.ac3"
       test21_AudioDelay:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
-        streams: ["<PATH>/streams/AVsync_aac_200_48k_ATSC_m2v_29fps.trp"]
+        <<: *defaults
+        streams:
+          - "<PATH>/streams/AVsync_aac_200_48k_ATSC_m2v_29fps.trp"
       test22_AudioFormat:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
-        streams: ["<PATH>/streams/tones_string_48k_stereo.wav",
-                  "<PATH>/streams/tones_string_48k_stereo.ac3",
-                  "<PATH>/streams/tones_string_48k_stereo.eac3",
-                  "<PATH>/streams/tones_string_48k_stereo.aac",
-                  "<PATH>/streams/tones_string_48k_stereo.ogg",
-                  "<PATH>/streams/tones_string_48k_stereo.wma"]
+        <<: *defaults
+        streams:
+          - "<PATH>/streams/tones_string_48k_stereo.wav"
+          - "<PATH>/streams/tones_string_48k_stereo.ac3"
+
       test23_AssociateMix:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
-        streams: ["<PATH>/streams/tones_string_48k_stereo.ac3"]
+        <<: *defaults
+        streams:
+          - "<PATH>/streams/tones_string_48k_stereo.ac3"
       test24_PrimarySecondaryLanguage:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
-        streams: ["<PATH>/streams/tones_string_48k_stereo.ac3"]
+        <<: *defaults
+        streams:
+          - "<PATH>/streams/tones_string_48k_stereo.ac3"
       test25_AudioMix:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
-        streams: ["<PATH>/streams/tones_string_48k_stereo.ac3"]
+        <<: *defaults
+        streams:
+          - "<PATH>/streams/tones_string_48k_stereo.ac3"
       test26_MS12AudioProfiles:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_AudioSettings.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
-        streams: ["<PATH>/streams/tones_string_48k_stereo.ac3"]
+        <<: *defaults
+        streams:
+          - "<PATH>/streams/tones_string_48k_stereo.ac3"
