@@ -813,7 +813,6 @@ void test_l1_dsFPD_positive_dsGetFPBrightness (void)
     uint8_t count = 0;
     dsFPDIndicator_t eIndicator;
     char buffer[DS_FPD_KEY_SIZE];
-    int indicator_power_index = -1;
 
     // Step 01: Initialize with dsFPInit()
     result = dsFPInit();
