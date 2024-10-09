@@ -51,7 +51,7 @@ function check_next_revision()
     popd > /dev/null
 }
 
-# Check if the common document configuration is present, if not clone it
+# Check if ut-core is present, if not clone it
 if [ -d "./ut-core" ]; then
     # ut-core exists so run the makefile from ut
     check_next_revision
