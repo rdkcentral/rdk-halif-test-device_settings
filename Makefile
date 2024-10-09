@@ -23,6 +23,10 @@ ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 BIN_DIR := $(ROOT_DIR)/bin
 TOP_DIR := $(ROOT_DIR)
 
+RED:='\033[0;31m'
+GREEN:='\033[0;32m'
+YELLOW:='\033[0;33m'
+NC:='\033[0m'
 ECHOE = /bin/echo -e
 
 SRC_DIRS = $(ROOT_DIR)/src
@@ -90,10 +94,10 @@ list:
 	make -C ./ut-core TARGET=${TARGET} list
 
 printenv:
-	@echo "Environment variables: [UT]"
-	@echo "---------------------------"
+	@${ECHOE} ${YELLOW}"Environment variables: [UT]"${NC}
+	@${ECHOE} ${YELLOW}"---------------------------"${NC}
 	@$(foreach v, $(.VARIABLES), $(info $(v) = $($(v))))
-	@echo "---------------------------"
+	@${ECHOE} ${YELLOW}"---------------------------"${NC}
 	make -C ./ut-core TARGET=${TARGET} printenv
 
 cleanlibs:
