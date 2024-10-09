@@ -53,10 +53,6 @@ class dsAudio_test14_MS12LEConfig(utHelperClass):
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
-        self.connectionCB = self.testSetup.get("callback").get("connection_status")
-        self.formatCB = self.testSetup.get("callback").get("format_status")
-        self.atmosCB = self.testSetup.get("callback").get("atmos_status")
-
         # Open Session for player
         self.player_session = self.dut.getConsoleSession("ssh_player")
 
@@ -109,6 +105,9 @@ class dsAudio_test14_MS12LEConfig(utHelperClass):
             None.
         """
         self.deleteFromDevice(self.testStreams)
+
+        # remove the callback log files
+        self.deleteFromDevice([self.connectionCB, self.formatCB, self.atmosCB])
 
     def testRunPrerequisites(self):
         """
@@ -165,11 +164,9 @@ class dsAudio_test14_MS12LEConfig(utHelperClass):
         self.log.testStart(self.testName, '1')
 
         # Initialize the dsAudio module
-        self.testdsAudio.initialise(self.testdsAudio.getDeviceType(), self.connectionCB, self.formatCB, self.atmosCB)
+        self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
         for stream in self.testStreams:
-            # Start the stream playback
-            self.testPlayer.play(stream)
 
             # Loop through the supported audio ports
             for port,index in self.testdsAudio.getSupportedPorts():
@@ -182,7 +179,13 @@ class dsAudio_test14_MS12LEConfig(utHelperClass):
                     # Enable LEConfig
                     self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":True})
 
+                    # Start the stream playback
+                    self.testPlayer.play(stream)
+
                     result = self.testVerifyLEConfig(stream, port, True, True)
+
+                    # Stop the stream playback
+                    self.testPlayer.stop()
 
                     self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
 
@@ -191,15 +194,18 @@ class dsAudio_test14_MS12LEConfig(utHelperClass):
                     # Disable LEConfig
                     self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":False})
 
+                    # Start the stream playback
+                    self.testPlayer.play(stream)
+
                     result = self.testVerifyLEConfig(stream, port, False, True)
+
+                    # Stop the stream playback
+                    self.testPlayer.stop()
 
                     self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{False} Port:{port} Index:{index} Stream:{stream}')
 
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)
-
-            # Stop the stream playback
-            self.testPlayer.stop()
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()

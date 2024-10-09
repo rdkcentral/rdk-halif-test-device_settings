@@ -250,7 +250,7 @@ static void writeCallbackLog(char *logPath, const char *format, ...)
     // Open the log file in append mode
     FILE *fp = fopen(logPath, "a");
     if (fp == NULL) {
-        fprintf(stderr, "Error opening log file: %s\n", strerror(errno));
+        UT_LOG_ERROR("Error opening log file: %s", strerror(errno));
         return;
     }
 

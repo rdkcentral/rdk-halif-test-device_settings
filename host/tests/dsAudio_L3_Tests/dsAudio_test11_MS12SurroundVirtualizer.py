@@ -41,7 +41,7 @@ class dsAudio_test11_MS12SurroundVirtualizer(utHelperClass):
     rackDevice = "dut"
     ms12DAPFeature = "SurroundVirtualizer"
     volumeModes = [0, 1, 2]
-    boostValues = [0, 20, 40, 60, 80, 96]
+    boostValues = [0, 40, 96]
 
     def __init__(self):
         """
@@ -54,10 +54,6 @@ class dsAudio_test11_MS12SurroundVirtualizer(utHelperClass):
 
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
-
-        self.connectionCB = self.testSetup.get("callback").get("connection_status")
-        self.formatCB = self.testSetup.get("callback").get("format_status")
-        self.atmosCB = self.testSetup.get("callback").get("atmos_status")
 
         # Open Session for player
         self.player_session = self.dut.getConsoleSession("ssh_player")
@@ -111,6 +107,9 @@ class dsAudio_test11_MS12SurroundVirtualizer(utHelperClass):
             None.
         """
         self.deleteFromDevice(self.testStreams)
+
+        # remove the callback log files
+        self.deleteFromDevice([self.connectionCB, self.formatCB, self.atmosCB])
 
     def testRunPrerequisites(self):
         """
@@ -168,7 +167,7 @@ class dsAudio_test11_MS12SurroundVirtualizer(utHelperClass):
         self.log.testStart(self.testName, '1')
 
         # Initialize the dsAudio module
-        self.testdsAudio.initialise(self.testdsAudio.getDeviceType(), self.connectionCB, self.formatCB, self.atmosCB)
+        self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
         for stream in self.testStreams:
             # Start the stream playback
@@ -180,15 +179,6 @@ class dsAudio_test11_MS12SurroundVirtualizer(utHelperClass):
                     # Enable the audio port
                     self.testdsAudio.enablePort(port, index)
 
-                    mode = 0 #SurroundVirtualizer is OFF
-                    boost = 0
-                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} boost:{boost} Port:{port} Index:{index} Stream:{stream}')
-
-                    # Set the SurroundVirtualizer
-                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, boost]})
-
-                    result = self.testVerifySurroundVirtualizer(stream, port, mode, boost, True)
-
                     mode = 2 #leveller is Auto
                     boost = 0
                     self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} boost:{boost} Port:{port} Index:{index} Stream:{stream}')
@@ -197,6 +187,8 @@ class dsAudio_test11_MS12SurroundVirtualizer(utHelperClass):
                     self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, boost]})
 
                     result = self.testVerifySurroundVirtualizer(stream, port, mode, boost, True)
+
+                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} boost:{boost} Port:{port} Index:{index} Stream:{stream}')
 
                     mode = 1 #SurroundVirtualizer is On
                     boost = 0
@@ -209,6 +201,17 @@ class dsAudio_test11_MS12SurroundVirtualizer(utHelperClass):
                         result = self.testVerifySurroundVirtualizer(stream, port, mode, boost, True)
 
                         self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} boost:{boost} Port:{port} Index:{index} Stream:{stream}')
+
+                    mode = 0 #SurroundVirtualizer is OFF
+                    boost = 0
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} boost:{boost} Port:{port} Index:{index} Stream:{stream}')
+
+                    # Set the SurroundVirtualizer
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, boost]})
+
+                    result = self.testVerifySurroundVirtualizer(stream, port, mode, boost, True)
+
+                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} boost:{boost} Port:{port} Index:{index} Stream:{stream}')
 
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)

@@ -55,10 +55,6 @@ class dsAudio_test25_AudioMix(utHelperClass):
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
-        self.connectionCB = self.testSetup.get("callback").get("connection_status")
-        self.formatCB = self.testSetup.get("callback").get("format_status")
-        self.atmosCB = self.testSetup.get("callback").get("atmos_status")
-
         # Open Session for player
         self.player_session = self.dut.getConsoleSession("ssh_player")
 
@@ -111,6 +107,9 @@ class dsAudio_test25_AudioMix(utHelperClass):
             None.
         """
         self.deleteFromDevice(self.testStreams)
+
+        # remove the callback log files
+        self.deleteFromDevice([self.connectionCB, self.formatCB, self.atmosCB])
 
     def testRunPrerequisites(self):
         """
@@ -166,7 +165,7 @@ class dsAudio_test25_AudioMix(utHelperClass):
         self.log.testStart(self.testName, '1')
 
         # Initialize the dsAudio module
-        self.testdsAudio.initialise(self.testdsAudio.getDeviceType(), self.connectionCB, self.formatCB, self.atmosCB)
+        self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
         for stream in self.testStreams:
             # Start the stream playback

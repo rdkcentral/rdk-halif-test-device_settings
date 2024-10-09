@@ -3,7 +3,11 @@
 dsAudio:  # Prefix must always exist
     description: "dsAudio Device Settings testing profile / menu system for UT"
     test:
-        execute: "/opt/bhanu/run.sh -p /opt/bhanu/Sink_AudioSettings.yaml" #Execute command
+        execute: "<PATH>/run.sh -p <PATH>/Sink_AudioSettings.yaml" #Execute command
+        callback:
+            connection_status: "<PATH>/dsAudio_connectionStatus.txt"
+            format_status: "<PATH>/dsAudio_formatStatus.txt"
+            atmos_status: "<PATH>/dsAudio_atmosStatus.txt"
         type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
         suites:
             0:

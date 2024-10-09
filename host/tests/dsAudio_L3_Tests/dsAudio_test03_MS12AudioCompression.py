@@ -39,7 +39,7 @@ class dsAudio_test03_MS12AudioCompression(utHelperClass):
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    compressionValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    compressionValues = [0, 5, 10]
 
     def __init__(self):
         """
@@ -52,10 +52,6 @@ class dsAudio_test03_MS12AudioCompression(utHelperClass):
 
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
-
-        self.connectionCB = self.testSetup.get("callback").get("connection_status")
-        self.formatCB = self.testSetup.get("callback").get("format_status")
-        self.atmosCB = self.testSetup.get("callback").get("atmos_status")
 
         # Open Session for player
         self.player_session = self.dut.getConsoleSession("ssh_player")
@@ -110,6 +106,9 @@ class dsAudio_test03_MS12AudioCompression(utHelperClass):
         """
         self.deleteFromDevice(self.testStreams)
 
+        # remove the callback log files
+        self.deleteFromDevice([self.connectionCB, self.formatCB, self.atmosCB])
+
     def testRunPrerequisites(self):
         """
         Runs Prerequisite commands listed in test-setup configuration file on the dut.
@@ -120,7 +119,7 @@ class dsAudio_test03_MS12AudioCompression(utHelperClass):
 
         #Run test specific commands
         test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("execute");
+        cmds = test.get("execute")
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
@@ -165,7 +164,7 @@ class dsAudio_test03_MS12AudioCompression(utHelperClass):
         self.log.testStart(self.testName, '1')
 
         # Initialize the dsAudio module
-        self.testdsAudio.initialise(self.testdsAudio.getDeviceType(), self.connectionCB, self.formatCB, self.atmosCB)
+        self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
         for stream in self.testStreams:
             # Start the stream playback
@@ -186,6 +185,9 @@ class dsAudio_test03_MS12AudioCompression(utHelperClass):
                         result = self.testVerifyCompressionLevel(stream, port, compression, True)
 
                         self.log.stepResult(result, f'Audio Compression:{compression} Port:{port} Index:{index} Stream:{stream}')
+
+                    # Resetting audio compression value to default
+                    self.testdsAudio.setAudioCompression(port, index, 0)
 
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)

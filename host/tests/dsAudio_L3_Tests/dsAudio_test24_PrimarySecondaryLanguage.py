@@ -40,9 +40,7 @@ class dsAudio_test24_PrimarySecondaryLanguage(utHelperClass):
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    streamLanguage = [{"Primary": ["eng", "ger"], "Secondary": ["eng", "spa"]},
-                      {"Primary": ["eng", "ger"], "Secondary": ["eng", "spa"]},
-                      {"Primary": ["eng", "ger"], "Secondary": ["eng", "spa"]}]
+    streamLanguage = [{"Primary": ["eng", "spa", "zho"], "Secondary": ["eng", "spa", "zho"]}]
 
     def __init__(self):
         """
@@ -55,10 +53,6 @@ class dsAudio_test24_PrimarySecondaryLanguage(utHelperClass):
 
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
-
-        self.connectionCB = self.testSetup.get("callback").get("connection_status")
-        self.formatCB = self.testSetup.get("callback").get("format_status")
-        self.atmosCB = self.testSetup.get("callback").get("atmos_status")
 
         # Open Session for player
         self.player_session = self.dut.getConsoleSession("ssh_player")
@@ -112,6 +106,9 @@ class dsAudio_test24_PrimarySecondaryLanguage(utHelperClass):
             None.
         """
         self.deleteFromDevice(self.testStreams)
+
+        # remove the callback log files
+        self.deleteFromDevice([self.connectionCB, self.formatCB, self.atmosCB])
 
     def testRunPrerequisites(self):
         """
@@ -167,10 +164,19 @@ class dsAudio_test24_PrimarySecondaryLanguage(utHelperClass):
         self.log.testStart(self.testName, '1')
 
         # Initialize the dsAudio module
-        self.testdsAudio.initialise(self.testdsAudio.getDeviceType(), self.connectionCB, self.formatCB, self.atmosCB)
+        self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        i = 0
-        for stream in self.testStreams:
+        for port,index in self.testdsAudio.getSupportedPorts():
+            if self.testdsAudio.getDeviceType() == 0 and "SPEAKER" in port:
+                # Enable the audio port
+                self.testdsAudio.enablePort(port, index)
+                break
+            elif self.testdsAudio.getDeviceType() == 1 and "HDMI" in port:
+                # Enable the audio port
+                self.testdsAudio.enablePort(port, index)
+                break
+
+        for i, stream in enumerate(self.testStreams):
 
             self.testdsAudio.enableAssociateAudioMixig(False)
 
@@ -202,7 +208,8 @@ class dsAudio_test24_PrimarySecondaryLanguage(utHelperClass):
             # Stop the stream playback
             self.testPlayer.stop()
 
-            i += 1
+        # Disable the audio port
+        self.testdsAudio.disablePort(port, index)
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
