@@ -1067,7 +1067,7 @@ void test_l1_dsFPD_negative_dsGetFPState (void)
     }
 
     // Step 05: Call dsGetFPState() and iterate through the indicators from the profile file and comparing with dsFPDIndicator_t values
-    for (int i = dsFPD_INDICATOR_MESSAGE; i <= dsFPD_INDICATOR_MAX; ++i)
+    for (int i = dsFPD_INDICATOR_MESSAGE; i < dsFPD_INDICATOR_MAX; ++i)
     {
         bool isValidIndicator = false;
         for (int j = 1; j <= count; ++j)
