@@ -24,16 +24,15 @@
 
 deviceConfig:
     cpe1:
-        platform:   "llama.uk"
+        platform:   "element"
         model:      "65"
         target_directory: "/opt/"
         test:
             #TODO: Use the single profile file which contains all details (ds, hdmi, etc)
-            profile: "../../../profiles/sink/Sink_AudioSettings.yaml"
+            profile: "../../../profiles/sink/Sink_HDMIIN.yaml"
             player:
-                tool: "gstreamer"
                 prerequisites:
-                    - "export EXP=test" # pre commands required to play the stream
+                    - "export XDG_RUNTIME_DIR=/run" # pre commands required to disable the graphics plane
     cpe2:
         platform: "test"
         model: "test"

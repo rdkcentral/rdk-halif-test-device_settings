@@ -356,7 +356,7 @@ static void hdmiInVideoModeUpdateCB(dsHdmiInPort_t port, dsVideoPortResolution_t
  */
 static void hdmiInAllmChangeCB(dsHdmiInPort_t port, bool allm_mode )
 {
-    UT_LOG_INFO("Received AllmChange status callback port: %s, sigstatus: %s",
+    UT_LOG_INFO("Received AllmChange status callback port: %s, allm_mode: %s",
                  UT_Control_GetMapString(dsHdmiInPort_mapTable, port),
                  UT_Control_GetMapString(bool_mapTable, allm_mode));
 
@@ -1006,13 +1006,6 @@ void test_l3_HdmiIn_get_edidversion(void)
       return;
     }
     port = select;
-
-    UT_LOG_MENU_INFO("\n------------------Please select from availabe edid versions--------\n");
-    for(tv_hdmi_edid_version_t i = HDMI_EDID_VER_14 ; i < HDMI_EDID_VER_MAX ; i++)
-    {
-           UT_LOG_MENU_INFO("%d. %s", i, UT_Control_GetMapString(tv_hdmi_edid_version_mapTable, i));
-    }
-    UT_LOG_MENU_INFO("\n-------------------------------------------------------------------\n");
    
     UT_LOG_INFO("Calling dsGetEdidVersion IN:port:[%s]:[%d] OUT:edidver:[ ]\t",
                    UT_Control_GetMapString(dsHdmiInPort_mapTable, port), port),
@@ -1131,12 +1124,6 @@ void test_l3_HdmiIn_get_edid2allmsupport(void)
 
     port = select;
 
-    UT_LOG_MENU_INFO("\n-----------------------------------------------------\n\t"
-                     "\tAcceptable values are:\n\t"
-                     "\t0. false\n\t"
-                     "\t1. true\n\t"
-                     "\n-------------------------------------------------------\n");
-
     UT_LOG_INFO("Calling dsGetEdid2AllmSupport IN:port:[%s]:[%d], OUT:allmsupport:[ ]",
                  UT_Control_GetMapString(dsHdmiInPort_mapTable, port), port),
 
@@ -1199,19 +1186,19 @@ int test_l3_dsHdmiIn_register ( void )
        return -1;
    }
 
-   UT_add_test( pSuite, "HdmiIn_Initialize" ,test_l3_HdmiIn_initialize );
-   UT_add_test( pSuite, "HdmiIn_get_inputport" ,test_l3_HdmiIn_get_inputports );
-   UT_add_test( pSuite, "HdmiIn_get_status" ,test_l3_HdmiIn_get_status);
-   UT_add_test( pSuite, "HdmiIn_select_port" ,test_l3_HdmiIn_select_port );
-   UT_add_test( pSuite, "HdmiIn_scale_video" ,test_l3_HdmiIn_scale_video );
-   UT_add_test( pSuite, "HdmiIn_zoom_mode" ,test_l3_HdmiIn_zoom_mode );
-   UT_add_test( pSuite, "HdmiIn_get_edid" ,test_l3_HdmiIn_get_edid );
-   UT_add_test( pSuite, "HdmiIn_spd_info" ,test_l3_HdmiIn_spd_info );
-   UT_add_test( pSuite, "HdmiIn_set_edidversion" ,test_l3_HdmiIn_set_edidversion );
-   UT_add_test( pSuite, "HdmiIn_get_edidversion" ,test_l3_HdmiIn_get_edidversion );
-   UT_add_test( pSuite, "HdmiIn_set_edid2allmsupport" ,test_l3_HdmiIn_set_edid2allmsupport );
-   UT_add_test( pSuite, "HdmiIn_get_edid2allmsupport" ,test_l3_HdmiIn_get_edid2allmsupport );
-   UT_add_test( pSuite, "dsHdmiIn_terminate" ,test_l3_dsHdmiIn_terminate );
+   UT_add_test( pSuite, "Initialize HdmiIn" ,test_l3_HdmiIn_initialize );
+   UT_add_test( pSuite, "Get Input Port" ,test_l3_HdmiIn_get_inputports );
+   UT_add_test( pSuite, "Get Status" ,test_l3_HdmiIn_get_status);
+   UT_add_test( pSuite, "Select Port" ,test_l3_HdmiIn_select_port );
+   UT_add_test( pSuite, "Scale Video" ,test_l3_HdmiIn_scale_video );
+   UT_add_test( pSuite, "Zoom Mode" ,test_l3_HdmiIn_zoom_mode );
+   UT_add_test( pSuite, "Get Edid" ,test_l3_HdmiIn_get_edid );
+   UT_add_test( pSuite, "Get Spdinfo" ,test_l3_HdmiIn_spd_info );
+   UT_add_test( pSuite, "Set EdidVersion" ,test_l3_HdmiIn_set_edidversion );
+   UT_add_test( pSuite, "Get EdidVersion" ,test_l3_HdmiIn_get_edidversion );
+   UT_add_test( pSuite, "Set Edid 2 Allm Support" ,test_l3_HdmiIn_set_edid2allmsupport );
+   UT_add_test( pSuite, "Get Edid 2 Allm Support" ,test_l3_HdmiIn_get_edid2allmsupport );
+   UT_add_test( pSuite, "Terminate HdmiIn" ,test_l3_dsHdmiIn_terminate );
 
    return 0;
 }
