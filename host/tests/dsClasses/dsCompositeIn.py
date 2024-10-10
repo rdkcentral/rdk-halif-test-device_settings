@@ -42,9 +42,9 @@ class dsCompositeInClass():
     testSuite = "L3 dsCompositeIn"
 
     """
-    Device Settings CpmpositeIn Class
+    Device Settings CompositeIn Class
 
-    This module provides common extensions for device Settings Audio Module.
+    This module provides common extensions for device Settings CompositeIn Module.
     """
     def __init__(self, deviceProfilePath:str, session=None ):
         """
@@ -71,7 +71,7 @@ class dsCompositeInClass():
         Returns:
             None
         """
-        result = self.utMenu.select( self.testSuite, "Initialize dsCompositeIn")
+        result = self.utMenu.select( self.testSuite, "Initialize CompositeIn")
 
     def terminate(self):
         """
@@ -83,7 +83,7 @@ class dsCompositeInClass():
         Returns:
             None
         """
-        result = self.utMenu.select(self.testSuite, "Terminate dsCompositeIn")
+        result = self.utMenu.select(self.testSuite, "Terminate CompositeIn")
 
     def getSupportedPorts(self):
         """
@@ -116,7 +116,7 @@ class dsCompositeInClass():
 
     def selectPort(self):
         """
-        Enables the audio port.
+        Enables the compositeIn port.
 
         Args:
             None
@@ -193,6 +193,9 @@ if __name__ == '__main__':
 
     test.initialise()
     ports = test.getSupportedPorts()
+    test.getStatus()
+    test.selectPort()
+    test.scaleVideo()
     test.terminate()
 
     shell.close()
