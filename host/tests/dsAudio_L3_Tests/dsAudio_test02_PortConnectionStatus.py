@@ -155,19 +155,41 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        self.log.stepStart('Headphone Connect Test')
-
         # Wait for headphone connection
         self.testWaitForConnectionChange(True, True)
+
+        self.log.stepStart('Headphone Connect Callback Test')
+
+        callbackStatus = self.testdsAudio.getHeadphoneConnectionCallbackStatus()
+
+        if(callbackStatus == None or "HEADPHONE" not in callbackStatus[0] or callbackStatus[2] == False):
+            result = False
+        else:
+            result = True
+
+        self.log.stepResult(result, 'Headphone Connect Callback Test')
+
+        self.log.stepStart('Headphone Connect Test')
 
         connectionStatus = self.testdsAudio.getHeadphoneConnectionStatus()
 
         self.log.stepResult(connectionStatus, 'Headphone Connect Test')
 
-        self.log.stepStart('Headphone Disconnect Test')
-
         # Wait for headphone disconnection
         self.testWaitForConnectionChange(False, True)
+
+        self.log.stepStart('Headphone Disconnect Callback Test')
+
+        callbackStatus = self.testdsAudio.getHeadphoneConnectionCallbackStatus()
+
+        if(callbackStatus == None or "HEADPHONE" not in callbackStatus[0] or callbackStatus[2] == True):
+            result = False
+        else:
+            result = True
+
+        self.log.stepResult(result, 'Headphone Disconnect Callback Test')
+
+        self.log.stepStart('Headphone Disconnect Test')
 
         connectionStatus = self.testdsAudio.getHeadphoneConnectionStatus()
 
