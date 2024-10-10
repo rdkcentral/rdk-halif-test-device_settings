@@ -32,16 +32,16 @@ from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsDisplay_test01_GetDisplayEDID(utHelperClass):
+class dsDisplay_test02_GetDisplayEdidBytes(utHelperClass):
 
-    testName  = "test01_GetDisplayEDID"
+    testName  = "test02_GetDisplayEdidBytes"
     testSetupPath = dir_path + "/dsDisplay_L3_testSetup.yml"
     moduleName = "dsDisplay"
     rackDevice = "dut"
 
     def __init__(self):
         """
-        Initializes the test01_GetDisplayEDID test .
+        Initializes the test02_GetDisplayEdidBytes test .
 
         Args:
             None.
@@ -55,7 +55,7 @@ class dsDisplay_test01_GetDisplayEDID(utHelperClass):
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
 
         # Create user response Class
-        self.testUserResponse = utUserResponse()
+        self.testUser Response = utUser Response()
 
         # Get path to device profile file
         self.deviceProfile = dir_path + "/" + self.cpe.get("test").get("profile")
@@ -69,32 +69,32 @@ class dsDisplay_test01_GetDisplayEDID(utHelperClass):
         """
 
         #Run test specific commands
-        cmds = self.testSetup.assets.device.test01_GetDisplayEDID.execute
+        cmds = self.testSetup.assets.device.test02_GetDisplayEdidBytes.execute
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    def testGetEDID(self, manual=False):
-    """
-    Gets the EDID of the display.
-    Args:
-        manual (bool, optional): Manual verification (True: manual, False: other verification methods).
+    def testGetEdidBytes(self, manual=False):
+        """
+        Gets the EDID bytes of the display.
+        Args:
+            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
                                  Defaults to other verification methods
-    Returns:
-        bool
-    """
-    if manual == True:
-        # Manual verification
-        edid = self.testdsDisplay.getEdid()
-        return self.testUserResponse.getUserYN(f"Is the EDID {edid} correct? (Y/N):")
-    else:
-        # Automation verification
-        #TODO: Add automation verification methods
-        return False
+        Returns:
+            bool
+        """
+        if manual == True:
+            # Manual verification
+            edid_bytes = self.testdsDisplay.getEdidBytes()
+            return self.testUserResponse.getUserYN(f"Are the EDID bytes {edid_bytes} correct? (Y/N):")
+        else:
+            # Automation verification
+            #TODO: Add automation verification methods
+            return False
 
     def testFunction(self):
         """
-        This function will test the Display by getting the EDID of the display
+        This function will test the Display by getting the EDID bytes of the display
 
         Returns:
             bool
@@ -106,8 +106,8 @@ class dsDisplay_test01_GetDisplayEDID(utHelperClass):
         # Create an instance of the dsDisplayClass
         self.testdsDisplay = dsDisplayClass(self.deviceProfile, self.hal_session)
 
-        # Get the EDID of the display
-        result = self.testGetEDID()
+        # Get the EDID bytes of the display
+        result = self.testGetEdidBytes()
 
         # Delete the dsDisplay class
         del self.testdsDisplay
@@ -115,5 +115,5 @@ class dsDisplay_test01_GetDisplayEDID(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsDisplay_test01_GetDisplayEDID()
+    test = dsDisplay_test02_GetDisplayEdidBytes()
     test.run(False)
