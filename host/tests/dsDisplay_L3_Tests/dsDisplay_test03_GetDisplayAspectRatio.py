@@ -55,7 +55,7 @@ class dsDisplay_test03_GetDisplayAspectRatio(utHelperClass):
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
 
         # Create user response Class
-        self.testUser Response = utUser Response()
+        self.testUserResponse = utUserResponse()
 
         # Get path to device profile file
         self.deviceProfile = dir_path + "/" + self.cpe.get("test").get("profile")
