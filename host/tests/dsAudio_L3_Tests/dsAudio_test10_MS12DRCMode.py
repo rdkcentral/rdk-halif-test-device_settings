@@ -34,6 +34,19 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsAudio_test10_MS12DRCMode(utHelperClass):
+    """
+    Test case class for testing the MS12 Dynamic Range Control (DRC) Mode.
+
+    This class inherits from utHelperClass and encapsulates the setup,
+    execution, and validation of the DRC feature in the MS12 audio system.
+
+    Attributes:
+        testName (str): Name of the test.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Name of the module under test.
+        rackDevice (str): Identifier for the Device Under Test (DUT).
+        ms12DAPFeature (str): The specific audio feature being tested.
+    """
 
     testName  = "test10_MS12DRCMode"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
@@ -43,7 +56,10 @@ class dsAudio_test10_MS12DRCMode(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test10_MS12DRCMode test .
+        Initializes the dsAudio_test10_MS12DRCMode test instance.
+
+        This constructor sets up necessary sessions and configurations
+        for the DRC mode test.
 
         Args:
             None.
@@ -72,10 +88,13 @@ class dsAudio_test10_MS12DRCMode(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -99,10 +118,10 @@ class dsAudio_test10_MS12DRCMode(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
@@ -111,10 +130,10 @@ class dsAudio_test10_MS12DRCMode(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
         #Run test specific commands
@@ -127,17 +146,19 @@ class dsAudio_test10_MS12DRCMode(utHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifyDRCMode(self, stream, port, mode, manual=False):
         """
-        Verifies whether the audio is fine or not.
+        Verifies the audio output when the DRC mode is applied.
+
+        This method checks if the audio is being processed correctly based on the mode.
 
         Args:
-            stream (str) : Stream used for testing
-            port (str) : Audio port to verify
-            mode (bool): Dolby DRCMode
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            stream (str) : The audio stream used for testing.
+            port (str) : The audio port to verify.
+            mode (bool): The current DRC mode (0: Line Mode, 1: RF Mode).
+            manual (bool, optional): If True, prompts for manual verification;
+                                     if False, uses automated verification methods. Defaults to False.
 
         Returns:
-            bool : returns the status of audio
+            bool : Returns the verification status of the audio output (True for success, False for failure).
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} {mode} applied to the {port}? (Y/N):")
@@ -146,10 +167,18 @@ class dsAudio_test10_MS12DRCMode(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function tests the MS12 DRCMode
+        """
+        Executes the test for the MS12 DRC Mode.
+
+        This method orchestrates
+        - The download of assets
+        - Execution of prerequisites
+        - Play the Audio Stream
+        - Apply the DRC modes for supported ports
+        - The main verification steps for testing the DRC feature.
 
         Returns:
-            bool
+            bool : The final verification result of the DRC mode test.
         """
 
         # Download the assets listed in test setup configuration file

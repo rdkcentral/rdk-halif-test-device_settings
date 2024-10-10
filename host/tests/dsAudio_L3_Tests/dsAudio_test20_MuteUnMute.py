@@ -34,7 +34,17 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsAudio_test20_MuteUnMute(utHelperClass):
+    """
+    Class to perform mute and unmute tests on audio ports.
 
+    Inherits from utHelperClass to leverage common test functionalities.
+
+    Attributes:
+        testName (str): Name of the test case.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Name of the module being tested.
+        rackDevice (str): Identifier for the device under test.
+    """
     testName  = "test20_MuteUnMute"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
@@ -71,10 +81,13 @@ class dsAudio_test20_MuteUnMute(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -98,10 +111,10 @@ class dsAudio_test20_MuteUnMute(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
@@ -110,10 +123,10 @@ class dsAudio_test20_MuteUnMute(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
         #Run test specific commands
@@ -126,15 +139,18 @@ class dsAudio_test20_MuteUnMute(utHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifyAudio(self, port, manual=False):
         """
-        Verifies whether the audio is fine or not.
+        Verifies the audio output on the specified port.
+
+        This method checks if audio is playing on the specified port and allows
+        for manual confirmation if required.
 
         Args:
-            port (str) : Audio port to verify
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            port (str): The audio port to verify (e.g., "HDMI", "SPDIF").
+            manual (bool, optional): If True, requires manual confirmation from the user.
+                                     Defaults to False.
 
         Returns:
-            bool : returns the status of audio
+            bool: True if audio is playing; otherwise, False.
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Is audio playing on the {port}? (Y/N):")
@@ -143,10 +159,19 @@ class dsAudio_test20_MuteUnMute(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function tests the Audio Mute and UnMute
+        """
+        Executes the mute and unmute tests on the audio ports.
+
+        This function performs the following steps:
+        - Downloads necessary assets.
+        - Runs prerequisite commands.
+        - Initializes the dsAudio module.
+        - Plays the audio stream
+        - Conducts mute and unmute tests on all supported audio ports.
+        - Cleans up the downloaded assets after testing.
 
         Returns:
-            bool
+            bool: Status of the last verification (True if successful, False otherwise).
         """
 
         # Download the assets listed in test setup configuration file

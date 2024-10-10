@@ -34,7 +34,19 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsAudio_test14_MS12LEConfig(utHelperClass):
+    """
+    This class implements the audio test for MS12 LEConfig functionality.
 
+    It inherits from utHelperClass and manages the setup, execution, and 
+    verification of the audio configuration tests for the LEConfig feature.
+
+    Attributes:
+        testName (str): Name of the test.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Name of the audio module.
+        rackDevice (str): Device under test (DUT).
+        ms12DAPFeature (str): The audio processing feature being tested.
+    """
     testName  = "test14_MS12LEConfig"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
@@ -43,10 +55,13 @@ class dsAudio_test14_MS12LEConfig(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test14_MS12LEConfig test .
+        Initializes the dsAudio_test14_MS12LEConfig test.
+
+        This constructor sets up the test environment, including loading the 
+        configuration, opening necessary sessions, and preparing the player.
 
         Args:
-            None.
+            None
         """
         super().__init__(self.testName, '1')
 
@@ -72,10 +87,13 @@ class dsAudio_test14_MS12LEConfig(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -99,10 +117,10 @@ class dsAudio_test14_MS12LEConfig(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
@@ -111,10 +129,10 @@ class dsAudio_test14_MS12LEConfig(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
         #Run test specific commands
@@ -127,17 +145,20 @@ class dsAudio_test14_MS12LEConfig(utHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifyLEConfig(self, stream, port, mode, manual=False):
         """
-        Verifies whether the audio is fine or not.
+        Verifies the functionality of the LEConfig feature.
+
+        This method checks whether the audio output is correct based on the 
+        applied LEConfig settings.
 
         Args:
-            stream (str) : Stream used for testing
-            port (str) : Audio port to verify
-            mode (bool): LEConfig
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            stream (str): The audio stream used for testing.
+            port (str): The audio port to verify.
+            mode (bool): The state of LEConfig (enabled/disabled).
+            manual (bool, optional): Flag for manual verification.
+                                     Defaults to False (automated methods).
 
         Returns:
-            bool : returns the status of audio
+            bool: Status indicating whether the audio is functioning correctly
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} {mode} applied to the {port}? (Y/N):")
@@ -146,10 +167,19 @@ class dsAudio_test14_MS12LEConfig(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function tests the MS12 LEConfig
+        """
+        Executes the main test function for the MS12 LEConfig feature.
+
+        This method orchestrates
+        - The downloading of assets
+        - Running prerequisites
+        - Initializing the audio module
+        - Play the Audio Stream
+        - Testing the LEConfig feature
+        - Cleaning up afterward.
 
         Returns:
-            bool
+            bool: Overall result of the test execution.
         """
 
         # Download the assets listed in test setup configuration file

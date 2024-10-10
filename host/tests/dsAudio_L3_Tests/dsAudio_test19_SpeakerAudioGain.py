@@ -34,7 +34,19 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsAudio_test19_AudioGain(utHelperClass):
+    """
+    Test class for verifying audio gain levels in the dsAudio module.
 
+    This class extends the utHelperClass and implements test procedures
+    to evaluate the audio gain functionality of the device under test (DUT).
+
+    Attributes:
+        testName (str): Name of the test case.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Name of the module being tested.
+        rackDevice (str): Identifier for the device under test.
+        gainValues (list): List of gain values to be tested.
+    """
     testName  = "test19_AudioGain"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
@@ -72,10 +84,13 @@ class dsAudio_test19_AudioGain(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -99,10 +114,10 @@ class dsAudio_test19_AudioGain(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
@@ -111,10 +126,10 @@ class dsAudio_test19_AudioGain(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
         #Run test specific commands
@@ -127,16 +142,21 @@ class dsAudio_test19_AudioGain(utHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifyAudioGainLevel(self, port, gain, manual=False):
         """
-        Verifies whether the audio is fine or not.
+        Verifies the audio gain level applied on the specified audio port.
+
+        This function prompts the user for manual verification or executes
+        an automated method if implemented in the future.
 
         Args:
-            port (str) : Audio port to verify
-            gain (float) : gain value
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            port (str): The audio port to verify.
+            gain (float): The gain level to check.
+            manual (bool, optional): Indicates whether to use manual verification 
+                                     (True) or automated methods (False).
+                                     Defaults to False.
 
         Returns:
-            bool : returns the status of audio
+            bool: Status of the audio verification (True if successful, 
+                  False otherwise).
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Has audio gain level {gain} applied to the {port}? (Y/N):")
@@ -145,10 +165,18 @@ class dsAudio_test19_AudioGain(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function tests the Audio Gain
+        """
+        Main test function for validating audio gain levels.
+
+        This method performs the following actions:
+        - Downloads necessary test assets.
+        - Runs prerequisite commands.
+        - Initializes the audio module.
+        - Plays the audio stream
+        - Vlidating gain levels on Speaker port.
 
         Returns:
-            bool
+            bool: The final status of the output mode tests.
         """
 
         # Download the assets listed in test setup configuration file

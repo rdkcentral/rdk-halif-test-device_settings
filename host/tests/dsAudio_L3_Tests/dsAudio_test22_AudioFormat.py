@@ -35,19 +35,36 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsAudio_test22_AudioFormat(utHelperClass):
+    """
+    Test class for validating audio format functionalities.
+
+    This class is designed to test the audio formats supported by the device.
+    It extends the utHelperClass to leverage its utility methods for device interaction
+    and test execution.
+
+    Attributes:
+        testName (str): Name of the test.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Name of the module being tested.
+        rackDevice (str): Identifier for the device under test (DUT).
+        audioFormats (list): List of audio formats to be tested.
+    """
 
     testName  = "test22_AudioFormat"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    audioFormats = ["PCM", "AC3"]#, "EAC3", "AAC", "VORBIS", "WMA", "AC4", "MAT", "TRUEHD", "EAC3_ATMOS", "TRUEHD_ATMOS", "MAT_ATMOS", "AC4_ATMOS"]
+    audioFormats = ["PCM", "AC3", "EAC3", "AAC", "VORBIS", "WMA", "AC4", "MAT", "TRUEHD", "EAC3_ATMOS", "TRUEHD_ATMOS", "MAT_ATMOS", "AC4_ATMOS"]
 
     def __init__(self):
         """
-        Initializes the test22_AudioFormat test .
+        Initializes the dsAudio_test22_AudioFormat test.
+
+        This constructor sets up the necessary configurations and prepares the 
+        test environment by initializing player and user response classes.
 
         Args:
-            None.
+            None
         """
         super().__init__(self.testName, '1')
 
@@ -73,10 +90,13 @@ class dsAudio_test22_AudioFormat(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -100,10 +120,10 @@ class dsAudio_test22_AudioFormat(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
@@ -112,10 +132,10 @@ class dsAudio_test22_AudioFormat(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
         #Run test specific commands
@@ -125,33 +145,17 @@ class dsAudio_test22_AudioFormat(utHelperClass):
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    #TODO: Current version supports only manual.
-    def testWaitForConnectionChange(self, connection, manual=False):
-        """
-        Wait for the port connection, disconnection.
-
-        Args:
-            connection (bool) : If True connect the port, otherwise disconnect the port
-            manual (bool, optional): Manual Control (True: manual, False: other disconnect/connect methods).
-                                     Defaults to other
-
-        Returns:
-            None
-        """
-        if manual == True:
-            if connection == True:
-                self.testUserResponse.getUserYN(f"Connect the port and press Enter:")
-            else:
-                self.testUserResponse.getUserYN(f"Disconnect the port and press Enter:")
-        else :
-            #TODO: Add automation verification methods
-            return False
-
     def testFunction(self):
-        """This function tests the Audio Format
+        """
+        Executes the audio format test.
+
+        This method:
+        - Runs through the various audio formats
+        - Playing associated streams
+        - Verifying that the audio formats are correctly reported by the device.
 
         Returns:
-            bool
+            bool: Always returns True upon successful execution of the test.
         """
 
         # Download the assets listed in test setup configuration file

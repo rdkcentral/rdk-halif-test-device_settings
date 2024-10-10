@@ -35,7 +35,16 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsAudio_test24_PrimarySecondaryLanguage(utHelperClass):
+    """
+    Test class for verifying the functionality of Primary and secondary languages.
 
+    Attributes:
+        testName (str): Name of the test.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Name of the module being tested.
+        rackDevice (str): Identifier for the device under test.
+        streamLanguage (dict): List of Dictionary of languages.
+    """
     testName  = "test24_PrimarySecondaryLanguage"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
@@ -73,10 +82,13 @@ class dsAudio_test24_PrimarySecondaryLanguage(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -100,10 +112,10 @@ class dsAudio_test24_PrimarySecondaryLanguage(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
@@ -112,10 +124,10 @@ class dsAudio_test24_PrimarySecondaryLanguage(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
         #Run test specific commands
@@ -128,16 +140,20 @@ class dsAudio_test24_PrimarySecondaryLanguage(utHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifyAudio(self, language_type:str, language:str, manual=False):
         """
-        Verifies whether the audio is fine or not.
+        Verifies the audio stream in the specified language (Primary or Secondary).
+
+        The verification can be performed manually or through an automated method (if available).
+        Currently, the manual method prompts the user to confirm whether the audio is playing
+        correctly.
 
         Args:
-            language_type (str): Primary:Primary language, Secondary:Secondary language.
-            language (str): 3 letter long language as per ISO 639-3. eg: eng - English
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            language_type (str): Specifies the language type, either "Primary" or "Secondary".
+            language (str): The 3-letter ISO 639-3 code representing the language (e.g., 'eng' for English).
+            manual (bool, optional): If True, prompts the user for manual verification.
+                                     Defaults to automated verification (when implemented).
 
         Returns:
-            bool : returns the status of audio
+            bool: The status of the audio verification (True if audio is correct, False otherwise).
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Is Audio playing as expected with {language_type} {language} Language? (Y/N):")
@@ -146,10 +162,15 @@ class dsAudio_test24_PrimarySecondaryLanguage(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function tests the Primary and Secondary language
+        """
+        Tests the Primary and Secondary audio language switching functionality.
+
+        This method validates the audio playback for both primary and secondary languages
+        by configuring the audio streams as per the test setup, running the test, and verifying
+        the results manually.
 
         Returns:
-            bool
+            bool: True if the test completes successfully.
         """
 
         # Download the assets listed in test setup configuration file

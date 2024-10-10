@@ -34,7 +34,15 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
+    """
+    Test class to enable, disable, and verify the status of audio ports on a device.
 
+    This class uses the `dsAudioClass` to interact with the device's audio ports,
+    downloading necessary test assets, playing audio streams, enabling and disabling
+    audio ports, and performing verification of audio output.
+    """
+
+    # Class variables
     testName  = "test01_EnableDisableAndVerifyAudioPortStatus"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
@@ -42,14 +50,14 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test01_EnableDisableAndVerifyAudioPortStatus test .
+        Initializes the test class with test name, setup configuration, and sessions for the device.
 
         Args:
-            None.
+            None
         """
         super().__init__(self.testName, '1')
 
-        # Test Setup configuration file
+        # Load test setup configuration
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
         # Open Sessions for player and hal test
@@ -69,10 +77,13 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -96,25 +107,22 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
-        # remove the callback log files
-        self.deleteFromDevice([self.connectionCB, self.formatCB, self.atmosCB])
-
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
-        #Run test specific commands
+        # Run commands as part of test prerequisites
         test = self.testSetup.get("assets").get("device").get(self.testName)
         cmds = test.get("execute")
         if cmds is not None:
@@ -124,15 +132,17 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifyAudio(self, port, manual=False):
         """
-        Verifies whether the audio is working on the specified port.
+        Verifies if the audio is working on the specified port.
+
+        For manual verification, it prompts the user to confirm if audio is heard on the port.
 
         Args:
-            port (str) : Audio port to verify
-            manual (bool, optional): Manual verification (True: manual, False: automated).
-                                     Defaults to False
+            port (str): The name of the audio port to verify.
+            manual (bool, optional): Flag to indicate if manual verification should be used.
+                                     Defaults to False for automation, True for manual.
 
         Returns:
-            bool : Returns the status of the audio verification.
+            bool: True if audio verification succeeds, False otherwise.
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Is audio playing on the {port}? (Y/N):")
@@ -141,7 +151,15 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
             return False
 
     def testFunction(self):
-        """Tests the Audio Ports by enabling and disabling the ports.
+        """
+        The main test function that verifies audio ports by enabling and disabling them.
+
+        This function:
+        - Downloads the required assets.
+        - Runs the prerequisite commands.
+        - Plays an audio stream and verifies audio output for each supported port.
+        - Enables and disables audio ports while performing verification.
+        - Cleans up assets after the test.
 
         Returns:
             bool: Final result of the test.

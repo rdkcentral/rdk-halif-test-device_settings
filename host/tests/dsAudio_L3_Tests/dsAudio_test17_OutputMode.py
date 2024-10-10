@@ -34,7 +34,19 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsAudio_test17_OutputMode(utHelperClass):
+    """
+    Test case class for verifying the audio output modes of the Device Under Test (DUT).
+    
+    This class inherits from utHelperClass and implements various test methods to ensure 
+    proper functionality of audio output modes.
 
+    Attributes:
+        testName (str): The name of the test case.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Name of the audio module under test.
+        rackDevice (str): Device under test identifier.
+        testOutputModes (list): List of audio output modes to be tested.
+    """
     testName  = "test17_OutputMode"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
@@ -43,7 +55,11 @@ class dsAudio_test17_OutputMode(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test17_OutputMode test .
+        Initializes the dsAudio_test17_OutputMode test instance.
+
+        This constructor sets up the necessary configurations, including loading the test 
+        setup file, establishing console sessions for player and HAL, and initializing 
+        the player and user response classes.
 
         Args:
             None.
@@ -72,10 +88,13 @@ class dsAudio_test17_OutputMode(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -99,10 +118,10 @@ class dsAudio_test17_OutputMode(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
@@ -111,10 +130,10 @@ class dsAudio_test17_OutputMode(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
         #Run test specific commands
@@ -127,17 +146,17 @@ class dsAudio_test17_OutputMode(utHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifyOutputMode(self, stream, port, outMode, manual=False):
         """
-        Verifies whether the audio is fine or not.
+        Verifies the audio output mode on the specified audio port during playback.
 
         Args:
-            stream (str) : Stream used for testing
-            port (str) : Audio port to verify
-            outMode (str) : output mode
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            stream (str): The audio stream being tested.
+            port (str): The audio port to verify the output mode.
+            outMode (str): The expected output mode.
+            manual (bool, optional): Flag to indicate if manual verification is required.
+                                     Defaults to False (automated verification).
 
         Returns:
-            bool : returns the status of audio
+            bool: True if the output mode is correct; otherwise, False.
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Stream:{stream} Is output mode on the {port} {outMode}? (Y/N):")
@@ -146,10 +165,18 @@ class dsAudio_test17_OutputMode(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function tests the Audio Ports by enabling and disabling the ports
+        """
+        Executes the output mode tests for the audio ports by enabling/disabling each port.
+
+        This method performs the following actions:
+        - Downloads necessary test assets.
+        - Runs prerequisite commands.
+        - Initializes the audio module.
+        - Plays the audio stream
+        - Tests each supported audio port by setting and verifying output modes.
 
         Returns:
-            bool
+            bool: The final status of the output mode tests.
         """
 
         # Download the assets listed in test setup configuration file

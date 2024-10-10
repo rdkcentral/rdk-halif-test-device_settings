@@ -35,17 +35,24 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsAudio_test26_MS12AudioProfiles(utHelperClass):
+    """
+    This class represents the 'test26_MS12AudioProfiles' test case, which is responsible
+    for verifying Dolby MS12 audio profiles on different audio ports of the Device Under Test (DUT).
 
+    Attributes:
+        testName (str): Name of the test case.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Name of the module under test.
+        rackDevice (str): Identifier for the device under test.
+    """
     testName  = "test26_MS12AudioProfiles"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    primaryVolume = [0, 25, 50, 75, 100]
-    systemVolume = [0, 25, 50, 75, 100]
 
     def __init__(self):
         """
-        Initializes the test26_MS12AudioProfiles test .
+        Initializes the 'test26_MS12AudioProfiles' test by setting up the test environment.
 
         Args:
             None.
@@ -74,10 +81,13 @@ class dsAudio_test26_MS12AudioProfiles(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -101,10 +111,10 @@ class dsAudio_test26_MS12AudioProfiles(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
@@ -113,10 +123,10 @@ class dsAudio_test26_MS12AudioProfiles(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
         #Run test specific commands
@@ -129,16 +139,17 @@ class dsAudio_test26_MS12AudioProfiles(utHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifyMS12AudioProfile(self, port, profile, manual=False):
         """
-        Verifies whether the audio is fine or not.
+        Verifies if the specified MS12 audio profile is applied correctly on the given audio port.
+
+        This can be done either manually (by asking the user) or through an automated verification method (not yet implemented).
 
         Args:
-            port (str) : Audio port to verify
-            profile (float) : profile (str, optional): MS12 profile to be set. Supported profiles are: Off, Music, Movie, Sports, Entertainment, Night, Party, User
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            port (str): The audio port to verify (e.g., HDMI, Optical).
+            profile (str): The MS12 audio profile to be tested (e.g., Off, Music, Movie, etc.).
+            manual (bool, optional): If True, manual verification is used. Defaults to False (automated verification).
 
         Returns:
-            bool : returns the status of audio
+            bool: True if the profile is correctly applied, otherwise False.
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Has audio profile {profile} applied to the {port}? (Y/N):")
@@ -147,10 +158,18 @@ class dsAudio_test26_MS12AudioProfiles(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function tests MS12 audio profiles
+        """
+        Executes the 'test26_MS12AudioProfiles' test case. The test performs the following steps:
+
+        - Downloads the required assets.
+        - Runs the prerequisite commands on the DUT.
+        - Initializes the dsAudio module.
+        - Plays test streams and iterates through supported audio ports and profiles.
+        - Verifies if the correct MS12 audio profiles are applied to the ports.
+        - Cleans up the assets and terminates the dsAudio module.
 
         Returns:
-            bool
+            bool: Returns True if the test completes successfully.
         """
 
         # Download the assets listed in test setup configuration file
