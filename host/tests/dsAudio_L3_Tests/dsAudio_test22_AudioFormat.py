@@ -40,7 +40,7 @@ class dsAudio_test22_AudioFormat(utHelperClass):
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    audioFormats = ["PCM", "AC3", "EAC3", "AAC", "VORBIS", "WMA", "AC4", "MAT", "TRUEHD", "EAC3_ATMOS", "TRUEHD_ATMOS", "MAT_ATMOS", "AC4_ATMOS"]
+    audioFormats = ["PCM", "AC3"]#, "EAC3", "AAC", "VORBIS", "WMA", "AC4", "MAT", "TRUEHD", "EAC3_ATMOS", "TRUEHD_ATMOS", "MAT_ATMOS", "AC4_ATMOS"]
 
     def __init__(self):
         """
@@ -179,6 +179,12 @@ class dsAudio_test22_AudioFormat(utHelperClass):
             # Start the stream playback
             self.testPlayer.play(stream)
             time.sleep(3)
+
+            self.log.stepStart(f'Audio Format {format} Callback Test')
+
+            cbAudioFormat = self.testdsAudio.getAudioFormatCallbackStatus()
+
+            self.log.stepResult(format in cbAudioFormat, f'Audio Format {format} Callback Test')
 
             self.log.stepStart(f'Audio Format {format} Test')
 

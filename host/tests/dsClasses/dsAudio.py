@@ -672,6 +672,31 @@ class dsAudioClass():
             return True
         return False
 
+    def getHeadphoneConnectionCallbackStatus(self):
+        """
+        Gets the headphone connection status from the callback.
+
+        Args:
+            None.
+
+        Returns:
+            None : If function fails to get the connection callback status
+            [port, index, status] : If gets the call back status
+                                    port (dsAudioPortType) - port name refer dsAudioPortType
+                                    index (int) - port index
+                                    status (bool) - Connection status (True: connected, False: disconnected)
+        """
+        result = self.testSession.read_until("Received Connection status callback port")
+        connectionCallback = r"Received Connection status callback port: (\w+), port number: (\d+), Connection: (\w+)"
+        match = re.search(connectionCallback, result)
+
+        if match:
+            port = match.group(1)
+            index = int(match.group(2))
+            connection = match.group(3) == "true"
+            return port, index, connection
+        return None
+
     def getAudioFormat(self):
         """
         Gets the audio format.
@@ -687,6 +712,22 @@ class dsAudioClass():
         audioFormat = self.searchPattern(result, audioFormatPattern)
 
         return audioFormat
+
+    def getAudioFormatCallbackStatus(self):
+        """
+        Gets the audio format details from the callback.
+
+        Args:
+            None.
+
+        Returns:
+            None : If function fails to get the callback status
+            format : Stream Format
+        """
+        result = self.testSession.read_until("Received Format update callback")
+        formatCallback = r"Received Format update callback : (\w+)"
+
+        return self.searchPattern(result, formatCallback)
 
     def getConnectedARCType(self):
         """
