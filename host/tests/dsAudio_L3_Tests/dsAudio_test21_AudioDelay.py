@@ -34,7 +34,16 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsAudio_test21_AudioDelay(utHelperClass):
+    """
+    Test case for validating audio delay settings on the Device Under Test (DUT).
 
+    Attributes:
+        testName (str): Name of the test case.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Name of the module under test.
+        rackDevice (str): Identifier for the DUT.
+        delayList (list): List of audio delay values to test (in milliseconds).
+    """
     testName  = "test21_AudioDelay"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
@@ -72,10 +81,13 @@ class dsAudio_test21_AudioDelay(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -99,10 +111,10 @@ class dsAudio_test21_AudioDelay(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
@@ -111,10 +123,10 @@ class dsAudio_test21_AudioDelay(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
         #Run test specific commands
@@ -127,16 +139,16 @@ class dsAudio_test21_AudioDelay(utHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifyAudioDelay(self, port, delay, manual=False):
         """
-        Verifies whether the audio is fine or not.
+        Verifies whether the specified audio delay is correctly applied.
 
         Args:
-            port (str) : Audio port to verify
-            delay (float) : delay value
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            port (str): The audio port to verify.
+            delay (float): The delay value (in milliseconds) to check.
+            manual (bool, optional): Flag indicating whether to perform manual verification.
+                                     Defaults to False (automated methods).
 
         Returns:
-            bool : returns the status of audio
+            bool: True if the audio delay is confirmed, False otherwise.
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Has Audio Delay {delay} applied to the {port}? (Y/N):")
@@ -145,10 +157,18 @@ class dsAudio_test21_AudioDelay(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function tests the Audio delay
+        """Executes the audio delay test logic.
+
+        This function performs the following steps:
+        - Downloads necessary assets.
+        - Runs prerequisite commands.
+        - Initializes the dsAudio module.
+        - Plays the audio stream
+        - Sets various audio delay on all supported audio ports.
+        - Cleans up the downloaded assets after testing.
 
         Returns:
-            bool
+            bool: The result of the final audio verification.
         """
 
         # Download the assets listed in test setup configuration file

@@ -34,6 +34,18 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsAudio_test11_MS12SurroundVirtualizer(utHelperClass):
+    """
+    Test class for MS12 Surround Virtualizer audio feature
+
+    Attributes:
+        testName (str): Name of the test.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Name of the module under test.
+        rackDevice (str): Identifier for the Device Under Test (DUT).
+        ms12DAPFeature (str): The specific audio feature being tested.
+        volumeModes (list): list of volume modes to be tested
+        boostValues (list): list of boost values to be tested
+    """
 
     testName  = "test11_MS12SurroundVirtualizer"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
@@ -45,7 +57,9 @@ class dsAudio_test11_MS12SurroundVirtualizer(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test11_MS12SurroundVirtualizer test .
+        Initializes the dsAudio_test11_MS12SurroundVirtualizer test.
+
+        Sets up the required sessions and configurations for testing.
 
         Args:
             None.
@@ -74,10 +88,13 @@ class dsAudio_test11_MS12SurroundVirtualizer(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -101,10 +118,10 @@ class dsAudio_test11_MS12SurroundVirtualizer(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
@@ -113,10 +130,10 @@ class dsAudio_test11_MS12SurroundVirtualizer(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
         #Run test specific commands
@@ -129,18 +146,20 @@ class dsAudio_test11_MS12SurroundVirtualizer(utHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifySurroundVirtualizer(self, stream, port, mode, level, manual=False):
         """
-        Verifies whether the audio is fine or not.
+        Verifies whether the audio playback is functioning correctly with the Surround Virtualizer settings.
+
+        This can be performed through user input for manual verification or other methods.
 
         Args:
-            stream (str) : Stream used for testing
-            port (str) : Audio port to verify
-            mode (str): SurroundVirtualizer modes
-            level (int): SurroundVirtualizer level
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            stream (str) : The audio stream being tested.
+            port (str) : The audio port to verify.
+            mode (str): The SurroundVirtualizer mode being tested.
+            level (int): The SurroundVirtualizer level to verify.
+            manual (bool, optional): If True, indicates that manual verification is used.
+                                     Defaults to False, meaning automatic verification methods will be applied.
 
         Returns:
-            bool : returns the status of audio
+            bool : The status of the audio verification (True if audio is fine, False otherwise).
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} mode {mode} level {level} applied to the {port}? (Y/N):")
@@ -149,10 +168,18 @@ class dsAudio_test11_MS12SurroundVirtualizer(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function tests the MS12 SurroundVirtualizer
+        """ 
+        Tests the functionality of the MS12 Surround Virtualizer.
+
+        This function:
+        - The download of assets
+        - Execution of prerequisites
+        - Play the Audio Stream
+        - Apply the Surround Virtualizer modes for supported ports
+        - The main verification steps for testing the Surround Virtualizer feature.
 
         Returns:
-            bool
+            bool : The result of the last audio verification.
         """
 
         # Download the assets listed in test setup configuration file

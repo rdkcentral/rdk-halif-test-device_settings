@@ -27,15 +27,16 @@ import sys
 from enum import Enum, auto
 import re
 
-# Add parent outside of the class directory
+# Add parent directory to the system path for module imports
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(dir_path+"/../")
+sys.path.append(os.path.join(dir_path, "../"))
 
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utSuiteNavigator import UTSuiteNavigatorClass
 from raft.framework.plugins.ut_raft.interactiveShell import InteractiveShell
 
 class dsAudioPortType(Enum):
+    """Enumeration for different audio port types."""
     dsAUDIOPORT_TYPE_ID_LR     = 0
     dsAUDIOPORT_TYPE_HDMI      = auto()
     dsAUDIOPORT_TYPE_SPDIF     = auto()
@@ -44,6 +45,7 @@ class dsAudioPortType(Enum):
     dsAUDIOPORT_TYPE_HEADPHONE = auto()
 
 class dsAudioStereoMode(Enum):
+    """Enumeration for audio stereo modes."""
     dsAUDIO_STEREO_MONO     = 1
     dsAUDIO_STEREO_STEREO   = auto()
     dsAUDIO_STEREO_SURROUND = auto()
@@ -52,6 +54,7 @@ class dsAudioStereoMode(Enum):
     dsAUDIO_STEREO_DDPLUS   = auto()
 
 class dsMS12Capabilities(Enum):
+    """Enumeration for audio processing capabilities."""
     DolbyVolume          = 0x01
     IntelligentEqualizer = 0x02
     DialogueEnhancer     = 0x04
@@ -65,30 +68,56 @@ class dsMS12Capabilities(Enum):
     LEConfig             = 0x400
 
 class dsAudioClass():
+    """
+    Device Settings Audio Class.
+
+    This module provides common functionalities and extensions for the device Settings Audio Module.
+    """
 
     moduleName = "dsAudio"
-    menuConfig =  dir_path + "/dsAudio_test_suite.yml"
+    menuConfig = os.path.join(dir_path, "dsAudio_test_suite.yml")
     testSuite = "L3 dsAudio"
 
-    """
-    Device Settings Audio Class
-
-    This module provides common extensions for device Settings Audio Module.
-    """
     def __init__(self, deviceProfilePath:str, session=None ):
         """
-        Initializes the dsAudio class function.
+        Initializes the dsAudioClass instance with configuration settings.
+
+        Args:
+            deviceProfilePath (str): Path to the device profile configuration file.
+            session: Optional; session object for the user interface.
+
+        Returns:
+            None
         """
+        # Load configurations for device profile and menu
         self.deviceProfile = ConfigRead( deviceProfilePath, self.moduleName)
         self.suitConfig    = ConfigRead(self.menuConfig, self.moduleName)
         self.utMenu        = UTSuiteNavigatorClass(self.menuConfig, self.moduleName, session)
         self.testSession   = session
+
+        # Start the user interface menu
         self.utMenu.start()
+
+        # Retrieve callback file paths from configuration
         self.connectionCB = self.suitConfig.get("test").get("callback").get("connection_status")
         self.formatCB = self.suitConfig.get("test").get("callback").get("format_status")
         self.atmosCB = self.suitConfig.get("test").get("callback").get("atmos_status")
 
     def searchPattern(self, haystack, pattern):
+        """
+        Searches for the first occurrence of a specified pattern in the provided string.
+
+        Args:
+            haystack (str): The string to be searched.
+            pattern (str): The regular expression pattern to search for.
+
+        Returns:
+            str: The first capturing group of the match if found; otherwise, None.
+
+        Notes:
+            - The pattern should contain at least one capturing group (parentheses).
+            - If no match is found, None is returned.
+        """
         match = re.search(pattern, haystack)
         if match:
             return match.group(1)
@@ -96,10 +125,12 @@ class dsAudioClass():
 
     def initialise(self, device_type:int=0):
         """
-        Initializes the device settings Audio module.
+        Initializes the audio module settings.
 
         Args:
-            device_type (int, optional): 0 - sink device, 1 - source device. Defaults to sink.
+            device_type (int, optional):
+                - 0 for Sink device (default).
+                - 1 for Source device.
 
         Returns:
             None
@@ -130,10 +161,10 @@ class dsAudioClass():
 
     def terminate(self):
         """
-        Enables the audio port.
+        Terminates the audio module
 
         Args:
-            None.
+            None
 
         Returns:
             None
@@ -142,12 +173,12 @@ class dsAudioClass():
 
     def enablePort(self, audio_port:str, port_index:int=0, arc_type:int=2):
         """
-        Enables the audio port.
+        Enables the specified audio port, with options for selecting port index and ARC type if applicable.
 
         Args:
-            audio_port (str): audio port
-            port_index (int, optional): port index. Defaults to 0
-            arc_type (int, optional): Type of ARC. Defaults to eArc.
+            audio_port (str): The audio port to be enabled (refer dsAudioPortType).
+            port_index (int, optional): The index of the audio port (default is 0).
+            arc_type (int, optional): The type of Audio Return Channel (ARC) to be used (default is eArc i.e 2).
 
         Returns:
             None
@@ -165,6 +196,7 @@ class dsAudioClass():
                 }
         ]
 
+        # If the selected audio port is HDMI ARC, prompt for the ARC type
         if audio_port == dsAudioPortType.dsAUDIOPORT_TYPE_HDMI_ARC.name:
             promptWithAnswers.append({
                     "query_type": "direct",
@@ -176,11 +208,11 @@ class dsAudioClass():
 
     def disablePort(self, audio_port:str, port_index:int=0):
         """
-        Disables the audio port.
+        Disables the specified audio port, with an option to select the port index.
 
         Args:
-            audio_port (str): name of the audio port. Refer dsAudioPortType enum
-            port_index (int, optional): port index. Defaults to 0
+            audio_port (str): The audio port to be enabled (refer dsAudioPortType).
+            port_index (int, optional): The index of the audio port (default is 0).
 
         Returns:
             None
@@ -202,12 +234,12 @@ class dsAudioClass():
 
     def setGainLevel(self, audio_port:str, port_index:int=0, gainLevel:float=0.0):
         """
-        Sets audio gain level.
+        Sets the audio gain level for the specified audio port.
 
         Args:
-            audio_port (str): name of the audio port. Refer dsAudioPortType enum
-            port_index (int, optional): port index. Defaults to 0
-            gainLevel (float, optional): Gain level to be applied. Ranges from 0.0 to 100.0. Defaults to 0.0
+            audio_port (str): The name of the audio port (refer to dsAudioPortType).
+            port_index (int, optional): The index of the audio port (default is 0).
+            gainLevel (float, optional): The gain level to be applied, ranging from 0.0 to 100.0 (default is 0.0).
 
         Returns:
             None
@@ -234,12 +266,12 @@ class dsAudioClass():
 
     def setSpeakerGain(self, audio_port:str, port_index:int=0, gain:float=0.0):
         """
-        Sets speaker gain.
+        Sets the gain level for the specified speaker audio port.
 
         Args:
-            audio_port (str): name of the audio port. Refer dsAudioPortType enum
-            port_index (int, optional): port index. Defaults to 0
-            gain (float, optional): Gain value to be applied. Ranges from -2080.0 to 480.0. Defaults to 0.0
+            audio_port (str): The name of the audio port (refer to dsAudioPortType).
+            port_index (int, optional): The index of the audio port (default is 0).
+            gain (float, optional): The gain value to be applied, ranging from -2080.0 to 480.0 (default is 0.0).
 
         Returns:
             None
@@ -256,12 +288,12 @@ class dsAudioClass():
 
     def setAudioMute(self, audio_port:str, port_index:int=0, mute:bool=True):
         """
-        Mutes/Unmutes the audio.
+        Mutes or unmutes the audio for the specified audio port.
 
         Args:
-            audio_port (str): name of the audio port. Refer dsAudioPortType enum
-            port_index (int, optional): port index. Defaults to 0
-            mute (bool, optional): True - Mutes, False - Unmutes. Defaults to True
+            audio_port (str): The name of the audio port (refer to dsAudioPortType).
+            port_index (int, optional): The index of the audio port (default is 0).
+            mute (bool, optional): Indicates whether to mute (True) or unmute (False) the audio (default is True).
 
         Returns:
             None
@@ -288,12 +320,12 @@ class dsAudioClass():
 
     def setAudioDelay(self, audio_port:str, port_index:int=0, delay:int=0):
         """
-        Set the audio delay.
+        Sets the audio delay for the specified audio port.
 
         Args:
-            audio_port (str): name of the audio port. Refer dsAudioPortType enum
-            port_index (int, optional): port index. Defaults to 0
-            delay (int, optional): audio delay to be applied. Ranges from 0 to 200. Defaults to 0
+            audio_port (str): The name of the audio port (refer to dsAudioPortType).
+            port_index (int, optional): The index of the audio port (default is 0).
+            delay (int, optional): The audio delay to be applied, ranging from 0 to 200 milliseconds (default is 0).
 
         Returns:
             None
@@ -320,12 +352,12 @@ class dsAudioClass():
 
     def setAudioCompression(self, audio_port:str, port_index:int=0, compression:int=0):
         """
-        Set the audio compression.
+        Sets the audio compression level for the specified audio port.
 
         Args:
-            audio_port (str): name of the audio port. Refer dsAudioPortType enum
-            port_index (int, optional): port index. Defaults to 0
-            compression (int, optional): audio compression to be applied. Ranges from 0 to 10. Defaults to 0
+            audio_port (str): The name of the audio port (refer to dsAudioPortType).
+            port_index (int, optional): The index of the audio port (default is 0).
+            compression (int, optional): The audio compression level to be applied, ranging from 0 to 10 (default is 0).
 
         Returns:
             None
@@ -352,12 +384,12 @@ class dsAudioClass():
 
     def setOutputMode(self, audio_port:str, port_index:int=0, mode:str = "dsAUDIO_STEREO_PASSTHRU"):
         """
-        Sets the output port mode.
+        Sets the output mode for the specified audio port.
 
         Args:
-            audio_port (str): Name of the audio port (refer to dsAudioPortType enum).
-            port_index (int, optional): Port index. Defaults to 0.
-            mode (str, optional): port output mode. refer dsAudioStereoMode
+            audio_port (str): The name of the audio port (refer to dsAudioPortType).
+            port_index (int, optional): The index of the audio port (default is 0).
+            mode (str, optional): The output mode for the audio port (refer to dsAudioStereoMode; default is "dsAUDIO_STEREO_PASSTHRU").
 
         Returns:
             None
@@ -508,13 +540,13 @@ class dsAudioClass():
 
     def setMS12AudioProfile(self, audio_port:str, port_index:int=0, profile:str='Off'):
         """
-        Sets the MS12 Audio Profile.
+        Sets the MS12 Audio Profile for the specified audio port.
 
         Args:
-            audio_port (str): Name of the audio port (refer to dsAudioPortType enum).
-            port_index (int, optional): Port index. Defaults to 0.
-            profile (str, optional): MS12 profile to be set. Supported profiles are: Off, Music, Movie, Sports, Entertainment, Night, Party, User
-                                     Defaults to 'Off'.
+            audio_port (str): The name of the audio port (refer to dsAudioPortType).
+            port_index (int, optional): The index of the audio port (default is 0).
+            profile (str, optional): The MS12 profile to be set. Supported profiles include: Off, Music, Movie, Sports, Entertainment, Night, Party, User.
+                Defaults to 'Off'.
 
         Returns:
             None
@@ -540,11 +572,11 @@ class dsAudioClass():
 
     def enableAssociateAudioMixig(self, enable:bool = True, fader:int = 0):
         """
-        Enable Associate Audio Mixing.
+        Enables or disables associated audio mixing for the system.
 
         Args:
-            enable (bool, optional): enables the associate audio mixing. Defaults to True
-            fader (bool, optional): Fader Control,-32:mute associated audio) to 32:mute main audio. Defaults to 0
+            enable (bool, optional): If True, enables associated audio mixing; if False, disables it (default is True).
+            fader (int, optional): Control level for the fader; range is -32 (mute associated audio) to 32 (mute main audio). Defaults to 0.
 
         Returns:
             None
@@ -568,11 +600,11 @@ class dsAudioClass():
 
     def setAudioMixerLevels(self, mixer_input:str, volume:int = 0):
         """
-        Sets mixer levels for primary and system audio.
+        Sets the audio mixer levels for primary or system audio.
 
         Args:
-            mixer_input (str): primary:Sets the volume for primary audio, "system":Sets the volume for system audio.
-            volume (int, optional): volume ranges 0-100. Defaults to 0
+            mixer_input (str): Indicates which audio level to set; use 'primary' for primary audio or 'system' for system audio.
+            volume (int, optional): The volume level to set, ranging from 0 to 100 (default is 0).
 
         Returns:
             None
@@ -594,11 +626,11 @@ class dsAudioClass():
 
     def setPrimarySecondaryLanguage(self, language_type:str, language:str):
         """
-        Sets mixer levels for primary and system audio.
+        Sets the primary or secondary language for the audio system.
 
         Args:
-            language_type (str): Primary:Primary language, Secondary:Secondary language.
-            language (str): 3 letter long language as per ISO 639-3. eg: eng - English
+            language_type (str): Specifies the language type to set; use 'Primary' for primary language or 'Secondary' for secondary language.
+            language (str): The 3-letter language code as per ISO 639-3 (e.g., 'eng' for English).
 
         Returns:
             None
@@ -625,10 +657,10 @@ class dsAudioClass():
 
     def setARCSAD(self, sadList:list=[]):
         """
-        Sets the ARC SAD (short audio descript).
+        Sets the ARC SAD (short audio description) values.
 
         Args:
-            sadList (list): List of SAD values to set.
+            sadList (list): A list of SAD values to be set. The length should be between 1 and 15.
 
         Returns:
             None
@@ -644,26 +676,24 @@ class dsAudioClass():
                 }
         ]
 
-        i = 0
-        for sad in sadList:
+        for i, sad in enumerate(sadList):
             promptWithAnswers.append({
                     "query_type": "direct",
-                    "query": f"Enter {0} SAD Value:",
+                    "query": f"Enter {i} SAD Value:",
                     "input": str(sad)
                 })
-            i += 1
 
         result = self.utMenu.select(self.testSuite, "Set SAD List", promptWithAnswers)
 
     def getHeadphoneConnectionStatus(self):
         """
-        Gets the headphone connection status.
+        Retrieves the current connection status of the headphone port.
 
         Args:
             None.
 
         Returns:
-            bool : connection status
+            bool: True if headphones are connected, False otherwise.
         """
         result = self.utMenu.select( self.testSuite, "Headphone Connection")
         connectionStatusPattern = r"Result dsAudioOutIsConnected\(IN:handle:\[.*\], OUT:isConnected:\[(true|false)\]\)"
@@ -674,21 +704,21 @@ class dsAudioClass():
 
     def getHeadphoneConnectionCallbackStatus(self):
         """
-        Gets the headphone connection status from the callback.
+        Retrieves the headphone connection status from a system callback.
 
         Args:
             None.
 
         Returns:
-            None : If function fails to get the connection callback status
-            [port, index, status] : If gets the call back status
-                                    port (dsAudioPortType) - port name refer dsAudioPortType
-                                    index (int) - port index
-                                    status (bool) - Connection status (True: connected, False: disconnected)
+            None: If the function fails to retrieve the connection status.
+            tuple: A tuple containing:
+                - port (str): The name of the audio port (refer to dsAudioPortType).
+                - index (int): The index of the port.
+                - status (bool): The connection status (True if connected, False if disconnected).
         """
         result = self.testSession.read_until("Received Connection status callback port")
-        connectionCallback = r"Received Connection status callback port: (\w+), port number: (\d+), Connection: (\w+)"
-        match = re.search(connectionCallback, result)
+        connectionCallbackPattern = r"Received Connection status callback port: (\w+), port number: (\d+), Connection: (\w+)"
+        match = re.search(connectionCallbackPattern, result)
 
         if match:
             port = match.group(1)
@@ -699,13 +729,13 @@ class dsAudioClass():
 
     def getAudioFormat(self):
         """
-        Gets the audio format.
+        Retrieves the current audio format being Played.
 
         Args:
             None.
 
         Returns:
-            str : audio format
+            str: The audio format in use, as a string (e.g., 'dsAUDIO_FORMAT_DD', 'dsAUDIO_FORMAT_AAC').
         """
         result = self.utMenu.select( self.testSuite, "Get Audio Format")
         audioFormatPattern = r"Result dsGetAudioFormat\(IN:handle:\[.*\], OUT:audioFormat:\[(dsAUDIO_FORMAT_\w+)\]\)"
@@ -715,41 +745,54 @@ class dsAudioClass():
 
     def getAudioFormatCallbackStatus(self):
         """
-        Gets the audio format details from the callback.
+        Retrieves the audio format from a system callback.
 
         Args:
             None.
 
         Returns:
-            None : If function fails to get the callback status
-            format : Stream Format
+            None: If the function fails to retrieve the callback status.
+            str: The current stream format, as indicated by the system callback.
         """
         result = self.testSession.read_until("Received Format update callback")
-        formatCallback = r"Received Format update callback : (\w+)"
+        formatCallbackPattern = r"Received Format update callback : (\w+)"
 
-        return self.searchPattern(result, formatCallback)
+        return self.searchPattern(result, formatCallbackPattern)
 
     def getConnectedARCType(self):
         """
-        Gets the ARC type (ARC, eARC, NONE) of connected device.
+        Determines the ARC type (ARC, eARC, or NONE) of the connected audio device.
 
         Args:
             None.
 
         Returns:
-            str : device type (ARC, eARC, NONE)
+            str: The type of ARC connection. Possible values:
+                - "ARC" for standard ARC connection.
+                - "eARC" for enhanced ARC connection.
+                - "NONE" if no ARC connection is detected.
         """
         result = self.utMenu.select( self.testSuite, "Get ARC Type")
         typeStatusPattern = r"Result dsGetSupportedARCTypes\(IN:handle:\[.*\], OUT:types:\[(dsAUDIOARCSUPPORT_\w+)\]\)"
         type = self.searchPattern(result, typeStatusPattern)
-        if("eARC" in type):
+
+        if "eARC" in type:
             return "eARC"
-        elif("ARC" in type):
+        elif "ARC" in type :
             return "ARC"
         else:
             return "NONE"
 
     def boolToString(self, val:bool):
+        """
+        Converts a boolean value to a string representation used in system menus.
+
+        Args:
+            val (bool): A boolean value where True represents 'Enable' and False represents 'Disable'.
+
+        Returns:
+            str: '1' for True (Enable) and '2' for False (Disable).
+        """
         if(val):
             return "1"
         else:
@@ -757,13 +800,16 @@ class dsAudioClass():
 
     def getSupportedPorts(self):
         """
-        Returns a list of supported audio ports on the device.
+        Retrieves a list of supported audio ports available on the device.
 
         Args:
-            None
+            None.
 
         Returns:
-            list: A list of tuples containing the port name and index.
+            list: A list of tuples, where each tuple contains:
+                - port name (str): The name of the audio port (as per dsAudioPortType).
+                - index (int): The index of the port.
+            Returns an empty list if no ports are found.
         """
 
         ports = self.deviceProfile.get("Ports")
@@ -778,13 +824,16 @@ class dsAudioClass():
 
     def getDeviceType(self):
         """
-        Returns the supported audio ports on device.
+        Retrieves the type of the audio device.
 
         Args:
             None.
 
         Returns:
-            returns the device type (0-Sink device, 1-Source device)
+            int: The type of device:
+                - 0 for a sink device.
+                - 1 for a source device.
+                - None if the device type is unknown or unsupported.
         """
 
         type = self.deviceProfile.get("Type")
@@ -797,15 +846,15 @@ class dsAudioClass():
 
     def getMS12DAPFeatureSupport(self, audio_port: str, port_index: int = 0, feature: str = ""):
         """
-        Checks if the specified audio port supports the given MS12 feature.
+        Checks whether the specified audio port supports a given MS12 DAP (Dolby Audio Processing) feature.
 
         Args:
             audio_port (str): The name of the audio port.
-            port_index (int, optional): The port index. Defaults to 0.
-            feature (str, optional): The MS12 feature to check.
+            port_index (int, optional): The index of the audio port. Defaults to 0.
+            feature (str, optional): The name of the MS12 feature to check.
 
         Returns:
-            bool: True if the feature is supported, False otherwise.
+            bool: True if the feature is supported by the specified port, False otherwise.
         """
 
         ports = self.deviceProfile.get("Ports")
@@ -822,11 +871,11 @@ class dsAudioClass():
 
     def getAudioCompressionSupport(self, audio_port: str, port_index: int = 0):
         """
-        Checks if the specified audio port supports audio compression.
+        Checks whether the specified audio port supports audio compression.
 
         Args:
             audio_port (str): The name of the audio port.
-            port_index (int, optional): The port index. Defaults to 0.
+            port_index (int, optional): The index of the audio port. Defaults to 0.
 
         Returns:
             bool: True if the port supports audio compression, False otherwise.
@@ -846,52 +895,51 @@ class dsAudioClass():
 
     def getSupportedOutputModes(self, audio_port: str, port_index: int = 0):
         """
-        Returns a list of supported output modes refer dsAudioStereoMode.
+        Retrieves the list of supported audio output modes for the specified port, based on `dsAudioStereoMode`.
 
         Args:
             audio_port (str): The name of the audio port.
-            port_index (int, optional): The port index. Defaults to 0.
+            port_index (int, optional): The index of the audio port. Defaults to 0.
 
         Returns:
-            l
+            list: A list of supported output modes for the specified audio port. If no ports or modes are found, returns an empty list.
         """
         ports = self.deviceProfile.get("Ports")
         if not ports:
             return []
 
-        output = []
+        output_modes = []
         for entry in ports.values():
             if (dsAudioPortType(entry['Typeid']).name == audio_port
                 and entry['Index'] == port_index):
                 for mode in entry['stereo_modes']:
-                    output.append(dsAudioStereoMode(mode).name)
-        return output
+                    output_modes.append(dsAudioStereoMode(mode).name)
+        return output_modes
 
     def getSupportedMS12Profiles(self, audio_port: str, port_index: int = 0):
         """
-        Returns a list of supported output modes refer dsAudioStereoMode.
+        Retrieves the list of supported MS12 audio profiles for the specified port.
 
         Args:
             audio_port (str): The name of the audio port.
-            port_index (int, optional): The port index. Defaults to 0.
+            port_index (int, optional): The index of the audio port. Defaults to 0.
 
         Returns:
-            l
+            list: A list of supported MS12 audio profiles. If no profiles are found, returns an empty list.
         """
         ports = self.deviceProfile.get("Ports")
         if not ports:
             return []
 
-        output = []
         for entry in ports.values():
             if (dsAudioPortType(entry['Typeid']).name == audio_port
                 and entry['Index'] == port_index):
                 return entry['MS12_AudioProfiles']
-        return output
+        return []
 
     def __del__(self):
         """
-        De-Initializes the dsAudio helper function.
+        Cleans up and de-initializes the dsAudio helper by stopping the test menu.
 
         Args:
             None.

@@ -34,23 +34,31 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsAudio_test03_MS12AudioCompression(utHelperClass):
+    """
+    Test class to verify the MS12 audio compression feature on various audio ports.
+
+    This test interacts with the `dsAudioClass` to:
+    - Set audio compression levels.
+    - Verify the application of compression on audio streams.
+    - Perform manual or automated verification of audio quality and compression.
+    """
 
     testName  = "test03_MS12AudioCompression"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    compressionValues = [0, 5, 10]
+    compressionValues = [0, 5, 10] # Different levels of audio compression to be tested
 
     def __init__(self):
         """
-        Initializes the test03_MS12AudioCompression test.
+        Initializes the MS12 Audio Compression test with setup configuration and sessions.
 
         Args:
             None.
         """
         super().__init__(self.testName, '1')
 
-        # Test Setup configuration file
+        # Load test setup configuration
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
         # Open Session for player
@@ -72,10 +80,13 @@ class dsAudio_test03_MS12AudioCompression(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -99,10 +110,10 @@ class dsAudio_test03_MS12AudioCompression(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
@@ -111,10 +122,10 @@ class dsAudio_test03_MS12AudioCompression(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
         #Run test specific commands
@@ -127,17 +138,17 @@ class dsAudio_test03_MS12AudioCompression(utHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifyCompressionLevel(self, stream, port, compression, manual=False):
         """
-        Verifies whether the audio is fine or not.
+        Verifies whether the specified audio compression level is applied on the given port.
 
         Args:
-            stream (str) : Stream used for testing
-            port (str) : Audio port to verify
-            compression (int) : compression level
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            stream (str): The audio stream used for testing.
+            port (str): The audio port on which compression is verified.
+            compression (int): The compression level applied.
+            manual (bool, optional): Manual verification (True for manual verification, False for other methods).
+                                     Defaults to True for manual verification.
 
         Returns:
-            bool : returns the status of audio
+            bool: Returns True if the compression is correctly applied, else False.
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Has audio compression level {compression} applied to the {port}? (Y/N):")
@@ -146,10 +157,17 @@ class dsAudio_test03_MS12AudioCompression(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function tests Audio Compression
+        """
+        Main test function for verifying MS12 audio compression across various audio ports.
+
+        This function:
+        - Downloads the required assets.
+        - Runs the prerequisite commands.
+        - Tests different levels of audio compression for each supported audio port.
+        - Allows manual or future automated verification.
 
         Returns:
-            bool
+            bool: Final result of the test.
         """
 
         # Download the assets listed in test setup configuration file

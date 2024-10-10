@@ -35,7 +35,20 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsAudio_test25_AudioMix(utHelperClass):
+    """
+    Class to perform audio mixing tests for the dsAudio module.
 
+    This test checks the behavior of primary and system audio levels while playing audio streams.
+    It verifies if the audio output behaves as expected for different volume settings.
+
+    Attributes:
+        testName (str): Name of the test case.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Name of the module under test.
+        rackDevice (str): Identifier for the device under test.
+        primaryVolume (list): List of primary volume levels to test (0-100).
+        systemVolume (list): List of system volume levels to test (0-100).
+    """
     testName  = "test25_AudioMix"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
@@ -45,7 +58,9 @@ class dsAudio_test25_AudioMix(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test25_AudioMix test .
+        Initializes the dsAudio_test25_AudioMix test instance.
+
+        Sets up the necessary sessions and reads the configuration for the test.
 
         Args:
             None.
@@ -74,10 +89,13 @@ class dsAudio_test25_AudioMix(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -101,10 +119,10 @@ class dsAudio_test25_AudioMix(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
@@ -113,10 +131,10 @@ class dsAudio_test25_AudioMix(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
         #Run test specific commands
@@ -129,16 +147,16 @@ class dsAudio_test25_AudioMix(utHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifyAudio(self, primary_volume, system_volume, manual=False):
         """
-        Verifies whether the audio is fine or not.
+        Verifies if the audio is functioning as expected at given volume levels.
 
         Args:
-            primary_volume (int) : volume ranges 0-100
-            system_volume (int): volume ranges 0-100
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            primary_volume (int): Primary audio volume level (0-100).
+            system_volume (int): System audio volume level (0-100).
+            manual (bool, optional): Indicates if manual verification is required. 
+                                     Defaults to False (automated verification).
 
         Returns:
-            bool : returns the status of audio
+            bool: True if audio plays as expected, otherwise False.
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Is Audio playing as expected with Mixing: Primary Volume: {primary_volume} System Volume: {system_volume}? (Y/N):")
@@ -147,10 +165,17 @@ class dsAudio_test25_AudioMix(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function tests the Primary and system audio Mixing
+        """
+        Executes the audio mixing test by verifying audio output with various volume settings.
+
+        This function handles the overall test flow, including:
+        - downloading assets
+        - running prerequisites
+        - setting audio levels
+        - verifying audio output for different combinations of primary and system volumes.
 
         Returns:
-            bool
+            bool: True if the test executes successfully, otherwise False.
         """
 
         # Download the assets listed in test setup configuration file

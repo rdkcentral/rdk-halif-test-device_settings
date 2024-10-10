@@ -34,6 +34,12 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsAudio_test04_MS12DialogueEnhancer(utHelperClass):
+    """
+    Test class to validate the MS12 Dialogue Enhancer functionality.
+
+    This test configures and verifies different levels of the MS12 Dialogue Enhancer
+    using the dsAudio class on the DUT (Device Under Test).
+    """
 
     testName  = "test04_MS12DialogueEnhancer"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
@@ -44,7 +50,8 @@ class dsAudio_test04_MS12DialogueEnhancer(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test04_MS12DialogueEnhancer test .
+        Initializes the test04_MS12DialogueEnhancer test, setting up player sessions,
+        configuration reading, and other required components
 
         Args:
             None.
@@ -73,10 +80,13 @@ class dsAudio_test04_MS12DialogueEnhancer(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -100,10 +110,10 @@ class dsAudio_test04_MS12DialogueEnhancer(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
@@ -112,10 +122,10 @@ class dsAudio_test04_MS12DialogueEnhancer(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
         #Run test specific commands
@@ -128,17 +138,16 @@ class dsAudio_test04_MS12DialogueEnhancer(utHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifyDialogueEnhance(self, stream, port, level, manual=False):
         """
-        Verifies whether the audio is fine or not.
+        Verifies if the MS12 Dialogue Enhancer level is correctly applied.
 
         Args:
-            stream (str) : Stream used for testing
-            port (str) : Audio port to verify
-            level (int): Dialogue Enhancer level. Ranges from 0-16
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            stream (str): The stream used for testing.
+            port (str): The audio port to verify.
+            level (int): The Dialogue Enhancer level (0-16).
+            manual (bool): If True, prompts the user for verification. Defaults to False.
 
         Returns:
-            bool : returns the status of audio
+            bool: True if the user confirms, otherwise False.
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} level {level} applied to the {port}? (Y/N):")
@@ -147,10 +156,17 @@ class dsAudio_test04_MS12DialogueEnhancer(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function tests the MS12 DialogueEnhancer
+        """
+        Main test function to validate MS12 Dialogue Enhancer functionality.
+
+        This function
+        - Downloads assets
+        - Plays test streams
+        - Cconfigures the Dialogue Enhancer
+        - Verifies the enhancement, and cleans up after the test.
 
         Returns:
-            bool
+            bool: True if the test passes, otherwise False.
         """
 
         # Download the assets listed in test setup configuration file

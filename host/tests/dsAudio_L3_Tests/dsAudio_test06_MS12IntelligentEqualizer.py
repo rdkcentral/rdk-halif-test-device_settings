@@ -34,6 +34,17 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
+    """
+    Test case for verifying the MS12 Intelligent Equalizer feature across various modes.
+
+    Attributes:
+        testName (str): Name of the test case.
+        testSetupPath (str): Path to the test setup YAML file.
+        moduleName (str): Name of the module being tested.
+        rackDevice (str): The rack device type (DUT - Device Under Test).
+        ms12DAPFeature (str): Name of the MS12 DAP feature being tested.
+        equalizerModes (list): List of Intelligent Equalizer modes to test.
+    """
 
     testName  = "test06_MS12IntelligentEqualizer"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
@@ -44,7 +55,9 @@ class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test06_MS12IntelligentEqualizer test .
+        Initializes the test case for MS12 Intelligent Equalizer.
+
+        Sets up necessary sessions, config files, and utility classes required for the test.
 
         Args:
             None.
@@ -73,10 +86,13 @@ class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -100,10 +116,10 @@ class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
@@ -112,10 +128,10 @@ class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
         #Run test specific commands
@@ -128,17 +144,16 @@ class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifyIntelligentEqualizer(self, stream, port, mode, manual=False):
         """
-        Verifies whether the audio is fine or not.
+        Verifies whether the MS12 Intelligent Equalizer feature is applied correctly.
 
         Args:
-            stream (str) : Stream used for testing
-            port (str) : Audio port to verify
-            mode (str): IntelligentEqualizer modes
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            stream (str): Audio stream used for testing.
+            port (str): Audio port being verified.
+            mode (str): Intelligent Equalizer mode being tested.
+            manual (bool, optional): Set to True for manual user verification, False for other methods.
 
         Returns:
-            bool : returns the status of audio
+            bool: Result of the verification (True if successful, False otherwise).
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} mode {mode} applied to the {port}? (Y/N):")
@@ -147,10 +162,17 @@ class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function tests the MS12 IntelligentEqualizer
+        """
+        Main function to test the MS12 Intelligent Equalizer feature.
+
+        This function:
+        - Plays audio streams
+        - Apply Intelligent Equalizer modes on supported audio ports
+        - verify the results.
+        - Cleans up the assets after the test completes.
 
         Returns:
-            bool
+            bool: Final test result (True if the test passes, False otherwise).
         """
 
         # Download the assets listed in test setup configuration file

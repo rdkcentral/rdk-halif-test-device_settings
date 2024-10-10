@@ -34,6 +34,18 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsAudio_test07_MS12Volumeleveller(utHelperClass):
+    """
+    Test class for MS12 Volume Leveller functionality.
+
+    Attributes:
+        testName (str): Name of the test case.
+        testSetupPath (str): Path to the test setup YAML file.
+        moduleName (str): Name of the module being tested.
+        rackDevice (str): The rack device type (DUT - Device Under Test).
+        ms12DAPFeature (str): Name of the MS12 DAP feature being tested.
+        volumeModes (list): List of Volume leveller modes to test.
+        volumeLevels (list): List of Volume leveller levels to test.
+    """
 
     testName  = "test07_MS12Volumeleveller"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
@@ -45,7 +57,9 @@ class dsAudio_test07_MS12Volumeleveller(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test07_MS12Volumeleveller test .
+        Initializes the test case for MS12 Volume leveller.
+
+        Sets up necessary sessions, config files, and utility classes required for the test.
 
         Args:
             None.
@@ -74,10 +88,13 @@ class dsAudio_test07_MS12Volumeleveller(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -101,10 +118,10 @@ class dsAudio_test07_MS12Volumeleveller(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
@@ -113,10 +130,10 @@ class dsAudio_test07_MS12Volumeleveller(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
         #Run test specific commands
@@ -129,18 +146,18 @@ class dsAudio_test07_MS12Volumeleveller(utHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifyVolumeleveller(self, stream, port, mode, level, manual=False):
         """
-        Verifies whether the audio is fine or not.
+        Verifies whether the Volume Leveller feature is functioning correctly.
 
         Args:
-            stream (str) : Stream used for testing
-            port (str) : Audio port to verify
-            mode (str): Volumeleveller modes
-            level (int): Volumeleveller level
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            stream (str): Stream used for testing
+            port (str): Audio port to verify
+            mode (int): Volume leveller mode
+            level (int): Volume leveller level
+            manual (bool, optional): Manual verification option (True: manual, False: automated).
+                                     Defaults to False.
 
         Returns:
-            bool : returns the status of audio
+            bool: Status indicating whether the audio verification was successful.
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} mode {mode} level {level} applied to the {port}? (Y/N):")
@@ -149,10 +166,17 @@ class dsAudio_test07_MS12Volumeleveller(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function tests the MS12 Volumeleveller
+        """
+       Main function to test the MS12 Volume Leveller.
+
+        This function:
+        - Plays audio streams
+        - Apply  Volume Leveller modes on supported audio ports
+        - verify the results.
+        - Cleans up the assets after the test completes.
 
         Returns:
-            bool
+            bool: Result of the final verification.
         """
 
         # Download the assets listed in test setup configuration file

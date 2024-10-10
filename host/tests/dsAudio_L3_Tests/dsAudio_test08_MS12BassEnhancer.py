@@ -34,7 +34,17 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsAudio_test08_MS12BassEnhancer(utHelperClass):
+    """
+    Test class for verifying the MS12 Bass Enhancer feature.
 
+    Attributes:
+        testName (str): Name of the test.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Name of the module under test.
+        rackDevice (str): Identifier for the Device Under Test (DUT).
+        ms12DAPFeature (str): The specific audio feature being tested.
+        boostValues (list): Possible boost values for the Bass Enhancer.
+    """
     testName  = "test08_MS12BassEnhancer"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
@@ -44,7 +54,9 @@ class dsAudio_test08_MS12BassEnhancer(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test08_MS12BassEnhancer test .
+        Initializes the dsAudio_test08_MS12BassEnhancer test class.
+
+        Sets up the necessary sessions and configurations for the test.
 
         Args:
             None.
@@ -73,10 +85,13 @@ class dsAudio_test08_MS12BassEnhancer(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -100,10 +115,10 @@ class dsAudio_test08_MS12BassEnhancer(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
@@ -112,10 +127,10 @@ class dsAudio_test08_MS12BassEnhancer(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
         #Run test specific commands
@@ -128,17 +143,17 @@ class dsAudio_test08_MS12BassEnhancer(utHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifyBassEnhancer(self, stream, port, boost, manual=False):
         """
-        Verifies whether the audio is fine or not.
+        Verifies the audio quality with the Bass Enhancer applied.
 
         Args:
-            stream (str) : Stream used for testing
-            port (str) : Audio port to verify
-            boost (int): BassEnhancer boost. Ranges from 0-100
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            stream (str): The audio stream used for testing.
+            port (str): The audio port to verify.
+            boost (int): The boost value for the Bass Enhancer (0-100).
+            manual (bool, optional): Whether to use manual verification.
+                                     Defaults to False (automated methods).
 
         Returns:
-            bool : returns the status of audio
+            bool: Status indicating whether the audio is satisfactory.
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} boost {boost} applied to the {port}? (Y/N):")
@@ -147,10 +162,18 @@ class dsAudio_test08_MS12BassEnhancer(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function tests the MS12 BassEnhancer
+        """
+        Executes the test for the MS12 Bass Enhancer feature.
+
+        This function orchestrates the test execution, including:
+        - Plays audio streams
+        - Asset downloading
+        - Running prerequisites
+        - Verifying audio quality across various boost settings.
+        - Cleans up the assets after the test completes.
 
         Returns:
-            bool
+            bool: Status of the last verification result.
         """
 
         # Download the assets listed in test setup configuration file

@@ -34,6 +34,16 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsAudio_test12_MS12MISteering(utHelperClass):
+    """
+    Class to test MS12 MISteering functionality in the dsAudio module.
+    
+    Attributes:
+        testName (str): Name of the test.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Name of the module being tested.
+        rackDevice (str): The Device Under Test (DUT).
+        ms12DAPFeature (str): Specific feature being tested (MISteering).
+    """
 
     testName  = "test12_MS12MISteering"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
@@ -43,10 +53,13 @@ class dsAudio_test12_MS12MISteering(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test12_MS12MISteering test .
+        Initializes the dsAudio_test12_MS12MISteering test instance.
+        
+        This sets up the test configuration and prepares sessions for 
+        player and device access.
 
         Args:
-            None.
+            None
         """
         super().__init__(self.testName, '1')
 
@@ -72,10 +85,13 @@ class dsAudio_test12_MS12MISteering(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -99,10 +115,10 @@ class dsAudio_test12_MS12MISteering(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
@@ -111,10 +127,10 @@ class dsAudio_test12_MS12MISteering(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
         #Run test specific commands
@@ -127,17 +143,20 @@ class dsAudio_test12_MS12MISteering(utHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifyMISteering(self, stream, port, mode, manual=False):
         """
-        Verifies whether the audio is fine or not.
+        Verifies the functionality of the MISteering feature.
+
+        This method checks whether the audio behaves as expected when 
+        the MISteering feature is applied to the specified audio port.
 
         Args:
-            stream (str) : Stream used for testing
-            port (str) : Audio port to verify
-            mode (bool): MISteering
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            stream (str): The audio stream used for testing.
+            port (str): The audio port being verified.
+            mode (bool): Indicates if MISteering is enabled (True) or disabled (False).
+            manual (bool, optional): Specifies whether to use manual verification. 
+                                     Defaults to False, using automated methods if implemented.
 
         Returns:
-            bool : returns the status of audio
+            bool: The status of the audio verification (True for success, False for failure).
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} {mode} applied to the {port}? (Y/N):")
@@ -146,10 +165,19 @@ class dsAudio_test12_MS12MISteering(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function tests the MS12 MISteering
+        """
+        Executes the main test sequence for MS12 MISteering.
+
+        This method orchestrates:
+        - The downloading of assets
+        - Running of prerequisites
+        - Initializing the audio module
+        - Play the Audio Stream
+        - Apply the MI steering modes for supported ports
+        - Performing the tests, and cleaning up afterward.
 
         Returns:
-            bool
+            bool: The final result of the test execution (True if successful, False otherwise).
         """
 
         # Download the assets listed in test setup configuration file

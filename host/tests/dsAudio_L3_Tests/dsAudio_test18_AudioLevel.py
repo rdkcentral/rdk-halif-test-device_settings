@@ -34,6 +34,19 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsAudio_test18_AudioLevel(utHelperClass):
+    """
+    Test class for validating audio gain levels on the device under test (DUT).
+
+    This class inherits from `utHelperClass` and implements a series of tests
+    to verify the audio gain levels across different audio ports.
+
+    Attributes:
+        testName (str): Name of the test case.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Name of the module being tested.
+        rackDevice (str): Identifier for the device under test.
+        gainLevels (list): List of gain levels to be tested.
+    """
 
     testName  = "test18_AudioLevel"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
@@ -43,7 +56,10 @@ class dsAudio_test18_AudioLevel(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test18_AudioLevel test .
+        Initializes the `dsAudio_test18_AudioLevel` instance.
+
+        Sets up the test configuration, initializes necessary sessions,
+        and prepares the player and user response handling classes.
 
         Args:
             None.
@@ -72,10 +88,13 @@ class dsAudio_test18_AudioLevel(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -99,10 +118,10 @@ class dsAudio_test18_AudioLevel(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
@@ -111,10 +130,10 @@ class dsAudio_test18_AudioLevel(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
         #Run test specific commands
@@ -127,16 +146,16 @@ class dsAudio_test18_AudioLevel(utHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifyAudioGainLevel(self, port, gain, manual=False):
         """
-        Verifies whether the audio is fine or not.
+        Verifies whether the specified audio gain level is correctly applied.
 
         Args:
-            port (str) : Audio port to verify
-            gain (float) : gain value
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            port (str): Audio port to verify.
+            gain (float): Gain value to check.
+            manual (bool, optional): Indicates whether to use manual verification.
+                                     Defaults to False, which uses automated methods.
 
         Returns:
-            bool : returns the status of audio
+            bool: True if the audio gain level is correctly applied, otherwise False.
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Has audio gain level {gain} applied to the {port}? (Y/N):")
@@ -145,10 +164,18 @@ class dsAudio_test18_AudioLevel(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function tests the AudioLevels
+        """
+        Main test function for validating audio gain levels.
+
+        This method performs the following actions:
+        - Downloads necessary test assets.
+        - Runs prerequisite commands.
+        - Initializes the audio module.
+        - Plays the audio stream
+        - Vlidating gain levels on supported audio ports.
 
         Returns:
-            bool
+            bool: The final status of the output mode tests.
         """
 
         # Download the assets listed in test setup configuration file

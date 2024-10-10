@@ -35,6 +35,19 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsAudio_test23_AssociateMix(utHelperClass):
+    """
+    Test class for verifying the functionality of audio mixing in the dsAudio module.
+
+    This test validates the associate audio mixing feature of the device under test (DUT)
+    by adjusting fader levels and checking audio playback with and without mixing enabled.
+
+    Attributes:
+        testName (str): Name of the test.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Name of the module being tested.
+        rackDevice (str): Identifier for the device under test.
+        faderValues (list): List of fader values to test (in decibels).
+    """
 
     testName  = "test23_AssociateMix"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
@@ -44,7 +57,9 @@ class dsAudio_test23_AssociateMix(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test23_AssociateMix test .
+        Initializes the dsAudio_test23_AssociateMix test class.
+
+        Sets up the necessary configuration, player session, and user response handling.
 
         Args:
             None.
@@ -73,10 +88,13 @@ class dsAudio_test23_AssociateMix(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -100,10 +118,10 @@ class dsAudio_test23_AssociateMix(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
@@ -112,10 +130,10 @@ class dsAudio_test23_AssociateMix(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
         #Run test specific commands
@@ -126,18 +144,18 @@ class dsAudio_test23_AssociateMix(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyAudio(self, mixer_status, fader, manual=False):
+    def testVerifyAssociateAudioMix(self, mixer_status, fader, manual=False):
         """
-        Verifies whether the audio is fine or not.
+        Verifies the audio playback quality under the specified mixing conditions.
 
         Args:
-            mixer_status (bool) : True: Enabled associate audio mixing, False: Disabled
-            fader (int): Fader Control,-32:mute associated audio) to 32:mute main audio
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            mixer_status (bool): True if associate audio mixing is enabled, False otherwise.
+            fader (int): Fader control value (e.g., -32 for mute, 32 for full).
+            manual (bool, optional): Flag for manual verification (True for manual, False for automated).
+                                     Defaults to False.
 
         Returns:
-            bool : returns the status of audio
+            bool: True if audio is as expected; otherwise, False.
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Is Audio playing as expected with Mixing: {mixer_status} fader: {fader}? (Y/N):")
@@ -146,10 +164,18 @@ class dsAudio_test23_AssociateMix(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function tests the Associate Mixing
+        """
+        Executes the associate mixing test.
+
+        This method performs the following steps:
+        - Downloads required assets.
+        - Runs prerequisite commands.
+        - Initializes the dsAudio module.
+        - Tests audio mixing by playing each stream with various fader settings.
+        - Cleans up downloaded assets and terminates the dsAudio module.
 
         Returns:
-            bool
+            bool: True if the test execution completes successfully; otherwise, False.
         """
 
         # Download the assets listed in test setup configuration file
@@ -175,7 +201,7 @@ class dsAudio_test23_AssociateMix(utHelperClass):
             # Start the stream playback
             self.testPlayer.play(stream)
 
-            result = self.testVerifyAudio(False, 0, True)
+            result = self.testVerifyAssociateAudioMix(False, 0, True)
 
             self.log.stepResult(result, f'Associate Mixing Disabled, Stream: {stream} Fader: 0')
 
@@ -184,7 +210,7 @@ class dsAudio_test23_AssociateMix(utHelperClass):
 
                 self.testdsAudio.enableAssociateAudioMixig(True, fade)
 
-                result = self.testVerifyAudio(True, fade, True)
+                result = self.testVerifyAssociateAudioMix(True, fade, True)
 
                 self.log.stepResult(result, f'Associate Mixing Stream: {stream} Fader: {fade}')
 

@@ -34,7 +34,14 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsAudio_test02_PortConnectionStatus(utHelperClass):
+    """
+    Test class to verify the connection and disconnection status of headphone.
 
+    This class interacts with the `dsAudioClass` to:
+    - Check the connection status of headphones.
+    - Test callback mechanisms for headphone connection/disconnection.
+    - Perform manual or automated connection status verification.
+    """
     testName  = "test02_PortConnectionStatus"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
@@ -42,14 +49,14 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test02_PortConnectionStatus test .
+        Initializes the test class with test name, setup configuration, and session for HAL testing.
 
         Args:
-            None.
+            None
         """
         super().__init__(self.testName, '1')
 
-        # Test Setup configuration file
+        # Load test setup configuration
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
         # Open Session for hal test
@@ -63,10 +70,13 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -90,19 +100,19 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
         #Run test specific commands
@@ -115,12 +125,12 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
     #TODO: Current version supports only manual.
     def testWaitForConnectionChange(self, connection, manual=False):
         """
-        Wait for the port connection, disconnection.
+        Waits for the headphone connection or disconnection.
 
         Args:
-            connection (bool) : If True connect the port, otherwise disconnect the port
-            manual (bool, optional): Manual Control (True: manual, False: other disconnect/connect methods).
-                                     Defaults to other
+            connection (bool): Set to True for connection, False for disconnection.
+            manual (bool, optional): Manual control flag (True for manual user input, False for automation). 
+                                     Defaults to False.
 
         Returns:
             None
@@ -131,14 +141,20 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
             else:
                 self.testUserResponse.getUserYN(f"Disconnect the HEADPONE and press Enter:")
         else :
-            #TODO: Add automation verification methods
+            # TODO: Implement automated connection change detection
             return False
 
     def testFunction(self):
-        """This function tests the Headphone connection
+        """
+        The main test function that verifies headphone connection and disconnection.
+
+        This function:
+        - Downloads necessary assets.
+        - Runs prerequisite commands.
+        - Verifies headphone connection and disconnection through callbacks and direct status checks.
 
         Returns:
-            bool
+            bool: Final result of the test.
         """
 
         # Download the assets listed in test setup configuration file
@@ -162,6 +178,7 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
 
         callbackStatus = self.testdsAudio.getHeadphoneConnectionCallbackStatus()
 
+        # Validate headphone connection callback
         if(callbackStatus == None or "HEADPHONE" not in callbackStatus[0] or callbackStatus[2] == False):
             result = False
         else:

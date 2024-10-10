@@ -34,6 +34,16 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsAudio_test05_MS12DolbyVolume(utHelperClass):
+    """
+    Test case for verifying the MS12 Dolby Volume feature on supported audio ports.
+
+    Attributes:
+        testName (str): Name of the test case.
+        testSetupPath (str): Path to the test setup YAML file.
+        moduleName (str): Name of the module being tested.
+        rackDevice (str): The rack device type (DUT - Device Under Test).
+        ms12DAPFeature (str): The name of the MS12 DAP feature being tested.
+    """
 
     testName  = "test05_MS12DolbyVolume"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
@@ -43,7 +53,7 @@ class dsAudio_test05_MS12DolbyVolume(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test05_MS12DolbyVolume test .
+        Initializes the test case for MS12 Dolby Volume.
 
         Args:
             None.
@@ -72,10 +82,13 @@ class dsAudio_test05_MS12DolbyVolume(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -99,10 +112,10 @@ class dsAudio_test05_MS12DolbyVolume(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
@@ -111,10 +124,10 @@ class dsAudio_test05_MS12DolbyVolume(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
         #Run test specific commands
@@ -127,17 +140,16 @@ class dsAudio_test05_MS12DolbyVolume(utHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifyDolbyVolume(self, stream, port, mode, manual=False):
         """
-        Verifies whether the audio is fine or not.
+        Verifies if the Dolby Volume feature is applied correctly.
 
         Args:
-            stream (str) : Stream used for testing
-            port (str) : Audio port to verify
-            mode (bool): Dolby volume mode
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            stream (str): The audio stream being tested.
+            port (str): The audio port where the test is applied.
+            mode (bool): The Dolby Volume mode (True for enabled, False for disabled).
+            manual (bool, optional): Set to True for manual verification via user input.
 
         Returns:
-            bool : returns the status of audio
+            bool: Verification result (True if Dolby Volume is correctly applied).
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} {mode} applied to the {port}? (Y/N):")
@@ -146,10 +158,16 @@ class dsAudio_test05_MS12DolbyVolume(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function tests the MS12 DolbyVolume
+        """
+        Executes the full test sequence for MS12 Dolby Volume.
+
+        This function:
+        - Plays audio streams
+        - Applies Dolby Volume settings
+        - Verifies audio ports, and cleans up assets.
 
         Returns:
-            bool
+            bool: Final test result (True if the test passes, False otherwise).
         """
 
         # Download the assets listed in test setup configuration file

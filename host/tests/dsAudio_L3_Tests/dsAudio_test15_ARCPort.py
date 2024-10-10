@@ -34,6 +34,18 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsAudio_test15_ARCPort(utHelperClass):
+    """
+    Test class for verifying ARC (Audio Return Channel) port functionality.
+
+    This class handles the setup, execution, and cleanup of tests that check
+    the connection and disconnection of ARC and eARC devices to the DUT (Device Under Test).
+
+    Attributes:
+        testName (str): Name of the test.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Name of the audio module.
+        rackDevice (str): Device under test (DUT).
+    """
 
     testName  = "test15_ARCPort"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
@@ -42,7 +54,10 @@ class dsAudio_test15_ARCPort(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test15_ARCPort test .
+        Initializes the dsAudio_test15_ARCPort test.
+
+        Sets up the test by reading the configuration, establishing necessary
+        sessions, and preparing the environment for the test execution.
 
         Args:
             None.
@@ -63,10 +78,13 @@ class dsAudio_test15_ARCPort(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -90,10 +108,10 @@ class dsAudio_test15_ARCPort(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
@@ -102,10 +120,10 @@ class dsAudio_test15_ARCPort(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
         #Run test specific commands
@@ -118,13 +136,17 @@ class dsAudio_test15_ARCPort(utHelperClass):
     #TODO: Current version supports only manual.
     def testWaitForConnectionChange(self, connection, type = "NONE", manual=False):
         """
-        Wait for the port connection, disconnection.
+        Waits for a change in port connection state (connection or disconnection).
+
+        Depending on the specified parameters, it can prompt the user to
+        connect or disconnect a device, or it can implement automated methods
+        for managing the connection.
 
         Args:
-            connection (bool) : If True connect the port, otherwise disconnect the port
-            type (str): Type of device to be connected (ARC, eARC)
-            manual (bool, optional): Manual Control (True: manual, False: other disconnect/connect methods).
-                                     Defaults to other
+            connection (bool): If True, waits for a connection; if False, waits for disconnection.
+            type (str): Type of device being connected (e.g., "ARC", "eARC").
+            manual (bool, optional): Indicates if manual intervention is required
+                                     (True for manual, False for automated methods). Defaults to False.
 
         Returns:
             None
@@ -139,10 +161,16 @@ class dsAudio_test15_ARCPort(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function tests the ARC Types connected to device
+        """
+        Executes the main testing routine for verifying ARC and eARC port functionality.
+
+        This method orchestrate
+        - Downloading assets
+        - Running prerequisites
+        - Checking the connection status of ARC/eARC devices.
 
         Returns:
-            bool
+            bool: Indicates the success of the test execution (True if successful).
         """
 
         # Download the assets listed in test setup configuration file

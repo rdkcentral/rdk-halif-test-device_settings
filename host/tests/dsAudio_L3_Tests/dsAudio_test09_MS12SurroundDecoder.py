@@ -34,6 +34,16 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsAudio_test09_MS12SurroundDecoder(utHelperClass):
+    """
+    Test case for the MS12 Surround Decoder feature in the dsAudio class
+
+    Attributes:
+        testName (str): Name of the test.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Name of the module under test.
+        rackDevice (str): Identifier for the Device Under Test (DUT).
+        ms12DAPFeature (str): The specific audio feature being tested.
+    """
 
     testName  = "test09_MS12SurroundDecoder"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
@@ -43,7 +53,10 @@ class dsAudio_test09_MS12SurroundDecoder(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test09_MS12SurroundDecoder test .
+        Initializes the dsAudio_test09_MS12SurroundDecoder test case.
+
+        Sets up necessary configurations, sessions, and instances
+        for testing the MS12 Surround Decoder.
 
         Args:
             None.
@@ -72,10 +85,13 @@ class dsAudio_test09_MS12SurroundDecoder(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -99,10 +115,10 @@ class dsAudio_test09_MS12SurroundDecoder(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
@@ -111,10 +127,10 @@ class dsAudio_test09_MS12SurroundDecoder(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
         #Run test specific commands
@@ -127,17 +143,16 @@ class dsAudio_test09_MS12SurroundDecoder(utHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifySurroundDecoder(self, stream, port, mode, manual=False):
         """
-        Verifies whether the audio is fine or not.
+        Verifies the Surround Decoder's audio output.
 
         Args:
-            stream (str) : Stream used for testing
-            port (str) : Audio port to verify
-            mode (bool): SurroundDecoder mode
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            stream (str): The audio stream used for testing.
+            port (str): The audio port to verify.
+            mode (bool): Indicates the Surround Decoder mode (True/False).
+            manual (bool, optional): If True, prompts user for manual verification.
 
         Returns:
-            bool : returns the status of audio
+            bool: The status of the audio verification.
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} {mode} applied to the {port}? (Y/N):")
@@ -146,10 +161,19 @@ class dsAudio_test09_MS12SurroundDecoder(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function tests the MS12 SurroundDecoder
+        """
+        Main function to execute the MS12 Surround Decoder test.
+
+        This Function:
+        - Downloads assets
+        - Runs prerequisites
+        - Initializes the dsAudio class
+        - Plays the Audio stream
+        - Enables disables the Surround Decoder
+        - Performs audio stream playback with verification.
 
         Returns:
-            bool
+            bool: The overall result of the test execution.
         """
 
         # Download the assets listed in test setup configuration file

@@ -34,7 +34,16 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsAudio_test16_ARCSAD(utHelperClass):
+    """
+    Test class for verifying the ARC SAD (Source Audio Descriptor) functionality.
 
+    Attributes:
+        testName (str): Name of the test.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Name of the module being tested.
+        rackDevice (str): Device under test (DUT).
+        sadList (list): Predefined list of ARC SAD values.
+    """
     testName  = "test16_ARCSAD"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
@@ -56,7 +65,7 @@ class dsAudio_test16_ARCSAD(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test16_ARCSAD test .
+        Initializes the dsAudio_test16_ARCSAD test.
 
         Args:
             None.
@@ -85,10 +94,13 @@ class dsAudio_test16_ARCSAD(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -112,10 +124,10 @@ class dsAudio_test16_ARCSAD(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
@@ -124,10 +136,10 @@ class dsAudio_test16_ARCSAD(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
         #Run test specific commands
@@ -140,15 +152,15 @@ class dsAudio_test16_ARCSAD(utHelperClass):
     #TODO: Current version supports only manual.
     def testARCSAD(self, sad, manual=False):
         """
-        Verifies the ARC SAD.
+        Verifies the ARC Source Audio Descriptor (SAD).
 
         Args:
-            sad (list): List of ARC SAD values
-            manual (bool, optional): Manual Control (True: manual, False: other disconnect/connect methods).
-                                     Defaults to other
+            sad (list): List of ARC SAD values to verify.
+            manual (bool, optional): Indicates whether to use manual control.
+                                     Defaults to False (automatic methods).
 
         Returns:
-            None
+            bool: True if the SAD verification was successful, False otherwise.
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Has SAD:{sad} sent to the ARC device [Y/N]:")
@@ -157,10 +169,18 @@ class dsAudio_test16_ARCSAD(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function tests the ARC SAD
+        """
+        Executes the test for verifying ARC SAD functionality.
+
+        This method performs the following steps:
+        - Downloads required assets.
+        - Runs prerequisite commands.
+        - Initializes the dsAudio module and player.
+        - Tests each supported audio port for ARC functionality.
+        - Stops the stream playback and cleans up.
 
         Returns:
-            bool
+            bool: True if the test ran successfully, False otherwise.
         """
 
         # Download the assets listed in test setup configuration file
