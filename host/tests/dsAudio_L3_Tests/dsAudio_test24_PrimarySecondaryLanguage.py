@@ -119,8 +119,6 @@ class dsAudio_test24_PrimarySecondaryLanguage(utHelperClass):
         """
         self.deleteFromDevice(self.testStreams)
 
-        # remove the callback log files
-        self.deleteFromDevice([self.connectionCB, self.formatCB, self.atmosCB])
 
     def testRunPrerequisites(self):
         """
@@ -138,7 +136,7 @@ class dsAudio_test24_PrimarySecondaryLanguage(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyAudio(self, language_type:str, language:str, manual=False):
+    def testVerifyAudio(self, port, language_type:str, language:str, manual=False):
         """
         Verifies the audio stream in the specified language (Primary or Secondary).
 
@@ -147,6 +145,7 @@ class dsAudio_test24_PrimarySecondaryLanguage(utHelperClass):
         correctly.
 
         Args:
+            port (str) : The audio port to verify.
             language_type (str): Specifies the language type, either "Primary" or "Secondary".
             language (str): The 3-letter ISO 639-3 code representing the language (e.g., 'eng' for English).
             manual (bool, optional): If True, prompts the user for manual verification.
@@ -156,7 +155,7 @@ class dsAudio_test24_PrimarySecondaryLanguage(utHelperClass):
             bool: The status of the audio verification (True if audio is correct, False otherwise).
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Is Audio playing as expected with {language_type} {language} Language? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Is Audio playing on {port} as expected with {language_type} {language} Language? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
@@ -188,49 +187,47 @@ class dsAudio_test24_PrimarySecondaryLanguage(utHelperClass):
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
         for port,index in self.testdsAudio.getSupportedPorts():
-            if self.testdsAudio.getDeviceType() == 0 and "SPEAKER" in port:
-                # Enable the audio port
-                self.testdsAudio.enablePort(port, index)
-                break
-            elif self.testdsAudio.getDeviceType() == 1 and "HDMI" in port:
-                # Enable the audio port
-                self.testdsAudio.enablePort(port, index)
-                break
+            # Enable the audio port
+            self.testdsAudio.enablePort(port, index)
 
-        for i, stream in enumerate(self.testStreams):
+            for i, stream in enumerate(self.testStreams):
 
-            self.testdsAudio.enableAssociateAudioMixig(False)
+                self.testdsAudio.enableAssociateAudioMixig(False)
 
-            # Start the stream playback
-            self.testPlayer.play(stream)
+                # Start the stream playback
+                self.testPlayer.play(stream)
 
-            self.testdsAudio.enableAssociateAudioMixig(True, -32)
+                for secondary in self.streamLanguage[i]["Secondary"]:
+                    self.log.stepStart(f'Secondary Language Test Stream: {stream} Language: {secondary}')
 
-            for primary in self.streamLanguage[i]["Primary"]:
-                self.log.stepStart(f'Primary Language Test Stream: {stream} Language: {primary}')
+                    self.testdsAudio.setPrimarySecondaryLanguage("Secondary", secondary)
 
-                self.testdsAudio.setPrimarySecondaryLanguage("Primary", primary)
+                    result = self.testVerifyAudio(port, "Secondary", secondary, True)
 
-                result = self.testVerifyAudio("Primary", primary, True)
+                    self.log.stepResult(result, f'Secondary Language Test Stream: {stream} Language: {secondary}')
 
-                self.log.stepResult(result, f'Primary Language Test Stream: {stream} Language: {primary}')
+                # Stop the stream playback
+                self.testPlayer.stop()
 
-            self.testdsAudio.enableAssociateAudioMixig(True, 32)
+                time.sleep(3)
 
-            for secondary in self.streamLanguage[i]["Secondary"]:
-                self.log.stepStart(f'Secondary Language Test Stream: {stream} Language: {secondary}')
+                # Start the stream playback
+                self.testPlayer.play(stream)
 
-                self.testdsAudio.setPrimarySecondaryLanguage("Secondary", secondary)
+                for primary in self.streamLanguage[i]["Primary"]:
+                    self.log.stepStart(f'Primary Language Test Stream: {stream} Language: {primary}')
 
-                result = self.testVerifyAudio("Secondary", secondary, True)
+                    self.testdsAudio.setPrimarySecondaryLanguage("Primary", primary)
 
-                self.log.stepResult(result, f'Secondary Language Test Stream: {stream} Language: {secondary}')
+                    result = self.testVerifyAudio(port, "Primary", primary, True)
 
-            # Stop the stream playback
-            self.testPlayer.stop()
+                    self.log.stepResult(result, f'Primary Language Test Stream: {stream} Language: {primary}')
 
-        # Disable the audio port
-        self.testdsAudio.disablePort(port, index)
+                # Stop the stream playback
+                self.testPlayer.stop()
+
+            # Disable the audio port
+            self.testdsAudio.disablePort(port, index)
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()

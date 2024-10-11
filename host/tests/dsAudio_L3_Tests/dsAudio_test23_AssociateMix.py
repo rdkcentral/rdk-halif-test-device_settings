@@ -125,8 +125,6 @@ class dsAudio_test23_AssociateMix(utHelperClass):
         """
         self.deleteFromDevice(self.testStreams)
 
-        # remove the callback log files
-        self.deleteFromDevice([self.connectionCB, self.formatCB, self.atmosCB])
 
     def testRunPrerequisites(self):
         """
@@ -144,11 +142,12 @@ class dsAudio_test23_AssociateMix(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyAssociateAudioMix(self, mixer_status, fader, manual=False):
+    def testVerifyAssociateAudioMix(self, port, mixer_status, fader, manual=False):
         """
         Verifies the audio playback quality under the specified mixing conditions.
 
         Args:
+            port (str) : The audio port to verify.
             mixer_status (bool): True if associate audio mixing is enabled, False otherwise.
             fader (int): Fader control value (e.g., -32 for mute, 32 for full).
             manual (bool, optional): Flag for manual verification (True for manual, False for automated).
@@ -158,7 +157,7 @@ class dsAudio_test23_AssociateMix(utHelperClass):
             bool: True if audio is as expected; otherwise, False.
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Is Audio playing as expected with Mixing: {mixer_status} fader: {fader}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Is Audio playing on {port} as expected with Mixing: {mixer_status} fader: {fader}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
@@ -192,30 +191,37 @@ class dsAudio_test23_AssociateMix(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        for stream in self.testStreams:
+        for port,index in self.testdsAudio.getSupportedPorts():
+            # Enable the audio port
+            self.testdsAudio.enablePort(port, index)
 
-            self.log.stepStart(f'Associate Mixing Disabled, Stream: {stream} Fader: 0')
+            for stream in self.testStreams:
 
-            self.testdsAudio.enableAssociateAudioMixig(False)
+                self.log.stepStart(f'Associate Mixing Disabled, Stream: {stream} Fader: 0')
 
-            # Start the stream playback
-            self.testPlayer.play(stream)
+                self.testdsAudio.enableAssociateAudioMixig(False)
 
-            result = self.testVerifyAssociateAudioMix(False, 0, True)
+                # Start the stream playback
+                self.testPlayer.play(stream)
 
-            self.log.stepResult(result, f'Associate Mixing Disabled, Stream: {stream} Fader: 0')
+                result = self.testVerifyAssociateAudioMix(port, False, 0, True)
 
-            for fade in self.faderValues:
-                self.log.stepStart(f'Associate Mixing Stream: {stream} Fader: {fade}')
+                self.log.stepResult(result, f'Associate Mixing Disabled, Stream: {stream} Fader: 0')
 
-                self.testdsAudio.enableAssociateAudioMixig(True, fade)
+                for fade in self.faderValues:
+                    self.log.stepStart(f'Associate Mixing Stream: {stream} Fader: {fade}')
 
-                result = self.testVerifyAssociateAudioMix(True, fade, True)
+                    self.testdsAudio.enableAssociateAudioMixig(True, fade)
 
-                self.log.stepResult(result, f'Associate Mixing Stream: {stream} Fader: {fade}')
+                    result = self.testVerifyAssociateAudioMix(port, True, fade, True)
 
-            # Stop the stream playback
-            self.testPlayer.stop()
+                    self.log.stepResult(result, f'Associate Mixing Stream: {stream} Fader: {fade}')
+
+                # Stop the stream playback
+                self.testPlayer.stop()
+
+            # Disable the audio port
+            self.testdsAudio.disablePort(port, index)
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()

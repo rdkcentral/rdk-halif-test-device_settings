@@ -73,6 +73,9 @@ class dsAudio_test25_AudioMix(utHelperClass):
         # Open Session for player
         self.player_session = self.dut.getConsoleSession("ssh_player")
 
+        # Open Session for secondary player
+        self.secondary_player_session = self.dut.getConsoleSession("ssh_player_secondary")
+
         # Open Session for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
 
@@ -126,9 +129,6 @@ class dsAudio_test25_AudioMix(utHelperClass):
         """
         self.deleteFromDevice(self.testStreams)
 
-        # remove the callback log files
-        self.deleteFromDevice([self.connectionCB, self.formatCB, self.atmosCB])
-
     def testRunPrerequisites(self):
         """
         Executes prerequisite commands listed in the test setup configuration file on the DUT.
@@ -145,11 +145,12 @@ class dsAudio_test25_AudioMix(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyAudio(self, primary_volume, system_volume, manual=False):
+    def testVerifyAudio(self, port, primary_volume, system_volume, manual=False):
         """
         Verifies if the audio is functioning as expected at given volume levels.
 
         Args:
+            port (str) : The audio port to verify.
             primary_volume (int): Primary audio volume level (0-100).
             system_volume (int): System audio volume level (0-100).
             manual (bool, optional): Indicates if manual verification is required. 
@@ -159,7 +160,7 @@ class dsAudio_test25_AudioMix(utHelperClass):
             bool: True if audio plays as expected, otherwise False.
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Is Audio playing as expected with Mixing: Primary Volume: {primary_volume} System Volume: {system_volume}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Is Audio playing on {port} as expected with Mixing: Primary Volume: {primary_volume} System Volume: {system_volume}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
@@ -171,6 +172,7 @@ class dsAudio_test25_AudioMix(utHelperClass):
         This function handles the overall test flow, including:
         - downloading assets
         - running prerequisites
+        - Plays the primary and secondary streams
         - setting audio levels
         - verifying audio output for different combinations of primary and system volumes.
 
@@ -192,24 +194,40 @@ class dsAudio_test25_AudioMix(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        for stream in self.testStreams:
-            # Start the stream playback
-            self.testPlayer.play(stream)
+        for port,index in self.testdsAudio.getSupportedPorts():
+            # Enable the audio port
+            self.testdsAudio.enablePort(port, index)
 
-            for prime in self.primaryVolume:
-                for system in self.systemVolume:
-                    self.log.stepStart(f'Audio Mixing Stream: {stream} Primary Voulem: {prime}, System Volume: {system}')
+            for i in range(0, len(self.testStreams) - 1, 2):
+                primaryStream = self.testStreams[i]
+                systemStream = self.testStreams[i+1]
 
-                    self.testdsAudio.setAudioMixerLevels("dsAUDIO_INPUT_PRIMARY", prime)
+                # Start the stream playback
+                self.testPlayer.play(primaryStream)
 
-                    self.testdsAudio.setAudioMixerLevels("dsAUDIO_INPUT_SYSTEM", system)
+                # TODO: Update the utPlayer class to take additional arguments for the playback
+                self.secondary_player_session.write(f'gst-play-1.0 {systemStream} --audiosink "amlhalasink direct-mode=0"')
 
-                    result = self.testVerifyAudio(prime, system, True)
+                for prime in self.primaryVolume:
+                    for system in self.systemVolume:
+                        self.log.stepStart(f'Audio Mixing Stream: Port:{port} Primary Voulem: {prime}, System Volume: {system}')
 
-                    self.log.stepResult(result, f'Audio Mixing Stream: {stream} Primary Voulem: {prime}, System Volume: {system}')
+                        self.testdsAudio.setAudioMixerLevels("dsAUDIO_INPUT_PRIMARY", prime)
 
-            # Stop the stream playback
-            self.testPlayer.stop()
+                        self.testdsAudio.setAudioMixerLevels("dsAUDIO_INPUT_SYSTEM", system)
+
+                        result = self.testVerifyAudio(port, prime, system, True)
+
+                        self.log.stepResult(result, f'Audio Mixing Stream: Port:{port} Primary Voulem: {prime}, System Volume: {system}')
+
+                # TODO: Update the utPlayer class to take additional arguments for the playback
+                self.secondary_player_session.write("q")
+
+                # Stop the stream playback
+                self.testPlayer.stop()
+
+            # Disable the audio port
+            self.testdsAudio.disablePort(port, index)
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
