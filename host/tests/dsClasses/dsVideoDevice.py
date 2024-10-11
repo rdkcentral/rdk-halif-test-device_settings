@@ -216,7 +216,7 @@ class dsVideoDeviceClass():
             None.
 
         Returns:
-            bool : connection status
+            None
         """
         promptWithAnswers = [
                 {
@@ -236,7 +236,7 @@ class dsVideoDeviceClass():
             None.
 
         Returns:
-            bool : connection status
+            None
         """
         promptWithAnswers = [
                 {
@@ -257,7 +257,7 @@ class dsVideoDeviceClass():
             None.
 
         Returns:
-            bool : connection status
+            None
         """
         promptWithAnswers = [
                 {
@@ -277,7 +277,7 @@ class dsVideoDeviceClass():
             None.
 
         Returns:
-            bool : connection status
+            None
         """
         promptWithAnswers = [
                 {
@@ -309,7 +309,7 @@ class dsVideoDeviceClass():
 
     def getDeviceType(self):
         """
-        Returns the supported audio ports on device.
+        Returns the device type.
 
         Args:
             None.
