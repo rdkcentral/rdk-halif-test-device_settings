@@ -24,9 +24,11 @@
 import os
 import sys
 
+# Append the parent directory to system path for module imports
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path+"/../")
 
+# Import required classes from modules
 from dsClasses.dsVideoPort import dsVideoPortClass
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
@@ -34,6 +36,9 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsVideoPort_test7_ResetToSDRMode(utHelperClass):
+    """
+    Test class for resetting video output to SDR mode and verifying playback.
+    """
 
     testName  = "test7_ResetToSDRMode"
     testSetupPath = dir_path + "/dsVideoPort_L3_testSetup.yml"
@@ -42,7 +47,7 @@ class dsVideoPort_test7_ResetToSDRMode(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test7_ResetToSDRMode test .
+        Initializes the test7_ResetToSDRMode test case with required setup.
 
         Args:
             None.
@@ -127,7 +132,7 @@ class dsVideoPort_test7_ResetToSDRMode(utHelperClass):
                                      Defaults to other verification methods
 
         Returns:
-            bool
+            bool: True if playback is verified successfully, False otherwise.
         """
         if manual == True:
             return self.testUserResponse.getUserYN("Is Video PlayBack is HDR on the port? (Y/N):")
@@ -135,45 +140,57 @@ class dsVideoPort_test7_ResetToSDRMode(utHelperClass):
             #TODO: Add automation verification methods
             return False
 
-    def testFunction(self):
-        """This function will test the Video Ports by enabling and disabling the ports
+    def enablePortAndResetToSDR(self, port, index):
+        """
+        Enables the video port and resets the output to SDR mode.
+
+        Args:
+            port (str): The name of the video port.
+            index (int): The port index.
 
         Returns:
-            bool
+            bool: Result of playback verification.
         """
+        self.log.stepStart(f'Enable {port} Port')
+        self.testdsVideoPort.enablePort(port, index)
 
-        # Download the assets listed in test setup configuration file
+        # Enable HDCP if required for the device
+        if self.testdsVideoPort.getDeviceType():
+            self.testdsVideoPort.enable_HDCP(port, index)
+
+        # Reset output to SDR mode
+        self.testdsVideoPort.resetOutputToSDR(port, index)
+        result = self.testVerifyPlayback(manual=True)
+
+        # Log the verification result
+        self.log.stepResult(not result, "Verified parameters using HDMI Analyzer")
+
+        return result
+
+    def testFunction(self):
+        """
+        Main test function that resets video output to SDR mode and verifies playback.
+
+        Returns:
+            bool: Final test result.
+        """
+        # Download the assets listed in the test setup configuration file
         self.testDownloadAssets()
 
-        # Run Prerequisites listed in the test setup configuration file
+        # Run prerequisites listed in the test setup configuration file
         self.testRunPrerequisites()
 
         # Start the stream playback
         self.testPlayer.play(self.testStreams[0])
 
-        # Create the dsVideoPort class
+        # Create and initialize the dsVideoPort class
         self.testdsVideoPort = dsVideoPortClass(self.deviceProfile, self.hal_session)
 
-        self.log.testStart("test7_ResetToSDRMode", '1')
+        self.log.testStart(self.testName, '1')
 
-        # Initialize the dsVideoPort module
-        #self.testdsVideoPort.initialise()
-
-        # Loop through the supported Video ports
-        for port,index in self.testdsVideoPort.getSupportedPorts():
-            self.log.stepStart(f'Enable {port} Port')
-            self.log.step(f'Enable {port} Port')
-
-            # Enable the Video port
-            self.testdsVideoPort.enablePort(port, index)
-
-            # Enable the HDCP only for source devices
-            if self.testdsVideoPort.getDeviceType():
-                self.testdsVideoPort.enable_HDCP(port, index)
-
-            self.testdsVideoPort.resetOutputToSDR(port, index)
-            result = self.testVerifyPlayback(True)
-            self.log.stepResult(not result, "All parameters verified using HDMI Analyzer")
+        # Loop through supported video ports and verify playback after resetting to SDR mode
+        for port, index in self.testdsVideoPort.getSupportedPorts():
+            result = self.enablePortAndResetToSDR(port, index)
 
         # Stop the stream playback
         self.testPlayer.stop()

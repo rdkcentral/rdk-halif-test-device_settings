@@ -24,9 +24,11 @@
 import os
 import sys
 
+# Get directory path and append to system path
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path+"/../")
 
+# Import required classes from modules
 from dsClasses.dsVideoPort import dsVideoPortClass
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
@@ -34,6 +36,15 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsVideoPort_test2_Check_DisplayConnected_VideoPort(utHelperClass):
+    """
+    A class to test the display connectivity via different video ports.
+
+    Attributes:
+        testName (str): The name of the test.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Module name for the test.
+        rackDevice (str): Device under test.
+    """
 
     testName  = "test2_Check_DisplayConnected_VideoPort"
     testSetupPath = dir_path + "/dsVideoPort_L3_testSetup.yml"
@@ -42,10 +53,10 @@ class dsVideoPort_test2_Check_DisplayConnected_VideoPort(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test2_Check_DisplayConnected_VideoPort test .
+        Initializes the test and sets up sessions and player classes.
 
-        Args:
-            None.
+        Initializes test setup, player, and HAL test sessions, and prepares the
+        user response and device profile paths.
         """
         super().__init__(self.testName, '1')
 
@@ -120,14 +131,14 @@ class dsVideoPort_test2_Check_DisplayConnected_VideoPort(utHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifyDisplay(self, manual=False):
         """
-        Verifies whether the Video&audio displayed or not.
+        Verifies whether video is being displayed or not.
 
         Args:
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            manual (bool, optional): Indicates if manual verification is required.
+                                     Defaults to False (automatic verification).
 
         Returns:
-            bool
+            bool: Verification result (True if the video is displayed, False otherwise).
         """
         if manual == True:
             return self.testUserResponse.getUserYN("Is Video Display on the port? (Y/N):")
@@ -135,65 +146,82 @@ class dsVideoPort_test2_Check_DisplayConnected_VideoPort(utHelperClass):
             #TODO: Add automation verification methods
             return False
 
-    def testFunction(self):
-        """This function will test the Video Ports by enabling and disabling the ports
+    def testEnablePortAndVerify(self, port, index):
+        """
+        Enables a video port and verifies video output.
+
+        Args:
+            port (str): The video port to be enabled.
+            index (int): The index of the video port.
 
         Returns:
-            bool
+            bool: The result of the video port verification.
         """
+        # Enable video port
+        self.log.stepStart(f'Enable {port} Port')
+        self.testdsVideoPort.enablePort(port, index)
 
-        # Download the assets listed in test setup configuration file
-        self.testDownloadAssets()
+        # Enable HDCP for source devices
+        if self.testdsVideoPort.getDeviceType():
+            self.testdsVideoPort.enable_HDCP(port, index)
 
-        # Run Prerequisites listed in the test setup configuration file
-        self.testRunPrerequisites()
+        # Verify video display
+        self.log.step(f'Verify {port} Port')
+        result = self.testVerifyDisplay(True)
+        self.log.stepResult(result, f'VideoPort Verification {port} Port')
+        return result
 
-        # Start the stream playback
-        self.testPlayer.play(self.testStreams[0])
+    def testDisablePortAndVerify(self, port, index):
+        """
+        Disables a video port and verifies that no video is displayed.
 
-        # Create the dsVideoPort class
+        Args:
+            port (str): The video port to be disabled.
+            index (int): The index of the video port.
+
+        Returns:
+            bool: The result of the video port disable verification.
+        """
+        self.log.stepStart(f'Disable {port} Port')
+        self.testdsVideoPort.disablePort(port, index)
+
+        # Verify that the video is no longer displayed
+        self.log.step(f'Verify {port} Port')
+        result = not self.testVerifyDisplay(True)
+        self.log.stepResult(result, f'VideoPort Disable Verification {port} Port')
+        return result
+
+    def testFunction(self):
+        """
+        The main test function that checks display connectivity by enabling and disabling video ports.
+
+        This function downloads assets, runs prerequisites, enables/disables ports, and verifies
+        display connectivity for each port.
+
+        Returns:
+            bool: The result of the final video verification.
+        """
+        self.testDownloadAssets()  # Download required assets
+        self.testRunPrerequisites()  # Run test prerequisites
+        self.testPlayer.play(self.testStreams[0])  # Start playback
+
+        # Create the dsVideoPort class and initialize if sink device
         self.testdsVideoPort = dsVideoPortClass(self.deviceProfile, self.hal_session)
-
-        self.log.testStart("test2_Check_DisplayConnected_VideoPort", '1')
-
-        # Initialize the dsVideoPort module only for sink
+        self.log.testStart(self.testName, '1')
         if not self.testdsVideoPort.getDeviceType():
             self.testdsVideoPort.initialise()
 
-        # Loop through the supported Video ports
-        for port,index in self.testdsVideoPort.getSupportedPorts():
-            self.log.stepStart(f'Enable {port} Port')
-            self.log.step(f'Enable {port} Port')
+        # Loop through supported video ports and verify connectivity
+        for port, index in self.testdsVideoPort.getSupportedPorts():
+            # Enable and verify the video port
+            result = self.testEnablePortAndVerify(port, index)
 
-            # Enable the Video port
-            self.testdsVideoPort.enablePort(port, index)
+            # Disable and verify the video port
+            result = result and self.testDisablePortAndVerify(port, index)
 
-            # Enable the HDCP only for source devices
-            if self.testdsVideoPort.getDeviceType():
-                self.testdsVideoPort.enable_HDCP(port, index)
-
-            self.log.step(f'Verify {port} Port')
-            result = self.testVerifyDisplay(True)
-
-            self.log.stepResult(result, f'VideoPort Verification {port} Port')
-            self.log.stepStart(f'Disable {port} Port')
-
-            # Disable the Video port
-            self.testdsVideoPort.disablePort(port, index)
-
-            self.log.step(f'Verify {port} Port')
-            result = self.testVerifyDisplay(True)
-
-            self.log.stepResult(not result, f'Video Verification {port} Port')
-
-        # Stop the stream playback
-        self.testPlayer.stop()
-
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
-
-        # Delete the dsVideoPort class
-        del self.testdsVideoPort
+        self.testPlayer.stop()  # Stop playback
+        self.testCleanAssets()  # Clean up assets
+        del self.testdsVideoPort  # Clean up the video port class
 
         return result
 

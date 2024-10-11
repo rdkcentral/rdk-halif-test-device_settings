@@ -126,16 +126,53 @@ class dsVideoPortClass():
         self.menuSession   = session
         self.utMenu.start()
 
-    def extract_output_values(self,result: str,out_pattern:str=r'OUT:[\w_]+:\[([\w_]+)\]'):
+    def extract_output_values(self, result: str, out_pattern: str = r'OUT:[\w_]+:\[([\w_]+)\]') -> list:
+        """
+        Extracts values from a given result string based on a specified pattern.
 
-        # Find all matches in the result string
+        This method uses a regular expression to find and extract relevant output
+        values from the provided result string. It is particularly useful for
+        parsing structured output from commands or logs.
+
+        Args:
+            result (str): The input string from which to extract values.
+                        This string typically contains multiple lines of output.
+            out_pattern (str, optional): The regex pattern to use for matching
+                                        the desired output values. Defaults to
+                                        a pattern that captures values in the
+                                        format 'OUT:<identifier>:[<value>]'.
+
+        Returns:
+            list: A list of extracted values that match the specified pattern.
+
+        Example:
+            extracted_values = extract_output_values(result="OUT:Example:[Value1]\nOUT:Example:[Value2]")
+        """
+
+        # Find all matches in the result string using the provided pattern
         out_values = re.findall(out_pattern, result, re.MULTILINE)
-        # Store the extracted values in a list
-        output_list = list(out_values)
-        return output_list
 
-    def read_Callbacks(self,input_str: str):
+        # Return the extracted values as a list
+        return list(out_values)
 
+
+    def read_Callbacks(self, input_str: str) -> str:
+        """
+        Reads data from the menu session until a specified input string is encountered.
+
+        This method is useful for capturing output or response data from the menu session
+        until a predefined string is reached, which can be important for synchronizing
+        interactions or processing command outputs.
+
+        Args:
+            input_str (str): The string that indicates where to stop reading from the session.
+
+        Returns:
+            str: The data read from the session up to the specified input string.
+
+        Example:
+            output = read_Callbacks("EndOfResponse")
+        """
         result = self.menuSession.read_until(input_str)
         return result
 
@@ -156,12 +193,15 @@ class dsVideoPortClass():
         Enables the specified Video port.
 
         Args:
-            video_port (int): video port enum value
-            port_index (int): port index
-            arc_type (int, optional): Type of ARC. Defaults to eArc.
+        video_port (int): The enumeration value representing the video port to enable.
+                           Refer to the appropriate enum for valid options.
+        port_index (int, optional): The index of the specific port to enable. Defaults to 0.
 
         Returns:
             None
+
+        Example:
+            enablePort(video_port=dsVIDEOPORT_TYPE_HDMI, port_index=1)
         """
         promptWithAnswers = [
             {
@@ -176,6 +216,7 @@ class dsVideoPortClass():
             }
         ]
 
+        # Convert input arguments to strings and update the prompts
         promptWithAnswers[0]["input"] = str(video_port)
         promptWithAnswers[1]["input"] = str(port_index)
 
@@ -186,10 +227,15 @@ class dsVideoPortClass():
         Disable the specified Video port.
 
         Args:
-            video_port (str): name of the video port. Refer dsVideoPortType enum
+        video_port (int): The enumeration value representing the video port to enable.
+                           Refer to the appropriate enum for valid options.
+        port_index (int, optional): The index of the specific port to enable. Defaults to 0.
 
         Returns:
             None
+
+        Example:
+        disablePort(video_port=dsVIDEOPORT_TYPE_HDMI, port_index=1)
         """
         promptWithAnswers = [
             {
@@ -204,6 +250,7 @@ class dsVideoPortClass():
             }
         ]
 
+        # Convert input arguments to strings and update the prompts
         promptWithAnswers[0]["input"] = str(video_port)
         promptWithAnswers[1]["input"] = str(port_index)
 
@@ -211,13 +258,22 @@ class dsVideoPortClass():
 
     def select_HdmiPreference(self,video_port:int, port_index:int=0,hdcp_version:int=0):
         """
-            Sets the preferred HDMI Protocol of the specified video port.
+        Sets the preferred HDMI protocol for the specified video port.
 
-            Args:
-                video_port (str): name of the video port. Refer dsVideoPortType enum
+        This method allows the user to select the HDMI version for the given video port,
+        which may include various HDCP (High-bandwidth Digital Content Protection) versions.
 
-            Returns:
-                None
+        Args:
+            video_port (int): The enumeration value representing the video port.
+                            Refer to the dsVideoPortType enum for valid options.
+            port_index (int, optional): The index of the specific port to configure. Defaults to 0.
+            hdcp_version (int, optional): The HDCP version to be set. Defaults to 0.
+
+        Returns:
+            None
+
+        Example:
+            select_HdmiPreference(video_port=dsVIDEOPORT_TYPE_HDMI, port_index=0, hdcp_version=1)
         """
         promptWithAnswers = [
             {
@@ -237,6 +293,7 @@ class dsVideoPortClass():
             }
         ]
 
+        # Convert input arguments to strings and update the prompts
         promptWithAnswers[0]["input"] = str(video_port)
         promptWithAnswers[1]["input"] = str(port_index)
         promptWithAnswers[2]["input"] = str(hdcp_version)
@@ -245,14 +302,21 @@ class dsVideoPortClass():
 
     def enable_HDCP(self,video_port:int, port_index:int=0):
         """
-            Enable the HDCP for the specified Video port.
+        Enables HDCP (High-bandwidth Digital Content Protection) for the specified video port.
 
-            Args:
-                video_port (str): name of the video port. Refer dsVideoPortType enum
-                port_index (str): Index of the video device
+        This method allows the user to enable HDCP, which is crucial for protecting digital content
+        during transmission over HDMI connections.
 
-            Returns:
-                None
+        Args:
+            video_port (int): The enumeration value representing the video port.
+                            Refer to the dsVideoPortType enum for valid options.
+            port_index (int, optional): The index of the specific port to configure. Defaults to 0.
+
+        Returns:
+            None
+
+        Example:
+            enable_HDCP(video_port=dsVIDEOPORT_TYPE_HDMI, port_index=0)
         """
         promptWithAnswers = [
             {
@@ -267,6 +331,7 @@ class dsVideoPortClass():
             }
         ]
 
+        # Convert input arguments to strings and update the prompts
         promptWithAnswers[0]["input"] = str(video_port)
         promptWithAnswers[1]["input"] = str(port_index)
 
@@ -275,14 +340,21 @@ class dsVideoPortClass():
 
     def disable_HDCP(self,video_port:int, port_index:int=0):
         """
-            Disable the HDCP for the specified Video port.
+        Disables HDCP (High-bandwidth Digital Content Protection) for the specified video port.
 
-            Args:
-                video_port (str): name of the video port. Refer dsVideoPortType enum
-                port_index (str): Index of the video device
+        This method allows users to disable HDCP, which is useful when you need to bypass
+        content protection for testing or troubleshooting purposes.
 
-            Returns:
-                None
+        Args:
+            video_port (int): The enumeration value representing the video port.
+                            Refer to the dsVideoPortType enum for valid options.
+            port_index (int, optional): The index of the specific port to configure. Defaults to 0.
+
+        Returns:
+            None
+
+        Example:
+            disable_HDCP(video_port=dsVIDEOPORT_TYPE_HDMI, port_index=0)
         """
         promptWithAnswers = [
             {
@@ -297,6 +369,7 @@ class dsVideoPortClass():
             }
         ]
 
+        # Convert input arguments to strings and update the prompts
         promptWithAnswers[0]["input"] = str(video_port)
         promptWithAnswers[1]["input"] = str(port_index)
 
@@ -305,15 +378,34 @@ class dsVideoPortClass():
 
     def select_Resolution(self,video_port:int, port_index:int=0, resolution: dict = None ):
         """
-             sets the resolution of the specified Video port.
+        Sets the resolution of the specified video port.
 
-            Args: #todo
-                video_port (str) : name of the video port. Refer dsVideoPortType enum
-                port_index (str) : Index of the video device
-                video_resolution :
+        This method configures the resolution settings for a video port, including pixel resolution,
+        aspect ratio, stereoscopic mode, frame rate, and scan mode. It provides options based on
+        the specified parameters or defaults to predefined values if not provided.
 
-            Returns:
-                None
+        Args:
+            video_port (int): The enumeration value representing the video port.
+                            Refer to the dsVideoPortType enum for valid options.
+            port_index (int, optional): The index of the specific port to configure. Defaults to 0.
+            resolution (dict, optional): A dictionary containing resolution settings:
+                - "pixelResolution" (str): Desired pixel resolution (e.g., 'dsVIDEO_PIXELRES_1920x1080').
+                - "aspectRatio" (str): Desired aspect ratio (e.g., 'dsVIDEO_ASPECT_RATIO_16x9').
+                - "stereoScopicMode" (str): Desired stereoscopic mode (e.g., 'dsVIDEO_SSMODE_2D').
+                - "frameRate" (str): Desired frame rate (e.g., 'dsVIDEO_FRAMERATE_24').
+                - "interlaced" (str): Desired scan mode (e.g., 'dsVIDEO_SCANMODE_INTERLACED').
+
+        Returns:
+            None
+
+        Example:
+            select_Resolution(video_port=dsVIDEOPORT_TYPE_HDMI, port_index=0, resolution={
+                "pixelResolution": "dsVIDEO_PIXELRES_3840x2160",
+                "aspectRatio": "dsVIDEO_ASPECT_RATIO_16x9",
+                "stereoScopicMode": "dsVIDEO_SSMODE_3D",
+                "frameRate": "dsVIDEO_FRAMERATE_60",
+                "interlaced": "dsVIDEO_SCANMODE_PROGRESSIVE"
+            })
         """
         promptWithAnswers = [
             {
@@ -355,6 +447,8 @@ class dsVideoPortClass():
             }
         )
         """
+
+        # Convert input arguments to strings and update the prompts
         promptWithAnswers[0]["input"] = str(video_port)
         promptWithAnswers[1]["input"] = str(port_index)
 
@@ -396,14 +490,24 @@ class dsVideoPortClass():
 
     def select_HDRModes(self,video_port:int, port_index:int=0,hdr_mode:int=0):
         """
-            Sets/reset the force HDR mode for the specified video port.
+        Sets or resets the HDR mode for the specified video port.
 
-            Args:
-                video_port (str): name of the video port. Refer dsVideoPortType enum
-                port_index (str): Index of the video device
+        This method allows you to configure the High Dynamic Range (HDR) settings
+        for a particular video port, which may enhance the visual experience
+        by adjusting brightness and color settings.
 
-            Returns:
-                None
+        Args:
+            video_port (int): The enumeration value representing the video port.
+                            Refer to the dsVideoPortType enum for valid options.
+            port_index (int, optional): The index of the specific port to configure. Defaults to 0.
+            hdr_mode (int, optional): The desired HDR mode.
+                                    Refer to the dsHDRSTANDARD enum for valid options.
+
+        Returns:
+            None
+
+        Example:
+            select_HDRModes(video_port=dsVIDEOPORT_TYPE_HDMI, port_index=0, hdr_mode=dsHDRSTANDARD_HDR10)
         """
         promptWithAnswers = [
             {
@@ -423,6 +527,7 @@ class dsVideoPortClass():
             }
         ]
 
+        # Convert input arguments to strings and update the prompts
         promptWithAnswers[0]["input"] = str(video_port)
         promptWithAnswers[1]["input"] = str(port_index)
         promptWithAnswers[2]["input"] = str(hdr_mode)
@@ -431,14 +536,22 @@ class dsVideoPortClass():
 
     def resetOutputToSDR(self,video_port:int, port_index:int=0):
         """
-            resets the video output to SDR.
+        Resets the video output to Standard Dynamic Range (SDR) for the specified video port.
 
-            Args:
-                video_port (str): name of the video port. Refer dsVideoPortType enum
-                port_index (str): Index of the video device
+        This method allows you to revert the current video output settings to SDR,
+        which is a common display standard. This can be useful for compatibility
+        with various devices and content that do not support High Dynamic Range (HDR).
 
-            Returns:
-                None
+        Args:
+            video_port (int): The enumeration value representing the video port.
+                            Refer to the dsVideoPortType enum for valid options.
+            port_index (int, optional): The index of the specific port to reset. Defaults to 0.
+
+        Returns:
+            None
+
+        Example:
+            resetOutputToSDR(video_port=dsVIDEOPORT_TYPE_HDMI, port_index=0)
         """
         promptWithAnswers = [
             {
@@ -453,6 +566,7 @@ class dsVideoPortClass():
             }
         ]
 
+        # Convert input arguments to strings and update the prompts
         promptWithAnswers[0]["input"] = str(video_port)
         promptWithAnswers[1]["input"] = str(port_index)
 
@@ -461,14 +575,23 @@ class dsVideoPortClass():
 
     def select_PreferredColorDepth(self,video_port:int, port_index:int=0,color_depth:int=0):
         """
-            set the preferred color depth for the specified Video port..
+        Sets the preferred color depth for the specified video port.
 
-            Args:
-                video_port (str): name of the video port. Refer dsVideoPortType enum
-                port_index (str): Index of the video device
+        This method allows you to configure the color depth of a video port,
+        which can affect the quality of the video output. Higher color depths
+        enable more colors and smoother gradients, enhancing visual quality.
 
-            Returns:
-                None
+        Args:
+            video_port (int): The enumeration value representing the video port.
+                            Refer to the dsVideoPortType enum for valid options.
+            port_index (int, optional): The index of the specific port to configure. Defaults to 0.
+            color_depth (int, optional): The desired color depth to set. Defaults to 0.
+
+        Returns:
+            None
+
+        Example:
+            select_PreferredColorDepth(video_port=dsVIDEOPORT_TYPE_HDMI, port_index=0, color_depth=dsDISPLAY_COLORDEPTH_8BIT)
         """
         promptWithAnswers = [
             {
@@ -488,6 +611,7 @@ class dsVideoPortClass():
             }
         ]
 
+        # Convert input arguments to strings and update the prompts
         promptWithAnswers[0]["input"] = str(video_port)
         promptWithAnswers[1]["input"] = str(port_index)
         promptWithAnswers[2]["input"] = str(color_depth)
@@ -496,14 +620,24 @@ class dsVideoPortClass():
 
     def select_BackgroundColor(self,video_port:int, port_index:int=0,background_color:int=0):
         """
-             sets the background color of the specified video port
+        Sets the background color of the specified video port.
 
-            Args:
-                video_port (str): name of the video port. Refer dsVideoPortType enum
-                port_index (str): Index of the video device
+        This method allows you to configure the background color for a video port,
+        which can enhance the visual experience or provide a specific aesthetic
+        based on the content being displayed.
 
-            Returns:
-                None
+        Args:
+            video_port (int): The enumeration value representing the video port.
+                            Refer to the dsVideoPortType enum for valid options.
+            port_index (int, optional): The index of the specific port to configure. Defaults to 0.
+            background_color (int, optional): The desired background color to set.
+                                            Defaults to 0.
+
+        Returns:
+            None
+
+        Example:
+            select_BackgroundColor(video_port=dsVIDEOPORT_TYPE_HDMI, port_index=0, background_color=dsVIDEO_BGCOLOR_BLUE)
         """
         promptWithAnswers = [
             {
@@ -523,6 +657,7 @@ class dsVideoPortClass():
             }
         ]
 
+        # Convert input arguments to strings and update the prompts
         promptWithAnswers[0]["input"] = str(video_port)
         promptWithAnswers[1]["input"] = str(port_index)
         promptWithAnswers[2]["input"] = str(background_color)
@@ -531,15 +666,29 @@ class dsVideoPortClass():
 
     def getCurrentOutputSettings(self,video_port:int, port_index:int=0):
         """
-            Gets current color space setting, color depth, matrix coefficients, video Electro-Optical Transfer Function (EOT)
-            and  quantization range in one call of the specified video port
+        Retrieves the current output settings for a specified video port.
 
-            Args:
-                video_port (str): name of the video port. Refer dsVideoPortType enum
-                port_index (str): Index of the video device
+        This method fetches various output parameters for a given video port, including:
+        - Color space setting
+        - Color depth
+        - Matrix coefficients
+        - Video Electro-Optical Transfer Function (EOTF)
+        - Quantization range
 
-            Returns:
+        Args:
+            video_port (int): The identifier of the video port. Refer to the `dsVideoPortType` enumeration for valid values.
+            port_index (int, optional): The index of the video device. Defaults to 0.
 
+        Returns:
+            list: A list of output settings extracted from the selected video port. The list includes:
+                - Current color space
+                - Current color depth
+                - Current matrix coefficients
+                - Current EOTF
+                - Current quantization range
+
+        Example:
+            output_settings = getCurrentOutputSettings(video_port=dsVIDEOPORT_TYPE_HDMI, port_index=1)
         """
         promptWithAnswers = [
             {
@@ -554,24 +703,39 @@ class dsVideoPortClass():
             }
         ]
 
+        # Convert input arguments to strings and update the prompts
         promptWithAnswers[0]["input"] = str(video_port)
         promptWithAnswers[1]["input"] = str(port_index)
 
         result = self.utMenu.select(self.testSuite, "Get CurrentOutputSettings", promptWithAnswers)
+
+        # Extract and return the output values from the result
         output_list = self.extract_output_values(result)
         return output_list
 
     def getResolution(self,video_port:int, port_index:int=0):
         """
-            Gets the display resolution of specified video port.
+        Retrieves the display resolution of the specified video port.
 
-            Args:
-                video_port (str): name of the video port. Refer dsVideoPortType enum
-                port_index (str): Index of the video device
+        This method allows the user to obtain the current resolution settings
+        of a particular video output, which is useful for ensuring compatibility
+        with display devices or for troubleshooting display issues.
 
-            Returns:
+        Args:
+            video_port (int): The enumeration value representing the video port.
+                            Refer to the dsVideoPortType enum for valid options.
+            port_index (int, optional): The index of the specific port to query.
+                                        Defaults to 0.
 
+        Returns:
+            list: A list containing the current resolution settings, including
+                width, height, and possibly other related information.
+
+        Example:
+            resolution = getResolution(video_port=dsVIDEOPORT_TYPE_HDMI, port_index=0)
         """
+
+        # Prepare prompts for user input to select the video port and index
         promptWithAnswers = [
             {
                 "query_type": "list",
@@ -585,11 +749,15 @@ class dsVideoPortClass():
             }
         ]
 
+        # Convert input arguments to strings and update the prompts
         promptWithAnswers[0]["input"] = str(video_port)
         promptWithAnswers[1]["input"] = str(port_index)
 
         result = self.utMenu.select(self.testSuite, "Get Resolution", promptWithAnswers)
+
+        # Extract and return the output values from the result
         output_list = self.extract_output_values(result)
+
         return output_list
 
     def getVideoEOTF(self,video_port:int, port_index:int=0):
@@ -597,11 +765,14 @@ class dsVideoPortClass():
             Gets the display resolution of specified video port.
 
             Args:
-                video_port (str): name of the video port. Refer dsVideoPortType enum
-                port_index (str): Index of the video device
+            video_port (int): Enum value representing the video port. Refer to dsVideoPortType.
+            port_index (int, optional): The index of the video device. Defaults to 0.
 
-            Returns:
+        Returns:
+            list: A list of EOTF settings retrieved for the specified video port.
 
+        Example:
+            eotf_settings = getVideoEOTF(video_port=1)
         """
         promptWithAnswers = [
             {
@@ -616,23 +787,34 @@ class dsVideoPortClass():
             }
         ]
 
+        # Convert input arguments to strings and update the prompts
         promptWithAnswers[0]["input"] = str(video_port)
         promptWithAnswers[1]["input"] = str(port_index)
 
+        # Select the desired video EOTF settings using the menu interface
         result = self.utMenu.select(self.testSuite, "Get VideoEOTF", promptWithAnswers)
+
+        # Extract and return the output values from the result
         output_list = self.extract_output_values(result)
+
         return output_list
 
     def isOutputHDR(self,video_port:int, port_index:int=0):
         """
-            checks if the video output is HDR or not.
+        Checks whether the video output for the specified video port is in HDR format.
 
-            Args:
-                video_port (str): name of the video port. Refer dsVideoPortType enum
-                port_index (str): Index of the video device
+        This method verifies if the output signal from the video port is High Dynamic Range (HDR),
+        which enhances the contrast and color range compared to standard video output.
 
-            Returns:
+        Args:
+            video_port (int): Enum value representing the video port. Refer to dsVideoPortType.
+            port_index (int, optional): The index of the video device. Defaults to 0.
 
+        Returns:
+            bool: True if the video output is HDR, False otherwise.
+
+        Example:
+            is_hdr = isOutputHDR(video_port=1)
         """
         promptWithAnswers = [
             {
@@ -650,20 +832,30 @@ class dsVideoPortClass():
         promptWithAnswers[0]["input"] = str(video_port)
         promptWithAnswers[1]["input"] = str(port_index)
 
+        # Check the output HDR status using the menu interface
         result = self.utMenu.select(self.testSuite, "IsOutputHDR", promptWithAnswers)
+
+        # Extract the output values to determine HDR status
         output_list = self.extract_output_values(result)
-        return output_list
+
+        return bool(output_list)
 
     def getHDCPStatus(self,video_port:int, port_index:int=0):
         """
-            Gets the current HDCP status of the specified video port.
+        Retrieves the current HDCP (High-bandwidth Digital Content Protection) status for the specified video port.
 
-            Args:
-                video_port (str): name of the video port. Refer dsVideoPortType enum
-                port_index (str): Index of the video device
+        HDCP is used to protect content being transmitted over digital interfaces. This method checks the status 
+        of HDCP on the selected video port.
 
-            Returns:
+        Args:
+            video_port (int): Enum value representing the video port. Refer to dsVideoPortType for valid options.
+            port_index (int, optional): The index of the video device. Defaults to 0.
 
+        Returns:
+            list: A list of extracted values related to HDCP status.
+
+        Example:
+            hdcp_status = getHDCPStatus(video_port=1, port_index=0)
         """
         promptWithAnswers = [
             {
@@ -678,24 +870,35 @@ class dsVideoPortClass():
             }
         ]
 
+        # Update the prompt inputs with provided arguments
         promptWithAnswers[0]["input"] = str(video_port)
         promptWithAnswers[1]["input"] = str(port_index)
 
+        # Select and execute the command to get HDCP status
         result = self.utMenu.select(self.testSuite, "Get HDCPStatus", promptWithAnswers)
+
+        # Extract relevant output values
         output_list = self.extract_output_values(result)
+
         return output_list
 
     def getHDCPCurrentProtocol(self,video_port:int, port_index:int=0):
         """
-            Gets the current negotiated HDCP protocol version.
+        Retrieves the currently negotiated HDCP (High-bandwidth Digital Content Protection) protocol version for the specified video port.
 
-            Args:
-                video_port (str): name of the video port. Refer dsVideoPortType enum
-                port_index (str): Index of the video device
+        This method queries the HDCP version (e.g., HDCP 1.4, HDCP 2.2) that is actively negotiated on the selected video output.
 
-            Returns:
+        Args:
+            video_port (int): Enum value representing the video port. Refer to the dsVideoPortType for valid values.
+            port_index (int, optional): Index of the video device. Defaults to 0.
 
+        Returns:
+            list: A list containing the current HDCP protocol version information.
+
+        Example:
+            hdcp_protocol = getHDCPCurrentProtocol(video_port=1)
         """
+        # Define the prompt structure for user selection
         promptWithAnswers = [
             {
                 "query_type": "list",
@@ -709,24 +912,35 @@ class dsVideoPortClass():
             }
         ]
 
+        # Update the prompts with provided arguments
         promptWithAnswers[0]["input"] = str(video_port)
         promptWithAnswers[1]["input"] = str(port_index)
 
+        # Execute the command to retrieve HDCP protocol information
         result = self.utMenu.select(self.testSuite, "Get HDCPCurrentProtocol", promptWithAnswers)
+
+        # Extract relevant output values using a helper function
         output_list = self.extract_output_values(result)
+
         return output_list
 
     def getHdmiPreference(self,video_port:int, port_index:int=0):
         """
-            Gets the preferred HDMI Protocol version of specified video port.
+        Retrieves the preferred HDMI protocol version for the specified video port.
 
-            Args:
-                video_port (str): name of the video port. Refer dsVideoPortType enum
-                port_index (str): Index of the video device
+        This method queries the preferred HDMI protocol version (e.g., HDMI 1.4, HDMI 2.0) configured for the selected video port.
 
-            Returns:
+        Args:
+            video_port (int): Enum value representing the video port. Refer to the dsVideoPortType for valid values.
+            port_index (int, optional): Index of the video device. Defaults to 0.
 
+        Returns:
+            list: A list containing the preferred HDMI protocol version information.
+
+        Example:
+            hdmi_preference = getHdmiPreference(video_port=1)
         """
+        # Define the prompt structure for user selection
         promptWithAnswers = [
             {
                 "query_type": "list",
@@ -740,24 +954,35 @@ class dsVideoPortClass():
             }
         ]
 
+        # Update the prompts with provided arguments
         promptWithAnswers[0]["input"] = str(video_port)
         promptWithAnswers[1]["input"] = str(port_index)
 
+        # Execute the command to retrieve the preferred HDMI protocol version
         result = self.utMenu.select(self.testSuite, "Get HdmiPreference", promptWithAnswers)
+
+        # Extract relevant output values using a helper function
         output_list = self.extract_output_values(result)
+
         return output_list
 
     def getColorSpace(self,video_port:int, port_index:int=0):
         """
-            Gets the color space setting of specified video port.
+        Retrieves the color space setting of the specified video port.
 
-            Args:
-                video_port (str): name of the video port. Refer dsVideoPortType enum
-                port_index (str): Index of the video device
+        This method fetches the current color space configuration (e.g., RGB, YUV) for the provided video port.
 
-            Returns:
+        Args:
+            video_port (int): Enum value representing the video port. Refer to dsVideoPortType enum for valid values.
+            port_index (int, optional): Index of the video device. Defaults to 0.
 
+        Returns:
+            list: A list containing the color space information.
+
+        Example:
+            color_space = getColorSpace(video_port=1)
         """
+        # Define the prompt structure for user selection
         promptWithAnswers = [
             {
                 "query_type": "list",
@@ -771,24 +996,34 @@ class dsVideoPortClass():
             }
         ]
 
+        # Update the prompts with provided arguments
         promptWithAnswers[0]["input"] = str(video_port)
         promptWithAnswers[1]["input"] = str(port_index)
 
+        # Execute the command to retrieve the color space setting
         result = self.utMenu.select(self.testSuite, "Get ColorSpace", promptWithAnswers)
+
+        # Extract relevant output values using the helper function
         output_list = self.extract_output_values(result)
         return output_list
 
     def getColorDepth(self,video_port:int, port_index:int=0):
         """
-            Gets the color depth value of specified video port.
+        Retrieves the color depth value of the specified video port.
 
-            Args:
-                video_port (str): name of the video port. Refer dsVideoPortType enum
-                port_index (str): Index of the video device
+        This function fetches the current color depth setting (e.g., 8-bit, 10-bit) for the provided video port.
 
-            Returns:
+        Args:
+            video_port (int): Enum value representing the video port. Refer to the dsVideoPortType enum for valid options.
+            port_index (int, optional): Index of the video device. Defaults to 0.
 
+        Returns:
+            list: A list containing the color depth information.
+
+        Example:
+            color_depth = getColorDepth(video_port=1)
         """
+        # Define prompts for user interaction
         promptWithAnswers = [
             {
                 "query_type": "list",
@@ -802,24 +1037,33 @@ class dsVideoPortClass():
             }
         ]
 
+        # Update prompts based on provided arguments
         promptWithAnswers[0]["input"] = str(video_port)
         promptWithAnswers[1]["input"] = str(port_index)
 
+        # Retrieve the color depth information by executing the menu command
         result = self.utMenu.select(self.testSuite, "Get ColorDepth", promptWithAnswers)
+
+        # Extract the relevant output values using the helper function
         output_list = self.extract_output_values(result)
         return output_list
 
     def getHDCPReceiverProtocol(self,video_port:int, port_index:int=0):
         """
-            Gets the HDCP protocol version of the connected sink device.
+        Retrieves the HDCP (High-bandwidth Digital Content Protection) protocol version
+        used by the connected sink device on the specified video port.
 
-            Args:
-                video_port (str): name of the video port. Refer dsVideoPortType enum
-                port_index (str): Index of the video device
+        Args:
+            video_port (int): Enum value representing the video port. Refer to the dsVideoPortType enum.
+            port_index (int, optional): Index of the video device. Defaults to 0.
 
-            Returns:
+        Returns:
+            list: A list containing the HDCP protocol version used by the connected receiver.
 
+        Example:
+            hdcp_protocol = getHDCPReceiverProtocol(video_port=1)
         """
+        # Define the prompts for querying the HDCP receiver protocol
         promptWithAnswers = [
             {
                 "query_type": "list",
@@ -833,24 +1077,35 @@ class dsVideoPortClass():
             }
         ]
 
+        # Update prompts based on the provided arguments
         promptWithAnswers[0]["input"] = str(video_port)
         promptWithAnswers[1]["input"] = str(port_index)
 
+        # Execute the command to get the HDCP receiver protocol
         result = self.utMenu.select(self.testSuite, "Get HDCPReceiverProtocol", promptWithAnswers)
+
+        # Extract the protocol version from the result
         output_list = self.extract_output_values(result)
+
         return output_list
 
     def getIgnoreEDIDStatus(self,video_port:int, port_index:int=0):
         """
-            Gets the IgnoreEDID status variable set in the device.
+        Retrieves the IgnoreEDID status for the specified video port. The IgnoreEDID flag indicates
+        whether the device is ignoring the Extended Display Identification Data (EDID) provided by the sink.
 
-            Args:
-                video_port (str): name of the video port. Refer dsVideoPortType enum
-                port_index (str): Index of the video device
+        Args:
+            video_port (int): Enum value representing the video port. Refer to the dsVideoPortType enum.
+            port_index (int, optional): Index of the video device. Defaults to 0.
 
-            Returns:
+        Returns:
+            list: A list containing the IgnoreEDID status of the device.
 
+        Example:
+            edid_status = getIgnoreEDIDStatus(video_port=1)
         """
+
+        # Define prompts for querying IgnoreEDID status
         promptWithAnswers = [
             {
                 "query_type": "list",
@@ -864,24 +1119,33 @@ class dsVideoPortClass():
             }
         ]
 
+        # Update prompts based on the provided arguments
         promptWithAnswers[0]["input"] = str(video_port)
         promptWithAnswers[1]["input"] = str(port_index)
 
+        # Extract the protocol version from the result
         result = self.utMenu.select(self.testSuite, "Get IgnoreEDIDStatus", promptWithAnswers)
+
+        # Extract and return the output values from the result
         output_list = self.extract_output_values(result)
+
         return output_list
 
     def getPreferredColorDepth(self,video_port:int, port_index:int=0):
         """
-            Gets the preferred color depth values.
+        Retrieves the preferred color depth setting for the specified video port.
 
-            Args:
-                video_port (str): name of the video port. Refer dsVideoPortType enum
-                port_index (str): Index of the video device
+        Args:
+            video_port (int): Enum value representing the video port. Refer to dsVideoPortType enum.
+            port_index (int, optional): Index of the video device. Defaults to 0.
 
-            Returns:
+        Returns:
+            list: A list containing the preferred color depth values.
 
+        Example:
+            color_depth = getPreferredColorDepth(video_port=1)
         """
+        # Define prompt structure to get preferred color depth
         promptWithAnswers = [
             {
                 "query_type": "list",
@@ -895,11 +1159,16 @@ class dsVideoPortClass():
             }
         ]
 
+        # Update the prompts based on function arguments
         promptWithAnswers[0]["input"] = str(video_port)
         promptWithAnswers[1]["input"] = str(port_index)
 
+        # Run the query and get the result
         result = self.utMenu.select(self.testSuite, "Get PreferredColorDepth", promptWithAnswers)
+
+        # Extract and return the output list
         output_list = self.extract_output_values(result)
+
         return output_list
 
     def terminate(self):

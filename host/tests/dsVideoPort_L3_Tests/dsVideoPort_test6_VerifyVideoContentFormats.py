@@ -24,9 +24,11 @@
 import os
 import sys
 
+# Append the parent directory to system path for module imports
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path+"/../")
 
+# Import required classes from modules
 from dsClasses.dsVideoPort import dsVideoPortClass
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
@@ -34,6 +36,9 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsVideoPort_test6_VerifyVideoContentFormats(utHelperClass):
+    """
+    Test class for verifying video content formats on supported video ports.
+    """
 
     testName  = "test6_VerifyVideoContentFormats"
     testSetupPath = dir_path + "/dsVideoPort_L3_testSetup.yml"
@@ -42,7 +47,7 @@ class dsVideoPort_test6_VerifyVideoContentFormats(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test6_VerifyVideoContentFormats test .
+        Initializes the test6_VerifyVideoContentFormats test case with required setup.
 
         Args:
             None.
@@ -119,7 +124,7 @@ class dsVideoPort_test6_VerifyVideoContentFormats(utHelperClass):
                                      Defaults to other verification methods
 
         Returns:
-            bool
+            bool: True if verification successful, False otherwise.
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f'is {hdr_mode} displayed on Analyzer (Y/N): ')
@@ -127,49 +132,62 @@ class dsVideoPort_test6_VerifyVideoContentFormats(utHelperClass):
             #TODO: Add automation verification methods
             return False
 
-    def testFunction(self):
-        """This function will test the Video Ports by enabling and disabling the ports
+    def enablePortAndVerifyFormats(self, port, index):
+        """
+        Enables the given video port and verifies supported HDR formats.
+
+        Args:
+            port (str): The name of the video port.
+            index (int): The port index.
 
         Returns:
-            bool
+            bool: Result of the HDR format verification.
         """
+        self.log.stepStart(f'Enable {port} Port')
+        self.testdsVideoPort.enablePort(port, index)
 
-        # Download the assets listed in test setup configuration file
+        # Enable HDCP if device type requires it
+        if self.testdsVideoPort.getDeviceType():
+            self.testdsVideoPort.enable_HDCP(port, index)
+
+        # Verify HDR capabilities
+        supported_formats = self.testdsVideoPort.getHDRCapabilities()
+        if supported_formats:
+            for hdr_format in supported_formats:
+                self.testdsVideoPort.select_HDRModes(port, index, hdr_format)
+                self.log.step(f'Verify HDR {hdr_format} with Analyzer')
+                result = self.testVerifyHDRFormat(manual=True, hdr_mode=hdr_format)
+
+                # Log the verification result
+                self.log.stepResult(result, f"HDR {hdr_format} verification result")
+        else:
+            self.log.error("No HDR formats available for verification.")
+            result = False
+
+        return result
+
+    def testFunction(self):
+        """
+        Main test function to verify video ports by enabling/disabling them and verifying HDR formats.
+
+        Returns:
+            bool: Final test result.
+        """
+        # Download the assets listed in the test setup configuration file
         self.testDownloadAssets()
 
-        # Run Prerequisites listed in the test setup configuration file
+        # Run prerequisites listed in the test setup configuration file
         self.testRunPrerequisites()
 
-        # Create the dsVideoPort class
+        # Create and initialize the dsVideoPort class
         self.testdsVideoPort = dsVideoPortClass(self.deviceProfile, self.hal_session)
-
-        self.log.testStart("test6_VerifyVideoContentFormats", '1')
-
-        # Initialize the dsVideoPort module
         self.testdsVideoPort.initialise()
 
-        # Loop through the supported Video ports
-        for port,index in self.testdsVideoPort.getSupportedPorts():
-            self.log.stepStart(f'Enable {port} Port')
-            self.log.step(f'Enable {port} Port')
+        self.log.testStart(self.testName, '1')
 
-            # Enable the Video port
-            self.testdsVideoPort.enablePort(port, index)
-
-            # Enable the HDCP only for source devices
-            if self.testdsVideoPort.getDeviceType():
-                self.testdsVideoPort.enable_HDCP(port, index)
-
-            # Enable the Video port
-            supported_formats = self.testdsVideoPort.getHDRCapabilities()
-            if supported_formats:
-                for format in supported_formats:
-                    self.testdsVideoPort.select_HDRModes(port, index, format)
-                    self.log.step(f'Verify HDR {format} with Analyzer')
-                    result = self.testVerifyHDRFormat(True,format)
-
-            self.log.stepResult(result, "All parameters successfully verified using HDMI Analyzer")
-
+        # Loop through supported video ports and verify HDR formats
+        for port, index in self.testdsVideoPort.getSupportedPorts():
+            result = self.enablePortAndVerifyFormats(port, index)
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()

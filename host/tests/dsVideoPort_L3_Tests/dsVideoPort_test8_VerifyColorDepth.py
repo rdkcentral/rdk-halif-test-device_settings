@@ -24,9 +24,11 @@
 import os
 import sys
 
+# Append the parent directory to system path for module imports
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path+"/../")
 
+# Import required classes from modules
 from dsClasses.dsVideoPort import dsVideoPortClass
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
@@ -34,6 +36,9 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsVideoPort_test8_VerifyColorDepth(utHelperClass):
+    """
+    Test class for verifying color depth on video ports.
+    """
 
     testName  = "test8_VerifyColorDepth"
     testSetupPath = dir_path + "/dsVideoPort_L3_testSetup.yml"
@@ -42,7 +47,7 @@ class dsVideoPort_test8_VerifyColorDepth(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test8_VerifyColorDepth test .
+        Initializes the dsVideoPortTest8VerifyColorDepth test.
 
         Args:
             None.
@@ -119,7 +124,7 @@ class dsVideoPort_test8_VerifyColorDepth(utHelperClass):
                                      Defaults to other verification methods
 
         Returns:
-            bool
+            bool: Verification result.
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f'is {self.testdsVideoPort.getColorDepth()} is same displayed on Analyzer (Y/N): ')
@@ -128,10 +133,11 @@ class dsVideoPort_test8_VerifyColorDepth(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function will test the Video Ports by enabling and disabling the ports
+        """
+        Executes the color depth verification test by enabling and disabling video ports.
 
         Returns:
-            bool
+            bool: Final verification result.
         """
 
         # Download the assets listed in test setup configuration file

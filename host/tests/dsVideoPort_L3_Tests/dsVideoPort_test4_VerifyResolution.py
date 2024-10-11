@@ -24,9 +24,11 @@
 import os
 import sys
 
+# Append the parent directory to system path for module imports
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path+"/../")
 
+# Import required classes from modules
 from dsClasses.dsVideoPort import dsVideoPortClass
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
@@ -34,6 +36,9 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsVideoPort_test4_VerifyResolution(utHelperClass):
+    """
+    Class for testing and verifying video resolution on supported ports.
+    """
 
     testName  = "test4_VerifyResolution"
     testSetupPath = dir_path + "/dsVideoPort_L3_testSetup.yml"
@@ -119,7 +124,7 @@ class dsVideoPort_test4_VerifyResolution(utHelperClass):
                                      Defaults to other verification methods
 
         Returns:
-            bool
+            bool: True if verification successful, False otherwise.
         """
         if manual == True:
             # Query user confirmation for each resolution attribute and combine results logically
@@ -134,56 +139,54 @@ class dsVideoPort_test4_VerifyResolution(utHelperClass):
             #TODO: Add automation verification methods
             return False
 
-    def testFunction(self):
-        """This function will test the Video Ports by enabling and disabling the ports
+    def testEnablePortAndVerifyResolution(self, port, index):
+        """
+        Enables a video port, sets resolution, and verifies output via HDMI Analyzer.
+
+        Args:
+            port (str): The video port name.
+            index (int): The port index.
 
         Returns:
-            bool
+            bool: Result of resolution verification.
         """
+        self.log.stepStart(f'Enable {port} Port')
+        self.testdsVideoPort.enablePort(port, index)
 
-        # Download the assets listed in test setup configuration file
+        if self.testdsVideoPort.getDeviceType():
+            self.testdsVideoPort.enable_HDCP(port, index)
+
+        for resolution in self.testdsVideoPort.getResolutions():
+            self.testdsVideoPort.select_Resolution(port, index, resolution)
+            result = self.testVerifyResolution(manual=True, resolution=resolution)
+            self.log.stepResult(result, "Resolution verified via HDMI Analyzer")
+        return result
+
+    def testFunction(self):
+        """
+        Main test function to verify resolution across all supported video ports.
+
+        Returns:
+            bool: Final result of the test.
+        """
+        # Download test assets
         self.testDownloadAssets()
 
-        # Run Prerequisites listed in the test setup configuration file
+        # Run prerequisite commands
         self.testRunPrerequisites()
 
-        # Create the dsVideoPort class
+        # Initialize video port class
         self.testdsVideoPort = dsVideoPortClass(self.deviceProfile, self.hal_session)
-
-        self.log.testStart("test4_VerifyResolution", '1')
-
-        # Initialize the dsVideoPort module
         self.testdsVideoPort.initialise()
 
-        # Loop through the supported Video ports
-        for port,index in self.testdsVideoPort.getSupportedPorts():
-            self.log.stepStart(f'Enable {port} Port')
-            self.log.step(f'Enable {port} Port')
+        # Enable each port and verify resolution
+        for port, index in self.testdsVideoPort.getSupportedPorts():
+            result = self.testEnablePortAndVerifyResolution(port, index)
 
-            # Enable the Video port
-            self.testdsVideoPort.enablePort(port, index)
-
-            # Enable the HDCP only for source devices
-            if self.testdsVideoPort.getDeviceType():
-                self.testdsVideoPort.enable_HDCP(port, index)
-
-            # Enable the Video port
-            for resolution in self.testdsVideoPort.getResolutions():
-                self.testdsVideoPort.select_Resolution(port, index, resolution)
-                result = self.testVerifyResolution(True,resolution)
-                """
-                result = self.testUserResponse.getUserYN(f'is {resolution.get("pixelResolution")} on HDMI Analyzer (Y/N): ')
-                result &= self.testUserResponse.getUserYN(f'is {resolution.get("aspectRatio")} on HDMI Analyzer (Y/N): ')
-                result &= self.testUserResponse.getUserYN(f'is {resolution.get("stereoScopicMode")} on HDMI Analyzer (Y/N): ')
-                result &= self.testUserResponse.getUserYN(f'is {resolution.get("frameRate")} on HDMI Analyzer (Y/N): ')
-                result &= self.testUserResponse.getUserYN(f'is {resolution.get("interlaced")} on HDMI Analyzer (Y/N): ')
-                """
-            self.log.stepResult(result, "All parameters verified using HDMI Analyzer")
-
-        # Clean the assets downloaded to the device
+        # Clean up assets
         self.testCleanAssets()
 
-        # Delete the dsVideoPort class
+        # Clean up video port class
         del self.testdsVideoPort
 
         return result
