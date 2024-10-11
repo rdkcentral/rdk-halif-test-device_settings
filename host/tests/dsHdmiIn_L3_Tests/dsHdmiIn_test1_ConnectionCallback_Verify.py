@@ -63,70 +63,89 @@ class dsHdmiIn_test1_ConnectionCallback_Verify(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
+
+        # List of streams with path
+        self.testStreams = []
 
         self.deviceDownloadPath = self.cpe.get("target_directory")
 
-        #download test artifacts to device
-        url = self.testSetup.assets.device.test1_ConnectionCallback_Verify.artifacts
+        test = self.testSetup.get("assets").get("device").get(self.testName)
+
+        # Download test artifacts to device
+        url = test.get("artifacts")
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
 
+        # Download test streams to device
+        url =  test.get("streams")
+        if url is not None:
+            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
+            for streampath in url:
+                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
+
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
-        #Run test specific commands
-        cmds = self.testSetup.assets.device.test1_ConnectionCallback_Verify.execute
+        # Run commands as part of test prerequisites
+        test = self.testSetup.get("assets").get("device").get(self.testName)
+        cmds = test.get("execute")
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    def testUnplugHDMI(self, unplug:True, manual=False):
+    def testPlugUnplugHDMI(self, port:str, plug:True, manual=False):
         """
-        Verifies whether the Connection status of HdmiIn ports
+        Waits for the HDMI port connection or disconnection.
         Args:
+            port (str) : HDMI port
+            plug (bool, optional): True - Plug the HDMI, False - Unplug the HDMI
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
                                      Defaults to other verification methods
         Returns:
-            bool
+            None
         """
         if manual == True:
-            if unplug == True:
-                return self.testUserResponse.getUserYN("UnPlug the HDMI Cable? (Y/N):")
+            if plug == True:
+                self.testUserResponse.getUserYN(f"Plug the HDMI cable {port} and Press Enter:")
             else :
-                return self.testUserResponse.getUserYN("Plug the HDMI Cable? (Y/N):")
+                self.testUserResponse.getUserYN(f"UnPlug the HDMI cable {port} and Press Enter:")
         else :
             #TODO: Add automation verification methods
-            return False
-
-    def find_Connectionstatus(self, input_str: str, status: str) -> bool:
-        if status in input_str:
-            return True
-        return False
+            return
 
     def testFunction(self):
-        """This Callback will check for Connect Disconnect events on HdmiIn ports
+        """
+        The main test function that verifies HDMI connection and disconnection.
+
+        This function:
+        - Downloads necessary assets.
+        - Runs prerequisite commands.
+        - Verifies HDMI connection and disconnection through callbacks.
 
         Returns:
-            bool
+            bool: Final result of the test.
         """
 
         # Download the assets listed in test setup configuration file
@@ -140,33 +159,38 @@ class dsHdmiIn_test1_ConnectionCallback_Verify(utHelperClass):
 
         self.log.testStart("test1_ConnectionCallback_Verify", '1')
 
-        # Initialize the dsAudio module
-        self.testdsHdmiIn.initialise(self.testdsHdmiIn.getDeviceType())
-   
+        # Initialize the dsHDMIIn module
+        self.testdsHdmiIn.initialise()
+
         # Loop through the supported HdmiIn ports
-        for port,index in self.testdsAudio.getSupportedPorts():
-            self.log.stepStart(f'Select {port} Port')
-            self.log.step(f'Select {port} Port')
+        for port in self.testdsHdmiIn.getSupportedPorts():
+            self.log.stepStart(f'HDMI Connect Status Test for {port} Port')
 
-            # Plug In HdmiIn device
-            result = self.testUnplugHDMI(True,True)
+            # Wait for HDMI Plug In
+            result = self.testPlugUnplugHDMI(port, True, True)
 
-            result = self.hal_session.read_until("Received Connection status callback port: , Connection:")
-            print(result)
-            if self.find_Connectionstatus(result,"true"):
-                self.log.stepResult(True,"HDMI is Unplug Callback found")
-            else:
-                self.log.stepResult(False,"HDMI is Unplug Callback Not found")
+            status = self.testdsHdmiIn.getHDMIConnectionStatus()
 
-            result = self.testUnplugHDMI(False,True)
+            result = False
+            if status:
+                if port == status[0] and status[1]:
+                    result = True
 
-            result = self.hal_session.read_until("Received Connection status callback port: , Connection:")
-            print(result)
-            if self.find_Connectionstatus(result,"false"):
-                self.log.stepResult(True,"HDMI is plug Callback found")
-            else:
-                self.log.stepResult(False, "HDMI is plug Callback Not found")
+            self.log.stepResult(result, f'HDMI Connect Status Test for {port} Port')
 
+            self.log.stepStart(f'HDMI Disconnect Status Test for {port} Port')
+
+            # Wait for HDMI UnPlug
+            result = self.testPlugUnplugHDMI(port, False, True)
+
+            status = self.testdsHdmiIn.getHDMIConnectionStatus()
+
+            result = False
+            if status:
+                if port == status[0] and not status[1]:
+                    result = True
+
+            self.log.stepResult(result, f'HDMI Connect Status Test for {port} Port')
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
