@@ -118,9 +118,6 @@ class dsAudio_test26_MS12AudioProfiles(utHelperClass):
         """
         self.deleteFromDevice(self.testStreams)
 
-        # remove the callback log files
-        self.deleteFromDevice([self.connectionCB, self.formatCB, self.atmosCB])
-
     def testRunPrerequisites(self):
         """
         Executes prerequisite commands listed in the test setup configuration file on the DUT.

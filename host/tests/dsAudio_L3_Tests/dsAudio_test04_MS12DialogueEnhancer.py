@@ -117,8 +117,6 @@ class dsAudio_test04_MS12DialogueEnhancer(utHelperClass):
         """
         self.deleteFromDevice(self.testStreams)
 
-        # remove the callback log files
-        self.deleteFromDevice([self.connectionCB, self.formatCB, self.atmosCB])
 
     def testRunPrerequisites(self):
         """

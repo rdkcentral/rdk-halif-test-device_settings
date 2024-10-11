@@ -115,8 +115,6 @@ class dsAudio_test15_ARCPort(utHelperClass):
         """
         self.deleteFromDevice(self.testStreams)
 
-        # remove the callback log files
-        self.deleteFromDevice([self.connectionCB, self.formatCB, self.atmosCB])
 
     def testRunPrerequisites(self):
         """
