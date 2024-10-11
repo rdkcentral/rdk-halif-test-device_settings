@@ -25,9 +25,11 @@ import os
 import sys
 import time
 
+# Append the parent directory to system path for module imports
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path+"/../")
 
+# Import required classes from modules
 from dsClasses.dsVideoPort import dsVideoPortClass
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
@@ -35,6 +37,17 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsVideoPort_test1_VerifyVideoContent_Formats(utHelperClass):
+
+    """
+    A class used to test video content formats through different video ports.
+
+    Attributes:
+        testName (str): Name of the test.
+        testSetupPath (str): Path to the test setup YAML file.
+        moduleName (str): The module being tested.
+        rackDevice (str): Device under test (DUT).
+        HDRFormats (list): Supported HDR formats for testing.
+    """
 
     testName  = "test1_VerifyVideoContent_Formats"
     testSetupPath = dir_path + "/dsVideoPort_L3_testSetup.yml"
@@ -44,10 +57,10 @@ class dsVideoPort_test1_VerifyVideoContent_Formats(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test1_VerifyVideoContent_Formats test .
+        Initializes the dsVideoPort_test1_VerifyVideoContent_Formats class and sets up test resources.
 
-        Args:
-            None.
+        This includes initializing the test setup, player session, and HAL test session,
+        as well as preparing the user response and device profile paths.
         """
         super().__init__(self.testName, '1')
 
@@ -73,10 +86,9 @@ class dsVideoPort_test1_VerifyVideoContent_Formats(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads required test assets (artifacts and streams) to the device under test (DUT).
 
-        Args:
-            None.
+        The paths are defined in the test setup configuration file.
         """
 
         # List of streams with path
@@ -98,8 +110,7 @@ class dsVideoPort_test1_VerifyVideoContent_Formats(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
-
+        Cleans up by removing the test assets downloaded to the DUT.
         Args:
             None.
         """
@@ -121,15 +132,28 @@ class dsVideoPort_test1_VerifyVideoContent_Formats(utHelperClass):
 
     #TODO: Current version supports only manual verification.
     def find_VideoFormat_Status(self, input_str: str, status: str) -> bool:
+        """
+        Checks if a specific video format status is present in the input string.
+
+        Args:
+            input_str (str): The string to search in.
+            status (str): The video format status to look for.
+
+        Returns:
+            bool: True if the status is found, False otherwise.
+        """
         if status in input_str:
             return True
         return False
 
     def testFunction(self):
-        """This function will test the Video Ports by enabling and disabling the ports
+        """
+        Main test function that verifies video formats on supported ports by enabling and disabling the ports.
+
+        This includes playing and stopping video streams, checking HDR formats, and verifying callbacks.
 
         Returns:
-            bool
+            bool: The result of the final video format callback check.
         """
 
         # Download the assets listed in test setup configuration file

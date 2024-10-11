@@ -24,9 +24,11 @@
 import os
 import sys
 
+# Append the parent directory to system path for module imports
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path+"/../")
 
+# Import required classes from modules
 from dsClasses.dsVideoPort import dsVideoPortClass
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
@@ -34,6 +36,9 @@ from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsVideoPort_test5_VerifyHDCP_Callback(utHelperClass):
+    """
+    Test class for verifying HDCP callback during HDMI plug/unplug.
+    """
 
     testName  = "test5_VerifyHDCP_Callback"
     testSetupPath = dir_path + "/dsVideoPort_L3_testSetup.yml"
@@ -42,7 +47,7 @@ class dsVideoPort_test5_VerifyHDCP_Callback(utHelperClass):
 
     def __init__(self):
         """
-        Initializes the test5_VerifyHDCP_Callback test .
+        Initializes the test5_VerifyHDCP_Callback test with necessary setup.
 
         Args:
             None.
@@ -139,65 +144,74 @@ class dsVideoPort_test5_VerifyHDCP_Callback(utHelperClass):
             return False
 
     def find_HDCPStatus(self, input_str: str, status: str) -> bool:
+        """
+        Finds HDCP status in a given input string.
+
+        Args:
+            input_str (str): The input log containing HDCP status.
+            status (str): The HDCP status string to look for.
+
+        Returns:
+            bool: True if the status is found, False otherwise.
+        """
         if status in input_str:
             return True
         return False
 
-    def testFunction(self):
-        """This function will test the Video Ports by enabling and disabling the ports
+    def testEnablePortAndVerifyHDCP(self, port, index):
+        """
+        Enables a video port, performs HDMI plug/unplug actions, and verifies HDCP callbacks.
+
+        Args:
+            port (str): The video port name.
+            index (int): The port index.
 
         Returns:
-            bool
+            bool: Result of the HDCP verification.
         """
+        self.log.stepStart(f'Enable {port} Port')
+        self.testdsVideoPort.enablePort(port, index)
 
-        # Download the assets listed in test setup configuration file
+        # Enable HDCP for the port
+        self.testdsVideoPort.enable_HDCP(port, index)
+
+        # Verify unplug HDMI event
+        result = self.testUnplugHDMI(unplug=True, manual=True)
+        result = self.testdsVideoPort.read_Callbacks("HDCP Status Callback dsHdcpStatus_t:")
+        if self.find_HDCPStatus(result, "dsHDCP_STATUS_UNPOWERED"):
+            self.log.stepResult(True, "HDMI Unplug Callback found")
+        else:
+            self.log.stepResult(False, "HDMI Unplug Callback Not found")
+
+        # Verify plug HDMI event
+        result = self.testUnplugHDMI(unplug=False, manual=True)
+        result = self.testdsVideoPort.read_Callbacks("HDCP Status Callback dsHdcpStatus_t:")
+        if self.find_HDCPStatus(result, "dsHDCP_STATUS_AUTHENTICATED"):
+            self.log.stepResult(True, "HDMI Plug Callback found")
+        else:
+            self.log.stepResult(False, "HDMI Plug Callback Not found")
+
+        return result
+
+    def testFunction(self):
+        """
+        Main test function to verify HDCP status callbacks during HDMI plug/unplug events.
+
+        Returns:
+            bool: Final result of the test.
+        """
         self.testDownloadAssets()
-
-        # Run Prerequisites listed in the test setup configuration file
         self.testRunPrerequisites()
 
-
-        # Create the dsVideoPort class
+        # Initialize the dsVideoPort class
         self.testdsVideoPort = dsVideoPortClass(self.deviceProfile, self.hal_session)
-
-        self.log.testStart("test5_VerifyHDCP_Callback", '1')
-
-        # Initialize the dsVideoPort module
         self.testdsVideoPort.initialise()
 
-        # Loop through the supported Video ports
-        for port,index in self.testdsVideoPort.getSupportedPorts():
-            self.log.stepStart(f'Enable {port} Port')
-            self.log.step(f'Enable {port} Port')
+        # Loop through all supported video ports and verify HDCP callbacks
+        for port, index in self.testdsVideoPort.getSupportedPorts():
+            result = self.testEnablePortAndVerifyHDCP(port, index)
 
-            # Enable the Video port
-            self.testdsVideoPort.enablePort(port, index)
-
-            # Enable the HDCP
-            self.testdsVideoPort.enable_HDCP(port, index)
-
-            result = self.testUnplugHDMI(True,True)
-
-            result = self.testdsVideoPort.read_Callbacks("HDCP Status Callback dsHdcpStatus_t:")
-            print(result)
-            if self.find_HDCPStatus(result,"dsHDCP_STATUS_UNPOWERED"):
-                self.log.stepResult(True,"HDMI is Unplug Callback found")
-            else:
-                self.log.stepResult(False,"HDMI is Unplug Callback Not found")
-
-            result = self.testUnplugHDMI(False,True)
-            result = self.testdsVideoPort.read_Callbacks("HDCP Status Callback dsHdcpStatus_t:")
-            print(result)
-            if self.find_HDCPStatus(result,"dsHDCP_STATUS_AUTHENTICATED"):
-                self.log.stepResult(True,"HDMI is plug Callback found")
-            else:
-                self.log.stepResult(False, "HDMI is plug Callback Not found")
-
-
-        # Clean the assets downloaded to the device
         self.testCleanAssets()
-
-        # Delete the dsVideoPort class
         del self.testdsVideoPort
 
         return result

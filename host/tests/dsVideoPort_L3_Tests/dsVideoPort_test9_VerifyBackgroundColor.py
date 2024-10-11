@@ -25,9 +25,11 @@ import os
 import sys
 from enum import Enum, auto
 
+# Append the parent directory to system path for module imports
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path+"/../")
 
+# Import required classes from modules
 from dsClasses.dsVideoPort import dsVideoPortClass
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
@@ -41,6 +43,9 @@ class dsVideoBackgroundColor(Enum):
     dsVIDEO_BGCOLOR_MAX = 3    # Out of range
 
 class dsVideoPort_test9_VerifyBackgroundColor(utHelperClass):
+    """
+    Test class for verifying the background color of video ports.
+    """
 
     testName  = "test9_VerifyBackgroundColor"
     testSetupPath = dir_path + "/dsVideoPort_L3_testSetup.yml"
