@@ -27,7 +27,7 @@ import time
 
 # Append the parent directory to system path for module imports
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(dir_path+"/../")
+sys.path.append(dir_path+"/../../")
 
 # Import required classes from modules
 from dsClasses.dsVideoPort import dsVideoPortClass
@@ -102,11 +102,38 @@ class dsVideoPort_test1_VerifyVideoContent_Formats(utHelperClass):
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
 
         #download test streams to device
-        url = self.testSetup.assets.device.test1_VerifyVideoContent_Formats.streams
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            for streampath in url:
-                self.testStreams.append(self.deviceDownloadPath + "/" + os.path.basename(streampath))
+        #stream_url = self.testSetup.assets.device.test1_VerifyVideoContent_Formats.streams[format_index]
+        #stream_download_path = self.deviceDownloadPath + "/" + os.path.basename(stream_url)
+
+        # Download the stream to the device as a list
+        #self.downloadToDevice([stream_url], self.deviceDownloadPath, self.rackDevice)
+
+        #return stream_download_path
+    def downloadStreamForFormat(self, format_index):
+        """
+        Downloads the specific stream for the HDR format being tested.
+
+        Args:
+            format_index (int): The index corresponding to the HDR format in the test setup.
+
+        Returns:
+            str: The full path of the downloaded stream.
+        """
+        stream_url = self.testSetup.assets.device.test1_VerifyVideoContent_Formats.streams[format_index]
+        stream_download_path = self.deviceDownloadPath + "/" + os.path.basename(stream_url)
+
+        # Download the stream to the device as a list
+        self.downloadToDevice([stream_url], self.deviceDownloadPath, self.rackDevice)
+
+        return stream_download_path
+    def testCleanSingleAsset(self, stream_path):
+        """
+        Cleans up by removing a single stream from the DUT after it has been played.
+
+        Args:
+            stream_path (str): The full path of the stream to be deleted.
+        """
+        self.deleteFromDevice([stream_path])
 
     def testCleanAssets(self):
         """
@@ -156,54 +183,44 @@ class dsVideoPort_test1_VerifyVideoContent_Formats(utHelperClass):
             bool: The result of the final video format callback check.
         """
 
-        # Download the assets listed in test setup configuration file
+        # Step 1: Run prerequisite commands
         self.testDownloadAssets()
-
-        # Run Prerequisites listed in the test setup configuration file
         self.testRunPrerequisites()
 
-
-        # Create the dsVideoPort class
+        # Step 2: Initialize and create the dsVideoPort class
         self.testdsVideoPort = dsVideoPortClass(self.deviceProfile, self.hal_session)
+        self.testdsVideoPort.initialise()
 
         self.log.testStart("test1_VerifyVideoContent_Formats", '1')
 
-        # Initialize the dsVideoPort module
-        self.testdsVideoPort.initialise()
-
-        # Loop through the supported Video ports
-        for port,index in self.testdsVideoPort.getSupportedPorts():
+        # Step 3: Loop through the supported video ports and test HDR formats
+        for port, index in self.testdsVideoPort.getSupportedPorts():
             self.log.stepStart(f'Enable {port} Port')
-            self.log.step(f'Enable {port} Port')
-
-            # Enable the Video port
             self.testdsVideoPort.enablePort(port, index)
 
-            i = 0
-            for formats in self.HDRFormats:
-                # Start the stream playback
-                if formats not in ["NONE", "TechnicolorPrime"]:
-                    self.testPlayer.play(self.testStreams[i])
-                    i+=1
-                    # Pause execution for 0.5 second
-                    time.sleep(1)
+            # Loop through HDR formats, download stream, play it, and then delete it
+            for i, format in enumerate(self.HDRFormats):
+                if format not in ["NONE", "TechnicolorPrime"]:
+                    # Step 3.1: Download the stream for this HDR format
+                    stream_path = self.downloadStreamForFormat(i)
 
+                    # Step 3.2: Play the corresponding stream
+                    self.testPlayer.play(stream_path)
+                    time.sleep(10)
                 result = self.testdsVideoPort.read_Callbacks("Video Format Callback dsHDRStandard_t:")
                 print(result)
-                if formats not in "TechnicolorPrime":
-                    if self.find_VideoFormat_Status(result, f'dsHDRSTANDARD_{formats}'):
-                        self.log.stepResult(True,f'{formats} VideoFormat Callback found')
+                if format not in "TechnicolorPrime":
+                    if self.find_VideoFormat_Status(result, f'dsHDRSTANDARD_{format}'):
+                        self.log.stepResult(True,f'{format} VideoFormat Callback found')
                     else:
-                        self.log.stepResult(False,f'{formats} VideoFormat Callback found')
-                if formats not in ["NONE", "TechnicolorPrime"]:
+                        self.log.stepResult(False,f'{format} VideoFormat Callback Not found')
+                if format not in ["NONE", "TechnicolorPrime"]:
                     # Stop the stream playback
                     self.testPlayer.stop()
                     time.sleep(0.1)
+                    self.testCleanSingleAsset(stream_path)
 
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
-
-        # Delete the dsVideoPort class
+        # Step 4: Clean up the test resources
         del self.testdsVideoPort
 
         return result

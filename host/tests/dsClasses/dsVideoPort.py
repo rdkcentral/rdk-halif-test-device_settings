@@ -844,7 +844,7 @@ class dsVideoPortClass():
         """
         Retrieves the current HDCP (High-bandwidth Digital Content Protection) status for the specified video port.
 
-        HDCP is used to protect content being transmitted over digital interfaces. This method checks the status 
+        HDCP is used to protect content being transmitted over digital interfaces. This method checks the status
         of HDCP on the selected video port.
 
         Args:
