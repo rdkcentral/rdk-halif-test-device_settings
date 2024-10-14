@@ -114,12 +114,12 @@ class dsCompositeInClass():
         """
         result = self.utMenu.select( self.testSuite, "Get status of ports")
 
-    def selectPort(self):
+    def selectPort(self, compositein_port:int):
         """
         Enables the compositeIn port.
 
         Args:
-            None
+            compositein_port (int): compositein port.
 
         Returns:
             None
@@ -128,7 +128,7 @@ class dsCompositeInClass():
                 {
                     "query_type": "direct",
                     "query": "Enter the port to select:",
-                    "input": 0
+                    "input": compositein_port
                 }
         ]
 
@@ -194,7 +194,6 @@ if __name__ == '__main__':
     test.initialise()
     ports = test.getSupportedPorts()
     test.getStatus()
-    test.selectPort()
     test.scaleVideo()
     test.terminate()
 
