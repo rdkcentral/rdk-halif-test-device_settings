@@ -186,7 +186,7 @@ class dsHdmiIn_test1_ConnectionCallback_Verify(utHelperClass):
             # Wait for HDMI UnPlug
             result = self.testPlugUnplugHDMI(port, False, True)
 
-            status = self.testdsHdmiIn.getHDMIConnectionStatus()
+            status = self.testdsHdmiIn.getHDMIConnectionCallbackStatus()
 
             result = False
             if status:

@@ -131,7 +131,7 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def CheckDeviceStatusAndEnableAllm(self, manual=False, port_type:str=0, enable_allm:str=0):
+    def CheckDeviceStatusAndEnableAllm(self, manual=False, port_type:str=0):
         """
         Checks whether the Hdmi In device is ON or Not.
         Ask for enabling Allm feature on source device.
@@ -142,10 +142,8 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(utHelperClass):
         Returns:
             bool
         """
-        if manual == True and enable_allm == False:
-            return self.testUserResponse.getUserYN(f'Check {port_type} Hdmi In device is ON and press Enter:')
-        elif manual == True and enable_allm == True:
-            return self.testUserResponse.getUserYN(f'Please enable ALLM feature on device connected to {port_type}then press Enter:')
+        if manual == True:
+            return self.testUserResponse.getUserYN(f'Connect Hdmi In device  on {port_type} and change the ALLM feature press Enter:')
         else:
             #TODO: Add automation verification methods
             return False
@@ -186,10 +184,12 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(utHelperClass):
             self.log.stepStart(f'Select {port} Port')
             self.log.step(f'Select {port} Port')
 
+            self.testdsHdmiIn.selectHDMIInPort(port, audmix, videoplane, topmost)
+            self.log.step(f'Port Selcted {port}')
+            
             # Check the HdmiIn device is active
-            self.CheckDeviceStatusAndEnableAllm(True,port,False)
-            self.testdsHdmiIn.selectPort(port, audmix, videoplane, topmost)
-            self.CheckDeviceStatusAndEnableAllm(True,port,True)  
+            self.CheckDeviceStatusAndEnableAllm(True,port)
+  
             allmstatus = self.testdsHdmiIn.getAllmCallbackStatus()
             if allmstatus[0] == port:
                result = True
