@@ -173,7 +173,7 @@ class dsHdmiInClass():
         HDMI port connection status. The callback message contains the port number
         and the connection status ("true" or "false"). The function parses the message
         and returns the port and connection status as a boolean value.
-        """
+
         Args:
             None.
         Returns:
@@ -181,7 +181,7 @@ class dsHdmiInClass():
                 - port (str): The HDMI port number as a string.
                 - connection (bool): True if the HDMI port is connected, False otherwise.
             None: If no matching connection status is found.
-
+        """
         result = self.testSession.read_until("Received Connection status callback port:")
         connectioncallpattern = r"Received Connection status callback port: \[(\w+)\], Connection: \[(\w+)\]"
         match = re.search(connectioncallpattern, result)
@@ -204,7 +204,7 @@ class dsHdmiInClass():
         or dsHDMI_IN_SIGNAL_STATUS_STABLE). The function parses the message
         and returns the port ,signal status and retrieved data present in list 
         as "true" or None if not present.
-        """
+        
         Args:
             None.
         Returns:
@@ -213,7 +213,7 @@ class dsHdmiInClass():
                 - signalstatus (str): Signal status as a string.
                 - found(str): true if matches with hdmiInSignalStatustype
             None: If no matching signal status is found.
-
+        """
         result = self.testSession.read_until("Received SignalChange status callback port: , sigstatus: ")
         connectioncallpattern = r"Received SignalChange status callback port: (\w+), sigstatus: (\w+)"
         match = re.search(connectioncallpattern, result)
@@ -240,7 +240,7 @@ class dsHdmiInClass():
         port  status. The callback message contains the port number
         and the status of port (ispresented , activeport). The function parses 
         the message and returns the port status.
-        """
+
         Args:
             None.
         Returns:
@@ -249,11 +249,11 @@ class dsHdmiInClass():
                 - ispresented (str): true or false.
                 - activeport(str):Active Port number as string
             None: If no matching signal status is found.
-        
+        """ 
         result = self.testSession.read_until("Received statuschange callback isPresented:")
         portstatuspattern = r"Received statuschange callback isPresented:(\w+), activeport: (w+)"
         match = re.search(portstatuspattern, result)
-
+       
         if match:
             ispresented = match.group(1)
             activeport = match.group(2)
@@ -269,7 +269,7 @@ class dsHdmiInClass():
         video mode update. The callback message contains the port number
         and the video mode update (pixelresolution , aspectratio). The function parses
         the message and returns the video mode update.
-        """
+    
         Args:
             None.
         Returns:
@@ -278,7 +278,7 @@ class dsHdmiInClass():
                 - ispresented (str): true or false.
                 - activeport(str):Active Port number as string
             None: If no matching signal status is found.
-
+        """
         result = self.testSession.read_until("Result dsHdmiInGetCurrentVideoMode OUT:port:[  ], pixelResolution:[  ]")
         videomodepattern = r"Result dsHdmiInGetCurrentVideoMode OUT:port:\[(\w+)\], pixelResolution:\[(dsVIDEO_PIXELRES_\w+)\], OUT:aspectRatio:\[(dsVIDEO_ASPECT_RATIO_\w+)\]\)"
         match = re.search(videomodepattern, result)
@@ -307,7 +307,7 @@ class dsHdmiInClass():
         HDMI allm status. The callback message contains the port number
         and the allm status ("true" or "false"). The function parses the message
         and returns the port and allm status as a boolean value.
-        """
+        
         Args:
             None.
         Returns:
@@ -315,7 +315,7 @@ class dsHdmiInClass():
                 - port_type (str): The HDMI port number as a string.
                 - allm_status (bool): True if the HDMI allm bit enabled, False otherwise.
             None: If no matching connection status is found.
-
+        """
         result = self.testSession.read_until("Received AllmChange status callback port: , allm_mode:")
         allmpattern = r"Received AllmChange status callback port: (\w+), allm_mode: (\w+)"
         match = re.search(allmpattern, result)
@@ -335,7 +335,7 @@ class dsHdmiInClass():
         audio video latency. The callback message contains the audio video latency
         in milliseconds. The function parses the message and returns the audio and 
         video latency as strings.
-        """
+        
         Args:
             None.
         Returns:
@@ -343,7 +343,7 @@ class dsHdmiInClass():
                 - audio_latency (str): The Audio latency as a string.
                 - video_latency (str): The Video latency as a string.
             None: If no matching connection status is found.
-
+        """
         result = self.testSession.read_until("Received AVlatencyChange status callback audio_latency: video_latency:")
         avlatencypattern = r"Received AVlatencyChange status callback audio_latency:(\d+) video_latency:(\d+)"
         match = re.search(avlatencypattern, result)
@@ -363,7 +363,7 @@ class dsHdmiInClass():
         AVI content change status. The callback message contains the port number
         and the AVI content type. The function parses the message
         and returns the port and AVI content type as strings.
-        """
+        
         Args:
             None.
         Returns:
@@ -371,7 +371,7 @@ class dsHdmiInClass():
                 - porttype (str): The HDMI port number as a string.
                 - allm_content_type (str): The AVI content type as a string.
             None: If no matching connection status is found.
-
+        """
         result = self.testSession.read_until("Received AviContentType change callback port: , avi_content_type:")
         avipattern = r"Received AviContentType change callback port: (\w+), avi_content_type: (w+)"
         match = re.search(avipattern, result)
@@ -398,7 +398,7 @@ class dsHdmiInClass():
         detect the port status. The callback message contains the 
         port status like (ispresented , active). The function parses 
         the message and returns ispresented and active as strings.
-        """
+        
         Args:
             None.
         Returns:
@@ -406,7 +406,7 @@ class dsHdmiInClass():
                 - isPresented (str): true if presented or flase otherwise.
                 - activeport (str): The HDMIIN port as a string.
             None: If no matching connection status is found.
-
+        """
         result = self.utMenu.select( self.testSuite, "Get Status")
         typeStatusPattern = r"Result dsHdmiInGetStatus OUT:inputstatus:isPresented:\[(\w+)\], activeport:\[(dsHDMI_IN_PORT_\w+)\] \],dsError_t:\[(dsERR_\w+)\]"
         match = re.search(typeStatusPattern, result)
