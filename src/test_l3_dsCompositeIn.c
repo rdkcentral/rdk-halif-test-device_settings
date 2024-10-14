@@ -160,7 +160,7 @@ static void readInput(int *choice)
  */
 static void compositeInConnectCB(dsCompositeInPort_t Port, bool isPortConnected)
 {
-    UT_LOG_INFO("Received Connection status callback port: %s, Connection: %s",
+    UT_LOG_INFO("Received Connection status callback port: [%s], Connection: [%s]\n",
                  UT_Control_GetMapString(dsCompositeInPortMappingTable, Port),
                  UT_Control_GetMapString(bool_mapTable, isPortConnected));
 
@@ -174,7 +174,7 @@ static void compositeInConnectCB(dsCompositeInPort_t Port, bool isPortConnected)
  */
 static void compositeInSignalChangeCB(dsCompositeInPort_t port, dsCompInSignalStatus_t sigStatus)
 {
-    UT_LOG_INFO("Received SignalChange status callback port: %s, sigstatus: %s",
+    UT_LOG_INFO("Received SignalChange status callback port: [%s], sigstatus: [%s]\n",
                  UT_Control_GetMapString(dsCompositeInPortMappingTable, port),
                  UT_Control_GetMapString(dsCompInSignalStatusMappingTable, sigStatus));
 
@@ -188,7 +188,7 @@ static void compositeInSignalChangeCB(dsCompositeInPort_t port, dsCompInSignalSt
  */
 static void compositeInStatusChangeCB(dsCompositeInStatus_t inputStatus)
 {
-    UT_LOG_INFO("Received statuschange callback isPresented: %s, activeport: %s",
+    UT_LOG_INFO("Received statuschange callback isPresented: [%s], activeport: [%s]\n",
                  UT_Control_GetMapString(bool_mapTable, inputStatus.isPresented),
                  UT_Control_GetMapString(dsCompositeInPortMappingTable, inputStatus.activePort));
 
@@ -197,7 +197,7 @@ static void compositeInStatusChangeCB(dsCompositeInStatus_t inputStatus)
          if(!(inputStatus.isPresented))
                  continue;
 
-         UT_LOG_INFO("Received statuschange callback isPortConnected: %s, activeport: %s",
+         UT_LOG_INFO("Received statuschange callback isPortConnected: [%s], activeport: [%s]\n",
                  UT_Control_GetMapString(bool_mapTable, inputStatus.isPortConnected[i]),
                  UT_Control_GetMapString(dsCompositeInPortMappingTable, inputStatus.activePort));
     }
