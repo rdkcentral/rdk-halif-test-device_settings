@@ -452,7 +452,7 @@ static UT_test_suite_t * pSuite = NULL;
 int test_l3_dsCompositeIn_register(void)
 {
     // Create the test suite for sink type
-    pSuite = UT_add_suite_withGroupID("[L3 dsCompositeIn - Sink]", NULL, NULL, UT_TESTS_L3);
+    pSuite = UT_add_suite_withGroupID("[L3 dsCompositeIn]", NULL, NULL, UT_TESTS_L3);
     ASSERT( pSuite != NULL );
 
     UT_add_test( pSuite, "Initialize CompositeIn" ,test_l3_CompositeIn_initialize );
