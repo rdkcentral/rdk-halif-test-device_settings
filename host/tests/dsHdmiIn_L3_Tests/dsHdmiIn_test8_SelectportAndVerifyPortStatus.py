@@ -30,7 +30,6 @@ sys.path.append(os.path.join(dir_path, "../"))
 from dsClasses.dsHdmiIn import dsHdmiInClass
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
-from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsHdmiIn_test8_SelectportAndVerifyPortStatus(utHelperClass):
@@ -63,18 +62,34 @@ class dsHdmiIn_test8_SelectportAndVerifyPortStatus(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
+
+        # List of streams with path
+        self.testStreams = []
 
         self.deviceDownloadPath = self.cpe.get("target_directory")
 
-        #download test artifacts to device
-        url = self.testSetup.assets.device.test8_SelectPortAndVerifyPortStatus.artifacts
+        test = self.testSetup.get("assets").get("device").get(self.testName)
+
+        # Download test artifacts to device
+        url = test.get("artifacts")
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
+
+        # Download test streams to device
+        url =  test.get("streams")
+        if url is not None:
+            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
+            for streampath in url:
+                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
+
 
     def testCleanAssets(self):
         """
@@ -87,20 +102,36 @@ class dsHdmiIn_test8_SelectportAndVerifyPortStatus(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
+
+        Args:
+            None
+        """
+
+        # Run commands as part of test prerequisites
+        test = self.testSetup.get("assets").get("device").get(self.testName)
+        cmds = test.get("execute")
+        if cmds is not None:
+            for cmd in cmds:
+                self.writeCommands(cmd)
+
+    def testRunPostreiquisites(self):
+        """
+        Executes postrequisite commands listed in test-setup configuration file on the DUT.
 
         Args:
             None.
         """
 
-        #Run test specific commands
-        cmds = self.testSetup.assets.device.test8_SelectportAndVerifyPortStatus.execute
+       # Run commands as part of test prerequisites
+        test = self.testSetup.get("assets").get("device").get(self.testName)
+        cmds = test.get("postcmd")
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def VerifyInput(self, manual=False):
+    def CheckDeviceStatus(self, manual=False, port_type:str=0):
         """
         Verifies whether the particular input selected or not.
 
@@ -112,16 +143,22 @@ class dsHdmiIn_test8_SelectportAndVerifyPortStatus(utHelperClass):
             bool
         """
         if manual == True:
-            return self.testUserResponse.getUserYN("Is HdmiIn port selected? (Y/N):")
+            return self.testUserResponse.getUserYN("Check HdmiIn device of {port_type} is ON and press Enter")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
-        """This function will test the Audio Ports by enabling and disabling the ports
+        """
+        The main test function tests port selection and verifies that
+        particular port selected on platform.
+
+        This function:
+        - Downloads necessary assets.
+        - Runs prerequisite commands.
 
         Returns:
-            bool
+            bool: Final result of the test.
         """
 
         # Download the assets listed in test setup configuration file
@@ -135,7 +172,7 @@ class dsHdmiIn_test8_SelectportAndVerifyPortStatus(utHelperClass):
 
         self.log.testStart("test8_SelectPortAndVerifyPortStatus", '1')
 
-        # Initialize the dsAudio module
+        # Initialize the dsHdmiIn module
         self.testdsHdmiIn.initialise(self.testdsHdmiIn.getDeviceType())
    
         audmix = 0      #default value false
@@ -143,20 +180,29 @@ class dsHdmiIn_test8_SelectportAndVerifyPortStatus(utHelperClass):
         topmost = 1     #Always should be true.
 
         # Loop through the supported HdmiIn ports
-        for port,index in self.testdsAudio.getSupportedPorts():
+        for port in self.testdsHdmiIn.getSupportedPorts():
             self.log.stepStart(f'Select {port} Port')
             self.log.step(f'Select {port} Port')
 
-            # Select the HdmiIn port
-            self.testdsHdmiIn.selectPort(port, index, audmix, videoplane, topmost)
+            # Check the HdmiIn device connected to is active
+            result = self.CheckDeviceStatus(True,port)
+            self.log.stepResult(result,f'Hdmi In Device is active {result} on {port}')
 
-            self.log.step(f'Verify Selected {port} Port')
-            result = self.VerifyInput(True)
-
-            self.log.stepResult(result, f'HdmiIn Select Verification {port} Port')
+            # Select the Hdmi In port
+            self.testdsHdmiIn.selectHdmiInPort(port, audmix, videoplane, topmost)
+            portstatus = self.testdsHdmiIn.getHDMIInPortStatus()
+            if port == portstatus[1]:
+               result = True
+               self.log.stepResult(result, f'HdmiIn Select Verification ispresented:{portstatus[0]} activeport:{portstatus[1]}')
+            else:
+                result = False
+                self.log.stepResult(result, f'HdmiIn Select Verification ispresented:{portstatus[0]} activeport:{portstatus[1]}')
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
+        
+        #Run postrequisites listed in the test setup configuration file 
+        self.testRunPostreiquisites()
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()
@@ -167,5 +213,5 @@ class dsHdmiIn_test8_SelectportAndVerifyPortStatus(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsHdiIn_test8_SelectPortAndVerifyPortStatus()
+    test = dsHdmiIn_test8_SelectportAndVerifyPortStatus()
     test.run(False)
