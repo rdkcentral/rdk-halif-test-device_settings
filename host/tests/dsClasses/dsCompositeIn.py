@@ -221,12 +221,15 @@ class dsCompositeInClass():
 
         result = self.utMenu.select(self.testSuite, "Select port", promptWithAnswers)
 
-    def scaleVideo(self):
+    def scaleVideo(self, xcord:int=0, ycord:int=0, width:int=0, height:int=0):
         """
         Scale the video played in compositIn source device
 
         Args:
-            None
+            xcord (int, optional): xcoordiante. Defaults to 0
+            ycord (int, optional): ycoordiante. Defaults to 0
+            width (int, optional): width. Defaults to 0
+            height(int, optional): height. Defaults to 0
 
         Returns:
             None
@@ -235,22 +238,22 @@ class dsCompositeInClass():
                 {
                     "query_type": "direct",
                     "query": "Enter the x coordinate to scale:",
-                    "input": 0
+                    "input": xcord
                 },
                 {
                     "query_type": "direct",
                     "query": "Enter the y coordinate to scale:",
-                    "input": 0
+                    "input": ycord
                 },
                 {
                     "query_type": "direct",
                     "query": "Enter the width coordinate to scale:",
-                    "input": 720
+                    "input": width
                 },
                 {
                     "query_type": "direct",
                     "query": "Enter the height coordinate to scale:",
-                    "input": 576
+                    "input": height
                 }
         ]
 
@@ -281,7 +284,6 @@ if __name__ == '__main__':
     test.initialise()
     ports = test.getSupportedPorts()
     test.getStatus()
-    test.scaleVideo()
     test.terminate()
 
     shell.close()
