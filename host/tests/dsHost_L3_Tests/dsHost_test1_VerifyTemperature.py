@@ -31,9 +31,8 @@ from dsClasses.dsHost import dsHostClass
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
-from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsHost_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
+class dsHost_test1_VerifyTemperature(utHelperClass):
 
     testName  = "test1_VerifyTemperature"
     testSetupPath = dir_path + "/dsHost_L3_testSetup.yml"
@@ -60,12 +59,6 @@ class dsHost_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
 
         player = self.cpe.get("test").get("player")
 
-        # Create player Class
-        self.testPlayer = utPlayer(self.player_session, player)
-
-         # Create user response Class
-        self.testUserResponse = utUserResponse()
-
         # Get path to device profile file
         self.deviceProfile = dir_path + "/" + self.cpe.get("test").get("profile")
 
@@ -83,12 +76,12 @@ class dsHost_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
         self.deviceDownloadPath = self.cpe.get("target_directory")
 
         #download test artifacts to device
-        url = self.testSetup.assets.device.test1_EnableDisableAndVerifyAudioPortStatus.artifacts
+        url = self.testSetup.assets.device.dsHost_test1_VerifyTemperature.artifacts
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
 
         #download test streams to device
-        url = self.testSetup.assets.device.test1_EnableDisableAndVerifyAudioPortStatus.streams
+        url = self.testSetup.assets.device.dsHost_test1_VerifyTemperature.streams
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
             for streampath in url:
@@ -112,13 +105,13 @@ class dsHost_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
         """
 
         #Run test specific commands
-        cmds = self.testSetup.assets.device.test1_EnableDisableAndVerifyAudioPortStatus.execute
+        cmds = self.testSetup.assets.device.dsHost_test1_VerifyTemperature.execute
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
 
     def testFunction(self):
-        """This function will test the Audio Ports by enabling and disabling the ports
+        """This function will test the get cpu tempature functionality
 
         Returns:
             bool
@@ -133,15 +126,20 @@ class dsHost_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
         # Create the dsHost class
         self.testdsHost = dsHostClass(self.deviceProfile, self.hal_session)
 
-        self.log.testStart("test1_EnableDisableAndVerifyAudioPortStatus", '1')
+        self.log.testStart("dsHost_test1_VerifyTemperature", '1')
 
         # Initialize the dsHost module
         self.testdsHost.initialise()
 
         # Get the CPU temperature
-        self.testdsHost.getCPUTemperature()
+        temp1 = self.testdsHost.getCPUTemperature()
         sleep(60)
-        self.testdsHost.getCPUTemperature()
+        temp2 = self.testdsHost.getCPUTemperature()
+
+        # Check if the temperature is within expected range while in same mode
+        # Are we fine with this range? What validation do we want?
+        result = abs(temp1 - temp2) < 5
+
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
