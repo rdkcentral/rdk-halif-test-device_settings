@@ -40,7 +40,7 @@ class dsVideoDeviceClass():
 
     moduleName = "dsVideoDevice"
     menuConfig =  dir_path + "/dsVideoDevice_test_suite.yml"
-    testSuite = "L3 dsVideodevice"
+    testSuite = "L3 dsVideoDevice"
 
     """
     Device Settings Videodevice Class
