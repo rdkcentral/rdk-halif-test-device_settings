@@ -54,6 +54,12 @@ class dsHostClass():
 
         self.utMenu.start()
 
+    def searchPattern(self, haystack, pattern):
+        match = re.search(pattern, haystack)
+        if match:
+            return match.group(1)
+        return None
+
     def initialise(self):
         """
         Initializes the device settings Host module.
@@ -77,6 +83,15 @@ class dsHostClass():
             None
         """
         result = self.utMenu.select( self.testSuite, "Get CPU Temperature")
+        typeStatusPattern = = r'Result dsGetCPUTemperature\(cpuTemperature: (?P<cpuTemperature>[-+]?\d*\.\d+|\d+)\)'
+        match = self.searchPattern(result, typeStatusPattern)
+
+        if match:
+            temperature = float(match.group('cpuTemperature'))
+            return temperature
+        else:
+            Print("Error: Could not get CPU temperature")
+            return None
 
     def getSoCID(self):
         """
