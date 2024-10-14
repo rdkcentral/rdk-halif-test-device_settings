@@ -41,9 +41,9 @@ class dsHostClass():
     testSuite = "L3 dsHost"
 
     """
-    Device Settings Audio Class
+    Device Settings Host Class
 
-    This module provides common extensions for device Settings Audio Module.
+    This module provides common extensions for device Settings Host Module.
     """
     def __init__(self, deviceProfilePath:str, session=None ):
         """
@@ -119,7 +119,7 @@ class dsHostClass():
 
     def terminate(self):
         """
-        Enables the audio port.
+        Terminates the host plugin.
 
         Args:
             None.
@@ -147,7 +147,7 @@ if __name__ == '__main__':
     shell = InteractiveShell()
     shell.open()
 
-    platformProfile = dir_path + "/../../../profiles/sink/Sink_AudioSettings.yaml"
+    platformProfile = dir_path + "/../../../profiles/sink/Sink_HostSettings.yaml"
     # test the class assuming that it's optional
     test = dsHostClass(platformProfile, shell)
 
