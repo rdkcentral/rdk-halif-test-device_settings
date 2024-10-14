@@ -432,23 +432,23 @@ class dsHdmiInClass():
         """
         promptWithAnswers = [
                 {
-                    "query_type": "list",
-                    "query": "Select dsHdmiIn Port:",
+                    "query_type": "direct",
+                    "query": "Enter the port number to select:",
                     "input": hdmiin_port
                 },
                 {
-                    "query_type": "list",
-                    "query": "Select audiomix value Index[0-1]:",
+                    "query_type": "direct",
+                    "query": "Enter the audiomix to select:",
                     "input": str(audmix)
                 },
                 {
-                    "query_type": "list",
-                    "query": "Select videoplane value Index[0]:",
+                    "query_type": "direct",
+                    "query": "Supported  the videoplane type:",
                     "input": str(videoplane)
                 },
                 {
-                    "query_type": "list",
-                    "query": "Select videoplane value Index[1]:",
+                    "query_type": "direct",
+                    "query": "Enter the topmost to select",
                     "input": str(topmost)
                 }
         ]
