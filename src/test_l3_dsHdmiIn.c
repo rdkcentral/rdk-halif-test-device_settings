@@ -432,16 +432,18 @@ void test_l3_HdmiIn_initialize(void)
     UT_LOG_INFO("Result dsHdmiInInit() dsError_t:[%s]", UT_Control_GetMapString(dsError_mapTable, ret));
     DS_ASSERT(ret == dsERR_NONE);
 
-    /* Register connection status callback */
-    UT_LOG_INFO("Calling dsHdmiInRegisterConnectCB(IN:CBFunc:[0x%0X])", hdmiInConnectCB);
-    ret = dsHdmiInRegisterConnectCB(hdmiInConnectCB);
-    UT_LOG_INFO("Result dsHdmiInRegisterConnectCB(IN:CBFunc:[0x%0X]) dsError_t:[%s]",
-                        hdmiInConnectCB, UT_Control_GetMapString(dsError_mapTable, ret));
-    DS_ASSERT(ret == dsERR_NONE);
-
-    /* Register Signal change callback */
     if(select == 0)
     {
+
+        /* Register connection status callback */
+        UT_LOG_INFO("Calling dsHdmiInRegisterConnectCB(IN:CBFunc:[0x%0X])", hdmiInConnectCB);
+        ret = dsHdmiInRegisterConnectCB(hdmiInConnectCB);
+        UT_LOG_INFO("Result dsHdmiInRegisterConnectCB(IN:CBFunc:[0x%0X]) dsError_t:[%s]",
+                        hdmiInConnectCB, UT_Control_GetMapString(dsError_mapTable, ret));
+        DS_ASSERT(ret == dsERR_NONE);
+
+        /* Register Signal change callback */
+    
         UT_LOG_INFO("Calling dsHdmiInRegisterSignalChangeCB(IN:CBFun:[0x%0X])", hdmiInSignalChangeCB);
         ret = dsHdmiInRegisterSignalChangeCB(hdmiInSignalChangeCB);
         UT_LOG_INFO("Result dsHdmiInRegisterSignalChangeCB(IN:CBFun:[0x%0X]) dsError_t:[%s]",
