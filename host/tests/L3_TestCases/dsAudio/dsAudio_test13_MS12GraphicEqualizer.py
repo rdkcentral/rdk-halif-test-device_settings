@@ -25,7 +25,7 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -33,36 +33,39 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test18_AudioLevel(utHelperClass):
+class dsAudio_test13_MS12GraphicEqualizer(utHelperClass):
     """
-    Test class for validating audio gain levels on the device under test (DUT).
+    Class to perform tests on the MS12 Graphic Equalizer feature.
 
-    This class inherits from `utHelperClass` and implements a series of tests
-    to verify the audio gain levels across different audio ports.
+    Inherits from utHelperClass and implements functionalities to test the
+    Graphic Equalizer feature in the audio processing module.
 
     Attributes:
-        testName (str): Name of the test case.
+        testName (str): Name of the test.
         testSetupPath (str): Path to the test setup configuration file.
-        moduleName (str): Name of the module being tested.
-        rackDevice (str): Identifier for the device under test.
-        gainLevels (list): List of gain levels to be tested.
+        moduleName (str): Name of the audio module.
+        rackDevice (str): Device under test (DUT).
+        ms12DAPFeature (str): The audio processing feature being tested.
+        equalizerModes (list): List of Graphic Equalizer modes to be tested.
     """
 
-    testName  = "test18_AudioLevel"
+    testName  = "test13_MS12GraphicEqualizer"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    gainLevels = [0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0]
+    ms12DAPFeature = "GraphicEqualizer"
+    equalizerModes = [0, 1, 2, 3]
 
     def __init__(self):
         """
-        Initializes the `dsAudio_test18_AudioLevel` instance.
+        Initializes the dsAudio_test13_MS12GraphicEqualizer test.
 
-        Sets up the test configuration, initializes necessary sessions,
-        and prepares the player and user response handling classes.
+        This constructor sets up the test environment, including configuration
+        file loading, player and HAL session initialization, and user response
+        handling.
 
         Args:
-            None.
+            None
         """
         super().__init__(self.testName, '1')
 
@@ -142,38 +145,43 @@ class dsAudio_test18_AudioLevel(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyAudioGainLevel(self, port, gain, manual=False):
+    def testVerifyGraphicEqualizer(self, stream, port, mode, manual=False):
         """
-        Verifies whether the specified audio gain level is correctly applied.
+        Verifies the effectiveness of the Graphic Equalizer feature.
+
+        This method checks if the audio output is as expected when the Graphic
+        Equalizer is set to a specific mode.
 
         Args:
-            port (str): Audio port to verify.
-            gain (float): Gain value to check.
-            manual (bool, optional): Indicates whether to use manual verification.
-                                     Defaults to False, which uses automated methods.
+            stream (str): The audio stream being tested.
+            port (str): The audio port to verify.
+            mode (int): The specific Graphic Equalizer mode to test.
+            manual (bool, optional): If True, requests user confirmation for verification.
+                                     Defaults to False (uses other verification methods).
 
         Returns:
-            bool: True if the audio gain level is correctly applied, otherwise False.
+            bool: The verification status of the audio output.
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has audio gain level {gain} applied to the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} mode {mode} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
         """
-        Main test function for validating audio gain levels.
+        Executes the main test for the MS12 Graphic Equalizer feature.
 
-        This method performs the following actions:
-        - Downloads necessary test assets.
-        - Runs prerequisite commands.
-        - Initializes the audio module.
-        - Plays the audio stream
-        - Vlidating gain levels on supported audio ports.
+        This function orchestrates:
+        - The downloading of assets
+        - Running prerequisites
+        - Initializing the audio module
+        - Play the Audio Stream
+        - Testing the Graphic Equalizer feature across various modes
+        - Cleaning up afterward.
 
         Returns:
-            bool: The final status of the output mode tests.
+            bool: The final result of the test.
         """
 
         # Download the assets listed in test setup configuration file
@@ -196,19 +204,22 @@ class dsAudio_test18_AudioLevel(utHelperClass):
 
             # Loop through the supported audio ports
             for port,index in self.testdsAudio.getSupportedPorts():
-                if "HEADPHONE" in port or "SPEAKER" in port:
+                if self.testdsAudio.getMS12DAPFeatureSupport(port, index, self.ms12DAPFeature):
                     # Enable the audio port
                     self.testdsAudio.enablePort(port, index)
 
-                    for gain in self.gainLevels:
-                        self.log.stepStart(f'Gain Level:{gain} Port:{port} Index:{index} Stream:{stream}')
+                    for mode in self.equalizerModes:
+                        self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} Port:{port} Index:{index} Stream:{stream}')
 
-                        # Set the gain level
-                        self.testdsAudio.setGainLevel(port, index, gain)
+                        # Set the GraphicEqualizer
+                        self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":mode})
 
-                        result = self.testVerifyAudioGainLevel(port, gain, True)
+                        result = self.testVerifyGraphicEqualizer(stream, port, mode, True)
 
-                        self.log.stepResult(result, f'Gain Level:{gain} Port:{port} Index:{index} Stream:{stream}')
+                        self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} Port:{port} Index:{index} Stream:{stream}')
+
+                    # Set the GraphicEqualizer to off
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":0})
 
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)
@@ -228,5 +239,5 @@ class dsAudio_test18_AudioLevel(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test18_AudioLevel()
+    test = dsAudio_test13_MS12GraphicEqualizer()
     test.run(False)

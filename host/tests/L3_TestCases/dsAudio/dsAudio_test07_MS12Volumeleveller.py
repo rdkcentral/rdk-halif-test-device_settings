@@ -25,7 +25,7 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -33,39 +33,36 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test13_MS12GraphicEqualizer(utHelperClass):
+class dsAudio_test07_MS12Volumeleveller(utHelperClass):
     """
-    Class to perform tests on the MS12 Graphic Equalizer feature.
-
-    Inherits from utHelperClass and implements functionalities to test the
-    Graphic Equalizer feature in the audio processing module.
+    Test class for MS12 Volume Leveller functionality.
 
     Attributes:
-        testName (str): Name of the test.
-        testSetupPath (str): Path to the test setup configuration file.
-        moduleName (str): Name of the audio module.
-        rackDevice (str): Device under test (DUT).
-        ms12DAPFeature (str): The audio processing feature being tested.
-        equalizerModes (list): List of Graphic Equalizer modes to be tested.
+        testName (str): Name of the test case.
+        testSetupPath (str): Path to the test setup YAML file.
+        moduleName (str): Name of the module being tested.
+        rackDevice (str): The rack device type (DUT - Device Under Test).
+        ms12DAPFeature (str): Name of the MS12 DAP feature being tested.
+        volumeModes (list): List of Volume leveller modes to test.
+        volumeLevels (list): List of Volume leveller levels to test.
     """
 
-    testName  = "test13_MS12GraphicEqualizer"
+    testName  = "test07_MS12Volumeleveller"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    ms12DAPFeature = "GraphicEqualizer"
-    equalizerModes = [0, 1, 2, 3]
+    ms12DAPFeature = "Volumeleveller"
+    volumeModes = [0, 1, 2]
+    volumeLevels = [0, 5, 10]
 
     def __init__(self):
         """
-        Initializes the dsAudio_test13_MS12GraphicEqualizer test.
+        Initializes the test case for MS12 Volume leveller.
 
-        This constructor sets up the test environment, including configuration
-        file loading, player and HAL session initialization, and user response
-        handling.
+        Sets up necessary sessions, config files, and utility classes required for the test.
 
         Args:
-            None
+            None.
         """
         super().__init__(self.testName, '1')
 
@@ -145,43 +142,39 @@ class dsAudio_test13_MS12GraphicEqualizer(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyGraphicEqualizer(self, stream, port, mode, manual=False):
+    def testVerifyVolumeleveller(self, stream, port, mode, level, manual=False):
         """
-        Verifies the effectiveness of the Graphic Equalizer feature.
-
-        This method checks if the audio output is as expected when the Graphic
-        Equalizer is set to a specific mode.
+        Verifies whether the Volume Leveller feature is functioning correctly.
 
         Args:
-            stream (str): The audio stream being tested.
-            port (str): The audio port to verify.
-            mode (int): The specific Graphic Equalizer mode to test.
-            manual (bool, optional): If True, requests user confirmation for verification.
-                                     Defaults to False (uses other verification methods).
+            stream (str): Stream used for testing
+            port (str): Audio port to verify
+            mode (int): Volume leveller mode
+            level (int): Volume leveller level
+            manual (bool, optional): Manual verification option (True: manual, False: automated).
+                                     Defaults to False.
 
         Returns:
-            bool: The verification status of the audio output.
+            bool: Status indicating whether the audio verification was successful.
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} mode {mode} applied to the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} mode {mode} level {level} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
         """
-        Executes the main test for the MS12 Graphic Equalizer feature.
+       Main function to test the MS12 Volume Leveller.
 
-        This function orchestrates:
-        - The downloading of assets
-        - Running prerequisites
-        - Initializing the audio module
-        - Play the Audio Stream
-        - Testing the Graphic Equalizer feature across various modes
-        - Cleaning up afterward.
+        This function:
+        - Plays audio streams
+        - Apply  Volume Leveller modes on supported audio ports
+        - verify the results.
+        - Cleans up the assets after the test completes.
 
         Returns:
-            bool: The final result of the test.
+            bool: Result of the final verification.
         """
 
         # Download the assets listed in test setup configuration file
@@ -208,18 +201,39 @@ class dsAudio_test13_MS12GraphicEqualizer(utHelperClass):
                     # Enable the audio port
                     self.testdsAudio.enablePort(port, index)
 
-                    for mode in self.equalizerModes:
-                        self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} Port:{port} Index:{index} Stream:{stream}')
+                    mode = 2 #leveller is Auto
+                    level = 0
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} level:{level} Port:{port} Index:{index} Stream:{stream}')
 
-                        # Set the GraphicEqualizer
-                        self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":mode})
+                    # Set the volume leveller
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, level]})
 
-                        result = self.testVerifyGraphicEqualizer(stream, port, mode, True)
+                    result = self.testVerifyVolumeleveller(stream, port, mode, level, True)
 
-                        self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} Port:{port} Index:{index} Stream:{stream}')
+                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} level:{level} Port:{port} Index:{index} Stream:{stream}')
 
-                    # Set the GraphicEqualizer to off
-                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":0})
+                    mode = 1 #leveller is On
+                    level = 0
+                    for level in self.volumeLevels:
+                        self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} level:{level} Port:{port} Index:{index} Stream:{stream}')
+
+                        # Set the volume leveller
+                        self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, level]})
+
+                        result = self.testVerifyVolumeleveller(stream, port, mode, level, True)
+
+                        self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} level:{level} Port:{port} Index:{index} Stream:{stream}')
+
+                    mode = 0 #leveller is OFF
+                    level = 0
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} level:{level} Port:{port} Index:{index} Stream:{stream}')
+
+                    # Set the volume leveller
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, level]})
+
+                    result = self.testVerifyVolumeleveller(stream, port, mode, level, True)
+
+                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} level:{level} Port:{port} Index:{index} Stream:{stream}')
 
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)
@@ -239,5 +253,5 @@ class dsAudio_test13_MS12GraphicEqualizer(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test13_MS12GraphicEqualizer()
+    test = dsAudio_test07_MS12Volumeleveller()
     test.run(False)

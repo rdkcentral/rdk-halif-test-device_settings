@@ -25,7 +25,7 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -33,33 +33,33 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test07_MS12Volumeleveller(utHelperClass):
+class dsAudio_test10_MS12DRCMode(utHelperClass):
     """
-    Test class for MS12 Volume Leveller functionality.
+    Test case class for testing the MS12 Dynamic Range Control (DRC) Mode.
+
+    This class inherits from utHelperClass and encapsulates the setup,
+    execution, and validation of the DRC feature in the MS12 audio system.
 
     Attributes:
-        testName (str): Name of the test case.
-        testSetupPath (str): Path to the test setup YAML file.
-        moduleName (str): Name of the module being tested.
-        rackDevice (str): The rack device type (DUT - Device Under Test).
-        ms12DAPFeature (str): Name of the MS12 DAP feature being tested.
-        volumeModes (list): List of Volume leveller modes to test.
-        volumeLevels (list): List of Volume leveller levels to test.
+        testName (str): Name of the test.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Name of the module under test.
+        rackDevice (str): Identifier for the Device Under Test (DUT).
+        ms12DAPFeature (str): The specific audio feature being tested.
     """
 
-    testName  = "test07_MS12Volumeleveller"
+    testName  = "test10_MS12DRCMode"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    ms12DAPFeature = "Volumeleveller"
-    volumeModes = [0, 1, 2]
-    volumeLevels = [0, 5, 10]
+    ms12DAPFeature = "DRCMode"
 
     def __init__(self):
         """
-        Initializes the test case for MS12 Volume leveller.
+        Initializes the dsAudio_test10_MS12DRCMode test instance.
 
-        Sets up necessary sessions, config files, and utility classes required for the test.
+        This constructor sets up necessary sessions and configurations
+        for the DRC mode test.
 
         Args:
             None.
@@ -142,39 +142,41 @@ class dsAudio_test07_MS12Volumeleveller(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyVolumeleveller(self, stream, port, mode, level, manual=False):
+    def testVerifyDRCMode(self, stream, port, mode, manual=False):
         """
-        Verifies whether the Volume Leveller feature is functioning correctly.
+        Verifies the audio output when the DRC mode is applied.
+
+        This method checks if the audio is being processed correctly based on the mode.
 
         Args:
-            stream (str): Stream used for testing
-            port (str): Audio port to verify
-            mode (int): Volume leveller mode
-            level (int): Volume leveller level
-            manual (bool, optional): Manual verification option (True: manual, False: automated).
-                                     Defaults to False.
+            stream (str) : The audio stream used for testing.
+            port (str) : The audio port to verify.
+            mode (bool): The current DRC mode (0: Line Mode, 1: RF Mode).
+            manual (bool, optional): If True, prompts for manual verification;
+                                     if False, uses automated verification methods. Defaults to False.
 
         Returns:
-            bool: Status indicating whether the audio verification was successful.
+            bool : Returns the verification status of the audio output (True for success, False for failure).
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} mode {mode} level {level} applied to the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} {mode} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
         """
-       Main function to test the MS12 Volume Leveller.
+        Executes the test for the MS12 DRC Mode.
 
-        This function:
-        - Plays audio streams
-        - Apply  Volume Leveller modes on supported audio ports
-        - verify the results.
-        - Cleans up the assets after the test completes.
+        This method orchestrates
+        - The download of assets
+        - Execution of prerequisites
+        - Play the Audio Stream
+        - Apply the DRC modes for supported ports
+        - The main verification steps for testing the DRC feature.
 
         Returns:
-            bool: Result of the final verification.
+            bool : The final verification result of the DRC mode test.
         """
 
         # Download the assets listed in test setup configuration file
@@ -192,8 +194,6 @@ class dsAudio_test07_MS12Volumeleveller(utHelperClass):
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
         for stream in self.testStreams:
-            # Start the stream playback
-            self.testPlayer.play(stream)
 
             # Loop through the supported audio ports
             for port,index in self.testdsAudio.getSupportedPorts():
@@ -201,45 +201,38 @@ class dsAudio_test07_MS12Volumeleveller(utHelperClass):
                     # Enable the audio port
                     self.testdsAudio.enablePort(port, index)
 
-                    mode = 2 #leveller is Auto
-                    level = 0
-                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} level:{level} Port:{port} Index:{index} Stream:{stream}')
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:DRC Line Mode Port:{port} Index:{index} Stream:{stream}')
 
-                    # Set the volume leveller
-                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, level]})
+                    # Set DRC Line Mode
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":0})
 
-                    result = self.testVerifyVolumeleveller(stream, port, mode, level, True)
+                    # Start the stream playback
+                    self.testPlayer.play(stream)
 
-                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} level:{level} Port:{port} Index:{index} Stream:{stream}')
+                    result = self.testVerifyDRCMode(stream, port, 0, True)
 
-                    mode = 1 #leveller is On
-                    level = 0
-                    for level in self.volumeLevels:
-                        self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} level:{level} Port:{port} Index:{index} Stream:{stream}')
+                    # Stop the stream playback
+                    self.testPlayer.stop()
 
-                        # Set the volume leveller
-                        self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, level]})
+                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:DRC RF Mode Port:{port} Index:{index} Stream:{stream}')
 
-                        result = self.testVerifyVolumeleveller(stream, port, mode, level, True)
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
 
-                        self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} level:{level} Port:{port} Index:{index} Stream:{stream}')
+                    # Set DRC RF Mode
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":1})
 
-                    mode = 0 #leveller is OFF
-                    level = 0
-                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} level:{level} Port:{port} Index:{index} Stream:{stream}')
+                    # Start the stream playback
+                    self.testPlayer.play(stream)
 
-                    # Set the volume leveller
-                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, level]})
+                    result = self.testVerifyDRCMode(stream, port, 1, True)
 
-                    result = self.testVerifyVolumeleveller(stream, port, mode, level, True)
+                    # Stop the stream playback
+                    self.testPlayer.stop()
 
-                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} level:{level} Port:{port} Index:{index} Stream:{stream}')
+                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{False} Port:{port} Index:{index} Stream:{stream}')
 
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)
-
-            # Stop the stream playback
-            self.testPlayer.stop()
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
@@ -253,5 +246,5 @@ class dsAudio_test07_MS12Volumeleveller(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test07_MS12Volumeleveller()
+    test = dsAudio_test10_MS12DRCMode()
     test.run(False)

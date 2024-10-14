@@ -25,7 +25,7 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -33,25 +33,27 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test04_MS12DialogueEnhancer(utHelperClass):
+class dsAudio_test05_MS12DolbyVolume(utHelperClass):
     """
-    Test class to validate the MS12 Dialogue Enhancer functionality.
+    Test case for verifying the MS12 Dolby Volume feature on supported audio ports.
 
-    This test configures and verifies different levels of the MS12 Dialogue Enhancer
-    using the dsAudio class on the DUT (Device Under Test).
+    Attributes:
+        testName (str): Name of the test case.
+        testSetupPath (str): Path to the test setup YAML file.
+        moduleName (str): Name of the module being tested.
+        rackDevice (str): The rack device type (DUT - Device Under Test).
+        ms12DAPFeature (str): The name of the MS12 DAP feature being tested.
     """
 
-    testName  = "test04_MS12DialogueEnhancer"
+    testName  = "test05_MS12DolbyVolume"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    ms12DAPFeature = "DialogueEnhancer"
-    dialogueEnhance = [0, 8, 16]
+    ms12DAPFeature = "DolbyVolume"
 
     def __init__(self):
         """
-        Initializes the test04_MS12DialogueEnhancer test, setting up player sessions,
-        configuration reading, and other required components
+        Initializes the test case for MS12 Dolby Volume.
 
         Args:
             None.
@@ -134,37 +136,36 @@ class dsAudio_test04_MS12DialogueEnhancer(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyDialogueEnhance(self, stream, port, level, manual=False):
+    def testVerifyDolbyVolume(self, stream, port, mode, manual=False):
         """
-        Verifies if the MS12 Dialogue Enhancer level is correctly applied.
+        Verifies if the Dolby Volume feature is applied correctly.
 
         Args:
-            stream (str): The stream used for testing.
-            port (str): The audio port to verify.
-            level (int): The Dialogue Enhancer level (0-16).
-            manual (bool): If True, prompts the user for verification. Defaults to False.
+            stream (str): The audio stream being tested.
+            port (str): The audio port where the test is applied.
+            mode (bool): The Dolby Volume mode (True for enabled, False for disabled).
+            manual (bool, optional): Set to True for manual verification via user input.
 
         Returns:
-            bool: True if the user confirms, otherwise False.
+            bool: Verification result (True if Dolby Volume is correctly applied).
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} level {level} applied to the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} {mode} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
         """
-        Main test function to validate MS12 Dialogue Enhancer functionality.
+        Executes the full test sequence for MS12 Dolby Volume.
 
-        This function
-        - Downloads assets
-        - Plays test streams
-        - Cconfigures the Dialogue Enhancer
-        - Verifies the enhancement, and cleans up after the test.
+        This function:
+        - Plays audio streams
+        - Applies Dolby Volume settings
+        - Verifies audio ports, and cleans up assets.
 
         Returns:
-            bool: True if the test passes, otherwise False.
+            bool: Final test result (True if the test passes, False otherwise).
         """
 
         # Download the assets listed in test setup configuration file
@@ -191,18 +192,23 @@ class dsAudio_test04_MS12DialogueEnhancer(utHelperClass):
                     # Enable the audio port
                     self.testdsAudio.enablePort(port, index)
 
-                    for level in self.dialogueEnhance:
-                        self.log.stepStart(f'MS12 {self.ms12DAPFeature} level:{level} Port:{port} Index:{index} Stream:{stream}')
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
 
-                        # Set the DialogueEnhancer
-                        self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":level})
+                    # Enable Dolby Volume mode
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":True})
 
-                        result = self.testVerifyDialogueEnhance(stream, port, level, True)
+                    result = self.testVerifyDolbyVolume(stream, port, True, True)
 
-                        self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} level:{level} Port:{port} Index:{index} Stream:{stream}')
+                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
 
-                    # Set the DialogueEnhancer to default
-                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":0})
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
+
+                    # Disable Dolby Volume mode
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":False})
+
+                    result = self.testVerifyDolbyVolume(stream, port, False, True)
+
+                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{False} Port:{port} Index:{index} Stream:{stream}')
 
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)
@@ -222,5 +228,5 @@ class dsAudio_test04_MS12DialogueEnhancer(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test04_MS12DialogueEnhancer()
+    test = dsAudio_test05_MS12DolbyVolume()
     test.run(False)

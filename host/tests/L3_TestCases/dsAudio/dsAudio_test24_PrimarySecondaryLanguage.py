@@ -23,9 +23,10 @@
 
 import os
 import sys
+import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -33,32 +34,33 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test03_MS12AudioCompression(utHelperClass):
+class dsAudio_test24_PrimarySecondaryLanguage(utHelperClass):
     """
-    Test class to verify the MS12 audio compression feature on various audio ports.
+    Test class for verifying the functionality of Primary and secondary languages.
 
-    This test interacts with the `dsAudioClass` to:
-    - Set audio compression levels.
-    - Verify the application of compression on audio streams.
-    - Perform manual or automated verification of audio quality and compression.
+    Attributes:
+        testName (str): Name of the test.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Name of the module being tested.
+        rackDevice (str): Identifier for the device under test.
+        streamLanguage (dict): List of Dictionary of languages.
     """
-
-    testName  = "test03_MS12AudioCompression"
+    testName  = "test24_PrimarySecondaryLanguage"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    compressionValues = [0, 5, 10] # Different levels of audio compression to be tested
+    streamLanguage = [{"Primary": ["eng", "spa", "zho"], "Secondary": ["eng", "spa", "zho"]}]
 
     def __init__(self):
         """
-        Initializes the MS12 Audio Compression test with setup configuration and sessions.
+        Initializes the test24_PrimarySecondaryLanguage test .
 
         Args:
             None.
         """
         super().__init__(self.testName, '1')
 
-        # Load test setup configuration
+        # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
         # Open Session for player
@@ -128,44 +130,46 @@ class dsAudio_test03_MS12AudioCompression(utHelperClass):
 
         #Run test specific commands
         test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("execute")
+        cmds = test.get("execute");
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyCompressionLevel(self, stream, port, compression, manual=False):
+    def testVerifyAudio(self, port, language_type:str, language:str, manual=False):
         """
-        Verifies whether the specified audio compression level is applied on the given port.
+        Verifies the audio stream in the specified language (Primary or Secondary).
+
+        The verification can be performed manually or through an automated method (if available).
+        Currently, the manual method prompts the user to confirm whether the audio is playing
+        correctly.
 
         Args:
-            stream (str): The audio stream used for testing.
-            port (str): The audio port on which compression is verified.
-            compression (int): The compression level applied.
-            manual (bool, optional): Manual verification (True for manual verification, False for other methods).
-                                     Defaults to True for manual verification.
+            port (str) : The audio port to verify.
+            language_type (str): Specifies the language type, either "Primary" or "Secondary".
+            language (str): The 3-letter ISO 639-3 code representing the language (e.g., 'eng' for English).
+            manual (bool, optional): If True, prompts the user for manual verification.
+                                     Defaults to automated verification (when implemented).
 
         Returns:
-            bool: Returns True if the compression is correctly applied, else False.
+            bool: The status of the audio verification (True if audio is correct, False otherwise).
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has audio compression level {compression} applied to the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Is Audio playing on {port} as expected with {language_type} {language} Language? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
         """
-        Main test function for verifying MS12 audio compression across various audio ports.
+        Tests the Primary and Secondary audio language switching functionality.
 
-        This function:
-        - Downloads the required assets.
-        - Runs the prerequisite commands.
-        - Tests different levels of audio compression for each supported audio port.
-        - Allows manual or future automated verification.
+        This method validates the audio playback for both primary and secondary languages
+        by configuring the audio streams as per the test setup, running the test, and verifying
+        the results manually.
 
         Returns:
-            bool: Final result of the test.
+            bool: True if the test completes successfully.
         """
 
         # Download the assets listed in test setup configuration file
@@ -182,34 +186,48 @@ class dsAudio_test03_MS12AudioCompression(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        for stream in self.testStreams:
-            # Start the stream playback
-            self.testPlayer.play(stream)
+        for port,index in self.testdsAudio.getSupportedPorts():
+            # Enable the audio port
+            self.testdsAudio.enablePort(port, index)
 
-            # Loop through the supported audio ports
-            for port,index in self.testdsAudio.getSupportedPorts():
-                if self.testdsAudio.getAudioCompressionSupport(port, index):
-                    # Enable the audio port
-                    self.testdsAudio.enablePort(port, index)
+            for i, stream in enumerate(self.testStreams):
 
-                    for compression in self.compressionValues:
-                        self.log.stepStart(f'Audio Compression:{compression} Port:{port} Index:{index} Stream:{stream}')
+                self.testdsAudio.enableAssociateAudioMixig(False)
 
-                        # Set audio compression value
-                        self.testdsAudio.setAudioCompression(port, index, compression)
+                # Start the stream playback
+                self.testPlayer.play(stream)
 
-                        result = self.testVerifyCompressionLevel(stream, port, compression, True)
+                for secondary in self.streamLanguage[i]["Secondary"]:
+                    self.log.stepStart(f'Secondary Language Test Stream: {stream} Language: {secondary}')
 
-                        self.log.stepResult(result, f'Audio Compression:{compression} Port:{port} Index:{index} Stream:{stream}')
+                    self.testdsAudio.setPrimarySecondaryLanguage("Secondary", secondary)
 
-                    # Resetting audio compression value to default
-                    self.testdsAudio.setAudioCompression(port, index, 0)
+                    result = self.testVerifyAudio(port, "Secondary", secondary, True)
 
-                    # Disable the audio port
-                    self.testdsAudio.disablePort(port, index)
+                    self.log.stepResult(result, f'Secondary Language Test Stream: {stream} Language: {secondary}')
 
-            # Stop the stream playback
-            self.testPlayer.stop()
+                # Stop the stream playback
+                self.testPlayer.stop()
+
+                time.sleep(3)
+
+                # Start the stream playback
+                self.testPlayer.play(stream)
+
+                for primary in self.streamLanguage[i]["Primary"]:
+                    self.log.stepStart(f'Primary Language Test Stream: {stream} Language: {primary}')
+
+                    self.testdsAudio.setPrimarySecondaryLanguage("Primary", primary)
+
+                    result = self.testVerifyAudio(port, "Primary", primary, True)
+
+                    self.log.stepResult(result, f'Primary Language Test Stream: {stream} Language: {primary}')
+
+                # Stop the stream playback
+                self.testPlayer.stop()
+
+            # Disable the audio port
+            self.testdsAudio.disablePort(port, index)
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
@@ -220,8 +238,8 @@ class dsAudio_test03_MS12AudioCompression(utHelperClass):
         # Delete the dsAudio class
         del self.testdsAudio
 
-        return result
+        return True
 
 if __name__ == '__main__':
-    test = dsAudio_test03_MS12AudioCompression()
+    test = dsAudio_test24_PrimarySecondaryLanguage()
     test.run(False)

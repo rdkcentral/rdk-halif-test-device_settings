@@ -25,7 +25,7 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -33,40 +33,32 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test17_OutputMode(utHelperClass):
+class dsAudio_test03_MS12AudioCompression(utHelperClass):
     """
-    Test case class for verifying the audio output modes of the Device Under Test (DUT).
-    
-    This class inherits from utHelperClass and implements various test methods to ensure 
-    proper functionality of audio output modes.
+    Test class to verify the MS12 audio compression feature on various audio ports.
 
-    Attributes:
-        testName (str): The name of the test case.
-        testSetupPath (str): Path to the test setup configuration file.
-        moduleName (str): Name of the audio module under test.
-        rackDevice (str): Device under test identifier.
-        testOutputModes (list): List of audio output modes to be tested.
+    This test interacts with the `dsAudioClass` to:
+    - Set audio compression levels.
+    - Verify the application of compression on audio streams.
+    - Perform manual or automated verification of audio quality and compression.
     """
-    testName  = "test17_OutputMode"
+
+    testName  = "test03_MS12AudioCompression"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    testOutputModes = [["STEREO", "PASSTHRU"], ["STEREO", "DD", "PASSTHRU"], ["STEREO", "DD", "DDPLUS", "PASSTHRU"]]
+    compressionValues = [0, 5, 10] # Different levels of audio compression to be tested
 
     def __init__(self):
         """
-        Initializes the dsAudio_test17_OutputMode test instance.
-
-        This constructor sets up the necessary configurations, including loading the test 
-        setup file, establishing console sessions for player and HAL, and initializing 
-        the player and user response classes.
+        Initializes the MS12 Audio Compression test with setup configuration and sessions.
 
         Args:
             None.
         """
         super().__init__(self.testName, '1')
 
-        # Test Setup configuration file
+        # Load test setup configuration
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
         # Open Session for player
@@ -136,45 +128,44 @@ class dsAudio_test17_OutputMode(utHelperClass):
 
         #Run test specific commands
         test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("execute");
+        cmds = test.get("execute")
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyOutputMode(self, stream, port, outMode, manual=False):
+    def testVerifyCompressionLevel(self, stream, port, compression, manual=False):
         """
-        Verifies the audio output mode on the specified audio port during playback.
+        Verifies whether the specified audio compression level is applied on the given port.
 
         Args:
-            stream (str): The audio stream being tested.
-            port (str): The audio port to verify the output mode.
-            outMode (str): The expected output mode.
-            manual (bool, optional): Flag to indicate if manual verification is required.
-                                     Defaults to False (automated verification).
+            stream (str): The audio stream used for testing.
+            port (str): The audio port on which compression is verified.
+            compression (int): The compression level applied.
+            manual (bool, optional): Manual verification (True for manual verification, False for other methods).
+                                     Defaults to True for manual verification.
 
         Returns:
-            bool: True if the output mode is correct; otherwise, False.
+            bool: Returns True if the compression is correctly applied, else False.
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Stream:{stream} Is output mode on the {port} {outMode}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has audio compression level {compression} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
         """
-        Executes the output mode tests for the audio ports by enabling/disabling each port.
+        Main test function for verifying MS12 audio compression across various audio ports.
 
-        This method performs the following actions:
-        - Downloads necessary test assets.
-        - Runs prerequisite commands.
-        - Initializes the audio module.
-        - Plays the audio stream
-        - Tests each supported audio port by setting and verifying output modes.
+        This function:
+        - Downloads the required assets.
+        - Runs the prerequisite commands.
+        - Tests different levels of audio compression for each supported audio port.
+        - Allows manual or future automated verification.
 
         Returns:
-            bool: The final status of the output mode tests.
+            bool: Final result of the test.
         """
 
         # Download the assets listed in test setup configuration file
@@ -191,33 +182,34 @@ class dsAudio_test17_OutputMode(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        # Loop through the supported audio ports
-        for port,index in self.testdsAudio.getSupportedPorts():
-            supportedModes = self.testdsAudio.getSupportedOutputModes(port,index)
+        for stream in self.testStreams:
+            # Start the stream playback
+            self.testPlayer.play(stream)
 
-            if(supportedModes == None or len(supportedModes) == 0):
-                continue
+            # Loop through the supported audio ports
+            for port,index in self.testdsAudio.getSupportedPorts():
+                if self.testdsAudio.getAudioCompressionSupport(port, index):
+                    # Enable the audio port
+                    self.testdsAudio.enablePort(port, index)
 
-            # Enable the audio port
-            self.testdsAudio.enablePort(port, index)
+                    for compression in self.compressionValues:
+                        self.log.stepStart(f'Audio Compression:{compression} Port:{port} Index:{index} Stream:{stream}')
 
-            for i, stream in enumerate(self.testStreams):
-                # Start the stream playback
-                self.testPlayer.play(stream)
+                        # Set audio compression value
+                        self.testdsAudio.setAudioCompression(port, index, compression)
 
-                for mode in self.testOutputModes[i]:
-                    for smode in supportedModes:
-                        if mode in smode:
-                            self.log.stepStart(f'Test Outputmode Stream:{stream} Port:{port} index:{index} output mode:{smode}')
-                            # Set OutputMode
-                            self.testdsAudio.setOutputMode(port, index, smode)
-                            result = self.testVerifyOutputMode(stream, port, smode, True)
-                            self.log.stepResult(result, f'Test Outputmode Stream:{stream} Port:{port} index:{index} output mode:{smode}')
-                            break
-                # Stop the stream playback
-                self.testPlayer.stop()
-            # Disable the audio port
-            self.testdsAudio.disablePort(port, index)
+                        result = self.testVerifyCompressionLevel(stream, port, compression, True)
+
+                        self.log.stepResult(result, f'Audio Compression:{compression} Port:{port} Index:{index} Stream:{stream}')
+
+                    # Resetting audio compression value to default
+                    self.testdsAudio.setAudioCompression(port, index, 0)
+
+                    # Disable the audio port
+                    self.testdsAudio.disablePort(port, index)
+
+            # Stop the stream playback
+            self.testPlayer.stop()
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
@@ -231,5 +223,5 @@ class dsAudio_test17_OutputMode(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test17_OutputMode()
+    test = dsAudio_test03_MS12AudioCompression()
     test.run(False)

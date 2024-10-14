@@ -25,7 +25,7 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -33,33 +33,26 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test10_MS12DRCMode(utHelperClass):
+class dsAudio_test20_MuteUnMute(utHelperClass):
     """
-    Test case class for testing the MS12 Dynamic Range Control (DRC) Mode.
+    Class to perform mute and unmute tests on audio ports.
 
-    This class inherits from utHelperClass and encapsulates the setup,
-    execution, and validation of the DRC feature in the MS12 audio system.
+    Inherits from utHelperClass to leverage common test functionalities.
 
     Attributes:
-        testName (str): Name of the test.
+        testName (str): Name of the test case.
         testSetupPath (str): Path to the test setup configuration file.
-        moduleName (str): Name of the module under test.
-        rackDevice (str): Identifier for the Device Under Test (DUT).
-        ms12DAPFeature (str): The specific audio feature being tested.
+        moduleName (str): Name of the module being tested.
+        rackDevice (str): Identifier for the device under test.
     """
-
-    testName  = "test10_MS12DRCMode"
+    testName  = "test20_MuteUnMute"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    ms12DAPFeature = "DRCMode"
 
     def __init__(self):
         """
-        Initializes the dsAudio_test10_MS12DRCMode test instance.
-
-        This constructor sets up necessary sessions and configurations
-        for the DRC mode test.
+        Initializes the test20_MuteUnMute test .
 
         Args:
             None.
@@ -142,41 +135,41 @@ class dsAudio_test10_MS12DRCMode(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyDRCMode(self, stream, port, mode, manual=False):
+    def testVerifyAudio(self, port, manual=False):
         """
-        Verifies the audio output when the DRC mode is applied.
+        Verifies the audio output on the specified port.
 
-        This method checks if the audio is being processed correctly based on the mode.
+        This method checks if audio is playing on the specified port and allows
+        for manual confirmation if required.
 
         Args:
-            stream (str) : The audio stream used for testing.
-            port (str) : The audio port to verify.
-            mode (bool): The current DRC mode (0: Line Mode, 1: RF Mode).
-            manual (bool, optional): If True, prompts for manual verification;
-                                     if False, uses automated verification methods. Defaults to False.
+            port (str): The audio port to verify (e.g., "HDMI", "SPDIF").
+            manual (bool, optional): If True, requires manual confirmation from the user.
+                                     Defaults to False.
 
         Returns:
-            bool : Returns the verification status of the audio output (True for success, False for failure).
+            bool: True if audio is playing; otherwise, False.
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} {mode} applied to the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Is audio playing on the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
         """
-        Executes the test for the MS12 DRC Mode.
+        Executes the mute and unmute tests on the audio ports.
 
-        This method orchestrates
-        - The download of assets
-        - Execution of prerequisites
-        - Play the Audio Stream
-        - Apply the DRC modes for supported ports
-        - The main verification steps for testing the DRC feature.
+        This function performs the following steps:
+        - Downloads necessary assets.
+        - Runs prerequisite commands.
+        - Initializes the dsAudio module.
+        - Plays the audio stream
+        - Conducts mute and unmute tests on all supported audio ports.
+        - Cleans up the downloaded assets after testing.
 
         Returns:
-            bool : The final verification result of the DRC mode test.
+            bool: Status of the last verification (True if successful, False otherwise).
         """
 
         # Download the assets listed in test setup configuration file
@@ -194,45 +187,37 @@ class dsAudio_test10_MS12DRCMode(utHelperClass):
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
         for stream in self.testStreams:
-
+            # Start the stream playback
+            self.testPlayer.play(stream)
             # Loop through the supported audio ports
             for port,index in self.testdsAudio.getSupportedPorts():
-                if self.testdsAudio.getMS12DAPFeatureSupport(port, index, self.ms12DAPFeature):
-                    # Enable the audio port
-                    self.testdsAudio.enablePort(port, index)
 
-                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:DRC Line Mode Port:{port} Index:{index} Stream:{stream}')
+                # Enable the audio port
+                self.testdsAudio.enablePort(port, index)
 
-                    # Set DRC Line Mode
-                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":0})
+                self.log.stepStart(f'Mute Test Port:{port} Index:{index} Stream:{stream}')
 
-                    # Start the stream playback
-                    self.testPlayer.play(stream)
+                # Mute the Audio
+                self.testdsAudio.setAudioMute(port, index, True)
 
-                    result = self.testVerifyDRCMode(stream, port, 0, True)
+                result = self.testVerifyAudio(port, True)
 
-                    # Stop the stream playback
-                    self.testPlayer.stop()
+                self.log.stepResult(not result, f'Mute Test Port:{port} Index:{index} Stream:{stream}')
 
-                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:DRC RF Mode Port:{port} Index:{index} Stream:{stream}')
+                self.log.stepStart(f'UnMute Test Port:{port} Index:{index} Stream:{stream}')
 
-                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
+                # UnMute the Audio
+                self.testdsAudio.setAudioMute(port, index, False)
 
-                    # Set DRC RF Mode
-                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":1})
+                result = self.testVerifyAudio(port, True)
 
-                    # Start the stream playback
-                    self.testPlayer.play(stream)
+                self.log.stepResult(result, f'UnMute Test Port:{port} Index:{index} Stream:{stream}')
 
-                    result = self.testVerifyDRCMode(stream, port, 1, True)
+                # Disable the audio port
+                self.testdsAudio.disablePort(port, index)
 
-                    # Stop the stream playback
-                    self.testPlayer.stop()
-
-                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{False} Port:{port} Index:{index} Stream:{stream}')
-
-                    # Disable the audio port
-                    self.testdsAudio.disablePort(port, index)
+            # Stop the stream playback
+            self.testPlayer.stop()
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
@@ -246,5 +231,5 @@ class dsAudio_test10_MS12DRCMode(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test10_MS12DRCMode()
+    test = dsAudio_test20_MuteUnMute()
     test.run(False)

@@ -25,7 +25,7 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -33,27 +33,39 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test05_MS12DolbyVolume(utHelperClass):
+class dsAudio_test16_ARCSAD(utHelperClass):
     """
-    Test case for verifying the MS12 Dolby Volume feature on supported audio ports.
+    Test class for verifying the ARC SAD (Source Audio Descriptor) functionality.
 
     Attributes:
-        testName (str): Name of the test case.
-        testSetupPath (str): Path to the test setup YAML file.
+        testName (str): Name of the test.
+        testSetupPath (str): Path to the test setup configuration file.
         moduleName (str): Name of the module being tested.
-        rackDevice (str): The rack device type (DUT - Device Under Test).
-        ms12DAPFeature (str): The name of the MS12 DAP feature being tested.
+        rackDevice (str): Device under test (DUT).
+        sadList (list): Predefined list of ARC SAD values.
     """
-
-    testName  = "test05_MS12DolbyVolume"
+    testName  = "test16_ARCSAD"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    ms12DAPFeature = "DolbyVolume"
+    """
+    Summary of the 3-byte SAD Format:
+    Byte    Bit Fields  Description
+    Byte 1  Bits 0-2:   Audio Format Code: Type of audio format (PCM, AC-3, DTS, etc.)
+            Bits 3-6:   Maximum Number of Channels	Number of audio channels supported
+            Bit 7:      Reserved
+    Byte 2	Bits 0-6:   Sampling Frequencies: Supported sampling frequencies (32 kHz, 48 kHz, etc.)
+            Bit 7:      Reserved
+    Byte 3	For LPCM: Bit Depths (16, 20, 24-bit) Supported bit depths for PCM
+            For Compressed Formats: Maximum Bitrate	Maximum supported bitrate for compressed formats
+    """
+    # 0x0040382A - AC3 6 channels sampling rates (48, 96, 192 kHz), Max bitrate (512 kbps)
+    # 0x00070709 - PCM 2 channels sampling rates (32, 44.1, 48 kHz), bit depth (16, 20, 24 bit per sample)
+    sadList = [[0x00070709],[0x0040382A]]
 
     def __init__(self):
         """
-        Initializes the test case for MS12 Dolby Volume.
+        Initializes the dsAudio_test16_ARCSAD test.
 
         Args:
             None.
@@ -63,11 +75,11 @@ class dsAudio_test05_MS12DolbyVolume(utHelperClass):
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
-        # Open Session for player
-        self.player_session = self.dut.getConsoleSession("ssh_player")
-
         # Open Session for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
+
+        # Open Session for player
+        self.player_session = self.dut.getConsoleSession("ssh_player")
 
         player = self.cpe.get("test").get("player")
 
@@ -135,37 +147,38 @@ class dsAudio_test05_MS12DolbyVolume(utHelperClass):
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    #TODO: Current version supports only manual verification.
-    def testVerifyDolbyVolume(self, stream, port, mode, manual=False):
+    #TODO: Current version supports only manual.
+    def testARCSAD(self, sad, manual=False):
         """
-        Verifies if the Dolby Volume feature is applied correctly.
+        Verifies the ARC Source Audio Descriptor (SAD).
 
         Args:
-            stream (str): The audio stream being tested.
-            port (str): The audio port where the test is applied.
-            mode (bool): The Dolby Volume mode (True for enabled, False for disabled).
-            manual (bool, optional): Set to True for manual verification via user input.
+            sad (list): List of ARC SAD values to verify.
+            manual (bool, optional): Indicates whether to use manual control.
+                                     Defaults to False (automatic methods).
 
         Returns:
-            bool: Verification result (True if Dolby Volume is correctly applied).
+            bool: True if the SAD verification was successful, False otherwise.
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} {mode} applied to the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has SAD:{sad} sent to the ARC device [Y/N]:")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
         """
-        Executes the full test sequence for MS12 Dolby Volume.
+        Executes the test for verifying ARC SAD functionality.
 
-        This function:
-        - Plays audio streams
-        - Applies Dolby Volume settings
-        - Verifies audio ports, and cleans up assets.
+        This method performs the following steps:
+        - Downloads required assets.
+        - Runs prerequisite commands.
+        - Initializes the dsAudio module and player.
+        - Tests each supported audio port for ARC functionality.
+        - Stops the stream playback and cleans up.
 
         Returns:
-            bool: Final test result (True if the test passes, False otherwise).
+            bool: True if the test ran successfully, False otherwise.
         """
 
         # Download the assets listed in test setup configuration file
@@ -182,42 +195,30 @@ class dsAudio_test05_MS12DolbyVolume(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        for stream in self.testStreams:
-            # Start the stream playback
-            self.testPlayer.play(stream)
+        # Start the stream playback
+        self.testPlayer.play(self.testStreams[0])
 
-            # Loop through the supported audio ports
-            for port,index in self.testdsAudio.getSupportedPorts():
-                if self.testdsAudio.getMS12DAPFeatureSupport(port, index, self.ms12DAPFeature):
-                    # Enable the audio port
-                    self.testdsAudio.enablePort(port, index)
+        # Loop through the supported audio ports and initialize ARC port
+        for port,index in self.testdsAudio.getSupportedPorts():
+            if "ARC" in port:
+                # Enable the audio port
+                self.testdsAudio.enablePort(port, index)
 
-                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
+                for sad in self.sadList:
+                    self.log.stepStart(f'ARC SAD {sad} Test')
 
-                    # Enable Dolby Volume mode
-                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":True})
+                    self.testdsAudio.setARCSAD(sad)
 
-                    result = self.testVerifyDolbyVolume(stream, port, True, True)
+                    # Verify ARC SAD
+                    result = self.testARCSAD(sad, True)
 
-                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
+                    self.log.stepResult(result, f'ARC SAD {sad} Test')
 
-                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
+                # Disable the audio port
+                self.testdsAudio.disablePort(port, index)
 
-                    # Disable Dolby Volume mode
-                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":False})
-
-                    result = self.testVerifyDolbyVolume(stream, port, False, True)
-
-                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{False} Port:{port} Index:{index} Stream:{stream}')
-
-                    # Disable the audio port
-                    self.testdsAudio.disablePort(port, index)
-
-            # Stop the stream playback
-            self.testPlayer.stop()
-
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
+        # Stop the stream playback
+        self.testPlayer.stop()
 
         # Terminate dsAudio Module
         self.testdsAudio.terminate()
@@ -225,8 +226,8 @@ class dsAudio_test05_MS12DolbyVolume(utHelperClass):
         # Delete the dsAudio class
         del self.testdsAudio
 
-        return result
+        return True
 
 if __name__ == '__main__':
-    test = dsAudio_test05_MS12DolbyVolume()
+    test = dsAudio_test16_ARCSAD()
     test.run(False)

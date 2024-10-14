@@ -25,7 +25,7 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -33,31 +33,33 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
+class dsAudio_test18_AudioLevel(utHelperClass):
     """
-    Test case for verifying the MS12 Intelligent Equalizer feature across various modes.
+    Test class for validating audio gain levels on the device under test (DUT).
+
+    This class inherits from `utHelperClass` and implements a series of tests
+    to verify the audio gain levels across different audio ports.
 
     Attributes:
         testName (str): Name of the test case.
-        testSetupPath (str): Path to the test setup YAML file.
+        testSetupPath (str): Path to the test setup configuration file.
         moduleName (str): Name of the module being tested.
-        rackDevice (str): The rack device type (DUT - Device Under Test).
-        ms12DAPFeature (str): Name of the MS12 DAP feature being tested.
-        equalizerModes (list): List of Intelligent Equalizer modes to test.
+        rackDevice (str): Identifier for the device under test.
+        gainLevels (list): List of gain levels to be tested.
     """
 
-    testName  = "test06_MS12IntelligentEqualizer"
+    testName  = "test18_AudioLevel"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    ms12DAPFeature = "IntelligentEqualizer"
-    equalizerModes = ["OFF", "Open", "Rich", "Focused", "Balanced", "Warm", "Detailed"]
+    gainLevels = [0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0]
 
     def __init__(self):
         """
-        Initializes the test case for MS12 Intelligent Equalizer.
+        Initializes the `dsAudio_test18_AudioLevel` instance.
 
-        Sets up necessary sessions, config files, and utility classes required for the test.
+        Sets up the test configuration, initializes necessary sessions,
+        and prepares the player and user response handling classes.
 
         Args:
             None.
@@ -140,37 +142,38 @@ class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyIntelligentEqualizer(self, stream, port, mode, manual=False):
+    def testVerifyAudioGainLevel(self, port, gain, manual=False):
         """
-        Verifies whether the MS12 Intelligent Equalizer feature is applied correctly.
+        Verifies whether the specified audio gain level is correctly applied.
 
         Args:
-            stream (str): Audio stream used for testing.
-            port (str): Audio port being verified.
-            mode (str): Intelligent Equalizer mode being tested.
-            manual (bool, optional): Set to True for manual user verification, False for other methods.
+            port (str): Audio port to verify.
+            gain (float): Gain value to check.
+            manual (bool, optional): Indicates whether to use manual verification.
+                                     Defaults to False, which uses automated methods.
 
         Returns:
-            bool: Result of the verification (True if successful, False otherwise).
+            bool: True if the audio gain level is correctly applied, otherwise False.
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} mode {mode} applied to the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has audio gain level {gain} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
         """
-        Main function to test the MS12 Intelligent Equalizer feature.
+        Main test function for validating audio gain levels.
 
-        This function:
-        - Plays audio streams
-        - Apply Intelligent Equalizer modes on supported audio ports
-        - verify the results.
-        - Cleans up the assets after the test completes.
+        This method performs the following actions:
+        - Downloads necessary test assets.
+        - Runs prerequisite commands.
+        - Initializes the audio module.
+        - Plays the audio stream
+        - Vlidating gain levels on supported audio ports.
 
         Returns:
-            bool: Final test result (True if the test passes, False otherwise).
+            bool: The final status of the output mode tests.
         """
 
         # Download the assets listed in test setup configuration file
@@ -193,22 +196,19 @@ class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
 
             # Loop through the supported audio ports
             for port,index in self.testdsAudio.getSupportedPorts():
-                if self.testdsAudio.getMS12DAPFeatureSupport(port, index, self.ms12DAPFeature):
+                if "HEADPHONE" in port or "SPEAKER" in port:
                     # Enable the audio port
                     self.testdsAudio.enablePort(port, index)
 
-                    for mode in self.equalizerModes:
-                        self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} Port:{port} Index:{index} Stream:{stream}')
+                    for gain in self.gainLevels:
+                        self.log.stepStart(f'Gain Level:{gain} Port:{port} Index:{index} Stream:{stream}')
 
-                        # Set the Interlligent equalizer mode
-                        self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":mode})
+                        # Set the gain level
+                        self.testdsAudio.setGainLevel(port, index, gain)
 
-                        result = self.testVerifyIntelligentEqualizer(stream, port, mode, True)
+                        result = self.testVerifyAudioGainLevel(port, gain, True)
 
-                        self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} Port:{port} Index:{index} Stream:{stream}')
-
-                    # Set the Interlligent equalizer mode to OFF
-                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":"OFF"})
+                        self.log.stepResult(result, f'Gain Level:{gain} Port:{port} Index:{index} Stream:{stream}')
 
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)
@@ -228,5 +228,5 @@ class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test06_MS12IntelligentEqualizer()
+    test = dsAudio_test18_AudioLevel()
     test.run(False)

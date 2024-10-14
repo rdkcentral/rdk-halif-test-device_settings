@@ -25,7 +25,7 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -33,35 +33,43 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
+class dsAudio_test12_MS12MISteering(utHelperClass):
     """
-    Test class to enable, disable, and verify the status of audio ports on a device.
-
-    This class uses the `dsAudioClass` to interact with the device's audio ports,
-    downloading necessary test assets, playing audio streams, enabling and disabling
-    audio ports, and performing verification of audio output.
+    Class to test MS12 MISteering functionality in the dsAudio module.
+    
+    Attributes:
+        testName (str): Name of the test.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Name of the module being tested.
+        rackDevice (str): The Device Under Test (DUT).
+        ms12DAPFeature (str): Specific feature being tested (MISteering).
     """
 
-    # Class variables
-    testName  = "test01_EnableDisableAndVerifyAudioPortStatus"
+    testName  = "test12_MS12MISteering"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
+    ms12DAPFeature = "MISteering"
 
     def __init__(self):
         """
-        Initializes the test class with test name, setup configuration, and sessions for the device.
+        Initializes the dsAudio_test12_MS12MISteering test instance.
+        
+        This sets up the test configuration and prepares sessions for 
+        player and device access.
 
         Args:
             None
         """
         super().__init__(self.testName, '1')
 
-        # Load test setup configuration
+        # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
-        # Open Sessions for player and hal test
+        # Open Session for player
         self.player_session = self.dut.getConsoleSession("ssh_player")
+
+        # Open Session for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
 
         player = self.cpe.get("test").get("player")
@@ -93,12 +101,12 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
 
         test = self.testSetup.get("assets").get("device").get(self.testName)
 
-        # Download test artifacts to device
+        #download test artifacts to device
         url = test.get("artifacts")
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
 
-        # Download test streams to device
+        #download test streams to device
         url =  test.get("streams")
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
@@ -114,6 +122,7 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
         """
         self.deleteFromDevice(self.testStreams)
 
+
     def testRunPrerequisites(self):
         """
         Executes prerequisite commands listed in the test setup configuration file on the DUT.
@@ -122,47 +131,51 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
             None
         """
 
-        # Run commands as part of test prerequisites
+        #Run test specific commands
         test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("execute")
+        cmds = test.get("execute");
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyAudio(self, port, manual=False):
+    def testVerifyMISteering(self, stream, port, mode, manual=False):
         """
-        Verifies if the audio is working on the specified port.
+        Verifies the functionality of the MISteering feature.
 
-        For manual verification, it prompts the user to confirm if audio is heard on the port.
+        This method checks whether the audio behaves as expected when 
+        the MISteering feature is applied to the specified audio port.
 
         Args:
-            port (str): The name of the audio port to verify.
-            manual (bool, optional): Flag to indicate if manual verification should be used.
-                                     Defaults to False for automation, True for manual.
+            stream (str): The audio stream used for testing.
+            port (str): The audio port being verified.
+            mode (bool): Indicates if MISteering is enabled (True) or disabled (False).
+            manual (bool, optional): Specifies whether to use manual verification. 
+                                     Defaults to False, using automated methods if implemented.
 
         Returns:
-            bool: True if audio verification succeeds, False otherwise.
+            bool: The status of the audio verification (True for success, False for failure).
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Is audio playing on the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} {mode} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
         """
-        The main test function that verifies audio ports by enabling and disabling them.
+        Executes the main test sequence for MS12 MISteering.
 
-        This function:
-        - Downloads the required assets.
-        - Runs the prerequisite commands.
-        - Plays an audio stream and verifies audio output for each supported port.
-        - Enables and disables audio ports while performing verification.
-        - Cleans up assets after the test.
+        This method orchestrates:
+        - The downloading of assets
+        - Running of prerequisites
+        - Initializing the audio module
+        - Play the Audio Stream
+        - Apply the MI steering modes for supported ports
+        - Performing the tests, and cleaning up afterward.
 
         Returns:
-            bool: Final result of the test.
+            bool: The final result of the test execution (True if successful, False otherwise).
         """
 
         # Download the assets listed in test setup configuration file
@@ -179,24 +192,36 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        # Loop through the supported audio ports
-        for port,index in self.testdsAudio.getSupportedPorts():
+        for stream in self.testStreams:
             # Start the stream playback
-            self.testPlayer.play(self.testStreams[0])
+            self.testPlayer.play(stream)
 
-            # Port Enable test
-            self.log.stepStart(f'Enable {port} Port')
-            # Enable the audio port
-            self.testdsAudio.enablePort(port, index)
-            result = self.testVerifyAudio(port, True)
-            self.log.stepResult(result, f'Audio Verification {port} Port')
+            # Loop through the supported audio ports
+            for port,index in self.testdsAudio.getSupportedPorts():
+                if self.testdsAudio.getMS12DAPFeatureSupport(port, index, self.ms12DAPFeature):
+                    # Enable the audio port
+                    self.testdsAudio.enablePort(port, index)
 
-            # Port Disable test
-            self.log.stepStart(f'Disable {port} Port')
-            # Disable the audio port
-            self.testdsAudio.disablePort(port, index)
-            result = self.testVerifyAudio(port, True)
-            self.log.stepResult(not result, f'Audio Verification {port} Port')
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
+
+                    # Enable MISteering
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":True})
+
+                    result = self.testVerifyMISteering(stream, port, True, True)
+
+                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
+
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
+
+                    # Disable MISteering
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":False})
+
+                    result = self.testVerifyMISteering(stream, port, False, True)
+
+                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{False} Port:{port} Index:{index} Stream:{stream}')
+
+                    # Disable the audio port
+                    self.testdsAudio.disablePort(port, index)
 
             # Stop the stream playback
             self.testPlayer.stop()
@@ -207,11 +232,11 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
         # Terminate dsAudio Module
         self.testdsAudio.terminate()
 
-        # Clean up the dsAudio instance
+        # Delete the dsAudio class
         del self.testdsAudio
 
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test01_EnableDisableAndVerifyAudioPortStatus()
+    test = dsAudio_test12_MS12MISteering()
     test.run(False)

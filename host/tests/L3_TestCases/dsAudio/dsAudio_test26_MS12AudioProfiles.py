@@ -23,9 +23,10 @@
 
 import os
 import sys
+import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -33,39 +34,25 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test16_ARCSAD(utHelperClass):
+class dsAudio_test26_MS12AudioProfiles(utHelperClass):
     """
-    Test class for verifying the ARC SAD (Source Audio Descriptor) functionality.
+    This class represents the 'test26_MS12AudioProfiles' test case, which is responsible
+    for verifying Dolby MS12 audio profiles on different audio ports of the Device Under Test (DUT).
 
     Attributes:
-        testName (str): Name of the test.
+        testName (str): Name of the test case.
         testSetupPath (str): Path to the test setup configuration file.
-        moduleName (str): Name of the module being tested.
-        rackDevice (str): Device under test (DUT).
-        sadList (list): Predefined list of ARC SAD values.
+        moduleName (str): Name of the module under test.
+        rackDevice (str): Identifier for the device under test.
     """
-    testName  = "test16_ARCSAD"
+    testName  = "test26_MS12AudioProfiles"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    """
-    Summary of the 3-byte SAD Format:
-    Byte    Bit Fields  Description
-    Byte 1  Bits 0-2:   Audio Format Code: Type of audio format (PCM, AC-3, DTS, etc.)
-            Bits 3-6:   Maximum Number of Channels	Number of audio channels supported
-            Bit 7:      Reserved
-    Byte 2	Bits 0-6:   Sampling Frequencies: Supported sampling frequencies (32 kHz, 48 kHz, etc.)
-            Bit 7:      Reserved
-    Byte 3	For LPCM: Bit Depths (16, 20, 24-bit) Supported bit depths for PCM
-            For Compressed Formats: Maximum Bitrate	Maximum supported bitrate for compressed formats
-    """
-    # 0x0040382A - AC3 6 channels sampling rates (48, 96, 192 kHz), Max bitrate (512 kbps)
-    # 0x00070709 - PCM 2 channels sampling rates (32, 44.1, 48 kHz), bit depth (16, 20, 24 bit per sample)
-    sadList = [[0x00070709],[0x0040382A]]
 
     def __init__(self):
         """
-        Initializes the dsAudio_test16_ARCSAD test.
+        Initializes the 'test26_MS12AudioProfiles' test by setting up the test environment.
 
         Args:
             None.
@@ -75,11 +62,11 @@ class dsAudio_test16_ARCSAD(utHelperClass):
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
-        # Open Session for hal test
-        self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
-
         # Open Session for player
         self.player_session = self.dut.getConsoleSession("ssh_player")
+
+        # Open Session for hal test
+        self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
 
         player = self.cpe.get("test").get("player")
 
@@ -131,7 +118,6 @@ class dsAudio_test16_ARCSAD(utHelperClass):
         """
         self.deleteFromDevice(self.testStreams)
 
-
     def testRunPrerequisites(self):
         """
         Executes prerequisite commands listed in the test setup configuration file on the DUT.
@@ -147,38 +133,40 @@ class dsAudio_test16_ARCSAD(utHelperClass):
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    #TODO: Current version supports only manual.
-    def testARCSAD(self, sad, manual=False):
+    #TODO: Current version supports only manual verification.
+    def testVerifyMS12AudioProfile(self, port, profile, manual=False):
         """
-        Verifies the ARC Source Audio Descriptor (SAD).
+        Verifies if the specified MS12 audio profile is applied correctly on the given audio port.
+
+        This can be done either manually (by asking the user) or through an automated verification method (not yet implemented).
 
         Args:
-            sad (list): List of ARC SAD values to verify.
-            manual (bool, optional): Indicates whether to use manual control.
-                                     Defaults to False (automatic methods).
+            port (str): The audio port to verify (e.g., HDMI, Optical).
+            profile (str): The MS12 audio profile to be tested (e.g., Off, Music, Movie, etc.).
+            manual (bool, optional): If True, manual verification is used. Defaults to False (automated verification).
 
         Returns:
-            bool: True if the SAD verification was successful, False otherwise.
+            bool: True if the profile is correctly applied, otherwise False.
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has SAD:{sad} sent to the ARC device [Y/N]:")
+            return self.testUserResponse.getUserYN(f"Has audio profile {profile} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
         """
-        Executes the test for verifying ARC SAD functionality.
+        Executes the 'test26_MS12AudioProfiles' test case. The test performs the following steps:
 
-        This method performs the following steps:
-        - Downloads required assets.
-        - Runs prerequisite commands.
-        - Initializes the dsAudio module and player.
-        - Tests each supported audio port for ARC functionality.
-        - Stops the stream playback and cleans up.
+        - Downloads the required assets.
+        - Runs the prerequisite commands on the DUT.
+        - Initializes the dsAudio module.
+        - Plays test streams and iterates through supported audio ports and profiles.
+        - Verifies if the correct MS12 audio profiles are applied to the ports.
+        - Cleans up the assets and terminates the dsAudio module.
 
         Returns:
-            bool: True if the test ran successfully, False otherwise.
+            bool: Returns True if the test completes successfully.
         """
 
         # Download the assets listed in test setup configuration file
@@ -195,30 +183,34 @@ class dsAudio_test16_ARCSAD(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        # Start the stream playback
-        self.testPlayer.play(self.testStreams[0])
+        for stream in self.testStreams:
+            # Start the stream playback
+            self.testPlayer.play(stream)
 
-        # Loop through the supported audio ports and initialize ARC port
-        for port,index in self.testdsAudio.getSupportedPorts():
-            if "ARC" in port:
-                # Enable the audio port
-                self.testdsAudio.enablePort(port, index)
+            # Loop through the supported audio ports
+            for port,index in self.testdsAudio.getSupportedPorts():
+                profileList = self.testdsAudio.getSupportedMS12Profiles(port, index)
+                if(profileList):
+                    # Enable the audio port
+                    self.testdsAudio.enablePort(port, index)
 
-                for sad in self.sadList:
-                    self.log.stepStart(f'ARC SAD {sad} Test')
+                    for profile in profileList:
+                        # Set the Audio Profile
+                        self.testdsAudio.setMS12AudioProfile(port, index, profile)
+                        # Verify the audio
+                        self.testVerifyMS12AudioProfile(port, profile, True)
 
-                    self.testdsAudio.setARCSAD(sad)
+                    # Enable the audio port
+                    self.testdsAudio.disablePort(port, index)
 
-                    # Verify ARC SAD
-                    result = self.testARCSAD(sad, True)
-
-                    self.log.stepResult(result, f'ARC SAD {sad} Test')
-
-                # Disable the audio port
-                self.testdsAudio.disablePort(port, index)
+            # Stop the stream playback
+            self.testPlayer.stop()
 
         # Stop the stream playback
         self.testPlayer.stop()
+
+        # Clean the assets downloaded to the device
+        self.testCleanAssets()
 
         # Terminate dsAudio Module
         self.testdsAudio.terminate()
@@ -229,5 +221,5 @@ class dsAudio_test16_ARCSAD(utHelperClass):
         return True
 
 if __name__ == '__main__':
-    test = dsAudio_test16_ARCSAD()
+    test = dsAudio_test26_MS12AudioProfiles()
     test.run(False)

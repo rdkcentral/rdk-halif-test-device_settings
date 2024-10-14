@@ -26,7 +26,7 @@ import sys
 import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -34,37 +34,36 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test22_AudioFormat(utHelperClass):
+class dsAudio_test25_AudioMix(utHelperClass):
     """
-    Test class for validating audio format functionalities.
+    Class to perform audio mixing tests for the dsAudio module.
 
-    This class is designed to test the audio formats supported by the device.
-    It extends the utHelperClass to leverage its utility methods for device interaction
-    and test execution.
+    This test checks the behavior of primary and system audio levels while playing audio streams.
+    It verifies if the audio output behaves as expected for different volume settings.
 
     Attributes:
-        testName (str): Name of the test.
+        testName (str): Name of the test case.
         testSetupPath (str): Path to the test setup configuration file.
-        moduleName (str): Name of the module being tested.
-        rackDevice (str): Identifier for the device under test (DUT).
-        audioFormats (list): List of audio formats to be tested.
+        moduleName (str): Name of the module under test.
+        rackDevice (str): Identifier for the device under test.
+        primaryVolume (list): List of primary volume levels to test (0-100).
+        systemVolume (list): List of system volume levels to test (0-100).
     """
-
-    testName  = "test22_AudioFormat"
+    testName  = "test25_AudioMix"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    audioFormats = ["PCM", "AC3", "EAC3", "AAC", "VORBIS", "WMA", "AC4", "MAT", "TRUEHD", "EAC3_ATMOS", "TRUEHD_ATMOS", "MAT_ATMOS", "AC4_ATMOS"]
+    primaryVolume = [0, 25, 50, 75, 100]
+    systemVolume = [0, 25, 50, 75, 100]
 
     def __init__(self):
         """
-        Initializes the dsAudio_test22_AudioFormat test.
+        Initializes the dsAudio_test25_AudioMix test instance.
 
-        This constructor sets up the necessary configurations and prepares the 
-        test environment by initializing player and user response classes.
+        Sets up the necessary sessions and reads the configuration for the test.
 
         Args:
-            None
+            None.
         """
         super().__init__(self.testName, '1')
 
@@ -73,6 +72,9 @@ class dsAudio_test22_AudioFormat(utHelperClass):
 
         # Open Session for player
         self.player_session = self.dut.getConsoleSession("ssh_player")
+
+        # Open Session for secondary player
+        self.secondary_player_session = self.dut.getConsoleSession("ssh_player_secondary")
 
         # Open Session for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
@@ -127,7 +129,6 @@ class dsAudio_test22_AudioFormat(utHelperClass):
         """
         self.deleteFromDevice(self.testStreams)
 
-
     def testRunPrerequisites(self):
         """
         Executes prerequisite commands listed in the test setup configuration file on the DUT.
@@ -143,17 +144,40 @@ class dsAudio_test22_AudioFormat(utHelperClass):
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    def testFunction(self):
+    #TODO: Current version supports only manual verification.
+    def testVerifyAudio(self, port, primary_volume, system_volume, manual=False):
         """
-        Executes the audio format test.
+        Verifies if the audio is functioning as expected at given volume levels.
 
-        This method:
-        - Runs through the various audio formats
-        - Playing associated streams
-        - Verifying that the audio formats are correctly reported by the device.
+        Args:
+            port (str) : The audio port to verify.
+            primary_volume (int): Primary audio volume level (0-100).
+            system_volume (int): System audio volume level (0-100).
+            manual (bool, optional): Indicates if manual verification is required. 
+                                     Defaults to False (automated verification).
 
         Returns:
-            bool: Always returns True upon successful execution of the test.
+            bool: True if audio plays as expected, otherwise False.
+        """
+        if manual == True:
+            return self.testUserResponse.getUserYN(f"Is Audio playing on {port} as expected with Mixing: Primary Volume: {primary_volume} System Volume: {system_volume}? (Y/N):")
+        else :
+            #TODO: Add automation verification methods
+            return False
+
+    def testFunction(self):
+        """
+        Executes the audio mixing test by verifying audio output with various volume settings.
+
+        This function handles the overall test flow, including:
+        - downloading assets
+        - running prerequisites
+        - Plays the primary and secondary streams
+        - setting audio levels
+        - verifying audio output for different combinations of primary and system volumes.
+
+        Returns:
+            bool: True if the test executes successfully, otherwise False.
         """
 
         # Download the assets listed in test setup configuration file
@@ -170,33 +194,40 @@ class dsAudio_test22_AudioFormat(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        self.log.stepStart(f'Audio Format NONE Test')
+        for port,index in self.testdsAudio.getSupportedPorts():
+            # Enable the audio port
+            self.testdsAudio.enablePort(port, index)
 
-        # Get the Audio Format
-        audioFormat = self.testdsAudio.getAudioFormat()
+            for i in range(0, len(self.testStreams) - 1, 2):
+                primaryStream = self.testStreams[i]
+                systemStream = self.testStreams[i+1]
 
-        self.log.stepResult("NONE" in audioFormat, f'Audio Format NONE Test')
+                # Start the stream playback
+                self.testPlayer.play(primaryStream)
 
-        for format, stream in zip(self.audioFormats, self.testStreams):
-            # Start the stream playback
-            self.testPlayer.play(stream)
-            time.sleep(3)
+                # TODO: Update the utPlayer class to take additional arguments for the playback
+                self.secondary_player_session.write(f'gst-play-1.0 {systemStream} --audiosink "amlhalasink direct-mode=0"')
 
-            self.log.stepStart(f'Audio Format {format} Callback Test')
+                for prime in self.primaryVolume:
+                    for system in self.systemVolume:
+                        self.log.stepStart(f'Audio Mixing Stream: Port:{port} Primary Voulem: {prime}, System Volume: {system}')
 
-            cbAudioFormat = self.testdsAudio.getAudioFormatCallbackStatus()
+                        self.testdsAudio.setAudioMixerLevels("dsAUDIO_INPUT_PRIMARY", prime)
 
-            self.log.stepResult(format in cbAudioFormat, f'Audio Format {format} Callback Test')
+                        self.testdsAudio.setAudioMixerLevels("dsAUDIO_INPUT_SYSTEM", system)
 
-            self.log.stepStart(f'Audio Format {format} Test')
+                        result = self.testVerifyAudio(port, prime, system, True)
 
-            # Get the Audio Format
-            audioFormat = self.testdsAudio.getAudioFormat()
+                        self.log.stepResult(result, f'Audio Mixing Stream: Port:{port} Primary Voulem: {prime}, System Volume: {system}')
 
-            self.log.stepResult(format in audioFormat, f'Audio Format {format} Test')
+                # TODO: Update the utPlayer class to take additional arguments for the playback
+                self.secondary_player_session.write("q")
 
-            # Stop the stream playback
-            self.testPlayer.stop()
+                # Stop the stream playback
+                self.testPlayer.stop()
+
+            # Disable the audio port
+            self.testdsAudio.disablePort(port, index)
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
@@ -210,5 +241,5 @@ class dsAudio_test22_AudioFormat(utHelperClass):
         return True
 
 if __name__ == '__main__':
-    test = dsAudio_test22_AudioFormat()
+    test = dsAudio_test25_AudioMix()
     test.run(False)

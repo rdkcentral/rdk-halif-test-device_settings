@@ -23,10 +23,9 @@
 
 import os
 import sys
-import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -34,26 +33,33 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test24_PrimarySecondaryLanguage(utHelperClass):
+class dsAudio_test11_MS12SurroundVirtualizer(utHelperClass):
     """
-    Test class for verifying the functionality of Primary and secondary languages.
+    Test class for MS12 Surround Virtualizer audio feature
 
     Attributes:
         testName (str): Name of the test.
         testSetupPath (str): Path to the test setup configuration file.
-        moduleName (str): Name of the module being tested.
-        rackDevice (str): Identifier for the device under test.
-        streamLanguage (dict): List of Dictionary of languages.
+        moduleName (str): Name of the module under test.
+        rackDevice (str): Identifier for the Device Under Test (DUT).
+        ms12DAPFeature (str): The specific audio feature being tested.
+        volumeModes (list): list of volume modes to be tested
+        boostValues (list): list of boost values to be tested
     """
-    testName  = "test24_PrimarySecondaryLanguage"
+
+    testName  = "test11_MS12SurroundVirtualizer"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    streamLanguage = [{"Primary": ["eng", "spa", "zho"], "Secondary": ["eng", "spa", "zho"]}]
+    ms12DAPFeature = "SurroundVirtualizer"
+    volumeModes = [0, 1, 2]
+    boostValues = [0, 40, 96]
 
     def __init__(self):
         """
-        Initializes the test24_PrimarySecondaryLanguage test .
+        Initializes the dsAudio_test11_MS12SurroundVirtualizer test.
+
+        Sets up the required sessions and configurations for testing.
 
         Args:
             None.
@@ -136,40 +142,42 @@ class dsAudio_test24_PrimarySecondaryLanguage(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyAudio(self, port, language_type:str, language:str, manual=False):
+    def testVerifySurroundVirtualizer(self, stream, port, mode, level, manual=False):
         """
-        Verifies the audio stream in the specified language (Primary or Secondary).
+        Verifies whether the audio playback is functioning correctly with the Surround Virtualizer settings.
 
-        The verification can be performed manually or through an automated method (if available).
-        Currently, the manual method prompts the user to confirm whether the audio is playing
-        correctly.
+        This can be performed through user input for manual verification or other methods.
 
         Args:
+            stream (str) : The audio stream being tested.
             port (str) : The audio port to verify.
-            language_type (str): Specifies the language type, either "Primary" or "Secondary".
-            language (str): The 3-letter ISO 639-3 code representing the language (e.g., 'eng' for English).
-            manual (bool, optional): If True, prompts the user for manual verification.
-                                     Defaults to automated verification (when implemented).
+            mode (str): The SurroundVirtualizer mode being tested.
+            level (int): The SurroundVirtualizer level to verify.
+            manual (bool, optional): If True, indicates that manual verification is used.
+                                     Defaults to False, meaning automatic verification methods will be applied.
 
         Returns:
-            bool: The status of the audio verification (True if audio is correct, False otherwise).
+            bool : The status of the audio verification (True if audio is fine, False otherwise).
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Is Audio playing on {port} as expected with {language_type} {language} Language? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} mode {mode} level {level} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
-        """
-        Tests the Primary and Secondary audio language switching functionality.
+        """ 
+        Tests the functionality of the MS12 Surround Virtualizer.
 
-        This method validates the audio playback for both primary and secondary languages
-        by configuring the audio streams as per the test setup, running the test, and verifying
-        the results manually.
+        This function:
+        - The download of assets
+        - Execution of prerequisites
+        - Play the Audio Stream
+        - Apply the Surround Virtualizer modes for supported ports
+        - The main verification steps for testing the Surround Virtualizer feature.
 
         Returns:
-            bool: True if the test completes successfully.
+            bool : The result of the last audio verification.
         """
 
         # Download the assets listed in test setup configuration file
@@ -186,48 +194,55 @@ class dsAudio_test24_PrimarySecondaryLanguage(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        for port,index in self.testdsAudio.getSupportedPorts():
-            # Enable the audio port
-            self.testdsAudio.enablePort(port, index)
+        for stream in self.testStreams:
+            # Start the stream playback
+            self.testPlayer.play(stream)
 
-            for i, stream in enumerate(self.testStreams):
+            # Loop through the supported audio ports
+            for port,index in self.testdsAudio.getSupportedPorts():
+                if self.testdsAudio.getMS12DAPFeatureSupport(port, index, self.ms12DAPFeature):
+                    # Enable the audio port
+                    self.testdsAudio.enablePort(port, index)
 
-                self.testdsAudio.enableAssociateAudioMixig(False)
+                    mode = 2 #leveller is Auto
+                    boost = 0
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} boost:{boost} Port:{port} Index:{index} Stream:{stream}')
 
-                # Start the stream playback
-                self.testPlayer.play(stream)
+                    # Set the SurroundVirtualizer
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, boost]})
 
-                for secondary in self.streamLanguage[i]["Secondary"]:
-                    self.log.stepStart(f'Secondary Language Test Stream: {stream} Language: {secondary}')
+                    result = self.testVerifySurroundVirtualizer(stream, port, mode, boost, True)
 
-                    self.testdsAudio.setPrimarySecondaryLanguage("Secondary", secondary)
+                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} boost:{boost} Port:{port} Index:{index} Stream:{stream}')
 
-                    result = self.testVerifyAudio(port, "Secondary", secondary, True)
+                    mode = 1 #SurroundVirtualizer is On
+                    boost = 0
+                    for boost in self.boostValues:
+                        self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} boost:{boost} Port:{port} Index:{index} Stream:{stream}')
 
-                    self.log.stepResult(result, f'Secondary Language Test Stream: {stream} Language: {secondary}')
+                        # Set the SurroundVirtualizer
+                        self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, boost]})
 
-                # Stop the stream playback
-                self.testPlayer.stop()
+                        result = self.testVerifySurroundVirtualizer(stream, port, mode, boost, True)
 
-                time.sleep(3)
+                        self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} boost:{boost} Port:{port} Index:{index} Stream:{stream}')
 
-                # Start the stream playback
-                self.testPlayer.play(stream)
+                    mode = 0 #SurroundVirtualizer is OFF
+                    boost = 0
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} boost:{boost} Port:{port} Index:{index} Stream:{stream}')
 
-                for primary in self.streamLanguage[i]["Primary"]:
-                    self.log.stepStart(f'Primary Language Test Stream: {stream} Language: {primary}')
+                    # Set the SurroundVirtualizer
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, boost]})
 
-                    self.testdsAudio.setPrimarySecondaryLanguage("Primary", primary)
+                    result = self.testVerifySurroundVirtualizer(stream, port, mode, boost, True)
 
-                    result = self.testVerifyAudio(port, "Primary", primary, True)
+                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} boost:{boost} Port:{port} Index:{index} Stream:{stream}')
 
-                    self.log.stepResult(result, f'Primary Language Test Stream: {stream} Language: {primary}')
+                    # Disable the audio port
+                    self.testdsAudio.disablePort(port, index)
 
-                # Stop the stream playback
-                self.testPlayer.stop()
-
-            # Disable the audio port
-            self.testdsAudio.disablePort(port, index)
+            # Stop the stream playback
+            self.testPlayer.stop()
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
@@ -238,8 +253,8 @@ class dsAudio_test24_PrimarySecondaryLanguage(utHelperClass):
         # Delete the dsAudio class
         del self.testdsAudio
 
-        return True
+        return result
 
 if __name__ == '__main__':
-    test = dsAudio_test24_PrimarySecondaryLanguage()
+    test = dsAudio_test11_MS12SurroundVirtualizer()
     test.run(False)

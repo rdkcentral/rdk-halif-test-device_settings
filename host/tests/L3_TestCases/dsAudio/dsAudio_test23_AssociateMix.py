@@ -26,7 +26,7 @@ import sys
 import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -34,25 +34,32 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test26_MS12AudioProfiles(utHelperClass):
+class dsAudio_test23_AssociateMix(utHelperClass):
     """
-    This class represents the 'test26_MS12AudioProfiles' test case, which is responsible
-    for verifying Dolby MS12 audio profiles on different audio ports of the Device Under Test (DUT).
+    Test class for verifying the functionality of audio mixing in the dsAudio module.
+
+    This test validates the associate audio mixing feature of the device under test (DUT)
+    by adjusting fader levels and checking audio playback with and without mixing enabled.
 
     Attributes:
-        testName (str): Name of the test case.
+        testName (str): Name of the test.
         testSetupPath (str): Path to the test setup configuration file.
-        moduleName (str): Name of the module under test.
+        moduleName (str): Name of the module being tested.
         rackDevice (str): Identifier for the device under test.
+        faderValues (list): List of fader values to test (in decibels).
     """
-    testName  = "test26_MS12AudioProfiles"
+
+    testName  = "test23_AssociateMix"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
+    faderValues = [-32, 0, 32]
 
     def __init__(self):
         """
-        Initializes the 'test26_MS12AudioProfiles' test by setting up the test environment.
+        Initializes the dsAudio_test23_AssociateMix test class.
+
+        Sets up the necessary configuration, player session, and user response handling.
 
         Args:
             None.
@@ -118,6 +125,7 @@ class dsAudio_test26_MS12AudioProfiles(utHelperClass):
         """
         self.deleteFromDevice(self.testStreams)
 
+
     def testRunPrerequisites(self):
         """
         Executes prerequisite commands listed in the test setup configuration file on the DUT.
@@ -134,39 +142,39 @@ class dsAudio_test26_MS12AudioProfiles(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyMS12AudioProfile(self, port, profile, manual=False):
+    def testVerifyAssociateAudioMix(self, port, mixer_status, fader, manual=False):
         """
-        Verifies if the specified MS12 audio profile is applied correctly on the given audio port.
-
-        This can be done either manually (by asking the user) or through an automated verification method (not yet implemented).
+        Verifies the audio playback quality under the specified mixing conditions.
 
         Args:
-            port (str): The audio port to verify (e.g., HDMI, Optical).
-            profile (str): The MS12 audio profile to be tested (e.g., Off, Music, Movie, etc.).
-            manual (bool, optional): If True, manual verification is used. Defaults to False (automated verification).
+            port (str) : The audio port to verify.
+            mixer_status (bool): True if associate audio mixing is enabled, False otherwise.
+            fader (int): Fader control value (e.g., -32 for mute, 32 for full).
+            manual (bool, optional): Flag for manual verification (True for manual, False for automated).
+                                     Defaults to False.
 
         Returns:
-            bool: True if the profile is correctly applied, otherwise False.
+            bool: True if audio is as expected; otherwise, False.
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has audio profile {profile} applied to the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Is Audio playing on {port} as expected with Mixing: {mixer_status} fader: {fader}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
         """
-        Executes the 'test26_MS12AudioProfiles' test case. The test performs the following steps:
+        Executes the associate mixing test.
 
-        - Downloads the required assets.
-        - Runs the prerequisite commands on the DUT.
+        This method performs the following steps:
+        - Downloads required assets.
+        - Runs prerequisite commands.
         - Initializes the dsAudio module.
-        - Plays test streams and iterates through supported audio ports and profiles.
-        - Verifies if the correct MS12 audio profiles are applied to the ports.
-        - Cleans up the assets and terminates the dsAudio module.
+        - Tests audio mixing by playing each stream with various fader settings.
+        - Cleans up downloaded assets and terminates the dsAudio module.
 
         Returns:
-            bool: Returns True if the test completes successfully.
+            bool: True if the test execution completes successfully; otherwise, False.
         """
 
         # Download the assets listed in test setup configuration file
@@ -183,31 +191,37 @@ class dsAudio_test26_MS12AudioProfiles(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        for stream in self.testStreams:
-            # Start the stream playback
-            self.testPlayer.play(stream)
+        for port,index in self.testdsAudio.getSupportedPorts():
+            # Enable the audio port
+            self.testdsAudio.enablePort(port, index)
 
-            # Loop through the supported audio ports
-            for port,index in self.testdsAudio.getSupportedPorts():
-                profileList = self.testdsAudio.getSupportedMS12Profiles(port, index)
-                if(profileList):
-                    # Enable the audio port
-                    self.testdsAudio.enablePort(port, index)
+            for stream in self.testStreams:
 
-                    for profile in profileList:
-                        # Set the Audio Profile
-                        self.testdsAudio.setMS12AudioProfile(port, index, profile)
-                        # Verify the audio
-                        self.testVerifyMS12AudioProfile(port, profile, True)
+                self.log.stepStart(f'Associate Mixing Disabled, Stream: {stream} Fader: 0')
 
-                    # Enable the audio port
-                    self.testdsAudio.disablePort(port, index)
+                self.testdsAudio.enableAssociateAudioMixig(False)
 
-            # Stop the stream playback
-            self.testPlayer.stop()
+                # Start the stream playback
+                self.testPlayer.play(stream)
 
-        # Stop the stream playback
-        self.testPlayer.stop()
+                result = self.testVerifyAssociateAudioMix(port, False, 0, True)
+
+                self.log.stepResult(result, f'Associate Mixing Disabled, Stream: {stream} Fader: 0')
+
+                for fade in self.faderValues:
+                    self.log.stepStart(f'Associate Mixing Stream: {stream} Fader: {fade}')
+
+                    self.testdsAudio.enableAssociateAudioMixig(True, fade)
+
+                    result = self.testVerifyAssociateAudioMix(port, True, fade, True)
+
+                    self.log.stepResult(result, f'Associate Mixing Stream: {stream} Fader: {fade}')
+
+                # Stop the stream playback
+                self.testPlayer.stop()
+
+            # Disable the audio port
+            self.testdsAudio.disablePort(port, index)
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
@@ -221,5 +235,5 @@ class dsAudio_test26_MS12AudioProfiles(utHelperClass):
         return True
 
 if __name__ == '__main__':
-    test = dsAudio_test26_MS12AudioProfiles()
+    test = dsAudio_test23_AssociateMix()
     test.run(False)
