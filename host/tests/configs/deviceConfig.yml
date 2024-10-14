@@ -25,14 +25,28 @@
 deviceConfig:
     cpe1:
         platform:   "element"
-        model:      "65"
-        target_directory: "/opt/"
+        model:      "v1"
+      # target_directory: "/opt/usb/hal/test_l3/"
+        target_directory: "/opt/usb1/"
         test:
             #TODO: Use the single profile file which contains all details (ds, hdmi, etc)
-            profile: "../../../profiles/sink/Sink_HDMIIN.yaml"
+            profile: "../../../profiles/sink/Sink_4K_VideoPort.yaml"
             player:
+                tool: "gstreamer"
                 prerequisites:
-                    - "export XDG_RUNTIME_DIR=/run" # pre commands required to disable the graphics plane
+                    - 'export XDG_RUNTIME_DIR="/tmp"'
+                    - "export LD_PRELOAD=libwesteros_gl.so.0.0.0"
+                    - "export WAYLAND_DISPLAY=wayland-0"
+                    - "export WESTEROS_SINK_AMLOGIC_USE_DMABUF=1"
+                    - "export PLAYERSINKBIN_USE_WESTEROSSINK=1"
+                    - "export WESTEROS_GL_USE_AMLOGIC_AVSYNC=1" 
+                    - "export WESTEROS_SINK_USE_FREERUN=1"
+                    - "export WESTEROS_GL_USE_REFRESH_LOCK=1"
+                    - "export WESTEROS_GL_DEBUG=2"
+                    - "export WESTEROS_SINK_USE_ESSRMGR=1"
+                    - "export AAMP_ENABLE_OPT_OVERRIDE=true"
+                    - "export GST_DEBUG_DUMP_DOT_DIR=/opt/"
+                    - "westeros-init &" 
     cpe2:
         platform: "test"
         model: "test"

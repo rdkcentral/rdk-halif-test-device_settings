@@ -1,4 +1,4 @@
-dsAudio:
+dsHdmiIn:
   description: "dsHdmiIn Device Settings test setup"
   callback:
   assets:
@@ -15,63 +15,64 @@ dsAudio:
                     "<PATH>/bin/libut_control.so",
                     "<PATH>/bin/Sink_HDMIIN.yaml",
                     "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
+        execute: ["westeros-gl-console set graphics enable 0", "chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
+        postcmd: ["westeros-gl-console set graphics enable 1"]
         streams: []
       test3_PortStatusCallback_Verify:
         artifacts: ["<PATH>/bin/hal_test",
                     "<PATH>/bin/libut_control.so",
                     "<PATH>/bin/Sink_HDMIIN.yaml",
                     "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
+        execute: ["westeros-gl-console set graphics enable 0", "chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
         streams: []
       test4_VideoModeChangeCallback_Verify:
         artifacts: ["<PATH>/bin/hal_test",
                     "<PATH>/bin/libut_control.so",
                     "<PATH>/bin/Sink_HDMIIN.yaml",
                     "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
+        execute: ["westeros-gl-console set graphics enable 0", "chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
         streams: []
       test5_AllmChangeCallback_Verify:
         artifacts: ["<PATH>/bin/hal_test",
                     "<PATH>/bin/libut_control.so",
                     "<PATH>/bin/Sink_HDMIIN.yaml",
                     "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
+        execute: ["westeros-gl-console set graphics enable 0", "chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
         streams: []
       test6_AVlatncyCallback_Verify:
         artifacts: ["<PATH>/bin/hal_test",
                     "<PATH>/bin/libut_control.so",
                     "<PATH>/bin/Sink_HDMIIN.yaml",
                     "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
+        execute: ["westeros-gl-console set graphics enable 0", "chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
         streams: []
       test7_AVIChangeCallback_Verify:
         artifacts: ["<PATH>/bin/hal_test",
                     "<PATH>/bin/libut_control.so",
                     "<PATH>/bin/Sink_HDMIIN.yaml",
                     "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
+        execute: ["westeros-gl-console set graphics enable 0", "chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
         streams: []
       test8_SelectportAndVerifyPortStatus:
         artifacts: ["<PATH>/bin/hal_test",
                     "<PATH>/bin/libut_control.so",
                     "<PATH>/bin/Sink_HDMIIN.yaml",
                     "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
+        execute: ["westeros-gl-console set graphics enable 0", "chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
         streams: []
       test9_ScalevideoAndVerify:
         artifacts: ["<PATH>/bin/hal_test",
                     "<PATH>/bin/libut_control.so",
                     "<PATH>/bin/Sink_HDMIIN.yaml",
                     "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
+        execute: ["westeros-gl-console set graphics enable 0", "chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
         streams: []
       test10_ZoomModeAndVerify:
         artifacts: ["<PATH>/bin/hal_test",
                     "<PATH>/bin/libut_control.so",
                     "<PATH>/bin/Sink_HDMIIN.yaml",
                     "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
+        execute: ["westeros-gl-console set graphics enable 0", "chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
         streams: []
       test13_SetAndGetEDIDVersion:
         artifacts: ["<PATH>/bin/hal_test",

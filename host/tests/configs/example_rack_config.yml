@@ -36,16 +36,7 @@ globalConfig:
     includes:
         # [ includes: ]
         # [ deviceConfig: "required.yml file"  ]
-        deviceConfig: "example_device_config.yml"
-    capture:
-        # [capture: optional]
-            # [ocrEnginePath: "/usr/bin/tesseract"] # "C:\\Program Files\\Tesseract-OCR\\tesseract.exe" (For Windows) - tesseract binary
-            # [resolution: "1080p"] - Capture resolution
-            # [input: 0] - which input is connected to the video path
-        # Note: Video capture will not be installed unless screenRegions: is defined in deviceConfig:
-        ocrEnginePath: "/usr/bin/tesseract" # "C:\\Program Files\\Tesseract-OCR\\tesseract.exe" (For Windows)
-        resolution: "1080p"
-        input: 0
+        deviceConfig: "deviceConfig.yml"
     local:
         log:                # log for each slot
             directory: "./logs"
@@ -55,7 +46,7 @@ globalConfig:
 rackConfig:
     rack1:
         name: "rack1"
-        description: "example config at my desk"
+        description: "my desksetup"
         slot1:
             # [ name: "required", description: "optional"]
             name: "slot1"
@@ -65,60 +56,32 @@ rackConfig:
                 # [ type: "ssh": port: 22 username: "test" password: "test" ]
                 # [ type: "telnet": port: 23 username: "test" password: "test" ]
                 - dut:
-                    ip: "127.0.0.1"  # IP Address of the ADA Hub
-                    description: "local PC"
-                    platform: "linux PC"
+                    ip: "***REMOVED***"  # IP Address of the Element
+                    description: "element"
+                    platform: "element"
                     consoles:
                         - default:
-                            type: "serial"
-                            port: "/dev/ttyUSB0"
+                            type: "ssh"
+                            port: 10022
+                            username: "root"
+                            ip: "***REMOVED***"
+                            password: " "
                         - ssh_player:
                             type: "ssh"
-                            port: 20022
+                            port: 10022
                             username: "root"
-                            ip: "" #IP address
-                            password: ''
+                            ip: "***REMOVED***"
+                            password: " "
                         - ssh_hal_test:
                             type: "ssh"
-                            port: 20022
+                            port: 10022
                             username: "root"
-                            ip: "" #IP address
-                            password: ''
-                    remoteController:
-                        # [ remoteController: ]
-                        # [ type: "olimex" ip: "192.168.0.17" port: 7 map: "llama_rc6", config: "remote_commander.yml" ]
-                        # [ type: "skyProc" map: "skyq_map", config: "remote_commander.yml" ]
-                        # [ type: "None" ]
-                        type: "none"
-                        map: "skyq_map"
-                        config: "example_remote_commander.yml"
+                            ip: "***REMOVED***"
+                            password: " "
                     outbound:
-                        download_url: "tftp://tftp-server.com/rack1/slot1/"    # download location for the CPE device
-                        upload_url: "sftp://server-address/home/workspace/tftp/rack1/slot1/" # upload location
-                        upload_url_base_dir: "sftp://server-address/home/workspace/tftp/rack1/slot1" # alternative upload location
-                        httpProxy: 'socks5h://localhost:1234'   # Local Proxy if required
+                        download_url: ""    # download location for the CPE device
+                        upload_url: "" # upload location
+                        upload_url_base_dir: "" # alternative upload location
+                        httpProxy:
                         workspaceDirectory: './logs/workspace'   # Local working directory
-                    powerSwitch:       # Specific power switch for each slot    
-                        # supported types, if this section is undefined this is ok
-                        # [type: "orvbioS20", ip: "", mac: "", port:"optional", relay:"optional"]
-                        # [type: "kasa", ip: "", options:"--plug" ] #  <- Plug
-                        # [type: "kasa", ip: "", options:"--strip", args:'--index 2' ] # <- Power Strip
-                        # [type: "hs100", ip:"", port:"optional" ]  kara also supports hs100
-                        # [type: "apc", ip:"", username:"", password:"" ]  rack apc switch
-                        # [type: "olimex", ip:"", port:"optional", relay:""  ]  
-                        # [type: "SLP", ip:"", username: "", password: "", outlet_id:"", port:"optional"]
-                        # [type: "none" ] if section doesn't exist then type:none will be used
-                        type: "HS100"
-                        ip: "192.168.1.7"
-                        port: 9999
-                - pi2:
-                    ip: "192.168.99.1"
-                    description: "local pi4"
-                    platform: "pi4"
-                    consoles:
-                        - ssh:
-                            type: "ssh"
-                            port: 22
-                            username: "root"
-
 
