@@ -128,12 +128,12 @@ class dsHdmiIn_test3_PortStatusCallback_Verify(utHelperClass):
             bool
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f'check Hdmi In device connected to {port_type} is ON and press Enter:')
+            return self.testUserResponse.getUserYN(f'connect Hdmi In device connected to {port_type} and press Enter:')
         else :
             #TODO: Add automation verification methods
             return False
     
-    def testRunPrerequisites(self):
+    def testRunPostreiquisites(self):
         """
         Executes postrequisite commands listed in the test setup configuration file on the DUT.
 
@@ -141,7 +141,7 @@ class dsHdmiIn_test3_PortStatusCallback_Verify(utHelperClass):
             None
         """
 
-        # Run commands as part of test prerequisites
+        # Run commands as part of test postrequisites
         test = self.testSetup.get("assets").get("device").get(self.testName)
         cmds = test.get("postcmd")
         if cmds is not None:
@@ -184,13 +184,13 @@ class dsHdmiIn_test3_PortStatusCallback_Verify(utHelperClass):
             self.log.stepStart(f'Select {port} Port')
             self.log.step(f'Select {port} Port')
 
+            self.testdsHdmiIn.selectPort(port, audmix, videoplane, topmost)
+            self.log.step(f'Port Selcted {port}')
+
             # Check the HdmiIn device connected to is active
             result = self.CheckDeviceStatus(True,port)
             self.log.stepResult(result,f'Hdmi In Device is active {result} on {port}')
-          
-            self.testdsHdmiIn.selectPort(port, audmix, videoplane, topmost)
-            self.log.step(f'Port Selcted {port}')
-                
+                  
             status = self.testdsHdmiIn.getHdmiInPortCallbackStatus()
             if status[1] == port:
                result = True    

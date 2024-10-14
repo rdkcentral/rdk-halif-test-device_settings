@@ -123,7 +123,7 @@ class dsHdmiIn_test2_SignalChangeCallback_Verify(utHelperClass):
             None.
         """
 
-       # Run commands as part of test prerequisites
+       # Run commands as part of test postrequisites
         test = self.testSetup.get("assets").get("device").get(self.testName)
         cmds = test.get("postcmd")
         if cmds is not None:
@@ -131,7 +131,7 @@ class dsHdmiIn_test2_SignalChangeCallback_Verify(utHelperClass):
                 self.writeCommands(cmd)
 
      #TODO: Current version supports only manual verification.
-    def checkDeviceStatus(self, manual=False, port_type:str=0):
+    def connectDevice(self, manual=False, port_type:str=0):
         """
         Checks Device Power status is ON.
 
@@ -143,7 +143,7 @@ class dsHdmiIn_test2_SignalChangeCallback_Verify(utHelperClass):
             bool
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f'check Hdmi In device connected to {port_type} is ON and press Enter:')
+            return self.testUserResponse.getUserYN(f'connect device to {port_type} and press Enter:')
         else :
             #TODO: Add automation verification methods
             return False
@@ -183,13 +183,13 @@ class dsHdmiIn_test2_SignalChangeCallback_Verify(utHelperClass):
         for port in self.testdsHdmiIn.getSupportedPorts():
             self.log.stepStart(f'Select {port} Port')
             self.log.step(f'Select {port} Port')
+            
+            self.testdsHdmiIn.selectHDMIInPort(port, audmix, videoplane, topmost)
+            self.log.step(f'Port Selcted {port}')
 
             # Check the HdmiIn device connected to is active
-            result = self.CheckDeviceStatus(True,port)
-            self.log.stepResult(result,f'Hdmi In Device is active {result} on {port}')
-            
-            self.testdsHdmiIn.selectPort(port, audmix, videoplane, topmost)
-            self.log.step(f'Port Selcted {port}')
+            result = self.connectDevice(True, port)
+            self.log.step(result,f'Hdmi In Device is active {result} on {port}')
 
             status = self.testdsHdmiIn.getSignalChangeCallbackStatus()
             if port == status[0] and status[2]:
