@@ -25,7 +25,7 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -33,30 +33,25 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test09_MS12SurroundDecoder(utHelperClass):
+class dsAudio_test04_MS12DialogueEnhancer(utHelperClass):
     """
-    Test case for the MS12 Surround Decoder feature in the dsAudio class
+    Test class to validate the MS12 Dialogue Enhancer functionality.
 
-    Attributes:
-        testName (str): Name of the test.
-        testSetupPath (str): Path to the test setup configuration file.
-        moduleName (str): Name of the module under test.
-        rackDevice (str): Identifier for the Device Under Test (DUT).
-        ms12DAPFeature (str): The specific audio feature being tested.
+    This test configures and verifies different levels of the MS12 Dialogue Enhancer
+    using the dsAudio class on the DUT (Device Under Test).
     """
 
-    testName  = "test09_MS12SurroundDecoder"
+    testName  = "test04_MS12DialogueEnhancer"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    ms12DAPFeature = "SurroundDecoder"
+    ms12DAPFeature = "DialogueEnhancer"
+    dialogueEnhance = [0, 8, 16]
 
     def __init__(self):
         """
-        Initializes the dsAudio_test09_MS12SurroundDecoder test case.
-
-        Sets up necessary configurations, sessions, and instances
-        for testing the MS12 Surround Decoder.
+        Initializes the test04_MS12DialogueEnhancer test, setting up player sessions,
+        configuration reading, and other required components
 
         Args:
             None.
@@ -139,39 +134,37 @@ class dsAudio_test09_MS12SurroundDecoder(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifySurroundDecoder(self, stream, port, mode, manual=False):
+    def testVerifyDialogueEnhance(self, stream, port, level, manual=False):
         """
-        Verifies the Surround Decoder's audio output.
+        Verifies if the MS12 Dialogue Enhancer level is correctly applied.
 
         Args:
-            stream (str): The audio stream used for testing.
+            stream (str): The stream used for testing.
             port (str): The audio port to verify.
-            mode (bool): Indicates the Surround Decoder mode (True/False).
-            manual (bool, optional): If True, prompts user for manual verification.
+            level (int): The Dialogue Enhancer level (0-16).
+            manual (bool): If True, prompts the user for verification. Defaults to False.
 
         Returns:
-            bool: The status of the audio verification.
+            bool: True if the user confirms, otherwise False.
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} {mode} applied to the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} level {level} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
         """
-        Main function to execute the MS12 Surround Decoder test.
+        Main test function to validate MS12 Dialogue Enhancer functionality.
 
-        This Function:
+        This function
         - Downloads assets
-        - Runs prerequisites
-        - Initializes the dsAudio class
-        - Plays the Audio stream
-        - Enables disables the Surround Decoder
-        - Performs audio stream playback with verification.
+        - Plays test streams
+        - Cconfigures the Dialogue Enhancer
+        - Verifies the enhancement, and cleans up after the test.
 
         Returns:
-            bool: The overall result of the test execution.
+            bool: True if the test passes, otherwise False.
         """
 
         # Download the assets listed in test setup configuration file
@@ -198,23 +191,18 @@ class dsAudio_test09_MS12SurroundDecoder(utHelperClass):
                     # Enable the audio port
                     self.testdsAudio.enablePort(port, index)
 
-                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
+                    for level in self.dialogueEnhance:
+                        self.log.stepStart(f'MS12 {self.ms12DAPFeature} level:{level} Port:{port} Index:{index} Stream:{stream}')
 
-                    # Enable SurroundDecoder mode
-                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":True})
+                        # Set the DialogueEnhancer
+                        self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":level})
 
-                    result = self.testVerifySurroundDecoder(stream, port, True, True)
+                        result = self.testVerifyDialogueEnhance(stream, port, level, True)
 
-                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
+                        self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} level:{level} Port:{port} Index:{index} Stream:{stream}')
 
-                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
-
-                    # Disable SurroundDecoder mode
-                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":False})
-
-                    result = self.testVerifySurroundDecoder(stream, port, False, True)
-
-                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{False} Port:{port} Index:{index} Stream:{stream}')
+                    # Set the DialogueEnhancer to default
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":0})
 
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)
@@ -234,5 +222,5 @@ class dsAudio_test09_MS12SurroundDecoder(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test09_MS12SurroundDecoder()
+    test = dsAudio_test04_MS12DialogueEnhancer()
     test.run(False)

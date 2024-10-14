@@ -25,7 +25,7 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -33,26 +33,30 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test21_AudioDelay(utHelperClass):
+class dsAudio_test09_MS12SurroundDecoder(utHelperClass):
     """
-    Test case for validating audio delay settings on the Device Under Test (DUT).
+    Test case for the MS12 Surround Decoder feature in the dsAudio class
 
     Attributes:
-        testName (str): Name of the test case.
+        testName (str): Name of the test.
         testSetupPath (str): Path to the test setup configuration file.
         moduleName (str): Name of the module under test.
-        rackDevice (str): Identifier for the DUT.
-        delayList (list): List of audio delay values to test (in milliseconds).
+        rackDevice (str): Identifier for the Device Under Test (DUT).
+        ms12DAPFeature (str): The specific audio feature being tested.
     """
-    testName  = "test21_AudioDelay"
+
+    testName  = "test09_MS12SurroundDecoder"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    delayList = [0, 100, 200]
+    ms12DAPFeature = "SurroundDecoder"
 
     def __init__(self):
         """
-        Initializes the test21_AudioDelay test .
+        Initializes the dsAudio_test09_MS12SurroundDecoder test case.
+
+        Sets up necessary configurations, sessions, and instances
+        for testing the MS12 Surround Decoder.
 
         Args:
             None.
@@ -105,7 +109,7 @@ class dsAudio_test21_AudioDelay(utHelperClass):
         #download test streams to device
         url =  test.get("streams")
         if url is not None:
-            #self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
+            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
             for streampath in url:
                 self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
 
@@ -135,38 +139,39 @@ class dsAudio_test21_AudioDelay(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyAudioDelay(self, port, delay, manual=False):
+    def testVerifySurroundDecoder(self, stream, port, mode, manual=False):
         """
-        Verifies whether the specified audio delay is correctly applied.
+        Verifies the Surround Decoder's audio output.
 
         Args:
+            stream (str): The audio stream used for testing.
             port (str): The audio port to verify.
-            delay (float): The delay value (in milliseconds) to check.
-            manual (bool, optional): Flag indicating whether to perform manual verification.
-                                     Defaults to False (automated methods).
+            mode (bool): Indicates the Surround Decoder mode (True/False).
+            manual (bool, optional): If True, prompts user for manual verification.
 
         Returns:
-            bool: True if the audio delay is confirmed, False otherwise.
+            bool: The status of the audio verification.
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has Audio Delay {delay} applied to the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} {mode} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
-        """Executes the audio delay test logic.
+        """
+        Main function to execute the MS12 Surround Decoder test.
 
-        This function performs the following steps:
-        - Downloads necessary assets.
-        - Runs prerequisite commands.
-        - Initializes the dsAudio module.
-        - Plays the audio stream
-        - Sets various audio delay on all supported audio ports.
-        - Cleans up the downloaded assets after testing.
+        This Function:
+        - Downloads assets
+        - Runs prerequisites
+        - Initializes the dsAudio class
+        - Plays the Audio stream
+        - Enables disables the Surround Decoder
+        - Performs audio stream playback with verification.
 
         Returns:
-            bool: The result of the final audio verification.
+            bool: The overall result of the test execution.
         """
 
         # Download the assets listed in test setup configuration file
@@ -189,19 +194,27 @@ class dsAudio_test21_AudioDelay(utHelperClass):
 
             # Loop through the supported audio ports
             for port,index in self.testdsAudio.getSupportedPorts():
-                if "ARC" in port or "SPDIF" in port or "HDMI" in port:
+                if self.testdsAudio.getMS12DAPFeatureSupport(port, index, self.ms12DAPFeature):
                     # Enable the audio port
                     self.testdsAudio.enablePort(port, index)
 
-                    for delay in self.delayList:
-                        self.log.stepStart(f'Audio Delay {delay} Port:{port} Index:{index} Stream:{stream}')
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
 
-                        # Set the Audio Delay
-                        self.testdsAudio.setAudioDelay(port, index, delay)
+                    # Enable SurroundDecoder mode
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":True})
 
-                        result = self.testVerifyAudioDelay(port, delay, True)
+                    result = self.testVerifySurroundDecoder(stream, port, True, True)
 
-                        self.log.stepResult(result, f'Audio Delay {delay} Port:{port} Index:{index} Stream:{stream}')
+                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
+
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
+
+                    # Disable SurroundDecoder mode
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":False})
+
+                    result = self.testVerifySurroundDecoder(stream, port, False, True)
+
+                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{False} Port:{port} Index:{index} Stream:{stream}')
 
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)
@@ -221,5 +234,5 @@ class dsAudio_test21_AudioDelay(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test21_AudioDelay()
+    test = dsAudio_test09_MS12SurroundDecoder()
     test.run(False)

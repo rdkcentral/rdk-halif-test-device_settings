@@ -25,7 +25,7 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -33,26 +33,33 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test20_MuteUnMute(utHelperClass):
+class dsAudio_test17_OutputMode(utHelperClass):
     """
-    Class to perform mute and unmute tests on audio ports.
-
-    Inherits from utHelperClass to leverage common test functionalities.
+    Test case class for verifying the audio output modes of the Device Under Test (DUT).
+    
+    This class inherits from utHelperClass and implements various test methods to ensure 
+    proper functionality of audio output modes.
 
     Attributes:
-        testName (str): Name of the test case.
+        testName (str): The name of the test case.
         testSetupPath (str): Path to the test setup configuration file.
-        moduleName (str): Name of the module being tested.
-        rackDevice (str): Identifier for the device under test.
+        moduleName (str): Name of the audio module under test.
+        rackDevice (str): Device under test identifier.
+        testOutputModes (list): List of audio output modes to be tested.
     """
-    testName  = "test20_MuteUnMute"
+    testName  = "test17_OutputMode"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
+    testOutputModes = [["STEREO", "PASSTHRU"], ["STEREO", "DD", "PASSTHRU"], ["STEREO", "DD", "DDPLUS", "PASSTHRU"]]
 
     def __init__(self):
         """
-        Initializes the test20_MuteUnMute test .
+        Initializes the dsAudio_test17_OutputMode test instance.
+
+        This constructor sets up the necessary configurations, including loading the test 
+        setup file, establishing console sessions for player and HAL, and initializing 
+        the player and user response classes.
 
         Args:
             None.
@@ -135,41 +142,39 @@ class dsAudio_test20_MuteUnMute(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyAudio(self, port, manual=False):
+    def testVerifyOutputMode(self, stream, port, outMode, manual=False):
         """
-        Verifies the audio output on the specified port.
-
-        This method checks if audio is playing on the specified port and allows
-        for manual confirmation if required.
+        Verifies the audio output mode on the specified audio port during playback.
 
         Args:
-            port (str): The audio port to verify (e.g., "HDMI", "SPDIF").
-            manual (bool, optional): If True, requires manual confirmation from the user.
-                                     Defaults to False.
+            stream (str): The audio stream being tested.
+            port (str): The audio port to verify the output mode.
+            outMode (str): The expected output mode.
+            manual (bool, optional): Flag to indicate if manual verification is required.
+                                     Defaults to False (automated verification).
 
         Returns:
-            bool: True if audio is playing; otherwise, False.
+            bool: True if the output mode is correct; otherwise, False.
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Is audio playing on the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Stream:{stream} Is output mode on the {port} {outMode}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
         """
-        Executes the mute and unmute tests on the audio ports.
+        Executes the output mode tests for the audio ports by enabling/disabling each port.
 
-        This function performs the following steps:
-        - Downloads necessary assets.
+        This method performs the following actions:
+        - Downloads necessary test assets.
         - Runs prerequisite commands.
-        - Initializes the dsAudio module.
+        - Initializes the audio module.
         - Plays the audio stream
-        - Conducts mute and unmute tests on all supported audio ports.
-        - Cleans up the downloaded assets after testing.
+        - Tests each supported audio port by setting and verifying output modes.
 
         Returns:
-            bool: Status of the last verification (True if successful, False otherwise).
+            bool: The final status of the output mode tests.
         """
 
         # Download the assets listed in test setup configuration file
@@ -186,38 +191,33 @@ class dsAudio_test20_MuteUnMute(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        for stream in self.testStreams:
-            # Start the stream playback
-            self.testPlayer.play(stream)
-            # Loop through the supported audio ports
-            for port,index in self.testdsAudio.getSupportedPorts():
+        # Loop through the supported audio ports
+        for port,index in self.testdsAudio.getSupportedPorts():
+            supportedModes = self.testdsAudio.getSupportedOutputModes(port,index)
 
-                # Enable the audio port
-                self.testdsAudio.enablePort(port, index)
+            if(supportedModes == None or len(supportedModes) == 0):
+                continue
 
-                self.log.stepStart(f'Mute Test Port:{port} Index:{index} Stream:{stream}')
+            # Enable the audio port
+            self.testdsAudio.enablePort(port, index)
 
-                # Mute the Audio
-                self.testdsAudio.setAudioMute(port, index, True)
+            for i, stream in enumerate(self.testStreams):
+                # Start the stream playback
+                self.testPlayer.play(stream)
 
-                result = self.testVerifyAudio(port, True)
-
-                self.log.stepResult(not result, f'Mute Test Port:{port} Index:{index} Stream:{stream}')
-
-                self.log.stepStart(f'UnMute Test Port:{port} Index:{index} Stream:{stream}')
-
-                # UnMute the Audio
-                self.testdsAudio.setAudioMute(port, index, False)
-
-                result = self.testVerifyAudio(port, True)
-
-                self.log.stepResult(result, f'UnMute Test Port:{port} Index:{index} Stream:{stream}')
-
-                # Disable the audio port
-                self.testdsAudio.disablePort(port, index)
-
-            # Stop the stream playback
-            self.testPlayer.stop()
+                for mode in self.testOutputModes[i]:
+                    for smode in supportedModes:
+                        if mode in smode:
+                            self.log.stepStart(f'Test Outputmode Stream:{stream} Port:{port} index:{index} output mode:{smode}')
+                            # Set OutputMode
+                            self.testdsAudio.setOutputMode(port, index, smode)
+                            result = self.testVerifyOutputMode(stream, port, smode, True)
+                            self.log.stepResult(result, f'Test Outputmode Stream:{stream} Port:{port} index:{index} output mode:{smode}')
+                            break
+                # Stop the stream playback
+                self.testPlayer.stop()
+            # Disable the audio port
+            self.testdsAudio.disablePort(port, index)
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
@@ -231,5 +231,5 @@ class dsAudio_test20_MuteUnMute(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test20_MuteUnMute()
+    test = dsAudio_test17_OutputMode()
     test.run(False)

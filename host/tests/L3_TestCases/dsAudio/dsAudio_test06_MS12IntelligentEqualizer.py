@@ -25,7 +25,7 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -33,34 +33,50 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test02_PortConnectionStatus(utHelperClass):
+class dsAudio_test06_MS12IntelligentEqualizer(utHelperClass):
     """
-    Test class to verify the connection and disconnection status of headphone.
+    Test case for verifying the MS12 Intelligent Equalizer feature across various modes.
 
-    This class interacts with the `dsAudioClass` to:
-    - Check the connection status of headphones.
-    - Test callback mechanisms for headphone connection/disconnection.
-    - Perform manual or automated connection status verification.
+    Attributes:
+        testName (str): Name of the test case.
+        testSetupPath (str): Path to the test setup YAML file.
+        moduleName (str): Name of the module being tested.
+        rackDevice (str): The rack device type (DUT - Device Under Test).
+        ms12DAPFeature (str): Name of the MS12 DAP feature being tested.
+        equalizerModes (list): List of Intelligent Equalizer modes to test.
     """
-    testName  = "test02_PortConnectionStatus"
+
+    testName  = "test06_MS12IntelligentEqualizer"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
+    ms12DAPFeature = "IntelligentEqualizer"
+    equalizerModes = ["OFF", "Open", "Rich", "Focused", "Balanced", "Warm", "Detailed"]
 
     def __init__(self):
         """
-        Initializes the test class with test name, setup configuration, and session for HAL testing.
+        Initializes the test case for MS12 Intelligent Equalizer.
+
+        Sets up necessary sessions, config files, and utility classes required for the test.
 
         Args:
-            None
+            None.
         """
         super().__init__(self.testName, '1')
 
-        # Load test setup configuration
+        # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
+
+        # Open Session for player
+        self.player_session = self.dut.getConsoleSession("ssh_player")
 
         # Open Session for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
+
+        player = self.cpe.get("test").get("player")
+
+        # Create player Class
+        self.testPlayer = utPlayer(self.player_session, player)
 
          # Create user response Class
         self.testUserResponse = utUserResponse()
@@ -107,6 +123,7 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
         """
         self.deleteFromDevice(self.testStreams)
 
+
     def testRunPrerequisites(self):
         """
         Executes prerequisite commands listed in the test setup configuration file on the DUT.
@@ -122,39 +139,38 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    #TODO: Current version supports only manual.
-    def testWaitForConnectionChange(self, connection, manual=False):
+    #TODO: Current version supports only manual verification.
+    def testVerifyIntelligentEqualizer(self, stream, port, mode, manual=False):
         """
-        Waits for the headphone connection or disconnection.
+        Verifies whether the MS12 Intelligent Equalizer feature is applied correctly.
 
         Args:
-            connection (bool): Set to True for connection, False for disconnection.
-            manual (bool, optional): Manual control flag (True for manual user input, False for automation). 
-                                     Defaults to False.
+            stream (str): Audio stream used for testing.
+            port (str): Audio port being verified.
+            mode (str): Intelligent Equalizer mode being tested.
+            manual (bool, optional): Set to True for manual user verification, False for other methods.
 
         Returns:
-            None
+            bool: Result of the verification (True if successful, False otherwise).
         """
         if manual == True:
-            if connection == True:
-                self.testUserResponse.getUserYN(f"Connect the HEADPONE and press Enter:")
-            else:
-                self.testUserResponse.getUserYN(f"Disconnect the HEADPONE and press Enter:")
+            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} mode {mode} applied to the {port}? (Y/N):")
         else :
-            # TODO: Implement automated connection change detection
+            #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
         """
-        The main test function that verifies headphone connection and disconnection.
+        Main function to test the MS12 Intelligent Equalizer feature.
 
         This function:
-        - Downloads necessary assets.
-        - Runs prerequisite commands.
-        - Verifies headphone connection and disconnection through callbacks and direct status checks.
+        - Plays audio streams
+        - Apply Intelligent Equalizer modes on supported audio ports
+        - verify the results.
+        - Cleans up the assets after the test completes.
 
         Returns:
-            bool: Final result of the test.
+            bool: Final test result (True if the test passes, False otherwise).
         """
 
         # Download the assets listed in test setup configuration file
@@ -171,46 +187,37 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        # Wait for headphone connection
-        self.testWaitForConnectionChange(True, True)
+        for stream in self.testStreams:
+            # Start the stream playback
+            self.testPlayer.play(stream)
 
-        self.log.stepStart('Headphone Connect Callback Test')
+            # Loop through the supported audio ports
+            for port,index in self.testdsAudio.getSupportedPorts():
+                if self.testdsAudio.getMS12DAPFeatureSupport(port, index, self.ms12DAPFeature):
+                    # Enable the audio port
+                    self.testdsAudio.enablePort(port, index)
 
-        callbackStatus = self.testdsAudio.getHeadphoneConnectionCallbackStatus()
+                    for mode in self.equalizerModes:
+                        self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} Port:{port} Index:{index} Stream:{stream}')
 
-        # Validate headphone connection callback
-        if(callbackStatus == None or "HEADPHONE" not in callbackStatus[0] or callbackStatus[2] == False):
-            result = False
-        else:
-            result = True
+                        # Set the Interlligent equalizer mode
+                        self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":mode})
 
-        self.log.stepResult(result, 'Headphone Connect Callback Test')
+                        result = self.testVerifyIntelligentEqualizer(stream, port, mode, True)
 
-        self.log.stepStart('Headphone Connect Test')
+                        self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} Port:{port} Index:{index} Stream:{stream}')
 
-        connectionStatus = self.testdsAudio.getHeadphoneConnectionStatus()
+                    # Set the Interlligent equalizer mode to OFF
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":"OFF"})
 
-        self.log.stepResult(connectionStatus, 'Headphone Connect Test')
+                    # Disable the audio port
+                    self.testdsAudio.disablePort(port, index)
 
-        # Wait for headphone disconnection
-        self.testWaitForConnectionChange(False, True)
+            # Stop the stream playback
+            self.testPlayer.stop()
 
-        self.log.stepStart('Headphone Disconnect Callback Test')
-
-        callbackStatus = self.testdsAudio.getHeadphoneConnectionCallbackStatus()
-
-        if(callbackStatus == None or "HEADPHONE" not in callbackStatus[0] or callbackStatus[2] == True):
-            result = False
-        else:
-            result = True
-
-        self.log.stepResult(result, 'Headphone Disconnect Callback Test')
-
-        self.log.stepStart('Headphone Disconnect Test')
-
-        connectionStatus = self.testdsAudio.getHeadphoneConnectionStatus()
-
-        self.log.stepResult(not connectionStatus, 'Headphone Disconnect Test')
+        # Clean the assets downloaded to the device
+        self.testCleanAssets()
 
         # Terminate dsAudio Module
         self.testdsAudio.terminate()
@@ -218,8 +225,8 @@ class dsAudio_test02_PortConnectionStatus(utHelperClass):
         # Delete the dsAudio class
         del self.testdsAudio
 
-        return True
+        return result
 
 if __name__ == '__main__':
-    test = dsAudio_test02_PortConnectionStatus()
+    test = dsAudio_test06_MS12IntelligentEqualizer()
     test.run(False)

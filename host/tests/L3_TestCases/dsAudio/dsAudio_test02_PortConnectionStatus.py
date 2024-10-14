@@ -25,59 +25,41 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
-from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test14_MS12LEConfig(utHelperClass):
+class dsAudio_test02_PortConnectionStatus(utHelperClass):
     """
-    This class implements the audio test for MS12 LEConfig functionality.
+    Test class to verify the connection and disconnection status of headphone.
 
-    It inherits from utHelperClass and manages the setup, execution, and 
-    verification of the audio configuration tests for the LEConfig feature.
-
-    Attributes:
-        testName (str): Name of the test.
-        testSetupPath (str): Path to the test setup configuration file.
-        moduleName (str): Name of the audio module.
-        rackDevice (str): Device under test (DUT).
-        ms12DAPFeature (str): The audio processing feature being tested.
+    This class interacts with the `dsAudioClass` to:
+    - Check the connection status of headphones.
+    - Test callback mechanisms for headphone connection/disconnection.
+    - Perform manual or automated connection status verification.
     """
-    testName  = "test14_MS12LEConfig"
+    testName  = "test02_PortConnectionStatus"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    ms12DAPFeature = "LEConfig"
 
     def __init__(self):
         """
-        Initializes the dsAudio_test14_MS12LEConfig test.
-
-        This constructor sets up the test environment, including loading the 
-        configuration, opening necessary sessions, and preparing the player.
+        Initializes the test class with test name, setup configuration, and session for HAL testing.
 
         Args:
             None
         """
         super().__init__(self.testName, '1')
 
-        # Test Setup configuration file
+        # Load test setup configuration
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
-
-        # Open Session for player
-        self.player_session = self.dut.getConsoleSession("ssh_player")
 
         # Open Session for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
-
-        player = self.cpe.get("test").get("player")
-
-        # Create player Class
-        self.testPlayer = utPlayer(self.player_session, player)
 
          # Create user response Class
         self.testUserResponse = utUserResponse()
@@ -124,7 +106,6 @@ class dsAudio_test14_MS12LEConfig(utHelperClass):
         """
         self.deleteFromDevice(self.testStreams)
 
-
     def testRunPrerequisites(self):
         """
         Executes prerequisite commands listed in the test setup configuration file on the DUT.
@@ -140,44 +121,39 @@ class dsAudio_test14_MS12LEConfig(utHelperClass):
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    #TODO: Current version supports only manual verification.
-    def testVerifyLEConfig(self, stream, port, mode, manual=False):
+    #TODO: Current version supports only manual.
+    def testWaitForConnectionChange(self, connection, manual=False):
         """
-        Verifies the functionality of the LEConfig feature.
-
-        This method checks whether the audio output is correct based on the 
-        applied LEConfig settings.
+        Waits for the headphone connection or disconnection.
 
         Args:
-            stream (str): The audio stream used for testing.
-            port (str): The audio port to verify.
-            mode (bool): The state of LEConfig (enabled/disabled).
-            manual (bool, optional): Flag for manual verification.
-                                     Defaults to False (automated methods).
+            connection (bool): Set to True for connection, False for disconnection.
+            manual (bool, optional): Manual control flag (True for manual user input, False for automation). 
+                                     Defaults to False.
 
         Returns:
-            bool: Status indicating whether the audio is functioning correctly
+            None
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} {mode} applied to the {port}? (Y/N):")
+            if connection == True:
+                self.testUserResponse.getUserYN(f"Connect the HEADPONE and press Enter:")
+            else:
+                self.testUserResponse.getUserYN(f"Disconnect the HEADPONE and press Enter:")
         else :
-            #TODO: Add automation verification methods
+            # TODO: Implement automated connection change detection
             return False
 
     def testFunction(self):
         """
-        Executes the main test function for the MS12 LEConfig feature.
+        The main test function that verifies headphone connection and disconnection.
 
-        This method orchestrates
-        - The downloading of assets
-        - Running prerequisites
-        - Initializing the audio module
-        - Play the Audio Stream
-        - Testing the LEConfig feature
-        - Cleaning up afterward.
+        This function:
+        - Downloads necessary assets.
+        - Runs prerequisite commands.
+        - Verifies headphone connection and disconnection through callbacks and direct status checks.
 
         Returns:
-            bool: Overall result of the test execution.
+            bool: Final result of the test.
         """
 
         # Download the assets listed in test setup configuration file
@@ -194,49 +170,46 @@ class dsAudio_test14_MS12LEConfig(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        for stream in self.testStreams:
+        # Wait for headphone connection
+        self.testWaitForConnectionChange(True, True)
 
-            # Loop through the supported audio ports
-            for port,index in self.testdsAudio.getSupportedPorts():
-                if self.testdsAudio.getMS12DAPFeatureSupport(port, index, self.ms12DAPFeature):
-                    # Enable the audio port
-                    self.testdsAudio.enablePort(port, index)
+        self.log.stepStart('Headphone Connect Callback Test')
 
-                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
+        callbackStatus = self.testdsAudio.getHeadphoneConnectionCallbackStatus()
 
-                    # Enable LEConfig
-                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":True})
+        # Validate headphone connection callback
+        if(callbackStatus == None or "HEADPHONE" not in callbackStatus[0] or callbackStatus[2] == False):
+            result = False
+        else:
+            result = True
 
-                    # Start the stream playback
-                    self.testPlayer.play(stream)
+        self.log.stepResult(result, 'Headphone Connect Callback Test')
 
-                    result = self.testVerifyLEConfig(stream, port, True, True)
+        self.log.stepStart('Headphone Connect Test')
 
-                    # Stop the stream playback
-                    self.testPlayer.stop()
+        connectionStatus = self.testdsAudio.getHeadphoneConnectionStatus()
 
-                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
+        self.log.stepResult(connectionStatus, 'Headphone Connect Test')
 
-                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
+        # Wait for headphone disconnection
+        self.testWaitForConnectionChange(False, True)
 
-                    # Disable LEConfig
-                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":False})
+        self.log.stepStart('Headphone Disconnect Callback Test')
 
-                    # Start the stream playback
-                    self.testPlayer.play(stream)
+        callbackStatus = self.testdsAudio.getHeadphoneConnectionCallbackStatus()
 
-                    result = self.testVerifyLEConfig(stream, port, False, True)
+        if(callbackStatus == None or "HEADPHONE" not in callbackStatus[0] or callbackStatus[2] == True):
+            result = False
+        else:
+            result = True
 
-                    # Stop the stream playback
-                    self.testPlayer.stop()
+        self.log.stepResult(result, 'Headphone Disconnect Callback Test')
 
-                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{False} Port:{port} Index:{index} Stream:{stream}')
+        self.log.stepStart('Headphone Disconnect Test')
 
-                    # Disable the audio port
-                    self.testdsAudio.disablePort(port, index)
+        connectionStatus = self.testdsAudio.getHeadphoneConnectionStatus()
 
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
+        self.log.stepResult(not connectionStatus, 'Headphone Disconnect Test')
 
         # Terminate dsAudio Module
         self.testdsAudio.terminate()
@@ -244,8 +217,8 @@ class dsAudio_test14_MS12LEConfig(utHelperClass):
         # Delete the dsAudio class
         del self.testdsAudio
 
-        return result
+        return True
 
 if __name__ == '__main__':
-    test = dsAudio_test14_MS12LEConfig()
+    test = dsAudio_test02_PortConnectionStatus()
     test.run(False)

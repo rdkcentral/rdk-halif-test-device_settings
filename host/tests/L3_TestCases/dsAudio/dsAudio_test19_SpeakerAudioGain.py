@@ -25,7 +25,7 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -33,33 +33,32 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test12_MS12MISteering(utHelperClass):
+class dsAudio_test19_AudioGain(utHelperClass):
     """
-    Class to test MS12 MISteering functionality in the dsAudio module.
-    
+    Test class for verifying audio gain levels in the dsAudio module.
+
+    This class extends the utHelperClass and implements test procedures
+    to evaluate the audio gain functionality of the device under test (DUT).
+
     Attributes:
-        testName (str): Name of the test.
+        testName (str): Name of the test case.
         testSetupPath (str): Path to the test setup configuration file.
         moduleName (str): Name of the module being tested.
-        rackDevice (str): The Device Under Test (DUT).
-        ms12DAPFeature (str): Specific feature being tested (MISteering).
+        rackDevice (str): Identifier for the device under test.
+        gainValues (list): List of gain values to be tested.
     """
-
-    testName  = "test12_MS12MISteering"
+    testName  = "test19_AudioGain"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    ms12DAPFeature = "MISteering"
+    gainValues = [-2080.0, -1000.0, 0.0, 250.0, 480.0]
 
     def __init__(self):
         """
-        Initializes the dsAudio_test12_MS12MISteering test instance.
-        
-        This sets up the test configuration and prepares sessions for 
-        player and device access.
+        Initializes the test19_AudioGain test .
 
         Args:
-            None
+            None.
         """
         super().__init__(self.testName, '1')
 
@@ -139,43 +138,43 @@ class dsAudio_test12_MS12MISteering(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyMISteering(self, stream, port, mode, manual=False):
+    def testVerifyAudioGainLevel(self, port, gain, manual=False):
         """
-        Verifies the functionality of the MISteering feature.
+        Verifies the audio gain level applied on the specified audio port.
 
-        This method checks whether the audio behaves as expected when 
-        the MISteering feature is applied to the specified audio port.
+        This function prompts the user for manual verification or executes
+        an automated method if implemented in the future.
 
         Args:
-            stream (str): The audio stream used for testing.
-            port (str): The audio port being verified.
-            mode (bool): Indicates if MISteering is enabled (True) or disabled (False).
-            manual (bool, optional): Specifies whether to use manual verification. 
-                                     Defaults to False, using automated methods if implemented.
+            port (str): The audio port to verify.
+            gain (float): The gain level to check.
+            manual (bool, optional): Indicates whether to use manual verification 
+                                     (True) or automated methods (False).
+                                     Defaults to False.
 
         Returns:
-            bool: The status of the audio verification (True for success, False for failure).
+            bool: Status of the audio verification (True if successful, 
+                  False otherwise).
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} {mode} applied to the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has audio gain level {gain} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
         """
-        Executes the main test sequence for MS12 MISteering.
+        Main test function for validating audio gain levels.
 
-        This method orchestrates:
-        - The downloading of assets
-        - Running of prerequisites
-        - Initializing the audio module
-        - Play the Audio Stream
-        - Apply the MI steering modes for supported ports
-        - Performing the tests, and cleaning up afterward.
+        This method performs the following actions:
+        - Downloads necessary test assets.
+        - Runs prerequisite commands.
+        - Initializes the audio module.
+        - Plays the audio stream
+        - Vlidating gain levels on Speaker port.
 
         Returns:
-            bool: The final result of the test execution (True if successful, False otherwise).
+            bool: The final status of the output mode tests.
         """
 
         # Download the assets listed in test setup configuration file
@@ -198,27 +197,22 @@ class dsAudio_test12_MS12MISteering(utHelperClass):
 
             # Loop through the supported audio ports
             for port,index in self.testdsAudio.getSupportedPorts():
-                if self.testdsAudio.getMS12DAPFeatureSupport(port, index, self.ms12DAPFeature):
+                if "SPEAKER" in port:
                     # Enable the audio port
                     self.testdsAudio.enablePort(port, index)
 
-                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
+                    for gain in self.gainValues:
+                        self.log.stepStart(f'Gain:{gain} Port:{port} Index:{index} Stream:{stream}')
 
-                    # Enable MISteering
-                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":True})
+                        # Set the gain level
+                        self.testdsAudio.setSpeakerGain(port, index, gain)
 
-                    result = self.testVerifyMISteering(stream, port, True, True)
+                        result = self.testVerifyAudioGainLevel(port, gain, True)
 
-                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
+                        self.log.stepResult(result, f'Gain:{gain} Port:{port} Index:{index} Stream:{stream}')
 
-                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
-
-                    # Disable MISteering
-                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":False})
-
-                    result = self.testVerifyMISteering(stream, port, False, True)
-
-                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{False} Port:{port} Index:{index} Stream:{stream}')
+                    # Resetting the gain level to default
+                    self.testdsAudio.setSpeakerGain(port, index, 0)
 
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)
@@ -238,5 +232,5 @@ class dsAudio_test12_MS12MISteering(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test12_MS12MISteering()
+    test = dsAudio_test19_AudioGain()
     test.run(False)

@@ -25,7 +25,7 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -33,29 +33,30 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test19_AudioGain(utHelperClass):
+class dsAudio_test08_MS12BassEnhancer(utHelperClass):
     """
-    Test class for verifying audio gain levels in the dsAudio module.
-
-    This class extends the utHelperClass and implements test procedures
-    to evaluate the audio gain functionality of the device under test (DUT).
+    Test class for verifying the MS12 Bass Enhancer feature.
 
     Attributes:
-        testName (str): Name of the test case.
+        testName (str): Name of the test.
         testSetupPath (str): Path to the test setup configuration file.
-        moduleName (str): Name of the module being tested.
-        rackDevice (str): Identifier for the device under test.
-        gainValues (list): List of gain values to be tested.
+        moduleName (str): Name of the module under test.
+        rackDevice (str): Identifier for the Device Under Test (DUT).
+        ms12DAPFeature (str): The specific audio feature being tested.
+        boostValues (list): Possible boost values for the Bass Enhancer.
     """
-    testName  = "test19_AudioGain"
+    testName  = "test08_MS12BassEnhancer"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    gainValues = [-2080.0, -1000.0, 0.0, 250.0, 480.0]
+    ms12DAPFeature = "BassEnhancer"
+    boostValues = [0, 50, 100]
 
     def __init__(self):
         """
-        Initializes the test19_AudioGain test .
+        Initializes the dsAudio_test08_MS12BassEnhancer test class.
+
+        Sets up the necessary sessions and configurations for the test.
 
         Args:
             None.
@@ -138,43 +139,39 @@ class dsAudio_test19_AudioGain(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyAudioGainLevel(self, port, gain, manual=False):
+    def testVerifyBassEnhancer(self, stream, port, boost, manual=False):
         """
-        Verifies the audio gain level applied on the specified audio port.
-
-        This function prompts the user for manual verification or executes
-        an automated method if implemented in the future.
+        Verifies the audio quality with the Bass Enhancer applied.
 
         Args:
+            stream (str): The audio stream used for testing.
             port (str): The audio port to verify.
-            gain (float): The gain level to check.
-            manual (bool, optional): Indicates whether to use manual verification 
-                                     (True) or automated methods (False).
-                                     Defaults to False.
+            boost (int): The boost value for the Bass Enhancer (0-100).
+            manual (bool, optional): Whether to use manual verification.
+                                     Defaults to False (automated methods).
 
         Returns:
-            bool: Status of the audio verification (True if successful, 
-                  False otherwise).
+            bool: Status indicating whether the audio is satisfactory.
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has audio gain level {gain} applied to the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} boost {boost} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
         """
-        Main test function for validating audio gain levels.
+        Executes the test for the MS12 Bass Enhancer feature.
 
-        This method performs the following actions:
-        - Downloads necessary test assets.
-        - Runs prerequisite commands.
-        - Initializes the audio module.
-        - Plays the audio stream
-        - Vlidating gain levels on Speaker port.
+        This function orchestrates the test execution, including:
+        - Plays audio streams
+        - Asset downloading
+        - Running prerequisites
+        - Verifying audio quality across various boost settings.
+        - Cleans up the assets after the test completes.
 
         Returns:
-            bool: The final status of the output mode tests.
+            bool: Status of the last verification result.
         """
 
         # Download the assets listed in test setup configuration file
@@ -197,23 +194,22 @@ class dsAudio_test19_AudioGain(utHelperClass):
 
             # Loop through the supported audio ports
             for port,index in self.testdsAudio.getSupportedPorts():
-                if "SPEAKER" in port:
+                if self.testdsAudio.getMS12DAPFeatureSupport(port, index, self.ms12DAPFeature):
                     # Enable the audio port
                     self.testdsAudio.enablePort(port, index)
 
-                    for gain in self.gainValues:
-                        self.log.stepStart(f'Gain:{gain} Port:{port} Index:{index} Stream:{stream}')
+                    for boost in self.boostValues:
+                        self.log.stepStart(f'MS12 {self.ms12DAPFeature} boot:{boost} Port:{port} Index:{index} Stream:{stream}')
 
-                        # Set the gain level
-                        self.testdsAudio.setSpeakerGain(port, index, gain)
+                        # Set the BassEnhancer
+                        self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":boost})
 
-                        result = self.testVerifyAudioGainLevel(port, gain, True)
+                        result = self.testVerifyBassEnhancer(stream, port, boost, True)
 
-                        self.log.stepResult(result, f'Gain:{gain} Port:{port} Index:{index} Stream:{stream}')
+                        self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} level:{boost} Port:{port} Index:{index} Stream:{stream}')
 
-                    # Resetting the gain level to default
-                    self.testdsAudio.setSpeakerGain(port, index, 0)
-
+                    # Set the BassEnhancer to 0
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":0})
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)
 
@@ -232,5 +228,5 @@ class dsAudio_test19_AudioGain(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test19_AudioGain()
+    test = dsAudio_test08_MS12BassEnhancer()
     test.run(False)

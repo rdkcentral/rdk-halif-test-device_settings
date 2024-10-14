@@ -25,7 +25,7 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -33,43 +33,35 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test08_MS12BassEnhancer(utHelperClass):
+class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
     """
-    Test class for verifying the MS12 Bass Enhancer feature.
+    Test class to enable, disable, and verify the status of audio ports on a device.
 
-    Attributes:
-        testName (str): Name of the test.
-        testSetupPath (str): Path to the test setup configuration file.
-        moduleName (str): Name of the module under test.
-        rackDevice (str): Identifier for the Device Under Test (DUT).
-        ms12DAPFeature (str): The specific audio feature being tested.
-        boostValues (list): Possible boost values for the Bass Enhancer.
+    This class uses the `dsAudioClass` to interact with the device's audio ports,
+    downloading necessary test assets, playing audio streams, enabling and disabling
+    audio ports, and performing verification of audio output.
     """
-    testName  = "test08_MS12BassEnhancer"
+
+    # Class variables
+    testName  = "test01_EnableDisableAndVerifyAudioPortStatus"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    ms12DAPFeature = "BassEnhancer"
-    boostValues = [0, 50, 100]
 
     def __init__(self):
         """
-        Initializes the dsAudio_test08_MS12BassEnhancer test class.
-
-        Sets up the necessary sessions and configurations for the test.
+        Initializes the test class with test name, setup configuration, and sessions for the device.
 
         Args:
-            None.
+            None
         """
         super().__init__(self.testName, '1')
 
-        # Test Setup configuration file
+        # Load test setup configuration
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
-        # Open Session for player
+        # Open Sessions for player and hal test
         self.player_session = self.dut.getConsoleSession("ssh_player")
-
-        # Open Session for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
 
         player = self.cpe.get("test").get("player")
@@ -101,12 +93,12 @@ class dsAudio_test08_MS12BassEnhancer(utHelperClass):
 
         test = self.testSetup.get("assets").get("device").get(self.testName)
 
-        #download test artifacts to device
+        # Download test artifacts to device
         url = test.get("artifacts")
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
 
-        #download test streams to device
+        # Download test streams to device
         url =  test.get("streams")
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
@@ -122,7 +114,6 @@ class dsAudio_test08_MS12BassEnhancer(utHelperClass):
         """
         self.deleteFromDevice(self.testStreams)
 
-
     def testRunPrerequisites(self):
         """
         Executes prerequisite commands listed in the test setup configuration file on the DUT.
@@ -131,47 +122,47 @@ class dsAudio_test08_MS12BassEnhancer(utHelperClass):
             None
         """
 
-        #Run test specific commands
+        # Run commands as part of test prerequisites
         test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("execute");
+        cmds = test.get("execute")
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyBassEnhancer(self, stream, port, boost, manual=False):
+    def testVerifyAudio(self, port, manual=False):
         """
-        Verifies the audio quality with the Bass Enhancer applied.
+        Verifies if the audio is working on the specified port.
+
+        For manual verification, it prompts the user to confirm if audio is heard on the port.
 
         Args:
-            stream (str): The audio stream used for testing.
-            port (str): The audio port to verify.
-            boost (int): The boost value for the Bass Enhancer (0-100).
-            manual (bool, optional): Whether to use manual verification.
-                                     Defaults to False (automated methods).
+            port (str): The name of the audio port to verify.
+            manual (bool, optional): Flag to indicate if manual verification should be used.
+                                     Defaults to False for automation, True for manual.
 
         Returns:
-            bool: Status indicating whether the audio is satisfactory.
+            bool: True if audio verification succeeds, False otherwise.
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} boost {boost} applied to the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Is audio playing on the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
         """
-        Executes the test for the MS12 Bass Enhancer feature.
+        The main test function that verifies audio ports by enabling and disabling them.
 
-        This function orchestrates the test execution, including:
-        - Plays audio streams
-        - Asset downloading
-        - Running prerequisites
-        - Verifying audio quality across various boost settings.
-        - Cleans up the assets after the test completes.
+        This function:
+        - Downloads the required assets.
+        - Runs the prerequisite commands.
+        - Plays an audio stream and verifies audio output for each supported port.
+        - Enables and disables audio ports while performing verification.
+        - Cleans up assets after the test.
 
         Returns:
-            bool: Status of the last verification result.
+            bool: Final result of the test.
         """
 
         # Download the assets listed in test setup configuration file
@@ -188,30 +179,24 @@ class dsAudio_test08_MS12BassEnhancer(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        for stream in self.testStreams:
+        # Loop through the supported audio ports
+        for port,index in self.testdsAudio.getSupportedPorts():
             # Start the stream playback
-            self.testPlayer.play(stream)
+            self.testPlayer.play(self.testStreams[0])
 
-            # Loop through the supported audio ports
-            for port,index in self.testdsAudio.getSupportedPorts():
-                if self.testdsAudio.getMS12DAPFeatureSupport(port, index, self.ms12DAPFeature):
-                    # Enable the audio port
-                    self.testdsAudio.enablePort(port, index)
+            # Port Enable test
+            self.log.stepStart(f'Enable {port} Port')
+            # Enable the audio port
+            self.testdsAudio.enablePort(port, index)
+            result = self.testVerifyAudio(port, True)
+            self.log.stepResult(result, f'Audio Verification {port} Port')
 
-                    for boost in self.boostValues:
-                        self.log.stepStart(f'MS12 {self.ms12DAPFeature} boot:{boost} Port:{port} Index:{index} Stream:{stream}')
-
-                        # Set the BassEnhancer
-                        self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":boost})
-
-                        result = self.testVerifyBassEnhancer(stream, port, boost, True)
-
-                        self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} level:{boost} Port:{port} Index:{index} Stream:{stream}')
-
-                    # Set the BassEnhancer to 0
-                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":0})
-                    # Disable the audio port
-                    self.testdsAudio.disablePort(port, index)
+            # Port Disable test
+            self.log.stepStart(f'Disable {port} Port')
+            # Disable the audio port
+            self.testdsAudio.disablePort(port, index)
+            result = self.testVerifyAudio(port, True)
+            self.log.stepResult(not result, f'Audio Verification {port} Port')
 
             # Stop the stream playback
             self.testPlayer.stop()
@@ -222,11 +207,11 @@ class dsAudio_test08_MS12BassEnhancer(utHelperClass):
         # Terminate dsAudio Module
         self.testdsAudio.terminate()
 
-        # Delete the dsAudio class
+        # Clean up the dsAudio instance
         del self.testdsAudio
 
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test08_MS12BassEnhancer()
+    test = dsAudio_test01_EnableDisableAndVerifyAudioPortStatus()
     test.run(False)

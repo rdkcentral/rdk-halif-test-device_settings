@@ -25,7 +25,7 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -33,33 +33,26 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test11_MS12SurroundVirtualizer(utHelperClass):
+class dsAudio_test21_AudioDelay(utHelperClass):
     """
-    Test class for MS12 Surround Virtualizer audio feature
+    Test case for validating audio delay settings on the Device Under Test (DUT).
 
     Attributes:
-        testName (str): Name of the test.
+        testName (str): Name of the test case.
         testSetupPath (str): Path to the test setup configuration file.
         moduleName (str): Name of the module under test.
-        rackDevice (str): Identifier for the Device Under Test (DUT).
-        ms12DAPFeature (str): The specific audio feature being tested.
-        volumeModes (list): list of volume modes to be tested
-        boostValues (list): list of boost values to be tested
+        rackDevice (str): Identifier for the DUT.
+        delayList (list): List of audio delay values to test (in milliseconds).
     """
-
-    testName  = "test11_MS12SurroundVirtualizer"
+    testName  = "test21_AudioDelay"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    ms12DAPFeature = "SurroundVirtualizer"
-    volumeModes = [0, 1, 2]
-    boostValues = [0, 40, 96]
+    delayList = [0, 100, 200]
 
     def __init__(self):
         """
-        Initializes the dsAudio_test11_MS12SurroundVirtualizer test.
-
-        Sets up the required sessions and configurations for testing.
+        Initializes the test21_AudioDelay test .
 
         Args:
             None.
@@ -112,7 +105,7 @@ class dsAudio_test11_MS12SurroundVirtualizer(utHelperClass):
         #download test streams to device
         url =  test.get("streams")
         if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
+            #self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
             for streampath in url:
                 self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
 
@@ -142,42 +135,38 @@ class dsAudio_test11_MS12SurroundVirtualizer(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifySurroundVirtualizer(self, stream, port, mode, level, manual=False):
+    def testVerifyAudioDelay(self, port, delay, manual=False):
         """
-        Verifies whether the audio playback is functioning correctly with the Surround Virtualizer settings.
-
-        This can be performed through user input for manual verification or other methods.
+        Verifies whether the specified audio delay is correctly applied.
 
         Args:
-            stream (str) : The audio stream being tested.
-            port (str) : The audio port to verify.
-            mode (str): The SurroundVirtualizer mode being tested.
-            level (int): The SurroundVirtualizer level to verify.
-            manual (bool, optional): If True, indicates that manual verification is used.
-                                     Defaults to False, meaning automatic verification methods will be applied.
+            port (str): The audio port to verify.
+            delay (float): The delay value (in milliseconds) to check.
+            manual (bool, optional): Flag indicating whether to perform manual verification.
+                                     Defaults to False (automated methods).
 
         Returns:
-            bool : The status of the audio verification (True if audio is fine, False otherwise).
+            bool: True if the audio delay is confirmed, False otherwise.
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} mode {mode} level {level} applied to the {port}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has Audio Delay {delay} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
-        """ 
-        Tests the functionality of the MS12 Surround Virtualizer.
+        """Executes the audio delay test logic.
 
-        This function:
-        - The download of assets
-        - Execution of prerequisites
-        - Play the Audio Stream
-        - Apply the Surround Virtualizer modes for supported ports
-        - The main verification steps for testing the Surround Virtualizer feature.
+        This function performs the following steps:
+        - Downloads necessary assets.
+        - Runs prerequisite commands.
+        - Initializes the dsAudio module.
+        - Plays the audio stream
+        - Sets various audio delay on all supported audio ports.
+        - Cleans up the downloaded assets after testing.
 
         Returns:
-            bool : The result of the last audio verification.
+            bool: The result of the final audio verification.
         """
 
         # Download the assets listed in test setup configuration file
@@ -200,43 +189,19 @@ class dsAudio_test11_MS12SurroundVirtualizer(utHelperClass):
 
             # Loop through the supported audio ports
             for port,index in self.testdsAudio.getSupportedPorts():
-                if self.testdsAudio.getMS12DAPFeatureSupport(port, index, self.ms12DAPFeature):
+                if "ARC" in port or "SPDIF" in port or "HDMI" in port:
                     # Enable the audio port
                     self.testdsAudio.enablePort(port, index)
 
-                    mode = 2 #leveller is Auto
-                    boost = 0
-                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} boost:{boost} Port:{port} Index:{index} Stream:{stream}')
+                    for delay in self.delayList:
+                        self.log.stepStart(f'Audio Delay {delay} Port:{port} Index:{index} Stream:{stream}')
 
-                    # Set the SurroundVirtualizer
-                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, boost]})
+                        # Set the Audio Delay
+                        self.testdsAudio.setAudioDelay(port, index, delay)
 
-                    result = self.testVerifySurroundVirtualizer(stream, port, mode, boost, True)
+                        result = self.testVerifyAudioDelay(port, delay, True)
 
-                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} boost:{boost} Port:{port} Index:{index} Stream:{stream}')
-
-                    mode = 1 #SurroundVirtualizer is On
-                    boost = 0
-                    for boost in self.boostValues:
-                        self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} boost:{boost} Port:{port} Index:{index} Stream:{stream}')
-
-                        # Set the SurroundVirtualizer
-                        self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, boost]})
-
-                        result = self.testVerifySurroundVirtualizer(stream, port, mode, boost, True)
-
-                        self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} boost:{boost} Port:{port} Index:{index} Stream:{stream}')
-
-                    mode = 0 #SurroundVirtualizer is OFF
-                    boost = 0
-                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} boost:{boost} Port:{port} Index:{index} Stream:{stream}')
-
-                    # Set the SurroundVirtualizer
-                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, boost]})
-
-                    result = self.testVerifySurroundVirtualizer(stream, port, mode, boost, True)
-
-                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} boost:{boost} Port:{port} Index:{index} Stream:{stream}')
+                        self.log.stepResult(result, f'Audio Delay {delay} Port:{port} Index:{index} Stream:{stream}')
 
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)
@@ -256,5 +221,5 @@ class dsAudio_test11_MS12SurroundVirtualizer(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test11_MS12SurroundVirtualizer()
+    test = dsAudio_test21_AudioDelay()
     test.run(False)

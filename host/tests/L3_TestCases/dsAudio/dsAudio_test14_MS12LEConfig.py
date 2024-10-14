@@ -23,10 +23,9 @@
 
 import os
 import sys
-import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -34,35 +33,35 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test23_AssociateMix(utHelperClass):
+class dsAudio_test14_MS12LEConfig(utHelperClass):
     """
-    Test class for verifying the functionality of audio mixing in the dsAudio module.
+    This class implements the audio test for MS12 LEConfig functionality.
 
-    This test validates the associate audio mixing feature of the device under test (DUT)
-    by adjusting fader levels and checking audio playback with and without mixing enabled.
+    It inherits from utHelperClass and manages the setup, execution, and 
+    verification of the audio configuration tests for the LEConfig feature.
 
     Attributes:
         testName (str): Name of the test.
         testSetupPath (str): Path to the test setup configuration file.
-        moduleName (str): Name of the module being tested.
-        rackDevice (str): Identifier for the device under test.
-        faderValues (list): List of fader values to test (in decibels).
+        moduleName (str): Name of the audio module.
+        rackDevice (str): Device under test (DUT).
+        ms12DAPFeature (str): The audio processing feature being tested.
     """
-
-    testName  = "test23_AssociateMix"
+    testName  = "test14_MS12LEConfig"
     testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
-    faderValues = [-32, 0, 32]
+    ms12DAPFeature = "LEConfig"
 
     def __init__(self):
         """
-        Initializes the dsAudio_test23_AssociateMix test class.
+        Initializes the dsAudio_test14_MS12LEConfig test.
 
-        Sets up the necessary configuration, player session, and user response handling.
+        This constructor sets up the test environment, including loading the 
+        configuration, opening necessary sessions, and preparing the player.
 
         Args:
-            None.
+            None
         """
         super().__init__(self.testName, '1')
 
@@ -142,39 +141,43 @@ class dsAudio_test23_AssociateMix(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyAssociateAudioMix(self, port, mixer_status, fader, manual=False):
+    def testVerifyLEConfig(self, stream, port, mode, manual=False):
         """
-        Verifies the audio playback quality under the specified mixing conditions.
+        Verifies the functionality of the LEConfig feature.
+
+        This method checks whether the audio output is correct based on the 
+        applied LEConfig settings.
 
         Args:
-            port (str) : The audio port to verify.
-            mixer_status (bool): True if associate audio mixing is enabled, False otherwise.
-            fader (int): Fader control value (e.g., -32 for mute, 32 for full).
-            manual (bool, optional): Flag for manual verification (True for manual, False for automated).
-                                     Defaults to False.
+            stream (str): The audio stream used for testing.
+            port (str): The audio port to verify.
+            mode (bool): The state of LEConfig (enabled/disabled).
+            manual (bool, optional): Flag for manual verification.
+                                     Defaults to False (automated methods).
 
         Returns:
-            bool: True if audio is as expected; otherwise, False.
+            bool: Status indicating whether the audio is functioning correctly
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Is Audio playing on {port} as expected with Mixing: {mixer_status} fader: {fader}? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has MS12 {self.ms12DAPFeature} {mode} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
         """
-        Executes the associate mixing test.
+        Executes the main test function for the MS12 LEConfig feature.
 
-        This method performs the following steps:
-        - Downloads required assets.
-        - Runs prerequisite commands.
-        - Initializes the dsAudio module.
-        - Tests audio mixing by playing each stream with various fader settings.
-        - Cleans up downloaded assets and terminates the dsAudio module.
+        This method orchestrates
+        - The downloading of assets
+        - Running prerequisites
+        - Initializing the audio module
+        - Play the Audio Stream
+        - Testing the LEConfig feature
+        - Cleaning up afterward.
 
         Returns:
-            bool: True if the test execution completes successfully; otherwise, False.
+            bool: Overall result of the test execution.
         """
 
         # Download the assets listed in test setup configuration file
@@ -191,37 +194,46 @@ class dsAudio_test23_AssociateMix(utHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        for port,index in self.testdsAudio.getSupportedPorts():
-            # Enable the audio port
-            self.testdsAudio.enablePort(port, index)
+        for stream in self.testStreams:
 
-            for stream in self.testStreams:
+            # Loop through the supported audio ports
+            for port,index in self.testdsAudio.getSupportedPorts():
+                if self.testdsAudio.getMS12DAPFeatureSupport(port, index, self.ms12DAPFeature):
+                    # Enable the audio port
+                    self.testdsAudio.enablePort(port, index)
 
-                self.log.stepStart(f'Associate Mixing Disabled, Stream: {stream} Fader: 0')
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
 
-                self.testdsAudio.enableAssociateAudioMixig(False)
+                    # Enable LEConfig
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":True})
 
-                # Start the stream playback
-                self.testPlayer.play(stream)
+                    # Start the stream playback
+                    self.testPlayer.play(stream)
 
-                result = self.testVerifyAssociateAudioMix(port, False, 0, True)
+                    result = self.testVerifyLEConfig(stream, port, True, True)
 
-                self.log.stepResult(result, f'Associate Mixing Disabled, Stream: {stream} Fader: 0')
+                    # Stop the stream playback
+                    self.testPlayer.stop()
 
-                for fade in self.faderValues:
-                    self.log.stepStart(f'Associate Mixing Stream: {stream} Fader: {fade}')
+                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
 
-                    self.testdsAudio.enableAssociateAudioMixig(True, fade)
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{True} Port:{port} Index:{index} Stream:{stream}')
 
-                    result = self.testVerifyAssociateAudioMix(port, True, fade, True)
+                    # Disable LEConfig
+                    self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":False})
 
-                    self.log.stepResult(result, f'Associate Mixing Stream: {stream} Fader: {fade}')
+                    # Start the stream playback
+                    self.testPlayer.play(stream)
 
-                # Stop the stream playback
-                self.testPlayer.stop()
+                    result = self.testVerifyLEConfig(stream, port, False, True)
 
-            # Disable the audio port
-            self.testdsAudio.disablePort(port, index)
+                    # Stop the stream playback
+                    self.testPlayer.stop()
+
+                    self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} :{False} Port:{port} Index:{index} Stream:{stream}')
+
+                    # Disable the audio port
+                    self.testdsAudio.disablePort(port, index)
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
@@ -232,8 +244,8 @@ class dsAudio_test23_AssociateMix(utHelperClass):
         # Delete the dsAudio class
         del self.testdsAudio
 
-        return True
+        return result
 
 if __name__ == '__main__':
-    test = dsAudio_test23_AssociateMix()
+    test = dsAudio_test14_MS12LEConfig()
     test.run(False)
