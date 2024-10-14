@@ -23,27 +23,26 @@
 
 import os
 import sys
-import re
+from enum import Enum, auto
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(dir_path+"/../")
+sys.path.append(os.path.join(dir_path, "../"))
 
 from dsClasses.dsCompositeIn import dsCompositeInClass
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
-from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsCompositeIn_test2_VerifyStatus_Callback(utHelperClass):
+class dsCompositeIn_test4_VerifySignal_Callback(utHelperClass):
 
-    testName  = "test2_VerifyStatus_Callback"
+    testName  = "test4_VerifySignal_Callback"
     testSetupPath = dir_path + "/dsCompositeIn_L3_testSetup.yml"
     moduleName = "dsCompositeIn"
     rackDevice = "dut"
 
     def __init__(self):
         """
-        Initializes the test2_VerifyStatus_Callback test .
+        Initializes the test4_VerifySignal_Callback test .
 
         Args:
             None.
@@ -53,16 +52,8 @@ class dsCompositeIn_test2_VerifyStatus_Callback(utHelperClass):
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
-        # Open Session for player
-        #self.player_session = self.dut.getConsoleSession("ssh_player")
-
         # Open Session for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
-
-        #player = self.cpe.get("test").get("player")
-
-        # Create player Class
-        #self.testPlayer = utPlayer(self.player_session, player)
 
          # Create user response Class
         self.testUserResponse = utUserResponse()
@@ -72,10 +63,13 @@ class dsCompositeIn_test2_VerifyStatus_Callback(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -83,17 +77,19 @@ class dsCompositeIn_test2_VerifyStatus_Callback(utHelperClass):
 
         self.deviceDownloadPath = self.cpe.get("target_directory")
 
-        #download test artifacts to device
-        url = self.testSetup.assets.device.test2_VerifyStatus_Callback.artifacts
+        test = self.testSetup.get("assets").get("device").get(self.testName)
+
+        # Download test artifacts to device
+        url = test.get("artifacts")
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
 
-        #download test streams to device
-        url = self.testSetup.assets.device.test2_VerifyStatus_Callback.streams
+        # Download test streams to device
+        url =  test.get("streams")
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
             for streampath in url:
-                self.testStreams.append(self.deviceDownloadPath + "/" + os.path.basename(streampath))
+                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
 
     def testCleanAssets(self):
         """
@@ -106,19 +102,35 @@ class dsCompositeIn_test2_VerifyStatus_Callback(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
+
+        Args:
+            None
+        """
+
+        # Run commands as part of test prerequisites
+        test = self.testSetup.get("assets").get("device").get(self.testName)
+        cmds = test.get("execute")
+        if cmds is not None:
+            for cmd in cmds:
+                self.writeCommands(cmd)
+
+    def testRunPostreiquisites(self):
+        """
+        Executes postrequisite commands listed in test-setup configuration file on the DUT.
 
         Args:
             None.
         """
 
-        #Run test specific commands
-        cmds = self.testSetup.assets.device.test2_VerifyStatus_Callback.execute
+       # Run commands as part of test prerequisites
+        test = self.testSetup.get("assets").get("device").get(self.testName)
+        cmds = test.get("postcmd")
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    #TODO: Current version supports only manual verification.
+     #TODO: Current version supports only manual verification.
     def CheckDeviceStatus(self, manual=False, port_type:str=0):
         """
         Verifies whether Composite Source Device connected or not
@@ -138,10 +150,16 @@ class dsCompositeIn_test2_VerifyStatus_Callback(utHelperClass):
             return False
 
     def testFunction(self):
-        """This function will test and verify the active status callback
+        """
+        The main test function that verifies signal status of Hdmi In device.
+
+        This function:
+        - Downloads necessary assets.
+        - Runs prerequisite commands.
+        - Verifies HDMI In signal status through callbacks.
 
         Returns:
-            bool
+            bool: Final result of the test.
         """
 
         # Download the assets listed in test setup configuration file
@@ -150,47 +168,50 @@ class dsCompositeIn_test2_VerifyStatus_Callback(utHelperClass):
         # Run Prerequisites listed in the test setup configuration file
         self.testRunPrerequisites()
 
-
-        # Create the dsCompositeIn class
+        # Create the dsHdmiIn class
         self.testdsCompositeIn = dsCompositeInClass(self.deviceProfile, self.hal_session)
 
-        self.log.testStart("test2_VerifyStatus_Callback", '1')
+        self.log.testStart("test4_VerifySignal_Callback", '1')
 
-        # Initialize the ddsCompositeIn module
-        self.dsCompositeIn.initialise()
+        # Initialize the dsHdmiIn module
+        self.testdsCompositeIn.initialise()
 
-        # Loop through the supported ports
-        for port in self.dsCompositeIn.getSupportedPorts():
+        # Loop through the supported HdmiIn ports
+        for port in self.testdsCompositeIn.getSupportedPorts():
             self.log.stepStart(f'Select {port} Port')
             self.log.step(f'Select {port} Port')
 
+            # Check the HdmiIn device connected to is active
             portstr = f"dsCOMPOSITE_IN_PORT_{port}"
-            result = self.CheckDeviceStatus(True, portstr)
+            result = self.CheckDeviceStatus(True,portstr)
             self.log.stepResult(result,f'CompositeIn Device is connected {result} on {portstr}')
-          
-            self.dsCompositeIn.selectPort(port)
+            
+            self.testdsCompositeIn.selectPort(port)
             self.log.step(f'Port Selcted {port}')
-                
-            status = self.dsCompositeIn.getPortCallbackStatus()
-            if status[1] == portstr:
-               result = True    
-               self.log.stepResult(result,f'Port Status ispresented:{status[0]} activeport:{status[1]} found in Callback')
+
+            status = self.testdsCompositeIn.getSignalChangeCallbackStatus()
+            result = False
+            if port == status[0]:
+               result = True
+               self.log.stepResult(result,f'Signal status {status[1]} found in Callback')
             else:
                result = False
-               self.log.stepResult(result,f'Port Status ispresented:{status[0]} activeport:{status[1]} found in Callback')
-
+               self.log.stepResult(result,f'Signal status not found in Callback found')
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
 
-        # Terminate dsCompositeIn Module
-        self.dsCompositeIn.terminate()
+        #Run postrequisites listed in the test setup configuration file 
+        self.testRunPostreiquisites()
 
-        # Delete the dsCompositeIn class
+        # Terminate testdsCompositeIn Module
+        self.testdsCompositeIn.terminate()
+
+        # Delete the testdsCompositeIn class
         del self.testdsCompositeIn
 
         return result
 
 if __name__ == '__main__':
-    test = dsCompositeIn_test2_VerifyStatus_Callback()
+    test = dsCompositeIn_test4_VerifySignal_Callback()
     test.run(False)
