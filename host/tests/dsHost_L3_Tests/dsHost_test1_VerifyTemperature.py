@@ -133,12 +133,26 @@ class dsHost_test1_VerifyTemperature(utHelperClass):
 
         # Get the CPU temperature
         temp1 = self.testdsHost.getCPUTemperature()
+        self.log.setResult("Temperature 1: " + str(temp1))
+
+        # Wait for 60 seconds
         sleep(60)
+
+        # Get the CPU temperature again
         temp2 = self.testdsHost.getCPUTemperature()
+        self.log.setResult("Temperature 2: " + str(temp2))
 
         # Check if the temperature is within expected range while in same mode
         # Are we fine with this range? What validation do we want?
+        self.log.step("Check if the temperature is within expected range")
         result = abs(temp1 - temp2) < 5
+
+        # Log the result
+        self.log.step("Temperature difference: " + str(abs(temp1 - temp2)))
+        if result:
+            self.log.stepResult("Temperature is within expected range")
+        else:
+            self.log.stepResult("Temperature is not within expected range")
 
 
         # Clean the assets downloaded to the device
