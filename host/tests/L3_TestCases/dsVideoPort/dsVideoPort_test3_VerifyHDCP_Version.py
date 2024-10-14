@@ -26,7 +26,7 @@ import sys
 
 # Append the parent directory to system path for module imports
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(dir_path+"/../")
+sys.path.append(dir_path+"/../../")
 
 # Import required classes from modules
 from dsClasses.dsVideoPort import dsVideoPortClass
@@ -35,40 +35,37 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsVideoPort_test7_ResetToSDRMode(utHelperClass):
+class dsVideoPort_test3_VerifyHDCP_Version(utHelperClass):
     """
-    Test class for resetting video output to SDR mode and verifying playback.
+    A class to test and verify HDCP version through supported video ports.
+
+    Attributes:
+        testName (str): Name of the test.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Name of the module being tested.
+        rackDevice (str): Device under test (DUT).
     """
 
-    testName  = "test7_ResetToSDRMode"
+    testName  = "test3_VerifyHDCP_Version"
     testSetupPath = dir_path + "/dsVideoPort_L3_testSetup.yml"
     moduleName = "dsVideoPort"
     rackDevice = "dut"
 
     def __init__(self):
         """
-        Initializes the test7_ResetToSDRMode test case with required setup.
+        Initializes the test3_VerifyHDCP_Version test setup and configuration.
 
-        Args:
-            None.
+        Initializes sessions, reads the test setup, and prepares the user response.
         """
         super().__init__(self.testName, '1')
 
-        # Test Setup configuration file
+        # Initialize the test setup configuration
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
-        # Open Session for player
-        self.player_session = self.dut.getConsoleSession("ssh_player")
-
-        # Open Session for hal test
+        # Create session for HAL test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
 
-        player = self.cpe.get("test").get("player")
-
-        # Create player Class
-        self.testPlayer = utPlayer(self.player_session, player)
-
-         # Create user response Class
+        # Create user response handler
         self.testUserResponse = utUserResponse()
 
         # Get path to device profile file
@@ -88,12 +85,12 @@ class dsVideoPort_test7_ResetToSDRMode(utHelperClass):
         self.deviceDownloadPath = self.cpe.get("target_directory")
 
         #download test artifacts to device
-        url = self.testSetup.assets.device.test7_ResetToSDRMode.artifacts
+        url = self.testSetup.assets.device.test3_VerifyHDCP_Version.artifacts
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
 
         #download test streams to device
-        url = self.testSetup.assets.device.test7_ResetToSDRMode.streams
+        url = self.testSetup.assets.device.test3_VerifyHDCP_Version.streams
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
             for streampath in url:
@@ -117,92 +114,91 @@ class dsVideoPort_test7_ResetToSDRMode(utHelperClass):
         """
 
         #Run test specific commands
-        cmds = self.testSetup.assets.device.test7_ResetToSDRMode.execute
+        cmds = self.testSetup.assets.device.test3_VerifyHDCP_Version.execute
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyPlayback(self, manual=False):
+    def testVerifyHDCPVersion(self, manual=False):
         """
-        Verifies whether the Video&audio displayed or not.
+        Verifies the HDCP version for the current port.
 
         Args:
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            manual (bool, optional): If True, manual verification is done using user response; otherwise,
+                                     automated verification is used (yet to be implemented).
 
         Returns:
-            bool: True if playback is verified successfully, False otherwise.
+            bool: Result of the HDCP version verification.
         """
         if manual == True:
-            return self.testUserResponse.getUserYN("Is Video PlayBack is HDR on the port? (Y/N):")
+            hdcpVersion = self.testdsVideoPort.getHDCPVersion()
+            return self.testUserResponse.getUserYN(f'is {hdcpVersion} HDCP Version displayed on Analyzer (Y/N): ')
         else :
             #TODO: Add automation verification methods
             return False
 
-    def enablePortAndResetToSDR(self, port, index):
+    def testEnablePortAndVerifyHDCP(self, port, index):
         """
-        Enables the video port and resets the output to SDR mode.
+        Enables a video port, verifies HDCP version, and logs the result.
 
         Args:
-            port (str): The name of the video port.
-            index (int): The port index.
+            port (str): The name of the video port being enabled.
+            index (int): The index of the video port.
 
         Returns:
-            bool: Result of playback verification.
+            bool: Result of the HDCP version verification after enabling the port.
         """
         self.log.stepStart(f'Enable {port} Port')
+
+        # Enable video port
         self.testdsVideoPort.enablePort(port, index)
 
-        # Enable HDCP if required for the device
+        # Enable HDCP if the device is a source
         if self.testdsVideoPort.getDeviceType():
             self.testdsVideoPort.enable_HDCP(port, index)
 
-        # Reset output to SDR mode
-        self.testdsVideoPort.resetOutputToSDR(port, index)
-        result = self.testVerifyPlayback(manual=True)
+        # Set HDMI preference to the current HDCP version
+        self.testdsVideoPort.select_HdmiPreference(port, index, self.testdsVideoPort.getHDCPVersion())
 
-        # Log the verification result
-        self.log.stepResult(not result, "Verified parameters using HDMI Analyzer")
-
+        # Verify HDCP version
+        self.log.step(f'Verify {self.testdsVideoPort.getHDCPVersion()} Version')
+        result = self.testVerifyHDCPVersion(True)
+        self.log.stepResult(result, f'Verified {self.testdsVideoPort.getHDCPVersion()} Version')
         return result
 
     def testFunction(self):
         """
-        Main test function that resets video output to SDR mode and verifies playback.
+        Main test function that enables video ports and verifies the HDCP version.
+
+        Downloads assets, runs prerequisites, enables/disables ports, and verifies HDCP version.
 
         Returns:
-            bool: Final test result.
+            bool: Final result of the HDCP version verification.
         """
-        # Download the assets listed in the test setup configuration file
+        # Download test assets
         self.testDownloadAssets()
 
-        # Run prerequisites listed in the test setup configuration file
+        # Run prerequisite commands
         self.testRunPrerequisites()
 
-        # Start the stream playback
-        self.testPlayer.play(self.testStreams[0])
-
-        # Create and initialize the dsVideoPort class
+        # Initialize the dsVideoPort class
         self.testdsVideoPort = dsVideoPortClass(self.deviceProfile, self.hal_session)
+        self.testdsVideoPort.initialise()
 
-        self.log.testStart(self.testName, '1')
-
-        # Loop through supported video ports and verify playback after resetting to SDR mode
+        # Loop through supported video ports and verify HDCP version
+        result = False
         for port, index in self.testdsVideoPort.getSupportedPorts():
-            result = self.enablePortAndResetToSDR(port, index)
+            result = self.testEnablePortAndVerifyHDCP(port, index)
 
-        # Stop the stream playback
-        self.testPlayer.stop()
-
-        # Clean the assets downloaded to the device
+        # Clean up assets
         self.testCleanAssets()
 
-        # Delete the dsVideoPort class
+        # Clean up the dsVideoPort class
         del self.testdsVideoPort
 
         return result
 
 if __name__ == '__main__':
-    test = dsVideoPort_test7_ResetToSDRMode()
+    test = dsVideoPort_test3_VerifyHDCP_Version()
     test.run(False)

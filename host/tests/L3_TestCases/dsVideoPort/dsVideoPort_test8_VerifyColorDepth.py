@@ -26,7 +26,7 @@ import sys
 
 # Append the parent directory to system path for module imports
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(dir_path+"/../")
+sys.path.append(dir_path+"/../../")
 
 # Import required classes from modules
 from dsClasses.dsVideoPort import dsVideoPortClass

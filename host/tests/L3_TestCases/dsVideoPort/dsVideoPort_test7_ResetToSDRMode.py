@@ -23,11 +23,10 @@
 
 import os
 import sys
-from enum import Enum, auto
 
 # Append the parent directory to system path for module imports
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(dir_path+"/../")
+sys.path.append(dir_path+"/../../")
 
 # Import required classes from modules
 from dsClasses.dsVideoPort import dsVideoPortClass
@@ -36,25 +35,19 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsVideoBackgroundColor(Enum):
-    dsVIDEO_BGCOLOR_BLUE = 0   # Background color BLUE
-    dsVIDEO_BGCOLOR_BLACK = 1  # Background color BLACK
-    dsVIDEO_BGCOLOR_NONE = 2   # Background color NONE
-    dsVIDEO_BGCOLOR_MAX = 3    # Out of range
-
-class dsVideoPort_test9_VerifyBackgroundColor(utHelperClass):
+class dsVideoPort_test7_ResetToSDRMode(utHelperClass):
     """
-    Test class for verifying the background color of video ports.
+    Test class for resetting video output to SDR mode and verifying playback.
     """
 
-    testName  = "test9_VerifyBackgroundColor"
+    testName  = "test7_ResetToSDRMode"
     testSetupPath = dir_path + "/dsVideoPort_L3_testSetup.yml"
     moduleName = "dsVideoPort"
     rackDevice = "dut"
 
     def __init__(self):
         """
-        Initializes the test9_VerifyBackgroundColor test .
+        Initializes the test7_ResetToSDRMode test case with required setup.
 
         Args:
             None.
@@ -64,10 +57,18 @@ class dsVideoPort_test9_VerifyBackgroundColor(utHelperClass):
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
+        # Open Session for player
+        self.player_session = self.dut.getConsoleSession("ssh_player")
+
         # Open Session for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
 
-        # Create user response Class
+        player = self.cpe.get("test").get("player")
+
+        # Create player Class
+        self.testPlayer = utPlayer(self.player_session, player)
+
+         # Create user response Class
         self.testUserResponse = utUserResponse()
 
         # Get path to device profile file
@@ -87,12 +88,12 @@ class dsVideoPort_test9_VerifyBackgroundColor(utHelperClass):
         self.deviceDownloadPath = self.cpe.get("target_directory")
 
         #download test artifacts to device
-        url = self.testSetup.assets.device.test9_VerifyBackgroundColor.artifacts
+        url = self.testSetup.assets.device.test7_ResetToSDRMode.artifacts
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
 
         #download test streams to device
-        url = self.testSetup.assets.device.test9_VerifyBackgroundColor.streams
+        url = self.testSetup.assets.device.test7_ResetToSDRMode.streams
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
             for streampath in url:
@@ -116,69 +117,83 @@ class dsVideoPort_test9_VerifyBackgroundColor(utHelperClass):
         """
 
         #Run test specific commands
-        cmds = self.testSetup.assets.device.test9_VerifyBackgroundColor.execute
+        cmds = self.testSetup.assets.device.test7_ResetToSDRMode.execute
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyBackGroundColor(self, manual=False,backgroundColor:str=0):
+    def testVerifyPlayback(self, manual=False):
         """
-        Verifies the HDCP Version .
+        Verifies whether the Video&audio displayed or not.
 
         Args:
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
                                      Defaults to other verification methods
 
         Returns:
-            bool
+            bool: True if playback is verified successfully, False otherwise.
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f'is {backgroundColor} displayed on Analyzer (Y/N): ')
+            return self.testUserResponse.getUserYN("Is Video PlayBack is HDR on the port? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
-    def testFunction(self):
-        """This function will test the Video Ports by enabling and disabling the ports
+    def enablePortAndResetToSDR(self, port, index):
+        """
+        Enables the video port and resets the output to SDR mode.
+
+        Args:
+            port (str): The name of the video port.
+            index (int): The port index.
 
         Returns:
-            bool
+            bool: Result of playback verification.
         """
+        self.log.stepStart(f'Enable {port} Port')
+        self.testdsVideoPort.enablePort(port, index)
 
-        # Download the assets listed in test setup configuration file
+        # Enable HDCP if required for the device
+        if self.testdsVideoPort.getDeviceType():
+            self.testdsVideoPort.enable_HDCP(port, index)
+
+        # Reset output to SDR mode
+        self.testdsVideoPort.resetOutputToSDR(port, index)
+        result = self.testVerifyPlayback(manual=True)
+
+        # Log the verification result
+        self.log.stepResult(not result, "Verified parameters using HDMI Analyzer")
+
+        return result
+
+    def testFunction(self):
+        """
+        Main test function that resets video output to SDR mode and verifies playback.
+
+        Returns:
+            bool: Final test result.
+        """
+        # Download the assets listed in the test setup configuration file
         self.testDownloadAssets()
 
-        # Run Prerequisites listed in the test setup configuration file
+        # Run prerequisites listed in the test setup configuration file
         self.testRunPrerequisites()
 
-        # Create the dsVideoPort class
+        # Start the stream playback
+        self.testPlayer.play(self.testStreams[0])
+
+        # Create and initialize the dsVideoPort class
         self.testdsVideoPort = dsVideoPortClass(self.deviceProfile, self.hal_session)
 
-        self.log.testStart("test9_VerifyBackgroundColor", '1')
+        self.log.testStart(self.testName, '1')
 
-        # Initialize the dsVideoPort module
-        self.testdsVideoPort.initialise()
+        # Loop through supported video ports and verify playback after resetting to SDR mode
+        for port, index in self.testdsVideoPort.getSupportedPorts():
+            result = self.enablePortAndResetToSDR(port, index)
 
-        # Loop through the supported Video ports
-        for port,index in self.testdsVideoPort.getSupportedPorts():
-            self.log.stepStart(f'Enable {port} Port')
-            self.log.step(f'Enable {port} Port')
-
-            # Enable the Video port
-            self.testdsVideoPort.enablePort(port, index)
-
-            # Enable the HDCP only for source devices
-            if self.testdsVideoPort.getDeviceType():
-                self.testdsVideoPort.enable_HDCP(port, index)
-
-            for backgroundColor in list(dsVideoBackgroundColor):
-                if backgroundColor != dsVideoBackgroundColor.dsVIDEO_BGCOLOR_MAX:
-                    self.testdsVideoPort.select_BackgroundColor(port, index, dsVideoBackgroundColor(backgroundColor).name)
-                    result = self.testVerifyBackGroundColor(True,dsVideoBackgroundColor(backgroundColor).name)
-
-            self.log.stepResult(result, "All parameters verified using HDMI Analyzer")
-
+        # Stop the stream playback
+        self.testPlayer.stop()
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
@@ -189,5 +204,5 @@ class dsVideoPort_test9_VerifyBackgroundColor(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsVideoPort_test9_VerifyBackgroundColor()
+    test = dsVideoPort_test7_ResetToSDRMode()
     test.run(False)
