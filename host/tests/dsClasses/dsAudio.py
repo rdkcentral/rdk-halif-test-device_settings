@@ -98,11 +98,6 @@ class dsAudioClass():
         # Start the user interface menu
         self.utMenu.start()
 
-        # Retrieve callback file paths from configuration
-        self.connectionCB = self.suitConfig.get("test").get("callback").get("connection_status")
-        self.formatCB = self.suitConfig.get("test").get("callback").get("format_status")
-        self.atmosCB = self.suitConfig.get("test").get("callback").get("atmos_status")
-
     def searchPattern(self, haystack, pattern):
         """
         Searches for the first occurrence of a specified pattern in the provided string.
@@ -140,21 +135,6 @@ class dsAudioClass():
                     "query_type": "direct",
                     "query": "Select Device Type[0: Sink, 1: Source]:",
                     "input": str(device_type)
-                },
-                {
-                    "query_type": "direct",
-                    "query": "Enter file name with path to log connection status callbacks:",
-                    "input": self.connectionCB
-                },
-                {
-                    "query_type": "direct",
-                    "query": "Enter file name with path to log audio format callbacks:",
-                    "input": self.formatCB
-                },
-                {
-                    "query_type": "direct",
-                    "query": "Enter file name with path to log ATMOS Caps callbacks:",
-                    "input": self.atmosCB
                 }
         ]
         result = self.utMenu.select( self.testSuite, "Initialize dsAudio", promptWithAnswers)

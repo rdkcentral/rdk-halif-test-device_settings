@@ -89,6 +89,10 @@
 
 #define DS_ASSERT assert
 
+#define DS_CONNECTION_CB_FILE "dsAudio_connection_callback.txt"
+#define DS_FORMAT_CB_FILE "dsAudio_format_callback.txt"
+#define DS_ATMOS_CB_FILE "dsAudio_atmos_callback.txt"
+
 /* Global Variables */
 static int32_t gTestGroup = 3;
 static int32_t gTestID = 1;
@@ -346,14 +350,10 @@ void test_l3_dsAudio_initialize(void)
         goto exit;
     }
 
-    UT_LOG_MENU_INFO("Enter file name with path to log connection status callbacks:");
-    readString(gConnectionCBFile);
-
-    UT_LOG_MENU_INFO("Enter file name with path to log audio format callbacks:");
-    readString(gFormatCBFile);
-
-    UT_LOG_MENU_INFO("Enter file name with path to log ATMOS Caps callbacks:");
-    readString(gATMOSCapsCBFile);
+    //TODO: replace with user input
+    strncpy(gConnectionCBFile, DS_CONNECTION_CB_FILE, DS_MAX_FILE_SIZE);
+    strncpy(gFormatCBFile, DS_FORMAT_CB_FILE, DS_MAX_FILE_SIZE);
+    strncpy(gATMOSCapsCBFile, DS_ATMOS_CB_FILE, DS_MAX_FILE_SIZE);
 
     /* Initialize the dsAudio Module */
     UT_LOG_INFO("Calling dsAudioPortInit()");

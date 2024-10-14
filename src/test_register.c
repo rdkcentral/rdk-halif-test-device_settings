@@ -103,8 +103,8 @@ static void dsAudio_register()
     {
         test_l1_dsAudio_register();
         test_l2_dsAudio_register();
-        test_l3_dsAudio_register();
     }
+    test_l3_dsAudio_register();
 }
 
 static void dsVideoPort_register()
