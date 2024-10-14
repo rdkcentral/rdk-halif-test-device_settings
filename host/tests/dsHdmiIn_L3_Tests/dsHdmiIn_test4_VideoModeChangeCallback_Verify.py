@@ -31,7 +31,6 @@ sys.path.append(os.path.join(dir_path, "../"))
 from dsClasses.dsHdmiIn import dsHdmiInClass
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
-from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsHdmiIn_test4_VideoModeChangeCallback_Verify(utHelperClass):
@@ -124,7 +123,7 @@ class dsHdmiIn_test4_VideoModeChangeCallback_Verify(utHelperClass):
             None.
         """
 
-       # Run commands as part of test prerequisites
+       # Run commands as part of test postrequisites
         test = self.testSetup.get("assets").get("device").get(self.testName)
         cmds = test.get("postcmd")
         if cmds is not None:
@@ -132,21 +131,21 @@ class dsHdmiIn_test4_VideoModeChangeCallback_Verify(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def CheckDeviceStatusAndResolutionChange(self, manual=False, port_type:str=0, resolution:str=0):
+    def CheckDeviceStatusAndResolutionChange(self, manual=False, port_type:str=0):
        """
         Verifies whether the particular input selected or not.
         Ask for resolution change on source device.
         Args:
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
                                      Defaults to other verification methods
+            port_type (str) : Hdmi In port type as string.
+            resolution (bool, optional) : Manual verification(True: manual, False: other verification methods)
 
         Returns:
             bool
        """
-       if manual == True and resolution == False:
-            return self.testUserResponse.getUserYN(f'Check {port_type} Hdmi In device is ON and press Enter:')
-       elif manual == True and resolution == True:
-            return self.testUserResponse.getUserYN(f'Change the resolution on device connected to {port_type}then press Enter:')
+       if manual == True:
+            return self.testUserResponse.getUserYN(f'Connect Hdmi In device on {port_type} and change resolution then press Enter:')
        else:
             #TODO: Add automation verification methods
             return False
@@ -188,10 +187,11 @@ class dsHdmiIn_test4_VideoModeChangeCallback_Verify(utHelperClass):
             self.log.stepStart(f'Select {port} Port')
             self.log.step(f'Select {port} Port')
 
+            self.testdsHdmiIn.selectHDMIInPort(port, audmix, videoplane, topmost)
+            self.log.step(f'Port Selcted {port}')
+
             # Check the HdmiIn device is active
-            self.CheckDeviceStatusAndResolutionChange(True,port,False)
-            self.testdsHdmiIn.selectPort(port, audmix, videoplane, topmost)
-            self.CheckDeviceStatusAndResolutionChange(True,port,True)
+            self.CheckDeviceStatusAndResolutionChange(True,port)
             
             videomode = self.testdsHdmiIn.getVideoModeCallbackStatus()
             if port == videomode[0] and videomode[3] == "true":
