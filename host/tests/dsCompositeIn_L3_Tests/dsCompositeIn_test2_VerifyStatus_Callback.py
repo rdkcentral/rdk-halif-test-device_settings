@@ -34,16 +34,16 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsCompositeIn_test1_VerifyConnect_Callback(utHelperClass):
+class dsCompositeIn_test2_VerifyStatus_Callback(utHelperClass):
 
-    testName  = "test1_VerifyConnect_Callback"
+    testName  = "test2_VerifyStatus_Callback"
     testSetupPath = dir_path + "/dsCompositeIn_L3_testSetup.yml"
     moduleName = "dsCompositeIn"
     rackDevice = "dut"
 
     def __init__(self):
         """
-        Initializes the test1_VerifyConnect_Callback test .
+        Initializes the test2_VerifyStatus_Callback test .
 
         Args:
             None.
@@ -84,12 +84,12 @@ class dsCompositeIn_test1_VerifyConnect_Callback(utHelperClass):
         self.deviceDownloadPath = self.cpe.get("target_directory")
 
         #download test artifacts to device
-        url = self.testSetup.assets.device.test1_VerifyConnect_Callback.artifacts
+        url = self.testSetup.assets.device.test2_VerifyStatus_Callback.artifacts
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
 
         #download test streams to device
-        url = self.testSetup.assets.device.test1_VerifyConnect_Callback.streams
+        url = self.testSetup.assets.device.test2_VerifyStatus_Callback.streams
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
             for streampath in url:
@@ -113,18 +113,17 @@ class dsCompositeIn_test1_VerifyConnect_Callback(utHelperClass):
         """
 
         #Run test specific commands
-        cmds = self.testSetup.assets.device.test1_VerifyConnect_Callback.execute
+        cmds = self.testSetup.assets.device.test2_VerifyStatus_Callback.execute
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testPlugUnplugtCompositeIn(self, Connect:False, manual=False):
+    def CheckDeviceStatus(self, manual=False):
         """
-        Verifies whether the compositeIn connected or not.
+        Verifies whether Composite Source Device connected or not
 
         Args:
-            disconnect (bool): Connect or Disconnect compositeIn source device
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
                                      Defaults to other verification methods
 
@@ -132,16 +131,13 @@ class dsCompositeIn_test1_VerifyConnect_Callback(utHelperClass):
             bool
         """
         if manual == True:
-            if Connect == True:
-                return self.testUserResponse.getUserYN("Connect the CompositeIn source and press Enter:")
-            else :
-                return self.testUserResponse.getUserYN("Disconnect the CompositeIn source and press Enter:")
+            return self.testUserResponse.getUserYN("Check if CompositeIn source is connected and press Enter:")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
-        """This function will test and verify the connect/ disconnect callback
+        """This function will test and verify the active status callback
 
         Returns:
             bool
@@ -157,36 +153,30 @@ class dsCompositeIn_test1_VerifyConnect_Callback(utHelperClass):
         # Create the dsCompositeIn class
         self.testdsCompositeIn = dsCompositeInClass(self.deviceProfile, self.hal_session)
 
-        self.log.testStart("test1_VerifyConnect_Callback", '1')
+        self.log.testStart("test2_VerifyStatus_Callback", '1')
 
         # Initialize the ddsCompositeIn module
         self.dsCompositeIn.initialise()
 
         # Loop through the supported ports
         for port in self.dsCompositeIn.getSupportedPorts():
-            self.log.stepStart(f'Connect Status Test for {port} Port')
+            self.log.stepStart(f'Select {port} Port')
+            self.log.step(f'Select {port} Port')
 
-            result = self.testPlugUnplugtCompositeIn(True,True)
-
-            status = self.dsCompositeIn.getConnectionCallbackStatus()
-            result = False
-            if status:
-                if port == status[0] and status[1]:
-                    result = True
-
-            self.log.stepResult(result, f'Connect Status Test for {port} Port')
-
-            self.log.stepStart(f'Disconnect Status Test for {port} Port')
-
-            result = self.testPlugUnplugtCompositeIn(False,True)
-
-            status = self.dsCompositeIn.getConnectionCallbackStatus()
-            result = False
-            if status:
-                if port == status[0] and not status[1]:
-                    result = True
-
-            self.log.stepResult(result, f'Disconnect Status Test for {port} Port')
+            result = self.CheckDeviceStatus(True)
+            self.log.stepResult(result,f'CompositeIn Device is connected {result} on {port}')
+          
+            self.dsCompositeIn.selectPort(port)
+            self.log.step(f'Port Selcted {port}')
+                
+            status = self.dsCompositeIn.getPortCallbackStatus()
+            portstr = f"dsCOMPOSITE_IN_PORT_{port}"
+            if status[1] == portstr:
+               result = True    
+               self.log.stepResult(result,f'Port Status ispresented:{status[0]} activeport:{status[1]} found in Callback')
+            else:
+               result = False
+               self.log.stepResult(result,f'Port Status ispresented:{status[0]} activeport:{status[1]} found in Callback')
 
 
         # Clean the assets downloaded to the device
@@ -201,5 +191,5 @@ class dsCompositeIn_test1_VerifyConnect_Callback(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsCompositeIn_test1_VerifyConnect_Callback()
+    test = dsCompositeIn_test2_VerifyStatus_Callback()
     test.run(False)

@@ -102,6 +102,93 @@ class dsCompositeInClass():
 
         return ports
 
+    def getConnectionCallbackStatus(self):
+        """
+        Retrieves the CompositeIn connection status from the device using a callback.
+
+        This function reads the output from the device session to detect the
+        CompositeIn port connection status. The callback message contains the port number
+        and the connection status ("true" or "false"). The function parses the message
+        and returns the port and connection status as a boolean value.
+
+        Args:
+            None
+        Returns:
+            tuple:
+                - port (str): The CompositeIn port number as a string.
+                - connection (bool): True if the CompositeIn port is connected, False otherwise.
+            None: If no matching connection status is found.
+        """
+
+        result = self.testSession.read_until("Received Connection status callback port:")
+        connectioncallpattern = r"Received Connection status callback port: \[(\w+)\], Connection: \[(\w+)\]"
+        match = re.search(connectioncallpattern, result)
+
+        if match:
+            port = match.group(1)
+            connection = match.group(2)
+            return port, connection == "true"
+
+        return None
+
+    def getSignalChangeCallbackStatus(self):
+        """
+        Retrieves the CompositeIn signal status from the device using a callback.
+
+        This function reads the output from the device session to detect the
+        signal  status. The callback message contains the port number
+        and the signal status. The function parses the message
+        and returns the port ,signal status and None if not present.
+
+        Args:
+            None.
+        Returns:
+            tuple:
+                - port (str): The CompositeIn port number as a string.
+                - signalstatus (str): Signal status as a string.
+            None: If no matching signal status is found.
+        """
+
+        result = self.testSession.read_until("Received SignalChange status callback port:")
+        connectioncallpattern = r"Received SignalChange status callback port: \[(\w+)\], sigstatus: \[(\w+)\]"
+        match = re.search(connectioncallpattern, result)
+
+        if match:
+            port = match.group(1)
+            signalstatus = match.group(2)
+            return port, signalstatus
+
+        return None
+
+    def getPortCallbackStatus(self):
+        """
+        Retrieves the CompositeIn In port status using a callback.
+
+        This function reads the output from the device session to detect the
+        port  status. The callback message contains the port number
+        and the status of port (ispresented , activeport). The function parses 
+        the message and returns the port status.
+
+        Args:
+            None.
+        Returns:
+            tuple:
+                - ispresented (str): true or false.
+                - activeport(str):Active Port number as string
+            None: If no matching signal status is found.
+        """
+        
+        result = self.testSession.read_until("Received statuschange callback isPresented:")
+        portstatuspattern = r"Received statuschange callback isPresented: \[(\w+)\], activeport: \[(\w+)\]"
+        match = re.search(portstatuspattern, result)
+
+        if match:
+            ispresented = match.group(1)
+            activeport = match.group(2)
+            return ispresented, activeport
+        
+        return None
+
     def getStatus(self):
         """
         Gets the status of compositeIn ports.
