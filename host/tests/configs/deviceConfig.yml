@@ -26,14 +26,15 @@ deviceConfig:
     cpe1:
         platform:   "llama.uk"
         model:      "65"
-        target_directory: "/opt/"
+        target_directory: "/tmp/"  # Target Directory on device
+        prompt: "" # Prompt string on console
         test:
             #TODO: Use the single profile file which contains all details (ds, hdmi, etc)
-            profile: "../../../profiles/sink/Sink_AudioSettings.yaml"
+            profile: "../../../../profiles/sink/Sink_AudioSettings.yaml"
             player:
                 tool: "gstreamer"
                 prerequisites:
-                    - "export EXP=test" # pre commands required to play the stream
+                    - export EXP=test # pre commands required to play the stream
     cpe2:
         platform: "test"
         model: "test"
