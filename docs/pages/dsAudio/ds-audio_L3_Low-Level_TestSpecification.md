@@ -41,14 +41,29 @@ This document describes the L3 Test Procedure for the Device Settings Audio modu
 
 ## Audio Streams Requirement
 
-|#|Stream|Description|
-|-|------|-----------|
-|001|400Hz_sine_tone|File: `WAV`, Format: `PCM`, SampleRate: 48000, Channels: 2|
-|002|AAC_stream|File: `mp4`, Format: `AAC`, SampleRate: 48000, Channels: 2|
-|003|Vorbis_stream|File: `ogg`, Format: `vorbis`, SampleRate: 48000, Channels: 2|
-|004|wma_stream|File: `wma`, Format: `wma`, SampleRate: 48000, Channels: 2|
-|005|Dolby_Streams|`TBD`|
-|006|Dolby_MS12_Streams|`TBD`|
+|#|Stream Name|Description |
+|-|-----------|------------|
+|01|tones_string_48k_stereo.ac3|`AC3` format audio with tones (single notes) across various frequencies|
+|02|Dolby_stream_supports_Dialogue_Enhancer|`AC4` format audio with speech frequencies, designed to test the dialogue enhancer feature|
+|03|music_8k_stereo.ac3|`AC3` format audio with music, used to test features like the equalizer|
+|04|tone_500Hz_compress_48k_stereo.ac3|`AC3` format with a 500Hz tone, which alternates between two volume levels (-25dB and -5dB), useful for compression and dynamic range testing|
+|05|tone_bassrange_150Hz_48k_stereo.ac3|`AC3` format with a 150Hz tone at -10dB|
+|06|Dolby_atmos_stream_supports_surround_mode|Dolby `AC4`, `EAC3_ATMOS`, and `AC4_ATMOS` formats to test surround sound mode|
+|07|tones_string_48k_stereo.wav|`WAV` (`PCM`) format with tones across various frequencies|
+|08|tones_string_48k_stereo.eac3|`EAC3` format with tones across various frequencies|
+|09|tones_string_48k_stereo.aac|`AAC` format with tones across various frequencies|
+|10|tones_string_48k_stereo.ogg|`VORBIS` format with tones across various frequencies|
+|11|tones_string_48k_stereo.wma|`WMA` format with tones across various frequencies|
+|12|Audio_supports_MAT_format|Dolby `MAT` format|
+|13|Dolby_audio_supports_TRUEHD_format|Dolby `TRUEHD` format|
+|14|DolbyDigitalPlus_atmos_audio|Dolby `EAC3_ATMOS` format|
+|15|TRUEHD_atmos_audio|Dolby `TRUEHD_ATMOS` format|
+|16|MAT_atmos_audio|Dolby `MAT_ATMOS` format|
+|17|Dolby_atmos_audio|Dolby `AC4_ATMOS` format|
+|18|Dolby_stream_supports_AVsync|Dolby stream specifically designed to test `AV` synchronization|
+|19|Dolby_stream_supports_Multi-Language|`AC4` format with three language tracks (Chinese, English, and Spanish) and additional audio options, used to test multi-language audio capabilities|
+|20|primary_audio_48k_2ch.ac3|`AC3` format with two-channel audio (stereo) containing dialogue|
+|21|system_audio_48k_2ch.wav|`WAV` (`PCM`) format with two-channel audio containing dialogue|
 
 ## Level 3 Test Cases High Level Overview
 
@@ -56,32 +71,32 @@ Below are top test use-case for the audio port.
 
 |#|Test-case|Description|HAL APIs|Source|Sink|Streams Number|
 |-|---------|-----------|--------|------|----|--------------|
-|1|Enable/disable audio ports|Play the predefined audio streams. Iterate through the supported audio ports, enabling or disabling them, and check if the stream is being played through each port| `dsEnableAudioPort()`|`Y`|`Y`|001|
+|1|Enable/disable audio ports|Play the predefined audio streams. Iterate through the supported audio ports, enabling or disabling them, and check if the stream is being played through each port| `dsEnableAudioPort()`|`Y`|`Y`|01|
 |2|Verify the Headphone connection status|Enable the headphone port and verify the connection status by disconnecting and reconnecting the port. Additionally, confirm if the callback is triggered| `dsAudioOutIsConnected()`|`N`|`Y`|`NA`|
-|3|Verify MS12 Audio Compression|Loop through the ports which supports Audio Compression and verify|`dsSetAudioCompression()`|`Y`|`Y`|006|
-|4|Verify MS12 `DAP` Dialog enhancement|Loop through the ports which supports `MS12` `DAP` Capabilities and verify Dialog enhancement|`dsSetDialogEnhancement()`|`Y`|`Y`|006|
-|5|Verify MS12 `DAP` Dolby Volume mode|Loop through the ports which supports `MS12` `DAP` Capabilities and verify Dolby Volume mode|`dsSetDolbyVolumeMode()`|`Y`|`Y`|006|
-|6|Verify MS12 `DAP` Intelligent Equalizer|Loop through the ports which supports `MS12` `DAP` Capabilities and verify the Intelligent Equalizer|`dsSetIntelligentEqualizerMode()`|`Y`|`Y`|006|
-|7|Verify MS12 `DAP` Volume leveller|Loop through the ports which supports `MS12` `DAP` Capabilities and verify Volume leveller|`dsSetVolumeLeveller()`|`Y`|`Y`|006|
-|8|Verify MS12 `DAP` Bass enhancer|Loop through the ports which supports `MS12` `DAP` Capabilities and verify Bass enhancer|`dsSetBassEnhancer()`|`Y`|`Y`|006|
-|9|Verify MS12 `DAP` Surround Decoder|Loop through the ports which supports `MS12` `DAP` Capabilities and verify Surround Decoder|`dsEnableSurroundDecoder()`|`Y`|`Y`|006|
-|10|Verify MS12 `DAP` `DRC` Mode|Loop through the ports which supports `MS12` `DAP` Capabilities and verify `DRC` Mode|`dsSetDRCMode()`|`Y`|`Y`|006|
-|11|Verify MS12 `DAP` Surround Virtualizer|Loop through the ports which supports `MS12` `DAP` Capabilities and verify Surround Virtualizer|`dsSetSurroundVirtualizer()`|`Y`|`Y`|006|
-|12|Verify MS12 `DAP` `MI` Steering|Loop through the ports which supports `MS12` `DAP` Capabilities and verify `MI` Steering|`dsSetMISteering()`|`Y`|`Y`|006|
-|13|Verify MS12 `DAP` Graphics Equalizer|Loop through the ports which supports `MS12` `DAP` Capabilities and verify Graphics Equalizer|`dsSetGraphicEqualizerMode()`|`Y`|`Y`|006|
-|14|Verify MS12 `DAP` `LE` Config|Loop through the ports which supports `MS12` `DAP` Capabilities and verify `LE` Config|`dsEnableLEConfig()`|`Y`|`Y`|006|
+|3|Verify MS12 Audio Compression|Loop through the ports which supports Audio Compression and verify|`dsSetAudioCompression()`|`Y`|`Y`|01|
+|4|Verify MS12 `DAP` Dialog enhancement|Loop through the ports which supports `MS12` `DAP` Capabilities and verify Dialog enhancement|`dsSetDialogEnhancement()`|`Y`|`Y`|02|
+|5|Verify MS12 `DAP` Dolby Volume mode|Loop through the ports which supports `MS12` `DAP` Capabilities and verify Dolby Volume mode|`dsSetDolbyVolumeMode()`|`Y`|`Y`|01|
+|6|Verify MS12 `DAP` Intelligent Equalizer|Loop through the ports which supports `MS12` `DAP` Capabilities and verify the Intelligent Equalizer|`dsSetIntelligentEqualizerMode()`|`Y`|`Y`|03|
+|7|Verify MS12 `DAP` Volume leveller|Loop through the ports which supports `MS12` `DAP` Capabilities and verify Volume leveller|`dsSetVolumeLeveller()`|`Y`|`Y`|04|
+|8|Verify MS12 `DAP` Bass enhancer|Loop through the ports which supports `MS12` `DAP` Capabilities and verify Bass enhancer|`dsSetBassEnhancer()`|`Y`|`Y`|05|
+|9|Verify MS12 `DAP` Surround Decoder|Loop through the ports which supports `MS12` `DAP` Capabilities and verify Surround Decoder|`dsEnableSurroundDecoder()`|`Y`|`Y`|06|
+|10|Verify MS12 `DAP` `DRC` Mode|Loop through the ports which supports `MS12` `DAP` Capabilities and verify `DRC` Mode|`dsSetDRCMode()`|`Y`|`Y`|04|
+|11|Verify MS12 `DAP` Surround Virtualizer|Loop through the ports which supports `MS12` `DAP` Capabilities and verify Surround Virtualizer|`dsSetSurroundVirtualizer()`|`Y`|`Y`|06|
+|12|Verify MS12 `DAP` `MI` Steering|Loop through the ports which supports `MS12` `DAP` Capabilities and verify `MI` Steering|`dsSetMISteering()`|`Y`|`Y`|01|
+|13|Verify MS12 `DAP` Graphics Equalizer|Loop through the ports which supports `MS12` `DAP` Capabilities and verify Graphics Equalizer|`dsSetGraphicEqualizerMode()`|`Y`|`Y`|01|
+|14|Verify MS12 `DAP` `LE` Config|Loop through the ports which supports `MS12` `DAP` Capabilities and verify `LE` Config|`dsEnableLEConfig()`|`Y`|`Y`|04|
 |15|Test `ARC` Port|Enable the `ARC` port, retrieve the connected device's capabilities, and verify them| `dsGetSupportedARCTypes()`|`N`|`Y`|`NA`|
 |16|Test `ARC` Port `SAD`|Enable the `ARC` port, set the set the `SAD` and verify| `dsAudioSetSAD()`|`N`|`Y`|`NA`|
-|17|Test output mode|Play the predefined audio streams. Iterate through the audio ports which supports stereo modes, set various stereo modes and verify| `dsSetStereoMode()`|`Y`|`Y`|001, 002, 005|
-|18|Test Audio Level|Play the predefined audio streams. Iterate through the audio ports, set the gain and verify| `dsSetAudioLevel()`|`N`|`Y`|001|
-|19|Test Audio Gain|Play the predefined audio streams. set the gain for Speaker port and verify| `dsSetAudioGain()`|`N`|`Y`|001|
-|20|Test Audio Mute|Play the predefined audio streams. Iterate through the audio ports, set the Mute, Un-mute and verify| `dsSetAudioMute()`|`Y`|`Y`|001, 005|
-|21|Test Audio Delay|Play the predefined audio streams. Iterate through the audio ports, set the delay and verify| `dsSetAudioDelay()`|`Y`|`Y`|001, 005|
-|22|Test Audio Format|Play the predefined audio streams. verify the audio format using `API`. Additionally, confirm if the callback is triggered| `dsGetAudioFormat()`|`Y`|`Y`|001, 002, 003, 004, 005|
-|23|Test Associated Audio Mixing|Play the predefined audio streams. Set the mixer levels and verify| `dsSetAssociatedAudioMixing()`, `dsSetFaderControl()`|`Y`|`Y`|005|
-|24|Test Primary/Secondary Language|Play the predefined audio streams. Set the primary and secondary languages and verify| `dsSetPrimaryLanguage()`, `dsSetSecondaryLanguage()`|`Y`|`Y`|005|
-|25|Test Audio Mixer Levels|Play the predefined audio streams. Set the mixer levels for primary and system audio and verify| `dsSetAudioMixerLevels()`|`N`|`Y`|005|
-|26|Test MS12 Audio Profiles|Play the predefined audio streams. Set the MS12 profiles and verify| `dsSetAudioMixerLevels()`|`N`|`Y`|005|
+|17|Test output mode|Play the predefined audio streams. Iterate through the audio ports which supports stereo modes, set various stereo modes and verify| `dsSetStereoMode()`|`Y`|`Y`|01, 07, 08|
+|18|Test Audio Level|Play the predefined audio streams. Iterate through the audio ports, set the gain and verify| `dsSetAudioLevel()`|`N`|`Y`|01|
+|19|Test Audio Gain|Play the predefined audio streams. set the gain for Speaker port and verify| `dsSetAudioGain()`|`N`|`Y`|01|
+|20|Test Audio Mute|Play the predefined audio streams. Iterate through the audio ports, set the Mute, Un-mute and verify| `dsSetAudioMute()`|`Y`|`Y`|01|
+|21|Test Audio Delay|Play the predefined audio streams. Iterate through the audio ports, set the delay and verify| `dsSetAudioDelay()`|`Y`|`Y`|18|
+|22|Test Audio Format|Play the predefined audio streams. verify the audio format using `API`. Additionally, confirm if the callback is triggered| `dsGetAudioFormat()`|`Y`|`Y`|01, 07, 08, 09, 10, 11, 12, 13, 14, 15, 16, 17|
+|23|Test Associated Audio Mixing|Play the predefined audio streams. Set the mixer levels and verify| `dsSetAssociatedAudioMixing()`, `dsSetFaderControl()`|`Y`|`Y`|19|
+|24|Test Primary/Secondary Language|Play the predefined audio streams. Set the primary and secondary languages and verify| `dsSetPrimaryLanguage()`, `dsSetSecondaryLanguage()`|`Y`|`Y`|19|
+|25|Test Audio Mixer Levels|Play the predefined audio streams. Set the mixer levels for primary and system audio and verify| `dsSetAudioMixerLevels()`|`N`|`Y`|20, 21|
+|26|Test MS12 Audio Profiles|Play the predefined audio streams. Set the MS12 profiles and verify| `dsSetMS12AudioProfile()`|`N`|`Y`|03|
 
 ## Level 3 Python Test Cases High Level Overview
 
