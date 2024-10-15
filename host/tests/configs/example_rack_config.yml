@@ -98,14 +98,14 @@ rackConfig:
                         upload_url_base_dir: "sftp://server-address/home/workspace/tftp/rack1/slot1" # alternative upload location
                         httpProxy: 'socks5h://localhost:1234'   # Local Proxy if required
                         workspaceDirectory: './logs/workspace'   # Local working directory
-                    powerSwitch:       # Specific power switch for each slot    
+                    powerSwitch:       # Specific power switch for each slot
                         # supported types, if this section is undefined this is ok
                         # [type: "orvbioS20", ip: "", mac: "", port:"optional", relay:"optional"]
                         # [type: "kasa", ip: "", options:"--plug" ] #  <- Plug
                         # [type: "kasa", ip: "", options:"--strip", args:'--index 2' ] # <- Power Strip
                         # [type: "hs100", ip:"", port:"optional" ]  kara also supports hs100
                         # [type: "apc", ip:"", username:"", password:"" ]  rack apc switch
-                        # [type: "olimex", ip:"", port:"optional", relay:""  ]  
+                        # [type: "olimex", ip:"", port:"optional", relay:""  ]
                         # [type: "SLP", ip:"", username: "", password: "", outlet_id:"", port:"optional"]
                         # [type: "none" ] if section doesn't exist then type:none will be used
                         type: "HS100"
