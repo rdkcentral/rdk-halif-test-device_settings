@@ -24,13 +24,13 @@
 
 deviceConfig:
     cpe1:
-        platform:   "llama.uk"
-        model:      "65"
+        platform:   "stb"
+        model:      "uk"
         target_directory: "/tmp/"  # Target Directory on device
         prompt: "" # Prompt string on console
         test:
             #TODO: Use the single profile file which contains all details (ds, hdmi, etc)
-            profile: "../../../../profiles/sink/Sink_AudioSettings.yaml"
+            profile: "../../../../profiles/source/Source_4K_VideoPort.yaml"
             player:
                 tool: "gstreamer"
                 prerequisites:
