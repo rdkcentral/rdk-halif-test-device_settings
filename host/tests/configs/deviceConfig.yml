@@ -27,7 +27,7 @@ deviceConfig:
         platform:   "llama.uk"
         model:      "65"
         target_directory: "/tmp/"  # Target Directory on device
-        prompt: "" # Prompt string on cosole
+        prompt: "" # Prompt string on console
         test:
             #TODO: Use the single profile file which contains all details (ds, hdmi, etc)
             profile: "../../../../profiles/sink/Sink_AudioSettings.yaml"
