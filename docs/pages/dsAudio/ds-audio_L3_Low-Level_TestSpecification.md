@@ -58,7 +58,7 @@ Below are top test use-case for the audio port.
 |-|---------|-----------|--------|------|----|--------------|
 |1|Enable/disable audio ports|Play the predefined audio streams. Iterate through the supported audio ports, enabling or disabling them, and check if the stream is being played through each port| `dsEnableAudioPort()`|`Y`|`Y`|001|
 |2|Verify the Headphone connection status|Enable the headphone port and verify the connection status by disconnecting and reconnecting the port. Additionally, confirm if the callback is triggered| `dsAudioOutIsConnected()`|`N`|`Y`|`NA`|
-|3|Verify MS12 Audio Compreesion|Loop through the ports which supports Audio Compreesion and verify|`dsSetAudioCompression()`|`Y`|`Y`|006|
+|3|Verify MS12 Audio Compression|Loop through the ports which supports Audio Compression and verify|`dsSetAudioCompression()`|`Y`|`Y`|006|
 |4|Verify MS12 `DAP` Dialog enhancement|Loop through the ports which supports `MS12` `DAP` Capabilities and verify Dialog enhancement|`dsSetDialogEnhancement()`|`Y`|`Y`|006|
 |5|Verify MS12 `DAP` Dolby Volume mode|Loop through the ports which supports `MS12` `DAP` Capabilities and verify Dolby Volume mode|`dsSetDolbyVolumeMode()`|`Y`|`Y`|006|
 |6|Verify MS12 `DAP` Intelligent Equalizer|Loop through the ports which supports `MS12` `DAP` Capabilities and verify the Intelligent Equalizer|`dsSetIntelligentEqualizerMode()`|`Y`|`Y`|006|

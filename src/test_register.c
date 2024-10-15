@@ -94,8 +94,15 @@ extern int test_l2_dsCompositeIn_register( void );
 extern int test_l2_dsDisplay_register( void );
 
 /* L3 Testing Functions */
+extern int test_l3_dsFPD_register( void);
 extern int test_l3_dsAudio_register( void );
 extern int test_l3_dsVideoPort_register( void );
+extern int test_l3_dsCompositeIn_register( void );
+extern int test_l3_dsHost_register( void );
+extern int test_l3_dsDisplay_register( void );
+extern int test_l3_dsVideoDevice_register( void );
+extern int test_l3_dsHdmiIn_register( void );
+
 
 static void dsAudio_register()
 {
@@ -113,36 +120,38 @@ static void dsVideoPort_register()
     {
         test_l1_dsVideoPort_register();
         test_l2_dsVideoPort_register();
-        test_l3_dsVideoPort_register();
     }
+    test_l3_dsVideoPort_register();
 }
 
 static void dsHost_register()
 {
     if (gDSModule & dsHost)
     {
-        /* TODO: Have a dsHost Register function and call it always */
         test_l1_dsHost_register();
         test_l2_dsHost_register();
     }
+    test_l3_dsHost_register();
 }
 
-static void dsVideo_register()
+static void dsVideoDevice_register()
 {
     if (gDSModule & dsVideoDevice)
     {
         test_l1_dsVideoDevice_register();
         test_l2_dsVideoDevice_register();
     }
+    test_l3_dsVideoDevice_register();
 }
 
-static void dsHdmiIn_regsiter()
+static void dsHdmiIn_register()
 {
     if (gDSModule & dsHdmiIn)
     {
         test_l1_dsHdmiIn_register();
         test_l2_dsHdmiIn_register();
     }
+    test_l3_dsHdmiIn_register();
 }
 
 static void dsFPD_register()
@@ -152,6 +161,7 @@ static void dsFPD_register()
         test_l1_dsFPD_register();
         test_l2_dsFPD_register();
     }
+    test_l3_dsFPD_register();
 }
 
 static void dsCompositeIn_register()
@@ -161,6 +171,7 @@ static void dsCompositeIn_register()
         test_l1_dsCompositeIn_register();
         test_l2_dsCompositeIn_register();
     }
+    test_l3_dsCompositeIn_register();
 }
 
 static void dsDisplay_register()
@@ -170,6 +181,7 @@ static void dsDisplay_register()
         test_l1_dsDisplay_register();
         test_l2_dsDisplay_register();
     }
+    test_l3_dsDisplay_register();
 }
 
 int UT_register_tests(void)
@@ -178,8 +190,8 @@ int UT_register_tests(void)
 
     dsHost_register();
     dsAudio_register();
-    dsVideo_register();
-    dsHdmiIn_regsiter();
+    dsVideoDevice_register();
+    dsHdmiIn_register();
     dsFPD_register();
     dsVideoPort_register();
     dsCompositeIn_register();

@@ -933,7 +933,7 @@ void test_l3_dsAudio_ms12_dap(void)
             DS_ASSERT(level == level_g);
             break;
         }
-        case 4: //Volumeleveller
+        case 4: //VolumeLeveller
         {
             dsVolumeLeveller_t volume_level = {0};
             dsVolumeLeveller_t volume_level_g = {0};
@@ -2232,7 +2232,7 @@ void test_l3_dsAudio_setSAD(void)
     dsError_t ret = dsERR_NONE;
     intptr_t handle = (intptr_t)NULL;
     bool enabled = false;
-    dsAudioSADList_t sad_list = {0}; 
+    dsAudioSADList_t sad_list = {0};
     int32_t portIndex = 0;
 
     handle = dsAudio_getPort(dsAUDIOPORT_TYPE_HDMI_ARC, portIndex, &enabled);
@@ -2313,7 +2313,7 @@ static UT_test_suite_t * pSuite = NULL;
 int32_t test_l3_dsAudio_register(void)
 {
     // Create the test suite for source type
-    pSuite = UT_add_suite("[L3 dsAudio]", NULL, NULL);
+    pSuite = UT_add_suite_withGroupID("[L3 dsAudio]", NULL, NULL,UT_TESTS_L3);
     if (pSuite == NULL)
     {
         UT_LOG_ERROR("Failed to create the test suite");
