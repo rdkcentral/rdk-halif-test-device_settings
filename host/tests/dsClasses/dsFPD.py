@@ -404,10 +404,26 @@ class dsFPDClass():
         """
         indicators = self.deviceProfile.get("SupportedFPDIndicators")
         if not indicators:
-            return []
+            return None
 
         indicatorType = indicators['index'].Indicator_Type
         return indicatorType
+
+    def getSupportedIndicators(self, index:int = 1):
+        """
+        Get All the supproted indicator list.
+
+        Args:
+            index:int - index of the indicator.
+
+        Returns:
+            indicator list
+        """
+        indicators = []
+        for i in range(1,self.getNumberOfIndicators()+1):
+            indicator = self.getTypeOfIndicator(i)
+            indicators.append(indicator)
+        return indicators
 
     def getSupportedColors(self, index:int = 1):
         """
