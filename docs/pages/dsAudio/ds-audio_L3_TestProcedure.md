@@ -2,35 +2,66 @@
 
 ## Table of Contents
 
-- [Setting Up Test Envirionment](#setting-up-test-environment)
+- [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
+- [Setting Up Test Environment](#setting-up-test-environment)
 - [Streams Required](#streams-required)
 - [Test Setup Connections](#test-setup-connections)
 - [Test Cases](#test-cases)
-  - [test01_enabledisableandverifyaudioportstatuspy](#dsaudio_test01_enabledisableandverifyaudioportstatuspy)
+  - [dsaudio_test01_enabledisableandverifyaudioportstatuspy](#dsaudio_test01_enabledisableandverifyaudioportstatuspy)
+
+## Acronyms, Terms and Abbreviations
+
+- `HAL`    - Hardware Abstraction Layer
+- `L3`     - Level 3 Testing
+- `ARC`    - Audio Return Channel
+- `eARC`   - Enhanced Audio Return Channel
+- `SAD`    - Short Audio Descriptor
+- `SPDIF`  - Sony/Philips Digital Interface
+- `HDMI`   - High-Definition Multimedia Interface
+- `LE`     - Loudness Equivalence
+- `DRC`    - Dynamic Range Control
+- `MI`     - Media Intelligent
+- `MS12`   - MultiStream 12
+- `PCM`    - Pulse Code Modulation
+- `AC3`    - Audio Codec 3
+- `EAC3`   - Enhanced `AC3`
+- `WMA`    - Windows Media Audio
+- `AAC`    - Advanced Audio coding
+- `DD`     - DOLBY Digital
+- `DDPLUS` - DOLBY Digital Plus
+- `DAP`    - Digital Audio Processing
+- `DUT`    - Device Under Test
+- `RAFT`   - Rapid Automation Framework for Testing
+- `YAML`   - YAML Ain't Markup Language
+- `avr`    - Audio Video Receiver
 
 ## Setting Up Test Environment
 
-To execute HAL L3 Python test cases, you need to set up the Python environment properly. Follow these steps mentioned in [HPK Public Documentation](https://github.com/rdkcentral/rdk-hpk-documentation/blob/main/README.md)
+To execute `HAL` `L3` Python test cases, you need to set up the Python environment properly. Follow these steps mentioned in [HPK Public Documentation](https://github.com/rdkcentral/rdk-hpk-documentation/blob/main/README.md)
 
-Modify Configuration Files:
+### Update Configuration Files
 
-a. `ut/host/tests/configs/example_rack_config.yml`
+#### Rack Configuration File
 
-In this file, update the configuration to define the console sessions for the device under test (DUT) and the outbound settings:
+Example Rack configuration File: `ut/host/tests/configs/example_rack_config.yml`
+
+For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_rack_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_rack_config.yml)
+
+In this file, update the configuration to define the console sessions for the `DUT` and the outbound settings:
 
 |Console Session|Description|
 |---------------|-----------|
-|default | Downloads the streams required for test cases.
-|ssh_player | Plays the stream required for test case.
-|ssh_player_secondary | Plays a secondary stream, if required for test case.
-|ssh_hal_test | Executes the HAL binary for the test case.
+|default|Downloads the streams required for test cases|
+|ssh_player|Plays the stream required for test case|
+|ssh_player_secondary|Plays a secondary stream, if required for test case|
+|ssh_hal_test|Executes the `HAL` binary for the test case|
 
-```mermaid
+```yaml
 rackConfig:
   - dut:
       ip: "XXX.XXX.XXX.XXX"  # IP Address of the device
-      description: "Element device under test"
-      platform: "Element"
+      description: "stb device under test"
+      platform: "stb"
       consoles:
         - default:
             type: "ssh"
@@ -64,27 +95,35 @@ rackConfig:
         workspaceDirectory: './logs/workspace'   # Local working directory
 
 ```
-b. `ut/host/tests/configs/deviceConfig.yml`
 
-Update the target directory where HAL binaries will be copied into the device. Also, map the profile to the source/sink settings YAML file path. 
+#### Device Configuration File
 
-Ensure the platform matches the DUT platform in `example_rack_config.yml`.
+Example Device configuration File: `ut/host/tests/configs/deviceConfig.yml`
 
-```mermaid
+For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_device_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_device_config.yml)
+
+Update the target directory where `HAL` binaries will be copied into the device. Also, map the profile to the source/sink settings `YAML` file path.
+
+Ensure the platform should match with the `DUT` platform in [Rack Configuration](#rack-configuration-file)
+
+```yaml
 deviceConfig:
   cpe1:
-    platform: "Element"    # Must match the platform in example_rack_config.yml
-    model: "X3"
-    target_directory: "/opt/HAL/dsAudio_L3"  # Path where HAL binaries are copied in device
+    platform: "stb"    # Must match the platform in example_rack_config.yml
+    model: "uk"
+    target_directory: "/tmp"  # Path where HAL binaries are copied in device
     test:
-      profile: "../../../profiles/sink/Sink_AudioSettings.yaml"
+      profile: "../../../../profiles/sink/Sink_AudioSettings.yaml"
       player:
         tool: "gstreamer"
         prerequisites:
           - export xxxx    # Pre-commands required to play the stream
 
 ```
-c. `ut/host/tests/dsAudio_L3_Tests/dsAudio_L3_testSetup.yml`
+
+#### Test Setup Configuration File
+
+Example Test Setup configuration File: `ut/host/tests/dsAudio_L3_Tests/dsAudio_L3_testSetup.yml`
 
 Update the artifact paths from which the binaries should be copied to the device.
 
@@ -92,7 +131,7 @@ Set the execution paths and provide the stream paths for each test case.
 
 If a test case requires multiple streams or needs to be validated using several streams, ensure that all necessary streams are added sequentially for that specific test case.
 
-```mermaid
+```yaml
 dsAudio:
   description: "dsAudio Device Settings test setup"
   assets:
@@ -121,94 +160,93 @@ dsAudio:
           - "<path>/streams/system_audio_48k_2ch.wav"
 
 ```
-d. `ut/host/tests/dsClasses/dsAudio_test_suite.yml`
 
-Update the execute command according to the device path where HAL binaries are copied.
+#### Test Suite Configuration
 
-```mermaid
+Example Test Setup configuration File: `ut/host/tests/dsClasses/dsAudio_test_suite.yml`
+
+Update the execute command according to the device path where `HAL` binaries are copied.
+
+```yaml
 dsAudio:
   description: "dsAudio Device Settings testing profile"
   test:
-    execute: "/opt/HAL/dsAudio_L3/run.sh -p /opt/HAL/dsAudio_L3/Sink_AudioSettings.yaml"
+    execute: "/tmp/run.sh -p /tmp/Sink_AudioSettings.yaml"
     type: UT-C  # Cunit tests (UT-C)
 
 ```
 
-5.Run Test Cases:
+## Run Test Cases
 
-Once the environment is set up, you can execute the test cases with the following command:
+Once the environment is set up, you can execute the test cases with the following command
 
-```mermaid
-python <TestCaseName.py> --config </PATH>/rdk-halif-device_settings/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/rdk-halif-device_settings/ut/host/tests/configs/deviceConfig.yml
+```bash
+python <TestCaseName.py> --config </PATH>/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/ut/host/tests/configs/deviceConfig.yml
 ```
 
 ## Streams Required
 
-| # | Streams Name | Description                                                                                   |
-|---|--------------------------|-------------------------------------------------------------------------------------------------------------|
-| 1 | tones_string_48k_stereo.ac3                        | Format: AC3
-| 2 | Dolby_stream_supports_Dialouge_Enhancer            | Format: AC4
-| 3 | music_lowdb.ac3                                    | Format: AC3
-| 4 | tone_500Hz_compress_48k_stereo.ac3                 | Format: AC3
-| 5 | tone_bassrange_150Hz_48k_Stereo.ac3                | Format: AC3
-| 6 | Dolby_atmos_stream_supports_surround_mode          | Format: AC4 / EAC3_ATMOS / AC4_ATMOS
-| 7 | tones_string_48k_stereo.wav                        | Format: PCM
-| 8 | tones_string_48k_stereo.eac3                       | Format: EAC3
-| 9 | tones_string_48k_stereo.aac                        | Format: AAC
-|10 | tones_string_48k_stereo.ogg                        | Format: VORBIS
-|11 | tones_string_48k_stereo.wma                        | Format: WMA
-|12 | Audio_supports_MAT_format                          | Format: MAT
-|13 | Dolby_audio_supports_TRUEHD_format                 | Format: TRUEHD
-|14 | DolbyDigitalPlus_atmos_audio                       | Format: EAC3_ATMOS
-|15 | TRUEHD_atmos_audio                                 | Format: TRUEHD_ATMOS
-|16 | MAT_atmos_audio                                    | Format: MAT_ATMOS
-|17 | Dolby_atmos_audio                                  | Format: AC4_ATMOS
-|18 | Dolby_stream_supports_AVsync                       | Format: AAC
-|19 | Dolby_stream_supports_Multi-Language               | Format: AC4
-|20 | primary_audio_48k_2ch.ac3                          | Format: AC3
-|21 | system_audio_48k_2ch.wav                           | Format: PCM
-|22 | Dolby_music                                        | Format: AC3
+| # | Streams Name | Description|
+|---|--------------|------------|
+|1|tones_string_48k_stereo.ac3|`AC3` file containing tones and strings across various frequency ranges|
+|2|Dolby_stream_supports_Dialouge_Enhancer|`AC4` file containing speech frequency range|
+|3|music_48k_stereo.ac3|`AC3` file containing music to test the equalizer|
+|4|tone_500Hz_compress_48k_stereo.ac3|`AC3` file containing 500Hz tone with -25dB and -5 dB volume levels|
+|5|tone_bassrange_150Hz_48k_Stereo.ac3|`AC3` file containing 150Hz tone with -10dB volume levels|
+|6|Dolby_atmos_stream_supports_surround_mode|Dolby `AC4`/`EAC3_ATMOS`/`AC4_ATMOS` files to test surround mode|
+|7|tones_string_48k_stereo.wav|`WAV`(`PCM`) file containing tones and strings across various frequency ranges|
+|8|tones_string_48k_stereo.eac3|`EAC3` file containing tones and strings across various frequency ranges|
+|9|tones_string_48k_stereo.aac|`AAC` file containing tones and strings across various frequency ranges|
+|10|tones_string_48k_stereo.ogg|`VORBIS` file containing tones and strings across various frequency ranges|
+|11|tones_string_48k_stereo.wma|`WMA` file containing tones and strings across various frequency ranges|
+|12|Audio_supports_MAT_format|Dolby `MAT` file|
+|13|Dolby_audio_supports_TRUEHD_format|Dolby `TRUEHD` file|
+|14|DolbyDigitalPlus_atmos_audio|Dolby `EAC3_ATMOS` file|
+|15|TRUEHD_atmos_audio|Dolby `TRUEHD_ATMOS` file|
+|16|MAT_atmos_audio|Dolby `MAT_ATMOS` file|
+|17|Dolby_atmos_audio|Dolby `AC4_ATMOS` file|
+|18|Dolby_stream_supports_AVsync|Dolby stream to test the `AV` sync|
+|19|Dolby_stream_supports_Multi-Language|Dolby `AC4` file containing three languages tracks (Chinese, English and Spanish) and associate Audio|
+|20|primary_audio_48k_2ch.ac3|`AC3` file containing dialogues|
+|21|system_audio_48k_2ch.wav|`WAV`(`PCM`) file containing dialogues|
 
 ## Test Setup Connections
 
-### Supported Audio Output Ports
+To verify the audio connect the external devices to `DUT`.
+For Example:
 
-### Source
-
-HDMI Out is the only supported audio port for Source device. So for verifying Audio in Source device HDMI Out should be connected to a Sink Device.
-
-### Sink
-
-There are different Audio output ports available for Sink device. So for verifying audio 
+- Connect headphone port to a aux speaker or headphone
+- Connect `ARC` port to a `avr`
 
 ## Test Cases
 
 ### dsAudio_test01_EnableDisableAndVerifyAudioPortStatus.py
 
-#### Overview
+#### Overview - test01
 
-- This test case verifies the functionality of enabling and disabling audio ports while ensuring that audio is correctly routed through the appropriate channels based on the device type (Source or Sink).
+This test case verifies the functionality of enabling and disabling audio ports while ensuring that audio is correctly routed through the appropriate channels based on the device type (Source or Sink).
 
-#### Platform Support
+#### Platform Support - test01
 
 - Source
 - Sink
 
-#### User Input Required
+#### User Input Required - test01
 
-- Yes: User interaction is necessary to confirm audio playback status (This will be automated later).
+Yes: User interaction is necessary to confirm audio playback status (This will be automated later).
 
-#### Acceptance Criteria
+#### Acceptance Criteria - test01
 
-- Play **Stream #1** and confirm that audio is heard through the supported ports.
+Play **Stream #1** and confirm that audio is heard through the supported ports.
 
 #### Expected Results
 
 The test enables the specified audio ports, plays the audio stream, and subsequently disables the ports
 
-- Success Criteria
-  - Users should hear audio through the enabled port during playback.
-  - Users should not hear any audio when the port is disabled.
+Success Criteria
+
+- User should hear audio through the enabled port during playback
+- User should not hear any audio when the port is disabled.
 
 #### Test Steps
 
@@ -241,7 +279,7 @@ The test enables the specified audio ports, plays the audio stream, and subseque
 
   Upon receiving user responses for all ports, the test will conclude and present a final result: PASS or FAIL based on the user inputs throughout the test execution.
 
-### 2. dsAudio_test02_PortConnectionStatus.py
+### dsAudio_test02_PortConnectionStatus.py
 
 2.1 Platform Supported:
 
