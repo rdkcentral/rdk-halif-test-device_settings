@@ -10,8 +10,8 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "args":[ "--config", "${cwd}/tests/configs/ulConfig.yml", 
-            "--deviceConfig", "${cwd}/tests/configs/deviceConfig.yml"
+            "args":[ "--config", "${workspaceFolder}/configs/config.yml",
+            "--deviceConfig", "${workspaceFolder}/configs/deviceConfig.yml"
             ]
         },
         {
@@ -21,4 +21,4 @@
             "program": "${workspaceFolder}/activate_venv.sh;${file}"
         }
     ]
-}
+  }

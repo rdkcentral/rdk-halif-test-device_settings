@@ -1,6 +1,7 @@
 # Folders
 ut-core
 obj
+logs
 
 # Prerequisites
 *.d
