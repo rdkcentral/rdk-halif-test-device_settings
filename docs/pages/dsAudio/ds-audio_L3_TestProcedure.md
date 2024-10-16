@@ -63,7 +63,7 @@
 
 ## Setting Up Test Environment
 
-To execute `HAL` `L3` Python test cases, you need to set up the Python environment properly. Follow these steps mentioned in [HPK Public Documentation](https://github.com/rdkcentral/rdk-hpk-documentation/blob/main/README.md)
+To execute `HAL` `L3` Python test cases, need a Python environment. Follow these steps mentioned in [HPK Public Documentation](https://github.com/rdkcentral/rdk-hpk-documentation/blob/main/README.md)
 
 ### Update Configuration Files
 
