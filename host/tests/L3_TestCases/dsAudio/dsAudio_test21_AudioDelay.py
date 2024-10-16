@@ -105,7 +105,7 @@ class dsAudio_test21_AudioDelay(utHelperClass):
         #download test streams to device
         url =  test.get("streams")
         if url is not None:
-            #self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
+            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
             for streampath in url:
                 self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
 
