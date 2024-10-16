@@ -192,8 +192,6 @@ class dsAudio_test07_MS12Volumeleveller(utHelperClass):
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
         for stream in self.testStreams:
-            # Start the stream playback
-            self.testPlayer.play(stream)
 
             # Loop through the supported audio ports
             for port,index in self.testdsAudio.getSupportedPorts():
@@ -217,10 +215,16 @@ class dsAudio_test07_MS12Volumeleveller(utHelperClass):
                     for level in self.volumeLevels:
                         self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} level:{level} Port:{port} Index:{index} Stream:{stream}')
 
+                        # Start the stream playback
+                        self.testPlayer.play(stream)
+
                         # Set the volume leveller
                         self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, level]})
 
                         result = self.testVerifyVolumeleveller(stream, port, mode, level, True)
+
+                        # Stop the stream playback
+                        self.testPlayer.stop()
 
                         self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} level:{level} Port:{port} Index:{index} Stream:{stream}')
 
@@ -237,9 +241,6 @@ class dsAudio_test07_MS12Volumeleveller(utHelperClass):
 
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)
-
-            # Stop the stream playback
-            self.testPlayer.stop()
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
