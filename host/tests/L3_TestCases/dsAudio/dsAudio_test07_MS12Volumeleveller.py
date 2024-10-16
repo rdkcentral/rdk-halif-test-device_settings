@@ -206,7 +206,13 @@ class dsAudio_test07_MS12Volumeleveller(utHelperClass):
                     # Set the volume leveller
                     self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, level]})
 
+                    # Start the stream playback
+                    self.testPlayer.play(stream)
+
                     result = self.testVerifyVolumeleveller(stream, port, mode, level, True)
+
+                    # Stop the stream playback
+                    self.testPlayer.stop()
 
                     self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} level:{level} Port:{port} Index:{index} Stream:{stream}')
 
@@ -215,11 +221,11 @@ class dsAudio_test07_MS12Volumeleveller(utHelperClass):
                     for level in self.volumeLevels:
                         self.log.stepStart(f'MS12 {self.ms12DAPFeature} mode:{mode} level:{level} Port:{port} Index:{index} Stream:{stream}')
 
-                        # Start the stream playback
-                        self.testPlayer.play(stream)
-
                         # Set the volume leveller
                         self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, level]})
+
+                        # Start the stream playback
+                        self.testPlayer.play(stream)
 
                         result = self.testVerifyVolumeleveller(stream, port, mode, level, True)
 
@@ -235,7 +241,13 @@ class dsAudio_test07_MS12Volumeleveller(utHelperClass):
                     # Set the volume leveller
                     self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":[mode, level]})
 
+                    # Start the stream playback
+                    self.testPlayer.play(stream)
+
                     result = self.testVerifyVolumeleveller(stream, port, mode, level, True)
+
+                    # Stop the stream playback
+                    self.testPlayer.stop()
 
                     self.log.stepResult(result, f'MS12 {self.ms12DAPFeature} mode:{mode} level:{level} Port:{port} Index:{index} Stream:{stream}')
 
