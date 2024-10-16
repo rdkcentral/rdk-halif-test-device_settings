@@ -349,7 +349,7 @@ Source
 
 **User Input Required:**
 
-Yes: The user needs to verify HDR formats using an AV analyzer(This will be automated in future versions.)
+Yes: The user needs to verify HDR formats using an AV analyzer(This will be automated in future versions with callbacks.)
 
 **Acceptance Criteria:**
 
