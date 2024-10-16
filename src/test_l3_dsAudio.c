@@ -73,6 +73,9 @@
 #include <ut_kvp_profile.h>
 #include <ut_control_plane.h>
 #include <stdlib.h>
+#include <sys/time.h>
+#include <time.h>
+#include <pthread.h>
 #include "dsAudio.h"
 
 #define DS_AUDIO_MAX_PORTS 20
@@ -80,10 +83,15 @@
 #define DS_AUDIO_MAX_DAP 20
 #define DS_AUDIO_MAX_MS12_PROFILES 10
 #define DS_AUDIO_MAX_MS12_LENGTH 32
+#define DS_MAX_FILE_SIZE 64
 
 #define UT_LOG_MENU_INFO UT_LOG_INFO
 
 #define DS_ASSERT assert
+
+#define DS_CONNECTION_CB_FILE "dsAudio_connection_callback.txt"
+#define DS_FORMAT_CB_FILE "dsAudio_format_callback.txt"
+#define DS_ATMOS_CB_FILE "dsAudio_atmos_callback.txt"
 
 /* Global Variables */
 static int32_t gTestGroup = 3;
@@ -94,6 +102,11 @@ static bool gAtmosStatus = false;
 static dsAudioFormat_t gAudioFormat = dsAUDIO_FORMAT_NONE;
 static dsATMOSCapability_t gAtosCapablity = dsAUDIO_ATMOS_NOTSUPPORTED;
 static dsAudioARCStatus_t gARCStatus = {0};
+static pthread_mutex_t gCallbackMutex = PTHREAD_MUTEX_INITIALIZER;
+
+static char gConnectionCBFile[DS_MAX_FILE_SIZE];
+static char gFormatCBFile[DS_MAX_FILE_SIZE];
+static char gATMOSCapsCBFile[DS_MAX_FILE_SIZE];
 
 /* Enum mapping tables */
 
@@ -215,8 +228,47 @@ static void readFloat(float_t *choice)
 
 static void readString(char *choice)
 {
-    fgets(choice, 4, stdin);
+    scanf("%s", choice);
     readAndDiscardRestOfLine(stdin);
+}
+
+static void writeCallbackLog(char *logPath, const char *format, ...)
+{
+    va_list args;
+    va_start(args, format);
+
+
+    // Get the current timestamp in seconds and microseconds
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+
+    // Format the timestamp with year, month, day, time, and microseconds
+    char timestamp[64];
+    strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S", localtime(&tv.tv_sec));
+
+    // Append the microseconds to the timestamp
+    snprintf(&timestamp[strlen(timestamp)], sizeof(timestamp) - strlen(timestamp), ".%06ld", tv.tv_usec);
+
+    pthread_mutex_lock(&gCallbackMutex);
+
+    // Open the log file in append mode
+    FILE *fp = fopen(logPath, "a");
+    if (fp == NULL) {
+        UT_LOG_ERROR("Error opening log file: %s", strerror(errno));
+        return;
+    }
+
+    // Print the timestamp and formatted message
+    fprintf(fp, "[%s] ", timestamp);
+    vfprintf(fp, format, args);
+    fprintf(fp, "\n");
+
+    // Close the log file
+    fclose(fp);
+
+    pthread_mutex_unlock(&gCallbackMutex);
+
+    va_end(args);
 }
 
 /**
@@ -229,6 +281,11 @@ static void audioOutPortConnectCB(dsAudioPortType_t portType, uint32_t uiPortNo,
     UT_LOG_INFO("Received Connection status callback port: %s, port number: %d, Connection: %s",
                  UT_Control_GetMapString(dsAudioPortType_mapTable, portType),uiPortNo,
                  UT_Control_GetMapString(bool_mapTable, isPortCon));
+
+    writeCallbackLog(gConnectionCBFile, "Received Connection status callback port: %s, port number: %d, Connection: %s",
+                     UT_Control_GetMapString(dsAudioPortType_mapTable, portType),uiPortNo,
+                     UT_Control_GetMapString(bool_mapTable, isPortCon));
+
     gConnectionStatus = isPortCon;
 }
 
@@ -240,6 +297,9 @@ static void audioOutPortConnectCB(dsAudioPortType_t portType, uint32_t uiPortNo,
 static void audioFormatUpdateCB(dsAudioFormat_t audioFormat)
 {
     UT_LOG_INFO("Received Format update callback : %s", UT_Control_GetMapString(dsAudioFormat_mapTable, audioFormat));
+
+    writeCallbackLog(gFormatCBFile, "Received Format update callback : %s", UT_Control_GetMapString(dsAudioFormat_mapTable, audioFormat));
+
     gAudioFormat = audioFormat;
 }
 
@@ -253,6 +313,11 @@ static void atmosCapsChange(dsATMOSCapability_t atmosCaps, bool status)
     UT_LOG_INFO("Received ATMOS Capablity Change callback, Capability: %s, Status: %s",
                  UT_Control_GetMapString(dsATMOSCapability_mapTable, atmosCaps),
                  UT_Control_GetMapString(bool_mapTable, status));
+
+    writeCallbackLog(gATMOSCapsCBFile, "Received ATMOS Capablity Change callback, Capability: %s, Status: %s",
+                 UT_Control_GetMapString(dsATMOSCapability_mapTable, atmosCaps),
+                 UT_Control_GetMapString(bool_mapTable, status));
+
     gAtosCapablity = atmosCaps;
     gAtmosStatus = status;
 }
@@ -285,6 +350,11 @@ void test_l3_dsAudio_initialize(void)
         goto exit;
     }
 
+    //TODO: replace with user input
+    strncpy(gConnectionCBFile, DS_CONNECTION_CB_FILE, DS_MAX_FILE_SIZE);
+    strncpy(gFormatCBFile, DS_FORMAT_CB_FILE, DS_MAX_FILE_SIZE);
+    strncpy(gATMOSCapsCBFile, DS_ATMOS_CB_FILE, DS_MAX_FILE_SIZE);
+
     /* Initialize the dsAudio Module */
     UT_LOG_INFO("Calling dsAudioPortInit()");
     ret = dsAudioPortInit();
@@ -314,7 +384,6 @@ void test_l3_dsAudio_initialize(void)
     UT_LOG_INFO("Result dsAudioFormatUpdateRegisterCB(IN:cbFun:[0x%0X]) dsError_t:[%s]",
                  audioFormatUpdateCB, UT_Control_GetMapString(dsError_mapTable, ret));
     DS_ASSERT(ret == dsERR_NONE);
-
 exit:
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
@@ -864,7 +933,7 @@ void test_l3_dsAudio_ms12_dap(void)
             DS_ASSERT(level == level_g);
             break;
         }
-        case 4: //Volumeleveller
+        case 4: //VolumeLeveller
         {
             dsVolumeLeveller_t volume_level = {0};
             dsVolumeLeveller_t volume_level_g = {0};
@@ -1653,13 +1722,8 @@ void test_l3_dsAudio_get_audio_format(void)
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret = dsERR_NONE;
-    int32_t port = dsAUDIOPORT_TYPE_SPEAKER;
     intptr_t handle = (intptr_t)NULL;
     dsAudioFormat_t getAudioFormat = dsAUDIO_FORMAT_NONE;
-    int32_t portIndex = 0;
-    bool enabled = false;
-
-    handle = dsAudio_getPort(port, portIndex, &enabled);
 
     UT_LOG_INFO("Calling dsGetAudioFormat(IN:handle:[0x%0X], OUT:audioFormat:[])", handle);
 
@@ -1693,14 +1757,9 @@ void test_l3_dsAudio_set_atmos_mode(void)
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret = dsERR_NONE;
-    int32_t port = dsAUDIOPORT_TYPE_SPEAKER;
     intptr_t handle = (intptr_t)NULL;
     int32_t choice = 0;
     bool enable = false;
-    int32_t portIndex = 0;
-    bool enabled = false;
-
-    handle = dsAudio_getPort(port, portIndex, &enabled);
 
     UT_LOG_MENU_INFO("Enable/Disable ATMOS Mode[1:Enable, 2:Disable]: ");
     readInt(&choice);
@@ -1798,11 +1857,11 @@ void test_l3_dsAudio_ms12Profile(void)
     int32_t choice = -1;
     intptr_t handle = (intptr_t)NULL;
     bool enabled = false;
-    dsMS12AudioProfileList_t profiles = {0};
-    char *profileList[DS_AUDIO_MAX_MS12_PROFILES] = {NULL};
-    char profile[DS_AUDIO_MAX_MS12_LENGTH]  = {0};
+    char *profileList[] = {"Off", "Music" ,"Movie", "Sports" , "Entertainment", "Night", "Party" , "User"};
     dsAudioPortType_t port = dsAUDIOPORT_TYPE_MAX;
     int32_t portIndex = 0;
+    int32_t profileSize = sizeof(profileList)/sizeof(char *);
+    char profile[DS_AUDIO_MAX_MS12_LENGTH]  = {0};
 
     if(dsAudio_list_select_ports(&port, &portIndex))
     {
@@ -1817,36 +1876,19 @@ void test_l3_dsAudio_ms12Profile(void)
         goto exit;
     }
 
-    UT_LOG_INFO("Calling dsGetMS12AudioProfileList(IN:handle:[0x%0X], OUT:profile:[])", handle);
-
-    ret = dsGetMS12AudioProfileList(handle, &profiles);
-
-    UT_LOG_INFO("Result dsGetMS12AudioProfileList(IN:handle:[0x%0X], OUT:profile:[audioProfileList: %s, audioProfileCount: %d] dsError_t:[%s])",
-                handle,
-                profiles.audioProfileList, profiles.audioProfileCount,
-                UT_Control_GetMapString(dsError_mapTable, ret));
-
-    DS_ASSERT(ret == dsERR_NONE);
-
-    char* token = strtok(profiles.audioProfileList, ",");
-    int32_t i = 0;
-
     UT_LOG_MENU_INFO("----------------------------------------------------------");
     UT_LOG_MENU_INFO("MS12 Profile");
     UT_LOG_MENU_INFO("----------------------------------------------------------");
     UT_LOG_MENU_INFO("\t#  %-20s","MS12 Profile");
-    while (token != NULL)
+    for (int i = 0; i < profileSize; i++)
     {
-        profileList[i] = token;
-        UT_LOG_MENU_INFO("\t%d.  %-20s", i+1, profileList[i]);
-        token = strtok(NULL, ",");
-        i++;
+        UT_LOG_MENU_INFO("\t%d.  %-20s", i, profileList[i]);
     }
     UT_LOG_MENU_INFO("----------------------------------------------------------");
 
     UT_LOG_MENU_INFO("Select MS12 Profile: ");
     readInt(&choice);
-    if(choice < 1 || choice > profiles.audioProfileCount)
+    if(choice < 0 || choice >= profileSize)
     {
         UT_LOG_ERROR("Invalid profile choice");
         goto exit;
@@ -1855,7 +1897,7 @@ void test_l3_dsAudio_ms12Profile(void)
     UT_LOG_INFO("Calling dsSetMS12AudioProfile(IN:handle:[0x%0X], IN:profile:[%s])",
                  handle, profileList[choice-1]);
 
-    ret = dsSetMS12AudioProfile(handle, profileList[choice-1]);
+    ret = dsSetMS12AudioProfile(handle, profileList[choice]);
 
     UT_LOG_INFO("Result dsSetMS12AudioProfile(IN:handle:[0x%0X], IN:profile:[%s]) dsError_t:[%s]",
                 handle, profileList[choice-1],
@@ -1872,7 +1914,7 @@ void test_l3_dsAudio_ms12Profile(void)
                 UT_Control_GetMapString(dsError_mapTable, ret));
 
     DS_ASSERT(ret == dsERR_NONE);
-    DS_ASSERT(!strcmp(profile, profileList[choice-1]));
+    DS_ASSERT(!strcmp(profile, profileList[choice]));
 
 exit:
     UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -1896,15 +1938,10 @@ void test_l3_dsAudio_set_associate_audio_mixing(void)
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret = dsERR_NONE;
-    int32_t port = dsAUDIOPORT_TYPE_SPEAKER;
     intptr_t handle = (intptr_t)NULL;
     int32_t choice = -1;
     bool mixing = false;
     bool mixing_g = false;
-    int32_t portIndex = 0;
-    bool enabled = false;
-
-    handle = dsAudio_getPort(port, portIndex, &enabled);
 
     UT_LOG_MENU_INFO("Enable/Disable Associated Audio Mixing[1:Enable, 2:Disable]: ");
     readInt(&choice);
@@ -1997,14 +2034,9 @@ void test_l3_dsAudio_set_audio_mixerlevels(void)
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret = dsERR_NONE;
-    int32_t port = dsAUDIOPORT_TYPE_SPEAKER;
     intptr_t handle = (intptr_t)NULL;
     int32_t volume = 0;
     int32_t aInput = 0;
-    int32_t portIndex = 0;
-    bool enabled = false;
-
-    handle = dsAudio_getPort(port, portIndex, &enabled);
 
     UT_LOG_MENU_INFO("----------------------------------------------------------");
     UT_LOG_MENU_INFO("Mixer Input");
@@ -2067,15 +2099,10 @@ void test_l3_dsAudio_set_language(void)
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret = dsERR_NONE;
-    int32_t port = dsAUDIOPORT_TYPE_SPEAKER;
     intptr_t handle = (intptr_t)NULL;
     int32_t language_type = 0;
     char language[4] = {0};
     char language_g[4] = {0};
-    int32_t portIndex = 0;
-    bool enabled = false;
-
-    handle = dsAudio_getPort(port, portIndex, &enabled);
 
     UT_LOG_MENU_INFO("Select the Language Type[1: Primary, 2: Secondary]: ");
     readInt(&language_type);
@@ -2205,7 +2232,7 @@ void test_l3_dsAudio_setSAD(void)
     dsError_t ret = dsERR_NONE;
     intptr_t handle = (intptr_t)NULL;
     bool enabled = false;
-    dsAudioSADList_t sad_list = {0}; 
+    dsAudioSADList_t sad_list = {0};
     int32_t portIndex = 0;
 
     handle = dsAudio_getPort(dsAUDIOPORT_TYPE_HDMI_ARC, portIndex, &enabled);
@@ -2286,7 +2313,7 @@ static UT_test_suite_t * pSuite = NULL;
 int32_t test_l3_dsAudio_register(void)
 {
     // Create the test suite for source type
-    pSuite = UT_add_suite("[L3 dsAudio]", NULL, NULL);
+    pSuite = UT_add_suite_withGroupID("[L3 dsAudio]", NULL, NULL,UT_TESTS_L3);
     if (pSuite == NULL)
     {
         UT_LOG_ERROR("Failed to create the test suite");
