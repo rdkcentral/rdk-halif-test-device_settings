@@ -80,17 +80,6 @@ int test_parse_configuration()
     bool nodeStatus = false;
     ut_kvp_status_t status;
 
-    /* CODING STANDARDS: K&R Brackets are not allowed,
-        if ( blah ){
-        ...
-        }
-    Requirement
-        if ( blah )
-        {
-        ...
-        }
-
-    */
     nodeStatus = ut_kvp_fieldPresent(ut_kvp_profile_getInstance(), "dsAudio");
     if (nodeStatus == true)
     {
