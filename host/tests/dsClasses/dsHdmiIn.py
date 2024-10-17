@@ -36,9 +36,9 @@ from raft.framework.plugins.ut_raft.utSuiteNavigator import UTSuiteNavigatorClas
 from raft.framework.plugins.ut_raft.interactiveShell import InteractiveShell
 
 class dsHdmiInPortType(Enum):
-      dsHDMI_IN_PORT_0      = 0
-      dsHDMI_IN_PORT_1      = auto()
-      dsHDMI_IN_PORT_2      = auto()
+    dsHDMI_IN_PORT_0      = 0
+    dsHDMI_IN_PORT_1      = auto()
+    dsHDMI_IN_PORT_2      = auto()
 
 class hdmiInSignalStatustype(Enum):
       dsHDMI_IN_SIGNAL_STATUS_NOSIGNAL = 0
@@ -62,23 +62,23 @@ class hdmiVideoAspectRatio(Enum):
       dsVIDEO_ASPECT_RATIO_MAX = 2    #< Out of range
 
 class hdmiVideoStereoScopicMode(Enum):
-      dsVIDEO_SSMODE_UNKNOWN = 0            #Unknown mode
-      dsVIDEO_SSMODE_2D = 1                #2D mode
-      dsVIDEO_SSMODE_3D_SIDE_BY_SIDE = 2    #3D side by side (L/R) stereo mode
-      dsVIDEO_SSMODE_3D_TOP_AND_BOTTOM = 3  #3D top & bottom stereo mode
-      dsVIDEO_SSMODE_MAX = 4                #Out of range
+    dsVIDEO_SSMODE_UNKNOWN = 0            #Unknown mode
+    dsVIDEO_SSMODE_2D = 1                #2D mode
+    dsVIDEO_SSMODE_3D_SIDE_BY_SIDE = 2    #3D side by side (L/R) stereo mode
+    dsVIDEO_SSMODE_3D_TOP_AND_BOTTOM = 3  #3D top & bottom stereo mode
+    dsVIDEO_SSMODE_MAX = 4                #Out of range
 
 class hdmiVideoFrameRate(Enum):
-      dsVIDEO_FRAMERATE_UNKNOWN = 0  #Unknown frame rate
-      dsVIDEO_FRAMERATE_24 = 1       # Played at 24 frames per second
-      dsVIDEO_FRAMERATE_25 = 2       # Played at 25 frames per second
-      dsVIDEO_FRAMERATE_30 = 3       # Played at 30 frames per second
-      dsVIDEO_FRAMERATE_60 = 4       # Played at 60 frames per second
-      dsVIDEO_FRAMERATE_23dot98 = 5  # Played at 23.98 frames per second
-      dsVIDEO_FRAMERATE_29dot97 = 6  # Played at 29.97 frames per second
-      dsVIDEO_FRAMERATE_50 = 7       # Played at 50 frames per second
-      dsVIDEO_FRAMERATE_59dot94 = 8  # Played at 59.94 frames per second
-      dsVIDEO_FRAMERATE_MAX = 9      # Out of range
+    dsVIDEO_FRAMERATE_UNKNOWN = 0  #Unknown frame rate
+    dsVIDEO_FRAMERATE_24 = 1       # Played at 24 frames per second
+    dsVIDEO_FRAMERATE_25 = 2       # Played at 25 frames per second
+    dsVIDEO_FRAMERATE_30 = 3       # Played at 30 frames per second
+    dsVIDEO_FRAMERATE_60 = 4       # Played at 60 frames per second
+    dsVIDEO_FRAMERATE_23dot98 = 5  # Played at 23.98 frames per second
+    dsVIDEO_FRAMERATE_29dot97 = 6  # Played at 29.97 frames per second
+    dsVIDEO_FRAMERATE_50 = 7       # Played at 50 frames per second
+    dsVIDEO_FRAMERATE_59dot94 = 8  # Played at 59.94 frames per second
+    dsVIDEO_FRAMERATE_MAX = 9      # Out of range
 
 class hdmiInAviContentType(Enum):
       dsAVICONTENT_TYPE_GRAPHICS = 0   #/*!< Content type Graphics. */
@@ -88,7 +88,7 @@ class hdmiInAviContentType(Enum):
       dsAVICONTENT_TYPE_INVALID = 4    #/*!< Content type Invalid */
       dsAVICONTENT_TYPE_MAX = 5        #/*!< Out of range */
 
-class hdmiInZoomMode(Enum):
+class dsvideozoommode(Enum):
       dsVIDEO_ZOOM_NONE = 0
       dsVIDEO_ZOOM_FULL = 1
       dsVIDEO_ZOOM_LB_16_9 = 2
@@ -165,7 +165,7 @@ class dsHdmiInClass():
         """
         result = self.utMenu.select(self.testSuite, "Terminate dsHdmiIn")
 
-    def getHDMIConnectionCallbackStatus(self):
+    def getHDMIConnectionStatus(self):
         """
         Retrieves the HDMI connection status from the device using a callback.
 
@@ -193,9 +193,9 @@ class dsHdmiInClass():
 
         return None
 
-    def getSignalChangeCallbackStatus(self):
+    def getSignalChangeStatus(self):
         """
-        Retrieves the HDMI signal status from the device using a callback.
+        Gets the Signal Change of HdmiIn device  on port.
 
         This function reads the output from the device session to detect the
         signal  status. The callback message contains the port number
@@ -221,20 +221,11 @@ class dsHdmiInClass():
         if match:
             port = match.group(1)
             signalstatus = match.group(2)
-       
-        signalList = []
-        for signalindex in hdmiInSignalStatustype:
-             signalList.append(hdmiInSignalStatustype(signalindex).name)
+            return port, signalstatus
 
-        if signalstatus in signalList:
-           found = "true"
-           return port, signalstatus, found
-        else:
-           return None
-
-    def getHdmiInPortCallbackStatus(self):
+    def getInPortStatus(self):
         """
-        Retrieves the HDMI In port status using a callback.
+        Gets the port status(like active , is presented) on platform.
 
         This function reads the output from the device session to detect the
         port  status. The callback message contains the port number
@@ -249,7 +240,7 @@ class dsHdmiInClass():
                 - ispresented (str): true or false.
                 - activeport(str):Active Port number as string
             None: If no matching signal status is found.
-        """ 
+        """
         result = self.testSession.read_until("Received statuschange callback isPresented:")
         portstatuspattern = r"Received statuschange callback isPresented:(\w+), activeport: (w+)"
         match = re.search(portstatuspattern, result)
@@ -258,12 +249,10 @@ class dsHdmiInClass():
             ispresented = match.group(1)
             activeport = match.group(2)
             return ispresented, activeport
-        
-        return None
 
-    def getVideoModeCallbackStatus(self):
+    def getVideoMode(self):
         """
-        Retrieves the HDMI In Video Mode update using a callback.
+        Gets the Video Mode of port.
 
         This function reads the output from the device session to detect the
         video mode update. The callback message contains the port number
@@ -280,28 +269,26 @@ class dsHdmiInClass():
             None: If no matching signal status is found.
         """
         result = self.testSession.read_until("Result dsHdmiInGetCurrentVideoMode OUT:port:[  ], pixelResolution:[  ]")
-        videomodepattern = r"Result dsHdmiInGetCurrentVideoMode OUT:port:\[(\w+)\], pixelResolution:\[(dsVIDEO_PIXELRES_\w+)\], OUT:aspectRatio:\[(dsVIDEO_ASPECT_RATIO_\w+)\]\)"
+        videomodepattern = r"Result dsHdmiInGetCurrentVideoMode OUT:resolution:\(resolution name:\[(\w+)\], pixelResolution:\[(dsVIDEO_PIXELRES_\w+)\] ,aspectRatio:\[(dsVIDEO_ASPECT_RATIO_\w+)\]\)"
         match = re.search(videomodepattern, result)
 
         if match:
-            port = match.group(1)
             pixelresolution = match.group(2)
             aspectratio = match.group(3)
 
-        pixelResList = []
-        for pixelindex in hdmiVideoResolution:
-             pixelResList.append(hdmiVideoResolution(pixelindex).name)
+        result = self.testSession.read_until("Result dsHdmiInGetCurrentVideoMode OUT:resolution:(stereoScopicMode:[  ], frameRate:[  ], interlaced:")
+        videomodepattern = r"Result dsHdmiInGetCurrentVideoMode OUT:resolution:\(stereoScopicMode:\[(dsVIDEO_SSMODE_\w+)\], frameRate:\[(dsVIDEO_FRAMERATE_\w+)\], interlaced:\[(w+)\]\)"
+        match = re.search(videomodepattern, result)
+        if match:
+           stereoscopicmode = match.group(1)
+           framerate = match.group(2)
+           interlaced = match.group(3)
 
-        if pixelresolution in pixelResList:
-             found = "true"
-        else:
-             found = None
-
-        return port, pixelresolution, aspectratio, found
+        return pixelresolution, aspectratio, stereoscopicmode, framerate, interlaced
 
     def getAllmCallbackStatus(self):
         """
-        Retrieves the HDMI ALLM status from the device using a callback.
+        Gets the allm status on Hdmi In device.
 
         This function reads the output from the device session to detect the
         HDMI allm status. The callback message contains the port number
@@ -324,12 +311,10 @@ class dsHdmiInClass():
             porttype = match.group(1)
             allm_status = match.group(2)
             return porttype, allm_status
-       
-        return None
 
     def getAVlatencyCallbackStatus(self):
         """
-        Retrieves the HDMI Audio Video latency from the device using a callback.
+        Gets the AV latency of Hdmi In device.
 
         This function reads the output from the device session to detect the
         audio video latency. The callback message contains the audio video latency
@@ -352,12 +337,10 @@ class dsHdmiInClass():
             audio_latency = match.group(1)
             video_latency = match.group(2)
             return audio_latency, video_latency
-   
-        return None
 
     def getAVIContentCallbackStatus(self):
         """
-        Retrieves the HDMI AVI content change from the device using a callback.
+        Gets the AVI content change on Hdmi In device.
 
         This function reads the output from the device session to detect the
         AVI content change status. The callback message contains the port number
@@ -379,20 +362,11 @@ class dsHdmiInClass():
         if match:
             porttype = match.group(1)
             avi_content_type = match.group(2)
+            return porttype, avi_content_type
 
-        contentList = []
-        for contentindex in hdmiInAviContentType:
-            contentList.append(hdmiInAviContentType(contentindex).name)
-        
-        if avi_content_type in contentList:
-           found = "true"
-           return porttype, avi_content_type, found
-        else:
-           return None
-
-    def getHDMIInPortStatus():
+    def getPortStatus(self):
         """
-        Retrieves the HDMI In port status.
+        Gets the port status.
 
         This function reads the output from the device session to 
         detect the port status. The callback message contains the 
@@ -408,21 +382,29 @@ class dsHdmiInClass():
             None: If no matching connection status is found.
         """
         result = self.utMenu.select( self.testSuite, "Get Status")
-        typeStatusPattern = r"Result dsHdmiInGetStatus OUT:inputstatus:isPresented:\[(\w+)\], activeport:\[(dsHDMI_IN_PORT_\w+)\] \],dsError_t:\[(dsERR_\w+)\]"
+        typeStatusPattern = r"Result dsHdmiInGetStatus\(OUT:inputstatus:\[isPresented:\[(\w+)\], activeport:\[(dsHDMI_IN_PORT_\w+)\] \],dsError_t:\[(dsERR_\w+)\]\)"
         match = re.search(typeStatusPattern, result)
         if match:
             isPresented = match.group(1)
             activeport = match.group(2)
-            return isPresented, activeport
+        
+        result = self.testSession.read_until("Result dsHdmiInGetStatus(OUT:inputstatus:[ port:[ ]:[ ], isPortConnected:[ ],dsError_t:[ ]")
+        isportconnectedpattern = r"Result dsHdmiInGetStatus\(OUT:inputstatus:\[ port:\[(dsHDMI_IN_PORT_\w+)\]:\[(\d+)\], isPortConnected:\[(\w+)\],dsError_t:\[(dsERR_\w+)\]\)"
+        match = re.search(typeStatusPattern, result)
+        if match:
+            isPortConnected = match.group(3)
+        
+        return isPresented, activeport, isPortConnected
       
         return None
 
-    def selectHDMIInPort(self, hdmiin_port:str, audmix:int=0, videoplane:int=0, topmost:int=1):
+    def selectPort(self, hdmiin_port:str, port_index:int=0, audmix:int=0, videoplane:int=0, topmost:int=1):
         """
-        Selects specified HDMI In port.
+        Selects specified port.
 
         Args:
-            hdmiin_port (str):HDMIIN port.
+            hdmiin_port (str): name of the hdiin port. Refer dsHdmiInPort enum
+            port_index (int, optional): port index. Defaults to 0
             audmix (int, optional): audmix .
             videoplane(int, optional): videoplane.
             topmost(int, optional): topmost.
@@ -432,13 +414,18 @@ class dsHdmiInClass():
         """
         promptWithAnswers = [
                 {
-                    "query_type": "direct",
-                    "query": "Enter the port number to select:",
+                    "query_type": "list",
+                    "query": "Select dsAudio Port:",
                     "input": hdmiin_port
                 },
                 {
                     "query_type": "direct",
                     "query": "Enter the audiomix to select:",
+                    "input": str(port_index)
+                },
+                {
+                    "query_type": "direct",
+                    "query": "Select audiomix value Index[0-1]:",
                     "input": str(audmix)
                 },
                 {
@@ -455,9 +442,9 @@ class dsHdmiInClass():
 
         result = self.utMenu.select(self.testSuite, "Select Port", promptWithAnswers)
 
-    def scaleHdmiInvdieo(self, xcord:int=0, ycord:int=0, width:int=0, height:int=0):
+    def scalevdieo(self, hdmiin_port:str, xcord:int=0, ycord:int=0, width:int=0, height:int=0):
         """
-        Scale video of specified HdmiIn port.
+        Scale video of specified port.
 
         Args:
             xcord (int, optional): xcoordiante. Defaults to 0
@@ -470,23 +457,28 @@ class dsHdmiInClass():
         """
         promptWithAnswers = [
                 {
+                    "query_type": "list",
+                    "query": "Select dsAudio Port:",
+                    "input": hdmiin_port
+                },
+                {
                     "query_type": "direct",
-                    "query": "Select x cordiante:",
+                    "query": "Select dsAudio Port Index[0-10]:",
                     "input": str(xcord)
                 },
                 {
                     "query_type": "direct",
-                    "query": "Select y coordinate:",
+                    "query": "Select audiomix value Index[0-1]:",
                     "input": str(ycord)
                 },
                 {
                     "query_type": "direct",
-                    "query": "Select width:",
+                    "query": "Select videoplane value Index[0]:",
                     "input": str(width)
                 },
                 {
                     "query_type": "direct",
-                    "query": "Select height:",
+                    "query": "Select videoplane value Index[1]:",
                     "input": str(height)
                 }
         ]
@@ -495,13 +487,13 @@ class dsHdmiInClass():
   
     def getSupportedPorts(self):
         """
-        Returns a list of supported Hdmi In ports on the device.
+        Returns a list of supported audio ports on the device.
 
         Args:
             None
 
         Returns:
-            list: A list of tuples containing the port name.
+            list: A list of tuples containing the port name and index.
         """
 
         result = self.utMenu.select(self.testSuite, "Get Input Port")
@@ -517,31 +509,13 @@ class dsHdmiInClass():
             portList.append(f'dsHDMI_IN_PORT_{i}')
 
         return portList
-  
-    def getVideoZoomModeList(self):
+
+    def setZoomMode(self, zoom_mode:int=0):
         """
-        gets supported Zoom Mode as list.
+        sets zoommode  on a particular HdmiIn port.
 
         Args:
-            None.
-
-        Returns:
-            A list of Zoom modes please refer dsvideozoommode enum class.
-        """
-       
-        videoZoomModeList = []
-        for modeindex in hdmiInZoomMode:
-            videoZoomModeList.append(hdmiInZoomMode(modeindex).name)
-
-        return videoZoomModeList
-
-
-    def setHdmiInZoomMode(self, zoom_mode:str=0):
-        """
-        sets zoommode  on a HdmiIn port.
-
-        Args:
-            zoommode (str, optional): zoommode. Defaults to 0
+            zoommode (int, optional): zoommode. Defaults to 0
 
         Returns:
             None.
@@ -550,74 +524,56 @@ class dsHdmiInClass():
             {
                 "query_type": "list",
                 "query": "Selected Zoom Mode",
-                "input": zoom_mode
+                "input": "dsVIDEO_ZOOM_NONE"
             }
         ]
         
+        promptWithAnswers[0]["input"] = str(zoom_mode)
+        
         result = self.utMenu.select(self.testSuite, "Zoom Mode", promptWithAnswers)
 
-    def getEDIDVersionList(self):
-        """
-        gets supported EDID versions as list.
-
-        Args:
-            None.
-
-        Returns:
-            A list of EDID list please refer  enum class.
-        """
-
-        edidList = []
-        for edidindex in hdmiEdidVersion:
-            edidList.append(hdmiEdidVersion(index).name)
-
-        return edidList
-
-    def setEdidVersion(self, port_type:str=0, edidversion:str=0):
+    def setEdidVersion(self, edidversion:int=0):
         """
         sets edid version  on a particular HdmiIn port.
 
         Args:
-            hdmiin_port (str): Defaults to 0
-            edidversion (str, optional): edidversion. Defaults to 0             
+            edidversion (int, optional): edidversion. Defaults to 0             
  
         Returns:
             None.
         """
         promptWithAnswers = [
-             {
-                "query_type": "list",
-                "query": "Select dsHdmiIn Port:",
-                "input": port_type
-             },
-             {
+            {
                 "query_type": "list",
                 "query": "Selected EDID Version",
-                "input": edidversion
-             }
+                "input": "HDMI_EDID_VER_14"
+            }
         ]
+
+        promptWithAnswers[0]["input"] = str(edidversion)
 
         result = self.utMenu.select(self.testSuite, "Set EdidVersion", promptWithAnswers)
 
-    def getEdidVersion(self, port_type:str=0):
+    def getEdidVersion(self, port_index:int=0):
         """
         Gets edidversion.
 
         Args:
             None.
         Returns:
-            Edid version as string.
+            string.
         """
         promptWithAnswers = [
             {
-                "query_type": "list",
-                "query": "Select dsHdmiIn Port",
-                "input": port_type
+                "query_type": "direct",
+                "query": "Get EDID Version",
+                "input": "0"
             }
         ]
         
-        result = self.utMenu.select( self.testSuite, "Get EdidVersion", promptWithAnswers)
+        promptWithAnswers[0]["input"] = str(port_index)
 
+        result = self.utMenu.select( self.testSuite, "Get EdidVersion", promptWithAnswers)
         typeStatusPattern = r"Result dsGetEdidVersion IN:port:\[(\w+)\]:\[.*\] OUT:edidver:\[(HDMI_EDID_VER_\w+)\]:\[.*\],dsError_t:\[(dsERR_\w+)\]"
         match = re.search(typeStatusPattern, result)
         if match:
@@ -625,7 +581,7 @@ class dsHdmiInClass():
 
         return edidversion
 
-    def setEdid2Allm(self, port_type:str=0, allm_support:int=0):
+    def setEdid2Allm(self, port_index:int=0, allm_support:int=0):
         """
         sets edid2allm support  on a particular HdmiIn port.
 
@@ -637,39 +593,43 @@ class dsHdmiInClass():
         """
         promptWithAnswers = [
             {
-                "query_type": "list",
-                "query": "Select dsHdmiIn Port",
-                "input": port_type
+                "query_type": "direct",
+                "query": "Selected EDID Version",
+                "input": "dsHDMI_IN_PORT_0"
             },
             {
                 "query_type": "list",
                 "query": "Selected EDID Version",
-                "input": str(allm_support)
+                "input": "0"
             }
 
         ]
 
+        promptWithAnswers[0]["input"] = str(port_index)
+        promptWithAnswers[1]["input"] = str(allm_support)
+
         result = self.utMenu.select(self.testSuite, "Set Edid 2 Allm Support", promptWithAnswers)
 
-    def getEdid2Allm(self, port_type:str=0):
+    def getEdid2Allm(self, port_index:int=0):
         """
         Gets edid 2 allm support.
 
         Args:
             None.
         Returns:
-            true if sets to true  otherwise false.
+            string.
         """
         promptWithAnswers = [
             {
-                "query_type": "list",
-                "query": "Select dsHdmiIn Port",
-                "input": port_type
+                "query_type": "direct",
+                "query": "Get EDID Version",
+                "input": "0"
             }
         ]
 
-        result = self.utMenu.select( self.testSuite, "Get Edid 2 Allm Support", promptWithAnswers)
+        promptWithAnswers[0]["input"] = str(port_index)
 
+        result = self.utMenu.select( self.testSuite, "Get Edid 2 Allm Support", promptWithAnswers)
         typeStatusPattern = r"Result dsGetEdid2AllmSupport IN:port:\[(\w+)\]:\[.*\] OUT:allmsupport:\[(\w+)\]:\[.*\],dsError_t:\[(dsERR_\w+)\]"
         match = re.search(typeStatusPattern, result)
         if match:

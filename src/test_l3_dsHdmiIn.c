@@ -335,15 +335,12 @@ static void hdmiInStatusChangeCB(dsHdmiInStatus_t inputStatus)
  */
 static void hdmiInVideoModeUpdateCB(dsHdmiInPort_t port, dsVideoPortResolution_t videoResolution)
 {
-    UT_LOG_INFO("Result dsHdmiInGetCurrentVideoMode OUT:port:[%s], pixelResolution:[%s]\n",
-                      UT_Control_GetMapString(dsHdmiInPort_mapTable, port),
-                      UT_Control_GetMapString(dsVideoResolution_mapTable, videoResolution.pixelResolution));
+    UT_LOG_INFO("Result dsHdmiInGetCurrentVideoMode OUT:resolution:resolution name:[%s], pixelResolution:[%s] ,aspectRatio:[%s])\n",
+                      videoResolution.name,
+                      UT_Control_GetMapString(dsVideoResolution_mapTable, videoResolution.pixelResolution),
+                      UT_Control_GetMapString(dsVideoAspectRatio_mapTable, videoResolution.aspectRatio));
 
-    UT_LOG_INFO("OUT:aspectRatio[%s], resolution name[%s])\n",
-                      UT_Control_GetMapString(dsVideoAspectRatio_mapTable, videoResolution.aspectRatio),
-                      videoResolution.name);
-
-    UT_LOG_INFO("OUT:stereoScopicMode:[%s], frameRate:[%s], interlaced:[%s]\n",
+    UT_LOG_INFO("OUT:resolution:(stereoScopicMode:[%s], frameRate:[%s], interlaced:[%s])\n",
                       UT_Control_GetMapString(dsVideoStereoScopicMode_mapTable, videoResolution.stereoScopicMode),
                       UT_Control_GetMapString(dsVideoFrameRate_mapTable, videoResolution.frameRate),
                       UT_Control_GetMapString(bool_mapTable, videoResolution.interlaced));
@@ -547,7 +544,7 @@ void test_l3_HdmiIn_get_status(void)
 
     ret = dsHdmiInGetStatus(&inputstatus);
 
-    UT_LOG_INFO("Result dsHdmiInGetStatus OUT:inputstatus:isPresented:[%s], activeport:[%s] ],dsError_t:[%s]",
+    UT_LOG_INFO("Result dsHdmiInGetStatus(OUT:inputstatus:[isPresented:[%s], activeport:[%s] ],dsError_t:[%s])",
                  UT_Control_GetMapString(bool_mapTable, inputstatus.isPresented),
                  UT_Control_GetMapString(dsHdmiInPort_mapTable, inputstatus.activePort),
                  UT_Control_GetMapString(dsError_mapTable, ret));
@@ -555,7 +552,7 @@ void test_l3_HdmiIn_get_status(void)
     for(int i = dsHDMI_IN_PORT_0 ; i < dsHDMI_IN_PORT_MAX ; i++) 
     {
 
-           UT_LOG_INFO("OUT:inputstatus:port:[%s]:[%d], isPortConnected:[%s],dsError_t:[%s]",
+           UT_LOG_INFO("Result dsHdmiInGetStatus(OUT:inputstatus:[ port:[%s]:[%d], isPortConnected:[%s],dsError_t:[%s])",
                          UT_Control_GetMapString(dsHdmiInPort_mapTable, i),i,
                          UT_Control_GetMapString(bool_mapTable, inputstatus.isPortConnected[i]),
                          UT_Control_GetMapString(dsError_mapTable, ret));
@@ -601,7 +598,7 @@ void test_l3_HdmiIn_select_port(void)
 
     port = select;
 
-    UT_LOG_MENU_INFO("\n Enter the audiomix to select:\n"
+    UT_LOG_MENU_INFO("\Enter the audiomix to select:\n"
                      "\t Acceptable inputs are:\n"
                      "\t 0. false\n"
                      "\t 1. true \n"
@@ -619,7 +616,7 @@ void test_l3_HdmiIn_select_port(void)
     UT_LOG_MENU_INFO("  Supported  the videoplane type: ");
     for(dsVideoPlaneType_t i = dsVideoPlane_PRIMARY ; i < dsVideoPlane_MAX ; i++)
     {
-          UT_LOG_MENU_INFO(" %d. %s ",
+          UT_LOG_MENU_INFO(" %d : %s ",
                                 i, UT_Control_GetMapString(dsVideoPlaneType_mapTable,i));
     }
 
@@ -687,11 +684,13 @@ void test_l3_HdmiIn_scale_video(void)
     int32_t x = 0 , y = 0, width = 0 , height = 0;
     int32_t select = 0;
 
-    UT_LOG_MENU_INFO("Enter the x coordinate to select\n"
-                     "\tAcceptable inputs are:\n"
-                     "\tMin is 0\n"
-                     "\tMax is based on the current resolution\n"
-                     "\tSelect x coordinate :");
+    UT_LOG_MENU_INFO("\n================Please Select Inputs==================\n");
+
+    UT_LOG_MENU_INFO("\n----------Enter the x coordinate to select------------\n\t"
+                     "\tAcceptable inputs are:\n\t"
+                     "\tMin is 0\n\t"
+                     "\tMax is based on the current resolution\n\t"
+                     "\n------------------------------------------------------\n");
 
    readInput(&select);
    x = select;
@@ -702,11 +701,11 @@ void test_l3_HdmiIn_scale_video(void)
       return;
    }
 
-   UT_LOG_MENU_INFO("Enter the y coordinate to select\n"
-                     "\tAcceptable inputs are:\n"
-                     "\tMin is 0\n"
-                     "\tMax is based on the current resolution\n"
-                     "\tSelect y coordinate :");
+   UT_LOG_MENU_INFO("\n--------Enter the y coordinate to select-------\n\t"
+                     "\tAcceptable inputs are:\n\t"
+                     "\tMin is 0\n\t"
+                     "\tMax is based on the current resolution\n\t"
+                    "\n-----------------------------------------------\n");
 
    readInput(&select);
    y = select;
@@ -717,11 +716,11 @@ void test_l3_HdmiIn_scale_video(void)
       return;
    }
 
-   UT_LOG_MENU_INFO("Enter the width to select\n"
-                    "\tAcceptable inputs are:\n"
-                    "\tMin is 0\n"
-                    "\tMax is based on the current resolution\n"
-                    "\tSelect width :");
+   UT_LOG_MENU_INFO("\n---------Enter the width to select------------\n\t"
+                     "\tAcceptable inputs are:\n\t"
+                     "\tMin is 0\n\t"
+                     "\tMax is based on the current resolution\n\t"
+               "\n---------------------------------------------------\n");
 
    readInput(&select);
    width = select;
@@ -732,11 +731,11 @@ void test_l3_HdmiIn_scale_video(void)
       return;
    }
 
-   UT_LOG_MENU_INFO("Enter the height to select\n"
-                     "\tAcceptable inputs are:\n"
-                     "\tMin is 0\n"
-                     "\tMax is based on the current resolution\n"
-                     "\tSelect height :");
+   UT_LOG_MENU_INFO("\n------------Enter the height to select---------\t"
+                     "\tAcceptable inputs are:\n\t"
+                     "\tMin is 0\n\t"
+                     "\tMax is based on the current resolution\n\t"
+                    "\n---------------------------------------------------\n");
 
    readInput(&select);
    height = select;
@@ -780,11 +779,14 @@ void test_l3_HdmiIn_zoom_mode(void)
     int32_t select = 0;
     dsVideoZoom_t mode = dsVIDEO_ZOOM_NONE;
 
-    UT_LOG_MENU_INFO("list of Zoom Modes");
+    UT_LOG_MENU_INFO("\n===================Select Zoom Mode====================\n");
+
+    UT_LOG_MENU_INFO("\n------------------Availabe Zoom Modes-------------------\n");
     for(dsVideoZoom_t i = dsVIDEO_ZOOM_NONE ; i < dsVIDEO_ZOOM_MAX ; i++)
     {
            UT_LOG_MENU_INFO("%d. %s", i, UT_Control_GetMapString(dsVideoZoom_mapTable, i));
     }
+    UT_LOG_MENU_INFO("\n--------------------------------------------------------\n");
 
     readInput(&select);
     if(select < dsVIDEO_ZOOM_NONE || select > dsVIDEO_ZOOM_MAX)
@@ -833,6 +835,7 @@ void test_l3_HdmiIn_get_edid(void)
     int32_t select = 0;
     dsHdmiInPort_t port = dsHDMI_IN_PORT_NONE;
 
+    UT_LOG_MENU_INFO("\n**********Please select port***********\n");
     listPorts();
     readInput(&select);
     if(select < dsHDMI_IN_PORT_0 || select >= dsHDMI_IN_PORT_MAX)
@@ -884,6 +887,7 @@ void test_l3_HdmiIn_spd_info(void)
     dsHdmiInPort_t port = dsHDMI_IN_PORT_NONE;
     int32_t select = 0;
     
+    UT_LOG_MENU_INFO("\n**********Please select port***********\n");
     listPorts();
     readInput(&select);
     if(select < dsHDMI_IN_PORT_0 || select >= dsHDMI_IN_PORT_MAX)
@@ -895,11 +899,11 @@ void test_l3_HdmiIn_spd_info(void)
    
     port = select;
    
-    UT_LOG_INFO("Calling  dsGetHDMISPDInfo IN:port:[%d] OUT:spdinfo:[ ]\n",port);
+    UT_LOG_INFO("Calling  dsGetHDMISPDInfo(IN:port:[%d] OUT:spdinfo:[ ])\n",port);
 
     ret = dsGetHDMISPDInfo(port, spdinfo);
 
-    UT_LOG_INFO("Result  dsGetHDMISPDInfo IN:port:[%d] OUT:spdinfo:[%s]),dsError_t:[%s]\n", port,
+    UT_LOG_INFO("Result  dsGetHDMISPDInfo(IN:port:[%d] OUT:spdinfo:[%s]),dsError_t:[%s]\n", port,
                  spdinfo, UT_Control_GetMapString(dsError_mapTable, ret));
     DS_ASSERT(ret == dsERR_NONE);
 
@@ -928,6 +932,7 @@ void test_l3_HdmiIn_set_edidversion(void)
     dsHdmiInPort_t port = dsHDMI_IN_PORT_NONE;
     tv_hdmi_edid_version_t edidver = HDMI_EDID_VER_MAX;
 
+    UT_LOG_MENU_INFO("\n**********Please select port***********\n");
     listPorts();
     readInput(&select);
     if(select < dsHDMI_IN_PORT_0 || select >= dsHDMI_IN_PORT_MAX)
@@ -939,11 +944,12 @@ void test_l3_HdmiIn_set_edidversion(void)
 
     port = select;
 
-    UT_LOG_MENU_INFO("Please select from availabe edid versions\n");
+    UT_LOG_MENU_INFO("\n------------------Please select from availabe edid versions--------\n");
     for(tv_hdmi_edid_version_t i = HDMI_EDID_VER_14 ; i < HDMI_EDID_VER_MAX ; i++)
     {
            UT_LOG_MENU_INFO("%d. %s", i, UT_Control_GetMapString(tv_hdmi_edid_version_mapTable, i));
     }
+    UT_LOG_MENU_INFO("\n-------------------------------------------------------------------\n");
 
     readInput(&select);
     if(select < HDMI_EDID_VER_14 || select > HDMI_EDID_VER_MAX)
@@ -992,6 +998,7 @@ void test_l3_HdmiIn_get_edidversion(void)
     dsHdmiInPort_t port = dsHDMI_IN_PORT_NONE;
     tv_hdmi_edid_version_t edidver = HDMI_EDID_VER_MAX;
 
+    UT_LOG_MENU_INFO("\n**********Please select port***********\n");
     listPorts();
     readInput(&select);
     if(select < dsHDMI_IN_PORT_0 || select >= dsHDMI_IN_PORT_MAX)
@@ -1038,6 +1045,9 @@ void test_l3_HdmiIn_set_edid2allmsupport(void)
     int32_t select = 0;
     bool allmsupport = false;
 
+    UT_LOG_MENU_INFO(" \n================Please Select Inputs==================\n");
+
+    UT_LOG_MENU_INFO("\n*******Enter the port number to select*******\n");
     listPorts();
     readInput(&select);
     if(select < dsHDMI_IN_PORT_0 || select >= dsHDMI_IN_PORT_MAX)
@@ -1049,11 +1059,11 @@ void test_l3_HdmiIn_set_edid2allmsupport(void)
 
     port = select;
 
-    UT_LOG_MENU_INFO("Enter the allmsupport to select\n"
-                     "\tAcceptable inputs are:\n"
-                     "\t0. false\n"
-                     "\t1. true\n"
-                     "\nSelect allm support");
+    UT_LOG_MENU_INFO("\n-------------Enter the allmsupport to select-----------\n\t"
+                     "\tAcceptable inputs are:\n\t"
+                     "\t0. false\n\t"
+                     "\t1. true\n\t"
+                     "\n-------------------------------------------------------\n");
 
     readInput(&select);
     if(select < 0 || select > 1)
@@ -1102,6 +1112,9 @@ void test_l3_HdmiIn_get_edid2allmsupport(void)
     int32_t select = 0;
     bool allmsupport = false;
 
+    UT_LOG_MENU_INFO(" \n================Please Select Inputs==================\n");
+
+    UT_LOG_MENU_INFO(" \n*******Enter the port number to select*******\n");
     listPorts();
     readInput(&select);
     if(select < dsHDMI_IN_PORT_0 || select >= dsHDMI_IN_PORT_MAX)
