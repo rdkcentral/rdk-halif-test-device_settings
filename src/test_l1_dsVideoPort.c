@@ -3200,7 +3200,7 @@ void test_l1_dsVideoPort_positive_dsGetColorDepth(void) {
         status = dsGetColorDepth(handle, &colorDepth1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
         // Step 04: Compare the value with values from profile file
-        UT_ASSERT_EQUAL(colorDepth1, gDSvideoPort_color_depth);
+        UT_ASSERT_EQUAL(colorDepth1, getColorDepth());
     }
 
     // Step 05: Terminate the video port system
@@ -4142,7 +4142,7 @@ void test_l1_dsVideoPort_negative_dsGetHdmiPreference(void) {
         UT_ASSERT_EQUAL(status, dsERR_NONE);
         // Step 05: Get HDMI preference with valid handle but with NULL pointer for HDMI Preference
         status = dsGetHdmiPreference(handle, NULL);
-        UT_ASSERT_EQUAL(status, dsERR_NONE);
+        UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
     }
 
     // Step 06: Terminate the video port system
