@@ -31,7 +31,13 @@ sys.path.append(os.path.join(dir_path, "../"))
 from dsClasses.dsHdmiIn import dsHdmiInClass
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
+from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
+
+class hdmiEdidVersion(Enum):
+      HDMI_EDID_VER_14 = 0
+      HDMI_EDID_VER_20 = 1
+      HDMI_EDID_VER_MAX = 2
 
 class dsHdmiIn_test13_SetAndGetEDIDVersion(utHelperClass):
 
@@ -63,33 +69,18 @@ class dsHdmiIn_test13_SetAndGetEDIDVersion(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the test artifacts and streams listed in the test setup configuration.
-
-        This function retrieves audio streams and other necessary files and
-        saves them on the DUT (Device Under Test).
+        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
 
         Args:
-            None
+            None.
         """
-
-        # List of streams with path
-        self.testStreams = []
 
         self.deviceDownloadPath = self.cpe.get("target_directory")
 
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-
-        # Download test artifacts to device
-        url = test.get("artifacts")
+        #download test artifacts to device
+        url = self.testSetup.assets.device.test13_SetAndGetEDIDVersion.artifacts
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-
-        # Download test streams to device
-        url =  test.get("streams")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            for streampath in url:
-                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
 
     def testCleanAssets(self):
         """
@@ -114,22 +105,8 @@ class dsHdmiIn_test13_SetAndGetEDIDVersion(utHelperClass):
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    def testRunPostreiquisites(self):
-        """
-        Executes postrequisite commands listed in test-setup configuration file on the DUT.
-
-        Args:
-            None.
-        """
-        # Run commands as part of test prerequisites
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("postcmd")
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
-
     #TODO: Current version supports only manual verification.
-    def CheckDeviceStatus(self, manual = False, port_type:str=0):
+    def VerifyEdidVersion(self, edidversion:str=0):
         """
         Verifies whether the particular edidversion selected or not.
 
@@ -141,22 +118,16 @@ class dsHdmiIn_test13_SetAndGetEDIDVersion(utHelperClass):
             bool
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f'check the Device Connected to {port_type} is ON and press Enter')
+            return self.testUserResponse.getUserYN(f'Is {edidversion} selected or not? (Y/N):')
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
-        """
-        The main test function tests EDID version sets.
-
-        This function:
-        - Downloads necessary assets.
-        - Runs prerequisite commands.
-        - Verifies EDID version through GET function.
+        """This function will test the video scaling of HdmiIn Ports
 
         Returns:
-            bool: Final result of the test.
+            bool
         """
 
         # Download the assets listed in test setup configuration file
@@ -170,47 +141,25 @@ class dsHdmiIn_test13_SetAndGetEDIDVersion(utHelperClass):
 
         self.log.testStart("test13_SetAndGetEDIDVersion", '1')
 
-        # Initialize the dsHdmiIn module
+        # Initialize the dsAudio module
         self.testdsHdmiIn.initialise(self.testdsHdmiIn.getDeviceType())
-
-        audmix = 0      #default value false
-        videoplane = 0  #Always select primary plane.
-        topmost = 1     #Always should be true.
    
         # Loop through the supported HdmiIn ports
-        for port in self.testdsHdmiIn.getSupportedPorts():
+        for port,index in self.testdsHdmiIn.getSupportedPorts():
             self.log.stepStart(f'{port} Port')
 
-            # Check the HdmiIn device connected to is active
-            result = self.CheckDeviceStatus(True,port)
-            self.log.stepResult(result,f'Hdmi In Device is active {result} on {port}')
-            
-            # Selecting Hdmi In port
-            self.testdsHdmiIn.selectPort(port, audmix, videoplane, topmost)
-            self.log.step(f'Port Selcted {port}')
-
-            #get the list EDID versions
-            edidVersionList = self.testdsHdmiIn.getEDIDVersionList()
-
             #Setting EDID Version on particular Hdmi input
-            for versionindex in edidVersionList:
-               if edidVersionList[versionindex] != "HDMI_EDID_VER_MAX":
-                   self.testdsHdmiIn.setEdidVersion(port, edidVersionList[versionindex])
+            for edidversion in list(hdmiEdidVersion):
+               if edidversion != hdmiEdidVersion.HDMI_EDID_VER_MAX:
+                   self.testdsHdmiIn.setedidversion(hdmiEdidVersion(edidversion).name)
                    #Getting EDID Version 
                    self.log.setp(f'Getting {port} edid version')
-                   edidstatus = self.testdsHdmiIn.getEdidVersion(port)
-                   if result == edidVersionList[versionindex]:
-                         result = True
-                         self.log.setpResult(result,f'Verified getversion:{edidstatus} setversion:{edidVersionList[versionindex]} same')
-                   else:
-                         result = False
-                         self.log.setpResult(result,f'Verified getversion:{edidstatus} setversion:{edidVersionList[versionindex]} same')      
-                                   
+                   result = self.testdsHdmiIn.getedidversion(index)
+                   if result == hdmiEdidVersion(edidversion).name:
+                         self.log.setpResult(f'Verified {get:result} {set:hdmiEdidVersion(edidversion).name} same')
+               
         # Clean the assets downloaded to the device
         self.testCleanAssets()
-
-        #Run postrequisites listed in the test setup configuration file 
-        self.testRunPostreiquisites()
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()

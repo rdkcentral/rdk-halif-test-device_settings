@@ -31,6 +31,7 @@ sys.path.append(os.path.join(dir_path, "../"))
 from dsClasses.dsHdmiIn import dsHdmiInClass
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
+from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsHdmiIn_test5_AllmChangeCallback_Verify(utHelperClass):
@@ -63,33 +64,18 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the test artifacts and streams listed in the test setup configuration.
-
-        This function retrieves audio streams and other necessary files and
-        saves them on the DUT (Device Under Test).
+        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
 
         Args:
-            None
+            None.
         """
-
-        # List of streams with path
-        self.testStreams = []
 
         self.deviceDownloadPath = self.cpe.get("target_directory")
 
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-
-        # Download test artifacts to device
-        url = test.get("artifacts")
+        #download test artifacts to device
+        url = self.testSetup.assets.device.test5_AllmChangeCallback_Verify.artifacts
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-
-        # Download test streams to device
-        url =  test.get("streams")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            for streampath in url:
-                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
 
     def testCleanAssets(self):
         """
@@ -102,39 +88,23 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Executes prerequisite commands listed in the test setup configuration file on the DUT.
-
-        Args:
-            None
-        """
-
-        # Run commands as part of test prerequisites
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("execute")
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
-
-    def testRunPostreiquisites(self):
-        """
-        Executes postrequisite commands listed in test-setup configuration file on the DUT.
+        Runs Prerequisite commands listed in test-setup configuration file on the dut.
 
         Args:
             None.
         """
 
-       # Run commands as part of test prerequisites
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("postcmd")
+        #Run test specific commands
+        cmds = self.testSetup.assets.device.test5_AllmChangeCallback_Verify.execute
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    #TODO: Current version supports only manual verification.
-    def CheckDeviceStatusAndEnableAllm(self, manual=False, port_type:str=0):
+     #TODO: Current version supports only manual verification.
+    def CheckDeviceStatus(self, manual=False, port_type:str:0):
         """
-        Checks whether the Hdmi In device is ON or Not.
-        Ask for enabling Allm feature on source device.
+        Verifies whether the particular input selected or not.
+
         Args:
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
                                      Defaults to other verification methods
@@ -147,18 +117,35 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(utHelperClass):
         else:
             #TODO: Add automation verification methods
             return False
- 
-    def testFunction(self):
-        """
-        The main test function tests Allm status of Hdmi In device.
 
-        This function:
-        - Downloads necessary assets.
-        - Runs prerequisite commands.
-        - Verifies HDMI In allm status update through callbacks.
+    #TODO: Current version supports only manual verification.
+    def VerifyInput(self, manual=False):
+        """
+        Verifies whether the particular input selected or not.
+
+        Args:
+            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
+                                     Defaults to other verification methods
 
         Returns:
-            bool: Final result of the test.
+            bool
+        """
+        if manual == True:
+            return self.testUserResponse.getUserYN("Is HdmiIn port selected? and please set the allm bit on source device (Y/N):")
+        else :
+            #TODO: Add automation verification methods
+            return False
+
+    def find_AllmStatus(self, input_str: str, allm_status: str) -> bool:
+        if allm_status in input_str:
+            return True
+        return False
+
+    def testFunction(self):
+        """This Callback will check for Signal Change events on HdmiIn ports
+
+        Returns:
+            bool
         """
 
         # Download the assets listed in test setup configuration file
@@ -172,7 +159,7 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(utHelperClass):
 
         self.log.testStart("test5_AllmChangeCallback_Verify", '1')
 
-        # Initialize the dsHdmiIn module
+        # Initialize the dsAudio module
         self.testdsHdmiIn.initialise(self.testdsHdmiIn.getDeviceType())
 
         audmix = 0      #default value false
@@ -180,7 +167,7 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(utHelperClass):
         topmost = 1     #Always should be true.
    
         # Loop through the supported HdmiIn ports
-        for port in self.testdsHdmiIn.getSupportedPorts():
+        for port,index in self.testdsAudio.getSupportedPorts():
             self.log.stepStart(f'Select {port} Port')
             self.log.step(f'Select {port} Port')
 
@@ -197,16 +184,28 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(utHelperClass):
             else:
                 result = False
                 self.log.stepResult(result,f'allm mode:{allmstatus[1]} on port:{allmstatus[0]} in Callback found')
+            result = self.CheckDeviceStatus(True,port)
+          
+            if result != False:
+                self.testdsHdmiIn.selectPort(port, index, audmix, videoplane, topmost)
+                result = self.VerifyInput(True)
+                self.log.stepResult(result, f'HdmiIn Select Verification {port} Port')
+                
+                result = self.hal_session.read_until("Received AllmChange status callback port: , allm_mode:")
+                print(result)
+                
+                if find_AllmStatus(result,"true"):
+                   self.log.stepResult(True,f'allm mode is set to true in Callback found')
+                else:
+                   self.log.stepResult(False,f'allm mode is set to false in Callback found')
+
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
 
-        #Run postrequisites listed in the test setup configuration file 
-        self.testRunPostreiquisites()
-
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()
-                
+
         # Delete the dsHdmiIn class
         del self.testdsHdmiIn
 

@@ -31,7 +31,13 @@ sys.path.append(os.path.join(dir_path, "../"))
 from dsClasses.dsHdmiIn import dsHdmiInClass
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
+from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
+
+class edid2allmsupport(Enum):
+      FALSE = 0
+      TRUE  = 1
+      MAX   = 2
 
 class dsHdmiIn_test14_SetAndGetEDID2ALLMsupport(utHelperClass):
 
@@ -63,34 +69,18 @@ class dsHdmiIn_test14_SetAndGetEDID2ALLMsupport(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the test artifacts and streams listed in the test setup configuration.
-
-        This function retrieves audio streams and other necessary files and
-        saves them on the DUT (Device Under Test).
+        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
 
         Args:
-            None
+            None.
         """
-
-        # List of streams with path
-        self.testStreams = []
 
         self.deviceDownloadPath = self.cpe.get("target_directory")
 
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-
-        # Download test artifacts to device
-        url = test.get("artifacts")
+        #download test artifacts to device
+        url = self.testSetup.assets.device.test14_SetAndGetEDID2ALLMsupport.artifacts
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-
-        # Download test streams to device
-        url =  test.get("streams")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            for streampath in url:
-                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
-
 
     def testCleanAssets(self):
         """
@@ -110,54 +100,16 @@ class dsHdmiIn_test14_SetAndGetEDID2ALLMsupport(utHelperClass):
         """
 
         #Run test specific commands
-        cmds = self.testSetup.assets.device.test13_SetAndGetEDIDVersion.execute
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
-
-    def testRunPostreiquisites(self):
-        """
-        Executes postrequisite commands listed in test-setup configuration file on the DUT.
-
-        Args:
-            None.
-        """
-        # Run commands as part of test prerequisites
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("postcmd")
+        cmds = self.testSetup.assets.device.test1_test14_SetAndGetEDID2ALLMsupport.execute
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
     
-    #TODO: Current version supports only manual verification.
-    def CheckDeviceStatus(self, manual = False, port_type:str=0):
-        """
-        Verifies whether the particular edidversion selected or not.
-
-        Args:
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+    def testFunction(self):
+        """This function will test the set and get allm support on HdmiIn Ports
 
         Returns:
             bool
-        """
-        if manual == True:
-            return self.testUserResponse.getUserYN(f'check the Device Connected to {port_type} is ON and press Enter')
-        else :
-            #TODO: Add automation verification methods
-            return False
-    
-    def testFunction(self):
-        """
-        The main test function tests EDID 2 ALLM support.
-
-        This function:
-        - Downloads necessary assets.
-        - Runs prerequisite commands.
-        - Verifies EDID 2 ALLM support through GET function.
-
-        Returns:
-            bool: Final result of the test.
         """
 
         # Download the assets listed in test setup configuration file
@@ -171,43 +123,25 @@ class dsHdmiIn_test14_SetAndGetEDID2ALLMsupport(utHelperClass):
 
         self.log.testStart("test14_SetAndGetEDID2ALLMsupport", '1')
 
-        # Initialize the dsHdmiIn module
+        # Initialize the dsAudio module
         self.testdsHdmiIn.initialise(self.testdsHdmiIn.getDeviceType())
-
-        audmix = 0      #default value false
-        videoplane = 0  #Always select primary plane.
-        topmost = 1     #Always should be true.
    
         # Loop through the supported HdmiIn ports
         for port,index in self.testdsHdmiIn.getSupportedPorts():
             self.log.stepStart(f'{port} Port')
 
-            # Check the HdmiIn device connected to is active
-            result = self.CheckDeviceStatus(True,port)
-            self.log.stepResult(result,f'Hdmi In Device is active {result} on {port}')
-            
-            # Selecting Hdmi In port
-            self.testdsHdmiIn.selectPort(port, audmix, videoplane, topmost)
-            self.log.step(f'Port Selcted {port}')
-
-            #Setting ALLM on particular Hdmi input to true and false
-            for versionindex in range(0,1):
-                self.testdsHdmiIn.setEdid2Allm(port,versionindex)
-                #Getting ALLM value set  
-                self.log.setp(f'Getting {port} edid 2 allm version')
-                allmstatus = self.testdsHdmiIn.getEdid2Allm(port)
-                if allmstatus == "false" or "true":
-                   result = True
-                   self.log.setpResult(result,f'Verified get allm:{allmstatus} set allm same')
-                else:
-                   result = False
-                   self.log.setpResult(result,f'Verified get allm:{allmstatus} set allm same')
-
+            #Setting EDID Version on particular Hdmi input
+            for allmsupport in list(edid2allmsupport):
+               if allmsupport != edid2allmsupport.MAX:
+                   self.testdsHdmiIn.setedid2allm(index,edid2allmsupport(allmsupport).name)
+                   #Getting EDID Version 
+                   self.log.setp(f'Getting {port} edid 2 allm version')
+                   result = self.testdsHdmiIn.getedid2allm(index)
+                   if result == edid2allmsupport(allmsupport).name:
+                         self.log.setpResult(f'Verified {get:result} {set:(edid2allmsupport(allmsupport).name)} same')
+               
         # Clean the assets downloaded to the device
         self.testCleanAssets()
-
-        #Run postrequisites listed in the test setup configuration file 
-        self.testRunPostreiquisites()
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()

@@ -24,7 +24,7 @@ BIN_DIR := $(ROOT_DIR)/bin
 TOP_DIR := $(ROOT_DIR)
 
 SRC_DIRS = $(ROOT_DIR)/src
-INC_DIRS := $(ROOT_DIR)/include
+INC_DIRS := $(ROOT_DIR)/../include
 INC_DIRS += $(ROOT_DIR)/profiles/include
 HAL_LIB := dshal
 SKELETON_SRCS := $(ROOT_DIR)/skeletons/src/*
@@ -67,7 +67,7 @@ build: $(SETUP_SKELETON_LIBS)
 skeleton:
 	echo $(CC)
 	mkdir -p $(HAL_LIB_DIR)
-	$(CC) -fPIC -shared -I$(ROOT_DIR)/include $(SKELETON_SRCS) -o $(HAL_LIB_DIR)/lib$(HAL_LIB).so
+	$(CC) -fPIC -shared -I$(ROOT_DIR)/../include $(SKELETON_SRCS) -o $(HAL_LIB_DIR)/lib$(HAL_LIB).so
 
 list:
 	@echo UT [$@]

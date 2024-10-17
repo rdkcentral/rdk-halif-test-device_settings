@@ -34,6 +34,15 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
+class hdmiInAviContentType(Enum):
+      dsAVICONTENT_TYPE_GRAPHICS = 0   #/*!< Content type Graphics. */
+      dsAVICONTENT_TYPE_PHOTO = 1      #/*!< Content type Photo */
+      dsAVICONTENT_TYPE_CINEMA = 2     #/*!< Content type Cinema */
+      dsAVICONTENT_TYPE_GAME = 3       #/*!< Content type Game */
+      dsAVICONTENT_TYPE_INVALID = 4    #/*!< Content type Invalid */
+      dsAVICONTENT_TYPE_MAX = 5        #/*!< Out of range */
+      
+
 class dsHdmiIn_test7_AVIChangeCallback_Verify(utHelperClass):
 
     testName  = "test7_AVIChangeCallback_Verify"
@@ -64,34 +73,18 @@ class dsHdmiIn_test7_AVIChangeCallback_Verify(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the test artifacts and streams listed in the test setup configuration.
-
-        This function retrieves audio streams and other necessary files and
-        saves them on the DUT (Device Under Test).
+        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
 
         Args:
-            None
+            None.
         """
-
-        # List of streams with path
-        self.testStreams = []
 
         self.deviceDownloadPath = self.cpe.get("target_directory")
 
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-
-        # Download test artifacts to device
-        url = test.get("artifacts")
+        #download test artifacts to device
+        url = self.testSetup.assets.device.test7_AVIChangeCallback_Verify.artifacts
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-
-        # Download test streams to device
-        url =  test.get("streams")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            for streampath in url:
-                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
-
 
     def testCleanAssets(self):
         """
@@ -104,27 +97,20 @@ class dsHdmiIn_test7_AVIChangeCallback_Verify(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Executes prerequisite commands listed in the test setup configuration file on the DUT.
-
-        Args:
-            None
-        """
-
-        # Run commands as part of test prerequisites
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("execute")
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
-
-    def testRunPostreiquisites(self):
-        """
-        Executes postrequisite commands listed in test-setup configuration file on the DUT.
+        Runs Prerequisite commands listed in test-setup configuration file on the dut.
 
         Args:
             None.
         """
-    def CheckDeviceStatus(self, manual=False, port_type:str=0):
+
+        #Run test specific commands
+        cmds = self.testSetup.assets.device.test7_AVIChangeCallback_Verify.execute
+        if cmds is not None:
+            for cmd in cmds:
+                self.writeCommands(cmd)
+
+     #TODO: Current version supports only manual verification.
+    def CheckDeviceStatus(self, manual=False, port_type:str:0):
         """
         Verifies whether the particular input selected or not.
 
@@ -136,22 +122,39 @@ class dsHdmiIn_test7_AVIChangeCallback_Verify(utHelperClass):
             bool
         """
         if manual == True:
-            return self.testUserResponse.getUserYN("Check Hdmi In device on {port_type} is ON and press Enter")
+            return self.testUserResponse.getUserYN("Is {port_type} Hdmi In device is ON? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
-    def testFunction(self):
+    #TODO: Current version supports only manual verification.
+    def VerifyInput(self, manual=False):
         """
-        The main test function tests AVI content change status of Hdmi In device.
+        Verifies whether the particular input selected or not.
 
-        This function:
-        - Downloads necessary assets.
-        - Runs prerequisite commands.
-        - Verifies HDMI In AVI content change through callbacks.
+        Args:
+            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
+                                     Defaults to other verification methods
 
         Returns:
-            bool: Final result of the test.
+            bool
+        """
+        if manual == True:
+            return self.testUserResponse.getUserYN("Is HdmiIn port selected? (Y/N):")
+        else :
+            #TODO: Add automation verification methods
+            return False
+
+    def find_AVIType(self, input_str: str, avi_content: str) -> bool:
+        if avi_content in input_str:
+            return True
+        return False
+
+    def testFunction(self):
+        """This Callback will check for AVI Content Change events on HdmiIn ports
+
+        Returns:
+            bool
         """
 
         # Download the assets listed in test setup configuration file
@@ -165,7 +168,7 @@ class dsHdmiIn_test7_AVIChangeCallback_Verify(utHelperClass):
 
         self.log.testStart("test7_AVIChangeCallback_Verify", '1')
 
-        # Initialize the dsHdmiIn module
+        # Initialize the dsAudio module
         self.testdsHdmiIn.initialise(self.testdsHdmiIn.getDeviceType())
 
         audmix = 0      #default value false
@@ -173,31 +176,40 @@ class dsHdmiIn_test7_AVIChangeCallback_Verify(utHelperClass):
         topmost = 1     #Always should be true.
    
         # Loop through the supported HdmiIn ports
-        for port in self.testdsHdmiIn.getSupportedPorts():
+        for port,index in self.testdsAudio.getSupportedPorts():
             self.log.stepStart(f'Select {port} Port')
             self.log.step(f'Select {port} Port')
 
             # Check the HdmiIn device is active
             result = self.CheckDeviceStatus(True,port)
-            self.testdsHdmiIn.selectPort(port, audmix, videoplane, topmost)
-            self.log.step(f'HdmiIn Select Verification {port} Port')
-            avistatus = self.testdsHdmiIn.getAVIContentCallbackStatus()
-            if avistatus[0] == port and avistatus[2] == "true":
-               result = True
-               self.log.stepResult(result,f'AVI content type:{avistatus[1]} on port:{avistatus[0]} found in Callback')
-            else:
-                result = False
-                self.log.stepResult(result,f'AVI content type:{avistatus[1]} on port:{avistatus[0]} found in Callback')
-               
+          
+            if result != False:
+                self.testdsHdmiIn.selectPort(port, index, audmix, videoplane, topmost)
+                result = self.VerifyInput(True)
+                self.log.stepResult(result, f'HdmiIn Select Verification {port} Port')
+                
+                result = self.hal_session.read_until("Received AviContentType change callback port: , avi_content_type:")
+                print(result)
+                
+                if find_AVIType(result,hdmiInAviContentType(hdmiInAviContentType.dsAVICONTENT_TYPE_GRAPHICS).name):
+                   self.log.stepResult(True,f'AVI content type {hdmiInAviContentType(hdmiInAviContentType.dsAVICONTENT_TYPE_GRAPHICS).name} in Callback found')
+                elif find_AVIType(result,hdmiInAviContentType(hdmiInAviContentType.dsAVICONTENT_TYPE_PHOTO).name):
+                   self.log.stepResult(True,f'AVI content type {hdmiInAviContentType(hdmiInAviContentType.dsAVICONTENT_TYPE_PHOTO).name} in Callback found')
+                elif find_AVIType(result,hdmiInAviContentType(hdmiInAviContentType.dsAVICONTENT_TYPE_CINEMA).name):
+                   self.log.stepResult(True,f'AVI content type {hdmiInAviContentType(hdmiInAviContentType.dsAVICONTENT_TYPE_CINEMA).name} in Callback found')
+                elif find_AVIType(result,hdmiInAviContentType(hdmiInAviContentType.dsAVICONTENT_TYPE_GAME).name):
+                   self.log.stepResult(True,f'AVI content type {hdmiInAviContentType(hdmiInAviContentType.dsAVICONTENT_TYPE_GAME).name} in Callback found')
+                elif find_AVIType(result,hdmiInAviContentType(hdmiInAviContentType.dsAVICONTENT_TYPE_INVALID).name):
+                   self.log.stepResult(True,f'AVI content type {hdmiInAviContentType(hdmiInAviContentType.dsAVICONTENT_TYPE_INVALID).name} in Callback found')
+                else:
+                   self.log.stepResult(False,f'Out of range {hdmiInAviContentType(hdmiInAviContentType.dsAVICONTENT_TYPE_MAX).name} in Callback found')
+
         # Clean the assets downloaded to the device
         self.testCleanAssets()
 
-        #Run postrequisites listed in the test setup configuration file 
-        self.testRunPostreiquisites()
-
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()
- 
+
         # Delete the dsHdmiIn class
         del self.testdsHdmiIn
 

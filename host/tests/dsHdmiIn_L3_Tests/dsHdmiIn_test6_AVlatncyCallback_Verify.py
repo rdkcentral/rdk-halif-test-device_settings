@@ -31,6 +31,7 @@ sys.path.append(os.path.join(dir_path, "../"))
 from dsClasses.dsHdmiIn import dsHdmiInClass
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
+from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsHdmiIn_test6_AVlatncyCallback_Verify(utHelperClass):
@@ -63,33 +64,18 @@ class dsHdmiIn_test6_AVlatncyCallback_Verify(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the test artifacts and streams listed in the test setup configuration.
-
-        This function retrieves audio streams and other necessary files and
-        saves them on the DUT (Device Under Test).
+        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
 
         Args:
-            None
+            None.
         """
-
-        # List of streams with path
-        self.testStreams = []
 
         self.deviceDownloadPath = self.cpe.get("target_directory")
 
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-
-        # Download test artifacts to device
-        url = test.get("artifacts")
+        #download test artifacts to device
+        url = self.testSetup.assets.device.test6_AVlatncyCallback_Verify.artifacts
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-
-        # Download test streams to device
-        url =  test.get("streams")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            for streampath in url:
-                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
 
     def testCleanAssets(self):
         """
@@ -102,36 +88,20 @@ class dsHdmiIn_test6_AVlatncyCallback_Verify(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Executes prerequisite commands listed in the test setup configuration file on the DUT.
-
-        Args:
-            None
-        """
-
-        # Run commands as part of test prerequisites
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("execute")
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
-
-    def testRunPostreiquisites(self):
-        """
-        Executes postrequisite commands listed in test-setup configuration file on the DUT.
+        Runs Prerequisite commands listed in test-setup configuration file on the dut.
 
         Args:
             None.
         """
 
-       # Run commands as part of test prerequisites
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("postcmd")
+        #Run test specific commands
+        cmds = self.testSetup.assets.device.test6_AVlatncyCallback_Verify.execute
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    #TODO: Current version supports only manual verification.
-    def CheckDeviceStatus(self, manual=False, port_type:str=0):
+     #TODO: Current version supports only manual verification.
+    def CheckDeviceStatus(self, manual=False, port_type:str:0):
         """
         Verifies whether the particular input selected or not.
 
@@ -143,23 +113,39 @@ class dsHdmiIn_test6_AVlatncyCallback_Verify(utHelperClass):
             bool
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f'Check Hdmi In on {port_type} is ON and press Enter:')
+            return self.testUserResponse.getUserYN(f'Is {port_type} Hdmi In device is ON? (Y/N):')
         else :
             #TODO: Add automation verification methods
             return False
 
-
-    def testFunction(self):
+    #TODO: Current version supports only manual verification.
+    def VerifyInput(self, manual=False):
         """
-        The main test function tests AV latency of Hdmi In device.
+        Verifies whether the particular input selected or not.
 
-        This function:
-        - Downloads necessary assets.
-        - Runs prerequisite commands.
-        - Verifies HDMI In latency update through callbacks.
+        Args:
+            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
+                                     Defaults to other verification methods
 
         Returns:
-            bool: Final result of the test.
+            bool
+        """
+        if manual == True:
+            return self.testUserResponse.getUserYN("Is HdmiIn port selected? (Y/N):")
+        else :
+            #TODO: Add automation verification methods
+            return False
+
+    def find_AVlatency(self, input_str: str, avlatency: str) -> bool:
+        if avlatency in input_str:
+            return True
+        return False
+
+    def testFunction(self):
+        """This Callback will check Audio Video latency Change events on HdmiIn ports
+
+        Returns:
+            bool
         """
 
         # Download the assets listed in test setup configuration file
@@ -173,7 +159,7 @@ class dsHdmiIn_test6_AVlatncyCallback_Verify(utHelperClass):
 
         self.log.testStart("test6_AVlatncyCallback_Verify", '1')
 
-        # Initialize the dsHdmiIn module
+        # Initialize the dsAudio module
         self.testdsHdmiIn.initialise(self.testdsHdmiIn.getDeviceType())
 
         audmix = 0      #default value false
@@ -181,26 +167,36 @@ class dsHdmiIn_test6_AVlatncyCallback_Verify(utHelperClass):
         topmost = 1     #Always should be true.
    
         # Loop through the supported HdmiIn ports
-        for port in self.testdsHdmiIn.getSupportedPorts():
+        for port,index in self.testdsAudio.getSupportedPorts():
             self.log.stepStart(f'Select {port} Port')
             self.log.step(f'Select {port} Port')
 
             # Check the HdmiIn device is active
             result = self.CheckDeviceStatus(True,port)
           
-            self.testdsHdmiIn.selectPort(port, audmix, videoplane, topmost)
-            self.log.step(f'HdmiIn Select Verification {port} Port')
-            avlatency = self.testdsHdmiIn.getAVlatencyCallbackStatus()
-            self.log.stepResult(True,f'audio_latency:{avlatency[0]}ms, videolatency:{avlatency[1]}ms found in Callback')
+            if result != False:
+                self.testdsHdmiIn.selectPort(port, index, audmix, videoplane, topmost)
+                result = self.VerifyInput(True)
+                self.log.stepResult(result, f'HdmiIn Select Verification {port} Port')
+                
+                result = self.hal_session.read_until("Received AVlatencyChange status callback audio_latency: video_latency:")
+                print(result)
+                
+                if find_AVlatency(result,"audio_latency"):
+                   self.log.stepResult(True,f'audio_latency found in Callback')
+                else:
+                   self.log.stepResult(False,f'audio_latency found in Callback')
+                
+                if find_AVlatency(result,"video_latency"):
+                   self.log.stepResult(True,f'video_latency found in Callback')
+                else:
+                   self.log.stepResult(False,f'video_latency found in Callback')
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()
-
-        #Run postrequisites listed in the test setup configuration file 
-        self.testRunPostreiquisites()
 
         # Delete the dsHdmiIn class
         del self.testdsHdmiIn
