@@ -459,12 +459,26 @@ void test_l1_dsVideoDevice_negative_dsSetDFC (void)
 
         // 04: Call dsSetDFC() with an invalid handle
         result = dsSetDFC(-1, gDSVideoDeviceConfiguration[i].DefaultDFC);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if (gSourceType == 1)
+        {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        }
+        else if (gSourceType == 0)
+        {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // 05: Call dsSetDFC() with an invalid zoom mode
         int32_t numSupportedDFCs = gDSVideoDeviceConfiguration[i].NoOfSupportedDFCs;
         result = dsSetDFC(handle, gDSVideoDeviceConfiguration[i].SupportedDFCs[numSupportedDFCs - 1] + 1);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if (gSourceType == 1)
+        {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        }
+        else if (gSourceType == 0)
+        {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
     }
 
     // 06: De-initialize video devices
