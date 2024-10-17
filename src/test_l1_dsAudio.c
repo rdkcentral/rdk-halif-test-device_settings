@@ -380,7 +380,7 @@ void test_l1_dsAudio_negative_dsGetAudioPort(void)
     {
         result = dsGetAudioPort(dsAUDIOPORT_TYPE_MAX, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
-        UT_ASSERT_NOT_EQUAL(handle, null_handle);
+        UT_ASSERT_EQUAL(handle, null_handle);
 
         // Step 04: Invalid index
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, -1, &handle);
@@ -6994,7 +6994,7 @@ void test_l1_dsAudio_negative_dsIsAudioMSDecode(void)
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
 
         // Step 05: Test with valid handle and invalid pointer
-        result = dsIsAudioMSDecode(handle, &hasMS11Decode);
+        result = dsIsAudioMSDecode(handle, NULL);
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     }
 
