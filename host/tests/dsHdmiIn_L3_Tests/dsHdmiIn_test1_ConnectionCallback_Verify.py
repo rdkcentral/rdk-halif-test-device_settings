@@ -30,6 +30,7 @@ sys.path.append(os.path.join(dir_path, "../"))
 from dsClasses.dsHdmiIn import dsHdmiInClass
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
+from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsHdmiIn_test1_ConnectionCallback_Verify(utHelperClass):
@@ -114,9 +115,7 @@ class dsHdmiIn_test1_ConnectionCallback_Verify(utHelperClass):
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-
     def testPlugUnplugHDMI(self, port:str, plug:True, manual=False):
-
         """
         Waits for the HDMI port connection or disconnection.
         Args:
@@ -128,7 +127,6 @@ class dsHdmiIn_test1_ConnectionCallback_Verify(utHelperClass):
             None
         """
         if manual == True:
-
             if plug == True:
                 self.testUserResponse.getUserYN(f"Plug the HDMI cable {port} and Press Enter:")
             else :
@@ -136,7 +134,6 @@ class dsHdmiIn_test1_ConnectionCallback_Verify(utHelperClass):
         else :
             #TODO: Add automation verification methods
             return
-
 
     def testFunction(self):
         """
@@ -172,7 +169,7 @@ class dsHdmiIn_test1_ConnectionCallback_Verify(utHelperClass):
             # Wait for HDMI Plug In
             result = self.testPlugUnplugHDMI(port, True, True)
 
-            status = self.testdsHdmiIn.getHDMIConnectionCallbackStatus()
+            status = self.testdsHdmiIn.getHDMIConnectionStatus()
 
             result = False
             if status:

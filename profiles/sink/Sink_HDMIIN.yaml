@@ -10,10 +10,6 @@ dsHdmiIn:
   #dsHDMI_IN_PORT_2,          /*!< HDMI input port index for PORT 2 */
   #dsHDMI_IN_PORT_MAX         /*!< Out of range */
   numberOfPorts: 3
-  ports:
-    - 0 # dsHDMI_IN_PORT_0
-    - 1 # dsHDMI_IN_PORT_1
-    - 2 # dsHDMI_IN_PORT_2
   # HDMI_EDID_VER_14  = 0x0,   /*!< EDID version 1.4 */
   # HDMI_EDID_VER_20  = 0x01,       /*!< EDID version 2.0 */
   # HDMI_EDID_VER_MAX = 0x02,      /*!< Out of bounds */

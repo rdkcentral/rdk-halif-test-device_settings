@@ -23,6 +23,7 @@
 
 import os
 import sys
+from enum import Enum, auto
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../"))
@@ -33,6 +34,20 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
+class dsvideozoommode(Enum):
+dsVIDEO_ZOOM_NONE = 0
+dsVIDEO_ZOOM_FULL = 1
+dsVIDEO_ZOOM_LB_16_9 = 2
+dsVIDEO_ZOOM_LB_14_9 = 3
+dsVIDEO_ZOOM_CCO = 4
+dsVIDEO_ZOOM_PAN_SCAN = 5
+dsVIDEO_ZOOM_LB_2_21_1_ON_4_3 = 6
+dsVIDEO_ZOOM_LB_2_21_1_ON_16_9 = 7
+dsVIDEO_ZOOM_PLATFORM = 8
+dsVIDEO_ZOOM_16_9_ZOOM = 9
+dsVIDEO_ZOOM_PILLARBOX_4_3 = 10
+dsVIDEO_ZOOM_WIDE_4_3 = 11
+dsVIDEO_ZOOM_MAX = 12 
 
 class dsHdmiIn_test10_ZoomModeAndVerify(utHelperClass):
 
@@ -64,34 +79,18 @@ class dsHdmiIn_test10_ZoomModeAndVerify(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the test artifacts and streams listed in the test setup configuration.
-
-        This function retrieves audio streams and other necessary files and
-        saves them on the DUT (Device Under Test).
+        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
 
         Args:
-            None
+            None.
         """
-
-        # List of streams with path
-        self.testStreams = []
 
         self.deviceDownloadPath = self.cpe.get("target_directory")
 
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-
-        # Download test artifacts to device
-        url = test.get("artifacts")
+        #download test artifacts to device
+        url = self.testSetup.assets.device.test10_ZoomModeAndVerify.artifacts
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-
-        # Download test streams to device
-        url =  test.get("streams")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            for streampath in url:
-                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
-
 
     def testCleanAssets(self):
         """
@@ -104,36 +103,38 @@ class dsHdmiIn_test10_ZoomModeAndVerify(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Executes prerequisite commands listed in the test setup configuration file on the DUT.
-
-        Args:
-            None
-        """
-
-        # Run commands as part of test prerequisites
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("execute")
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
-
-    def testRunPostreiquisites(self):
-        """
-        Executes postrequisite commands listed in test-setup configuration file on the DUT.
+        Runs Prerequisite commands listed in test-setup configuration file on the dut.
 
         Args:
             None.
         """
 
-       # Run commands as part of test prerequisites
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("postcmd")
+        #Run test specific commands
+        cmds = self.testSetup.assets.device.test1_test10_ZoomModeAndVerify.execute
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def CheckDeviceStatusAndVerifyZoomMode(self, Manual=False, port_type:str=0,videozoommode:str=0,):
+    def VerifyInputselect(self, manual=False):
+        """
+        Verifies whether the particular input selected or not.
+
+        Args:
+            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
+                                     Defaults to other verification methods
+
+        Returns:
+            bool
+        """
+        if manual == True:
+            return self.testUserResponse.getUserYN("Is HdmiIn port selected? (Y/N):")
+        else :
+            #TODO: Add automation verification methods
+            return False
+
+    #TODO: Current version supports only manual verification.
+    def VerifyZoomMode(self, videozoommode:str=0):
         """
         Verifies whether the particular zoom mode selected or not.
 
@@ -144,25 +145,17 @@ class dsHdmiIn_test10_ZoomModeAndVerify(utHelperClass):
         Returns:
             bool
         """
-        if Manual == True and videozoommode == False:
-            return self.testUserResponse.getUserYN(f'Check Device is ON connected to {port_type} and press Enter')
-        elif Manual == True and videozoommode == True:
-            return self.testUserResponse.getUserYN(f'Verify Zoom Mode selected on port {port_type} and press Enter')
+        if manual == True:
+            return self.testUserResponse.getUserYN(f'Is {videozoommode} selected or not? (Y/N):')
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
-        """
-        The main test function tests Zoom Mode of Hdmi In device.
-
-        This function:
-        - Downloads necessary assets.
-        - Runs prerequisite commands.
-        - Verifies Zoom Mode Set.
+        """This function will test the video scaling of HdmiIn Ports
 
         Returns:
-            bool: Final result of the test.
+            bool
         """
 
         # Download the assets listed in test setup configuration file
@@ -176,7 +169,7 @@ class dsHdmiIn_test10_ZoomModeAndVerify(utHelperClass):
 
         self.log.testStart("test10_ZoomModeAndVerify", '1')
 
-        # Initialize the dsHdmiIn module
+        # Initialize the dsAudio module
         self.testdsHdmiIn.initialise(self.testdsHdmiIn.getDeviceType())
    
         audmix = 0      #default value false
@@ -184,31 +177,29 @@ class dsHdmiIn_test10_ZoomModeAndVerify(utHelperClass):
         topmost = 1     #Always should be true.
 
         # Loop through the supported HdmiIn ports
-        for port in self.testdsHdmiIn.getSupportedPorts():
+        for port,index in self.testdsHdmiIn.getSupportedPorts():
             self.log.stepStart(f'Select {port} Port')
             self.log.step(f'Select {port} Port')
 
-            # Check the HdmiIn device connected to is active
-            result = self.CheckDeviceStatusAndVerifyZoomMode(True,port,False)
-            self.log.stepResult(result,f'Hdmi In Device is active {result} on {port}')
-
             # Select the HdmiIn port
-            self.testdsHdmiIn.selectPort(port, audmix, videoplane, topmost)
-            self.log.step(f'Port Selcted {port}')
+            self.testdsHdmiIn.selectPort(port, index, audmix, videoplane, topmost)
 
-            #get the list of Zoom Modes
-            zoomModeList = self.testdsHdmiIn.getVideoZoomModeList()
+            self.log.step(f'Verify Selected {port} Port')
+            result = self.VerifyInputselect(True)
 
-            for zoommodeindex in range (1,len(zoomModeList)):
-                   self.testdsHdmiIn.setHdmiInZoomMode(zoomModeList[zoommodeindex])
-                   result = self.CheckDeviceStatusAndVerifyZoomMode(True,port,True)
-                   self.log.stepResult(result, f'Verified selected Zoom Mode {zoomModeList[zoommodeindex]}')
+            self.log.stepResult(result, f'HdmiIn Select Verification {port} Port')
+
+            self.log.step(f'Zoom mode {port} Port')
+
+            #Setting Zoom Mode on particular Hdmi input
+            for videozoommode in list(dsvideozoommode):
+               if videozoommode != dsvideozoommode.dsVIDEO_ZOOM_MAX:
+                   self.testdsHdmiIn.zoommode(dsvideozoommode(videozoommode).name)
+                   result = self.VerifyZoomMode(True,dsvideozoommode(videozoommode).name)
+                   self.log.stepResult(result, f'Verified the {self.testdsHdmiIn.zoommode}')
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
-
-        #Run postrequisites listed in the test setup configuration file 
-        self.testRunPostreiquisites()
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()
