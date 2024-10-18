@@ -151,9 +151,7 @@ deviceConfig:
 
 Example Test Setup configuration File: `ut/host/tests/L3_TestCases/dsAudio/dsAudio_L3_testSetup.yml`
 
-Update the artifact paths from which the binaries should be copied to the device.
-
-Set the execution paths and provide the stream paths for each test case.
+Provide the stream paths for each test case.
 
 If a test case requires multiple streams or needs to be validated using several streams, ensure that all necessary streams are added sequentially for that specific test case.
 
@@ -162,29 +160,20 @@ dsAudio:
   description: "dsAudio Device Settings test setup"
   assets:
     device:
-      defaults: &defaults
-        artifacts:
-          - "<path>/bin/hal_test"
-          - "<path>/bin/libut_control.so"
-          - "<path>/bin/Sink_AudioSettings.yaml"
-          - "<path>/bin/run.sh"
-        execute:
-          - "chmod +x /opt/HAL/dsAudio_L3/hal_test"
-          - "chmod +x /opt/HAL/dsAudio_L3/run.sh"
-          - cp -rf /usr/lib/libdshal.so /opt/HAL/dsAudio_L3/
-          - "ln -s /usr/lib/libds-hal.so /opt/HAL/dsAudio_L3/libdshal.so"
       test01_EnableDisableAndVerifyAudioPortStatus:
-        <<: *defaults
         streams:
-          - "<path>/streams/tones_string_48k_stereo.ac3"
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
       test02_PortConnectionStatus:
-        <<: *defaults
-      test25_AudioMix:
-        <<: *defaults
         streams:
-          - "<path>/streams/primary_audio_48k_2ch.ac3"
-          - "<path>/streams/system_audio_48k_2ch.wav"
-
+      test03_MS12AudioCompression:
+        streams:
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+      test04_MS12DialogueEnhancer:
+        streams:
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+      test05_MS12DolbyVolume:
+        streams:
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
 ```
 
 #### Test Suite Configuration
@@ -195,11 +184,16 @@ Update the execute command according to the device path where `HAL` binaries are
 
 ```yaml
 dsAudio:
-  description: "dsAudio Device Settings testing profile"
-  test:
-    execute: "/tmp/run.sh -p /tmp/Sink_AudioSettings.yaml"
-    type: UT-C  # Cunit tests (UT-C)
-
+    description: "dsAudio Device Settings testing profile / menu system for UT"
+    test:
+        artifacts:
+          - "../../../bin/hal_test"
+          - "../../../bin/libut_control.so"
+          - "../../../bin/run.sh"
+        execute:
+          command: "run.sh"
+          arguments: ""
+        type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
 ```
 
 ## Run Test Cases
