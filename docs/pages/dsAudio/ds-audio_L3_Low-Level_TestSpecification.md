@@ -110,7 +110,8 @@ classDiagram
     testControl <|-- ut_raft : inherits
     class ut_raft{
     }
-    ut_raft <|-- L3_TestClasses : inherits
+    ut_raft <|-- dsAudioHelperClass : inherits
+    dsAudioHelperClass <|-- L3_TestClasses : inherits
     L3_TestClasses ..> dsAudio : uses
     note for testControl "uses rackConfig.yaml and deviceConfig.yaml"
     note for dsAudio "uses platformProfile.yaml"
