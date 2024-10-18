@@ -7,6 +7,7 @@
 - [References](#references)
 - [Level 3 Test cases High Level Overview](#level-3-test-cases-high-level-overview)
 - [Level 3 Python Test Cases High Level Overview](#level-3-python-test-cases-high-level-overview)
+- [L3 Test Procedure Documentation](#l3-test-procedure-documentation)
 
 ## Overview
 
@@ -46,13 +47,13 @@ Below are top test use-case for the video port.
 
 |#|Test-case|Description|HAL APIs|Source|Sink|Streams Number|
 |-|---------|-----------|--------|------|----|--------------|
-|1|Verify the Video content Formats with callbacks|Play the pre-defined streams with different video content format(`HDR`,`HLG`,DolbyVision,..) and check the callbacks is triggered when the video content format changes|`dsVideoFormatUpdateRegisterCB()` `dsGetVideoEOTF()`|`Y`|`Y`|1,2,3,4,5|
+|1|Verify the Video content Formats with callbacks|Play the pre-defined streams with different video content format(`HDR`,`HLG`,DolbyVision,..) and check the callbacks is triggered when the video content format changes|`dsVideoFormatUpdateRegisterCB()` `dsGetVideoEOTF()`|`NA`|`Y`|1,2,3,4,5|
 |2|Check DisplayConnected|Verify the Display by enabling and disable each supported video port|`dsEnableVideoPort()` `dsIsDisplayConnected()` `dsIsVideoPortActive()`|`Y`|`Y`|1|
 |3|Select the `HDCP` Version |Select the Supported `HDCP` version and verify|`dsSetHdmiPreference()`|`Y`|`Y`|`NA`|
-|4|Verify the Resolution for source|Play the pre-defined stream and set supported resolution and verify the resolution of the TV|`dsSetResolution()`|`Y`|`NA`|1|
+|4|Verify the Resolution for source|Play the pre-defined stream and set supported resolution and verify the resolution of the TV|`dsSetResolution()`|`Y`|`NA`|`NA`|
 |5|Verify the `HDCP` status using callbacks for Source|Power off and power on TV or pug/unplug `HDMI` and Check the `HDCP` status using callbacks(i.e.UNPOWERED,AUTHENTICATED,..)|`dsEnableHDCP()`|`Y`|`NA`|`NA`|
-|6|Select video content formats for Source |Select the Supported `HDR` modes & Verify the video content formats|`dsSetForceHDRMode()`|`Y`|`NA`|1,2,3,4,5|
-|7|Resets the video output to `SDR` for Source |Play the `HDR` stream and verify the video content formats|`dsResetOutputToSDR()`|`Y`|`NA`|2|
+|6|Select video content formats for Source |Select the Supported `HDR` modes & Verify the video content formats using callbacks|`dsSetForceHDRMode()`|`Y`|`NA`|1,2,3,4,5|
+|7|Resets the video output to `SDR` for Source |Play the `HDR` stream and verify the video content formats|`dsResetOutputToSDR()`|`Y`|`NA`|1|
 |8|Select preferred color depth for Source|Select the Color depth from Supported list & verify|`dsSetPreferredColorDepth()`|`Y`|`NA`|`NA`|
 |9|sets the background color for Source |Select the background color form supported list & verify|`dsSetBackgroundColor()`|`Y`|`NA`|`NA`|
 
@@ -110,8 +111,12 @@ classDiagram
 
 - **testSetupConfig.yaml**
   - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams, setting environment variables etc.
-  - Example configuration file [dsVideoPort_L3_testSetup.yml](../../../host/tests/dsVideoPort_L3_Tests/dsVideoPort_L3_testSetup.yml)
+  - Example configuration file [dsVideoPort_L3_testSetup.yml](../../../host/tests/L3_TestCases/dsVideoPort/dsVideoPort_L3_testSetup.yml)
 
 - **testSuite.yaml**
   - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
   - Example configuration file [dsVideoPort_test_suite.yml](../../../host/tests/dsClasses/dsVideoPort_test_suite.yml)
+
+## L3 Test Procedure Documentation
+
+- [L3 test procedure doc](./ds-video-port_L3_Test-Procedure.md)

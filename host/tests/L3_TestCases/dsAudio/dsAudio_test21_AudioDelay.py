@@ -25,7 +25,7 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(dir_path+"/../")
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsAudio import dsAudioClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -33,16 +33,26 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
+class dsAudio_test21_AudioDelay(utHelperClass):
+    """
+    Test case for validating audio delay settings on the Device Under Test (DUT).
 
-    testName  = "test1_EnableDisableAndVerifyAudioPortStatus"
-    testSetupPath = dir_path + "/dsAudio_L3_testSetup.yml"
+    Attributes:
+        testName (str): Name of the test case.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Name of the module under test.
+        rackDevice (str): Identifier for the DUT.
+        delayList (list): List of audio delay values to test (in milliseconds).
+    """
+    testName  = "test21_AudioDelay"
+    testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
     moduleName = "dsAudio"
     rackDevice = "dut"
+    delayList = [0, 100, 200]
 
     def __init__(self):
         """
-        Initializes the test1_EnableDisableAndVerifyAudioPortStatus test .
+        Initializes the test21_AudioDelay test .
 
         Args:
             None.
@@ -67,14 +77,17 @@ class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
         self.testUserResponse = utUserResponse()
 
         # Get path to device profile file
-        self.deviceProfile = dir_path + "/" + self.cpe.get("test").get("profile")
+        self.deviceProfile = os.path.join(dir_path, self.cpe.get("test").get("profile"))
 
     def testDownloadAssets(self):
         """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
+        Downloads the test artifacts and streams listed in the test setup configuration.
+
+        This function retrieves audio streams and other necessary files and
+        saves them on the DUT (Device Under Test).
 
         Args:
-            None.
+            None
         """
 
         # List of streams with path
@@ -82,64 +95,78 @@ class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
 
         self.deviceDownloadPath = self.cpe.get("target_directory")
 
+        test = self.testSetup.get("assets").get("device").get(self.testName)
+
         #download test artifacts to device
-        url = self.testSetup.assets.device.test1_EnableDisableAndVerifyAudioPortStatus.artifacts
+        url = test.get("artifacts")
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
 
         #download test streams to device
-        url = self.testSetup.assets.device.test1_EnableDisableAndVerifyAudioPortStatus.streams
+        url =  test.get("streams")
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
             for streampath in url:
-                self.testStreams.append(self.deviceDownloadPath + "/" + os.path.basename(streampath))
+                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
 
+
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
         #Run test specific commands
-        cmds = self.testSetup.assets.device.test1_EnableDisableAndVerifyAudioPortStatus.execute
+        test = self.testSetup.get("assets").get("device").get(self.testName)
+        cmds = test.get("execute");
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyAudio(self, manual=False):
+    def testVerifyAudioDelay(self, port, delay, manual=False):
         """
-        Verifies whether the audio is fine or not.
+        Verifies whether the specified audio delay is correctly applied.
 
         Args:
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
+            port (str): The audio port to verify.
+            delay (float): The delay value (in milliseconds) to check.
+            manual (bool, optional): Flag indicating whether to perform manual verification.
+                                     Defaults to False (automated methods).
 
         Returns:
-            bool
+            bool: True if the audio delay is confirmed, False otherwise.
         """
         if manual == True:
-            return self.testUserResponse.getUserYN("Is audio playing on the port? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has Audio Delay {delay} applied to the {port}? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
-        """This function will test the Audio Ports by enabling and disabling the ports
+        """Executes the audio delay test logic.
+
+        This function performs the following steps:
+        - Downloads necessary assets.
+        - Runs prerequisite commands.
+        - Initializes the dsAudio module.
+        - Plays the audio stream
+        - Sets various audio delay on all supported audio ports.
+        - Cleans up the downloaded assets after testing.
 
         Returns:
-            bool
+            bool: The result of the final audio verification.
         """
 
         # Download the assets listed in test setup configuration file
@@ -148,44 +175,45 @@ class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
         # Run Prerequisites listed in the test setup configuration file
         self.testRunPrerequisites()
 
-        # Start the stream playback
-        self.testPlayer.play(self.testStreams[0])
-
         # Create the dsAudio class
         self.testdsAudio = dsAudioClass(self.deviceProfile, self.hal_session)
 
-        self.log.testStart("test1_EnableDisableAndVerifyAudioPortStatus", '1')
+        self.log.testStart(self.testName, '1')
 
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        # Loop through the supported audio ports
-        for port,index in self.testdsAudio.getSupportedPorts():
-            self.log.stepStart(f'Enable {port} Port')
-            self.log.step(f'Enable {port} Port')
+        for stream in self.testStreams:
+            # Start the stream playback
+            self.testPlayer.play(stream)
 
-            # Enable the audio port
-            self.testdsAudio.enablePort(port, index)
+            # Loop through the supported audio ports
+            for port,index in self.testdsAudio.getSupportedPorts():
+                if "ARC" in port or "SPDIF" in port or "HDMI" in port:
+                    # Enable the audio port
+                    self.testdsAudio.enablePort(port, index)
 
-            self.log.step(f'Verify {port} Port')
-            result = self.testVerifyAudio(True)
+                    for delay in self.delayList:
+                        self.log.stepStart(f'Audio Delay {delay} Port:{port} Index:{index} Stream:{stream}')
 
-            self.log.stepResult(result, f'Audio Verification {port} Port')
-            self.log.stepStart(f'Disable {port} Port')
+                        # Set the Audio Delay
+                        self.testdsAudio.setAudioDelay(port, index, delay)
 
-            # Disable the audio port
-            self.testdsAudio.disablePort(port, index)
+                        result = self.testVerifyAudioDelay(port, delay, True)
 
-            self.log.step(f'Verify {port} Port')
-            result = self.testVerifyAudio(True)
+                        self.log.stepResult(result, f'Audio Delay {delay} Port:{port} Index:{index} Stream:{stream}')
 
-            self.log.stepResult(not result, f'Audio Verification {port} Port')
+                    # Disable the audio port
+                    self.testdsAudio.disablePort(port, index)
 
-        # Stop the stream playback
-        self.testPlayer.stop()
+            # Stop the stream playback
+            self.testPlayer.stop()
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
+
+        # Terminate dsAudio Module
+        self.testdsAudio.terminate()
 
         # Delete the dsAudio class
         del self.testdsAudio
@@ -193,5 +221,5 @@ class dsAudio_test1_EnableDisableAndVerifyAudioPortStatus(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test1_EnableDisableAndVerifyAudioPortStatus()
+    test = dsAudio_test21_AudioDelay()
     test.run(False)
