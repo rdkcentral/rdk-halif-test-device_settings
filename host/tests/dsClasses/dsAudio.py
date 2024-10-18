@@ -21,7 +21,7 @@
 # *
 #* ******************************************************************************
 
-import yaml
+import subprocess
 import os
 import sys
 from enum import Enum, auto
@@ -34,6 +34,7 @@ sys.path.append(os.path.join(dir_path, "../"))
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utSuiteNavigator import UTSuiteNavigatorClass
 from raft.framework.plugins.ut_raft.interactiveShell import InteractiveShell
+from raft.framework.plugins.ut_raft.utBaseUtils import utBaseUtils
 
 class dsAudioPortType(Enum):
     """Enumeration for different audio port types."""
@@ -78,7 +79,7 @@ class dsAudioClass():
     menuConfig = os.path.join(dir_path, "dsAudio_test_suite.yml")
     testSuite = "L3 dsAudio"
 
-    def __init__(self, deviceProfilePath:str, session=None ):
+    def __init__(self, deviceProfilePath:str, session=None, devicePath="/tmp"):
         """
         Initializes the dsAudioClass instance with configuration settings.
 
@@ -92,8 +93,13 @@ class dsAudioClass():
         # Load configurations for device profile and menu
         self.deviceProfile = ConfigRead( deviceProfilePath, self.moduleName)
         self.suitConfig    = ConfigRead(self.menuConfig, self.moduleName)
-        self.utMenu        = UTSuiteNavigatorClass(self.menuConfig, self.moduleName, session)
+        self.utMenu        = UTSuiteNavigatorClass(self.menuConfig, self.moduleName, session, devicePath)
         self.testSession   = session
+        self.utils         = utBaseUtils()
+
+        for artifact in self.suitConfig.test.artifacts:
+            filePath = os.path.join(dir_path, artifact)
+            self.utils.scpCopy(self.testSession, filePath, devicePath)
 
         # Start the user interface menu
         self.utMenu.start()
