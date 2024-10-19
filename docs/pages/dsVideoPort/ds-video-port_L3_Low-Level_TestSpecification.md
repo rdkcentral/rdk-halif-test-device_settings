@@ -7,6 +7,7 @@
 - [References](#references)
 - [Level 3 Test cases High Level Overview](#level-3-test-cases-high-level-overview)
 - [Level 3 Python Test Cases High Level Overview](#level-3-python-test-cases-high-level-overview)
+- [L3 Test Procedure Documentation](#l3-test-procedure-documentation)
 
 ## Overview
 
@@ -110,8 +111,12 @@ classDiagram
 
 - **testSetupConfig.yaml**
   - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams, setting environment variables etc.
-  - Example configuration file [dsVideoPort_L3_testSetup.yml](../../../host/tests/dsVideoPort_L3_Tests/dsVideoPort_L3_testSetup.yml)
+  - Example configuration file [dsVideoPort_L3_testSetup.yml](../../../host/tests/L3_TestCases/dsVideoPort/dsVideoPort_L3_testSetup.yml)
 
 - **testSuite.yaml**
   - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
   - Example configuration file [dsVideoPort_test_suite.yml](../../../host/tests/dsClasses/dsVideoPort_test_suite.yml)
+
+## L3 Test Procedure Documentation
+
+- [L3 test procedure doc](./ds-video-port_L3_Test-Procedure.md)
