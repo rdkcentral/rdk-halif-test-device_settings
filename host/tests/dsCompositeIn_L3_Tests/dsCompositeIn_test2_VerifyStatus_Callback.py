@@ -132,7 +132,7 @@ class dsCompositeIn_test2_VerifyStatus_Callback(utHelperClass):
             bool
         """
         if manual == True:
-            return self.testUserResponse.getUserYN("Check if CompositeIn source is connected to {port_type} and press Enter:")
+            return self.testUserResponse.getUserYN(f"Check if CompositeIn source is connected to {port_type} and press Y:")
         else :
             #TODO: Add automation verification methods
             return False
@@ -156,37 +156,37 @@ class dsCompositeIn_test2_VerifyStatus_Callback(utHelperClass):
 
         self.log.testStart("test2_VerifyStatus_Callback", '1')
 
-        # Initialize the ddsCompositeIn module
-        self.dsCompositeIn.initialise()
+        # Initialize the dsCompositeIn module
+        self.testdsCompositeIn.initialise()
 
         # Loop through the supported ports
-        for port in self.dsCompositeIn.getSupportedPorts():
+        for port in self.testdsCompositeIn.getSupportedPorts():
             self.log.stepStart(f'Select {port} Port')
             self.log.step(f'Select {port} Port')
 
             portstr = f"dsCOMPOSITE_IN_PORT_{port}"
             result = self.CheckDeviceStatus(True, portstr)
-            self.log.stepResult(result,f'CompositeIn Device is connected {result} on {portstr}')
+            self.log.stepResult(result,f'CompositeIn Device connected {result} on {portstr}')
           
-            self.dsCompositeIn.selectPort(port)
-            self.log.step(f'Port Selcted {port}')
+            self.testdsCompositeIn.selectPort(portstr)
+            self.log.step(f'Port Selcted {portstr}')
                 
-            status = self.dsCompositeIn.getPortCallbackStatus()
-            if status[1] == portstr:
-               result = True    
-               self.log.stepResult(result,f'Port Status ispresented:{status[0]} activeport:{status[1]} found in Callback')
+            status = self.testdsCompositeIn.getPortCallbackStatus()
+            result = False
+            if status:
+                if status[1] == portstr:
+                    result = True
+                    self.log.stepResult(result,f'Port Status ispresented:{status[0]} activeport:{status[1]} found in Callback')
             else:
-               result = False
-               self.log.stepResult(result,f'Port Status ispresented:{status[0]} activeport:{status[1]} found in Callback')
-
+                self.log.stepResult(result,f'Port Status Callback is not found')
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
 
-        # Terminate dsCompositeIn Module
-        self.dsCompositeIn.terminate()
+        # Terminate testdsCompositeIn Module
+        self.testdsCompositeIn.terminate()
 
-        # Delete the dsCompositeIn class
+        # Delete the testdsCompositeIn class
         del self.testdsCompositeIn
 
         return result

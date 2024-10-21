@@ -80,12 +80,12 @@ class dsCompositeIn_test4_VerifySignal_Callback(utHelperClass):
         test = self.testSetup.get("assets").get("device").get(self.testName)
 
         # Download test artifacts to device
-        url = test.get("artifacts")
+        url = self.testSetup.assets.device.test4_VerifySignal_Callback.artifacts
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
 
         # Download test streams to device
-        url =  test.get("streams")
+        url = self.testSetup.assets.device.test4_VerifySignal_Callback.streams
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
             for streampath in url:
@@ -109,23 +109,7 @@ class dsCompositeIn_test4_VerifySignal_Callback(utHelperClass):
         """
 
         # Run commands as part of test prerequisites
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("execute")
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
-
-    def testRunPostreiquisites(self):
-        """
-        Executes postrequisite commands listed in test-setup configuration file on the DUT.
-
-        Args:
-            None.
-        """
-
-       # Run commands as part of test prerequisites
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("postcmd")
+        cmds = self.testSetup.assets.device.test4_VerifySignal_Callback.execute
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
@@ -144,7 +128,7 @@ class dsCompositeIn_test4_VerifySignal_Callback(utHelperClass):
             bool
         """
         if manual == True:
-            return self.testUserResponse.getUserYN("Check if CompositeIn source is connected to {port_type} and press Enter:")
+            return self.testUserResponse.getUserYN(f"Check if CompositeIn source is connected to {port_type} and press Y:")
         else :
             #TODO: Add automation verification methods
             return False
@@ -179,30 +163,26 @@ class dsCompositeIn_test4_VerifySignal_Callback(utHelperClass):
         # Loop through the supported CompositeIn ports
         for port in self.testdsCompositeIn.getSupportedPorts():
             self.log.stepStart(f'Select {port} Port')
-            self.log.step(f'Select {port} Port')
 
             # Check the CompositeIn device connected to is active
             portstr = f"dsCOMPOSITE_IN_PORT_{port}"
             result = self.CheckDeviceStatus(True,portstr)
-            self.log.stepResult(result,f'CompositeIn Device is connected {result} on {portstr}')
+            self.log.stepResult(result,f'CompositeIn Device connected {result} on {portstr}')
             
-            self.testdsCompositeIn.selectPort(port)
-            self.log.step(f'Port Selcted {port}')
+            self.testdsCompositeIn.selectPort(portstr)
+            self.log.step(f'Port Selcted {portstr}')
 
             status = self.testdsCompositeIn.getSignalChangeCallbackStatus()
             result = False
-            if port == status[0]:
-               result = True
-               self.log.stepResult(result,f'Signal status {status[1]} found in Callback')
+            if status:
+                if portstr == status[0]:
+                    result = True
+                    self.log.stepResult(result,f'Signal status {status[1]} found in Callback')
             else:
-               result = False
                self.log.stepResult(result,f'Signal status not found in Callback found')
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
-
-        #Run postrequisites listed in the test setup configuration file 
-        self.testRunPostreiquisites()
 
         # Terminate testdsCompositeIn Module
         self.testdsCompositeIn.terminate()
