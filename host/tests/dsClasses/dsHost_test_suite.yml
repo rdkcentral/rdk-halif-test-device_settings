@@ -15,8 +15,8 @@ dsHost:  # Prefix must always exist
             2:
                 name: "L3 dsHost"
                 tests:
-                  - "Host Init"
-                  - "Host Term"
+                  - "Initialize dsHost"
+                  - "Terminate dsHost"
                   - "Get CPU Temperature"
                   - "Get SoC ID"
-                  - "Get HOST EDID"
+                  - "Get Host EDID"
