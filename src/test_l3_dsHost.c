@@ -285,6 +285,7 @@ void test_l3_dsHost_hal_Term(void)
 
 
 static UT_test_suite_t * pSuite = NULL;
+static UT_test_suite_t * pSuite_SOB_Only = NULL;
 
 /**
  * @brief Register the main tests for this module
@@ -294,8 +295,13 @@ static UT_test_suite_t * pSuite = NULL;
 int test_l3_dsHost_register(void)
 {
     // Create the test suite
-    pSuite = UT_add_suite("[L3 Devicesettings Host Functions] ", NULL, NULL);
+    pSuite = UT_add_suite("[L3 dsHost] ", NULL, NULL);
     if (pSuite == NULL)
+    {
+        return -1;
+    }
+    pSuite_SOB_Only = UT_add_suite("[L3 dsHost SOB Only]", NULL, NULL);
+    if (pSuite_SOB_Only == NULL)
     {
         return -1;
     }
@@ -304,7 +310,7 @@ int test_l3_dsHost_register(void)
     UT_add_test( pSuite, "Initialize dsHost", test_l3_dsHost_hal_Init);
     UT_add_test( pSuite, "Get CPU Temperature", test_l3_dsHost_hal_get_Temperature);
     UT_add_test( pSuite, "Get SoC ID", test_l3_dsHost_hal_get_SocID);
-    UT_add_test( pSuite, "Get Host EDID", test_l3_dsHost_hal_get_hostEdid);
+    UT_add_test( pSuite_SOB_Only, "Get Host EDID", test_l3_dsHost_hal_get_hostEdid);
     UT_add_test( pSuite, "Terminate dsHost", test_l3_dsHost_hal_Term);
 
     return 0;
