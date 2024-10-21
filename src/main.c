@@ -70,8 +70,6 @@ extern int UT_register_tests(void);
 
 int main(int argc, char** argv)
 {
-    int registerReturn = 0;
-
     /* Register tests as required, then call the UT-main to support switches and triggering */
     UT_init(argc, argv);
 
@@ -82,16 +80,7 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    /* Check if tests are registered successfully */
-    /* FIXME: Why would register fail, that's a FATAL error in the register function that should assert
-                Therefore you can remove the check from here, and just make it void
-    */
-    registerReturn = UT_register_tests();
-    if (registerReturn == -1)
-    {
-        UT_FAIL(" UT_register_tests() returned failure");
-        return -1;
-    }
+    UT_register_tests();
 
     /* Begin test executions */
     UT_run_tests();
