@@ -34,14 +34,14 @@ from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsCompositeIn_test3_ScaleAndVerify_Video(utHelperClass):
 
-    testName  = "dsCompositeIn_test3_ScaleAndVerify_Video"
+    testName  = "test3_ScaleAndVerify_Video"
     testSetupPath = dir_path + "/dsCompositeIn_L3_testSetup.yml"
     moduleName = "dsCompositeIn"
     rackDevice = "dut"
 
     def __init__(self):
         """
-        Initializes the test9_ScalevideoAndVerify test .
+        Initializes the test3_ScaleAndVerify_Video test .
 
         Args:
             None.
@@ -51,8 +51,16 @@ class dsCompositeIn_test3_ScaleAndVerify_Video(utHelperClass):
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
+        # Open Session for player
+        #self.player_session = self.dut.getConsoleSession("ssh_player")
+
         # Open Session for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
+
+        #player = self.cpe.get("test").get("player")
+
+        # Create player Class
+        #self.testPlayer = utPlayer(self.player_session, player)
 
          # Create user response Class
         self.testUserResponse = utUserResponse()
@@ -76,19 +84,17 @@ class dsCompositeIn_test3_ScaleAndVerify_Video(utHelperClass):
 
         self.deviceDownloadPath = self.cpe.get("target_directory")
 
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-
-        # Download test artifacts to device
-        url = test.get("artifacts")
+        #download test artifacts to device
+        url = self.testSetup.assets.device.test3_ScaleAndVerify_Video.artifacts
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
 
-        # Download test streams to device
-        url =  test.get("streams")
+        #download test streams to device
+        url = self.testSetup.assets.device.test3_ScaleAndVerify_Video.streams
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
             for streampath in url:
-                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
+                self.testStreams.append(self.deviceDownloadPath + "/" + os.path.basename(streampath))
 
 
     def testCleanAssets(self):
@@ -108,24 +114,8 @@ class dsCompositeIn_test3_ScaleAndVerify_Video(utHelperClass):
             None
         """
 
-        # Run commands as part of test prerequisites
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("execute")
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
-
-    def testRunPostreiquisites(self):
-        """
-        Executes postrequisite commands listed in test-setup configuration file on the DUT.
-
-        Args:
-            None.
-        """
-
-       # Run commands as part of test prerequisites
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("postcmd")
+        #Run test specific commands
+        cmds = self.testSetup.assets.device.test3_ScaleAndVerify_Video.execute
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
@@ -143,9 +133,9 @@ class dsCompositeIn_test3_ScaleAndVerify_Video(utHelperClass):
             bool
         """
         if manual == True and videoscale == False:
-            return self.testUserResponse.getUserYN("Check CompositeIn source device connected on port {port_type} and press Enter")
+            return self.testUserResponse.getUserYN(f"Check CompositeIn source device connected&active on port {port_type} and press Y:")
         elif manual == True and videoscale == True:
-            return self.testUserResponse.getUserYN("Check video scaled on {port_type} and press Enter")
+            return self.testUserResponse.getUserYN(f"Check video scaled on {port_type} and press (Y/N)")
         else:
             #TODO: Add automation verification methods
             return False
@@ -175,34 +165,29 @@ class dsCompositeIn_test3_ScaleAndVerify_Video(utHelperClass):
         self.log.testStart("test3_ScaleAndVerify_Video", '1')
 
         # Initialize the dsCompositeIn module
-        self.testdsCompositeIn.initialise(self.testdsCompositeIn.getDeviceType())
+        self.testdsCompositeIn.initialise()
 
         # x-coordiante, y-coordinate, width, height list
-        videoScale_argList = [[0,0,720,576], [500,500,500,500], [500,500,1000,1000],[1000,1000,2000,2000]]
+        videoScale_argList = [[0,0,720,576], [500,500,500,500], [500,500,1000,1000]]
         # Loop through the supported CompositeIn ports
-        for port,index in self.testdsCompositeIn.getSupportedPorts():
+        for port in self.testdsCompositeIn.getSupportedPorts():
             self.log.stepStart(f'Select {port} Port')
-            self.log.step(f'Select {port} Port')
 
             # Check the ComposteIn device connected to is active
             portstr = f"dsCOMPOSITE_IN_PORT_{port}"
-            result = self.CheckDeviceStatusAndVerifyVideoScale(True,portstr,False)
-            self.log.stepResult(result,f'CompositeIn Device is connected {result} on {portstr}')
-
             # Select the ComposteIn port
-            self.testdsCompositeIn.selectPort(port)
-            self.log.step(f'Selected port {port}')
+            result = self.CheckDeviceStatusAndVerifyVideoScale(True,portstr,False)
+            self.log.stepResult(result,f'CompositeIn Device connected {result} on {portstr}')
+            self.testdsCompositeIn.selectPort(portstr)
+
             # video scaling of ComposteIn port
             for xcord, ycord, width, height in videoScale_argList:
-                scalevideo = self.testdsCompositeIn.scaleVdieo(xcord, ycord, width, height)
-                result = self.CheckDeviceStatusAndVerifyVideoScale(True,port,True)
-                self.log.stepResult(result, f'CompositeIn Video Scale Verification {port} Port')
+                self.testdsCompositeIn.scaleVideo(xcord, ycord, width, height)
+                result = self.CheckDeviceStatusAndVerifyVideoScale(True,portstr,True)
+                self.log.stepResult(result, f'CompositeIn Video Scale Verification {portstr} Port')
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
-
-        #Run postrequisites listed in the test setup configuration file 
-        self.testRunPostreiquisites()
 
         # Terminate dsCompositeIn Module
         self.testdsCompositeIn.terminate()

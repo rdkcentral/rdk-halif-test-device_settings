@@ -61,12 +61,12 @@ class dsCompositeInClass():
             return match.group(1)
         return None
 
-    def initialise(self, device_type:int=0):
+    def initialise(self):
         """
         Initializes the device settings CompositeIn module.
 
         Args:
-            device_type (int, optional): 0 - sink device, 1 - source device. Defaults to sink.
+            None
 
         Returns:
             None
@@ -96,11 +96,12 @@ class dsCompositeInClass():
             list: A list of ports.
         """
 
-        ports = self.deviceProfile.get("ports")
-        if not ports:
-            return []  # Handle empty ports list
+        portList = []
+        portnum = self.deviceProfile.get("composite_input_configurations").get("number_of_ports")
+        for i in range(0, portnum):
+            portList.append(i)
 
-        return ports
+        return portList
 
     def getConnectionCallbackStatus(self):
         """
@@ -201,7 +202,7 @@ class dsCompositeInClass():
         """
         result = self.utMenu.select( self.testSuite, "Get status of ports")
 
-    def selectPort(self, compositein_port:int):
+    def selectPort(self, compositein_port:str=0):
         """
         Enables the compositeIn port.
 
@@ -213,7 +214,7 @@ class dsCompositeInClass():
         """
         promptWithAnswers = [
                 {
-                    "query_type": "direct",
+                    "query_type": "list",
                     "query": "Enter the port to select:",
                     "input": compositein_port
                 }
@@ -238,22 +239,22 @@ class dsCompositeInClass():
                 {
                     "query_type": "direct",
                     "query": "Enter the x coordinate to scale:",
-                    "input": xcord
+                    "input": str(xcord)
                 },
                 {
                     "query_type": "direct",
                     "query": "Enter the y coordinate to scale:",
-                    "input": ycord
+                    "input": str(ycord)
                 },
                 {
                     "query_type": "direct",
                     "query": "Enter the width coordinate to scale:",
-                    "input": width
+                    "input": str(width)
                 },
                 {
                     "query_type": "direct",
                     "query": "Enter the height coordinate to scale:",
-                    "input": height
+                    "input": str(height)
                 }
         ]
 

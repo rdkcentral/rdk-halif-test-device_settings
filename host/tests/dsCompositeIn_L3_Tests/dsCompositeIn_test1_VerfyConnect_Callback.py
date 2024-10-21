@@ -26,7 +26,7 @@ import sys
 import re
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(dir_path+"/../")
+sys.path.append(os.path.join(dir_path, "../"))
 
 from dsClasses.dsCompositeIn import dsCompositeInClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -119,7 +119,7 @@ class dsCompositeIn_test1_VerifyConnect_Callback(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testPlugUnplugtCompositeIn(self, Connect:False, manual=False):
+    def testPlugUnplugtCompositeIn(self, Connect:False, manual=False, port_type:str=0):
         """
         Verifies whether the compositeIn connected or not.
 
@@ -133,9 +133,10 @@ class dsCompositeIn_test1_VerifyConnect_Callback(utHelperClass):
         """
         if manual == True:
             if Connect == True:
-                return self.testUserResponse.getUserYN("Connect the CompositeIn source and press Enter:")
+                return self.testUserResponse.getUserYN(f"Connect the compositeIn source device to Port {port_type} and press (Y/N):")
+
             else :
-                return self.testUserResponse.getUserYN("Disconnect the CompositeIn source and press Enter:")
+                return self.testUserResponse.getUserYN(f"Disconnect the compositeIn source device to Port {port_type} and press (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
@@ -160,42 +161,43 @@ class dsCompositeIn_test1_VerifyConnect_Callback(utHelperClass):
         self.log.testStart("test1_VerifyConnect_Callback", '1')
 
         # Initialize the ddsCompositeIn module
-        self.dsCompositeIn.initialise()
+        self.testdsCompositeIn.initialise()
 
         # Loop through the supported ports
-        for port in self.dsCompositeIn.getSupportedPorts():
-            self.log.stepStart(f'Connect Status Test for {port} Port')
+        for port in self.testdsCompositeIn.getSupportedPorts():
+            self.log.stepStart(f'Connect Status Test for Port {port}')
 
-            result = self.testPlugUnplugtCompositeIn(True,True)
+            portstr = f"dsCOMPOSITE_IN_PORT_{port}"
+            result = self.testPlugUnplugtCompositeIn(True,True, portstr)
 
-            status = self.dsCompositeIn.getConnectionCallbackStatus()
+            status = self.testdsCompositeIn.getConnectionCallbackStatus()
             result = False
             if status:
-                if port == status[0] and status[1]:
+                if portstr == status[0] and status[1]:
                     result = True
 
-            self.log.stepResult(result, f'Connect Status Test for {port} Port')
+            self.log.stepResult(result, f'Connect Status Test for Port {portstr}')
 
-            self.log.stepStart(f'Disconnect Status Test for {port} Port')
+            self.log.stepStart(f'Disconnect Status Test for Port {portstr}')
 
-            result = self.testPlugUnplugtCompositeIn(False,True)
+            result = self.testPlugUnplugtCompositeIn(False,True, portstr)
 
-            status = self.dsCompositeIn.getConnectionCallbackStatus()
+            status = self.testdsCompositeIn.getConnectionCallbackStatus()
             result = False
             if status:
-                if port == status[0] and not status[1]:
+                if portstr == status[0] and not status[1]:
                     result = True
 
-            self.log.stepResult(result, f'Disconnect Status Test for {port} Port')
+            self.log.stepResult(result, f'Disconnect Status Test for Port {portstr}')
 
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
 
-        # Terminate dsCompositeIn Module
-        self.dsCompositeIn.terminate()
+        # Terminate testdsCompositeIn Module
+        self.testdsCompositeIn.terminate()
 
-        # Delete the dsCompositeIn class
+        # Delete the testdsCompositeIn class
         del self.testdsCompositeIn
 
         return result
