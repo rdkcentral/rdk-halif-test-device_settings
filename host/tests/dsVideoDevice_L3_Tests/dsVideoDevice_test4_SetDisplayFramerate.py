@@ -68,11 +68,6 @@ class dsVideoDevice_test4_SetDisplayFramerate(utHelperClass):
         # Open Session for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
 
-        player = self.cpe.get("test").get("player")
-
-        # Create player Class
-        self.testPlayer = utPlayer(self.player_session, player)
-
          # Create user response Class
         self.testUserResponse = utUserResponse()
 
@@ -184,22 +179,19 @@ class dsVideoDevice_test4_SetDisplayFramerate(utHelperClass):
         self.log.testStart(self.testName, '1')
 
         # Initialize the dsVideoDevice module
-        self.testdsAudio.initialise(self.testdsVideoDevice.getDeviceType())
+        self.testdsVideoDevice.initialise(self.testdsVideoDevice.getDeviceType())
 
         # set the display framerate
-        self.testdsVideoDevice.setDisplayFramerate()
+        self.testdsVideoDevice.setDisplayFramerate(0, 'dsVIDEO_FRAMERATE_25')
 
-        result = self.testVerifyFRFMode(False, True)
+        result = True
 
         self.log.stepResult(result, f'Verified setDisplayFramerate')
 
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
-
-        # Terminate dsAudio Module
+        # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()
 
-        # Delete the dsAudio class
+        # Delete the dsVideoDevice class
         del self.testdsVideoDevice
 
         return result

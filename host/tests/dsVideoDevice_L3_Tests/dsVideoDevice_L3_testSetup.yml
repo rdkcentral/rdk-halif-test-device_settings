@@ -5,11 +5,26 @@ dsVideoDevice:  # Prefix must always exist
   description: "dsVideoDevice Device Settings test setup"
   assets:
     device:
-      test1_SetZoomModeAndVerify:
-        artifacts: #list of artifacts to be copied to device
-        execute: #list of commands to be executed on device
-        streams: #list of streams to be copied to device
-      test2_SetDisplayFrameRateAndVerify:
+      defaults: &defaults
         artifacts:
+          - "http://localhost:8000/bin/hal_test"
+          - "http://localhost:8000/bin/libut_control.so"
+          - "http://localhost:8000/profiles/source/Source_VideoDevice.yaml"
+          - "http://localhost:8000/bin/run.sh"
         execute:
+          - "chmod +x /opt/karthi/hal_test"
+          - "chmod +x /opt/karthi/run.sh"
+          - "ln -s /usr/lib/libds-hal.so /opt/karthi/libdshal.so"
+        streams:
+      test3_ZoomMode:
+        <<: *defaults
+        streams:
+      test4_SetDisplayFramerate:
+        <<: *defaults
+        streams:
+      test5_FRFMode:
+        <<: *defaults
+        streams:
+      test6_VideoCodingFormats:
+        <<: *defaults
         streams:
