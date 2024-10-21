@@ -29,7 +29,7 @@ import re
 
 # Add parent outside of the class directory
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(dir_path+"/../")
+sys.path.append(os.path.join(dir_path, "../"))
 
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utSuiteNavigator import UTSuiteNavigatorClass
@@ -39,7 +39,7 @@ from raft.framework.plugins.ut_raft.interactiveShell import InteractiveShell
 class dsVideoDeviceClass():
 
     moduleName = "dsVideoDevice"
-    menuConfig =  dir_path + "/dsVideoDevice_test_suite.yml"
+    menuConfig =  os.path.join(dir_path, "dsVideoDevice_test_suite.yml")
     testSuite = "L3 dsVideoDevice"
 
     """
@@ -52,6 +52,7 @@ class dsVideoDeviceClass():
         Initializes the dsVideodevice class function.
         """
         self.deviceProfile = ConfigRead( deviceProfilePath, self.moduleName)
+        self.suitConfig    = ConfigRead(self.menuConfig, self.moduleName)
         self.utMenu        = UTSuiteNavigatorClass(self.menuConfig, self.moduleName, session)
         self.testSession   = session
         self.utMenu.start()
@@ -72,8 +73,14 @@ class dsVideoDeviceClass():
         Returns:
             None
         """
-        
-        result = self.utMenu.select( self.testSuite, "VideoDevice_Init")
+        promptWithAnswers = [
+                {
+                    "query_type": "direct",
+                    "query": "Select Device Type[0: Sink, 1: Source]:",
+                    "input": str(device_type)
+                }
+        ]
+        result = self.utMenu.select( self.testSuite, "VideoDevice_Init",promptWithAnswers)
 
     def terminate(self):
         """
@@ -87,7 +94,7 @@ class dsVideoDeviceClass():
         """
         result = self.utMenu.select(self.testSuite, "VideoDevice_Term")
 
-    def setZoomMode(self):
+    def setZoomMode(self, device:int=0, mode:str=0):
         """
         sets the zoom mode.
 
@@ -99,20 +106,20 @@ class dsVideoDeviceClass():
         """
         promptWithAnswers = [
                 {
-                    "query_type": "list",
+                    "query_type": "direct",
                     "query": "Select the Video Device:",
-                    "input": 0
+                    "input": str(device)
                 },
                 {
                     "query_type": "list",
-                    "query": "Select the Zoom mode:",
-                    "input": 2
+                    "query": " Select the Zoom mode:",
+                    "input": mode
                 }
         ]
 
         result = self.utMenu.select(self.testSuite, "SetZoomMode", promptWithAnswers)
 
-    def setDisplayFramerate(self):
+    def setDisplayFramerate(self, device:int=0, framerate:str=0):
         """
         Sets display framerate.
 
@@ -124,20 +131,20 @@ class dsVideoDeviceClass():
         """
         promptWithAnswers = [
                 {
-                    "query_type": "list",
+                    "query_type": "direct",
                     "query": "Select the Video Device:",
-                    "input": 0
+                    "input": str(device)
                 },
                 {
                     "query_type": "list",
-                    "query": "Select the Display Framerate :",
-                    "input": 3
+                    "query": " Select the Display Framerate :",
+                    "input": str(framerate)
                 }
         ]
 
         result = self.utMenu.select(self.testSuite, "SetDisplayFramerate", promptWithAnswers)
 
-    def setFRFMode(self):
+    def setFRFMode(self, device:int=0, mode:str=0):
         """
         Sets display FRF mode.
 
@@ -149,20 +156,20 @@ class dsVideoDeviceClass():
         """
         promptWithAnswers = [
                 {
-                    "query_type": "list",
+                    "query_type": "device",
                     "query": "Select the Video Device:",
-                    "input": 0
+                    "input": str(device)
                 },
                 {
                     "query_type": "list",
-                    "query": "Select the Display FRF Mode :",
-                    "input": 1
+                    "query": " Select the Display FRF Mode :",
+                    "input": str(mode)
                 }
         ]
 
         result = self.utMenu.select(self.testSuite, "SetFRFMode", promptWithAnswers)
 
-    def getVideoCodecInfo(self):
+    def getVideoCodecInfo(self,device:int=0,codec:str=0):
         """
         Gets the Video codec information.
 
@@ -174,21 +181,21 @@ class dsVideoDeviceClass():
         """
         promptWithAnswers = [
                 {
-                    "query_type": "list",
+                    "query_type": "direct",
                     "query": "Select the Video Device:",
-                    "input": 0
+                    "input": str(device)
                 },
                 {
                     "query_type": "list",
-                    "query": "Select the Codec for Info :",
-                    "input": 1
+                    "query": " Select the Codec for Info :",
+                    "input": str(codec)
                 }
         ]
 
         result = self.utMenu.select(self.testSuite, "GetVideoCodecInfo", promptWithAnswers)
 
         
-    def getSupportedVideoCodingFormat(self):
+    def getSupportedVideoCodingFormat(self,device:int=0):
         """
         Gets the Supported VideoCoding Format.
 
@@ -200,15 +207,15 @@ class dsVideoDeviceClass():
         """
         promptWithAnswers = [
                 {
-                    "query_type": "list",
+                    "query_type": "direct",
                     "query": "Select the Video Device:",
-                    "input": 0
+                    "input": str(device)
                 }
         ]
 
         result = self.utMenu.select(self.testSuite, "GetSupportedVideoCodingFormat", promptWithAnswers)
 
-    def getHDRCapabilities(self):
+    def getHDRCapabilities(self,device:int=0):
         """
         Gets the HDR capabilities.
 
@@ -220,15 +227,15 @@ class dsVideoDeviceClass():
         """
         promptWithAnswers = [
                 {
-                    "query_type": "list",
+                    "query_type": "direct",
                     "query": "Select the Video Device:",
-                    "input": 0
+                    "input": str(device)
                 }
         ]
 
         result = self.utMenu.select(self.testSuite, "GetHDRCapabilities", promptWithAnswers)
 
-    def getFRFMode(self):
+    def getFRFMode(self, device:int=0):
         """
         Gets the FRF mode.
 
@@ -240,16 +247,16 @@ class dsVideoDeviceClass():
         """
         promptWithAnswers = [
                 {
-                    "query_type": "list",
+                    "query_type": "direct",
                     "query": "Select the Video Device:",
-                    "input": 0
+                    "input": str(device)
                 }
         ]
 
         result = self.utMenu.select(self.testSuite, "dsGetFRFMode", promptWithAnswers)
 
 
-    def getCurrentDisplayframerate(self):
+    def getCurrentDisplayframerate(self,device:int=0):
         """
         Gets the current display framerate.
 
@@ -261,15 +268,15 @@ class dsVideoDeviceClass():
         """
         promptWithAnswers = [
                 {
-                    "query_type": "list",
+                    "query_type": "direct",
                     "query": "Select the Video Device:",
-                    "input": 0
+                    "input": str(device)
                 }
         ]
 
         result = self.utMenu.select(self.testSuite, "GetCurrentDisplayframerate", promptWithAnswers)
 
-    def getZoomMode(self):
+    def getZoomMode(self,device:int=0):
         """
         Gets the Zoom mode.
 
@@ -281,31 +288,15 @@ class dsVideoDeviceClass():
         """
         promptWithAnswers = [
                 {
-                    "query_type": "list",
+                    "query_type": "direct",
                     "query": "Select the Video Device:",
-                    "input": 0
+                    "input": str(device)
                 }
         ]
 
         result = self.utMenu.select(self.testSuite, "GetZoomMode", promptWithAnswers)
 
 
-    def getVideoDevice(self):
-        """
-        Returns a list of video devices.
-
-        Args:
-            None
-
-        Returns:
-            list: A list of tuples containing the video devices.
-        """
-
-        devices = self.deviceProfile.get("NumVideoDevices")
-        if not devices:
-            return []  # Handle empty ports list
-
-        return devices
 
     def getDeviceType(self):
         """
@@ -345,7 +336,7 @@ if __name__ == '__main__':
     shell = InteractiveShell()
     shell.open()
 
-    platformProfile = dir_path + "/../../../profiles/sink/Sink_4K_VideoDevice.yaml"
+    platformProfile = dir_path + "/../../../profiles/source/Source_VideoDevice.yaml"
     # test the class assuming that it's optional
     test = dsVideoDeviceClass(platformProfile, shell)
 

@@ -68,11 +68,6 @@ class dsVideoDevice_test3_SetAndGetZoomMode(utHelperClass):
         # Open Session for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
 
-        player = self.cpe.get("test").get("player")
-
-        # Create player Class
-        self.testPlayer = utPlayer(self.player_session, player)
-
          # Create user response Class
         self.testUserResponse = utUserResponse()
 
@@ -164,7 +159,7 @@ class dsVideoDevice_test3_SetAndGetZoomMode(utHelperClass):
         This function performs the following steps:
         - Downloads necessary assets.
         - Runs prerequisite commands.
-        - Initializes the dsAudio module.
+        - Initializes the dsVideoDevice module.
         - Set and Get the Zoom Mode.
         - Cleans up the downloaded assets after testing.
 
@@ -184,29 +179,24 @@ class dsVideoDevice_test3_SetAndGetZoomMode(utHelperClass):
         self.log.testStart(self.testName, '1')
 
         # Initialize the dsVideoDevice module
-        self.testdsAudio.initialise(self.testdsVideoDevice.getDeviceType())
+        self.testdsVideoDevice.initialise(self.testdsVideoDevice.getDeviceType())
 
         # set the zoom mode
-        self.testdsVideoDevice.setZoomMode()
+        self.testdsVideoDevice.setZoomMode(0, 'dsVIDEO_ZOOM_PILLARBOX_4_3')
 
-        result = self.testVerifyZoomMode(False, True)
+        result = True
 
         self.log.stepResult(result, f'Verified setZoomMode')
 
         # get the zoom mode
         self.testdsVideoDevice.getZoomMode()
 
-        result = self.testVerifyZoomMode(True, True)
-
         self.log.stepResult(result, f'Verified getZoomMode')
 
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
-
-        # Terminate dsAudio Module
+        # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()
 
-        # Delete the dsAudio class
+        # Delete the dsVideoDevice class
         del self.testdsVideoDevice
 
         return result

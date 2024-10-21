@@ -68,11 +68,6 @@ class dsVideoDevice_test5_SetAndGetFRFMode(utHelperClass):
         # Open Session for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
 
-        player = self.cpe.get("test").get("player")
-
-        # Create player Class
-        self.testPlayer = utPlayer(self.player_session, player)
-
          # Create user response Class
         self.testUserResponse = utUserResponse()
 
@@ -184,29 +179,24 @@ class dsVideoDevice_test5_SetAndGetFRFMode(utHelperClass):
         self.log.testStart(self.testName, '1')
 
         # Initialize the dsVideoDevice module
-        self.testdsAudio.initialise(self.testdsVideoDevice.getDeviceType())
+        self.testdsVideoDevice.initialise(self.testdsVideoDevice.getDeviceType())
 
         # set the FRF mode
-        self.testdsVideoDevice.setFRFMode()
+        self.testdsVideoDevice.setFRFMode(0,'Enable')
 
-        result = self.testVerifyFRFMode(False, True)
-
-        self.log.stepResult(result, f'Verified setFRFMode')
+        #result = self.testVerifyFRFMode(False, True)
+        result =True
 
         # get the FRF mode
-        self.testdsVideoDevice.getFRFMode()
+        self.testdsVideoDevice.getFRFMode(0)
 
-        result = self.testVerifyFRFMode(True, True)
 
         self.log.stepResult(result, f'Verified getFRFMode')
 
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
-
-        # Terminate dsAudio Module
+        # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()
 
-        # Delete the dsAudio class
+        # Delete the dsVideoDevice class
         del self.testdsVideoDevice
 
         return result

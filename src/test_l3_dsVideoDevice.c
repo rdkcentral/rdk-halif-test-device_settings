@@ -190,7 +190,7 @@ static void dsVideoDevice_getHandle()
     UT_LOG_MENU_INFO(" Supported Video Device:");
     for (device = 0; device < num_of_devices; device++)
     {
-        UT_LOG_MENU_INFO("\t%d.  VideoDevice%d ", device, device);
+        UT_LOG_MENU_INFO("\t%d. VideoDevice%d", device, device);
     }
     UT_LOG_MENU_INFO("------------------------------------------");
     UT_LOG_MENU_INFO(" Select the Video Device:");
@@ -232,20 +232,38 @@ void test_l3_dsVideoDevice_Init()
     gTestID = 1;
     dsError_t status   = dsERR_NONE;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
+    int32_t choice = -1;
+
+    UT_LOG_MENU_INFO("Select Device Type[0: Sink, 1: Source]: ");
+    scanf("%d", &choice);
+    readAndDiscardRestOfLine(stdin);
+
+    if(choice < 0 || choice > 1)
+    {
+        UT_LOG_ERROR("Invalid device Type");
+        goto exit;
+    }
 
     UT_LOG_INFO("Calling dsVideoDeviceInit()");
     status = dsVideoDeviceInit();
     UT_LOG_INFO("Result dsVideoDeviceInit(), dsError_t=[%s]", UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status, dsERR_NONE);
-    UT_LOG_INFO("Calling dsRegisterFrameratePreChangeCB()");
-    status = dsRegisterFrameratePreChangeCB(dsVideoDevice_FrameratePreChange);
-    UT_LOG_INFO("Result dsRegisterFrameratePreChangeCB(), dsError_t=[%s]", UT_Control_GetMapString(dsErrorMappingTable, status));
-    DS_ASSERT(status, dsERR_NONE);
-    UT_LOG_INFO("Calling dsRegisterFrameratePostChangeCB()");
-    status = dsRegisterFrameratePostChangeCB(dsVideoDevice_FrameratePostChange);
-    UT_LOG_INFO("Result dsRegisterFrameratePostChangeCB(), dsError_t=[%s]", UT_Control_GetMapString(dsErrorMappingTable, status));
-    DS_ASSERT(status, dsERR_NONE);
-    UT_LOG_INFO("Out %s", __FUNCTION__);
+
+    if(choice == 0)
+    {
+        UT_LOG_INFO("Calling dsRegisterFrameratePreChangeCB()");
+        status = dsRegisterFrameratePreChangeCB(dsVideoDevice_FrameratePreChange);
+        UT_LOG_INFO("Result dsRegisterFrameratePreChangeCB(), dsError_t=[%s]", UT_Control_GetMapString(dsErrorMappingTable, status));
+        DS_ASSERT(status, dsERR_NONE);
+        UT_LOG_INFO("Calling dsRegisterFrameratePostChangeCB()");
+        status = dsRegisterFrameratePostChangeCB(dsVideoDevice_FrameratePostChange);
+        UT_LOG_INFO("Result dsRegisterFrameratePostChangeCB(), dsError_t=[%s]", UT_Control_GetMapString(dsErrorMappingTable, status));
+        DS_ASSERT(status, dsERR_NONE);
+    }
+ 
+
+    exit:
+        UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
@@ -303,7 +321,7 @@ void test_l3_dsVideoDevice_SetZoomMode()
     UT_LOG_MENU_INFO(" \t  Supported Zoom Modes are:");
     for (j = dsVIDEO_ZOOM_NONE; j < dsVIDEO_ZOOM_MAX; j++)
     {
-        UT_LOG_MENU_INFO("\t%d.  %-20s ", j, \
+        UT_LOG_MENU_INFO("\t%d. %-20s", j, \
                     UT_Control_GetMapString(dsVideoZoomMappingTable, j));
     }
 
@@ -357,7 +375,7 @@ void test_l3_dsVideoDevice_SetDisplayFramerate()
     UT_LOG_MENU_INFO(" \t  Supported Display Framerate are:");
     for (j = dsVIDEO_FRAMERATE_24; j < dsVIDEO_FRAMERATE_MAX; j++)
     {
-        UT_LOG_MENU_INFO("\t%d.  %-20s ", j, UT_Control_GetMapString(dsVideoFrameRateTable, j));
+        UT_LOG_MENU_INFO("\t%d. %-20s", j, UT_Control_GetMapString(dsVideoFrameRateTable, j));
     }
 
     UT_LOG_MENU_INFO("------------------------------------------");
@@ -410,11 +428,11 @@ void test_l3_dsVideoDevice_SetFRFMode()
     UT_LOG_MENU_INFO(" \t  Supported Display FRF Mode are:");
     for (j = 0; j < 2; j++)
     {
-        UT_LOG_MENU_INFO("\t%d.  %-20s ", j,((j==0)?"Disable":"Enable"));
+        UT_LOG_MENU_INFO("\t%d. %-20s", j,((j==0)?"Disable":"Enable"));
     }
 
     UT_LOG_MENU_INFO("------------------------------------------");
-    UT_LOG_MENU_INFO(" Select the Display FRF Mode :");
+    UT_LOG_MENU_INFO(" Select the Display FRF Mode Sample :");
     scanf("%d", &choice);
     readAndDiscardRestOfLine(stdin);
 
@@ -464,7 +482,7 @@ void test_l3_dsVideoDevice_GetVideoCodecInfo()
     UT_LOG_MENU_INFO(" \t  Supported Video Codec Info:");
     for (i = dsVIDEO_CODEC_MPEGHPART2; i < dsVIDEO_CODEC_MAX;i++)
     {        
-            UT_LOG_MENU_INFO("\t%d.  %-20s ", i, UT_Control_GetMapString(dsVideoCodingFormatMappingTable, i));
+            UT_LOG_MENU_INFO("\t%d. %-20s", i, UT_Control_GetMapString(dsVideoCodingFormatMappingTable, i));
     }
     UT_LOG_MENU_INFO("------------------------------------------");
     UT_LOG_MENU_INFO(" Select the Codec for Info :");

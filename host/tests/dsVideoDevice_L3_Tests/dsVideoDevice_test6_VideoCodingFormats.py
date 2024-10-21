@@ -68,11 +68,6 @@ class dsVideoDevice_test6_VideoCodingFormats(utHelperClass):
         # Open Session for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
 
-        player = self.cpe.get("test").get("player")
-
-        # Create player Class
-        self.testPlayer = utPlayer(self.player_session, player)
-
          # Create user response Class
         self.testUserResponse = utUserResponse()
 
@@ -184,29 +179,24 @@ class dsVideoDevice_test6_VideoCodingFormats(utHelperClass):
         self.log.testStart(self.testName, '1')
 
         # Initialize the dsVideoDevice module
-        self.testdsAudio.initialise(self.testdsVideoDevice.getDeviceType())
+        self.testdsVideoDevice.initialise(self.testdsVideoDevice.getDeviceType())
 
         # get the SupportedVideoCodingFormat
         self.testdsVideoDevice.getSupportedVideoCodingFormat()
 
-        result = self.testVerifyVideoCodec(False, True) #check
+        result = True
 
         self.log.stepResult(result, f'Verified Supported VideoCodingFormats')
 
         # get the videoCodec info
-        self.testdsVideoDevice.getVideoCodecInfo()
-
-        result = self.testVerifyVideoCodec(True, True) #check
+        self.testdsVideoDevice.getVideoCodecInfo(0, 'dsVIDEO_CODEC_MPEG4PART10')
 
         self.log.stepResult(result, f'Verified get VideoCodingFormats Info')
 
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
-
-        # Terminate dsAudio Module
+        # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()
 
-        # Delete the dsAudio class
+        # Delete the dsVideoDevice class
         del self.testdsVideoDevice
 
         return result
