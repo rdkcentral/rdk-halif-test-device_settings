@@ -322,10 +322,10 @@ void test_l3_CompositeIn_select_port(void)
 
     port = (dsCompositeInPort_t)select;
 
-    UT_LOG_INFO("Calling dsCompositeInSelectPort(IN:port[%d])",
+    UT_LOG_INFO("Calling dsCompositeInSelectPort(IN:port[%s])",
                 UT_Control_GetMapString(dsCompositeInPortMappingTable, port));
     ret = dsCompositeInSelectPort(port);
-    UT_LOG_INFO("Result dsCompositeInSelectPort(IN:port[%d] dsError_t:[%s])",
+    UT_LOG_INFO("Result dsCompositeInSelectPort(IN:port[%s] dsError_t:[%s])",
                 UT_Control_GetMapString(dsCompositeInPortMappingTable, port), 
                 UT_Control_GetMapString(dsError_mapTable, ret));
     ASSERT(ret == dsERR_NONE);
