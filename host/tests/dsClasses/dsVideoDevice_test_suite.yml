@@ -4,7 +4,7 @@
 dsVideoDevice:  # Prefix must always exist
     description: "dsVideoDevice Device Settings testing profile / menu system for UT"
     test:
-        execute: "" #Execute command
+        execute: "/opt/karthi/run.sh -p /opt/karthi/Source_VideoDevice.yaml" #Execute command
         type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
         suites:
             0:
@@ -16,14 +16,14 @@ dsVideoDevice:  # Prefix must always exist
             2:
                 name: "L3 dsVideoDevice"
                 tests:
-                    - "Initialize dsVideoDevice"
-                    - "Zoom mode"
-                    - "Device Frame Rate"
-                    - "Device Frame Rate Mode"
-                    - "Get Supported Video Coding formats"
-                    - "Get Supported HDR capabilities"
-                    - "Get Current Frame Rate Mode"
-                    - "Get Current Frame Rate"
-                    - "Get Current Zoom Mode"
-                    - "Terminate dsVideoDevice"
+                    - "VideoDevice_Init"
+                    - "SetZoomMode"
+                    - "SetDisplayFramerate"
+                    - "SetFRFMode"
+                    - "GetSupportedVideoCodingFormat"
+                    - "dsGetFRFMode"
+                    - "GetCurrentDisplayframerate"
+                    - "GetZoomMode"
+                    - "GetVideoCodecInfo"
+                    - "VideoDevice_Term"
                     
