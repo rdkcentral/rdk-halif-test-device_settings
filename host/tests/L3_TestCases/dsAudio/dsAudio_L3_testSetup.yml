@@ -1,0 +1,141 @@
+#** *****************************************************************************
+# *
+# * If not stated otherwise in this file or this component's LICENSE file the
+# * following copyright and licenses apply:
+# *
+# * Copyright 2024 RDK Management
+# *
+# * Licensed under the Apache License, Version 2.0 (the "License");
+# * you may not use this file except in compliance with the License.
+# * You may obtain a copy of the License at
+# *
+# *
+# http://www.apache.org/licenses/LICENSE-2.0
+# *
+# * Unless required by applicable law or agreed to in writing, software
+# * distributed under the License is distributed on an "AS IS" BASIS,
+# * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# * See the License for the specific language governing permissions and
+# * limitations under the License.
+# *
+#* ******************************************************************************
+dsAudio:
+  description: "dsAudio Device Settings test setup"
+  assets:
+    device:
+      defaults: &defaults
+        artifacts:
+          - "<URL Path>/bin/hal_test"
+          - "<URL Path>/bin/libut_control.so"
+          - "<URL Path>/bin/Sink_AudioSettings.yaml"
+          - "<URL Path>/bin/run.sh"
+        execute:
+          - "chmod +x <PATH on Device>/hal_test"
+          - "chmod +x <PATH on Device>/run.sh"
+        streams:
+      test01_EnableDisableAndVerifyAudioPortStatus:
+        <<: *defaults
+        streams:
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+      test02_PortConnectionStatus:
+        <<: *defaults
+        streams:
+      test03_MS12AudioCompression:
+        <<: *defaults
+        streams:
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+      test04_MS12DialogueEnhancer:
+        <<: *defaults
+        streams:
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+      test05_MS12DolbyVolume:
+        <<: *defaults
+        streams:
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+      test06_MS12IntelligentEqualizer:
+        <<: *defaults
+        streams:
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+      test07_MS12Volumeleveller:
+        <<: *defaults
+        streams:
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+      test08_MS12BassEnhancer:
+        <<: *defaults
+        streams:
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+      test09_MS12SurroundDecoder:
+        <<: *defaults
+        streams:
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+      test10_MS12DRCMode:
+        <<: *defaults
+        streams:
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+      test11_MS12SurroundVirtualizer:
+        <<: *defaults
+        streams:
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+      test12_MS12MISteering:
+        <<: *defaults
+        streams:
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+      test13_MS12GraphicEqualizer:
+        <<: *defaults
+        streams:
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+      test14_MS12LEConfig:
+        <<: *defaults
+        streams:
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+      test15_ARCPort:
+        <<: *defaults
+        streams: []
+      test16_ARCSAD:
+        <<: *defaults
+        streams:
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+      test17_OutputMode:
+        <<: *defaults
+        streams:
+          - "<URL Path>/streams/tones_string_48k_stereo.wav"
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+          - "<URL Path>/streams/tones_string_48k_stereo.eac3"
+      test18_AudioLevel:
+        <<: *defaults
+        streams:
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+      test19_AudioGain:
+        <<: *defaults
+        streams:
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+      test20_MuteUnMute:
+        <<: *defaults
+        streams:
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+      test21_AudioDelay:
+        <<: *defaults
+        streams:
+          - "<URL Path>/streams/AVsync_aac_200_48k_ATSC_m2v_29fps.trp"
+      test22_AudioFormat:
+        <<: *defaults
+        streams:
+          - "<URL Path>/streams/tones_string_48k_stereo.wav"
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+      test23_AssociateMix:
+        <<: *defaults
+        streams:
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+      test24_PrimarySecondaryLanguage:
+        <<: *defaults
+        streams:
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+      test25_AudioMix:
+        <<: *defaults
+        streams:
+          - "<URL Path>/streams/primary_audio_48k_2ch.ac3"
+          - "<URL Path>/streams/secondary_audio_48k_2ch.wav"
+      test26_MS12AudioProfiles:
+        <<: *defaults
+        streams:
+          - "<URL Path>/streams/tones_string_48k_stereo.ac3"

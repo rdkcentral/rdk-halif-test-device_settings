@@ -73,7 +73,7 @@ dsAudio:
             # dsMS12SUPPORT_GraphicEqualizer           = 0x200, ///< MS12 Graphic equalizer
             # dsMS12SUPPORT_LEConfig                   = 0x400, ///< MS12 LE config
             # dsMS12SUPPORT_Invalid                    = 0x800  ///< Invalid / Out of range
-            MS12_Capabilities: 0x05  # DolbyVolume | IntelligentEqualizer | DialogueEnhancer
+            MS12_Capabilities: 0x4D  # DolbyVolume | IntelligentEqualizer | DialogueEnhancer
             MS12_AudioProfiles:
             # number of counts from the "ms12_audio_profiles.ini" file
             MS12_AudioProfileCount: 0

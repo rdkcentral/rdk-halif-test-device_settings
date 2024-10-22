@@ -61,7 +61,7 @@ dsAudio:
             # dsAUDIO_CMP_MAX    = 0x04   ///< Out of range
             compressions: [0x00, 0x01, 0x02, 0x03]  # NONE, LIGHT, MEDIUM, HEAVY
             # Number of supported Stereo modes
-            number_of_supported_stereo_modes: 1
+            number_of_supported_stereo_modes: 0
             # dsAUDIO_STEREO_UNKNOWN                   = 0x00, ///< Stereo mode none
             # dsAUDIO_STEREO_MONO                      = 0x01, ///< Mono mode
             # dsAUDIO_STEREO_STEREO                    = 0x02, ///< Normal stereo mode (L+R)
@@ -70,7 +70,7 @@ dsAudio:
             # dsAUDIO_STEREO_DD                        = 0x05, ///< Dolby Digital
             # dsAUDIO_STEREO_DDPLUS                    = 0x06, ///< Dolby Digital Plus
             # dsAUDIO_STEREO_MAX                       = 0x07  ///< Out of range
-            stereo_modes: [0x2]  # STEREO, SURROUND
+            stereo_modes: []  # STEREO, SURROUND
             stereo_auto_mode: false
             # dsMS12SUPPORT_NONE                       = 0x0,   ///< MS12 Supported None
             # dsMS12SUPPORT_DolbyVolume                = 0x01,  //< MS12 supported Dolby Volume
@@ -85,19 +85,13 @@ dsAudio:
             # dsMS12SUPPORT_GraphicEqualizer           = 0x200, ///< MS12 Graphic equalizer
             # dsMS12SUPPORT_LEConfig                   = 0x400, ///< MS12 LE config
             # dsMS12SUPPORT_Invalid                    = 0x800  ///< Invalid / Out of range
-            MS12_Capabilities: 0x07  # DolbyVolume | IntelligentEqualizer | DialogueEnhancer
+            MS12_Capabilities: 0xFFF  # DolbyVolume | IntelligentEqualizer | DialogueEnhancer
             # profile names from the "ms12_audio_profiles.ini" file.
             MS12_AudioProfiles:
-              - Off
-              - Music
-              - Movie
-              - Sports
-              - Entertainment
-              - Night
-              - Party
-              - User
+              - "Off"
+              - "User"
             # number of counts from the "ms12_audio_profiles.ini" file
-            MS12_AudioProfileCount: 8
+            MS12_AudioProfileCount: 2
             # @a true if audio port supports Dolby MS12 Multistream Decoding or @a false otherwise
             IsMS12Decode: true
             # @a true if audio port supports Dolby MS11 Multistream Decoding or @a false otherwise
@@ -134,7 +128,7 @@ dsAudio:
             # dsAUDIO_CMP_MAX    = 0x04  ///< Out of range
             compressions:
             # Number of supported Stereo modes
-            number_of_supported_stereo_modes: 3
+            number_of_supported_stereo_modes: 4
             # dsAUDIO_STEREO_UNKNOWN                   = 0x00,  ///< Stereo mode none
             # dsAUDIO_STEREO_MONO                      = 0x01,  ///< Mono mode
             # dsAUDIO_STEREO_STEREO                    = 0x02,  ///< Normal stereo mode (L+R)
@@ -143,7 +137,7 @@ dsAudio:
             # dsAUDIO_STEREO_DD                        = 0x05,  ///< Dolby Digital
             # dsAUDIO_STEREO_DDPLUS                    = 0x06,  ///< Dolby Digital Plus
             # dsAUDIO_STEREO_MAX                       = 0x07   ///< Out of range
-            stereo_modes: [0x02, 0x03, 0x04]  # STEREO, SURROUND, PASSTHRU
+            stereo_modes: [0x02, 0x04, 0x05, 0x06]  # STEREO, SURROUND, PASSTHRU
             stereo_auto_mode: true
             # dsMS12SUPPORT_NONE                       = 0x0,   ///< MS12 Supported None
             # dsMS12SUPPORT_DolbyVolume                = 0x01,  //< MS12 supported Dolby Volume
@@ -211,7 +205,7 @@ dsAudio:
             #dsAUDIO_STEREO_DD                        = 0x05,   ///< Dolby Digital
             #dsAUDIO_STEREO_DDPLUS                    = 0x06,   ///< Dolby Digital Plus
             #dsAUDIO_STEREO_MAX                       = 0x07    ///< Out of range
-            stereo_modes: [0x02, 0x03, 0x04]  # STEREO, SURROUND, PASSTHRU
+            stereo_modes: [0x02, 0x04, 0x05]  # STEREO, SURROUND, PASSTHRU
             stereo_auto_mode: true
             # dsMS12SUPPORT_NONE                       = 0x0,   ///< MS12 Supported None
             # dsMS12SUPPORT_DolbyVolume                = 0x01,  //< MS12 supported Dolby Volume
