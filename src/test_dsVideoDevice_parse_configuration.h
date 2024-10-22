@@ -65,7 +65,7 @@
 #ifndef __TEST_DS_VIDEO_DEVICE_PARSE_CONFIG_H__
 #define __TEST_DS_VIDEO_DEVICE_PARSE_CONFIG_H__
 
-#include "dsVideoDevice.h"
+#include <dsVideoDevice.h>
 
 #define DS_VIDEO_DEVICE_KVP_SIZE              128
 #define DS_VIDEO_DEVICE_PORT_NAME_SIZE        32
@@ -76,15 +76,15 @@
 #define DS_VIDEO_DEVICE_MODULE_NAME    "dsVideoDevice"
 
 /* Video Device configuration */
-typedef struct _dsVideoDeviceConfiguration_t {
+typedef struct 
+{
     int32_t  NoOfSupportedDFCs;
     dsVideoZoom_t  SupportedDFCs[dsVIDEO_ZOOM_MAX];
     dsVideoZoom_t  DefaultDFC;
     int32_t  HDRCapabilities;
     uint32_t SupportedVideoCodingFormats;
     int32_t  NoOfSupportedDFR;
-    char     SupportedDisplayFramerate[DS_VIDEO_DEVICE_MAX_FRAMERATE_LIST] \
-                                    [DS_VIDEO_DEVICE_MAX_FRAMERATE_LEN];
+    char     SupportedDisplayFramerate[DS_VIDEO_DEVICE_MAX_FRAMERATE_LIST][DS_VIDEO_DEVICE_MAX_FRAMERATE_LEN];
     int32_t  num_codec_entries;
     float    level;
     dsVideoCodecHevcProfiles_t  profile;

@@ -91,46 +91,57 @@ int test_dsVideoDevice_parse_configuration()
     UT_LOG_DEBUG("gDSvideoDevice_NumVideoDevices: %d",gDSvideoDevice_NumVideoDevices);
 
     status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsVideoDevice/Type", gDeviceType, TEST_DS_DEVICE_TYPE_SIZE);
-    if (status == UT_KVP_STATUS_SUCCESS ) {
-        if (!strncmp(gDeviceType, TEST_TYPE_SOURCE_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) {
+    if (status == UT_KVP_STATUS_SUCCESS ) 
+    {
+        if (!strncmp(gDeviceType, TEST_TYPE_SOURCE_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) 
+        {
             gSourceType = 1;
         }
-        else if(!strncmp(gDeviceType, TEST_TYPE_SINK_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) {
+        else if(!strncmp(gDeviceType, TEST_TYPE_SINK_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) 
+        {
             gSourceType = 0;
         }
-        else {
+        else 
+        {
             UT_LOG_ERROR("Invalid platform type: %s", gDeviceType);
             return -1;
         }
     }
-    else {
+    else 
+    {
         UT_LOG_ERROR("Failed to get the platform type");
         return -1;
     }
 
     status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsVideoDevice/Name", gDSVideoDeviceName, DS_VIDEO_DEVICE_NAME_SIZE);
-    if (status == UT_KVP_STATUS_SUCCESS ) {
+    if (status == UT_KVP_STATUS_SUCCESS ) 
+    {
         UT_LOG_DEBUG("Device Type: %s, Device Name: %s", gDeviceType, gDSVideoDeviceName);
     }
-    else {
+    else 
+    {
         UT_LOG_ERROR("Failed to get the Device Name ");
         return -1;
     }
 
     gDSVideoDeviceConfiguration = (dsVideoDeviceConfiguration_t*) calloc(gDSvideoDevice_NumVideoDevices, sizeof(dsVideoDeviceConfiguration_t));
-    if(gDSVideoDeviceConfiguration == NULL) {
+    if(gDSVideoDeviceConfiguration == NULL) 
+    {
          UT_LOG_ERROR("Failed to allocate memory for Video Device configuration structure");
          return -1;
     }
 
-    for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++) {
-        if(gSourceType == 1){
+    for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++) 
+    {
+        if(gSourceType == 1)
+        {
             snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/SupportedDFCs" , i+1);
             gDSVideoDeviceConfiguration[i].NoOfSupportedDFCs = ut_kvp_getListCount(ut_kvp_profile_getInstance(), key_string);
             UT_LOG_DEBUG("NoOfSupportedDFCs: %d",gDSVideoDeviceConfiguration[i].NoOfSupportedDFCs);
 
             // loop to get supported SupportedDFCs in array
-            for(int j = 0; j < gDSVideoDeviceConfiguration[i].NoOfSupportedDFCs; j++) {
+            for(int j = 0; j < gDSVideoDeviceConfiguration[i].NoOfSupportedDFCs; j++) 
+            {
                 snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/SupportedDFCs/%d" , i+1 , j);
                 gDSVideoDeviceConfiguration[i].SupportedDFCs[j] = (dsVideoZoom_t)ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
                 UT_LOG_DEBUG("SupportedDFCs: %d",gDSVideoDeviceConfiguration[i].SupportedDFCs[j]);
@@ -154,13 +165,16 @@ int test_dsVideoDevice_parse_configuration()
             gDSVideoDeviceConfiguration[i].NoOfSupportedDFR = ut_kvp_getListCount(ut_kvp_profile_getInstance(), key_string);
             UT_LOG_DEBUG("NoOfSupportedDFR: %d ",gDSVideoDeviceConfiguration[i].NoOfSupportedDFR);
             // loop to get supported SupportedDFR in array
-            for(int j = 0; j < gDSVideoDeviceConfiguration[i].NoOfSupportedDFR; j++) {
+            for(int j = 0; j < gDSVideoDeviceConfiguration[i].NoOfSupportedDFR; j++) 
+            {
                 snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/SupportedDisplayFramerate/%d" , i+1 , j);
                 status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key_string, gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate[j], sizeof(gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate[j]));
-                if (status == UT_KVP_STATUS_SUCCESS ) {
+                if (status == UT_KVP_STATUS_SUCCESS ) 
+                {
                     UT_LOG_DEBUG("SupportedDisplayFramerate: %s ",gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate[j]);
                 }
-                else {
+                else 
+                {
                     UT_LOG_ERROR("Failed to get the platform Device SupportedDisplayFramerate");
                     return -1;
                 }
@@ -169,7 +183,8 @@ int test_dsVideoDevice_parse_configuration()
 
         UT_LOG_DEBUG("gSourceType %d ",gSourceType);
         /* check for only source */
-        if(gSourceType == 1){
+        if(gSourceType == 1)
+        {
             snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo/num_entries" , i+1);
             gDSVideoDeviceConfiguration[i].num_codec_entries = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string );
             UT_LOG_DEBUG("num_codec_entries %d",gDSVideoDeviceConfiguration[i].num_codec_entries);
@@ -192,7 +207,8 @@ int test_dsVideoDevice_parse_configuration()
 /* Free Parse Video Device Configuration */
 void test_dsVideoDevice_parse_configuration_term()
 {
-    if(gDSVideoDeviceConfiguration) {
+    if(gDSVideoDeviceConfiguration) 
+    {
         free(gDSVideoDeviceConfiguration);
     }
 }

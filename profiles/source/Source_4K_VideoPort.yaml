@@ -5,8 +5,12 @@ dsVideoPort:
         extendedEnumsSupported: false
     Number_of_ports: 1
 
-    # 8-Bit, 10-bit and 12 bit
-    color_depth: 8
+    #dsDISPLAY_COLORDEPTH_UNKNOWN = 0x0
+    #dsDISPLAY_COLORDEPTH_8BIT = 0x01
+    #dsDISPLAY_COLORDEPTH_10BIT = 0x0
+    #dsDISPLAY_COLORDEPTH_12BIT = 0x04
+    #dsDISPLAY_COLORDEPTH_AUTO = 0x08
+    color_depth: 1
 
     defaultResolution: "1080i50"
 
@@ -258,7 +262,7 @@ dsVideoPort:
             #dsHDRSTANDARD_SDR                = 0x20,  ///< Video Format SDR
             #dsHDRSTANDARD_Invalid            = 0x80   ///< When invalid value observed
             # HDR Capabilities:
-            hdr_capabilities: 0x20 # OR-ed value of SDR | HDR10 | HDR10PLUS | DolbyVision | HLG
+            hdr_capabilities: 0x37 # OR-ed value of SDR | HDR10 | HDR10PLUS | DolbyVision | HLG
 
             # HDCP Protocol Version:
             #dsHDCP_VERSION_1X                = 00x0,  ///< HDCP Protocol version 1.x

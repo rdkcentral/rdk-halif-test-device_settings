@@ -2,6 +2,7 @@
 ut-core
 logs
 obj
+logs
 
 # Prerequisites
 *.d

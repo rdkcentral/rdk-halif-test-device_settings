@@ -158,7 +158,7 @@ setup_and_enable_venv
 
 ### Clone required repos ###
 # Setup raft
-clone_repo git@github.com:rdkcentral/python_raft.git "${RAFT_DIR}" "1.0.0" "in ./raft"
+clone_repo git@github.com:rdkcentral/python_raft.git "${RAFT_DIR}" "1.1.1" "in ./raft"
 install_pip_requirements "${RAFT_DIR}"/requirements.txt
 
 # Setup rdk-raft
@@ -167,7 +167,7 @@ install_pip_requirements "${RAFT_DIR}"/requirements.txt
 
 # Setup ut-raft
 clone_repo git@github.com:rdkcentral/ut-raft.git "${PLUGINS_FRAMEWORK_DIR}/ut_raft" develop "in ./raft/framework/plugins"
-install_pip_requirements "${TESTS_DIR}"/ut_raft/requirements.txt
+install_pip_requirements "${PLUGINS_FRAMEWORK_DIR}"/ut_raft/requirements.txt
 
 ## Install your own sub git repo's in here as required
 # 
