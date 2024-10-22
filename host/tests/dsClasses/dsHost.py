@@ -24,6 +24,7 @@
 import yaml
 import os
 import sys
+import re
 from enum import Enum, auto
 
 # Add parent outside of the class directory
@@ -83,14 +84,14 @@ class dsHostClass():
             None
         """
         result = self.utMenu.select( self.testSuite, "Get CPU Temperature")
-        typeStatusPattern = = r'Result dsGetCPUTemperature\(cpuTemperature: (?P<cpuTemperature>[-+]?\d*\.\d+|\d+)\)'
+        typeStatusPattern = r'Result dsGetCPUTemperature\(cpuTemperature: (?P<cpuTemperature>[-+]?\d*\.\d+|\d+)\)'
         match = self.searchPattern(result, typeStatusPattern)
 
         if match:
-            temperature = float(match.group('cpuTemperature'))
+            temperature = float(match)
             return temperature
         else:
-            Print("Error: Could not get CPU temperature")
+            print("Error: Could not get CPU temperature")
             return None
 
     def getSoCID(self):
