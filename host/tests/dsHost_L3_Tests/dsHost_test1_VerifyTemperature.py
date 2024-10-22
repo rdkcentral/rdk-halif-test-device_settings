@@ -23,6 +23,7 @@
 
 import os
 import sys
+import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path+"/../")
@@ -30,7 +31,6 @@ sys.path.append(dir_path+"/../")
 from dsClasses.dsHost import dsHostClass
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
-from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 
 class dsHost_test1_VerifyTemperature(utHelperClass):
 
@@ -76,12 +76,12 @@ class dsHost_test1_VerifyTemperature(utHelperClass):
         self.deviceDownloadPath = self.cpe.get("target_directory")
 
         #download test artifacts to device
-        url = self.testSetup.assets.device.dsHost_test1_VerifyTemperature.artifacts
+        url = self.testSetup.assets.device.test1_VerifyTemperature.artifacts
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
 
         #download test streams to device
-        url = self.testSetup.assets.device.dsHost_test1_VerifyTemperature.streams
+        url = self.testSetup.assets.device.test1_VerifyTemperature.streams
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
             for streampath in url:
@@ -105,7 +105,7 @@ class dsHost_test1_VerifyTemperature(utHelperClass):
         """
 
         #Run test specific commands
-        cmds = self.testSetup.assets.device.dsHost_test1_VerifyTemperature.execute
+        cmds = self.testSetup.assets.device.test1_VerifyTemperature.execute
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
@@ -126,33 +126,34 @@ class dsHost_test1_VerifyTemperature(utHelperClass):
         # Create the dsHost class
         self.testdsHost = dsHostClass(self.deviceProfile, self.hal_session)
 
-        self.log.testStart("dsHost_test1_VerifyTemperature", '1')
+        self.log.stepStart(f'dsHost_test1_VerifyTemperature')
 
         # Initialize the dsHost module
         self.testdsHost.initialise()
 
         # Get the CPU temperature
         temp1 = self.testdsHost.getCPUTemperature()
-        self.log.setResult("Temperature 1: " + str(temp1))
+        self.log.stepStart(f'Temperature 1: {temp1}')
+
 
         # Wait for 60 seconds
-        sleep(60)
+        time.sleep(60)
 
         # Get the CPU temperature again
         temp2 = self.testdsHost.getCPUTemperature()
-        self.log.setResult("Temperature 2: " + str(temp2))
+        self.log.stepStart(f'Temperature 1: {temp2}')
 
         # Check if the temperature is within expected range while in same mode
         # Are we fine with this range? What validation do we want?
-        self.log.step("Check if the temperature is within expected range")
+        self.log.stepStart(f'Check if the temperature is within expected range')
         result = abs(temp1 - temp2) < 5
 
         # Log the result
-        self.log.step("Temperature difference: " + str(abs(temp1 - temp2)))
+        self.log.stepStart(f'Temperature difference:: {abs(temp1 - temp2)}')
         if result:
-            self.log.stepResult("Temperature is within expected range")
+            self.log.stepStart(f'Temperature is within expected range')
         else:
-            self.log.stepResult("Temperature is not within expected range")
+            self.log.stepStart(f'Temperature is not within expected range')
 
 
         # Clean the assets downloaded to the device
