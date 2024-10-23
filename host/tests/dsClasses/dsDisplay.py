@@ -64,7 +64,7 @@ class dsDisplayClass():
 
         self.utMenu.start()
 
-        def initialise(self, device_type:int=0):
+    def initialise(self, device_type:int=0):
         """
         Initializes the device settings Display module.
 
@@ -72,11 +72,11 @@ class dsDisplayClass():
             device_type (int, optional): 0 - sink device, 1 - source device. Defaults to sink.
 
         Returns:
-            None
+                None
         """
         result = self.utMenu.select( self.testSuite, "Initialize dsDisplay")
 
-        def getEdid(self, video_port: str, port_index: int = 0):
+    def getEdid(self, video_port: str, port_index: int = 0):
         """
         Gets the EDID information.
 
@@ -91,12 +91,12 @@ class dsDisplayClass():
                 {
                     "query_type": "list",
                     "query": "Select dsVideo Port:",
-                    "input": "dsVIDEOPORT_TYPE_HDMI"
+                    "input":str(video_port)
                 },
                 {
                     "query_type": "direct",
                     "query": "Select dsVideo Port Index[0-10]:",
-                    "input": "0"
+                    "input": str(port_index)
                 }
         ]
 
@@ -105,7 +105,7 @@ class dsDisplayClass():
 
         result = self.utMenu.select(self.testSuite, "Get display EDID", promptWithAnswers)
 
-        def getEdidBytes(self, video_port: str, port_index: int = 0):
+    def getEdidBytes(self, video_port: str, port_index: int = 0):
         """
         Gets the EDID bytes.
 
@@ -120,12 +120,12 @@ class dsDisplayClass():
                 {
                     "query_type": "list",
                     "query": "Select dsVideo Port:",
-                    "input": "dsVIDEOPORT_TYPE_HDMI"
+                    "input": str(video_port)
                 },
                 {
                     "query_type": "direct",
                     "query": "Select dsVideo Port Index[0-10]:",
-                    "input": "0"
+                    "input": str(port_index)
                 }
         ]
 
@@ -134,7 +134,7 @@ class dsDisplayClass():
 
         result = self.utMenu.select(self.testSuite, "Get display EDIDBytes", promptWithAnswers)
 
-        def getAspectRatio(self, video_port: str, port_index: int = 0):
+    def getAspectRatio(self, video_port: str, port_index: int = 0):
         """
         Gets the display aspect ratio.
 
@@ -146,56 +146,86 @@ class dsDisplayClass():
             None
         """
         promptWithAnswers = [
-        {
-            "query_type": "list",
-            "query": "Select dsVideo Port:",
-            "input": "dsVIDEOPORT_TYPE_HDMI"
-        },
-        {
-            "query_type": "direct",
-            "query": "Select dsVideo Port Index[0-10]:",
-            "input": "0"
-        }
-    ]
+            {
+                "query_type": "list",
+                "query": "Select dsVideo Port:",
+                "input": str(video_port)
+            },
+            {
+                "query_type": "direct",
+                "query": "Select dsVideo Port Index[0-10]:",
+                "input": str(port_index)
+            }
+        ]
 
-    promptWithAnswers[0]["input"] = str(video_port)
-    promptWithAnswers[1]["input"] = str(port_index)
+        promptWithAnswers[0]["input"] = str(video_port)
+        promptWithAnswers[1]["input"] = str(port_index)
 
-    result = self.utMenu.select(self.testSuite, "Get display AspectRatio", promptWithAnswers)
+        result = self.utMenu.select(self.testSuite, "Get display AspectRatio", promptWithAnswers)
 
     def terminate(self):
-    """
-    Terminates the display.
+        """
+        Terminates the display.
 
-    Args:
-        None.
+        Args:
+            None.
 
-    Returns:
-        None
-    """
-    result = self.utMenu.select(self.testSuite, "Terminate dsDisplay")
+        Returns:
+            None
+        """
+        result = self.utMenu.select(self.testSuite, "Terminate dsDisplay")
 
     def getDisplayHandle(self, video_port: str, port_index: int=0):
-    """
-    Returns the handle of the display port.
+        """
+        Returns the handle of the display port.
 
-    Args:
-        video_port (str): name of the video port. Refer dsVideoPortType enum
-        port_index (int): port index
+        Args:
+            video_port (str): name of the video port. Refer dsVideoPortType enum
+            port_index (int): port index
 
-    Returns:
-        int: The handle of the display port.
-    """
-    ports = self.deviceProfile.get("Ports")
-    if not ports:
-        return None  # Handle empty ports list
+        Returns:
+            int: The handle of the display port.
+        """
+        ports = self.deviceProfile.get("Ports")
+        if not ports:
+            return None  # Handle empty ports list
 
-    for entry in ports.values():
-        if entry['Typeid'] == video_port and entry['Index'] == port_index:
-            handle = entry['Handle']
-            return handle
+        for entry in ports.values():
+            if entry['Typeid'] == video_port and entry['Index'] == port_index:
+                handle = entry['Handle']
+                return handle
 
-    return None
+        return None
+
+    def getSupportedPorts(self):
+        """
+        Returns the supported Video ports on the device.
+        Args:
+            None.
+
+        Returns:
+            list: A list of tuples containing (video_port_name, index).
+        """
+        portLists= []
+
+        ports = self.deviceProfile.get("Video_Ports")  # Default to empty list if "Ports" not found
+        for entry in ports:  # Iterate directly through the list of ports
+
+            video_port_name = dsVideoPortType(entry).name  # Get the name of the video port type
+            port_index =  0# Get the index
+            portLists.append((video_port_name, port_index))  # Append as a tuple
+
+        return portLists
+
+    def __del__(self):
+        """
+        De-Initializes the dsDisplay helper function.
+        Args:
+            None.
+        Returns:
+            None
+        """
+        self.utMenu.stop()
 
 if __name__ == '__main__':
 
@@ -207,11 +237,12 @@ if __name__ == '__main__':
     test = dsDisplayClass(platformProfile, shell)
 
     test.initialise()
-    handle = test.getDisplayHandle("dsVIDEOPORT_TYPE_HDMI")
 
-    test.getEdid(handle)
-    test.getEdidBytes(handle)
-    test.getAspectRatio(handle)
+    ports = test.getSupportedPorts()
+
+    test.getEdid(ports[0][0], ports[0][1])
+    test.getEdidBytes(ports[0][0], ports[0][1])
+    test.getAspectRatio(ports[0][0], ports[0][1])
 
     test.terminate()
 
