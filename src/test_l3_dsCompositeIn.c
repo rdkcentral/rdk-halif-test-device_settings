@@ -160,7 +160,7 @@ static void readInput(int *choice)
  */
 static void compositeInConnectCB(dsCompositeInPort_t Port, bool isPortConnected)
 {
-    UT_LOG_INFO("Received Connection status callback port: %s, Connection: %s",
+    UT_LOG_INFO("Received Connection status callback port: [%s], Connection: [%s]\n",
                  UT_Control_GetMapString(dsCompositeInPortMappingTable, Port),
                  UT_Control_GetMapString(bool_mapTable, isPortConnected));
 
@@ -174,7 +174,7 @@ static void compositeInConnectCB(dsCompositeInPort_t Port, bool isPortConnected)
  */
 static void compositeInSignalChangeCB(dsCompositeInPort_t port, dsCompInSignalStatus_t sigStatus)
 {
-    UT_LOG_INFO("Received SignalChange status callback port: %s, sigstatus: %s",
+    UT_LOG_INFO("Received SignalChange status callback port: [%s], sigstatus: [%s]\n",
                  UT_Control_GetMapString(dsCompositeInPortMappingTable, port),
                  UT_Control_GetMapString(dsCompInSignalStatusMappingTable, sigStatus));
 
@@ -188,7 +188,7 @@ static void compositeInSignalChangeCB(dsCompositeInPort_t port, dsCompInSignalSt
  */
 static void compositeInStatusChangeCB(dsCompositeInStatus_t inputStatus)
 {
-    UT_LOG_INFO("Received statuschange callback isPresented: %s, activeport: %s",
+    UT_LOG_INFO("Received statuschange callback isPresented: [%s], activeport: [%s]\n",
                  UT_Control_GetMapString(bool_mapTable, inputStatus.isPresented),
                  UT_Control_GetMapString(dsCompositeInPortMappingTable, inputStatus.activePort));
 
@@ -197,7 +197,7 @@ static void compositeInStatusChangeCB(dsCompositeInStatus_t inputStatus)
          if(!(inputStatus.isPresented))
                  continue;
 
-         UT_LOG_INFO("Received statuschange callback isPortConnected: %s, activeport: %s",
+         UT_LOG_INFO("Received statuschange callback isPortConnected: [%s], activeport: [%s]\n",
                  UT_Control_GetMapString(bool_mapTable, inputStatus.isPortConnected[i]),
                  UT_Control_GetMapString(dsCompositeInPortMappingTable, inputStatus.activePort));
     }
@@ -322,10 +322,10 @@ void test_l3_CompositeIn_select_port(void)
 
     port = (dsCompositeInPort_t)select;
 
-    UT_LOG_INFO("Calling dsCompositeInSelectPort(IN:port[%d])",
+    UT_LOG_INFO("Calling dsCompositeInSelectPort(IN:port[%s])",
                 UT_Control_GetMapString(dsCompositeInPortMappingTable, port));
     ret = dsCompositeInSelectPort(port);
-    UT_LOG_INFO("Result dsCompositeInSelectPort(IN:port[%d] dsError_t:[%s])",
+    UT_LOG_INFO("Result dsCompositeInSelectPort(IN:port[%s] dsError_t:[%s])",
                 UT_Control_GetMapString(dsCompositeInPortMappingTable, port), 
                 UT_Control_GetMapString(dsError_mapTable, ret));
     ASSERT(ret == dsERR_NONE);
@@ -452,7 +452,7 @@ static UT_test_suite_t * pSuite = NULL;
 int test_l3_dsCompositeIn_register(void)
 {
     // Create the test suite for sink type
-    pSuite = UT_add_suite_withGroupID("[L3 dsCompositeIn - Sink]", NULL, NULL, UT_TESTS_L3);
+    pSuite = UT_add_suite_withGroupID("[L3 dsCompositeIn]", NULL, NULL, UT_TESTS_L3);
     ASSERT( pSuite != NULL );
 
     UT_add_test( pSuite, "Initialize CompositeIn" ,test_l3_CompositeIn_initialize );
