@@ -196,7 +196,7 @@ class dsHdmiIn_test1_ConnectionCallback_Verify(utHelperClass):
             self.log.stepResult(result, f'HDMI Connect Status Test for {port} Port')
 
         # Clean the assets downloaded to the device
-        self.testCleanAssets()
+       # self.testCleanAssets()
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()

@@ -174,7 +174,7 @@ class dsHdmiIn_test6_AVlatncyCallback_Verify(utHelperClass):
         self.log.testStart("test6_AVlatncyCallback_Verify", '1')
 
         # Initialize the dsHdmiIn module
-        self.testdsHdmiIn.initialise(self.testdsHdmiIn.getDeviceType())
+        self.testdsHdmiIn.initialise()
 
         audmix = 0      #default value false
         videoplane = 0  #Always select primary plane.
@@ -188,7 +188,7 @@ class dsHdmiIn_test6_AVlatncyCallback_Verify(utHelperClass):
             # Check the HdmiIn device is active
             result = self.CheckDeviceStatus(True,port)
           
-            self.testdsHdmiIn.selectPort(port, audmix, videoplane, topmost)
+            self.testdsHdmiIn.selectHDMIInPort(port, audmix, videoplane, topmost)
             self.log.step(f'HdmiIn Select Verification {port} Port')
             avlatency = self.testdsHdmiIn.getAVlatencyCallbackStatus()
             self.log.stepResult(True,f'audio_latency:{avlatency[0]}ms, videolatency:{avlatency[1]}ms found in Callback')

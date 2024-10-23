@@ -173,7 +173,7 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(utHelperClass):
         self.log.testStart("test5_AllmChangeCallback_Verify", '1')
 
         # Initialize the dsHdmiIn module
-        self.testdsHdmiIn.initialise(self.testdsHdmiIn.getDeviceType())
+        self.testdsHdmiIn.initialise()
 
         audmix = 0      #default value false
         videoplane = 0  #Always select primary plane.

@@ -214,23 +214,16 @@ class dsHdmiInClass():
                 - found(str): true if matches with hdmiInSignalStatustype
             None: If no matching signal status is found.
         """
-        result = self.testSession.read_until("Received SignalChange status callback port: , sigstatus: ")
-        connectioncallpattern = r"Received SignalChange status callback port: (\w+), sigstatus: (\w+)"
+        result = self.testSession.read_until("Received SignalChange status callback port:")
+        connectioncallpattern = r"Received SignalChange status callback port:\s*\[(.*?)\].*?sigstatus:\s*\[(.*?)\]"
         match = re.search(connectioncallpattern, result)
 
         if match:
             port = match.group(1)
             signalstatus = match.group(2)
-       
-        signalList = []
-        for signalindex in hdmiInSignalStatustype:
-             signalList.append(hdmiInSignalStatustype(signalindex).name)
-
-        if signalstatus in signalList:
-           found = "true"
-           return port, signalstatus, found
-        else:
-           return None
+            return port, signalstatus
+        
+        return None
 
     def getHdmiInPortCallbackStatus(self):
         """
@@ -251,7 +244,7 @@ class dsHdmiInClass():
             None: If no matching signal status is found.
         """ 
         result = self.testSession.read_until("Received statuschange callback isPresented:")
-        portstatuspattern = r"Received statuschange callback isPresented:(\w+), activeport: (w+)"
+        portstatuspattern = r"Received statuschange callback isPresented:\s*\[(.*?)\].*?activeport:\s*\[(.*?)\]"
         match = re.search(portstatuspattern, result)
        
         if match:
@@ -279,25 +272,17 @@ class dsHdmiInClass():
                 - activeport(str):Active Port number as string
             None: If no matching signal status is found.
         """
-        result = self.testSession.read_until("Result dsHdmiInGetCurrentVideoMode OUT:port:[  ], pixelResolution:[  ]")
-        videomodepattern = r"Result dsHdmiInGetCurrentVideoMode OUT:port:\[(\w+)\], pixelResolution:\[(dsVIDEO_PIXELRES_\w+)\], OUT:aspectRatio:\[(dsVIDEO_ASPECT_RATIO_\w+)\]\)"
-        match = re.search(videomodepattern, result)
+        result = self.testSession.read_until("Result dsHdmiInGetCurrentVideoMode OUT:")
+        videomodepattern = r'Result dsHdmiInGetCurrentVideoMode OUT:port:\s*\[([^]]+)\].*?pixelResolution:\s*\[([^]]+)\].*?aspectRatio\[\s*([^]]+)\]'
+        match = re.search(videomodepattern, result,re.DOTALL)
 
         if match:
             port = match.group(1)
             pixelresolution = match.group(2)
             aspectratio = match.group(3)
-
-        pixelResList = []
-        for pixelindex in hdmiVideoResolution:
-             pixelResList.append(hdmiVideoResolution(pixelindex).name)
-
-        if pixelresolution in pixelResList:
-             found = "true"
-        else:
-             found = None
-
-        return port, pixelresolution, aspectratio, found
+            return port, pixelresolution, aspectratio
+        
+        return None
 
     def getAllmCallbackStatus(self):
         """
@@ -316,8 +301,8 @@ class dsHdmiInClass():
                 - allm_status (bool): True if the HDMI allm bit enabled, False otherwise.
             None: If no matching connection status is found.
         """
-        result = self.testSession.read_until("Received AllmChange status callback port: , allm_mode:")
-        allmpattern = r"Received AllmChange status callback port: (\w+), allm_mode: (\w+)"
+        result = self.testSession.read_until("Received AllmChange status callback port:")
+        allmpattern = r"Received AllmChange status callback port:\s*\[(.*?)\].*?allm_mode:\s*\[(.*?)\]"
         match = re.search(allmpattern, result)
 
         if match:
@@ -345,7 +330,7 @@ class dsHdmiInClass():
             None: If no matching connection status is found.
         """
         result = self.testSession.read_until("Received AVlatencyChange status callback audio_latency: video_latency:")
-        avlatencypattern = r"Received AVlatencyChange status callback audio_latency:(\d+) video_latency:(\d+)"
+        avlatencypattern = r"Received AVlatencyChange status callback audio_latency:\s*\[(.*?)\].*?video_latency:\s*\[(.*?)\]"
         match = re.search(avlatencypattern, result)
 
         if match:
@@ -390,7 +375,7 @@ class dsHdmiInClass():
         else:
            return None
 
-    def getHDMIInPortStatus():
+    def getHDMIInPortStatus(self):
         """
         Retrieves the HDMI In port status.
 
@@ -408,7 +393,7 @@ class dsHdmiInClass():
             None: If no matching connection status is found.
         """
         result = self.utMenu.select( self.testSuite, "Get Status")
-        typeStatusPattern = r"Result dsHdmiInGetStatus OUT:inputstatus:isPresented:\[(\w+)\], activeport:\[(dsHDMI_IN_PORT_\w+)\] \],dsError_t:\[(dsERR_\w+)\]"
+        typeStatusPattern = r"Result dsHdmiInGetStatus OUT:inputstatus:isPresented:\s*\[(.*?)\].*?activeport:\s*\[(.*?)\]"
         match = re.search(typeStatusPattern, result)
         if match:
             isPresented = match.group(1)
@@ -433,7 +418,7 @@ class dsHdmiInClass():
         promptWithAnswers = [
                 {
                     "query_type": "direct",
-                    "query": "Enter the port number to select:",
+                    "query": "List of supported ports:",
                     "input": hdmiin_port
                 },
                 {
@@ -569,7 +554,7 @@ class dsHdmiInClass():
 
         edidList = []
         for edidindex in hdmiEdidVersion:
-            edidList.append(hdmiEdidVersion(index).name)
+            edidList.append(hdmiEdidVersion(edidindex).name)
 
         return edidList
 
@@ -637,13 +622,13 @@ class dsHdmiInClass():
         """
         promptWithAnswers = [
             {
-                "query_type": "list",
-                "query": "Select dsHdmiIn Port",
+                "query_type": "direct",
+                "query": "List of supported ports",
                 "input": port_type
             },
             {
-                "query_type": "list",
-                "query": "Selected EDID Version",
+                "query_type": "direct",
+                "query": "Select allm support",
                 "input": str(allm_support)
             }
 
@@ -662,15 +647,15 @@ class dsHdmiInClass():
         """
         promptWithAnswers = [
             {
-                "query_type": "list",
-                "query": "Select dsHdmiIn Port",
+                "query_type": "direct",
+                "query": "List of supported ports",
                 "input": port_type
             }
         ]
 
         result = self.utMenu.select( self.testSuite, "Get Edid 2 Allm Support", promptWithAnswers)
 
-        typeStatusPattern = r"Result dsGetEdid2AllmSupport IN:port:\[(\w+)\]:\[.*\] OUT:allmsupport:\[(\w+)\]:\[.*\],dsError_t:\[(dsERR_\w+)\]"
+        typeStatusPattern = r"Result dsGetEdid2AllmSupport IN:port:\[(\w+)\]:\[.*\] OUT:allmsupport:\[(\w+)\]"
         match = re.search(typeStatusPattern, result)
         if match:
             edid2allm = match.group(2)

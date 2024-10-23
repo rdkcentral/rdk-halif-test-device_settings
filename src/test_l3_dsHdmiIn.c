@@ -313,17 +313,18 @@ static void hdmiInSignalChangeCB(dsHdmiInPort_t port, dsHdmiInSignalStatus_t sig
  */
 static void hdmiInStatusChangeCB(dsHdmiInStatus_t inputStatus)
 {
-    UT_LOG_INFO("Received statuschange callback isPresented:[%s], activeport: [%s]\n",
-                 UT_Control_GetMapString(bool_mapTable, inputStatus.isPresented),
-                 UT_Control_GetMapString(dsHdmiInPort_mapTable, inputStatus.activePort));
 
     for(int i = dsHDMI_IN_PORT_0 ; i < dsHDMI_IN_PORT_MAX ; i++)
     {
 
-         UT_LOG_INFO("Received statuschange callback port:[%s] , isPortConnected: [%s]\n",
+         UT_LOG_INFO("port:[%s] , isPortConnected: [%s]\n",
                       UT_Control_GetMapString(dsHdmiInPort_mapTable, i),
                       UT_Control_GetMapString(bool_mapTable, inputStatus.isPortConnected[i]));
     }
+
+    UT_LOG_INFO("Received statuschange callback isPresented:[%s], activeport: [%s]\n",
+                 UT_Control_GetMapString(bool_mapTable, inputStatus.isPresented),
+                 UT_Control_GetMapString(dsHdmiInPort_mapTable, inputStatus.activePort));
 
     gStatusChange = inputStatus;
 }
@@ -339,11 +340,11 @@ static void hdmiInVideoModeUpdateCB(dsHdmiInPort_t port, dsVideoPortResolution_t
                       UT_Control_GetMapString(dsHdmiInPort_mapTable, port),
                       UT_Control_GetMapString(dsVideoResolution_mapTable, videoResolution.pixelResolution));
 
-    UT_LOG_INFO("OUT:aspectRatio[%s], resolution name[%s])\n",
+    UT_LOG_INFO(",OUT:aspectRatio[%s], resolution name[%s])\n",
                       UT_Control_GetMapString(dsVideoAspectRatio_mapTable, videoResolution.aspectRatio),
                       videoResolution.name);
 
-    UT_LOG_INFO("OUT:stereoScopicMode:[%s], frameRate:[%s], interlaced:[%s]\n",
+    UT_LOG_INFO(",OUT:stereoScopicMode:[%s], frameRate:[%s], interlaced:[%s]\n",
                       UT_Control_GetMapString(dsVideoStereoScopicMode_mapTable, videoResolution.stereoScopicMode),
                       UT_Control_GetMapString(dsVideoFrameRate_mapTable, videoResolution.frameRate),
                       UT_Control_GetMapString(bool_mapTable, videoResolution.interlaced));
@@ -590,7 +591,6 @@ void test_l3_HdmiIn_select_port(void)
     bool topmost = false;
 
     listPorts();
-    UT_LOG_MENU_INFO("Enter the port number to select: ");
     readInput(&select);
     if(select < dsHDMI_IN_PORT_0 || select >= dsHDMI_IN_PORT_MAX)
     {

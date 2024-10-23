@@ -173,7 +173,7 @@ class dsHdmiIn_test3_PortStatusCallback_Verify(utHelperClass):
         self.log.testStart("test3_PortStatusCallback_Verify", '1')
 
         # Initialize the dsHdmiIn module
-        self.testdsHdmiIn.initialise(self.testdsHdmiIn.getDeviceType())
+        self.testdsHdmiIn.initialise()
 
         audmix = 0      #default value false
         videoplane = 0  #Always select primary plane.
@@ -184,12 +184,12 @@ class dsHdmiIn_test3_PortStatusCallback_Verify(utHelperClass):
             self.log.stepStart(f'Select {port} Port')
             self.log.step(f'Select {port} Port')
 
-            self.testdsHdmiIn.selectPort(port, audmix, videoplane, topmost)
-            self.log.step(f'Port Selcted {port}')
-
             # Check the HdmiIn device connected to is active
             result = self.CheckDeviceStatus(True,port)
             self.log.stepResult(result,f'Hdmi In Device is active {result} on {port}')
+
+            self.testdsHdmiIn.selectHDMIInPort(port, audmix, videoplane, topmost)
+            self.log.step(f'Port Selcted {port}')
                   
             status = self.testdsHdmiIn.getHdmiInPortCallbackStatus()
             if status[1] == port:
