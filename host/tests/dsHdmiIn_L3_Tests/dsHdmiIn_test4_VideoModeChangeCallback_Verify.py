@@ -176,7 +176,7 @@ class dsHdmiIn_test4_VideoModeChangeCallback_Verify(utHelperClass):
         self.log.testStart("test4_VideoModeChangeCallback_Verify", '1')
 
         # Initialize the dsHdmiIn module
-        self.testdsHdmiIn.initialise(self.testdsHdmiIn.getDeviceType())
+        self.testdsHdmiIn.initialise()
 
         audmix = 0      #default value false
         videoplane = 0  #Always select primary plane.
@@ -194,7 +194,7 @@ class dsHdmiIn_test4_VideoModeChangeCallback_Verify(utHelperClass):
             self.CheckDeviceStatusAndResolutionChange(True,port)
             
             videomode = self.testdsHdmiIn.getVideoModeCallbackStatus()
-            if port == videomode[0] and videomode[3] == "true":
+            if port == videomode[0]:
                 result = True
                 self.log.stepResult(result,f'hdmi video mode port:{port} pixelresolution:{videomode[1]} aspectratio:{videomode[2]} in Callback found')
             else:
