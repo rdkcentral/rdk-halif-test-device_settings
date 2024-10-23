@@ -34,6 +34,14 @@ from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsDisplay_test03_GetDisplayAspectRatio(utHelperClass):
 
+    """
+    Test class to retrieve and verify the display aspect ratio.
+
+    This class uses the `dsDisplayClass` to interact with the device's display,
+    downloading necessary test assets, retrieving the aspect ratio, and performing verification.
+    """
+
+    # Class variables
     testName  = "test03_GetDisplayAspectRatio"
     testSetupPath = dir_path + "/dsDisplay_L3_testSetup.yml"
     moduleName = "dsDisplay"
@@ -60,6 +68,23 @@ class dsDisplay_test03_GetDisplayAspectRatio(utHelperClass):
         # Get path to device profile file
         self.deviceProfile = dir_path + "/" + self.cpe.get("test").get("profile")
 
+    def testDownloadAssets(self):
+        """
+        Downloads the artifacts in test-setup configuration file to the dut.
+
+        Args:
+            None.
+        """
+
+        self.deviceDownloadPath = self.cpe.get("target_directory")
+
+        test = self.testSetup.get("assets").get("device").get(self.testName)
+
+        # Download test artifacts to device
+        url = test.get("artifacts")
+        if url is not None:
+            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
+
     def testRunPrerequisites(self):
         """
         Runs Prerequisite commands listed in test-setup configuration file on the dut.
@@ -69,24 +94,30 @@ class dsDisplay_test03_GetDisplayAspectRatio(utHelperClass):
         """
 
         #Run test specific commands
-        cmds = self.testSetup.assets.device.test03_GetDisplayAspectRatio.execute
+        test = self.testSetup.get("assets").get("device").get(self.testName)
+        cmds = test.get("execute")
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    def testGetAspectRatio(self, manual=False):
+    #TODO: Current version supports only manual verification.
+    def testGetDisplayAspectRatio(self, manual=False, port="dsVIDEOPORT_TYPE_HDMI" , index:int = 0):
         """
-        Gets the aspect ratio of the display.
+        Gets the aspectratio of the display.
         Args:
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                 Defaults to other verification methods
+                                    Defaults to other verification methods
+                                    port (str, optional): The type of video port to retrieve the EDID Bytes.
+                                    index (int, optional): The index of the port to retrieve the EDID Bytes.
         Returns:
             bool
         """
-        if manual == True:
+        # Get the aspectratio from the display
+        aspectratio = self.testdsDisplay.getAspectRatio(port, index)
+
+        if manual:
             # Manual verification
-            aspect_ratio = self.testdsDisplay.getAspectRatio()
-            return self.testUserResponse.getUserYN(f"Is the aspect ratio {aspect_ratio} correct? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Is the aspectratio {aspectratio} correct? (Y/N):")
         else:
             # Automation verification
             #TODO: Add automation verification methods
@@ -94,11 +125,20 @@ class dsDisplay_test03_GetDisplayAspectRatio(utHelperClass):
 
     def testFunction(self):
         """
-        This function will test the Display by getting the aspect ratio of the display
+        This function will test the Display by getting the aspectratio of the display.
+
+        This function:
+        - Downloads the required assets.
+        - Runs the prerequisite commands.
+        - Retrieves aspectratio for each supported port and verifies them.
+        - Cleans up assets after the test.
 
         Returns:
-            bool
+            bool: Final result of the test.
         """
+
+        # Download the assets listed in the test setup configuration file
+        self.testDownloadAssets()
 
         # Run Prerequisites listed in the test setup configuration file
         self.testRunPrerequisites()
@@ -106,8 +146,30 @@ class dsDisplay_test03_GetDisplayAspectRatio(utHelperClass):
         # Create an instance of the dsDisplayClass
         self.testdsDisplay = dsDisplayClass(self.deviceProfile, self.hal_session)
 
-        # Get the aspect ratio of the display
-        result = self.testGetAspectRatio()
+        # Initialize the dsDisplay module
+        self.testdsDisplay.initialise()
+
+        self.log.testStart(self.testName, '1')
+
+        # Get the supported video ports
+        supported_ports = self.testdsDisplay.getSupportedPorts()
+        result=True
+
+        if not supported_ports:
+            self.log.error("No supported ports found.")
+            return False
+
+        # Loop through the supported video ports
+        for port, index in supported_ports:
+            self.log.info(f"Testing port {port} at index {index}.")
+            edid_result = self.testGetDisplayAspectRatio(manual=True, port=port, index=index)
+            if not edid_result:
+                self.log.error(f"DisplayAspectRatio verification failed for port {port} at index {index}.")
+                result = False
+                break  # Exit if verification fails
+
+        #Terminate dsDisplay Module
+        self.testdsDisplay.terminate()
 
         # Delete the dsDisplay class
         del self.testdsDisplay

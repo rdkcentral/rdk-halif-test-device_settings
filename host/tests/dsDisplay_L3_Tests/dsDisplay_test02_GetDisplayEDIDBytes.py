@@ -32,24 +32,24 @@ from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsDisplay_test01_GetDisplayEDID(utHelperClass):
+class dsDisplay_test02_GetDisplayEDIDBytes(utHelperClass):
 
     """
-    Test class to retrieve and verify the EDID (Extended Display Identification Data) from a display.
+    Test class to retrieve and verify EDID bytes from the display.
 
     This class uses the `dsDisplayClass` to interact with the device's display,
-    downloading necessary test assets, retrieving the EDID, and performing verification.
+    downloading necessary test assets, retrieving EDID bytes, and performing verification.
     """
 
     # Class variables
-    testName  = "test01_GetDisplayEDID"
+    testName  = "test02_GetDisplayEDIDBytes"
     testSetupPath = dir_path + "/dsDisplay_L3_testSetup.yml"
     moduleName = "dsDisplay"
     rackDevice = "dut"
 
     def __init__(self):
         """
-        Initializes the test03_GetDisplayAspectRatio test .
+        Initializes the test02_GetDisplayEDIDBytes test .
 
         Args:
             None.
@@ -101,23 +101,23 @@ class dsDisplay_test01_GetDisplayEDID(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testGetEDID(self, manual=False, port="dsVIDEOPORT_TYPE_HDMI" , index:int = 0):
+    def testGetEDIDBytes(self, manual=False, port="dsVIDEOPORT_TYPE_HDMI" , index:int = 0):
         """
-        Gets the EDID of the display.
+        Gets the EDIDBytes of the display through the specified video port.
         Args:
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
                                     Defaults to other verification methods
-                                    port (str, optional): The type of video port to retrieve the EDID.
-                                    index (int, optional): The index of the port to retrieve the EDID.
+                                    port (str, optional): The type of video port to retrieve the EDID Bytes.
+                                    index (int, optional): The index of the port to retrieve the EDID Bytes.
         Returns:
             bool
         """
-        # Get the EDID from the display
-        edid = self.testdsDisplay.getEdid(port, index)
+        # Get the EDIDBytes from the display
+        edidbytes = self.testdsDisplay.getEdidBytes(port, index)
 
         if manual:
             # Manual verification
-            return self.testUserResponse.getUserYN(f"Is the EDID {edid} correct? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Is the EDID {edidbytes} correct? (Y/N):")
         else:
             # Automation verification
             #TODO: Add automation verification methods
@@ -125,12 +125,12 @@ class dsDisplay_test01_GetDisplayEDID(utHelperClass):
 
     def testFunction(self):
         """
-        This function will test the Display by getting the EDID of the display.
+        This function will test the Display by getting the EDID Bytes of the display.
 
         This function:
         - Downloads the required assets.
         - Runs the prerequisite commands.
-        - Retrieves EDID for each supported port and verifies them.
+        - Retrieves EDID bytes for each supported port and verifies them.
         - Cleans up assets after the test.
 
         Returns:
@@ -162,7 +162,7 @@ class dsDisplay_test01_GetDisplayEDID(utHelperClass):
         # Loop through the supported video ports
         for port, index in supported_ports:
             self.log.info(f"Testing port {port} at index {index}.")
-            edid_result = self.testGetEDID(manual=True, port=port, index=index)
+            edid_result = self.testGetEDIDBytes(manual=True, port=port, index=index)
             if not edid_result:
                 self.log.error(f"EDID verification failed for port {port} at index {index}.")
                 result = False
@@ -177,5 +177,5 @@ class dsDisplay_test01_GetDisplayEDID(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsDisplay_test01_GetDisplayEDID()
+    test = dsDisplay_test02_GetDisplayEDIDBytes()
     test.run(False)
