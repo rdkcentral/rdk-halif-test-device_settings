@@ -31,7 +31,6 @@ sys.path.append(os.path.join(dir_path, "../"))
 from dsClasses.dsHdmiIn import dsHdmiInClass
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
-from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsHdmiIn_test7_AVIChangeCallback_Verify(utHelperClass):
@@ -124,7 +123,7 @@ class dsHdmiIn_test7_AVIChangeCallback_Verify(utHelperClass):
         Args:
             None.
         """
-    def CheckDeviceStatus(self, manual=False, port_type:str=0):
+    def CheckDeviceStatus(self, manual=False, port_type:str=0, avi_input:str=0):
         """
         Verifies whether the particular input selected or not.
 
@@ -135,8 +134,10 @@ class dsHdmiIn_test7_AVIChangeCallback_Verify(utHelperClass):
         Returns:
             bool
         """
-        if manual == True:
-            return self.testUserResponse.getUserYN("Check Hdmi In device on {port_type} is ON and press Enter")
+        if manual == True and avi_input != True:
+            return self.testUserResponse.getUserYN(f'Check Hdmi In device on {port_type} is ON and press Enter:')
+        elif manual == True and avi_input == True:
+            return self.testUserResponse.getUserYN(f'Please change the AVI Content on device connected to {port_type} and press Enter:')
         else :
             #TODO: Add automation verification methods
             return False
@@ -166,7 +167,7 @@ class dsHdmiIn_test7_AVIChangeCallback_Verify(utHelperClass):
         self.log.testStart("test7_AVIChangeCallback_Verify", '1')
 
         # Initialize the dsHdmiIn module
-        self.testdsHdmiIn.initialise(self.testdsHdmiIn.getDeviceType())
+        self.testdsHdmiIn.initialise()
 
         audmix = 0      #default value false
         videoplane = 0  #Always select primary plane.
@@ -178,9 +179,10 @@ class dsHdmiIn_test7_AVIChangeCallback_Verify(utHelperClass):
             self.log.step(f'Select {port} Port')
 
             # Check the HdmiIn device is active
-            result = self.CheckDeviceStatus(True,port)
-            self.testdsHdmiIn.selectPort(port, audmix, videoplane, topmost)
+            self.CheckDeviceStatus(True, port, False)
+            self.testdsHdmiIn.selectHDMIInPort(port, audmix, videoplane, topmost)
             self.log.step(f'HdmiIn Select Verification {port} Port')
+            self.CheckDeviceStatus(True, port, True)
             avistatus = self.testdsHdmiIn.getAVIContentCallbackStatus()
             if avistatus[0] == port and avistatus[2] == "true":
                result = True
