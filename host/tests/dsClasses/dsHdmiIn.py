@@ -364,16 +364,9 @@ class dsHdmiInClass():
         if match:
             porttype = match.group(1)
             avi_content_type = match.group(2)
+            return porttype, avi_content_type
 
-        contentList = []
-        for contentindex in hdmiInAviContentType:
-            contentList.append(hdmiInAviContentType(contentindex).name)
-        
-        if avi_content_type in contentList:
-           found = "true"
-           return porttype, avi_content_type, found
-        else:
-           return None
+        return None
 
     def getHDMIInPortStatus(self):
         """
