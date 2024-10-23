@@ -2,7 +2,7 @@
 #location: https://github.com/rdkcentral/rdk-halif-test-device_settings/tree/3.1.2/assets/
 
 dsCompositeIn:
-  description: "dsAudio Device Settings test setup"
+  description: "dsCompositeIn Device Settings test setup"
   assets:
     device:
       defaults: &defaults
