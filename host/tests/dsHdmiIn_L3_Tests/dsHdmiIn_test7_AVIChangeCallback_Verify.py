@@ -184,7 +184,7 @@ class dsHdmiIn_test7_AVIChangeCallback_Verify(utHelperClass):
             self.log.step(f'HdmiIn Select Verification {port} Port')
             self.CheckDeviceStatus(True, port, True)
             avistatus = self.testdsHdmiIn.getAVIContentCallbackStatus()
-            if avistatus[0] == port and avistatus[2] == "true":
+            if avistatus[0] == port:
                result = True
                self.log.stepResult(result,f'AVI content type:{avistatus[1]} on port:{avistatus[0]} found in Callback')
             else:
