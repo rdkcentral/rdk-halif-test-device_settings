@@ -19,7 +19,7 @@
 # * See the License for the specific language governing permissions and
 # * limitations under the License.
 # *
-#* ******************************************************************************
+#*******************************************************************************
 
 import os
 import sys
@@ -34,7 +34,7 @@ from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsHdmiIn_test9_ScalevideoAndVerify(utHelperClass):
 
-    testName  = "dsHdmiIn_test9_ScalevideoAndVerify"
+    testName  = "test9_ScalevideoAndVerify"
     testSetupPath = dir_path + "/dsHdmiIn_L3_testSetup.yml"
     moduleName = "dsHdmiIn"
     rackDevice = "dut"
@@ -143,9 +143,9 @@ class dsHdmiIn_test9_ScalevideoAndVerify(utHelperClass):
             bool
         """
         if manual == True and videoscale == False:
-            return self.testUserResponse.getUserYN("Check HdmiIn device on {port_type} press Enter")
+            return self.testUserResponse.getUserYN(f'Check HdmiIn device on {port_type} press Enter:')
         elif manual == True and videoscale == True:
-            return self.testUserResponse.getUserYN("Check video scaled on {port_type} press Enter")
+            return self.testUserResponse.getUserYN(f'Check video scaled on {port_type} press Enter:')
         else:
             #TODO: Add automation verification methods
             return False
@@ -175,16 +175,16 @@ class dsHdmiIn_test9_ScalevideoAndVerify(utHelperClass):
         self.log.testStart("test9_ScalevideoAndVerify", '1')
 
         # Initialize the dsHdmiIn module
-        self.testdsHdmiIn.initialise(self.testdsHdmiIn.getDeviceType())
+        self.testdsHdmiIn.initialise()
    
         audmix = 0      #default value false
         videoplane = 0  #Always select primary plane.
         topmost = 1     #Always should be true.
         
         # x-coordiante, y-coordinate, width, height list
-        videoScale_argList = [[500,500,500,500], [500,500,1000,1000],[1000,1000,2000,2000]]
+        videoScale_argList = [[500,500,500,500], [500,500,1000,1000],[1000,1000,1000,1000]]
         # Loop through the supported HdmiIn ports
-        for port,index in self.testdsHdmiIn.getSupportedPorts():
+        for port in self.testdsHdmiIn.getSupportedPorts():
             self.log.stepStart(f'Select {port} Port')
             self.log.step(f'Select {port} Port')
 
@@ -193,7 +193,7 @@ class dsHdmiIn_test9_ScalevideoAndVerify(utHelperClass):
             self.log.stepResult(result,f'Hdmi In Device is active {result} on {port}')
 
             # Select the HdmiIn port
-            self.testdsHdmiIn.selectHDMIInPort(port, index, audmix, videoplane, topmost)
+            self.testdsHdmiIn.selectHDMIInPort(port, audmix, videoplane, topmost)
             self.log.step(f'Selected port {port} Port')
             # video scaling of HdmiIn port
             for xcord, ycord, width, height in videoScale_argList:

@@ -35,7 +35,7 @@ from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsHdmiIn_test13_SetAndGetEDIDVersion(utHelperClass):
 
-    testName  = "dsHdmiIn_test13_SetAndGetEDIDVersion"
+    testName  = "test13_SetAndGetEDIDVersion"
     testSetupPath = dir_path + "/dsHdmiIn_L3_testSetup.yml"
     moduleName = "dsHdmiIn"
     rackDevice = "dut"
@@ -141,7 +141,7 @@ class dsHdmiIn_test13_SetAndGetEDIDVersion(utHelperClass):
             bool
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f'check the Device Connected to {port_type} is ON and press Enter')
+            return self.testUserResponse.getUserYN(f'check the Device Connected to {port_type} is ON and press Enter:')
         else :
             #TODO: Add automation verification methods
             return False
@@ -171,7 +171,7 @@ class dsHdmiIn_test13_SetAndGetEDIDVersion(utHelperClass):
         self.log.testStart("test13_SetAndGetEDIDVersion", '1')
 
         # Initialize the dsHdmiIn module
-        self.testdsHdmiIn.initialise(self.testdsHdmiIn.getDeviceType())
+        self.testdsHdmiIn.initialise()
 
         audmix = 0      #default value false
         videoplane = 0  #Always select primary plane.
@@ -180,31 +180,23 @@ class dsHdmiIn_test13_SetAndGetEDIDVersion(utHelperClass):
         # Loop through the supported HdmiIn ports
         for port in self.testdsHdmiIn.getSupportedPorts():
             self.log.stepStart(f'{port} Port')
-
-            # Check the HdmiIn device connected to is active
-            result = self.CheckDeviceStatus(True,port)
-            self.log.stepResult(result,f'Hdmi In Device is active {result} on {port}')
             
-            # Selecting Hdmi In port
-            self.testdsHdmiIn.selectPort(port, audmix, videoplane, topmost)
-            self.log.step(f'Port Selcted {port}')
-
             #get the list EDID versions
             edidVersionList = self.testdsHdmiIn.getEDIDVersionList()
 
             #Setting EDID Version on particular Hdmi input
-            for versionindex in edidVersionList:
-               if edidVersionList[versionindex] != "HDMI_EDID_VER_MAX":
-                   self.testdsHdmiIn.setEdidVersion(port, edidVersionList[versionindex])
+            for edidversion in edidVersionList:
+               if edidversion != "HDMI_EDID_VER_MAX":
+                   self.testdsHdmiIn.setEdidVersion(port, edidversion)
                    #Getting EDID Version 
-                   self.log.setp(f'Getting {port} edid version')
+                   self.log.step(f'Getting {port} edid version')
                    edidstatus = self.testdsHdmiIn.getEdidVersion(port)
-                   if result == edidVersionList[versionindex]:
+                   if edidstatus == edidversion:
                          result = True
-                         self.log.setpResult(result,f'Verified getversion:{edidstatus} setversion:{edidVersionList[versionindex]} same')
+                         self.log.stepResult(result,f'Verified getversion:{edidstatus} setversion:{edidversion} same')
                    else:
                          result = False
-                         self.log.setpResult(result,f'Verified getversion:{edidstatus} setversion:{edidVersionList[versionindex]} same')      
+                         self.log.stepResult(result,f'Verified getversion:{edidstatus} setversion:{edidversion} same')      
                                    
         # Clean the assets downloaded to the device
         self.testCleanAssets()

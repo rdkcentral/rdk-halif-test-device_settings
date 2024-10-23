@@ -143,7 +143,7 @@ class dsHdmiIn_test8_SelectportAndVerifyPortStatus(utHelperClass):
             bool
         """
         if manual == True:
-            return self.testUserResponse.getUserYN("Check HdmiIn device of {port_type} is ON and press Enter")
+            return self.testUserResponse.getUserYN(f'Check HdmiIn device of {port_type} is ON and press Enter:')
         else :
             #TODO: Add automation verification methods
             return False
@@ -173,7 +173,7 @@ class dsHdmiIn_test8_SelectportAndVerifyPortStatus(utHelperClass):
         self.log.testStart("test8_SelectPortAndVerifyPortStatus", '1')
 
         # Initialize the dsHdmiIn module
-        self.testdsHdmiIn.initialise(self.testdsHdmiIn.getDeviceType())
+        self.testdsHdmiIn.initialise()
    
         audmix = 0      #default value false
         videoplane = 0  #Always select primary plane.
@@ -185,11 +185,11 @@ class dsHdmiIn_test8_SelectportAndVerifyPortStatus(utHelperClass):
             self.log.step(f'Select {port} Port')
 
             # Check the HdmiIn device connected to is active
-            result = self.CheckDeviceStatus(True,port)
-            self.log.stepResult(result,f'Hdmi In Device is active {result} on {port}')
+            result = self.CheckDeviceStatus(True, port)
+            self.log.step(f'Hdmi In Device is active {result} on {port}')
 
             # Select the Hdmi In port
-            self.testdsHdmiIn.selectHdmiInPort(port, audmix, videoplane, topmost)
+            self.testdsHdmiIn.selectHDMIInPort(port, audmix, videoplane, topmost)
             portstatus = self.testdsHdmiIn.getHDMIInPortStatus()
             if port == portstatus[1]:
                result = True
