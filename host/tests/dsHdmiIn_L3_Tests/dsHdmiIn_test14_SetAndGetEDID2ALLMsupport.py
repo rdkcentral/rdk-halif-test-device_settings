@@ -35,7 +35,7 @@ from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsHdmiIn_test14_SetAndGetEDID2ALLMsupport(utHelperClass):
 
-    testName  = "dsHdmiIn_test14_SetAndGetEDID2ALLMsupport"
+    testName  = "test14_SetAndGetEDID2ALLMsupport"
     testSetupPath = dir_path + "/dsHdmiIn_L3_testSetup.yml"
     moduleName = "dsHdmiIn"
     rackDevice = "dut"
@@ -172,14 +172,14 @@ class dsHdmiIn_test14_SetAndGetEDID2ALLMsupport(utHelperClass):
         self.log.testStart("test14_SetAndGetEDID2ALLMsupport", '1')
 
         # Initialize the dsHdmiIn module
-        self.testdsHdmiIn.initialise(self.testdsHdmiIn.getDeviceType())
+        self.testdsHdmiIn.initialise()
 
         audmix = 0      #default value false
         videoplane = 0  #Always select primary plane.
         topmost = 1     #Always should be true.
    
         # Loop through the supported HdmiIn ports
-        for port,index in self.testdsHdmiIn.getSupportedPorts():
+        for port in self.testdsHdmiIn.getSupportedPorts():
             self.log.stepStart(f'{port} Port')
 
             # Check the HdmiIn device connected to is active
@@ -187,21 +187,21 @@ class dsHdmiIn_test14_SetAndGetEDID2ALLMsupport(utHelperClass):
             self.log.stepResult(result,f'Hdmi In Device is active {result} on {port}')
             
             # Selecting Hdmi In port
-            self.testdsHdmiIn.selectPort(port, audmix, videoplane, topmost)
-            self.log.step(f'Port Selcted {port}')
+            #self.testdsHdmiIn.selectPort(port, audmix, videoplane, topmost)
+            #self.log.step(f'Port Selcted {port}')
 
             #Setting ALLM on particular Hdmi input to true and false
             for versionindex in range(0,1):
                 self.testdsHdmiIn.setEdid2Allm(port,versionindex)
                 #Getting ALLM value set  
-                self.log.setp(f'Getting {port} edid 2 allm version')
+                self.log.step(f'Getting {port} edid 2 allm version')
                 allmstatus = self.testdsHdmiIn.getEdid2Allm(port)
                 if allmstatus == "false" or "true":
                    result = True
-                   self.log.setpResult(result,f'Verified get allm:{allmstatus} set allm same')
+                   self.log.stepResult(result,f'Verified get allm:{allmstatus} set allm same')
                 else:
                    result = False
-                   self.log.setpResult(result,f'Verified get allm:{allmstatus} set allm same')
+                   self.log.stepResult(result,f'Verified get allm:{allmstatus} set allm same')
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()

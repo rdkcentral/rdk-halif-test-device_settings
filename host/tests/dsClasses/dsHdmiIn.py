@@ -357,8 +357,8 @@ class dsHdmiInClass():
                 - allm_content_type (str): The AVI content type as a string.
             None: If no matching connection status is found.
         """
-        result = self.testSession.read_until("Received AviContentType change callback port: , avi_content_type:")
-        avipattern = r"Received AviContentType change callback port: (\w+), avi_content_type: (w+)"
+        result = self.testSession.read_until("Received AviContentType change callback port:")
+        avipattern = r"Received AviContentType change callback port:\s*\[(.*?)\].*?avi_content_type:\s*\[(.*?)\]"
         match = re.search(avipattern, result)
 
         if match:
@@ -417,9 +417,9 @@ class dsHdmiInClass():
         """
         promptWithAnswers = [
                 {
-                    "query_type": "direct",
+                    "query_type": "list",
                     "query": "List of supported ports:",
-                    "input": hdmiin_port
+                    "input": str(hdmiin_port)
                 },
                 {
                     "query_type": "direct",
