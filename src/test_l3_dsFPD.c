@@ -560,7 +560,7 @@ void test_l3_dsFPD_hal_SetFPColor(void)
     }
     UT_LOG_MENU_INFO("----------------------------------------------------------");
     UT_LOG_MENU_INFO("Select Color: ");
-    scanf("%u", &uColor);
+    scanf("%06X", &uColor);
     readAndDiscardRestOfLine(stdin);
     isValidColor = false;
     for (int32_t j = 0; j < dsFPD_COLOR_MAX; j++)

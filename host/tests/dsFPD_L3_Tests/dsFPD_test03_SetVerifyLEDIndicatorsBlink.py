@@ -34,12 +34,14 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsFPD_test01_EnableDisableAndVerifyLEDIndicators(utHelperClass):
+class dsFPD_test03_SetVerifyLEDIndicatorsBlink(utHelperClass):
 
-    testName  = "test01_EnableDisableAndVerifyLEDIndicators"
+    testName  = "test03_SetVerifyLEDIndicatorsBlink"
     testSetupPath = os.path.join(dir_path, "dsFPD_L3_testSetup.yml")
     moduleName = "dsFPD"
     rackDevice = "dut"
+    blinkDuration = 1000
+    blinkIteration = 5
 
     def __init__(self):
         """
@@ -61,6 +63,9 @@ class dsFPD_test01_EnableDisableAndVerifyLEDIndicators(utHelperClass):
 
         # Get path to device profile file
         self.deviceProfile = os.path.join(dir_path, self.cpe.get("test").get("profile"))
+
+        self.blinkDuration = 1000
+        self.blinkIteration = 5
 
     def testDownloadAssets(self):
         """
@@ -120,6 +125,25 @@ class dsFPD_test01_EnableDisableAndVerifyLEDIndicators(utHelperClass):
         else :
             #todo: add automation verification methods
             return False
+    
+    #TODO: Current version supports only manual verification.
+    def testVerifyIndicatorBlink(self, indicator, manual=False):
+        """
+        Verifies whether the audio is working on the specified port.
+
+        Args:
+            port (str) : Audio port to verify
+            manual (bool, optional): Manual verification (True: manual, False: automated).
+                                     Defaults to False
+
+        Returns:
+            bool : Returns the status of the audio verification.
+        """
+        if manual == True:
+            return self.testUserResponse.getUserYN(f"Is {indicator} Blinking {self.blinkDuration/1000} seconds for {self.blinkIteration} times? (Y/N):")
+        else :
+            #todo: add automation verification methods
+            return False
 
     def testFunction(self):
         """tests the audio ports by enabling and disabling the ports.
@@ -150,23 +174,15 @@ class dsFPD_test01_EnableDisableAndVerifyLEDIndicators(utHelperClass):
             self.testdsFPD.setState(indicator.name,dsFPDState.dsFPD_STATE_ON.name)
             result = self.testVerifyIndicator(indicator.name,dsFPDState.dsFPD_STATE_ON.name, True)
             self.log.stepResult(result, f'Indicator State Verification {indicator.name} indicator')
-            result = False
-            state = self.testdsFPD.getState(indicator.name)
-            if state == dsFPDState.dsFPD_STATE_ON.name:
-                result = True
-            self.log.stepResult(result, f'Indicator {indicator.name} get  {state} state')
-
+            self.testdsFPD.blinkIndicator(indicator.name,self.blinkDuration,self.blinkIteration)
+            result = self.testVerifyIndicatorBlink(indicator.name,True)
+            self.log.stepResult(result, f'Indicator State Verification {indicator.name} indicator')
             # Port Disable test
             self.log.stepStart(f'Set {indicator.name} state OFF')
             # Disable the audio port
             self.testdsFPD.setState(indicator.name,dsFPDState.dsFPD_STATE_OFF.name)
             result = self.testVerifyIndicator(indicator.name,dsFPDState.dsFPD_STATE_OFF.name,True)
             self.log.stepResult(result, f'Indicator State Verification {indicator.name} indicator')
-            result = False
-            state = self.testdsFPD.getState(indicator.name)
-            if state == dsFPDState.dsFPD_STATE_OFF.name:
-                result = True
-            self.log.stepResult(result, f'Indicator {indicator.name} get  {state} state')
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
@@ -180,5 +196,5 @@ class dsFPD_test01_EnableDisableAndVerifyLEDIndicators(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsFPD_test01_EnableDisableAndVerifyLEDIndicators()
+    test = dsFPD_test03_SetVerifyLEDIndicatorsBlink()
     test.run(False)

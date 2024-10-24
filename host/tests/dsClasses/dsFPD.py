@@ -74,7 +74,7 @@ class dsFPDClass():
 
     moduleName = "dsFPD"
     menuConfig =  dir_path + "/dsFPD_test_suite.yml"
-    testSuite = "L3 dsFPD"
+    testSuite = "L3 Front Panel Functions"
 
     """
     Device Settings Front Panel Device Class
@@ -107,7 +107,7 @@ class dsFPDClass():
         """
         result = self.utMenu.select( self.testSuite, "Initialize dsFPD")
 
-    def setState(self, fdp_indicator:int=1, indicator_state:int=1):
+    def setState(self, fdp_indicator:str="dsFPD_INDICATOR_POWER", indicator_state:str="dsFPD_STATE_ON"):
         """
         Set the LED Indicator State.
 
@@ -134,7 +134,7 @@ class dsFPDClass():
         promptWithAnswers[1]["input"] = str(indicator_state)
         result = self.utMenu.select(self.testSuite, "Set Front Panel Indicator State", promptWithAnswers)
 
-    def getState(self, fdp_indicator:int=1):
+    def getState(self, fdp_indicator:str="dsFPD_INDICATOR_POWER"):
         """
         Get the LED Indicator State.
 
@@ -155,12 +155,12 @@ class dsFPDClass():
         promptWithAnswers[0]["input"] = str(fdp_indicator)
 
         result = self.utMenu.select(self.testSuite, "Get Front Panel Indicator State", promptWithAnswers)
-        LedStatePattern = r"Result dsGetFPState\(IN:Indicator:\[.*\], OUT:State:\[(dsFPD_INDICATOR_\w+)\]\)"
+        LedStatePattern = r"Result dsGetFPState\(IN:Indicator:\[.*\], OUT:State:\[(dsFPD_\w+)\]\)"
         ledState = self.searchPattern(result,LedStatePattern)
 
         return ledState
 
-    def blinkIndicator(self, fdp_indicator:int=1, blink_duration:int=1000, blink_iteration:int=3):
+    def blinkIndicator(self, fdp_indicator:str="dsFPD_INDICATOR_POWER", blink_duration:int=1000, blink_iteration:int=3):
         """
         Set the FPD indicator to defined Blink pattern.
 
@@ -191,10 +191,10 @@ class dsFPDClass():
         ]
         promptWithAnswers[0]["input"] = str(fdp_indicator)
         promptWithAnswers[1]["input"] = str(blink_duration)
-        promptWithAnswers[1]["input"] = str(blink_iteration)
+        promptWithAnswers[2]["input"] = str(blink_iteration)
         result = self.utMenu.select(self.testSuite, "Blink Front Panel Indicator", promptWithAnswers)
 
-    def setBrightness(self, fdp_indicator:int=1, brightness:int=100):
+    def setBrightness(self, fdp_indicator:str="dsFPD_INDICATOR_POWER", brightness:int=100):
         """
         Set the FPD indicator to defined Blink pattern.
 
@@ -219,9 +219,9 @@ class dsFPDClass():
         ]
         promptWithAnswers[0]["input"] = str(fdp_indicator)
         promptWithAnswers[1]["input"] = str(brightness)
-        result = self.utMenu.select(self.testSuite, "Set Front Panel Indicaor Brightness", promptWithAnswers)
+        result = self.utMenu.select(self.testSuite, "Set Front Panel Indicaor Brightne", promptWithAnswers)
 
-    def getBrightness(self, fdp_indicator:int=1):
+    def getBrightness(self, fdp_indicator:str="dsFPD_INDICATOR_POWER"):
         """
         Get the FPD indicator to defined Blink pattern.
 
@@ -239,14 +239,14 @@ class dsFPDClass():
             }
         ]
         promptWithAnswers[0]["input"] = str(fdp_indicator)
-        result = self.utMenu.select(self.testSuite, "Get Front Panel Indicaor Brightness", promptWithAnswers)
+        result = self.utMenu.select(self.testSuite, "Get Front Panel Indicaor Brightne", promptWithAnswers)
         
         LedBrightnessPattern = r"Result dsGetFPBrightness\(IN:Indicator:\[.*\], OUT:Brightness:\[(\d+)\]\)"
         ledBrightness = self.searchPattern(result,LedBrightnessPattern)
 
         return ledBrightness
 
-    def setIndicatorColor(self, fdp_indicator:int=1, color:int=0xFFFFFF):
+    def setIndicatorColor(self, fdp_indicator:str="dsFPD_INDICATOR_POWER", color:str="dsFPD_COLOR_WHITE"):
         """
         Set the FPD indicator to defined Blink pattern.
 
@@ -264,16 +264,16 @@ class dsFPDClass():
                 "input": "dsFPD_INDICATOR_POWER"
             },
             {
-                "query_type": "list",
+                "query_type": "direct",
                 "query": "Select Color: ",
-                "input": "dsFPD_COLOR_WHITE"
+                "input": "0XFFFFFF"
             }
         ]
         promptWithAnswers[0]["input"] = str(fdp_indicator)
-        promptWithAnswers[1]["input"] = str(color)
-        result = self.utMenu.select(self.testSuite, "Set Front Panel State Pattern", promptWithAnswers)
+        promptWithAnswers[1]["input"] = str('{:06X}'.format(color))
+        result = self.utMenu.select(self.testSuite, "Set Front Panel Indicator Color", promptWithAnswers)
 
-    def getIndicatorColor(self, fdp_indicator:int=1):
+    def getIndicatorColor(self, fdp_indicator:str="dsFPD_INDICATOR_POWER"):
         """
         Get the FPD indicator to defined Blink pattern.
 
@@ -293,13 +293,13 @@ class dsFPDClass():
         promptWithAnswers[0]["input"] = str(fdp_indicator)
         result = self.utMenu.select(self.testSuite, "Get Front Panel Indicator Color", promptWithAnswers)
 
-        LedColorPattern = r"Result dsGetFPColor(IN:Indicator:\[.*\], OUT:Color:\[(dsFPD_COLOR_\w+)\]\)"
+        LedColorPattern = r"Result dsGetFPColor\(IN:Indicator:\[.*\], OUT:Color:\[(dsFPD_COLOR_\w+)\]\)"
         ledColor = self.searchPattern(result,LedColorPattern)
 
         return ledColor
 
 
-    def setLedStatPattern(self, fdp_indicator:int=1, pattern:int=1):
+    def setLedStatePattern(self, pattern:str="dsFPD_LED_DEVICE_ACTIVE"):
         """
         Set the FPD indicator to defined Blink pattern.
 
@@ -313,20 +313,14 @@ class dsFPDClass():
         promptWithAnswers = [
             {
                 "query_type": "list",
-                "query": "Select Indicator :",
-                "input": "dsFPD_INDICATOR_POWER"
-            },
-            {
-                "query_type": "list",
                 "query": "Select State: ",
                 "input": "dsFPD_LED_DEVICE_ACTIVE"
             }
         ]
-        promptWithAnswers[0]["input"] = str(fdp_indicator)
-        promptWithAnswers[1]["input"] = str(pattern)
+        promptWithAnswers[0]["input"] = str(pattern)
         result = self.utMenu.select(self.testSuite, "Set Front Panel State Pattern", promptWithAnswers)
 
-    def getLedStatPattern(self, fdp_indicator:int=1):
+    def getLedStatePattern(self):
         """
         Get the FPD indicator to defined Blink pattern.
 
@@ -336,17 +330,9 @@ class dsFPDClass():
         Returns:
             Front panel pattern states.
         """
-        promptWithAnswers = [
-            {
-                "query_type": "list",
-                "query": "Select Indicator :",
-                "input": "dsFPD_INDICATOR_POWER"
-            }
-        ]
-        promptWithAnswers[0]["input"] = str(fdp_indicator)
-        result = self.utMenu.select(self.testSuite, "Get Front Panel State Pattern", promptWithAnswers)
+        result = self.utMenu.select(self.testSuite, "Get Front Panel State Pattern")
 
-        FPStatePattern = r"Result dsFPGetLEDState(OUT:FP LED State:\[(dsFPD_LED_DEVICE_\w+)\]\)"
+        FPStatePattern = r"Result dsFPGetLEDState\(OUT:FP LED State:\[(dsFPD_LED_DEVICE_\w+)\]\)"
         fpState = self.searchPattern(result,FPStatePattern)
 
         return fpState
@@ -361,7 +347,7 @@ class dsFPDClass():
         Returns:
             All supported Front panel pattern States.
         """
-        result = self.utMenu.select(self.testSuite, "Get Supported Front Panel State Patterns")
+        result = self.utMenu.select(self.testSuite, "Get Supported Front Panel State P")
         SupportedStatesPattern = r"Result dsFPGetSupportedLEDStates\(OUT:states:\[(0x\w+)\]\)"
         supportedStates = self.searchPattern(result,SupportedStatesPattern)
 
@@ -406,10 +392,11 @@ class dsFPDClass():
         if not indicators:
             return None
 
-        indicatorType = indicators['index'].Indicator_Type
+        indicator = indicators[index]
+        indicatorType = indicator.get("Indicator_Type")
         return indicatorType
 
-    def getSupportedIndicators(self, index:int = 1):
+    def getSupportedIndicators(self):
         """
         Get All the supproted indicator list.
 
@@ -421,7 +408,7 @@ class dsFPDClass():
         """
         indicators = []
         for i in range(1,self.getNumberOfIndicators()+1):
-            indicator = self.getTypeOfIndicator(i)
+            indicator = dsFPDIndicatorType(self.getTypeOfIndicator(i))
             indicators.append(indicator)
         return indicators
 
@@ -435,14 +422,37 @@ class dsFPDClass():
         Returns:
             Array of Supported colors
         """
+        supportedColors = []
         indicators = self.deviceProfile.get("SupportedFPDIndicators")
         if not indicators:
             return []
 
-        supportedColors = indicators['index'].supportedColors
-        if not supportedColors:
+        colorsFromConfig = indicators[index].get("supportedColors")
+        if not colorsFromConfig:
             return []
+        for color in colorsFromConfig:
+            supportedColors.append(dsFPDColor(color))
         return supportedColors
+
+    def getSupportedStatesFromConfig(self, index:int = 1):
+        """
+        Get Supported color of indicator at the given index.
+
+        Args:
+            index:int - index of the indicator.
+
+        Returns:
+            Array of Supported colors
+        """
+        supportedStates = []
+        stateConfig = self.deviceProfile.get("SupportedLEDStates")
+        if not stateConfig:
+            return []
+
+        for s in dsFPDLedState:
+            if stateConfig & (1<<s.value):
+                supportedStates.append(s)
+        return supportedStates
 
     def getDefaultColorMode(self, index:int = 1):
         """
@@ -458,10 +468,10 @@ class dsFPDClass():
         if not indicators:
             return []
 
-        colorMode = indicators['index'].DEFAULT_COLOR_MODE
+        colorMode = indicators[index].get("DEFAULT_COLOR_MODE")
         return colorMode
 
-    def getMAxBrightnessValue(self, index:int = 1):
+    def getMaxBrightnessValue(self, index:int = 1):
         """
         Get Maximum brightness of indicator at the given index.
 
@@ -475,7 +485,7 @@ class dsFPDClass():
         if not indicators:
             return []
 
-        maxBrightness = indicators['index'].MAX_BRIGHTNESS
+        maxBrightness = indicators[index].get("MAX_BRIGHTNESS")
         return maxBrightness
 
     def getMinBrightnessValue(self, index:int = 1):
@@ -492,7 +502,7 @@ class dsFPDClass():
         if not indicators:
             return []
 
-        minBrightness = indicators['index'].MIN_BRIGHTNESS
+        minBrightness = indicators[index].get("MIN_BRIGHTNESS")
         return minBrightness
 
     def __del__(self):
