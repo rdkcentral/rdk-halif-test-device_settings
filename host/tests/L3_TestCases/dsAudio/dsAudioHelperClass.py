@@ -29,17 +29,13 @@ sys.path.append(os.path.join(dir_path, "../../"))
 
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
+from raft.framework.plugins.ut_raft.utPlayer import MixerInputTypes
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.core.logModule import logModule
 from dsClasses.dsAudio import dsAudioClass
 
 class dsAudioHelperClass(utHelperClass):
-
-    testName  = ""
-    testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
-    moduleName = "dsAudio"
-    rackDevice = "dut"
 
     def __init__(self, testName:str, qcId:str, log:logModule=None ):
         """
@@ -50,6 +46,11 @@ class dsAudioHelperClass(utHelperClass):
             qcId (str): QC ID of the test.
             log (class, optional): Parent log class. Defaults to None.
         """
+        self.testName  = ""
+        self.testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
+        self.moduleName = "dsAudio"
+        self.rackDevice = "dut"
+
         super().__init__(testName, qcId, log)
 
         # Load test setup configuration
@@ -61,11 +62,14 @@ class dsAudioHelperClass(utHelperClass):
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
 
         player = self.cpe.get("test").get("player")
-        platform = self.cpe.get("platform")
+        vendor = self.cpe.get("vendor")
 
         # Create player and sencodary player Class
-        self.testPlayer = utPlayer(self.player_session, platform, player)
-        self.testSecondaryPlayer = utPlayer(self.secondary_player_session, platform, player)
+        self.testPlayer = utPlayer(self.player_session, vendor, player)
+        self.testPlayer.setMixerInput(MixerInputTypes.MIXER_INPUT_PRIMARY)
+
+        self.testSecondaryPlayer = utPlayer(self.secondary_player_session, vendor, player)
+        self.testSecondaryPlayer.setMixerInput(MixerInputTypes.MIXER_INPUT_SECONDARY)
 
          # Create user response Class
         self.testUserResponse = utUserResponse()

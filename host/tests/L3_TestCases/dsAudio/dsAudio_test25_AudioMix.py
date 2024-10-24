@@ -107,7 +107,7 @@ class dsAudio_test25_AudioMix(dsAudioHelperClass):
                 self.testPlayer.play(primaryStream)
 
                 # Start the system stream playback
-                self.testSecondaryPlayer.play(systemStream, "secondary")
+                self.testSecondaryPlayer.play(systemStream)
 
                 for prime in self.primaryVolume:
                     for system in self.systemVolume:

@@ -24,9 +24,10 @@
 
 deviceConfig:
     cpe1:
-        platform:   "element"
-        model:      "uk"
-        target_directory: "/tmp/"  # Target Directory on device
+        platform: "element"
+        model: "uk"
+        vendor: "amlogic"
+        target_directory: "/tmp"  # Target Directory on device
         prompt: "" # Prompt string on console
         test:
             #TODO: Use the single profile file which contains all details (ds, hdmi, etc)
@@ -35,6 +36,7 @@ deviceConfig:
     cpe2:
         platform: "test"
         model: "test"
+        vendor: "test"
         target_directory: "/tmp"
         profile: ""
         test:
