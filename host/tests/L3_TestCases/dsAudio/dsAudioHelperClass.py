@@ -61,10 +61,11 @@ class dsAudioHelperClass(utHelperClass):
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
 
         player = self.cpe.get("test").get("player")
+        platform = self.cpe.get("platform")
 
         # Create player and sencodary player Class
-        self.testPlayer = utPlayer(self.player_session, player)
-        self.testSecondaryPlayer = utPlayer(self.secondary_player_session, player)
+        self.testPlayer = utPlayer(self.player_session, platform, player)
+        self.testSecondaryPlayer = utPlayer(self.secondary_player_session, platform, player)
 
          # Create user response Class
         self.testUserResponse = utUserResponse()
