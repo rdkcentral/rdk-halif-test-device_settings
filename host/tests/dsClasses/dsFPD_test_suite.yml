@@ -3,7 +3,7 @@
 dsFPD:  # Prefix must always exist
     description: "dsFPD Device Settings testing profile / menu system for UT"
     test:
-        execute: "" #Execute command
+        execute: "<PATH>/run.sh -p <PATH>/Source_FPD.yaml" #Execute command
         type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
         suites:
             0:
@@ -13,12 +13,17 @@ dsFPD:  # Prefix must always exist
                 name: "L2 dsFPD - Sink"
                 tests:
             2:
-                name: "L3 dsFPD"
+                name: "L3 Front Panel Functions"
                 tests:
                     - "Initialize dsFPD"
-                    - "Front Panel Indicator State"
+                    - "Set Front Panel Indicator State"
+                    - "Get Front Panel Indicator State"
                     - "Blink Front Panel Indicator"
-                    - "Front Panel Indicaor Brightness"
-                    - "Front Panel Pattern"
-                    - "Front Panel Indicator Color"
+                    - "Set Front Panel Indicaor Brightne"
+                    - "Get Front Panel Indicaor Brightne"
+                    - "Set Front Panel State Pattern"
+                    - "Get Front Panel State Pattern"
+                    - "Set Front Panel Indicator Color"
+                    - "Get Front Panel Indicator Color"
+                    - "Get Supported Front Panel State P"
                     - "Terminate dsFPD"

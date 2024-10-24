@@ -5,11 +5,36 @@ dsFPD:  # Prefix must always exist
   description: "dsFPD Device Settings test setup"
   assets:
     device:
-      test1_EnableDisableAndVerifyLEDIndicators:
-        artifacts: #list of artifacts to be copied to device
-        execute: #list of commands to be executed on device
-        streams: #list of streams to be copied to device
-
+      test01_EnableDisableAndVerifyLEDIndicators:
+        artifacts: ["<PATH>/bin/hal_test",
+                    "<PATH>/bin/libut_control.so",
+                    "<PATH>/profiles/source/Source_FPD.yaml",
+                    "<PATH>/bin/run.sh"]
+        execute: ["chmod +x <PATH>/hal_test", "chmod +x <PATH>/run.sh"]
+      test02_SetVerifyLEDIndicatorsBrightness:
+        artifacts: ["<PATH>/bin/hal_test",
+                    "<PATH>/bin/libut_control.so",
+                    "<PATH>/profiles/source/Source_FPD.yaml",
+                    "<PATH>/bin/run.sh"]
+        execute: ["chmod +x <PATH>/hal_test", "chmod +x <PATH>/run.sh"]
+      test03_SetVerifyLEDIndicatorsBlink:
+        artifacts: ["<PATH>/bin/hal_test",
+                    "<PATH>/bin/libut_control.so",
+                    "<PATH>/profiles/source/Source_FPD.yaml",
+                    "<PATH>/bin/run.sh"]
+        execute: ["chmod +x <PATH>/hal_test", "chmod +x <PATH>/run.sh"]
+      test04_SetVerifyLEDIndicatorsColor:
+        artifacts: ["<PATH>/bin/hal_test",
+                    "<PATH>/bin/libut_control.so",
+                    "<PATH>/profiles/source/Source_FPD.yaml",
+                    "<PATH>/bin/run.sh"]
+        execute: ["chmod +x <PATH>/hal_test", "chmod +x <PATH>/run.sh"]
+      test05_SetVerifyFPPattern:
+        artifacts: ["<PATH>/bin/hal_test",
+                    "<PATH>/bin/libut_control.so",
+                    "<PATH>/profiles/source/Source_FPD.yaml",
+                    "<PATH>/bin/run.sh"]
+        execute: ["chmod +x <PATH>/hal_test", "chmod +x <PATH>/run.sh"]
 
 
 
