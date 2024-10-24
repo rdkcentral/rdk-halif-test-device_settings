@@ -75,10 +75,6 @@ class dsAudioClass():
     This module provides common functionalities and extensions for the device Settings Audio Module.
     """
 
-    moduleName = "dsAudio"
-    menuConfig = os.path.join(dir_path, "dsAudio_test_suite.yml")
-    testSuite = "L3 dsAudio"
-
     def __init__(self, deviceProfilePath:str, session=None, devicePath="/tmp"):
         """
         Initializes the dsAudioClass instance with configuration settings.
@@ -90,6 +86,10 @@ class dsAudioClass():
         Returns:
             None
         """
+        self.moduleName = "dsAudio"
+        self.menuConfig = os.path.join(dir_path, "dsAudio_test_suite.yml")
+        self.testSuite = "L3 dsAudio"
+
         # Load configurations for device profile and menu
         self.deviceProfile = ConfigRead( deviceProfilePath, self.moduleName)
         self.suitConfig    = ConfigRead(self.menuConfig, self.moduleName)
