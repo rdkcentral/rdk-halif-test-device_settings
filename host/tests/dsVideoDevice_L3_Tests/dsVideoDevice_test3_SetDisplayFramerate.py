@@ -23,7 +23,6 @@
 
 import os
 import sys
-from enum import Enum, auto
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../"))
@@ -31,18 +30,29 @@ sys.path.append(os.path.join(dir_path, "../"))
 from dsClasses.dsVideoDevice import dsVideoDeviceClass
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
+from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsVideoDevice_test2_FrameratePostChangeCallback_Verify(utHelperClass):
+class dsVideoDevice_test3_SetDisplayFramerate(utHelperClass):
+    """
+    Class to perform set and get the FRF mode on video device.
 
-    testName  = "test2_FrameratePostChangeCallBack_Verify"
-    testSetupPath = dir_path + "/dsVideoDevice_L3_testSetup.yml"
+    Inherits from utHelperClass to leverage common test functionalities.
+
+    Attributes:
+        testName (str): Name of the test case.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Name of the module being tested.
+        rackDevice (str): Identifier for the device under test.
+    """
+    testName  = "test4_SetDisplayFramerate"
+    testSetupPath = os.path.join(dir_path, "dsVideoDevice_L3_testSetup.yml")
     moduleName = "dsVideoDevice"
     rackDevice = "dut"
 
     def __init__(self):
         """
-        Initializes the test2_FrameratePostChangeCallBack_Verify test .
+        Initializes the test4_SetDisplayFramerate test .
 
         Args:
             None.
@@ -52,6 +62,9 @@ class dsVideoDevice_test2_FrameratePostChangeCallback_Verify(utHelperClass):
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
+        # Open Session for player
+        self.player_session = self.dut.getConsoleSession("ssh_player")
+
         # Open Session for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
 
@@ -59,7 +72,7 @@ class dsVideoDevice_test2_FrameratePostChangeCallback_Verify(utHelperClass):
         self.testUserResponse = utUserResponse()
 
         # Get path to device profile file
-        self.deviceProfile = dir_path + "/" + self.cpe.get("test").get("profile")
+        self.deviceProfile = os.path.join(dir_path, self.cpe.get("test").get("profile"))
 
     def testDownloadAssets(self):
         """
@@ -79,12 +92,12 @@ class dsVideoDevice_test2_FrameratePostChangeCallback_Verify(utHelperClass):
 
         test = self.testSetup.get("assets").get("device").get(self.testName)
 
-        # Download test artifacts to device
+        #download test artifacts to device
         url = test.get("artifacts")
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
 
-        # Download test streams to device
+        #download test streams to device
         url =  test.get("streams")
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
@@ -93,12 +106,15 @@ class dsVideoDevice_test2_FrameratePostChangeCallback_Verify(utHelperClass):
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
+
+        # remove the callback log files
+        self.deleteFromDevice([self.connectionCB, self.formatCB, self.atmosCB])
 
     def testRunPrerequisites(self):
         """
@@ -108,56 +124,47 @@ class dsVideoDevice_test2_FrameratePostChangeCallback_Verify(utHelperClass):
             None
         """
 
-        # Run commands as part of test prerequisites
+        #Run test specific commands
         test = self.testSetup.get("assets").get("device").get(self.testName)
         cmds = test.get("execute")
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    def testRunPostreiquisites(self):
+    #TODO: Current version supports only manual verification.
+    def testVerifyFramerate(self, manual=False, videomode=False):
         """
-        Executes postrequisite commands listed in test-setup configuration file on the DUT.
+        Verifies the FRF mode on specified video device.
+
 
         Args:
-            None.
-        """
+            manual (bool, optional): If True, requires manual confirmation from the user.
+                                     Defaults to False.
 
-       # Run commands as part of test prerequisites
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("postcmd")
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
-
-     #TODO: Current version supports only manual verification.
-    def checkDeviceStatus(self, manual=False):
-        """
-        Checks Display device is connected and Power status is ON.
-
-        Args:
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
         Returns:
-            bool
+            bool: True if selected FRF mode is visible in output device; otherwise, False.
         """
-        if manual == True:
-            return self.testUserResponse.getUserYN('check video display connected and in ON state and press Enter:')
+        if manual == True and videomode == True:
+            return self.testUserResponse.getUserYN(f"Is the selected FRF mode visible in the device's output? (Y/N):")
+        elif manual == False and videomode == True:
+            return True
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
         """
-        The main test function that verifies display framerate prechange in video device.
+        Executes the set display framerate tests on the video device.
 
-        This function:
+        This function performs the following steps:
         - Downloads necessary assets.
         - Runs prerequisite commands.
-        - Verifies display framerate prechange through callbacks.
+        - Initializes the dsVideoDevice module.
+        - Set Display framerate
+        - Cleans up the downloaded assets after testing.
 
         Returns:
-            bool: Final result of the test.
+            bool: Status of the last verification (True if successful, False otherwise).
         """
 
         # Download the assets listed in test setup configuration file
@@ -169,33 +176,17 @@ class dsVideoDevice_test2_FrameratePostChangeCallback_Verify(utHelperClass):
         # Create the dsVideoDevice class
         self.testdsVideoDevice = dsVideoDeviceClass(self.deviceProfile, self.hal_session)
 
-        self.log.testStart("test2_FrameratePostChangeCallBack_Verify", '1')
+        self.log.testStart(self.testName, '1')
 
         # Initialize the dsVideoDevice module
         self.testdsVideoDevice.initialise(self.testdsVideoDevice.getDeviceType())
 
-   
-        self.log.stepStart(f'Check the video device status')
-        self.log.step(f'Check the video device status')
+        # set the display framerate
+        self.testdsVideoDevice.setDisplayFramerate(0, 'dsVIDEO_FRAMERATE_25')
 
-        # Check the Display device connected to is active
-        result = self.CheckDeviceStatus(True)
-        self.log.stepResult(result,'Display Device is active')
-        
+        result = True
 
-        status = self.testdsVideoDevice.getFrameratePostchangeCallbackStatus()
-        if status:
-            result = True
-            self.log.stepResult(result,f'Framerate Postchange tSecond {status[0]} found in Callback')
-        else:
-            result = False
-            self.log.stepResult(result,f'Framerate Postchange tSecond not found in Callback')
-
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
-
-        #Run postrequisites listed in the test setup configuration file 
-        self.testRunPostreiquisites()
+        self.log.stepResult(result, f'Verified setDisplayFramerate')
 
         # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()
@@ -206,5 +197,5 @@ class dsVideoDevice_test2_FrameratePostChangeCallback_Verify(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsVideoDevice_test2_FrameratePostChangeCallback_Verify()
+    test = dsVideoDevice_test3_SetDisplayFramerate()
     test.run(False)
