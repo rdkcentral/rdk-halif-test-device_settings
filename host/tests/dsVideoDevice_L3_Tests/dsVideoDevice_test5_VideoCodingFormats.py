@@ -33,9 +33,9 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsVideoDevice_test5_SetAndGetFRFMode(utHelperClass):
+class dsVideoDevice_test5_VideoCodingFormats(utHelperClass):
     """
-    Class to perform set and get the FRF mode on video device.
+    Class to perform get the supported video coding formats and codec info on video device.
 
     Inherits from utHelperClass to leverage common test functionalities.
 
@@ -45,14 +45,14 @@ class dsVideoDevice_test5_SetAndGetFRFMode(utHelperClass):
         moduleName (str): Name of the module being tested.
         rackDevice (str): Identifier for the device under test.
     """
-    testName  = "test5_FRFMode"
+    testName  = "test6_VideoCodingFormats"
     testSetupPath = os.path.join(dir_path, "dsVideoDevice_L3_testSetup.yml")
     moduleName = "dsVideoDevice"
     rackDevice = "dut"
 
     def __init__(self):
         """
-        Initializes the test5_FRFMode test .
+        Initializes the test6_VideoCodingFormats test .
 
         Args:
             None.
@@ -132,9 +132,9 @@ class dsVideoDevice_test5_SetAndGetFRFMode(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def testVerifyFRFMode(self, manual=False, frfmode=False):
+    def testVerifyVideoCodec(self, manual=False, codecinfo=False):
         """
-        Verifies the FRF mode on specified video device.
+        Verifies the codec info on specified video device.
 
 
         Args:
@@ -144,9 +144,9 @@ class dsVideoDevice_test5_SetAndGetFRFMode(utHelperClass):
         Returns:
             bool: True if selected FRF mode is visible in output device; otherwise, False.
         """
-        if manual == True and frfmode == True:
-            return self.testUserResponse.getUserYN(f"Is the selected FRF mode visible in the device's output? (Y/N):")
-        elif manual == False and frfmode == True:
+        if manual == True and codecinfo == True:
+            return self.testUserResponse.getUserYN(f"Is the selected VideoCoding formats visible in the device's output? (Y/N):")
+        elif manual == False and codecinfo == True:
             return True
         else :
             #TODO: Add automation verification methods
@@ -154,13 +154,13 @@ class dsVideoDevice_test5_SetAndGetFRFMode(utHelperClass):
 
     def testFunction(self):
         """
-        Executes the set and get FRF mode tests on the video device.
+        Executes the get the supported video coding formats and codec info on video device.
 
         This function performs the following steps:
         - Downloads necessary assets.
         - Runs prerequisite commands.
         - Initializes the dsVideoDevice module.
-        - Set and Get the FRF mode
+        - Get the VideoCodec info.
         - Cleans up the downloaded assets after testing.
 
         Returns:
@@ -181,17 +181,17 @@ class dsVideoDevice_test5_SetAndGetFRFMode(utHelperClass):
         # Initialize the dsVideoDevice module
         self.testdsVideoDevice.initialise(self.testdsVideoDevice.getDeviceType())
 
-        # set the FRF mode
-        self.testdsVideoDevice.setFRFMode(0,'Enable')
+        # get the SupportedVideoCodingFormat
+        self.testdsVideoDevice.getSupportedVideoCodingFormat()
 
-        #result = self.testVerifyFRFMode(False, True)
-        result =True
+        result = True
 
-        # get the FRF mode
-        self.testdsVideoDevice.getFRFMode(0)
+        self.log.stepResult(result, f'Verified Supported VideoCodingFormats')
 
+        # get the videoCodec info
+        self.testdsVideoDevice.getVideoCodecInfo(0, 'dsVIDEO_CODEC_MPEG4PART10')
 
-        self.log.stepResult(result, f'Verified getFRFMode')
+        self.log.stepResult(result, f'Verified get VideoCodingFormats Info')
 
         # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()
@@ -202,5 +202,5 @@ class dsVideoDevice_test5_SetAndGetFRFMode(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsVideoDevice_test5_SetAndGetFRFMode()
+    test = dsVideoDevice_test5_VideoCodingFormats()
     test.run(False)
