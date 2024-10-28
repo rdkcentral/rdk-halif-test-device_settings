@@ -130,28 +130,28 @@ For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0
 
 Update the target directory where `HAL` binaries will be copied into the device. Also, map the profile to the source/sink settings `YAML` file path.
 
+Update the URL `streams_download_url` from which the streams are fetched.
+
 Ensure the platform should match with the `DUT` platform in [Rack Configuration](#rack-configuration-file)
 
 ```yaml
 deviceConfig:
-  cpe1:
-    platform: "stb"    # Must match the platform in example_rack_config.yml
-    model: "uk"
-    target_directory: "/tmp"  # Path where HAL binaries are copied in device
-    test:
-      profile: "../../../../profiles/sink/Sink_AudioSettings.yaml"
-      player:
-        tool: "gstreamer"
-        prerequisites:
-          - export xxxx    # Pre-commands required to play the stream
-
+    cpe1:
+        platform: "linux"
+        model: "uk"
+        soc_vendor: "intel"
+        target_directory: "/tmp/"  # Target Directory on device
+        prompt: "" # Prompt string on console
+        test:
+            profile: "../../../../profiles/sink/Sink_AudioSettings.yaml"
+            streams_download_url: "<URL_Path>" #URL path from which the streams are downloaded to the device
 ```
 
 #### Test Setup Configuration File
 
 Example Test Setup configuration File: `ut/host/tests/L3_TestCases/dsAudio/dsAudio_L3_testSetup.yml`
 
-Provide the stream paths for each test case.
+Provide the streams for each test case. This path is appended with `streams_download_url` entry from [Device Configuration File](#device-configuration-file)
 
 If a test case requires multiple streams or needs to be validated using several streams, ensure that all necessary streams are added sequentially for that specific test case.
 
@@ -162,23 +162,20 @@ dsAudio:
     device:
       test01_EnableDisableAndVerifyAudioPortStatus:
         streams:
-          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.ac3"
       test02_PortConnectionStatus:
         streams:
       test03_MS12AudioCompression:
         streams:
-          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.ac3"
       test04_MS12DialogueEnhancer:
         streams:
-          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
-      test05_MS12DolbyVolume:
-        streams:
-          - "<URL Path>/streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.ac3"
 ```
 
-#### Test Suite Configuration
+#### Test Configuration
 
-Example Test Setup configuration File: `ut/host/tests/dsClasses/dsAudio_test_suite.yml`
+Example Test Setup configuration File: `ut/host/tests/dsClasses/dsAudio_testConfig.yml`
 
 Update the execute command according to the device path where `HAL` binaries are copied.
 
@@ -187,12 +184,10 @@ dsAudio:
     description: "dsAudio Device Settings testing profile / menu system for UT"
     test:
         artifacts:
-          - "../../../bin/hal_test"
-          - "../../../bin/libut_control.so"
-          - "../../../bin/run.sh"
-        execute:
-          command: "run.sh"
-          arguments: ""
+        #List of artifacts folders, test class copies the content of folder to the target device workspace
+          - "../../../bin/"
+        # exectute command, this will appended with the target device workspace path
+        execute: "run.sh"
         type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
 ```
 

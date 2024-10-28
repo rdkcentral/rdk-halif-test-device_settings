@@ -155,6 +155,6 @@ classDiagram
   - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams, setting environment variables etc.
   - Example configuration file [dsAudio_L3_testSetup.yml](../../../host/tests/L3_TestCases/dsAudio/dsAudio_L3_testSetup.yml)
 
-- **testSuite.yaml**
+- **testConfig.yaml**
   - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
-  - Example configuration file [dsAudio_test_suite.yml](../../../host/tests/dsClasses/dsAudio_test_suite.yml)
+  - Example configuration file [dsAudio_test_suite.yml](../../../host/tests/dsClasses/dsAudio_testConfig.yml)

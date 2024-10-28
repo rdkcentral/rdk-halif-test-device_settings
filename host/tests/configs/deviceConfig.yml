@@ -26,13 +26,13 @@ deviceConfig:
     cpe1:
         platform: "element"
         model: "uk"
-        vendor: "amlogic"
-        target_directory: "/tmp"  # Target Directory on device
+        soc_vendor: "amlogic"
+        target_directory: "/tmp/"  # Target Directory on device
         prompt: "" # Prompt string on console
         test:
             #TODO: Use the single profile file which contains all details (ds, hdmi, etc)
             profile: "../../../../profiles/sink/Sink_AudioSettings.yaml"
-            player: "gstreamer"
+            streams_download_url: "<URL_Path>" #URL path from which the streams are downloaded to the device
     cpe2:
         platform: "test"
         model: "test"

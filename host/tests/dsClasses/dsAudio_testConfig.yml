@@ -23,12 +23,10 @@ dsAudio:
     description: "dsAudio Device Settings testing profile / menu system for UT"
     test:
         artifacts:
-          - "../../../bin/hal_test"
-          - "../../../bin/libut_control.so"
-          - "../../../bin/run.sh"
-        execute:
-          command: "run.sh"
-          arguments: ""
+        #List of artifacts folders, test class copies the content of folder to the target device workspace
+          - "../../../bin/"
+        # exectute command, this will appended with the target device workspace path
+        execute: "run.sh"
         type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
         suites:
             0:
