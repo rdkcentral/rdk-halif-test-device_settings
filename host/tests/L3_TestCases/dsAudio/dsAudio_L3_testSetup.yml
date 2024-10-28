@@ -25,81 +25,81 @@ dsAudio:
     device:
       test01_EnableDisableAndVerifyAudioPortStatus:
         streams:
-          - "<URL PATH>/streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.ac3"
       test02_PortConnectionStatus:
         streams:
       test03_MS12AudioCompression:
         streams:
-          - "<URL PATH>/streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.ac3"
       test04_MS12DialogueEnhancer:
         streams:
-          - "<URL PATH>/streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.ac3"
       test05_MS12DolbyVolume:
         streams:
-          - "<URL PATH>/streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.ac3"
       test06_MS12IntelligentEqualizer:
         streams:
-          - "<URL PATH>/streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.ac3"
       test07_MS12Volumeleveller:
         streams:
-          - "<URL PATH>/streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.ac3"
       test08_MS12BassEnhancer:
         streams:
-          - "<URL PATH>/streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.ac3"
       test09_MS12SurroundDecoder:
         streams:
-          - "<URL PATH>/streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.ac3"
       test10_MS12DRCMode:
         streams:
-          - "<URL PATH>/streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.ac3"
       test11_MS12SurroundVirtualizer:
         streams:
-          - "<URL PATH>/streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.ac3"
       test12_MS12MISteering:
         streams:
-          - "<URL PATH>/streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.ac3"
       test13_MS12GraphicEqualizer:
         streams:
-          - "<URL PATH>/streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.ac3"
       test14_MS12LEConfig:
         streams:
-          - "<URL PATH>/streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.ac3"
       test15_ARCPort:
         streams:
       test16_ARCSAD:
         streams:
-          - "<URL PATH>/streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.ac3"
       test17_OutputMode:
         streams:
-          - "<URL PATH>/streams/tones_string_48k_stereo.wav"
-          - "<URL PATH>/streams/tones_string_48k_stereo.ac3"
-          - "<URL PATH>/streams/tones_string_48k_stereo.eac3"
+          - "streams/tones_string_48k_stereo.wav"
+          - "streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.eac3"
       test18_AudioLevel:
         streams:
-          - "<URL PATH>/streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.ac3"
       test19_AudioGain:
         streams:
-          - "<URL PATH>/streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.ac3"
       test20_MuteUnMute:
         streams:
-          - "<URL PATH>/streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.ac3"
       test21_AudioDelay:
         streams:
-          - "<URL PATH>/streams/AVsync_aac_200_48k_ATSC_m2v_29fps.trp"
+          - "streams/AVsync_aac_200_48k_ATSC_m2v_29fps.trp"
       test22_AudioFormat:
         streams:
-          - "<URL PATH>/streams/tones_string_48k_stereo.wav"
-          - "<URL PATH>/streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.wav"
+          - "streams/tones_string_48k_stereo.ac3"
       test23_AssociateMix:
         streams:
-          - "<URL PATH>/streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.ac3"
       test24_PrimarySecondaryLanguage:
         streams:
-          - "<URL PATH>/streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.ac3"
       test25_AudioMix:
         streams:
-          - "<URL PATH>/streams/primary_audio_48k_2ch.ac3"
-          - "<URL PATH>/streams/system_audio_48k_2ch.wav"
+          - "streams/primary_audio_48k_2ch.ac3"
+          - "streams/system_audio_48k_2ch.wav"
       test26_MS12AudioProfiles:
         streams:
-          - "<URL PATH>/streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.ac3"

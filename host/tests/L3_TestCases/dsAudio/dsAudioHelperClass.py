@@ -61,23 +61,25 @@ class dsAudioHelperClass(utHelperClass):
         self.secondary_player_session = self.dut.getConsoleSession("ssh_player_secondary")
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
 
-        player = self.cpe.get("test").get("player")
-        vendor = self.cpe.get("vendor")
+        deviceTestSetup = self.cpe.get("test")
+        socVendor = self.cpe.get("soc_vendor")
 
         # Create player and sencodary player Class
-        self.testPlayer = utPlayer(self.player_session, vendor, player)
+        self.testPlayer = utPlayer(self.player_session, socVendor)
         self.testPlayer.setMixerInput(MixerInputTypes.MIXER_INPUT_PRIMARY)
 
-        self.testSecondaryPlayer = utPlayer(self.secondary_player_session, vendor, player)
+        self.testSecondaryPlayer = utPlayer(self.secondary_player_session, socVendor)
         self.testSecondaryPlayer.setMixerInput(MixerInputTypes.MIXER_INPUT_SECONDARY)
 
          # Create user response Class
         self.testUserResponse = utUserResponse()
 
         # Get path to device profile file
-        self.deviceProfile = os.path.join(dir_path, self.cpe.get("test").get("profile"))
+        self.moduleConfigProfileFile = os.path.join(dir_path, deviceTestSetup.get("profile"))
 
-        self.deviceDownloadPath = self.cpe.get("target_directory")
+        self.targetWorkspace = self.cpe.get("target_directory")
+        self.targetWorkspace = os.path.join(self.targetWorkspace, self.moduleName)
+        self.streamDownloadURL = deviceTestSetup.get("streams_download_url")
 
     def testDownloadAssets(self):
         """
@@ -92,14 +94,16 @@ class dsAudioHelperClass(utHelperClass):
 
         # List of streams with path
         self.testStreams = []
+        url = []
 
-        url = self.testSetup.get("assets").get("device").get(self.testName).get("streams")
+        streamPaths = self.testSetup.get("assets").get("device").get(self.testName).get("streams")
 
         # Download test streams to device
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            for streampath in url:
-                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
+        if streamPaths and self.streamDownloadURL:
+            for s in streamPaths:
+                url.append(os.path.join(self.streamDownloadURL, s))
+                self.testStreams.append(os.path.join(self.targetWorkspace, os.path.basename(s)))
+            self.downloadToDevice(url, self.targetWorkspace, self.rackDevice)
 
     def testCleanAssets(self):
         """
@@ -145,7 +149,7 @@ class dsAudioHelperClass(utHelperClass):
         self.testRunPrerequisites()
 
         # Create the dsAudio class
-        self.testdsAudio = dsAudioClass(self.deviceProfile, self.hal_session, self.deviceDownloadPath)
+        self.testdsAudio = dsAudioClass(self.moduleConfigProfileFile, self.hal_session, self.targetWorkspace)
 
         return True
 
