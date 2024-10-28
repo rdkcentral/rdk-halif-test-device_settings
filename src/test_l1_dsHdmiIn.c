@@ -693,23 +693,30 @@ void test_l1_dsHdmiIn_negative_dsHdmiInScaleVideo(void) {
  * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  *
  */
-void test_l1_dsHdmiIn_positive_dsHdmiInSelectZoomMode_source(void) {
+void test_l1_dsHdmiIn_positive_dsHdmiInSelectZoomMode(void) {
 
     gTestID = 13;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     uint8_t numInputPorts = 0;
-
+    dsError_t result = dsERR_NONE;
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
     numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
     if (numInputPorts > 0) {
         // Step 2: Call dsHdmiInSelectPort() to select Port 0
-        UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
+        result = dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false);
+        UT_ASSERT_EQUAL(result,dsERR_NONE);
 
         // Step 3: Loop through all dsVideoZoom_t values and call dsHdmiInSelectZoomMode()
         for (dsVideoZoom_t i = dsVIDEO_ZOOM_NONE; i < dsVIDEO_ZOOM_MAX; i++) {
-              UT_ASSERT_EQUAL(dsHdmiInSelectZoomMode(i), dsERR_NONE);
+            result = dsHdmiInSelectZoomMode(i);
+            if(gDeviceType == 1){
+                UT_ASSERT_EQUAL(result,dsERR_NONE);
+            }
+            else {
+                UT_ASSERT_EQUAL(result,dsERR_OPERATION_NOT_SUPPORTED);
+            }
         }
     } else {
        // Step 4:Calling dsHdmiInSelectZoomMode(dsVIDEO_ZOOM_MAX)
@@ -2620,8 +2627,8 @@ int test_l1_dsHdmiIn_register ( void )
     UT_add_test( pSuite2, "dsHdmiInGetStatus_L1_negative" ,test_l1_dsHdmiIn_negative_dsHdmiInGetStatus );
 
 
-    UT_add_test( pSuite, "dsHdmiInSelectZoomMode_L1_positive" ,test_l1_dsHdmiIn_positive_dsHdmiInSelectZoomMode_source );
-    UT_add_test( pSuite, "dsHdmiInSelectZoomMode_L1_negative" ,test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode_source );
+    UT_add_test( pSuite, "dsHdmiInSelectZoomMode_L1_positive" ,test_l1_dsHdmiIn_positive_dsHdmiInSelectZoomMode );
+    UT_add_test( pSuite, "dsHdmiInSelectZoomMode_L1_negative" ,test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode );
 
     UT_add_test( pSuite, "dsIsHdmiARCPort_L1_positive" ,test_l1_dsHdmiIn_positive_dsIsHdmiARCPort_sink );
     UT_add_test( pSuite, "dsGetEDIDBytesInfo_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo_sink );
