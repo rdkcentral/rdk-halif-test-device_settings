@@ -7,18 +7,21 @@ dsVideoDevice:  # Prefix must always exist
     device:
       defaults: &defaults
         artifacts:
-          - "http://localhost:8000/bin/hal_test"
-          - "http://localhost:8000/bin/libut_control.so"
-          - "http://localhost:8000/profiles/source/Source_VideoDevice.yaml"
-          - "http://localhost:8000/bin/run.sh"
+          - "<URL Path>/bin/hal_test"
+          - "<URL Path>/bin/libut_control.so"
+          - "<URL Path>/profiles/source/Source_VideoDevice.yaml"
+          - "<URL Path>/bin/run.sh"
         execute:
-          - "chmod +x /opt/karthi/hal_test"
-          - "chmod +x /opt/karthi/run.sh"
-          - "ln -s /usr/lib/libds-hal.so /opt/karthi/libdshal.so"
+          - "chmod +x <PATH on Device>/hal_test"
+          - "chmod +x <PATH on Device>/run.sh"
+          - "ln -s /usr/lib/libds-hal.so <PATH on Device>/libdshal.so"
         streams:
-      test3_ZoomMode:
+      test1_FrameratePreChangeCallBack_Verify:
         <<: *defaults
         streams:
+      test2_ZoomMode:
+        <<: *defaults
+        streams: #list of streams to be copied to device
       test4_SetDisplayFramerate:
         <<: *defaults
         streams:
