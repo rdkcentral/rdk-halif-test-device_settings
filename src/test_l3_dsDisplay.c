@@ -333,13 +333,6 @@ void test_l3_dsDisplay_get_edid(void)
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
-    int32_t portIndex = 0;
-    dsVideoPortType_t port = dsVIDEOPORT_TYPE_MAX;
-
-    if(dsDisplay_list_select_ports(&port, &portIndex))
-    {
-        goto exit;
-    }
 
     UT_LOG_INFO("Calling dsGetEDID(IN:handle:[0x%0X], OUT:edid:[])", gDisplayHandle);
 
@@ -355,7 +348,6 @@ void test_l3_dsDisplay_get_edid(void)
 
     DS_ASSERT(status == dsERR_NONE);
 
-exit:
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
@@ -378,13 +370,6 @@ void test_l3_dsDisplay_get_edidbytes(void)
 
     dsError_t status = dsERR_NONE;
     int32_t length = 0;
-    int32_t portIndex = 0;
-    dsVideoPortType_t port = dsVIDEOPORT_TYPE_MAX;
-
-    if(dsDisplay_list_select_ports(&port, &portIndex))
-    {
-        goto exit;
-    }
 
     UT_LOG_INFO("Calling dsGetEDIDBytes(IN:Handle:[0x%0X], OUT:EDID:[], OUT:Length:[])", gDisplayHandle);
 
@@ -403,7 +388,6 @@ void test_l3_dsDisplay_get_edidbytes(void)
         UT_LOG_INFO("%02X ", gEdidBuffer[i]);
     }
 
-exit:
     UT_LOG_INFO("Out %s", __FUNCTION__);
 
 }
@@ -427,13 +411,6 @@ void test_l3_dsDisplay_get_aspectratio(void)
 
     dsError_t status   = dsERR_NONE;
     dsVideoAspectRatio_t displayAspectRatio = dsVIDEO_ASPECT_RATIO_MAX;
-    int32_t portIndex = 0;
-    dsVideoPortType_t port = dsVIDEOPORT_TYPE_MAX;
-
-    if(dsDisplay_list_select_ports(&port, &portIndex))
-    {
-        goto exit;
-    }
 
     UT_LOG_INFO("Calling dsGetDisplayAspectRatio(IN:handle:[0x%0X], OUT:aspectRatio:[]) ", gDisplayHandle);
 
@@ -446,7 +423,6 @@ void test_l3_dsDisplay_get_aspectratio(void)
 
     DS_ASSERT(status == dsERR_NONE);
 
-exit:
     UT_LOG_INFO("Out %s", __FUNCTION__);
 
 }
