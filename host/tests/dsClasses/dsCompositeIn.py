@@ -46,7 +46,7 @@ class dsCompositeInClass():
 
     This module provides common extensions for device Settings CompositeIn Module.
     """
-    def __init__(self, deviceProfilePath:str, session=None ):
+    def __init__(self, deviceProfilePath:str, session=None, devicePath="/opt/HAL" ):
         """
         Initializes the dsCompositeIn class function.
         """
