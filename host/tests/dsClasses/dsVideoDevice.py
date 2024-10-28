@@ -72,6 +72,20 @@ class dsVideoDeviceClass():
         self.utMenu.start()
 
     def searchPattern(self, haystack, pattern):
+        """
+        Searches for the first occurrence of a specified pattern in the provided string.
+
+        Args:
+            haystack (str): The string to be searched.
+            pattern (str): The regular expression pattern to search for.
+
+        Returns:
+            str: The first capturing group of the match if found; otherwise, None.
+
+        Notes:
+            - The pattern should contain at least one capturing group (parentheses).
+            - If no match is found, None is returned.
+        """
         match = re.search(pattern, haystack)
         if match:
             return match.group(1)
@@ -177,7 +191,7 @@ class dsVideoDeviceClass():
                 {
                     "query_type": "list",
                     "query": " Select the Display FRF Mode :",
-                    "input": str(mode)
+                    "input": mode
                 }
         ]
 
@@ -207,6 +221,10 @@ class dsVideoDeviceClass():
         ]
 
         result = self.utMenu.select(self.testSuite, "GetVideoCodecInfo", promptWithAnswers)
+        codecInfoPattern = r"Result dsGetVideoCodecInfo\(IN:Handle:[.*\],IN:Codec[+w\], OUT:Codec number of Entires[.*\]"
+        codecInfo = self.searchPattern(result, codecInfoPattern)
+
+        return codecInfo
 
         
     def getSupportedVideoCodingFormat(self,device:int=0):
@@ -228,26 +246,11 @@ class dsVideoDeviceClass():
         ]
 
         result = self.utMenu.select(self.testSuite, "GetSupportedVideoCodingFormat", promptWithAnswers)
+        supportedCodecPattern = r"Result dsGetSupportedVideoCodingFormats\(IN:Handle[.*\],OUT:supportedFormat[.*\]\)"
+        supportedCodec = self.searchPattern(result, supportedCodecPattern)
 
-    def getHDRCapabilities(self,device:int=0):
-        """
-        Gets the HDR capabilities.
+        return supportedCodec
 
-        Args:
-            None.
-
-        Returns:
-            None
-        """
-        promptWithAnswers = [
-                {
-                    "query_type": "list",
-                    "query": "Select the Video Device:",
-                    "input": str(device)
-                }
-        ]
-
-        result = self.utMenu.select(self.testSuite, "GetHDRCapabilities", promptWithAnswers)
 
     def getFRFMode(self, device:int=0):
         """
@@ -268,6 +271,11 @@ class dsVideoDeviceClass():
         ]
 
         result = self.utMenu.select(self.testSuite, "dsGetFRFMode", promptWithAnswers)
+        frfModepattern = r"Result dsGetFRFMode\(IN:Handle[.*\],OUT:frfMode[.*\])"
+        frfMode = self.searchPattern(result, frfModepattern)
+
+        return frfMode
+
 
 
     def getCurrentDisplayframerate(self,device:int=0):
@@ -289,8 +297,12 @@ class dsVideoDeviceClass():
         ]
 
         result = self.utMenu.select(self.testSuite, "GetCurrentDisplayframerate", promptWithAnswers)
+        frameRatePattern = r"Result dsGetCurrentDisplayframerate\(IN:Handle\[.*\],OUT:currentFrameRate\[(3840x\w+)\]\)"
+        frameRate = self.searchPattern(result, frameRatePattern)
 
-    def getZoomMode(self):
+        return frameRate
+
+    def getZoomMode(self,device:int=0):
         """
         Gets the Zoom mode.
 
@@ -304,29 +316,16 @@ class dsVideoDeviceClass():
                 {
                     "query_type": "direct",
                     "query": "Select the Video Device:",
-                    "input": str(0)
+                    "input": str(device)
                 }
         ]
 
         result = self.utMenu.select(self.testSuite, "GetZoomMode", promptWithAnswers)
+        zoomModePattern = r"Result dsGetDFC\(\(IN:Handle\[.*\],OUT:CurrentZoomMode\[(dsVIDEO_ZOOM_\w+)\]\)"
+        zoomMode = self.searchPattern(result, zoomModePattern)
 
+        return zoomMode
 
-    def getVideoDevice(self):
-        """
-        Returns a list of video devices.
-
-        Args:
-            None
-
-        Returns:
-            list: A list of tuples containing the video devices.
-        """
-
-        devices = self.deviceProfile.get("NumVideoDevices")
-        if not devices:
-            return []  # Handle empty ports list
-
-        return devices
 
     def getDeviceType(self):
         """
@@ -374,7 +373,6 @@ class dsVideoDeviceClass():
         result = self.testSession.read_until("FrameratePreChange callback tSecond: ")
         framerateprechange = r"FrameratePreChange callback tSecond: (\d+)"
         match = re.search(framerateprechange, result)
-        print(f'PRECB_MATCH = {match}')
 
         if match:
             tSecond = match.group(1)
@@ -396,7 +394,6 @@ class dsVideoDeviceClass():
         result = self.testSession.read_until("FrameratePostChange callback tSecond: ")
         framerateprechange = r"FrameratePostChange callback tSecond: (\d+)"
         match = re.search(framerateprechange, result)
-        print(f'POSTCB_MATCH = {match}')
 
         if match:
             tSecond = match.group(1)
@@ -476,7 +473,7 @@ if __name__ == '__main__':
     shell = InteractiveShell()
     shell.open()
 
-    platformProfile = dir_path + "/../../../profiles/sink/Sink_4K_VideoDevice.yaml"
+    platformProfile = dir_path + "/../../../profiles/source/Source_VideoDevice.yaml"
     # test the class assuming that it's optional
     test = dsVideoDeviceClass(platformProfile, shell)
 

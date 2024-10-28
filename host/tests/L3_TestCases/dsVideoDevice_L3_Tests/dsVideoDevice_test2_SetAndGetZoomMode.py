@@ -33,7 +33,7 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsVideoDevice_test2_SetAndGetZoomMode(utHelperClass):
+class dsVideoDevice_test3_SetAndGetZoomMode(utHelperClass):
     """
     Class to perform set and get the Zoom mode on video device.
 
@@ -45,14 +45,14 @@ class dsVideoDevice_test2_SetAndGetZoomMode(utHelperClass):
         moduleName (str): Name of the module being tested.
         rackDevice (str): Identifier for the device under test.
     """
-    testName  = "test3_ZoomMode"
+    testName  = "test2_ZoomMode"
     testSetupPath = os.path.join(dir_path, "dsVideoDevice_L3_testSetup.yml")
     moduleName = "dsVideoDevice"
     rackDevice = "dut"
 
     def __init__(self):
         """
-        Initializes the test3_ZoomMode test .
+        Initializes the test2_ZoomMode test .
 
         Args:
             None.
@@ -68,6 +68,11 @@ class dsVideoDevice_test2_SetAndGetZoomMode(utHelperClass):
         # Open Session for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
 
+        player = self.cpe.get("test").get("player")
+
+        # Create player Class
+        self.testPlayer = utPlayer(self.player_session, player)
+
          # Create user response Class
         self.testUserResponse = utUserResponse()
 
@@ -78,7 +83,7 @@ class dsVideoDevice_test2_SetAndGetZoomMode(utHelperClass):
         """
         Downloads the test artifacts and streams listed in the test setup configuration.
 
-        This function retrieves audio streams and other necessary files and
+        This function retrieves video streams and other necessary files and
         saves them on the DUT (Device Under Test).
 
         Args:
@@ -113,8 +118,6 @@ class dsVideoDevice_test2_SetAndGetZoomMode(utHelperClass):
         """
         self.deleteFromDevice(self.testStreams)
 
-        # remove the callback log files
-        self.deleteFromDevice([self.connectionCB, self.formatCB, self.atmosCB])
 
     def testRunPrerequisites(self):
         """
@@ -142,12 +145,10 @@ class dsVideoDevice_test2_SetAndGetZoomMode(utHelperClass):
                                      Defaults to False.
 
         Returns:
-            bool: True if audio is playing; otherwise, False.
+            bool: True if video is playing and selected zoom mode applied ; otherwise, False.
         """
         if manual == True and videomode == True:
-            return self.testUserResponse.getUserYN(f"Is the selected Zoom mode visible in the device's output? (Y/N):")
-        elif manual == False and videomode == True:
-            return True
+            return self.testUserResponse.getUserYN(f"Is the selected Zoom mode applied in the device's output? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
@@ -160,6 +161,7 @@ class dsVideoDevice_test2_SetAndGetZoomMode(utHelperClass):
         - Downloads necessary assets.
         - Runs prerequisite commands.
         - Initializes the dsVideoDevice module.
+        - Plays the stream
         - Set and Get the Zoom Mode.
         - Cleans up the downloaded assets after testing.
 
@@ -181,17 +183,27 @@ class dsVideoDevice_test2_SetAndGetZoomMode(utHelperClass):
         # Initialize the dsVideoDevice module
         self.testdsVideoDevice.initialise(self.testdsVideoDevice.getDeviceType())
 
-        # set the zoom mode
-        self.testdsVideoDevice.setZoomMode(0, 'dsVIDEO_ZOOM_PILLARBOX_4_3')
+        for stream in self.testStreams:
+            self.testPlayer.play(stream)
 
-        result = True
+            supported_modes = self.testdsVideoDevice.getZoomModes()
+            if supported_modes:
+                for zoomMode in supported_modes:
+                    self.testdsVideoDevice.setZoomMode(0, zoomMode)
+                    self.log.step(f'Verify setZoomMode {zoomMode}')
+                    result = self.testVerifyZoomMode(True, True)
+                    self.log.stepResult(result, f'Verified setZoomMode with {zoomMode}')
+                    mode = self.testdsVideoDevice.getZoomMode()
+                    self.log.stepResult(zoomMode in mode, f'Get Zoom Mode {zoomMode} Test')
+            else:
+                self.log.error("No Zoom mode formats available for verification.")
+                result = False
+                
+            self.testPlayer.stop()
 
-        self.log.stepResult(result, f'Verified setZoomMode')
 
-        # get the zoom mode
-        self.testdsVideoDevice.getZoomMode()
-
-        self.log.stepResult(result, f'Verified getZoomMode')
+        # Clean the assets downloaded to the device
+        self.testCleanAssets()
 
         # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()
@@ -202,5 +214,5 @@ class dsVideoDevice_test2_SetAndGetZoomMode(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsVideoDevice_test2_SetAndGetZoomMode()
+    test = dsVideoDevice_test3_SetAndGetZoomMode()
     test.run(False)
