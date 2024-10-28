@@ -27,17 +27,16 @@ import sys
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../"))
 
-from dsClasses.dsCompositeIn import dsCompositeInClass
-from raft.framework.plugins.ut_raft import utHelperClass
-from raft.framework.plugins.ut_raft.configRead import ConfigRead
-from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
+from dsCompositeInHelperClass import dsCompositeInHelperClass
 
-class dsCompositeIn_test3_ScaleAndVerify_Video(utHelperClass):
+class dsCompositeIn_test3_ScaleAndVerify_Video(dsCompositeInHelperClass):
+    """
+    Test class to scale and verify the video in CompositeIn device
 
-    testName  = "test3_ScaleAndVerify_Video"
-    testSetupPath = dir_path + "/dsCompositeIn_L3_testSetup.yml"
-    moduleName = "dsCompositeIn"
-    rackDevice = "dut"
+    This class uses the `dscompositeInClass` to interact with the device's compositeIn ports,
+    downloading necessary test assets, selecting
+    CompositeIn ports, and performing verification of compositeIn output.
+    """
 
     def __init__(self):
         """
@@ -46,79 +45,8 @@ class dsCompositeIn_test3_ScaleAndVerify_Video(utHelperClass):
         Args:
             None.
         """
+        self.testName  = "test3_ScaleAndVerify_Video"
         super().__init__(self.testName, '1')
-
-        # Test Setup configuration file
-        self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
-
-        # Open Session for player
-        #self.player_session = self.dut.getConsoleSession("ssh_player")
-
-        # Open Session for hal test
-        self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
-
-        #player = self.cpe.get("test").get("player")
-
-        # Create player Class
-        #self.testPlayer = utPlayer(self.player_session, player)
-
-         # Create user response Class
-        self.testUserResponse = utUserResponse()
-
-        # Get path to device profile file
-        self.deviceProfile = dir_path + "/" + self.cpe.get("test").get("profile")
-
-    def testDownloadAssets(self):
-        """
-        Downloads the test artifacts and streams listed in the test setup configuration.
-
-        This function retrieves audio streams and other necessary files and
-        saves them on the DUT (Device Under Test).
-
-        Args:
-            None
-        """
-
-        # List of streams with path
-        self.testStreams = []
-
-        self.deviceDownloadPath = self.cpe.get("target_directory")
-
-        #download test artifacts to device
-        url = self.testSetup.assets.device.test3_ScaleAndVerify_Video.artifacts
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-
-        #download test streams to device
-        url = self.testSetup.assets.device.test3_ScaleAndVerify_Video.streams
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            for streampath in url:
-                self.testStreams.append(self.deviceDownloadPath + "/" + os.path.basename(streampath))
-
-
-    def testCleanAssets(self):
-        """
-        Removes the assets copied to the dut.
-
-        Args:
-            None.
-        """
-        self.deleteFromDevice(self.testStreams)
-
-    def testRunPrerequisites(self):
-        """
-        Executes prerequisite commands listed in the test setup configuration file on the DUT.
-
-        Args:
-            None
-        """
-
-        #Run test specific commands
-        cmds = self.testSetup.assets.device.test3_ScaleAndVerify_Video.execute
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
     def CheckDeviceStatusAndVerifyVideoScale(self, manual=False, port_type:str=0, videoscale:str=0):
@@ -145,22 +73,11 @@ class dsCompositeIn_test3_ScaleAndVerify_Video(utHelperClass):
         The main test function test scale video of dsCompositeIn device.
 
         This function:
-        - Downloads necessary assets.
-        - Runs prerequisite commands.
         - Verifies video scaling .
 
         Returns:
             bool: Final result of the test.
         """
-
-        # Download the assets listed in test setup configuration file
-        self.testDownloadAssets()
-
-        # Run Prerequisites listed in the test setup configuration file
-        self.testRunPrerequisites()
-
-        # Create the dsCompositeIn class
-        self.testdsCompositeIn = dsCompositeInClass(self.deviceProfile, self.hal_session)
 
         self.log.testStart("test3_ScaleAndVerify_Video", '1')
 
@@ -181,19 +98,13 @@ class dsCompositeIn_test3_ScaleAndVerify_Video(utHelperClass):
             self.testdsCompositeIn.selectPort(portstr)
 
             # video scaling of ComposteIn port
-            for xcord, ycord, width, height in videoScale_argList:
-                self.testdsCompositeIn.scaleVideo(xcord, ycord, width, height)
+            for xvalue, yvalue, width, height in videoScale_argList:
+                self.testdsCompositeIn.scaleVideo(xvalue, yvalue, width, height)
                 result = self.CheckDeviceStatusAndVerifyVideoScale(True,portstr,True)
                 self.log.stepResult(result, f'CompositeIn Video Scale Verification {portstr} Port')
 
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
-
         # Terminate dsCompositeIn Module
         self.testdsCompositeIn.terminate()
-
-        # Delete the dsCompositeIn class
-        del self.testdsCompositeIn
 
         return result
 

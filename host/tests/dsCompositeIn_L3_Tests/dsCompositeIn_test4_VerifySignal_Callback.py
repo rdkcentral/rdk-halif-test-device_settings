@@ -28,17 +28,16 @@ from enum import Enum, auto
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../"))
 
-from dsClasses.dsCompositeIn import dsCompositeInClass
-from raft.framework.plugins.ut_raft import utHelperClass
-from raft.framework.plugins.ut_raft.configRead import ConfigRead
-from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
+from dsCompositeInHelperClass import dsCompositeInHelperClass
 
-class dsCompositeIn_test4_VerifySignal_Callback(utHelperClass):
+class dsCompositeIn_test4_VerifySignal_Callback(dsCompositeInHelperClass):
+    """
+    Test class to verify the signal change callback of CompositeIn device
 
-    testName  = "test4_VerifySignal_Callback"
-    testSetupPath = dir_path + "/dsCompositeIn_L3_testSetup.yml"
-    moduleName = "dsCompositeIn"
-    rackDevice = "dut"
+    This class uses the `dscompositeInClass` to interact with the device's compositeIn ports,
+    downloading necessary test assets, selecting
+    CompositeIn ports, and performing verification of compositeIn output.
+    """
 
     def __init__(self):
         """
@@ -47,75 +46,11 @@ class dsCompositeIn_test4_VerifySignal_Callback(utHelperClass):
         Args:
             None.
         """
+        self.testName  = "test4_VerifySignal_Callback"
         super().__init__(self.testName, '1')
 
-        # Test Setup configuration file
-        self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
-
-        # Open Session for hal test
-        self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
-
-         # Create user response Class
-        self.testUserResponse = utUserResponse()
-
-        # Get path to device profile file
-        self.deviceProfile = dir_path + "/" + self.cpe.get("test").get("profile")
-
-    def testDownloadAssets(self):
-        """
-        Downloads the test artifacts and streams listed in the test setup configuration.
-
-        This function retrieves audio streams and other necessary files and
-        saves them on the DUT (Device Under Test).
-
-        Args:
-            None
-        """
-
-        # List of streams with path
-        self.testStreams = []
-
-        self.deviceDownloadPath = self.cpe.get("target_directory")
-
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-
-        # Download test artifacts to device
-        url = self.testSetup.assets.device.test4_VerifySignal_Callback.artifacts
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-
-        # Download test streams to device
-        url = self.testSetup.assets.device.test4_VerifySignal_Callback.streams
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            for streampath in url:
-                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
-
-    def testCleanAssets(self):
-        """
-        Removes the assets copied to the dut.
-
-        Args:
-            None.
-        """
-        self.deleteFromDevice(self.testStreams)
-
-    def testRunPrerequisites(self):
-        """
-        Executes prerequisite commands listed in the test setup configuration file on the DUT.
-
-        Args:
-            None
-        """
-
-        # Run commands as part of test prerequisites
-        cmds = self.testSetup.assets.device.test4_VerifySignal_Callback.execute
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
-
      #TODO: Current version supports only manual verification.
-    def CheckDeviceStatus(self, manual=False, port_type:str=0):
+    def CheckDeviceStatus(self, manual=False, connect=False, port_type:str=0):
         """
         Verifies whether Composite Source Device connected or not
 
@@ -127,8 +62,10 @@ class dsCompositeIn_test4_VerifySignal_Callback(utHelperClass):
         Returns:
             bool
         """
-        if manual == True:
+        if manual == True and connect == True:
             return self.testUserResponse.getUserYN(f"Check if CompositeIn source is connected to {port_type} and press Y:")
+        elif manual == True and connect == False:
+            return self.testUserResponse.getUserYN(f"Check if CompositeIn source is disconnected to {port_type}/set to standby and press Y:")
         else :
             #TODO: Add automation verification methods
             return False
@@ -138,22 +75,11 @@ class dsCompositeIn_test4_VerifySignal_Callback(utHelperClass):
         The main test function that verifies signal status of CompositeIn device.
 
         This function:
-        - Downloads necessary assets.
-        - Runs prerequisite commands.
         - Verifies CompositeIn signal status through callbacks.
 
         Returns:
             bool: Final result of the test.
         """
-
-        # Download the assets listed in test setup configuration file
-        self.testDownloadAssets()
-
-        # Run Prerequisites listed in the test setup configuration file
-        self.testRunPrerequisites()
-
-        # Create the dsCompositeIn class
-        self.testdsCompositeIn = dsCompositeInClass(self.deviceProfile, self.hal_session)
 
         self.log.testStart("test4_VerifySignal_Callback", '1')
 
@@ -166,29 +92,26 @@ class dsCompositeIn_test4_VerifySignal_Callback(utHelperClass):
 
             # Check the CompositeIn device connected to is active
             portstr = f"dsCOMPOSITE_IN_PORT_{port}"
-            result = self.CheckDeviceStatus(True,portstr)
-            self.log.stepResult(result,f'CompositeIn Device connected {result} on {portstr}')
-            
-            self.testdsCompositeIn.selectPort(portstr)
-            self.log.step(f'Port Selcted {portstr}')
+            for i in range(0, 2):
+                connect = True
+                if ( i == 1): connect = False
+                result = self.CheckDeviceStatus(True, connect, portstr)
+                self.log.stepResult(result,f'CompositeIn Device connected {result} on {portstr}')
 
-            status = self.testdsCompositeIn.getSignalChangeCallbackStatus()
-            result = False
-            if status:
-                if portstr == status[0]:
-                    result = True
-                    self.log.stepResult(result,f'Signal status {status[1]} found in Callback')
-            else:
-               self.log.stepResult(result,f'Signal status not found in Callback found')
+                self.testdsCompositeIn.selectPort(portstr)
+                self.log.step(f'Port Selcted {portstr}')
 
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
+                status = self.testdsCompositeIn.getSignalChangeCallbackStatus()
+                if status:
+                    if portstr == status[0]:
+                        result = True
+                        self.log.stepResult(result,f'Signal status {status[1]} found in Callback')
+                else:
+                    result = False
+                    self.log.stepResult(result,f'Signal status not found in Callback found')
 
         # Terminate testdsCompositeIn Module
         self.testdsCompositeIn.terminate()
-
-        # Delete the testdsCompositeIn class
-        del self.testdsCompositeIn
 
         return result
 
