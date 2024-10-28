@@ -883,26 +883,28 @@ void test_l1_dsVideoDevice_positive_dsGetVideoCodecInfo(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        
-        result = dsGetVideoCodecInfo(handle, codec, &codecInfo);
-        if(gSourceType == 1) {
-            // Step 03: Iterate over all codecs
-            for(dsVideoCodingFormat_t codec = dsVIDEO_CODEC_MPEGHPART2; codec < dsVIDEO_CODEC_MAX; codec = (dsVideoCodingFormat_t)(codec + 1)){
-                if(!(gDSVideoDeviceConfiguration[i].SupportedVideoCodingFormats & codec)){
+        // Step 03: Iterate over all codecs
+        for(dsVideoCodingFormat_t codec = dsVIDEO_CODEC_MPEGHPART2; codec < dsVIDEO_CODEC_MAX; codec = (dsVideoCodingFormat_t)(codec + 1)){
+            result = dsGetVideoCodecInfo(handle, codec, &codecInfo);
+            if (gSourceType == 1)
+            {
+                if (!(gDSVideoDeviceConfiguration[i].SupportedVideoCodingFormats & codec))
+                {
                     continue;
                 }
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
                 // Compare with profile file
                 UT_ASSERT_EQUAL(codecInfo.num_entries, gDSVideoDeviceConfiguration[i].num_codec_entries);
-                if(codec == dsVIDEO_CODEC_MPEGHPART2){
+                if (codec == dsVIDEO_CODEC_MPEGHPART2)
+                {
                     UT_ASSERT_EQUAL(codecInfo.entries->profile, gDSVideoDeviceConfiguration[i].profile);
                     // Support for float values in KVP
                     UT_ASSERT_EQUAL(codecInfo.entries->level, gDSVideoDeviceConfiguration[i].level);
                 }
-                codec = (dsVideoCodingFormat_t) (0x01 << (j++));
-    	    }
-        } else if(gSourceType == 0) {
-            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+                codec = (dsVideoCodingFormat_t)(0x01 << (j++));
+            } else if(gSourceType == 0) {
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+            }
         }
     }
 
