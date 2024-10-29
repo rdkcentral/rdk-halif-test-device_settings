@@ -34,9 +34,9 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsFPD_test01_EnableDisableAndVerifyLEDIndicators(utHelperClass):
+class dsFPD_test05_SetVerifyFPPattern(utHelperClass):
 
-    testName  = "test01_EnableDisableAndVerifyLEDIndicators"
+    testName  = "test05_SetVerifyFPPattern"
     testSetupPath = os.path.join(dir_path, "dsFPD_L3_testSetup.yml")
     moduleName = "dsFPD"
     rackDevice = "dut"
@@ -120,6 +120,25 @@ class dsFPD_test01_EnableDisableAndVerifyLEDIndicators(utHelperClass):
         else :
             #todo: add automation verification methods
             return False
+    
+    #TODO: Current version supports only manual verification.
+    def testVerifyIndicatorPattern(self, pattern, manual=False):
+        """
+        Verifies whether the audio is working on the specified port.
+
+        Args:
+            port (str) : Audio port to verify
+            manual (bool, optional): Manual verification (True: manual, False: automated).
+                                     Defaults to False
+
+        Returns:
+            bool : Returns the status of the audio verification.
+        """
+        if manual == True:
+            return self.testUserResponse.getUserYN(f"Is Front Panel Pattern {pattern}? (Y/N):")
+        else :
+            #todo: add automation verification methods
+            return False
 
     def testFunction(self):
         """tests the audio ports by enabling and disabling the ports.
@@ -142,31 +161,20 @@ class dsFPD_test01_EnableDisableAndVerifyLEDIndicators(utHelperClass):
         # initialize the dsaudio module
         self.testdsFPD.initialise()
 
-        # Loop through the supported audio ports
-        for indicator in self.testdsFPD.getSupportedIndicators():
-            # Port Enable test
-            self.log.stepStart(f'Set {indicator.name} State ON')
-            # Enable the audio port
-            self.testdsFPD.setState(indicator.name,dsFPDState.dsFPD_STATE_ON.name)
-            result = self.testVerifyIndicator(indicator.name,dsFPDState.dsFPD_STATE_ON.name, True)
-            self.log.stepResult(result, f'Indicator State Verification {indicator.name} indicator')
+        supportedStates = self.testdsFPD.getSupportedFPStates()
+        supportedStates = 0x1FE
+        for pattern in self.testdsFPD.getSupportedStatesFromConfig():
+            if not (supportedStates & (1<<pattern.value)):
+                result = False
+                self.log.stepResult(result, f'Front Panel Do not support {pattern.name}')
+                continue
+            self.testdsFPD.setLedStatePattern(pattern.name)
+            result = self.testVerifyIndicatorPattern(pattern.name, True)
+            currentPattern = self.testdsFPD.getLedStatePattern()
             result = False
-            state = self.testdsFPD.getState(indicator.name)
-            if state == dsFPDState.dsFPD_STATE_ON.name:
+            if currentPattern == pattern.name:
                 result = True
-            self.log.stepResult(result, f'Indicator {indicator.name} get  {state} state')
-
-            # Port Disable test
-            self.log.stepStart(f'Set {indicator.name} state OFF')
-            # Disable the audio port
-            self.testdsFPD.setState(indicator.name,dsFPDState.dsFPD_STATE_OFF.name)
-            result = self.testVerifyIndicator(indicator.name,dsFPDState.dsFPD_STATE_OFF.name,True)
-            self.log.stepResult(result, f'Indicator State Verification {indicator.name} indicator')
-            result = False
-            state = self.testdsFPD.getState(indicator.name)
-            if state == dsFPDState.dsFPD_STATE_OFF.name:
-                result = True
-            self.log.stepResult(result, f'Indicator {indicator.name} get  {state} state')
+            self.log.stepResult(result, f'Front Panel Get Pattern Verification for {pattern.name}, retrieved Pattern {currentPattern}')
 
         # Clean the assets downloaded to the device
         self.testCleanAssets()
@@ -180,5 +188,5 @@ class dsFPD_test01_EnableDisableAndVerifyLEDIndicators(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsFPD_test01_EnableDisableAndVerifyLEDIndicators()
+    test = dsFPD_test05_SetVerifyFPPattern()
     test.run(False)
