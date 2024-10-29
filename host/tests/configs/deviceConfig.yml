@@ -36,21 +36,7 @@ deviceConfig:
                 prerequisites:
                     - export EXP=test # pre commands required to play the stream
             prerequisites:
-                - export XDG_RUNTIME_DIR="/tmp" # pre commands required to play the stream
-                - export LD_PRELOAD=libwesteros_gl.so.0.0.0
-                - export WAYLAND_DISPLAY=wayland-0
-                - export PLAYERSINKBIN_USE_WESTEROSSINK=1
-                - export WESTEROS_SINK_AMLOGIC_USE_DMABUF=1
-                - export WESTEROS_GL_USE_AMLOGIC_AVSYNC=1
-                - export WESTEROS_SINK_USE_FREERUN=1
-                - export WESTEROS_GL_USE_REFRESH_LOCK=1
-                - export WESTEROS_SINK_USE_ESSRMGR=1
-                - export WESTEROS_GL_DEBUG=2
-                - export AAMP_ENABLE_OPT_OVERRIDE=true
-                - export GST_DEBUG_DUMP_DOT_DIR=/opt/
-                - westeros-init &
-                - export DBUS_SESSION_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket
-                - echo "pause0"> /sys/class/hdmirx/hdmirx0/debug
+                - export EXP=test # pre commands required to play the stream
     cpe2:
         platform: "test"
         model: "test"

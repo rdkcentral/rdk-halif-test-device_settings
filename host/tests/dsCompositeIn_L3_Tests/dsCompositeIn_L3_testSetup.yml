@@ -7,14 +7,14 @@ dsCompositeIn:
     device:
       defaults: &defaults
         artifacts:
-          - "http://localhost:8000/bin/hal_test"
-          - "http://localhost:8000/bin/libut_control.so"
-          - "http://localhost:8000/profiles/sink/Sink_CompositeInput.yaml"
-          - "http://localhost:8000/bin/run.sh"
+          - "<PATH URL>/bin/hal_test"
+          - "<PATH URL>/bin/libut_control.so"
+          - "<PATH URL>/profiles/sink/Sink_CompositeInput.yaml"
+          - "<PATH URL>/bin/run.sh"
         execute:
-          - "chmod +x /opt/HAL/hal_test"
-          - "chmod +x /opt/HAL/run.sh"
-          - "ln -s /usr/lib/libds-hal.so /opt/HAL/libdshal.so"
+          - "chmod +x <PATH on Device>/hal_test"
+          - "chmod +x <PATH on Device>/run.sh"
+          - "ln -s /usr/lib/libds-hal.so <PATH on Device>/libdshal.so"
         streams:
       test1_VerifyConnect_Callback:
         <<: *defaults

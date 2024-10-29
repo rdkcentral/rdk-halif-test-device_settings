@@ -95,11 +95,9 @@ class dsCompositeIn_test1_VerifyConnect_Callback(dsCompositeInHelperClass):
 
             status = self.testdsCompositeIn.getConnectionCallbackStatus()
             if status != None and portstr == status[0] and status[1] == True:
-                result = True
+                self.log.stepResult(True, f'Connect Status Test for Port {portstr}')
             else:
-                result = False
-
-            self.log.stepResult(result, f'Connect Status Test for Port {portstr}')
+                self.log.stepResult(False, f'Connect Status Test for Port {portstr}')
 
             self.log.stepStart(f'Disconnect Status Test for Port {portstr}')
 
@@ -107,11 +105,9 @@ class dsCompositeIn_test1_VerifyConnect_Callback(dsCompositeInHelperClass):
 
             status = self.testdsCompositeIn.getConnectionCallbackStatus()
             if status != None and portstr == status[0] and status[1] == False:
-                result = True
+                self.log.stepResult(True, f'Disconnect Status Test for Port {portstr}')
             else:
-                result = False
-
-            self.log.stepResult(result, f'Disconnect Status Test for Port {portstr}')
+                self.log.stepResult(False, f'Disconnect Status Test for Port {portstr}')
 
         # Terminate testdsCompositeIn Module
         self.testdsCompositeIn.terminate()
