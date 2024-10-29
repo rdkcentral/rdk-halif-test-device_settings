@@ -39,12 +39,11 @@ Below are top test use-case for the Video Display.
 
 |#|Test-case|Description|HAL APIs|Source|Sink|
 |-|---------|-----------|--------|------|----|
-|1|Verify the Video Display framerate change with pre-change callback.|Play any video content and check the callback is triggered before when the framerate of a display changes|`dsRegisterFrameratePreChangeCB()`|`NA`|`Y`|
-|2|Verify the Video Display framerate change with post-change callback|Play any video content and check the callback is triggered after when the framerate of a display changes|`dsRegisterFrameratePostChangeCB()`|`NA`|`Y`|
-|3|Set and verify the Zoom mode of the source device|Set the Zoom mode and verify the selected Zoom mode|`dsSetDFC()`, `dsGetDFC()`|`Y`|`NA`|
-|4|Select the Device Frame Rate of Sink device|Select the Device Frame Rate of Sink device and verify|`dsSetDisplayframerate()`|`NA`|`Y`|
-|5|Set and verify the `FRF` mode|Select the`FRF`mode and verify the selected `FRF` mode|`dsSetFRFMode()`,`dsGetFRFMode()`|`NA`|`Y`|
-|6|Check Video coding Formats and information|Select the supported video device and the get Video coding format using `dsGetSupportedVideoCodingFormats()` and get Video codec information for video device using `dsGetVideoCodecInfo()`|`dsGetSupportedVideoCodingFormats()`,`dsGetVideoCodecInfo()`|`Y`|`NA`|
+|1|Verify the Video Display framerate change with pre-change callback.|Set the supported diplay framrates using `dsSetDisplayframerate()` and check the callback is triggered before and after when the framerate of a display changes|`dsRegisterFrameratePreChangeCB()`, `dsRegisterFrameratePostChangeCB()`|`NA`|`Y`|
+|2|Set and verify the Zoom mode of the source device|Play any video content and Set the supported Zoom mode and verify the selected Zoom mode|`dsSetDFC()`, `dsGetDFC()`|`Y`|`NA`|
+|3|Select the Device Frame Rate of Sink device|Select the Device Frame Rate of Sink device and verify|`dsSetDisplayframerate()`|`NA`|`Y`|
+|4|Set and verify the `FRF` mode|Select the`FRF`mode and verify the selected `FRF` mode|`dsSetFRFMode()`,`dsGetFRFMode()`|`NA`|`Y`|
+|5|Check Video coding Formats and information|Select the supported video device and Video coding format using `dsGetVideoCodecInfo()` and get Video codec information for video device|`dsGetSupportedVideoCodingFormats()`,`dsGetVideoCodecInfo()`|`Y`|`NA`|
 
 ## Level 3 Python Test Cases High Level Overview
 

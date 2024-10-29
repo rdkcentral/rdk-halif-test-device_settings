@@ -172,13 +172,13 @@ static void readAndDiscardRestOfLine(FILE* in)
 /*FrameratePreChange callback*/
 void dsVideoDevice_FrameratePreChange(unsigned int tSecond)
 {
-    UT_LOG_INFO("FrameratePreChange callback tSecond:[%d]",tSecond);
+    UT_LOG_INFO("FrameratePreChange callback tSecond: %d",tSecond);
 }
 
 /*FrameratePostChange callback*/
 void dsVideoDevice_FrameratePostChange(unsigned int tSecond)
 {
-    UT_LOG_INFO("FrameratePostChange callback tSecond:[%d]",tSecond);
+    UT_LOG_INFO("FrameratePostChange callback tSecond: %d",tSecond);
 }
 
 static void dsVideoDevice_getHandle()
@@ -368,33 +368,21 @@ void test_l3_dsVideoDevice_SetDisplayFramerate()
     gTestID = 3;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     dsError_t status   = dsERR_NONE;
-    int32_t choice= 0;
+    char frameRate[100] = {0};
     int32_t j = 0;
 
     dsVideoDevice_getHandle();
-    UT_LOG_MENU_INFO(" \t  Supported Display Framerate are:");
-    for (j = dsVIDEO_FRAMERATE_24; j < dsVIDEO_FRAMERATE_MAX; j++)
-    {
-        UT_LOG_MENU_INFO("\t%d. %-20s", j, UT_Control_GetMapString(dsVideoFrameRateTable, j));
-    }
-
-    UT_LOG_MENU_INFO("------------------------------------------");
-    UT_LOG_MENU_INFO(" Select the Display Framerate :");
-    scanf("%d", &choice);
+    
+    UT_LOG_MENU_INFO(" Provided Display Framerate :");
+    scanf("%s", &frameRate);
     readAndDiscardRestOfLine(stdin);
 
-    if(choice < 0 || choice >= dsVIDEO_FRAMERATE_MAX) 
-    {
-       UT_LOG_ERROR("\nInvalid Display Framerate selected\n");
-       goto exit;
-    }
-
     UT_LOG_INFO("Calling dsSetDisplayframerate(IN:Handle:[0x%0X],IN:framerate:[%s])",gdeviceHandle, \
-                        UT_Control_GetMapString(dsVideoFrameRateTable, choice));
+                        frameRate);
 
-    status = dsSetDisplayframerate(gdeviceHandle, UT_Control_GetMapString(dsVideoFrameRateTable, choice));
+    status = dsSetDisplayframerate(gdeviceHandle, frameRate);
     UT_LOG_INFO("Result dsSetDisplayframerate(IN:Handle:[0x%0X],IN:framerate:[%s]), dsError_t=[%s]",gdeviceHandle, \
-                        UT_Control_GetMapString(dsVideoFrameRateTable, choice), UT_Control_GetMapString(dsErrorMappingTable, status));
+                        frameRate, UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status, dsERR_NONE);
     
     exit:
@@ -601,7 +589,7 @@ void test_l3_dsVideoDevice_dsGetFRFMode()
     dsVideoDevice_getHandle();
     UT_LOG_INFO("Calling dsGetFRFMode(IN:Handle[0x%0X],OUT:frfMode[])",gdeviceHandle);
     status = dsGetFRFMode(gdeviceHandle, &frfMode);
-    UT_LOG_INFO("Result dsGetFRFMode(IN:Handle[0x%0X],OUT:frfMode[0x08%d]), dsError_t=[%s] ",gdeviceHandle, \
+    UT_LOG_INFO("Result dsGetFRFMode(IN:Handle[0x%0X],OUT:frfMode[%d]), dsError_t=[%s] ",gdeviceHandle, \
                                                 frfMode,UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status, dsERR_NONE);
     UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -627,7 +615,7 @@ void test_l3_dsVideoDevice_dsGetCurrentDisplayframerate()
     gTestID = 9;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     dsError_t status   = dsERR_NONE;
-    char currentFrameRate[dsVIDEO_FRAMERATE_MAX] = {0};
+    char currentFrameRate[50] = {0};
 
     dsVideoDevice_getHandle();
     UT_LOG_INFO("Calling dsGetCurrentDisplayframerate(IN:Handle[0x%0X],OUT:currentFrameRate[])",gdeviceHandle);

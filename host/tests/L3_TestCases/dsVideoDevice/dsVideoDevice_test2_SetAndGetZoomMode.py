@@ -22,28 +22,37 @@
 #* ******************************************************************************
 
 import os
-import time
 import sys
-from enum import Enum, auto
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsVideoDevice import dsVideoDeviceClass
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
+from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsVideoDevice_test1_FrameratePreChangePostChangeCallback_Verify(utHelperClass):
+class dsVideoDevice_test2_SetAndGetZoomMode(utHelperClass):
+    """
+    Class to perform set and get the Zoom mode on video device.
 
-    testName  = "test1_FrameratePreChangeCallBack_Verify"
-    testSetupPath = dir_path + "/dsVideoDevice_L3_testSetup.yml"
+    Inherits from utHelperClass to leverage common test functionalities.
+
+    Attributes:
+        testName (str): Name of the test case.
+        testSetupPath (str): Path to the test setup configuration file.
+        moduleName (str): Name of the module being tested.
+        rackDevice (str): Identifier for the device under test.
+    """
+    testName  = "test2_ZoomMode"
+    testSetupPath = os.path.join(dir_path, "dsVideoDevice_L3_testSetup.yml")
     moduleName = "dsVideoDevice"
     rackDevice = "dut"
 
     def __init__(self):
         """
-        Initializes the test1_FrameratePreChangeCallBack_Verify test .
+        Initializes the test2_ZoomMode test .
 
         Args:
             None.
@@ -53,20 +62,28 @@ class dsVideoDevice_test1_FrameratePreChangePostChangeCallback_Verify(utHelperCl
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
+        # Open Session for player
+        self.player_session = self.dut.getConsoleSession("ssh_player")
+
         # Open Session for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
+
+        player = self.cpe.get("test").get("player")
+
+        # Create player Class
+        self.testPlayer = utPlayer(self.player_session, player)
 
          # Create user response Class
         self.testUserResponse = utUserResponse()
 
         # Get path to device profile file
-        self.deviceProfile = dir_path + "/" + self.cpe.get("test").get("profile")
+        self.deviceProfile = os.path.join(dir_path, self.cpe.get("test").get("profile"))
 
     def testDownloadAssets(self):
         """
         Downloads the test artifacts and streams listed in the test setup configuration.
 
-        This function retrieves audio streams and other necessary files and
+        This function retrieves video streams and other necessary files and
         saves them on the DUT (Device Under Test).
 
         Args:
@@ -80,12 +97,12 @@ class dsVideoDevice_test1_FrameratePreChangePostChangeCallback_Verify(utHelperCl
 
         test = self.testSetup.get("assets").get("device").get(self.testName)
 
-        # Download test artifacts to device
+        #download test artifacts to device
         url = test.get("artifacts")
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
 
-        # Download test streams to device
+        #download test streams to device
         url =  test.get("streams")
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
@@ -94,12 +111,13 @@ class dsVideoDevice_test1_FrameratePreChangePostChangeCallback_Verify(utHelperCl
 
     def testCleanAssets(self):
         """
-        Removes the assets copied to the dut.
+        Removes the downloaded assets and test streams from the DUT after test execution.
 
         Args:
-            None.
+            None
         """
         self.deleteFromDevice(self.testStreams)
+
 
     def testRunPrerequisites(self):
         """
@@ -109,55 +127,46 @@ class dsVideoDevice_test1_FrameratePreChangePostChangeCallback_Verify(utHelperCl
             None
         """
 
-        # Run commands as part of test prerequisites
+        #Run test specific commands
         test = self.testSetup.get("assets").get("device").get(self.testName)
         cmds = test.get("execute")
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    def testRunPostreiquisites(self):
+    #TODO: Current version supports only manual verification.
+    def testVerifyZoomMode(self, manual=False, videomode=False):
         """
-        Executes postrequisite commands listed in test-setup configuration file on the DUT.
+        Verifies the zoom mode on specified video device.
+
 
         Args:
-            None.
-        """
-
-       # Run commands as part of test prerequisites
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("postcmd")
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
-
-            
-    def find_CBStatus(self, input_str: str, status: str) -> bool:
-        """
-        Finds the framerate change callback in a given input string.
-
-        Args:
-            input_str (str): The input log containing callback string.
-            status (str): The callback string to look for.
+            manual (bool, optional): If True, requires manual confirmation from the user.
+                                     Defaults to False.
 
         Returns:
-            bool: True if the status is found, False otherwise.
+            bool: True if video is playing and selected zoom mode applied ; otherwise, False.
         """
-        if status in input_str:
-            return True
-        return False
+        if manual == True and videomode == True:
+            return self.testUserResponse.getUserYN(f"Is the selected Zoom mode applied in the device's output? (Y/N):")
+        else :
+            #TODO: Add automation verification methods
+            return False
 
     def testFunction(self):
         """
-        The main test function that verifies display framerate prechange in video device.
+        Executes the set and get tests on the video device.
 
-        This function:
+        This function performs the following steps:
         - Downloads necessary assets.
         - Runs prerequisite commands.
-        - Verifies display framerate prechange and postchange through callbacks.
+        - Initializes the dsVideoDevice module.
+        - Plays the stream
+        - Set and Get the Zoom Mode.
+        - Cleans up the downloaded assets after testing.
 
         Returns:
-            bool: Final result of the test.
+            bool: Status of the last verification (True if successful, False otherwise).
         """
 
         # Download the assets listed in test setup configuration file
@@ -169,38 +178,33 @@ class dsVideoDevice_test1_FrameratePreChangePostChangeCallback_Verify(utHelperCl
         # Create the dsVideoDevice class
         self.testdsVideoDevice = dsVideoDeviceClass(self.deviceProfile, self.hal_session)
 
-        self.log.testStart("test1_FrameratePreChangeCallBack_Verify", '1')
+        self.log.testStart(self.testName, '1')
 
         # Initialize the dsVideoDevice module
         self.testdsVideoDevice.initialise(self.testdsVideoDevice.getDeviceType())
 
-   
-        self.log.stepStart(f'Set the display framerate')
+        for stream in self.testStreams:
+            self.testPlayer.play(stream)
 
-        supported_framerate = self.testdsVideoDevice.getSupportedFrameRates()
-        if supported_framerate:
-            for framerate in supported_framerate:   
-                self.testdsVideoDevice.setDisplayFramerate(0, framerate)
-                result = self.testdsVideoDevice.read_Callbacks("FrameratePreChange callback tSecond:")
-                if self.find_CBStatus(result, "FrameratePreChange callback tSecond:"):
-                #if result:
-                    self.log.stepResult(True, "Framerate Prechange tSecond found in Callback")
-                else:
-                    self.log.stepResult(False, "Framerate Prechange tSecond not found in Callback")
-                    
-                result = self.testdsVideoDevice.read_Callbacks("FrameratePostChange callback tSecond:")
-                if self.find_CBStatus(result, "FrameratePostChange callback tSecond"):
-                #if result:
-                    self.log.stepResult(True, "FrameratePostChange callback tSecond found in Callback")
-                else:
-                    self.log.stepResult(False, "FrameratePostChange callback tSecond not found in Callback")
+            supported_modes = self.testdsVideoDevice.getZoomModes()
+            if supported_modes:
+                for zoomMode in supported_modes:
+                    self.testdsVideoDevice.setZoomMode(0, zoomMode)
+                    self.log.step(f'Verify setZoomMode {zoomMode}')
+                    result = self.testVerifyZoomMode(True, True)
+                    self.log.stepResult(result, f'Verified setZoomMode with {zoomMode}')
+                    mode = self.testdsVideoDevice.getZoomMode()
+                    self.log.stepResult(zoomMode in mode, f'Get Zoom Mode {zoomMode} Test')
+                result = True
+            else:
+                self.log.error("No Zoom mode formats available for verification.")
+                result = False
+                
+            self.testPlayer.stop()
 
-        else:
-            self.log.error("No supported framerates available for verification.")
-            result = False
-        
-        #Run postrequisites listed in the test setup configuration file 
-        self.testRunPostreiquisites()
+
+        # Clean the assets downloaded to the device
+        self.testCleanAssets()
 
         # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()
@@ -211,5 +215,5 @@ class dsVideoDevice_test1_FrameratePreChangePostChangeCallback_Verify(utHelperCl
         return result
 
 if __name__ == '__main__':
-    test = dsVideoDevice_test1_FrameratePreChangePostChangeCallback_Verify()
+    test = dsVideoDevice_test2_SetAndGetZoomMode()
     test.run(False)

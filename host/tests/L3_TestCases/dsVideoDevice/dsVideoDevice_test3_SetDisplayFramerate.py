@@ -25,7 +25,7 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsVideoDevice import dsVideoDeviceClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -33,9 +33,9 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsVideoDevice_test5_VideoCodingFormats(utHelperClass):
+class dsVideoDevice_test3_SetDisplayFramerate(utHelperClass):
     """
-    Class to perform get the supported video coding formats and codec info on video device.
+    Class to perform set and get the FRF mode on video device.
 
     Inherits from utHelperClass to leverage common test functionalities.
 
@@ -45,14 +45,14 @@ class dsVideoDevice_test5_VideoCodingFormats(utHelperClass):
         moduleName (str): Name of the module being tested.
         rackDevice (str): Identifier for the device under test.
     """
-    testName  = "test6_VideoCodingFormats"
+    testName  = "test3_SetDisplayFramerate"
     testSetupPath = os.path.join(dir_path, "dsVideoDevice_L3_testSetup.yml")
     moduleName = "dsVideoDevice"
     rackDevice = "dut"
 
     def __init__(self):
         """
-        Initializes the test6_VideoCodingFormats test .
+        Initializes the test3_SetDisplayFramerate test .
 
         Args:
             None.
@@ -131,36 +131,17 @@ class dsVideoDevice_test5_VideoCodingFormats(utHelperClass):
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    #TODO: Current version supports only manual verification.
-    def testVerifyVideoCodec(self, manual=False, codecinfo=False):
-        """
-        Verifies the codec info on specified video device.
 
-
-        Args:
-            manual (bool, optional): If True, requires manual confirmation from the user.
-                                     Defaults to False.
-
-        Returns:
-            bool: True if selected FRF mode is visible in output device; otherwise, False.
-        """
-        if manual == True and codecinfo == True:
-            return self.testUserResponse.getUserYN(f"Is the selected VideoCoding formats visible in the device's output? (Y/N):")
-        elif manual == False and codecinfo == True:
-            return True
-        else :
-            #TODO: Add automation verification methods
-            return False
 
     def testFunction(self):
         """
-        Executes the get the supported video coding formats and codec info on video device.
+        Executes the set display framerate tests on the video device.
 
         This function performs the following steps:
         - Downloads necessary assets.
         - Runs prerequisite commands.
         - Initializes the dsVideoDevice module.
-        - Get the VideoCodec info.
+        - Set Display framerate
         - Cleans up the downloaded assets after testing.
 
         Returns:
@@ -181,17 +162,17 @@ class dsVideoDevice_test5_VideoCodingFormats(utHelperClass):
         # Initialize the dsVideoDevice module
         self.testdsVideoDevice.initialise(self.testdsVideoDevice.getDeviceType())
 
-        # get the SupportedVideoCodingFormat
-        self.testdsVideoDevice.getSupportedVideoCodingFormat()
+        supported_framerate = self.testdsVideoDevice.getSupportedFrameRates()
+        if supported_framerate:
+            for framerate in supported_framerate:   
+                frr = self.testdsVideoDevice.setDisplayFramerate(0, framerate)
+                self.log.stepResult(framerate in frr, f'Set display framerate {framerate} Test')
+            result = True
+                
+        else:
+            self.log.error("No supported framerates available.")
+            result = False
 
-        result = True
-
-        self.log.stepResult(result, f'Verified Supported VideoCodingFormats')
-
-        # get the videoCodec info
-        self.testdsVideoDevice.getVideoCodecInfo(0, 'dsVIDEO_CODEC_MPEG4PART10')
-
-        self.log.stepResult(result, f'Verified get VideoCodingFormats Info')
 
         # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()
@@ -202,5 +183,5 @@ class dsVideoDevice_test5_VideoCodingFormats(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsVideoDevice_test5_VideoCodingFormats()
+    test = dsVideoDevice_test3_SetDisplayFramerate()
     test.run(False)
