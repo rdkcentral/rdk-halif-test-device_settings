@@ -46,7 +46,7 @@ class dsCompositeIn_test3_ScaleAndVerify_Video(dsCompositeInHelperClass):
             None.
         """
         self.testName  = "test3_ScaleAndVerify_Video"
-        super().__init__(self.testName, '1')
+        super().__init__(self.testName, '3')
 
     #TODO: Current version supports only manual verification.
     def CheckDeviceStatusAndVerifyVideoScale(self, manual=False, port_type:str=0, videoscale:str=0):
@@ -79,7 +79,7 @@ class dsCompositeIn_test3_ScaleAndVerify_Video(dsCompositeInHelperClass):
             bool: Final result of the test.
         """
 
-        self.log.testStart("test3_ScaleAndVerify_Video", '1')
+        self.log.testStart("test3_ScaleAndVerify_Video", '3')
 
         # Initialize the dsCompositeIn module
         self.testdsCompositeIn.initialise()

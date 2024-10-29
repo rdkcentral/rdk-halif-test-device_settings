@@ -269,3 +269,18 @@ class dsCompositeInClass():
             None
         """
         self.utMenu.stop()
+if __name__ == '__main__':
+
+    shell = InteractiveShell()
+    shell.open()
+
+    platformProfile = dir_path + "/../../../profiles/sink/Sink_CompositeInput.yaml"
+    # test the class assuming that it's optional
+    test = dsCompositeInClass(platformProfile, shell)
+
+    test.initialise()
+    ports = test.getSupportedPorts()
+    test.getStatus()
+    test.terminate()
+
+    shell.close()

@@ -47,7 +47,7 @@ class dsCompositeIn_test4_VerifySignal_Callback(dsCompositeInHelperClass):
             None.
         """
         self.testName  = "test4_VerifySignal_Callback"
-        super().__init__(self.testName, '1')
+        super().__init__(self.testName, '4')
 
      #TODO: Current version supports only manual verification.
     def CheckDeviceStatus(self, manual=False, connect=False, port_type:str=0):
@@ -81,7 +81,7 @@ class dsCompositeIn_test4_VerifySignal_Callback(dsCompositeInHelperClass):
             bool: Final result of the test.
         """
 
-        self.log.testStart("test4_VerifySignal_Callback", '1')
+        self.log.testStart("test4_VerifySignal_Callback", '4')
 
         # Initialize the dsCompositeIn module
         self.testdsCompositeIn.initialise()
@@ -103,11 +103,9 @@ class dsCompositeIn_test4_VerifySignal_Callback(dsCompositeInHelperClass):
 
                 status = self.testdsCompositeIn.getSignalChangeCallbackStatus()
                 if status != None and portstr == status[0]:
-                    result = True
-                    self.log.stepResult(result,f'Signal status {status[1]} found in Callback')
+                    self.log.stepResult(True,f'Signal status {status[1]} found in Callback')
                 else:
-                    result = False
-                    self.log.stepResult(result,f'Signal status not found in Callback')
+                    self.log.stepResult(False,f'Signal status not found in Callback')
 
         # Terminate testdsCompositeIn Module
         self.testdsCompositeIn.terminate()

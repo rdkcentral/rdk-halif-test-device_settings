@@ -46,7 +46,7 @@ class dsCompositeIn_test2_VerifyStatus_Callback(dsCompositeInHelperClass):
             None.
         """
         self.testName  = "test2_VerifyStatus_Callback"
-        super().__init__(self.testName, '1')
+        super().__init__(self.testName, '2')
 
     #TODO: Current version supports only manual verification.
     def CheckDeviceStatus(self, manual=False, port_type:str=0):
@@ -78,7 +78,7 @@ class dsCompositeIn_test2_VerifyStatus_Callback(dsCompositeInHelperClass):
             bool: Final result of the test.
         """
 
-        self.log.testStart("test2_VerifyStatus_Callback", '1')
+        self.log.testStart("test2_VerifyStatus_Callback", '2')
 
         # Initialize the dsCompositeIn module
         self.testdsCompositeIn.initialise()
@@ -96,11 +96,9 @@ class dsCompositeIn_test2_VerifyStatus_Callback(dsCompositeInHelperClass):
                 
             status = self.testdsCompositeIn.getPortCallbackStatus()
             if status != None and status[1] == portstr:
-                result = True
-                self.log.stepResult(result,f'Port Status ispresented:{status[0]} activeport:{status[1]} found in Callback')
+                self.log.stepResult(True,f'Port Status ispresented:{status[0]} activeport:{status[1]} found in Callback')
             else:
-                result = False
-                self.log.stepResult(result,f'Port Status Callback is not found')
+                self.log.stepResult(False,f'Port Status Callback is not found')
 
         # Terminate testdsCompositeIn Module
         self.testdsCompositeIn.terminate()
