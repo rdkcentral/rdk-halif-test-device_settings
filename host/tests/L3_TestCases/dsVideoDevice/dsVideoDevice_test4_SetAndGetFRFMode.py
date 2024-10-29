@@ -25,7 +25,7 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsVideoDevice import dsVideoDeviceClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -45,14 +45,14 @@ class dsVideoDevice_test4_SetAndGetFRFMode(utHelperClass):
         moduleName (str): Name of the module being tested.
         rackDevice (str): Identifier for the device under test.
     """
-    testName  = "test5_FRFMode"
+    testName  = "test4_FRFMode"
     testSetupPath = os.path.join(dir_path, "dsVideoDevice_L3_testSetup.yml")
     moduleName = "dsVideoDevice"
     rackDevice = "dut"
 
     def __init__(self):
         """
-        Initializes the test5_FRFMode test .
+        Initializes the test4_FRFMode test .
 
         Args:
             None.
@@ -131,26 +131,6 @@ class dsVideoDevice_test4_SetAndGetFRFMode(utHelperClass):
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    #TODO: Current version supports only manual verification.
-    def testVerifyFRFMode(self, manual=False, frfmode=False):
-        """
-        Verifies the FRF mode on specified video device.
-
-
-        Args:
-            manual (bool, optional): If True, requires manual confirmation from the user.
-                                     Defaults to False.
-
-        Returns:
-            bool: True if selected FRF mode is visible in output device; otherwise, False.
-        """
-        if manual == True and frfmode == True:
-            return self.testUserResponse.getUserYN(f"Is the selected FRF mode visible in the device's output? (Y/N):")
-        elif manual == False and frfmode == True:
-            return True
-        else :
-            #TODO: Add automation verification methods
-            return False
 
     def testFunction(self):
         """
@@ -172,7 +152,7 @@ class dsVideoDevice_test4_SetAndGetFRFMode(utHelperClass):
 
         # Run Prerequisites listed in the test setup configuration file
         self.testRunPrerequisites()
-
+        
         # Create the dsVideoDevice class
         self.testdsVideoDevice = dsVideoDeviceClass(self.deviceProfile, self.hal_session)
 
@@ -181,17 +161,28 @@ class dsVideoDevice_test4_SetAndGetFRFMode(utHelperClass):
         # Initialize the dsVideoDevice module
         self.testdsVideoDevice.initialise(self.testdsVideoDevice.getDeviceType())
 
+        
         # set the FRF mode
-        self.testdsVideoDevice.setFRFMode(0,'Enable')
-
-        #result = self.testVerifyFRFMode(False, True)
-        result =True
-
+        self.testdsVideoDevice.setFRFMode(0, 'Enable')
         # get the FRF mode
-        self.testdsVideoDevice.getFRFMode(0)
+        frfmode = self.testdsVideoDevice.getFRFMode(0)
+        if frfmode:
+            self.log.stepResult('1' in frfmode, f'Get FRF Mode {frfmode} Test')
+            result = True
+        else:
+            self.log.error("No result from getFRF mode Enable state")
+            result = False
 
-
-        self.log.stepResult(result, f'Verified getFRFMode')
+        # set the FRF mode
+        self.testdsVideoDevice.setFRFMode(0, 'Disable')
+        # get the FRF mode
+        frfmode = self.testdsVideoDevice.getFRFMode(0)
+        if frfmode:
+            self.log.stepResult('0' in frfmode, f'Get FRF Mode {frfmode} Test')
+            result = True
+        else:
+            self.log.error("No result from getFRF mode for Disable state")
+            result = False
 
         # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()

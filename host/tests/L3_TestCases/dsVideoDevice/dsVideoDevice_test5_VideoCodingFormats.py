@@ -25,7 +25,7 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsClasses.dsVideoDevice import dsVideoDeviceClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -33,9 +33,9 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsVideoDevice_test3_SetDisplayFramerate(utHelperClass):
+class dsVideoDevice_test5_VideoCodingFormats(utHelperClass):
     """
-    Class to perform set and get the FRF mode on video device.
+    Class to perform get the supported video coding formats and codec info on video device.
 
     Inherits from utHelperClass to leverage common test functionalities.
 
@@ -45,14 +45,14 @@ class dsVideoDevice_test3_SetDisplayFramerate(utHelperClass):
         moduleName (str): Name of the module being tested.
         rackDevice (str): Identifier for the device under test.
     """
-    testName  = "test4_SetDisplayFramerate"
+    testName  = "test5_VideoCodingFormats"
     testSetupPath = os.path.join(dir_path, "dsVideoDevice_L3_testSetup.yml")
     moduleName = "dsVideoDevice"
     rackDevice = "dut"
 
     def __init__(self):
         """
-        Initializes the test4_SetDisplayFramerate test .
+        Initializes the test5_VideoCodingFormats test .
 
         Args:
             None.
@@ -131,36 +131,16 @@ class dsVideoDevice_test3_SetDisplayFramerate(utHelperClass):
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    #TODO: Current version supports only manual verification.
-    def testVerifyFramerate(self, manual=False, videomode=False):
-        """
-        Verifies the FRF mode on specified video device.
-
-
-        Args:
-            manual (bool, optional): If True, requires manual confirmation from the user.
-                                     Defaults to False.
-
-        Returns:
-            bool: True if selected FRF mode is visible in output device; otherwise, False.
-        """
-        if manual == True and videomode == True:
-            return self.testUserResponse.getUserYN(f"Is the selected FRF mode visible in the device's output? (Y/N):")
-        elif manual == False and videomode == True:
-            return True
-        else :
-            #TODO: Add automation verification methods
-            return False
-
+    
     def testFunction(self):
         """
-        Executes the set display framerate tests on the video device.
+        Executes the get the supported video coding formats and codec info on video device.
 
         This function performs the following steps:
         - Downloads necessary assets.
         - Runs prerequisite commands.
         - Initializes the dsVideoDevice module.
-        - Set Display framerate
+        - Get the VideoCodec info.
         - Cleans up the downloaded assets after testing.
 
         Returns:
@@ -181,12 +161,18 @@ class dsVideoDevice_test3_SetDisplayFramerate(utHelperClass):
         # Initialize the dsVideoDevice module
         self.testdsVideoDevice.initialise(self.testdsVideoDevice.getDeviceType())
 
-        # set the display framerate
-        self.testdsVideoDevice.setDisplayFramerate(0, 'dsVIDEO_FRAMERATE_25')
+        # get the videoCodec info
+        supported_codingformats = self.testdsVideoDevice.getsupportedCodingFormats()
+        if supported_codingformats:
+            for codec in supported_codingformats:   
+                pattern, count, values = self.testdsVideoDevice.getVideoCodecInfo(0, codec)
+                if count != 0:
+                    self.log.stepResult(values in pattern, f'VideoCodecInfo {values} Test')
+                    result = True
+                else:
+                    self.log.stepResult(False, f'No codec entries are found')
+                    result = False
 
-        result = True
-
-        self.log.stepResult(result, f'Verified setDisplayFramerate')
 
         # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()
@@ -197,5 +183,5 @@ class dsVideoDevice_test3_SetDisplayFramerate(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsVideoDevice_test3_SetDisplayFramerate()
+    test = dsVideoDevice_test5_VideoCodingFormats()
     test.run(False)

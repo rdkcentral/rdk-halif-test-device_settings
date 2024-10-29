@@ -50,6 +50,12 @@ class dsVideoZoomMode(Enum):
     dsVIDEO_ZOOM_WIDE_4_3 = 11          # Wide 4:3 
     dsVIDEO_ZOOM_MAX = 12                # Out of range 
 
+class dsVideoCodec(Enum):
+    dsVIDEO_CODEC_MPEGHPART2 = 1     
+    dsVIDEO_CODEC_MPEG4PART10 = 2    
+    dsVIDEO_CODEC_MPEG2 = 4          
+    dsVIDEO_CODEC_MAX = 5
+
 class dsVideoDeviceClass():
 
     moduleName = "dsVideoDevice"
@@ -171,6 +177,10 @@ class dsVideoDeviceClass():
         ]
 
         result = self.utMenu.select(self.testSuite, "SetDisplayFramerate", promptWithAnswers)
+        frameRatePattern = r"Result dsSetDisplayframerate\(IN:Handle:\[.*\],IN:framerate:\[(3840x\w+)\]\)"
+        frameRate = self.searchPattern(result, frameRatePattern)
+
+        return frameRate
 
     def setFRFMode(self, device:int=0, mode:str=0):
         """
@@ -221,10 +231,20 @@ class dsVideoDeviceClass():
         ]
 
         result = self.utMenu.select(self.testSuite, "GetVideoCodecInfo", promptWithAnswers)
-        codecInfoPattern = r"Result dsGetVideoCodecInfo\(IN:Handle:[.*\],IN:Codec[+w\], OUT:Codec number of Entires[.*\]"
-        codecInfo = self.searchPattern(result, codecInfoPattern)
+        codecInfoPattern = r"Result dsGetVideoCodecInfo\(IN:Handle:\[.*\],IN:Codec\[(\w+)\], OUT:Codec number of Entires\[(\w+)\]"
+        codecInfo = re.search(codecInfoPattern,result)
+        if codecInfo:
+            count = codecInfo.group(2)
 
-        return codecInfo
+
+        codecpattern = r"OUT:CodecProfile\[\(dsVIDEO_CODEC_\w+\)\]"
+        pattern = re.search(codecpattern,result)
+
+        codecValues = 0
+        if pattern:
+            codecValues = pattern.group(0)
+        
+        return codecpattern, int(count), codecValues
 
         
     def getSupportedVideoCodingFormat(self,device:int=0):
@@ -271,10 +291,14 @@ class dsVideoDeviceClass():
         ]
 
         result = self.utMenu.select(self.testSuite, "dsGetFRFMode", promptWithAnswers)
-        frfModepattern = r"Result dsGetFRFMode\(IN:Handle[.*\],OUT:frfMode[.*\])"
-        frfMode = self.searchPattern(result, frfModepattern)
+        frfModepattern = r"Result dsGetFRFMode\(IN:Handle\[.*\],OUT:frfMode\[(\w+)\]\)"
+        match = re.search(frfModepattern, result)
 
-        return frfMode
+        if match:
+            mode = match.group(1)
+            return mode
+        
+        return None
 
 
 
@@ -327,6 +351,24 @@ class dsVideoDeviceClass():
         return zoomMode
 
 
+
+    def getVideoDevice(self):
+        """
+        Returns a list of video devices.
+
+        Args:
+            None
+
+        Returns:
+            list: A list of tuples containing the video devices.
+        """
+
+        devices = self.deviceProfile.get("NumVideoDevices")
+        if not devices:
+            return []  # Handle empty ports list
+
+        return devices
+
     def getDeviceType(self):
         """
         Returns the device type.
@@ -359,48 +401,7 @@ class dsVideoDeviceClass():
         """
         self.utMenu.stop()
     
-    def getFrameratePrechangeCallbackStatus(self):
-        """
-        Retrieves the display Framerate Prechange status using a callback.
-
-        Args:
-            None.
-        Returns:
-            tuple:
-                - tSecond: Time in seconds as a integer.
-            None: If no matching signal status is found.
-        """
-        result = self.testSession.read_until("FrameratePreChange callback tSecond: ")
-        framerateprechange = r"FrameratePreChange callback tSecond: (\d+)"
-        match = re.search(framerateprechange, result)
-
-        if match:
-            tSecond = match.group(1)
-            return tSecond
         
-        return None
-
-    def getFrameratePostchangeCallbackStatus(self):
-        """
-        Retrieves the display Framerate Postchange status using a callback.
-
-        Args:
-            None.
-        Returns:
-            tuple:
-                - tSecond: Time in seconds as a integer.
-            None: If no matching signal status is found.
-        """
-        result = self.testSession.read_until("FrameratePostChange callback tSecond: ")
-        framerateprechange = r"FrameratePostChange callback tSecond: (\d+)"
-        match = re.search(framerateprechange, result)
-
-        if match:
-            tSecond = match.group(1)
-            return tSecond
-        
-        return None
-    
     def read_Callbacks(self, input_str: str) -> str:
         """
         Reads data from the menu session until a specified input string is encountered.
@@ -440,10 +441,37 @@ class dsVideoDeviceClass():
             for j in range(0, len(SupportedDisplayFramerate)):
                 supported_Framerates.append(SupportedDisplayFramerate[j])
 
-        print(f"Supported FR's {supported_Framerates}")
-
         return supported_Framerates	
 
+    def getsupportedCodingFormats(self):
+        """
+        Returns the supported Framerate Formats on device.
+
+        Args:
+            None.
+
+        Returns:
+            returns the supported Framerate Formats
+        """
+        supported_CodingFormats = []
+
+        Device = self.deviceProfile.get("Device")
+        for i in range(1, len(Device)+1):
+            entry = Device[i]
+            SupportedVideoCodingFormats = entry['SupportedVideoCodingFormats']
+            for j in range(0, 2):
+                if j == 0:
+                    value = SupportedVideoCodingFormats & 0x02
+                    codecVal = dsVideoCodec(value).name
+                else:
+                    value = SupportedVideoCodingFormats & 0x04
+                    codecVal = dsVideoCodec(value).name
+
+                supported_CodingFormats.append(codecVal)
+
+        return supported_CodingFormats	
+    
+    
     def getZoomModes(self):
         """
         Returns the supported Zoom modes on device.
@@ -473,7 +501,7 @@ if __name__ == '__main__':
     shell = InteractiveShell()
     shell.open()
 
-    platformProfile = dir_path + "/../../../profiles/source/Source_VideoDevice.yaml"
+    platformProfile = dir_path + "/../../../profiles/sink/Sink_4K_VideoDevice.yaml"
     # test the class assuming that it's optional
     test = dsVideoDeviceClass(platformProfile, shell)
 

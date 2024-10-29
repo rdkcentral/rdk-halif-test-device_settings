@@ -22,12 +22,12 @@ dsVideoDevice:  # Prefix must always exist
       test2_ZoomMode:
         <<: *defaults
         streams: #list of streams to be copied to device
-      test4_SetDisplayFramerate:
+      test3_SetDisplayFramerate:
         <<: *defaults
         streams:
-      test5_FRFMode:
+      test4_FRFMode:
         <<: *defaults
         streams:
-      test6_VideoCodingFormats:
+      test5_VideoCodingFormats:
         <<: *defaults
         streams:
