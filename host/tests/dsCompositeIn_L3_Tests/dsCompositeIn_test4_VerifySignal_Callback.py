@@ -88,27 +88,26 @@ class dsCompositeIn_test4_VerifySignal_Callback(dsCompositeInHelperClass):
 
         # Loop through the supported CompositeIn ports
         for port in self.testdsCompositeIn.getSupportedPorts():
-            self.log.stepStart(f'Select {port} Port')
 
             # Check the CompositeIn device connected to is active
             portstr = f"dsCOMPOSITE_IN_PORT_{port}"
             for i in range(0, 2):
+                self.log.stepStart(f'Select {port} Port')
                 connect = True
                 if ( i == 1): connect = False
                 result = self.CheckDeviceStatus(True, connect, portstr)
                 self.log.stepResult(result,f'CompositeIn Device connected {result} on {portstr}')
 
                 self.testdsCompositeIn.selectPort(portstr)
-                self.log.step(f'Port Selcted {portstr}')
+                self.log.stepStart(f'Port Selcted {portstr}')
 
                 status = self.testdsCompositeIn.getSignalChangeCallbackStatus()
-                if status:
-                    if portstr == status[0]:
-                        result = True
-                        self.log.stepResult(result,f'Signal status {status[1]} found in Callback')
+                if status != None and portstr == status[0]:
+                    result = True
+                    self.log.stepResult(result,f'Signal status {status[1]} found in Callback')
                 else:
                     result = False
-                    self.log.stepResult(result,f'Signal status not found in Callback found')
+                    self.log.stepResult(result,f'Signal status not found in Callback')
 
         # Terminate testdsCompositeIn Module
         self.testdsCompositeIn.terminate()

@@ -58,7 +58,9 @@ class dsCompositeInClass():
     def searchPattern(self, haystack, pattern):
         match = re.search(pattern, haystack)
         if match:
-            return match.group(1)
+            output1 = match.group(1)
+            output2 = match.group(2)
+            return output1, output2
         return None
 
     def initialise(self):
@@ -122,12 +124,12 @@ class dsCompositeInClass():
         """
 
         result = self.testSession.read_until("Received Connection status callback port:")
-        connectioncallpattern = r"Received Connection status callback port: \[(\w+)\], Connection: \[(\w+)\]"
-        match = re.search(connectioncallpattern, result)
+        callpattern = r"Received Connection status callback port: \[(\w+)\], Connection: \[(\w+)\]"
+        status = self.searchPattern(result, callpattern)
 
-        if match:
-            port = match.group(1)
-            connection = match.group(2)
+        if status:
+            port = status[0]
+            connection = status[1]
             return port, connection == "true"
 
         return None
@@ -151,13 +153,11 @@ class dsCompositeInClass():
         """
 
         result = self.testSession.read_until("Received SignalChange status callback port:")
-        connectioncallpattern = r"Received SignalChange status callback port: \[(\w+)\], sigstatus: \[(\w+)\]"
-        match = re.search(connectioncallpattern, result)
+        callpattern = r"Received SignalChange status callback port: \[(\w+)\], sigstatus: \[(\w+)\]"
+        status = self.searchPattern(result, callpattern)
 
-        if match:
-            port = match.group(1)
-            signalstatus = match.group(2)
-            return port, signalstatus
+        if status:
+            return status
 
         return None
 
@@ -178,16 +178,14 @@ class dsCompositeInClass():
                 - activeport(str):Active Port number as string
             None: If no matching signal status is found.
         """
-        
-        result = self.testSession.read_until("Received statuschange callback isPresented:")
-        portstatuspattern = r"Received statuschange callback isPresented: \[(\w+)\], activeport: \[(\w+)\]"
-        match = re.search(portstatuspattern, result)
 
-        if match:
-            ispresented = match.group(1)
-            activeport = match.group(2)
-            return ispresented, activeport
-        
+        result = self.testSession.read_until("Received statuschange callback isPresented:")
+        callpattern = r"Received statuschange callback isPresented: \[(\w+)\], activeport: \[(\w+)\]"
+        status = self.searchPattern(result, callpattern)
+
+        if status:
+            return status
+
         return None
 
     def getStatus(self):

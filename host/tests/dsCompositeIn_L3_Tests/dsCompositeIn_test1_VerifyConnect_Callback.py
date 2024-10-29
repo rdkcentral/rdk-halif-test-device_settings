@@ -62,10 +62,10 @@ class dsCompositeIn_test1_VerifyConnect_Callback(dsCompositeInHelperClass):
         """
         if manual == True:
             if Connect == True:
-                return self.testUserResponse.getUserYN(f"Connect the compositeIn source device to Port {port_type} and press (Y/N):")
+                return self.testUserResponse.getUserYN(f"Connect the compositeIn source device to Port {port_type} and press Y:")
 
             else :
-                return self.testUserResponse.getUserYN(f"Disconnect the compositeIn source device to Port {port_type} and press (Y/N):")
+                return self.testUserResponse.getUserYN(f"Disconnect the compositeIn source device to Port {port_type} and press Y:")
         else :
             #TODO: Add automation verification methods
             return False
@@ -94,9 +94,8 @@ class dsCompositeIn_test1_VerifyConnect_Callback(dsCompositeInHelperClass):
             result = self.testPlugUnplugtCompositeIn(True,True, portstr)
 
             status = self.testdsCompositeIn.getConnectionCallbackStatus()
-            if status:
-                if portstr == status[0] and status[1]:
-                    result = True
+            if status != None and portstr == status[0] and status[1] == True:
+                result = True
             else:
                 result = False
 
@@ -107,9 +106,8 @@ class dsCompositeIn_test1_VerifyConnect_Callback(dsCompositeInHelperClass):
             result = self.testPlugUnplugtCompositeIn(False,True, portstr)
 
             status = self.testdsCompositeIn.getConnectionCallbackStatus()
-            if status:
-                if portstr == status[0] and not status[1]:
-                    result = True
+            if status != None and portstr == status[0] and status[1] == False:
+                result = True
             else:
                 result = False
 
