@@ -38,27 +38,27 @@ class dsFPD_test05_SetVerifyFPPattern(dsFPDHelperClass):
 
     def __init__(self):
         """
-        Initializes the test01_EnableDisableAndVerifyAudioPortStatus test .
+        Initializes the test05_SetVerifyFPPattern test .
 
         Args:
             None.
         """
-        self.testName  = "test01_EnableDisableAndVerifyLEDIndicators"
+        self.testName  = "test05_SetVerifyFPPattern"
         super().__init__(self.testName, '1')
 
 
     #TODO: Current version supports only manual verification.
     def testVerifyIndicatorPattern(self, pattern, manual=False):
         """
-        Verifies whether the audio is working on the specified port.
+        Verifies whether the indicator pattern is displayed in the device.
 
         Args:
-            port (str) : Audio port to verify
+            pattern (str) :  pattern set in the device.
             manual (bool, optional): Manual verification (True: manual, False: automated).
                                      Defaults to False
 
         Returns:
-            bool : Returns the status of the audio verification.
+            bool : Returns the status of the indicator pattern verification.
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Is Front panel shows {pattern}? (Y/N):")
@@ -67,7 +67,7 @@ class dsFPD_test05_SetVerifyFPPattern(dsFPDHelperClass):
             return False
 
     def testFunction(self):
-        """tests the audio ports by enabling and disabling the ports.
+        """tests the front panel patterns supported by device.
 
         Returns:
             bool: final result of the test.
@@ -75,10 +75,10 @@ class dsFPD_test05_SetVerifyFPPattern(dsFPDHelperClass):
 
         self.log.testStart(self.testName, '1')
 
-        # initialize the dsaudio module
+        # initialize the dsFPD module
         self.testdsFPD.initialise()
 
-        # Loop through the supported audio ports
+        # Loop through the supported front panel patterns.
         supportedStates = self.testdsFPD.getSupportedFPStates()
         supportedStates = 0x1FE
         for pattern in self.testdsFPD.getSupportedStatesFromConfig():
@@ -93,7 +93,7 @@ class dsFPD_test05_SetVerifyFPPattern(dsFPDHelperClass):
             if currentPattern == pattern.name:
                 result = True
             self.log.stepResult(result, f'Front Panel Get Pattern Verification for {pattern.name}, retrieved Pattern {currentPattern}')
-        # Terminate dsAudio Module
+        # Terminate dsFPD Module
         self.testdsFPD.terminate()
 
         return result

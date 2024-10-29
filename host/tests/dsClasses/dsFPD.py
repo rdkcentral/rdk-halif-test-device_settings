@@ -35,7 +35,6 @@ sys.path.append(dir_path+"/../")
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utSuiteNavigator import UTSuiteNavigatorClass
 from raft.framework.plugins.ut_raft.interactiveShell import InteractiveShell
-from raft.framework.plugins.ut_raft.utBaseUtils import utBaseUtils
 
 class dsFPDIndicatorType(Enum):
     dsFPD_INDICATOR_MESSAGE   = 0
@@ -90,14 +89,6 @@ class dsFPDClass():
         self.suitConfig    = ConfigRead(self.menuConfig, self.moduleName)
         self.utMenu        = UTSuiteNavigatorClass(self.menuConfig, self.moduleName, session)
         self.testSession   = session
-        self.utils         = utBaseUtils()
-
-        for artifact in self.suitConfig.test.artifacts:
-            filePath = os.path.join(dir_path, artifact)
-            self.utils.rsync(self.testSession, filePath, devicePath)
-            #self.downloadToDevice(artifact, self.deviceDownloadPath, self.rackDevice)
-            #filePath = os.path.join(dir_path, artifact)
-            #self.utils.scpCopy(self.testSession, filePath, devicePath)
 
         self.utMenu.start()
 
@@ -257,7 +248,7 @@ class dsFPDClass():
 
         return ledBrightness
 
-    def setIndicatorColor(self, fdp_indicator:str="dsFPD_INDICATOR_POWER", color:str="dsFPD_COLOR_WHITE"):
+    def setIndicatorColor(self, fdp_indicator:str="dsFPD_INDICATOR_POWER", color:int=dsFPDColor.dsFPD_COLOR_WHITE.value):
         """
         Set the FPD indicator to defined Blink pattern.
 
@@ -402,7 +393,7 @@ class dsFPDClass():
         indicators = self.deviceProfile.get("SupportedFPDIndicators")
         if not indicators:
             return None
-        indicator = indicators.get("_"+str(index))
+        indicator = indicators[index]
         indicatorType = indicator.get("Indicator_Type")
         return indicatorType
 
@@ -437,7 +428,7 @@ class dsFPDClass():
         if not indicators:
             return []
 
-        colorsFromConfig = indicators.get("_"+str(index)).get("supportedColors")
+        colorsFromConfig = indicators[index].get("supportedColors")
         if not colorsFromConfig:
             return []
         for color in colorsFromConfig:
@@ -478,7 +469,7 @@ class dsFPDClass():
         if not indicators:
             return []
 
-        colorMode = indicators.get("_"+str(index)).get("DEFAULT_COLOR_MODE")
+        colorMode = indicators[index].get("DEFAULT_COLOR_MODE")
         return colorMode
 
     def getMaxBrightnessValue(self, index:int = 1):
@@ -495,7 +486,7 @@ class dsFPDClass():
         if not indicators:
             return []
 
-        maxBrightness = indicators.get("_"+str(index)).get("MAX_BRIGHTNESS")
+        maxBrightness = indicators[index].get("MAX_BRIGHTNESS")
         return maxBrightness
 
     def getMinBrightnessValue(self, index:int = 1):
@@ -512,7 +503,7 @@ class dsFPDClass():
         if not indicators:
             return []
 
-        minBrightness = indicators.get("_"+str(index)).get("MIN_BRIGHTNESS")
+        minBrightness = indicators[index].get("MIN_BRIGHTNESS")
         return minBrightness
 
     def __del__(self):

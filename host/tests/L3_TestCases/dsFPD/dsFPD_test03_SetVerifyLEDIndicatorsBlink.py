@@ -38,12 +38,12 @@ class dsFPD_test03_SetVerifyLEDIndicatorsBlink(dsFPDHelperClass):
 
     def __init__(self):
         """
-        Initializes the test01_EnableDisableAndVerifyAudioPortStatus test .
+        Initializes the test03_SetVerifyLEDIndicatorsBlink test .
 
         Args:
             None.
         """
-        self.testName  = "test01_EnableDisableAndVerifyLEDIndicators"
+        self.testName  = "test03_SetVerifyLEDIndicatorsBlink"
         self.duration = 1000
         self.iteration = 5
         super().__init__(self.testName, '1')
@@ -52,15 +52,16 @@ class dsFPD_test03_SetVerifyLEDIndicatorsBlink(dsFPDHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifyIndicator(self, indicator, state, manual=False):
         """
-        Verifies whether the audio is working on the specified port.
+        Verifies whether the indicator is provided state.
 
         Args:
-            port (str) : Audio port to verify
+            indicator (str) : front panel indicator
+            state (str) : state of front panel indicator
             manual (bool, optional): Manual verification (True: manual, False: automated).
                                      Defaults to False
 
         Returns:
-            bool : Returns the status of the audio verification.
+            bool : Returns the status of the front panel indicator state verification.
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Is {indicator} state {state}? (Y/N):")
@@ -71,15 +72,15 @@ class dsFPD_test03_SetVerifyLEDIndicatorsBlink(dsFPDHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifyIndicatorBlink(self, indicator, manual=False):
         """
-        Verifies whether the audio is working on the specified port.
+        Verifies whether the indicaotr is blinkig as per the values provided.
 
         Args:
-            port (str) : Audio port to verify
+            indicator (str) : indicator to verify
             manual (bool, optional): Manual verification (True: manual, False: automated).
                                      Defaults to False
 
         Returns:
-            bool : Returns the status of the audio verification.
+            bool : Returns the status of the indicator blink verification.
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Is {indicator} blinking {self.iteration} times with {self.duration/1000} sec ? (Y/N):")
@@ -87,7 +88,7 @@ class dsFPD_test03_SetVerifyLEDIndicatorsBlink(dsFPDHelperClass):
             #todo: add automation verification methods
             return False
     def testFunction(self):
-        """tests the audio ports by enabling and disabling the ports.
+        """tests the indicator blink functionality.
 
         Returns:
             bool: final result of the test.
@@ -95,28 +96,28 @@ class dsFPD_test03_SetVerifyLEDIndicatorsBlink(dsFPDHelperClass):
 
         self.log.testStart(self.testName, '1')
 
-        # initialize the dsaudio module
+        # initialize the dsFPD module
         self.testdsFPD.initialise()
 
-        # Loop through the supported audio ports
+        # Loop through the supported Indicators
         for indicator in self.testdsFPD.getSupportedIndicators():
-            # Port Enable test
             self.log.stepStart(f'Set {indicator.name} State ON')
-            # Enable the audio port
+            # Enable the indicator
             self.testdsFPD.setState(indicator.name,dsFPDState.dsFPD_STATE_ON.name)
             result = self.testVerifyIndicator(indicator.name,dsFPDState.dsFPD_STATE_ON.name, True)
             self.log.stepResult(result, f'Indicator State Verification {indicator.name} indicator')
+            # blink the indicator in specified rate.
             self.testdsFPD.blinkIndicator(indicator.name,self.duration,self.iteration)
             result = self.testVerifyIndicatorBlink(indicator.name,True)
             self.log.stepResult(result, f'Indicator State Verification {indicator.name} indicator')
-            # Port Disable test
+
             self.log.stepStart(f'Set {indicator.name} state OFF')
-            # Disable the audio port
+            # Disable the Indicator
             self.testdsFPD.setState(indicator.name,dsFPDState.dsFPD_STATE_OFF.name)
             result = self.testVerifyIndicator(indicator.name,dsFPDState.dsFPD_STATE_OFF.name,True)
             self.log.stepResult(result, f'Indicator State Verification {indicator.name} indicator')
 
-        # Terminate dsAudio Module
+        # Terminate dsFPD Module
         self.testdsFPD.terminate()
 
         return result
