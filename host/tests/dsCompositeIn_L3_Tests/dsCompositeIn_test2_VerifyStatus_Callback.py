@@ -86,20 +86,18 @@ class dsCompositeIn_test2_VerifyStatus_Callback(dsCompositeInHelperClass):
         # Loop through the supported ports
         for port in self.testdsCompositeIn.getSupportedPorts():
             self.log.stepStart(f'Select {port} Port')
-            self.log.step(f'Select {port} Port')
 
             portstr = f"dsCOMPOSITE_IN_PORT_{port}"
             result = self.CheckDeviceStatus(True, portstr)
             self.log.stepResult(result,f'CompositeIn Device connected {result} on {portstr}')
           
             self.testdsCompositeIn.selectPort(portstr)
-            self.log.step(f'Port Selcted {portstr}')
+            self.log.stepStart(f'Port Selcted {portstr}')
                 
             status = self.testdsCompositeIn.getPortCallbackStatus()
-            if status:
-                if status[1] == portstr:
-                    result = True
-                    self.log.stepResult(result,f'Port Status ispresented:{status[0]} activeport:{status[1]} found in Callback')
+            if status != None and status[1] == portstr:
+                result = True
+                self.log.stepResult(result,f'Port Status ispresented:{status[0]} activeport:{status[1]} found in Callback')
             else:
                 result = False
                 self.log.stepResult(result,f'Port Status Callback is not found')

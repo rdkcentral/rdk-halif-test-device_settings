@@ -85,7 +85,7 @@ class dsCompositeIn_test3_ScaleAndVerify_Video(dsCompositeInHelperClass):
         self.testdsCompositeIn.initialise()
 
         # x-coordiante, y-coordinate, width, height list
-        videoScale_argList = [[0,0,720,576], [500,500,500,500], [500,500,1000,1000]]
+        videoScale_argList = [[0,0,720,576], [500,500,500,500], [0,0,1920,1080]]
         # Loop through the supported CompositeIn ports
         for port in self.testdsCompositeIn.getSupportedPorts():
             self.log.stepStart(f'Select {port} Port')
@@ -99,6 +99,7 @@ class dsCompositeIn_test3_ScaleAndVerify_Video(dsCompositeInHelperClass):
 
             # video scaling of ComposteIn port
             for xvalue, yvalue, width, height in videoScale_argList:
+                self.log.stepStart(f'Scale video playing on compositeIn device')
                 self.testdsCompositeIn.scaleVideo(xvalue, yvalue, width, height)
                 result = self.CheckDeviceStatusAndVerifyVideoScale(True,portstr,True)
                 self.log.stepResult(result, f'CompositeIn Video Scale Verification {portstr} Port')

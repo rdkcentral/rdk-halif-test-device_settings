@@ -118,12 +118,11 @@ class dsCompositeInHelperClass(utHelperClass):
                 self.writeCommands(cmd)
 
         # Run commands as part of test prerequisites
-        if self.testName == "test3_ScaleAndVerify_Video":
-            prerequisite_cmds = self.cpe.get("test").get("prerequisites")
-            if prerequisite_cmds is not None:
-                for expcmd in prerequisite_cmds:
-                    print(expcmd)
-                    self.writeCommands(expcmd)
+        prerequisite_cmds = self.cpe.get("test").get("prerequisites")
+        if prerequisite_cmds is not None:
+            for expcmd in prerequisite_cmds:
+                print(expcmd)
+                self.writeCommands(expcmd)
 
     def testPrepareFunction(self):
         """
