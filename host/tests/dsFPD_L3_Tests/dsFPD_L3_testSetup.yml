@@ -8,9 +8,33 @@ dsFPD:  # Prefix must always exist
       test01_EnableDisableAndVerifyLEDIndicators:
         artifacts: ["<PATH>/bin/hal_test",
                     "<PATH>/bin/libut_control.so",
-                    "<PATH>/bin/Sink_FPD.yaml",
+                    "<PATH>/profiles/source/Source_FPD.yaml",
                     "<PATH>/bin/run.sh"]
-        execute: ["chmod +x /opt/HAL_L3/hal_test", "chmod +x /opt/HAL_L3/run.sh"]
+        execute: ["chmod +x <PATH>/hal_test", "chmod +x <PATH>/run.sh"]
+      test02_SetVerifyLEDIndicatorsBrightness:
+        artifacts: ["<PATH>/bin/hal_test",
+                    "<PATH>/bin/libut_control.so",
+                    "<PATH>/profiles/source/Source_FPD.yaml",
+                    "<PATH>/bin/run.sh"]
+        execute: ["chmod +x <PATH>/hal_test", "chmod +x <PATH>/run.sh"]
+      test03_SetVerifyLEDIndicatorsBlink:
+        artifacts: ["<PATH>/bin/hal_test",
+                    "<PATH>/bin/libut_control.so",
+                    "<PATH>/profiles/source/Source_FPD.yaml",
+                    "<PATH>/bin/run.sh"]
+        execute: ["chmod +x <PATH>/hal_test", "chmod +x <PATH>/run.sh"]
+      test04_SetVerifyLEDIndicatorsColor:
+        artifacts: ["<PATH>/bin/hal_test",
+                    "<PATH>/bin/libut_control.so",
+                    "<PATH>/profiles/source/Source_FPD.yaml",
+                    "<PATH>/bin/run.sh"]
+        execute: ["chmod +x <PATH>/hal_test", "chmod +x <PATH>/run.sh"]
+      test05_SetVerifyFPPattern:
+        artifacts: ["<PATH>/bin/hal_test",
+                    "<PATH>/bin/libut_control.so",
+                    "<PATH>/profiles/source/Source_FPD.yaml",
+                    "<PATH>/bin/run.sh"]
+        execute: ["chmod +x <PATH>/hal_test", "chmod +x <PATH>/run.sh"]
 
 
 
