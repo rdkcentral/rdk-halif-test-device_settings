@@ -73,9 +73,14 @@ class dsFPDHelperClass(utHelperClass):
         Args:
             None
         """
-
-        # Run commands as part of test prerequisites
+        
         test = self.testSetup.get("assets").get("device").get(self.testName)
+
+        # Download test artifacts to device
+        url = test.get("artifacts")
+        if url is not None:
+            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
+        # Run commands as part of test prerequisites
         cmds = test.get("execute")
         if cmds is not None:
             for cmd in cmds:
@@ -88,21 +93,21 @@ class dsFPDHelperClass(utHelperClass):
         This function:
         - Downloads the required assets.
         - Runs the prerequisite commands.
-        - Creates dsAudioClass
+        - Creates dsFPDClass
 
         Returns:
             bool
         """
 
-
-        # Create the dsAudio class
+        self.testRunPrerequisites()
+        # Create the dsFPD class
         self.testdsFPD = dsFPDClass(self.deviceProfile, self.hal_session, self.deviceDownloadPath)
 
         return True
 
     def testEndFunction(self, powerOff=True):
 
-        # Clean up the dsAudio instance
+        # Clean up the dsFPD instance
         del self.testdsFPD
 
     def testExceptionCleanUp (self):

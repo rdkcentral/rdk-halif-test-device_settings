@@ -38,27 +38,28 @@ class dsFPD_test04_SetVerifyLEDIndicatorsColor(dsFPDHelperClass):
 
     def __init__(self):
         """
-        Initializes the test01_EnableDisableAndVerifyAudioPortStatus test .
+        Initializes the test04_SetVerifyLEDIndicatorsColor test .
 
         Args:
             None.
         """
-        self.testName  = "test01_EnableDisableAndVerifyLEDIndicators"
+        self.testName  = "test04_SetVerifyLEDIndicatorsColor"
         super().__init__(self.testName, '1')
 
 
     #TODO: Current version supports only manual verification.
     def testVerifyIndicator(self, indicator, state, manual=False):
         """
-        Verifies whether the audio is working on the specified port.
+        Verifies whether the indicator is provided state.
 
         Args:
-            port (str) : Audio port to verify
+            indicator (str) : front panel indicator
+            state (str) : state of front panel indicator
             manual (bool, optional): Manual verification (True: manual, False: automated).
                                      Defaults to False
 
         Returns:
-            bool : Returns the status of the audio verification.
+            bool : Returns the status of the front panel indicator state verification.
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Is {indicator} state {state}? (Y/N):")
@@ -68,15 +69,16 @@ class dsFPD_test04_SetVerifyLEDIndicatorsColor(dsFPDHelperClass):
 
     def testVerifyIndicatorColor(self, indicator, color, manual=False):
         """
-        Verifies whether the audio is working on the specified port.
+        Verifies whether the indicator is in provided color
 
         Args:
-            port (str) : Audio port to verify
+            indicator (str) : front panel indicator
+            color (str) : color of front panel indicator
             manual (bool, optional): Manual verification (True: manual, False: automated).
                                      Defaults to False
 
         Returns:
-            bool : Returns the status of the audio verification.
+            bool : Returns the status of the front panel indicator color verification.
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Is {indicator} color {color}? (Y/N):")
@@ -85,7 +87,7 @@ class dsFPD_test04_SetVerifyLEDIndicatorsColor(dsFPDHelperClass):
             return False
 
     def testFunction(self):
-        """tests the audio ports by enabling and disabling the ports.
+        """tests the front panle indicator colors.
 
         Returns:
             bool: final result of the test.
@@ -93,10 +95,10 @@ class dsFPD_test04_SetVerifyLEDIndicatorsColor(dsFPDHelperClass):
 
         self.log.testStart(self.testName, '1')
 
-        # initialize the dsaudio module
+        # initialize the dsFPD module
         self.testdsFPD.initialise()
 
-        # Loop through the supported audio ports
+        # Loop through the supported indicators
         for indicator in self.testdsFPD.getSupportedIndicators():
             colorMode = self.testdsFPD.getDefaultColorMode(indicator.value)
             if colorMode == 0:
@@ -104,13 +106,12 @@ class dsFPD_test04_SetVerifyLEDIndicatorsColor(dsFPDHelperClass):
                 self.log.stepResult(result, f'Indicator {indicator.name} Do not support Multi Color Mode')
                 continue
 
-            # Port Enable test
             self.log.stepStart(f'Set {indicator.name} State ON')
-            # Enable the audio port
+            # Enable the Indicator
             self.testdsFPD.setState(indicator.name,dsFPDState.dsFPD_STATE_ON.name)
             result = self.testVerifyIndicator(indicator.name,dsFPDState.dsFPD_STATE_ON.name, True)
             self.log.stepResult(result, f'Indicator State Verification {indicator.name} indicator')
-            # Enable the audio port
+            # Loop through supported colors
             colors = self.testdsFPD.getSupportedColors(indicator.value)
             for color in colors:
                 self.testdsFPD.setIndicatorColor(indicator.name,color.value)
@@ -122,14 +123,13 @@ class dsFPD_test04_SetVerifyLEDIndicatorsColor(dsFPDHelperClass):
                     result = True
                 self.log.stepResult(result, f'Indicator Get Color Verification {indicator.name} indicator, {retrievedColor}')
 
-            # Port Disable test
             self.log.stepStart(f'Set {indicator.name} state OFF')
-            # Disable the audio port
+            # Disable the Indicator
             self.testdsFPD.setState(indicator.name,dsFPDState.dsFPD_STATE_OFF.name)
             result = self.testVerifyIndicator(indicator.name,dsFPDState.dsFPD_STATE_OFF.name,True)
             self.log.stepResult(result, f'Indicator State Verification {indicator.name} indicator')
 
-        # Terminate dsAudio Module
+        # Terminate dsFPD Module
         self.testdsFPD.terminate()
 
         return result

@@ -38,27 +38,28 @@ class dsFPD_test02_SetVerifyLEDIndicatorsBrightness(dsFPDHelperClass):
 
     def __init__(self):
         """
-        Initializes the test01_EnableDisableAndVerifyAudioPortStatus test .
+        Initializes the test02_SetVerifyLEDIndicatorsBrightness test .
 
         Args:
             None.
         """
-        self.testName  = "test01_EnableDisableAndVerifyLEDIndicators"
+        self.testName  = "test02_SetVerifyLEDIndicatorsBrightness"
         super().__init__(self.testName, '1')
 
 
     #TODO: Current version supports only manual verification.
     def testVerifyIndicator(self, indicator, state, manual=False):
         """
-        Verifies whether the audio is working on the specified port.
+        Verifies whether the indicator is provided state.
 
         Args:
-            port (str) : Audio port to verify
+            indicator (str) : front panel indicator
+            state (str) : state of front panel indicator
             manual (bool, optional): Manual verification (True: manual, False: automated).
                                      Defaults to False
 
         Returns:
-            bool : Returns the status of the audio verification.
+            bool : Returns the status of the front panel indicator state verification.
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Is {indicator} state {state}? (Y/N):")
@@ -69,15 +70,16 @@ class dsFPD_test02_SetVerifyLEDIndicatorsBrightness(dsFPDHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifyIndicatorBrightness(self, indicator, brightness, manual=False):
         """
-        Verifies whether the audio is working on the specified port.
+        Verifies whether the indicator is showing in teh specified brightness.
 
         Args:
-            port (str) : Audio port to verify
+            indicator (str) : front panel indicator
+            state (str) : state of the indicator
             manual (bool, optional): Manual verification (True: manual, False: automated).
                                      Defaults to False
 
         Returns:
-            bool : Returns the status of the audio verification.
+            bool : Returns the status of the indicator brightness.
         """
         if manual == True:
             return self.testUserResponse.getUserYN(f"Is {indicator} brightness {brightness}%? (Y/N):")
@@ -85,7 +87,7 @@ class dsFPD_test02_SetVerifyLEDIndicatorsBrightness(dsFPDHelperClass):
             #todo: add automation verification methods
             return False
     def testFunction(self):
-        """tests the audio ports by enabling and disabling the ports.
+        """tests the brightness of the LED indicator.
 
         Returns:
             bool: final result of the test.
@@ -93,21 +95,22 @@ class dsFPD_test02_SetVerifyLEDIndicatorsBrightness(dsFPDHelperClass):
 
         self.log.testStart(self.testName, '1')
 
-        # initialize the dsaudio module
+        # initialize the dsFPD module
         self.testdsFPD.initialise()
 
-        # Loop through the supported audio ports
+        # Loop through the supported frontpanel indicators
         for indicator in self.testdsFPD.getSupportedIndicators():
-            # Port Enable test
+            # Enable indicator test
             self.log.stepStart(f'Set {indicator.name} State ON')
-            # Enable the audio port
+            # Enable the indicator
             self.testdsFPD.setState(indicator.name,dsFPDState.dsFPD_STATE_ON.name)
             result = self.testVerifyIndicator(indicator.name,dsFPDState.dsFPD_STATE_ON.name, True)
             self.log.stepResult(result, f'Indicator State Verification {indicator.name} indicator')
-            # Enable the audio port
+            # Read the brightness
             minBrightness = self.testdsFPD.getMinBrightnessValue(indicator.value)
             maxBrightness = self.testdsFPD.getMaxBrightnessValue(indicator.value)
             avgBrightness = (minBrightness+maxBrightness)/2
+            #set the brightness
             self.testdsFPD.setBrightness(indicator.name,minBrightness)
             result = self.testVerifyIndicatorBrightness(indicator.name,minBrightness, True)
             self.log.stepResult(result, f'Indicator Brightness Verification {indicator.name} indicator')
@@ -135,14 +138,14 @@ class dsFPD_test02_SetVerifyLEDIndicatorsBrightness(dsFPDHelperClass):
                result = True
  
             self.log.stepResult(result, f'Indicator Get Brightness Verification {indicator} indicator {brightness}%')
-            # Port Disable test
+            # Indicator Disable test
             self.log.stepStart(f'Set {indicator.name} state OFF')
-            # Disable the audio port
+            # Disable the Indicator
             self.testdsFPD.setState(indicator.name,dsFPDState.dsFPD_STATE_OFF.name)
             result = self.testVerifyIndicator(indicator.name,dsFPDState.dsFPD_STATE_OFF.name,True)
             self.log.stepResult(result, f'Indicator State Verification {indicator.name} indicator')
 
-        # Terminate dsAudio Module
+        # Terminate dsFPD Module
         self.testdsFPD.terminate()
 
         return result

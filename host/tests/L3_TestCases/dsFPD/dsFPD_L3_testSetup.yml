@@ -5,36 +5,25 @@ dsFPD:  # Prefix must always exist
   description: "dsFPD Device Settings test setup"
   assets:
     device:
+      defaults: &defaults
+        artifacts:
+          - "<PATH>/bin/hal_test"
+          - "<PATH>/bin/libut_control.so"
+          - "<PATH>/bin/Source_FPD.yaml"
+          - "<PATH>/bin/run.sh"
+        execute:
+          - "chmod +x <PATH>/hal_test"
+          - "chmod +x <PATH>/run.sh"
       test01_EnableDisableAndVerifyLEDIndicators:
-        artifacts: ["bin/hal_test",
-                    "bin/libut_control.so",
-                    "profiles/source/Source_FPD.yaml",
-                    "bin/run.sh"]
-        execute: ["chmod +x /home//vts/build/rdk-halif-device_settings/tmp/hal_test", "chmod +x /home//vts/build/rdk-halif-device_settings/tmp/run.sh"]
+        <<: *defaults
       test02_SetVerifyLEDIndicatorsBrightness:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/profiles/source/Source_FPD.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x <PATH>/hal_test", "chmod +x <PATH>/run.sh"]
+        <<: *defaults
       test03_SetVerifyLEDIndicatorsBlink:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/profiles/source/Source_FPD.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x <PATH>/hal_test", "chmod +x <PATH>/run.sh"]
+        <<: *defaults
       test04_SetVerifyLEDIndicatorsColor:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/profiles/source/Source_FPD.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x <PATH>/hal_test", "chmod +x <PATH>/run.sh"]
+        <<: *defaults
       test05_SetVerifyFPPattern:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/profiles/source/Source_FPD.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x <PATH>/hal_test", "chmod +x <PATH>/run.sh"]
+        <<: *defaults
 
 
 
