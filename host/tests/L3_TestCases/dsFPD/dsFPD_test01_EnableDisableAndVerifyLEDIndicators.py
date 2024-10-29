@@ -25,21 +25,16 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
-from dsClasses.dsFPD import dsFPDClass
+from L3_TestCases.dsFPD.dsFPDHelperClass import dsFPDHelperClass
+from dsClasses.dsFPD import dsFPDIndicatorType
+from dsClasses.dsFPD import dsFPDColor
+from dsClasses.dsFPD import dsFPDLedState
 from dsClasses.dsFPD import dsFPDState
-from raft.framework.plugins.ut_raft import utHelperClass
-from raft.framework.plugins.ut_raft.configRead import ConfigRead
-from raft.framework.plugins.ut_raft.utPlayer import utPlayer
-from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsFPD_test01_EnableDisableAndVerifyLEDIndicators(utHelperClass):
 
-    testName  = "test01_EnableDisableAndVerifyLEDIndicators"
-    testSetupPath = os.path.join(dir_path, "dsFPD_L3_testSetup.yml")
-    moduleName = "dsFPD"
-    rackDevice = "dut"
+class dsFPD_test01_EnableDisableAndVerifyLEDIndicators(dsFPDHelperClass):
 
     def __init__(self):
         """
@@ -48,59 +43,9 @@ class dsFPD_test01_EnableDisableAndVerifyLEDIndicators(utHelperClass):
         Args:
             None.
         """
+        self.testName  = "test01_EnableDisableAndVerifyLEDIndicators"
         super().__init__(self.testName, '1')
 
-        # Test Setup configuration file
-        self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
-
-        # Open Sessions for player and hal test
-        self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
-
-         # Create user response Class
-        self.testUserResponse = utUserResponse()
-
-        # Get path to device profile file
-        self.deviceProfile = os.path.join(dir_path, self.cpe.get("test").get("profile"))
-
-    def testDownloadAssets(self):
-        """
-        Downloads the artifacts in test-setup configuration file to the dut.
-
-        Args:
-            None.
-        """
-
-        self.deviceDownloadPath = self.cpe.get("target_directory")
-
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-
-        # Download test artifacts to device
-        url = test.get("artifacts")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-
-    def testCleanAssets(self):
-        """
-        Removes the assets copied to the dut.
-
-        Args:
-            None.
-        """
-
-    def testRunPrerequisites(self):
-        """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
-
-        Args:
-            None.
-        """
-
-        #Run test specific commands
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("execute");
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
     def testVerifyIndicator(self, indicator, state, manual=False):
@@ -127,15 +72,6 @@ class dsFPD_test01_EnableDisableAndVerifyLEDIndicators(utHelperClass):
         Returns:
             bool: final result of the test.
         """
-
-        # download the assets listed in test setup configuration file
-        self.testDownloadAssets()
-
-        # run prerequisites listed in the test setup configuration file
-        self.testRunPrerequisites()
-
-        # create the dsaudio class
-        self.testdsFPD = dsFPDClass(self.deviceProfile, self.hal_session)
 
         self.log.testStart(self.testName, '1')
 
@@ -168,14 +104,8 @@ class dsFPD_test01_EnableDisableAndVerifyLEDIndicators(utHelperClass):
                 result = True
             self.log.stepResult(result, f'Indicator {indicator.name} get  {state} state')
 
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
-
         # Terminate dsAudio Module
         self.testdsFPD.terminate()
-
-        # Clean up the dsAudio instance
-        del self.testdsFPD
 
         return result
 

@@ -25,23 +25,16 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
-from dsClasses.dsFPD import dsFPDClass
+from L3_TestCases.dsFPD.dsFPDHelperClass import dsFPDHelperClass
+from dsClasses.dsFPD import dsFPDIndicatorType
+from dsClasses.dsFPD import dsFPDColor
+from dsClasses.dsFPD import dsFPDLedState
 from dsClasses.dsFPD import dsFPDState
-from raft.framework.plugins.ut_raft import utHelperClass
-from raft.framework.plugins.ut_raft.configRead import ConfigRead
-from raft.framework.plugins.ut_raft.utPlayer import utPlayer
-from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsFPD_test03_SetVerifyLEDIndicatorsBlink(utHelperClass):
 
-    testName  = "test03_SetVerifyLEDIndicatorsBlink"
-    testSetupPath = os.path.join(dir_path, "dsFPD_L3_testSetup.yml")
-    moduleName = "dsFPD"
-    rackDevice = "dut"
-    blinkDuration = 1000
-    blinkIteration = 5
+class dsFPD_test02_SetVerifyLEDIndicatorsBrightness(dsFPDHelperClass):
 
     def __init__(self):
         """
@@ -50,62 +43,9 @@ class dsFPD_test03_SetVerifyLEDIndicatorsBlink(utHelperClass):
         Args:
             None.
         """
+        self.testName  = "test01_EnableDisableAndVerifyLEDIndicators"
         super().__init__(self.testName, '1')
 
-        # Test Setup configuration file
-        self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
-
-        # Open Sessions for player and hal test
-        self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
-
-         # Create user response Class
-        self.testUserResponse = utUserResponse()
-
-        # Get path to device profile file
-        self.deviceProfile = os.path.join(dir_path, self.cpe.get("test").get("profile"))
-
-        self.blinkDuration = 1000
-        self.blinkIteration = 5
-
-    def testDownloadAssets(self):
-        """
-        Downloads the artifacts in test-setup configuration file to the dut.
-
-        Args:
-            None.
-        """
-
-        self.deviceDownloadPath = self.cpe.get("target_directory")
-
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-
-        # Download test artifacts to device
-        url = test.get("artifacts")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-
-    def testCleanAssets(self):
-        """
-        Removes the assets copied to the dut.
-
-        Args:
-            None.
-        """
-
-    def testRunPrerequisites(self):
-        """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
-
-        Args:
-            None.
-        """
-
-        #Run test specific commands
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("execute");
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
     def testVerifyIndicator(self, indicator, state, manual=False):
@@ -125,9 +65,9 @@ class dsFPD_test03_SetVerifyLEDIndicatorsBlink(utHelperClass):
         else :
             #todo: add automation verification methods
             return False
-    
+
     #TODO: Current version supports only manual verification.
-    def testVerifyIndicatorBlink(self, indicator, manual=False):
+    def testVerifyIndicatorBrightness(self, indicator, brightness, manual=False):
         """
         Verifies whether the audio is working on the specified port.
 
@@ -140,26 +80,16 @@ class dsFPD_test03_SetVerifyLEDIndicatorsBlink(utHelperClass):
             bool : Returns the status of the audio verification.
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Is {indicator} Blinking {self.blinkDuration/1000} seconds for {self.blinkIteration} times? (Y/N):")
+            return self.testUserResponse.getUserYN(f"Is {indicator} brightness {brightness}%? (Y/N):")
         else :
             #todo: add automation verification methods
             return False
-
     def testFunction(self):
         """tests the audio ports by enabling and disabling the ports.
 
         Returns:
             bool: final result of the test.
         """
-
-        # download the assets listed in test setup configuration file
-        self.testDownloadAssets()
-
-        # run prerequisites listed in the test setup configuration file
-        self.testRunPrerequisites()
-
-        # create the dsaudio class
-        self.testdsFPD = dsFPDClass(self.deviceProfile, self.hal_session)
 
         self.log.testStart(self.testName, '1')
 
@@ -174,9 +104,37 @@ class dsFPD_test03_SetVerifyLEDIndicatorsBlink(utHelperClass):
             self.testdsFPD.setState(indicator.name,dsFPDState.dsFPD_STATE_ON.name)
             result = self.testVerifyIndicator(indicator.name,dsFPDState.dsFPD_STATE_ON.name, True)
             self.log.stepResult(result, f'Indicator State Verification {indicator.name} indicator')
-            self.testdsFPD.blinkIndicator(indicator.name,self.blinkDuration,self.blinkIteration)
-            result = self.testVerifyIndicatorBlink(indicator.name,True)
-            self.log.stepResult(result, f'Indicator State Verification {indicator.name} indicator')
+            # Enable the audio port
+            minBrightness = self.testdsFPD.getMinBrightnessValue(indicator.value)
+            maxBrightness = self.testdsFPD.getMaxBrightnessValue(indicator.value)
+            avgBrightness = (minBrightness+maxBrightness)/2
+            self.testdsFPD.setBrightness(indicator.name,minBrightness)
+            result = self.testVerifyIndicatorBrightness(indicator.name,minBrightness, True)
+            self.log.stepResult(result, f'Indicator Brightness Verification {indicator.name} indicator')
+            brightness = self.testdsFPD.getBrightness(indicator.name)
+            result = False
+            if int(brightness) == minBrightness:
+               result = True 
+            self.log.stepResult(result, f'Indicator Get Brightness Verification {indicator} indicator {brightness}%')
+
+            self.testdsFPD.setBrightness(indicator.name,avgBrightness)
+            result = self.testVerifyIndicatorBrightness(indicator.name,avgBrightness, True)
+            self.log.stepResult(result, f'Indicator Brightness Verification {indicator} indicator')
+            brightness = self.testdsFPD.getBrightness(indicator.name)
+            result = False
+            if int(brightness) == avgBrightness:
+               result = True 
+            self.log.stepResult(result, f'Indicator Get Brightness Verification {indicator} indicator {brightness}%')
+
+            self.testdsFPD.setBrightness(indicator.name,maxBrightness)
+            result = self.testVerifyIndicatorBrightness(indicator.name,maxBrightness, True)
+            self.log.stepResult(result, f'Indicator Brightness Verification {indicator} indicator')
+            brightness = self.testdsFPD.getBrightness(indicator.name)
+            result = False
+            if int(brightness) == maxBrightness:
+               result = True
+ 
+            self.log.stepResult(result, f'Indicator Get Brightness Verification {indicator} indicator {brightness}%')
             # Port Disable test
             self.log.stepStart(f'Set {indicator.name} state OFF')
             # Disable the audio port
@@ -184,17 +142,11 @@ class dsFPD_test03_SetVerifyLEDIndicatorsBlink(utHelperClass):
             result = self.testVerifyIndicator(indicator.name,dsFPDState.dsFPD_STATE_OFF.name,True)
             self.log.stepResult(result, f'Indicator State Verification {indicator.name} indicator')
 
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
-
         # Terminate dsAudio Module
         self.testdsFPD.terminate()
-
-        # Clean up the dsAudio instance
-        del self.testdsFPD
 
         return result
 
 if __name__ == '__main__':
-    test = dsFPD_test03_SetVerifyLEDIndicatorsBlink()
+    test = dsFPD_test02_SetVerifyLEDIndicatorsBrightness()
     test.run(False)

@@ -6,11 +6,11 @@ dsFPD:  # Prefix must always exist
   assets:
     device:
       test01_EnableDisableAndVerifyLEDIndicators:
-        artifacts: ["<PATH>/bin/hal_test",
-                    "<PATH>/bin/libut_control.so",
-                    "<PATH>/profiles/source/Source_FPD.yaml",
-                    "<PATH>/bin/run.sh"]
-        execute: ["chmod +x <PATH>/hal_test", "chmod +x <PATH>/run.sh"]
+        artifacts: ["bin/hal_test",
+                    "bin/libut_control.so",
+                    "profiles/source/Source_FPD.yaml",
+                    "bin/run.sh"]
+        execute: ["chmod +x /home/***REMOVED***/vts/build/rdk-halif-device_settings/tmp/hal_test", "chmod +x /home/***REMOVED***/vts/build/rdk-halif-device_settings/tmp/run.sh"]
       test02_SetVerifyLEDIndicatorsBrightness:
         artifacts: ["<PATH>/bin/hal_test",
                     "<PATH>/bin/libut_control.so",
