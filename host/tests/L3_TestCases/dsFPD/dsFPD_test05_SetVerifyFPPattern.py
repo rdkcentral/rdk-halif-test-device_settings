@@ -28,10 +28,6 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsFPD.dsFPDHelperClass import dsFPDHelperClass
-from dsClasses.dsFPD import dsFPDIndicatorType
-from dsClasses.dsFPD import dsFPDColor
-from dsClasses.dsFPD import dsFPDLedState
-from dsClasses.dsFPD import dsFPDState
 
 
 class dsFPD_test05_SetVerifyFPPattern(dsFPDHelperClass):
@@ -80,7 +76,6 @@ class dsFPD_test05_SetVerifyFPPattern(dsFPDHelperClass):
 
         # Loop through the supported front panel patterns.
         supportedStates = self.testdsFPD.getSupportedFPStates()
-        supportedStates = 0x1FE
         for pattern in self.testdsFPD.getSupportedStatesFromConfig():
             if not (supportedStates & (1<<pattern.value)):
                 result = False

@@ -28,9 +28,6 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsFPD.dsFPDHelperClass import dsFPDHelperClass
-from dsClasses.dsFPD import dsFPDIndicatorType
-from dsClasses.dsFPD import dsFPDColor
-from dsClasses.dsFPD import dsFPDLedState
 from dsClasses.dsFPD import dsFPDState
 
 
@@ -47,25 +44,6 @@ class dsFPD_test01_EnableDisableAndVerifyLEDIndicators(dsFPDHelperClass):
         super().__init__(self.testName, '1')
 
 
-    #TODO: Current version supports only manual verification.
-    def testVerifyIndicator(self, indicator, state, manual=False):
-        """
-        Verifies whether the Front panel Indicator is set to specified state
-
-        Args:
-            indicator (str) : Front Panel Indicator
-            state (str) : Front Panel Indicator State
-            manual (bool, optional): Manual verification (True: manual, False: automated).
-                                     Defaults to False
-
-        Returns:
-            bool : Returns the status of the indicator state verification.
-        """
-        if manual == True:
-            return self.testUserResponse.getUserYN(f"Is {indicator} state {state}? (Y/N):")
-        else :
-            #TODO: add automation verification methods
-            return False
 
     def testFunction(self):
         """tests the front panel indicators by enabling and disabling the indicators.

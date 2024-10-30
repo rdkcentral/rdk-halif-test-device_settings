@@ -28,9 +28,6 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsFPD.dsFPDHelperClass import dsFPDHelperClass
-from dsClasses.dsFPD import dsFPDIndicatorType
-from dsClasses.dsFPD import dsFPDColor
-from dsClasses.dsFPD import dsFPDLedState
 from dsClasses.dsFPD import dsFPDState
 
 
@@ -48,26 +45,6 @@ class dsFPD_test03_SetVerifyLEDIndicatorsBlink(dsFPDHelperClass):
         self.iteration = 5
         super().__init__(self.testName, '1')
 
-
-    #TODO: Current version supports only manual verification.
-    def testVerifyIndicator(self, indicator, state, manual=False):
-        """
-        Verifies whether the indicator is provided state.
-
-        Args:
-            indicator (str) : front panel indicator
-            state (str) : state of front panel indicator
-            manual (bool, optional): Manual verification (True: manual, False: automated).
-                                     Defaults to False
-
-        Returns:
-            bool : Returns the status of the front panel indicator state verification.
-        """
-        if manual == True:
-            return self.testUserResponse.getUserYN(f"Is {indicator} state {state}? (Y/N):")
-        else :
-            #todo: add automation verification methods
-            return False
 
     #TODO: Current version supports only manual verification.
     def testVerifyIndicatorBlink(self, indicator, manual=False):

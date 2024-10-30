@@ -868,6 +868,7 @@ void test_l1_dsVideoDevice_positive_dsGetVideoCodecInfo(void)
     int j = 1;
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
         if(gSourceType == 1) {
             // Step 03: Iterate over all codecs
             UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -876,7 +877,6 @@ void test_l1_dsVideoDevice_positive_dsGetVideoCodecInfo(void)
                     continue;
                 }
                 result = dsGetVideoCodecInfo(handle, codec, &codecInfo);
-                UT_ASSERT_EQUAL(result, dsERR_NONE);
                 // Compare with profile file
                 UT_ASSERT_EQUAL(codecInfo.num_entries, gDSVideoDeviceConfiguration[i].num_codec_entries);
                 if(codec == dsVIDEO_CODEC_MPEGHPART2){
