@@ -16,7 +16,7 @@ dsVideoDevice:  # Prefix must always exist
           - "chmod +x <PATH on Device>/run.sh"
           - "ln -s /usr/lib/libds-hal.so <PATH on Device>/libdshal.so"
         streams:
-      test1_FrameratePreChangeCallBack_Verify:
+      test1_FrameratePrePostChangeCallBack_Verify:
         <<: *defaults
         streams:
       test2_ZoomMode:
