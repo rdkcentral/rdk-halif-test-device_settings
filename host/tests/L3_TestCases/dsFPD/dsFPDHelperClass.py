@@ -64,6 +64,25 @@ class dsFPDHelperClass(utHelperClass):
 
         self.deviceDownloadPath = self.cpe.get("target_directory")
 
+    #TODO: Current version supports only manual verification.
+    def testVerifyIndicator(self, indicator, state, manual=False):
+        """
+        Verifies whether the Front panel Indicator is set to specified state
+
+        Args:
+            indicator (str) : Front Panel Indicator
+            state (str) : Front Panel Indicator State
+            manual (bool, optional): Manual verification (True: manual, False: automated).
+                                     Defaults to False
+
+        Returns:
+            bool : Returns the status of the indicator state verification.
+        """
+        if manual == True:
+            return self.testUserResponse.getUserYN(f"Is {indicator} state {state}? (Y/N):")
+        else :
+            #TODO: add automation verification methods
+            return False
 
 
     def testRunPrerequisites(self):
@@ -109,7 +128,3 @@ class dsFPDHelperClass(utHelperClass):
 
         # Clean up the dsFPD instance
         del self.testdsFPD
-
-    def testExceptionCleanUp (self):
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
