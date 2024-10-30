@@ -269,6 +269,8 @@ class dsCompositeInClass():
             None
         """
         self.utMenu.stop()
+
+# Test and example usage code
 if __name__ == '__main__':
 
     shell = InteractiveShell()
