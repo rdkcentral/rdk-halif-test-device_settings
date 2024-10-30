@@ -711,7 +711,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSelectZoomMode(void) {
         // Step 3: Loop through all dsVideoZoom_t values and call dsHdmiInSelectZoomMode()
         for (dsVideoZoom_t i = dsVIDEO_ZOOM_NONE; i < dsVIDEO_ZOOM_MAX; i++) {
             result = dsHdmiInSelectZoomMode(i);
-            if(gDeviceType == 1){
+            if(gSourceType == 1){
                 UT_ASSERT_EQUAL(result,dsERR_NONE);
             }
             else {
@@ -751,7 +751,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSelectZoomMode(void) {
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  *
  */
-void test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode_source(void) {
+void test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode(void) {
 
     gTestID = 14;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
