@@ -33,8 +33,6 @@ deviceConfig:
             profile: "../../../../profiles/source/Source_4K_VideoPort.yaml"
             player:
                 tool: "gstreamer"
-                prerequisites:
-                    - export EXP=test # pre commands required to play the stream
             prerequisites:
                 - export EXP=test # pre commands required to play the stream
     cpe2:
