@@ -24,6 +24,7 @@
 import yaml
 import os
 import sys
+import re
 from enum import Enum, auto
 
 # Add parent outside of the class directory
@@ -33,6 +34,7 @@ sys.path.append(dir_path+"/../")
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utSuiteNavigator import UTSuiteNavigatorClass
 from raft.framework.plugins.ut_raft.interactiveShell import InteractiveShell
+
 
 class dsVideoPortType(Enum):
     dsVIDEOPORT_TYPE_RF     = 0
@@ -45,76 +47,87 @@ class dsVideoPortType(Enum):
     dsVIDEOPORT_TYPE_HDMI_INPUT =auto()
     dsVIDEOPORT_TYPE_INTERNAL =auto()
 
-class dsDisplayClass():
+class dsDisplayEvent(Enum):
+    dsDISPLAY_EVENT_CONNECTED = 0
+    dsDISPLAY_EVENT_DISCONNECTED = auto()
+    dsDISPLAY_RXSENSE_ON = auto()
+    dsDISPLAY_RXSENSE_OFF = auto()
+    dsDISPLAY_HDCPPROTOCOL_CHANGE = auto()
+    dsDISPLAY_EVENT_MAX = auto()
 
-    moduleName = "dsDisplay"
-    menuConfig =  dir_path + "/dsDisplay_test_suite.yml"
-    testSuite = "L3 dsDisplay"
+class dsVideoAspectRatio(Enum):
+    dsVIDEO_ASPECT_RATIO_4x3 = auto()
+    dsVIDEO_ASPECT_RATIO_16x9 = auto()
+    dsVIDEO_ASPECT_RATIO_MAX = auto()
+
+
+class dsDisplayClass():
 
     """
     Device Settings Display Class
     This module provides common extensions for device Settings Display Module.
     """
-    def __init__(self, deviceProfilePath:str, session=None ):
+    moduleName = "dsDisplay"
+    menuConfig = dir_path+ "/dsDisplay_test_suite.yml"
+    testSuite = "L3 dsDisplay"
+    validationConfig = dir_path + "/../L3_TestCases/dsDisplay/dsDisplay_test_validation.yml"
+
+    def __init__(self, deviceProfilePath :str, session=None, targetWorkspace="/tmp" ):
         """
         Initializes the dsDisplay class function.
         """
-        self.deviceProfile = ConfigRead( deviceProfilePath, self.moduleName)
-        self.utMenu        = UTSuiteNavigatorClass(self.menuConfig, self.moduleName, session)
 
+        # Load configurations for device profile and menu
+        self.deviceProfile = ConfigRead( deviceProfilePath , self.moduleName)
+        self.validationProfile = ConfigRead(self.validationConfig,self.moduleName)
+        self.utMenu        = UTSuiteNavigatorClass(self.menuConfig, self.moduleName, session)
+        self.testSession   = session
+
+         # Start the user interface menu
         self.utMenu.start()
 
-    def initialise(self, device_type:int=0):
+    def searchPattern(self, haystack, pattern):
+        """
+        Searches for the first occurrence of a specified pattern in the provided string.
+
+        Args:
+            haystack (str): The string to be searched.
+            pattern (str): The regular expression pattern to search for.
+
+        Returns:
+            str: The first capturing group of the match if found; otherwise, None.
+
+        Notes:
+            - The pattern should contain at least one capturing group (parentheses).
+            - If no match is found, None is returned.
+        """
+        match = re.search(pattern, haystack)
+        if match:
+            return match.group(1)
+        return None
+
+    def initialise(self):
         """
         Initializes the device settings Display module.
 
         Args:
-            device_type (int, optional): 0 - sink device, 1 - source device. Defaults to sink.
+            None
 
         Returns:
                 None
         """
         result = self.utMenu.select( self.testSuite, "Initialize dsDisplay")
 
-    def getEdid(self, video_port: str, port_index: int = 0):
+    def getDisplayHandle(self, video_port: str, port_index: int=0):
         """
-        Gets the EDID information.
-
-        Args:
-            port_type (str): name of the video port. Refer dsVideoPortType enum
-            port_index (int, optional): port index. Defaults to 0
-
-            Returns:
-                None
-        """
-        promptWithAnswers = [
-                {
-                    "query_type": "list",
-                    "query": "Select dsVideo Port:",
-                    "input":str(video_port)
-                },
-                {
-                    "query_type": "direct",
-                    "query": "Select dsVideo Port Index[0-10]:",
-                    "input": str(port_index)
-                }
-        ]
-
-        promptWithAnswers[0]["input"] = str(video_port)
-        promptWithAnswers[1]["input"] = str(port_index)
-
-        result = self.utMenu.select(self.testSuite, "Get display EDID", promptWithAnswers)
-
-    def getEdidBytes(self, video_port: str, port_index: int = 0):
-        """
-        Gets the EDID bytes.
+        Returns the handle of the display port.
 
         Args:
             video_port (str): name of the video port. Refer dsVideoPortType enum
-            port_index (int, optional): port index. Defaults to 0
+            port_index (int): port index
 
         Returns:
-            None
+            int: The handle of the display port.
         """
         promptWithAnswers = [
                 {
@@ -132,36 +145,68 @@ class dsDisplayClass():
         promptWithAnswers[0]["input"] = str(video_port)
         promptWithAnswers[1]["input"] = str(port_index)
 
-        result = self.utMenu.select(self.testSuite, "Get display EDIDBytes", promptWithAnswers)
+        result = self.utMenu.select(self.testSuite, "Get display handle", promptWithAnswers)
 
-    def getAspectRatio(self, video_port: str, port_index: int = 0):
+    def getEdid(self):
         """
-        Gets the display aspect ratio.
+        Gets the EDID information.
 
         Args:
-            video_port (str): name of the video port. Refer dsVideoPortType enum
-            port_index (int, optional): port index. Defaults to 0
+            None.
 
         Returns:
             None
         """
-        promptWithAnswers = [
-            {
-                "query_type": "list",
-                "query": "Select dsVideo Port:",
-                "input": str(video_port)
-            },
-            {
-                "query_type": "direct",
-                "query": "Select dsVideo Port Index[0-10]:",
-                "input": str(port_index)
-            }
-        ]
+        result = self.utMenu.select(self.testSuite, "Get display EDID")
+        # Define the pattern to extract EDID information
+        edidPattern = r"Result dsGetEDID\(dsDisplayEDID_t\(OUT:monitorName:\[(\w+)\], dsError_t=\[.*\]\)"
+        monitorName = self.searchPattern(result, edidPattern)
+        return monitorName
 
-        promptWithAnswers[0]["input"] = str(video_port)
-        promptWithAnswers[1]["input"] = str(port_index)
+    def getEdidBytes(self):
+        """
+        Gets the EDID bytes.
 
-        result = self.utMenu.select(self.testSuite, "Get display AspectRatio", promptWithAnswers)
+        Args:
+            None.
+
+        Returns:
+            None
+        """
+        result = self.utMenu.select(self.testSuite, "Get display EDIDBytes")
+
+    def getAspectRatio(self):
+        """
+        Gets the display aspect ratio.
+
+        Args:
+            None.
+
+        Returns:
+            None
+        """
+        result = self.utMenu.select(self.testSuite, "Get display AspectRatio")
+        aspectRatioPattern = r"Result dsGetDisplayAspectRatio\(handle:\[.*\], dsVideoAspectRatio_t:\[(.*?)\], dsError_t=\[.*?\]\)"
+        aspectRatio = self.searchPattern(result, aspectRatioPattern)
+        return aspectRatio
+
+    def getConnectionCallbackStatus(self):
+        """
+        Retrieves the display event callback status from the device.
+        This function reads the output from the device session to detect the
+        display event status. The callback message contains the event type,
+        which is parsed and returned as a string.
+        Args:
+            None
+        Returns:
+            str: The display event type (e.g., 'dsVIDEO_EVENT_CONNECTED').
+            None: If no matching event status is found.
+        """
+
+        result = self.testSession.read_until("Display EventCallback(IN:handle:")
+        callpattern = r"Display EventCallback\(IN:handle:\[.*\], dsDisplayEvent_t:\[(\w+)\]"
+        status = self.searchPattern(result, callpattern)
+        return status
 
     def terminate(self):
         """
@@ -175,27 +220,6 @@ class dsDisplayClass():
         """
         result = self.utMenu.select(self.testSuite, "Terminate dsDisplay")
 
-    def getDisplayHandle(self, video_port: str, port_index: int=0):
-        """
-        Returns the handle of the display port.
-
-        Args:
-            video_port (str): name of the video port. Refer dsVideoPortType enum
-            port_index (int): port index
-
-        Returns:
-            int: The handle of the display port.
-        """
-        ports = self.deviceProfile.get("Ports")
-        if not ports:
-            return None  # Handle empty ports list
-
-        for entry in ports.values():
-            if entry['Typeid'] == video_port and entry['Index'] == port_index:
-                handle = entry['Handle']
-                return handle
-
-        return None
 
     def getSupportedPorts(self):
         """
@@ -216,6 +240,13 @@ class dsDisplayClass():
             portLists.append((video_port_name, port_index))  # Append as a tuple
 
         return portLists
+
+    def getDisplayInfoFromConfig(self):
+        monitorNames = []
+        displays = self.validationProfile.get("Displays")
+        for entry in displays:
+            monitorNames.append(displays[entry].get("Name"))
+        return monitorNames
 
     def __del__(self):
         """
