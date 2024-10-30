@@ -63,17 +63,13 @@ class dsHdmiIn_test4_VideoModeChangeCallback_Verify(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the test artifacts and streams listed in the test setup configuration.
+        Downloads the test artifacts listed in the test setup configuration.
 
-        This function retrieves audio streams and other necessary files and
-        saves them on the DUT (Device Under Test).
+        This function retrieves necessary files and saves them on the DUT (Device Under Test).
 
         Args:
             None
         """
-
-        # List of streams with path
-        self.testStreams = []
 
         self.deviceDownloadPath = self.cpe.get("target_directory")
 
@@ -83,13 +79,6 @@ class dsHdmiIn_test4_VideoModeChangeCallback_Verify(utHelperClass):
         url = test.get("artifacts")
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-
-        # Download test streams to device
-        url =  test.get("streams")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            for streampath in url:
-                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
 
     def testCleanAssets(self):
         """
@@ -131,7 +120,7 @@ class dsHdmiIn_test4_VideoModeChangeCallback_Verify(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def CheckDeviceStatusAndResolutionChange(self, manual=False, port_type:str=0):
+    def CheckDeviceStatusAndResolutionChange(self, manual=False, port_type:str=0, resolution_info:str=0):
        """
         Verifies whether the particular input selected or not.
         Ask for resolution change on source device.
@@ -144,8 +133,10 @@ class dsHdmiIn_test4_VideoModeChangeCallback_Verify(utHelperClass):
         Returns:
             bool
        """
-       if manual == True:
-            return self.testUserResponse.getUserYN(f'Connect Hdmi In device on {port_type} and change resolution then press Enter:')
+       if manual == True and resolution_info == False:
+            return self.testUserResponse.getUserYN(f'Check the Hdmi In device is on connect to {port_type} and then press Enter:')
+       elif  manual == True and resolution_info == True:
+            return self.testUserResponse.getUserYN(f'Change the Resolution on device connected to {port_type} and then press Enter:')
        else:
             #TODO: Add automation verification methods
             return False
@@ -187,12 +178,12 @@ class dsHdmiIn_test4_VideoModeChangeCallback_Verify(utHelperClass):
             self.log.stepStart(f'Select {port} Port')
             self.log.step(f'Select {port} Port')
 
+            # Check the HdmiIn device is active
+            self.CheckDeviceStatusAndResolutionChange(True, port , False)
             self.testdsHdmiIn.selectHDMIInPort(port, audmix, videoplane, topmost)
             self.log.step(f'Port Selcted {port}')
 
-            # Check the HdmiIn device is active
-            self.CheckDeviceStatusAndResolutionChange(True,port)
-            
+            self.CheckDeviceStatusAndResolutionChange(True, port, True)
             videomode = self.testdsHdmiIn.getVideoModeCallbackStatus()
             if port == videomode[0]:
                 result = True
@@ -200,9 +191,6 @@ class dsHdmiIn_test4_VideoModeChangeCallback_Verify(utHelperClass):
             else:
                 result = False
                 self.log.stepResult(result,f'hdmi video mode port:{port} pixelresolution:{videomode[1]} aspectratio:{videomode[2]} in Callback found')
-
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
 
         #Run postrequisites listed in the test setup configuration file 
         self.testRunPostreiquisites()

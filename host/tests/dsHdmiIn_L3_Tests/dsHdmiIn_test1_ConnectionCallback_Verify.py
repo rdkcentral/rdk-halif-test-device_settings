@@ -64,16 +64,12 @@ class dsHdmiIn_test1_ConnectionCallback_Verify(utHelperClass):
         """
         Downloads the test artifacts and streams listed in the test setup configuration.
 
-        This function retrieves audio streams and other necessary files and
-        saves them on the DUT (Device Under Test).
+        This function retrieves artifacts and saves them on the DUT (Device Under Test).
 
         Args:
             None
         """
-
-        # List of streams with path
-        self.testStreams = []
-
+        
         self.deviceDownloadPath = self.cpe.get("target_directory")
 
         test = self.testSetup.get("assets").get("device").get(self.testName)
@@ -82,22 +78,6 @@ class dsHdmiIn_test1_ConnectionCallback_Verify(utHelperClass):
         url = test.get("artifacts")
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-
-        # Download test streams to device
-        url =  test.get("streams")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            for streampath in url:
-                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
-
-    def testCleanAssets(self):
-        """
-        Removes the downloaded assets and test streams from the DUT after test execution.
-
-        Args:
-            None
-        """
-        self.deleteFromDevice(self.testStreams)
 
     def testRunPrerequisites(self):
         """
@@ -113,7 +93,6 @@ class dsHdmiIn_test1_ConnectionCallback_Verify(utHelperClass):
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
-
 
     def testPlugUnplugHDMI(self, port:str, plug:True, manual=False):
 
@@ -194,9 +173,6 @@ class dsHdmiIn_test1_ConnectionCallback_Verify(utHelperClass):
                     result = True
 
             self.log.stepResult(result, f'HDMI Connect Status Test for {port} Port')
-
-        # Clean the assets downloaded to the device
-       # self.testCleanAssets()
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()

@@ -63,17 +63,13 @@ class dsHdmiIn_test3_PortStatusCallback_Verify(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the test artifacts and streams listed in the test setup configuration.
+        Downloads the test artifacts  listed in the test setup configuration.
 
-        This function retrieves audio streams and other necessary files and
-        saves them on the DUT (Device Under Test).
+        This function retrieves  necessary files and saves them on the DUT (Device Under Test).
 
         Args:
             None
         """
-
-        # List of streams with path
-        self.testStreams = []
 
         self.deviceDownloadPath = self.cpe.get("target_directory")
 
@@ -83,13 +79,6 @@ class dsHdmiIn_test3_PortStatusCallback_Verify(utHelperClass):
         url = test.get("artifacts")
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-
-        # Download test streams to device
-        url =  test.get("streams")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            for streampath in url:
-                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
 
     def testCleanAssets(self):
         """
@@ -185,8 +174,8 @@ class dsHdmiIn_test3_PortStatusCallback_Verify(utHelperClass):
             self.log.step(f'Select {port} Port')
 
             # Check the HdmiIn device connected to is active
-            result = self.CheckDeviceStatus(True,port)
-            self.log.stepResult(result,f'Hdmi In Device is active {result} on {port}')
+            self.CheckDeviceStatus(True,port)
+            self.log.step(f'Hdmi In Device is active on {port}')
 
             self.testdsHdmiIn.selectHDMIInPort(port, audmix, videoplane, topmost)
             self.log.step(f'Port Selcted {port}')
@@ -198,9 +187,6 @@ class dsHdmiIn_test3_PortStatusCallback_Verify(utHelperClass):
             else:
                result = False
                self.log.stepResult(result,f'Port Status ispresented:{status[0]} activeport:{status[1]} found in Callback')
-
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
   
         #Run postrequisites listed in the test setup configuration file 
         self.testRunPostreiquisites()

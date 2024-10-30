@@ -62,10 +62,9 @@ class dsHdmiIn_test9_ScalevideoAndVerify(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the test artifacts and streams listed in the test setup configuration.
+        Downloads the test artifacts listed in the test setup configuration.
 
-        This function retrieves audio streams and other necessary files and
-        saves them on the DUT (Device Under Test).
+        This function retrieves necessary files and saves them on the DUT (Device Under Test).
 
         Args:
             None
@@ -82,14 +81,6 @@ class dsHdmiIn_test9_ScalevideoAndVerify(utHelperClass):
         url = test.get("artifacts")
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-
-        # Download test streams to device
-        url =  test.get("streams")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            for streampath in url:
-                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
-
 
     def testCleanAssets(self):
         """
@@ -143,7 +134,7 @@ class dsHdmiIn_test9_ScalevideoAndVerify(utHelperClass):
             bool
         """
         if manual == True and videoscale == False:
-            return self.testUserResponse.getUserYN(f'Check HdmiIn device on {port_type} press Enter:')
+            return self.testUserResponse.getUserYN(f'Connect HdmiIn device on {port_type} press Enter:')
         elif manual == True and videoscale == True:
             return self.testUserResponse.getUserYN(f'Check video scaled on {port_type} press Enter:')
         else:
@@ -197,12 +188,9 @@ class dsHdmiIn_test9_ScalevideoAndVerify(utHelperClass):
             self.log.step(f'Selected port {port} Port')
             # video scaling of HdmiIn port
             for xcord, ycord, width, height in videoScale_argList:
-                scalevideo = self.testdsHdmiIn.scaleHdmiInvdieo(xcord, ycord, width, height)
+                self.testdsHdmiIn.scaleHdmiInvdieo(xcord, ycord, width, height)
                 result = self.CheckDeviceStatusAndVerifyVideoScale(True,port,True)
                 self.log.stepResult(result, f'HdmiIn Video Scale Verification {port} Port')
-
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
 
         #Run postrequisites listed in the test setup configuration file 
         self.testRunPostreiquisites()

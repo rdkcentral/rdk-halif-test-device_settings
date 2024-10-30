@@ -65,15 +65,11 @@ class dsHdmiIn_test2_SignalChangeCallback_Verify(utHelperClass):
         """
         Downloads the test artifacts and streams listed in the test setup configuration.
 
-        This function retrieves audio streams and other necessary files and
-        saves them on the DUT (Device Under Test).
+        This function retrieves artifacts and saves them on the DUT (Device Under Test).
 
         Args:
             None
         """
-
-        # List of streams with path
-        self.testStreams = []
 
         self.deviceDownloadPath = self.cpe.get("target_directory")
 
@@ -83,13 +79,6 @@ class dsHdmiIn_test2_SignalChangeCallback_Verify(utHelperClass):
         url = test.get("artifacts")
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-
-        # Download test streams to device
-        url =  test.get("streams")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            for streampath in url:
-                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
 
     def testCleanAssets(self):
         """

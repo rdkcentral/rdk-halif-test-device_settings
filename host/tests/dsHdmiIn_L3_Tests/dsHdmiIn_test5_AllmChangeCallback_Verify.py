@@ -63,17 +63,13 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the test artifacts and streams listed in the test setup configuration.
+        Downloads the test artifacts listed in the test setup configuration.
 
-        This function retrieves audio streams and other necessary files and
-        saves them on the DUT (Device Under Test).
+        This function retrieves Hdmi In necessary files and saves them on the DUT (Device Under Test).
 
         Args:
             None
         """
-
-        # List of streams with path
-        self.testStreams = []
 
         self.deviceDownloadPath = self.cpe.get("target_directory")
 
@@ -83,13 +79,6 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(utHelperClass):
         url = test.get("artifacts")
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-
-        # Download test streams to device
-        url =  test.get("streams")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            for streampath in url:
-                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
 
     def testCleanAssets(self):
         """
@@ -199,9 +188,6 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(utHelperClass):
             else:
                 result = False
                 self.log.stepResult(result,f'allm mode:{allmstatus[1]} on port:{allmstatus[0]} in Callback found')
-
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
 
         #Run postrequisites listed in the test setup configuration file 
         self.testRunPostreiquisites()
