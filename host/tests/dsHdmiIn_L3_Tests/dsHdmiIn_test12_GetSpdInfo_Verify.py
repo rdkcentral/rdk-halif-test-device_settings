@@ -23,6 +23,7 @@
 
 import os
 import sys
+from enum import Enum, auto
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../"))
@@ -32,16 +33,16 @@ from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
-class dsHdmiIn_test8_SelectportAndVerifyPortStatus(utHelperClass):
+class dsHdmiIn_test12_GetSpdInfo_Verify(utHelperClass):
 
-    testName  = "test8_SelectPortAndVerifyPortStatus"
+    testName  = "test12_GetSpdInfo_Verify"
     testSetupPath = dir_path + "/dsHdmiIn_L3_testSetup.yml"
     moduleName = "dsHdmiIn"
     rackDevice = "dut"
 
     def __init__(self):
         """
-        Initializes the test8_SelectPortAndVerifyPortStatus test .
+        Initializes the test12_GetSpdInfo_Verify test .
 
         Args:
             None.
@@ -90,15 +91,14 @@ class dsHdmiIn_test8_SelectportAndVerifyPortStatus(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Executes prerequisite commands listed in the test setup configuration file on the DUT.
+        Runs Prerequisite commands listed in test-setup configuration file on the dut.
 
         Args:
-            None
+            None.
         """
 
-        # Run commands as part of test prerequisites
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("execute")
+        #Run test specific commands
+        cmds = self.testSetup.assets.device.test12_GetSpdInfo_Verify.execute
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
@@ -110,18 +110,17 @@ class dsHdmiIn_test8_SelectportAndVerifyPortStatus(utHelperClass):
         Args:
             None.
         """
-
-       # Run commands as part of test prerequisites
+        # Run commands as part of test prerequisites
         test = self.testSetup.get("assets").get("device").get(self.testName)
         cmds = test.get("postcmd")
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
-
+    
     #TODO: Current version supports only manual verification.
-    def CheckDeviceStatus(self, manual=False, port_type:str=0):
+    def CheckDeviceAndInfoStatus(self, manual = False, port_type:str=0, spd_info:str=0):
         """
-        Verifies whether the particular input selected or not.
+        Verifies whether the Device Status and Spdinfo received on particular port.
 
         Args:
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
@@ -130,20 +129,22 @@ class dsHdmiIn_test8_SelectportAndVerifyPortStatus(utHelperClass):
         Returns:
             bool
         """
-        if manual == True:
-            return self.testUserResponse.getUserYN(f'Check HdmiIn device of {port_type} is ON and press Enter:')
+        if manual == True and spd_info == False:
+            return self.testUserResponse.getUserYN(f'check the Device Connected to {port_type} is ON and press Enter:')
+        elif manual == True and spd_info == True:
+            return self.testUserResponse.getUserYN(f'check the Spd Info received of device connected to {port_type} and press Enter:')
         else :
             #TODO: Add automation verification methods
             return False
-
+    
     def testFunction(self):
         """
-        The main test function tests port selection and verifies that
-        particular port selected on platform.
+        The main test function tests Spd Info on port.
 
         This function:
         - Downloads necessary assets.
         - Runs prerequisite commands.
+        - Verifies Spd Info through Manual Verification.
 
         Returns:
             bool: Final result of the test.
@@ -158,34 +159,32 @@ class dsHdmiIn_test8_SelectportAndVerifyPortStatus(utHelperClass):
         # Create the dsHdmiIn class
         self.testdsHdmiIn = dsHdmiInClass(self.deviceProfile, self.hal_session)
 
-        self.log.testStart("test8_SelectPortAndVerifyPortStatus", '1')
+        self.log.testStart("test12_GetSpdInfo_Verify", '1')
 
         # Initialize the dsHdmiIn module
         self.testdsHdmiIn.initialise()
-   
+
         audmix = 0      #default value false
         videoplane = 0  #Always select primary plane.
         topmost = 1     #Always should be true.
-
+   
         # Loop through the supported HdmiIn ports
         for port in self.testdsHdmiIn.getSupportedPorts():
-            self.log.stepStart(f'Select {port} Port')
-            self.log.step(f'Select {port} Port')
+            self.log.stepStart(f'{port} Port')
 
             # Check the HdmiIn device connected to is active
-            result = self.CheckDeviceStatus(True, port)
-            self.log.step(f'Hdmi In Device is active {result} on {port}')
-
-            # Select the Hdmi In port
+            self.CheckDeviceAndInfoStatus(True, port, False)
+            self.log.step(f'Hdmi In Device is active on {port}')
+            
+            # Selecting Hdmi In port
             self.testdsHdmiIn.selectHDMIInPort(port, audmix, videoplane, topmost)
-            portstatus = self.testdsHdmiIn.getHDMIInPortStatus()
-            if port == portstatus[1]:
-               result = True
-               self.log.stepResult(result, f'HdmiIn Select Verification ispresented:{portstatus[0]} activeport:{portstatus[1]}')
-            else:
-                result = False
-                self.log.stepResult(result, f'HdmiIn Select Verification ispresented:{portstatus[0]} activeport:{portstatus[1]}')
-        
+            self.log.step(f'Port Selcted {port}')
+
+            #Getting Spd Info on particular Hdmi input port
+            self.testdsHdmiIn.getSpdInfo(port)
+            result = self.CheckDeviceAndInfoStatus(True, port , True) 
+            self.log.stepResult(result,f'Verified Spd info on {port}')
+
         #Run postrequisites listed in the test setup configuration file 
         self.testRunPostreiquisites()
 
@@ -198,5 +197,5 @@ class dsHdmiIn_test8_SelectportAndVerifyPortStatus(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsHdmiIn_test8_SelectportAndVerifyPortStatus()
+    test = dsHdmiIn_test12_GetSpdInfo_Verify()
     test.run(False)

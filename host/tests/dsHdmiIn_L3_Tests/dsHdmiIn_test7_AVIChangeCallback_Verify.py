@@ -137,7 +137,7 @@ class dsHdmiIn_test7_AVIChangeCallback_Verify(utHelperClass):
         if manual == True and avi_input != True:
             return self.testUserResponse.getUserYN(f'Check Hdmi In device on {port_type} is ON and press Enter:')
         elif manual == True and avi_input == True:
-            return self.testUserResponse.getUserYN(f'Please change the AVI Content on device connected to {port_type} and press Enter:')
+            return self.testUserResponse.getUserYN(f'Change the AVI Content on device connected to {port_type} and press Enter:')
         else :
             #TODO: Add automation verification methods
             return False

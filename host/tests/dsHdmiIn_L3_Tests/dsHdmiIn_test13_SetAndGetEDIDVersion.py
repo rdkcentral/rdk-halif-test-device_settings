@@ -63,17 +63,13 @@ class dsHdmiIn_test13_SetAndGetEDIDVersion(utHelperClass):
 
     def testDownloadAssets(self):
         """
-        Downloads the test artifacts and streams listed in the test setup configuration.
+        Downloads the test artifactslisted in the test setup configuration.
 
-        This function retrieves audio streams and other necessary files and
-        saves them on the DUT (Device Under Test).
+        This function retrieves necessary files and saves them on the DUT (Device Under Test).
 
         Args:
             None
         """
-
-        # List of streams with path
-        self.testStreams = []
 
         self.deviceDownloadPath = self.cpe.get("target_directory")
 
@@ -83,13 +79,6 @@ class dsHdmiIn_test13_SetAndGetEDIDVersion(utHelperClass):
         url = test.get("artifacts")
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-
-        # Download test streams to device
-        url =  test.get("streams")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            for streampath in url:
-                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
 
     def testCleanAssets(self):
         """
@@ -128,24 +117,6 @@ class dsHdmiIn_test13_SetAndGetEDIDVersion(utHelperClass):
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    #TODO: Current version supports only manual verification.
-    def CheckDeviceStatus(self, manual = False, port_type:str=0):
-        """
-        Verifies whether the particular edidversion selected or not.
-
-        Args:
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                     Defaults to other verification methods
-
-        Returns:
-            bool
-        """
-        if manual == True:
-            return self.testUserResponse.getUserYN(f'check the Device Connected to {port_type} is ON and press Enter:')
-        else :
-            #TODO: Add automation verification methods
-            return False
-
     def testFunction(self):
         """
         The main test function tests EDID version sets.
@@ -172,10 +143,6 @@ class dsHdmiIn_test13_SetAndGetEDIDVersion(utHelperClass):
 
         # Initialize the dsHdmiIn module
         self.testdsHdmiIn.initialise()
-
-        audmix = 0      #default value false
-        videoplane = 0  #Always select primary plane.
-        topmost = 1     #Always should be true.
    
         # Loop through the supported HdmiIn ports
         for port in self.testdsHdmiIn.getSupportedPorts():
@@ -197,9 +164,6 @@ class dsHdmiIn_test13_SetAndGetEDIDVersion(utHelperClass):
                    else:
                          result = False
                          self.log.stepResult(result,f'Verified getversion:{edidstatus} setversion:{edidversion} same')      
-                                   
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
 
         #Run postrequisites listed in the test setup configuration file 
         self.testRunPostreiquisites()

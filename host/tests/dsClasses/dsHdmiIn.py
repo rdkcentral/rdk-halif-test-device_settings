@@ -365,7 +365,7 @@ class dsHdmiInClass():
             porttype = match.group(1)
             avi_content_type = match.group(2)
             return porttype, avi_content_type
-
+        
         return None
 
     def getHDMIInPortStatus(self):
@@ -602,7 +602,56 @@ class dsHdmiInClass():
             edidversion = match.group(2)
 
         return edidversion
+    
+    def getEdidInfo(self, port_type:str=0):
+        """
+        Gets EDID info of a port.
 
+        Args:
+            None.
+        Returns:
+            Edid Info as string.
+        """
+        promptWithAnswers = [
+            {
+                "query_type": "list",
+                "query": "Select dsHdmiIn Port",
+                "input": port_type
+            }
+        ]
+        edid_list = self.deviceProfile.get("edidbytes")
+        print("ahmed")
+        print(edid_list)
+        result = self.utMenu.select( self.testSuite, "Get Edid", promptWithAnswers)
+        pattern = r'edidbyte\[(8|9)\]:\[(\w{2})\]'
+        matches = re.findall(pattern, result)
+        if matches:
+            edid_values = {int(index): value for index, value in matches}
+        for key in edid_values:
+            if int(edid_values.get(key)) in edid_list:
+                if(key == 9):
+                    return True
+            
+        return None
+        
+    def getSpdInfo(self, port_type:str=0):
+        """
+        Gets Spd info of a port.
+
+        Args:
+            None.
+        Returns:
+            Spd Info Info as string.
+        """
+        promptWithAnswers = [
+            {
+                "query_type": "list",
+                "query": "Select dsHdmiIn Port",
+                "input": port_type
+            }
+        ]
+        result = self.utMenu.select( self.testSuite, "Get Spdinfo", promptWithAnswers)
+   
     def setEdid2Allm(self, port_type:str=0, allm_support:int=0):
         """
         sets edid2allm support  on a particular HdmiIn port.
