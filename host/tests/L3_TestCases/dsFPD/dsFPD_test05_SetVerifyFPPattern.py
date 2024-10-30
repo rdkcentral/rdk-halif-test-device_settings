@@ -40,7 +40,7 @@ class dsFPD_test05_SetVerifyFPPattern(dsFPDHelperClass):
             None.
         """
         self.testName  = "test05_SetVerifyFPPattern"
-        super().__init__(self.testName, '1')
+        super().__init__(self.testName, '5')
 
 
     #TODO: Current version supports only manual verification.

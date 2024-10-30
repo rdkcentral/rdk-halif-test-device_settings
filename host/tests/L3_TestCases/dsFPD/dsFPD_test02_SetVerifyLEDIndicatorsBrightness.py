@@ -41,7 +41,7 @@ class dsFPD_test02_SetVerifyLEDIndicatorsBrightness(dsFPDHelperClass):
             None.
         """
         self.testName  = "test02_SetVerifyLEDIndicatorsBrightness"
-        super().__init__(self.testName, '1')
+        super().__init__(self.testName, '2')
 
 
     #TODO: Current version supports only manual verification.
