@@ -43,7 +43,7 @@ class dsFPD_test03_SetVerifyLEDIndicatorsBlink(dsFPDHelperClass):
         self.testName  = "test03_SetVerifyLEDIndicatorsBlink"
         self.duration = 1000
         self.iteration = 5
-        super().__init__(self.testName, '1')
+        super().__init__(self.testName, '3')
 
 
     #TODO: Current version supports only manual verification.

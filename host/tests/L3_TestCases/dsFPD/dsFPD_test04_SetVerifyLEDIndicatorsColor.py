@@ -41,7 +41,7 @@ class dsFPD_test04_SetVerifyLEDIndicatorsColor(dsFPDHelperClass):
             None.
         """
         self.testName  = "test04_SetVerifyLEDIndicatorsColor"
-        super().__init__(self.testName, '1')
+        super().__init__(self.testName, '4')
 
 
     def testVerifyIndicatorColor(self, indicator, color, manual=False):
