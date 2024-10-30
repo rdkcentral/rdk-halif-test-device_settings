@@ -7,13 +7,14 @@ dsFPD:  # Prefix must always exist
     device:
       defaults: &defaults
         artifacts:
-          - "http://localhost:8000/bin/hal_test"
-          - "http://localhost:8000/bin/libut_control.so"
-          - "http://localhost:8000/bin/Source_FPD.yaml"
-          - "http://localhost:8000/bin/run.sh"
+          - "<PATH>/bin/hal_test"
+          - "<PATH>/bin/libut_control.so"
+          - "<PATH>/profiles/source/Source_FPD.yaml"
+          - "<PATH>/profiles/sink/Sink_FPD.yaml"
+          - "<PATH>/bin/run.sh"
         execute:
-          - "chmod +x /home/***REMOVED***/vts/build/rdk-halif-device_settings/tmp/hal_test"
-          - "chmod +x /home/***REMOVED***/vts/build/rdk-halif-device_settings/tmp/run.sh"
+          - "chmod +x <PATH>/hal_test"
+          - "chmod +x <PATH>/run.sh"
       test01_EnableDisableAndVerifyLEDIndicators:
         <<: *defaults
       test02_SetVerifyLEDIndicatorsBrightness:
