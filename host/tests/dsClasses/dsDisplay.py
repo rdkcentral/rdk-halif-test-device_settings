@@ -173,7 +173,18 @@ class dsDisplayClass():
         Returns:
             None
         """
+        edid_list = self.deviceProfile.get("edidbytes")
         result = self.utMenu.select(self.testSuite, "Get display EDIDBytes")
+        pattern = r'edidbyte\[(8|9)\]:\[(\w{2})\]'
+        matches = re.findall(pattern, result)
+        if matches:
+            edid_values = {int(index): value for index, value in matches}
+        for key in edid_values:
+            if int(edid_values.get(key)) in edid_list:
+                if(key == 9):
+                    return True
+
+        return None
 
     def getAspectRatio(self):
         """
@@ -232,12 +243,12 @@ class dsDisplayClass():
         """
         portLists= []
 
-        ports = self.deviceProfile.get("Video_Ports")  # Default to empty list if "Ports" not found
-        for entry in ports:  # Iterate directly through the list of ports
+        ports = self.deviceProfile.get("Video_Ports")
+        for entry in ports:
 
-            video_port_name = dsVideoPortType(entry).name  # Get the name of the video port type
+            video_port_name = dsVideoPortType(entry).name
             port_index =  0# Get the index
-            portLists.append((video_port_name, port_index))  # Append as a tuple
+            portLists.append((video_port_name, port_index))
 
         return portLists
 

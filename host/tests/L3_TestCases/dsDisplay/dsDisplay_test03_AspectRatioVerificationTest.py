@@ -93,7 +93,7 @@ class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
             bool: Final result of the test.
         """
 
-        self.log.testStart(self.testName, '1')
+        self.log.testStart(self.testName, '3')
         # Initialize the dsDisplay module
         self.testdsDisplay.initialise()
 

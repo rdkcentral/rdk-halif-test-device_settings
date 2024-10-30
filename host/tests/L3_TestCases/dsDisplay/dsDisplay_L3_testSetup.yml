@@ -7,14 +7,14 @@ dsDisplay:  # Prefix must always exist
     device:
       defaults: &defaults
         artifacts:
-          - "<PATH URL>/bin/hal_test"
-          - "<PATH URL>/bin/libut_control.so"
-          - "<PATH URL>/profiles/source/Source_4K_Display.yaml"
-          - "<PATH URL>/bin/run.sh"
+          - "http://localhost:8000/bin/hal_test"
+          - "http://localhost:8000/bin/libut_control.so"
+          - "http://localhost:8000/profiles/source/Source_4K_Display.yaml"
+          - "http://localhost:8000/bin/run.sh"
         execute:
-          - "chmod +x <PATH on Device>/hal_test"
-          - "chmod +x <PATH on Device>/run.sh"
-          - "ln -s /usr/lib/libds-hal.so <PATH on Device>/libdshal.so"
+          - "chmod +x /opt/sumi/hal_test"
+          - "chmod +x /opt/sumi/run.sh"
+          - "ln -s /usr/lib/libds-hal.so /opt/sumi/libdshal.so"
         streams:
       test01_VerifyDisplayConnectCallBackTest:
         <<: *defaults
@@ -22,4 +22,7 @@ dsDisplay:  # Prefix must always exist
         <<: *defaults
       test03_AspectRatioVerificationTest:
         <<: *defaults
+      test04_TestVerifyDisplayEdidBytes:
+        <<: *defaults
+
 
