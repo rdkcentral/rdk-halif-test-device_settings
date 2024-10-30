@@ -385,7 +385,7 @@ void test_l3_dsDisplay_get_edidbytes(void)
 
     for (int32_t i = 0; i < length; i++)
     {
-        UT_LOG_INFO("%02X ", gEdidBuffer[i]);
+	UT_LOG_INFO("edidbyte[%d]:[%02X] ", i, gEdidBuffer[i]);
     }
 
     UT_LOG_INFO("Out %s", __FUNCTION__);

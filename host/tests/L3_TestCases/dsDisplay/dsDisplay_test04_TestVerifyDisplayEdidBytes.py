@@ -28,43 +28,30 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path+"../../../")
 
 from L3_TestCases.dsDisplay.dsDisplayHelperClass import dsDisplayHelperClass
-from dsClasses.dsDisplay import dsDisplayEvent
 
-
-class dsDisplay_test02_TestVerifyDisplayEdid(dsDisplayHelperClass):
+class dsDisplay_test04_TestVerifyDisplayEdidBytes(dsDisplayHelperClass):
 
     """
-    Test class to retrieve and verify the display aspect ratio.
+    Test class to retrieve and verify the display EdidBytes.
 
     This class uses the `dsDisplayClass` to interact with the device's display,
-    downloading necessary test assets, retrieving the aspect ratio, and performing verification.
+    downloading necessary test assets, retrieving the EdidBytes, and performing verification.
     """
 
     # Class variables
     def __init__(self):
         """
-        Initializes the test02_TestVerifyDisplayEdid test .
+        Initializes the test04_TestVerifyDisplayEdidBytes test .
 
         Args:
             None.
         """
-        self.testName  = "test02_TestVerifyDisplayEdid"
-        super().__init__(self.testName,'2')
+        self.testName  = "test04_TestVerifyDisplayEdidBytes"
+        super().__init__(self.testName,'4')
 
     def testFunction(self):
-        """
-        This function will test the Display by getting the aspectratio of the display.
+        self.log.testStart(self.testName, '4')
 
-        This function:
-        - Runs the prerequisite commands.
-        - Retrieves aspectratio for each supported port and verifies them.
-        - Cleans up assets after the test.
-
-        Returns:
-            bool: Final result of the test.
-        """
-
-        self.log.testStart(self.testName, '2')
         # Initialize the dsDisplay module
         self.testdsDisplay.initialise()
 
@@ -80,11 +67,12 @@ class dsDisplay_test02_TestVerifyDisplayEdid(dsDisplayHelperClass):
         for port, index in supported_ports:
             self.log.info(f"Testing port {port} at index {index}.")
             self.testdsDisplay.getDisplayHandle(port, index)
-            for tv in self.testdsDisplay.getDisplayInfoFromConfig():
-                self.testUserResponse.getUserYN(f"Connect Device to {tv}(Y/N):")
-                name = self.testdsDisplay.getEdid()
-                if name != tv:
-                    self.log.error(f"Monitor name doesnot match with request.")
+            result = self.testdsDisplay.getEdidBytes()
+            if result == True:
+                self.log.stepResult(result,f'Verified EDID Info received on {port}')
+            else:
+                result = False
+                self.log.stepResult(result,f'Verified EDID Info received on {port}')
 
         #Terminate dsDisplay Module
         self.testdsDisplay.terminate()
@@ -95,5 +83,5 @@ class dsDisplay_test02_TestVerifyDisplayEdid(dsDisplayHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsDisplay_test02_TestVerifyDisplayEdid()
+    test = dsDisplay_test04_TestVerifyDisplayEdidBytes()
     test.run(False)
