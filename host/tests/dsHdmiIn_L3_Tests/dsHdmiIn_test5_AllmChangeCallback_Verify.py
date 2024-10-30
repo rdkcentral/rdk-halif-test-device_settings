@@ -120,7 +120,7 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def CheckDeviceStatusAndEnableAllm(self, manual=False, port_type:str=0, allm_input:str=0):
+    def CheckDeviceStatusAndEnableAllm(self, manual=False, port_type:str=0, allm_change:str=0, allm_input:str=0):
         """
         Checks whether the Hdmi In device is ON or Not.
         Ask for enabling Allm feature on source device.
@@ -131,10 +131,12 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(utHelperClass):
         Returns:
             bool
         """
-        if manual == True and allm_input != True:
+        if manual == True and allm_change != True:
             return self.testUserResponse.getUserYN(f'Connect Hdmi In device  on {port_type} and press Enter:')
-        elif manual == True and allm_input != False:
-            return self.testUserResponse.getUserYN(f'Change ALLM mode on Hdmi In device connected to {port_type} and press Enter:')
+        elif manual == True and allm_change != False and allm_input == 'ON':
+            return self.testUserResponse.getUserYN(f'Change ALLM mode on Hdmi In device connected to {port_type} to {allm_input} if its in OFF and press Enter:')
+        elif manual == True and allm_change != False and allm_input != 'ON':
+            return self.testUserResponse.getUserYN(f'Change ALLM mode on Hdmi In device connected to {port_type} to {allm_input} and press Enter:')
         else:
             #TODO: Add automation verification methods
             return False
@@ -179,8 +181,18 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(utHelperClass):
             self.testdsHdmiIn.selectHDMIInPort(port, audmix, videoplane, topmost)
             self.log.step(f'Port Selcted {port}')
             
-            # Check the HdmiIn device is active
-            self.CheckDeviceStatusAndEnableAllm(True, port, True)  
+            # Change the ALLM Mode to ON its in OFF
+            self.CheckDeviceStatusAndEnableAllm(True, port, True, "ON")  
+            allmstatus = self.testdsHdmiIn.getAllmCallbackStatus()
+            if allmstatus[0] == port:
+               result = True
+               self.log.stepResult(result,f'allm mode:{allmstatus[1]} on port:{allmstatus[0]} in Callback found')
+            else:
+                result = False
+                self.log.stepResult(result,f'allm mode:{allmstatus[1]} on port:{allmstatus[0]} in Callback found')
+            
+            # Change the ALLM Mode to OFF 
+            self.CheckDeviceStatusAndEnableAllm(True, port, True, "OFF")  
             allmstatus = self.testdsHdmiIn.getAllmCallbackStatus()
             if allmstatus[0] == port:
                result = True

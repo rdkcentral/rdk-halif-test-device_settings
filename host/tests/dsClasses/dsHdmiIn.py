@@ -610,7 +610,7 @@ class dsHdmiInClass():
         Args:
             None.
         Returns:
-            Edid Info as string.
+            True if matches , otherwise None.
         """
         promptWithAnswers = [
             {
@@ -620,8 +620,6 @@ class dsHdmiInClass():
             }
         ]
         edid_list = self.deviceProfile.get("edidbytes")
-        print("ahmed")
-        print(edid_list)
         result = self.utMenu.select( self.testSuite, "Get Edid", promptWithAnswers)
         pattern = r'edidbyte\[(8|9)\]:\[(\w{2})\]'
         matches = re.findall(pattern, result)
