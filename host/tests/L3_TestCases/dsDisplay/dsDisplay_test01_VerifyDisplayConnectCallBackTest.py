@@ -25,19 +25,17 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(dir_path+"../../../")
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsDisplay.dsDisplayHelperClass import dsDisplayHelperClass
-from dsClasses.dsDisplay import dsDisplayEvent
-
 
 class dsDisplay_test01_VerifyDisplayConnectCallBackTest(dsDisplayHelperClass):
 
     """
-    Test class to retrieve and verify the display aspect ratio.
+    Test class to verifies the display event callbacks.
 
     This class uses the `dsDisplayClass` to interact with the device's display,
-    downloading necessary test assets, retrieving the aspect ratio, and performing verification.
+    downloading necessary test assets, and verifies the display callback events.
     """
 
     # Class variables
@@ -48,68 +46,54 @@ class dsDisplay_test01_VerifyDisplayConnectCallBackTest(dsDisplayHelperClass):
         Args:
             None.
         """
+        self.testEvents = ["CONNECT", "DISCONNECT", "RXSENSE_ON", "RXSENSE_OFF", "HDCPPROTOCOL_CHANGE"]
         self.testName  = "test01_VerifyDisplayConnectCallBackTest"
         super().__init__(self.testName,'1')
 
     #TODO: Current version supports only manual verification.
-    def testRaiseDisplayEvent(self,port, event:str, manual=False):
+    def testRaiseDisplayEvent(self, port, event:str, manual=False):
         """
-        Verifies whether the compositeIn connected or not.
+        Raises the display events to the dut
         Args:
-            disconnect (bool): Connect or Disconnect compositeIn source device
+            port (str): display port
+            event (bool): display events to raise
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
                                      Defaults to other verification methods
         Returns:
             bool
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Change the {port} status to {event} and press Y:")
+            return self.testUserResponse.getUserYN(f"Change the {port} status to {event} and press Enter:")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
         """
-        This function will test the Display by getting the aspectratio of the display.
-
-        This function:
-        - Runs the prerequisite commands.
-        - Retrieves aspectratio for each supported port and verifies them.
-        - Cleans up assets after the test.
+        This function will test the events callbacks raised by the display port.
 
         Returns:
             bool: Final result of the test.
         """
 
         self.log.testStart(self.testName, '1')
+
         # Initialize the dsDisplay module
         self.testdsDisplay.initialise()
 
-        # Get the supported video ports
-        supported_ports = self.testdsDisplay.getSupportedPorts()
-        result=True
-
-        if not supported_ports:
-            self.log.error("No supported ports found.")
-            return False
-
+        result = True
         # Loop through the supported video ports
-        for port, index in supported_ports:
-            self.log.info(f"Testing port {port} at index {index}.")
-            self.testdsDisplay.getDisplayHandle(port, index)
-            for event in dsDisplayEvent:
-                if event == dsDisplayEvent.dsDISPLAY_EVENT_MAX:
-                    continue
-                self.testRaiseDisplayEvent(port,event.name,True)
-                status = self.testdsDisplay.getConnectionCallbackStatus()
-                if status != event.name:
-                    self.log.error(f"Event did not found in device.")
+        for port, index in self.testdsDisplay.getSupportedPorts():
+            self.testdsDisplay.selectDisplayPort(port, index)
+            for event in self.testEvents:
+                self.log.stepStart(f'Test Display Event {event} for the Port {port}')
+                self.testRaiseDisplayEvent(port, event,True)
+                status = self.testdsDisplay.getDisplayEventFromCallback()
+                result = status and event in status
+                self.log.stepResult(result, f'Test Display Event {event} for the Port {port}')
 
         #Terminate dsDisplay Module
         self.testdsDisplay.terminate()
-
-        # Delete the dsDisplay class
-        del self.testdsDisplay
 
         return result
 

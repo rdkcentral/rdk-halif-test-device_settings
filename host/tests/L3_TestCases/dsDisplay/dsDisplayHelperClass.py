@@ -23,6 +23,7 @@
 
 import os
 import sys
+import struct
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
@@ -48,6 +49,7 @@ class dsDisplayHelperClass(utHelperClass):
         self.testSetupPath = os.path.join(dir_path, "dsDisplay_L3_testSetup.yml")
         self.moduleName = "dsDisplay"
         self.rackDevice = "dut"
+        self.testMonitorNameDetails = ["Samsung", "Hisense", "Element", "Llama"]
 
         super().__init__(testName, qcId, log)
 
@@ -64,6 +66,71 @@ class dsDisplayHelperClass(utHelperClass):
         self.deviceProfile = os.path.join(dir_path, self.cpe.get("test").get("profile"))
 
         self.deviceDownloadPath = self.cpe.get("target_directory")
+
+    def parseEdidData(self, edidData):
+        """
+        Parses the edid buffer and returns the details as dictionary
+        Args:
+            edidData (list): list containing edid data
+        Returns:
+            Dictionary
+            {
+                "manufacturer_id": "",
+                "product_id": "",
+                "serial_number": "",
+                "manufacture_week": "",
+                "manufacture_year": "",
+                "version": "",
+                "revision": "",
+                "video_input_type": "",
+                "max_horizontal_size": "",
+                "max_vertical_size": "",
+                "gamma": "",
+                "standby_mode": "",
+                "suspend_mode": "",
+                "active_off": "",
+            }
+        """
+        edidBytes = bytes(edidData)
+        edidInfo = {}
+
+        # EDID is usually 128 bytes long
+        if len(edidBytes) < 128:
+            raise ValueError("EDID data is too short")
+
+        # Manufacturer ID: bytes 8-9, encoded as 5-bit letters
+        edidInfo["manufacturer_id"] = ''.join([
+            chr(((edidBytes[8] >> 2) & 0x1F) + ord('A') - 1),
+            chr((((edidBytes[8] & 0x03) << 3) | ((edidBytes[9] >> 5) & 0x07)) + ord('A') - 1),
+            chr((edidBytes[9] & 0x1F) + ord('A') - 1)
+        ])
+
+        # Product ID: bytes 10-11, little-endian
+        edidInfo["product_id"] = struct.unpack('<H', edidBytes[10:12])[0]
+
+        # Serial Number: bytes 12-15, little-endian
+        edidInfo["serial_number"] = struct.unpack('<I', edidBytes[12:16])[0]
+
+        # Manufacture Week and Year: bytes 16-17
+        edidInfo["manufacture_week"] = edidBytes[16]
+        edidInfo["manufacture_year"] = edidBytes[17] + 1990
+
+        # EDID version: bytes 18-19
+        edidInfo["version"] = edidBytes[18]
+        edidInfo["revision"] = edidBytes[19]
+
+        # Basic Display Parameters: byte 20
+        edidInfo["video_input_type"] = "Digital" if (edidBytes[20] & 0x80) else "Analog"
+        edidInfo["max_horizontal_size"] = edidBytes[21]  # in cm
+        edidInfo["max_vertical_size"] = edidBytes[22]    # in cm
+        edidInfo["gamma"] = (edidBytes[23] + 100) / 100  # gamma = (value + 100) / 100
+
+        # Supported features: byte 24
+        edidInfo["standby_mode"] = bool(edidBytes[24] & 0x80)
+        edidInfo["suspend_mode"] = bool(edidBytes[24] & 0x40)
+        edidInfo["active_off"] = bool(edidBytes[24] & 0x20)
+
+        return edidInfo
 
     def testRunPrerequisites(self):
         """
@@ -83,7 +150,6 @@ class dsDisplayHelperClass(utHelperClass):
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
-
 
     def testPrepareFunction(self):
         """

@@ -25,11 +25,9 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(dir_path+"../../../")
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsDisplay.dsDisplayHelperClass import dsDisplayHelperClass
-from dsClasses.dsDisplay import dsVideoAspectRatio
-
 
 class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
 
@@ -48,44 +46,29 @@ class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
         Args:
             None.
         """
+        self.testApectRatios = ["16x9", "4x3"]
         self.testName  = "test03_AspectRatioVerificationTest"
         super().__init__(self.testName,'3')
 
-
     #TODO: Current version supports only manual verification.
-    def testGetDisplayAspectRatio(self, manual=False, port="dsVIDEOPORT_TYPE_HDMI" , index:int = 0):
+    def testChangeDisplayAspectRatio(self, port:str, aspectRatio:str, manual=False):
         """
         Gets the aspectratio of the display.
         Args:
+            port (str): Port name
+            aspectRatio (str) : aspectRatio ration eg: 4x3, 16x9
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
                                     Defaults to other verification methods
-                                    port (str, optional): The type of video port to retrieve the EDID Bytes.
-                                    index (int, optional): The index of the port to retrieve the EDID Bytes.
         Returns:
-            bool
+            None
         """
-        # Get the aspectratio from the display
-        for ratio in dsVideoAspectRatio:
-            if ratio == dsVideoAspectRatio.dsVIDEO_ASPECT_RATIO_MAX:
-                continue
-            result = self.testUserResponse.getUserYN(f"Set the aspectratio to {ratio}! (Y/N):")
-            if not result:
-                self.log.error(f"DisplayAspectRatio {ratio.name} could not set from user.")
-                continue
-            retirevedRatio = self.testdsDisplay.getAspectRatio()
-            result = False
-            if ratio.name == retirevedRatio:
-                result = True
-        return result
-
+        self.testUserResponse.getUserYN(f"Set the aspectratio {aspectRatio} to Port: {port} and Press Enter:")
 
     def testFunction(self):
         """
         This function will test the Display by getting the aspectratio of the display.
 
         This function:
-        - Downloads the required assets.
-        - Runs the prerequisite commands.
         - Retrieves aspectratio for each supported port and verifies them.
         - Cleans up assets after the test.
 
@@ -97,31 +80,20 @@ class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
         # Initialize the dsDisplay module
         self.testdsDisplay.initialise()
 
-
-
-        # Get the supported video ports
-        supported_ports = self.testdsDisplay.getSupportedPorts()
-        result=True
-
-        if not supported_ports:
-            self.log.error("No supported ports found.")
-            return False
-
+        result = False
         # Loop through the supported video ports
-        for port, index in supported_ports:
-            self.log.info(f"Testing port {port} at index {index}.")
-            self.testdsDisplay.getDisplayHandle(port, index)
-            result = self.testGetDisplayAspectRatio(manual=True)
-            if not result:
-                self.log.error(f"DisplayAspectRatio verification failed for port {port} at index {index}.")
-                result = False
-                break  # Exit if verification fails
+        for port, index in self.testdsDisplay.getSupportedPorts():
+            self.testdsDisplay.selectDisplayPort(port, index)
+
+            for aspectRatio in self.testApectRatios:
+                self.log.stepStart(f'Test Display Apect Ration {aspectRatio} Port: {port}')
+                self.testChangeDisplayAspectRatio(port, aspectRatio, True)
+                ratio = self.testdsDisplay.getAspectRatio()
+                result = ratio and aspectRatio in ratio
+                self.log.stepResult(result, f'Test Display Apect Ration {aspectRatio} Port: {port}')
 
         #Terminate dsDisplay Module
         self.testdsDisplay.terminate()
-
-        # Delete the dsDisplay class
-        del self.testdsDisplay
 
         return result
 

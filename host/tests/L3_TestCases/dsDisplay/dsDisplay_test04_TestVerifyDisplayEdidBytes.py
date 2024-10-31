@@ -25,7 +25,7 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(dir_path+"../../../")
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsDisplay.dsDisplayHelperClass import dsDisplayHelperClass
 
@@ -49,36 +49,62 @@ class dsDisplay_test04_TestVerifyDisplayEdidBytes(dsDisplayHelperClass):
         self.testName  = "test04_TestVerifyDisplayEdidBytes"
         super().__init__(self.testName,'4')
 
+    #TODO: Current version supports only manual verification.
+    def testConnectDisplay(self, port:str, display:str, manual=False):
+        """
+        Connects the display to specified port
+        Args:
+            port (str): display port
+            display (str): Display name
+            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
+                                     Defaults to other verification methods
+        Returns:
+            bool
+        """
+        if manual == True:
+            return self.testUserResponse.getUserYN(f"Connect Device: {display} to Port: {port} and Press Enter")
+        else :
+            #TODO: Add automation verification methods
+            return False
+
+    def testGetMonitorFromEdid(edidBytes:list):
+        """
+        Connects the display to specified port
+        Args:
+            edidBytes (list): list of edid bytes
+        Returns:
+            Monitor details
+        """
+        monitorName = ""
+        return monitorName
+
     def testFunction(self):
         self.log.testStart(self.testName, '4')
 
         # Initialize the dsDisplay module
         self.testdsDisplay.initialise()
 
-        # Get the supported video ports
-        supported_ports = self.testdsDisplay.getSupportedPorts()
-        result=True
-
-        if not supported_ports:
-            self.log.error("No supported ports found.")
-            return False
+        result = False
 
         # Loop through the supported video ports
-        for port, index in supported_ports:
-            self.log.info(f"Testing port {port} at index {index}.")
-            self.testdsDisplay.getDisplayHandle(port, index)
-            result = self.testdsDisplay.getEdidBytes()
-            if result == True:
-                self.log.stepResult(result,f'Verified EDID Info received on {port}')
-            else:
-                result = False
-                self.log.stepResult(result,f'Verified EDID Info received on {port}')
+        for port, index in self.testdsDisplay.getSupportedPorts():
+            self.testdsDisplay.selectDisplayPort(port, index)
+
+            for display in self.testMonitorNameDetails:
+                self.log.stepStart(f'Test Display Edid Port: {port} Device: {display}')
+                # Wait for the device connection
+                self.testConnectDisplay(port, display, True)
+
+                # Get the Edid Bytes
+                edidData = self.testdsDisplay.getEdidBytes()
+
+                edidInfo = self.parseEdidData(edidData)
+
+                result = edidInfo["manufacturer_id"] == display
+                self.log.stepResult(result, f'Test Display Edid Port: {port} Device: {display}')
 
         #Terminate dsDisplay Module
         self.testdsDisplay.terminate()
-
-        # Delete the dsDisplay class
-        del self.testdsDisplay
 
         return result
 

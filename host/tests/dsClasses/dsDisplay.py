@@ -35,7 +35,6 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utSuiteNavigator import UTSuiteNavigatorClass
 from raft.framework.plugins.ut_raft.interactiveShell import InteractiveShell
 
-
 class dsVideoPortType(Enum):
     dsVIDEOPORT_TYPE_RF     = 0
     dsVIDEOPORT_TYPE_BB =auto()
@@ -47,20 +46,6 @@ class dsVideoPortType(Enum):
     dsVIDEOPORT_TYPE_HDMI_INPUT =auto()
     dsVIDEOPORT_TYPE_INTERNAL =auto()
 
-class dsDisplayEvent(Enum):
-    dsDISPLAY_EVENT_CONNECTED = 0
-    dsDISPLAY_EVENT_DISCONNECTED = auto()
-    dsDISPLAY_RXSENSE_ON = auto()
-    dsDISPLAY_RXSENSE_OFF = auto()
-    dsDISPLAY_HDCPPROTOCOL_CHANGE = auto()
-    dsDISPLAY_EVENT_MAX = auto()
-
-class dsVideoAspectRatio(Enum):
-    dsVIDEO_ASPECT_RATIO_4x3 = auto()
-    dsVIDEO_ASPECT_RATIO_16x9 = auto()
-    dsVIDEO_ASPECT_RATIO_MAX = auto()
-
-
 class dsDisplayClass():
 
     """
@@ -70,7 +55,6 @@ class dsDisplayClass():
     moduleName = "dsDisplay"
     menuConfig = dir_path+ "/dsDisplay_test_suite.yml"
     testSuite = "L3 dsDisplay"
-    validationConfig = dir_path + "/../L3_TestCases/dsDisplay/dsDisplay_test_validation.yml"
 
     def __init__(self, deviceProfilePath :str, session=None, targetWorkspace="/tmp" ):
         """
@@ -79,7 +63,6 @@ class dsDisplayClass():
 
         # Load configurations for device profile and menu
         self.deviceProfile = ConfigRead( deviceProfilePath , self.moduleName)
-        self.validationProfile = ConfigRead(self.validationConfig,self.moduleName)
         self.utMenu        = UTSuiteNavigatorClass(self.menuConfig, self.moduleName, session)
         self.testSession   = session
 
@@ -118,7 +101,7 @@ class dsDisplayClass():
         """
         result = self.utMenu.select( self.testSuite, "Initialize dsDisplay")
 
-    def getDisplayHandle(self, video_port: str, port_index: int=0):
+    def selectDisplayPort(self, video_port: str, port_index: int=0):
         """
         Returns the handle of the display port.
 
@@ -145,7 +128,7 @@ class dsDisplayClass():
         promptWithAnswers[0]["input"] = str(video_port)
         promptWithAnswers[1]["input"] = str(port_index)
 
-        result = self.utMenu.select(self.testSuite, "Get display handle", promptWithAnswers)
+        result = self.utMenu.select(self.testSuite, "Select Display Port", promptWithAnswers)
 
     def getEdid(self):
         """
@@ -155,13 +138,44 @@ class dsDisplayClass():
             None.
 
         Returns:
-            None
+            Edid informaton in Dict type
+            {
+                'productCode': '',
+                'serialNumber': '',
+                'manufactureYear': '',
+                'manufactureWeek': '',
+                'hdmiDeviceType': '',
+                'isRepeater': '',
+                'physicalAddressA': '',
+                'physicalAddressB': '',
+                'physicalAddressC': '',
+                'physicalAddressD': '',
+                'numOfSupportedResolution':'',
+                'monitorName': ''
+            }
         """
         result = self.utMenu.select(self.testSuite, "Get display EDID")
+
+        if result == None:
+            return None
+
         # Define the pattern to extract EDID information
-        edidPattern = r"Result dsGetEDID\(dsDisplayEDID_t\(OUT:monitorName:\[(\w+)\], dsError_t=\[.*\]\)"
-        monitorName = self.searchPattern(result, edidPattern)
-        return monitorName
+        pattern = r"Result dsGetEDID\(dsDisplayEDID_t\(([^)]+)\)"
+        # Search for the dsGetEDID line and extract fields if present
+        match = re.search(pattern, result, re.DOTALL)
+
+        edidInfo = None
+        if match:
+            # Extract the field values from the dsDisplayEDID_t section
+            fields_str = match.group(1)
+            edidInfo = {}
+            
+            # Extract key-value pairs from the string within parentheses
+            field_pattern = r"(\w+):\[(.*?)\]"
+            for key, value in re.findall(field_pattern, fields_str):
+                edidInfo[key] = value
+
+        return edidInfo
 
     def getEdidBytes(self):
         """
@@ -173,18 +187,11 @@ class dsDisplayClass():
         Returns:
             None
         """
-        edid_list = self.deviceProfile.get("edidbytes")
         result = self.utMenu.select(self.testSuite, "Get display EDIDBytes")
-        pattern = r'edidbyte\[(8|9)\]:\[(\w{2})\]'
-        matches = re.findall(pattern, result)
-        if matches:
-            edid_values = {int(index): value for index, value in matches}
-        for key in edid_values:
-            if int(edid_values.get(key)) in edid_list:
-                if(key == 9):
-                    return True
+        pattern = r'edidbyte\[\d+\]:\[(\w+)\]'
+        edid_bytes = [int(match, 16) for match in re.findall(pattern, result)]
 
-        return None
+        return edid_bytes
 
     def getAspectRatio(self):
         """
@@ -197,11 +204,13 @@ class dsDisplayClass():
             None
         """
         result = self.utMenu.select(self.testSuite, "Get display AspectRatio")
+        if result == None:
+            return None
         aspectRatioPattern = r"Result dsGetDisplayAspectRatio\(handle:\[.*\], dsVideoAspectRatio_t:\[(.*?)\], dsError_t=\[.*?\]\)"
         aspectRatio = self.searchPattern(result, aspectRatioPattern)
         return aspectRatio
 
-    def getConnectionCallbackStatus(self):
+    def getDisplayEventFromCallback(self):
         """
         Retrieves the display event callback status from the device.
         This function reads the output from the device session to detect the
@@ -245,19 +254,11 @@ class dsDisplayClass():
 
         ports = self.deviceProfile.get("Video_Ports")
         for entry in ports:
-
             video_port_name = dsVideoPortType(entry).name
             port_index =  0# Get the index
             portLists.append((video_port_name, port_index))
 
         return portLists
-
-    def getDisplayInfoFromConfig(self):
-        monitorNames = []
-        displays = self.validationProfile.get("Displays")
-        for entry in displays:
-            monitorNames.append(displays[entry].get("Name"))
-        return monitorNames
 
     def __del__(self):
         """
@@ -282,9 +283,14 @@ if __name__ == '__main__':
 
     ports = test.getSupportedPorts()
 
-    test.getEdid(ports[0][0], ports[0][1])
-    test.getEdidBytes(ports[0][0], ports[0][1])
-    test.getAspectRatio(ports[0][0], ports[0][1])
+    edidInfo = test.getEdid(ports[0][0], ports[0][1])
+    print(edidInfo)
+
+    edidBytes = test.getEdidBytes(ports[0][0], ports[0][1])
+    print(edidBytes)
+
+    aspectRatio = test.getAspectRatio(ports[0][0], ports[0][1])
+    print(aspectRatio)
 
     test.terminate()
 
