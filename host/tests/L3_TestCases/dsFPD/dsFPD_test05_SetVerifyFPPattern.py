@@ -69,7 +69,7 @@ class dsFPD_test05_SetVerifyFPPattern(dsFPDHelperClass):
             bool: final result of the test.
         """
 
-        self.log.testStart(self.testName, '1')
+        self.log.testStart(self.testName, '5')
 
         # initialize the dsFPD module
         self.testdsFPD.initialise()

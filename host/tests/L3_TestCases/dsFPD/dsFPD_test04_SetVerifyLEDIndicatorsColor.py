@@ -70,7 +70,7 @@ class dsFPD_test04_SetVerifyLEDIndicatorsColor(dsFPDHelperClass):
             bool: final result of the test.
         """
 
-        self.log.testStart(self.testName, '1')
+        self.log.testStart(self.testName, '4')
 
         # initialize the dsFPD module
         self.testdsFPD.initialise()
