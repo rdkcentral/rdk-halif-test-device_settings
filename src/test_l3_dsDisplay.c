@@ -271,7 +271,7 @@ void test_l3_dsDisplay_initialize(void)
  * Refer to Test specification documentation
  * [ds-display_L3_Low-Level_TestSpecification.md](../../docs/pages/ds-display_L3_Low-Level_TestSpecification.md)
  */
-void test_l3_dsDisplay_get_handle(void)
+void test_l3_dsDisplay_select_display_port(void)
 {
     gTestID = 6;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
@@ -475,7 +475,7 @@ int test_l3_dsDisplay_register (void)
     }
 
     UT_add_test( pSuite, "Initialize dsDisplay", test_l3_dsDisplay_initialize);
-    UT_add_test( pSuite, "Get display handle", test_l3_dsDisplay_get_handle);
+    UT_add_test( pSuite, "Select Display Port", test_l3_dsDisplay_select_display_port);
     UT_add_test( pSuite, "Get display EDID", test_l3_dsDisplay_get_edid);
     UT_add_test( pSuite, "Get display EDIDBytes", test_l3_dsDisplay_get_edidbytes);
     UT_add_test( pSuite, "Get display AspectRatio",test_l3_dsDisplay_get_aspectratio);
