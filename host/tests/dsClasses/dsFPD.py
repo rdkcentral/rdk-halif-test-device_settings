@@ -353,7 +353,7 @@ class dsFPDClass():
         SupportedStatesPattern = r"Result dsFPGetSupportedLEDStates\(OUT:states:\[(0x\w+)\]\)"
         supportedStates = self.searchPattern(result,SupportedStatesPattern)
 
-        return supportedStates
+        return int(supportedStates,0)
 
     def terminate(self):
         """

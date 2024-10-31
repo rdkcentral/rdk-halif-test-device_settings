@@ -3,11 +3,11 @@
 dsFPD:  # Prefix must always exist
     description: "dsFPD Device Settings testing profile / menu system for UT"
     test:
-        execute: "/home/***REMOVED***/vts/build/rdk-halif-device_settings/tmp/run.sh -p /home/***REMOVED***/vts/build/rdk-halif-device_settings/tmp/Source_FPD.yaml" #Execute command
+        execute: "" #Execute command
         type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
         artifacts:
           - "../../../bin"
-          - "../../../profiles/source/Source_FPD.yaml"
+          - "../../../profiles/sink/Sink_FPD.yaml"
         suites:
             0:
                 name: "L1 dsFPD - Sink"
