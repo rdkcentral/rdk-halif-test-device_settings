@@ -84,13 +84,12 @@ class dsDisplay_test04_TestVerifyDisplayEdidBytes(dsDisplayHelperClass):
         # Initialize the dsDisplay module
         self.testdsDisplay.initialise()
 
-        result = False
-
         # Loop through the supported video ports
         for port, index in self.testdsDisplay.getSupportedPorts():
             self.testdsDisplay.selectDisplayPort(port, index)
 
             for display in self.testMonitorNameDetails:
+                result = False
                 self.log.stepStart(f'Test Display Edid Port: {port} Device: {display["Product"]}')
                 # Wait for the device connection
                 self.testConnectDisplay(port, display["Product"], True)
@@ -100,7 +99,11 @@ class dsDisplay_test04_TestVerifyDisplayEdidBytes(dsDisplayHelperClass):
 
                 edidInfo = self.parseEdidData(edidData)
 
-                result = edidInfo["manufacturer_id"] == display["manufacturer_id"]
+                result = edidInfo["manufacturerId"] == display["manufacturerId"]
+
+                if "monitorName" in edidInfo:
+                    result = display["monitorName"] in edidInfo["monitorName"]
+
                 self.log.stepResult(result, f'Test Display Edid Port: {port} Device: {display["Product"]}')
 
         #Terminate dsDisplay Module
