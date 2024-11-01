@@ -130,7 +130,6 @@ class dsVideoDeviceHelperClass(utHelperClass):
         prerequisite_cmds = self.cpe.get("test").get("player").get("prerequisites")
         if prerequisite_cmds is not None:
             for expcmd in prerequisite_cmds:
-                print(expcmd)
                 self.writeCommands(expcmd)
 
     def testPrepareFunction(self):

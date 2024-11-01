@@ -462,34 +462,41 @@ void test_l3_dsVideoDevice_GetVideoCodecInfo()
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     dsError_t status   = dsERR_NONE;
     dsVideoCodecInfo_t codecInfo;
-    int32_t choice = 0;
-    int32_t i = 0;
+    int choice = 0;
+    int32_t index = 1;
     int32_t j = 0;
 
     dsVideoDevice_getHandle();
     UT_LOG_MENU_INFO(" \t  Supported Video Codec Info:");
-    for (i = dsVIDEO_CODEC_MPEGHPART2; i < dsVIDEO_CODEC_MAX;i++)
-    {        
-            UT_LOG_MENU_INFO("\t%d. %-20s", i, UT_Control_GetMapString(dsVideoCodingFormatMappingTable, i));
+    for (dsVideoCodingFormat_t codec = dsVIDEO_CODEC_MPEGHPART2; codec < dsVIDEO_CODEC_MAX;codec <<= 1)
+    { 
+            UT_LOG_MENU_INFO("\t%d. %-20s", index, UT_Control_GetMapString(dsVideoCodingFormatMappingTable, codec));
+            index++;
     }
     UT_LOG_MENU_INFO("------------------------------------------");
     UT_LOG_MENU_INFO(" Select the Codec for Info :");
     scanf("%d", &choice);
     readAndDiscardRestOfLine(stdin);
 
-    if(choice < 0 || choice >= dsVIDEO_CODEC_MAX) 
+    if(choice <=0 || choice >= dsVIDEO_CODEC_MAX) 
     {
-       UT_LOG_ERROR("\nInvalid Display Framerate selected\n");
+       UT_LOG_ERROR("\nInvalid Codec selected\n");
        goto exit;
     }
 
+    if(choice > 2)
+    {
+        choice += 1;
+    }
 
     UT_LOG_INFO("Calling dsGetVideoCodecInfo(IN:Handle:[0x%0X],IN:Codec[%s], OUT:CodecInfo[]))",gdeviceHandle,\
                                     UT_Control_GetMapString(dsVideoCodingFormatMappingTable, choice));
+    
     status = dsGetVideoCodecInfo(gdeviceHandle, (dsVideoCodingFormat_t)choice, &codecInfo);
     UT_LOG_INFO("Result dsGetVideoCodecInfo(IN:Handle:[0x%0X],IN:Codec[%s], OUT:Codec number of Entires[%d]), dsError_t=[%s] ",gdeviceHandle,\
                                     UT_Control_GetMapString(dsVideoCodingFormatMappingTable, choice), \
             codecInfo.num_entries, UT_Control_GetMapString(dsErrorMappingTable, status));
+
 
     for(j = 0; j< codecInfo.num_entries; j++)
     {

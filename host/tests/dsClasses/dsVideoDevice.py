@@ -51,10 +51,10 @@ class dsVideoZoomMode(Enum):
     dsVIDEO_ZOOM_MAX = 12                # Out of range 
 
 class dsVideoCodec(Enum):
-    dsVIDEO_CODEC_MPEGHPART2 = 1     
-    dsVIDEO_CODEC_MPEG4PART10 = 2    
-    dsVIDEO_CODEC_MPEG2 = 4          
-    dsVIDEO_CODEC_MAX = 5
+    dsVIDEO_CODEC_MPEGHPART2  = (0x01 << 0) 
+    dsVIDEO_CODEC_MPEG4PART10 = (0x01 << 1)  
+    dsVIDEO_CODEC_MPEG2       = (0x01 << 2)  
+    dsVIDEO_CODEC_MAX         = (0x01 << 3) 
 
 class dsVideoDeviceClass():
 
@@ -221,7 +221,6 @@ class dsVideoDeviceClass():
         result = self.testSession.read_until("FrameratePreChange callback tSecond: ")
         framerateprechange = r"FrameratePreChange callback tSecond: (\d+)"
         match = re.search(framerateprechange, result)
-        print(f'PRECB_MATCH = {match}')
 
         if match:
             tSecond = match.group(1)
@@ -243,7 +242,6 @@ class dsVideoDeviceClass():
         result = self.testSession.read_until("FrameratePostChange callback tSecond: ")
         framerateprechange = r"FrameratePostChange callback tSecond: (\d+)"
         match = re.search(framerateprechange, result)
-        print(f'POSTCB_MATCH = {match}')
 
         if match:
             tSecond = match.group(1)
@@ -282,14 +280,14 @@ class dsVideoDeviceClass():
             count = codecInfo.group(2)
 
 
-        codecpattern = r"OUT:CodecProfile\[\(dsVIDEO_CODEC_\w+\)\]"
+        codecpattern = r"OUT:CodecProfile\[(dsVIDEO_CODEC_\w+)\]"
         pattern = re.search(codecpattern,result)
 
-        codecValues = 0
+        codecValues = ''
         if pattern:
             codecValues = pattern.group(0)
         
-        return codecpattern, int(count), codecValues
+        return  int(count), codecValues
 
         
     def getSupportedVideoCodingFormat(self,device:int=0):
@@ -484,15 +482,12 @@ class dsVideoDeviceClass():
         for i in range(1, len(Device)+1):
             entry = Device[i]
             SupportedVideoCodingFormats = entry['SupportedVideoCodingFormats']
-            for j in range(0, 2):
-                if j == 0:
-                    value = SupportedVideoCodingFormats & 0x02
-                    codecVal = dsVideoCodec(value).name
-                else:
-                    value = SupportedVideoCodingFormats & 0x04
-                    codecVal = dsVideoCodec(value).name
-
-                supported_CodingFormats.append(codecVal)
+            
+            codec_list = list(dsVideoCodec)
+            
+            for i, codec in enumerate(codec_list, start=1):
+                if SupportedVideoCodingFormats & codec.value:
+                    supported_CodingFormats.append(codec.name)
 
         return supported_CodingFormats	
     
