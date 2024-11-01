@@ -52,14 +52,15 @@ class dsDisplayClass():
     Device Settings Display Class
     This module provides common extensions for device Settings Display Module.
     """
-    moduleName = "dsDisplay"
-    menuConfig = dir_path+ "/dsDisplay_test_suite.yml"
-    testSuite = "L3 dsDisplay"
 
     def __init__(self, deviceProfilePath :str, session=None, targetWorkspace="/tmp" ):
         """
         Initializes the dsDisplay class function.
         """
+
+        self.moduleName = "dsDisplay"
+        self.menuConfig = dir_path+ "/dsDisplay_test_suite.yml"
+        self.testSuite = "L3 dsDisplay"
 
         # Load configurations for device profile and menu
         self.deviceProfile = ConfigRead( deviceProfilePath , self.moduleName)
@@ -124,9 +125,6 @@ class dsDisplayClass():
                     "input": str(port_index)
                 }
         ]
-
-        promptWithAnswers[0]["input"] = str(video_port)
-        promptWithAnswers[1]["input"] = str(port_index)
 
         result = self.utMenu.select(self.testSuite, "Select Display Port", promptWithAnswers)
 
