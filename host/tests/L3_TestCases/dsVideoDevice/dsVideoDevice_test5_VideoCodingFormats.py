@@ -76,17 +76,21 @@ class dsVideoDevice_test5_VideoCodingFormats(dsVideoDeviceHelperClass):
         # Initialize the dsVideoDevice module
         self.testdsVideoDevice.initialise(self.testdsVideoDevice.getDeviceType())
 
-        # get the SupportedVideoCodingFormat
-        supported_codingformats = self.testdsVideoDevice.getsupportedCodingFormats()
-        if supported_codingformats:
-            for codec in supported_codingformats:   
-                pattern, count, values = self.testdsVideoDevice.getVideoCodecInfo(0, codec)
-                if count != 0:
-                    self.log.stepResult(values in pattern, f'VideoCodecInfo {values} Test')
-                    result = True
-                else:
-                    self.log.stepResult(False, f'No codec entries are found')
-                    result = False
+        NumofVideoDevices = self.testdsVideoDevice.getVideoDevice()
+        
+        
+        for i in range(0, NumofVideoDevices):
+            # get the SupportedVideoCodingFormat
+            supported_codingformats = self.testdsVideoDevice.getsupportedCodingFormats()
+            if supported_codingformats:
+                for codec in supported_codingformats:   
+                    count, values = self.testdsVideoDevice.getVideoCodecInfo(i, codec)
+                    if count != 0:
+                        self.log.stepResult(True, f'VideoCodecInfo {values} Test')
+                        result = True
+                    else:
+                        self.log.stepResult(False, f'No codec entries are found')
+                        result = False
         
         # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()

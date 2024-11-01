@@ -55,7 +55,7 @@ class dsVideoDevice_test2_SetAndGetZoomMode(dsVideoDeviceHelperClass):
        
 
     #TODO: Current version supports only manual verification.
-    def testVerifyZoomMode(self, manual=False, videomode=False):
+    def testVerifyZoomMode(self, manual=False):
         """
         Verifies the zoom mode on specified video device.
 
@@ -65,14 +65,11 @@ class dsVideoDevice_test2_SetAndGetZoomMode(dsVideoDeviceHelperClass):
                                      Defaults to False.
 
         Returns:
-            bool: True if zoom mode is applied; otherwise, False.
+            bool: True if audio is playing; otherwise, False.
         """
-        if manual == True and videomode == True:
+        if manual == True:
             return self.testUserResponse.getUserYN(f"Is the selected Zoom mode applied in the device's output? (Y/N):")
-        elif manual == False and videomode == True:
-            return True
         else :
-            #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
@@ -95,23 +92,24 @@ class dsVideoDevice_test2_SetAndGetZoomMode(dsVideoDeviceHelperClass):
         # Initialize the dsVideoDevice module
         self.testdsVideoDevice.initialise(self.testdsVideoDevice.getDeviceType())
 
+        NumofVideoDevices = self.testdsVideoDevice.getVideoDevice()
+        for i in range(0, NumofVideoDevices):
+            for stream in self.testStreams:
+                self.testPlayer.play(stream)
+                supported_modes = self.testdsVideoDevice.getZoomModes()
+                if supported_modes:
+                    for zoomMode in supported_modes:
+                        self.testdsVideoDevice.setZoomMode(i, zoomMode)
+                        self.log.step(f'Verify setZoomMode {zoomMode}')
+                        result = self.testVerifyZoomMode(True)
+                        self.log.stepResult(result, f'Verified setZoomMode with {zoomMode}')
+                        mode = self.testdsVideoDevice.getZoomMode()
+                        self.log.stepResult(zoomMode in mode, f'Get Zoom Mode {zoomMode} Test')
+                else:
+                    self.log.error("No Zoom mode formats available for verification.")
+                    result = False
 
-        for stream in self.testStreams:
-            self.testPlayer.play(stream)
-            supported_modes = self.testdsVideoDevice.getZoomModes()
-            if supported_modes:
-                for zoomMode in supported_modes:
-                    self.testdsVideoDevice.setZoomMode(0, zoomMode)
-                    self.log.step(f'Verify setZoomMode {zoomMode}')
-                    result = self.testVerifyZoomMode(True, True)
-                    self.log.stepResult(result, f'Verified setZoomMode with {zoomMode}')
-                    mode = self.testdsVideoDevice.getZoomMode()
-                    self.log.stepResult(zoomMode in mode, f'Get Zoom Mode {zoomMode} Test')
-            else:
-                self.log.error("No Zoom mode formats available for verification.")
-                result = False
-
-        
+        self.testPlayer.stop()
         # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()
 
