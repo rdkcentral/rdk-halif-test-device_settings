@@ -144,6 +144,13 @@ const static ut_control_keyStringMapping_t dsVideoAspectRatio_mapTable[] = {
     {NULL, -1}
 };
 
+/* bool */
+const static ut_control_keyStringMapping_t bool_mapTable[] =
+{
+    {"false", (int32_t) false},
+    {"true", (int32_t) true},
+    {NULL, -1}
+};
 /**
  * @brief This function clears the stdin buffer.
  *
@@ -338,10 +345,11 @@ void test_l3_dsDisplay_get_edid(void)
 
     status = dsGetEDID(gDisplayHandle, &gEdid);
 
-    UT_LOG_INFO("Result dsGetEDID(dsDisplayEDID_t(productCode:[%d], serialNumber:[%d], manufactureYear:[%d],manufactureWeek:[%d],hdmiDeviceType:[%s], isRepeater:[%s], physicalAddressA:[%u], physicalAddressB:[%u], physicalAddressC:[%u], physicalAddressD:[%u], numOfSupportedResolution:[%d], monitorName:[%s])", \
+    UT_LOG_INFO("Result dsGetEDID(dsDisplayEDID_t(productCode:[%d], serialNumber:[%d], manufactureYear:[%d],manufactureWeek:[%d],hdmiDeviceType:[%s], isRepeater:[%s])",
                 gEdid.productCode, gEdid.serialNumber, 
                 gEdid.manufactureYear, gEdid.manufactureWeek, 
-                gEdid.hdmiDeviceType, gEdid.isRepeater, 
+                gEdid.hdmiDeviceType?"HDMI":"DVI", UT_Control_GetMapString(bool_mapTable, gEdid.isRepeater));
+    UT_LOG_INFO("Result dsGetEDID(dsDisplayEDID_t(physicalAddress:[%u.%u.%u.%u], numOfSupportedResolution:[%d], monitorName:[%s])",
                 gEdid.physicalAddressA, gEdid.physicalAddressB, 
                 gEdid.physicalAddressC, gEdid.physicalAddressD, 
                 gEdid.numOfSupportedResolution, gEdid.monitorName);

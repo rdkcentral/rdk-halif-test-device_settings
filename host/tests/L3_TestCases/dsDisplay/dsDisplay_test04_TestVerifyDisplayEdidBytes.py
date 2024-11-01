@@ -91,17 +91,17 @@ class dsDisplay_test04_TestVerifyDisplayEdidBytes(dsDisplayHelperClass):
             self.testdsDisplay.selectDisplayPort(port, index)
 
             for display in self.testMonitorNameDetails:
-                self.log.stepStart(f'Test Display Edid Port: {port} Device: {display}')
+                self.log.stepStart(f'Test Display Edid Port: {port} Device: {display["Product"]}')
                 # Wait for the device connection
-                self.testConnectDisplay(port, display, True)
+                self.testConnectDisplay(port, display["Product"], True)
 
                 # Get the Edid Bytes
                 edidData = self.testdsDisplay.getEdidBytes()
 
                 edidInfo = self.parseEdidData(edidData)
 
-                result = edidInfo["manufacturer_id"] == display
-                self.log.stepResult(result, f'Test Display Edid Port: {port} Device: {display}')
+                result = edidInfo["manufacturer_id"] == display["manufacturer_id"]
+                self.log.stepResult(result, f'Test Display Edid Port: {port} Device: {display["Product"]}')
 
         #Terminate dsDisplay Module
         self.testdsDisplay.terminate()

@@ -159,21 +159,20 @@ class dsDisplayClass():
         if result == None:
             return None
 
-        # Define the pattern to extract EDID information
-        pattern = r"Result dsGetEDID\(dsDisplayEDID_t\(([^)]+)\)"
-        # Search for the dsGetEDID line and extract fields if present
-        match = re.search(pattern, result, re.DOTALL)
+        edidInfo = {}
+        pattern = r"Result dsGetEDID\(dsDisplayEDID_t\((.*?)\)"
+        matches = re.findall(pattern, result, re.DOTALL)
 
-        edidInfo = None
-        if match:
-            # Extract the field values from the dsDisplayEDID_t section
-            fields_str = match.group(1)
-            edidInfo = {}
-            
-            # Extract key-value pairs from the string within parentheses
-            field_pattern = r"(\w+):\[(.*?)\]"
-            for key, value in re.findall(field_pattern, fields_str):
-                edidInfo[key] = value
+        for match in matches:
+            fields = match.split(",")
+            for field in fields:
+                key_value_pattern = r"(\w+):\[(.*?)\]"
+                key_value_match = re.match(key_value_pattern, field.strip())
+                key, value = field.strip().split(":")
+                if key_value_match:
+                    key = key_value_match.group(1)
+                    value = key_value_match.group(2)
+                    edidInfo[key] = value
 
         return edidInfo
 
