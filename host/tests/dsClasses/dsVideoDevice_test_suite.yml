@@ -4,7 +4,7 @@
 dsVideoDevice:  # Prefix must always exist
     description: "dsVideoDevice Device Settings testing profile / menu system for UT"
     test:
-        execute: "" #Execute command
+        execute: "<PATH On Device>/run.sh" #Execute command
         type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
         suites:
             0:

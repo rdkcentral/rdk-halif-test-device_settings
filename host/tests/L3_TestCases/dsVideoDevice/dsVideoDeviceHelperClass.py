@@ -127,7 +127,7 @@ class dsVideoDeviceHelperClass(utHelperClass):
                 self.writeCommands(cmd)
         
         # Run commands as part of test prerequisites
-        prerequisite_cmds = self.cpe.get("test").get("prerequisites")
+        prerequisite_cmds = self.cpe.get("test").get("player").get("prerequisites")
         if prerequisite_cmds is not None:
             for expcmd in prerequisite_cmds:
                 print(expcmd)
@@ -153,7 +153,7 @@ class dsVideoDeviceHelperClass(utHelperClass):
         self.testRunPrerequisites()
 
         # Create the dsVideoDevice class
-        self.testdsVideoDevice = dsVideoDeviceClass(self.deviceProfile, self.hal_session, self.deviceDownloadPath)
+        self.testdsVideoDevice = dsVideoDeviceClass(self.deviceProfile, self.hal_session)
 
         return True
 

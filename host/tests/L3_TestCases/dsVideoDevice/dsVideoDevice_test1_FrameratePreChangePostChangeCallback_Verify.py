@@ -60,6 +60,7 @@ class dsVideoDevice_test1_FrameratePreChangeCallback_Verify(dsVideoDeviceHelperC
         Checks Display device is connected and Power status is ON.
 
         Args:
+            port (str) : HDMI port
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
                                      Defaults to other verification methods
         Returns:
@@ -71,21 +72,7 @@ class dsVideoDevice_test1_FrameratePreChangeCallback_Verify(dsVideoDeviceHelperC
             #TODO: Add automation verification methods
             return False
         
-    def find_CBStatus(self, input_str: str, status: str) -> bool:
-        """
-        Finds HDCP status in a given input string.
-
-        Args:
-            input_str (str): The input log containing HDCP status.
-            status (str): The HDCP status string to look for.
-
-        Returns:
-            bool: True if the status is found, False otherwise.
-        """
-        if status in input_str:
-            return True
-        return False
-
+    
     def testFunction(self):
         """
             The main test function that verifies display framerate prechange in video device.
@@ -112,27 +99,34 @@ class dsVideoDevice_test1_FrameratePreChangeCallback_Verify(dsVideoDeviceHelperC
         result = self.checkDeviceStatus(True)
         self.log.stepResult(result,'Display Device is active')
 
+        NumofVideoDevices = self.testdsVideoDevice.getVideoDevice()
+        for i in range(0, NumofVideoDevices):
+            supported_framerate = self.testdsVideoDevice.getSupportedFrameRates()
+            if supported_framerate:
+                for framerate in supported_framerate:   
+                    self.testdsVideoDevice.setDisplayFramerate(i, framerate)
+                    time.sleep(20)
 
-        supported_framerate = self.testdsVideoDevice.getSupportedFrameRates()
-        if supported_framerate:
-            for framerate in supported_framerate:   
-                self.testdsVideoDevice.setDisplayFramerate(0, framerate)
-                time.sleep(20)
-                result = self.testdsVideoDevice.read_Callbacks("FrameratePreChange callback tSecond:")
-                if self.find_CBStatus(result, "FrameratePreChange callback tSecond:"):
-                    self.log.stepResult(True, "Framerate Prechange tSecond found in Callback")
-                else:
-                    self.log.stepResult(False, "Framerate Prechange tSecond not found in Callback")
-                    
-                result = self.testdsVideoDevice.read_Callbacks("FrameratePostChange callback tSecond:")
-                if self.find_CBStatus(result, "FrameratePostChange callback tSecond"):
-                    self.log.stepResult(True, "FrameratePostChange callback tSecond found in Callback")
-                else:
-                    self.log.stepResult(False, "FrameratePostChange callback tSecond not found in Callback")
+                    status = self.testdsVideoDevice.getFrameratePrechangeCallbackStatus()
+                    if status:
+                        result = True
+                        self.log.stepResult(result,f'Framerate Prechange tSecond {status[0]} found in Callback')
+                    else:
+                        result = False
+                        self.log.stepResult(result,f'Framerate Prechange tSecond not found in Callback')
 
-        else:
-            self.log.error("No supported framerates available for verification.")
-            result = False
+                    status = self.testdsVideoDevice.getFrameratePostchangeCallbackStatus()
+                    if status:
+                        result = True
+                        self.log.stepResult(result,f'Framerate Postchange tSecond {status[0]} found in Callback')
+                    else:
+                        result = False
+                        self.log.stepResult(result,f'Framerate Postchange tSecond not found in Callback')
+
+
+            else:
+                self.log.error("No supported framerates available for verification.")
+                result = False
 
 
         # Terminate dsVideoDevice Module
