@@ -53,6 +53,26 @@ class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
         self.testName = "test3_SetDisplayFramerate"
         super().__init__(self.testName, '1')
 
+    def testVerifyDisplayFramerate(self, manual=False, filename: str=0, frate:str=0):
+        """
+        Verifies the Display framerate on specified video device.
+
+
+        Args:
+            manual (bool, optional): If True, requires manual confirmation from the user.
+                                     Defaults to False.
+
+        Returns:
+            bool: True if selected FRF mode is visible in output device; otherwise, False.
+        """
+        if manual == True:
+            return self.testUserResponse.getUserYN(f"Played {filename} for {frate}. Whether the video playback is smooth without any streaming issues (Y/N):")
+        elif manual == False:
+            return True
+        else :
+            #TODO: Add automation verification methods
+            return False
+
 
     def testFunction(self):
         """
@@ -76,16 +96,40 @@ class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
         self.testdsVideoDevice.initialise(self.testdsVideoDevice.getDeviceType())
 
         # set the display framerate
-        supported_framerate = self.testdsVideoDevice.getSupportedFrameRates()
-        if supported_framerate:
-            for framerate in supported_framerate:   
-                frr = self.testdsVideoDevice.setDisplayFramerate(0, framerate)
-                self.log.stepResult(framerate in frr, f'Set display framerate {framerate} Test')
-            result = True
-                
-        else:
-            self.log.error("No supported framerates available.")
-            result = False
+        NumofVideoDevices = self.testdsVideoDevice.getVideoDevice()
+        
+        
+        for i in range(0, NumofVideoDevices):
+            supported_framerate = self.testdsVideoDevice.getSupportedFrameRates()
+            if supported_framerate:
+                for framerate in supported_framerate:   
+                    frr = self.testdsVideoDevice.setDisplayFramerate(i, framerate)
+                    self.log.stepResult(framerate in frr, f'Set display framerate with {framerate} ')
+
+                    for stream in self.testStreams:
+                        filename = os.path.basename(stream)
+                        if framerate in filename or '24' in filename:
+                            self.log.step(f'Wait till Playback ends.')
+                            self.log.step(f'Playing {filename}')
+
+                            self.testPlayer.play(stream)
+
+                            result = self.testVerifyDisplayFramerate(True,filename,framerate)
+                    
+                            if result and filename != '24':
+                                self.log.stepResult(result, f'Playback was fine without any streaming issues')
+                            elif result == False and filename == '24':
+                                self.log.stepResult(True, f'Playback with streaming issues')
+                            else:
+                                self.log.error("Able to observe streaming issues")
+                            if filename == framerate:
+                                break
+                            
+            else:
+                self.log.error("No supported framerates available.")
+                result = False
+            
+            self.testPlayer.stop()
 
         
         # Terminate dsVideoDevice Module

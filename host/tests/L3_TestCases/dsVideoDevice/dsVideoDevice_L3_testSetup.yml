@@ -24,10 +24,10 @@ dsVideoDevice:  # Prefix must always exist
         streams: #list of streams to be copied to device
       test3_SetDisplayFramerate:
         <<: *defaults
-        streams:
+        streams: #list of streams to be copied to device
       test4_FRFMode:
         <<: *defaults
-        streams:
+        streams: #list of streams to be copied to device
       test5_VideoCodingFormats:
         <<: *defaults
         streams:

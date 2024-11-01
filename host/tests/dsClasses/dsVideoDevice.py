@@ -74,7 +74,7 @@ class dsVideoDeviceClass():
         self.deviceProfile = ConfigRead( deviceProfilePath, self.moduleName)
         self.suitConfig    = ConfigRead(self.menuConfig, self.moduleName)
         self.utMenu        = UTSuiteNavigatorClass(self.menuConfig, self.moduleName, session)
-        self.menuSession   = session
+        self.testSession   = session
         self.utMenu.start()
 
     def searchPattern(self, haystack, pattern):
@@ -206,6 +206,51 @@ class dsVideoDeviceClass():
         ]
 
         result = self.utMenu.select(self.testSuite, "SetFRFMode", promptWithAnswers)
+
+    def getFrameratePrechangeCallbackStatus(self):
+        """
+        Retrieves the display Framerate Prechange status using a callback.
+
+        Args:
+            None.
+        Returns:
+            tuple:
+                - tSecond: Time in seconds as a integer.
+            None: If no matching signal status is found.
+        """
+        result = self.testSession.read_until("FrameratePreChange callback tSecond: ")
+        framerateprechange = r"FrameratePreChange callback tSecond: (\d+)"
+        match = re.search(framerateprechange, result)
+        print(f'PRECB_MATCH = {match}')
+
+        if match:
+            tSecond = match.group(1)
+            return tSecond
+        
+        return None
+
+    def getFrameratePostchangeCallbackStatus(self):
+        """
+        Retrieves the display Framerate Postchange status using a callback.
+
+        Args:
+            None.
+        Returns:
+            tuple:
+                - tSecond: Time in seconds as a integer.
+            None: If no matching signal status is found.
+        """
+        result = self.testSession.read_until("FrameratePostChange callback tSecond: ")
+        framerateprechange = r"FrameratePostChange callback tSecond: (\d+)"
+        match = re.search(framerateprechange, result)
+        print(f'POSTCB_MATCH = {match}')
+
+        if match:
+            tSecond = match.group(1)
+            return tSecond
+        
+        return None
+
 
     def getVideoCodecInfo(self,device:int=0,codec:str=0):
         """
@@ -402,26 +447,6 @@ class dsVideoDeviceClass():
         self.utMenu.stop()
     
         
-    def read_Callbacks(self, input_str: str) -> str:
-        """
-        Reads data from the menu session until a specified input string is encountered.
-
-        This method is useful for capturing output or response data from the menu session
-        until a predefined string is reached, which can be important for synchronizing
-        interactions or processing command outputs.
-
-        Args:
-            input_str (str): The string that indicates where to stop reading from the session.
-
-        Returns:
-            str: The data read from the session up to the specified input string.
-
-        Example:
-            output = read_Callbacks("EndOfResponse")
-        """
-        result = self.menuSession.read_until(input_str)
-        return result
-    
     def getSupportedFrameRates(self):
         """
         Returns the supported Framerate Formats on device.
