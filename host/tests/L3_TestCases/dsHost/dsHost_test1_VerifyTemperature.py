@@ -121,12 +121,14 @@ class dsHost_test1_VerifyTemperature(utHelperClass):
         # Initialize the dsHost module
         self.testdsHost.initialise()
 
+        # Ask the user to put the DUT in a heating chamber
         self.testUserResponse.getUserYN(f"Put the DUT in a heating chamber and press Enter:")
 
         # Get the CPU temperature
         temp1 = self.testdsHost.getCPUTemperature()
         self.log.stepStart(f'Temperature 1: {temp1}')
 
+        # Ask the user to increase the temperature
         self.testUserResponse.getUserYN(f"Increase the temperature and press Enter:")
         # Wait for 60 seconds
         time.sleep(60)
