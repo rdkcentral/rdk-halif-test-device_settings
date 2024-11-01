@@ -71,21 +71,12 @@ class dsHost_test1_VerifyTemperature(utHelperClass):
         """
 
         # List of streams with path
-        self.testStreams = []
-
         self.deviceDownloadPath = self.cpe.get("target_directory")
 
         #download test artifacts to device
         url = self.testSetup.assets.device.test1_VerifyTemperature.artifacts
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-
-        #download test streams to device
-        url = self.testSetup.assets.device.test1_VerifyTemperature.streams
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            for streampath in url:
-                self.testStreams.append(self.deviceDownloadPath + "/" + os.path.basename(streampath))
 
     def testCleanAssets(self):
         """
