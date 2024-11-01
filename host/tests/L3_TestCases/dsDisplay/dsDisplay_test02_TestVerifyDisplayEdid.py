@@ -86,16 +86,16 @@ class dsDisplay_test02_TestVerifyDisplayEdid(dsDisplayHelperClass):
             self.testdsDisplay.selectDisplayPort(port, index)
 
             for display in self.testMonitorNameDetails:
-                self.log.stepStart(f'Test Display Edid Port: {port} Device: {display}')
+                self.log.stepStart(f'Test Display Edid Port: {port} Device: {display["Product"]}')
                 # Wait for the device connection
-                self.testConnectDisplay(port, display, True)
+                self.testConnectDisplay(port, display["Product"], True)
 
                 # Get the Edid information
                 edidInfo = self.testdsDisplay.getEdid()
 
-                if edidInfo and "monitorName" in edidInfo:
-                    result = edidInfo["monitorName"] == display
-                self.log.stepResult(result, f'Test Display Edid Port: {port} Device: {display}')
+                if edidInfo and "productCode" in edidInfo:
+                    result = edidInfo["productCode"] == display["manufacturer_id"]
+                self.log.stepResult(result, f'Test Display Edid Port: {port} Device: {display["Product"]}')
 
         #Terminate dsDisplay Module
         self.testdsDisplay.terminate()

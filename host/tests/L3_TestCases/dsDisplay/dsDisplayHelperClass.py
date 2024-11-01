@@ -49,7 +49,11 @@ class dsDisplayHelperClass(utHelperClass):
         self.testSetupPath = os.path.join(dir_path, "dsDisplay_L3_testSetup.yml")
         self.moduleName = "dsDisplay"
         self.rackDevice = "dut"
-        self.testMonitorNameDetails = ["Samsung", "Hisense", "Element", "Llama"]
+        self.testMonitorNameDetails = [
+            {"Product":"LG", "manufacturer_id": "GSM"},
+            {"Product":"Philips", "manufacturer_id": "PHL"},
+            {"Product":"Element", "manufacturer_id": "ELE"}
+        ]
 
         super().__init__(testName, qcId, log)
 
