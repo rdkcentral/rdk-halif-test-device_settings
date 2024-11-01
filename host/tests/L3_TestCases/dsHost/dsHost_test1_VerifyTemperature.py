@@ -31,6 +31,7 @@ sys.path.append(dir_path+"/../")
 from dsClasses.dsHost import dsHostClass
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
+from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 
 class dsHost_test1_VerifyTemperature(utHelperClass):
 
@@ -53,6 +54,9 @@ class dsHost_test1_VerifyTemperature(utHelperClass):
 
         # Open Session for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
+
+        # Create user response Class
+        self.testUserResponse = utUserResponse()
 
         # Get path to device profile file
         self.deviceProfile = dir_path + "/" + self.cpe.get("test").get("profile")
@@ -117,12 +121,13 @@ class dsHost_test1_VerifyTemperature(utHelperClass):
         # Initialize the dsHost module
         self.testdsHost.initialise()
 
+        self.testUserResponse.getUserYN(f"Put the DUT in a heating chamber and press Enter:")
+
         # Get the CPU temperature
         temp1 = self.testdsHost.getCPUTemperature()
         self.log.stepStart(f'Temperature 1: {temp1}')
 
-        self.log.stepStart(f'Put the device in a heating chamber, or in some way to represent an increase in tempearture')
-
+        self.testUserResponse.getUserYN(f"Increase the temperature and press Enter:")
         # Wait for 60 seconds
         time.sleep(60)
 
