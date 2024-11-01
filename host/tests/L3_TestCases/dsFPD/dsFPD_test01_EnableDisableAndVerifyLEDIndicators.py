@@ -65,11 +65,12 @@ class dsFPD_test01_EnableDisableAndVerifyLEDIndicators(dsFPDHelperClass):
             self.testdsFPD.setState(indicator.name,dsFPDState.dsFPD_STATE_ON.name)
             result = self.testVerifyIndicator(indicator.name,dsFPDState.dsFPD_STATE_ON.name, True)
             self.log.stepResult(result, f'Indicator State Verification {indicator.name} indicator')
-            result = False
-            state = self.testdsFPD.getState(indicator.name)
-            if state == dsFPDState.dsFPD_STATE_ON.name:
-                result = True
-            self.log.stepResult(result, f'Indicator {indicator.name} get  {state} state')
+            if result == True:
+                verify = False
+                state = self.testdsFPD.getState(indicator.name)
+                if state == dsFPDState.dsFPD_STATE_ON.name:
+                    verify = True
+                self.log.stepResult(verify, f'Indicator {indicator.name} get  {state} state')
 
             # Indicator Disable test
             self.log.stepStart(f'Set {indicator.name} state OFF')
@@ -77,11 +78,12 @@ class dsFPD_test01_EnableDisableAndVerifyLEDIndicators(dsFPDHelperClass):
             self.testdsFPD.setState(indicator.name,dsFPDState.dsFPD_STATE_OFF.name)
             result = self.testVerifyIndicator(indicator.name,dsFPDState.dsFPD_STATE_OFF.name,True)
             self.log.stepResult(result, f'Indicator State Verification {indicator.name} indicator')
-            result = False
-            state = self.testdsFPD.getState(indicator.name)
-            if state == dsFPDState.dsFPD_STATE_OFF.name:
-                result = True
-            self.log.stepResult(result, f'Indicator {indicator.name} get  {state} state')
+            if result == True:
+                verify = False
+                state = self.testdsFPD.getState(indicator.name)
+                if state == dsFPDState.dsFPD_STATE_OFF.name:
+                    verify = True
+                self.log.stepResult(verify, f'Indicator {indicator.name} get  {state} state')
 
         # Terminate dsFPD Module
         self.testdsFPD.terminate()

@@ -868,6 +868,7 @@ void test_l1_dsVideoDevice_positive_dsGetVideoCodecInfo(void)
     int j = 1;
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
         if(gSourceType == 1) {
             // Step 03: Iterate over all codecs
             for(dsVideoCodingFormat_t codec = dsVIDEO_CODEC_MPEGHPART2; codec < dsVIDEO_CODEC_MAX; codec = (dsVideoCodingFormat_t)(codec + 1)){
