@@ -51,13 +51,8 @@ class dsHost_test1_VerifyTemperature(utHelperClass):
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
-        # Open Session for player
-        self.player_session = self.dut.getConsoleSession("ssh_player")
-
         # Open Session for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
-
-        player = self.cpe.get("test").get("player")
 
         # Get path to device profile file
         self.deviceProfile = dir_path + "/" + self.cpe.get("test").get("profile")
@@ -126,6 +121,7 @@ class dsHost_test1_VerifyTemperature(utHelperClass):
         temp1 = self.testdsHost.getCPUTemperature()
         self.log.stepStart(f'Temperature 1: {temp1}')
 
+        self.log.stepStart(f'Put the device in a heating chamber, or in some way to represent an increase in tempearture')
 
         # Wait for 60 seconds
         time.sleep(60)
@@ -134,10 +130,9 @@ class dsHost_test1_VerifyTemperature(utHelperClass):
         temp2 = self.testdsHost.getCPUTemperature()
         self.log.stepStart(f'Temperature 1: {temp2}')
 
-        # Check if the temperature is within expected range while in same mode
-        # Are we fine with this range? What validation do we want?
-        self.log.stepStart(f'Check if the temperature is within expected range')
-        result = abs(temp1 - temp2) < 5
+        # Check to make sure the temperature has increased
+        self.log.stepStart(f'Check that the temperature has increased')
+        result = temp1 < temp2
 
         # Log the result
         self.log.stepStart(f'Temperature difference:: {abs(temp1 - temp2)}')
