@@ -165,8 +165,9 @@ class dsDisplayClass():
             fields = match.split(",")
             for field in fields:
                 key_value_pattern = r"(\w+):\[(.*?)\]"
-                key_value_match = re.match(key_value_pattern, field.strip())
-                key, value = field.strip().split(":")
+                cleaned_string = field.replace("\r", "").replace("\n", "")
+                key_value_match = re.match(key_value_pattern, cleaned_string.strip())
+
                 if key_value_match:
                     key = key_value_match.group(1)
                     value = key_value_match.group(2)
