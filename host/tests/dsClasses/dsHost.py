@@ -50,6 +50,10 @@ class dsHostClass():
         """
         Initializes the dsHost class function.
         """
+
+        self.moduleName = "dsHost"
+        self.menuConfig =  dir_path + "/dsHost_test_suite.yml"
+        self.testSuite = "L3 dsHost"
         self.deviceProfile = ConfigRead( deviceProfilePath, self.moduleName)
         self.utMenu        = UTSuiteNavigatorClass(self.menuConfig, self.moduleName, session)
 
@@ -94,30 +98,6 @@ class dsHostClass():
             print("Error: Could not get CPU temperature")
             return None
 
-    def getSoCID(self):
-        """
-        Get the SoC ID.
-
-        Args:
-            None
-
-        Returns:
-            None
-        """
-        result = self.utMenu.select( self.testSuite, "Get SoC ID")
-
-    def getHostEDID(self):
-        """
-        Get the Host EDID.
-
-        Args:
-            None
-
-        Returns:
-            None
-        """
-        result = self.utMenu.select( self.testSuite, "Get Host EDID")
-
     def terminate(self):
         """
         Terminates the host plugin.
@@ -154,8 +134,6 @@ if __name__ == '__main__':
 
     test.initialise()
     test.getCPUTemperature()
-    test.getSoCID()
-    test.getHostEDID()
     test.terminate()
 
     shell.close()
