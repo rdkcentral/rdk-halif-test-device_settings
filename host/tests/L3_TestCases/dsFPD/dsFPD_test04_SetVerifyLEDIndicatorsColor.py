@@ -94,11 +94,12 @@ class dsFPD_test04_SetVerifyLEDIndicatorsColor(dsFPDHelperClass):
                 self.testdsFPD.setIndicatorColor(indicator.name,color.value)
                 result = self.testVerifyIndicatorColor(indicator.name,color.name, True)
                 self.log.stepResult(result, f'Color Verification for {indicator.name} indicator, {color.name} Color')
-                retrievedColor = self.testdsFPD.getIndicatorColor(indicator.name)
-                result = False
-                if retrievedColor == color.name:
-                    result = True
-                self.log.stepResult(result, f'Indicator Get Color Verification {indicator.name} indicator, {retrievedColor}')
+                if result == True:
+                    retrievedColor = self.testdsFPD.getIndicatorColor(indicator.name)
+                    verify = False
+                    if retrievedColor == color.name:
+                        verify = True
+                    self.log.stepResult(verify, f'Indicator Get Color Verification {indicator.name} indicator, {retrievedColor}')
 
             self.log.stepStart(f'Set {indicator.name} state OFF')
             # Disable the Indicator

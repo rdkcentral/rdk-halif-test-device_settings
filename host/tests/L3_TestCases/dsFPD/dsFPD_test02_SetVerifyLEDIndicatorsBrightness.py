@@ -91,30 +91,32 @@ class dsFPD_test02_SetVerifyLEDIndicatorsBrightness(dsFPDHelperClass):
             self.testdsFPD.setBrightness(indicator.name,minBrightness)
             result = self.testVerifyIndicatorBrightness(indicator.name,minBrightness, True)
             self.log.stepResult(result, f'Indicator Brightness Verification {indicator.name} indicator')
-            brightness = self.testdsFPD.getBrightness(indicator.name)
-            result = False
-            if int(brightness) == minBrightness:
-               result = True 
-            self.log.stepResult(result, f'Indicator Get Brightness Verification {indicator} indicator {brightness}%')
+            if result ==True:
+                brightness = self.testdsFPD.getBrightness(indicator.name)
+                verify = False
+                if int(brightness) == minBrightness:
+                    verify = True 
+                self.log.stepResult(verify, f'Indicator Get Brightness Verification {indicator} indicator {brightness}%')
 
             self.testdsFPD.setBrightness(indicator.name,avgBrightness)
             result = self.testVerifyIndicatorBrightness(indicator.name,avgBrightness, True)
             self.log.stepResult(result, f'Indicator Brightness Verification {indicator} indicator')
-            brightness = self.testdsFPD.getBrightness(indicator.name)
-            result = False
-            if int(brightness) == avgBrightness:
-               result = True 
-            self.log.stepResult(result, f'Indicator Get Brightness Verification {indicator} indicator {brightness}%')
+            if result ==True:
+                brightness = self.testdsFPD.getBrightness(indicator.name)
+                verify = False
+                if int(brightness) == avgBrightness:
+                    verify = True 
+                self.log.stepResult(verify, f'Indicator Get Brightness Verification {indicator} indicator {brightness}%')
 
             self.testdsFPD.setBrightness(indicator.name,maxBrightness)
             result = self.testVerifyIndicatorBrightness(indicator.name,maxBrightness, True)
             self.log.stepResult(result, f'Indicator Brightness Verification {indicator} indicator')
-            brightness = self.testdsFPD.getBrightness(indicator.name)
-            result = False
-            if int(brightness) == maxBrightness:
-               result = True
- 
-            self.log.stepResult(result, f'Indicator Get Brightness Verification {indicator} indicator {brightness}%')
+            if result == True:
+                brightness = self.testdsFPD.getBrightness(indicator.name)
+                verify = False
+                if int(brightness) == maxBrightness:
+                    verify = True
+                self.log.stepResult(verify, f'Indicator Get Brightness Verification {indicator} indicator {brightness}%')
             # Indicator Disable test
             self.log.stepStart(f'Set {indicator.name} state OFF')
             # Disable the Indicator

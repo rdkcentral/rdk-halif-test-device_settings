@@ -83,11 +83,13 @@ class dsFPD_test05_SetVerifyFPPattern(dsFPDHelperClass):
                 continue
             self.testdsFPD.setLedStatePattern(pattern.name)
             result = self.testVerifyIndicatorPattern(pattern.name, True)
-            currentPattern = self.testdsFPD.getLedStatePattern()
-            result = False
-            if currentPattern == pattern.name:
-                result = True
-            self.log.stepResult(result, f'Front Panel Get Pattern Verification for {pattern.name}, retrieved Pattern {currentPattern}')
+            self.log.stepResult(result, f'Front Panel Get Pattern Manual Verification for {pattern.name}, retrieved Pattern {currentPattern}')
+            if result ==True:
+                currentPattern = self.testdsFPD.getLedStatePattern()
+                verify = False
+                if currentPattern == pattern.name:
+                    verify = True
+                self.log.stepResult(verify, f'Front Panel Get Pattern Verification for {pattern.name}, retrieved Pattern {currentPattern}')
         # Terminate dsFPD Module
         self.testdsFPD.terminate()
 
