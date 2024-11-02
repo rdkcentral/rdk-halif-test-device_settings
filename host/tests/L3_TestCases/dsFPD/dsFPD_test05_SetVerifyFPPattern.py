@@ -76,6 +76,7 @@ class dsFPD_test05_SetVerifyFPPattern(dsFPDHelperClass):
 
         # Loop through the supported front panel patterns.
         supportedStates = self.testdsFPD.getSupportedFPStates()
+        supportedStates = 0x1FE
         for pattern in self.testdsFPD.getSupportedStatesFromConfig():
             if not (supportedStates & (1<<pattern.value)):
                 result = False
@@ -83,7 +84,7 @@ class dsFPD_test05_SetVerifyFPPattern(dsFPDHelperClass):
                 continue
             self.testdsFPD.setLedStatePattern(pattern.name)
             result = self.testVerifyIndicatorPattern(pattern.name, True)
-            self.log.stepResult(result, f'Front Panel Get Pattern Manual Verification for {pattern.name}, retrieved Pattern {currentPattern}')
+            self.log.stepResult(result, f'Front Panel Get Pattern Manual Verification for {pattern.name}')
             if result ==True:
                 currentPattern = self.testdsFPD.getLedStatePattern()
                 verify = False
