@@ -5,7 +5,11 @@ dsVideoPort:
         extendedEnumsSupported: false
     Number_of_ports: 1
 
-    # 8-Bit, 10-bit and 12 bit
+    #dsDISPLAY_COLORDEPTH_UNKNOWN = 0x0
+    #dsDISPLAY_COLORDEPTH_8BIT = 0x01
+    #dsDISPLAY_COLORDEPTH_10BIT = 0x0
+    #dsDISPLAY_COLORDEPTH_12BIT = 0x04
+    #dsDISPLAY_COLORDEPTH_AUTO = 0x08
     color_depth: 10
 
     Ports:
