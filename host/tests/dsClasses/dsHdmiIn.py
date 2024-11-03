@@ -199,12 +199,12 @@ class dsHdmiInClass():
 
         This function reads the output from the device session to detect the
         signal  status. The callback message contains the port number
-        and the signal status (dsHDMI_IN_SIGNAL_STATUS_NOSIGNAL or 
+        and the signal status (dsHDMI_IN_SIGNAL_STATUS_NOSIGNAL or
         dsHDMI_IN_SIGNAL_STATUS_UNSTABLE or dsHDMI_IN_SIGNAL_STATUS_NOTSUPPORTED
         or dsHDMI_IN_SIGNAL_STATUS_STABLE). The function parses the message
-        and returns the port ,signal status and retrieved data present in list 
+        and returns the port ,signal status and retrieved data present in list
         as "true" or None if not present.
-        
+
         Args:
             None.
         Returns:
@@ -222,7 +222,7 @@ class dsHdmiInClass():
             port = match.group(1)
             signalstatus = match.group(2)
             return port, signalstatus
-        
+
         return None
 
     def getHdmiInPortCallbackStatus(self):
@@ -446,13 +446,13 @@ class dsHdmiInClass():
 
         result = self.utMenu.select(self.testSuite, "Select Port", promptWithAnswers)
 
-    def scaleHdmiInvdieo(self, xcord:int=0, ycord:int=0, width:int=0, height:int=0):
+    def scaleHdmiInVideo(self, xCord:int=0, yCord:int=0, width:int=0, height:int=0):
         """
         Scale video of specified HdmiIn port.
 
         Args:
-            xcord (int, optional): xcoordiante. Defaults to 0
-            ycord (int, optional): ycoordiante. Defaults to 0
+            xCord (int, optional): x coordinate. Defaults to 0
+            yCord (int, optional): y coordinate. Defaults to 0
             width (int, optional): width. Defaults to 0
             height(int, optional): height. Defaults to 0
 
@@ -463,12 +463,12 @@ class dsHdmiInClass():
                 {
                     "query_type": "direct",
                     "query": "Enter the x coordinate to select",
-                    "input": str(xcord)
+                    "input": str(xCord)
                 },
                 {
                     "query_type": "direct",
                     "query": "Enter the y coordinate to select",
-                    "input": str(ycord)
+                    "input": str(yYord)
                 },
                 {
                     "query_type": "direct",
@@ -483,7 +483,7 @@ class dsHdmiInClass():
         ]
 
         result = self.utMenu.select(self.testSuite, "Scale Video", promptWithAnswers)
-  
+
     def getSupportedPorts(self):
         """
         Returns a list of supported Hdmi In ports on the device.
@@ -508,7 +508,7 @@ class dsHdmiInClass():
             portList.append(f'dsHDMI_IN_PORT_{i}')
 
         return portList
-  
+ 
     def getVideoZoomModeList(self):
         """
         gets supported Zoom Mode as list.
