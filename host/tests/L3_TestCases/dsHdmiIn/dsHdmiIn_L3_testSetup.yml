@@ -12,7 +12,7 @@ dsHdmiIn:
         streams: []
       test2_SignalChangeCallback_Verify:
         <<: *defaults
-        postcmd:
+        postCmd:
         streams: []
       test3_PortStatusCallback_Verify:
         <<: *defaults
@@ -23,7 +23,7 @@ dsHdmiIn:
       test5_AllmChangeCallback_Verify:
         <<: *defaults
         streams: []
-      test6_AVlatncyCallback_Verify:
+      test6_AVlatencyCallback_Verify:
         <<: *defaults
         streams: []
       test7_AVIChangeCallback_Verify:
@@ -32,7 +32,7 @@ dsHdmiIn:
       test8_SelectPortAndVerifyPortStatus:
         <<: *defaults
         streams: []
-      test9_ScalevideoAndVerify:
+      test9_ScaleVideoAndVerify:
         <<: *defaults
         streams: []
       test10_ZoomModeAndVerify:
@@ -47,6 +47,6 @@ dsHdmiIn:
       test13_SetAndGetEDIDVersion:
         <<: *defaults
         streams: []
-      test14_SetAndGetEDID2ALLMsupport:
+      test14_SetAndGetEDID2ALLMSupport:
         <<: *defaults
         streams: []
