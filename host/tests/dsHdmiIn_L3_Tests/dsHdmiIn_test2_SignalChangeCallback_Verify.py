@@ -104,15 +104,15 @@ class dsHdmiIn_test2_SignalChangeCallback_Verify(utHelperClass):
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    def testRunPostreiquisites(self):
+    def testRunPostRequisites(self):
         """
-        Executes postrequisite commands listed in test-setup configuration file on the DUT.
+        Executes postRequisite commands listed in test-setup configuration file on the DUT.
 
         Args:
             None.
         """
 
-       # Run commands as part of test postrequisites
+       # Run commands as part of test postRequisites
         test = self.testSetup.get("assets").get("device").get(self.testName)
         cmds = test.get("postcmd")
         if cmds is not None:
@@ -167,12 +167,12 @@ class dsHdmiIn_test2_SignalChangeCallback_Verify(utHelperClass):
         audmix = 0      #default value false
         videoplane = 0  #Always select primary plane.
         topmost = 1     #Always should be true.
-   
+
         # Loop through the supported HdmiIn ports
         for port in self.testdsHdmiIn.getSupportedPorts():
             self.log.stepStart(f'Select {port} Port')
             self.log.step(f'Select {port} Port')
-            
+
             # Check the HdmiIn device connected to is active
             result = self.connectDevice(True, port)
             self.log.step(result,f'Hdmi In Device is active {result} on {port}')
@@ -191,8 +191,8 @@ class dsHdmiIn_test2_SignalChangeCallback_Verify(utHelperClass):
         # Clean the assets downloaded to the device
         self.testCleanAssets()
 
-        #Run postrequisites listed in the test setup configuration file 
-        self.testRunPostreiquisites()
+        #Run postRequisites listed in the test setup configuration file
+        self.testRunPostRequisites()
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()

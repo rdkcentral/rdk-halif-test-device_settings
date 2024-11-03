@@ -163,7 +163,7 @@ class dsHdmiInClass():
         Returns:
             None
         """
-        result = self.utMenu.select(self.testSuite, "Terminate dsHdmiIn")
+        result = self.utMenu.select(self.testSuite, "Terminate HdmiIn")
 
     def getHDMIConnectionCallbackStatus(self):
         """
@@ -273,14 +273,27 @@ class dsHdmiInClass():
             None: If no matching signal status is found.
         """
         result = self.testSession.read_until("Result dsHdmiInGetCurrentVideoMode OUT:")
-        videomodepattern = r'Result dsHdmiInGetCurrentVideoMode OUT:port:\s*\[([^]]+)\].*?pixelResolution:\s*\[([^]]+)\].*?aspectRatio\[\s*([^]]+)\]'
-        match = re.search(videomodepattern, result,re.DOTALL)
+        # The keyword you're searching for
+        search_string = "dsHdmiInGetCurrentVideoMode"
+
+        # Find all occurrences
+        match = list(re.finditer(search_string, result))
+
 
         if match:
-            port = match.group(1)
-            pixelresolution = match.group(2)
-            aspectratio = match.group(3)
-            return port, pixelresolution, aspectratio
+            last_match = match[-1]
+            start_index = last_match.start()
+            end_index = last_match.end()
+            # Extracting context around the last match
+            context = result[max(0, start_index - 300):end_index + 300]
+            print(context)
+            videomodepattern = r'Result dsHdmiInGetCurrentVideoMode OUT:port:\s*\[([^]]+)\].*?pixelResolution:\s*\[([^]]+)\].*?aspectRatio\[\s*([^]]+)\]'
+            matches = re.search(videomodepattern, context,re.DOTALL)
+            if matches:
+                port = matches.group(1)
+                pixelresolution = matches.group(2)
+                aspectratio = matches.group(3)
+                return port, pixelresolution, aspectratio
         
         return None
 
@@ -449,22 +462,22 @@ class dsHdmiInClass():
         promptWithAnswers = [
                 {
                     "query_type": "direct",
-                    "query": "Select x cordiante:",
+                    "query": "Enter the x coordinate to select",
                     "input": str(xcord)
                 },
                 {
                     "query_type": "direct",
-                    "query": "Select y coordinate:",
+                    "query": "Enter the y coordinate to select",
                     "input": str(ycord)
                 },
                 {
                     "query_type": "direct",
-                    "query": "Select width:",
+                    "query": "Enter the width to select",
                     "input": str(width)
                 },
                 {
                     "query_type": "direct",
-                    "query": "Select height:",
+                    "query": "Enter the height to select",
                     "input": str(height)
                 }
         ]
@@ -565,12 +578,12 @@ class dsHdmiInClass():
         promptWithAnswers = [
              {
                 "query_type": "list",
-                "query": "Select dsHdmiIn Port:",
-                "input": port_type
+                "query": "List of supported ports:",
+                "input": str(port_type)
              },
              {
                 "query_type": "list",
-                "query": "Selected EDID Version",
+                "query": "Please select from availabe edid versions",
                 "input": edidversion
              }
         ]
@@ -589,8 +602,8 @@ class dsHdmiInClass():
         promptWithAnswers = [
             {
                 "query_type": "list",
-                "query": "Select dsHdmiIn Port",
-                "input": port_type
+                "query": "List of supported ports:",
+                "input": str(port_type)
             }
         ]
         
@@ -615,8 +628,8 @@ class dsHdmiInClass():
         promptWithAnswers = [
             {
                 "query_type": "list",
-                "query": "Select dsHdmiIn Port",
-                "input": port_type
+                "query": "List of supported ports:",
+                "input": str(port_type)
             }
         ]
         edid_list = self.deviceProfile.get("edidbytes")
@@ -644,11 +657,20 @@ class dsHdmiInClass():
         promptWithAnswers = [
             {
                 "query_type": "list",
-                "query": "Select dsHdmiIn Port",
-                "input": port_type
+                "query": "List of supported ports:",
+                "input": str(port_type)
             }
         ]
+
         result = self.utMenu.select( self.testSuite, "Get Spdinfo", promptWithAnswers)
+        typeStatusPattern = r'Result dsGetHDMISPDInfo IN:port:\[(\w+)\] OUT:spdinfo:\[(\w+)\]'
+        match = re.search(typeStatusPattern, result)
+        if match:
+            port = match.group(1)
+            spdinfo = match.group(2)
+            print(f"Port: {port}")
+            print(f"SPD Info: {spdinfo}")
+            return spdinfo
    
     def setEdid2Allm(self, port_type:str=0, allm_support:int=0):
         """
@@ -663,12 +685,12 @@ class dsHdmiInClass():
         promptWithAnswers = [
             {
                 "query_type": "direct",
-                "query": "List of supported ports",
-                "input": port_type
+                "query": "List of supported ports:",
+                "input": str(port_type)
             },
             {
                 "query_type": "direct",
-                "query": "Select allm support",
+                "query": "Enter the allmsupport to select",
                 "input": str(allm_support)
             }
 
@@ -688,8 +710,8 @@ class dsHdmiInClass():
         promptWithAnswers = [
             {
                 "query_type": "direct",
-                "query": "List of supported ports",
-                "input": port_type
+                "query": "List of supported ports:",
+                "input": str(port_type)
             }
         ]
 
