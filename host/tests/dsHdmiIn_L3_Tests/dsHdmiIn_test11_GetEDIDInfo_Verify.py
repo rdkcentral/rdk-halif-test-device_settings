@@ -91,17 +91,37 @@ class dsHdmiIn_test11_GetEDIDInfo_Verify(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
-        #Run test specific commands
-        cmds = self.testSetup.assets.device.test11_GetEDIDInfo_Verify.execute
+        # Run commands as part of test prerequisites
+        test = self.testSetup.get("assets").get("device").get(self.testName)
+        cmds = test.get("execute")
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
+
+    #TODO: Current version supports only manual verification.
+    def CheckDeviceStatus(self, manual=False, port_type:str=0):
+        """
+        Verifies whether the particular port video scaled or not.
+
+        Args:
+            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
+                                     Defaults to other verification methods
+
+        Returns:
+            bool
+        """
+        if manual == True:
+            self.testUserResponse.getUserYN(f'Please connect the {port_type} and press Enter:')
+            return self.testUserResponse.getUserYN(f'Is HdmiIn device connected and Displayed is ON {port_type} press Y/N:')
+        else:
+            #TODO: Add automation verification methods
+            return False
       
     def testFunction(self):
         """
@@ -129,12 +149,25 @@ class dsHdmiIn_test11_GetEDIDInfo_Verify(utHelperClass):
 
         # Initialize the dsHdmiIn module
         self.testdsHdmiIn.initialise()
+        audmix = 0      #default value false
+        videoplane = 0  #Always select primary plane.
+        topmost = 1     #Always should be true.
 
         # Loop through the supported HdmiIn ports
         for port in self.testdsHdmiIn.getSupportedPorts():
-            self.log.stepStart(f'{port} Port')
+            self.log.stepStart(f'Select {port} Port')
+            self.log.step(f'Select {port} Port')
 
-            #Setting ALLM on particular Hdmi input to true and false
+            # Check the HdmiIn device connected to is active
+            result = self.CheckDeviceStatus(True,port)
+            #self.log.stepResult(result,f'Hdmi In Device is active {result} on {port}')
+            if not result:
+                # Select the HdmiIn port
+                self.testdsHdmiIn.selectHDMIInPort(port, audmix, videoplane, topmost)
+                self.log.step(f'Selected port {port} Port')
+            # video scaling of HdmiIn port
+
+            #get EDID Info on particular Hdmi input to true and false
             result = self.testdsHdmiIn.getEdidInfo(port)
             if result == True:
                 self.log.stepResult(result,f'Verified EDID Info received on {port}')

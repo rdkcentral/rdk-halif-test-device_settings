@@ -106,9 +106,9 @@ class dsHdmiIn_test9_ScalevideoAndVerify(utHelperClass):
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    def testRunPostreiquisites(self):
+    def testRunPostRequisites(self):
         """
-        Executes postrequisite commands listed in test-setup configuration file on the DUT.
+        Executes postRequisite commands listed in test-setup configuration file on the DUT.
 
         Args:
             None.
@@ -122,7 +122,7 @@ class dsHdmiIn_test9_ScalevideoAndVerify(utHelperClass):
                 self.writeCommands(cmd)
 
     #TODO: Current version supports only manual verification.
-    def CheckDeviceStatusAndVerifyVideoScale(self, manual=False, port_type:str=0, videoscale:str=0):
+    def CheckDeviceStatusAndVerifyVideoScale(self, manual=False, port_type:str=0, videoscale:str=0,xcord:str=0, ycord:str=0, width:str=0, height:str=0):
         """
         Verifies whether the particular port video scaled or not.
 
@@ -134,9 +134,10 @@ class dsHdmiIn_test9_ScalevideoAndVerify(utHelperClass):
             bool
         """
         if manual == True and videoscale == False:
-            return self.testUserResponse.getUserYN(f'Connect HdmiIn device on {port_type} press Enter:')
+            self.testUserResponse.getUserYN(f'Please connect the {port_type} and press Enter:')
+            return self.testUserResponse.getUserYN(f'Is HdmiIn device connected and Displayed is ON {port_type} press Y/N:')
         elif manual == True and videoscale == True:
-            return self.testUserResponse.getUserYN(f'Check video scaled on {port_type} press Enter:')
+            return self.testUserResponse.getUserYN(f'Check Video is Scale with {xcord}*{ycord}*{width}*{height} on {port_type} Port press Y/N:')
         else:
             #TODO: Add automation verification methods
             return False
@@ -167,11 +168,11 @@ class dsHdmiIn_test9_ScalevideoAndVerify(utHelperClass):
 
         # Initialize the dsHdmiIn module
         self.testdsHdmiIn.initialise()
-   
+
         audmix = 0      #default value false
         videoplane = 0  #Always select primary plane.
         topmost = 1     #Always should be true.
-        
+
         # x-coordiante, y-coordinate, width, height list
         videoScale_argList = [[500,500,500,500], [500,500,1000,1000],[1000,1000,1000,1000]]
         # Loop through the supported HdmiIn ports
@@ -181,19 +182,20 @@ class dsHdmiIn_test9_ScalevideoAndVerify(utHelperClass):
 
             # Check the HdmiIn device connected to is active
             result = self.CheckDeviceStatusAndVerifyVideoScale(True,port,False)
-            self.log.stepResult(result,f'Hdmi In Device is active {result} on {port}')
-
-            # Select the HdmiIn port
-            self.testdsHdmiIn.selectHDMIInPort(port, audmix, videoplane, topmost)
-            self.log.step(f'Selected port {port} Port')
+            #self.log.stepResult(result,f'Hdmi In Device is active {result} on {port}')
+            if not result:
+                # Select the HdmiIn port
+                self.testdsHdmiIn.selectHDMIInPort(port, audmix, videoplane, topmost)
+                self.log.step(f'Selected port {port} Port')
             # video scaling of HdmiIn port
             for xcord, ycord, width, height in videoScale_argList:
                 self.testdsHdmiIn.scaleHdmiInvdieo(xcord, ycord, width, height)
-                result = self.CheckDeviceStatusAndVerifyVideoScale(True,port,True)
-                self.log.stepResult(result, f'HdmiIn Video Scale Verification {port} Port')
+                result &= self.CheckDeviceStatusAndVerifyVideoScale(True,port,True,xcord, ycord, width, height)
 
-        #Run postrequisites listed in the test setup configuration file 
-        self.testRunPostreiquisites()
+        self.log.stepResult(result,  "Video is Scaled ")
+
+        #Run postRequisites listed in the test setup configuration file
+        self.testRunPostRequisites()
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()

@@ -23,6 +23,7 @@
 
 import os
 import sys
+import time
 from enum import Enum, auto
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -91,14 +92,15 @@ class dsHdmiIn_test12_GetSpdInfo_Verify(utHelperClass):
 
     def testRunPrerequisites(self):
         """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
+        Executes prerequisite commands listed in the test setup configuration file on the DUT.
 
         Args:
-            None.
+            None
         """
 
-        #Run test specific commands
-        cmds = self.testSetup.assets.device.test12_GetSpdInfo_Verify.execute
+        # Run commands as part of test prerequisites
+        test = self.testSetup.get("assets").get("device").get(self.testName)
+        cmds = test.get("execute")
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
@@ -130,7 +132,8 @@ class dsHdmiIn_test12_GetSpdInfo_Verify(utHelperClass):
             bool
         """
         if manual == True and spd_info == False:
-            return self.testUserResponse.getUserYN(f'check the Device Connected to {port_type} is ON and press Enter:')
+            self.testUserResponse.getUserYN(f'Please connect the {port_type} and press Enter:')
+            return self.testUserResponse.getUserYN(f'Is HdmiIn device connected and Displayed is ON {port_type} press Y/N:')
         elif manual == True and spd_info == True:
             return self.testUserResponse.getUserYN(f'check the Spd Info received of device connected to {port_type} and press Enter:')
         else :
@@ -173,15 +176,19 @@ class dsHdmiIn_test12_GetSpdInfo_Verify(utHelperClass):
             self.log.stepStart(f'{port} Port')
 
             # Check the HdmiIn device connected to is active
-            self.CheckDeviceAndInfoStatus(True, port, False)
-            self.log.step(f'Hdmi In Device is active on {port}')
+            result = self.CheckDeviceAndInfoStatus(True, port, False)
+            #self.log.step(f'Hdmi In Device is active on {port}')
             
-            # Selecting Hdmi In port
-            self.testdsHdmiIn.selectHDMIInPort(port, audmix, videoplane, topmost)
-            self.log.step(f'Port Selcted {port}')
+            if not result:
+                # Select the HdmiIn port
+                self.testdsHdmiIn.selectHDMIInPort(port, audmix, videoplane, topmost)
+                self.log.step(f'Selected port {port} Port')
 
+            time.sleep(5)
             #Getting Spd Info on particular Hdmi input port
-            self.testdsHdmiIn.getSpdInfo(port)
+            result = self.testdsHdmiIn.getSpdInfo(port)
+            print(result)
+            self.log.stepResult(result,f'Verified Spd info on {port}')
             result = self.CheckDeviceAndInfoStatus(True, port , True) 
             self.log.stepResult(result,f'Verified Spd info on {port}')
 
