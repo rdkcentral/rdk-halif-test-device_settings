@@ -125,11 +125,12 @@ class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
                             if filename == framerate:
                                 break
                             
+                            self.testPlayer.stop()
+                        
+                            
             else:
                 self.log.error("No supported framerates available.")
                 result = False
-            
-            self.testPlayer.stop()
 
         
         # Terminate dsVideoDevice Module
