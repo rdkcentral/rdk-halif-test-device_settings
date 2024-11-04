@@ -11,7 +11,7 @@
  *  http://www.apache.org/licenses/LICENSE-2.0
  *
  *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an AS IS BASIS,getColorDepth()
+ *  distributed under the License is distributed on an AS IS BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
@@ -94,20 +94,6 @@ static bool extendedEnumsSupported=false; //Default to not supported
    {\
        UT_ASSERT_EQUAL( result, old );\
    }\
-}
-
-dsDisplayColorDepth_t getColorDepth(void){
-    dsDisplayColorDepth_t colorDepth;
-    if (gDSvideoPort_color_depth == 8) {
-        colorDepth = dsDISPLAY_COLORDEPTH_8BIT;
-    } else if (gDSvideoPort_color_depth == 10) {
-        colorDepth = dsDISPLAY_COLORDEPTH_10BIT;
-    } else if (gDSvideoPort_color_depth == 12) {
-        colorDepth = dsDISPLAY_COLORDEPTH_12BIT;
-    } else {
-        colorDepth = dsDISPLAY_COLORDEPTH_AUTO;
-    }
-    return colorDepth;
 }
 
 /**
@@ -4699,7 +4685,7 @@ void test_l1_dsVideoPort_positive_dsGetPreferredColorDepth(void) {
         status = dsGetPreferredColorDepth(handle, &colorDepth1);
         if (gSourceType == 1) {
             UT_ASSERT_EQUAL(status, dsERR_NONE);
-            UT_ASSERT_EQUAL(colorDepth1, getColorDepth());
+            UT_ASSERT_EQUAL(colorDepth1, gDSvideoPort_color_depth);
         } else if (gSourceType == 0) {
             UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
         }
@@ -4807,7 +4793,6 @@ void test_l1_dsVideoPort_positive_dsSetPreferredColorDepth(void) {
 
     dsError_t status;
     intptr_t handle = 0;
-    dsDisplayColorDepth_t colorDepth = getColorDepth();
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -4818,7 +4803,7 @@ void test_l1_dsVideoPort_positive_dsSetPreferredColorDepth(void) {
         status = dsGetVideoPort(gDSVideoPortConfiguration[i].typeid, gDSVideoPortConfiguration[i].index, &(handle));
         UT_ASSERT_EQUAL(status, dsERR_NONE);
         // Step 03: Set preferred color depth
-        status = dsSetPreferredColorDepth(handle, colorDepth);
+        status = dsSetPreferredColorDepth(handle, gDSvideoPort_color_depth);
         if (gSourceType == 1) {
             UT_ASSERT_EQUAL(status, dsERR_NONE);
         } else if (gSourceType == 0) {
