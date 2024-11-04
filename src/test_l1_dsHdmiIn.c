@@ -755,10 +755,14 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode(void) {
 
     gTestID = 14;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
+    
     // Step 1: Call dsHdmiInSelectZoomMode() without initializing the HDMI input sub-system
     dsError_t result = dsHdmiInSelectZoomMode(dsVIDEO_ZOOM_NONE);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    if(gSourceType == 1 ){
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    }else{
+        UT_ASSERT_EQUAL(result,dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
@@ -767,14 +771,23 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode(void) {
     UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
 
     // Step 4: Call dsHdmiInSelectZoomMode() with invalid value (dsVIDEO_ZOOM_MAX)
-    UT_ASSERT_EQUAL(dsHdmiInSelectZoomMode(dsVIDEO_ZOOM_MAX),dsERR_INVALID_PARAM);
+    result = dsHdmiInSelectZoomMode(dsVIDEO_ZOOM_MAX);
+    if(gSourceType ==1){
+        UT_ASSERT_EQUAL(result,dsERR_INVALID_PARAM);
+    }else {
+        UT_ASSERT_EQUAL(result,dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     // Step 5: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
 
     // Step 6: Call dsHdmiInSelectZoomMode() without terminating the HDMI input sub-system
     result = dsHdmiInSelectZoomMode(dsVIDEO_ZOOM_NONE);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    if(gSourceType ==1){
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    }else {
+        UT_ASSERT_EQUAL(result,dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
