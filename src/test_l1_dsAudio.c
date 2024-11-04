@@ -5495,16 +5495,23 @@ void test_l1_dsAudio_positive_dsSetAudioDelay(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
+        if(gDSAudioPortConfiguration[i].typeid != dsAUDIOPORT_TYPE_HEADPHONE)
+        {
+            // Step 03: Set audio delay for digital ports
+            result = dsSetAudioDelay(handle, audio_delay_min);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-        // Step 03: Set audio delay
-        result = dsSetAudioDelay(handle, audio_delay_min);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+            result = dsSetAudioDelay(handle, audio_delay_mid);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-        result = dsSetAudioDelay(handle, audio_delay_mid);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-        result = dsSetAudioDelay(handle, audio_delay_max);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+            result = dsSetAudioDelay(handle, audio_delay_max);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+        }
+        else
+        {
+            result = dsSetAudioDelay(handle, audio_delay_min);
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
     }
 
     // Step 04: Terminate audio ports
