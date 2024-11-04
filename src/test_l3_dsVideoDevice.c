@@ -486,7 +486,7 @@ void test_l3_dsVideoDevice_GetVideoCodecInfo()
 
     if(choice > 2)
     {
-        choice += 1;
+        choice = 1 << (choice-1);
     }
 
     UT_LOG_INFO("Calling dsGetVideoCodecInfo(IN:Handle:[0x%0X],IN:Codec[%s], OUT:CodecInfo[]))",gdeviceHandle,\

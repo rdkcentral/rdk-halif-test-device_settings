@@ -110,11 +110,13 @@ class dsVideoDevice_test4_SetAndGetFRFMode(dsVideoDeviceHelperClass):
             for stream in self.testStreams:
                 self.testPlayer.play(stream)
 
-            result = self.testVerifyFRFMode(True,True)
-            if result:
-                self.log.stepResult(result, f'Playback was fine without any streaming issues')
-            else:
-                self.log.error("Able to observe streaming issues")
+                result = self.testVerifyFRFMode(True,True)
+                if result:
+                    self.log.stepResult(result, f'Playback was fine without any streaming issues')
+                else:
+                    self.log.error("Able to observe streaming issues")
+                
+                self.testPlayer.stop()
 
             self.testdsVideoDevice.setFRFMode(i, 'Disable')
             self.log.step(f'Wait till Playback ends.')
@@ -122,15 +124,14 @@ class dsVideoDevice_test4_SetAndGetFRFMode(dsVideoDeviceHelperClass):
             #Playback with framerate 24fps
             for stream in self.testStreams:
                 self.testPlayer.play(stream)
-            
 
-            result = self.testVerifyFRFMode(True,False)
-            if result:
-                self.log.stepResult(True, f'Playback with streaming issues')
-            else:
-                self.log.error("When FRF mode Disable playback was smooth")
+                result = self.testVerifyFRFMode(True,False)
+                if result:
+                    self.log.stepResult(True, f'Playback with streaming issues')
+                else:
+                    self.log.error("When FRF mode Disable playback was smooth")
 
-            self.testPlayer.stop()
+                self.testPlayer.stop()
         # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()
 

@@ -95,21 +95,25 @@ class dsVideoDevice_test2_SetAndGetZoomMode(dsVideoDeviceHelperClass):
         NumofVideoDevices = self.testdsVideoDevice.getVideoDevice()
         for i in range(0, NumofVideoDevices):
             for stream in self.testStreams:
-                self.testPlayer.play(stream)
+                filename = os.path.basename(stream)
+                self.log.step(f'Wait till Playback ends.')
+                self.log.step(f'Playing {filename}')
+                
                 supported_modes = self.testdsVideoDevice.getZoomModes()
                 if supported_modes:
                     for zoomMode in supported_modes:
+                        self.testPlayer.play(stream)
                         self.testdsVideoDevice.setZoomMode(i, zoomMode)
                         self.log.step(f'Verify setZoomMode {zoomMode}')
                         result = self.testVerifyZoomMode(True)
                         self.log.stepResult(result, f'Verified setZoomMode with {zoomMode}')
                         mode = self.testdsVideoDevice.getZoomMode()
                         self.log.stepResult(zoomMode in mode, f'Get Zoom Mode {zoomMode} Test')
+                        self.testPlayer.stop()
                 else:
                     self.log.error("No Zoom mode formats available for verification.")
                     result = False
 
-        self.testPlayer.stop()
         # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()
 
