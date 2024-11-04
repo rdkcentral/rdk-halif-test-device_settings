@@ -11,7 +11,7 @@
  *  http://www.apache.org/licenses/LICENSE-2.0
  *
  *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an AS IS BASIS,
+ *  distributed under the License is distributed on an AS IS BASIS,getColorDepth()
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
@@ -3200,7 +3200,7 @@ void test_l1_dsVideoPort_positive_dsGetColorDepth(void) {
         status = dsGetColorDepth(handle, &colorDepth1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
         // Step 04: Compare the value with values from profile file
-        UT_ASSERT_EQUAL(colorDepth1, getColorDepth());
+        UT_ASSERT_EQUAL(colorDepth1, gDSvideoPort_color_depth);
     }
 
     // Step 05: Terminate the video port system
