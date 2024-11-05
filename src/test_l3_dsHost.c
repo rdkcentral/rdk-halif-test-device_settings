@@ -300,6 +300,9 @@ int test_l3_dsHost_register(void)
     {
         return -1;
     }
+
+    //Crashes on non-SOB in testbed, same issue as in test_l1_dsHost.c
+    //Split to be turned on and off as necessary
     pSuite_SOB_Only = UT_add_suite("[L3 dsHost SOB Only]", NULL, NULL);
     if (pSuite_SOB_Only == NULL)
     {
