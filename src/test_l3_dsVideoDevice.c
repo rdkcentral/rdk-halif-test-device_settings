@@ -478,7 +478,9 @@ void test_l3_dsVideoDevice_GetVideoCodecInfo()
     scanf("%d", &choice);
     readAndDiscardRestOfLine(stdin);
 
-    if(choice <=0 || choice >= dsVIDEO_CODEC_MAX) 
+    dsVideoCodingFormat_t selectedCodec = (dsVideoCodingFormat_t)(1 << (choice - 1));
+
+    if(choice <=0 || selectedCodec >= dsVIDEO_CODEC_MAX) 
     {
        UT_LOG_ERROR("\nInvalid Codec selected\n");
        goto exit;
