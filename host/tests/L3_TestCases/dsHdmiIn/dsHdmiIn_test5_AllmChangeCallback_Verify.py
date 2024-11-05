@@ -139,13 +139,11 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(dsHdmiInHelperClass):
 
             # Change ALLM to ON if it is OFF and verify
             self.CheckDeviceStatusAndEnableAllm(manual=True, port_type=port, allm_change=True, allm_input="ON")
-            if not self.verify_allm_status(port, "True"):
-                result &= False
+            result &= self.verify_allm_status(port, "True")
 
             # Change ALLM to OFF and verify
             self.CheckDeviceStatusAndEnableAllm(manual=True, port_type=port, allm_change=True, allm_input="OFF")
-            if not self.verify_allm_status(port, "False"):
-                result &= False
+            result &= self.verify_allm_status(port, "False")
 
         self.log.stepResult(result,f"ALLM mode: Verified ")
         # Run postRequisites listed in the test setup configuration file

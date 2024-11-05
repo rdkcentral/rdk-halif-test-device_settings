@@ -116,11 +116,12 @@ class dsHdmiIn_test4_VideoModeChangeCallback_Verify(dsHdmiInHelperClass):
             if videoMode != None and port == videoMode[0]:
                 self.log.step(f'hdmi video mode port:{port} pixelResolution:{videoMode[1]} aspectRatio:{videoMode[2]} in Callback found')
                 result &= self.testUserResponse.getUserYN(f'Is the Resolution change on device port:{port} pixelResolution:{videoMode[1]} aspectRatio:{videoMode[2]}? Y/N: ')
-                self.log.stepResult(result,f'hdmi video mode port:{port} Resolution ')
+                self.log.step(f'hdmi video mode port:{port} Resolution ')
             elif videoMode == None:
-                result = False
-                self.log.stepResult(result,f'hdmi video mode port:{port} in Callback Not found')
+                result &= False
+                self.log.step(f'hdmi video mode port:{port} in Callback Not found')
 
+        self.log.stepResult(result,f"Verified Video modes ")
         #Run postRequisites listed in the test setup configuration file
         self.testRunPostRequisites()
 
