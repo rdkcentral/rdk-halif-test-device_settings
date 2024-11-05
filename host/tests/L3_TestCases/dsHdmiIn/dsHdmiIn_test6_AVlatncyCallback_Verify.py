@@ -23,6 +23,7 @@
 
 import os
 import sys
+import time
 from enum import Enum, auto
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -73,9 +74,10 @@ class dsHdmiIn_test6_AVlatencyCallback_Verify(dsHdmiInHelperClass):
 
             # Check the HdmiIn device is active
             result = self.CheckDeviceStatus(True,port)
-
-            self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
-            self.log.step(f'HdmiIn Select Verification {port} Port')
+            if not result:
+                self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
+                time.sleep(5)
+                self.log.step(f'Port Selected {port}')
             avLatency = self.testdsHdmiIn.getAVlatencyCallbackStatus()
             self.log.stepResult(True,f'audio_latency:{avLatency[0]}ms, videoLatency:{avLatency[1]}ms found in Callback')
 

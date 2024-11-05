@@ -23,6 +23,7 @@
 
 import os
 import sys
+import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
@@ -66,6 +67,7 @@ class dsHdmiIn_test9_ScaleVideoAndVerify(dsHdmiInHelperClass):
         if manual:
             if not videoScale:
                 self.testUserResponse.getUserYN(f'Please connect the {port_type} and press Enter:')
+                time.sleep(3)
                 return self.testUserResponse.getUserYN(f'Is HDMI device connected and display is ON {port_type}? Y/N:')
             else:
                 return self.testUserResponse.getUserYN(f'Check if video is scaled to {xCord}*{yCord}*{width}*{height} on port {port_type}. Press Y/N:')
@@ -95,6 +97,7 @@ class dsHdmiIn_test9_ScaleVideoAndVerify(dsHdmiInHelperClass):
         for port in self.testdsHdmiIn.getSupportedPorts():
             if not self.CheckDeviceStatusAndVerifyVideoScale(True, port, False):
                 self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
+                time.sleep(5)
             for xCord, yCord, width, height in videoScale_argList:
                 self.testdsHdmiIn.scaleHdmiInVideo(xCord, yCord, width, height)
                 result = self.CheckDeviceStatusAndVerifyVideoScale(True, port, True, xCord, yCord, width, height)

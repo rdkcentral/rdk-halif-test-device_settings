@@ -77,11 +77,13 @@ class dsHdmiIn_test3_PortStatusCallback_Verify(dsHdmiInHelperClass):
             self.log.step(f'Select {port} Port')
 
             # Check the HdmiIn device connected to is active
-            self.CheckDeviceStatus(True,port)
-            self.log.step(f'Hdmi In Device is active on {port}')
-
-            self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
-            self.log.step(f'Port Selected {port}')
+            result = self.CheckDeviceStatus(True,port)
+            #self.log.stepResult(result,f'Hdmi In Device is active {result} on {port}')
+            if not result:
+                # Select the HdmiIn port
+                self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
+                self.log.step(f'Selected port {port} Port')
+            # video scaling of HdmiIn port
 
             status = self.testdsHdmiIn.getHdmiInPortCallbackStatus()
             if status[1] == port:

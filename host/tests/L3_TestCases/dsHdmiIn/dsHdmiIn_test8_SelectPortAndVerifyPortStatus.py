@@ -23,6 +23,7 @@
 
 import os
 import sys
+import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
@@ -72,10 +73,10 @@ class dsHdmiIn_test8_SelectPortAndVerifyPortStatus(dsHdmiInHelperClass):
 
             # Check the HdmiIn device connected to is active
             result = self.CheckDeviceStatus(True, port)
-            self.log.step(f'Hdmi In Device is active {result} on {port}')
-
-            # Select the Hdmi In port
-            self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
+            if not result:
+                self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
+                time.sleep(5)
+                self.log.step(f'Port Selected {port}')
             portStatus = self.testdsHdmiIn.getHDMIInPortStatus()
             if port == portStatus[1]:
                result = True

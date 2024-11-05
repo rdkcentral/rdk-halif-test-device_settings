@@ -23,6 +23,7 @@
 
 import os
 import sys
+import time
 from enum import Enum, auto
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -65,7 +66,9 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(dsHdmiInHelperClass):
             bool: True if verification is successful; otherwise, False.
         """
         if manual == True and allm_change != True:
-            return self.testUserResponse.getUserYN(f'Connect Hdmi In device  on {port_type} and press Enter:')
+            self.testUserResponse.getUserYN(f'Please connect the {port_type} and press Enter:')
+            time.sleep(3)
+            return self.testUserResponse.getUserYN(f'Is HdmiIn device connected and Displayed is ON {port_type} press Y/N:')
         elif manual == True and allm_change != False and allm_input == 'ON':
             return self.testUserResponse.getUserYN(f'Change ALLM mode on Hdmi In device connected to {port_type} to {allm_input} if its in OFF and press Enter:')
         elif manual == True and allm_change != False and allm_input != 'ON':
@@ -93,10 +96,10 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(dsHdmiInHelperClass):
         actual_port, actual_status = allmStatus
 
         if actual_port == port and actual_status == expected_status:
-            self.log.stepResult(True, f"ALLM mode: {actual_status} on port: {actual_port} confirmed in Callback")
+            self.log.step(f"ALLM mode: {actual_status} on port: {actual_port} confirmed in Callback")
             return True
         else:
-            self.log.stepResult(False, f"Unexpected ALLM mode: {actual_status} on port: {actual_port} in Callback")
+            self.log.step(f"Unexpected ALLM mode: {actual_status} on port: {actual_port} in Callback")
             return False
 
     def testFunction(self):
@@ -128,20 +131,23 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(dsHdmiInHelperClass):
             self.log.stepStart(f'Select {port} Port')
             self.log.step(f'Select {port} Port')
 
-            self.CheckDeviceStatusAndEnableAllm(True, port, False)
-            self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
-            self.log.step(f'Port Selected {port}')
+            result = self.CheckDeviceStatusAndEnableAllm(True, port, False)
+            if not result:
+                self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
+                time.sleep(5)
+                self.log.step(f'Port Selected {port}')
 
             # Change ALLM to ON if it is OFF and verify
             self.CheckDeviceStatusAndEnableAllm(manual=True, port_type=port, allm_change=True, allm_input="ON")
-            if not self.verify_allm_status(port, "ON"):
-                result = False
+            if not self.verify_allm_status(port, "True"):
+                result &= False
 
             # Change ALLM to OFF and verify
             self.CheckDeviceStatusAndEnableAllm(manual=True, port_type=port, allm_change=True, allm_input="OFF")
-            if not self.verify_allm_status(port, "OFF"):
-                result = False
+            if not self.verify_allm_status(port, "False"):
+                result &= False
 
+        self.log.stepResult(result,f"ALLM mode: Verified ")
         # Run postRequisites listed in the test setup configuration file
         self.testRunPostRequisites()
 

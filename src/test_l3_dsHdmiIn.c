@@ -236,8 +236,8 @@ const static ut_control_keyStringMapping_t tv_hdmi_edid_version_mapTable [] =
 /* bool */
 const static ut_control_keyStringMapping_t bool_mapTable [] =
 {
-  { "false", (int32_t)false },
-  { "true",  (int32_t)true  },
+  { "False", (int32_t)false },
+  { "True",  (int32_t)true  },
   {  NULL, -1 }
 };
 
