@@ -380,7 +380,7 @@ void test_l1_dsAudio_negative_dsGetAudioPort(void)
     {
         result = dsGetAudioPort(dsAUDIOPORT_TYPE_MAX, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
-        UT_ASSERT_NOT_EQUAL(handle, null_handle);
+        UT_ASSERT_EQUAL(handle, null_handle);
 
         // Step 04: Invalid index
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, -1, &handle);
@@ -5495,16 +5495,25 @@ void test_l1_dsAudio_positive_dsSetAudioDelay(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
+        if(gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HDMI || \
+            gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPDIF || \
+            gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HDMI_ARC )
+        {
+            // Step 03: Set audio delay for digital ports
+            result = dsSetAudioDelay(handle, audio_delay_min);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-        // Step 03: Set audio delay
-        result = dsSetAudioDelay(handle, audio_delay_min);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+            result = dsSetAudioDelay(handle, audio_delay_mid);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-        result = dsSetAudioDelay(handle, audio_delay_mid);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-        result = dsSetAudioDelay(handle, audio_delay_max);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+            result = dsSetAudioDelay(handle, audio_delay_max);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+        }
+        else
+        {
+            result = dsSetAudioDelay(handle, audio_delay_min);
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
     }
 
     // Step 04: Terminate audio ports
@@ -6994,7 +7003,7 @@ void test_l1_dsAudio_negative_dsIsAudioMSDecode(void)
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
 
         // Step 05: Test with valid handle and invalid pointer
-        result = dsIsAudioMSDecode(handle, &hasMS11Decode);
+        result = dsIsAudioMSDecode(handle, NULL);
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     }
 
