@@ -146,6 +146,8 @@ class dsHost_test1_VerifyTemperature(utHelperClass):
             result = False
 
         # Delete the dsHost class
+        self.testdsHost.terminate()
+
         del self.testdsHost
 
         return result
