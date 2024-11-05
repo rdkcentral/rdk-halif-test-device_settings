@@ -85,6 +85,7 @@ class dsHdmiIn_test10_ZoomModeAndVerify(dsHdmiInHelperClass):
 
         # Initialize the dsHDMIIn module
         self.testdsHdmiIn.initialise()
+        result = True
 
         # Loop through the supported HdmiIn ports
         for port in self.testdsHdmiIn.getSupportedPorts():

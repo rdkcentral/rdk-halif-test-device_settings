@@ -66,6 +66,7 @@ class dsHdmiIn_test11_GetEDIDInfo_Verify(dsHdmiInHelperClass):
 
         # Initialize the dsHDMIIn module
         self.testdsHdmiIn.initialise()
+        result = True
 
         # Loop through the supported HdmiIn ports
         for port in self.testdsHdmiIn.getSupportedPorts():
@@ -73,9 +74,9 @@ class dsHdmiIn_test11_GetEDIDInfo_Verify(dsHdmiInHelperClass):
             self.log.step(f'Select {port} Port')
 
             # Check the HdmiIn device connected to is active
-            result = self.CheckDeviceStatus(True,port)
+            status = self.CheckDeviceStatus(True,port)
             #self.log.stepResult(result,f'Hdmi In Device is active {result} on {port}')
-            if not result:
+            if not status:
                 # Select the HdmiIn port
                 self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
                 self.log.step(f'Selected port {port} Port')

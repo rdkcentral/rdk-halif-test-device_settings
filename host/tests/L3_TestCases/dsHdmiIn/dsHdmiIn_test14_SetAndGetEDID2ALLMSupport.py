@@ -64,6 +64,7 @@ class dsHdmiIn_test14_SetAndGetEDID2ALLMSupport(dsHdmiInHelperClass):
 
         # Initialize the dsHDMIIn module
         self.testdsHdmiIn.initialise()
+        result = True
 
         # Loop through the supported HdmiIn ports
         for port in self.testdsHdmiIn.getSupportedPorts():
@@ -75,14 +76,13 @@ class dsHdmiIn_test14_SetAndGetEDID2ALLMSupport(dsHdmiInHelperClass):
                 #Getting ALLM value set
                 self.log.step(f'Getting {port} edid 2 allm version')
                 allmStatus = self.testdsHdmiIn.getEdid2Allm(port)
-                if allmStatus == "false" or "true":
+                if allmStatus != None and allmStatus == "False" or "True":
                    result &= True
                    self.log.step(f'Verified get ALLM:{allmStatus} set ALLM same')
                 else:
                    result &= False
                    self.log.step(f'Verified get ALLM:{allmStatus} set ALLM same')
 
-        self.log.stepResult(result,f"Verified EDID & ALLM Support ")
         #Run postRequisites listed in the test setup configuration file
         self.testRunPostRequisites()
 

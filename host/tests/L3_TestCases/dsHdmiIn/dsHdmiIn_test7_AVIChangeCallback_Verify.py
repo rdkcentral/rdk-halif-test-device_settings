@@ -89,6 +89,7 @@ class dsHdmiIn_test7_AVIChangeCallback_Verify(dsHdmiInHelperClass):
 
         # Initialize the dsHdmiIn module
         self.testdsHdmiIn.initialise()
+        result = True
 
         # Loop through the supported HdmiIn ports
         for port in self.testdsHdmiIn.getSupportedPorts():
@@ -96,19 +97,20 @@ class dsHdmiIn_test7_AVIChangeCallback_Verify(dsHdmiInHelperClass):
             self.log.step(f'Select {port} Port')
 
             # Check the HdmiIn device is active
-            result = self.CheckDeviceStatus(True, port, False)
-            if not result:
+            status = self.CheckDeviceStatus(True, port, False)
+            if not status:
                 self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
                 time.sleep(5)
                 self.log.step(f'Port Selected {port}')
             self.CheckDeviceStatus(True, port, True)
+            time.sleep(5)
             aviStatus = self.testdsHdmiIn.getAVIContentCallbackStatus()
-            if aviStatus[0] == port:
+            if aviStatus != None and aviStatus[0] == port:
                result &= True
-               self.log.stepResult(f'AVI content type:{aviStatus[1]} on port:{aviStatus[0]} found in Callback')
+               self.log.step(f'AVI content type:{aviStatus[1]} on port:{aviStatus[0]} found')
             else:
                 result &= False
-                self.log.step(f'AVI content type:{aviStatus[1]} on port:{aviStatus[0]} found in Callback')
+                self.log.step(f'AVI content callback not found on port:{port}')
 
         self.log.stepResult(result,f"AVI content type Verified ")
         #Run postRequisites listed in the test setup configuration file

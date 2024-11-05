@@ -93,7 +93,11 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(dsHdmiInHelperClass):
             bool: True if verification is successful; otherwise, False.
         """
         allmStatus = self.testdsHdmiIn.getAllmCallbackStatus()
-        actual_port, actual_status = allmStatus
+        if allmStatus != None:
+            actual_port, actual_status = allmStatus
+        else:
+            self.log.step(f"No callbacks found on port: {port}")
+            return False
 
         if actual_port == port and actual_status == expected_status:
             self.log.step(f"ALLM mode: {actual_status} on port: {actual_port} confirmed in Callback")
@@ -125,14 +129,14 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(dsHdmiInHelperClass):
 
         # Initialize the dsHdmiIn module
         self.testdsHdmiIn.initialise()
-
+        result = True
         # Loop through the supported HdmiIn ports
         for port in self.testdsHdmiIn.getSupportedPorts():
             self.log.stepStart(f'Select {port} Port')
             self.log.step(f'Select {port} Port')
 
-            result = self.CheckDeviceStatusAndEnableAllm(True, port, False)
-            if not result:
+            status = self.CheckDeviceStatusAndEnableAllm(True, port, False)
+            if not status:
                 self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
                 time.sleep(5)
                 self.log.step(f'Port Selected {port}')

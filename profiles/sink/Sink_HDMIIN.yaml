@@ -15,6 +15,7 @@ dsHdmiIn:
   # HDMI_EDID_VER_MAX = 0x02,      /*!< Out of bounds */
   EdidVersion: [0x01, 0x01, 0x01] # supported 2.0 for all three HDMI input ports
   edidbytes: [ff,ff,ff,ff,ff,ff,00,15,85,2d,2a]
+  spdbytes: [83,01,19,00,dc,51,44,49,00,00,00,00,00,48,44,4d,49,20,41,4e,41,4c,59,5a,45,52,00,00,00] # quantum data Analyzer M41h
   HdmiArcPortID: 1
   gameFeatures:
     feature: "allm"

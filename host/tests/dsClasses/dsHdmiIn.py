@@ -189,7 +189,7 @@ class dsHdmiInClass():
         if match:
             port = match.group(1)
             connection = match.group(2)
-            return port, connection == "True"
+            return port, connection
 
         return None
 
@@ -231,7 +231,7 @@ class dsHdmiInClass():
 
         This function reads the output from the device session to detect the
         port  status. The callback message contains the port number
-        and the status of port (ispresented , activeport). The function parses 
+        and the status of port (ispresented , activeport). The function parses
         the message and returns the port status.
 
         Args:
@@ -242,16 +242,16 @@ class dsHdmiInClass():
                 - ispresented (str): true or false.
                 - activeport(str):Active Port number as string
             None: If no matching signal status is found.
-        """ 
+        """
         result = self.testSession.read_until("Received statuschange callback isPresented:")
         portstatuspattern = r"Received statuschange callback isPresented:\s*\[(.*?)\].*?activeport:\s*\[(.*?)\]"
         match = re.search(portstatuspattern, result)
-       
+
         if match:
             ispresented = match.group(1)
             activeport = match.group(2)
             return ispresented, activeport
-        
+
         return None
 
     def getVideoModeCallbackStatus(self):
@@ -262,7 +262,7 @@ class dsHdmiInClass():
         video mode update. The callback message contains the port number
         and the video mode update (pixelresolution , aspectratio). The function parses
         the message and returns the video mode update.
-    
+
         Args:
             None.
         Returns:
@@ -294,7 +294,7 @@ class dsHdmiInClass():
                 pixelresolution = matches.group(2)
                 aspectratio = matches.group(3)
                 return port, pixelresolution, aspectratio
-        
+
         return None
 
     def getAllmCallbackStatus(self):
@@ -305,7 +305,7 @@ class dsHdmiInClass():
         HDMI allm status. The callback message contains the port number
         and the allm status ("true" or "false"). The function parses the message
         and returns the port and allm status as a boolean value.
-        
+
         Args:
             None.
         Returns:
@@ -322,7 +322,7 @@ class dsHdmiInClass():
             porttype = match.group(1)
             allm_status = match.group(2)
             return porttype, allm_status
-       
+
         return None
 
     def getAVlatencyCallbackStatus(self):
@@ -331,9 +331,9 @@ class dsHdmiInClass():
 
         This function reads the output from the device session to detect the
         audio video latency. The callback message contains the audio video latency
-        in milliseconds. The function parses the message and returns the audio and 
+        in milliseconds. The function parses the message and returns the audio and
         video latency as strings.
-        
+
         Args:
             None.
         Returns:
@@ -350,7 +350,7 @@ class dsHdmiInClass():
             audio_latency = match.group(1)
             video_latency = match.group(2)
             return audio_latency, video_latency
-   
+
         return None
 
     def getAVIContentCallbackStatus(self):
@@ -361,7 +361,7 @@ class dsHdmiInClass():
         AVI content change status. The callback message contains the port number
         and the AVI content type. The function parses the message
         and returns the port and AVI content type as strings.
-        
+
         Args:
             None.
         Returns:
@@ -378,18 +378,18 @@ class dsHdmiInClass():
             porttype = match.group(1)
             avi_content_type = match.group(2)
             return porttype, avi_content_type
-        
+
         return None
 
     def getHDMIInPortStatus(self):
         """
         Retrieves the HDMI In port status.
 
-        This function reads the output from the device session to 
-        detect the port status. The callback message contains the 
-        port status like (ispresented , active). The function parses 
+        This function reads the output from the device session to
+        detect the port status. The callback message contains the
+        port status like (ispresented , active). The function parses
         the message and returns ispresented and active as strings.
-        
+
         Args:
             None.
         Returns:
@@ -405,7 +405,7 @@ class dsHdmiInClass():
             isPresented = match.group(1)
             activeport = match.group(2)
             return isPresented, activeport
-      
+
         return None
 
     def selectHDMIInPort(self, hdmiin_port:str, audMix:int=0, videoPlane:int=0, topmost:int=1):
@@ -417,7 +417,7 @@ class dsHdmiInClass():
             audmix (int, optional): audmix .
             videoplane(int, optional): videoplane.
             topmost(int, optional): topmost.
-           
+
         Returns:
             None
         """
@@ -508,7 +508,7 @@ class dsHdmiInClass():
             portList.append(f'dsHDMI_IN_PORT_{i}')
 
         return portList
- 
+
     def getVideoZoomModeList(self):
         """
         gets supported Zoom Mode as list.
@@ -519,7 +519,7 @@ class dsHdmiInClass():
         Returns:
             A list of Zoom modes please refer dsvideozoommode enum class.
         """
-       
+
         videoZoomModeList = []
         for modeindex in hdmiInZoomMode:
             videoZoomModeList.append(hdmiInZoomMode(modeindex).name)
@@ -544,7 +544,7 @@ class dsHdmiInClass():
                 "input": zoom_mode
             }
         ]
-        
+
         result = self.utMenu.select(self.testSuite, "Zoom Mode", promptWithAnswers)
 
     def getEDIDVersionList(self):
@@ -570,8 +570,8 @@ class dsHdmiInClass():
 
         Args:
             hdmiin_port (str): Defaults to 0
-            edidversion (str, optional): edidversion. Defaults to 0             
- 
+            edidversion (str, optional): edidversion. Defaults to 0
+
         Returns:
             None.
         """
@@ -606,7 +606,7 @@ class dsHdmiInClass():
                 "input": str(port_type)
             }
         ]
-        
+
         result = self.utMenu.select( self.testSuite, "Get EdidVersion", promptWithAnswers)
 
         typeStatusPattern = r"Result dsGetEdidVersion IN:port:\[(\w+)\]:\[.*\] OUT:edidver:\[(HDMI_EDID_VER_\w+)\]:\[.*\],dsError_t:\[(dsERR_\w+)\]"
@@ -615,7 +615,7 @@ class dsHdmiInClass():
             edidversion = match.group(2)
 
         return edidversion
-    
+
     def getEdidInfo(self, port_type:str=0):
         """
         Gets EDID info of a port.
@@ -642,9 +642,9 @@ class dsHdmiInClass():
             if int(edid_values.get(key)) in edid_list:
                 if(key == 9):
                     return True
-            
+
         return None
-        
+
     def getSpdInfo(self, port_type:str=0):
         """
         Gets Spd info of a port.
@@ -662,16 +662,17 @@ class dsHdmiInClass():
             }
         ]
 
+        spd_list = self.deviceProfile.get("spdbytes")
         result = self.utMenu.select( self.testSuite, "Get Spdinfo", promptWithAnswers)
-        typeStatusPattern = r'Result dsGetHDMISPDInfo IN:port:\[(\w+)\] OUT:spdinfo:\[(\w+)\]'
-        match = re.search(typeStatusPattern, result)
-        if match:
-            port = match.group(1)
-            spdinfo = match.group(2)
-            print(f"Port: {port}")
-            print(f"SPD Info: {spdinfo}")
-            return spdinfo
-   
+        pattern = r'spdinfo:\[(13|14)\]:\[(\w{2})\]'
+        matches = re.findall(pattern, result)
+        if matches:
+            spd_values = {int(index): value for index, value in matches}
+        for key in spd_values:
+            if int(spd_values.get(key)) in spd_list:
+                if(key == 14):
+                    return True
+
     def setEdid2Allm(self, port_type:str=0, allm_support:int=0):
         """
         sets edid2allm support  on a particular HdmiIn port.
@@ -721,8 +722,9 @@ class dsHdmiInClass():
         match = re.search(typeStatusPattern, result)
         if match:
             edid2allm = match.group(2)
+            return edid2allm
 
-        return edid2allm
+        return None
 
     def __del__(self):
         """
