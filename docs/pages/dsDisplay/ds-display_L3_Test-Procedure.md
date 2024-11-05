@@ -7,10 +7,10 @@
 - [References](#references)
 - [Setting Up Test Environment](#setting-up-test-environment)
 - [Test Case Procedure](#test-case-procedure)
-  - [dsDisplay_test01_VerifyDisplayConnectCallBackTest.py](#dsDisplay_test01_VerifyDisplayConnectCallBackTest.py)
-  - [dsDisplay_test02_TestVerifyDisplayEdid.py](#dsDisplay_test02_TestVerifyDisplayEdid.py)
-  - [dsDisplay_test03_AspectRatioVerificationTest.py](#dsDisplay_test03_AspectRatioVerificationTest.py)
-  - [dsDisplay_test04_TestVerifyDisplayEdidBytes.py](#dsDisplay_test04_TestVerifyDisplayEdidBytes.py)
+  - [dsDisplay_test01_VerifyDisplayConnectCallBackTest.py](#dsdisplay_test01_verifydisplayconnectCallBackTestpy)
+  - [dsDisplay_test02_TestVerifyDisplayEdid.py](#dsdisplay_test02_testverifydisplayEdidpy)
+  - [dsDisplay_test03_AspectRatioVerificationTest.py](#dsdisplay_test03_aspectratioverificationtestpy)
+  - [dsDisplay_test04_TestVerifyDisplayEdidBytes.py](#dsdisplay_test04_testverifydisplayEdidbytespy)
 
 ## Overview
 
@@ -31,7 +31,7 @@ This document describes the L3 Test case Procedure Documentation for the Device 
 
 ### References
 
--`High Level Test Specification` - [dsDisplay High Level TestSpec](ds-display_High-Level_TestSpecification.md)
+- `High Level Test Specification` - [dsDisplay High Level TestSpec](ds-display-high-Level_TestSpec.md)
 
 - `dsDisplay L3 Low Level Test Specification` - [dsDisplay L3 Low Level TestSpec](ds-display_L3_Low-Level_TestSpecification.md)
 
@@ -43,9 +43,9 @@ To execute `HAL` `L3` Python test cases, need a Python environment. Follow these
 
 #### Rack Configuration File
 
-- It identifies the rack configuration and platform used. We need to update our target device specif information in the rackconfig.yaml. In this file, update the configuration to define the console sessions for the device under test (DUT)
 Example Rack configuration File: `ut/host/tests/configs/example_rack_config.yml`
-  - For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_rack_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_rack_config.yml)
+
+For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_rack_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_rack_config.yml)
 
 In this file, update the configuration to define the console sessions for the `DUT` and the outbound settings:
 
@@ -177,7 +177,7 @@ dsDisplay_test01_VerifyDisplayConnectCallBackTest.py --config /host/tests/config
 
 - Completion and results:
 
-After verifying all callback statuses, the test will conclude and display the final result (PASS/FAIL).
+  After verifying all callback statuses, the test will conclude and display the final result (PASS/FAIL).
 
 ### dsDisplay_test02_TestVerifyDisplayEdid.py
 
@@ -217,9 +217,9 @@ dsDisplay_test02_TestVerifyDisplayEdid.py --config /host/tests/configs/example_r
   - For each port, it will prompt the user to connect the specified display device and confirm successful connection.
   - The test will retrieve the `EDID` information from the connected display device and verify it against the expected details, such as the monitor name, for each display.
 
-Completion and Results:
+- Completion and Results:
 
-After verifying the `EDID` information for all connected display devices, the test will conclude and display the final result (PASS/FAIL).
+  After verifying the `EDID` information for all connected display devices, the test will conclude and display the final result (PASS/FAIL).
 
 ### dsDisplay_test03_AspectRatioVerificationTest.py
 
@@ -229,7 +229,7 @@ This test retrieves and verifies the aspect ratio of the display on each support
 
 **Platform Supported:**
 
-Source
+- Source
 
 **User Input Required:**
 
@@ -260,7 +260,7 @@ dsDisplay_test03_AspectRatioVerificationTest.py --config /host/tests/configs/exa
 
 - Completion and Results:
 
-- If all expected aspect ratios are verified for each port, the test will conclude and display the final result (PASS/FAIL).
+  If all expected aspect ratios are verified for each port, the test will conclude and display the final result (PASS/FAIL).
 
 ### dsDisplay_test04_TestVerifyDisplayEdidBytes
 
@@ -300,6 +300,6 @@ dsDisplay_test04_TestVerifyDisplayEdidBytes --config /host/tests/configs/example
   - The test will retrieve the EDID bytes from the connected display device.
   - The test will verify the retrieved EDID bytes against the expected details, such as manufacturer ID and monitor name, for each connected display.
 
-Completion and Results:
+- Completion and Results:
 
-- If all expected EDID bytes are verified, the test will conclude and display the final result (PASS/FAIL).
+  If all expected EDID bytes are verified, the test will conclude and display the final result (PASS/FAIL).
