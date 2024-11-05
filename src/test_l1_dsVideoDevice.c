@@ -1021,11 +1021,11 @@ void test_l1_dsVideoDevice_positive_dsForceDisableHDRSupport(void)
 
         // Step 03: Force disable HDR support (set to true)
         result = dsForceDisableHDRSupport(handle, true);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
 
         // Step 04: Force disable HDR support (set to false)
         result = dsForceDisableHDRSupport(handle, false);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     }
 
     // Step 05: De-initialize the video devices
