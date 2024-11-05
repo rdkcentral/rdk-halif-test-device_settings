@@ -23,7 +23,6 @@
 
 import os
 import sys
-import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
@@ -43,7 +42,6 @@ class dsVideoDevice_test1_FrameratePreChangeCallback_Verify(dsVideoDeviceHelperC
         rackDevice (str): Identifier for the device under test.
     """
 
-
     def __init__(self):
         """
         Initializes the test1_FrameratePrePostChangeCallBack_Verify test .
@@ -52,7 +50,8 @@ class dsVideoDevice_test1_FrameratePreChangeCallback_Verify(dsVideoDeviceHelperC
             None.
         """
         self.testName  = "test1_FrameratePrePostChangeCallBack_Verify"
-        super().__init__(self.testName, '1')
+        self.qcID = '1'
+        super().__init__(self.testName, self.qcID)
 
 
     def checkDeviceStatus(self, manual=False):
@@ -71,63 +70,40 @@ class dsVideoDevice_test1_FrameratePreChangeCallback_Verify(dsVideoDeviceHelperC
         else :
             #TODO: Add automation verification methods
             return False
-        
-    
+
     def testFunction(self):
         """
             The main test function that verifies display framerate prechange in video device.
 
             This function:
-            - Downloads necessary assets.
-            - Runs prerequisite commands.
             - Verifies display framerate prechange and postchange through callbacks.
 
             Returns:
                 bool: Final result of the test.
          """
 
-
-        self.log.testStart(self.testName, '1')
+        self.log.testStart(self.testName, self.qcID)
 
         # Initialize the dsVideoDevice module
         self.testdsVideoDevice.initialise(self.testdsVideoDevice.getDeviceType())
 
-        self.log.stepStart(f'Check the video device status')
-        self.log.step(f'Check the video device status')
+        result = True
+        SupportedDevices = self.testdsVideoDevice.getSupportedVideoDevice()
 
-        # Check the Display device connected to is active
-        result = self.checkDeviceStatus(True)
-        self.log.stepResult(result,'Display Device is active')
+        for device in SupportedDevices:
+            supported_framerate = self.testdsVideoDevice.getSupportedFrameRates(device)
+            self.testdsVideoDevice.setFRFMode(device, 'Disable')
 
-        NumofVideoDevices = self.testdsVideoDevice.getVideoDevice()
-        for i in range(0, NumofVideoDevices):
-            supported_framerate = self.testdsVideoDevice.getSupportedFrameRates()
-            if supported_framerate:
-                for framerate in supported_framerate:   
-                    self.testdsVideoDevice.setDisplayFramerate(i, framerate)
-                    time.sleep(20)
+            for framerate in supported_framerate:
+                self.testdsVideoDevice.setDisplayFramerate(device, framerate)
 
-                    status = self.testdsVideoDevice.getFrameratePrechangeCallbackStatus()
-                    if status:
-                        result = True
-                        self.log.stepResult(result,f'Framerate Prechange tSecond {status[0]} found in Callback')
-                    else:
-                        result = False
-                        self.log.stepResult(result,f'Framerate Prechange tSecond not found in Callback')
+                self.log.stepStart(f'Check Frame Rate Pre-Change Callback device:{device}, Framerate:{framerate}')
+                status = self.testdsVideoDevice.getFrameratePrechangeCallbackStatus()
+                self.log.stepResult(status, f'Check Frame Rate Pre-Change Callback device:{device}, Framerate:{framerate}')
 
-                    status = self.testdsVideoDevice.getFrameratePostchangeCallbackStatus()
-                    if status:
-                        result = True
-                        self.log.stepResult(result,f'Framerate Postchange tSecond {status[0]} found in Callback')
-                    else:
-                        result = False
-                        self.log.stepResult(result,f'Framerate Postchange tSecond not found in Callback')
-
-
-            else:
-                self.log.error("No supported framerates available for verification.")
-                result = False
-
+                self.log.stepStart(f'Check Frame Rate Post-Change Callback device:{device}, Framerate:{framerate}')
+                status = self.testdsVideoDevice.getFrameratePostchangeCallbackStatus()
+                self.log.stepResult(status, f'Check Frame Rate Post-Change Callback device:{device}, Framerate:{framerate}')
 
         # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()

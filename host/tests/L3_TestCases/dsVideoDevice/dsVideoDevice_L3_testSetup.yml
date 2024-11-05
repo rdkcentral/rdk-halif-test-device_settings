@@ -7,14 +7,14 @@ dsVideoDevice:  # Prefix must always exist
     device:
       defaults: &defaults
         artifacts:
-          - "<URL Path>/bin/hal_test"
-          - "<URL Path>/bin/libut_control.so"
-          - "<URL Path>/profiles/source/Source_VideoDevice.yaml"
-          - "<URL Path>/bin/run.sh"
+          - "<URL Path>/dsVideoDevice//bin/hal_test"
+          - "<URL Path>/dsVideoDevice//bin/libut_control.so"
+          - "<URL Path>/dsVideoDevice/profiles/sink/Sink_4K_VideoDevice.yaml"
+          - "<URL Path>/dsVideoDevice/bin/run.sh"
         execute:
-          - "chmod +x <PATH on Device>/hal_test"
-          - "chmod +x <PATH on Device>/run.sh"
-          - "ln -s /usr/lib/libds-hal.so <PATH on Device>/libdshal.so"
+          - "chmod +x <Path on Device>/dsVideodevice/hal_test"
+          - "chmod +x <Path on Device>/dsVideodevice/run.sh"
+          - "ln -s /usr/lib/libds-hal.so <Path on Device>/dsVideodevice/libdshal.so"
         streams:
       test1_FrameratePrePostChangeCallBack_Verify:
         <<: *defaults
@@ -24,10 +24,23 @@ dsVideoDevice:  # Prefix must always exist
         streams: #list of streams to be copied to device
       test3_SetDisplayFramerate:
         <<: *defaults
-        streams: #list of streams to be copied to device
+        streams:
+          - "<URL Path>/streams/BounceBall_3840x2160_23.98fps.mp4"
+          - "<URL Path>/streams/BounceBall_3840x2160_24fps.mp4"
+          - "<URL Path>/streams/BounceBall_3840x2160_25fps.mp4"
+          - "<URL Path>/streams/BounceBall_3840x2160_29.97fps.mp4"
+          - "<URL Path>/streams/BounceBall_3840x2160_30fps.mp4"
+          - "<URL Path>/streams/BounceBall_3840x2160_50fps.mp4"
+          - "<URL Path>/streams/BounceBall_3840x2160_59.94fps.mp4"
+          - "<URL Path>/streams/BounceBall_3840x2160_60fps.mp4"
       test4_FRFMode:
         <<: *defaults
-        streams: #list of streams to be copied to device
-      test5_VideoCodingFormats:
-        <<: *defaults
         streams:
+          - "<URL Path>/streams/BounceBall_3840x2160_23.98fps.mp4"
+          - "<URL Path>/streams/BounceBall_3840x2160_24fps.mp4"
+          - "<URL Path>/streams/BounceBall_3840x2160_25fps.mp4"
+          - "<URL Path>/streams/BounceBall_3840x2160_29.97fps.mp4"
+          - "<URL Path>/streams/BounceBall_3840x2160_30fps.mp4"
+          - "<URL Path>/streams/BounceBall_3840x2160_50fps.mp4"
+          - "<URL Path>/streams/BounceBall_3840x2160_59.94fps.mp4"
+          - "<URL Path>/streams/BounceBall_3840x2160_60fps.mp4"

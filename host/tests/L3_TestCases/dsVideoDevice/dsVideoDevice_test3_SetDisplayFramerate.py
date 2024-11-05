@@ -23,6 +23,7 @@
 
 import os
 import sys
+import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
@@ -42,7 +43,6 @@ class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
         rackDevice (str): Identifier for the device under test.
     """
 
-
     def __init__(self):
         """
         Initializes the test3_SetDisplayFramerate test .
@@ -51,14 +51,17 @@ class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
             None.
         """
         self.testName = "test3_SetDisplayFramerate"
-        super().__init__(self.testName, '1')
+        self.qcID = '3'
+        self.testStreamFrameRates = ["23.98", "24", "25", "29.97", "30", "50", "59.94", "60"]
+        super().__init__(self.testName, self.qcID)
 
-    def testVerifyDisplayFramerate(self, manual=False, filename: str=0, frate:str=0):
+    def testVerifyDisplayFramerate(self, StreamFrameRate:str, displayFramerate:str, manual=False):
         """
         Verifies the Display framerate on specified video device.
 
-
         Args:
+            StreamFrameRate(str) : Stream frame rate
+            displayFramerate(str): display frame rate
             manual (bool, optional): If True, requires manual confirmation from the user.
                                      Defaults to False.
 
@@ -66,9 +69,7 @@ class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
             bool: True if selected FRF mode is visible in output device; otherwise, False.
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Played {filename} for {frate}. Whether the video playback is smooth without any streaming issues (Y/N):")
-        elif manual == False:
-            return True
+            return self.testUserResponse.getUserYN(f"Is a displayRate {displayFramerate} with a streamRate {StreamFrameRate} acceptable? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
@@ -79,9 +80,6 @@ class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
         Executes the set display framerate tests on the video device.
 
         This function performs the following steps:
-        - Downloads necessary assets.
-        - Runs prerequisite commands.
-        - Initializes the dsVideoDevice module.
         - Set Display framerate
         - Cleans up the downloaded assets after testing.
 
@@ -89,53 +87,40 @@ class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
             bool: Status of the last verification (True if successful, False otherwise).
         """
 
-    
-        self.log.testStart(self.testName, '1')
+        self.log.testStart(self.testName, self.qcID)
 
         # Initialize the dsVideoDevice module
         self.testdsVideoDevice.initialise(self.testdsVideoDevice.getDeviceType())
 
         # set the display framerate
-        NumofVideoDevices = self.testdsVideoDevice.getVideoDevice()
-        
-        
-        for i in range(0, NumofVideoDevices):
+        SupportedDevices = self.testdsVideoDevice.getSupportedVideoDevice()
+
+        for device in SupportedDevices:
+            #Disable Auto FRF mode
+            self.testdsVideoDevice.setFRFMode(device, 'Disable')
+
             supported_framerate = self.testdsVideoDevice.getSupportedFrameRates()
-            if supported_framerate:
-                for framerate in supported_framerate:   
-                    frr = self.testdsVideoDevice.setDisplayFramerate(i, framerate)
-                    self.log.stepResult(framerate in frr, f'Set display framerate with {framerate} ')
 
-                    for stream in self.testStreams:
-                        filename = os.path.basename(stream)
-                        if framerate in filename or '24' in filename:
-                            self.log.step(f'Wait till Playback ends.')
-                            self.log.step(f'Playing {filename}')
+            for displayFramerate in supported_framerate:
+                self.testdsVideoDevice.setDisplayFramerate(device, displayFramerate)
 
-                            self.testPlayer.play(stream)
+                for streamUrl, StreamFrameRate in zip(self.StreamUrl, self.testStreamFrameRates):
+                    #Download the stream to device
+                    streamPath = self.testDownloadSingleStream(streamUrl)
+                    self.testPlayer.play(streamPath)
+                    time.sleep(5)
 
-                            result = self.testVerifyDisplayFramerate(True,filename,framerate)
-                    
-                            if result and filename != '24':
-                                self.log.stepResult(result, f'Playback was fine without any streaming issues')
-                            elif result == False and filename == '24':
-                                self.log.stepResult(result, f'Playback with streaming issues')
-                            else:
-                                self.log.stepResult(result, f"Able to observe streaming issues")
-                            if filename == framerate:
-                                break
-                            
-                            self.testPlayer.stop()
-                        
-                            
-            else:
-                self.log.error("No supported framerates available.")
-                result = False
+                    self.log.stepStart(f'Check Framerate device:{device}, StreamFrameRate: {StreamFrameRate}, Display Framerate:{displayFramerate}')
+                    result = self.testVerifyDisplayFramerate(StreamFrameRate, displayFramerate, True)
+                    self.log.stepResult(result, f'Check Framerate device:{device}, StreamFrameRate: {StreamFrameRate}, Display Framerate:{displayFramerate}')
 
-        
+                    self.testPlayer.stop()
+
+                    # Delete the stream
+                    self.testDeleteSingleStream(streamPath)
+
         # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()
-
 
         return result
 

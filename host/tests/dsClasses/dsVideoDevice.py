@@ -35,32 +35,26 @@ from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utSuiteNavigator import UTSuiteNavigatorClass
 from raft.framework.plugins.ut_raft.interactiveShell import InteractiveShell
 
-class dsVideoZoomMode(Enum):		
-    dsVIDEO_ZOOM_NONE = 0          
-    dsVIDEO_ZOOM_FULL = 1              # Full screen 
-    dsVIDEO_ZOOM_LB_16_9 = 2           # 16:9 Letterbox 
-    dsVIDEO_ZOOM_LB_14_9 = 3           # 14:9 Letterbox 
-    dsVIDEO_ZOOM_CCO = 4               # Center Cut-out 
-    dsVIDEO_ZOOM_PAN_SCAN = 5          # Pan & Scan 
-    dsVIDEO_ZOOM_LB_2_21_1_ON_4_3 = 6  # 2.21:1 Letterbox on 4:3 
-    dsVIDEO_ZOOM_LB_2_21_1_ON_16_9 = 7 # 2.21:1 Letterbox on 16:9 
-    dsVIDEO_ZOOM_PLATFORM = 8          # Control over the decoder format conversions is managed by the platform
-    dsVIDEO_ZOOM_16_9_ZOOM = 9         # 16:9 Zoom 
-    dsVIDEO_ZOOM_PILLARBOX_4_3 = 10     # Pillarbox 4:3
-    dsVIDEO_ZOOM_WIDE_4_3 = 11          # Wide 4:3 
-    dsVIDEO_ZOOM_MAX = 12                # Out of range 
+class dsVideoZoomMode(Enum):
+    dsVIDEO_ZOOM_NONE              = 0
+    dsVIDEO_ZOOM_FULL              = auto()  # Full screen
+    dsVIDEO_ZOOM_LB_16_9           = auto()  # 16:9 Letterbox
+    dsVIDEO_ZOOM_LB_14_9           = auto()  # 14:9 Letterbox
+    dsVIDEO_ZOOM_CCO               = auto()  # Center Cut-out
+    dsVIDEO_ZOOM_PAN_SCAN          = auto()  # Pan & Scan
+    dsVIDEO_ZOOM_LB_2_21_1_ON_4_3  = auto()  # 2.21:1 Letterbox on 4:3
+    dsVIDEO_ZOOM_LB_2_21_1_ON_16_9 = auto()  # 2.21:1 Letterbox on 16:9
+    dsVIDEO_ZOOM_PLATFORM          = auto()  # Control over the decoder format conversions is managed by the platform
+    dsVIDEO_ZOOM_16_9_ZOOM         = auto()  # 16:9 Zoom
+    dsVIDEO_ZOOM_PILLARBOX_4_3     = auto()  # Pillarbox 4:3
+    dsVIDEO_ZOOM_WIDE_4_3          = auto()  # Wide 4:3
 
 class dsVideoCodec(Enum):
-    dsVIDEO_CODEC_MPEGHPART2  = (0x01 << 0) 
-    dsVIDEO_CODEC_MPEG4PART10 = (0x01 << 1)  
-    dsVIDEO_CODEC_MPEG2       = (0x01 << 2)  
-    dsVIDEO_CODEC_MAX         = (0x01 << 3) 
+    dsVIDEO_CODEC_MPEGHPART2  = (0x01 << 0)
+    dsVIDEO_CODEC_MPEG4PART10 = (0x01 << 1)
+    dsVIDEO_CODEC_MPEG2       = (0x01 << 2)
 
 class dsVideoDeviceClass():
-
-    moduleName = "dsVideoDevice"
-    menuConfig =  os.path.join(dir_path, "dsVideoDevice_test_suite.yml")
-    testSuite = "L3 dsVideoDevice"
 
     """
     Device Settings Videodevice Class
@@ -71,10 +65,15 @@ class dsVideoDeviceClass():
         """
         Initializes the dsVideodevice class function.
         """
+        self.moduleName = "dsVideoDevice"
+        self.menuConfig =  os.path.join(dir_path, "dsVideoDevice_test_suite.yml")
+        self.testSuite  = "L3 dsVideoDevice"
         self.deviceProfile = ConfigRead( deviceProfilePath, self.moduleName)
         self.suitConfig    = ConfigRead(self.menuConfig, self.moduleName)
         self.utMenu        = UTSuiteNavigatorClass(self.menuConfig, self.moduleName, session)
         self.testSession   = session
+        self.devicePrefix = "VideoDevice"
+
         self.utMenu.start()
 
     def searchPattern(self, haystack, pattern):
@@ -97,7 +96,7 @@ class dsVideoDeviceClass():
             return match.group(1)
         return None
 
-    def initialise(self, device_type:int=0):
+    def initialise(self, device_type:int = 0):
         """
         Initializes the device settings VideoDevice module.
 
@@ -128,21 +127,22 @@ class dsVideoDeviceClass():
         """
         result = self.utMenu.select(self.testSuite, "VideoDevice_Term")
 
-    def setZoomMode(self, device:int=0, mode:str=0):
+    def setZoomMode(self, device:str="VideoDevice0", mode:str="dsVIDEO_ZOOM_NONE"):
         """
         sets the zoom mode.
 
         Args:
-            None
+            device (str, optional) : Video Device, defaults to VideoDevice0
+            mode (str, optional) : Zoom mode to set, defaults to dsVIDEO_ZOOM_NONE
 
         Returns:
             None
         """
         promptWithAnswers = [
                 {
-                    "query_type": "direct",
+                    "query_type": "list",
                     "query": "Select the Video Device:",
-                    "input": str(device)
+                    "input": device
                 },
                 {
                     "query_type": "list",
@@ -153,54 +153,52 @@ class dsVideoDeviceClass():
 
         result = self.utMenu.select(self.testSuite, "SetZoomMode", promptWithAnswers)
 
-    def setDisplayFramerate(self, device:int=0, framerate:str=0):
+    def setDisplayFramerate(self, device:str="VideoDevice0", framerate:str="3840x2160px60"):
         """
         Sets display framerate.
 
         Args:
-           None
+           device (str, optional) : Video Device, defaults to VideoDevice0
+           framerate(str, optional) : Display Framerate to set, defaults to 3840x2160px60
 
         Returns:
             None
         """
         promptWithAnswers = [
                 {
-                    "query_type": "direct",
+                    "query_type": "list",
                     "query": "Select the Video Device:",
-                    "input": str(device)
+                    "input": device
                 },
                 {
                     "query_type": "direct",
                     "query": " Provided Display Framerate :",
-                    "input": str(framerate)
+                    "input": framerate
                 }
         ]
 
         result = self.utMenu.select(self.testSuite, "SetDisplayFramerate", promptWithAnswers)
-        frameRatePattern = r"Result dsSetDisplayframerate\(IN:Handle:\[.*\],IN:framerate:\[(3840x\w+)\]\)"
-        frameRate = self.searchPattern(result, frameRatePattern)
 
-        return frameRate
-
-    def setFRFMode(self, device:int=0, mode:str=0):
+    def setFRFMode(self, device:str="VideoDevice0", mode:str="Enable"):
         """
         Sets display FRF mode.
 
         Args:
-            None
+            device (str, optional) : Video Device, defaults to VideoDevice0
+            mode (str, optional) : FRF mode, defaults to "Enable"
 
         Returns:
             None
         """
         promptWithAnswers = [
                 {
-                    "query_type": "device",
+                    "query_type": "list",
                     "query": "Select the Video Device:",
-                    "input": str(device)
+                    "input": device
                 },
                 {
                     "query_type": "list",
-                    "query": " Select the Display FRF Mode :",
+                    "query": "Select the Display FRF Mode :",
                     "input": mode
                 }
         ]
@@ -214,8 +212,7 @@ class dsVideoDeviceClass():
         Args:
             None.
         Returns:
-            tuple:
-                - tSecond: Time in seconds as a integer.
+            tSecond: Time in seconds as a integer.
             None: If no matching signal status is found.
         """
         result = self.testSession.read_until("FrameratePreChange callback tSecond: ")
@@ -225,7 +222,7 @@ class dsVideoDeviceClass():
         if match:
             tSecond = match.group(1)
             return tSecond
-        
+
         return None
 
     def getFrameratePostchangeCallbackStatus(self):
@@ -235,8 +232,7 @@ class dsVideoDeviceClass():
         Args:
             None.
         Returns:
-            tuple:
-                - tSecond: Time in seconds as a integer.
+            tSecond: Time in seconds as a integer.
             None: If no matching signal status is found.
         """
         result = self.testSession.read_until("FrameratePostChange callback tSecond: ")
@@ -246,30 +242,30 @@ class dsVideoDeviceClass():
         if match:
             tSecond = match.group(1)
             return tSecond
-        
+
         return None
 
-
-    def getVideoCodecInfo(self,device:int=0,codec:str=0):
+    def getVideoCodecInfo(self, device:str="VideoDevice0", codec:str="dsVIDEO_CODEC_MPEG4PART10"):
         """
         Gets the Video codec information.
 
         Args:
-            None
+            device (str, optional) : Video Device, defaults to VideoDevice0
+            codec (str, optional) : Video codec, defaults to dsVIDEO_CODEC_MPEG4PART10
 
         Returns:
-            None
+            tuple - Codec information
         """
         promptWithAnswers = [
                 {
-                    "query_type": "direct",
+                    "query_type": "list",
                     "query": "Select the Video Device:",
-                    "input": str(device)
+                    "input": device
                 },
                 {
                     "query_type": "list",
                     "query": " Select the Codec for Info :",
-                    "input": str(codec)
+                    "input": codec
                 }
         ]
 
@@ -279,32 +275,30 @@ class dsVideoDeviceClass():
         if codecInfo:
             count = codecInfo.group(2)
 
-
         codecpattern = r"OUT:CodecProfile\[(dsVIDEO_CODEC_\w+)\]"
         pattern = re.search(codecpattern,result)
 
         codecValues = ''
         if pattern:
             codecValues = pattern.group(0)
-        
+
         return  int(count), codecValues
 
-        
-    def getSupportedVideoCodingFormat(self,device:int=0):
+    def getSupportedVideoCodingFormat(self, device:str="VideoDevice0"):
         """
         Gets the Supported VideoCoding Format.
 
         Args:
-            None
+            device (str, optional) : Video Device, defaults to VideoDevice0
 
         Returns:
-            None
+            List of video codec formats
         """
         promptWithAnswers = [
                 {
-                    "query_type": "direct",
+                    "query_type": "list",
                     "query": "Select the Video Device:",
-                    "input": str(device)
+                    "input": device
                 }
         ]
 
@@ -314,22 +308,21 @@ class dsVideoDeviceClass():
 
         return supportedCodec
 
-
-    def getFRFMode(self, device:int=0):
+    def getFRFMode(self, device:str="VideoDevice0"):
         """
         Gets the FRF mode.
 
         Args:
-            None.
+            device (str, optional) : Video Device, defaults to VideoDevice0
 
         Returns:
-            None
+            Returns current FRF mode
         """
         promptWithAnswers = [
                 {
-                    "query_type": "direct",
+                    "query_type": "list",
                     "query": "Select the Video Device:",
-                    "input": str(device)
+                    "input": device
                 }
         ]
 
@@ -340,26 +333,24 @@ class dsVideoDeviceClass():
         if match:
             mode = match.group(1)
             return mode
-        
+
         return None
 
-
-
-    def getCurrentDisplayframerate(self,device:int=0):
+    def getCurrentDisplayframerate(self, device:str="VideoDevice0"):
         """
         Gets the current display framerate.
 
         Args:
-            None.
+            device (str, optional) : Video Device, defaults to VideoDevice0
 
         Returns:
-            None
+            Returns current display frame rate set
         """
         promptWithAnswers = [
                 {
-                    "query_type": "direct",
+                    "query_type": "list",
                     "query": "Select the Video Device:",
-                    "input": str(device)
+                    "input": device
                 }
         ]
 
@@ -369,21 +360,21 @@ class dsVideoDeviceClass():
 
         return frameRate
 
-    def getZoomMode(self,device:int=0):
+    def getZoomMode(self, device:str="VideoDevice0"):
         """
         Gets the Zoom mode.
 
         Args:
-            None.
+            device (str, optional) : Video Device, defaults to VideoDevice0
 
         Returns:
-            None
+            Returns current zoom mode set
         """
         promptWithAnswers = [
                 {
-                    "query_type": "direct",
+                    "query_type": "list",
                     "query": "Select the Video Device:",
-                    "input": str(device)
+                    "input": device
                 }
         ]
 
@@ -393,9 +384,7 @@ class dsVideoDeviceClass():
 
         return zoomMode
 
-
-
-    def getVideoDevice(self):
+    def getSupportedVideoDevice(self):
         """
         Returns a list of video devices.
 
@@ -403,14 +392,17 @@ class dsVideoDeviceClass():
             None
 
         Returns:
-            list: A list of tuples containing the video devices.
+            Returns list of supported video devices.
         """
 
+        supportedDevices = []
         devices = self.deviceProfile.get("NumVideoDevices")
         if not devices:
-            return []  # Handle empty ports list
+            return supportedDevices  # Handle empty ports list
 
-        return devices
+        for i in range(0, devices):
+            supportedDevices.append(self.devicePrefix + str(i))
+        return supportedDevices
 
     def getDeviceType(self):
         """
@@ -431,7 +423,6 @@ class dsVideoDeviceClass():
         else:
             return None
 
-    
     def __del__(self):
         """
         De-Initializes the dsVideo helper function.
@@ -443,28 +434,22 @@ class dsVideoDeviceClass():
             None
         """
         self.utMenu.stop()
-    
-        
-    def getSupportedFrameRates(self):
+
+    def getSupportedFrameRates(self, device:str="VideoDevice0"):
         """
         Returns the supported Framerate Formats on device.
 
         Args:
-            None.
+            device (str, optional) : Video Device, defaults to VideoDevice0
 
         Returns:
             returns the supported Framerate Formats
         """
-        supported_Framerates = []
 
-        Device = self.deviceProfile.get("Device")
-        for i in range(1, len(Device)+1):
-            entry = Device[i]
-            SupportedDisplayFramerate = entry['SupportedDisplayFramerate']
-            for j in range(0, len(SupportedDisplayFramerate)):
-                supported_Framerates.append(SupportedDisplayFramerate[j])
+        deviceNum = int(device.replace(self.devicePrefix, "")) + 1
+        supported_Framerates = self.deviceProfile.get("Device").get(deviceNum).get("SupportedDisplayFramerate")
 
-        return supported_Framerates	
+        return supported_Framerates
 
     def getsupportedCodingFormats(self):
         """
@@ -482,38 +467,36 @@ class dsVideoDeviceClass():
         for i in range(1, len(Device)+1):
             entry = Device[i]
             SupportedVideoCodingFormats = entry['SupportedVideoCodingFormats']
-            
+
             codec_list = list(dsVideoCodec)
-            
+
             for i, codec in enumerate(codec_list, start=1):
                 if SupportedVideoCodingFormats & codec.value:
                     supported_CodingFormats.append(codec.name)
 
-        return supported_CodingFormats	
-    
-    
-    def getZoomModes(self):
+        return supported_CodingFormats
+
+    def getSupportedZoomModes(self, device:str="VideoDevice0"):
         """
         Returns the supported Zoom modes on device.
 
         Args:
-            None.
+            device (str, optional) : Video Device, defaults to VideoDevice0
 
         Returns:
-            returns the supported Zoom modes
+            returns the list of supported Zoom modes
         """
         supported_ZoomModes = []
 
-        Device = self.deviceProfile.get("Device")
-        for i in range(1, len(Device)+1):
-            entry = Device[i]
-            SupportedDFCs = entry['SupportedDFCs']
-            for j in range(0, len(SupportedDFCs)):
-                zoomModes_enum = dsVideoZoomMode(SupportedDFCs[j]).name
-                supported_ZoomModes.append(zoomModes_enum)
+        deviceNum = int(device.replace(self.devicePrefix, "")) + 1
+        zoomModes = self.deviceProfile.get("Device").get(deviceNum).get("SupportedDFCs")
+        if zoomModes is None or zoomModes == 0:
+            return supported_ZoomModes
+
+        for zoomMode in zoomModes:
+            supported_ZoomModes.append(dsVideoZoomMode(zoomMode).name)
 
         return supported_ZoomModes
-
 
 # Test and example usage code
 if __name__ == '__main__':
