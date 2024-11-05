@@ -7,6 +7,10 @@
 - [Streams Required](#streams-required)
 - [Test Setup Connections](#test-setup-connections)
 - [Test Cases](#test-cases)
+  = [dsCompositeIn_test1_VerifyConnect_Callback.py](#dscompositein_test1_verifyconnect_callbackpy)
+  - [dsCompositeIn_test2_VerifyStatus_Callback.py](#dscompositein_test2_verifystatus_callbackpy)
+  - [dsCompositeIn_test3_ScaleAndVerify_Video.py](#dscompositein_test3_scaleandverify_videopy)
+  - [dsCompositeIn_test4_VerifySignal_Callback](#dscompositein_test4_verifysignal_Callbackpy)
 
 ## Acronyms, Terms and Abbreviations
 
@@ -216,7 +220,7 @@ Success Criteria
 
   - Test will check if the event has reached the device. 
   - If event detected will mark the step as PASS
-  - If event not detected will mark the step as DAIL
+  - If event not detected will mark the step as FAIL
 
 - Device Disconnect prompt:
 
@@ -230,7 +234,7 @@ Success Criteria
 
   - Test will check if the event has reached the device. 
   - If event detected will mark the step as PASS
-  - If event not detected will mark the step as DAIL
+  - If event not detected will mark the step as FAIL
 
 - Repeat for All Ports:
 
@@ -251,7 +255,7 @@ Success Criteria
 
 #### Acceptance Criteria - test02
 
-Test detects the status of the Source ddevice connected to Composite In port
+Test detects the status of the Source device connected to Composite In port
 
 #### Expected Results - test02
 
@@ -280,7 +284,7 @@ Success Criteria
 
   - Test will check if the device status event has reached the device. 
   - If event detected will mark the step as PASS
-  - If event not detected will mark the step as DAIL
+  - If event not detected will mark the step as FAIL
 
 - Repeat for All Ports:
 
@@ -364,7 +368,7 @@ Success Criteria
 
 - Test identifies the signal change.
 
-#### Test Steps - test03
+#### Test Steps - test04
 
 - Initiate the Test:
 
@@ -385,7 +389,7 @@ Success Criteria
 
 - Repeat for All Ports:
 
-  The test will iterate through all available ports.
+  The test will iterate through all available ports.x`
 
 - Test Conclusion:
 
