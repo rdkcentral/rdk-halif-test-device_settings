@@ -133,17 +133,13 @@ class dsHost_test1_VerifyTemperature(utHelperClass):
         # Log the result
         self.log.step(f'Temperature {temp2} & {temp1} difference:: {abs(temp2 - temp1)}')
         tolerance = 1e-9 
-        if abs(temp2 - temp1) < tolerance:
-            if temp2 == temp1:
-                self.log.stepResult(False,f'Temperature is not within expected range')
-                result = False
-            else:
-                self.log.stepResult(True,f'Temperature is within expected range')
-                result = True
- 
-        else:
-            self.log.stepResult(False,f'There is no Temperature is within expected range')
+        abs(temp2 - temp1) > tolerance
+        if temp2 <= temp1:
+            self.log.stepResult(False,f'Temperature is not within expected range')
             result = False
+        else:
+            self.log.stepResult(True,f'Temperature is within expected range')
+            result = True
 
         # Delete the dsHost class
         self.testdsHost.terminate()
