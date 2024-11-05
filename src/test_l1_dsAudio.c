@@ -5495,7 +5495,9 @@ void test_l1_dsAudio_positive_dsSetAudioDelay(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if(gDSAudioPortConfiguration[i].typeid != dsAUDIOPORT_TYPE_HEADPHONE)
+        if(gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HDMI || \
+            gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPDIF || \
+            gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HDMI_ARC )
         {
             // Step 03: Set audio delay for digital ports
             result = dsSetAudioDelay(handle, audio_delay_min);
