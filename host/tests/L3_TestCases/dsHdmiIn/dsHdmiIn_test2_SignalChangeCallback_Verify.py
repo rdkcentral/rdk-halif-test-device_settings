@@ -89,6 +89,7 @@ class dsHdmiIn_test2_SignalChangeCallback_Verify(dsHdmiInHelperClass):
 
         # Initialize the dsHdmiIn module
         self.testdsHdmiIn.initialise()
+        result = True
 
         # Loop through the supported HdmiIn ports
         for port in self.testdsHdmiIn.getSupportedPorts():
@@ -96,19 +97,19 @@ class dsHdmiIn_test2_SignalChangeCallback_Verify(dsHdmiInHelperClass):
             self.log.step(f'Select {port} Port')
 
             # Check the HdmiIn device connected to is active
-            result = self.connectDevice(True, port)
+            status = self.connectDevice(True, port)
             self.log.step(f'Hdmi In Device is active {result} on {port}')
 
             self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
             self.log.step(f'Port Selected {port}')
 
             status = self.testdsHdmiIn.getSignalChangeCallbackStatus()
-            if port == status[0]:
+            if status != None and port == status[0]:
                result &= True
-               self.log.step(f'Signal status {status[1]} found in Callback')
+               self.log.step(f'Signal status {status[1]} found in Callback and Result{result}')
             else:
                result &= False
-               self.log.step(f'Signal status not found in Callback found')
+               self.log.step(f'Signal status not found in Callback found and Result{result}')
 
         self.log.stepResult(result,f'Signal status Callbacks Verified')
         #Run postRequisites listed in the test setup configuration file

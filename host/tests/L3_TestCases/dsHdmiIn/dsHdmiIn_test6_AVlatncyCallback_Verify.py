@@ -66,6 +66,7 @@ class dsHdmiIn_test6_AVlatencyCallback_Verify(dsHdmiInHelperClass):
 
         # Initialize the dsHdmiIn module
         self.testdsHdmiIn.initialise()
+        result = True
 
         # Loop through the supported HdmiIn ports
         for port in self.testdsHdmiIn.getSupportedPorts():
@@ -73,14 +74,19 @@ class dsHdmiIn_test6_AVlatencyCallback_Verify(dsHdmiInHelperClass):
             self.log.step(f'Select {port} Port')
 
             # Check the HdmiIn device is active
-            result = self.CheckDeviceStatus(True,port)
-            if not result:
+            status = self.CheckDeviceStatus(True,port)
+            if not status:
                 self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
                 time.sleep(5)
                 self.log.step(f'Port Selected {port}')
+            self.testUserResponse.getUserYN(f'Chanage the AV content for latency on {port} press Y/N:')
             avLatency = self.testdsHdmiIn.getAVlatencyCallbackStatus()
-            self.log.step(f'audio_latency:{avLatency[0]}ms, videoLatency:{avLatency[1]}ms found in Callback')
-            result &= self.testUserResponse.getUserYN(f'Is AV Latency is changed on {port_type} press Y/N:')
+            if avLatency != None:
+                self.log.step(f'audio_latency:{avLatency[0]}ms, videoLatency:{avLatency[1]}ms found in Callback')
+                result &= self.testUserResponse.getUserYN(f'Is AV Latency is changed on {port} press Y/N:')
+            else:
+                self.log.step(f'No AV latency callback found in port: {port}')
+                result &= False
 
         self.log.stepResult(result,f"AV Latency is change Verified ")
         #Run postRequisites listed in the test setup configuration file

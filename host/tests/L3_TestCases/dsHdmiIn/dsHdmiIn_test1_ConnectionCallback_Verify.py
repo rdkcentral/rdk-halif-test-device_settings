@@ -65,9 +65,9 @@ class dsHdmiIn_test1_ConnectionCallback_Verify(dsHdmiInHelperClass):
         """
         if manual == True:
             if plug == True:
-                self.testUserResponse.getUserYN(f"Plug the HDMI cable {port} and Press Enter:")
+                return self.testUserResponse.getUserYN(f"Plug the HDMI cable {port} and Press Enter:")
             else :
-                self.testUserResponse.getUserYN(f"UnPlug the HDMI cable {port} and Press Enter:")
+                return self.testUserResponse.getUserYN(f"UnPlug the HDMI cable {port} and Press Enter:")
         else :
             #TODO: Add automation verification methods
             return
@@ -91,37 +91,37 @@ class dsHdmiIn_test1_ConnectionCallback_Verify(dsHdmiInHelperClass):
 
         # Initialize the dsHDMIIn module
         self.testdsHdmiIn.initialise()
+        result = True
 
         # Iterate through each supported HDMI port for the test
         for port in self.testdsHdmiIn.getSupportedPorts():
             self.log.stepStart(f'HDMI Connect Status Test for {port} Port')
 
             # Wait for HDMI Plug In
-            result = self.testPlugUnplugHDMI(port, True, True)
+            status = self.testPlugUnplugHDMI(port, True, True)
 
             status = self.testdsHdmiIn.getHDMIConnectionCallbackStatus()
-
-            result = False
-            if status:
-                if port == status[0] and status[1]:
-                    result = True
-
-            self.log.stepResult(result, f'HDMI Connect Status Test for {port} Port')
-
-            self.log.stepStart(f'HDMI Disconnect Status Test for {port} Port')
+            if status != None and port == status[0] and status[1] == "True":
+               self.log.step(f'HDMI Connection Status Callback found on {port} Port')
+               result &= True
+            else:
+                self.log.step(f'HDMI Connection Status Callback Not found on {port} Port')
+                result &= False
 
             # Wait for HDMI UnPlug
-            result = self.testPlugUnplugHDMI(port, False, True)
+            status = self.testPlugUnplugHDMI(port, False, True)
 
             status = self.testdsHdmiIn.getHDMIConnectionCallbackStatus()
+            if status != None and port == status[0] and status[1] == "False":
+               self.log.step(f'HDMI Unplug Status Callback found on {port} Port')
+               result &= True
+            else:
+                self.log.step(f'HDMI Unplug Status Callback Not found on {port} Port')
+                result &= False
 
-            result = False
-            if status:
-                if port == status[0] and not status[1]:
-                    result &= True
+            self.log.step(f'HDMI Connect Status Test for {port} Port')
 
-            self.log.stepResult(result, f'HDMI Connect Status Test for {port} Port')
-
+        self.log.stepResult(result, f'HDMI Connect Status Verified with Callbacks')
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()
 

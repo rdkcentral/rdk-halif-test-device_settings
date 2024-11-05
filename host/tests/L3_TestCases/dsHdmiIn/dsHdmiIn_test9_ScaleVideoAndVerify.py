@@ -86,6 +86,7 @@ class dsHdmiIn_test9_ScaleVideoAndVerify(dsHdmiInHelperClass):
 
         # Initialize the dsHDMIIn module
         self.testdsHdmiIn.initialise()
+        result = True
 
         # Define scaling parameters for testing
         videoScale_argList = [

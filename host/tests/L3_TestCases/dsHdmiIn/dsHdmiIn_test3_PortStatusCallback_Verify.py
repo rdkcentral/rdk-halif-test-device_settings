@@ -71,27 +71,29 @@ class dsHdmiIn_test3_PortStatusCallback_Verify(dsHdmiInHelperClass):
         # Initialize the dsHdmiIn module
         self.testdsHdmiIn.initialise()
 
+        result = True
+
         # Loop through the supported HdmiIn ports
         for port in self.testdsHdmiIn.getSupportedPorts():
             self.log.stepStart(f'Select {port} Port')
             self.log.step(f'Select {port} Port')
 
             # Check the HdmiIn device connected to is active
-            result = self.CheckDeviceStatus(True,port)
+            status = self.CheckDeviceStatus(True,port)
             #self.log.stepResult(result,f'Hdmi In Device is active {result} on {port}')
-            if not result:
+            if not status:
                 # Select the HdmiIn port
                 self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
                 self.log.step(f'Selected port {port} Port')
             # video scaling of HdmiIn port
 
             status = self.testdsHdmiIn.getHdmiInPortCallbackStatus()
-            if status[1] == port:
+            if status !=None and status[1] == port:
                result &= True
-               self.log.step(result,f'Port Status isPresented:{status[0]} activePort:{status[1]} found in Callback')
+               self.log.step(f'Port Status isPresented:{status[0]} activePort:{status[1]} found in Callback and Result{result}')
             else:
                result &= False
-               self.log.step(result,f'Port Status isPresented:{status[0]} activePort:{status[1]} found in Callback')
+               self.log.step(f'Port Status CALLBACK NOT found and Result{result}')
 
         self.log.stepResult(result,f'Port Status Verified with Callbacks')
         #Run postRequisites listed in the test setup configuration file
