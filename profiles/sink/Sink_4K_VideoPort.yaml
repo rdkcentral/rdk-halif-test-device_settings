@@ -10,7 +10,7 @@ dsVideoPort:
     #dsDISPLAY_COLORDEPTH_10BIT = 0x02
     #dsDISPLAY_COLORDEPTH_12BIT = 0x04
     #dsDISPLAY_COLORDEPTH_AUTO = 0x08
-    color_depth: 1
+    color_depth: 8
 
     Ports:
         1:
