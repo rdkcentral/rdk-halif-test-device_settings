@@ -6,10 +6,9 @@ dsVideoPort:
     Number_of_ports: 1
 
     #dsDISPLAY_COLORDEPTH_UNKNOWN = 0x0
-    #dsDISPLAY_COLORDEPTH_8BIT = 0x01
-    #dsDISPLAY_COLORDEPTH_10BIT = 0x0
-    #dsDISPLAY_COLORDEPTH_12BIT = 0x04
-    #dsDISPLAY_COLORDEPTH_AUTO = 0x08
+    #dsDISPLAY_COLORDEPTH_8BIT hal will return 8 
+    #dsDISPLAY_COLORDEPTH_10BIT hal will return 10
+    #dsDISPLAY_COLORDEPTH_12BIT hal will return 12
     color_depth: 10
 
     Ports:
