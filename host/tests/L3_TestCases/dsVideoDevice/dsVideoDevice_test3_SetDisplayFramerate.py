@@ -119,9 +119,9 @@ class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
                             if result and filename != '24':
                                 self.log.stepResult(result, f'Playback was fine without any streaming issues')
                             elif result == False and filename == '24':
-                                self.log.stepResult(True, f'Playback with streaming issues')
+                                self.log.stepResult(result, f'Playback with streaming issues')
                             else:
-                                self.log.error("Able to observe streaming issues")
+                                self.log.stepResult(result, f"Able to observe streaming issues")
                             if filename == framerate:
                                 break
                             
@@ -136,7 +136,7 @@ class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
         # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()
 
-        
+
         return result
 
 if __name__ == '__main__':

@@ -104,34 +104,34 @@ class dsVideoDevice_test4_SetAndGetFRFMode(dsVideoDeviceHelperClass):
         NumofVideoDevices = self.testdsVideoDevice.getVideoDevice()
         for i in range(0, NumofVideoDevices):
             self.testdsVideoDevice.setFRFMode(i, 'Enable')
-            self.log.step(f'Wait till Playback ends.')
-            
-            #Playback with framerate 24fps
+        
             for stream in self.testStreams:
+                filename = os.path.basename(stream)
+                self.log.step(f'Playing {filename}')
                 self.testPlayer.play(stream)
-
                 result = self.testVerifyFRFMode(True,True)
                 if result:
-                    self.log.stepResult(result, f'Playback was fine without any streaming issues')
+                    self.log.stepResult(result, f'Playback was fine without any streaming issues in {filename}')
                 else:
-                    self.log.error("Able to observe streaming issues")
-                
+                    self.log.stepResult(result,f"Able to observe streaming issues in {filename}")
+            
                 self.testPlayer.stop()
 
             self.testdsVideoDevice.setFRFMode(i, 'Disable')
-            self.log.step(f'Wait till Playback ends.')
-            
-            #Playback with framerate 24fps
+
             for stream in self.testStreams:
+                filename = os.path.basename(stream)
+                self.log.step(f'Playing {filename}')
                 self.testPlayer.play(stream)
 
                 result = self.testVerifyFRFMode(True,False)
                 if result:
-                    self.log.stepResult(True, f'Playback with streaming issues')
+                    self.log.stepResult(result, f'Playback with streaming issues in {filename}')
                 else:
-                    self.log.error("When FRF mode Disable playback was smooth")
+                    self.log.stepResult(result,f"When FRF mode Disable playback was smooth in {filename}")
 
                 self.testPlayer.stop()
+        
         # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()
 
