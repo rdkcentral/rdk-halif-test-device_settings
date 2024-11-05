@@ -82,13 +82,14 @@ class dsHdmiIn_test11_GetEDIDInfo_Verify(dsHdmiInHelperClass):
             # video scaling of HdmiIn port
 
             #get EDID Info on particular Hdmi input to true and false
-            result = self.testdsHdmiIn.getEdidInfo(port)
+            result &= self.testdsHdmiIn.getEdidInfo(port)
             if result == True:
-                self.log.stepResult(result,f'Verified EDID Info received on {port}')
+                self.log.step(f'Verified EDID Info received on {port}')
             else:
                 result = False
-                self.log.stepResult(result,f'Verified EDID Info received on {port}')
+                self.log.step(f'Verified EDID Info received on {port}')
 
+        self.log.stepResult(result,f"Verified EDID Info ")
         #Run postRequisites listed in the test setup configuration file
         self.testRunPostRequisites()
 

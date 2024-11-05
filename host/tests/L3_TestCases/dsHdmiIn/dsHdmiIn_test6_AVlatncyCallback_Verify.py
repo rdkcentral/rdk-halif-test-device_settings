@@ -79,8 +79,10 @@ class dsHdmiIn_test6_AVlatencyCallback_Verify(dsHdmiInHelperClass):
                 time.sleep(5)
                 self.log.step(f'Port Selected {port}')
             avLatency = self.testdsHdmiIn.getAVlatencyCallbackStatus()
-            self.log.stepResult(True,f'audio_latency:{avLatency[0]}ms, videoLatency:{avLatency[1]}ms found in Callback')
+            self.log.step(f'audio_latency:{avLatency[0]}ms, videoLatency:{avLatency[1]}ms found in Callback')
+            result &= self.testUserResponse.getUserYN(f'Is AV Latency is changed on {port_type} press Y/N:')
 
+        self.log.stepResult(result,f"AV Latency is change Verified ")
         #Run postRequisites listed in the test setup configuration file
         self.testRunPostRequisites()
 

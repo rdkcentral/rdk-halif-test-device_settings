@@ -81,12 +81,13 @@ class dsHdmiIn_test13_SetAndGetEDIDVersion(dsHdmiInHelperClass):
                    self.log.step(f'Getting {port} edid version')
                    edidStatus = self.testdsHdmiIn.getEdidVersion(port)
                    if edidStatus == edidVersion:
-                         result = True
-                         self.log.stepResult(result,f'Verified getVersion:{edidStatus} setVersion:{edidVersion} same')
+                         result &= True
+                         self.log.step(f'Verified getVersion:{edidStatus} setVersion:{edidVersion} same')
                    else:
-                         result = False
-                         self.log.stepResult(result,f'Verified getVersion:{edidStatus} setVersion:{edidVersion} same')
+                         result &= False
+                         self.log.step(f'Verified getVersion:{edidStatus} setVersion:{edidVersion} same')
 
+        self.log.stepResult(result,f"Verified EDID Version ")
         #Run postRequisites listed in the test setup configuration file
         self.testRunPostRequisites()
 

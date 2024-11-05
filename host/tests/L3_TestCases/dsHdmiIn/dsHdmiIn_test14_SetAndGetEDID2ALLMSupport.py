@@ -76,12 +76,13 @@ class dsHdmiIn_test14_SetAndGetEDID2ALLMSupport(dsHdmiInHelperClass):
                 self.log.step(f'Getting {port} edid 2 allm version')
                 allmStatus = self.testdsHdmiIn.getEdid2Allm(port)
                 if allmStatus == "false" or "true":
-                   result = True
-                   self.log.stepResult(result,f'Verified get ALLM:{allmStatus} set ALLM same')
+                   result &= True
+                   self.log.step(f'Verified get ALLM:{allmStatus} set ALLM same')
                 else:
-                   result = False
-                   self.log.stepResult(result,f'Verified get ALLM:{allmStatus} set ALLM same')
+                   result &= False
+                   self.log.step(f'Verified get ALLM:{allmStatus} set ALLM same')
 
+        self.log.stepResult(result,f"Verified EDID & ALLM Support ")
         #Run postRequisites listed in the test setup configuration file
         self.testRunPostRequisites()
 

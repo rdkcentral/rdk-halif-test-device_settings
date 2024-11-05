@@ -87,12 +87,13 @@ class dsHdmiIn_test3_PortStatusCallback_Verify(dsHdmiInHelperClass):
 
             status = self.testdsHdmiIn.getHdmiInPortCallbackStatus()
             if status[1] == port:
-               result = True
-               self.log.stepResult(result,f'Port Status isPresented:{status[0]} activePort:{status[1]} found in Callback')
+               result &= True
+               self.log.step(result,f'Port Status isPresented:{status[0]} activePort:{status[1]} found in Callback')
             else:
-               result = False
-               self.log.stepResult(result,f'Port Status isPresented:{status[0]} activePort:{status[1]} found in Callback')
+               result &= False
+               self.log.step(result,f'Port Status isPresented:{status[0]} activePort:{status[1]} found in Callback')
 
+        self.log.stepResult(result,f'Port Status Verified with Callbacks')
         #Run postRequisites listed in the test setup configuration file
         self.testRunPostRequisites()
 

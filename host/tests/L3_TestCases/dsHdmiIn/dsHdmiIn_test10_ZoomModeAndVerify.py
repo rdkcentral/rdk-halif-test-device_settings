@@ -103,9 +103,10 @@ class dsHdmiIn_test10_ZoomModeAndVerify(dsHdmiInHelperClass):
 
             for zoomModeIndex in range (1,len(zoomModeList)):
                    self.testdsHdmiIn.setHdmiInZoomMode(zoomModeList[zoomModeIndex])
-                   result = self.CheckDeviceStatusAndVerifyZoomMode(True,port,True)
-                   self.log.stepResult(result, f'Verified selected Zoom Mode {zoomModeList[zoomModeIndex]}')
+                   result &= self.CheckDeviceStatusAndVerifyZoomMode(True,port,True)
+                   self.log.step(f'Verified selected Zoom Mode {zoomModeList[zoomModeIndex]}')
 
+        self.log.stepResult(result,f"Verified Zoom Modes")
         #Run postRequisites listed in the test setup configuration file
         self.testRunPostRequisites()
 

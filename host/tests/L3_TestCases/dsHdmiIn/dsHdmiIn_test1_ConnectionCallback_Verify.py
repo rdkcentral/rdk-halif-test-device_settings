@@ -118,7 +118,7 @@ class dsHdmiIn_test1_ConnectionCallback_Verify(dsHdmiInHelperClass):
             result = False
             if status:
                 if port == status[0] and not status[1]:
-                    result = True
+                    result &= True
 
             self.log.stepResult(result, f'HDMI Connect Status Test for {port} Port')
 
