@@ -23,6 +23,7 @@
 
 import os
 import sys
+import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
@@ -61,7 +62,9 @@ class dsHdmiIn_test10_ZoomModeAndVerify(dsHdmiInHelperClass):
             bool: True if verification is successful, otherwise False.
         """
         if Manual == True and videoZoomMode == False:
-            return self.testUserResponse.getUserYN(f'Check Device is ON connected to {port_type} and press Enter')
+            self.testUserResponse.getUserYN(f'Please connect the {port_type} and press Enter:')
+            time.sleep(3)
+            return self.testUserResponse.getUserYN(f'Is HDMI device connected and display is ON {port_type}? Y/N:')
         elif Manual == True and videoZoomMode == True:
             return self.testUserResponse.getUserYN(f'Verify Zoom Mode selected on port {port_type} and press Enter')
         else :
@@ -90,11 +93,10 @@ class dsHdmiIn_test10_ZoomModeAndVerify(dsHdmiInHelperClass):
 
             # Check the HdmiIn device connected to is active
             result = self.CheckDeviceStatusAndVerifyZoomMode(True,port,False)
-            self.log.stepResult(result,f'Hdmi In Device is active {result} on {port}')
-
-            # Select the HdmiIn port
-            self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
-            self.log.step(f'Port Selected {port}')
+            if not result:
+                self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
+                time.sleep(5)
+                self.log.step(f'Port Selected {port}')
 
             #get the list of Zoom Modes
             zoomModeList = self.testdsHdmiIn.getVideoZoomModeList()

@@ -23,6 +23,7 @@
 
 import os
 import sys
+import time
 from enum import Enum, auto
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -63,6 +64,7 @@ class dsHdmiIn_test7_AVIChangeCallback_Verify(dsHdmiInHelperClass):
         """
         if manual == True and avi_input != True:
             self.testUserResponse.getUserYN(f'Please connect the {port_type} and press Enter:')
+            time.sleep(3)
             return self.testUserResponse.getUserYN(f'Is HdmiIn device connected and Displayed is ON {port_type} press Y/N:')
         elif manual == True and avi_input == True:
             return self.testUserResponse.getUserYN(f'Change the AVI Content on device connected to {port_type} and press Enter:')
@@ -94,9 +96,11 @@ class dsHdmiIn_test7_AVIChangeCallback_Verify(dsHdmiInHelperClass):
             self.log.step(f'Select {port} Port')
 
             # Check the HdmiIn device is active
-            self.CheckDeviceStatus(True, port, False)
-            self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
-            self.log.step(f'HdmiIn Select Verification {port} Port')
+            result = self.CheckDeviceStatus(True, port, False)
+            if not result:
+                self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
+                time.sleep(5)
+                self.log.step(f'Port Selected {port}')
             self.CheckDeviceStatus(True, port, True)
             aviStatus = self.testdsHdmiIn.getAVIContentCallbackStatus()
             if aviStatus[0] == port:

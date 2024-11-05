@@ -64,6 +64,7 @@ class dsHdmiIn_test12_GetSpdInfo_Verify(dsHdmiInHelperClass):
         """
         if manual == True and spd_info == False:
             self.testUserResponse.getUserYN(f'Please connect the {port_type} and press Enter:')
+            time.sleep(3)
             return self.testUserResponse.getUserYN(f'Is HdmiIn device connected and Displayed is ON {port_type} press Y/N:')
         elif manual == True and spd_info == True:
             return self.testUserResponse.getUserYN(f'check the Spd Info received of device connected to {port_type} and press Enter:')
@@ -100,6 +101,7 @@ class dsHdmiIn_test12_GetSpdInfo_Verify(dsHdmiInHelperClass):
             if not result:
                 # Select the HdmiIn port
                 self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
+                time.sleep(5)
                 self.log.step(f'Selected port {port} Port')
 
             time.sleep(5)

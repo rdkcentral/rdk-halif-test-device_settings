@@ -23,6 +23,7 @@
 
 import os
 import sys
+import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
@@ -115,6 +116,7 @@ class dsHdmiInHelperClass(utHelperClass):
         """
         if manual == True:
             self.testUserResponse.getUserYN(f'Please connect the {port_type} and press Enter:')
+            time.sleep(3)
             return self.testUserResponse.getUserYN(f'Is HdmiIn device connected and Displayed is ON {port_type} press Y/N:')
         else:
             #TODO: Add automation verification methods

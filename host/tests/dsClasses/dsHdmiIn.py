@@ -171,7 +171,7 @@ class dsHdmiInClass():
 
         This function reads the output from the device session to detect the
         HDMI port connection status. The callback message contains the port number
-        and the connection status ("true" or "false"). The function parses the message
+        and the connection status ("True" or "alse"). The function parses the message
         and returns the port and connection status as a boolean value.
 
         Args:
@@ -189,7 +189,7 @@ class dsHdmiInClass():
         if match:
             port = match.group(1)
             connection = match.group(2)
-            return port, connection == "true"
+            return port, connection == "True"
 
         return None
 
@@ -408,7 +408,7 @@ class dsHdmiInClass():
       
         return None
 
-    def selectHDMIInPort(self, hdmiin_port:str, audmix:int=0, videoplane:int=0, topmost:int=1):
+    def selectHDMIInPort(self, hdmiin_port:str, audMix:int=0, videoPlane:int=0, topmost:int=1):
         """
         Selects specified HDMI In port.
 
@@ -430,12 +430,12 @@ class dsHdmiInClass():
                 {
                     "query_type": "direct",
                     "query": "Enter the audiomix to select:",
-                    "input": str(audmix)
+                    "input": str(audMix)
                 },
                 {
                     "query_type": "direct",
                     "query": "Supported  the videoplane type:",
-                    "input": str(videoplane)
+                    "input": str(videoPlane)
                 },
                 {
                     "query_type": "direct",
@@ -468,7 +468,7 @@ class dsHdmiInClass():
                 {
                     "query_type": "direct",
                     "query": "Enter the y coordinate to select",
-                    "input": str(yYord)
+                    "input": str(yCord)
                 },
                 {
                     "query_type": "direct",

@@ -23,6 +23,8 @@
 
 import os
 import sys
+import time
+
 from enum import Enum, auto
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -102,18 +104,22 @@ class dsHdmiIn_test4_VideoModeChangeCallback_Verify(dsHdmiInHelperClass):
             self.log.step(f'Select {port} Port')
 
             # Check the HdmiIn device is active
-            self.CheckDeviceStatusAndResolutionChange(True, port , False)
-            self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
-            self.log.step(f'Port Selected {port}')
+            result = self.CheckDeviceStatusAndResolutionChange(True, port , False)
+            if not result:
+                self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
+                time.sleep(5)
+                self.log.step(f'Port Selected {port}')
 
             self.CheckDeviceStatusAndResolutionChange(True, port, True)
+            time.sleep(5)
             videoMode = self.testdsHdmiIn.getVideoModeCallbackStatus()
-            if port == videoMode[0]:
-                result = True
-                self.log.stepResult(result,f'hdmi video mode port:{port} pixelResolution:{videoMode[1]} aspectRatio:{videoMode[2]} in Callback found')
-            else:
+            if videoMode != None and port == videoMode[0]:
+                self.log.step(f'hdmi video mode port:{port} pixelResolution:{videoMode[1]} aspectRatio:{videoMode[2]} in Callback found')
+                result &= self.testUserResponse.getUserYN(f'Is the Resolution change on device port:{port} pixelResolution:{videoMode[1]} aspectRatio:{videoMode[2]}? Y/N: ')
+                self.log.stepResult(result,f'hdmi video mode port:{port} Resolution ')
+            elif videoMode == None:
                 result = False
-                self.log.stepResult(result,f'hdmi video mode port:{port} pixelResolution:{videoMode[1]} aspectRatio:{videoMode[2]} in Callback found')
+                self.log.stepResult(result,f'hdmi video mode port:{port} in Callback Not found')
 
         #Run postRequisites listed in the test setup configuration file
         self.testRunPostRequisites()
