@@ -26,7 +26,7 @@ import sys
 import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(dir_path+"/../")
+sys.path.append(dir_path+"/../../")
 
 from dsClasses.dsHost import dsHostClass
 from raft.framework.plugins.ut_raft import utHelperClass
@@ -77,15 +77,6 @@ class dsHost_test1_VerifyTemperature(utHelperClass):
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
 
-    def testCleanAssets(self):
-        """
-        Removes the assets copied to the dut.
-
-        Args:
-            None.
-        """
-        self.deleteFromDevice(self.testStreams)
-
     def testRunPrerequisites(self):
         """
         Runs Prerequisite commands listed in test-setup configuration file on the dut.
@@ -126,31 +117,33 @@ class dsHost_test1_VerifyTemperature(utHelperClass):
 
         # Get the CPU temperature
         temp1 = self.testdsHost.getCPUTemperature()
-        self.log.stepStart(f'Temperature 1: {temp1}')
+        self.log.step(f'Temperature 1: {temp1}')
 
         # Ask the user to increase the temperature
-        self.testUserResponse.getUserYN(f"Increase the temperature and press Enter:")
-        # Wait for 60 seconds
-        time.sleep(60)
+        self.testUserResponse.getUserYN(f"Please begin to increase the temperature, and wait around one to two minutes before pressing enter to continue:")
+
 
         # Get the CPU temperature again
         temp2 = self.testdsHost.getCPUTemperature()
-        self.log.stepStart(f'Temperature 1: {temp2}')
+        self.log.step(f'Temperature 2: {temp2}')
 
         # Check to make sure the temperature has increased
-        self.log.stepStart(f'Check that the temperature has increased')
-        result = temp1 < temp2
+        self.log.step(f'Check that the temperature has increased')
 
         # Log the result
-        self.log.stepStart(f'Temperature difference:: {abs(temp1 - temp2)}')
-        if result:
-            self.log.stepStart(f'Temperature is within expected range')
+        self.log.step(f'Temperature {temp2} & {temp1} difference:: {abs(temp2 - temp1)}')
+        tolerance = 1e-9 
+        if abs(temp2 - temp1) < tolerance:
+            if temp2 == temp1:
+                self.log.stepResult(False,f'Temperature is not within expected range')
+                result = False
+            else:
+                self.log.stepResult(True,f'Temperature is within expected range')
+                result = True
+ 
         else:
-            self.log.stepStart(f'Temperature is not within expected range')
-
-
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
+            self.log.stepResult(False,f'There is no Temperature is within expected range')
+            result = False
 
         # Delete the dsHost class
         del self.testdsHost
