@@ -35,15 +35,24 @@ This document describes the L3 Low Level Test Specification and Procedure Docume
 - `Interface header` - [dsVideoDevice HAL header](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsVideoDevice.h)
 
 ## Level 3 Test Cases High Level Overview
+|#|Streams Name|Streams description|
+|-|------------|-------------------|
+|1|24fps_stream|Framerate Per Second: 24fps|
+|2|vts_3840x2160px47_stream|Framerate Per Second: 47fps|
+|3|vts_3840x2160px48_stream|Framerate Per Second: 48fps|
+|4|vts_3840x2160px50_stream|Framerate Per Second: 50fps|
+|5|vts_3840x2160px59_stream|Framerate Per Second: 59fps|
+|6|vts_3840x2160px60_stream|Framerate Per Second: 60fps|
+
 Below are top test use-case for the Video Display.
 
-|#|Test-case|Description|HAL APIs|Source|Sink|
-|-|---------|-----------|--------|------|----|
-|1|Verify the Video Display framerate change with pre-change callback.|Set the supported diplay framrates using `dsSetDisplayframerate()` and check the callback is triggered before and after when the framerate of a display changes|`dsRegisterFrameratePreChangeCB()`, `dsRegisterFrameratePostChangeCB()`|`NA`|`Y`|
-|2|Set and verify the Zoom mode of the source device|Play any video content and Set the supported Zoom mode and verify the selected Zoom mode|`dsSetDFC()`, `dsGetDFC()`|`Y`|`NA`|
-|3|Select the Device Frame Rate of Sink device|Select the Device Frame Rate of Sink device and on playing video playback verify `dsSetDisplayframerate()`|`dsSetDisplayframerate()`|`NA`|`Y`|
-|4|Set and verify the `FRF` mode|Select the`FRF`mode and verify the selected `FRF` mode with video playback|`dsSetFRFMode()`|`NA`|`Y`|
-|5|Check Video coding Formats and information|Select the supported video device and Video coding format using `dsGetVideoCodecInfo()` and get Video codec information for video device|`dsGetVideoCodecInfo()`|`Y`|`NA`|
+|#|Test-case|Description|HAL APIs|Source|Sink|Streams Number|
+|-|---------|-----------|--------|------|----|--------------|
+|1|Verify the Video Display framerate change with pre-change callback.|Set the supported diplay framrates using `dsSetDisplayframerate()` and check the callback is triggered before and after when the framerate of a display changes|`dsRegisterFrameratePreChangeCB()`, `dsRegisterFrameratePostChangeCB()`|`NA`|`Y`|`NA`|
+|2|Set and verify the Zoom mode of the source device|Play any video content and Set the supported Zoom mode and verify the selected Zoom mode|`dsSetDFC()`, `dsGetDFC()`|`Y`|`NA`|1,2,3,4,5,6|
+|3|Select the Device Frame Rate of Sink device|Select the Device Frame Rate of Sink device and on playing video playback verify `dsSetDisplayframerate()`|`dsSetDisplayframerate()`|`NA`|`Y`|1,2,3,4,5,6|
+|4|Set and verify the `FRF` mode|Select the`FRF`mode and verify the selected `FRF` mode with video playback|`dsSetFRFMode()`|`NA`|`Y`|1,2,3,4,5,6|
+|5|Check Video coding Formats and information|Select the supported video device and Video coding format using `dsGetVideoCodecInfo()` and get Video codec information for video device|`dsGetVideoCodecInfo()`|`Y`|`NA`|`NA`|
 
 ## Level 3 Python Test Cases High Level Overview
 

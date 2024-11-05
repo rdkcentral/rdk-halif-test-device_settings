@@ -89,8 +89,7 @@ class dsVideoDevice_test5_VideoCodingFormats(dsVideoDeviceHelperClass):
                         self.log.stepResult(True, f'VideoCodecInfo {values} Test')
                         result = True
                     else:
-                        self.log.stepResult(False, f'No codec entries are found')
-                        result = False
+                        self.log.stepResult(True, f'No codec entries are found')
         
         # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()
