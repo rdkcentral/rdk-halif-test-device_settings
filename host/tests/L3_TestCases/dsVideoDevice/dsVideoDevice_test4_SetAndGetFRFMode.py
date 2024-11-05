@@ -23,6 +23,7 @@
 
 import os
 import sys
+import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
@@ -51,91 +52,73 @@ class dsVideoDevice_test4_SetAndGetFRFMode(dsVideoDeviceHelperClass):
             None.
         """
         self.testName  = "test4_FRFMode"
-        super().__init__(self.testName, '1')
+        self.qcID = '4'
+        self.testStreamFrameRates = ["23.98", "24", "25", "29.97", "30", "50", "59.94", "60"]
+        self.exptectedMode = ["3840x2160px48", "3840x2160px48", "3840x2160px50", "3840x2160px60", "3840x2160px60", "3840x2160px50", "3840x2160px60", "3840x2160px60"]
+        super().__init__(self.testName, self.qcID)
 
 
-    def testVerifyFRFMode(self, manual=False, frfmode=False):
+    def testVerifyFRFMode(self, frfmode, expectedMode:str, manual=False):
         """
         Verifies the FRF mode on specified video device.
 
-
         Args:
+            frfmode (bool) : FRF mode
+            expectedMode (str): Expected display mode
             manual (bool, optional): If True, requires manual confirmation from the user.
                                      Defaults to False.
 
         Returns:
             bool: True if selected FRF mode is visible in output device; otherwise, False.
         """
-        if manual == True and frfmode == True:
-            return self.testUserResponse.getUserYN(f"Wait till playback ends. And, Check whether the video playback is smooth without any streaming issues (Y/N):")
-        elif manual == True and frfmode == False:
-            return self.testUserResponse.getUserYN(f"Wait till playback ends. And, Check whether the video playback has streamming issues is seen? (Y/N):")
+        if manual == True:
+            return self.testUserResponse.getUserYN(f"Has the display refresh rate been changed to {expectedMode} (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
 
-    
     def testFunction(self):
         """
         Executes the set and get FRF mode tests on the video device.
 
         This function performs the following steps:
-        - Downloads necessary assets.
-        - Runs prerequisite commands.
         - Initializes the dsVideoDevice module.
         - Get the number of video devices
         - Set the FRF mode to Enable
-        - Play the video stream
-        - Wait till playback ends and verify with observation
-        - Set the FRF mode to Disable
-        - Play the video stream
-        - Wait till playback ends and verify with observation
-        - Cleans up the downloaded assets after testing.
+        - Play the different frame rate video streams
+        - Check the if the display rate changes according to the video framerate
 
         Returns:
             bool: Status of the last verification (True if successful, False otherwise).
         """
-        
-        self.log.testStart(self.testName, '1')
+
+        self.log.testStart(self.testName, self.qcID)
 
         # Initialize the dsVideoDevice module
         self.testdsVideoDevice.initialise(self.testdsVideoDevice.getDeviceType())
 
-        NumofVideoDevices = self.testdsVideoDevice.getVideoDevice()
-        for i in range(0, NumofVideoDevices):
-            self.testdsVideoDevice.setFRFMode(i, 'Enable')
-        
-            for stream in self.testStreams:
-                filename = os.path.basename(stream)
-                self.log.step(f'Playing {filename}')
-                self.testPlayer.play(stream)
-                result = self.testVerifyFRFMode(True,True)
-                if result:
-                    self.log.stepResult(result, f'Playback was fine without any streaming issues in {filename}')
-                else:
-                    self.log.stepResult(result,f"Able to observe streaming issues in {filename}")
-            
-                self.testPlayer.stop()
+        result = True
+        SupportedDevices = self.testdsVideoDevice.getSupportedVideoDevice()
+        for device in SupportedDevices:
+            self.testdsVideoDevice.setFRFMode(device, 'Enable')
 
-            self.testdsVideoDevice.setFRFMode(i, 'Disable')
-
-            for stream in self.testStreams:
-                filename = os.path.basename(stream)
-                self.log.step(f'Playing {filename}')
-                self.testPlayer.play(stream)
-
-                result = self.testVerifyFRFMode(True,False)
-                if result:
-                    self.log.stepResult(result, f'Playback with streaming issues in {filename}')
-                else:
-                    self.log.stepResult(result,f"When FRF mode Disable playback was smooth in {filename}")
+            for streamUrl, frameRate, exptectedMode in zip(self.StreamUrl, self.testStreamFrameRates, self.exptectedMode):
+                streamPath = self.testDownloadSingleStream(streamUrl)
+                self.testPlayer.play(streamPath)
+                time.sleep(5)
+                self.log.stepStart(f'Check Auto FRF mode device:{device}, Framerate:{frameRate}')
+                result = self.testVerifyFRFMode(True, exptectedMode, False)
+                self.log.stepResult(result, f'Check Auto FRF mode device:{device}, Framerate:{frameRate}')
 
                 self.testPlayer.stop()
-        
+
+                self.testDeleteSingleStream(streamPath)
+
+            self.testdsVideoDevice.setFRFMode(device, 'Disable')
+
         # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()
 
-        
         return result
 
 if __name__ == '__main__':

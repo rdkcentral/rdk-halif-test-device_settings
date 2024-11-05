@@ -24,7 +24,6 @@
 import os
 import sys
 
-
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
 
@@ -57,7 +56,6 @@ class dsVideoDeviceHelperClass(utHelperClass):
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
-        
         self.player_session = self.dut.getConsoleSession("ssh_player")
 
         player = self.cpe.get("test").get("player")
@@ -85,7 +83,6 @@ class dsVideoDeviceHelperClass(utHelperClass):
         """
 
         # List of streams with path
-        # List of streams with path
         self.testStreams = []
 
         test = self.testSetup.get("assets").get("device").get(self.testName)
@@ -95,12 +92,38 @@ class dsVideoDeviceHelperClass(utHelperClass):
         if url is not None:
             self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
 
-        url = self.testSetup.get("assets").get("device").get(self.testName).get("streams")
         # Download test streams to device
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            for streampath in url:
+        self.StreamUrl = test.get("streams")
+        if(self.StreamUrl and len(self.StreamUrl) == 1):
+            self.downloadToDevice(self.StreamUrl, self.deviceDownloadPath, self.rackDevice)
+            for streampath in self.StreamUrl:
                 self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
+
+    def testDownloadSingleStream(self, stream_url) -> str:
+        """
+        Downloads a single stream listed in the test-setup configuration file to the dut.
+
+        Args:
+            stream_url (str): The URL of the stream to download.
+        Return:
+            Returns the stream path on device
+        """
+
+        # Download the specified stream to the device
+        if stream_url is not None:
+            self.downloadToDevice([stream_url], self.deviceDownloadPath, self.rackDevice)
+            return os.path.join(self.deviceDownloadPath, os.path.basename(stream_url))
+
+        return None
+
+    def testDeleteSingleStream(self, streamPath:str):
+        """
+        Removes the test stream from the DUT after test execution.
+
+        Args:
+            None
+        """
+        self.deleteFromDevice([streamPath])
 
     def testCleanAssets(self):
         """
@@ -125,7 +148,7 @@ class dsVideoDeviceHelperClass(utHelperClass):
         if cmds is not None:
             for cmd in cmds:
                 self.writeCommands(cmd)
-        
+
         # Run commands as part of test prerequisites
         prerequisite_cmds = self.cpe.get("test").get("player").get("prerequisites")
         if prerequisite_cmds is not None:
