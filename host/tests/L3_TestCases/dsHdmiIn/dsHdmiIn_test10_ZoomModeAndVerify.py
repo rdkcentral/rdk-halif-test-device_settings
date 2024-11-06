@@ -102,7 +102,7 @@ class dsHdmiIn_test10_ZoomModeAndVerify(dsHdmiInHelperClass):
             #get the list of Zoom Modes
             zoomModeList = self.testdsHdmiIn.getVideoZoomModeList()
 
-            for zoomModeIndex in range (1,len(zoomModeList)):
+            for zoomModeIndex in zoomModeList:
                 self.testdsHdmiIn.setHdmiInZoomMode(zoomModeList[zoomModeIndex])
                 status = self.CheckDeviceStatusAndVerifyZoomMode(True,port,True)
                 if status:
