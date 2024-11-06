@@ -47,19 +47,18 @@ class dsDisplayHelperClass(utHelperClass):
         """
         self.testName  = ""
         self.testSetupPath = os.path.join(dir_path, "dsDisplay_L3_testSetup.yml")
+        self.monitorDeatilsPath = os.path.join(dir_path, "dsDisplay_test_MonitorDetails.yml")
         self.moduleName = "dsDisplay"
         self.rackDevice = "dut"
-        self.testMonitorNameDetails = [
-            {"Product":"LG", "manufacturerId": "GSM", "monitorName": "LG TV"},
-            {"Product":"Philips", "manufacturerId": "PHL", "monitorName": "PHILIPS FTV"},
-            {"Product":"Sony", "manufacturerId": "SNY", "monitorName": "SONY TV"},
-            {"Product":"Samsung", "manufacturerId": "SAM", "monitorName": "SAMSUNG"}
-        ]
 
         super().__init__(testName, qcId, log)
 
          # Load test setup configuration
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
+
+        # Load test setup configuration
+        self.testMonitorConfig = ConfigRead(self.monitorDeatilsPath, "Monitor")
+        self.testMonitorNameDetails = self.testMonitorConfig.fields
 
         #open Hal Session
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
