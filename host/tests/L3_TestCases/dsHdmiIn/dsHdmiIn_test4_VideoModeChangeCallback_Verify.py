@@ -105,8 +105,8 @@ class dsHdmiIn_test4_VideoModeChangeCallback_Verify(dsHdmiInHelperClass):
             self.log.step(f'Select {port} Port')
 
             # Check the HdmiIn device is active
-            result = self.CheckDeviceStatusAndResolutionChange(True, port , False)
-            if not result:
+            status = self.CheckDeviceStatusAndResolutionChange(True, port , False)
+            if not status:
                 self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
                 time.sleep(5)
                 self.log.step(f'Port Selected {port}')
@@ -116,11 +116,18 @@ class dsHdmiIn_test4_VideoModeChangeCallback_Verify(dsHdmiInHelperClass):
             videoMode = self.testdsHdmiIn.getVideoModeCallbackStatus()
             if videoMode != None and port == videoMode[0]:
                 self.log.step(f'hdmi video mode port:{port} pixelResolution:{videoMode[1]} aspectRatio:{videoMode[2]} in Callback found')
-                result &= self.testUserResponse.getUserYN(f'Is the Resolution change on device port:{port} pixelResolution:{videoMode[1]} aspectRatio:{videoMode[2]}? Y/N: ')
-                self.log.step(f'hdmi video mode port:{port} Resolution and Result{result}')
+                status = self.testUserResponse.getUserYN(f'Is the Resolution change on device port:{port} pixelResolution:{videoMode[1]} aspectRatio:{videoMode[2]}? Y/N: ')
+                if status:
+                    self.log.stepResult(True,f'hdmi video mode port:{port} Resolution , pixelResolution Verified ')
+                    result &= True
+                else:
+                    self.log.stepResult(False,f'Resolution change on Not observed :{port} ')
+                    result &= False
+
             elif videoMode == None:
+                self.log.stepResult(False,f'hdmi video mode port:{port} in Callback Not found and Result{result}')
                 result &= False
-                self.log.step(f'hdmi video mode port:{port} in Callback Not found and Result{result}')
+
 
         self.log.stepResult(result,f"Verified Video modes ")
         #Run postRequisites listed in the test setup configuration file

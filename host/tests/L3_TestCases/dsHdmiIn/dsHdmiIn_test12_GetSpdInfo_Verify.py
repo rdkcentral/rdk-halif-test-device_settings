@@ -96,7 +96,7 @@ class dsHdmiIn_test12_GetSpdInfo_Verify(dsHdmiInHelperClass):
             self.log.stepStart(f'{port} Port')
 
             # Check the HdmiIn device connected to is active
-            status = self.CheckDeviceAndInfoStatus(True, port, False)
+            status = self.CheckDeviceStatus(True,port)
             #self.log.step(f'Hdmi In Device is active on {port}')
             if not status:
                 # Select the HdmiIn port
@@ -106,11 +106,15 @@ class dsHdmiIn_test12_GetSpdInfo_Verify(dsHdmiInHelperClass):
 
             self.testUserResponse.getUserYN(f'Please set the SPD Info {port} press Y/N:')
             #Getting Spd Info on particular Hdmi input port
-            result &= self.testdsHdmiIn.getSpdInfo(port)
-            status = self.CheckDeviceAndInfoStatus(True, port , True)
-            if not status:
-                result &= True
-                self.log.step(f'Verified Spd info on {port}')
+            spd_values= self.testdsHdmiIn.getSpdInfo(port)
+            if spd_values:
+                spd_list = self.testdsHdmiIn.deviceProfile.get("spdInfo")
+                if spd_values[13] == str(spd_list[13]) and spd_values[14] == str(spd_list[14]):
+                    self.log.stepResult(True,f'Verified SPD Info received on {port}')
+                    result &= True
+            else:
+                self.log.stepResult(False,f'SPD Info Not received on {port}')
+                result &= False
 
         self.log.stepResult(result,f"Verified SPD Info ")
         #Run postRequisites listed in the test setup configuration file

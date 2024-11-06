@@ -101,9 +101,13 @@ class dsHdmiIn_test9_ScaleVideoAndVerify(dsHdmiInHelperClass):
                 time.sleep(5)
             for xCord, yCord, width, height in videoScale_argList:
                 self.testdsHdmiIn.scaleHdmiInVideo(xCord, yCord, width, height)
-                result &= self.CheckDeviceStatusAndVerifyVideoScale(True, port, True, xCord, yCord, width, height)
-                if result:
-                    self.log.step("Video scaled successfully")
+                status = self.CheckDeviceStatusAndVerifyVideoScale(True, port, True, xCord, yCord, width, height)
+                if status:
+                    self.log.stepResult(True,f'Video scale on observed :{port} ')
+                    result &= True
+                else:
+                    self.log.stepResult(False,f'Video scale Not observed :{port} ')
+                    result &= False
 
         self.log.stepResult(result,f"Video Scale Verified ")
         #Run postRequisites listed in the test setup configuration file

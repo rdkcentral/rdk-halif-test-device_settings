@@ -80,11 +80,11 @@ class dsHdmiIn_test8_SelectPortAndVerifyPortStatus(dsHdmiInHelperClass):
                 self.log.step(f'Port Selected {port}')
             portStatus = self.testdsHdmiIn.getHDMIInPortStatus()
             if portStatus != None and port == portStatus[1]:
-               result &= True
-               self.log.step(f'HdmiIn Select Verification isPresented:{portStatus[0]} activePort:{portStatus[1]} and Result {result}')
+                self.log.stepResult(True,f'HdmiIn Select Verification isPresented:{portStatus[0]} activePort:{portStatus[1]} and Result {result}')
+                result &= True
             else:
+                self.log.stepResult(False,f'Unable to get the Port status ')
                 result &= False
-                self.log.step(f'Unable to get the Port status ')
 
         self.log.stepResult(result,f"Port Status Verified ")
         #Run postRequisites listed in the test setup configuration file

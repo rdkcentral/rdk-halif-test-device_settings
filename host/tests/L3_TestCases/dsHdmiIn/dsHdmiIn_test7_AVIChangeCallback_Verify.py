@@ -106,11 +106,11 @@ class dsHdmiIn_test7_AVIChangeCallback_Verify(dsHdmiInHelperClass):
             time.sleep(5)
             aviStatus = self.testdsHdmiIn.getAVIContentCallbackStatus()
             if aviStatus != None and aviStatus[0] == port:
-               result &= True
-               self.log.step(f'AVI content type:{aviStatus[1]} on port:{aviStatus[0]} found')
+                self.log.stepResult(True,f'AVI content type:{aviStatus[1]} on port:{aviStatus[0]} found')
+                result &= True
             else:
+                self.log.stepResult(False,f'AVI content callback not found on port:{port}')
                 result &= False
-                self.log.step(f'AVI content callback not found on port:{port}')
 
         self.log.stepResult(result,f"AVI content type Verified ")
         #Run postRequisites listed in the test setup configuration file

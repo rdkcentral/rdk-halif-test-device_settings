@@ -102,10 +102,10 @@ class dsHdmiIn_test1_ConnectionCallback_Verify(dsHdmiInHelperClass):
 
             status = self.testdsHdmiIn.getHDMIConnectionCallbackStatus()
             if status != None and port == status[0] and status[1] == "True":
-               self.log.step(f'HDMI Connection Status Callback found on {port} Port')
+               self.log.stepResult(True,f'HDMI Connection Status Callback found on {port} Port')
                result &= True
             else:
-                self.log.step(f'HDMI Connection Status Callback Not found on {port} Port')
+                self.log.stepResult(False,f'HDMI Connection Status Callback Not found on {port} Port')
                 result &= False
 
             # Wait for HDMI UnPlug
@@ -113,10 +113,10 @@ class dsHdmiIn_test1_ConnectionCallback_Verify(dsHdmiInHelperClass):
 
             status = self.testdsHdmiIn.getHDMIConnectionCallbackStatus()
             if status != None and port == status[0] and status[1] == "False":
-               self.log.step(f'HDMI Unplug Status Callback found on {port} Port')
-               result &= True
+                self.log.stepResult(True,f'HDMI Unplug Status Callback found on {port} Port')
+                result &= True
             else:
-                self.log.step(f'HDMI Unplug Status Callback Not found on {port} Port')
+                self.log.stepResult(False,f'HDMI Unplug Status Callback Not found on {port} Port')
                 result &= False
 
             self.log.step(f'HDMI Connect Status Test for {port} Port')

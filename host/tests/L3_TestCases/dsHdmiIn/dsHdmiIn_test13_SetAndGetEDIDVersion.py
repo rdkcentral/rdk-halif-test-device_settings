@@ -76,17 +76,17 @@ class dsHdmiIn_test13_SetAndGetEDIDVersion(dsHdmiInHelperClass):
 
             #Setting EDID Version on particular Hdmi input
             for edidVersion in edidVersionList:
-               if edidVersion != "HDMI_EDID_VER_MAX":
-                   self.testdsHdmiIn.setEdidVersion(port, edidVersion)
-                   #Getting EDID Version
-                   self.log.step(f'Getting {port} edid version')
-                   edidStatus = self.testdsHdmiIn.getEdidVersion(port)
-                   if edidStatus == edidVersion:
-                         result &= True
-                         self.log.step(f'Verified getVersion:{edidStatus} setVersion:{edidVersion} same')
-                   else:
-                         result &= False
-                         self.log.step(f'Verified getVersion:{edidStatus} setVersion:{edidVersion} same')
+                if edidVersion != "HDMI_EDID_VER_MAX":
+                    self.testdsHdmiIn.setEdidVersion(port, edidVersion)
+                    #Getting EDID Version
+                    self.log.step(f'Getting {port} edid version')
+                    edidStatus = self.testdsHdmiIn.getEdidVersion(port)
+                    if edidStatus == edidVersion:
+                        self.log.stepResult(True,f'Verified getVersion:{edidStatus} setVersion:{edidVersion} same')
+                        result &= True
+                    else:
+                        self.log.stepResult(False,f'Verified getVersion:{edidStatus} setVersion:{edidVersion} Not same')
+                        result &= False
 
         self.log.stepResult(result,f"Verified EDID Version ")
         #Run postRequisites listed in the test setup configuration file
