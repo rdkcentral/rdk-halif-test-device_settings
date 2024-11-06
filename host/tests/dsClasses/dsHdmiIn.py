@@ -115,14 +115,13 @@ class dsHdmiInClass():
 
     This module provides common extensions for device Settings HdmiIn Module.
     """
-    moduleName = "dsHdmiIn"
-    menuConfig =  os.path.join(dir_path, "dsHdmiIn_test_suite.yml")
-    testSuite = "L3 dsHdmiIn"
-
     def __init__(self, deviceProfilePath:str, session=None ):
         """
         Initializes the dsHdmiIn class function.
         """
+        self.moduleName    = "dsHdmiIn"
+        self.menuConfig    =  os.path.join(dir_path, "dsHdmiIn_test_suite.yml")
+        self.testSuite     = "L3 dsHdmiIn"
         self.deviceProfile = ConfigRead( deviceProfilePath, self.moduleName)
         self.utMenu        = UTSuiteNavigatorClass(self.menuConfig, self.moduleName, session)
         self.testSession   = session
