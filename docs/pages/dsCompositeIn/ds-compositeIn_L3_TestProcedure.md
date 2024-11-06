@@ -28,7 +28,7 @@ To execute `HAL` `L3` Python test cases, need a Python environment. Follow these
 
 #### Rack Configuration File
 
-Example Rack configuration File: `ut/host/tests/configs/example_rack_config.yml`
+Example Rack configuration File: [example_rack_config.yml](#../../../host/tests/configs/example_rack_config.yml)
 
 For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_rack_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_rack_config.yml)
 
@@ -83,7 +83,7 @@ rackConfig:
 
 #### Device Configuration File
 
-Example Device configuration File: `ut/host/tests/configs/deviceConfig.yml`
+Example Device configuration File: [deviceConfig.yml](#../../../host/tests/configs/deviceconfig.yml)
 
 For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_device_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_device_config.yml)
 
@@ -108,7 +108,7 @@ deviceConfig:
 
 #### Test Setup Configuration File
 
-Example Test Setup configuration File: `ut/host/tests/dsCompositeIn_L3_Tests/dscompositeIn_L3_testSetup.yml`
+Example Test Setup configuration File: [dscompositeIn_L3_testSetup.yml](#../../../host/tests/dsCompositeIn_L3_Tests/dsCompositeIn_L3_testSetup.yml)
 
 Update the artifact paths from which the binaries should be copied to the device.
 
@@ -130,8 +130,6 @@ dscompositeIn:
         execute:
           - "chmod +x /opt/HAL/dscompositeIn_L3/hal_test"
           - "chmod +x /opt/HAL/dscompositeIn_L3/run.sh"
-          - cp -rf /usr/lib/libdshal.so /opt/HAL/dscompositeIn_L3/
-          - "ln -s /usr/lib/libds-hal.so /opt/HAL/dscompositeIn_L3/libdshal.so"
         streams:
         test1_VerifyConnect_Callback:
           <<: *defaults
@@ -383,13 +381,13 @@ Success Criteria
   - Press **Y** if user connected the device and acknowledge the same. (this will mark the step as PASS).
   - Press **N** if user could not connect the device. (this will mark the step as FAIL).
 
-- Device changes the scale and request user to confirm:
+- Device detects signal change:
 
   - Test will check the signal change.
 
 - Repeat for All Ports:
 
-  The test will iterate through all available ports.x`
+  The test will iterate through all available ports.
 
 - Test Conclusion:
 
