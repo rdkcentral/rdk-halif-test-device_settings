@@ -41,7 +41,6 @@ In this file, update the configuration to define the console sessions for the `D
 |---------------|-----------|
 |default|Downloads the streams required for test cases|
 |ssh_player|Plays the stream required for test case|
-|ssh_player_secondary|Plays a secondary stream, if required for test case|
 |ssh_hal_test|Executes the `HAL` binary for the test case|
 
 ```yaml
@@ -58,12 +57,6 @@ rackConfig:
             ip: "XXX.XXX.XXX" # IP address of the device
             password: ' '
         - ssh_player:
-            type: "ssh"
-            port: 10022
-            username: "root"
-            ip: "XXX.XXX.XXX" # IP address of the device
-            password: ' '
-        - ssh_player_secondary:
             type: "ssh"
             port: 10022
             username: "root"
@@ -215,7 +208,7 @@ Refer [ds-video-device_L3_Low-Level_TestSpecification.md](./ds-video-device_L3_L
 
 - Iterating through supported display framerates:
 
-  The test will repeat for different supported display framerates. Before that set the FRF mode to `Disable`. And, then on setting each framerates callback need to be triggered accordingly.
+  The test will repeat for different supported display framerates. Before that set the FRF mode to `Disable`. And, then on setting each framerates pre and post change callbacks need to be triggered accordingly.
 
 - Completion and results:
 
@@ -227,7 +220,7 @@ Refer [ds-video-device_L3_Low-Level_TestSpecification.md](./ds-video-device_L3_L
 
 - Source
 
-#### User Input Required - test0
+#### User Input Required - test02
 
 Yes (This will be automated later).
 
@@ -265,7 +258,7 @@ The test will evaluate the various zoom modes. The user should notice a zoom mod
 
   For each iteration:
 
-  - The test will ask: "Is the selected Zoom mode applied in the device's output? (Y/N):"
+  - The test will ask: "Is the Zoom mode {zoomMode} applied in the device: {device}? (Y/N):"
 
 - Completion and results:
 
@@ -283,7 +276,7 @@ Yes (This will be automated later).
 
 #### Acceptance Criteria - test03
 
-Verify the impact of the supported display framerates for **Stream #2**.
+Verify the impact of the supported display framerates for designated video streams.
 
 #### Expected Results - test03
 
@@ -316,8 +309,8 @@ This test will evaluate the supported display framerates. The user should notice
 
   For each prompt, the user should assess the video playback output and respond:
 
-  - Is a displayRate with a streamRate acceptable? (Y/N):, the user should press **Y** to confirm (this will pass the step).
-  - If not, press **N** (this will fail the step).
+  - Is a displayRate with a streamRate acceptable? (Y/N):, the user should press **Y** to confirm (this will mark the step as PASS).
+  - If not, press **N** (this will mark the step as FAIL).
 
 - Completion and results:
 
@@ -333,13 +326,24 @@ This test will evaluate the supported display framerates. The user should notice
 
 Yes (This will be automated later).
 
+## **Test Setup:**
+This test validates the functionality of setting and getting the Frame Refresh Rate (FRF) mode on the video device. The test checks whether the display refresh rate correctly adjusts according to the video stream's frame rate.
+ 
+- **Test Stream Frame Rates**: The following frame rates will be tested:
+  - 23.98, 24, 25, 29.97, 30, 50, 59.94, 60
+- **Expected Display Modes**: Corresponding to the frame rates, the expected display modes are:
+  - 3840x2160px48, 3840x2160px50, 3840x2160px60
+
 #### Acceptance Criteria - test04
 
-Verify the video playback with FRF mode enabled/disabled for all supported video device for **Stream #1**.
+Verify the video playback with FRF mode enabled/disabled for all available video device for designated video streams.
 
 #### Expected Results - test04
 
-The test evaluates the effect of FRF mode on video playback. The user should notice a clear difference in video output when FRF is toggled between Enable and Disable.
+The expected display modes should correspond to the predefined list for each stream's frame rate:
+  - 3840x2160px48 for 23.98, 24
+  - 3840x2160px50 for 25, 50
+  - 3840x2160px60 for 29.97, 30, 59.94, 60
 
 #### Test Steps - test04
 
