@@ -89,7 +89,7 @@
 
 static int32_t gTestGroup = 3;
 static int32_t gTestID    = 1;
-static intptr_t gDisplayHandle = (intptr_t)NULL;
+static intptr_t gDisplayHandle = 0;
 static dsDisplayEDID_t gEdid = {0};
 static uint8_t gEdidBuffer[EDID_MAX_DATA_SIZE];
 
@@ -144,6 +144,13 @@ const static ut_control_keyStringMapping_t dsVideoAspectRatio_mapTable[] = {
     {NULL, -1}
 };
 
+/* bool */
+const static ut_control_keyStringMapping_t bool_mapTable[] =
+{
+    {"false", (int32_t) false},
+    {"true", (int32_t) true},
+    {NULL, -1}
+};
 /**
  * @brief This function clears the stdin buffer.
  *
@@ -225,38 +232,6 @@ static int32_t dsDisplay_list_select_ports(dsVideoPortType_t *pVideoPort, int32_
     return 0;
 }
 
-static intptr_t dsDisplay_gethandle(dsAudioPortType_t videoPort, int32_t index, intptr_t *handle)
-{
-    int32_t ret;
-
-    UT_LOG_INFO("Calling dsGetDisplay(IN:type:[%s], IN:index:[%d], OUT:handle:[])",
-                 UT_Control_GetMapString(dsVideoPortType_mapTable, videoPort), index);
-
-    ret = dsGetDisplay(videoPort, index, (intptr_t *)&handle);
-
-    UT_LOG_INFO("Result dsGetDisplay(IN:type:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
-                 UT_Control_GetMapString(dsVideoPortType_mapTable, videoPort), index,
-                 handle,
-                 UT_Control_GetMapString(dsDisplayError_mapTable, ret));
-
-    DS_ASSERT(ret == dsERR_NONE);
-
-    UT_LOG_MENU_INFO("Calling dsRegisterDisplayEventCallback");
-
-    UT_LOG_INFO("Calling dsRegisterDisplayEventCallback(IN:handle:[0x%0X], IN:cb[0x%0X]) ", gDisplayHandle, displayEventCallback);
-
-    ret = dsRegisterDisplayEventCallback(gDisplayHandle,displayEventCallback);
-
-    UT_LOG_INFO("Result dsRegisterDisplayEventCallback(IN:handle:[0x%0X], IN:cb[0x%0X]), dsError_t=[%s]", 
-                gDisplayHandle, 
-                displayEventCallback,
-                UT_Control_GetMapString(dsDisplayError_mapTable, ret));
-
-    DS_ASSERT(ret == dsERR_NONE);
-
-    return *handle;
-}
-
 /**
  * @brief This test initializes the dsDisplay Module.
  *
@@ -290,12 +265,70 @@ void test_l3_dsDisplay_initialize(void)
 }
 
 /**
+ * @brief Retrieves the handle of the connected display device.
+ *
+ * This test function retrieves the handle of the connected display device
+ * corresponding to the specified video port and index. It also registers
+ * a display event callback for the retrieved handle.
+ *
+ * **Test Group ID:** 03@n
+ * **Test Case ID:** 002@n
+ *
+ * **Test Procedure:**
+ * Refer to Test specification documentation
+ * [ds-display_L3_Low-Level_TestSpecification.md](../../docs/pages/ds-display_L3_Low-Level_TestSpecification.md)
+ */
+void test_l3_dsDisplay_select_display_port(void)
+{
+    gTestID = 6;
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t status = dsERR_NONE;
+    int32_t ret;
+    int32_t portIndex = 0;
+    dsVideoPortType_t port = dsVIDEOPORT_TYPE_MAX;
+
+    if(dsDisplay_list_select_ports(&port, &portIndex))
+    {
+        goto exit;
+    }
+
+    UT_LOG_INFO("Calling dsGetDisplay(IN:vType:[%s], IN:index:[%d], OUT:handle:[])",
+                UT_Control_GetMapString(dsVideoPortType_mapTable, port), portIndex);
+
+    status = dsGetDisplay(port, portIndex, &gDisplayHandle);
+
+    UT_LOG_INFO("Result dsGetDisplay(IN:vType:[%s], IN:index:[%d], OUT:handle:[0x%0X]) dsError_t:[%s]",
+                UT_Control_GetMapString(dsVideoPortType_mapTable, port), portIndex,
+                gDisplayHandle,
+                UT_Control_GetMapString(dsDisplayError_mapTable, status));
+
+    DS_ASSERT(status == dsERR_NONE);
+
+    UT_LOG_MENU_INFO("Calling dsRegisterDisplayEventCallback");
+
+    UT_LOG_INFO("Calling dsRegisterDisplayEventCallback(IN:handle:[0x%0X], IN:cb[0x%0X]) ", gDisplayHandle, displayEventCallback);
+
+    ret = dsRegisterDisplayEventCallback(gDisplayHandle, displayEventCallback);
+
+    UT_LOG_INFO("Result dsRegisterDisplayEventCallback(IN:handle:[0x%0X], IN:cb[0x%0X]), dsError_t=[%s]", 
+                gDisplayHandle, 
+                displayEventCallback,
+                UT_Control_GetMapString(dsDisplayError_mapTable, ret));
+
+    DS_ASSERT(status == dsERR_NONE);
+
+exit:
+    UT_LOG_INFO("Out %s", __FUNCTION__);
+}
+
+/**
  * @brief Retrieves Extended Display Identification Data (EDID) for the display.
  *
  * Retrieves the EDID information for the display associated with the selected handle.
  *
  * **Test Group ID:** 03@n
- * **Test Case ID:** 002@n
+ * **Test Case ID:** 003@n
  *
  * **Test Procedure:**
  * Refer to Test specification documentation
@@ -307,32 +340,22 @@ void test_l3_dsDisplay_get_edid(void)
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
-    int32_t portIndex = 0;
-    dsVideoPortType_t port = dsVIDEOPORT_TYPE_MAX;
-    intptr_t handle = (intptr_t)NULL;
 
-    if(dsDisplay_list_select_ports(&port, &portIndex))
-    {
-        goto exit;
-    }
-
-   gDisplayHandle = dsDisplay_gethandle(port,portIndex,&handle);
-    
     UT_LOG_INFO("Calling dsGetEDID(IN:handle:[0x%0X], OUT:edid:[])", gDisplayHandle);
 
     status = dsGetEDID(gDisplayHandle, &gEdid);
 
-    UT_LOG_INFO("Result dsGetEDID(dsDisplayEDID_t(productCode:[%d], serialNumber:[%d], manufactureYear:[%d],manufactureWeek:[%d],hdmiDeviceType:[%s], isRepeater:[%s], physicalAddressA:[%u], physicalAddressB:[%u], physicalAddressC:[%u], physicalAddressD:[%u], numOfSupportedResolution:[%d], monitorName:[%s])", \
+    UT_LOG_INFO("Result dsGetEDID(dsDisplayEDID_t(productCode:[%d], serialNumber:[%d], manufactureYear:[%d],manufactureWeek:[%d],hdmiDeviceType:[%s], isRepeater:[%s])",
                 gEdid.productCode, gEdid.serialNumber, 
                 gEdid.manufactureYear, gEdid.manufactureWeek, 
-                gEdid.hdmiDeviceType, gEdid.isRepeater, 
+                gEdid.hdmiDeviceType?"HDMI":"DVI", UT_Control_GetMapString(bool_mapTable, gEdid.isRepeater));
+    UT_LOG_INFO("Result dsGetEDID(dsDisplayEDID_t(physicalAddress:[%u.%u.%u.%u], numOfSupportedResolution:[%d], monitorName:[%s])",
                 gEdid.physicalAddressA, gEdid.physicalAddressB, 
                 gEdid.physicalAddressC, gEdid.physicalAddressD, 
                 gEdid.numOfSupportedResolution, gEdid.monitorName);
 
     DS_ASSERT(status == dsERR_NONE);
 
-exit:
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
@@ -342,7 +365,7 @@ exit:
  * Retrieves the EDID data bytes for the display associated with the selected handle.
  *
  * **Test Group ID:** 03@n
- * **Test Case ID:** 003@n
+ * **Test Case ID:** 004@n
  *
  * **Test Procedure:**
  * Refer to Test specification documentation
@@ -355,16 +378,6 @@ void test_l3_dsDisplay_get_edidbytes(void)
 
     dsError_t status = dsERR_NONE;
     int32_t length = 0;
-    int32_t portIndex = 0;
-    dsVideoPortType_t port = dsVIDEOPORT_TYPE_MAX;
-    intptr_t handle = (intptr_t)NULL;
-
-    if(dsDisplay_list_select_ports(&port, &portIndex))
-    {
-        goto exit;
-    }
-
-    gDisplayHandle = dsDisplay_gethandle(port,portIndex,&handle);
 
     UT_LOG_INFO("Calling dsGetEDIDBytes(IN:Handle:[0x%0X], OUT:EDID:[], OUT:Length:[])", gDisplayHandle);
 
@@ -380,10 +393,9 @@ void test_l3_dsDisplay_get_edidbytes(void)
 
     for (int32_t i = 0; i < length; i++)
     {
-        UT_LOG_INFO("%02X ", gEdidBuffer[i]);
+	UT_LOG_INFO("edidbyte[%d]:[%02X] ", i, gEdidBuffer[i]);
     }
 
-exit:
     UT_LOG_INFO("Out %s", __FUNCTION__);
 
 }
@@ -394,7 +406,7 @@ exit:
  * Retrieves the aspect ratio of the display.
  *
  * **Test Group ID:** 03@n
- * **Test Case ID:** 004@n
+ * **Test Case ID:** 005@n
  *
  * **Test Procedure:**
  * Refer to Test specification documentation
@@ -407,16 +419,6 @@ void test_l3_dsDisplay_get_aspectratio(void)
 
     dsError_t status   = dsERR_NONE;
     dsVideoAspectRatio_t displayAspectRatio = dsVIDEO_ASPECT_RATIO_MAX;
-    int32_t portIndex = 0;
-    intptr_t handle = (intptr_t)NULL;
-    dsVideoPortType_t port = dsVIDEOPORT_TYPE_MAX;
-
-    if(dsDisplay_list_select_ports(&port, &portIndex))
-    {
-        goto exit;
-    }
-
-    gDisplayHandle = dsDisplay_gethandle(port,portIndex,&handle);
 
     UT_LOG_INFO("Calling dsGetDisplayAspectRatio(IN:handle:[0x%0X], OUT:aspectRatio:[]) ", gDisplayHandle);
 
@@ -429,7 +431,6 @@ void test_l3_dsDisplay_get_aspectratio(void)
 
     DS_ASSERT(status == dsERR_NONE);
 
-exit:
     UT_LOG_INFO("Out %s", __FUNCTION__);
 
 }
@@ -440,7 +441,7 @@ exit:
  * This test function terminates the dsDisplay Module.
  *
  * **Test Group ID:** 03@n
- * **Test Case ID:** 005@n
+ * **Test Case ID:** 006@n
  *
  * **Test Procedure:**
  * Refer to Test specification documentation
@@ -482,6 +483,7 @@ int test_l3_dsDisplay_register (void)
     }
 
     UT_add_test( pSuite, "Initialize dsDisplay", test_l3_dsDisplay_initialize);
+    UT_add_test( pSuite, "Select Display Port", test_l3_dsDisplay_select_display_port);
     UT_add_test( pSuite, "Get display EDID", test_l3_dsDisplay_get_edid);
     UT_add_test( pSuite, "Get display EDIDBytes", test_l3_dsDisplay_get_edidbytes);
     UT_add_test( pSuite, "Get display AspectRatio",test_l3_dsDisplay_get_aspectratio);
