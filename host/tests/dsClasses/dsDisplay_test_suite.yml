@@ -3,19 +3,35 @@
 dsDisplay:  # Prefix must always exist
     description: "dsDisplay Device Settings testing profile / menu system for UT"
     test:
-        execute: "" #Execute command
+        execute: "<Path on dut>/run.sh -p <Path on dut>/Source_4K_Display.yaml" #Execute command
         type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
         suites:
             0:
                 name: "L1 dsDisplay - Sink"
                 tests:
+                    - "dsDisplayInit_L1_positive"
+                    - "dsDisplayInit_L1_negative"
+                    - "dsDisplayTerm_L1_positive"
+                    - "dsDisplayTerm_L1_negative"
+                    - "dsGetDisplay_L1_positive"
+                    - "dsGetDisplay_L1_negative"
+                    - "dsGetEDID_L1_positive"
+                    - "dsGetEDID_L1_negative"
+                    - "dsGetEDIDBytes_L1_positive"
+                    - "dsGetEDIDBytes_L1_negative"
+                    - "dsGetDisplayAspectRatio_L1_positive"
+                    - "dsGetDisplayAspectRatio_L1_negative"
+                    - "dsRegisterDisplayEventCallback_L1_positive"
+                    - "dsRegisterDisplayEventCallback_L1_negative"
             1:
                 name: "L2 dsDisplay - Sink"
                 tests:
+                    - L2_RetrieveAndValidateEDID_sink
             2:
                 name: "L3 dsDisplay"
                 tests:
                     - "Initialize dsDisplay"
+                    - "Select Display Port"
                     - "Get display EDID"
                     - "Get display EDIDBytes"
                     - "Get display AspectRatio"
