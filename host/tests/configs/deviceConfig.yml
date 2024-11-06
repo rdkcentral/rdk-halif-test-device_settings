@@ -24,13 +24,17 @@
 
 deviceConfig:
     cpe1:
-        platform:   "PC"
-        model:      "linux"
-        target_directory: "/home/***REMOVED***/vts/build/rdk-halif-device_settings/tmp"  # Target Directory on device
-        prompt: "$" # Prompt string on console
+        platform:   "stb"
+        model:      "uk"
+        target_directory: "/tmp/"  # Target Directory on device
+        prompt: "" # Prompt string on console
         test:
             #TODO: Use the single profile file which contains all details (ds, hdmi, etc)
-            profile: "../../../../profiles/source/Source_FPD.yaml"
+            profile: "../../../../profiles/source/Source_4K_VideoPort.yaml"
+            player:
+                tool: "gstreamer"
+                prerequisites:
+                    - export EXP=test # pre commands required to play the stream
     cpe2:
         platform: "test"
         model: "test"
