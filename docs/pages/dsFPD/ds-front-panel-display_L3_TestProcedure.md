@@ -139,14 +139,15 @@ python <TestCaseName.py> --config </PATH>/ut/host/tests/configs/example_rack_con
 
 ### dsFPD_test01_EnableDisableAndVerifyLEDIndicators.py
 
+### Overview
+
+This test helps to verify if the Led indicators can be switched ON and OFF using the HAL API's
+
 #### Platform Support - test01
 
 - Source
 - Sink
 
-## Overview
-
-This test helps to verify if the Led indicators can be switched ON and OFF using the HAL API's
 
 #### User Input Required - test01
 
@@ -198,14 +199,14 @@ Success Criteria
 
 ### dsFPD_test02_SetVerifyLEDIndicatorsBrightness.py
 
+### Overview
+
+This test helps to verify if the Led indicators can be set with specified brightness.
+
 #### Platform Support - test02
 
 - Source
 - Sink
-
-## Overview
-
-This test helps to verify if the Led indicators can be set with specified brightness.
 
 #### User Input Required - test02
 
@@ -284,14 +285,14 @@ Success Criteria
 
 ### dsFPD_test03_SetVerifyLEDIndicatorsBlink.py
 
+### Overview
+
+This test helps to verify if the Led indicators can blink with specified parameter.
+
 #### Platform Support - test03
 
 - Source
 - Sink
-
-## Overview
-
-This test helps to verify if the Led indicators can blink with specified parameter.
 
 #### User Input Required - test03
 
@@ -352,14 +353,14 @@ Success Criteria
 
 ### dsFPD_test04_SetVerifyLEDIndicatorsColor.py
 
+### Overview
+
+This test helps to verify if the Led indicators can set with supported colors.
+
 #### Platform Support - test04
 
 - Source
 - Sink
-
-## Overview
-
-This test helps to verify if the Led indicators can set with supported colors.
 
 #### User Input Required - test04
 
@@ -424,14 +425,14 @@ Success Criteria
 
 ### dsFPD_test05_SetVerifyFPPattern.py
 
+### Overview
+
+This test helps to verify if the front panel can set with different patterns.
+
 #### Platform Support - test05
 
 - Source
 - Sink
-
-## Overview
-
-This test helps to verify if the front panel can set with different patterns.
 
 #### User Input Required - test05
 
