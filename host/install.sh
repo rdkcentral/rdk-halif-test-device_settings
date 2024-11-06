@@ -166,10 +166,10 @@ install_pip_requirements "${RAFT_DIR}"/requirements.txt
 #install_pip_requirements "${TESTS_DIR}"/rdk_raft/requirements.txt
 
 # Setup ut-raft
-clone_repo git@github.com:rdkcentral/ut-raft.git "${PLUGINS_FRAMEWORK_DIR}/ut_raft" develop "in ./raft/framework/plugins"
+clone_repo git@github.com:rdkcentral/ut-raft.git "${PLUGINS_FRAMEWORK_DIR}/ut_raft" "1.0.1" "in ./raft/framework/plugins"
 install_pip_requirements "${PLUGINS_FRAMEWORK_DIR}"/ut_raft/requirements.txt
 
 ## Install your own sub git repo's in here as required
-# 
+#
 INFO "Install Complete"
 

@@ -3,7 +3,7 @@
 dsHost:  # Prefix must always exist
     description: "dsHost Device Settings testing profile / menu system for UT"
     test:
-        execute: "" #Execute command
+        execute: "/opt/HAL/dsHost/run.sh -p /opt/HAL/dsHost/Sink_HostSettings.yaml" #Execute command
         type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
         suites:
             0:
@@ -15,8 +15,8 @@ dsHost:  # Prefix must always exist
             2:
                 name: "L3 dsHost"
                 tests:
-                  - "Host Init"
-                  - "Host Term"
+                  - "Initialize dsHost"
+                  - "Terminate dsHost"
                   - "Get CPU Temperature"
                   - "Get SoC ID"
-                  - "Get HOST EDID"
+                  - "Get Host EDID"
