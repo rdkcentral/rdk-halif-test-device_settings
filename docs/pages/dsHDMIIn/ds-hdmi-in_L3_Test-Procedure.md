@@ -464,7 +464,7 @@ Success Criteria
 
 #### User Input Required - test06
 
--  **Yes**: User interaction is necessary to connect the Hdmi In device on ports (like Xbox, Hdmi Analyzer) and change the co    ntent like Cinema , Game , Sport.(This will be automated later).
+-  **Yes**: User interaction is necessary to connect the Hdmi In device on ports (like Xbox) and play the games.(This will be    automated later).
 
 #### Acceptance Criteria - test06
 
