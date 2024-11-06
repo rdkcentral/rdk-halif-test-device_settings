@@ -69,7 +69,7 @@ rackConfig:
 
 #### Device Configuration File
 
-Example Device configuration File: `ut/host/tests/configs/deviceConfig.yml`
+Example Device configuration File: [deviceConfig.yml](../../../host/tests/configs/deviceConfig.yml)
 
 For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_device_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_device_config.yml)
 
@@ -94,7 +94,7 @@ deviceConfig:
 
 #### Test Setup Configuration File
 
-Example Test Setup configuration File: `ut/host/tests/L3_TestCases/dsFPD/dsFPD_L3_testSetup.yml`
+Example Test Setup configuration File: [dsFPD_L3_testSetup.yml](../../../host/tests/L3_TestCases/dsFPD/dsFPD_L3_testSetup.yml)
 
 Update the artifact paths from which the binaries should be copied to the device.
 
@@ -131,18 +131,9 @@ dsFPD:
 
 #### Test Suite Configuration
 
-Example Test Setup configuration File: `ut/host/tests/dsClasses/dsFPD_test_suite.yml`
+Example Test Setup configuration File: [dsFPD_test_suite.yml](../../../host/tests/dsClasses/dsFPD_test_suite.yml)
 
 Update the execute command according to the device path where `HAL` binaries are copied.
-
-```yaml
-dsFPD:
-  description: "dsFPD Device Settings testing profile"
-  test:
-    execute: "/tmp/run.sh -p /tmp/Sink_FPD.yaml"
-    type: UT-C  # Cunit tests (UT-C)
-
-```
 
 ## Run Test Cases
 
@@ -159,6 +150,10 @@ python <TestCaseName.py> --config </PATH>/ut/host/tests/configs/example_rack_con
 
 - Source
 - Sink
+
+## Overview
+
+This test helps to verify if the Led indicators can be switched ON and OFF using the HAL API's
 
 #### User Input Required - test01
 
@@ -202,7 +197,7 @@ Success Criteria
 
 - Repeat for All supported LED indicators:
 
-  The test will iterate through all supporeted Indicators, enabling/disabling each one and collecting user feedback accordingly.
+  The test will iterate through all supported Indicators, enabling/disabling each one and collecting user feedback accordingly.
 
 - Test Conclusion:
 
@@ -215,6 +210,10 @@ Success Criteria
 - Source
 - Sink
 
+## Overview
+
+This test helps to verify if the Led indicators can be set with specified brightness.
+
 #### User Input Required - test02
 
 **Yes**: User interaction is necessary to confirm front panel LED status and Brightness (This will be automated later).
@@ -225,14 +224,14 @@ Set supported Front panel LED can be set with different brightness, 0%, 50% and 
 
 #### Expected Results - test02
 
-The test enables the supported front panel LED, sets brightness value to 0, 50 and 100, subsiquently disables the LED indicator.
+The test enables the supported front panel LED, sets brightness value to 0, 50 and 100, subsequently disables the LED indicator.
 
 Success Criteria
 
 - User should see the supported LED turned to ON State
-- User shoudl see the supported LED glowing in 0% brightness
-- User shoudl see the supported LED glowing in 50% brightness
-- User shoudl see the supported LED glowing in 1000% brightness
+- User should see the supported LED glowing in 0% brightness
+- User should see the supported LED glowing in 50% brightness
+- User should see the supported LED glowing in 100% brightness
 - User should see the supported LED turned to OFF state.
 
 #### Test Steps - test02
@@ -284,7 +283,7 @@ Success Criteria
 
 - Repeat for All supported LED indicators:
 
-  The test will iterate through all supporeted Indicators, enabling/disabling and setting brightness to each one and collecting user feedback accordingly.
+  The test will iterate through all supported Indicators, enabling/disabling and setting brightness to each one and collecting user feedback accordingly.
 
 - Test Conclusion:
 
@@ -297,6 +296,10 @@ Success Criteria
 - Source
 - Sink
 
+## Overview
+
+This test helps to verify if the Led indicators can blink with specified parameter.
+
 #### User Input Required - test03
 
 **Yes**: User interaction is necessary to confirm front panel LED status and blinking (This will be automated later).
@@ -307,12 +310,12 @@ Set supported Front panel LED with blink duration of 1000 ms and 5 iterations.
 
 #### Expected Results - test02
 
-The test enables the supported front panel LED, sets LED to blink with 1000ms duration and 5 iterations , subsiquently disables the LED indicator.
+The test enables the supported front panel LED, sets LED to blink with 1000ms duration and 5 iterations , subsequently disables the LED indicator.
 
 Success Criteria
 
 - User should see the supported LED turned to ON State
-- User shoudl see the supported LED blinking with 1000ms duration and 5 iterations.
+- User should see the supported LED blinking with 1000ms duration and 5 iterations.
 - User should see the supported LED turned to OFF state.
 
 #### Test Steps - test03
@@ -336,7 +339,7 @@ Success Criteria
 
   - Question: "Is indicator blinking 5 times with 1 sec ? (Y/N)"
   - Press **Y** if specified LED indicator blink with the duration specified. (this will mark the step as PASS).
-  - Press **N** if specified LED indicator did not blink wiht duration specified. (this will mark the step as FAIL).
+  - Press **N** if specified LED indicator did not blink with duration specified. (this will mark the step as FAIL).
 
 - LED status confirmation (LED indicator Disabled):
 
@@ -348,7 +351,7 @@ Success Criteria
 
 - Repeat for All supported LED indicators:
 
-  The test will iterate through all supporeted Indicators, enabling/disabling and setting blink parameter to each one and collecting user feedback accordingly.
+  The test will iterate through all supported Indicators, enabling/disabling and setting blink parameter to each one and collecting user feedback accordingly.
 
 - Test Conclusion:
 
@@ -361,6 +364,10 @@ Success Criteria
 - Source
 - Sink
 
+## Overview
+
+This test helps to verify if the Led indicators can set with supported colors.
+
 #### User Input Required - test04
 
 **Yes**: User interaction is necessary to confirm front panel LED status and blinking (This will be automated later).
@@ -371,12 +378,12 @@ Set supported Front panel LED set with supported colors.
 
 #### Expected Results - test04
 
-The test enables the supported front panel LED, sets LED to its supported colors , subsiquently disables the LED indicator.
+The test enables the supported front panel LED, sets LED to its supported colors , subsequently disables the LED indicator.
 
 Success Criteria
 
 - User should see the supported LED turned to ON State
-- User shoudl see the supported LED set with supported color
+- User should see the supported LED set with supported color
 - User should see the supported LED turned to OFF state.
 
 #### Test Steps - test04
@@ -404,7 +411,7 @@ Success Criteria
 
 - Repeat for All supported color for the LED indicators:
 
-  The test will iterate through all supporeted colors of the indicatorand collecting user feedback accordingly.
+  The test will iterate through all supported colors of the indicator and collecting user feedback accordingly.
 
 - LED status confirmation (LED indicator Disabled):
 
@@ -416,7 +423,7 @@ Success Criteria
 
 - Repeat for All supported LED indicators:
 
-  The test will iterate through all supporeted Indicators and collecting user feedback accordingly.
+  The test will iterate through all supported Indicators and collecting user feedback accordingly.
 
 - Test Conclusion:
 
@@ -429,6 +436,10 @@ Success Criteria
 - Source
 - Sink
 
+## Overview
+
+This test helps to verify if the front panel can set with different patterns.
+
 #### User Input Required - test05
 
 **Yes**: User interaction is necessary to confirm front panel Patterns is set (This will be automated later).
@@ -439,7 +450,7 @@ Set supported Front panel pattern
 
 #### Expected Results - test05
 
-The test sets all teh supported Front panel patterns and verifies.
+The test sets all the supported Front panel patterns and verifies.
 
 Success Criteria
 
@@ -452,9 +463,9 @@ Success Criteria
   - Select and execute the Python file: **`dsFPD_test05_SetVerifyFPPattern.py`**
   - The test will automatically download all required artifacts, copying them to the designated target directory before commencing execution.
 
-- Front panel pattern verificaiton:
+- Front panel pattern verification:
 
-    The test will set teh pattern and prompt the user with the following:
+    The test will set the pattern and prompt the user with the following:
 
   - Question: "Is Front panel shows <Pattern> ? (Y/N):? (Y/N)"
   - Press **Y** if specified pattern is shown  (this will mark the step as PASS).
@@ -463,7 +474,7 @@ Success Criteria
 
 - Repeat for All supported patterns:
 
-  The test will iterate through all supporeted pattenrs of the device collecting user feedback accordingly.
+  The test will iterate through all supported patterns of the device collecting user feedback accordingly.
 
 - Test Conclusion:
 
