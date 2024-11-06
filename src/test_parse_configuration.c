@@ -152,7 +152,7 @@ int test_parse_configuration()
 void test_parse_configuration_term()
 {
     test_dsAudio_parse_configuration_term();
-    test_dsVideoDevice_parse_configuration_term();
+    test_dsVideoPort_parse_term();
     test_dsVideoDevice_parse_configuration_term();
 }
 

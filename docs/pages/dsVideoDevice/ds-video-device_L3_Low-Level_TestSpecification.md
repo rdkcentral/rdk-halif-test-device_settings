@@ -34,17 +34,30 @@ This document describes the L3 Low Level Test Specification and Procedure Docume
 - `High Level Test Specification` - [dsVideoDevice High Level TestSpec](ds-video-device_High-Level_TestSpec.md)
 - `Interface header` - [dsVideoDevice HAL header](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsVideoDevice.h)
 
+## Video Streams Requirement
+
+|#|Streams Name|Streams description|
+|-|------------|-------------------|
+|1|scrolling_text_fast_3840x2160_23.98fps.mp4|Resolution: 3840x2160, Framerate Per Second: 23.98|
+|2|scrolling_text_fast_3840x2160_24fps.mp4|Resolution: 3840x2160, Framerate Per Second: 24|
+|3|scrolling_text_fast_3840x2160_25fps.mp4|Resolution: 3840x2160, Framerate Per Second: 25|
+|4|scrolling_text_fast_3840x2160_29.97fps.mp4|Resolution: 3840x2160, Framerate Per Second: 29.97|
+|5|scrolling_text_fast_3840x2160_30fps.mp4|Resolution: 3840x2160, Framerate Per Second: 30|
+|6|scrolling_text_fast_3840x2160_50fps.mp4|Resolution: 3840x2160, Framerate Per Second: 50|
+|7|scrolling_text_fast_3840x2160_59.94fps.mp4|Resolution: 3840x2160, Framerate Per Second: 59.94|
+|8|scrolling_text_fast_3840x2160_60fps.mp4|Resolution: 3840x2160, Framerate Per Second: 60|
+|9|scrolling_text_fast_1920x1080_60fps.mp4|Resolution: 1920x1080, Framerate Per Second: 60|
+
 ## Level 3 Test Cases High Level Overview
+
 Below are top test use-case for the Video Display.
 
-|#|Test-case|Description|HAL APIs|Source|Sink|
-|-|---------|-----------|--------|------|----|
-|1|Verify the Video Display framerate change with pre-change callback.|Play any video content and check the callback is triggered before when the framerate of a display changes|`dsRegisterFrameratePreChangeCB()`|`NA`|`Y`|
-|2|Verify the Video Display framerate change with post-change callback|Play any video content and check the callback is triggered after when the framerate of a display changes|`dsRegisterFrameratePostChangeCB()`|`NA`|`Y`|
-|3|Set and verify the Zoom mode of the source device|Set the Zoom mode and verify the selected Zoom mode|`dsSetDFC()`, `dsGetDFC()`|`Y`|`NA`|
-|4|Select the Device Frame Rate of Sink device|Select the Device Frame Rate of Sink device and verify|`dsSetDisplayframerate()`|`NA`|`Y`|
-|5|Set and verify the `FRF` mode|Select the`FRF`mode and verify the selected `FRF` mode|`dsSetFRFMode()`,`dsGetFRFMode()`|`NA`|`Y`|
-|6|Check Video coding Formats and information|Select the supported video device and the get Video coding format using `dsGetSupportedVideoCodingFormats()` and get Video codec information for video device using `dsGetVideoCodecInfo()`|`dsGetSupportedVideoCodingFormats()`,`dsGetVideoCodecInfo()`|`Y`|`NA`|
+|#|Test-case|Description|HAL APIs|Source|Sink|Streams Number|
+|-|---------|-----------|--------|------|----|--------------|
+|1|Verify the Video Display framerate change with pre and post change callback.|Set the auto framerate mode and check the callback is triggered before and after when the framerate of a display changes|`dsRegisterFrameratePreChangeCB()`, `dsRegisterFrameratePostChangeCB()`|`NA`|`Y`|1,2,3,4,5,6,7,8|
+|2|Set and verify the Zoom mode of the source device|Play any video content and Set the supported Zoom mode and verify the selected Zoom mode|`dsSetDFC()`, `dsGetDFC()`|`Y`|`NA`|9|
+|3|Select the Device Frame Rate of Sink device|Select the Device Frame Rate of Sink device and on playing video playback verify `dsSetDisplayframerate()`|`dsSetDisplayframerate()`|`NA`|`Y`|1,2,3,4,5,6,7,8|
+|4|Set and verify the `FRF` mode|Select the`FRF`mode and verify the selected `FRF` mode with video playback|`dsSetFRFMode()`|`NA`|`Y`|1,2,3,4,5,6,7,8|
 
 ## Level 3 Python Test Cases High Level Overview
 
