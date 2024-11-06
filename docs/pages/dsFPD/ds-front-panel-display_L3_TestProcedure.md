@@ -93,9 +93,7 @@ Example Test Setup configuration File: [dsFPD_L3_testSetup.yml](../../../host/te
 
 Update the artifact paths from which the binaries should be copied to the device.
 
-Set the execution paths and provide the stream paths for each test case.
-
-If a test case requires multiple streams or needs to be validated using several streams, ensure that all necessary streams are added sequentially for that specific test case.
+Set the execution paths for each test case.
 
 ```yaml
 dsFPD:
