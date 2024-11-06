@@ -23,6 +23,7 @@
 
 import os
 import sys
+import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
@@ -91,19 +92,34 @@ class dsVideoDevice_test1_FrameratePreChangeCallback_Verify(dsVideoDeviceHelperC
         SupportedDevices = self.testdsVideoDevice.getSupportedVideoDevice()
 
         for device in SupportedDevices:
-            supported_framerate = self.testdsVideoDevice.getSupportedFrameRates(device)
+            self.testdsVideoDevice.setFRFMode(device, 'Enable')
+
+            for streamUrl in self.StreamUrl:
+                streamPath = self.testDownloadSingleStream(streamUrl)
+                self.testPlayer.play(streamPath)
+                time.sleep(5)
+
+                self.log.stepStart(f'Check Frame Rate Pre Post Change Callback device:{device}, Stream:{os.path.basename(streamPath)}')
+                frameRateChangeTime = self.testdsVideoDevice.getFrameratePrePostChangeCallbackStatus()
+
+                if("Pre" in frameRateChangeTime):
+                    preTime = frameRateChangeTime["Pre"]
+                    if("Post" in frameRateChangeTime):
+                        postTime = frameRateChangeTime["Post"]
+                        self.log.stepResult(True, f'Check Frame Rate Pre Post Change Callback device:{device}, Stream:{os.path.basename(streamPath)}')
+                        self.log.step(f'Time Difference between Pre and Post FrameRate change: {postTime - preTime}')
+                    else:
+                        self.log.error("Post Framerate change callback not triggered")
+                        self.log.stepResult(False, f'Check Frame Rate Pre Post Change Callback device:{device}, Stream:{os.path.basename(streamPath)}')
+                else:
+                    self.log.error("Pre Framerate change callback not triggered")
+                    self.log.stepResult(False, f'Check Frame Rate Pre Post Change Callback device:{device}, Stream:{os.path.basename(streamPath)}')
+
+                self.testPlayer.stop()
+
+                self.testDeleteSingleStream(streamPath)
+
             self.testdsVideoDevice.setFRFMode(device, 'Disable')
-
-            for framerate in supported_framerate:
-                self.testdsVideoDevice.setDisplayFramerate(device, framerate)
-
-                self.log.stepStart(f'Check Frame Rate Pre-Change Callback device:{device}, Framerate:{framerate}')
-                status = self.testdsVideoDevice.getFrameratePrechangeCallbackStatus()
-                self.log.stepResult(status, f'Check Frame Rate Pre-Change Callback device:{device}, Framerate:{framerate}')
-
-                self.log.stepStart(f'Check Frame Rate Post-Change Callback device:{device}, Framerate:{framerate}')
-                status = self.testdsVideoDevice.getFrameratePostchangeCallbackStatus()
-                self.log.stepResult(status, f'Check Frame Rate Post-Change Callback device:{device}, Framerate:{framerate}')
 
         # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()

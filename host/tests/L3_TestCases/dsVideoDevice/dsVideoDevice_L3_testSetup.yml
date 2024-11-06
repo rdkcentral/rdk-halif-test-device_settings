@@ -19,28 +19,37 @@ dsVideoDevice:  # Prefix must always exist
       test1_FrameratePrePostChangeCallBack_Verify:
         <<: *defaults
         streams:
+          - "<URL Path>/streams/scrolling_text_fast_3840x2160_23.98fps.mp4"
+          - "<URL Path>/streams/scrolling_text_fast_3840x2160_24fps.mp4"
+          - "<URL Path>/streams/scrolling_text_fast_3840x2160_25fps.mp4"
+          - "<URL Path>/streams/scrolling_text_fast_3840x2160_29.97fps.mp4"
+          - "<URL Path>/streams/scrolling_text_fast_3840x2160_30fps.mp4"
+          - "<URL Path>/streams/scrolling_text_fast_3840x2160_50fps.mp4"
+          - "<URL Path>/streams/scrolling_text_fast_3840x2160_59.94fps.mp4"
+          - "<URL Path>/streams/scrolling_text_fast_3840x2160_60fps.mp4"
       test2_ZoomMode:
         <<: *defaults
-        streams: #list of streams to be copied to device
+        streams:
+          - "<URL Path>/streams/scrolling_text_fast_1920x1080_60fps.mp4"
       test3_SetDisplayFramerate:
         <<: *defaults
         streams:
-          - "<URL Path>/streams/BounceBall_3840x2160_23.98fps.mp4"
-          - "<URL Path>/streams/BounceBall_3840x2160_24fps.mp4"
-          - "<URL Path>/streams/BounceBall_3840x2160_25fps.mp4"
-          - "<URL Path>/streams/BounceBall_3840x2160_29.97fps.mp4"
-          - "<URL Path>/streams/BounceBall_3840x2160_30fps.mp4"
-          - "<URL Path>/streams/BounceBall_3840x2160_50fps.mp4"
-          - "<URL Path>/streams/BounceBall_3840x2160_59.94fps.mp4"
-          - "<URL Path>/streams/BounceBall_3840x2160_60fps.mp4"
+          - "<URL Path>/streams/scrolling_text_fast_3840x2160_23.98fps.mp4"
+          - "<URL Path>/streams/scrolling_text_fast_3840x2160_24fps.mp4"
+          - "<URL Path>/streams/scrolling_text_fast_3840x2160_25fps.mp4"
+          - "<URL Path>/streams/scrolling_text_fast_3840x2160_29.97fps.mp4"
+          - "<URL Path>/streams/scrolling_text_fast_3840x2160_30fps.mp4"
+          - "<URL Path>/streams/scrolling_text_fast_3840x2160_50fps.mp4"
+          - "<URL Path>/streams/scrolling_text_fast_3840x2160_59.94fps.mp4"
+          - "<URL Path>/streams/scrolling_text_fast_3840x2160_60fps.mp4"
       test4_FRFMode:
         <<: *defaults
         streams:
-          - "<URL Path>/streams/BounceBall_3840x2160_23.98fps.mp4"
-          - "<URL Path>/streams/BounceBall_3840x2160_24fps.mp4"
-          - "<URL Path>/streams/BounceBall_3840x2160_25fps.mp4"
-          - "<URL Path>/streams/BounceBall_3840x2160_29.97fps.mp4"
-          - "<URL Path>/streams/BounceBall_3840x2160_30fps.mp4"
-          - "<URL Path>/streams/BounceBall_3840x2160_50fps.mp4"
-          - "<URL Path>/streams/BounceBall_3840x2160_59.94fps.mp4"
-          - "<URL Path>/streams/BounceBall_3840x2160_60fps.mp4"
+          - "<URL Path>/streams/scrolling_text_fast_3840x2160_23.98fps.mp4"
+          - "<URL Path>/streams/scrolling_text_fast_3840x2160_24fps.mp4"
+          - "<URL Path>/streams/scrolling_text_fast_3840x2160_25fps.mp4"
+          - "<URL Path>/streams/scrolling_text_fast_3840x2160_29.97fps.mp4"
+          - "<URL Path>/streams/scrolling_text_fast_3840x2160_30fps.mp4"
+          - "<URL Path>/streams/scrolling_text_fast_3840x2160_50fps.mp4"
+          - "<URL Path>/streams/scrolling_text_fast_3840x2160_59.94fps.mp4"
+          - "<URL Path>/streams/scrolling_text_fast_3840x2160_60fps.mp4"

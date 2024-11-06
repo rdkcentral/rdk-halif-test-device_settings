@@ -58,7 +58,7 @@ class dsVideoDevice_test4_SetAndGetFRFMode(dsVideoDeviceHelperClass):
         super().__init__(self.testName, self.qcID)
 
 
-    def testVerifyFRFMode(self, frfmode, expectedMode:str, manual=False):
+    def testVerifyFrameRateMode(self, frfmode, expectedMode:str, streamFramerate:str, manual=False):
         """
         Verifies the FRF mode on specified video device.
 
@@ -72,7 +72,7 @@ class dsVideoDevice_test4_SetAndGetFRFMode(dsVideoDeviceHelperClass):
             bool: True if selected FRF mode is visible in output device; otherwise, False.
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Has the display refresh rate been changed to {expectedMode} (Y/N):")
+            return self.testUserResponse.getUserYN(f"Has the display refresh rate been changed to match Stream Framerate:{streamFramerate} (Suggested mode is {expectedMode})? (Y/N):")
         else :
             #TODO: Add automation verification methods
             return False
@@ -107,7 +107,7 @@ class dsVideoDevice_test4_SetAndGetFRFMode(dsVideoDeviceHelperClass):
                 self.testPlayer.play(streamPath)
                 time.sleep(5)
                 self.log.stepStart(f'Check Auto FRF mode device:{device}, Framerate:{frameRate}')
-                result = self.testVerifyFRFMode(True, exptectedMode, False)
+                result = self.testVerifyFrameRateMode(True, exptectedMode, frameRate, True)
                 self.log.stepResult(result, f'Check Auto FRF mode device:{device}, Framerate:{frameRate}')
 
                 self.testPlayer.stop()
