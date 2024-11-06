@@ -8,10 +8,10 @@
 - [Setting Up Test Environment](#setting-up-test-environment)
 - [Run Test Cases](#run-test-cases)
 - [Test Case Procedure](#test-case-procedure)
-  - [dsDisplay_test01_VerifyDisplayConnectCallBackTest.py](#dsdisplay_test01_verifydisplayconnectCallBackTestpy)
-  - [dsDisplay_test02_TestVerifyDisplayEdid.py](#dsdisplay_test02_testverifydisplayEdidpy)
+  - [dsDisplay_test01_VerifyDisplayConnectCallBackTest.py](#dsdisplay_test01_verifydisplayconnectcallbacktestpy)
+  - [dsDisplay_test02_TestVerifyDisplayEdid.py](#dsdisplay_test02_testverifydisplayedidpy)
   - [dsDisplay_test03_AspectRatioVerificationTest.py](#dsdisplay_test03_aspectratioverificationtestpy)
-  - [dsDisplay_test04_TestVerifyDisplayEdidBytes.py](#dsdisplay_test04_testverifydisplayEdidbytespy)
+  - [dsDisplay_test04_TestVerifyDisplayEdidBytes.py](#dsdisplay_test04_testverifydisplayedidbytes)
 
 ## Overview
 
@@ -26,7 +26,6 @@ This document describes the VTS Level 3 Test scenarios and the execution process
 - `HDMI` \- High-Definition Multimedia Interface
 - `EDID` \- Extended Display Identification Data
 - `RAFT` \- Rapid Automation Framework for Testing
-- `DVI`  \- Digital Video Interface
 - `Y`    \- yes supported
 - `NA`   \- Not Supported
 
@@ -183,7 +182,7 @@ dsDisplay_test01_VerifyDisplayConnectCallBackTest.py --config /host/tests/config
 
 **Overview:**
 
-This test aims to retrieve and verify the `EDID` by connecting various pre-defined displays to each supported video port. It compares the `EDID` data retrieved from the connected displays with the expected values to validate accurate identification.
+This test case is designed for Source devices and focuses on retrieving and verifying the `EDID` by connecting various pre-defined displays to each supported video port. The test compares the `EDID` data retrieved from the connected displays against expected values to ensure accurate identification. It uses the [dsDisplay_test_MonitorDetails.yml](../../../host/tests/L3_TestCases/dsDisplay/dsDisplay_test_MonitorDetails.yml) file, which contains the details of the connected monitors for verification.
 
 **Platform Supported:**
 
@@ -199,7 +198,7 @@ This test retrieves and verifies `EDID` by connecting various pre-defined displa
 
 **Expected Results:**
 
-Connect each specified display device, retrieve `EDID` data, and confirm that the retrieved monitor names match the expected values defined in `dsDisplay_test_MonitorDetails.yml`, returning a pass/fail status based on the comparison.
+Connect each specified display device, retrieve `EDID` data, and confirm that the retrieved monitor names match the expected values defined in [dsDisplay_test_MonitorDetails.yml](../../../host/tests/L3_TestCases/dsDisplay/dsDisplay_test_MonitorDetails.yml), returning a pass/fail status based on the comparison.
 
 **Test Steps:**
 
@@ -253,10 +252,10 @@ dsDisplay_test03_AspectRatioVerificationTest.py --config /host/tests/configs/exa
 
 - The test will download the required artifacts, then copy them to the target directory.
 
-- Aspect Ratio Verification:
-    - For each video port, the user will be prompted to set the specified aspect ratio on the port and confirm by pressing Enter.
-    - The test will retrieve the aspect ratio from the connected display device.
-    - The retrieved aspect ratio will be compared to the expected value for each configuration.
+- Aspect Ratio Verification
+  - For each video port, the user will be prompted to set the specified aspect ratio on the port and confirm by pressing Enter.
+  - The test will retrieve the aspect ratio from the connected display device.
+  - The retrieved aspect ratio will be compared to the expected value for each configuration.
 
 - Completion and Results:
 
@@ -266,12 +265,11 @@ dsDisplay_test03_AspectRatioVerificationTest.py --config /host/tests/configs/exa
 
 **Overview:**
 
-This test retrieves and verifies the `EDID` bytes from connected displays through each supported video port. The test compares the retrieved EDID bytes against expected values to ensure accurate identification and functionality of the display.
+This test case is designed for Source devices and focuses on retrieving and verifying the `EDID` bytes by connecting various pre-defined displays to each supported video port. The test parses the `EDID` bytes retrieved from the connected displays against expected values to ensure accurate identification. It uses the [dsDisplay_test_MonitorDetails.yml](../../../host/tests/L3_TestCases/dsDisplay/dsDisplay_test_MonitorDetails.yml) file, which contains the details of the connected monitors for verification.
 
 **Platform Supported:**
 
 - Source
-- Sink
 
 **User Input Required:**
 
@@ -283,7 +281,7 @@ Connect each display to the supported video ports, retrieve the `EDID` bytes, an
 
 **Expected Results:**
 
-The test will retrieve and parse EDID bytes for each connected display. It will verify that the EDID information, including fields like manufacturerId and monitorName, matches the expected values for each display. The test will pass if all expected EDID details are retrieved and verified correctly for each display and port.
+The test will retrieve and parse `EDID` bytes for each connected display. It will verify that the `EDID` information, including fields like manufacturerId and monitorName, matches the expected values for each display. The test will pass if all expected `EDID` details are retrieved and verified correctly for each display and port.
 
 **Test Steps:**
 
@@ -297,9 +295,10 @@ dsDisplay_test04_TestVerifyDisplayEdidBytes --config /host/tests/configs/example
 
 - EDID Bytes Verification:
   - For each display, the test will prompt the user to connect the display to the specified port.
-  - The test will retrieve the EDID bytes from the connected display device.
-  - The test will verify the retrieved EDID bytes against the expected details, such as manufacturer ID and monitor name, for each connected display.
+  - The test will retrieve the `EDID` bytes from the connected display device.
+  - The test will verify the retrieved `EDID` bytes against the expected details, such as manufacturer ID and monitor name, for each connected display.
 
 - Completion and Results:
 
-  If all expected EDID bytes are verified, the test will conclude and display the final result (PASS/FAIL).
+  If all expected `EDID` bytes are verified, the test will conclude and display the final result (PASS/FAIL).
+  
