@@ -7,7 +7,7 @@
 - [Streams Required](#streams-required)
 - [Test Setup Connections](#test-setup-connections)
 - [Test Cases](#test-cases)
-  = [dsCompositeIn_test1_VerifyConnect_Callback.py](#dscompositein_test1_verifyconnect_callbackpy)
+  - [dsCompositeIn_test1_VerifyConnect_Callback.py](#dscompositein_test1_verifyconnect_callbackpy)
   - [dsCompositeIn_test2_VerifyStatus_Callback.py](#dscompositein_test2_verifystatus_callbackpy)
   - [dsCompositeIn_test3_ScaleAndVerify_Video.py](#dscompositein_test3_scaleandverify_videopy)
   - [dsCompositeIn_test4_VerifySignal_Callback](#dscompositein_test4_verifysignal_Callbackpy)
@@ -125,7 +125,7 @@ dscompositeIn:
         artifacts:
           - "<path>/bin/hal_test"
           - "<path>/bin/libut_control.so"
-          - "<path>/bin/Sink_compositeIn.yaml"
+          - "<path>/bin/Sink_CompositeInput.yaml"
           - "<path>/bin/run.sh"
         execute:
           - "chmod +x <PATH>/dscompositeIn_L3/hal_test"
@@ -201,9 +201,8 @@ Success Criteria
 
     The test will Request User to connect Source device to Composite In port:
 
-  - Question: "Connect the compositeIn source device to Port port_type and press Y: (Y/N)"
+  - Question: "Connect the compositeIn source device to Port port_type and press Y: "
   - Press **Y** if user connected the device and acknowledge the same. (this will mark the step as PASS).
-  - Press **N** if user could not connect the device. (this will mark the step as FAIL).
 
 - Device connect Confirmation:
 
@@ -215,9 +214,8 @@ Success Criteria
 
     The test will Request User to disconnect Source device to Composite In port:
 
-  - Question: "Disonnect the compositeIn source device to Port port_type and press Y: (Y/N)"
+  - Question: "Disonnect the compositeIn source device to Port port_type and press Y: "
   - Press **Y** if user connected the device and acknowledge the same. (this will mark the step as PASS).
-  - Press **N** if user could not connect the device. (this will mark the step as FAIL).
 
 - Device disconnect Confirmation:
 
@@ -227,7 +225,7 @@ Success Criteria
 
 - Repeat for All Ports:
 
-  The test will iterate through all available  ports, enabling/disabling each one and collecting user feedback accordingly.
+  The test will iterate through all available  ports, connecting/disconnecting each one and collecting user feedback accordingly.
 
 - Test Conclusion:
 
@@ -240,7 +238,7 @@ Success Criteria
 
 #### User Input Required - test02
 
-**Yes**: User interaction is necessary to connect/disconnect Composite Source device (This will be automated later).
+**Yes**: User interaction is necessary to check the connect status of Composite Source device (This will be automated later).
 
 #### Acceptance Criteria - test02
 
@@ -265,19 +263,18 @@ Success Criteria
 
     The test will Request User to connect Source device to Composite In port:
 
-  - Question: "Connect the compositeIn source device to Port port_type and press Y: (Y/N)"
+  - Question: "Connect the compositeIn source device to Port port_type and press Y: "
   - Press **Y** if user connected the device and acknowledge the same. (this will mark the step as PASS).
-  - Press **N** if user could not connect the device. (this will mark the step as FAIL).
 
 - Device status Confirmation:
 
-  - Test will check if the device status event has reached the device. 
+  - Test will select the port and check if the device status event has reached the device. 
   - If event detected will mark the step as PASS
   - If event not detected will mark the step as FAIL
 
 - Repeat for All Ports:
 
-  The test will iterate through all available  ports, enabling/disabling each one and collecting user feedback accordingly.
+  The test will iterate through all available  ports, selecting each one and collecting user feedback accordingly.
 
 - Test Conclusion:
 
@@ -289,19 +286,19 @@ Success Criteria
 
 #### User Input Required - test03
 
-**Yes**: User interaction is necessary to verify the video scaling (This will be automated later).
+**Yes**: User interaction is necessary to check the connect status of compositeIn Source device and to verify the video scaling (This will be automated later).
 
 #### Acceptance Criteria - test03
 
-Test detects the status of the Source device connected to Composite In port
+Test checks if video scaling happens on video from the Source device connected to Composite In port
 
 #### Expected Results - test03
 
-The test scales the compoiste in video 
+The test scales the video playing from compositeIn source device 
 
 Success Criteria
 
-- User should see video scaling happengin in dut.
+- User should see video scaling happening in dut.
 
 #### Test Steps - test03
 
@@ -314,9 +311,8 @@ Success Criteria
 
     The test will Request User to connect Source device to Composite In port:
 
-  - Question: "Connect the compositeIn source device to Port port_type and press Y: (Y/N)"
+  - Question: "Connect the compositeIn source device to Port port_type and press Y: "
   - Press **Y** if user connected the device and acknowledge the same. (this will mark the step as PASS).
-  - Press **N** if user could not connect the device. (this will mark the step as FAIL).
 
 - Device changes the scale and request user to confirm:
 
@@ -328,7 +324,6 @@ Success Criteria
 
   The test will iterate through all available scaling parameter and set scaling accordingly..
 
-  
 - Repeat for All Ports:
 
   The test will iterate through all available ports.
@@ -368,13 +363,27 @@ Success Criteria
 
     The test will Request User to connect Source device to Composite In port:
 
-  - Question: "Connect the compositeIn source device to Port port_type and press Y: (Y/N)"
+  - Question: "Connect the compositeIn source device to Port port_type and press Y: "
   - Press **Y** if user connected the device and acknowledge the same. (this will mark the step as PASS).
-  - Press **N** if user could not connect the device. (this will mark the step as FAIL).
 
-- Device detects signal change:
+- Signal change confirmation:
 
-  - Test will check the signal change.
+  - Test will check if the event has reached the device. 
+  - If event detected will mark the step as PASS
+  - If event not detected will mark the step as FAIL
+
+- Device Disconnect/Standby prompt:
+
+    The test will Request User to disconnect the Source device to Composite In port or make Source device to standby mode:
+
+  - Question: "Check if CompositeIn source is disconnected to port_type/set to standby and press Y: "
+  - Press **Y** if user connected the device and acknowledge the same. (this will mark the step as PASS).
+
+- Signal change confirmation:
+
+  - Test will check if the event has reached the device. 
+  - If event detected will mark the step as PASS
+  - If event not detected will mark the step as FAIL
 
 - Repeat for All Ports:
 
