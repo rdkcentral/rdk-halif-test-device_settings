@@ -85,7 +85,7 @@ rackConfig:
 
 #### Device Configuration File
 
-  Example Device configuration File: `ut/host/tests/configs/deviceConfig.yml`
+Example Device configuration File: [deviceConfig.yml](../../../host/tests/configs/deviceConfig.yml)
 
 For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_device_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_device_config.yml)
 
@@ -110,35 +110,11 @@ deviceConfig:
 
 #### Test Setup Configuration File
 
-- Example configuration file: [dsDisplay_L3_testSetup.yml](../../../host/tests/L3_TestCases/dsDisplay/dsDisplay_L3_testSetup.yml).
-
 Update the artifact paths from which the binaries should be copied to the device.
 
 Set the execution paths for each test case.
 
-dsDisplay:
-  description: "dsDisplay Device Settings test setup"
-  assets:
-    device:
-      defaults: &defaults
-        artifacts:
-          - "<URL Path>/hal_test"
-          - "<URL Path>/libut_control.so"
-          - "<URL Path>/Source_4K_Display.yaml"
-          - "<URL Path>/run.sh"
-        execute:
-          - "chmod +x <Path on dut>/dsDisplay/hal_test"
-          - "chmod +x <Path on dut>/run.sh"
-          - "ln -s /usr/lib/libds-hal.so <Path on dut>/libdshal.so"
-        streams:
-      test01_VerifyDisplayConnectCallBackTest:
-        <<: *defaults
-      test02_TestVerifyDisplayEdid:
-        <<: *defaults
-      test03_AspectRatioVerificationTest:
-        <<: *defaults
-      test04_TestVerifyDisplayEdidBytes:
-        <<: *defaults
+- Example configuration file: [dsDisplay_L3_testSetup.yml](../../../host/tests/L3_TestCases/dsDisplay/dsDisplay_L3_testSetup.yml).
 
 #### Test Suite Configuration
 
