@@ -30,11 +30,11 @@ deviceConfig:
         prompt: "" # Prompt string on console
         test:
             #TODO: Use the single profile file which contains all details (ds, hdmi, etc)
-            profile: "../../../../../profiles/source/Source_4K_VideoPort.yaml"
+            profile: "../../../../profiles/source/Source_4K_VideoPort.yaml"
             player:
                 tool: "gstreamer"
-            prerequisites:
-                - export EXP=test # pre commands required to play the stream
+                prerequisites:
+                    - export EXP=test # pre commands required to play the stream
     cpe2:
         platform: "test"
         model: "test"
