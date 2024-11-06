@@ -341,11 +341,11 @@ Success Criteria
 
 #### User Input Required - test04
 
--  **Yes**: User interaction is necessary to connect the Hdmi In device and to change the resolution on connected device.(This will be automated later).
+-  **Yes**: User interaction is necessary to connect the Hdmi In device and to change the resolution on connected device(like Fire Tv Stick, Xbox, Hdmi Analyzer).(This will be automated later).
 
 #### Acceptance Criteria - test04
 
-- Verify the video mode stauts.
+- Verify the video mode status.
 
 #### Expected Results - test04
 
@@ -401,7 +401,7 @@ Success Criteria
 
 #### User Input Required - test05
 
--  **Yes**: User interaction is necessary to connect the Hdmi In device and to enable/disable ALLM on connected device.(This will be automated later).
+-  **Yes**: User interaction is necessary to connect the Hdmi In device and to enable/disable ALLM on connected device (like Fire Tv Stick, Xbox, Hdmi Analyzer).(This will be automated later).
 
 #### Acceptance Criteria - test05
 
@@ -464,7 +464,7 @@ Success Criteria
 
 #### User Input Required - test06
 
--  **Yes**: User interaction is necessary to connect the Hdmi In device on ports.(This will be automated later).
+-  **Yes**: User interaction is necessary to connect the Hdmi In device on ports (like Xbox, Hdmi Analyzer) and change the co    ntent like Cinema , Game , Sport.(This will be automated later).
 
 #### Acceptance Criteria - test06
 
@@ -510,7 +510,7 @@ Success Criteria
 
 #### User Input Required - test07
 
--  **Yes**: User interaction is necessary to connect the Hdmi In device and to change the AVI content on connected device.(This will be automated later).
+-  **Yes**: User interaction is necessary to connect the Hdmi In device and to change the AVI content on connected device (lik   e Hdmi Analyzer) and change the content type like Cinema , Game , Sport.(This will be automated later).
 
 #### Acceptance Criteria - test07
 
@@ -765,7 +765,7 @@ Success Criteria
 
 #### User Input Required - test12
 
--  **Yes**: User interaction is necessary to connect the Hdmi In device to port.(This will be automated later).
+-  **Yes**: User interaction is necessary to connect the Hdmi In device to port like Hdmi Quantum Data Analyzer.(This will be    automated later).
 
 #### Acceptance Criteria - test12
 
@@ -791,6 +791,8 @@ This test evaluates the SPD Info received from connected device.
 - SPD Info Confirmation:
 
   - Test will get the SPD info and verifies the same.
+  - If SPD info is received, it will be compared with the YAML SPD info bytes. If they match, the step will be marked as PASS
+  - If SPD info is received, it will be compared with the YAML SPD info bytes. If they does not match, the step will be marked as FAIL
 
 - Repeat for All Ports:
 
