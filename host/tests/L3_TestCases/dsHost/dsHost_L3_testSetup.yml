@@ -14,7 +14,12 @@ dsHost:  # Prefix must always exist
           - ""  #prerequisites commands if required
         streams:
           - "" #URL path to the test streams
-      test1_GetCpuTemperature:
-        artifacts:
-        execute:
-        streams:
+      test1_VerifyTemperature:
+         artifacts:
+          - "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/dsHost/bin/hal_test"
+          - "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/dsHost/bin/libut_control.so"
+          - "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/dsHost/bin/run.sh"
+          - "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/dsHost/bin/Sink_HostSettings.yaml"
+         execute:
+          - "chmod +x /opt/HAL/dsHost/hal_test"
+          - "chmod +x /opt/HAL/dsHost/run.sh"
