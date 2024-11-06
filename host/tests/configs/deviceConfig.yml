@@ -30,7 +30,7 @@ deviceConfig:
         prompt: "" # Prompt string on console
         test:
             #TODO: Use the single profile file which contains all details (ds, hdmi, etc)
-            profile: "../../../../profiles/source/Source_4K_VideoPort.yaml"
+            profile: "../../../../../profiles/source/Source_4K_VideoPort.yaml"
             player:
                 tool: "gstreamer"
             prerequisites:
