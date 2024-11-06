@@ -6,6 +6,7 @@
 - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
 - [References](#references)
 - [Setting Up Test Environment](#setting-up-test-environment)
+- [Run Test Cases](#run-test-cases)
 - [Test Case Procedure](#test-case-procedure)
   - [dsDisplay_test01_VerifyDisplayConnectCallBackTest.py](#dsdisplay_test01_verifydisplayconnectCallBackTestpy)
   - [dsDisplay_test02_TestVerifyDisplayEdid.py](#dsdisplay_test02_testverifydisplayEdidpy)
@@ -14,20 +15,20 @@
 
 ## Overview
 
-This document describes the L3 Test case Procedure Documentation for the Device Settings Display module.
+This document describes the VTS Level 3 Test scenarios and the execution process for the Device Setting Display Module.
 
 ### Acronyms, Terms and Abbreviations
 
-- `HAL` \- Hardware Abstraction Layer, may include some common components
-- `UT`  \- Unit Test(s)
-- `OEM` \- Original Equipment Manufacture
-- `SoC` \- System on a Chip
-- `HDMI`\- High-Definition Multimedia Interface
-- `EDID`\- Extended Display Identification Data
-- `RAFT`\- Rapid Automation Framework for Testing
-- `DVI` \- Digital Video Interface
-- `Y`   \- yes supported
-- `NA`  \- Not Supported
+- `HAL`  \- Hardware Abstraction Layer, may include some common components
+- `UT`   \- Unit Test(s)
+- `OEM`  \- Original Equipment Manufacture
+- `SoC`  \- System on a Chip
+- `HDMI` \- High-Definition Multimedia Interface
+- `EDID` \- Extended Display Identification Data
+- `RAFT` \- Rapid Automation Framework for Testing
+- `DVI`  \- Digital Video Interface
+- `Y`    \- yes supported
+- `NA`   \- Not Supported
 
 ### References
 
@@ -43,7 +44,7 @@ To execute `HAL` `L3` Python test cases, need a Python environment. Follow these
 
 #### Rack Configuration File
 
-Example Rack configuration File: `ut/host/tests/configs/example_rack_config.yml`
+Example Rack configuration File: [example_rack_config.yml](../../../host/tests/configs/example_rack_config.yml)
 
 For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_rack_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_rack_config.yml)
 
@@ -109,11 +110,35 @@ deviceConfig:
 
 #### Test Setup Configuration File
 
+- Example configuration file: [dsDisplay_L3_testSetup.yml](../../../host/tests/L3_TestCases/dsDisplay/dsDisplay_L3_testSetup.yml).
+
 Update the artifact paths from which the binaries should be copied to the device.
 
-Set the execution paths.
+Set the execution paths for each test case.
 
-- Example configuration file: [dsDisplay_L3_testSetup.yml](../../../host/tests/L3_TestCases/dsDisplay/dsDisplay_L3_testSetup.yml).
+dsDisplay:
+  description: "dsDisplay Device Settings test setup"
+  assets:
+    device:
+      defaults: &defaults
+        artifacts:
+          - "<URL Path>/hal_test"
+          - "<URL Path>/libut_control.so"
+          - "<URL Path>/Source_4K_Display.yaml"
+          - "<URL Path>/run.sh"
+        execute:
+          - "chmod +x <Path on dut>/dsDisplay/hal_test"
+          - "chmod +x <Path on dut>/run.sh"
+          - "ln -s /usr/lib/libds-hal.so <Path on dut>/libdshal.so"
+        streams:
+      test01_VerifyDisplayConnectCallBackTest:
+        <<: *defaults
+      test02_TestVerifyDisplayEdid:
+        <<: *defaults
+      test03_AspectRatioVerificationTest:
+        <<: *defaults
+      test04_TestVerifyDisplayEdidBytes:
+        <<: *defaults
 
 #### Test Suite Configuration
 
@@ -140,7 +165,6 @@ This test verifies display event callbacks by connecting and disconnecting a dis
 **Platform Supported:**
 
 - Source
-- Sink
 
 **User Input Required:**
 
@@ -183,12 +207,11 @@ dsDisplay_test01_VerifyDisplayConnectCallBackTest.py --config /host/tests/config
 
 **Overview:**
 
-This test retrieves and verifies `EDID` by connecting various pre-defined displays to each supported video port. It then compares the retrieved `EDID` data against expected values to ensure accurate display identification.
+This test aims to retrieve and verify the `EDID` by connecting various pre-defined displays to each supported video port. It compares the `EDID` data retrieved from the connected displays with the expected values to validate accurate identification.
 
 **Platform Supported:**
 
 - Source
-- Sink
 
 **User Input Required:**
 
@@ -196,11 +219,11 @@ Yes: User input is required to manually connect the display to the specified por
 
 **Acceptance Criteria:**
 
-Connect each display to the supported video ports, retrieve the `EDID` information, and verify it against the expected EDID data.
+This test retrieves and verifies `EDID` by connecting various pre-defined displays to each supported video port. It then compares the retrieved `EDID` data against expected values to ensure accurate display identification.
 
 **Expected Results:**
 
-The test will connect various displays, retrieve their `EDID` information, and confirm that the monitor names match the expected values. The test will pass if all expected `EDID` data is correctly identified; otherwise, it will fail.
+Connect each specified display device, retrieve `EDID` data, and confirm that the retrieved monitor names match the expected values defined in `dsDisplay_test_MonitorDetails.yml`, returning a pass/fail status based on the comparison.
 
 **Test Steps:**
 
@@ -214,8 +237,9 @@ dsDisplay_test02_TestVerifyDisplayEdid.py --config /host/tests/configs/example_r
 
 - Display Device Verification:
 
-  - For each port, it will prompt the user to connect the specified display device and confirm successful connection.
-  - The test will retrieve the `EDID` information from the connected display device and verify it against the expected details, such as the monitor name, for each display.
+  - For each available video port, the test prompts the user to connect the specified display device (LG, Philips, Sony, Samsung).
+  - The test will retrieve the `EDID` information from the connected display device and verify it against the expected details, such as the monitor name, for each display device.
+  - It will confirm that the `monitorName` field in the retrieved `EDID` matches the expected monitor name specified in [dsDisplay_test_MonitorDetails.yml](../../..//host/tests/L3_TestCases/dsDisplay/dsDisplay_test_MonitorDetails.yml).
 
 - Completion and Results:
 
