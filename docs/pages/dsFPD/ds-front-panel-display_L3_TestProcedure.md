@@ -28,7 +28,7 @@ To execute `HAL` `L3` Python test cases, need a Python environment. Follow these
 
 #### Rack Configuration File
 
-Example Rack configuration File: `ut/host/tests/configs/example_rack_config.yml`
+Example Rack configuration File: [example_rack_config.yml](../../../host/tests/configs/example_rack_config.yml)
 
 For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_rack_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_rack_config.yml)
 
@@ -85,11 +85,6 @@ deviceConfig:
     target_directory: "/tmp"  # Path where HAL binaries are copied in device
     test:
       profile: "../../../../profiles/sink/Sink_FPD.yaml"
-      player:
-        tool: "gstreamer"
-        prerequisites:
-          - export xxxx    # Pre-commands required to play the stream
-
 ```
 
 #### Test Setup Configuration File
