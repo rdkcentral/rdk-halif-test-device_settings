@@ -4,13 +4,13 @@
 
 - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
 - [Setting Up Test Environment](#setting-up-test-environment)
-- [Streams Required](#streams-required)
+- [Run Test Cases](#run-test-cases)
 - [Test Setup Connections](#test-setup-connections)
 - [Test Cases](#test-cases)
   - [dsCompositeIn_test1_VerifyConnect_Callback.py](#dscompositein_test1_verifyconnect_callbackpy)
   - [dsCompositeIn_test2_VerifyStatus_Callback.py](#dscompositein_test2_verifystatus_callbackpy)
   - [dsCompositeIn_test3_ScaleAndVerify_Video.py](#dscompositein_test3_scaleandverify_videopy)
-  - [dsCompositeIn_test4_VerifySignal_Callback](#dscompositein_test4_verifysignal_Callbackpy)
+  - [dsCompositeIn_test4_VerifySignal_Callback.py](#dscompositein_test4_verifysignal_callbackpy)
 
 ## Acronyms, Terms and Abbreviations
 
@@ -37,8 +37,6 @@ In this file, update the configuration to define the console sessions for the `D
 |Console Session|Description|
 |---------------|-----------|
 |default|Downloads the streams required for test cases|
-|ssh_player|Plays the stream required for test case|
-|ssh_player_secondary|Plays a secondary stream, if required for test case|
 |ssh_hal_test|Executes the `HAL` binary for the test case|
 
 ```yaml
@@ -49,18 +47,6 @@ rackConfig:
       platform: "stb"
       consoles:
         - default:
-            type: "ssh"
-            port: 10022
-            username: "root"
-            ip: "XXX.XXX.XXX" # IP address of the device
-            password: ' '
-        - ssh_player:
-            type: "ssh"
-            port: 10022
-            username: "root"
-            ip: "XXX.XXX.XXX" # IP address of the device
-            password: ' '
-        - ssh_player_secondary:
             type: "ssh"
             port: 10022
             username: "root"
@@ -99,10 +85,8 @@ deviceConfig:
     target_directory: "/tmp"  # Path where HAL binaries are copied in device
     test:
       profile: "../../../../profiles/sink/Sink_compositeIn.yaml"
-      player:
-        tool: "gstreamer"
-        prerequisites:
-          - export xxxx    # Pre-commands required to play the stream
+      prerequisites:
+        - export xxxx    # Pre-commands required to play the stream
 
 ```
 
