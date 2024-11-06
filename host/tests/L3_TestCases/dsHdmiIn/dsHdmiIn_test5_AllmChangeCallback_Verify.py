@@ -96,14 +96,14 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(dsHdmiInHelperClass):
         if allmStatus != None:
             actual_port, actual_status = allmStatus
         else:
-            self.log.step(f"No callbacks found on port: {port}")
+            self.log.stepResult(False,f"No callbacks found on port: {port}")
             return False
 
         if actual_port == port and actual_status == expected_status:
-            self.log.step(f"ALLM mode: {actual_status} on port: {actual_port} confirmed in Callback")
+            self.log.stepResult(True,f"ALLM mode: {actual_status} on port: {actual_port} confirmed in Callback")
             return True
         else:
-            self.log.step(f"Unexpected ALLM mode: {actual_status} on port: {actual_port} in Callback")
+            self.log.stepResult(False,f"Unexpected ALLM mode: {actual_status} on port: {actual_port} in Callback")
             return False
 
     def testFunction(self):

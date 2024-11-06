@@ -613,8 +613,9 @@ class dsHdmiInClass():
         match = re.search(typeStatusPattern, result)
         if match:
             edidversion = match.group(2)
+            return edidversion
 
-        return edidversion
+        return None
 
     def getEdidInfo(self, port_type:str=0):
         """
@@ -632,16 +633,13 @@ class dsHdmiInClass():
                 "input": str(port_type)
             }
         ]
-        edid_list = self.deviceProfile.get("edidbytes")
+
         result = self.utMenu.select( self.testSuite, "Get Edid", promptWithAnswers)
-        pattern = r'edidbyte\[(8|9)\]:\[(\w{2})\]'
+        pattern = r'edidbyte:\[(\w+)\]:\[(\w{2})\]'
         matches = re.findall(pattern, result)
         if matches:
-            edid_values = {int(index): value for index, value in matches}
-        for key in edid_values:
-            if int(edid_values.get(key)) in edid_list:
-                if(key == 9):
-                    return True
+            edid_values = [item[1] for item in matches]
+            return edid_values
 
         return None
 
@@ -662,16 +660,14 @@ class dsHdmiInClass():
             }
         ]
 
-        spd_list = self.deviceProfile.get("spdbytes")
         result = self.utMenu.select( self.testSuite, "Get Spdinfo", promptWithAnswers)
-        pattern = r'spdinfo:\[(13|14)\]:\[(\w{2})\]'
+        pattern = r'spdinfo:\[(\w+)\]:\[(\w{2})\]'
         matches = re.findall(pattern, result)
         if matches:
-            spd_values = {int(index): value for index, value in matches}
-        for key in spd_values:
-            if int(spd_values.get(key)) in spd_list:
-                if(key == 14):
-                    return True
+            spd_info = [item[1] for item in matches]
+            return spd_info
+
+        return False
 
     def setEdid2Allm(self, port_type:str=0, allm_support:int=0):
         """

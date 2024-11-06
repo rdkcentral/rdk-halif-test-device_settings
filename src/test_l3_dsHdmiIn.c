@@ -855,7 +855,7 @@ void test_l3_HdmiIn_get_edid(void)
 
     UT_LOG_INFO("OUT:");
     for (int itr = 0; itr < length; itr++) {
-        UT_LOG_INFO("edidbyte[%d]:[%02x] ", itr, edidbytes[itr]);
+        UT_LOG_INFO("edidbyte:[%d]:[%02x] ", itr, edidbytes[itr]);
     }
     DS_ASSERT(ret == dsERR_NONE);
 

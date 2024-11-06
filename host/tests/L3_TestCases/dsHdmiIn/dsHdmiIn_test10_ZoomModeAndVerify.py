@@ -93,8 +93,8 @@ class dsHdmiIn_test10_ZoomModeAndVerify(dsHdmiInHelperClass):
             self.log.step(f'Select {port} Port')
 
             # Check the HdmiIn device connected to is active
-            result = self.CheckDeviceStatusAndVerifyZoomMode(True,port,False)
-            if not result:
+            status = self.CheckDeviceStatusAndVerifyZoomMode(True,port,False)
+            if not status:
                 self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
                 time.sleep(5)
                 self.log.step(f'Port Selected {port}')
@@ -103,9 +103,14 @@ class dsHdmiIn_test10_ZoomModeAndVerify(dsHdmiInHelperClass):
             zoomModeList = self.testdsHdmiIn.getVideoZoomModeList()
 
             for zoomModeIndex in range (1,len(zoomModeList)):
-                   self.testdsHdmiIn.setHdmiInZoomMode(zoomModeList[zoomModeIndex])
-                   result &= self.CheckDeviceStatusAndVerifyZoomMode(True,port,True)
-                   self.log.step(f'Verified selected Zoom Mode {zoomModeList[zoomModeIndex]}')
+                self.testdsHdmiIn.setHdmiInZoomMode(zoomModeList[zoomModeIndex])
+                status = self.CheckDeviceStatusAndVerifyZoomMode(True,port,True)
+                if status:
+                    self.log.stepResult(True,f'Verified selected Zoom Mode {zoomModeList[zoomModeIndex]}')
+                    result &= True
+                else:
+                    self.log.stepResult(False,f'Verified selected Zoom Mode {zoomModeList[zoomModeIndex]}')
+                    result &= False
 
         self.log.stepResult(result,f"Verified Zoom Modes")
         #Run postRequisites listed in the test setup configuration file

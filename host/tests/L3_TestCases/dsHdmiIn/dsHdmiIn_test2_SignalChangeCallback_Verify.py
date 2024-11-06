@@ -105,11 +105,12 @@ class dsHdmiIn_test2_SignalChangeCallback_Verify(dsHdmiInHelperClass):
 
             status = self.testdsHdmiIn.getSignalChangeCallbackStatus()
             if status != None and port == status[0]:
-               result &= True
-               self.log.step(f'Signal status {status[1]} found in Callback and Result{result}')
+                self.log.stepResult(True,f'Signal status {status[1]} found in Callback and Result{result}')
+                result &= True
+
             else:
-               result &= False
-               self.log.step(f'Signal status not found in Callback found and Result{result}')
+                self.log.stepResult(False,f'Signal status not found in Callback found and Result{result}')
+                result &= False
 
         self.log.stepResult(result,f'Signal status Callbacks Verified')
         #Run postRequisites listed in the test setup configuration file
