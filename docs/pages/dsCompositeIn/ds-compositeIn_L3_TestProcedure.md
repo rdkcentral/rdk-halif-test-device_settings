@@ -28,7 +28,7 @@ To execute `HAL` `L3` Python test cases, need a Python environment. Follow these
 
 #### Rack Configuration File
 
-Example Rack configuration File: [example_rack_config.yml](#../../../host/tests/configs/example_rack_config.yml)
+Example Rack configuration File: [example_rack_config.yml](#https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/main/host/tests/configs/example_rack_config.yml)
 
 For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_rack_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_rack_config.yml)
 
@@ -83,7 +83,7 @@ rackConfig:
 
 #### Device Configuration File
 
-Example Device configuration File: [deviceConfig.yml](#../../../host/tests/configs/deviceconfig.yml)
+Example Device configuration File: [deviceConfig.yml](#https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/main/host/tests/configs/deviceConfig.yml)
 
 For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_device_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_device_config.yml)
 
@@ -108,7 +108,7 @@ deviceConfig:
 
 #### Test Setup Configuration File
 
-Example Test Setup configuration File: [dscompositeIn_L3_testSetup.yml](#../../../host/tests/dsCompositeIn_L3_Tests/dsCompositeIn_L3_testSetup.yml)
+Example Test Setup configuration File: [dscompositeIn_L3_testSetup.yml](#https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/main/host/tests/dsCompositeIn_L3_Tests/dsCompositeIn_L3_testSetup.yml)
 
 Update the artifact paths from which the binaries should be copied to the device.
 
