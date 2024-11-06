@@ -52,8 +52,6 @@ In this file, update the configuration to define the console sessions for the `D
 |Console Session|Description|
 |---------------|-----------|
 |default|Downloads the streams required for test cases|
-|ssh_player|Plays the stream required for test case|
-|ssh_player_secondary|Plays a secondary stream, if required for test case|
 |ssh_hal_test|Executes the `HAL` binary for the test case|
 
 ```yaml
@@ -64,18 +62,6 @@ rackConfig:
       platform: "tv"
       consoles:
         - default:
-            type: "ssh"
-            port: 10022
-            username: "root"
-            ip: "XXX.XXX.XXX" # IP address of the device
-            password: ' '
-        - ssh_player:
-            type: "ssh"
-            port: 10022
-            username: "root"
-            ip: "XXX.XXX.XXX" # IP address of the device
-            password: ' '
-        - ssh_player_secondary:
             type: "ssh"
             port: 10022
             username: "root"
@@ -113,7 +99,7 @@ deviceConfig:
     model: "uk"
     target_directory: "/tmp"  # Path where HAL binaries are copied in device
     test:
-      profile: "../../../../profiles/sink/Sink_AudioSettings.yaml"
+      profile: "../../../../profiles/sink/Sink_HDMIIN.yaml"
       player:
         tool: "gstreamer"
         prerequisites:
@@ -143,7 +129,7 @@ dsHdmiIn:
         execute:
           - "chmod +x /opt/HAL/dsHdmiIn_L3/hal_test"
           - "chmod +x /opt/HAL/dsHdmiIn_L3/run.sh"
-          - cp -rf /usr/lib/libdshal.so /opt/HAL/dsHdmiIn_L3/
+          - "cp -rf /usr/lib/libdshal.so /opt/HAL/dsHdmiIn_L3/"
           - "ln -s /usr/lib/libds-hal.so /opt/HAL/dsHdmiIn_L3/libdshal.so"
        streams:
           -" "
@@ -209,7 +195,7 @@ Disconnect the external device and check if dut recognize the event.
 
 #### Expected Results - test01
 
-The test registers the event and check for  the event call back.
+The test registers the event and check for  the event callback.
 
 Success Criteria
 
@@ -233,8 +219,9 @@ Success Criteria
 - Device Status Confirmation:
 
   - Test will check if the device status event has reached the device. 
-  - If event detected will mark the step as PASS
-  - If event not detected will mark the step as FAIL
+  - If event is detected, the step will marked as PASS
+  - If event not detected, the step will marked as FAIL
+
 
 - Repeat for All Ports:
 
@@ -256,7 +243,7 @@ Success Criteria
 
 #### Acceptance Criteria - test02
 
-- Verify the Singal status.
+- Verify the Signal status.
 
 #### Expected Results - test02
 
@@ -271,7 +258,7 @@ Success Criteria
 
 -  Device Connect prompt:
 
-    The test will Request User to connect Source device to Hdmi In port:
+    The test will prompt the User to connect a Source device:
 
   - Question: "connect device to porttype and press Enter (Y/N)"
   - Press **Y** if Device is connected (this will mark the step as PASS).
@@ -280,8 +267,8 @@ Success Criteria
 - Signal Status Confirmation:
 
   - Test will check if the signal status event has reached the device.
-  - If event detected will mark the step as PASS
-  - If event not detected will mark the step as FAIL
+  - If event is detected, the step will marked as PASS
+  - If event not detected, the step will marked as FAIL
 
 - Repeat for All Ports:
 
@@ -322,7 +309,7 @@ Success Criteria
 
 -  Device Connect prompt:
 
-    The test will Request User to connect Source device to Hdmi In port:
+    The test will prompt the User to connect a Source device:
 
   - Question: "connect device to porttype and press Enter (Y/N)"
   - Press **Y** if Device is connected (this will mark the step as PASS).
@@ -331,8 +318,8 @@ Success Criteria
 - Port Status Confirmation:
 
   - Test will check if the port status event has reached the device.
-  - If event detected will mark the step as PASS
-  - If event not detected will mark the step as FAIL
+  - If event is detected, the step will marked as PASS
+  - If event not detected, the step will marked as FAIL
 
 - Repeat for All Ports:
 
@@ -373,7 +360,7 @@ Success Criteria
 
   -  Device Connect prompt:
 
-    The test will Request User to connect Source device to Hdmi In port:
+    The test will prompt the User to connect a Source device:
 
   - Question: "connect device to porttype and press Enter (Y/N)"
   - Press **Y** if Device is connected (this will mark the step as PASS).
@@ -381,7 +368,7 @@ Success Criteria
 
   -  Device resolution change prompt:
 
-    The test will Request User to change resolution on Source device connected to Hdmi In port:
+    The test will prompt the user to change the resolution on the source device connected to the HDMI In port:
 
   - Question: "Change the Resolution on device connected to port_type and then press Enter: (Y/N)"
   - Press **Y** if user able to change resolution (this will mark the step as PASS).
@@ -390,8 +377,8 @@ Success Criteria
 - Video mode Status Confirmation:
 
   - Test will check if the video mode status event has reached the device.
-  - If event detected will mark the step as PASS
-  - If event not detected will mark the step as FAIL
+  - If event is detected, the step will marked as PASS
+  - If event not detected, the step will marked as FAIL
 
 - Repeat for All Ports:
 
@@ -433,7 +420,7 @@ Success Criteria
 
   -  Device Connect prompt:
 
-    The test will Request User to connect Source device to Hdmi In port:
+    The test will prompt the User to connect a Source device:
 
   - Question: "connect device to porttype and press Enter (Y/N)"
   - Press **Y** if Device is connected (this will mark the step as PASS).
@@ -441,7 +428,7 @@ Success Criteria
 
   - Device ALLM change prompt:
 
-    The test will Request User to enable/disable ALLM on Source device connected to Hdmi In port:
+    The test will prompt the user to enable or disable ALLM:
 
   - Question: "Change ALLM mode on Hdmi In device connected to port to enable ALLM if its in OFF and press Enter: (Y/N)"
   - Press **Y** if user able to enable the ALLM feature (this will mark the step as PASS).
@@ -454,8 +441,8 @@ Success Criteria
 - ALLM enable/disable Status Confirmation:
 
   - Test will check if the ALLM change event has reached the device.
-  - If event detected will mark the step as PASS
-  - If event not detected will mark the step as FAIL
+  - If event is detected, the step will marked as PASS
+  - If event not detected, the step will marked as FAIL
 
 - Repeat for All Ports:
 
@@ -495,7 +482,7 @@ Success Criteria
   - The test will automatically download all required artifacts and streams, copying them to the designated target directory before commencing execution.
   -  Device Connect prompt:
 
-    The test will Request User to connect Source device to Hdmi In port:
+    The test will prompt the User to connect a Source device:
 
   - Question: "connect device to porttype and press Enter (Y/N)"
   - Press **Y** if Device is connected (this will mark the step as PASS).
@@ -504,8 +491,8 @@ Success Criteria
 - Audio Video latency Confirmation:
 
   - Test will check if the audio video latency event has reached the device.
-  - If event detected will mark the step as PASS
-  - If event not detected will mark the step as FAIL
+  - If event is detected, the step will marked as PASS
+  - If event not detected, the step will marked as FAIL
 
 - Repeat for All Ports:
 
@@ -542,7 +529,7 @@ Success Criteria
 
   -  Device Connect prompt:
 
-    The test will Request User to connect Source device to Hdmi In port:
+    The test will prompt the User to connect a Source device:
 
   - Question: "connect device to porttype and press Enter (Y/N)"
   - Press **Y** if Device is connected (this will mark the step as PASS).
@@ -550,7 +537,7 @@ Success Criteria
 
   -  Device AVI content change prompt:
 
-    The test will Request User to change AVI content on Source device connected to Hdmi In port:
+    The test will prompt the user to change AVI content on the source device:
 
   - Question: "Change the AVI Content on device connected to port and press Enter: (Y/N)"
   - Press **Y** if user able to change AVI content (this will mark the step as PASS).
@@ -559,8 +546,8 @@ Success Criteria
 - AVI content Change Confirmation:
 
   - Test will check if the AVI content change event has reached the device.
-  - If event detected will mark the step as PASS
-  - If event not detected will mark the step as FAIL
+  - If event is detected, the step will marked as PASS
+  - If event not detected, the step will marked as FAIL
 
 - Repeat for All Ports:
 
@@ -601,7 +588,7 @@ Success Criteria
 
   -  Device Connect prompt:
 
-    The test will Request User to connect Source device to Hdmi In port:
+    The test will prompt the User to connect a Source device:
 
   - Question: "connect device to porttype and press Enter (Y/N)"
   - Press **Y** if Device is connected (this will mark the step as PASS).
@@ -610,8 +597,8 @@ Success Criteria
 - Port select Confirmation:
 
   - Test will check the status of the port selected.
-  - If port selected and supplied port argument is same then mark the step as PASS
-  - If  port selected and supplied port argument is not same then  mark the step as FAIL
+  - If port selected and supplied port argument are same then mark the step as PASS
+  - If  port selected and supplied port argument are not same then  mark the step as FAIL
 
 - Repeat for All Ports:
 
@@ -652,18 +639,18 @@ Success Criteria
 
   -  Device Connect prompt:
 
-    The test will Request User to connect Source device to Hdmi In port:
+    The test will prompt the User to connect a Source device:
 
   - Question: "connect device to porttype and press Enter (Y/N)"
   - Press **Y** if Device is connected (this will mark the step as PASS).
   - Press **N** if user could not connect the device (this will mark the step as FAIL).
 
-- Video scaled Confirmation:
+- Video scaling Confirmation:
     The test will Request User to check video scaled on particular port or not:
 
   - Question: "Check if video is scaled  on port port_type. Press Y/N:"
-  - Press **Y** if video scaled on particular port happen (this will mark the step as PASS).
-  - Press **N** if video scaled on particular port not happen (this will mark the step as FAIL).
+  - Press **Y** if video scaling on the specified port is successful (this will mark the step as PASS).
+  - Press **N** if video scaled on the sepcified port not successful (this will mark the step as FAIL).
 
 - Repeat for All Ports:
 
@@ -705,7 +692,7 @@ Success Criteria
 
   -  Device Connect prompt:
 
-    The test will Request User to connect Source device to Hdmi In port:
+    The test will prompt the User to connect a Source device:
 
   - Question: "connect device to porttype and press Enter (Y/N)"
   - Press **Y** if Device is connected (this will mark the step as PASS).
@@ -755,8 +742,8 @@ Success Criteria
 - Edid Info Confirmation:
 
   - Test will get the EDID info and verifies the same.
-  - If EDID info received will compared with the yaml EDID info bytes if same  will mark the step as PASS
-  - If EDID info received will compared with the yaml EDID info bytes are not same  will mark the step as FAIL
+  - If EDID info is received, it will be compared with the YAML EDID info bytes. If they match, the step will be marked as PASS
+  - If EDID info is received, it will be compared with the YAML EDID info bytes. If they does not match, the step will be marked as FAIL
 
 - Repeat for All Ports:
 
@@ -795,7 +782,7 @@ This test evaluates the SPD Info received from connected device.
 
   -  Device Connect prompt:
 
-    The test will Request User to connect Source device to Hdmi In port:
+    The test will prompt the User to connect a Source device:
 
   - Question: "connect device to porttype and press Enter (Y/N)"
   - Press **Y** if Device is connected (this will mark the step as PASS).
@@ -803,7 +790,7 @@ This test evaluates the SPD Info received from connected device.
 
 - SPD Info Confirmation:
 
-  - Test will get the EDID info and verifies the same.
+  - Test will get the SPD info and verifies the same.
 
 - Repeat for All Ports:
 
@@ -842,8 +829,8 @@ This test set EDID version and verifies the same by retrieving the EDID version.
 - EDID version Verification:
 
   - Test will sets and get the EDID version.
-  - If sets and gets EDID version are same then test will mark the step as PASS.
-  - If sets and gets EDID version are not same then test will mark the step as FAIL.
+  - If the set and retrieved EDID versions are the same, the test will mark the step as PASS.
+  - If the set and retrieved EDID versions do not match, the test will mark the step as FAIL.
 
 - Repeat for All Ports:
 
@@ -875,15 +862,15 @@ This test set EDID version and verifies the same by retrieving the EDID version.
 
 This test set ALLM and verifies the same by retrieving the ALLM.
 
-#### Test Steps - test13
+#### Test Steps - test14
 
   - Run the Python script **`dsHdmiIn_test14_SetAndGetEDID2ALLMSupport.py`**
   - The test will automatically download all required artifacts and streams, copying them to the designated target directory before commencing execution.
-- EDID version Verification:
+- ALLM version Verification:
 
   - Test will sets and get the ALLM.
-  - If sets and gets ALLM version are same then test will mark the step as PASS.
-  - If sets and gets ALLM version are not same then test will mark the step as FAIL.
+  - If the set and retrieved ALLM support statuses match, the test will mark the step as PASS.
+  - If the set and retrieved ALLM support statuses do not match, the test will mark the step as FAIL.
 
 - Repeat for All Ports:
 
