@@ -35,25 +35,27 @@ This document describes the L3 Low Level Test Specification and Procedure Docume
 - `Interface header` - [dsVideoDevice HAL header](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/include/dsVideoDevice.h)
 
 ## Video Streams Requirement
+
 |#|Streams Name|Streams description|
 |-|------------|-------------------|
-|1|BounceBall_3840x2160_23.98fps|Framerate Per Second: 23.98fps|
-|2|BounceBall_3840x2160_24fps|Framerate Per Second: 24fps|
-|3|BounceBall_3840x2160_25fps|Framerate Per Second: 25fps|
-|4|BounceBall_3840x2160_29.97fps|Framerate Per Second: 29.97fps|
-|5|BounceBall_3840x2160_30fps|Framerate Per Second: 30fps|
-|6|BounceBall_3840x2160_50fps|Framerate Per Second: 50fps|
-|7|BounceBall_3840x2160_59.94fps|Framerate Per Second: 59.94fps|
-|8|BounceBall_3840x2160_60fps|Framerate Per Second: 60fps|
-
+|1|scrolling_text_fast_3840x2160_23.98fps.mp4|Resolution: 3840x2160, Framerate Per Second: 23.98|
+|2|scrolling_text_fast_3840x2160_24fps.mp4|Resolution: 3840x2160, Framerate Per Second: 24|
+|3|scrolling_text_fast_3840x2160_25fps.mp4|Resolution: 3840x2160, Framerate Per Second: 25|
+|4|scrolling_text_fast_3840x2160_29.97fps.mp4|Resolution: 3840x2160, Framerate Per Second: 29.97|
+|5|scrolling_text_fast_3840x2160_30fps.mp4|Resolution: 3840x2160, Framerate Per Second: 30|
+|6|scrolling_text_fast_3840x2160_50fps.mp4|Resolution: 3840x2160, Framerate Per Second: 50|
+|7|scrolling_text_fast_3840x2160_59.94fps.mp4|Resolution: 3840x2160, Framerate Per Second: 59.94|
+|8|scrolling_text_fast_3840x2160_60fps.mp4|Resolution: 3840x2160, Framerate Per Second: 60|
+|9|scrolling_text_fast_1920x1080_60fps.mp4|Resolution: 1920x1080, Framerate Per Second: 60|
 
 ## Level 3 Test Cases High Level Overview
+
 Below are top test use-case for the Video Display.
 
 |#|Test-case|Description|HAL APIs|Source|Sink|Streams Number|
 |-|---------|-----------|--------|------|----|--------------|
-|1|Verify the Video Display framerate change with pre and post change callback.|Set the supported diplay framrates using `dsSetDisplayframerate()` and check the callback is triggered before and after when the framerate of a display changes|`dsRegisterFrameratePreChangeCB()`, `dsRegisterFrameratePostChangeCB()`|`NA`|`Y`|`NA`|
-|2|Set and verify the Zoom mode of the source device|Play any video content and Set the supported Zoom mode and verify the selected Zoom mode|`dsSetDFC()`, `dsGetDFC()`|`Y`|`NA`|1,2|
+|1|Verify the Video Display framerate change with pre and post change callback.|Set the auto framerate mode and check the callback is triggered before and after when the framerate of a display changes|`dsRegisterFrameratePreChangeCB()`, `dsRegisterFrameratePostChangeCB()`|`NA`|`Y`|1,2,3,4,5,6,7,8|
+|2|Set and verify the Zoom mode of the source device|Play any video content and Set the supported Zoom mode and verify the selected Zoom mode|`dsSetDFC()`, `dsGetDFC()`|`Y`|`NA`|9|
 |3|Select the Device Frame Rate of Sink device|Select the Device Frame Rate of Sink device and on playing video playback verify `dsSetDisplayframerate()`|`dsSetDisplayframerate()`|`NA`|`Y`|1,2,3,4,5,6,7,8|
 |4|Set and verify the `FRF` mode|Select the`FRF`mode and verify the selected `FRF` mode with video playback|`dsSetFRFMode()`|`NA`|`Y`|1,2,3,4,5,6,7,8|
 
