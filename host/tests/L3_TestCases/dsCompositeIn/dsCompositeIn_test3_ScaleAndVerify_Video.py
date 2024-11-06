@@ -23,88 +23,92 @@
 
 import os
 import sys
-import re
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsCompositeInHelperClass import dsCompositeInHelperClass
 
-class dsCompositeIn_test2_VerifyStatus_Callback(dsCompositeInHelperClass):
+class dsCompositeIn_test3_ScaleAndVerify_Video(dsCompositeInHelperClass):
     """
-    Test class to select the compositeIn port and verify the status of CompositeIn device
+    Test class to scale and verify the video in CompositeIn device
 
     This class uses the `dscompositeInClass` to interact with the device's compositeIn ports,
     downloading necessary test assets, selecting
     CompositeIn ports, and performing verification of compositeIn output.
     """
+
     def __init__(self):
         """
-        Initializes the test2_VerifyStatus_Callback test .
+        Initializes the test3_ScaleAndVerify_Video test .
 
         Args:
             None.
         """
-        self.testName  = "test2_VerifyStatus_Callback"
-        super().__init__(self.testName, '2')
+        self.testName  = "test3_ScaleAndVerify_Video"
+        super().__init__(self.testName, '3')
 
     #TODO: Current version supports only manual verification.
-    def CheckDeviceStatus(self, manual=False, port_type:str=0):
+    def CheckDeviceStatusAndVerifyVideoScale(self, manual=False, port_type:str=0, videoscale:str=0):
         """
-        Verifies whether Composite Source Device connected or not
+        Verifies whether the particular port video scaled or not.
 
         Args:
-            port_type (str) : CompositeIn port
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
                                      Defaults to other verification methods
 
         Returns:
             bool
         """
-        if manual == True:
-            return self.testUserResponse.getUserYN(f"Check if CompositeIn source is connected to {port_type} and press Y:")
-        else :
+        if manual == True and videoscale == False:
+            return self.testUserResponse.getUserYN(f"Check CompositeIn source device connected&active on port {port_type} and press Y:")
+        elif manual == True and videoscale == True:
+            return self.testUserResponse.getUserYN(f"Check video scaled on {port_type} and press (Y/N)")
+        else:
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
-        """This function will test and verify the active status callback
+        """
+        The main test function test scale video of dsCompositeIn device.
 
         This function:
-        - Connect / disconnect the compositeIn port.
-        - Verify the status through callbacks
+        - Verifies video scaling .
 
         Returns:
             bool: Final result of the test.
         """
 
-        self.log.testStart("test2_VerifyStatus_Callback", '2')
+        self.log.testStart("test3_ScaleAndVerify_Video", '3')
 
         # Initialize the dsCompositeIn module
         self.testdsCompositeIn.initialise()
 
-        # Loop through the supported ports
+        # x-coordiante, y-coordinate, width, height list
+        videoScale_argList = [[0,0,720,576], [500,500,500,500], [0,0,1920,1080]]
+        # Loop through the supported CompositeIn ports
         for port in self.testdsCompositeIn.getSupportedPorts():
             self.log.stepStart(f'Select {port} Port')
 
+            # Check the ComposteIn device connected to is active
             portstr = f"dsCOMPOSITE_IN_PORT_{port}"
-            result = self.CheckDeviceStatus(True, portstr)
+            # Select the ComposteIn port
+            result = self.CheckDeviceStatusAndVerifyVideoScale(True,portstr,False)
             self.log.stepResult(result,f'CompositeIn Device connected {result} on {portstr}')
-          
             self.testdsCompositeIn.selectPort(portstr)
-            self.log.stepStart(f'Port Selcted {portstr}')
-                
-            status = self.testdsCompositeIn.getPortCallbackStatus()
-            if status != None and status[1] == portstr:
-                self.log.stepResult(True,f'Port Status ispresented:{status[0]} activeport:{status[1]} found in Callback')
-            else:
-                self.log.stepResult(False,f'Port Status Callback is not found')
 
-        # Terminate testdsCompositeIn Module
+            # video scaling of ComposteIn port
+            for xvalue, yvalue, width, height in videoScale_argList:
+                self.log.stepStart(f'Scale video playing on compositeIn device')
+                self.testdsCompositeIn.scaleVideo(xvalue, yvalue, width, height)
+                result = self.CheckDeviceStatusAndVerifyVideoScale(True,portstr,True)
+                self.log.stepResult(result, f'CompositeIn Video Scale Verification {portstr} Port')
+
+        # Terminate dsCompositeIn Module
         self.testdsCompositeIn.terminate()
 
         return result
 
 if __name__ == '__main__':
-    test = dsCompositeIn_test2_VerifyStatus_Callback()
+    test = dsCompositeIn_test3_ScaleAndVerify_Video()
     test.run(False)

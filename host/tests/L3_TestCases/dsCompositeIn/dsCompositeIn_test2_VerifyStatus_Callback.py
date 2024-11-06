@@ -23,34 +23,33 @@
 
 import os
 import sys
-from enum import Enum, auto
+import re
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path, "../"))
+sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsCompositeInHelperClass import dsCompositeInHelperClass
 
-class dsCompositeIn_test4_VerifySignal_Callback(dsCompositeInHelperClass):
+class dsCompositeIn_test2_VerifyStatus_Callback(dsCompositeInHelperClass):
     """
-    Test class to verify the signal change callback of CompositeIn device
+    Test class to select the compositeIn port and verify the status of CompositeIn device
 
     This class uses the `dscompositeInClass` to interact with the device's compositeIn ports,
     downloading necessary test assets, selecting
     CompositeIn ports, and performing verification of compositeIn output.
     """
-
     def __init__(self):
         """
-        Initializes the test4_VerifySignal_Callback test .
+        Initializes the test2_VerifyStatus_Callback test .
 
         Args:
             None.
         """
-        self.testName  = "test4_VerifySignal_Callback"
-        super().__init__(self.testName, '4')
+        self.testName  = "test2_VerifyStatus_Callback"
+        super().__init__(self.testName, '2')
 
-     #TODO: Current version supports only manual verification.
-    def CheckDeviceStatus(self, manual=False, connect=False, port_type:str=0):
+    #TODO: Current version supports only manual verification.
+    def CheckDeviceStatus(self, manual=False, port_type:str=0):
         """
         Verifies whether Composite Source Device connected or not
 
@@ -62,50 +61,44 @@ class dsCompositeIn_test4_VerifySignal_Callback(dsCompositeInHelperClass):
         Returns:
             bool
         """
-        if manual == True and connect == True:
+        if manual == True:
             return self.testUserResponse.getUserYN(f"Check if CompositeIn source is connected to {port_type} and press Y:")
-        elif manual == True and connect == False:
-            return self.testUserResponse.getUserYN(f"Check if CompositeIn source is disconnected to {port_type}/set to standby and press Y:")
         else :
             #TODO: Add automation verification methods
             return False
 
     def testFunction(self):
-        """
-        The main test function that verifies signal status of CompositeIn device.
+        """This function will test and verify the active status callback
 
         This function:
-        - Verifies CompositeIn signal status through callbacks.
+        - Connect / disconnect the compositeIn port.
+        - Verify the status through callbacks
 
         Returns:
             bool: Final result of the test.
         """
 
-        self.log.testStart("test4_VerifySignal_Callback", '4')
+        self.log.testStart("test2_VerifyStatus_Callback", '2')
 
         # Initialize the dsCompositeIn module
         self.testdsCompositeIn.initialise()
 
-        # Loop through the supported CompositeIn ports
+        # Loop through the supported ports
         for port in self.testdsCompositeIn.getSupportedPorts():
+            self.log.stepStart(f'Select {port} Port')
 
-            # Check the CompositeIn device connected to is active
             portstr = f"dsCOMPOSITE_IN_PORT_{port}"
-            for i in range(0, 2):
-                self.log.stepStart(f'Select {port} Port')
-                connect = True
-                if ( i == 1): connect = False
-                result = self.CheckDeviceStatus(True, connect, portstr)
-                self.log.stepResult(result,f'CompositeIn Device connected {result} on {portstr}')
-
-                self.testdsCompositeIn.selectPort(portstr)
-                self.log.stepStart(f'Port Selcted {portstr}')
-
-                status = self.testdsCompositeIn.getSignalChangeCallbackStatus()
-                if status != None and portstr == status[0]:
-                    self.log.stepResult(True,f'Signal status {status[1]} found in Callback')
-                else:
-                    self.log.stepResult(False,f'Signal status not found in Callback')
+            result = self.CheckDeviceStatus(True, portstr)
+            self.log.stepResult(result,f'CompositeIn Device connected {result} on {portstr}')
+          
+            self.testdsCompositeIn.selectPort(portstr)
+            self.log.stepStart(f'Port Selcted {portstr}')
+                
+            status = self.testdsCompositeIn.getPortCallbackStatus()
+            if status != None and status[1] == portstr:
+                self.log.stepResult(True,f'Port Status ispresented:{status[0]} activeport:{status[1]} found in Callback')
+            else:
+                self.log.stepResult(False,f'Port Status Callback is not found')
 
         # Terminate testdsCompositeIn Module
         self.testdsCompositeIn.terminate()
@@ -113,5 +106,5 @@ class dsCompositeIn_test4_VerifySignal_Callback(dsCompositeInHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsCompositeIn_test4_VerifySignal_Callback()
+    test = dsCompositeIn_test2_VerifyStatus_Callback()
     test.run(False)
