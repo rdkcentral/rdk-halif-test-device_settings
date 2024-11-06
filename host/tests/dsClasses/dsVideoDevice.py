@@ -205,25 +205,33 @@ class dsVideoDeviceClass():
 
         result = self.utMenu.select(self.testSuite, "SetFRFMode", promptWithAnswers)
 
-    def getFrameratePrechangeCallbackStatus(self):
+    def getFrameratePrePostChangeCallbackStatus(self):
         """
         Retrieves the display Framerate Prechange status using a callback.
 
         Args:
             None.
         Returns:
-            tSecond: Time in seconds as a integer.
-            None: If no matching signal status is found.
+            dict: Returns dictionary of pre and post framerate changes in seconds.
+                  { Pre: <pre framerate change in seconds>,
+                    Post: <post framerate change in seconds>}
         """
+        timeChange = {}
         result = self.testSession.read_until("FrameratePreChange callback tSecond: ")
         framerateprechange = r"FrameratePreChange callback tSecond: (\d+)"
-        match = re.search(framerateprechange, result)
+        frameratepostchange = r"FrameratePostChange callback tSecond: (\d+)"
+        preMatch = re.search(framerateprechange, result)
+        postMatch = re.search(frameratepostchange, result)
 
-        if match:
-            tSecond = match.group(1)
-            return tSecond
+        if preMatch:
+            tSecond = preMatch.group(1)
+            timeChange["Pre"] = int(tSecond)
 
-        return None
+        if postMatch:
+            tSecond = postMatch.group(1)
+            timeChange["Post"] = int(tSecond)
+
+        return timeChange
 
     def getFrameratePostchangeCallbackStatus(self):
         """
@@ -236,8 +244,8 @@ class dsVideoDeviceClass():
             None: If no matching signal status is found.
         """
         result = self.testSession.read_until("FrameratePostChange callback tSecond: ")
-        framerateprechange = r"FrameratePostChange callback tSecond: (\d+)"
-        match = re.search(framerateprechange, result)
+        frameratepostchange = r"FrameratePostChange callback tSecond: (\d+)"
+        match = re.search(frameratepostchange, result)
 
         if match:
             tSecond = match.group(1)
