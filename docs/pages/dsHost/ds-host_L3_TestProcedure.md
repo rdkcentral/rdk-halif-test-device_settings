@@ -160,7 +160,7 @@ python <TestCaseName.py> --config </PATH>/ut/host/tests/configs/example_rack_con
 To verify the get temperature works as expected.
 For Example:
 
-- Get the temperature, and then place the device in a heat chamber, and verify the temperature increases.
+- Get the temperature, and then place the device in a heat chamber and verify the temperature increases.
 
 ## Test Cases
 ### dsHost_test1_VerifyTemperature.py
@@ -175,7 +175,7 @@ For Example:
 
 #### Acceptance Criteria - test01
 
-The temperature is noted to be increasing once placed in the heat chamber, or location to increase the temperature.
+The temperature is noted to be increasing once placed in the heat chamber or location to increase the temperature.
 
 #### Expected Results - test01
 
@@ -190,10 +190,10 @@ The temperature should increase.
 
 - Increase Temperature prompt:
 
-    The test will request User to place the device in a heat chamber and press enter to take the first reading, then increase the temperature and press enter to get the next reading:
+    The test will request the User to place the device in a heat chamber and press enter to take the first reading, then increase the temperature and press enter to get the next reading:
 
   - Question: "Please begin to increase the temperature, and wait around one to two minutes before pressing enter to continue:"
-  - Press **Enter** once the device is in a location to increase the temperature and suitable time has passed the change in temperature can be recorded..
+  - Press **Enter** once the device is in a location to increase the temperature and suitable time has passed the change in temperature can be recorded.
 
 - Test Conclusion:
 
