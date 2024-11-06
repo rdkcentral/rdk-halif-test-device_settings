@@ -247,7 +247,7 @@ Success Criteria
 
 #### Expected Results - test02
 
-- The test registers the event and check for signal status event call back.
+- The test registers the event and check for signal status event callback.
 
 #### Test Steps - test02
 
@@ -298,7 +298,7 @@ Success Criteria
 
 #### Expected Results - test03
 
-- The test registers the event and check for port status event call back.
+- The test registers the event and check for port status event callback.
 
 #### Test Steps - test03
 
@@ -349,7 +349,7 @@ Success Criteria
 
 #### Expected Results - test04
 
-- The test registers the event and check for Video mode status event call back.
+- The test registers the event and check for Video mode status event callback.
 
 #### Test Steps - test04
 
@@ -409,7 +409,7 @@ Success Criteria
 
 #### Expected Results - test05
 
-- The test registers the event and check for ALLM change event call back
+- The test registers the event and check for ALLM change event callback
 
 #### Test Steps - test05
 
@@ -472,7 +472,7 @@ Success Criteria
 
 #### Expected Results - test06
 
-- The test registers the event and check for audio video latency event call back.
+- The test registers the event and check for audio video latency event callback.
 
 #### Test Steps - test06
 
@@ -518,7 +518,7 @@ Success Criteria
 
 #### Expected Results - test07
 
-- The test registers the event and check for AVI content change event call back
+- The test registers the event and check for AVI content change event callback
 
 #### Test Steps - test07
 
