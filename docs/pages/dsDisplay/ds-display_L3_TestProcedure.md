@@ -301,4 +301,3 @@ dsDisplay_test04_TestVerifyDisplayEdidBytes --config /host/tests/configs/example
 - Completion and Results:
 
   If all expected `EDID` bytes are verified, the test will conclude and display the final result (PASS/FAIL).
-  
