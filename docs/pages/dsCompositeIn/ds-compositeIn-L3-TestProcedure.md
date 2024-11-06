@@ -14,11 +14,11 @@
 
 ## Acronyms, Terms and Abbreviations
 
-- `HAL`    - Hardware Abstraction Layer
-- `L3`     - Level 3 Testing
-- `DUT`    - Device Under Test
-- `RAFT`   - Rapid Automation Framework for Testing
-- `YAML`   - YAML Ain't Markup Language
+- `HAL `    - Hardware Abstraction Layer
+- `L3  `    - Level 3 Testing
+- `DUT `    - Device Under Test
+- `RAFT`    - Rapid Automation Framework for Testing
+- `YAML`    - YAML Ain't Markup Language
 
 ## Setting Up Test Environment
 
@@ -186,7 +186,7 @@ Success Criteria
     The test will Request User to connect Source device to Composite In port:
 
   - Question: "Connect the compositeIn source device to Port port_type and press Y: "
-  - Press **Y** if user connected the device and acknowledge the same. (this will mark the step as PASS).
+  - Press **Y** if user connected the device and acknowledge it. (this will mark the step as PASS).
 
 - Device connect Confirmation:
 
@@ -198,8 +198,8 @@ Success Criteria
 
     The test will Request User to disconnect Source device to Composite In port:
 
-  - Question: "Disonnect the compositeIn source device to Port port_type and press Y: "
-  - Press **Y** if user connected the device and acknowledge the same. (this will mark the step as PASS).
+  - Question: "Disconnect the compositeIn source device to Port port_type and press Y: "
+  - Press **Y** if user connected the device and acknowledge it. (this will mark the step as PASS).
 
 - Device disconnect Confirmation:
 
@@ -248,7 +248,7 @@ Success Criteria
     The test will Request User to connect Source device to Composite In port:
 
   - Question: "Connect the compositeIn source device to Port port_type and press Y: "
-  - Press **Y** if user connected the device and acknowledge the same. (this will mark the step as PASS).
+  - Press **Y** if user connected the device and acknowledge it. (this will mark the step as PASS).
 
 - Device status Confirmation:
 
@@ -296,7 +296,7 @@ Success Criteria
     The test will Request User to connect Source device to Composite In port:
 
   - Question: "Connect the compositeIn source device to Port port_type and press Y: "
-  - Press **Y** if user connected the device and acknowledge the same. (this will mark the step as PASS).
+  - Press **Y** if user connected the device and acknowledge it. (this will mark the step as PASS).
 
 - Device changes the scale and request user to confirm:
 
@@ -322,11 +322,11 @@ Success Criteria
 
 #### User Input Required - test04
 
-**Yes**: User interaction is necessary to connect/Disconnet the device (This will be automated later).
+**Yes**: User interaction is necessary to connect/Disconnect the device (This will be automated later).
 
 #### Acceptance Criteria - test04
 
-Test detects the signal status of the compposit In signal.
+Test detects the signal status of the compositeIn signal.
 
 #### Expected Results - test04
 
@@ -348,7 +348,7 @@ Success Criteria
     The test will Request User to connect Source device to Composite In port:
 
   - Question: "Connect the compositeIn source device to Port port_type and press Y: "
-  - Press **Y** if user connected the device and acknowledge the same. (this will mark the step as PASS).
+  - Press **Y** if user connected the device and acknowledge it. (this will mark the step as PASS).
 
 - Signal change confirmation:
 
@@ -361,7 +361,7 @@ Success Criteria
     The test will Request User to disconnect the Source device to Composite In port or make Source device to standby mode:
 
   - Question: "Check if CompositeIn source is disconnected to port_type/set to standby and press Y: "
-  - Press **Y** if user connected the device and acknowledge the same. (this will mark the step as PASS).
+  - Press **Y** if user connected the device and acknowledge it. (this will mark the step as PASS).
 
 - Signal change confirmation:
 
