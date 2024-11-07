@@ -184,7 +184,7 @@ Launching of the source device with the CompositeIn connected.
 
 ### Emulator Requirement - Callback for video mode change
 
-Emulator will boot with the port information and its video mode changes coming from the configuration file.
+Emulator will boot with the port information and its video mode change coming from the configuration file.
 
 ### Control Plane Requirement - Callback for video mode change
 
