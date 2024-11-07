@@ -931,6 +931,97 @@ void test_l1_dsCompositeIn_negative_dsCompositeInRegisterStatusChangeCB(void)
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
+void mockCompositeInVideoModeUpdateCallback(dsCompositeInPort_t port, dsVideoPortResolution_t videoResolution){
+// Mock implementation, can be customized for testing
+}
+
+/**
+ * @brief Ensure dsCompositeInRegisterVideoModeUpdateCB() correctly registers a callback during positive scenarios.
+ *
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 019@n
+ *
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ *
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Initialize the Composite input sub-system using dsCompositeInInit() | | dsERR_NONE | Should Pass |
+ * |02|Call dsCompositeInRegisterVideoModeUpdateCB() based on the device type |dsCompositeInVideoModeUpdateCB_t| dsERR_NONE | Callback should be registered |
+ * |03|Call dsCompositeInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ *
+ */
+void test_l1_dsCompositeIn_positive_dsCompositeInRegisterVideoModeUpdateCB(void) {
+
+    gTestID = 19;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    // Step 1: Initialize the Composite input sub-system using dsCompositeInInit()
+    UT_ASSERT_EQUAL_FATAL(dsCompositeInInit(), dsERR_NONE);
+
+    // Step 2: Call dsCompositeInRegisterVideoModeUpdateCB() based on the device type
+    if (gSourceType == 0) {
+        // For sink devices
+         UT_ASSERT_EQUAL(dsCompositeInRegisterVideoModeUpdateCB(mockCompositeInVideoModeUpdateCallback), dsERR_NONE);
+
+    } else if (gSourceType == 1) {
+        // For source devices
+        UT_ASSERT_EQUAL(dsCompositeInRegisterVideoModeUpdateCB(mockCompositeInVideoModeUpdateCallback), dsERR_OPERATION_NOT_SUPPORTED);
+    }
+
+    // Step 3: Call dsCompositeInTerm() to ensure deinitialization
+    UT_ASSERT_EQUAL_FATAL(dsCompositeInTerm(), dsERR_NONE);
+
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsCompositeInRegisterVideoModeUpdateCB() returns correct error codes during negative scenarios.
+ *
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 020@n
+ *
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ *
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsCompositeInRegisterVideoModeUpdateCB() without initializing the Composite input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the Composite input sub-system using dsCompositeInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsCompositeInRegisterVideoModeUpdateCB() with invalid input |NULL| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsCompositeInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |05|Call dsCompositeInRegisterVideoModeUpdateCB() after terminating the Composite input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
+ *
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
+ *
+ */
+void test_l1_dsCompositeIn_negative_dsCompositeInRegisterVideoModeUpdateCB(void) {
+
+    gTestID = 20;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    // Step 1: Call dsCompositeInRegisterVideoModeUpdateCB() without initializing the Composite input sub-system
+    dsError_t result = dsCompositeInRegisterVideoModeUpdateCB(mockCompositeInVideoModeUpdateCallback);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+
+    // Step 2: Initialize the Composite input sub-system using dsCompositeInInit()
+    UT_ASSERT_EQUAL_FATAL(dsCompositeInInit(), dsERR_NONE);
+
+    // Step 3: Call dsCompositeInRegisterVideoModeUpdateCB() with invalid input
+    UT_ASSERT_EQUAL(dsCompositeInRegisterVideoModeUpdateCB(NULL), dsERR_INVALID_PARAM);
+
+    // Step 4: Call dsCompositeInTerm() to ensure deinitialization
+    UT_ASSERT_EQUAL_FATAL(dsCompositeInTerm(), dsERR_NONE);
+
+    // Step 5: Call dsCompositeInRegisterVideoModeUpdateCB() after terminating the Composite input sub-system
+    result = dsCompositeInRegisterVideoModeUpdateCB(mockCompositeInVideoModeUpdateCallback);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
 static UT_test_suite_t * pSuite = NULL;
 
 /**
@@ -983,7 +1074,9 @@ int test_l1_dsCompositeIn_register ( void )
         UT_add_test( pSuite, "dsCompositeInRegisterSignalChangeCB_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInRegisterSignalChangeCB );
         UT_add_test( pSuite, "dsCompositeInRegisterStatusChangeCB_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInRegisterStatusChangeCB );
         UT_add_test( pSuite, "dsCompositeInRegisterStatusChangeCB_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInRegisterStatusChangeCB );
-        extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsCompositeIn/features/extendedEnumsSupported" );
+	UT_add_test( pSuite, "dsCompositeInRegisterVideoModeUpdateCB_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInRegisterVideoModeUpdateCB );
+	UT_add_test( pSuite, "dsCompositeInRegisterVideoModeUpdateCB_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInRegisterVideoModeUpdateCB );
+	extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsCompositeIn/features/extendedEnumsSupported" );
     }
     return 0;
 }
