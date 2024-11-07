@@ -948,7 +948,7 @@ void mockCompositeInVideoModeUpdateCallback(dsCompositeInPort_t port, dsVideoPor
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the Composite input sub-system using dsCompositeInInit() | | dsERR_NONE | Should Pass |
- * |02|Call dsCompositeInRegisterVideoModeUpdateCB() based on the device type |dsCompositeInVideoModeUpdateCB_t| dsERR_NONE | Callback should be registered |
+ * |02|Call dsCompositeInRegisterVideoModeUpdateCB() with valid callback function |dsCompositeInVideoModeUpdateCB_t| dsERR_NONE | Callback should be registered |
  * |03|Call dsCompositeInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
  *
  */
@@ -960,15 +960,9 @@ void test_l1_dsCompositeIn_positive_dsCompositeInRegisterVideoModeUpdateCB(void)
     // Step 1: Initialize the Composite input sub-system using dsCompositeInInit()
     UT_ASSERT_EQUAL_FATAL(dsCompositeInInit(), dsERR_NONE);
 
-    // Step 2: Call dsCompositeInRegisterVideoModeUpdateCB() based on the device type
-    if (gSourceType == 0) {
-        // For sink devices
-         UT_ASSERT_EQUAL(dsCompositeInRegisterVideoModeUpdateCB(mockCompositeInVideoModeUpdateCallback), dsERR_NONE);
+    // Step 2: Call dsCompositeInRegisterVideoModeUpdateCB() 
+    UT_ASSERT_EQUAL(dsCompositeInRegisterVideoModeUpdateCB(mockCompositeInVideoModeUpdateCallback), dsERR_NONE);
 
-    } else if (gSourceType == 1) {
-        // For source devices
-        UT_ASSERT_EQUAL(dsCompositeInRegisterVideoModeUpdateCB(mockCompositeInVideoModeUpdateCallback), dsERR_OPERATION_NOT_SUPPORTED);
-    }
 
     // Step 3: Call dsCompositeInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL_FATAL(dsCompositeInTerm(), dsERR_NONE);
