@@ -89,8 +89,6 @@ class dsAudio_test12_MS12MISteering(dsAudioHelperClass):
         Returns:
             bool: The final result of the test execution (True if successful, False otherwise).
         """
-        self.log.testStart(self.testName, '1')
-
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 

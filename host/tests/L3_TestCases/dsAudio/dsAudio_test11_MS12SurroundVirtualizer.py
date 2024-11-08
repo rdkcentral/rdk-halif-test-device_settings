@@ -91,8 +91,6 @@ class dsAudio_test11_MS12SurroundVirtualizer(dsAudioHelperClass):
         Returns:
             bool : The result of the last audio verification.
         """
-        self.log.testStart(self.testName, '1')
-
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 

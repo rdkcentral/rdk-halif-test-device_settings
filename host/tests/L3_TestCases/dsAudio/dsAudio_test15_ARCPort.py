@@ -92,8 +92,6 @@ class dsAudio_test15_ARCPort(dsAudioHelperClass):
         Returns:
             bool: Indicates the success of the test execution (True if successful).
         """
-        self.log.testStart(self.testName, '1')
-
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 

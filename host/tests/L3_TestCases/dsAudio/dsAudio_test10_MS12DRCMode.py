@@ -90,8 +90,6 @@ class dsAudio_test10_MS12DRCMode(dsAudioHelperClass):
         Returns:
             bool : The final verification result of the DRC mode test.
         """
-        self.log.testStart(self.testName, '1')
-
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 

@@ -94,8 +94,6 @@ class dsAudio_test16_ARCSAD(dsAudioHelperClass):
         Returns:
             bool: True if the test ran successfully, False otherwise.
         """
-        self.log.testStart(self.testName, '1')
-
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 

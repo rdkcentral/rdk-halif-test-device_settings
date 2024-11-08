@@ -83,8 +83,6 @@ class dsAudio_test21_AudioDelay(dsAudioHelperClass):
         Returns:
             bool: The result of the final audio verification.
         """
-        self.log.testStart(self.testName, '1')
-
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 

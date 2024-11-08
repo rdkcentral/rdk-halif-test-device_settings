@@ -92,8 +92,6 @@ class dsAudio_test24_PrimarySecondaryLanguage(dsAudioHelperClass):
         Returns:
             bool: True if the test completes successfully.
         """
-        self.log.testStart(self.testName, '1')
-
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 

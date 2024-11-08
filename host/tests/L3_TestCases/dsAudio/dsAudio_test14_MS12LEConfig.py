@@ -92,8 +92,6 @@ class dsAudio_test14_MS12LEConfig(dsAudioHelperClass):
         Returns:
             bool: Overall result of the test execution.
         """
-        self.log.testStart(self.testName, '1')
-
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 

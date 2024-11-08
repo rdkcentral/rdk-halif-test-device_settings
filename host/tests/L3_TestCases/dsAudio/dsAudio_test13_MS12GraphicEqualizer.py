@@ -96,8 +96,6 @@ class dsAudio_test13_MS12GraphicEqualizer(dsAudioHelperClass):
         Returns:
             bool: The final result of the test.
         """
-        self.log.testStart(self.testName, '1')
-
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
