@@ -25,43 +25,43 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsAudio.dsAudioHelperClass import dsAudioHelperClass
+from dsAudioHelperClass import dsAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsAudio_test16_ARCSAD(dsAudioHelperClass):
     """
     Test class for verifying the ARC SAD (Source Audio Descriptor) functionality.
-
-    Attributes:
-        testName (str): Name of the test.
-        sadList (list): Predefined list of ARC SAD values.
     """
-
-    """
-    Summary of the 3-byte SAD Format:
-    Byte    Bit Fields  Description
-    Byte 1  Bits 0-2:   Audio Format Code: Type of audio format (PCM, AC-3, DTS, etc.)
-            Bits 3-6:   Maximum Number of Channels	Number of audio channels supported
-            Bit 7:      Reserved
-    Byte 2	Bits 0-6:   Sampling Frequencies: Supported sampling frequencies (32 kHz, 48 kHz, etc.)
-            Bit 7:      Reserved
-    Byte 3	For LPCM: Bit Depths (16, 20, 24-bit) Supported bit depths for PCM
-            For Compressed Formats: Maximum Bitrate	Maximum supported bitrate for compressed formats
-    """
-    # 0x0040382A - AC3 6 channels sampling rates (48, 96, 192 kHz), Max bitrate (512 kbps)
-    # 0x00070709 - PCM 2 channels sampling rates (32, 44.1, 48 kHz), bit depth (16, 20, 24 bit per sample)
-    sadList = [[0x00070709],[0x0040382A]]
-
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the dsAudio_test16_ARCSAD test.
 
         Args:
             None.
         """
+        # Class variables
+        self.qcID = '16'
         self.testName  = "test16_ARCSAD"
-        super().__init__(self.testName, '1')
+
+        """
+        Summary of the 3-byte SAD Format:
+        Byte    Bit Fields  Description
+        Byte 1  Bits 0-2:   Audio Format Code: Type of audio format (PCM, AC-3, DTS, etc.)
+                Bits 3-6:   Maximum Number of Channels	Number of audio channels supported
+                Bit 7:      Reserved
+        Byte 2	Bits 0-6:   Sampling Frequencies: Supported sampling frequencies (32 kHz, 48 kHz, etc.)
+                Bit 7:      Reserved
+        Byte 3	For LPCM: Bit Depths (16, 20, 24-bit) Supported bit depths for PCM
+                For Compressed Formats: Maximum Bitrate	Maximum supported bitrate for compressed formats
+        """
+        # 0x0040382A - AC3 6 channels sampling rates (48, 96, 192 kHz), Max bitrate (512 kbps)
+        # 0x00070709 - PCM 2 channels sampling rates (32, 44.1, 48 kHz), bit depth (16, 20, 24 bit per sample)
+        self.sadList = [[0x00070709],[0x0040382A]]
+
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual.
     def testARCSAD(self, sad, manual=False):

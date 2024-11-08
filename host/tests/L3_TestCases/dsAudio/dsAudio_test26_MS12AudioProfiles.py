@@ -26,28 +26,29 @@ import sys
 import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsAudio.dsAudioHelperClass import dsAudioHelperClass
+from dsAudioHelperClass import dsAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsAudio_test26_MS12AudioProfiles(dsAudioHelperClass):
     """
     This class represents the 'test26_MS12AudioProfiles' test case, which is responsible
     for verifying Dolby MS12 audio profiles on different audio ports of the Device Under Test (DUT).
-
-    Attributes:
-        testName (str): Name of the test case.
     """
-
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the 'test26_MS12AudioProfiles' test by setting up the test environment.
 
         Args:
             None.
         """
+        # Class variables
+        self.qcID = '26'
         self.testName  = "test26_MS12AudioProfiles"
-        super().__init__(self.testName, '1')
+
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testVerifyMS12AudioProfile(self, port, profile, manual=False):

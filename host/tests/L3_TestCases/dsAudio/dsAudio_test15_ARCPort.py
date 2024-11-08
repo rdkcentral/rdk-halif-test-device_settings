@@ -25,9 +25,11 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsAudio.dsAudioHelperClass import dsAudioHelperClass
+from dsAudioHelperClass import dsAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsAudio_test15_ARCPort(dsAudioHelperClass):
     """
@@ -35,12 +37,9 @@ class dsAudio_test15_ARCPort(dsAudioHelperClass):
 
     This class handles the setup, execution, and cleanup of tests that check
     the connection and disconnection of ARC and eARC devices to the DUT (Device Under Test).
-
-    Attributes:
-        testName (str): Name of the test.
     """
 
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the dsAudio_test15_ARCPort test.
 
@@ -50,8 +49,11 @@ class dsAudio_test15_ARCPort(dsAudioHelperClass):
         Args:
             None.
         """
+        # Class variables
+        self.qcID = '15'
         self.testName  = "test15_ARCPort"
-        super().__init__(self.testName, '1')
+
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual.
     def testWaitForConnectionChange(self, connection, type = "NONE", manual=False):

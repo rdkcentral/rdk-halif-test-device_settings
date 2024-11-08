@@ -25,9 +25,11 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsAudio.dsAudioHelperClass import dsAudioHelperClass
+from dsAudioHelperClass import dsAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsAudio_test10_MS12DRCMode(dsAudioHelperClass):
     """
@@ -35,14 +37,8 @@ class dsAudio_test10_MS12DRCMode(dsAudioHelperClass):
 
     This class inherits from dsAudioHelperClass and encapsulates the setup,
     execution, and validation of the DRC feature in the MS12 audio system.
-
-    Attributes:
-        testName (str): Name of the test.
-        ms12DAPFeature (str): The specific audio feature being tested.
     """
-    ms12DAPFeature = "DRCMode"
-
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the dsAudio_test10_MS12DRCMode test instance.
 
@@ -52,8 +48,12 @@ class dsAudio_test10_MS12DRCMode(dsAudioHelperClass):
         Args:
             None.
         """
+        # Class variables
+        self.qcID = '10'
         self.testName  = "test10_MS12DRCMode"
-        super().__init__(self.testName, '1')
+        self.ms12DAPFeature = "DRCMode"
+
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testVerifyDRCMode(self, stream, port, mode, manual=False):

@@ -26,9 +26,11 @@ import sys
 import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsAudio.dsAudioHelperClass import dsAudioHelperClass
+from dsAudioHelperClass import dsAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsAudio_test22_AudioFormat(dsAudioHelperClass):
     """
@@ -37,25 +39,25 @@ class dsAudio_test22_AudioFormat(dsAudioHelperClass):
     This class is designed to test the audio formats supported by the device.
     It extends the utHelperClass to leverage its utility methods for device interaction
     and test execution.
-
-    Attributes:
-        testName (str): Name of the test.
-        audioFormats (list): List of audio formats to be tested.
     """
-    audioFormats = ["PCM", "AC3", "EAC3", "AAC", "VORBIS", "WMA", "AC4", "MAT", "TRUEHD", "EAC3_ATMOS", "TRUEHD_ATMOS", "MAT_ATMOS", "AC4_ATMOS"]
-
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the dsAudio_test22_AudioFormat test.
 
-        This constructor sets up the necessary configurations and prepares the 
+        This constructor sets up the necessary configurations and prepares the
         test environment by initializing player and user response classes.
 
         Args:
             None
         """
+        # Class variables
+        self.qcID = '22'
         self.testName  = "test22_AudioFormat"
-        super().__init__(self.testName, '1')
+
+        # List of audio formats for testing
+        self.audioFormats = ["PCM", "AC3", "EAC3", "AAC", "VORBIS", "WMA", "AC4", "MAT", "TRUEHD", "EAC3_ATMOS", "TRUEHD_ATMOS", "MAT_ATMOS", "AC4_ATMOS"]
+
+        super().__init__(self.testName, self.qcID, log)
 
     def testFunction(self):
         """

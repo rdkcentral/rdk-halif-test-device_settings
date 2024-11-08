@@ -25,29 +25,30 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsAudio.dsAudioHelperClass import dsAudioHelperClass
+from dsAudioHelperClass import dsAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsAudio_test20_MuteUnMute(dsAudioHelperClass):
     """
     Class to perform mute and unmute tests on audio ports.
 
     Inherits from dsAudioHelperClass to leverage common test functionalities.
-
-    Attributes:
-        testName (str): Name of the test case.
     """
-
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test20_MuteUnMute test .
 
         Args:
             None.
         """
+        # Class variables
+        self.qcID = '20'
         self.testName  = "test20_MuteUnMute"
-        super().__init__(self.testName, '1')
+
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testVerifyAudio(self, port, manual=False):

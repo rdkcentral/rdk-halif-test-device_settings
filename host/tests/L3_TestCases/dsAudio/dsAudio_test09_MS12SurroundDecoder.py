@@ -25,21 +25,17 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsAudio.dsAudioHelperClass import dsAudioHelperClass
+from dsAudioHelperClass import dsAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsAudio_test09_MS12SurroundDecoder(dsAudioHelperClass):
     """
     Test case for the MS12 Surround Decoder feature in the dsAudio class
-
-    Attributes:
-        testName (str): Name of the test.
-        ms12DAPFeature (str): The specific audio feature being tested.
     """
-    ms12DAPFeature = "SurroundDecoder"
-
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the dsAudio_test09_MS12SurroundDecoder test case.
 
@@ -49,8 +45,12 @@ class dsAudio_test09_MS12SurroundDecoder(dsAudioHelperClass):
         Args:
             None.
         """
+        # Class variables
+        self.qcID = '9'
         self.testName  = "test09_MS12SurroundDecoder"
-        super().__init__(self.testName, '1')
+        self.ms12DAPFeature = "SurroundDecoder"
+
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testVerifySurroundDecoder(self, stream, port, mode, manual=False):
@@ -85,8 +85,6 @@ class dsAudio_test09_MS12SurroundDecoder(dsAudioHelperClass):
         Returns:
             bool: The overall result of the test execution.
         """
-        self.log.testStart(self.testName, '1')
-
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 

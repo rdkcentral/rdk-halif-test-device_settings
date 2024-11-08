@@ -25,23 +25,17 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsAudio.dsAudioHelperClass import dsAudioHelperClass
+from dsAudioHelperClass import dsAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsAudio_test08_MS12BassEnhancer(dsAudioHelperClass):
     """
     Test class for verifying the MS12 Bass Enhancer feature.
-
-    Attributes:
-        testName (str): Name of the test.
-        ms12DAPFeature (str): The specific audio feature being tested.
-        boostValues (list): Possible boost values for the Bass Enhancer.
     """
-    ms12DAPFeature = "BassEnhancer"
-    boostValues = [0, 50, 100]
-
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the dsAudio_test08_MS12BassEnhancer test class.
 
@@ -50,8 +44,15 @@ class dsAudio_test08_MS12BassEnhancer(dsAudioHelperClass):
         Args:
             None.
         """
+        # Class variables
+        self.qcID = '8'
         self.testName  = "test08_MS12BassEnhancer"
-        super().__init__(self.testName, '1')
+        self.ms12DAPFeature = "BassEnhancer"
+
+        # List of bass enhancer values for testing
+        self.boostValues = [0, 50, 100]
+
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testVerifyBassEnhancer(self, stream, port, boost, manual=False):
@@ -86,8 +87,6 @@ class dsAudio_test08_MS12BassEnhancer(dsAudioHelperClass):
         Returns:
             bool: Status of the last verification result.
         """
-        self.log.testStart(self.testName, '1')
-
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 

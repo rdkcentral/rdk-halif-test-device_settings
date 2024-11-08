@@ -25,33 +25,31 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsAudio.dsAudioHelperClass import dsAudioHelperClass
+from dsAudioHelperClass import dsAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsAudio_test02_PortConnectionStatus(dsAudioHelperClass):
     """
     Test class to verify the connection and disconnection status of headphone.
-
-    This class interacts with the `dsAudioClass` to:
     - Check the connection status of headphones.
     - Test callback mechanisms for headphone connection/disconnection.
     - Perform manual or automated connection status verification.
     """
-
-    testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
-    moduleName = "dsAudio"
-    rackDevice = "dut"
-
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test class with test name, setup configuration, and session for HAL testing.
 
         Args:
             None
         """
+        # Class variables
         self.testName  = "test02_PortConnectionStatus"
-        super().__init__(self.testName, '1')
+        self.qcID = '2'
+
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual.
     def testWaitForConnectionChange(self, connection, manual=False):
@@ -60,7 +58,7 @@ class dsAudio_test02_PortConnectionStatus(dsAudioHelperClass):
 
         Args:
             connection (bool): Set to True for connection, False for disconnection.
-            manual (bool, optional): Manual control flag (True for manual user input, False for automation). 
+            manual (bool, optional): Manual control flag (True for manual user input, False for automation).
                                      Defaults to False.
 
         Returns:
@@ -85,7 +83,6 @@ class dsAudio_test02_PortConnectionStatus(dsAudioHelperClass):
         Returns:
             bool: Final result of the test.
         """
-        self.log.testStart(self.testName, '1')
 
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())

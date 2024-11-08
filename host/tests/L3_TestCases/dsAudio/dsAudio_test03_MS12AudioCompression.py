@@ -25,9 +25,11 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsAudio.dsAudioHelperClass import dsAudioHelperClass
+from dsAudioHelperClass import dsAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsAudio_test03_MS12AudioCompression(dsAudioHelperClass):
     """
@@ -38,18 +40,21 @@ class dsAudio_test03_MS12AudioCompression(dsAudioHelperClass):
     - Verify the application of compression on audio streams.
     - Perform manual or automated verification of audio quality and compression.
     """
-    compressionValues = [0, 5, 10] # Different levels of audio compression to be tested
-
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the MS12 Audio Compression test with setup configuration and sessions.
 
         Args:
             None.
         """
-        super().__init__(self.testName, '1')
-
+        # Class variables
         self.testName  = "test03_MS12AudioCompression"
+        self.qcID = '3'
+
+         # List of audio compression levels for testing
+        self.compressionValues = [0, 5, 10]
+
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testVerifyCompressionLevel(self, stream, port, compression, manual=False):
@@ -83,7 +88,6 @@ class dsAudio_test03_MS12AudioCompression(dsAudioHelperClass):
         Returns:
             bool: Final result of the test.
         """
-        self.log.testStart(self.testName, '1')
 
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())

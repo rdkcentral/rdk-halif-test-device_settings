@@ -25,25 +25,17 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsAudio.dsAudioHelperClass import dsAudioHelperClass
+from dsAudioHelperClass import dsAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsAudio_test07_MS12Volumeleveller(dsAudioHelperClass):
     """
     Test class for MS12 Volume Leveller functionality.
-
-    Attributes:
-        testName (str): Name of the test case.
-        ms12DAPFeature (str): Name of the MS12 DAP feature being tested.
-        volumeModes (list): List of Volume leveller modes to test.
-        volumeLevels (list): List of Volume leveller levels to test.
     """
-    ms12DAPFeature = "Volumeleveller"
-    volumeModes = [0, 1, 2]
-    volumeLevels = [0, 5, 10]
-
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test case for MS12 Volume leveller.
 
@@ -52,8 +44,16 @@ class dsAudio_test07_MS12Volumeleveller(dsAudioHelperClass):
         Args:
             None.
         """
+        # Class variables
+        self.qcID = '7'
         self.testName  = "test07_MS12Volumeleveller"
-        super().__init__(self.testName, '1')
+        self.ms12DAPFeature = "Volumeleveller"
+
+        # List of volume modes for testing
+        self.volumeModes = [0, 1, 2]
+        self.volumeLevels = [0, 5, 10]
+
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testVerifyVolumeleveller(self, stream, port, mode, level, manual=False):
@@ -90,8 +90,6 @@ class dsAudio_test07_MS12Volumeleveller(dsAudioHelperClass):
         Returns:
             bool: Result of the final verification.
         """
-        self.log.testStart(self.testName, '1')
-
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
