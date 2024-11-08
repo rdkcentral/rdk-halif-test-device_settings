@@ -91,8 +91,6 @@ class dsAudio_test25_AudioMix(dsAudioHelperClass):
         Returns:
             bool: True if the test executes successfully, otherwise False.
         """
-        self.log.testStart(self.testName, '1')
-
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 

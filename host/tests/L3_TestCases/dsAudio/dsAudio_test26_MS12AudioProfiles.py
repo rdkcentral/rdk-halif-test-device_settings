@@ -83,8 +83,6 @@ class dsAudio_test26_MS12AudioProfiles(dsAudioHelperClass):
         Returns:
             bool: Returns True if the test completes successfully.
         """
-        self.log.testStart(self.testName, '1')
-
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 

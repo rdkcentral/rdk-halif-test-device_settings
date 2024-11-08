@@ -88,8 +88,6 @@ class dsAudio_test23_AssociateMix(dsAudioHelperClass):
         Returns:
             bool: True if the test execution completes successfully; otherwise, False.
         """
-        self.log.testStart(self.testName, '1')
-
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 

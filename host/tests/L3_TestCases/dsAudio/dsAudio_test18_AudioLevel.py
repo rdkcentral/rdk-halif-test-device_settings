@@ -89,8 +89,6 @@ class dsAudio_test18_AudioLevel(dsAudioHelperClass):
         Returns:
             bool: The final status of the output mode tests.
         """
-        self.log.testStart(self.testName, '1')
-
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 

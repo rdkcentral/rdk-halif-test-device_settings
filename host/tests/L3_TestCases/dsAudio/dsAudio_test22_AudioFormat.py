@@ -71,8 +71,6 @@ class dsAudio_test22_AudioFormat(dsAudioHelperClass):
         Returns:
             bool: Always returns True upon successful execution of the test.
         """
-        self.log.testStart(self.testName, '1')
-
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 

@@ -85,8 +85,6 @@ class dsAudio_test20_MuteUnMute(dsAudioHelperClass):
         Returns:
             bool: Status of the last verification (True if successful, False otherwise).
         """
-        self.log.testStart(self.testName, '1')
-
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
