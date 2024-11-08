@@ -25,29 +25,31 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsAudio.dsAudioHelperClass import dsAudioHelperClass
+from dsAudioHelperClass import dsAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsAudio_test21_AudioDelay(dsAudioHelperClass):
     """
     Test case for validating audio delay settings on the Device Under Test (DUT).
-
-    Attributes:
-        testName (str): Name of the test case.
-        delayList (list): List of audio delay values to test (in milliseconds).
     """
-    delayList = [0, 100, 200]
-
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test21_AudioDelay test .
 
         Args:
             None.
         """
+        # Class variables
+        self.qcID = '21'
         self.testName  = "test21_AudioDelay"
-        super().__init__(self.testName, '1')
+
+        # List of delay (msec) values for testing
+        self.delayList = [0, 100, 200]
+
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testVerifyAudioDelay(self, port, delay, manual=False):

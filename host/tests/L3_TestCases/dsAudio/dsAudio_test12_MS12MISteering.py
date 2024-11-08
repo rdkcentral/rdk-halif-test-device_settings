@@ -25,46 +25,46 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsAudio.dsAudioHelperClass import dsAudioHelperClass
+from dsAudioHelperClass import dsAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsAudio_test12_MS12MISteering(dsAudioHelperClass):
     """
     Class to test MS12 MISteering functionality in the dsAudio module.
-    
-    Attributes:
-        testName (str): Name of the test.
-        ms12DAPFeature (str): Specific feature being tested (MISteering).
     """
-    ms12DAPFeature = "MISteering"
-
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the dsAudio_test12_MS12MISteering test instance.
-        
-        This sets up the test configuration and prepares sessions for 
+
+        This sets up the test configuration and prepares sessions for
         player and device access.
 
         Args:
             None
         """
+        # Class variables
+        self.qcID = '12'
         self.testName  = "test12_MS12MISteering"
-        super().__init__(self.testName, '1')
+        self.ms12DAPFeature = "MISteering"
+
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testVerifyMISteering(self, stream, port, mode, manual=False):
         """
         Verifies the functionality of the MISteering feature.
 
-        This method checks whether the audio behaves as expected when 
+        This method checks whether the audio behaves as expected when
         the MISteering feature is applied to the specified audio port.
 
         Args:
             stream (str): The audio stream used for testing.
             port (str): The audio port being verified.
             mode (bool): Indicates if MISteering is enabled (True) or disabled (False).
-            manual (bool, optional): Specifies whether to use manual verification. 
+            manual (bool, optional): Specifies whether to use manual verification.
                                      Defaults to False, using automated methods if implemented.
 
         Returns:

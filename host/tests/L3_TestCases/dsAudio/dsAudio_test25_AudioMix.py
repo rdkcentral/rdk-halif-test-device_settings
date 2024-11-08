@@ -26,9 +26,11 @@ import sys
 import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsAudio.dsAudioHelperClass import dsAudioHelperClass
+from dsAudioHelperClass import dsAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsAudio_test25_AudioMix(dsAudioHelperClass):
     """
@@ -36,16 +38,8 @@ class dsAudio_test25_AudioMix(dsAudioHelperClass):
 
     This test checks the behavior of primary and system audio levels while playing audio streams.
     It verifies if the audio output behaves as expected for different volume settings.
-
-    Attributes:
-        testName (str): Name of the test case.
-        primaryVolume (list): List of primary volume levels to test (0-100).
-        systemVolume (list): List of system volume levels to test (0-100).
     """
-    primaryVolume = [0, 25, 50, 75, 100]
-    systemVolume = [0, 25, 50, 75, 100]
-
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the dsAudio_test25_AudioMix test instance.
 
@@ -54,8 +48,15 @@ class dsAudio_test25_AudioMix(dsAudioHelperClass):
         Args:
             None.
         """
+        # Class variables
+        self.qcID = '25'
         self.testName  = "test25_AudioMix"
-        super().__init__(self.testName, '1')
+
+        # List of primary and secondary volume levels for testing
+        self.primaryVolume = [0, 25, 50, 75, 100]
+        self.systemVolume = [0, 25, 50, 75, 100]
+
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testVerifyAudio(self, port, primary_volume, system_volume, manual=False):
@@ -66,7 +67,7 @@ class dsAudio_test25_AudioMix(dsAudioHelperClass):
             port (str) : The audio port to verify.
             primary_volume (int): Primary audio volume level (0-100).
             system_volume (int): System audio volume level (0-100).
-            manual (bool, optional): Indicates if manual verification is required. 
+            manual (bool, optional): Indicates if manual verification is required.
                                      Defaults to False (automated verification).
 
         Returns:

@@ -25,9 +25,11 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsAudio.dsAudioHelperClass import dsAudioHelperClass
+from dsAudioHelperClass import dsAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsAudio_test18_AudioLevel(dsAudioHelperClass):
     """
@@ -35,15 +37,8 @@ class dsAudio_test18_AudioLevel(dsAudioHelperClass):
 
     This class inherits from `dsAudioHelperClass` and implements a series of tests
     to verify the audio gain levels across different audio ports.
-
-    Attributes:
-        testName (str): Name of the test case.
-        gainLevels (list): List of gain levels to be tested.
     """
-
-    gainLevels = [0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0]
-
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the `dsAudio_test18_AudioLevel` instance.
 
@@ -53,8 +48,14 @@ class dsAudio_test18_AudioLevel(dsAudioHelperClass):
         Args:
             None.
         """
+        # Class variables
+        self.qcID = '18'
         self.testName  = "test18_AudioLevel"
-        super().__init__(self.testName, '1')
+
+        # List of gain values for testing
+        self.gainLevels = [0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0]
+
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testVerifyAudioGainLevel(self, port, gain, manual=False):

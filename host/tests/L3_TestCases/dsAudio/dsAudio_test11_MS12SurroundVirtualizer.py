@@ -25,25 +25,17 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsAudio.dsAudioHelperClass import dsAudioHelperClass
+from dsAudioHelperClass import dsAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsAudio_test11_MS12SurroundVirtualizer(dsAudioHelperClass):
     """
     Test class for MS12 Surround Virtualizer audio feature
-
-    Attributes:
-        testName (str): Name of the test.
-        ms12DAPFeature (str): The specific audio feature being tested.
-        volumeModes (list): list of volume modes to be tested
-        boostValues (list): list of boost values to be tested
     """
-    ms12DAPFeature = "SurroundVirtualizer"
-    volumeModes = [0, 1, 2]
-    boostValues = [0, 40, 96]
-
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the dsAudio_test11_MS12SurroundVirtualizer test.
 
@@ -52,8 +44,16 @@ class dsAudio_test11_MS12SurroundVirtualizer(dsAudioHelperClass):
         Args:
             None.
         """
+        # Class variables
+        self.qcID = '11'
         self.testName  = "test11_MS12SurroundVirtualizer"
-        super().__init__(self.testName, '1')
+        self.ms12DAPFeature = "SurroundVirtualizer"
+
+        #List of Volume modes for testing
+        self.volumeModes = [0, 1, 2]
+        self.boostValues = [0, 40, 96]
+
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testVerifySurroundVirtualizer(self, stream, port, mode, level, manual=False):
@@ -80,7 +80,7 @@ class dsAudio_test11_MS12SurroundVirtualizer(dsAudioHelperClass):
             return False
 
     def testFunction(self):
-        """ 
+        """
         Tests the functionality of the MS12 Surround Virtualizer.
 
         This function:

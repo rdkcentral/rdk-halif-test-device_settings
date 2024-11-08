@@ -25,42 +25,42 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsAudio.dsAudioHelperClass import dsAudioHelperClass
+from dsAudioHelperClass import dsAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsAudio_test14_MS12LEConfig(dsAudioHelperClass):
     """
     This class implements the audio test for MS12 LEConfig functionality.
 
-    It inherits from dsAudioHelperClass and manages the setup, execution, and 
+    It inherits from dsAudioHelperClass and manages the setup, execution, and
     verification of the audio configuration tests for the LEConfig feature.
-
-    Attributes:
-        testName (str): Name of the test.
-        ms12DAPFeature (str): The audio processing feature being tested.
     """
-    ms12DAPFeature = "LEConfig"
-
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the dsAudio_test14_MS12LEConfig test.
 
-        This constructor sets up the test environment, including loading the 
+        This constructor sets up the test environment, including loading the
         configuration, opening necessary sessions, and preparing the player.
 
         Args:
             None
         """
+        # Class variables
+        self.qcID = '14'
         self.testName  = "test14_MS12LEConfig"
-        super().__init__(self.testName, '1')
+        self.ms12DAPFeature = "LEConfig"
+
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testVerifyLEConfig(self, stream, port, mode, manual=False):
         """
         Verifies the functionality of the LEConfig feature.
 
-        This method checks whether the audio output is correct based on the 
+        This method checks whether the audio output is correct based on the
         applied LEConfig settings.
 
         Args:

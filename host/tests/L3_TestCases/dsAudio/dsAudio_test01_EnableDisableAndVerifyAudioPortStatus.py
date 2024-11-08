@@ -25,9 +25,11 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsAudio.dsAudioHelperClass import dsAudioHelperClass
+from dsAudioHelperClass import dsAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(dsAudioHelperClass):
     """
@@ -37,8 +39,7 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(dsAudioHelperClass):
     downloading necessary test assets, playing audio streams, enabling and disabling
     audio ports, and performing verification of audio output.
     """
-
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test class with test name, setup configuration, and sessions for the device.
 
@@ -47,8 +48,9 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(dsAudioHelperClass):
         """
         # Class variables
         self.testName  = "test01_EnableDisableAndVerifyAudioPortStatus"
+        self.qcID = '1'
 
-        super().__init__(self.testName, '1')
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testVerifyAudio(self, port, manual=False):
@@ -83,8 +85,6 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(dsAudioHelperClass):
             bool: Final result of the test.
         """
 
-        self.log.testStart(self.testName, '1')
-
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
@@ -116,5 +116,6 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(dsAudioHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test01_EnableDisableAndVerifyAudioPortStatus()
+    testLog = logModule("Long_Run", level=logModule.INFO)
+    test = dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(testLog)
     test.run(False)

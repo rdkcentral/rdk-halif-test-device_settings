@@ -25,9 +25,11 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsAudio.dsAudioHelperClass import dsAudioHelperClass
+from dsAudioHelperClass import dsAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsAudio_test04_MS12DialogueEnhancer(dsAudioHelperClass):
     """
@@ -35,15 +37,8 @@ class dsAudio_test04_MS12DialogueEnhancer(dsAudioHelperClass):
 
     This test configures and verifies different levels of the MS12 Dialogue Enhancer
     using the dsAudio class on the DUT (Device Under Test).
-    Attributes:
-        testName (str): Name of the test case.
-        dialogueEnhance(list): list of dialogueenhancer values to be tested
-        ms12DAPFeature(str): Name of the MS12 DAP feature being tested.
     """
-    dialogueEnhance = [0, 8, 16]
-    ms12DAPFeature = "DialogueEnhancer"
-
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test04_MS12DialogueEnhancer test, setting up player sessions,
         configuration reading, and other required components
@@ -51,8 +46,15 @@ class dsAudio_test04_MS12DialogueEnhancer(dsAudioHelperClass):
         Args:
             None.
         """
+        # Class variables
         self.testName  = "test04_MS12DialogueEnhancer"
-        super().__init__(self.testName, '1')
+        self.qcID = '4'
+        self.ms12DAPFeature = "DialogueEnhancer"
+
+        # List of dialogue enhance values for testing
+        self.dialogueEnhance = [0, 8, 16]
+
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testVerifyDialogueEnhance(self, stream, port, level, manual=False):
@@ -85,8 +87,6 @@ class dsAudio_test04_MS12DialogueEnhancer(dsAudioHelperClass):
         Returns:
             bool: True if the test passes, otherwise False.
         """
-        self.log.testStart(self.testName, '1')
-
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 

@@ -26,9 +26,11 @@ import sys
 import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsAudio.dsAudioHelperClass import dsAudioHelperClass
+from dsAudioHelperClass import dsAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsAudio_test23_AssociateMix(dsAudioHelperClass):
     """
@@ -36,14 +38,8 @@ class dsAudio_test23_AssociateMix(dsAudioHelperClass):
 
     This test validates the associate audio mixing feature of the device under test (DUT)
     by adjusting fader levels and checking audio playback with and without mixing enabled.
-
-    Attributes:
-        testName (str): Name of the test.
-        faderValues (list): List of fader values to test (in decibels).
     """
-    faderValues = [-32, 0, 32]
-
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the dsAudio_test23_AssociateMix test class.
 
@@ -52,8 +48,12 @@ class dsAudio_test23_AssociateMix(dsAudioHelperClass):
         Args:
             None.
         """
+        # Class variables
+        self.qcID = '23'
         self.testName  = "test23_AssociateMix"
-        super().__init__(self.testName, '1')
+        self.faderValues = [-32, 0, 32]
+
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testVerifyAssociateAudioMix(self, port, mixer_status, fader, manual=False):

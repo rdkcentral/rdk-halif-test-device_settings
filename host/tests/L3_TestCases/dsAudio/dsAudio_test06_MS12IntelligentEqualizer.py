@@ -25,23 +25,17 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsAudio.dsAudioHelperClass import dsAudioHelperClass
+from dsAudioHelperClass import dsAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsAudio_test06_MS12IntelligentEqualizer(dsAudioHelperClass):
     """
     Test case for verifying the MS12 Intelligent Equalizer feature across various modes.
-
-    Attributes:
-        testName (str): Name of the test case.
-        ms12DAPFeature (str): Name of the MS12 DAP feature being tested.
-        equalizerModes (list): List of Intelligent Equalizer modes to test.
     """
-    ms12DAPFeature = "IntelligentEqualizer"
-    equalizerModes = ["OFF", "Open", "Rich", "Focused", "Balanced", "Warm", "Detailed"]
-
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test case for MS12 Intelligent Equalizer.
 
@@ -50,8 +44,15 @@ class dsAudio_test06_MS12IntelligentEqualizer(dsAudioHelperClass):
         Args:
             None.
         """
+        # Class variables
+        self.qcID = '6'
         self.testName  = "test06_MS12IntelligentEqualizer"
-        super().__init__(self.testName, '1')
+        self.ms12DAPFeature = "IntelligentEqualizer"
+
+        #List of Equalizer modes for testing
+        self.equalizerModes = ["OFF", "Open", "Rich", "Focused", "Balanced", "Warm", "Detailed"]
+
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testVerifyIntelligentEqualizer(self, stream, port, mode, manual=False):
@@ -86,8 +87,6 @@ class dsAudio_test06_MS12IntelligentEqualizer(dsAudioHelperClass):
         Returns:
             bool: Final test result (True if the test passes, False otherwise).
         """
-        self.log.testStart(self.testName, '1')
-
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 

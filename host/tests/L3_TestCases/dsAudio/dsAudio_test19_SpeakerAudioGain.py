@@ -25,9 +25,11 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsAudio.dsAudioHelperClass import dsAudioHelperClass
+from dsAudioHelperClass import dsAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsAudio_test19_AudioGain(dsAudioHelperClass):
     """
@@ -35,22 +37,22 @@ class dsAudio_test19_AudioGain(dsAudioHelperClass):
 
     This class extends the dsAudioHelperClass and implements test procedures
     to evaluate the audio gain functionality of the device under test (DUT).
-
-    Attributes:
-        testName (str): Name of the test case.
-        gainValues (list): List of gain values to be tested.
     """
-    gainValues = [-2080.0, -1000.0, 0.0, 250.0, 480.0]
-
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test19_AudioGain test .
 
         Args:
             None.
         """
+        # Class variables
+        self.qcID = '19'
         self.testName  = "test19_AudioGain"
-        super().__init__(self.testName, '1')
+
+        # List Gain values for testing
+        self.gainValues = [-2080.0, -1000.0, 0.0, 250.0, 480.0]
+
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testVerifyAudioGainLevel(self, port, gain, manual=False):
@@ -63,12 +65,12 @@ class dsAudio_test19_AudioGain(dsAudioHelperClass):
         Args:
             port (str): The audio port to verify.
             gain (float): The gain level to check.
-            manual (bool, optional): Indicates whether to use manual verification 
+            manual (bool, optional): Indicates whether to use manual verification
                                      (True) or automated methods (False).
                                      Defaults to False.
 
         Returns:
-            bool: Status of the audio verification (True if successful, 
+            bool: Status of the audio verification (True if successful,
                   False otherwise).
         """
         if manual == True:

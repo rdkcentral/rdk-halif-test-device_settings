@@ -25,36 +25,38 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsAudio.dsAudioHelperClass import dsAudioHelperClass
+from dsAudioHelperClass import dsAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsAudio_test17_OutputMode(dsAudioHelperClass):
     """
     Test case class for verifying the audio output modes of the Device Under Test (DUT).
-    
-    This class inherits from dsAudioHelperClass and implements various test methods to ensure 
+
+    This class inherits from dsAudioHelperClass and implements various test methods to ensure
     proper functionality of audio output modes.
-
-    Attributes:
-        testName (str): The name of the test case.
-        testOutputModes (list): List of audio output modes to be tested.
     """
-    testOutputModes = [["STEREO", "PASSTHRU"], ["STEREO", "DD", "PASSTHRU"], ["STEREO", "DD", "DDPLUS", "PASSTHRU"]]
-
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the dsAudio_test17_OutputMode test instance.
 
-        This constructor sets up the necessary configurations, including loading the test 
-        setup file, establishing console sessions for player and HAL, and initializing 
+        This constructor sets up the necessary configurations, including loading the test
+        setup file, establishing console sessions for player and HAL, and initializing
         the player and user response classes.
 
         Args:
             None.
         """
+        # Class variables
+        self.qcID = '17'
         self.testName  = "test17_OutputMode"
-        super().__init__(self.testName, '1')
+
+        # List of Output modes for testing
+        self.testOutputModes = [["STEREO", "PASSTHRU"], ["STEREO", "DD", "PASSTHRU"], ["STEREO", "DD", "DDPLUS", "PASSTHRU"]]
+
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testVerifyOutputMode(self, stream, port, outMode, manual=False):

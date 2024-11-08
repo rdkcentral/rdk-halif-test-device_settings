@@ -25,9 +25,11 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsAudio.dsAudioHelperClass import dsAudioHelperClass
+from dsAudioHelperClass import dsAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsAudio_test13_MS12GraphicEqualizer(dsAudioHelperClass):
     """
@@ -35,16 +37,8 @@ class dsAudio_test13_MS12GraphicEqualizer(dsAudioHelperClass):
 
     Inherits from dsAudioHelperClass and implements functionalities to test the
     Graphic Equalizer feature in the audio processing module.
-
-    Attributes:
-        testName (str): Name of the test.
-        ms12DAPFeature (str): The audio processing feature being tested.
-        equalizerModes (list): List of Graphic Equalizer modes to be tested.
     """
-    ms12DAPFeature = "GraphicEqualizer"
-    equalizerModes = [0, 1, 2, 3]
-
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the dsAudio_test13_MS12GraphicEqualizer test.
 
@@ -55,8 +49,15 @@ class dsAudio_test13_MS12GraphicEqualizer(dsAudioHelperClass):
         Args:
             None
         """
+        # Class variables
+        self.qcID = '13'
         self.testName  = "test13_MS12GraphicEqualizer"
-        super().__init__(self.testName, '1')
+        self.ms12DAPFeature = "GraphicEqualizer"
+
+        # List of equalizer modes for testing
+        self.equalizerModes = [0, 1, 2, 3]
+
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testVerifyGraphicEqualizer(self, stream, port, mode, manual=False):
