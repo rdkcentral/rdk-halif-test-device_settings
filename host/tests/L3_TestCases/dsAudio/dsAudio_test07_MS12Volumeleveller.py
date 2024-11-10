@@ -163,5 +163,7 @@ class dsAudio_test07_MS12Volumeleveller(dsAudioHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test07_MS12Volumeleveller()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsAudio_test07_MS12Volumeleveller(summeryLog)
     test.run(False)

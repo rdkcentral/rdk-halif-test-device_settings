@@ -5,7 +5,6 @@
 - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
 - [Setting Up Test Environment](#setting-up-test-environment)
 - [Streams Required](#streams-required)
-- [Test Setup Connections](#test-setup-connections)
 - [Test Cases](#test-cases)
   - [dsaudio_test01_enabledisableandverifyaudioportstatus.py](#dsaudio_test01_enabledisableandverifyaudioportstatuspy)
   - [dsaudio_test02_portconnectionstatus.py](#dsaudio_test02_portconnectionstatuspy)
@@ -69,7 +68,7 @@ To execute `HAL` `L3` Python test cases, need a Python environment. Follow these
 
 #### Rack Configuration File
 
-Example Rack configuration File: `ut/host/tests/configs/example_rack_config.yml`
+Example Rack configuration File: [example_rack_config.yml](../../../../ut/host/tests/configs/example_rack_config.yml)
 
 For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_rack_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_rack_config.yml)
 
@@ -124,15 +123,15 @@ rackConfig:
 
 #### Device Configuration File
 
-Example Device configuration File: `ut/host/tests/configs/deviceConfig.yml`
+Example Device configuration File: [deviceConfig.yml](ut/host/tests/configs/deviceConfig.yml)
 
 For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_device_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_device_config.yml)
 
-Update the target directory where `HAL` binaries will be copied into the device. Also, map the profile to the source/sink settings `YAML` file path.
-
-Update the URL `streams_download_url` from which the streams are fetched.
-
-Ensure the platform should match with the `DUT` platform in [Rack Configuration](#rack-configuration-file)
+Update below fileds in the device configuration file:
+- Set the folder path for `target_directory` where `HAL` binaries will be copied onto the device.
+- Specify the device profile path in `test/profile`
+- Update `streams_download_url` with the URL from which the streams will be downloaded
+- Ensure the `platform` should match with the `DUT` `platform` in [Rack Configuration](#rack-configuration-file)
 
 ```yaml
 deviceConfig:
@@ -149,7 +148,7 @@ deviceConfig:
 
 #### Test Setup Configuration File
 
-Example Test Setup configuration File: `ut/host/tests/L3_TestCases/dsAudio/dsAudio_L3_testSetup.yml`
+Example Test Setup configuration File: [dsAudio_L3_testSetup.yml](../../../../ut/host/tests/L3_TestCases/dsAudio/dsAudio_L3_testSetup.yml)
 
 Provide the streams for each test case. This path is appended with `streams_download_url` entry from [Device Configuration File](#device-configuration-file)
 
@@ -175,7 +174,7 @@ dsAudio:
 
 #### Test Configuration
 
-Example Test Setup configuration File: `ut/host/tests/dsClasses/dsAudio_testConfig.yml`
+Example Test Setup configuration File: [dsAudio_testConfig.yml](../../../../ut/host/tests/dsClasses/dsAudio_testConfig.yml)
 
 Update the execute command according to the device path where `HAL` binaries are copied.
 
@@ -202,14 +201,6 @@ python <TestCaseName.py> --config </PATH>/ut/host/tests/configs/example_rack_con
 ## Streams Required
 
 Refer [ds-audio_L3_Low-Level_TestSpecification.md](./ds-audio_L3_Low-Level_TestSpecification.md#audio-streams-requirement) for the stream details
-
-## Test Setup Connections
-
-To verify the audio connect the external devices to `DUT`.
-For Example:
-
-- Connect headphone port to a aux speaker or headphone
-- Connect `ARC` port to a `avr`
 
 ## Test Cases
 
@@ -382,7 +373,7 @@ This test will evaluate the dialogue enhancer levels. The user should notice an 
 
 #### Test Steps - test04
 
-- Select the test file:  
+- Select the test file:
 
   - Run the Python script **`dsAudio_test04_MS12DialogueEnhancer.py`**
 
@@ -394,11 +385,11 @@ This test will evaluate the dialogue enhancer levels. The user should notice an 
   - Copy them to the target directory.
   - Automatically begin the test execution.
 
-- Play the audio stream:  
+- Play the audio stream:
 
   Test starts the audio stream playback specified in the test setup configuration file, and the user will be prompted to verify whether the Dialogue Enhancer level has been applied.
 
-- User interaction for verification:  
+- User interaction for verification:
 
   For each iteration:
 

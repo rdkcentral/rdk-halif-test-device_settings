@@ -124,5 +124,7 @@ class dsAudio_test18_AudioLevel(dsAudioHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test18_AudioLevel()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsAudio_test18_AudioLevel(summeryLog)
     test.run(False)

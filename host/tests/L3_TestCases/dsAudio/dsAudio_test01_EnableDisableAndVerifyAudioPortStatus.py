@@ -116,6 +116,7 @@ class dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(dsAudioHelperClass):
         return result
 
 if __name__ == '__main__':
-    testLog = logModule("Long_Run", level=logModule.INFO)
-    test = dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(testLog)
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsAudio_test01_EnableDisableAndVerifyAudioPortStatus(summeryLog)
     test.run(False)

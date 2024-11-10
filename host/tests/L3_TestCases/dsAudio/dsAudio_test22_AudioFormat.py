@@ -108,5 +108,7 @@ class dsAudio_test22_AudioFormat(dsAudioHelperClass):
         return True
 
 if __name__ == '__main__':
-    test = dsAudio_test22_AudioFormat()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsAudio_test22_AudioFormat(summeryLog)
     test.run(False)
