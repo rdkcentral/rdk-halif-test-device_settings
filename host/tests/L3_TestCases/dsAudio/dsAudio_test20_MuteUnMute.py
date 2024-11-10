@@ -127,5 +127,7 @@ class dsAudio_test20_MuteUnMute(dsAudioHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test20_MuteUnMute()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsAudio_test20_MuteUnMute(summeryLog)
     test.run(False)

@@ -150,5 +150,7 @@ class dsAudio_test11_MS12SurroundVirtualizer(dsAudioHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test11_MS12SurroundVirtualizer()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsAudio_test11_MS12SurroundVirtualizer(summeryLog)
     test.run(False)

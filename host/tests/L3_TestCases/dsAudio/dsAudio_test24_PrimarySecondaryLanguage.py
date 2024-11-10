@@ -144,5 +144,7 @@ class dsAudio_test24_PrimarySecondaryLanguage(dsAudioHelperClass):
         return True
 
 if __name__ == '__main__':
-    test = dsAudio_test24_PrimarySecondaryLanguage()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsAudio_test24_PrimarySecondaryLanguage(summeryLog)
     test.run(False)

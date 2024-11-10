@@ -125,5 +125,7 @@ class dsAudio_test04_MS12DialogueEnhancer(dsAudioHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test04_MS12DialogueEnhancer()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsAudio_test04_MS12DialogueEnhancer(summeryLog)
     test.run(False)

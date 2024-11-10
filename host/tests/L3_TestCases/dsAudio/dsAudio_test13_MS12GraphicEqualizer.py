@@ -134,5 +134,7 @@ class dsAudio_test13_MS12GraphicEqualizer(dsAudioHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test13_MS12GraphicEqualizer()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsAudio_test13_MS12GraphicEqualizer(summeryLog)
     test.run(False)

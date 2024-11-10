@@ -129,5 +129,7 @@ class dsAudio_test23_AssociateMix(dsAudioHelperClass):
         return True
 
 if __name__ == '__main__':
-    test = dsAudio_test23_AssociateMix()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsAudio_test23_AssociateMix(summeryLog)
     test.run(False)

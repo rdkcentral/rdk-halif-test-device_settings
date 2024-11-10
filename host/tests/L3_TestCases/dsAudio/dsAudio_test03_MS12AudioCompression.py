@@ -127,5 +127,7 @@ class dsAudio_test03_MS12AudioCompression(dsAudioHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsAudio_test03_MS12AudioCompression()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsAudio_test03_MS12AudioCompression(summeryLog)
     test.run(False)
