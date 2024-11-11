@@ -100,9 +100,9 @@ class dsAudioHelperClass(utHelperClass):
 
         # Download test streams to device
         if streamPaths and self.streamDownloadURL:
-            for s in streamPaths:
-                url.append(os.path.join(self.streamDownloadURL, s))
-                self.testStreams.append(os.path.join(self.targetWorkspace, os.path.basename(s)))
+            for streamPath in streamPaths:
+                url.append(os.path.join(self.streamDownloadURL, streamPath))
+                self.testStreams.append(os.path.join(self.targetWorkspace, os.path.basename(streamPath)))
             self.downloadToDevice(url, self.targetWorkspace, self.rackDevice)
 
     def testCleanAssets(self):

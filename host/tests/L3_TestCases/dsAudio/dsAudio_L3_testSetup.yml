@@ -33,28 +33,28 @@ dsAudio:
           - "streams/tones_string_48k_stereo.ac3"
       test04_MS12DialogueEnhancer:
         streams:
-          - "streams/tones_string_48k_stereo.ac3"
+          - "streams/DE_LR_200_AC4_H265_DVB_50fps.trp"
       test05_MS12DolbyVolume:
         streams:
           - "streams/tones_string_48k_stereo.ac3"
       test06_MS12IntelligentEqualizer:
         streams:
-          - "streams/tones_string_48k_stereo.ac3"
+          - "streams/multi_tone.ac3"
       test07_MS12Volumeleveller:
         streams:
-          - "streams/tones_string_48k_stereo.ac3"
+          - "streams/tone_500Hz_compress_48k_stereo.ac3"
       test08_MS12BassEnhancer:
         streams:
-          - "streams/tones_string_48k_stereo.ac3"
+          - "streams/tone_bassrange_150Hz_48k_Stereo.ac3"
       test09_MS12SurroundDecoder:
         streams:
-          - "streams/tones_string_48k_stereo.ac3"
+          - "streams/test_surroundDecoder.mp4"
       test10_MS12DRCMode:
         streams:
-          - "streams/tones_string_48k_stereo.ac3"
+          - "streams/tone_500Hz_compress_48k_stereo.ac3"
       test11_MS12SurroundVirtualizer:
         streams:
-          - "streams/tones_string_48k_stereo.ac3"
+          - "streams/test_surroundVirualizer.mp4"
       test12_MS12MISteering:
         streams:
           - "streams/tones_string_48k_stereo.ac3"
@@ -63,7 +63,7 @@ dsAudio:
           - "streams/tones_string_48k_stereo.ac3"
       test14_MS12LEConfig:
         streams:
-          - "streams/tones_string_48k_stereo.ac3"
+          - "streams/tone_500Hz_compress_48k_stereo.ac3"
       test15_ARCPort:
         streams:
       test16_ARCSAD:
@@ -85,21 +85,28 @@ dsAudio:
           - "streams/tones_string_48k_stereo.ac3"
       test21_AudioDelay:
         streams:
-          - "streams/AVsync_aac_200_48k_ATSC_m2v_29fps.trp"
+          - "streams/test_avsync.mp4"
       test22_AudioFormat:
         streams:
           - "streams/tones_string_48k_stereo.wav"
           - "streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.eac3"
+          - "streams/tones_string_48k_stereo.aac"
+          - "streams/tones_string_48k_stereo.ogg"
+          - "streams/tones_string_48k_stereo.wma"
+          - "streams/ac4_multilanguage.mp4"
+          - "streams/eac3_atmos.mp4"
+          - "streams/ac4_atmos.mp4"
       test23_AssociateMix:
         streams:
-          - "streams/tones_string_48k_stereo.ac3"
+          - "streams/ac4_multilanguage.mp4"
       test24_PrimarySecondaryLanguage:
         streams:
-          - "streams/tones_string_48k_stereo.ac3"
+          - "streams/ac4_multilanguage.mp4"
       test25_AudioMix:
         streams:
           - "streams/primary_audio_48k_2ch.ac3"
           - "streams/system_audio_48k_2ch.wav"
       test26_MS12AudioProfiles:
         streams:
-          - "streams/tones_string_48k_stereo.ac3"
+          - "streams/multi_tone.ac3"
