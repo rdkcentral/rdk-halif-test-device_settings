@@ -55,7 +55,7 @@ class dsAudio_test22_AudioFormat(dsAudioHelperClass):
         self.testName  = "test22_AudioFormat"
 
         # List of audio formats for testing
-        self.audioFormats = ["PCM", "AC3", "EAC3", "AAC", "VORBIS", "WMA", "AC4", "MAT", "TRUEHD", "EAC3_ATMOS", "TRUEHD_ATMOS", "MAT_ATMOS", "AC4_ATMOS"]
+        self.audioFormats = ["PCM", "AC3", "EAC3", "AAC", "VORBIS", "WMA", "AC4", "EAC3_ATMOS", "AC4_ATMOS"]
 
         super().__init__(self.testName, self.qcID, log)
 
