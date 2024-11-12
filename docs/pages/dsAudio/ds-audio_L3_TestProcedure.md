@@ -32,6 +32,8 @@
   - [dsaudio_test24_primarysecondarylanguage.py](#dsaudio_test24_primarysecondarylanguagepy)
   - [dsaudio_test25_audiomix.py](#dsaudio_test25_audiomixpy)
   - [dsaudio_test26_ms12audioprofiles.py](#dsaudio_test26_ms12audioprofilespy)
+  - [dsAudio_L3_Runall_Sink.py](#dsaudio_l3_runall_sinkpy)
+  - [dsAudio_L3_Runall_Source.py](#dsaudio_l3_runall_sourcepy)
 
 ## Acronyms, Terms and Abbreviations
 
@@ -1523,3 +1525,19 @@ Play **Stream #3** and verify the MS12 Audio Profile modes for the supported aud
 
   - Once all user responses are collected, the test will conclude.
   - If all profile modes are verified successfully, the test will end with Result: PASS. If any of the modes fail, the test will conclude with Result: FAIL.
+
+### dsAudio_L3_Runall_Sink.py
+
+This python file runs all the tests supported by `sink` devices
+
+```bash
+python dsAudio_L3_Runall_Sink.py --config </PATH>/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/ut/host/tests/configs/deviceConfig.yml
+```
+
+### dsAudio_L3_Runall_Source.py
+
+This python file runs all the tests supported by `source` devices
+
+```bash
+python dsAudio_L3_Runall_Source.py --config </PATH>/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/ut/host/tests/configs/deviceConfig.yml
+```
