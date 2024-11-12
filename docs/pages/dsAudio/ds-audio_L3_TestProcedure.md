@@ -5,7 +5,6 @@
 - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
 - [Setting Up Test Environment](#setting-up-test-environment)
 - [Streams Required](#streams-required)
-- [Test Setup Connections](#test-setup-connections)
 - [Test Cases](#test-cases)
   - [dsaudio_test01_enabledisableandverifyaudioportstatus.py](#dsaudio_test01_enabledisableandverifyaudioportstatuspy)
   - [dsaudio_test02_portconnectionstatus.py](#dsaudio_test02_portconnectionstatuspy)
@@ -33,6 +32,8 @@
   - [dsaudio_test24_primarysecondarylanguage.py](#dsaudio_test24_primarysecondarylanguagepy)
   - [dsaudio_test25_audiomix.py](#dsaudio_test25_audiomixpy)
   - [dsaudio_test26_ms12audioprofiles.py](#dsaudio_test26_ms12audioprofilespy)
+  - [dsAudio_L3_Runall_Sink.py](#dsaudio_l3_runall_sinkpy)
+  - [dsAudio_L3_Runall_Source.py](#dsaudio_l3_runall_sourcepy)
 
 ## Acronyms, Terms and Abbreviations
 
@@ -69,7 +70,7 @@ To execute `HAL` `L3` Python test cases, need a Python environment. Follow these
 
 #### Rack Configuration File
 
-Example Rack configuration File: `ut/host/tests/configs/example_rack_config.yml`
+Example Rack configuration File: [example_rack_config.yml](../../../../ut/host/tests/configs/example_rack_config.yml)
 
 For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_rack_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_rack_config.yml)
 
@@ -124,36 +125,34 @@ rackConfig:
 
 #### Device Configuration File
 
-Example Device configuration File: `ut/host/tests/configs/deviceConfig.yml`
+Example Device configuration File: [deviceConfig.yml](ut/host/tests/configs/deviceConfig.yml)
 
 For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_device_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_device_config.yml)
 
-Update the target directory where `HAL` binaries will be copied into the device. Also, map the profile to the source/sink settings `YAML` file path.
-
-Ensure the platform should match with the `DUT` platform in [Rack Configuration](#rack-configuration-file)
+Update below fileds in the device configuration file:
+- Set the folder path for `target_directory` where `HAL` binaries will be copied onto the device.
+- Specify the device profile path in `test/profile`
+- Update `streams_download_url` with the URL from which the streams will be downloaded
+- Ensure the `platform` should match with the `DUT` `platform` in [Rack Configuration](#rack-configuration-file)
 
 ```yaml
 deviceConfig:
-  cpe1:
-    platform: "stb"    # Must match the platform in example_rack_config.yml
-    model: "uk"
-    target_directory: "/tmp"  # Path where HAL binaries are copied in device
-    test:
-      profile: "../../../../profiles/sink/Sink_AudioSettings.yaml"
-      player:
-        tool: "gstreamer"
-        prerequisites:
-          - export xxxx    # Pre-commands required to play the stream
-
+    cpe1:
+        platform: "linux"
+        model: "uk"
+        soc_vendor: "intel"
+        target_directory: "/tmp/"  # Target Directory on device
+        prompt: "" # Prompt string on console
+        test:
+            profile: "../../../../profiles/sink/Sink_AudioSettings.yaml"
+            streams_download_url: "<URL_Path>" #URL path from which the streams are downloaded to the device
 ```
 
 #### Test Setup Configuration File
 
-Example Test Setup configuration File: `ut/host/tests/L3_TestCases/dsAudio/dsAudio_L3_testSetup.yml`
+Example Test Setup configuration File: [dsAudio_L3_testSetup.yml](../../../../ut/host/tests/L3_TestCases/dsAudio/dsAudio_L3_testSetup.yml)
 
-Update the artifact paths from which the binaries should be copied to the device.
-
-Set the execution paths and provide the stream paths for each test case.
+Provide the streams for each test case. This path is appended with `streams_download_url` entry from [Device Configuration File](#device-configuration-file)
 
 If a test case requires multiple streams or needs to be validated using several streams, ensure that all necessary streams are added sequentially for that specific test case.
 
@@ -162,44 +161,35 @@ dsAudio:
   description: "dsAudio Device Settings test setup"
   assets:
     device:
-      defaults: &defaults
-        artifacts:
-          - "<path>/bin/hal_test"
-          - "<path>/bin/libut_control.so"
-          - "<path>/bin/Sink_AudioSettings.yaml"
-          - "<path>/bin/run.sh"
-        execute:
-          - "chmod +x /opt/HAL/dsAudio_L3/hal_test"
-          - "chmod +x /opt/HAL/dsAudio_L3/run.sh"
-          - cp -rf /usr/lib/libdshal.so /opt/HAL/dsAudio_L3/
-          - "ln -s /usr/lib/libds-hal.so /opt/HAL/dsAudio_L3/libdshal.so"
       test01_EnableDisableAndVerifyAudioPortStatus:
-        <<: *defaults
         streams:
-          - "<path>/streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.ac3"
       test02_PortConnectionStatus:
-        <<: *defaults
-      test25_AudioMix:
-        <<: *defaults
         streams:
-          - "<path>/streams/primary_audio_48k_2ch.ac3"
-          - "<path>/streams/system_audio_48k_2ch.wav"
-
+      test03_MS12AudioCompression:
+        streams:
+          - "streams/tones_string_48k_stereo.ac3"
+      test04_MS12DialogueEnhancer:
+        streams:
+          - "streams/tones_string_48k_stereo.ac3"
 ```
 
-#### Test Suite Configuration
+#### Test Configuration
 
-Example Test Setup configuration File: `ut/host/tests/dsClasses/dsAudio_test_suite.yml`
+Example Test Setup configuration File: [dsAudio_testConfig.yml](../../../../ut/host/tests/dsClasses/dsAudio_testConfig.yml)
 
 Update the execute command according to the device path where `HAL` binaries are copied.
 
 ```yaml
 dsAudio:
-  description: "dsAudio Device Settings testing profile"
-  test:
-    execute: "/tmp/run.sh -p /tmp/Sink_AudioSettings.yaml"
-    type: UT-C  # Cunit tests (UT-C)
-
+    description: "dsAudio Device Settings testing profile / menu system for UT"
+    test:
+        artifacts:
+        #List of artifacts folders, test class copies the content of folder to the target device workspace
+          - "../../../bin/"
+        # exectute command, this will appended with the target device workspace path
+        execute: "run.sh"
+        type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
 ```
 
 ## Run Test Cases
@@ -213,14 +203,6 @@ python <TestCaseName.py> --config </PATH>/ut/host/tests/configs/example_rack_con
 ## Streams Required
 
 Refer [ds-audio_L3_Low-Level_TestSpecification.md](./ds-audio_L3_Low-Level_TestSpecification.md#audio-streams-requirement) for the stream details
-
-## Test Setup Connections
-
-To verify the audio connect the external devices to `DUT`.
-For Example:
-
-- Connect headphone port to a aux speaker or headphone
-- Connect `ARC` port to a `avr`
 
 ## Test Cases
 
@@ -393,7 +375,7 @@ This test will evaluate the dialogue enhancer levels. The user should notice an 
 
 #### Test Steps - test04
 
-- Select the test file:  
+- Select the test file:
 
   - Run the Python script **`dsAudio_test04_MS12DialogueEnhancer.py`**
 
@@ -405,11 +387,11 @@ This test will evaluate the dialogue enhancer levels. The user should notice an 
   - Copy them to the target directory.
   - Automatically begin the test execution.
 
-- Play the audio stream:  
+- Play the audio stream:
 
   Test starts the audio stream playback specified in the test setup configuration file, and the user will be prompted to verify whether the Dialogue Enhancer level has been applied.
 
-- User interaction for verification:  
+- User interaction for verification:
 
   For each iteration:
 
@@ -1543,3 +1525,19 @@ Play **Stream #3** and verify the MS12 Audio Profile modes for the supported aud
 
   - Once all user responses are collected, the test will conclude.
   - If all profile modes are verified successfully, the test will end with Result: PASS. If any of the modes fail, the test will conclude with Result: FAIL.
+
+### dsAudio_L3_Runall_Sink.py
+
+This python file runs all the tests supported by `sink` devices
+
+```bash
+python dsAudio_L3_Runall_Sink.py --config </PATH>/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/ut/host/tests/configs/deviceConfig.yml
+```
+
+### dsAudio_L3_Runall_Source.py
+
+This python file runs all the tests supported by `source` devices
+
+```bash
+python dsAudio_L3_Runall_Source.py --config </PATH>/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/ut/host/tests/configs/deviceConfig.yml
+```

@@ -22,7 +22,11 @@
 dsAudio:
     description: "dsAudio Device Settings testing profile / menu system for UT"
     test:
-        execute: "<PATH on Device>run.sh -p <PATH on Device>Sink_AudioSettings.yaml" #Execute command
+        artifacts:
+        #List of artifacts folders, test class copies the content of folder to the target device workspace
+          - "../../../bin/"
+        # exectute command, this will appended with the target device workspace path
+        execute: "run.sh"
         type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
         suites:
             0:
