@@ -29,6 +29,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsVideoDevice.dsVideoDeviceHelperClass import dsVideoDeviceHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
     """
@@ -43,7 +44,7 @@ class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
         rackDevice (str): Identifier for the device under test.
     """
 
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test3_SetDisplayFramerate test .
 
@@ -53,7 +54,7 @@ class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
         self.testName = "test3_SetDisplayFramerate"
         self.qcID = '3'
         self.testStreamFrameRates = ["23.98", "24", "25", "29.97", "30", "50", "59.94", "60"]
-        super().__init__(self.testName, self.qcID)
+        super().__init__(self.testName, self.qcID, log)
 
     def testVerifyDisplayFramerate(self, StreamFrameRate:str, displayFramerate:str, manual=False):
         """
@@ -86,8 +87,6 @@ class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
         Returns:
             bool: Status of the last verification (True if successful, False otherwise).
         """
-
-        self.log.testStart(self.testName, self.qcID)
 
         # Initialize the dsVideoDevice module
         self.testdsVideoDevice.initialise(self.testdsVideoDevice.getDeviceType())
@@ -125,5 +124,7 @@ class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
         return result
 
 if __name__ == '__main__':
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
     test = dsVideoDevice_test3_SetDisplayFramerate()
     test.run(False)

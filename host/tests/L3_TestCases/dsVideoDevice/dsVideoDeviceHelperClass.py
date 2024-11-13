@@ -58,18 +58,24 @@ class dsVideoDeviceHelperClass(utHelperClass):
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
         self.player_session = self.dut.getConsoleSession("ssh_player")
 
-        player = self.cpe.get("test").get("player")
+
+        deviceTestSetup = self.cpe.get("test")
+        socVendor = self.cpe.get("soc_vendor")
 
         # Create player Class
-        self.testPlayer = utPlayer(self.player_session, player)
+        self.testPlayer = utPlayer(self.player_session, socVendor)
 
          # Create user response Class
         self.testUserResponse = utUserResponse()
 
         # Get path to device profile file
-        self.deviceProfile = os.path.join(dir_path, self.cpe.get("test").get("profile"))
 
-        self.deviceDownloadPath = self.cpe.get("target_directory")
+        self.moduleConfigProfileFile = os.path.join(dir_path, deviceTestSetup.get("profile"))
+
+        self.targetWorkspace = self.cpe.get("target_directory")
+        self.targetWorkspace = os.path.join(self.targetWorkspace, self.moduleName)
+        self.streamDownloadURL = deviceTestSetup.get("streams_download_url")
+
 
     def testDownloadAssets(self):
         """
@@ -87,17 +93,13 @@ class dsVideoDeviceHelperClass(utHelperClass):
 
         test = self.testSetup.get("assets").get("device").get(self.testName)
 
-        # Download test artifacts to device
-        url = test.get("artifacts")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
 
         # Download test streams to device
         self.StreamUrl = test.get("streams")
         if(self.StreamUrl and len(self.StreamUrl) == 1):
-            self.downloadToDevice(self.StreamUrl, self.deviceDownloadPath, self.rackDevice)
+            self.downloadToDevice(self.StreamUrl, self.targetWorkspace, self.rackDevice)
             for streampath in self.StreamUrl:
-                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
+                self.testStreams.append(os.path.join(self.targetWorkspace, os.path.basename(streampath)))
 
     def testDownloadSingleStream(self, stream_url) -> str:
         """
@@ -149,11 +151,6 @@ class dsVideoDeviceHelperClass(utHelperClass):
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-        # Run commands as part of test prerequisites
-        prerequisite_cmds = self.cpe.get("test").get("player").get("prerequisites")
-        if prerequisite_cmds is not None:
-            for expcmd in prerequisite_cmds:
-                self.writeCommands(expcmd)
 
     def testPrepareFunction(self):
         """
@@ -175,12 +172,13 @@ class dsVideoDeviceHelperClass(utHelperClass):
         self.testRunPrerequisites()
 
         # Create the dsVideoDevice class
-        self.testdsVideoDevice = dsVideoDeviceClass(self.deviceProfile, self.hal_session)
+        self.testdsVideoDevice = dsVideoDeviceClass(self.moduleConfigProfileFile, self.hal_session, self.targetWorkspace)
 
         return True
 
     def testEndFunction(self, powerOff=True):
         # Clean up the dsVideoDevice instance
+        self.testCleanAssets()
         del self.testdsVideoDevice
 
     def testExceptionCleanUp (self):

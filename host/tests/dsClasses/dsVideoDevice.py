@@ -34,6 +34,7 @@ sys.path.append(os.path.join(dir_path, "../"))
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utSuiteNavigator import UTSuiteNavigatorClass
 from raft.framework.plugins.ut_raft.interactiveShell import InteractiveShell
+from raft.framework.plugins.ut_raft.utBaseUtils import utBaseUtils
 
 class dsVideoZoomMode(Enum):
     dsVIDEO_ZOOM_NONE              = 0
@@ -61,20 +62,32 @@ class dsVideoDeviceClass():
 
     This module provides common extensions for device Settings Videodevice Module.
     """
-    def __init__(self, deviceProfilePath:str, session=None ):
+        
+    def __init__(self, moduleConfigProfileFile :str, session=None, targetWorkspace="/tmp"):
         """
         Initializes the dsVideodevice class function.
         """
         self.moduleName = "dsVideoDevice"
-        self.menuConfig =  os.path.join(dir_path, "dsVideoDevice_test_suite.yml")
+        self.testConfigFile =  os.path.join(dir_path, "dsVideoDevice_testConfig.yml")
         self.testSuite  = "L3 dsVideoDevice"
-        self.deviceProfile = ConfigRead( deviceProfilePath, self.moduleName)
-        self.suitConfig    = ConfigRead(self.menuConfig, self.moduleName)
-        self.utMenu        = UTSuiteNavigatorClass(self.menuConfig, self.moduleName, session)
+
+        self.moduleConfigProfile = ConfigRead( moduleConfigProfileFile , self.moduleName)
+        
+        self.testConfig    = ConfigRead(self.testConfigFile, self.moduleName)
+        self.testConfig.test.execute = os.path.join(targetWorkspace, self.testConfig.test.execute)
+        self.utMenu        = UTSuiteNavigatorClass(self.testConfig, None, session)
         self.testSession   = session
         self.devicePrefix = "VideoDevice"
 
+        self.utils         = utBaseUtils()
+
+        for artifact in self.testConfig.test.artifacts:
+            filesPath = os.path.join(dir_path, artifact)
+            self.utils.rsync(self.testSession, filesPath, targetWorkspace)
+
+
         self.utMenu.start()
+
 
     def searchPattern(self, haystack, pattern):
         """
