@@ -28,12 +28,13 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsFPD.dsFPDHelperClass import dsFPDHelperClass
+from raft.framework.core.logModule import logModule
 from dsClasses.dsFPD import dsFPDState
 
 
 class dsFPD_test01_EnableDisableAndVerifyLEDIndicators(dsFPDHelperClass):
 
-    def __init__(self):
+    def __init__(self,log:logModule=None):
         """
         Initializes the dsFPD_test01_EnableDisableAndVerifyLEDIndicators test .
 
@@ -41,7 +42,8 @@ class dsFPD_test01_EnableDisableAndVerifyLEDIndicators(dsFPDHelperClass):
             None.
         """
         self.testName  = "test01_EnableDisableAndVerifyLEDIndicators"
-        super().__init__(self.testName, '1')
+        self.qcID = '1'
+        super().__init__(self.testName, self.qcID,log)
 
 
 
@@ -51,8 +53,6 @@ class dsFPD_test01_EnableDisableAndVerifyLEDIndicators(dsFPDHelperClass):
         Returns:
             bool: final result of the test.
         """
-
-        self.log.testStart(self.testName, '1')
 
         # initialize the dsFPD module
         self.testdsFPD.initialise()
@@ -91,5 +91,7 @@ class dsFPD_test01_EnableDisableAndVerifyLEDIndicators(dsFPDHelperClass):
         return result
 
 if __name__ == '__main__':
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
     test = dsFPD_test01_EnableDisableAndVerifyLEDIndicators()
     test.run(False)

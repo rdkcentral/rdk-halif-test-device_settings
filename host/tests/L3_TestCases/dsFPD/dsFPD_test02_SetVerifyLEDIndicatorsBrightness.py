@@ -28,12 +28,13 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsFPD.dsFPDHelperClass import dsFPDHelperClass
+from raft.framework.core.logModule import logModule
 from dsClasses.dsFPD import dsFPDState
 
 
 class dsFPD_test02_SetVerifyLEDIndicatorsBrightness(dsFPDHelperClass):
 
-    def __init__(self):
+    def __init__(self,log:logModule=None):
         """
         Initializes the test02_SetVerifyLEDIndicatorsBrightness test .
 
@@ -41,7 +42,8 @@ class dsFPD_test02_SetVerifyLEDIndicatorsBrightness(dsFPDHelperClass):
             None.
         """
         self.testName  = "test02_SetVerifyLEDIndicatorsBrightness"
-        super().__init__(self.testName, '2')
+        self.qcID = '2'
+        super().__init__(self.testName, self.qcID,log)
 
 
     #TODO: Current version supports only manual verification.
@@ -69,8 +71,6 @@ class dsFPD_test02_SetVerifyLEDIndicatorsBrightness(dsFPDHelperClass):
         Returns:
             bool: final result of the test.
         """
-
-        self.log.testStart(self.testName, '2')
 
         # initialize the dsFPD module
         self.testdsFPD.initialise()
@@ -130,5 +130,7 @@ class dsFPD_test02_SetVerifyLEDIndicatorsBrightness(dsFPDHelperClass):
         return result
 
 if __name__ == '__main__':
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
     test = dsFPD_test02_SetVerifyLEDIndicatorsBrightness()
     test.run(False)
