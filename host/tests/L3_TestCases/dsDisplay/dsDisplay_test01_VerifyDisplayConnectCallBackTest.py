@@ -27,7 +27,8 @@ import sys
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsDisplay.dsDisplayHelperClass import dsDisplayHelperClass
+from dsDisplayHelperClass import dsDisplayHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsDisplay_test01_VerifyDisplayConnectCallBackTest(dsDisplayHelperClass):
 
@@ -38,17 +39,18 @@ class dsDisplay_test01_VerifyDisplayConnectCallBackTest(dsDisplayHelperClass):
     downloading necessary test assets, and verifies the display callback events.
     """
 
-    # Class variables
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test01_VerifyDisplayConnectCallBackTest test .
 
         Args:
             None.
         """
+        # Class variables
         self.testEvents = ["CONNECT", "DISCONNECT", "RXSENSE_ON", "RXSENSE_OFF", "HDCPPROTOCOL_CHANGE"]
         self.testName  = "test01_VerifyDisplayConnectCallBackTest"
-        super().__init__(self.testName,'1')
+        self.qcID = '1'
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testRaiseDisplayEvent(self, port, event:str, manual=False):
@@ -76,8 +78,6 @@ class dsDisplay_test01_VerifyDisplayConnectCallBackTest(dsDisplayHelperClass):
             bool: Final result of the test.
         """
 
-        self.log.testStart(self.testName, '1')
-
         # Initialize the dsDisplay module
         self.testdsDisplay.initialise()
 
@@ -98,5 +98,7 @@ class dsDisplay_test01_VerifyDisplayConnectCallBackTest(dsDisplayHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsDisplay_test01_VerifyDisplayConnectCallBackTest()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsDisplay_test01_VerifyDisplayConnectCallBackTest(summeryLog)
     test.run(False)

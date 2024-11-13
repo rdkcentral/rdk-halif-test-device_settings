@@ -53,7 +53,7 @@ class dsDisplayHelperClass(utHelperClass):
 
         super().__init__(testName, qcId, log)
 
-         # Load test setup configuration
+        # Load test setup configuration
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
         # Load test setup configuration
@@ -63,13 +63,15 @@ class dsDisplayHelperClass(utHelperClass):
         #open Hal Session
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
 
+        deviceTestSetup = self.cpe.get("test")
+
          # Create user response Class
         self.testUserResponse = utUserResponse()
 
         # Get path to device profile file
-        self.deviceProfile = os.path.join(dir_path, self.cpe.get("test").get("profile"))
+        self.moduleConfigProfileFile = os.path.join(dir_path, deviceTestSetup.get("profile"))
 
-        self.deviceDownloadPath = self.cpe.get("target_directory")
+        self.targetWorkspace = self.cpe.get("target_directory")
 
     def extractMonitorName(self, edid_data):
         """
@@ -230,10 +232,6 @@ class dsDisplayHelperClass(utHelperClass):
 
         test = self.testSetup.get("assets").get("device").get(self.testName)
 
-        # Download test artifacts to device
-        url = test.get("artifacts")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
         # Run commands as part of test prerequisites
         cmds = test.get("execute")
         if cmds is not None:
@@ -255,11 +253,11 @@ class dsDisplayHelperClass(utHelperClass):
         self.testRunPrerequisites()
 
         # Create the dsDisplay class
-        self.testdsDisplay = dsDisplayClass(self.deviceProfile, self.hal_session)
+        self.testdsDisplay = dsDisplayClass(self.moduleConfigProfileFile, self.hal_session, self.targetWorkspace)
 
         return True
 
     def testEndFunction(self, powerOff=True):
 
-        # Clean up the dsAudio instance
+        # Clean up the dsDisplay instance
         del self.testdsDisplay
