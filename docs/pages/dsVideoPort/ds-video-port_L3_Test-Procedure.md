@@ -106,34 +106,34 @@ Ensure the platform should match with the `DUT` platform in [Rack Configuration]
 
 ```yaml
 deviceConfig:
-  cpe1:
-    platform: "stb"    # Must match the platform in example_rack_config.yml
-    model: "uk"
-    target_directory: "/tmp"  # Path where HAL binaries are copied in device
-    test:
-      profile: "../../../../profiles/source/Source_4K_VideoPort.yaml"
-      player:
-        tool: "gstreamer"
-        prerequisites:
-          - export xxxx    # Pre-commands required to play the stream
+    cpe1:
+        platform: "xi-one"
+        model: "uk"
+        soc_vendor: "realtek"
+        target_directory: "/opt/"  # Target Directory on device
+        prompt: "" # Prompt string on console
+        test:
+            #TODO: Use the single profile file which contains all details (ds, hdmi, etc)
+            profile: "../../../../profiles/source/Source_4K_VideoPort.yaml"
+            streams_download_url: "" #URL path from which the streams are downloaded to the device
 
 ```
 
+- Example Device Config file: [deviceConfig.yml](../../../host/tests/configs/deviceConfig.yml).
+
 #### Test Setup Configuration File
 
-Update the artifact paths from which the binaries should be copied to the device.
+Each test case requires a stream name to be provided if required. If a test case involves multiple streams or requires validation using several streams, ensure that all necessary streams are added sequentially under the specific test case.
 
-Set the execution paths and provide the stream paths for each test case.
+The URL paths for the streams are defined in the [deviceConfig.yml](../../../host/tests/configs/deviceConfig.yml) file, under the parameter `streams_download_url`
 
-If a test case requires multiple streams or needs to be validated using several streams, ensure that all necessary streams are added sequentially for that specific test case.
-
-- Example configuration file: [dsVideoPort_L3_testSetup.yml](../../../host/tests/L3_TestCases/dsVideoPort/dsVideoPort_L3_testSetup.yml).
+- Example configuration file [dsVideoPort_L3_testSetup.yml](../../../host/tests/L3_TestCases/dsVideoPort/dsVideoPort_L3_testSetup.yml).
 
 #### Test Suite Configuration
 
 Update the execute command according to the device path where `HAL` binaries are copied and Update the test suite for each level test case
 
-- Example configuration file: [dsVideoPort_test_suite.yml](../../../host/tests/dsClasses/dsVideoPort_test_suite.yml).
+- Example configuration file: [dsVideoPort_testConfig.yml](../../../host/tests/dsClasses/dsVideoPort_testConfig.yml).
 
 ## Run Test Cases
 
