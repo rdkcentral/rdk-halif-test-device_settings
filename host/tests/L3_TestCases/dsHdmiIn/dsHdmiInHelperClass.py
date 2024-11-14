@@ -71,13 +71,14 @@ class dsHdmiInHelperClass(utHelperClass):
 
         # Set up paths and URLs for device test setup
         deviceTestSetup = self.cpe.get("test")
-        #socVendor = self.cpe.get("soc_vendor")
+        socVendor = self.cpe.get("soc_vendor")
 
         # User response interface for manual testing
         self.testUserResponse = utUserResponse()
 
         # Get path to device profile file
         self.moduleConfigProfileFile = os.path.join(dir_path, deviceTestSetup.get("profile"))
+
         self.targetWorkspace = self.cpe.get("target_directory")
         self.targetWorkspace = os.path.join(self.targetWorkspace, self.moduleName)
 
@@ -181,7 +182,7 @@ class dsHdmiInHelperClass(utHelperClass):
         self.testRunPrerequisites()
 
         # Create the dsHdmiIn class
-        self.testdsHdmiIn = dsHdmiInClass(self.moduleConfigProfileFile, self.hal_session)
+        self.testdsHdmiIn = dsHdmiInClass(self.moduleConfigProfileFile, self.hal_session, self.targetWorkspace)
 
         return True
 

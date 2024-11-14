@@ -26,9 +26,11 @@ import sys
 import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsHdmiIn.dsHdmiInHelperClass import dsHdmiInHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsHdmiIn_test8_SelectPortAndVerifyPortStatus(dsHdmiInHelperClass):
     """
@@ -39,14 +41,15 @@ class dsHdmiIn_test8_SelectPortAndVerifyPortStatus(dsHdmiInHelperClass):
     - Verifies the status of the selected ports.
     """
 
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test8_SelectPortAndVerifyPortStatus test.
 
         Sets the test name and calls the superclass constructor.
         """
         self.testName  = "test8_SelectPortAndVerifyPortStatus"
-        super().__init__(self.testName, '1')
+        self.qcID = '8'
+        super().__init__(self.testName, self.qcID, log)
 
 
     def testFunction(self):
@@ -60,8 +63,6 @@ class dsHdmiIn_test8_SelectPortAndVerifyPortStatus(dsHdmiInHelperClass):
         Returns:
             bool: Final result of the test, indicating success or failure.
         """
-
-        self.log.testStart(self.testName, '1')
 
         # Initialize the dsHdmiIn module
         self.testdsHdmiIn.initialise()
@@ -96,5 +97,7 @@ class dsHdmiIn_test8_SelectPortAndVerifyPortStatus(dsHdmiInHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsHdmiIn_test8_SelectPortAndVerifyPortStatus()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsHdmiIn_test8_SelectPortAndVerifyPortStatus(summeryLog)
     test.run(False)

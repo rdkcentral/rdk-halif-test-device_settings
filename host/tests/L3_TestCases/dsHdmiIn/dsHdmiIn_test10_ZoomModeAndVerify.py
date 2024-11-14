@@ -26,9 +26,11 @@ import sys
 import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsHdmiIn.dsHdmiInHelperClass import dsHdmiInHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsHdmiIn_test10_ZoomModeAndVerify(dsHdmiInHelperClass):
     """
@@ -38,7 +40,7 @@ class dsHdmiIn_test10_ZoomModeAndVerify(dsHdmiInHelperClass):
     to test the zoom modes of HDMI inputs on the device.
     """
 
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test10_ZoomModeAndVerify test .
 
@@ -46,7 +48,8 @@ class dsHdmiIn_test10_ZoomModeAndVerify(dsHdmiInHelperClass):
             None.
         """
         self.testName  = "test10_ZoomModeAndVerify"
-        super().__init__(self.testName, '1')
+        self.qcID = '10'
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def CheckDeviceStatusAndVerifyZoomMode(self, Manual=False, port_type:str=0,videoZoomMode:str=0):
@@ -80,8 +83,6 @@ class dsHdmiIn_test10_ZoomModeAndVerify(dsHdmiInHelperClass):
         - Loops through each supported HDMI port.
         - Selects the port and verifies the zoom modes.
         """
-
-        self.log.testStart(self.testName, '1')
 
         # Initialize the dsHDMIIn module
         self.testdsHdmiIn.initialise()
@@ -122,5 +123,7 @@ class dsHdmiIn_test10_ZoomModeAndVerify(dsHdmiInHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsHdmiIn_test10_ZoomModeAndVerify()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsHdmiIn_test10_ZoomModeAndVerify(summeryLog)
     test.run(False)

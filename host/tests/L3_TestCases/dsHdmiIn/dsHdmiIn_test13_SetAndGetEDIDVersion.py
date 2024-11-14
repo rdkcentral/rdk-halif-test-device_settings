@@ -26,9 +26,11 @@ import sys
 from enum import Enum, auto
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsHdmiIn.dsHdmiInHelperClass import dsHdmiInHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsHdmiIn_test13_SetAndGetEDIDVersion(dsHdmiInHelperClass):
     """
@@ -38,7 +40,7 @@ class dsHdmiIn_test13_SetAndGetEDIDVersion(dsHdmiInHelperClass):
     to test the EDID version settings on HDMI inputs.
     """
 
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test13_SetAndGetEDIDVersion test .
 
@@ -46,7 +48,8 @@ class dsHdmiIn_test13_SetAndGetEDIDVersion(dsHdmiInHelperClass):
             None.
         """
         self.testName  = "test13_SetAndGetEDIDVersion"
-        super().__init__(self.testName, '1')
+        self.qcID = '13'
+        super().__init__(self.testName, self.qcID, log)
 
     def testFunction(self):
         """
@@ -60,8 +63,6 @@ class dsHdmiIn_test13_SetAndGetEDIDVersion(dsHdmiInHelperClass):
         Returns:
             None
         """
-
-        self.log.testStart(self.testName, '1')
 
         # Initialize the dsHDMIIn module
         self.testdsHdmiIn.initialise()
@@ -98,5 +99,7 @@ class dsHdmiIn_test13_SetAndGetEDIDVersion(dsHdmiInHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsHdmiIn_test13_SetAndGetEDIDVersion()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsHdmiIn_test13_SetAndGetEDIDVersion(summeryLog)
     test.run(False)
