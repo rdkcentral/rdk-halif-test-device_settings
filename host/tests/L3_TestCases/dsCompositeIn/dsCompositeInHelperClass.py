@@ -63,7 +63,9 @@ class dsCompositeInHelperClass(utHelperClass):
         # Get path to device profile file
         self.deviceProfile = os.path.join(dir_path, self.cpe.get("test").get("profile"))
 
-        self.deviceDownloadPath = self.cpe.get("target_directory")
+        self.targetWorkspace = self.cpe.get("target_directory")
+        self.targetWorkspace = os.path.join(self.targetWorkspace, self.moduleName)
+        self.streamDownloadURL = self.cpe.get("test").get("streams_download_url")
 
     def testDownloadAssets(self):
         """
@@ -78,20 +80,16 @@ class dsCompositeInHelperClass(utHelperClass):
 
         # List of streams with path
         self.testStreams = []
+        url = []
 
-        test = self.testSetup.get("assets").get("device").get(self.testName)
+        streamPaths = self.testSetup.get("assets").get("device").get(self.testName).get("streams")
 
-        # Download test artifacts to device
-        url = test.get("artifacts")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-
-        url = self.testSetup.get("assets").get("device").get(self.testName).get("streams")
         # Download test streams to device
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            for streampath in url:
-                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
+        if streamPaths and self.streamDownloadURL:
+            for streamPath in streamPaths:
+                url.append(os.path.join(self.streamDownloadURL, streamPath))
+                self.testStreams.append(os.path.join(self.targetWorkspace, os.path.basename(streamPath)))
+            self.downloadToDevice(url, self.targetWorkspace, self.rackDevice)
 
     def testCleanAssets(self):
         """
@@ -144,7 +142,7 @@ class dsCompositeInHelperClass(utHelperClass):
         self.testRunPrerequisites()
 
         # Create the dsCompositeIn class
-        self.testdsCompositeIn = dsCompositeInClass(self.deviceProfile, self.hal_session, self.deviceDownloadPath)
+        self.testdsCompositeIn = dsCompositeInClass(self.deviceProfile, self.hal_session, self.targetWorkspace)
 
         return True
 

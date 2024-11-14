@@ -28,6 +28,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsCompositeInHelperClass import dsCompositeInHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsCompositeIn_test1_VerifyConnect_Callback(dsCompositeInHelperClass):
     """
@@ -37,7 +38,7 @@ class dsCompositeIn_test1_VerifyConnect_Callback(dsCompositeInHelperClass):
     downloading necessary test assets, selecting
     CompositeIn ports, and performing verification of compositeIn output.
     """
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test1_VerifyConnect_Callback test .
 
@@ -45,7 +46,8 @@ class dsCompositeIn_test1_VerifyConnect_Callback(dsCompositeInHelperClass):
             None.
         """
         self.testName  = "test1_VerifyConnect_Callback"
-        super().__init__(self.testName, '1')
+        self.qcID = '1'
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testPlugUnplugtCompositeIn(self, Connect:False, manual=False, port_type:str=0):
@@ -81,8 +83,6 @@ class dsCompositeIn_test1_VerifyConnect_Callback(dsCompositeInHelperClass):
             bool: Final result of the test.
         """
 
-        self.log.testStart("test1_VerifyConnect_Callback", '1')
-
         # Initialize the dsCompositeIn module
         self.testdsCompositeIn.initialise()
 
@@ -115,5 +115,7 @@ class dsCompositeIn_test1_VerifyConnect_Callback(dsCompositeInHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsCompositeIn_test1_VerifyConnect_Callback()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsCompositeIn_test1_VerifyConnect_Callback(summeryLog)
     test.run(False)
