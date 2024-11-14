@@ -34,6 +34,7 @@ sys.path.append(dir_path+"/../")
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utSuiteNavigator import UTSuiteNavigatorClass
 from raft.framework.plugins.ut_raft.interactiveShell import InteractiveShell
+from raft.framework.plugins.ut_raft.utBaseUtils import utBaseUtils
 
 class dsHdmiInPortType(Enum):
       dsHDMI_IN_PORT_0      = 0
@@ -115,16 +116,30 @@ class dsHdmiInClass():
 
     This module provides common extensions for device Settings HdmiIn Module.
     """
-    def __init__(self, deviceProfilePath:str, session=None ):
+    def __init__(self, moduleConfigProfileFile :str, session=None, targetWorkspace="/tmp"):
         """
-        Initializes the dsHdmiIn class function.
+        Initializes the dsHdmiIn class function with configuration settings.
+
+        Args:
+            moduleConfigProfileFile  (str): Path to the device profile configuration file.
+            session: Optional; session object for the user interface.
         """
         self.moduleName    = "dsHdmiIn"
         self.menuConfig    =  os.path.join(dir_path, "dsHdmiIn_test_suite.yml")
         self.testSuite     = "L3 dsHdmiIn"
-        self.deviceProfile = ConfigRead( deviceProfilePath, self.moduleName)
-        self.utMenu        = UTSuiteNavigatorClass(self.menuConfig, self.moduleName, session)
+
+        # Load configurations for device profile and menu
+        self.moduleConfigProfile = ConfigRead( moduleConfigProfileFile , self.moduleName)
+        self.testConfig    = ConfigRead(self.testConfigFile, self.moduleName)
+        self.testConfig.test.execute = os.path.join(targetWorkspace, self.testConfig.test.execute)
+        self.utMenu        = UTSuiteNavigatorClass(self.testConfig, None, session)
         self.testSession   = session
+        self.utils         = utBaseUtils()
+
+        for artifact in self.testConfig.test.artifacts:
+            filesPath = os.path.join(dir_path, artifact)
+            self.utils.rsync(self.testSession, filesPath, targetWorkspace)
+
         self.utMenu.start()
 
     def searchPattern(self, haystack, pattern):

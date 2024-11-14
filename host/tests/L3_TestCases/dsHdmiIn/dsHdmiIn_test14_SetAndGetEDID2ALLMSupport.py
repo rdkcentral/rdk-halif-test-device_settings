@@ -26,9 +26,11 @@ import sys
 from enum import Enum, auto
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsHdmiIn.dsHdmiInHelperClass import dsHdmiInHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsHdmiIn_test14_SetAndGetEDID2ALLMSupport(dsHdmiInHelperClass):
     """
@@ -37,7 +39,7 @@ class dsHdmiIn_test14_SetAndGetEDID2ALLMSupport(dsHdmiInHelperClass):
     This class extends `dsHdmiInHelperClass` and provides functionality
     to test the ALLM (Auto Low Latency Mode) support of EDID 2.
     """
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test14_SetAndGetEDID2ALLMSupport test .
 
@@ -45,7 +47,8 @@ class dsHdmiIn_test14_SetAndGetEDID2ALLMSupport(dsHdmiInHelperClass):
             None.
         """
         self.testName  = "test14_SetAndGetEDID2ALLMSupport"
-        super().__init__(self.testName, '1')
+        self.qcID = '14'
+        super().__init__(self.testName, self.qcID, log)
 
     def testFunction(self):
         """
@@ -59,8 +62,6 @@ class dsHdmiIn_test14_SetAndGetEDID2ALLMSupport(dsHdmiInHelperClass):
         Returns:
             None
         """
-
-        self.log.testStart(self.testName, '1')
 
         # Initialize the dsHDMIIn module
         self.testdsHdmiIn.initialise()
@@ -86,8 +87,13 @@ class dsHdmiIn_test14_SetAndGetEDID2ALLMSupport(dsHdmiInHelperClass):
         #Run postRequisites listed in the test setup configuration file
         self.testRunPostRequisites()
 
+        # Terminate dsHdmiIn Module
+        self.testdsHdmiIn.terminate()
+
         return result
 
 if __name__ == '__main__':
-    test = dsHdmiIn_test14_SetAndGetEDID2ALLMSupport()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsHdmiIn_test14_SetAndGetEDID2ALLMSupport(summeryLog)
     test.run(False)

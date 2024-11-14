@@ -1,13 +1,13 @@
-#!/usr/bin/env python3
 #** *****************************************************************************
+#!/usr/bin/env python3
 # *
 # * If not stated otherwise in this file or this component's LICENSE file the
 # * following copyright and licenses apply:
 # *
 # * Copyright 2024 RDK Management
 # *
-# * Licensed under the Apache License, Version 2.0 (the "License");
 # * you may not use this file except in compliance with the License.
+# * Licensed under the Apache License, Version 2.0 (the "License");
 # * You may obtain a copy of the License at
 # *
 # *
@@ -25,9 +25,11 @@ import os
 import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsHdmiIn.dsHdmiInHelperClass import dsHdmiInHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsHdmiIn_test1_ConnectionCallback_Verify(dsHdmiInHelperClass):
     """
@@ -38,7 +40,7 @@ class dsHdmiIn_test1_ConnectionCallback_Verify(dsHdmiInHelperClass):
     - Confirm status changes on HDMI ports through callbacks.
     """
 
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test1_ConnectionCallback_Verify test case.
         Sets up test-specific variables and initiates the superclass with the test name and quality control ID.
@@ -48,7 +50,8 @@ class dsHdmiIn_test1_ConnectionCallback_Verify(dsHdmiInHelperClass):
         """
         # Class variables
         self.testName  = "test1_ConnectionCallback_Verify"
-        super().__init__(self.testName, '1')
+        self.qcID = '1'
+        super().__init__(self.testName, self.qcID, log)
 
     def testPlugUnplugHDMI(self, port:str, plug:True, manual=False):
 
@@ -86,8 +89,6 @@ class dsHdmiIn_test1_ConnectionCallback_Verify(dsHdmiInHelperClass):
         Returns:
             bool: Final test result, True if all port tests pass, otherwise False.
         """
-
-        self.log.testStart(self.testName, '1')
 
         # Initialize the dsHDMIIn module
         self.testdsHdmiIn.initialise()
@@ -128,5 +129,7 @@ class dsHdmiIn_test1_ConnectionCallback_Verify(dsHdmiInHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsHdmiIn_test1_ConnectionCallback_Verify()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsHdmiIn_test1_ConnectionCallback_Verify(summeryLog)
     test.run(False)
