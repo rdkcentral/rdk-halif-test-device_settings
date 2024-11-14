@@ -27,13 +27,14 @@ import sys
 import re
 from enum import Enum, auto
 
-# Add parent outside of the class directory
+# Add parent directory to the system path for module imports
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(dir_path+"/../")
+sys.path.append(os.path.join(dir_path, "../"))
 
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utSuiteNavigator import UTSuiteNavigatorClass
 from raft.framework.plugins.ut_raft.interactiveShell import InteractiveShell
+from raft.framework.plugins.ut_raft.utBaseUtils import utBaseUtils
 
 class dsVideoPortType(Enum):
     dsVIDEOPORT_TYPE_RF          = 0
@@ -46,6 +47,7 @@ class dsVideoPortType(Enum):
     dsVIDEOPORT_TYPE_HDMI_INPUT  = auto()
     dsVIDEOPORT_TYPE_INTERNAL    = auto()
     dsVIDEOPORT_TYPE_MAX         = auto()
+
 class dsVideoPorthdcp_version(Enum):
     dsHDCP_VERSION_1X            = 0
     dsHDCP_VERSION_2X            = auto()
@@ -108,22 +110,32 @@ class dsVideoScanModeMode(Enum):
 
 class dsVideoPortClass():
 
-    moduleName = "dsVideoPort"
-    menuConfig =  dir_path + "/dsVideoPort_test_suite.yml"
-    testSuite = "L3 dsVideoPort"
-
     """
     Device Settings VideoPort Class
 
     This module provides common extensions for device Settings VideoPort Module.
     """
-    def __init__(self, deviceProfilePath:str, session=None ):
+    def __init__(self, moduleConfigProfileFile :str, session=None, targetWorkspace="/tmp"):
         """
         Initializes the dsVideoPort class function.
         """
-        self.deviceProfile = ConfigRead( deviceProfilePath, self.moduleName)
-        self.utMenu        = UTSuiteNavigatorClass(self.menuConfig, self.moduleName, session)
-        self.menuSession   = session
+        self.moduleName     = "dsVideoPort"
+        self.testConfigFile = os.path.join(dir_path, "dsVideoPort_testConfig.yml")
+        self.testSuite      = "L3 dsVideoPort"
+
+        self.moduleConfigProfile     = ConfigRead(moduleConfigProfileFile , self.moduleName)
+        self.testConfig              = ConfigRead(self.testConfigFile, self.moduleName)
+        self.testConfig.test.execute = os.path.join(targetWorkspace, self.testConfig.test.execute)
+        self.utMenu                  = UTSuiteNavigatorClass(self.testConfig, None, session)
+        self.testSession             = session
+        self.utils                   = utBaseUtils()
+        self.ports                   = self.moduleConfigProfile.fields.get("Ports")
+
+        for artifact in self.testConfig.test.artifacts:
+            filesPath = os.path.join(dir_path, artifact)
+            self.utils.rsync(self.testSession, filesPath, targetWorkspace)
+
+        # Start the user interface menu
         self.utMenu.start()
 
     def extract_output_values(self, result: str, out_pattern: str = r'OUT:[\w_]+:\[([\w_]+)\]') -> list:
@@ -173,7 +185,7 @@ class dsVideoPortClass():
         Example:
             output = read_Callbacks("EndOfResponse")
         """
-        result = self.menuSession.read_until(input_str)
+        result = self.testSession.read_until(input_str)
         return result
 
     def initialise(self, device_type:int=0):
@@ -1195,9 +1207,8 @@ class dsVideoPortClass():
         """
         portLists = []
 
-        ports = self.deviceProfile.get("Ports")
-        for i in range(1, len(ports)+1):
-            entry = ports[i]
+        for i in range(1, len(self.ports)+1):
+            entry = self.ports[i]
             portLists.append([dsVideoPortType(entry['Typeid']).name, entry['Index']])
 
         return portLists
@@ -1214,9 +1225,8 @@ class dsVideoPortClass():
         """
         hdcp_protocol_version = 0
 
-        ports = self.deviceProfile.get("Ports")
-        for i in range(1, len(ports)+1):
-            entry = ports[i]
+        for i in range(1, len(self.ports)+1):
+            entry = self.ports[i]
             hdcp_protocol_version = dsVideoPorthdcp_version(entry['hdcp_protocol_version']).name
 
         return hdcp_protocol_version
@@ -1235,9 +1245,8 @@ class dsVideoPortClass():
         resolutions_list = []
         pixel_res = 0
 
-        ports = self.deviceProfile.get("Ports")
-        for i in range(1, len(ports)+1):
-            entry = ports[i]
+        for i in range(1, len(self.ports)+1):
+            entry = self.ports[i]
             num_supported_resolutions = entry["numSupportedResolutions"]
             supported_resolutions = entry["supportedResolutions"]
             for j in range(1, num_supported_resolutions + 1):
@@ -1278,9 +1287,8 @@ class dsVideoPortClass():
         # Store the resolutions in a list
         aspectRatio_list = []
 
-        ports = self.deviceProfile.get("Ports")
-        for i in range(1, len(ports)+1):
-            entry = ports[i]
+        for i in range(1, len(self.ports)+1):
+            entry = self.ports[i]
             num_supported_resolutions = entry["numSupportedResolutions"]
             supported_resolutions = entry["supportedResolutions"]
             for j in range(1, num_supported_resolutions + 1):
@@ -1306,9 +1314,8 @@ class dsVideoPortClass():
         # Store the resolutions in a list
         stereoScopicMode_list = []
 
-        ports = self.deviceProfile.get("Ports")
-        for i in range(1, len(ports)+1):
-            entry = ports[i]
+        for i in range(1, len(self.ports)+1):
+            entry = self.ports[i]
             num_supported_resolutions = entry["numSupportedResolutions"]
             supported_resolutions = entry["supportedResolutions"]
             for j in range(1, num_supported_resolutions + 1):
@@ -1334,9 +1341,8 @@ class dsVideoPortClass():
         # Store the resolutions in a list
         frameRates_list = []
 
-        ports = self.deviceProfile.get("Ports")
-        for i in range(1, len(ports)+1):
-            entry = ports[i]
+        for i in range(1, len(self.ports)+1):
+            entry = self.ports[i]
             num_supported_resolutions = entry["numSupportedResolutions"]
             supported_resolutions = entry["supportedResolutions"]
             for j in range(1, num_supported_resolutions + 1):
@@ -1362,9 +1368,8 @@ class dsVideoPortClass():
         # Store the resolutions in a list
         scanModes_list = []
 
-        ports = self.deviceProfile.get("Ports")
-        for i in range(1, len(ports)+1):
-            entry = ports[i]
+        for i in range(1, len(self.ports)+1):
+            entry = self.ports[i]
             num_supported_resolutions = entry["numSupportedResolutions"]
             supported_resolutions = entry["supportedResolutions"]
             for j in range(1, num_supported_resolutions + 1):
@@ -1389,9 +1394,9 @@ class dsVideoPortClass():
         """
         supported_HDRformats = []
 
-        ports = self.deviceProfile.get("Ports")
-        for i in range(1, len(ports)+1):
-            entry = ports[i]
+
+        for i in range(1, len(self.ports)+1):
+            entry = self.ports[i]
             hdr_capabilities = entry['hdr_capabilities']
             for hdr_format in dsHDRStandard:
                 if hdr_capabilities & hdr_format.value:  # Check if the format is supported
@@ -1411,7 +1416,7 @@ class dsVideoPortClass():
         """
         color_depth = 0
 
-        color_depth = dsDisplayColorDepth(self.deviceProfile.get("color_depth")).name
+        color_depth = dsDisplayColorDepth(self.moduleConfigProfile.get("color_depth")).name
         return color_depth
 
     def getDeviceType(self):
@@ -1426,7 +1431,7 @@ class dsVideoPortClass():
         """
         portLists = []
 
-        type = self.deviceProfile.get("Type")
+        type = self.moduleConfigProfile.get("Type")
         if type == "sink":
             return 0
         elif type == "source":

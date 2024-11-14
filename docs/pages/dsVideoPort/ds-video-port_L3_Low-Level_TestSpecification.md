@@ -69,11 +69,11 @@ classDiagram
     testControl <|-- ut_raft : inherits
     class ut_raft{
     }
-    ut_raft <|-- L3_TestClasses : inherits
-    L3_TestClasses ..> dsVideoPort : uses
+    ut_raft <|-- L3_TestHelperClass : inherits
+    L3_TestHelperClass ..> dsVideoPort : uses
     note for testControl "uses rackConfig.yaml and deviceConfig.yaml"
     note for dsVideoPort "uses platformProfile.yaml"
-    note for L3_TestClasses "uses testSetupConfig.yaml"
+    note for L3_TestHelperClass "uses testSetupConfig.yaml"
     note for ut_raft "suite Navigator uses testSuite.yaml"
 ```
 
@@ -86,9 +86,8 @@ classDiagram
   - For more details [ut-raft](https://github.com/rdkcentral/ut-raft).
 - **dsVideoPort**
   - This is test helper class which communicates with the `L3` C/C++ test running on the `DUT` through menu
-- **L3_TestClasses**
-  - These are the L3 test case classes
-  - Each class covers the each test use-case defined in [L3 Test use-cases](#level-3-test-cases-high-level-overview) table
+- **L3_TestHelperClass**
+  - Each test class uses HelperClass to write a test case define in [L3 Test use-cases](#level-3-test-cases-high-level-overview).
 
 ### YAML File Inputs
 
@@ -115,7 +114,7 @@ classDiagram
 
 - **testSuite.yaml**
   - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
-  - Example configuration file [dsVideoPort_test_suite.yml](../../../host/tests/dsClasses/dsVideoPort_test_suite.yml)
+  - Example configuration file [dsVideoPort_testConfig.yml](../../../host/tests/dsClasses/dsVideoPort_testConfig.yml)
 
 ## L3 Test Procedure Documentation
 
