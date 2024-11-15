@@ -26,6 +26,7 @@ import sys
 import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
@@ -93,15 +94,6 @@ class dsHdmiInHelperClass(utHelperClass):
         """
         # List of streams with path
         self.testStreams = []
-
-        self.deviceDownloadPath = self.cpe.get("target_directory")
-
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-
-        # Download test artifacts to device
-        url = test.get("artifacts")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
 
     #TODO: Current version supports only manual verification.
     def CheckDeviceStatus(self, manual=False, port_type:str=0):

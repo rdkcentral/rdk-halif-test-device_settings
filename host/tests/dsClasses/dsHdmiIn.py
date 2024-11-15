@@ -21,6 +21,7 @@
 # *
 #* ******************************************************************************
 
+import subprocess
 import yaml
 import os
 import sys
@@ -29,7 +30,7 @@ import re
 
 # Add parent outside of the class directory
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(dir_path+"/../")
+sys.path.append(os.path.join(dir_path, "../"))
 
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utSuiteNavigator import UTSuiteNavigatorClass
@@ -125,7 +126,7 @@ class dsHdmiInClass():
             session: Optional; session object for the user interface.
         """
         self.moduleName    = "dsHdmiIn"
-        self.menuConfig    =  os.path.join(dir_path, "dsHdmiIn_test_suite.yml")
+        self.testConfigFile    =  os.path.join(dir_path, "dsHdmiIn_testConfig.yml")
         self.testSuite     = "L3 dsHdmiIn"
 
         # Load configurations for device profile and menu

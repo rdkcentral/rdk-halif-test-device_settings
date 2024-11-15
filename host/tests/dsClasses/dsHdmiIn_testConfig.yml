@@ -3,7 +3,9 @@
 dsHdmiIn:  # Prefix must always exist
     description: "dHdmiIn Device Settings testing profile / menu system for UT"
     test:
-        execute: "" #Execute command
+        artifacts:
+                 - "../../../bin/"
+        execute: "run.sh" #Execute command
         type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
         suites:
             0:
