@@ -56,7 +56,8 @@ classDiagram
     testControl <|-- ut_raft : inherits
     class ut_raft{
     }
-    ut_raft <|-- L3_TestClasses : inherits
+    ut_raft <|-- dsCompositeInHelperClass : inherits
+    dsCompositeInHelperClass <|-- L3_TestClasses : inherits
     L3_TestClasses ..> dsCompositeIn : uses
     note for testControl "uses rackConfig.yaml and deviceConfig.yaml"
     note for dsCompositeIn "uses platformProfile.yaml"
@@ -100,6 +101,6 @@ classDiagram
   - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams, setting environment variables etc.
   - Example configuration file [dsCompositeIn_L3_testSetup.yml](../../../host/tests/dsCompositeIn_L3_Tests/dsCompositeIn_L3_testSetup.yml)
 
-- **testSuite.yaml**
+- **testConfig.yaml**
   - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
-  - Example configuration file [dsCompositeIn_test_suite.yml](../../../host/tests/dsClasses/dsCompositeIn_test_suite.yml)
+  - Example configuration file [dsCompositeIn_test_suite.yml](../../../host/tests/dsClasses/dsCompositeIn_testConfig.yml)
