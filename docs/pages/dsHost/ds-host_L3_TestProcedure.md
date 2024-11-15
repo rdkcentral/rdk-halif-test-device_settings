@@ -134,7 +134,7 @@ dsHost:
 
 #### Test Suite Configuration
 
-Example Test Setup configuration File: [dsHost_test_suite.yml](../../../host/tests/dsClasses/dsHost_test_suite.yml)
+Example Test Setup configuration File: [dsHost_testConfig.yml](../../../host/tests/dsClasses/dsHost_testConfig.yml)
 
 Update the execute command according to the device path where `HAL` binaries are copied.
 
