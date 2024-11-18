@@ -514,7 +514,14 @@ class dsVideoDeviceClass():
         supported_ZoomModes = []
 
         deviceNum = int(device.replace(self.devicePrefix, "")) + 1
-        zoomModes = self.deviceProfile.get("Device").get(deviceNum).get("SupportedDFCs")
+        
+        device_data = self.deviceProfile.fields.get("Device")
+        if isinstance(device_data, dict):
+            device_entry = device_data.get(deviceNum)
+        if isinstance(device_entry, dict):
+              zoomModes = device_entry.get("SupportedDFCs")
+
+
         if zoomModes is None or zoomModes == 0:
             return supported_ZoomModes
 
