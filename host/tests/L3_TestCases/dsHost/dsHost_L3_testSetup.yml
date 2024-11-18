@@ -11,15 +11,9 @@ dsHost:  # Prefix must always exist
           -  "<URL>/ut_control.so" #URL Path to the .so files if any to copy
           -  "<URL>/run.sh"
         execute:
-          - ""  #prerequisites commands if required
+          - "chmod +x /opt/HAL/dsHost/hal_test"
+          - "chmod +x /opt/HAL/dsHost/run.sh"
         streams:
           - "" #URL path to the test streams
       test1_VerifyTemperature:
-         artifacts:
-          - "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/dsHost/bin/hal_test"
-          - "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/dsHost/bin/libut_control.so"
-          - "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/dsHost/bin/run.sh"
-          - "http://hydra.bskyb.com/shared/Projects/RDK_HAL/HAL_Testing/Element/Demo/DeviceSettings/dsHost/bin/Sink_HostSettings.yaml"
-         execute:
-          - "chmod +x /opt/HAL/dsHost/hal_test"
-          - "chmod +x /opt/HAL/dsHost/run.sh"
+          streams:
