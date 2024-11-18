@@ -34,6 +34,7 @@ sys.path.append(dir_path+"/../")
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utSuiteNavigator import UTSuiteNavigatorClass
 from raft.framework.plugins.ut_raft.interactiveShell import InteractiveShell
+from raft.framework.plugins.ut_raft.utBaseUtils import utBaseUtils
 
 class dsHostClass():
 
@@ -45,10 +46,17 @@ class dsHostClass():
     def __init__(self, moduleConfigProfileFile:str, session=None, targetWorkspace="/tmp" ):
         """
         Initializes the dsHost class function.
+
+        Args:
+            moduleConfigProfileFile  (str): Path to the device profile configuration file.
+            session: Optional; session object for the user interface.
+
+        Returns:
+            None
         """
 
         self.moduleName = "dsHost"
-        self.testConfigFile =  os.path.join(dir_path, "/dsHost_testConfig.yml")
+        self.testConfigFile =  os.path.join(dir_path, "dsHost_testConfig.yml")
         self.testConfig    = ConfigRead(self.testConfigFile, self.moduleName)
         self.testConfig.test.execute = os.path.join(targetWorkspace, self.testConfig.test.execute)
         self.testSuite = "L3 dsHost"
@@ -56,6 +64,7 @@ class dsHostClass():
         self.deviceProfile = ConfigRead( moduleConfigProfileFile, self.moduleName)
         self.utMenu        = UTSuiteNavigatorClass(self.testConfig, None, session)
         self.testSession = session
+        self.utils         = utBaseUtils()
 
         for artifact in self.testConfig.test.artifacts:
             filesPath = os.path.join(dir_path, artifact)
