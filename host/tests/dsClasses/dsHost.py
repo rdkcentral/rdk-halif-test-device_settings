@@ -48,7 +48,8 @@ class dsHostClass():
         """
 
         self.moduleName = "dsHost"
-        self.testConfig =  os.path.join(dir_path, "/dsHost_testConfig.yml")
+        self.testConfigFile =  os.path.join(dir_path, "/dsHost_testConfig.yml")
+        self.testConfig    = ConfigRead(self.testConfigFile, self.moduleName)
         self.testConfig.test.execute = os.path.join(targetWorkspace, self.testConfig.test.execute)
         self.testSuite = "L3 dsHost"
         

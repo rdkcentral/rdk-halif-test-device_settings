@@ -52,7 +52,7 @@ class dsHost_test1_VerifyTemperature(utHelperClass):
         self.qcID = '1'
 
         
-        super().init(self.testName, self.qcID, log)
+        super().__init__(self.testName, self.qcID, log)
 
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
