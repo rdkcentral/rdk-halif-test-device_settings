@@ -5,26 +5,11 @@ dsFPD:  # Prefix must always exist
   description: "dsFPD Device Settings test setup"
   assets:
     device:
-      defaults: &defaults
-        artifacts:
-          - "<PATH>/bin/hal_test"
-          - "<PATH>/bin/libut_control.so"
-          - "<PATH>/profiles/source/Source_FPD.yaml"
-          - "<PATH>/profiles/sink/Sink_FPD.yaml"
-          - "<PATH>/bin/run.sh"
-        execute:
-          - "chmod +x <PATH>/hal_test"
-          - "chmod +x <PATH>/run.sh"
       test01_EnableDisableAndVerifyLEDIndicators:
-        <<: *defaults
       test02_SetVerifyLEDIndicatorsBrightness:
-        <<: *defaults
       test03_SetVerifyLEDIndicatorsBlink:
-        <<: *defaults
       test04_SetVerifyLEDIndicatorsColor:
-        <<: *defaults
       test05_SetVerifyFPPattern:
-        <<: *defaults
 
 
 
