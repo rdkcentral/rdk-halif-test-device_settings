@@ -26,6 +26,7 @@ import sys
 import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsVideoDevice.dsVideoDeviceHelperClass import dsVideoDeviceHelperClass
@@ -100,17 +101,15 @@ class dsVideoDevice_test4_SetAndGetFRFMode(dsVideoDeviceHelperClass):
         for device in SupportedDevices:
             self.testdsVideoDevice.setFRFMode(device, 'Enable')
 
-            for streamUrl, frameRate, exptectedMode in zip(self.StreamUrl, self.testStreamFrameRates, self.exptectedMode):
-                streamPath = self.testDownloadSingleStream(streamUrl)
-                self.testPlayer.play(streamPath)
+            for streamUrl, frameRate, exptectedMode in zip(self.testStreams, self.testStreamFrameRates, self.exptectedMode):
+                streamUrl = streamUrl.replace("\\", "/")
+                self.testPlayer.play(streamUrl)
                 time.sleep(5)
                 self.log.stepStart(f'Check Auto FRF mode device:{device}, Framerate:{frameRate}')
                 result = self.testVerifyFrameRateMode(True, exptectedMode, frameRate, True)
                 self.log.stepResult(result, f'Check Auto FRF mode device:{device}, Framerate:{frameRate}')
 
                 self.testPlayer.stop()
-
-                self.testDeleteSingleStream(streamPath)
 
             self.testdsVideoDevice.setFRFMode(device, 'Disable')
 

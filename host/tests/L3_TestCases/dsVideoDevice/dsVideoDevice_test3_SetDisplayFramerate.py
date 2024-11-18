@@ -26,6 +26,7 @@ import sys
 import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsVideoDevice.dsVideoDeviceHelperClass import dsVideoDeviceHelperClass
@@ -42,8 +43,7 @@ class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
         testSetupPath (str): Path to the test setup configuration file.
         moduleName (str): Name of the module being tested.
         rackDevice (str): Identifier for the device under test.
-    """
-
+    """ 
     def __init__(self, log:logModule=None):
         """
         Initializes the test3_SetDisplayFramerate test .
@@ -55,6 +55,7 @@ class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
         self.qcID = '3'
         self.testStreamFrameRates = ["23.98", "24", "25", "29.97", "30", "50", "59.94", "60"]
         super().__init__(self.testName, self.qcID, log)
+
 
     def testVerifyDisplayFramerate(self, StreamFrameRate:str, displayFramerate:str, manual=False):
         """
@@ -88,6 +89,8 @@ class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
             bool: Status of the last verification (True if successful, False otherwise).
         """
 
+        self.log.testStart(self.testName, self.qcID)
+
         # Initialize the dsVideoDevice module
         self.testdsVideoDevice.initialise(self.testdsVideoDevice.getDeviceType())
 
@@ -103,10 +106,10 @@ class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
             for displayFramerate in supported_framerate:
                 self.testdsVideoDevice.setDisplayFramerate(device, displayFramerate)
 
-                for streamUrl, StreamFrameRate in zip(self.StreamUrl, self.testStreamFrameRates):
+                for streamUrl, StreamFrameRate in zip(self.testStreams, self.testStreamFrameRates):
                     #Download the stream to device
-                    streamPath = self.testDownloadSingleStream(streamUrl)
-                    self.testPlayer.play(streamPath)
+                    streamUrl = streamUrl.replace("\\", "/")
+                    self.testPlayer.play(streamUrl)
                     time.sleep(5)
 
                     self.log.stepStart(f'Check Framerate device:{device}, StreamFrameRate: {StreamFrameRate}, Display Framerate:{displayFramerate}')
@@ -114,9 +117,6 @@ class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
                     self.log.stepResult(result, f'Check Framerate device:{device}, StreamFrameRate: {StreamFrameRate}, Display Framerate:{displayFramerate}')
 
                     self.testPlayer.stop()
-
-                    # Delete the stream
-                    self.testDeleteSingleStream(streamPath)
 
         # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()
