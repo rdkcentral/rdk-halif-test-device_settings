@@ -82,6 +82,14 @@ class dsFPDClass():
     def __init__(self, moduleConfigProfileFile:str, session=None, targetPath = "/tmp" ):
         """
         Initializes the dsFPD class function.
+        
+        Args:
+            moduleConfigProfileFile  (str): Path to the device profile configuration file.
+            session: Optional; session object for the user interface.
+            targetPath: Path on dut for the artifacts.
+
+        Returns:
+            None
         """
         self.moduleName     = "dsFPD"
         self.testConfigFile =  dir_path + "/dsFPD_testConfig.yml"

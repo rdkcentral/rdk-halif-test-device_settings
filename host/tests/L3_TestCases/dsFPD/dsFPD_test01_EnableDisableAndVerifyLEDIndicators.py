@@ -93,5 +93,5 @@ class dsFPD_test01_EnableDisableAndVerifyLEDIndicators(dsFPDHelperClass):
 if __name__ == '__main__':
     summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
     summeryLog = logModule(summerLogName, level=logModule.INFO)
-    test = dsFPD_test01_EnableDisableAndVerifyLEDIndicators()
+    test = dsFPD_test01_EnableDisableAndVerifyLEDIndicators(summeryLog)
     test.run(False)

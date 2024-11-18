@@ -102,5 +102,5 @@ class dsFPD_test03_SetVerifyLEDIndicatorsBlink(dsFPDHelperClass):
 if __name__ == '__main__':
     summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
     summeryLog = logModule(summerLogName, level=logModule.INFO)
-    test = dsFPD_test03_SetVerifyLEDIndicatorsBlink()
+    test = dsFPD_test03_SetVerifyLEDIndicatorsBlink(summeryLog)
     test.run(False)
