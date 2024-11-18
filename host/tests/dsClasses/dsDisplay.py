@@ -258,7 +258,7 @@ class dsDisplayClass():
         """
         portLists= []
 
-        ports = self.deviceProfile.get("Video_Ports")
+        ports = self.moduleConfigProfile.get("Video_Ports")
         for entry in ports:
             video_port_name = dsVideoPortType(entry).name
             port_index =  0# Get the index
