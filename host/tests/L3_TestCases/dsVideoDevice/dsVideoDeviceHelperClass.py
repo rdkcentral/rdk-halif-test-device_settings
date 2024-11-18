@@ -58,7 +58,6 @@ class dsVideoDeviceHelperClass(utHelperClass):
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
         self.player_session = self.dut.getConsoleSession("ssh_player")
 
-
         deviceTestSetup = self.cpe.get("test")
         socVendor = self.cpe.get("soc_vendor")
 
@@ -69,9 +68,9 @@ class dsVideoDeviceHelperClass(utHelperClass):
         self.testUserResponse = utUserResponse()
 
         # Get path to device profile file
-
         self.moduleConfigProfileFile = os.path.join(dir_path, deviceTestSetup.get("profile"))
 
+        #self.targetWorkspace = self.cpe.get("target_directory")
         self.targetWorkspace = self.cpe.get("target_directory")
         self.targetWorkspace = os.path.join(self.targetWorkspace, self.moduleName)
         self.streamDownloadURL = deviceTestSetup.get("streams_download_url")
@@ -90,16 +89,16 @@ class dsVideoDeviceHelperClass(utHelperClass):
 
         # List of streams with path
         self.testStreams = []
+        url = []
 
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-
+        streamPaths = self.testSetup.get("assets").get("device").get(self.testName).get("streams")
 
         # Download test streams to device
-        self.StreamUrl = test.get("streams")
-        if(self.StreamUrl and len(self.StreamUrl) == 1):
-            self.downloadToDevice(self.StreamUrl, self.targetWorkspace, self.rackDevice)
-            for streampath in self.StreamUrl:
-                self.testStreams.append(os.path.join(self.targetWorkspace, os.path.basename(streampath)))
+        if streamPaths and self.streamDownloadURL:
+            for streamPath in streamPaths:
+                url.append(os.path.join(self.streamDownloadURL, streamPath))
+                self.testStreams.append(os.path.join(self.targetWorkspace, os.path.basename(streamPath)))
+            self.downloadToDevice(url, self.targetWorkspace, self.rackDevice)
 
     def testDownloadSingleStream(self, stream_url) -> str:
         """

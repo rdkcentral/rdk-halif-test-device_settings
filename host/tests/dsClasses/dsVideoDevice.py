@@ -71,7 +71,7 @@ class dsVideoDeviceClass():
         self.testConfigFile =  os.path.join(dir_path, "dsVideoDevice_testConfig.yml")
         self.testSuite  = "L3 dsVideoDevice"
 
-        self.moduleConfigProfile = ConfigRead( moduleConfigProfileFile , self.moduleName)
+        self.deviceProfile = ConfigRead( moduleConfigProfileFile , self.moduleName)
         
         self.testConfig    = ConfigRead(self.testConfigFile, self.moduleName)
         self.testConfig.test.execute = os.path.join(targetWorkspace, self.testConfig.test.execute)
@@ -468,10 +468,14 @@ class dsVideoDeviceClass():
         """
 
         deviceNum = int(device.replace(self.devicePrefix, "")) + 1
-        supported_Framerates = self.deviceProfile.get("Device").get(deviceNum).get("SupportedDisplayFramerate")
-
-        return supported_Framerates
-
+        
+        device_data = self.deviceProfile.fields.get("Device")
+        if isinstance(device_data, dict):
+            device_entry = device_data.get(deviceNum)
+        if isinstance(device_entry, dict):
+                return device_entry.get("SupportedDisplayFramerate")
+        
+    
     def getsupportedCodingFormats(self):
         """
         Returns the supported Framerate Formats on device.
