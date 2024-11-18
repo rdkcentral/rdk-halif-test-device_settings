@@ -115,5 +115,5 @@ class dsFPD_test04_SetVerifyLEDIndicatorsColor(dsFPDHelperClass):
 if __name__ == '__main__':
     summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
     summeryLog = logModule(summerLogName, level=logModule.INFO)
-    test = dsFPD_test04_SetVerifyLEDIndicatorsColor()
+    test = dsFPD_test04_SetVerifyLEDIndicatorsColor(summeryLog)
     test.run(False)
