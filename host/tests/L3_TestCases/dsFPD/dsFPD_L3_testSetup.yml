@@ -5,11 +5,18 @@ dsFPD:  # Prefix must always exist
   description: "dsFPD Device Settings test setup"
   assets:
     device:
+      defaults: &defaults
+        execute:
       test01_EnableDisableAndVerifyLEDIndicators:
+        <<: *defaults
       test02_SetVerifyLEDIndicatorsBrightness:
+        <<: *defaults
       test03_SetVerifyLEDIndicatorsBlink:
+        <<: *defaults
       test04_SetVerifyLEDIndicatorsColor:
+        <<: *defaults
       test05_SetVerifyFPPattern:
+        <<: *defaults
 
 
 
