@@ -103,4 +103,4 @@ classDiagram
 
 - **testConfig.yaml**
   - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
-  - Example configuration file [dsCompositeIn_test_suite.yml](../../../host/tests/dsClasses/dsCompositeIn_testConfig.yml)
+  - Example configuration file [dsCompositeIn_testConfig.yml](../../../host/tests/dsClasses/dsCompositeIn_testConfig.yml)
