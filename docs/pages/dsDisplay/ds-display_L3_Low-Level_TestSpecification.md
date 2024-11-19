@@ -54,11 +54,13 @@ classDiagram
     class ut_raft{
     }
     ut_raft <|-- L3_TestClasses : inherits
+    ut_raft <|-- dsDisplayHelperClass : inherits
+    dsDisplayHelperClass <|-- L3_TestClasses : inherits
     L3_TestClasses ..> dsDisplay : uses
     note for testControl "uses rackConfig.yaml and deviceConfig.yaml"
     note for dsDisplay "uses platformProfile.yaml"
     note for L3_TestClasses "uses testSetupConfig.yaml"
-    note for ut_raft "suite Navigator uses testSuite.yaml"
+    note for ut_raft "suite Navigator uses testConfig.yaml"
 ```
 
 - **testControl**
@@ -97,6 +99,6 @@ classDiagram
   - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams, setting environment variables etc.
   - Example configuration file [dsDisplay_L3_testSetup.yml](../../../host/tests/dsDisplay_L3_Tests/dsDisplay_L3_testSetup.yml)
 
-- **testSuite.yaml**
+- **testConfig.yaml**
   - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
-  - Example configuration file [dsDisplay_test_suite.yml](../../../host/tests/dsClasses/dsDisplay_test_suite.yml)
+  - Example configuration file [dsDisplay_testConfig.yml](../../../host/tests/dsClasses/dsDisplay_testConfig.yml)
