@@ -10,6 +10,7 @@
   - [dsFPD_test03_SetVerifyLEDIndicatorsBlink.py](#dsfpd_test03_setverifyledindicatorsblinkpy)
   - [dsFPD_test04_SetVerifyLEDIndicatorsColor.py](#dsfpd_test04_setverifyledindicatorscolorpy)
   - [dsFPD_test05_SetVerifyFPPattern.py](#dsfpd_test05_setverifyfppatternpy)
+  - [dsFPD_L3_Runall.py](#dsfpd_l3_runallpy)
 
 ## Acronyms, Terms and Abbreviations
 
