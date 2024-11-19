@@ -91,11 +91,11 @@ class dsVideoDeviceHelperClass(utHelperClass):
         self.testStreams = []
         url = []
 
-        streamPaths = self.testSetup.get("assets").get("device").get(self.testName).get("streams")
+        self.streamPaths = self.testSetup.get("assets").get("device").get(self.testName).get("streams")
 
         # Download test streams to device
-        if streamPaths and self.streamDownloadURL:
-            for streamPath in streamPaths:
+        if self.streamPaths and self.streamDownloadURL:
+            for streamPath in self.streamPaths:
                 url.append(os.path.join(self.streamDownloadURL, streamPath))
                 self.testStreams.append(os.path.join(self.targetWorkspace, os.path.basename(streamPath)))
             self.downloadToDevice(url, self.targetWorkspace, self.rackDevice)
@@ -109,11 +109,12 @@ class dsVideoDeviceHelperClass(utHelperClass):
         Return:
             Returns the stream path on device
         """
-
+        url=[]
         # Download the specified stream to the device
         if stream_url is not None:
-            self.downloadToDevice([stream_url], self.deviceDownloadPath, self.rackDevice)
-            return os.path.join(self.deviceDownloadPath, os.path.basename(stream_url))
+            url.append(os.path.join(self.streamDownloadURL, stream_url))
+            self.downloadToDevice(url, self.targetWorkspace, self.rackDevice)
+            return os.path.join(self.targetWorkspace, os.path.basename(stream_url))
 
         return None
 

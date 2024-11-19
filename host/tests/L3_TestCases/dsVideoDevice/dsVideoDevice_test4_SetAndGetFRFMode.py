@@ -100,15 +100,17 @@ class dsVideoDevice_test4_SetAndGetFRFMode(dsVideoDeviceHelperClass):
         for device in SupportedDevices:
             self.testdsVideoDevice.setFRFMode(device, 'Enable')
 
-            for streamUrl, frameRate, exptectedMode in zip(self.testStreams, self.testStreamFrameRates, self.exptectedMode):
-                streamUrl = streamUrl.replace("\\", "/")
-                self.testPlayer.play(streamUrl)
+            for streamUrl, frameRate, exptectedMode in zip(self.streamPaths, self.testStreamFrameRates, self.exptectedMode):
+                streamPath = self.testDownloadSingleStream(streamUrl)
+                streamPath = streamPath.replace("\\", "/")
+                self.testPlayer.play(streamPath)
                 time.sleep(5)
                 self.log.stepStart(f'Check Auto FRF mode device:{device}, Framerate:{frameRate}')
                 result = self.testVerifyFrameRateMode(True, exptectedMode, frameRate, True)
                 self.log.stepResult(result, f'Check Auto FRF mode device:{device}, Framerate:{frameRate}')
 
                 self.testPlayer.stop()
+                self.testDeleteSingleStream(streamPath)
 
             self.testdsVideoDevice.setFRFMode(device, 'Disable')
 
@@ -120,5 +122,5 @@ class dsVideoDevice_test4_SetAndGetFRFMode(dsVideoDeviceHelperClass):
 if __name__ == '__main__':
     summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
     summeryLog = logModule(summerLogName, level=logModule.INFO)
-    test = dsVideoDevice_test4_SetAndGetFRFMode()
+    test = dsVideoDevice_test4_SetAndGetFRFMode(summeryLog)
     test.run(False)
