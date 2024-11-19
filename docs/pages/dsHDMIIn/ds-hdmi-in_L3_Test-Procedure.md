@@ -717,13 +717,13 @@ Success Criteria
 
   - Run the Python script **`dsHdmiIn_test11_GetEDIDInfo_Verify.py`**
   - The test will automatically download all required artifacts and streams, copying them to the designated target directory before commencing execution.
-- Edid Info Confirmation:
+  - Edid Info Confirmation:
 
   - Test will get the EDID info and verifies the same.
   - If EDID info is received, it will be compared with the YAML EDID info bytes. If they match, the step will be marked as PASS
   - If EDID info is received, it will be compared with the YAML EDID info bytes. If they does not match, the step will be marked as FAIL
 
-- Repeat for All Ports:
+  - Repeat for All Ports:
 
   The test will iterate through all available Hdmi IN ports, gets EDID and verifies.
 
@@ -766,13 +766,13 @@ This test evaluates the SPD Info received from connected device.
   - Press **Y** if Device is connected (this will mark the step as PASS).
   - Press **N** if user could not connect the device (this will mark the step as FAIL).
 
-- SPD Info Confirmation:
+  - SPD Info Confirmation:
 
   - Test will get the SPD info and verifies the same.
   - If SPD info is received, it will be compared with the YAML SPD info bytes. If they match, the step will be marked as PASS
   - If SPD info is received, it will be compared with the YAML SPD info bytes. If they does not match, the step will be marked as FAIL
 
-- Repeat for All Ports:
+  - Repeat for All Ports:
 
   The test will iterate through all available Hdmi IN ports, gets spdinfo and verifies the same.
 
@@ -806,13 +806,13 @@ This test set EDID version and verifies the same by retrieving the EDID version.
 
   - Run the Python script **`dsHdmiIn_test13_SetAndGetEDIDVersion.py`**
   - The test will automatically download all required artifacts and streams, copying them to the designated target directory before commencing execution.
-- EDID version Verification:
+  - EDID version Verification:
 
   - Test will sets and get the EDID version.
   - If the set and retrieved EDID versions are the same, the test will mark the step as PASS.
   - If the set and retrieved EDID versions do not match, the test will mark the step as FAIL.
 
-- Repeat for All Ports:
+  - Repeat for All Ports:
 
   The test will iterate through all available Hdmi IN ports, sets EDID version and verifies by retrieving EDID version.
 
@@ -846,13 +846,13 @@ This test set ALLM and verifies the same by retrieving the ALLM.
 
   - Run the Python script **`dsHdmiIn_test14_SetAndGetEDID2ALLMSupport.py`**
   - The test will automatically download all required artifacts and streams, copying them to the designated target directory before commencing execution.
-- ALLM version Verification:
+  - ALLM version Verification:
 
   - Test will sets and get the ALLM.
   - If the set and retrieved ALLM support statuses match, the test will mark the step as PASS.
   - If the set and retrieved ALLM support statuses do not match, the test will mark the step as FAIL.
 
-- Repeat for All Ports:
+  - Repeat for All Ports:
 
   The test will iterate through all available Hdmi IN ports, sets ALLM and verifies by retrieving ALLM.
 
@@ -865,4 +865,4 @@ Upon receiving user responses for all ports, the test will conclude and present 
 This python file runs all the tests supported by `sink` devices
 
 ```bash
-python dsHdmiIn_L3_Runall_Sink.py --config </PATH>/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/ut/host/tests/configs/deviceConfig.yml
+python dsHdmiIn_L3_Runall_Sink.py --config /PATH/ut/host/tests/configs/example_rack_config.yml --deviceConfig /PATH/ut/host/tests/configs/deviceConfig.yml
