@@ -96,4 +96,4 @@ classDiagram
 
 - **testSuite.yaml**
   - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
-  - Example configuration file [dsFPD_test_suite.yml](../../../host/tests/dsClasses/dsFPD_test_suite.yml)
+  - Example configuration file [dsFPD_testConfig.yml](../../../host/tests/dsClasses/dsFPD_testConfig.yml)
