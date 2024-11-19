@@ -465,3 +465,11 @@ Success Criteria
 - Test Conclusion:
 
   Upon receiving user responses for all indicators, the test will conclude and present a final result: PASS or FAIL based on the user inputs throughout the test execution.
+
+### dsFPD_L3_Runall.py
+
+This python file runs all the tests supported
+
+```bash
+python dsFPD_L3_Runall.py --config </PATH>/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/ut/host/tests/configs/deviceConfig.yml
+```
