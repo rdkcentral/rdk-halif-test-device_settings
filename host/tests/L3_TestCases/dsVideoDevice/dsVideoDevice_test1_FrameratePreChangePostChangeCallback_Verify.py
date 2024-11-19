@@ -95,9 +95,11 @@ class dsVideoDevice_test1_FrameratePreChangePostChangeCallback_Verify(dsVideoDev
         for device in SupportedDevices:
             self.testdsVideoDevice.setFRFMode(device, 'Enable')
 
-            for streamUrl in self.testStreams:
-                streamUrl = streamUrl.replace("\\", "/")
-                self.testPlayer.play(streamUrl)
+            for streamUrl in self.streamPaths:
+                streamPath = self.testDownloadSingleStream(streamUrl)
+                streamPath = streamPath.replace("\\", "/")
+                self.testPlayer.play(streamPath)
+
                 time.sleep(5)
 
                 self.log.stepStart(f'Check Frame Rate Pre Post Change Callback device:{device}, Stream:{os.path.basename(streamUrl)}')
@@ -118,7 +120,7 @@ class dsVideoDevice_test1_FrameratePreChangePostChangeCallback_Verify(dsVideoDev
 
                 self.testPlayer.stop()
 
-                self.testDeleteSingleStream(streamUrl)
+                self.testDeleteSingleStream(streamPath)
 
             self.testdsVideoDevice.setFRFMode(device, 'Disable')
 
@@ -130,5 +132,5 @@ class dsVideoDevice_test1_FrameratePreChangePostChangeCallback_Verify(dsVideoDev
 if __name__ == '__main__':
     summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
     summeryLog = logModule(summerLogName, level=logModule.INFO)
-    test = dsVideoDevice_test1_FrameratePreChangePostChangeCallback_Verify()
+    test = dsVideoDevice_test1_FrameratePreChangePostChangeCallback_Verify(summeryLog)
     test.run(False)

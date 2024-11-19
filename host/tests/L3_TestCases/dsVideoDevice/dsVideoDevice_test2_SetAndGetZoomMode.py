@@ -85,18 +85,20 @@ class dsVideoDevice_test2_SetAndGetZoomMode(dsVideoDeviceHelperClass):
         SupportedDevices = self.testdsVideoDevice.getSupportedVideoDevice()
         for device in SupportedDevices:
 
-            for stream in self.testStreams:
+            for stream in self.streamPaths:
                 supportedZoomModes = self.testdsVideoDevice.getSupportedZoomModes(device)
 
                 for zoomMode in supportedZoomModes:
-                    stream = stream.replace("\\", "/")
-                    self.testPlayer.play(stream)
+                    streamPath = self.testDownloadSingleStream(stream)
+                    streamPath = streamPath.replace("\\", "/")
+                    self.testPlayer.play(streamPath)
                     self.log.stepStart(f'Zoom Mode test, device:{device}, zoomMode:{zoomMode}')
                     self.testdsVideoDevice.setZoomMode(device, zoomMode)
                     result = self.testVerifyZoomMode(device, zoomMode, True)
                     mode = self.testdsVideoDevice.getZoomMode(device)
                     self.log.stepResult(result and zoomMode in mode, f'Zoom Mode test, device:{device}, zoomMode:{zoomMode}')
                     self.testPlayer.stop()
+                self.testDeleteSingleStream(streamPath)
 
         # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()
@@ -106,5 +108,5 @@ class dsVideoDevice_test2_SetAndGetZoomMode(dsVideoDeviceHelperClass):
 if __name__ == '__main__':
     summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
     summeryLog = logModule(summerLogName, level=logModule.INFO)
-    test = dsVideoDevice_test2_SetAndGetZoomMode()
+    test = dsVideoDevice_test2_SetAndGetZoomMode(summeryLog)
     test.run(False)

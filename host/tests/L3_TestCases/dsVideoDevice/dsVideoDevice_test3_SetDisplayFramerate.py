@@ -88,8 +88,6 @@ class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
             bool: Status of the last verification (True if successful, False otherwise).
         """
 
-        self.log.testStart(self.testName, self.qcID)
-
         # Initialize the dsVideoDevice module
         self.testdsVideoDevice.initialise(self.testdsVideoDevice.getDeviceType())
 
@@ -125,5 +123,5 @@ class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
 if __name__ == '__main__':
     summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
     summeryLog = logModule(summerLogName, level=logModule.INFO)
-    test = dsVideoDevice_test3_SetDisplayFramerate()
+    test = dsVideoDevice_test3_SetDisplayFramerate(summeryLog)
     test.run(False)
