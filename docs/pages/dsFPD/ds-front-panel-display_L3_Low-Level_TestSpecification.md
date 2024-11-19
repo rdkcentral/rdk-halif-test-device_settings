@@ -94,6 +94,6 @@ classDiagram
   - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams, setting environment variables etc.
   - Example configuration file [dsFPD_L3_testSetup.yml](../../../host/tests/L3_TestCases/dsFPD/dsFPD_L3_testSetup.yml)
 
-- **testSuite.yaml**
+- **testConfig.yaml**
   - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
   - Example configuration file [dsFPD_testConfig.yml](../../../host/tests/dsClasses/dsFPD_testConfig.yml)
