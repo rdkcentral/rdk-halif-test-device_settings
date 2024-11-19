@@ -14,9 +14,9 @@
 
 ## Acronyms, Terms and Abbreviations
 
-- `HAL `    - Hardware Abstraction Layer
-- `L3  `    - Level 3 Testing
-- `DUT `    - Device Under Test
+- `HAL`     - Hardware Abstraction Layer
+- `L3`      - Level 3 Testing
+- `DUT`     - Device Under Test
 - `RAFT`    - Rapid Automation Framework for Testing
 - `YAML`    - YAML Ain't Markup Language
 
@@ -74,6 +74,7 @@ Example Device configuration File: [deviceConfig.yml](../../../host/tests/config
 For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_device_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_device_config.yml)
 
 Update below fileds in the device configuration file:
+
 - Set the folder path for `target_directory` where `HAL` binaries will be copied onto the device.
 - Specify the device profile path in `test/profile`
 - Ensure the `platform` should match with the `DUT` `platform` in [Rack Configuration](#rack-configuration-file)
@@ -94,7 +95,7 @@ deviceConfig:
 
 #### Test Setup Configuration File
 
-Example Test Setup configuration File: [dscompositeIn_L3_testSetup.yml](../../..//host/tests/dsCompositeIn_L3_Tests/dsCompositeIn_L3_testSetup.yml)
+Example Test Setup configuration File: [dscompositeIn_L3_testSetup.yml](../../..//host/tests/L3_TestCases/dsCompositeIn/dsCompositeIn_L3_testSetup.yml)
 
 Provide the streams for each test case. This path is appended with `streams_download_url` entry from [Device Configuration File](#device-configuration-file)
 
@@ -130,6 +131,7 @@ python <TestCaseName.py> --config </PATH>/ut/host/tests/configs/example_rack_con
 ```
 
 ## Test Cases
+
 ### dsCompositeIn_test1_VerifyConnect_Callback.py
 
 #### Platform Support - test01
@@ -169,7 +171,7 @@ Success Criteria
 
 - Device connect Confirmation:
 
-  - The test will check if the event has reached the device. 
+  - The test will check if the event has reached the device.
   - If the event is detected will mark the step as PASS
   - If the event is not detected will mark the step as FAIL
 
@@ -182,7 +184,7 @@ Success Criteria
 
 - Device disconnect Confirmation:
 
-  - The test will check if the event has reached the device. 
+  - The test will check if the event has reached the device.
   - If the event detected will mark the step as PASS
   - If the event not detected will mark the step as FAIL
 
@@ -195,6 +197,7 @@ Success Criteria
   Upon receiving user responses for all ports, the test will conclude and present a final result: PASS or FAIL based on the user inputs throughout the test execution.
 
 ### dsCompositeIn_test2_VerifyStatus_Callback.py
+
 #### Platform Support - test02
 
 - Sink
@@ -231,7 +234,7 @@ Success Criteria
 
 - Device status Confirmation:
 
-  - The test will select the port and check if the device status event has reached the device. 
+  - The test will select the port and check if the device status event has reached the device.
   - If the event is detected will mark the step as PASS
   - If the event is not detected will mark the step as FAIL
 
@@ -242,7 +245,9 @@ Success Criteria
 - Test Conclusion:
 
   Upon receiving user responses for all the ports, the test will conclude and present a final result: PASS or FAIL based on the user inputs throughout the test execution.
+
 ### dsCompositeIn_test3_ScaleAndVerify_Video.py
+
 #### Platform Support - test03
 
 - Sink
@@ -257,7 +262,7 @@ Test checks if video scaling happens on video from the Source device connected t
 
 #### Expected Results - test03
 
-The test scales the video playing from compositeIn source device 
+The test scales the video playing from compositeIn source device
 
 Success Criteria
 
@@ -294,7 +299,9 @@ Success Criteria
 - Test Conclusion:
 
   Upon receiving user responses for all ports, the test will conclude and present a final result: PASS or FAIL based on the user inputs throughout the test execution.
+
 ### dsCompositeIn_test4_VerifySignal_Callback.py
+
 #### Platform Support - test04
 
 - Sink
@@ -309,7 +316,7 @@ The test detects the signal status of the compositeIn signal.
 
 #### Expected Results - test04
 
-The test checks the signal change in the composite source 
+The test checks the signal change in the composite source
 
 Success Criteria
 
@@ -331,7 +338,7 @@ Success Criteria
 
 - Signal change confirmation:
 
-  - The test will check if the event has reached the device. 
+  - The test will check if the event has reached the device.
   - If the event is detected will mark the step as PASS
   - If the event is not detected will mark the step as FAIL
 
@@ -344,7 +351,7 @@ Success Criteria
 
 - Signal change confirmation:
 
-  - The test will check if the event has reached the device. 
+  - The test will check if the event has reached the device.
   - If the event is detected will mark the step as PASS
   - If the event is not detected will mark the step as FAIL
 
