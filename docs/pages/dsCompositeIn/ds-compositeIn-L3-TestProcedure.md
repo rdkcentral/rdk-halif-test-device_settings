@@ -90,6 +90,7 @@ deviceConfig:
         test:
             profile: "../../../../profiles/sink/Sink_CompositeInput.yaml"
             streams_download_url: "<URL_Path>" #URL path from which the streams are downloaded to the device
+            prerequisites: #prerequisites if any
 
 ```
 
