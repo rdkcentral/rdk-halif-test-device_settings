@@ -86,7 +86,7 @@ class dsHdmiIn_test11_GetEDIDInfo_Verify(dsHdmiInHelperClass):
             #get EDID Info on particular Hdmi input to true and false
             edid_values = self.testdsHdmiIn.getEdidInfo(port)
             if edid_values:
-                edid_list = self.testdsHdmiIn.deviceProfile.get("edidBytes")
+                edid_list = self.moduleConfigProfile.fields.get("edidBytes")
                 if edid_values[8] == str(edid_list[8]) and edid_values[9] == str(edid_list[9]):
                     self.log.stepResult(True,f'Verified EDID Info received on {port}')
                     result &= True

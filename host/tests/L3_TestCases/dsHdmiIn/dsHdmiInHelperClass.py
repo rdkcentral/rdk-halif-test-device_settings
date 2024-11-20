@@ -30,6 +30,7 @@ sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
+from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.core.logModule import logModule
@@ -71,29 +72,21 @@ class dsHdmiInHelperClass(utHelperClass):
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
 
         # Set up paths and URLs for device test setup
-        deviceTestSetup = self.cpe.get("test")
         socVendor = self.cpe.get("soc_vendor")
+        deviceTestSetup = self.cpe.get("test")
+
+         # Create player 
+        self.testPlayer = utPlayer(self.hal_session, socVendor)
 
         # User response interface for manual testing
         self.testUserResponse = utUserResponse()
 
         # Get path to device profile file
         self.moduleConfigProfileFile = os.path.join(dir_path, deviceTestSetup.get("profile"))
+        self.moduleConfigProfile = ConfigRead( self.moduleConfigProfileFile , self.moduleName)
 
         self.targetWorkspace = self.cpe.get("target_directory")
         self.targetWorkspace = os.path.join(self.targetWorkspace, self.moduleName)
-
-    def testDownloadAssets(self):
-        """
-        Downloads the test artifacts and streams listed in the test setup configuration.
-
-        This function retrieves artifacts and saves them on the DUT (Device Under Test).
-
-        Args:
-            None
-        """
-        # List of streams with path
-        self.testStreams = []
 
     #TODO: Current version supports only manual verification.
     def CheckDeviceStatus(self, manual=False, port_type:str=0):
@@ -137,6 +130,7 @@ class dsHdmiInHelperClass(utHelperClass):
         Args:
             None
         """
+        self.testStreams = []
         self.deleteFromDevice(self.testStreams)
 
     def testRunPrerequisites(self):
@@ -166,9 +160,6 @@ class dsHdmiInHelperClass(utHelperClass):
         Returns:
             bool
         """
-
-        # Download the assets listed in test setup configuration file
-        self.testDownloadAssets()
 
         # Run Prerequisites listed in the test setup configuration file
         self.testRunPrerequisites()
