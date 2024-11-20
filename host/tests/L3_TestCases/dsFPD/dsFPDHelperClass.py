@@ -64,6 +64,7 @@ class dsFPDHelperClass(utHelperClass):
         self.moduleConfigProfileFile = os.path.join(dir_path, self.deviceTestSetup.get("profile"))
 
         self.targetPath = self.cpe.get("target_directory")
+        self.targetPath = os.path.join(self.targetPath, self.moduleName)
 
     #TODO: Current version supports only manual verification.
     def testVerifyIndicator(self, indicator, state, manual=False):
