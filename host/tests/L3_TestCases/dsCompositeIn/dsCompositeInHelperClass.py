@@ -65,40 +65,6 @@ class dsCompositeInHelperClass(utHelperClass):
 
         self.targetWorkspace = self.cpe.get("target_directory")
         self.targetWorkspace = os.path.join(self.targetWorkspace, self.moduleName)
-        self.streamDownloadURL = self.cpe.get("test").get("streams_download_url")
-
-    def testDownloadAssets(self):
-        """
-        Downloads the test artifacts and streams listed in the test setup configuration.
-
-        This function retrieves streams and other necessary files and
-        saves them on the DUT (Device Under Test).
-
-        Args:
-            None
-        """
-
-        # List of streams with path
-        self.testStreams = []
-        url = []
-
-        streamPaths = self.testSetup.get("assets").get("device").get(self.testName).get("streams")
-
-        # Download test streams to device
-        if streamPaths and self.streamDownloadURL:
-            for streamPath in streamPaths:
-                url.append(os.path.join(self.streamDownloadURL, streamPath))
-                self.testStreams.append(os.path.join(self.targetWorkspace, os.path.basename(streamPath)))
-            self.downloadToDevice(url, self.targetWorkspace, self.rackDevice)
-
-    def testCleanAssets(self):
-        """
-        Removes the downloaded assets and test streams from the DUT after test execution.
-
-        Args:
-            None
-        """
-        self.deleteFromDevice(self.testStreams)
 
     def testRunPrerequisites(self):
         """
@@ -135,9 +101,6 @@ class dsCompositeInHelperClass(utHelperClass):
             bool
         """
 
-        # Download the assets listed in test setup configuration file
-        self.testDownloadAssets()
-
         # Run Prerequisites listed in the test setup configuration file
         self.testRunPrerequisites()
 
@@ -149,7 +112,3 @@ class dsCompositeInHelperClass(utHelperClass):
     def testEndFunction(self, powerOff=True):
         # Clean up the dsCompositeIn instance
         del self.testdsCompositeIn
-
-    def testExceptionCleanUp (self):
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
