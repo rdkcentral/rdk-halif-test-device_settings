@@ -141,6 +141,7 @@ This test verifies display event callbacks by connecting and disconnecting a dis
 **Platform Supported:**
 
 - Source
+- Sink
 
 **User Input Required:**
 
