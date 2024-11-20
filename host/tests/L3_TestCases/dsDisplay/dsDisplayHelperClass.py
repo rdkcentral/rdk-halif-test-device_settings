@@ -71,7 +71,8 @@ class dsDisplayHelperClass(utHelperClass):
         # Get path to device profile file
         self.moduleConfigProfileFile = os.path.join(dir_path, deviceTestSetup.get("profile"))
 
-        self.targetPath = self.cpe.get("target_directory")
+        self.targetWorkspace = self.cpe.get("target_directory")
+        self.targetWorkspace = os.path.join(self.targetWorkspace, self.moduleName)
 
     def extractMonitorName(self, edid_data):
         """
@@ -253,7 +254,7 @@ class dsDisplayHelperClass(utHelperClass):
         self.testRunPrerequisites()
 
         # Create the dsDisplay class
-        self.testdsDisplay = dsDisplayClass(self.moduleConfigProfileFile, self.hal_session, self.targetPath)
+        self.testdsDisplay = dsDisplayClass(self.moduleConfigProfileFile, self.hal_session, self.targetWorkspace)
 
         return True
 
