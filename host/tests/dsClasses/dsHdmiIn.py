@@ -130,7 +130,6 @@ class dsHdmiInClass():
         self.testSuite     = "L3 dsHdmiIn"
 
         # Load configurations for device profile and menu
-        self.moduleConfigProfile = ConfigRead( moduleConfigProfileFile , self.moduleName)
         self.testConfig    = ConfigRead(self.testConfigFile, self.moduleName)
         self.testConfig.test.execute = os.path.join(targetWorkspace, self.testConfig.test.execute)
         self.utMenu        = UTSuiteNavigatorClass(self.testConfig, None, session)

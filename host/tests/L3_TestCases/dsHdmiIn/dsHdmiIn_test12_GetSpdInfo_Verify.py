@@ -109,7 +109,7 @@ class dsHdmiIn_test12_GetSpdInfo_Verify(dsHdmiInHelperClass):
             #Getting Spd Info on particular Hdmi input port
             spd_values= self.testdsHdmiIn.getSpdInfo(port)
             if spd_values:
-                spd_list = self.testdsHdmiIn.deviceProfile.get("spdInfo")
+                spd_list = self.moduleConfigProfile.fields.get("spdInfo")
                 if spd_values[13] == str(spd_list[13]) and spd_values[14] == str(spd_list[14]):
                     self.log.stepResult(True,f'Verified SPD Info received on {port}')
                     result &= True
