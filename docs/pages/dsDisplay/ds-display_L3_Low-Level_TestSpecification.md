@@ -37,8 +37,8 @@ Below are the top test use cases for the display.
 |#|Test-case|Description|HAL APIs|Source|Sink|
 |-|---------|-----------|--------|------|----|
 |1|Verify Display Events with callbacks|Connect/disconnect the display device on each port and verify that the callbacks are triggered for display connected, display disconnected, Rx Sense ON, Rx Sense OFF, and HDCP protocol version change events |`dsRegisterDisplayEventCallback()`|`Y`|`Y`|
-|2|Retrieves and interprets EDID information|Connect various pre-defined displays to the device, retrieve their EDID information, and compare it against the expected EDID data |`dsGetEDID()`|`Y`|`Y`|
-|3|Gets the EDID buffer and EDID length|Verify that the edid buffer contains the expected EDID data, and the length is accurate |`dsGetEDIDBytes()`|`Y`|`Y`|
+|2|Retrieves and interprets EDID information|Connect various pre-defined displays to the device, retrieve their EDID information, and compare it against the expected EDID data |`dsGetEDID()`|`Y`|`NA`|
+|3|Gets the EDID buffer and EDID length|Verify that the edid buffer contains the expected EDID data, and the length is accurate |`dsGetEDIDBytes()`|`Y`|`NA`|
 |4|Gets Aspect Ratio |Verify that the aspect ratio of the display is correctly retrieved and matches the expected value for a given configuration |`dsGetDisplayAspectRatio()`|`Y`|`NA`|
 
 ## Level 3 Python Test Cases High Level Overview
@@ -97,7 +97,7 @@ classDiagram
 
 - **testSetupConfig.yaml**
   - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams, setting environment variables etc.
-  - Example configuration file [dsDisplay_L3_testSetup.yml](../../../host/tests/dsDisplay_L3_Tests/dsDisplay_L3_testSetup.yml)
+  - Example configuration file [dsDisplay_L3_testSetup.yml](../../../host/tests/L3_TestCases/dsDisplay/dsDisplay_L3_testSetup.yml)
 
 - **testConfig.yaml**
   - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
