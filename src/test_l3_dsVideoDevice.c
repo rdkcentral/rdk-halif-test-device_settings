@@ -81,6 +81,7 @@
 
 #define DS_ASSERT(actual,expected) assert(actual==expected)
 #define UT_LOG_MENU_INFO UT_LOG_INFO
+#define DS_FRAMERATE_KEY_SIZE 50
 
 intptr_t gdeviceHandle = 0;
 
@@ -90,6 +91,7 @@ int num_of_devices = 1;
 /* Global Variables */
 static int32_t gTestGroup = 3;
 static int32_t gTestID    = 1;
+
 
 // Mapping table for dsError_t
 const static ut_control_keyStringMapping_t  dsErrorMappingTable[] = {
@@ -143,20 +145,6 @@ const static ut_control_keyStringMapping_t dsVideoCodecHevcProfilesMappingTable[
     {NULL, -1}
 };
 
-// Mapping table for dsVideoFrameRate_t
-const static ut_control_keyStringMapping_t dsVideoFrameRateTable[] = {
-    {"dsVIDEO_FRAMERATE_UNKNOWN", (int32_t)dsVIDEO_FRAMERATE_UNKNOWN},
-    {"dsVIDEO_FRAMERATE_24", (int32_t)dsVIDEO_FRAMERATE_24},
-    {"dsVIDEO_FRAMERATE_25", (int32_t)dsVIDEO_FRAMERATE_25},
-    {"dsVIDEO_FRAMERATE_30", (int32_t)dsVIDEO_FRAMERATE_30},
-    {"dsVIDEO_FRAMERATE_60", (int32_t)dsVIDEO_FRAMERATE_60},
-    {"dsVIDEO_FRAMERATE_23dot98", (int32_t)dsVIDEO_FRAMERATE_23dot98},
-    {"dsVIDEO_FRAMERATE_29dot97", (int32_t)dsVIDEO_FRAMERATE_29dot97},
-    {"dsVIDEO_FRAMERATE_50", (int32_t)dsVIDEO_FRAMERATE_50},
-    {"dsVIDEO_FRAMERATE_59dot94", (int32_t)dsVIDEO_FRAMERATE_59dot94},
-    {"dsVIDEO_FRAMERATE_MAX", (int32_t)dsVIDEO_FRAMERATE_MAX},
-    {NULL, -1}
-};
 
 /**
  * @brief This function clears the stdin buffer.
@@ -368,13 +356,12 @@ void test_l3_dsVideoDevice_SetDisplayFramerate()
     gTestID = 3;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
     dsError_t status   = dsERR_NONE;
-    char frameRate[100] = {0};
-    int32_t j = 0;
+    char frameRate[DS_FRAMERATE_KEY_SIZE] = {0};
 
     dsVideoDevice_getHandle();
     
-    UT_LOG_MENU_INFO(" Provided Display Framerate :");
-    scanf("%s", &frameRate);
+    UT_LOG_MENU_INFO(" Provide Display Framerate :");
+    scanf("%s", frameRate);
     readAndDiscardRestOfLine(stdin);
 
     UT_LOG_INFO("Calling dsSetDisplayframerate(IN:Handle:[0x%0X],IN:framerate:[%s])",gdeviceHandle, \
@@ -385,8 +372,7 @@ void test_l3_dsVideoDevice_SetDisplayFramerate()
                         frameRate, UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status, dsERR_NONE);
     
-    exit:
-        UT_LOG_INFO("Out %s", __FUNCTION__);
+    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
 /**
