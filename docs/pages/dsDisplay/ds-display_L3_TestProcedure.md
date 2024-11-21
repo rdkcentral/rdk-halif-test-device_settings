@@ -13,6 +13,7 @@
   - [dsDisplay_test03_AspectRatioVerificationTest.py](#dsdisplay_test03_aspectratioverificationtestpy)
   - [dsDisplay_test04_TestVerifyDisplayEdidBytes.py](#dsdisplay_test04_testverifydisplayedidbytes)
   - [dsDisplay_L3_Runall_Source.py](#dsdisplay_l3_runall_sourcepy)
+  - [dsDisplay_L3_Runall_Sink.py](#dsdisplay_l3_runall_sinkpy)
 
 ## Overview
 
@@ -310,4 +311,12 @@ This python file runs all the tests supported by `source` devices
 
 ```bash
 python dsDisplay_L3_Runall_Source.py  --config </PATH>/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/ut/host/tests/configs/deviceConfig.yml
+```
+
+### dsDisplay_L3_Runall_Sink.py 
+
+This python file runs all the tests supported by `sink` devices
+
+```bash
+python dsDisplay_L3_Runall_Sink.py  --config </PATH>/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/ut/host/tests/configs/deviceConfig.yml
 ```
