@@ -259,9 +259,11 @@ class dsDisplayClass():
         portLists= []
 
         ports = self.moduleConfigProfile.get("Video_Ports")
-        for entry in ports:
-            video_port_name = dsVideoPortType(entry).name
-            port_index =  0# Get the index
+        indices = self.moduleConfigProfile.get("VideoPort_Index")
+
+        for i, port in enumerate(ports):
+            video_port_name = dsVideoPortType(port).name
+            port_index = indices[i]
             portLists.append((video_port_name, port_index))
 
         return portLists
