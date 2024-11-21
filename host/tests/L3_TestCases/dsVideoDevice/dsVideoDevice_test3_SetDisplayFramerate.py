@@ -103,10 +103,11 @@ class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
             for displayFramerate in supported_framerate:
                 self.testdsVideoDevice.setDisplayFramerate(device, displayFramerate)
 
-                for streamUrl, StreamFrameRate in zip(self.testStreams, self.testStreamFrameRates):
+                for streamUrl, StreamFrameRate in zip(self.streamPaths, self.testStreamFrameRates):
                     #Download the stream to device
-                    streamUrl = streamUrl.replace("\\", "/")
-                    self.testPlayer.play(streamUrl)
+                    streamPath = self.testDownloadSingleStream(streamUrl)
+                    streamPath = streamPath.replace("\\", "/")
+                    self.testPlayer.play(streamPath)
                     time.sleep(5)
 
                     self.log.stepStart(f'Check Framerate device:{device}, StreamFrameRate: {StreamFrameRate}, Display Framerate:{displayFramerate}')
@@ -114,6 +115,8 @@ class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
                     self.log.stepResult(result, f'Check Framerate device:{device}, StreamFrameRate: {StreamFrameRate}, Display Framerate:{displayFramerate}')
 
                     self.testPlayer.stop()
+                    # Delete the stream
+                    self.testDeleteSingleStream(streamPath)
 
         # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()

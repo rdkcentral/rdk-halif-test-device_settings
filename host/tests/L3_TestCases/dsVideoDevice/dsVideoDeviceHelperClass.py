@@ -76,31 +76,7 @@ class dsVideoDeviceHelperClass(utHelperClass):
         self.streamDownloadURL = deviceTestSetup.get("streams_download_url")
 
 
-    def testDownloadAssets(self):
-        """
-        Downloads the test artifacts and streams listed in the test setup configuration.
-
-        This function retrieves audio streams and other necessary files and
-        saves them on the DUT (Device Under Test).
-
-        Args:
-            None
-        """
-
-        # List of streams with path
-        self.testStreams = []
-        url = []
-
-        self.streamPaths = self.testSetup.get("assets").get("device").get(self.testName).get("streams")
-
-        # Download test streams to device
-        if self.streamPaths and self.streamDownloadURL:
-            for streamPath in self.streamPaths:
-                url.append(os.path.join(self.streamDownloadURL, streamPath))
-                self.testStreams.append(os.path.join(self.targetWorkspace, os.path.basename(streamPath)))
-            self.downloadToDevice(url, self.targetWorkspace, self.rackDevice)
-
-    def testDownloadSingleStream(self, stream_url) -> str:
+    def testDownloadSingleStream(self, stream_url:str="") -> str:
         """
         Downloads a single stream listed in the test-setup configuration file to the dut.
 
@@ -110,11 +86,15 @@ class dsVideoDeviceHelperClass(utHelperClass):
             Returns the stream path on device
         """
         url=[]
+        self.testStreams = []
+        if stream_url == "":
+            self.streamPaths = self.testSetup.get("assets").get("device").get(self.testName).get("streams")
         # Download the specified stream to the device
-        if stream_url is not None:
+        if stream_url != "":
             url.append(os.path.join(self.streamDownloadURL, stream_url))
+            self.testStreams.append(os.path.join(self.targetWorkspace, os.path.basename(stream_url)))
             self.downloadToDevice(url, self.targetWorkspace, self.rackDevice)
-            return os.path.join(self.targetWorkspace, os.path.basename(stream_url))
+            return self.testStreams[0]
 
         return None
 
@@ -136,21 +116,6 @@ class dsVideoDeviceHelperClass(utHelperClass):
         """
         self.deleteFromDevice(self.testStreams)
 
-    def testRunPrerequisites(self):
-        """
-        Executes prerequisite commands listed in the test setup configuration file on the DUT.
-
-        Args:
-            None
-        """
-
-        # Run commands as part of test prerequisites
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("execute")
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
-
 
     def testPrepareFunction(self):
         """
@@ -165,11 +130,7 @@ class dsVideoDeviceHelperClass(utHelperClass):
             bool
         """
 
-        # Download the assets listed in test setup configuration file
-        self.testDownloadAssets()
-
-        # Run Prerequisites listed in the test setup configuration file
-        self.testRunPrerequisites()
+        self.testDownloadSingleStream()
 
         # Create the dsVideoDevice class
         self.testdsVideoDevice = dsVideoDeviceClass(self.moduleConfigProfileFile, self.hal_session, self.targetWorkspace)

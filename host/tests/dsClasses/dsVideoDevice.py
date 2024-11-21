@@ -185,7 +185,7 @@ class dsVideoDeviceClass():
                 },
                 {
                     "query_type": "direct",
-                    "query": " Provided Display Framerate :",
+                    "query": " Provide Display Framerate :",
                     "input": framerate
                 }
         ]
