@@ -87,22 +87,6 @@ class dsFPDHelperClass(utHelperClass):
             return False
 
 
-    def testRunPrerequisites(self):
-        """
-        Executes prerequisite commands listed in the test setup configuration file on the DUT.
-
-        Args:
-            None
-        """
-        
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-
-        # Run commands as part of test prerequisites
-        cmds = test.get("execute")
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
-
     def testPrepareFunction(self):
         """
         Prepares the environment and assets required for the test.
@@ -116,7 +100,6 @@ class dsFPDHelperClass(utHelperClass):
             bool
         """
 
-        self.testRunPrerequisites()
         # Create the dsFPD class
         self.testdsFPD = dsFPDClass(self.moduleConfigProfileFile, self.hal_session, self.targetPath)
 
