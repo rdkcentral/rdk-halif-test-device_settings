@@ -151,8 +151,6 @@ class dsHdmiIn_test05_AllmChangeCallback_Verify(dsHdmiInHelperClass):
             result &= self.verify_allm_status(port, "False")
 
         self.log.stepResult(result,f"ALLM mode: Verified ")
-        # Run postRequisites listed in the test setup configuration file
-        self.testRunPostRequisites()
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()

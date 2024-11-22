@@ -90,8 +90,6 @@ class dsHdmiIn_test13_SetAndGetEDIDVersion(dsHdmiInHelperClass):
                         result &= False
 
         self.log.stepResult(result,f"Verified EDID Version ")
-        #Run postRequisites listed in the test setup configuration file
-        self.testRunPostRequisites()
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()

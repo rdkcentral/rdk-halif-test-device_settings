@@ -131,8 +131,6 @@ class dsHdmiIn_test04_VideoModeChangeCallback_Verify(dsHdmiInHelperClass):
 
 
         self.log.stepResult(result,f"Verified Video modes ")
-        #Run postRequisites listed in the test setup configuration file
-        self.testRunPostRequisites()
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()

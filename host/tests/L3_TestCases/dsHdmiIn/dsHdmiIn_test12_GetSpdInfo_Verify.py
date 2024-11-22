@@ -121,8 +121,6 @@ class dsHdmiIn_test12_GetSpdInfo_Verify(dsHdmiInHelperClass):
                 result &= False
 
         self.log.stepResult(result,f"Verified SPD Info ")
-        #Run postRequisites listed in the test setup configuration file
-        self.testRunPostRequisites()
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()

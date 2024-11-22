@@ -84,9 +84,6 @@ class dsHdmiIn_test14_SetAndGetEDID2ALLMSupport(dsHdmiInHelperClass):
                     self.log.stepResult(False,f'Verified get ALLM:{allmStatus} set ALLM same')
                     result &= False
 
-        #Run postRequisites listed in the test setup configuration file
-        self.testRunPostRequisites()
-
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()
 
