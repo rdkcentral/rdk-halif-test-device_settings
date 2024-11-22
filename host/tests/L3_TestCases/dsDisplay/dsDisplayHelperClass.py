@@ -224,34 +224,16 @@ class dsDisplayHelperClass(utHelperClass):
 
         return edidInfo
 
-    def testRunPrerequisites(self):
-        """
-        Executes prerequisite commands listed in the test setup configuration file on the DUT.
-        Args:
-            None
-        """
-
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-
-        # Run commands as part of test prerequisites
-        cmds = test.get("execute")
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
-
     def testPrepareFunction(self):
         """
         Prepares the environment and assets required for the test.
 
         This function:
-        - Runs the prerequisite commands.
         - Creates dsDisplayClass
 
         Returns:
             bool
         """
-        # Run Prerequisites listed in the test setup configuration file
-        self.testRunPrerequisites()
 
         # Create the dsDisplay class
         self.testdsDisplay = dsDisplayClass(self.moduleConfigProfileFile, self.hal_session, self.targetWorkspace)
