@@ -113,6 +113,9 @@ class dsHdmiIn_test12_GetSpdInfo_Verify(dsHdmiInHelperClass):
                 if spd_values[13] == str(spd_list[13]) and spd_values[14] == str(spd_list[14]):
                     self.log.stepResult(True,f'Verified SPD Info received on {port}')
                     result &= True
+                else:
+                    self.log.stepResult(False,f'Wrong SPD Info received on {port}')
+                    result &= False
             else:
                 self.log.stepResult(False,f'SPD Info Not received on {port}')
                 result &= False

@@ -34,7 +34,7 @@ sys.path.append(os.path.join(dir_path, "../../"))
 from L3_TestCases.dsHdmiIn.dsHdmiInHelperClass import dsHdmiInHelperClass
 from raft.framework.core.logModule import logModule
 
-class dsHdmiIn_test4_VideoModeChangeCallback_Verify(dsHdmiInHelperClass):
+class dsHdmiIn_test04_VideoModeChangeCallback_Verify(dsHdmiInHelperClass):
     """
     A test class to verify video mode change callbacks for HDMI input devices.
 
@@ -45,12 +45,12 @@ class dsHdmiIn_test4_VideoModeChangeCallback_Verify(dsHdmiInHelperClass):
 
     def __init__(self, log:logModule=None):
         """
-        Initializes the dsHdmiIn_test4_VideoModeChangeCallback_Verify test case.
+        Initializes the dsHdmiIn_test04_VideoModeChangeCallback_Verify test case.
 
         Sets the test name and calls the superclass constructor.
         """
         # Class variables
-        self.testName  = "test4_VideoModeChangeCallback_Verify"
+        self.testName  = "test04_VideoModeChangeCallback_Verify"
         self.qcID = '4'
         super().__init__(self.testName, self.qcID, log)
 
@@ -142,5 +142,5 @@ class dsHdmiIn_test4_VideoModeChangeCallback_Verify(dsHdmiInHelperClass):
 if __name__ == '__main__':
     summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
     summeryLog = logModule(summerLogName, level=logModule.INFO)
-    test = dsHdmiIn_test4_VideoModeChangeCallback_Verify(summeryLog)
+    test = dsHdmiIn_test04_VideoModeChangeCallback_Verify(summeryLog)
     test.run(False)

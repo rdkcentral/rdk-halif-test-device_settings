@@ -33,7 +33,7 @@ sys.path.append(os.path.join(dir_path, "../../"))
 from L3_TestCases.dsHdmiIn.dsHdmiInHelperClass import dsHdmiInHelperClass
 from raft.framework.core.logModule import logModule
 
-class dsHdmiIn_test5_AllmChangeCallback_Verify(dsHdmiInHelperClass):
+class dsHdmiIn_test05_AllmChangeCallback_Verify(dsHdmiInHelperClass):
     """
     A test class to verify the Auto Low Latency Mode (ALLM) change callbacks for HDMI input devices.
 
@@ -44,11 +44,11 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(dsHdmiInHelperClass):
 
     def __init__(self, log:logModule=None):
         """
-        Initializes the dsHdmiIn_test5_AllmChangeCallback_Verify test case.
+        Initializes the dsHdmiIn_test05_AllmChangeCallback_Verify test case.
 
         Sets the test name and calls the superclass constructor.
         """
-        self.testName  = "test5_AllmChangeCallback_Verify"
+        self.testName  = "test05_AllmChangeCallback_Verify"
         self.qcID = '5'
         super().__init__(self.testName, self.qcID, log)
 
@@ -162,5 +162,5 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(dsHdmiInHelperClass):
 if __name__ == '__main__':
     summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
     summeryLog = logModule(summerLogName, level=logModule.INFO)
-    test = dsHdmiIn_test5_AllmChangeCallback_Verify(summeryLog)
+    test = dsHdmiIn_test05_AllmChangeCallback_Verify(summeryLog)
     test.run(False)
