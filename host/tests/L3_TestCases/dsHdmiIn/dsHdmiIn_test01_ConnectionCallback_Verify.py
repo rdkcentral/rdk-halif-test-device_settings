@@ -31,7 +31,7 @@ sys.path.append(os.path.join(dir_path, "../../"))
 from L3_TestCases.dsHdmiIn.dsHdmiInHelperClass import dsHdmiInHelperClass
 from raft.framework.core.logModule import logModule
 
-class dsHdmiIn_test1_ConnectionCallback_Verify(dsHdmiInHelperClass):
+class dsHdmiIn_test01_ConnectionCallback_Verify(dsHdmiInHelperClass):
     """
     A test class to verify HDMI connection and disconnection events through callbacks on the Device Under Test (DUT).
 
@@ -42,14 +42,14 @@ class dsHdmiIn_test1_ConnectionCallback_Verify(dsHdmiInHelperClass):
 
     def __init__(self, log:logModule=None):
         """
-        Initializes the test1_ConnectionCallback_Verify test case.
+        Initializes the test01_ConnectionCallback_Verify test case.
         Sets up test-specific variables and initiates the superclass with the test name and quality control ID.
 
         Args:
             None.
         """
         # Class variables
-        self.testName  = "test1_ConnectionCallback_Verify"
+        self.testName  = "test01_ConnectionCallback_Verify"
         self.qcID = '1'
         super().__init__(self.testName, self.qcID, log)
 
@@ -131,5 +131,5 @@ class dsHdmiIn_test1_ConnectionCallback_Verify(dsHdmiInHelperClass):
 if __name__ == '__main__':
     summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
     summeryLog = logModule(summerLogName, level=logModule.INFO)
-    test = dsHdmiIn_test1_ConnectionCallback_Verify(summeryLog)
+    test = dsHdmiIn_test01_ConnectionCallback_Verify(summeryLog)
     test.run(False)

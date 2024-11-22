@@ -32,7 +32,7 @@ sys.path.append(os.path.join(dir_path, "../../"))
 from L3_TestCases.dsHdmiIn.dsHdmiInHelperClass import dsHdmiInHelperClass
 from raft.framework.core.logModule import logModule
 
-class dsHdmiIn_test9_ScaleVideoAndVerify(dsHdmiInHelperClass):
+class dsHdmiIn_test09_ScaleVideoAndVerify(dsHdmiInHelperClass):
     """
     A test class for scaling HDMI input video and verifying the scaling status.
 
@@ -42,12 +42,12 @@ class dsHdmiIn_test9_ScaleVideoAndVerify(dsHdmiInHelperClass):
 
     def __init__(self, log:logModule=None):
         """
-        Initializes the test9_ScaleVideoAndVerify test .
+        Initializes the test09_ScaleVideoAndVerify test .
 
         Args:
             None.
         """
-        self.testName  = "test9_ScaleVideoAndVerify"
+        self.testName  = "test09_ScaleVideoAndVerify"
         self.qcID = '9'
         super().__init__(self.testName, self.qcID, log)
 
@@ -123,5 +123,5 @@ class dsHdmiIn_test9_ScaleVideoAndVerify(dsHdmiInHelperClass):
 if __name__ == '__main__':
     summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
     summeryLog = logModule(summerLogName, level=logModule.INFO)
-    test = dsHdmiIn_test9_ScaleVideoAndVerify(summeryLog)
+    test = dsHdmiIn_test09_ScaleVideoAndVerify(summeryLog)
     test.run(False)

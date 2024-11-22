@@ -33,33 +33,56 @@ sys.path.append(os.path.join(dir_path, "../../"))
 from L3_TestCases.dsHdmiIn.dsHdmiInHelperClass import dsHdmiInHelperClass
 from raft.framework.core.logModule import logModule
 
-class dsHdmiIn_test6_AVlatencyCallback_Verify(dsHdmiInHelperClass):
+class dsHdmiIn_test07_AVIChangeCallback_Verify(dsHdmiInHelperClass):
     """
-    A test class to verify the audio-video latency callback for HDMI input devices.
+    A test class to verify AVI content change callbacks for HDMI input devices.
 
     This class inherits from `dsHdmiInHelperClass` and focuses on:
-    - Verifying the audio and video latency updates through callback mechanisms.
+    - Verifying the status of AVI content changes through callback mechanisms.
     """
 
 
     def __init__(self, log:logModule=None):
         """
-        Initializes the dsHdmiIn_test6_AVlatencyCallback_Verify test case.
+        Initializes the dsHdmiIn_test07_AVIChangeCallback_Verify test.
 
         Sets the test name and calls the superclass constructor.
         """
-        self.testName  = "test6_AVlatencyCallback_Verify"
-        self.qcID = '6'
+        self.testName  = "test07_AVIChangeCallback_Verify"
+        self.qcID = '7'
         super().__init__(self.testName, self.qcID, log)
+
+    def CheckDeviceStatus(self, manual=False, port_type:str=0, avi_input:str=0):
+        """
+        Verifies whether the HDMI input device is connected and active.
+
+        Args:
+            manual (bool, optional): Manual verification (True: manual, False: automated).
+                                     Defaults to automated verification.
+            port_type (str, optional): The type of the port being checked.
+            avi_input (str, optional): Indicates whether to check AVI input status.
+
+        Returns:
+            bool: True if the device is connected and verified; False otherwise.
+        """
+        if manual == True and avi_input != True:
+            self.testUserResponse.getUserYN(f'Please connect the {port_type} and press Enter:')
+            time.sleep(3)
+            return self.testUserResponse.getUserYN(f'Is HdmiIn device connected and Displayed is ON {port_type} press Y/N:')
+        elif manual == True and avi_input == True:
+            return self.testUserResponse.getUserYN(f'Change the AVI Content on device connected to {port_type} and press Enter:')
+        else :
+            #TODO: Add automation verification methods
+            return False
 
     def testFunction(self):
         """
-        The main test function that verifies audio-video latency of HDMI input devices.
+        The main test function that verifies the AVI content change status of HDMI input devices.
 
         This function:
         - Initializes the HDMI input module.
-        - Loops through each supported HDMI input port to verify latency.
-        - Logs the results of the latency verification.
+        - Loops through each supported HDMI input port to verify the AVI content.
+        - Logs the results of the AVI content verification.
 
         Returns:
             bool: True if all checks are successful, otherwise False.
@@ -75,27 +98,22 @@ class dsHdmiIn_test6_AVlatencyCallback_Verify(dsHdmiInHelperClass):
             self.log.step(f'Select {port} Port')
 
             # Check the HdmiIn device is active
-            status = self.CheckDeviceStatus(True,port)
+            status = self.CheckDeviceStatus(True, port, False)
             if not status:
                 self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
                 time.sleep(5)
                 self.log.step(f'Port Selected {port}')
-            self.testUserResponse.getUserYN(f'Change the AV content for latency on {port} press Y/N:')
-            avLatency = self.testdsHdmiIn.getAVlatencyCallbackStatus()
-            if avLatency != None:
-                self.log.step(f'audio_latency:{avLatency[0]}ms, videoLatency:{avLatency[1]}ms found in Callback')
-                status = self.testUserResponse.getUserYN(f'Is AV Latency is changed on {port} press Y/N:')
-                if status:
-                    self.log.stepResult(True,f' AV latency callback found & Change is observed in port: {port}')
-                    result &= True
-                else:
-                    self.log.stepResult(False,f' AV latency callback found & Change is Not observed in port: {port}')
-                    result &= False
+            self.CheckDeviceStatus(True, port, True)
+            time.sleep(5)
+            aviStatus = self.testdsHdmiIn.getAVIContentCallbackStatus()
+            if aviStatus != None and aviStatus[0] == port:
+                self.log.stepResult(True,f'AVI content type:{aviStatus[1]} on port:{aviStatus[0]} found')
+                result &= True
             else:
-                self.log.step(f'No AV latency callback found in port: {port}')
+                self.log.stepResult(False,f'AVI content callback not found on port:{port}')
                 result &= False
 
-        self.log.stepResult(result,f"AV Latency is change Verified ")
+        self.log.stepResult(result,f"AVI content type Verified ")
         #Run postRequisites listed in the test setup configuration file
         self.testRunPostRequisites()
 
@@ -107,5 +125,5 @@ class dsHdmiIn_test6_AVlatencyCallback_Verify(dsHdmiInHelperClass):
 if __name__ == '__main__':
     summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
     summeryLog = logModule(summerLogName, level=logModule.INFO)
-    test = dsHdmiIn_test6_AVlatencyCallback_Verify(summeryLog)
+    test = dsHdmiIn_test07_AVIChangeCallback_Verify(summeryLog)
     test.run(False)

@@ -23,7 +23,7 @@
 
 import os
 import sys
-from enum import Enum, auto
+import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path))
@@ -32,46 +32,40 @@ sys.path.append(os.path.join(dir_path, "../../"))
 from L3_TestCases.dsHdmiIn.dsHdmiInHelperClass import dsHdmiInHelperClass
 from raft.framework.core.logModule import logModule
 
-class dsHdmiIn_test3_PortStatusCallback_Verify(dsHdmiInHelperClass):
+class dsHdmiIn_test08_SelectPortAndVerifyPortStatus(dsHdmiInHelperClass):
     """
-    A test class to verify the port status callbacks from HDMI input devices.
+    A test class for selecting HDMI input ports and verifying their status.
 
-    This class inherits from `dsHdmiInHelperClass` and is responsible for:
-    - Checking the status of HDMI input ports.
-    - Verifying that the status callbacks accurately reflect the active ports.
+    This class extends the `dsHdmiInHelperClass` and performs the following:
+    - Selects supported HDMI input ports.
+    - Verifies the status of the selected ports.
     """
 
     def __init__(self, log:logModule=None):
         """
-        Initializes the dsHdmiIn_test3_PortStatusCallback_Verify test case.
+        Initializes the test08_SelectPortAndVerifyPortStatus test.
 
-        Sets the test name and invokes the superclass constructor.
+        Sets the test name and calls the superclass constructor.
         """
-        self.testName  = "test3_PortStatusCallback_Verify"
-        self.qcID = '3'
+        self.testName  = "test08_SelectPortAndVerifyPortStatus"
+        self.qcID = '8'
         super().__init__(self.testName, self.qcID, log)
+
 
     def testFunction(self):
         """
-        The main test function that verifies the status of HDMI input ports.
+        The main test function that selects HDMI input ports and verifies their statuses.
 
-        This function performs the following actions:
-        - Initiates logging for the test.
+        This function:
         - Initializes the HDMI input module.
-        - Loops through each supported HDMI input port:
-          - Checks if the connected HDMI device is active.
-          - Selects the appropriate HDMI port.
-          - Verifies the port status through callback mechanisms.
-        - Executes post-requisite commands defined in the test setup.
-        - Cleans up by terminating the HDMI input module.
+        - Loops through each supported HDMI input port to verify selection status.
 
         Returns:
-            bool: Final result of the test, True if all checks are successful, otherwise False.
+            bool: Final result of the test, indicating success or failure.
         """
-        
+
         # Initialize the dsHdmiIn module
         self.testdsHdmiIn.initialise()
-
         result = True
 
         # Loop through the supported HdmiIn ports
@@ -80,23 +74,20 @@ class dsHdmiIn_test3_PortStatusCallback_Verify(dsHdmiInHelperClass):
             self.log.step(f'Select {port} Port')
 
             # Check the HdmiIn device connected to is active
-            status = self.CheckDeviceStatus(True,port)
-            #self.log.stepResult(result,f'Hdmi In Device is active {result} on {port}')
+            status = self.CheckDeviceStatus(True, port)
             if not status:
-                # Select the HdmiIn port
                 self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
-                self.log.step(f'Selected port {port} Port')
-            # video scaling of HdmiIn port
-
-            status = self.testdsHdmiIn.getHdmiInPortCallbackStatus()
-            if status !=None and status[1] == port:
-                self.log.stepResult(True,f'Port Status isPresented:{status[0]} activePort:{status[1]} found in Callback')
+                time.sleep(5)
+                self.log.step(f'Port Selected {port}')
+            portStatus = self.testdsHdmiIn.getHDMIInPortStatus()
+            if portStatus != None and port == portStatus[1]:
+                self.log.stepResult(True,f'HdmiIn Select Verification isPresented:{portStatus[0]} activePort:{portStatus[1]} and Result {result}')
                 result &= True
             else:
-                self.log.stepResult(False,f'Port Status CALLBACK NOT found and Result{result}')
+                self.log.stepResult(False,f'Unable to get the Port status ')
                 result &= False
 
-        self.log.stepResult(result,f'Port Status Verified with Callbacks')
+        self.log.stepResult(result,f"Port Status Verified ")
         #Run postRequisites listed in the test setup configuration file
         self.testRunPostRequisites()
 
@@ -108,5 +99,5 @@ class dsHdmiIn_test3_PortStatusCallback_Verify(dsHdmiInHelperClass):
 if __name__ == '__main__':
     summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
     summeryLog = logModule(summerLogName, level=logModule.INFO)
-    test = dsHdmiIn_test3_PortStatusCallback_Verify(summeryLog)
+    test = dsHdmiIn_test08_SelectPortAndVerifyPortStatus(summeryLog)
     test.run(False)

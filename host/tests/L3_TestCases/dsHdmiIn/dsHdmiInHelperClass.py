@@ -123,16 +123,6 @@ class dsHdmiInHelperClass(utHelperClass):
             for cmd in cmds:
                 self.writeCommands(cmd)
 
-    def testCleanAssets(self):
-        """
-        Removes the downloaded assets and test streams from the DUT after test execution.
-
-        Args:
-            None
-        """
-        self.testStreams = []
-        self.deleteFromDevice(self.testStreams)
-
     def testRunPrerequisites(self):
         """
         Executes prerequisite commands listed in the test setup configuration file on the DUT.
@@ -170,12 +160,5 @@ class dsHdmiInHelperClass(utHelperClass):
         return True
 
     def testEndFunction(self, powerOff=True):
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
-
         # Clean up the dsHdmiIn instance
         del self.testdsHdmiIn
-
-    def testExceptionCleanUp (self):
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
