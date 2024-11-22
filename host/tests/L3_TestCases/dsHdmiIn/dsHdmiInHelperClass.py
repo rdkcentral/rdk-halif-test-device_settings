@@ -43,7 +43,7 @@ class dsHdmiInHelperClass(utHelperClass):
 
     This class is initialized with test-specific parameters and includes methods to:
     - Download test artifacts
-    - Run prerequisite and post-requisite commands
+    - Exporting prerequisite commands using utplayer
     - Interact with the HDMI In device for manual checks
     - Manage test assets on the Device Under Test (DUT)
     """
@@ -113,8 +113,6 @@ class dsHdmiInHelperClass(utHelperClass):
         Prepares the environment and assets required for the test.
 
         This function:
-        - Downloads the required assets.
-        - Runs the prerequisite commands.
         - Creates dsHdmiInClass
 
         Returns:
