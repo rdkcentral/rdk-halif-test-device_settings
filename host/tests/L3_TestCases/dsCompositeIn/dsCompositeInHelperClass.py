@@ -75,13 +75,6 @@ class dsCompositeInHelperClass(utHelperClass):
         """
 
         # Run commands as part of test prerequisites
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("execute")
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
-
-        # Run commands as part of test prerequisites
         prerequisite_cmds = self.cpe.get("test").get("prerequisites")
         if prerequisite_cmds is not None:
             for expcmd in prerequisite_cmds:
