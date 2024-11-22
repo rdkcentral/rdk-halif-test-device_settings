@@ -5,15 +5,13 @@ dsDisplay:  # Prefix must always exist
   description: "dsDisplay Device Settings test setup"
   assets:
     device:
-      defaults: &defaults
-        execute:
       test01_VerifyDisplayConnectCallBackTest:
-        <<: *defaults
+
       test02_TestVerifyDisplayEdid:
-        <<: *defaults
+
       test03_AspectRatioVerificationTest:
-        <<: *defaults
+
       test04_TestVerifyDisplayEdidBytes:
-        <<: *defaults
+
 
 
