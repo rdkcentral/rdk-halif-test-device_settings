@@ -96,8 +96,6 @@ class dsHdmiIn_test06_AVlatencyCallback_Verify(dsHdmiInHelperClass):
                 result &= False
 
         self.log.stepResult(result,f"AV Latency is change Verified ")
-        #Run postRequisites listed in the test setup configuration file
-        self.testRunPostRequisites()
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()

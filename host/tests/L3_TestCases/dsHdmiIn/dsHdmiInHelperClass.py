@@ -108,36 +108,6 @@ class dsHdmiInHelperClass(utHelperClass):
             #TODO: Add automation verification methods
             return False
 
-    def testRunPostRequisites(self):
-        """
-        Executes postRequisite commands listed in test-setup configuration file on the DUT.
-
-        Args:
-            None.
-        """
-
-       # Run commands as part of test postRequisites
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("postcmd")
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
-
-    def testRunPrerequisites(self):
-        """
-        Executes prerequisite commands listed in the test setup configuration file on the DUT.
-
-        Args:
-            None
-        """
-
-        # Run commands as part of test prerequisites
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("execute")
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
-
     def testPrepareFunction(self):
         """
         Prepares the environment and assets required for the test.
@@ -150,9 +120,6 @@ class dsHdmiInHelperClass(utHelperClass):
         Returns:
             bool
         """
-
-        # Run Prerequisites listed in the test setup configuration file
-        self.testRunPrerequisites()
 
         # Create the dsHdmiIn class
         self.testdsHdmiIn = dsHdmiInClass(self.moduleConfigProfileFile, self.hal_session, self.targetWorkspace)

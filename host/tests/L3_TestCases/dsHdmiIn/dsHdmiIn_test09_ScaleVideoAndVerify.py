@@ -112,8 +112,6 @@ class dsHdmiIn_test09_ScaleVideoAndVerify(dsHdmiInHelperClass):
                     result &= False
 
         self.log.stepResult(result,f"Video Scale Verified ")
-        #Run postRequisites listed in the test setup configuration file
-        self.testRunPostRequisites()
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()

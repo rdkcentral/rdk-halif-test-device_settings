@@ -114,8 +114,6 @@ class dsHdmiIn_test07_AVIChangeCallback_Verify(dsHdmiInHelperClass):
                 result &= False
 
         self.log.stepResult(result,f"AVI content type Verified ")
-        #Run postRequisites listed in the test setup configuration file
-        self.testRunPostRequisites()
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()

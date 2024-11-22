@@ -97,8 +97,6 @@ class dsHdmiIn_test03_PortStatusCallback_Verify(dsHdmiInHelperClass):
                 result &= False
 
         self.log.stepResult(result,f'Port Status Verified with Callbacks')
-        #Run postRequisites listed in the test setup configuration file
-        self.testRunPostRequisites()
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()

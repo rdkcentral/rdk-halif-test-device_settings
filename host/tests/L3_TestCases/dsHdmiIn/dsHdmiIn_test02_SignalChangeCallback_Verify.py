@@ -114,8 +114,6 @@ class dsHdmiIn_test02_SignalChangeCallback_Verify(dsHdmiInHelperClass):
                 result &= False
 
         self.log.stepResult(result,f'Signal status Callbacks Verified')
-        #Run postRequisites listed in the test setup configuration file
-        self.testRunPostRequisites()
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()
