@@ -90,7 +90,6 @@ class dsVideoDevice_test2_SetAndGetZoomMode(dsVideoDeviceHelperClass):
 
                 for zoomMode in supportedZoomModes:
                     streamPath = self.testDownloadSingleStream(stream)
-                    streamPath = streamPath.replace("\\", "/")
                     self.testPlayer.play(streamPath)
                     self.log.stepStart(f'Zoom Mode test, device:{device}, zoomMode:{zoomMode}')
                     self.testdsVideoDevice.setZoomMode(device, zoomMode)

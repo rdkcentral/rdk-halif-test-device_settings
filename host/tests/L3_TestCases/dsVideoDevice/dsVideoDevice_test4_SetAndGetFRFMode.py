@@ -102,7 +102,6 @@ class dsVideoDevice_test4_SetAndGetFRFMode(dsVideoDeviceHelperClass):
 
             for streamUrl, frameRate, exptectedMode in zip(self.streamPaths, self.testStreamFrameRates, self.exptectedMode):
                 streamPath = self.testDownloadSingleStream(streamUrl)
-                streamPath = streamPath.replace("\\", "/")
                 self.testPlayer.play(streamPath)
                 time.sleep(5)
                 self.log.stepStart(f'Check Auto FRF mode device:{device}, Framerate:{frameRate}')
