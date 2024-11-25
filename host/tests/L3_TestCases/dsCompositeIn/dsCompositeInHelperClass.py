@@ -28,6 +28,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
+from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.core.logModule import logModule
@@ -56,6 +57,10 @@ class dsCompositeInHelperClass(utHelperClass):
 
         # Open Sessions for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
+        socVendor = self.cpe.get("soc_vendor")
+
+        # Create player and sencodary player Class
+        self.testPlayer = utPlayer(self.hal_session, socVendor)
 
          # Create user response Class
         self.testUserResponse = utUserResponse()
@@ -65,21 +70,6 @@ class dsCompositeInHelperClass(utHelperClass):
 
         self.targetWorkspace = self.cpe.get("target_directory")
         self.targetWorkspace = os.path.join(self.targetWorkspace, self.moduleName)
-
-    def testRunPrerequisites(self):
-        """
-        Executes prerequisite commands listed in the test setup configuration file on the DUT.
-
-        Args:
-            None
-        """
-
-        # Run commands as part of test prerequisites
-        prerequisite_cmds = self.cpe.get("test").get("prerequisites")
-        if prerequisite_cmds is not None:
-            for expcmd in prerequisite_cmds:
-                print(expcmd)
-                self.writeCommands(expcmd)
 
     def testPrepareFunction(self):
         """
@@ -93,9 +83,6 @@ class dsCompositeInHelperClass(utHelperClass):
         Returns:
             bool
         """
-
-        # Run Prerequisites listed in the test setup configuration file
-        self.testRunPrerequisites()
 
         # Create the dsCompositeIn class
         self.testdsCompositeIn = dsCompositeInClass(self.deviceProfile, self.hal_session, self.targetWorkspace)
