@@ -97,7 +97,6 @@ class dsVideoDevice_test1_FrameratePreChangePostChangeCallback_Verify(dsVideoDev
 
             for streamUrl in self.streamPaths:
                 streamPath = self.testDownloadSingleStream(streamUrl)
-                streamPath = streamPath.replace("\\", "/")
                 self.testPlayer.play(streamPath)
 
                 time.sleep(5)

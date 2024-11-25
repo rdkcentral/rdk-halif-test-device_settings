@@ -106,7 +106,6 @@ class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
                 for streamUrl, StreamFrameRate in zip(self.streamPaths, self.testStreamFrameRates):
                     #Download the stream to device
                     streamPath = self.testDownloadSingleStream(streamUrl)
-                    streamPath = streamPath.replace("\\", "/")
                     self.testPlayer.play(streamPath)
                     time.sleep(5)
 
