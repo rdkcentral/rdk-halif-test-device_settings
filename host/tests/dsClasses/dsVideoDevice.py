@@ -34,6 +34,7 @@ sys.path.append(os.path.join(dir_path, "../"))
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utSuiteNavigator import UTSuiteNavigatorClass
 from raft.framework.plugins.ut_raft.interactiveShell import InteractiveShell
+from raft.framework.plugins.ut_raft.utBaseUtils import utBaseUtils
 
 class dsVideoZoomMode(Enum):
     dsVIDEO_ZOOM_NONE              = 0
@@ -61,20 +62,32 @@ class dsVideoDeviceClass():
 
     This module provides common extensions for device Settings Videodevice Module.
     """
-    def __init__(self, deviceProfilePath:str, session=None ):
+        
+    def __init__(self, moduleConfigProfileFile :str, session=None, targetWorkspace="/tmp"):
         """
         Initializes the dsVideodevice class function.
         """
         self.moduleName = "dsVideoDevice"
-        self.menuConfig =  os.path.join(dir_path, "dsVideoDevice_test_suite.yml")
+        self.testConfigFile =  os.path.join(dir_path, "dsVideoDevice_testConfig.yml")
         self.testSuite  = "L3 dsVideoDevice"
-        self.deviceProfile = ConfigRead( deviceProfilePath, self.moduleName)
-        self.suitConfig    = ConfigRead(self.menuConfig, self.moduleName)
-        self.utMenu        = UTSuiteNavigatorClass(self.menuConfig, self.moduleName, session)
+
+        self.deviceProfile = ConfigRead( moduleConfigProfileFile , self.moduleName)
+        
+        self.testConfig    = ConfigRead(self.testConfigFile, self.moduleName)
+        self.testConfig.test.execute = os.path.join(targetWorkspace, self.testConfig.test.execute)
+        self.utMenu        = UTSuiteNavigatorClass(self.testConfig, None, session)
         self.testSession   = session
         self.devicePrefix = "VideoDevice"
 
+        self.utils         = utBaseUtils()
+
+        for artifact in self.testConfig.test.artifacts:
+            filesPath = os.path.join(dir_path, artifact)
+            self.utils.rsync(self.testSession, filesPath, targetWorkspace)
+
+
         self.utMenu.start()
+
 
     def searchPattern(self, haystack, pattern):
         """
@@ -172,7 +185,7 @@ class dsVideoDeviceClass():
                 },
                 {
                     "query_type": "direct",
-                    "query": " Provided Display Framerate :",
+                    "query": " Provide Display Framerate :",
                     "input": framerate
                 }
         ]
@@ -455,10 +468,14 @@ class dsVideoDeviceClass():
         """
 
         deviceNum = int(device.replace(self.devicePrefix, "")) + 1
-        supported_Framerates = self.deviceProfile.get("Device").get(deviceNum).get("SupportedDisplayFramerate")
-
-        return supported_Framerates
-
+        
+        device_data = self.deviceProfile.fields.get("Device")
+        if isinstance(device_data, dict):
+            device_entry = device_data.get(deviceNum)
+        if isinstance(device_entry, dict):
+                return device_entry.get("SupportedDisplayFramerate")
+        
+    
     def getsupportedCodingFormats(self):
         """
         Returns the supported Framerate Formats on device.
@@ -497,7 +514,14 @@ class dsVideoDeviceClass():
         supported_ZoomModes = []
 
         deviceNum = int(device.replace(self.devicePrefix, "")) + 1
-        zoomModes = self.deviceProfile.get("Device").get(deviceNum).get("SupportedDFCs")
+        
+        device_data = self.deviceProfile.fields.get("Device")
+        if isinstance(device_data, dict):
+            device_entry = device_data.get(deviceNum)
+        if isinstance(device_entry, dict):
+              zoomModes = device_entry.get("SupportedDFCs")
+
+
         if zoomModes is None or zoomModes == 0:
             return supported_ZoomModes
 

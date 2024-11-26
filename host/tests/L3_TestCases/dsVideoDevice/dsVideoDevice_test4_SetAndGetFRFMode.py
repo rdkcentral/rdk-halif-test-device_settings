@@ -29,7 +29,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsVideoDevice.dsVideoDeviceHelperClass import dsVideoDeviceHelperClass
-
+from raft.framework.core.logModule import logModule
 
 class dsVideoDevice_test4_SetAndGetFRFMode(dsVideoDeviceHelperClass):
     """
@@ -44,7 +44,7 @@ class dsVideoDevice_test4_SetAndGetFRFMode(dsVideoDeviceHelperClass):
         rackDevice (str): Identifier for the device under test.
     """
 
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test4_FRFMode test .
 
@@ -55,7 +55,7 @@ class dsVideoDevice_test4_SetAndGetFRFMode(dsVideoDeviceHelperClass):
         self.qcID = '4'
         self.testStreamFrameRates = ["23.98", "24", "25", "29.97", "30", "50", "59.94", "60"]
         self.exptectedMode = ["3840x2160px48", "3840x2160px48", "3840x2160px50", "3840x2160px60", "3840x2160px60", "3840x2160px50", "3840x2160px60", "3840x2160px60"]
-        super().__init__(self.testName, self.qcID)
+        super().__init__(self.testName, self.qcID, log)
 
 
     def testVerifyFrameRateMode(self, frfmode, expectedMode:str, streamFramerate:str, manual=False):
@@ -92,8 +92,6 @@ class dsVideoDevice_test4_SetAndGetFRFMode(dsVideoDeviceHelperClass):
             bool: Status of the last verification (True if successful, False otherwise).
         """
 
-        self.log.testStart(self.testName, self.qcID)
-
         # Initialize the dsVideoDevice module
         self.testdsVideoDevice.initialise(self.testdsVideoDevice.getDeviceType())
 
@@ -102,7 +100,7 @@ class dsVideoDevice_test4_SetAndGetFRFMode(dsVideoDeviceHelperClass):
         for device in SupportedDevices:
             self.testdsVideoDevice.setFRFMode(device, 'Enable')
 
-            for streamUrl, frameRate, exptectedMode in zip(self.StreamUrl, self.testStreamFrameRates, self.exptectedMode):
+            for streamUrl, frameRate, exptectedMode in zip(self.streamPaths, self.testStreamFrameRates, self.exptectedMode):
                 streamPath = self.testDownloadSingleStream(streamUrl)
                 self.testPlayer.play(streamPath)
                 time.sleep(5)
@@ -111,7 +109,6 @@ class dsVideoDevice_test4_SetAndGetFRFMode(dsVideoDeviceHelperClass):
                 self.log.stepResult(result, f'Check Auto FRF mode device:{device}, Framerate:{frameRate}')
 
                 self.testPlayer.stop()
-
                 self.testDeleteSingleStream(streamPath)
 
             self.testdsVideoDevice.setFRFMode(device, 'Disable')
@@ -122,5 +119,7 @@ class dsVideoDevice_test4_SetAndGetFRFMode(dsVideoDeviceHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsVideoDevice_test4_SetAndGetFRFMode()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsVideoDevice_test4_SetAndGetFRFMode(summeryLog)
     test.run(False)
