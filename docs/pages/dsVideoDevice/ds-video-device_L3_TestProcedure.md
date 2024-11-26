@@ -10,6 +10,9 @@
   - [dsVideoDevice_test2_SetAndGetZoomMode.py](#dsvideodevice_test2_setandgetzoommodepy)
   - [dsVideoDevice_test3_SetDisplayFramerate.py](#dsvideodevice_test3_setdisplayframeratepy)
   - [dsVideoDevice_test4_SetAndGetFRFMode.py](#dsvideodevice_test4_setandgetfrfmodepy)
+  - [dsVideoDevice_L3_Runall_Sink.py](#dsVideoDevice_L3_Runall_Sinkpy)
+  - [dsVideoDevice_L3_Runall_Source.py](#dsVideoDevice_L3_Runall_Sourcepy)
+  
   
 ## Acronyms, Terms and Abbreviations
 
@@ -83,86 +86,52 @@ Example Device configuration File: [deviceConfig.yml](../../../host/tests/config
 
 For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_device_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_device_config.yml)
 
-Update the target directory where `HAL` binaries will be copied into the device. Also, map the profile to the source/sink settings `YAML` file path.
-
-Ensure the platform should match with the `DUT` platform in [Rack Configuration](#rack-configuration-file)
+Update below fileds in the device configuration file:
+- Set the folder path for `target_directory` where `HAL` binaries will be copied onto the device.
+- Specify the device profile path in `test/profile`
+- Ensure the `platform` should match with the `DUT` `platform` in [Rack Configuration](#rack-configuration-file)
 
 ```yaml
 deviceConfig:
-  cpe1:
-    platform: "stb"    # Must match the platform in example_rack_config.yml
-    model: "uk"
-    target_directory: "/tmp"  # Path where HAL binaries are copied in device
-    test:
-      profile: "../../../../profiles/sink/Sink_4K_VideoDevice.yaml"
-      player:
-        tool: "gstreamer"
-        prerequisites:
-          - export xxxx    # Pre-commands required to play the stream
-
+    cpe1:
+        platform: "linux"
+        model: "uk"
+        soc_vendor: "intel"
+        target_directory: "/tmp/"  # Target Directory on device
+        prompt: "" # Prompt string on console
+        test:
+            profile: "../../../../profiles/sink/Source_VideoDevice.yaml"
+            streams_download_url: "<URL_Path>" #URL path from which the streams are downloaded to the device
 ```
 
 #### Test Setup Configuration File
 
   Example Test Setup configuration File: [dsVideoDevice_L3_testSetup.yml](../../../host/tests/L3_TestCases/dsVideoDevice/dsVideoDevice_L3_testSetup.yml)
 
-Update the artifact paths from which the binaries should be copied to the device.
-
-Set the execution paths and provide the stream paths for each test case.
+Provide the streams for each test case. This path is appended with `streams_download_url` entry from [Device Configuration File](#device-configuration-file)
 
 If a test case requires multiple streams or needs to be validated using several streams, ensure that all necessary streams are added sequentially for that specific test case.
 
 ```yaml
-dsVideoDevice:
+dsVideoDevice:  
   description: "dsVideoDevice Device Settings test setup"
   assets:
     device:
-      defaults: &defaults
-        artifacts:
-          - "<path>/bin/hal_test"
-          - "<path>/bin/libut_control.so"
-          - "<path>/profiles/sink/Sink_2K_VideoDevice.yaml"
-          - "<path>/profiles/sink/Sink_4k_VideoDevice.yaml"
-          - "<path>/profiles/sink/Source_VideoDevice.yaml"
-          - "<path>/bin/run.sh"
-        execute:
-          - "chmod +x <path>/hal_test"
-          - "chmod +x <path>/run.sh"
-          - "ln -s /usr/lib/libds-hal.so.0 <path>/libdshal.so"
       test1_FrameratePrePostChangeCallBack_Verify:
-        <<: *defaults
         streams:
-          - "<URL Path>/streams/scrolling_text_fast_3840x2160_50fps.mp4"
       test2_ZoomMode:
-        <<: *defaults
         streams:
-          - "<URL Path>/streams/scrolling_text_fast_1920x1080_60fps.mp4"
       test3_SetDisplayFramerate:
-        <<: *defaults
         streams:
-          - "<URL Path>/streams/scrolling_text_fast_3840x2160_30fps.mp4"
-          - "<URL Path>/streams/scrolling_text_fast_3840x2160_59.94fps.mp4"
       test4_FRFMode:
-        <<: *defaults
         streams:
-          - "<URL Path>/streams/scrolling_text_fast_3840x2160_24fps.mp4"
-
 ```
 
-#### Test Suite Configuration
+#### Test Configuration
 
-Example Test Setup configuration File: [dsVideoDevice_test_suite.yml](../../../host/tests/dsClasses/dsVideoDevice_test_suite.yml)
+Example Test Setup configuration File: [dsVideoDevice_testConfig.yml](../../../host/tests/dsClasses/dsVideoDevice_testConfig.yml)
 
 Update the execute command according to the device path where `HAL` binaries are copied.
-
-```yaml
-dsVideoDevice:
-  description: "dsVideoDevice Device Settings testing profile"
-  test:
-    execute: "/tmp/run.sh -p /tmp/Sink_4k_VideoDevice.yaml"
-    type: UT-C  # Cunit tests (UT-C)
-
-```
 
 ## Run Test Cases
 
@@ -377,3 +346,19 @@ The test evaluates the effect of `FRF` mode on video playback. The user should n
 - Completion:
 
   After receiving all necessary user inputs, the test case will conclude and display the final result: PASS or FAIL.
+
+### dsVideoDevice_L3_Runall_Sink.py
+
+This python file runs all the tests supported by `sink` devices
+
+```bash
+python dsVideoDevice_L3_Runall_Sink.py --config </PATH>/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/ut/host/tests/configs/deviceConfig.yml
+```
+
+### dsVideoDevice_L3_Runall_Source.py
+
+This python file runs all the tests supported by `source` devices
+
+```bash
+python dsVideoDevice_L3_Runall_Source.py --config </PATH>/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/ut/host/tests/configs/deviceConfig.yml
+```
