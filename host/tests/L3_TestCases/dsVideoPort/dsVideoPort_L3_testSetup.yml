@@ -4,40 +4,30 @@ dsVideoPort:  # Prefix must always exist
   description: "dsVideoPort Device Settings test setup"
   assets:
     device:
-      defaults: &defaults
-        artifacts:
-          - "<URL Path>/bin/hal_test"
-          - "<URL Path>/bin/libut_control.so"
-          - "<URL Path>/bin/Sink_AudioSettings.yaml"
-          - "<URL Path>/bin/run.sh"
-        execute:
-          - "chmod +x <PATH on Device>/hal_test"
-          - "chmod +x <PATH on Device>/run.sh"
+      test1_VerifyVideoContent_Format_Callback:
         streams:
-      test1_VerifyVideoContent_Formats:
-        <<: *defaults
-        streams: #list of streams to be copied
-      test2_Check_DisplayConnected_VideoPort:
-        <<: *defaults
-        streams: #list of streams to be copied
+          - ""
+          - "vts_HDR10_stream.mp4"
+          - "vts_HLG_stream.ts"
+          - "vts_DolbyVision_stream.mp4"
+          - ""
+          - "vts_HDR10plus_stream.mp4"
+          - "vts_SDR_stream.mp4"
+      test2_EnableDisableAndVerifyPortStatus:
+        streams:
+          - "vts_SDR_stream.mp4"
       test3_VerifyHDCP_Version:
-        <<: *defaults
         streams: #list of streams to be copied to device
       test4_VerifyResolution:
-        <<: *defaults
         streams: #list of streams to be copied to device
       test5_VerifyHDCP_Callback:
-        <<: *defaults
         streams: #list of streams to be copied to device
       test6_VerifyVideoContentFormats:
-        <<: *defaults
         streams: #list of streams to be copied to device
       test7_ResetToSDRMode:
-        <<: *defaults
-        streams: #list of streams to be copied
+        streams:
+          - "vts_HDR10_stream.mp4"
       test8_VerifyColorDepth:
-        <<: *defaults
         streams: #list of streams to be copied
       test9_VerifyBackgroundColor:
-        <<: *defaults
         streams: #list of streams to be copied
