@@ -28,6 +28,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsVideoDevice.dsVideoDeviceHelperClass import dsVideoDeviceHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsVideoDevice_test2_SetAndGetZoomMode(dsVideoDeviceHelperClass):
     """
@@ -35,7 +36,7 @@ class dsVideoDevice_test2_SetAndGetZoomMode(dsVideoDeviceHelperClass):
 
     """
 
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test2_ZoomMode test .
 
@@ -44,7 +45,7 @@ class dsVideoDevice_test2_SetAndGetZoomMode(dsVideoDeviceHelperClass):
         """
         self.testName = "test2_ZoomMode"
         self.qcID = '2'
-        super().__init__(self.testName, self.qcID)
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testVerifyZoomMode(self, device:str, zoomMode:str, manual=False):
@@ -78,25 +79,25 @@ class dsVideoDevice_test2_SetAndGetZoomMode(dsVideoDeviceHelperClass):
 
         result = True
 
-        self.log.testStart(self.testName, self.qcID)
-
         # Initialize the dsVideoDevice module
         self.testdsVideoDevice.initialise(self.testdsVideoDevice.getDeviceType())
 
         SupportedDevices = self.testdsVideoDevice.getSupportedVideoDevice()
         for device in SupportedDevices:
 
-            for stream in self.testStreams:
+            for stream in self.streamPaths:
                 supportedZoomModes = self.testdsVideoDevice.getSupportedZoomModes(device)
 
                 for zoomMode in supportedZoomModes:
-                    self.testPlayer.play(stream)
+                    streamPath = self.testDownloadSingleStream(stream)
+                    self.testPlayer.play(streamPath)
                     self.log.stepStart(f'Zoom Mode test, device:{device}, zoomMode:{zoomMode}')
                     self.testdsVideoDevice.setZoomMode(device, zoomMode)
                     result = self.testVerifyZoomMode(device, zoomMode, True)
                     mode = self.testdsVideoDevice.getZoomMode(device)
                     self.log.stepResult(result and zoomMode in mode, f'Zoom Mode test, device:{device}, zoomMode:{zoomMode}')
                     self.testPlayer.stop()
+                self.testDeleteSingleStream(streamPath)
 
         # Terminate dsVideoDevice Module
         self.testdsVideoDevice.terminate()
@@ -104,5 +105,7 @@ class dsVideoDevice_test2_SetAndGetZoomMode(dsVideoDeviceHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsVideoDevice_test2_SetAndGetZoomMode()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsVideoDevice_test2_SetAndGetZoomMode(summeryLog)
     test.run(False)

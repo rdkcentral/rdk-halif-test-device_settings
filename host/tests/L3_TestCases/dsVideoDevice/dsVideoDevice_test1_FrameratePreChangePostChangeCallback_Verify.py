@@ -28,9 +28,11 @@ import time
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsVideoDevice.dsVideoDeviceHelperClass import dsVideoDeviceHelperClass
 
-class dsVideoDevice_test1_FrameratePreChangeCallback_Verify(dsVideoDeviceHelperClass):
+from L3_TestCases.dsVideoDevice.dsVideoDeviceHelperClass import dsVideoDeviceHelperClass
+from raft.framework.core.logModule import logModule
+
+class dsVideoDevice_test1_FrameratePreChangePostChangeCallback_Verify(dsVideoDeviceHelperClass):
     """
     Class to verify display framerate change pre and post callback .
 
@@ -43,7 +45,7 @@ class dsVideoDevice_test1_FrameratePreChangeCallback_Verify(dsVideoDeviceHelperC
         rackDevice (str): Identifier for the device under test.
     """
 
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test1_FrameratePrePostChangeCallBack_Verify test .
 
@@ -52,7 +54,7 @@ class dsVideoDevice_test1_FrameratePreChangeCallback_Verify(dsVideoDeviceHelperC
         """
         self.testName  = "test1_FrameratePrePostChangeCallBack_Verify"
         self.qcID = '1'
-        super().__init__(self.testName, self.qcID)
+        super().__init__(self.testName, self.qcID, log)
 
 
     def checkDeviceStatus(self, manual=False):
@@ -83,7 +85,6 @@ class dsVideoDevice_test1_FrameratePreChangeCallback_Verify(dsVideoDeviceHelperC
                 bool: Final result of the test.
          """
 
-        self.log.testStart(self.testName, self.qcID)
 
         # Initialize the dsVideoDevice module
         self.testdsVideoDevice.initialise(self.testdsVideoDevice.getDeviceType())
@@ -94,26 +95,27 @@ class dsVideoDevice_test1_FrameratePreChangeCallback_Verify(dsVideoDeviceHelperC
         for device in SupportedDevices:
             self.testdsVideoDevice.setFRFMode(device, 'Enable')
 
-            for streamUrl in self.StreamUrl:
+            for streamUrl in self.streamPaths:
                 streamPath = self.testDownloadSingleStream(streamUrl)
                 self.testPlayer.play(streamPath)
+
                 time.sleep(5)
 
-                self.log.stepStart(f'Check Frame Rate Pre Post Change Callback device:{device}, Stream:{os.path.basename(streamPath)}')
+                self.log.stepStart(f'Check Frame Rate Pre Post Change Callback device:{device}, Stream:{os.path.basename(streamUrl)}')
                 frameRateChangeTime = self.testdsVideoDevice.getFrameratePrePostChangeCallbackStatus()
 
                 if("Pre" in frameRateChangeTime):
                     preTime = frameRateChangeTime["Pre"]
                     if("Post" in frameRateChangeTime):
                         postTime = frameRateChangeTime["Post"]
-                        self.log.stepResult(True, f'Check Frame Rate Pre Post Change Callback device:{device}, Stream:{os.path.basename(streamPath)}')
+                        self.log.stepResult(True, f'Check Frame Rate Pre Post Change Callback device:{device}, Stream:{os.path.basename(streamUrl)}')
                         self.log.step(f'Time Difference between Pre and Post FrameRate change: {postTime - preTime}')
                     else:
                         self.log.error("Post Framerate change callback not triggered")
-                        self.log.stepResult(False, f'Check Frame Rate Pre Post Change Callback device:{device}, Stream:{os.path.basename(streamPath)}')
+                        self.log.stepResult(False, f'Check Frame Rate Pre Post Change Callback device:{device}, Stream:{os.path.basename(streamUrl)}')
                 else:
                     self.log.error("Pre Framerate change callback not triggered")
-                    self.log.stepResult(False, f'Check Frame Rate Pre Post Change Callback device:{device}, Stream:{os.path.basename(streamPath)}')
+                    self.log.stepResult(False, f'Check Frame Rate Pre Post Change Callback device:{device}, Stream:{os.path.basename(streamUrl)}')
 
                 self.testPlayer.stop()
 
@@ -127,5 +129,7 @@ class dsVideoDevice_test1_FrameratePreChangeCallback_Verify(dsVideoDeviceHelperC
         return result
 
 if __name__ == '__main__':
-    test = dsVideoDevice_test1_FrameratePreChangeCallback_Verify()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsVideoDevice_test1_FrameratePreChangePostChangeCallback_Verify(summeryLog)
     test.run(False)
