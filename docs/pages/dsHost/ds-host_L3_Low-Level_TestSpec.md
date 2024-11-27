@@ -93,4 +93,4 @@ classDiagram
 
 - **testSuite.yaml**
   - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
-  - Example configuration file [dsHost_test_suite.yml](../../../host/tests/dsClasses/dsHost_test_suite.yml)
+  - Example configuration file [dsHost_testConfig.yml](../../../host/tests/dsClasses/dsHost_testConfig.yml)
