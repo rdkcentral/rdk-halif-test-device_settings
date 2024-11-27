@@ -37,8 +37,8 @@ Below are the top test use cases for the display.
 |#|Test-case|Description|HAL APIs|Source|Sink|
 |-|---------|-----------|--------|------|----|
 |1|Verify Display Events with callbacks|Connect/disconnect the display device on each port and verify that the callbacks are triggered for display connected, display disconnected, Rx Sense ON, Rx Sense OFF, and HDCP protocol version change events |`dsRegisterDisplayEventCallback()`|`Y`|`Y`|
-|2|Retrieves and interprets EDID information|Connect various pre-defined displays to the device, retrieve their EDID information, and compare it against the expected EDID data |`dsGetEDID()`|`Y`|`Y`|
-|3|Gets the EDID buffer and EDID length|Verify that the edid buffer contains the expected EDID data, and the length is accurate |`dsGetEDIDBytes()`|`Y`|`Y`|
+|2|Retrieves and interprets EDID information|Connect various pre-defined displays to the device, retrieve their EDID information, and compare it against the expected EDID data |`dsGetEDID()`|`Y`|`NA`|
+|3|Gets the EDID buffer and EDID length|Verify that the edid buffer contains the expected EDID data, and the length is accurate |`dsGetEDIDBytes()`|`Y`|`NA`|
 |4|Gets Aspect Ratio |Verify that the aspect ratio of the display is correctly retrieved and matches the expected value for a given configuration |`dsGetDisplayAspectRatio()`|`Y`|`NA`|
 
 ## Level 3 Python Test Cases High Level Overview
@@ -54,11 +54,13 @@ classDiagram
     class ut_raft{
     }
     ut_raft <|-- L3_TestClasses : inherits
+    ut_raft <|-- dsDisplayHelperClass : inherits
+    dsDisplayHelperClass <|-- L3_TestClasses : inherits
     L3_TestClasses ..> dsDisplay : uses
     note for testControl "uses rackConfig.yaml and deviceConfig.yaml"
     note for dsDisplay "uses platformProfile.yaml"
     note for L3_TestClasses "uses testSetupConfig.yaml"
-    note for ut_raft "suite Navigator uses testSuite.yaml"
+    note for ut_raft "suite Navigator uses testConfig.yaml"
 ```
 
 - **testControl**
@@ -95,8 +97,8 @@ classDiagram
 
 - **testSetupConfig.yaml**
   - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams, setting environment variables etc.
-  - Example configuration file [dsDisplay_L3_testSetup.yml](../../../host/tests/dsDisplay_L3_Tests/dsDisplay_L3_testSetup.yml)
+  - Example configuration file [dsDisplay_L3_testSetup.yml](../../../host/tests/L3_TestCases/dsDisplay/dsDisplay_L3_testSetup.yml)
 
-- **testSuite.yaml**
+- **testConfig.yaml**
   - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
-  - Example configuration file [dsDisplay_test_suite.yml](../../../host/tests/dsClasses/dsDisplay_test_suite.yml)
+  - Example configuration file [dsDisplay_testConfig.yml](../../../host/tests/dsClasses/dsDisplay_testConfig.yml)

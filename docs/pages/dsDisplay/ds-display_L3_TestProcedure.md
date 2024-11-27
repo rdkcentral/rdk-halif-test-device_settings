@@ -12,6 +12,8 @@
   - [dsDisplay_test02_TestVerifyDisplayEdid.py](#dsdisplay_test02_testverifydisplayedidpy)
   - [dsDisplay_test03_AspectRatioVerificationTest.py](#dsdisplay_test03_aspectratioverificationtestpy)
   - [dsDisplay_test04_TestVerifyDisplayEdidBytes.py](#dsdisplay_test04_testverifydisplayedidbytes)
+  - [dsDisplay_L3_Runall_Source.py](#dsdisplay_l3_runall_sourcepy)
+  - [dsDisplay_L3_Runall_Sink.py](#dsdisplay_l3_runall_sinkpy)
 
 ## Overview
 
@@ -115,11 +117,11 @@ Set the execution paths for each test case.
 
 - Example configuration file: [dsDisplay_L3_testSetup.yml](../../../host/tests/L3_TestCases/dsDisplay/dsDisplay_L3_testSetup.yml).
 
-#### Test Suite Configuration
+#### Test Configuration
 
 Update the execute command according to the device path where `HAL` binaries are copied and Update the test suite for each level test case
 
-- Example configuration file: [dsDisplay_test_suite.yml](../../../host/tests/dsClasses/dsDisplay_test_suite.yml).
+- Example configuration file: [dsDisplay_testConfig.yml](../../../host/tests/dsClasses/dsDisplay_testConfig.yml).
 
 ## Run Test Cases
 
@@ -140,6 +142,7 @@ This test verifies display event callbacks by connecting and disconnecting a dis
 **Platform Supported:**
 
 - Source
+- Sink
 
 **User Input Required:**
 
@@ -301,3 +304,19 @@ dsDisplay_test04_TestVerifyDisplayEdidBytes --config /host/tests/configs/example
 - Completion and Results:
 
   If all expected `EDID` bytes are verified, the test will conclude and display the final result (PASS/FAIL).
+
+### dsDisplay_L3_Runall_Source.py 
+
+This python file runs all the tests supported by `source` devices
+
+```bash
+python dsDisplay_L3_Runall_Source.py  --config </PATH>/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/ut/host/tests/configs/deviceConfig.yml
+```
+
+### dsDisplay_L3_Runall_Sink.py 
+
+This python file runs all the tests supported by `sink` devices
+
+```bash
+python dsDisplay_L3_Runall_Sink.py  --config </PATH>/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/ut/host/tests/configs/deviceConfig.yml
+```

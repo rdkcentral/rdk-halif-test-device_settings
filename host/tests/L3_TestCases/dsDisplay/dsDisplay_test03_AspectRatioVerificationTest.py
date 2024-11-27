@@ -27,7 +27,8 @@ import sys
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsDisplay.dsDisplayHelperClass import dsDisplayHelperClass
+from dsDisplayHelperClass import dsDisplayHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
 
@@ -38,17 +39,18 @@ class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
     downloading necessary test assets, retrieving the aspect ratio, and performing verification.
     """
 
-    # Class variables
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test03_GetDisplayAspectRatio test .
 
         Args:
             None.
         """
+        # Class variables
         self.testApectRatios = ["16x9", "4x3"]
         self.testName  = "test03_AspectRatioVerificationTest"
-        super().__init__(self.testName,'3')
+        self.qcID = '3'
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testChangeDisplayAspectRatio(self, port:str, aspectRatio:str, manual=False):
@@ -76,7 +78,6 @@ class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
             bool: Final result of the test.
         """
 
-        self.log.testStart(self.testName, '3')
         # Initialize the dsDisplay module
         self.testdsDisplay.initialise()
 
@@ -98,5 +99,7 @@ class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsDisplay_test03_AspectRatioVerificationTest()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsDisplay_test03_AspectRatioVerificationTest(summeryLog)
     test.run(False)
