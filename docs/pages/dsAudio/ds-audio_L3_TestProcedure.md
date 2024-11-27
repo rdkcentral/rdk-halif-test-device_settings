@@ -6,6 +6,8 @@
 - [Setting Up Test Environment](#setting-up-test-environment)
 - [Streams Required](#streams-required)
 - [Test Cases](#test-cases)
+  - [dsAudio_L3_Runall_Sink.py](#dsaudio_l3_runall_sinkpy)
+  - [dsAudio_L3_Runall_Source.py](#dsaudio_l3_runall_sourcepy)
   - [dsaudio_test01_enabledisableandverifyaudioportstatus.py](#dsaudio_test01_enabledisableandverifyaudioportstatuspy)
   - [dsaudio_test02_portconnectionstatus.py](#dsaudio_test02_portconnectionstatuspy)
   - [dsaudio_test03_ms12audiocompression.py](#dsaudio_test03_ms12audiocompressionpy)
@@ -32,8 +34,6 @@
   - [dsaudio_test24_primarysecondarylanguage.py](#dsaudio_test24_primarysecondarylanguagepy)
   - [dsaudio_test25_audiomix.py](#dsaudio_test25_audiomixpy)
   - [dsaudio_test26_ms12audioprofiles.py](#dsaudio_test26_ms12audioprofilespy)
-  - [dsAudio_L3_Runall_Sink.py](#dsaudio_l3_runall_sinkpy)
-  - [dsAudio_L3_Runall_Source.py](#dsaudio_l3_runall_sourcepy)
 
 ## Acronyms, Terms and Abbreviations
 
@@ -115,12 +115,9 @@ rackConfig:
             ip: "XXX.XXX.XXX" # IP address of the device
             password: ' '
       outbound:
-        download_url: "tftp://tftp-server.com/rack1/slot1/"    # Download location for the CPE device
-        upload_url: "sftp://server-address/home/workspace/tftp/rack1/slot1/" # Upload location
-        upload_url_base_dir: "sftp://server-address/home/workspace/tftp/rack1/slot1"
-        httpProxy:   # Local proxy if required
+        download_url: "http://localhost:8000/"    # download location for the CPE device
+        httpProxy:   # Local Proxy if required
         workspaceDirectory: './logs/workspace'   # Local working directory
-
 ```
 
 #### Device Configuration File
@@ -130,7 +127,18 @@ Example Device configuration File: [deviceConfig.yml](ut/host/tests/configs/devi
 For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_device_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_device_config.yml)
 
 Update below fileds in the device configuration file:
-- Set the folder path for `target_directory` where `HAL` binaries will be copied onto the device.
+
+- Set the path for `target_directory` where `HAL` binaries will be copied onto the device.
+- Add `soc_vendor` inorder to run prerequisites required for the player in the path `<PATH>/ut/host/tests/raft/framework/plugins/ut_raft/configs/utPlayerConfig.yml`
+
+    ```yaml
+    intel: # soc ID
+      gstreamer: # player Name
+        prerequisites: # Prerequisites if any to run the player
+          - export XDG_RUNTIME_DIR="/tmp"
+          - westros-init &
+    ```
+
 - Specify the device profile path in `test/profile`
 - Update `streams_download_url` with the URL from which the streams will be downloaded
 - Ensure the `platform` should match with the `DUT` `platform` in [Rack Configuration](#rack-configuration-file)
@@ -152,7 +160,7 @@ deviceConfig:
 
 Example Test Setup configuration File: [dsAudio_L3_testSetup.yml](../../../../ut/host/tests/L3_TestCases/dsAudio/dsAudio_L3_testSetup.yml)
 
-Provide the streams for each test case. This path is appended with `streams_download_url` entry from [Device Configuration File](#device-configuration-file)
+Streams required for each test case was provided in this file. This path is appended with `streams_download_url` entry from [Device Configuration File](#device-configuration-file)
 
 If a test case requires multiple streams or needs to be validated using several streams, ensure that all necessary streams are added sequentially for that specific test case.
 
@@ -169,16 +177,17 @@ dsAudio:
       test03_MS12AudioCompression:
         streams:
           - "streams/tones_string_48k_stereo.ac3"
-      test04_MS12DialogueEnhancer:
+      test25_AudioMix:
         streams:
-          - "streams/tones_string_48k_stereo.ac3"
+          - "streams/primary_audio_48k_2ch.ac3"
+          - "streams/system_audio_48k_2ch.wav"
 ```
 
 #### Test Configuration
 
 Example Test Setup configuration File: [dsAudio_testConfig.yml](../../../../ut/host/tests/dsClasses/dsAudio_testConfig.yml)
 
-Update the execute command according to the device path where `HAL` binaries are copied.
+Execute command to run te HAL binary was provided in this file.
 
 ```yaml
 dsAudio:
@@ -205,6 +214,22 @@ python <TestCaseName.py> --config </PATH>/ut/host/tests/configs/example_rack_con
 Refer [ds-audio_L3_Low-Level_TestSpecification.md](./ds-audio_L3_Low-Level_TestSpecification.md#audio-streams-requirement) for the stream details
 
 ## Test Cases
+
+### dsAudio_L3_Runall_Sink.py
+
+This python file runs all the tests supported by `sink` devices
+
+```bash
+python dsAudio_L3_Runall_Sink.py --config </PATH>/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/ut/host/tests/configs/deviceConfig.yml
+```
+
+### dsAudio_L3_Runall_Source.py
+
+This python file runs all the tests supported by `source` devices
+
+```bash
+python dsAudio_L3_Runall_Source.py --config </PATH>/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/ut/host/tests/configs/deviceConfig.yml
+```
 
 ### dsAudio_test01_EnableDisableAndVerifyAudioPortStatus.py
 
@@ -1525,19 +1550,3 @@ Play **Stream #3** and verify the MS12 Audio Profile modes for the supported aud
 
   - Once all user responses are collected, the test will conclude.
   - If all profile modes are verified successfully, the test will end with Result: PASS. If any of the modes fail, the test will conclude with Result: FAIL.
-
-### dsAudio_L3_Runall_Sink.py
-
-This python file runs all the tests supported by `sink` devices
-
-```bash
-python dsAudio_L3_Runall_Sink.py --config </PATH>/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/ut/host/tests/configs/deviceConfig.yml
-```
-
-### dsAudio_L3_Runall_Source.py
-
-This python file runs all the tests supported by `source` devices
-
-```bash
-python dsAudio_L3_Runall_Source.py --config </PATH>/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/ut/host/tests/configs/deviceConfig.yml
-```
