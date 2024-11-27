@@ -28,6 +28,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
+from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.core.logModule import logModule
@@ -56,6 +57,10 @@ class dsCompositeInHelperClass(utHelperClass):
 
         # Open Sessions for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
+        socVendor = self.cpe.get("soc_vendor")
+
+        # Create player and sencodary player Class
+        self.testPlayer = utPlayer(self.hal_session, socVendor)
 
          # Create user response Class
         self.testUserResponse = utUserResponse()
@@ -63,66 +68,8 @@ class dsCompositeInHelperClass(utHelperClass):
         # Get path to device profile file
         self.deviceProfile = os.path.join(dir_path, self.cpe.get("test").get("profile"))
 
-        self.deviceDownloadPath = self.cpe.get("target_directory")
-
-    def testDownloadAssets(self):
-        """
-        Downloads the test artifacts and streams listed in the test setup configuration.
-
-        This function retrieves streams and other necessary files and
-        saves them on the DUT (Device Under Test).
-
-        Args:
-            None
-        """
-
-        # List of streams with path
-        self.testStreams = []
-
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-
-        # Download test artifacts to device
-        url = test.get("artifacts")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-
-        url = self.testSetup.get("assets").get("device").get(self.testName).get("streams")
-        # Download test streams to device
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            for streampath in url:
-                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
-
-    def testCleanAssets(self):
-        """
-        Removes the downloaded assets and test streams from the DUT after test execution.
-
-        Args:
-            None
-        """
-        self.deleteFromDevice(self.testStreams)
-
-    def testRunPrerequisites(self):
-        """
-        Executes prerequisite commands listed in the test setup configuration file on the DUT.
-
-        Args:
-            None
-        """
-
-        # Run commands as part of test prerequisites
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("execute")
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
-
-        # Run commands as part of test prerequisites
-        prerequisite_cmds = self.cpe.get("test").get("prerequisites")
-        if prerequisite_cmds is not None:
-            for expcmd in prerequisite_cmds:
-                print(expcmd)
-                self.writeCommands(expcmd)
+        self.targetWorkspace = self.cpe.get("target_directory")
+        self.targetWorkspace = os.path.join(self.targetWorkspace, self.moduleName)
 
     def testPrepareFunction(self):
         """
@@ -137,21 +84,11 @@ class dsCompositeInHelperClass(utHelperClass):
             bool
         """
 
-        # Download the assets listed in test setup configuration file
-        self.testDownloadAssets()
-
-        # Run Prerequisites listed in the test setup configuration file
-        self.testRunPrerequisites()
-
         # Create the dsCompositeIn class
-        self.testdsCompositeIn = dsCompositeInClass(self.deviceProfile, self.hal_session, self.deviceDownloadPath)
+        self.testdsCompositeIn = dsCompositeInClass(self.deviceProfile, self.hal_session, self.targetWorkspace)
 
         return True
 
     def testEndFunction(self, powerOff=True):
         # Clean up the dsCompositeIn instance
         del self.testdsCompositeIn
-
-    def testExceptionCleanUp (self):
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
