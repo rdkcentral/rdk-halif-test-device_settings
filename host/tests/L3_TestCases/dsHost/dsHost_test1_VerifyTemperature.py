@@ -32,22 +32,27 @@ from dsClasses.dsHost import dsHostClass
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
+from raft.framework.core.logModule import logModule
 
 class dsHost_test1_VerifyTemperature(utHelperClass):
 
-    testName  = "test1_VerifyTemperature"
-    testSetupPath = dir_path + "/dsHost_L3_testSetup.yml"
-    moduleName = "dsHost"
-    rackDevice = "dut"
 
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test1_VerifyTemperature test .
 
         Args:
             None.
         """
-        super().__init__(self.testName, '1')
+
+        self.testName  = "test1_VerifyTemperature"
+        self.testSetupPath = dir_path + "/dsHost_L3_testSetup.yml"
+        self.moduleName = "dsHost"
+        self.rackDevice = "dut"
+        self.qcID = '1'
+
+        
+        super().__init__(self.testName, self.qcID, log)
 
         # Test Setup configuration file
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
@@ -59,37 +64,10 @@ class dsHost_test1_VerifyTemperature(utHelperClass):
         self.testUserResponse = utUserResponse()
 
         # Get path to device profile file
-        self.deviceProfile = dir_path + "/" + self.cpe.get("test").get("profile")
-
-    def testDownloadAssets(self):
-        """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
-
-        Args:
-            None.
-        """
-
-        # List of streams with path
-        self.deviceDownloadPath = self.cpe.get("target_directory")
-
-        #download test artifacts to device
-        url = self.testSetup.assets.device.test1_VerifyTemperature.artifacts
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-
-    def testRunPrerequisites(self):
-        """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
-
-        Args:
-            None.
-        """
-
-        #Run test specific commands
-        cmds = self.testSetup.assets.device.test1_VerifyTemperature.execute
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
+        deviceTestSetup = self.cpe.get("test")
+        self.moduleConfigProfileFile = os.path.join(dir_path, deviceTestSetup.get("profile"))
+        self.targetWorkspace = self.cpe.get("target_directory")
+        self.targetWorkspace = os.path.join(self.targetWorkspace, self.moduleName)
 
     def testFunction(self):
         """This function will test the get cpu tempature functionality
@@ -97,15 +75,9 @@ class dsHost_test1_VerifyTemperature(utHelperClass):
         Returns:
             bool
         """
-
-        # Download the assets listed in test setup configuration file
-        self.testDownloadAssets()
-
-        # Run Prerequisites listed in the test setup configuration file
-        self.testRunPrerequisites()
-
+        
         # Create the dsHost class
-        self.testdsHost = dsHostClass(self.deviceProfile, self.hal_session)
+        self.testdsHost = dsHostClass(self.moduleConfigProfileFile, self.hal_session, self.targetWorkspace)
 
         self.log.stepStart(f'dsHost_test1_VerifyTemperature')
 
@@ -149,5 +121,7 @@ class dsHost_test1_VerifyTemperature(utHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsHost_test1_VerifyTemperature()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsHost_test1_VerifyTemperature(summeryLog)
     test.run(False)
