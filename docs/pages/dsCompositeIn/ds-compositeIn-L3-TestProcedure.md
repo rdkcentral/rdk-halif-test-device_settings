@@ -5,18 +5,18 @@
 - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
 - [Setting Up Test Environment](#setting-up-test-environment)
 - [Run Test Cases](#run-test-cases)
-- [Test Setup Connections](#test-setup-connections)
 - [Test Cases](#test-cases)
   - [dsCompositeIn_test1_VerifyConnect_Callback.py](#dscompositein_test1_verifyconnect_callbackpy)
   - [dsCompositeIn_test2_VerifyStatus_Callback.py](#dscompositein_test2_verifystatus_callbackpy)
   - [dsCompositeIn_test3_ScaleAndVerify_Video.py](#dscompositein_test3_scaleandverify_videopy)
   - [dsCompositeIn_test4_VerifySignal_Callback.py](#dscompositein_test4_verifysignal_callbackpy)
+  - [dsCompositeIn_L3_Runall_Sink.py](#dscompositein_l3_runall_sinkpy)
 
 ## Acronyms, Terms and Abbreviations
 
-- `HAL `    - Hardware Abstraction Layer
-- `L3  `    - Level 3 Testing
-- `DUT `    - Device Under Test
+- `HAL`     - Hardware Abstraction Layer
+- `L3`      - Level 3 Testing
+- `DUT`     - Device Under Test
 - `RAFT`    - Rapid Automation Framework for Testing
 - `YAML`    - YAML Ain't Markup Language
 
@@ -73,30 +73,31 @@ Example Device configuration File: [deviceConfig.yml](../../../host/tests/config
 
 For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_device_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_device_config.yml)
 
-Update the target directory where `HAL` binaries will be copied into the device. Also, map the profile to the source/sink settings `YAML` file path.
+Update below fileds in the device configuration file:
 
-Ensure the platform should match with the `DUT` platform in [Rack Configuration](#rack-configuration-file)
+- Set the folder path for `target_directory` where `HAL` binaries will be copied onto the device.
+- Specify the device profile path in `test/profile`
+- Ensure the `platform` should match with the `DUT` `platform` in [Rack Configuration](#rack-configuration-file)
 
 ```yaml
 deviceConfig:
-  cpe1:
-    platform: "stb"    # Must match the platform in example_rack_config.yml
-    model: "uk"
-    target_directory: "/tmp"  # Path where HAL binaries are copied in device
-    test:
-      profile: "../../../../profiles/sink/Sink_compositeIn.yaml"
-      prerequisites:
-        - export xxxx    # Pre-commands required to play the stream
+    cpe1:
+        platform: "linux"
+        model: "uk"
+        soc_vendor: "intel"
+        target_directory: "/tmp/"  # Target Directory on device
+        prompt: "" # Prompt string on console
+        test:
+            profile: "../../../../profiles/sink/Sink_CompositeInput.yaml"
+            streams_download_url: "<URL_Path>" #URL path from which the streams are downloaded to the device
 
 ```
 
 #### Test Setup Configuration File
 
-Example Test Setup configuration File: [dscompositeIn_L3_testSetup.yml](../../..//host/tests/dsCompositeIn_L3_Tests/dsCompositeIn_L3_testSetup.yml)
+Example Test Setup configuration File: [dscompositeIn_L3_testSetup.yml](../../..//host/tests/L3_TestCases/dsCompositeIn/dsCompositeIn_L3_testSetup.yml)
 
-Update the artifact paths from which the binaries should be copied to the device.
-
-Set the execution paths and provide the stream paths for each test case.
+Provide the streams for each test case. This path is appended with `streams_download_url` entry from [Device Configuration File](#device-configuration-file)
 
 If a test case requires multiple streams or needs to be validated using several streams, ensure that all necessary streams are added sequentially for that specific test case.
 
@@ -105,33 +106,19 @@ dscompositeIn:
   description: "dscompositeIn Device Settings test setup"
   assets:
     device:
-      defaults: &defaults
-        artifacts:
-          - "<path>/bin/hal_test"
-          - "<path>/bin/libut_control.so"
-          - "<path>/bin/Sink_CompositeInput.yaml"
-          - "<path>/bin/run.sh"
-        execute:
-          - "chmod +x <PATH>/dscompositeIn_L3/hal_test"
-          - "chmod +x <PATH>/dscompositeIn_L3/run.sh"
-        streams:
         test1_VerifyConnect_Callback:
-          <<: *defaults
           streams:
         test2_VerifyStatus_Callback:
-          <<: *defaults
           streams:
         test3_ScaleAndVerify_Video:
-          <<: *defaults
           streams:
         test4_VerifySignal_Callback:
-          <<: *defaults
           streams:
 ```
 
-#### Test Suite Configuration
+#### Test Configuration
 
-Example Test Setup configuration File: [dsCompositeIn_test_suite.yml](../../../host/tests/dsClasses/dsCompositeIn_test_suite.yml)
+Example Test Setup configuration File: [dsCompositeIn_testConfig.yml](../../../host/tests/dsClasses/dsCompositeIn_testConfig.yml)
 
 Update the execute command according to the device path where `HAL` binaries are copied.
 
@@ -143,14 +130,8 @@ Once the environment is set up, you can execute the test cases with the followin
 python <TestCaseName.py> --config </PATH>/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/ut/host/tests/configs/deviceConfig.yml
 ```
 
-## Test Setup Connections
-
-To verify the compositeIn connect the external devices to `DUT`.
-For Example:
-
-- Connect an external device with Composite Out to Composite In port.
-
 ## Test Cases
+
 ### dsCompositeIn_test1_VerifyConnect_Callback.py
 
 #### Platform Support - test01
@@ -190,7 +171,7 @@ Success Criteria
 
 - Device connect Confirmation:
 
-  - The test will check if the event has reached the device. 
+  - The test will check if the event has reached the device.
   - If the event is detected will mark the step as PASS
   - If the event is not detected will mark the step as FAIL
 
@@ -203,7 +184,7 @@ Success Criteria
 
 - Device disconnect Confirmation:
 
-  - The test will check if the event has reached the device. 
+  - The test will check if the event has reached the device.
   - If the event detected will mark the step as PASS
   - If the event not detected will mark the step as FAIL
 
@@ -216,6 +197,7 @@ Success Criteria
   Upon receiving user responses for all ports, the test will conclude and present a final result: PASS or FAIL based on the user inputs throughout the test execution.
 
 ### dsCompositeIn_test2_VerifyStatus_Callback.py
+
 #### Platform Support - test02
 
 - Sink
@@ -252,7 +234,7 @@ Success Criteria
 
 - Device status Confirmation:
 
-  - The test will select the port and check if the device status event has reached the device. 
+  - The test will select the port and check if the device status event has reached the device.
   - If the event is detected will mark the step as PASS
   - If the event is not detected will mark the step as FAIL
 
@@ -263,7 +245,9 @@ Success Criteria
 - Test Conclusion:
 
   Upon receiving user responses for all the ports, the test will conclude and present a final result: PASS or FAIL based on the user inputs throughout the test execution.
+
 ### dsCompositeIn_test3_ScaleAndVerify_Video.py
+
 #### Platform Support - test03
 
 - Sink
@@ -278,7 +262,7 @@ Test checks if video scaling happens on video from the Source device connected t
 
 #### Expected Results - test03
 
-The test scales the video playing from compositeIn source device 
+The test scales the video playing from compositeIn source device
 
 Success Criteria
 
@@ -315,7 +299,9 @@ Success Criteria
 - Test Conclusion:
 
   Upon receiving user responses for all ports, the test will conclude and present a final result: PASS or FAIL based on the user inputs throughout the test execution.
+
 ### dsCompositeIn_test4_VerifySignal_Callback.py
+
 #### Platform Support - test04
 
 - Sink
@@ -330,7 +316,7 @@ The test detects the signal status of the compositeIn signal.
 
 #### Expected Results - test04
 
-The test checks the signal change in the composite source 
+The test checks the signal change in the composite source
 
 Success Criteria
 
@@ -352,7 +338,7 @@ Success Criteria
 
 - Signal change confirmation:
 
-  - The test will check if the event has reached the device. 
+  - The test will check if the event has reached the device.
   - If the event is detected will mark the step as PASS
   - If the event is not detected will mark the step as FAIL
 
@@ -365,7 +351,7 @@ Success Criteria
 
 - Signal change confirmation:
 
-  - The test will check if the event has reached the device. 
+  - The test will check if the event has reached the device.
   - If the event is detected will mark the step as PASS
   - If the event is not detected will mark the step as FAIL
 
@@ -376,3 +362,11 @@ Success Criteria
 - Test Conclusion:
 
   Upon receiving user responses for all ports, the test will conclude and present a final result: PASS or FAIL based on the user inputs throughout the test execution.
+
+### dsCompositeIn_L3_Runall_Sink.py
+
+This python file runs all the tests supported by `sink` devices
+
+```bash
+python dsCompositeIn_L3_Runall_Sink.py --config </PATH>/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/ut/host/tests/configs/deviceConfig.yml
+```
