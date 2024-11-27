@@ -847,7 +847,7 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
  * |03|Call dsGetDisplay() Loop through all valid ports in numPorts[]|vType: [Valid Port Type]_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
  * |04|If the device is a source, call dsGetDisplayAspectRatio() with an invalid handle| NULL, dsVideoAspectRatio_t *aspectRatio | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
  * |05|If the device is a source, call dsGetDisplayAspectRatio() with an NULL aspectRatio | intptr_t handle, NULL | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
- * |06|If the device is a sink, call dsGetDisplayAspectRatio() with a valid handle | intptr_t handle, dsVideoAspectRatio_t *aspectRatio | dsERR_OPERATION_NOT_SUPPORTED | API is not supported for sink devices |
+ * |06|If the device is a sink, call dsGetDisplayAspectRatio() | intptr_t handle, dsVideoAspectRatio_t *aspectRatio | dsERR_OPERATION_NOT_SUPPORTED | API is not supported for sink devices |
  * |07|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
  * |08|Call dsGetDisplayAspectRatio() without initializing the display sub-system or obtaining a handle | intptr_t handle, dsVideoAspectRatio_t *aspectRatio  | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  *
