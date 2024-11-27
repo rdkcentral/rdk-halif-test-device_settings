@@ -1059,6 +1059,32 @@ static UT_test_suite_t * pSuite = NULL;
  */
 int test_l1_dsDisplay_register ( void )
 {
+    ut_kvp_status_t status;
+
+    /* Get the Device Type */
+    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsDisplay.Type", gDeviceType, TEST_DS_DEVICE_TYPE_SIZE);
+
+    if (status == UT_KVP_STATUS_SUCCESS )
+    {
+        if (!strncmp(gDeviceType, TEST_TYPE_SOURCE_VALUE, TEST_DS_DEVICE_TYPE_SIZE))
+        {
+            gSourceType = 1;
+        }
+        else if(!strncmp(gDeviceType, TEST_TYPE_SINK_VALUE, TEST_DS_DEVICE_TYPE_SIZE))
+        {
+            gSourceType = 0;
+        }
+        else
+        {
+            UT_LOG_ERROR("Invalid platform type: %s", gDeviceType);
+            return -1;
+        }
+    }
+    else {
+        UT_LOG_ERROR("Failed to get the platform type");
+        return -1;
+    }
+
     /* add a suite to the registry */
     pSuite = UT_add_suite( "[L1 dsDisplay]", NULL, NULL );
     if ( NULL == pSuite)
