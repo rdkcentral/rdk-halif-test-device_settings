@@ -24,45 +24,45 @@
 import os
 import sys
 import time
-from enum import Enum, auto
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsHdmiIn.dsHdmiInHelperClass import dsHdmiInHelperClass
+from raft.framework.core.logModule import logModule
 
-class dsHdmiIn_test6_AVlatencyCallback_Verify(dsHdmiInHelperClass):
+class dsHdmiIn_test08_SelectPortAndVerifyPortStatus(dsHdmiInHelperClass):
     """
-    A test class to verify the audio-video latency callback for HDMI input devices.
+    A test class for selecting HDMI input ports and verifying their status.
 
-    This class inherits from `dsHdmiInHelperClass` and focuses on:
-    - Verifying the audio and video latency updates through callback mechanisms.
+    This class extends the `dsHdmiInHelperClass` and performs the following:
+    - Selects supported HDMI input ports.
+    - Verifies the status of the selected ports.
     """
 
-
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
-        Initializes the dsHdmiIn_test6_AVlatencyCallback_Verify test case.
+        Initializes the test08_SelectPortAndVerifyPortStatus test.
 
         Sets the test name and calls the superclass constructor.
         """
-        self.testName  = "test6_AVlatencyCallback_Verify"
-        super().__init__(self.testName, '1')
+        self.testName  = "test08_SelectPortAndVerifyPortStatus"
+        self.qcID = '8'
+        super().__init__(self.testName, self.qcID, log)
+
 
     def testFunction(self):
         """
-        The main test function that verifies audio-video latency of HDMI input devices.
+        The main test function that selects HDMI input ports and verifies their statuses.
 
         This function:
         - Initializes the HDMI input module.
-        - Loops through each supported HDMI input port to verify latency.
-        - Logs the results of the latency verification.
+        - Loops through each supported HDMI input port to verify selection status.
 
         Returns:
-            bool: True if all checks are successful, otherwise False.
+            bool: Final result of the test, indicating success or failure.
         """
-
-        self.log.testStart(self.testName, '1')
 
         # Initialize the dsHdmiIn module
         self.testdsHdmiIn.initialise()
@@ -73,30 +73,21 @@ class dsHdmiIn_test6_AVlatencyCallback_Verify(dsHdmiInHelperClass):
             self.log.stepStart(f'Select {port} Port')
             self.log.step(f'Select {port} Port')
 
-            # Check the HdmiIn device is active
-            status = self.CheckDeviceStatus(True,port)
+            # Check the HdmiIn device connected to is active
+            status = self.CheckDeviceStatus(True, port)
             if not status:
                 self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
                 time.sleep(5)
                 self.log.step(f'Port Selected {port}')
-            self.testUserResponse.getUserYN(f'Change the AV content for latency on {port} press Y/N:')
-            avLatency = self.testdsHdmiIn.getAVlatencyCallbackStatus()
-            if avLatency != None:
-                self.log.step(f'audio_latency:{avLatency[0]}ms, videoLatency:{avLatency[1]}ms found in Callback')
-                status = self.testUserResponse.getUserYN(f'Is AV Latency is changed on {port} press Y/N:')
-                if status:
-                    self.log.stepResult(True,f' AV latency callback found & Change is observed in port: {port}')
-                    result &= True
-                else:
-                    self.log.stepResult(False,f' AV latency callback found & Change is Not observed in port: {port}')
-                    result &= False
+            portStatus = self.testdsHdmiIn.getHDMIInPortStatus()
+            if portStatus != None and port == portStatus[1]:
+                self.log.stepResult(True,f'HdmiIn Select Verification isPresented:{portStatus[0]} activePort:{portStatus[1]} and Result {result}')
+                result &= True
             else:
-                self.log.step(f'No AV latency callback found in port: {port}')
+                self.log.stepResult(False,f'Unable to get the Port status ')
                 result &= False
 
-        self.log.stepResult(result,f"AV Latency is change Verified ")
-        #Run postRequisites listed in the test setup configuration file
-        self.testRunPostRequisites()
+        self.log.stepResult(result,f"Port Status Verified ")
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()
@@ -104,5 +95,7 @@ class dsHdmiIn_test6_AVlatencyCallback_Verify(dsHdmiInHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsHdmiIn_test6_AVlatencyCallback_Verify()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsHdmiIn_test08_SelectPortAndVerifyPortStatus(summeryLog)
     test.run(False)

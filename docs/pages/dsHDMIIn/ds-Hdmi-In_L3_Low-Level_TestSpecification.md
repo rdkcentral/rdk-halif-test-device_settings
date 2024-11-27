@@ -74,12 +74,13 @@ classDiagram
     testControl <|-- ut_raft : inherits
     class ut_raft{
     }
-    ut_raft <|-- L3_TestClasses : inherits
+    ut_raft <|-- dsHdmiInHelperClass : inherits
+    dsHdmiInHelperClass <|-- L3_TestClasses : inherits
     L3_TestClasses ..> dsHdmiIn : uses
     note for testControl "uses rackConfig.yaml and deviceConfig.yaml"
     note for dsHdmiIn "uses platformProfile.yaml"
     note for L3_TestClasses "uses testSetupConfig.yaml"
-    note for ut_raft "suite Navigator uses testSuite.yaml"
+    note for ut_raft "suite Navigator uses testConfig.yaml"
 ```
 
 - **testControl**
@@ -115,9 +116,9 @@ classDiagram
   - Example configuration file [dsHdmiIn_Settings](https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/3.0.0/profiles/sink/Sink_HDMIIN.yaml)
 
 - **testSetupConfig.yaml**
-  - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams, setting environment variables etc.
+  - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams etc.
   - Example configuration file [dsHdmiIn_L3_testSetup.yml](../../../host/tests/dsHdmiIn_L3_Tests/dsHdmiIn_L3_testSetup.yml)
 
 - **testSuite.yaml**
   - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
-  - Example configuration file [dsHdmiIn_test_suite.yml](../../../host/tests/dsClasses/dsHdmiIn_test_suite.yml)
+  - Example configuration file [dsHdmiIn_testConfig.yml](../../../host/tests/dsClasses/dsHdmiIn_testConfig.yml)

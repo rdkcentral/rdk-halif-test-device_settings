@@ -26,9 +26,11 @@ import sys
 import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
+from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.core.logModule import logModule
@@ -41,7 +43,7 @@ class dsHdmiInHelperClass(utHelperClass):
 
     This class is initialized with test-specific parameters and includes methods to:
     - Download test artifacts
-    - Run prerequisite and post-requisite commands
+    - Exporting prerequisite commands using utplayer
     - Interact with the HDMI In device for manual checks
     - Manage test assets on the Device Under Test (DUT)
     """
@@ -70,37 +72,21 @@ class dsHdmiInHelperClass(utHelperClass):
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
 
         # Set up paths and URLs for device test setup
+        socVendor = self.cpe.get("soc_vendor")
         deviceTestSetup = self.cpe.get("test")
-        #socVendor = self.cpe.get("soc_vendor")
+
+         # Create player 
+        self.testPlayer = utPlayer(self.hal_session, socVendor)
 
         # User response interface for manual testing
         self.testUserResponse = utUserResponse()
 
         # Get path to device profile file
         self.moduleConfigProfileFile = os.path.join(dir_path, deviceTestSetup.get("profile"))
+        self.moduleConfigProfile = ConfigRead( self.moduleConfigProfileFile , self.moduleName)
+
         self.targetWorkspace = self.cpe.get("target_directory")
         self.targetWorkspace = os.path.join(self.targetWorkspace, self.moduleName)
-
-    def testDownloadAssets(self):
-        """
-        Downloads the test artifacts and streams listed in the test setup configuration.
-
-        This function retrieves artifacts and saves them on the DUT (Device Under Test).
-
-        Args:
-            None
-        """
-        # List of streams with path
-        self.testStreams = []
-
-        self.deviceDownloadPath = self.cpe.get("target_directory")
-
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-
-        # Download test artifacts to device
-        url = test.get("artifacts")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
 
     #TODO: Current version supports only manual verification.
     def CheckDeviceStatus(self, manual=False, port_type:str=0):
@@ -122,76 +108,22 @@ class dsHdmiInHelperClass(utHelperClass):
             #TODO: Add automation verification methods
             return False
 
-    def testRunPostRequisites(self):
-        """
-        Executes postRequisite commands listed in test-setup configuration file on the DUT.
-
-        Args:
-            None.
-        """
-
-       # Run commands as part of test postRequisites
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("postcmd")
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
-
-    def testCleanAssets(self):
-        """
-        Removes the downloaded assets and test streams from the DUT after test execution.
-
-        Args:
-            None
-        """
-        self.deleteFromDevice(self.testStreams)
-
-    def testRunPrerequisites(self):
-        """
-        Executes prerequisite commands listed in the test setup configuration file on the DUT.
-
-        Args:
-            None
-        """
-
-        # Run commands as part of test prerequisites
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("execute")
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
-
     def testPrepareFunction(self):
         """
         Prepares the environment and assets required for the test.
 
         This function:
-        - Downloads the required assets.
-        - Runs the prerequisite commands.
         - Creates dsHdmiInClass
 
         Returns:
             bool
         """
 
-        # Download the assets listed in test setup configuration file
-        self.testDownloadAssets()
-
-        # Run Prerequisites listed in the test setup configuration file
-        self.testRunPrerequisites()
-
         # Create the dsHdmiIn class
-        self.testdsHdmiIn = dsHdmiInClass(self.moduleConfigProfileFile, self.hal_session)
+        self.testdsHdmiIn = dsHdmiInClass(self.moduleConfigProfileFile, self.hal_session, self.targetWorkspace)
 
         return True
 
     def testEndFunction(self, powerOff=True):
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
-
         # Clean up the dsHdmiIn instance
         del self.testdsHdmiIn
-
-    def testExceptionCleanUp (self):
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
