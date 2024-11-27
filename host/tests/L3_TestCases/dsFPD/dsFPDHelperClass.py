@@ -53,16 +53,18 @@ class dsFPDHelperClass(utHelperClass):
 
         # Load test setup configuration
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
-        #open Hal Seesion
+        #open Hal Session
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
+        self.deviceTestSetup = self.cpe.get("test")
 
          # Create user response Class
         self.testUserResponse = utUserResponse()
 
         # Get path to device profile file
-        self.deviceProfile = os.path.join(dir_path, self.cpe.get("test").get("profile"))
+        self.moduleConfigProfileFile = os.path.join(dir_path, self.deviceTestSetup.get("profile"))
 
-        self.deviceDownloadPath = self.cpe.get("target_directory")
+        self.targetPath = self.cpe.get("target_directory")
+        self.targetPath = os.path.join(self.targetPath, self.moduleName)
 
     #TODO: Current version supports only manual verification.
     def testVerifyIndicator(self, indicator, state, manual=False):
@@ -85,26 +87,6 @@ class dsFPDHelperClass(utHelperClass):
             return False
 
 
-    def testRunPrerequisites(self):
-        """
-        Executes prerequisite commands listed in the test setup configuration file on the DUT.
-
-        Args:
-            None
-        """
-        
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-
-        # Download test artifacts to device
-        url = test.get("artifacts")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-        # Run commands as part of test prerequisites
-        cmds = test.get("execute")
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
-
     def testPrepareFunction(self):
         """
         Prepares the environment and assets required for the test.
@@ -118,9 +100,8 @@ class dsFPDHelperClass(utHelperClass):
             bool
         """
 
-        self.testRunPrerequisites()
         # Create the dsFPD class
-        self.testdsFPD = dsFPDClass(self.deviceProfile, self.hal_session, self.deviceDownloadPath)
+        self.testdsFPD = dsFPDClass(self.moduleConfigProfileFile, self.hal_session, self.targetPath)
 
         return True
 

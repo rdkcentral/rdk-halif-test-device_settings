@@ -35,6 +35,7 @@ sys.path.append(dir_path+"/../")
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utSuiteNavigator import UTSuiteNavigatorClass
 from raft.framework.plugins.ut_raft.interactiveShell import InteractiveShell
+from raft.framework.plugins.ut_raft.utBaseUtils import utBaseUtils
 
 class dsFPDIndicatorType(Enum):
     dsFPD_INDICATOR_MESSAGE   = 0
@@ -72,24 +73,40 @@ class dsFPDColor(Enum):
 
 class dsFPDClass():
 
-    moduleName = "dsFPD"
-    menuConfig =  dir_path + "/dsFPD_test_suite.yml"
-    testSuite = "L3 Front Panel Functions"
 
     """
     Device Settings Front Panel Device Class
 
     This module provides common extensions for device Settings Front Panel Device Module.
     """
-    def __init__(self, deviceProfilePath:str, session=None, devicePath = "/tmp" ):
+    def __init__(self, moduleConfigProfileFile:str, session=None, targetPath = "/tmp" ):
         """
         Initializes the dsFPD class function.
-        """
-        self.deviceProfile = ConfigRead( deviceProfilePath, self.moduleName)
-        self.suitConfig    = ConfigRead(self.menuConfig, self.moduleName)
-        self.utMenu        = UTSuiteNavigatorClass(self.menuConfig, self.moduleName, session)
-        self.testSession   = session
+        
+        Args:
+            moduleConfigProfileFile  (str): Path to the device profile configuration file.
+            session: Optional; session object for the user interface.
+            targetPath: Path on dut for the artifacts.
 
+        Returns:
+            None
+        """
+        self.moduleName     = "dsFPD"
+        self.testConfigFile =  dir_path + "/dsFPD_testConfig.yml"
+        self.testSuite      = "L3 Front Panel Functions"
+        self.moduleConfig   = ConfigRead(moduleConfigProfileFile, self.moduleName)
+        self.testConfig     = ConfigRead(self.testConfigFile, self.moduleName)
+        self.testConfig.test.execute = os.path.join(targetPath, self.testConfig.test.execute)
+        self.utMenu         = UTSuiteNavigatorClass(self.testConfig, None, session)
+        self.testSession    = session
+        self.utils          = utBaseUtils()
+
+        # download the binaries to execute.
+        for artifact in self.testConfig.test.artifacts:
+            filesPath = os.path.join(dir_path, artifact)
+            self.utils.rsync(self.testSession, filesPath, targetPath)
+
+        #start the interface menu.
         self.utMenu.start()
 
     def searchPattern(self, haystack, pattern):
@@ -357,7 +374,7 @@ class dsFPDClass():
 
     def terminate(self):
         """
-        Terminate Front Panle Device.
+        Terminate Front Panel Device.
 
         Args:
             None.
@@ -369,7 +386,7 @@ class dsFPDClass():
 
     def getNumberOfIndicators(self):
         """
-        Get number of indicators available from proifle.
+        Get number of indicators available from profile.
 
         Args:
             None.
@@ -377,8 +394,8 @@ class dsFPDClass():
         Returns:
             Number of Indicators in Profile
         """
-        totlaIndicators = self.deviceProfile.get("Number_of_Indicators")
-        return totlaIndicators
+        totalIndicators = self.moduleConfig.get("Number_of_Indicators")
+        return totalIndicators
 
     def getTypeOfIndicator(self, index:int = 1):
         """
@@ -390,16 +407,16 @@ class dsFPDClass():
         Returns:
             indicator Type
         """
-        indicators = self.deviceProfile.get("SupportedFPDIndicators")
+        indicators = self.moduleConfig.get("SupportedFPDIndicators")
         if not indicators:
             return None
-        indicator = indicators[index]
+        indicator = indicators.get("_"+str(index))
         indicatorType = indicator.get("Indicator_Type")
         return indicatorType
 
     def getSupportedIndicators(self):
         """
-        Get All the supproted indicator list.
+        Get All the supported indicator list.
 
         Args:
             index:int - index of the indicator.
@@ -424,11 +441,11 @@ class dsFPDClass():
             Array of Supported colors
         """
         supportedColors = []
-        indicators = self.deviceProfile.get("SupportedFPDIndicators")
+        indicators = self.moduleConfig.get("SupportedFPDIndicators")
         if not indicators:
             return []
 
-        colorsFromConfig = indicators[index].get("supportedColors")
+        colorsFromConfig = indicators.get("_"+str(index)).get("supportedColors")
         if not colorsFromConfig:
             return []
         for color in colorsFromConfig:
@@ -446,7 +463,7 @@ class dsFPDClass():
             Array of Supported colors
         """
         supportedStates = []
-        stateConfig = self.deviceProfile.get("SupportedLEDStates")
+        stateConfig = self.moduleConfig.get("SupportedLEDStates")
         if not stateConfig:
             return []
 
@@ -465,11 +482,11 @@ class dsFPDClass():
         Returns:
             default color mode : 0 Single Color, 1: Multicolor 
         """
-        indicators = self.deviceProfile.get("SupportedFPDIndicators")
+        indicators = self.moduleConfig.get("SupportedFPDIndicators")
         if not indicators:
             return []
 
-        colorMode = indicators[index].get("DEFAULT_COLOR_MODE")
+        colorMode = indicators.get("_"+str(index)).get("DEFAULT_COLOR_MODE")
         return colorMode
 
     def getMaxBrightnessValue(self, index:int = 1):
@@ -482,11 +499,11 @@ class dsFPDClass():
         Returns:
             Maximum brightness value 
         """
-        indicators = self.deviceProfile.get("SupportedFPDIndicators")
+        indicators = self.moduleConfig.get("SupportedFPDIndicators")
         if not indicators:
             return []
 
-        maxBrightness = indicators[index].get("MAX_BRIGHTNESS")
+        maxBrightness = indicators.get("_"+str(index)).get("MAX_BRIGHTNESS")
         return maxBrightness
 
     def getMinBrightnessValue(self, index:int = 1):
@@ -499,11 +516,11 @@ class dsFPDClass():
         Returns:
             Minimum brightness value 
         """
-        indicators = self.deviceProfile.get("SupportedFPDIndicators")
+        indicators = self.moduleConfig.get("SupportedFPDIndicators")
         if not indicators:
             return []
 
-        minBrightness = indicators[index].get("MIN_BRIGHTNESS")
+        minBrightness = indicators.get("_"+str(index)).get("MIN_BRIGHTNESS")
         return minBrightness
 
     def __del__(self):

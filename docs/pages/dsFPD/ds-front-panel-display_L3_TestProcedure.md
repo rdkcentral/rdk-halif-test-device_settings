@@ -10,6 +10,7 @@
   - [dsFPD_test03_SetVerifyLEDIndicatorsBlink.py](#dsfpd_test03_setverifyledindicatorsblinkpy)
   - [dsFPD_test04_SetVerifyLEDIndicatorsColor.py](#dsfpd_test04_setverifyledindicatorscolorpy)
   - [dsFPD_test05_SetVerifyFPPattern.py](#dsfpd_test05_setverifyfppatternpy)
+  - [dsFPD_L3_Runall.py](#dsfpd_l3_runallpy)
 
 ## Acronyms, Terms and Abbreviations
 
@@ -101,15 +102,7 @@ dsFPD:
   assets:
     device:
       defaults: &defaults
-        artifacts:
-          - "<PATH>/bin/hal_test"
-          - "<PATH>/bin/libut_control.so"
-          - "<PATH>/profiles/source/Source_FPD.yaml"
-          - "<PATH>/profiles/sink/Sink_FPD.yaml"
-          - "<PATH>/bin/run.sh"
         execute:
-          - "chmod +x <PATH>/hal_test"
-          - "chmod +x <PATH>/run.sh"
       test01_EnableDisableAndVerifyLEDIndicators:
         <<: *defaults
       test02_SetVerifyLEDIndicatorsBrightness:
@@ -124,7 +117,7 @@ dsFPD:
 
 #### Test Suite Configuration
 
-Example Test Setup configuration File: [dsFPD_test_suite.yml](../../../host/tests/dsClasses/dsFPD_test_suite.yml)
+Example Test Setup configuration File: [dsFPD_testConfig.yml](../../../host/tests/dsClasses/dsFPD_testConfig.yml)
 
 Update the execute command according to the device path where `HAL` binaries are copied.
 
@@ -473,3 +466,11 @@ Success Criteria
 - Test Conclusion:
 
   Upon receiving user responses for all indicators, the test will conclude and present a final result: PASS or FAIL based on the user inputs throughout the test execution.
+
+### dsFPD_L3_Runall.py
+
+This python file runs all the tests supported
+
+```bash
+python dsFPD_L3_Runall.py --config </PATH>/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/ut/host/tests/configs/deviceConfig.yml
+```

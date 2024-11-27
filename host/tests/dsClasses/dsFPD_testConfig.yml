@@ -3,11 +3,10 @@
 dsFPD:  # Prefix must always exist
     description: "dsFPD Device Settings testing profile / menu system for UT"
     test:
-        execute: "" #Execute command
-        type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
         artifacts:
           - "../../../bin"
-          - "../../../profiles/sink/Sink_FPD.yaml"
+        execute: "bin/run.sh" #Execute command
+        type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
         suites:
             0:
                 name: "L1 dsFPD"
