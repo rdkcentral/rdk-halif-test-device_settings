@@ -27,11 +27,13 @@ import time
 from enum import Enum, auto
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsHdmiIn.dsHdmiInHelperClass import dsHdmiInHelperClass
+from raft.framework.core.logModule import logModule
 
-class dsHdmiIn_test5_AllmChangeCallback_Verify(dsHdmiInHelperClass):
+class dsHdmiIn_test05_AllmChangeCallback_Verify(dsHdmiInHelperClass):
     """
     A test class to verify the Auto Low Latency Mode (ALLM) change callbacks for HDMI input devices.
 
@@ -40,14 +42,15 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(dsHdmiInHelperClass):
     - Testing ALLM status updates through callback mechanisms.
     """
 
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
-        Initializes the dsHdmiIn_test5_AllmChangeCallback_Verify test case.
+        Initializes the dsHdmiIn_test05_AllmChangeCallback_Verify test case.
 
         Sets the test name and calls the superclass constructor.
         """
-        self.testName  = "test5_AllmChangeCallback_Verify"
-        super().__init__(self.testName, '1')
+        self.testName  = "test05_AllmChangeCallback_Verify"
+        self.qcID = '5'
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def CheckDeviceStatusAndEnableAllm(self, manual=False, port_type:str=0, allm_change:str=0, allm_input:str=0):
@@ -125,8 +128,6 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(dsHdmiInHelperClass):
             bool: Final result of the test, True if all checks are successful, otherwise False.
         """
 
-        self.log.testStart(self.testName, '1')
-
         # Initialize the dsHdmiIn module
         self.testdsHdmiIn.initialise()
         result = True
@@ -150,8 +151,6 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(dsHdmiInHelperClass):
             result &= self.verify_allm_status(port, "False")
 
         self.log.stepResult(result,f"ALLM mode: Verified ")
-        # Run postRequisites listed in the test setup configuration file
-        self.testRunPostRequisites()
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()
@@ -159,5 +158,7 @@ class dsHdmiIn_test5_AllmChangeCallback_Verify(dsHdmiInHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsHdmiIn_test5_AllmChangeCallback_Verify()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsHdmiIn_test05_AllmChangeCallback_Verify(summeryLog)
     test.run(False)

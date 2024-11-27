@@ -5,7 +5,6 @@
 - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
 - [Setting Up Test Environment](#setting-up-test-environment)
 - [Streams Required](#streams-required)
-- [Test Setup Connections](#test-setup-connections)
 - [Test Cases](#test-cases)
   - [dsHdmiIn_test1_ConnectionCallback_Verify.py](#dshdmiin_test1_connectioncallback_verifypy)
   - [dsHdmiIn_test2_SignalChangeCallback_Verify.py](#dshdmiin_test2_signalchangecallback_verifypy)
@@ -21,6 +20,7 @@
   - [dsHdmiIn_test12_GetSpdInfo_Verify.py](#dshdmiin_test12_getspdinfo_verifypy)
   - [dsHdmiIn_test13_SetAndGetEDIDVersion.py](#dshdmiin_test13_setandgetedidversionpy)
   - [dsHdmiIn_test14_SetAndGetEDID2ALLMSupport.py](#dshdmiin_test14_setandgetedid2allmsupportpy)
+  - [dsHdmiIn_L3_Runall_Sink.py](#dshdmiin_l3_runall_sinkpy)
 
 ## Acronyms, Terms and Abbreviations
 
@@ -88,16 +88,19 @@ Example Device configuration File: `ut/host/tests/configs/deviceConfig.yml`
 
 For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_device_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_device_config.yml)
 
-Update the target directory where `HAL` binaries will be copied into the device. Also, map the profile to the source/sink settings `YAML` file path.
-
-Ensure the platform should match with the `DUT` platform in [Rack Configuration](#rack-configuration-file)
+Update below fileds in the device configuration file:
+- Set the folder path for `target_directory` where `HAL` binaries will be copied onto the device.
+- Specify the device profile path in `test/profile`
+- Ensure the `platform` should match with the `DUT` `platform` in [Rack Configuration](#rack-configuration-file)
 
 ```yaml
 deviceConfig:
   cpe1:
-    platform: "tv"    # Must match the platform in example_rack_config.yml
+    platform: "linux"    # Must match the platform in example_rack_config.yml
     model: "uk"
+    soc_vendor: "intel"
     target_directory: "/tmp"  # Path where HAL binaries are copied in device
+    prompt: "" # Prompt string on console
     test:
       profile: "../../../../profiles/sink/Sink_HDMIIN.yaml"
       player:
@@ -111,8 +114,6 @@ deviceConfig:
 
 Example Test Setup configuration File: `ut/host/tests/L3_TestCases/dsHdmiIn/dsHdmiIn_L3_testSetup.yml`
 
-Update the artifact paths from which the binaries should be copied to the device.
-
 If need to enable any commands post test case execution update postcmd.
 
 ```yaml
@@ -120,36 +121,17 @@ dsHdmiIn:
   description: "dsHdmiIn Device Settings test setup"
   assets:
     device:
-      defaults: &defaults
-        artifacts:
-          - "<path>/bin/hal_test"
-          - "<path>/bin/libut_control.so"
-          - "<path>/bin/Sink_HDMIIN.yaml"
-          - "<path>/bin/run.sh"
-        execute:
-          - "chmod +x /opt/HAL/dsHdmiIn_L3/hal_test"
-          - "chmod +x /opt/HAL/dsHdmiIn_L3/run.sh"
-          - "cp -rf /usr/lib/libdshal.so /opt/HAL/dsHdmiIn_L3/"
-          - "ln -s /usr/lib/libds-hal.so /opt/HAL/dsHdmiIn_L3/libdshal.so"
-       streams:
-          -" "
-       postcmd:
-          -" "
       test1_ConnectionCallback_Verify:
-        <<: *defaults
         streams:[]
       test2_SignalChangeCallback_Verify:
-        <<: *defaults
         streams:[]
       test14_SetAndGetEDID2ALLMSupport:
-        <<: *defaults
         streams:[]
-
 ```
 
-#### Test Suite Configuration
+#### Test Configuration
 
-Example Test Setup configuration File: `ut/host/tests/dsClasses/dsHdmiIn_test_suite.yml`
+Example Test Setup configuration File: `ut/host/tests/dsClasses/dsHdmiIn_testConfig.yml`
 
 Update the execute command according to the device path where `HAL` binaries are copied.
 
@@ -157,7 +139,9 @@ Update the execute command according to the device path where `HAL` binaries are
 dsHdmiIn:
   description: "dsHdmiIn Device Settings testing profile"
   test:
-    execute: "/tmp/run.sh -p /tmp/Sink_HDMIIN.yaml"
+    artifacts:
+            - "../../../bin/"
+    execute: "run.sh"
     type: UT-C  # Cunit tests (UT-C)
 
 ```
@@ -169,12 +153,6 @@ Once the environment is set up, you can execute the test cases with the followin
 ```bash
 python <TestCaseName.py> --config </PATH>/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/ut/host/tests/configs/deviceConfig.yml
 ```
-## Test Setup Connections
-
-To verify the HdmiIn connect the external devices to `DUT`.
-For Example:
-
-- Connect HdmiIn device to a HdmiIn port.
 
 ## Test Cases
 
@@ -739,13 +717,13 @@ Success Criteria
 
   - Run the Python script **`dsHdmiIn_test11_GetEDIDInfo_Verify.py`**
   - The test will automatically download all required artifacts and streams, copying them to the designated target directory before commencing execution.
-- Edid Info Confirmation:
+  - Edid Info Confirmation:
 
   - Test will get the EDID info and verifies the same.
   - If EDID info is received, it will be compared with the YAML EDID info bytes. If they match, the step will be marked as PASS
   - If EDID info is received, it will be compared with the YAML EDID info bytes. If they does not match, the step will be marked as FAIL
 
-- Repeat for All Ports:
+  - Repeat for All Ports:
 
   The test will iterate through all available Hdmi IN ports, gets EDID and verifies.
 
@@ -788,13 +766,13 @@ This test evaluates the SPD Info received from connected device.
   - Press **Y** if Device is connected (this will mark the step as PASS).
   - Press **N** if user could not connect the device (this will mark the step as FAIL).
 
-- SPD Info Confirmation:
+  - SPD Info Confirmation:
 
   - Test will get the SPD info and verifies the same.
   - If SPD info is received, it will be compared with the YAML SPD info bytes. If they match, the step will be marked as PASS
   - If SPD info is received, it will be compared with the YAML SPD info bytes. If they does not match, the step will be marked as FAIL
 
-- Repeat for All Ports:
+  - Repeat for All Ports:
 
   The test will iterate through all available Hdmi IN ports, gets spdinfo and verifies the same.
 
@@ -828,13 +806,13 @@ This test set EDID version and verifies the same by retrieving the EDID version.
 
   - Run the Python script **`dsHdmiIn_test13_SetAndGetEDIDVersion.py`**
   - The test will automatically download all required artifacts and streams, copying them to the designated target directory before commencing execution.
-- EDID version Verification:
+  - EDID version Verification:
 
   - Test will sets and get the EDID version.
   - If the set and retrieved EDID versions are the same, the test will mark the step as PASS.
   - If the set and retrieved EDID versions do not match, the test will mark the step as FAIL.
 
-- Repeat for All Ports:
+  - Repeat for All Ports:
 
   The test will iterate through all available Hdmi IN ports, sets EDID version and verifies by retrieving EDID version.
 
@@ -868,21 +846,23 @@ This test set ALLM and verifies the same by retrieving the ALLM.
 
   - Run the Python script **`dsHdmiIn_test14_SetAndGetEDID2ALLMSupport.py`**
   - The test will automatically download all required artifacts and streams, copying them to the designated target directory before commencing execution.
-- ALLM version Verification:
+  - ALLM version Verification:
 
   - Test will sets and get the ALLM.
   - If the set and retrieved ALLM support statuses match, the test will mark the step as PASS.
   - If the set and retrieved ALLM support statuses do not match, the test will mark the step as FAIL.
 
-- Repeat for All Ports:
+  - Repeat for All Ports:
 
   The test will iterate through all available Hdmi IN ports, sets ALLM and verifies by retrieving ALLM.
 
 - Test Conclusion:
 
-  Upon receiving user responses for all ports, the test will conclude and present a final result: PASS or FAIL based on the user inputs throughout the test execution.
+Upon receiving user responses for all ports, the test will conclude and present a final result: PASS or FAIL based on the user inputs throughout the test execution.
 
-- Completion and Result:
+### dsHdmiIn_L3_Runall_Sink.py
 
-  Once all necessary user actions are completed, the test will evaluate the results and display whether the test Passed or Failed.
+This python file runs all the tests supported by `sink` devices
 
+```bash
+python dsHdmiIn_L3_Runall_Sink.py --config /PATH/ut/host/tests/configs/example_rack_config.yml --deviceConfig /PATH/ut/host/tests/configs/deviceConfig.yml

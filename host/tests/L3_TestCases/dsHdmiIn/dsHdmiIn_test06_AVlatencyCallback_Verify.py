@@ -23,6 +23,7 @@
 
 import os
 import sys
+import time
 from enum import Enum, auto
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -32,40 +33,39 @@ sys.path.append(os.path.join(dir_path, "../../"))
 from L3_TestCases.dsHdmiIn.dsHdmiInHelperClass import dsHdmiInHelperClass
 from raft.framework.core.logModule import logModule
 
-class dsHdmiIn_test11_GetEDIDInfo_Verify(dsHdmiInHelperClass):
+class dsHdmiIn_test06_AVlatencyCallback_Verify(dsHdmiInHelperClass):
     """
-    A test class for verifying the EDID information from HDMI input devices.
+    A test class to verify the audio-video latency callback for HDMI input devices.
 
-    This class extends `dsHdmiInHelperClass` and provides functionality
-    to test the EDID info of HDMI inputs on the device.
+    This class inherits from `dsHdmiInHelperClass` and focuses on:
+    - Verifying the audio and video latency updates through callback mechanisms.
     """
 
 
     def __init__(self, log:logModule=None):
         """
-        Initializes the test11_GetEDID Info_Verify test .
+        Initializes the dsHdmiIn_test06_AVlatencyCallback_Verify test case.
 
-        Args:
-            None.
+        Sets the test name and calls the superclass constructor.
         """
-        self.testName  = "test11_GetEDIDInfo_Verify"
-        self.qcID = '11'
+        self.testName  = "test06_AVlatencyCallback_Verify"
+        self.qcID = '6'
         super().__init__(self.testName, self.qcID, log)
 
     def testFunction(self):
         """
-        The main test function to verify EDID information on HDMI input ports.
+        The main test function that verifies audio-video latency of HDMI input devices.
 
         This function:
         - Initializes the HDMI input module.
-        - Loops through each supported HDMI port.
-        - Checks the active status of each port and retrieves its EDID info.
+        - Loops through each supported HDMI input port to verify latency.
+        - Logs the results of the latency verification.
 
         Returns:
-            None
+            bool: True if all checks are successful, otherwise False.
         """
 
-        # Initialize the dsHDMIIn module
+        # Initialize the dsHdmiIn module
         self.testdsHdmiIn.initialise()
         result = True
 
@@ -74,27 +74,28 @@ class dsHdmiIn_test11_GetEDIDInfo_Verify(dsHdmiInHelperClass):
             self.log.stepStart(f'Select {port} Port')
             self.log.step(f'Select {port} Port')
 
-            # Check the HdmiIn device connected to is active
+            # Check the HdmiIn device is active
             status = self.CheckDeviceStatus(True,port)
-            #self.log.stepResult(result,f'Hdmi In Device is active {result} on {port}')
             if not status:
-                # Select the HdmiIn port
                 self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
-                self.log.step(f'Selected port {port} Port')
-            # video scaling of HdmiIn port
-
-            #get EDID Info on particular Hdmi input to true and false
-            edid_values = self.testdsHdmiIn.getEdidInfo(port)
-            if edid_values:
-                edid_list = self.moduleConfigProfile.fields.get("edidBytes")
-                if edid_values[8] == str(edid_list[8]) and edid_values[9] == str(edid_list[9]):
-                    self.log.stepResult(True,f'Verified EDID Info received on {port}')
+                time.sleep(5)
+                self.log.step(f'Port Selected {port}')
+            self.testUserResponse.getUserYN(f'Change the AV content for latency on {port} press Y/N:')
+            avLatency = self.testdsHdmiIn.getAVlatencyCallbackStatus()
+            if avLatency != None:
+                self.log.step(f'audio_latency:{avLatency[0]}ms, videoLatency:{avLatency[1]}ms found in Callback')
+                status = self.testUserResponse.getUserYN(f'Is AV Latency is changed on {port} press Y/N:')
+                if status:
+                    self.log.stepResult(True,f' AV latency callback found & Change is observed in port: {port}')
                     result &= True
+                else:
+                    self.log.stepResult(False,f' AV latency callback found & Change is Not observed in port: {port}')
+                    result &= False
             else:
-                self.log.stepResult(False,f' EDID Info Not received on {port}')
+                self.log.step(f'No AV latency callback found in port: {port}')
                 result &= False
 
-        self.log.stepResult(result,f"Verified EDID Info ")
+        self.log.stepResult(result,f"AV Latency is change Verified ")
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()
@@ -104,5 +105,5 @@ class dsHdmiIn_test11_GetEDIDInfo_Verify(dsHdmiInHelperClass):
 if __name__ == '__main__':
     summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
     summeryLog = logModule(summerLogName, level=logModule.INFO)
-    test = dsHdmiIn_test11_GetEDIDInfo_Verify(summeryLog)
+    test = dsHdmiIn_test06_AVlatencyCallback_Verify(summeryLog)
     test.run(False)

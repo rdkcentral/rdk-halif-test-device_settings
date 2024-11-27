@@ -26,11 +26,13 @@ import sys
 import time
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsHdmiIn.dsHdmiInHelperClass import dsHdmiInHelperClass
+from raft.framework.core.logModule import logModule
 
-class dsHdmiIn_test9_ScaleVideoAndVerify(dsHdmiInHelperClass):
+class dsHdmiIn_test09_ScaleVideoAndVerify(dsHdmiInHelperClass):
     """
     A test class for scaling HDMI input video and verifying the scaling status.
 
@@ -38,15 +40,16 @@ class dsHdmiIn_test9_ScaleVideoAndVerify(dsHdmiInHelperClass):
     test the video scaling features of HDMI inputs.
     """
 
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
-        Initializes the test9_ScaleVideoAndVerify test .
+        Initializes the test09_ScaleVideoAndVerify test .
 
         Args:
             None.
         """
-        self.testName  = "test9_ScaleVideoAndVerify"
-        super().__init__(self.testName, '1')
+        self.testName  = "test09_ScaleVideoAndVerify"
+        self.qcID = '9'
+        super().__init__(self.testName, self.qcID, log)
 
     def CheckDeviceStatusAndVerifyVideoScale(self, manual=False, port_type=0, videoScale=False, xCord=0, yCord=0, width=0, height=0):
         """
@@ -82,7 +85,6 @@ class dsHdmiIn_test9_ScaleVideoAndVerify(dsHdmiInHelperClass):
         - Loops through each supported HDMI input port.
         - Verifies the connection status and scales video as needed.
         """
-        self.log.testStart(self.testName, '1')
 
         # Initialize the dsHDMIIn module
         self.testdsHdmiIn.initialise()
@@ -110,8 +112,6 @@ class dsHdmiIn_test9_ScaleVideoAndVerify(dsHdmiInHelperClass):
                     result &= False
 
         self.log.stepResult(result,f"Video Scale Verified ")
-        #Run postRequisites listed in the test setup configuration file
-        self.testRunPostRequisites()
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()
@@ -119,5 +119,7 @@ class dsHdmiIn_test9_ScaleVideoAndVerify(dsHdmiInHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsHdmiIn_test9_ScaleVideoAndVerify()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsHdmiIn_test09_ScaleVideoAndVerify(summeryLog)
     test.run(False)
