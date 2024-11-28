@@ -27,9 +27,11 @@ import time
 from enum import Enum, auto
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsHdmiIn.dsHdmiInHelperClass import dsHdmiInHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsHdmiIn_test12_GetSpdInfo_Verify(dsHdmiInHelperClass):
     """
@@ -39,7 +41,7 @@ class dsHdmiIn_test12_GetSpdInfo_Verify(dsHdmiInHelperClass):
     to test the SPD info of HDMI inputs on the device.
     """
 
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test12_GetSpdInfo_Verify test .
 
@@ -47,7 +49,8 @@ class dsHdmiIn_test12_GetSpdInfo_Verify(dsHdmiInHelperClass):
             None.
         """
         self.testName  = "test12_GetSpdInfo_Verify"
-        super().__init__(self.testName, '1')
+        self.qcID = '12'
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def CheckDeviceAndInfoStatus(self, manual = False, port_type:str=0, spd_info:str=0):
@@ -85,8 +88,6 @@ class dsHdmiIn_test12_GetSpdInfo_Verify(dsHdmiInHelperClass):
             None
         """
 
-        self.log.testStart(self.testName, '1')
-
         # Initialize the dsHDMIIn module
         self.testdsHdmiIn.initialise()
         result = True
@@ -108,17 +109,18 @@ class dsHdmiIn_test12_GetSpdInfo_Verify(dsHdmiInHelperClass):
             #Getting Spd Info on particular Hdmi input port
             spd_values= self.testdsHdmiIn.getSpdInfo(port)
             if spd_values:
-                spd_list = self.testdsHdmiIn.deviceProfile.get("spdInfo")
+                spd_list = self.moduleConfigProfile.fields.get("spdInfo")
                 if spd_values[13] == str(spd_list[13]) and spd_values[14] == str(spd_list[14]):
                     self.log.stepResult(True,f'Verified SPD Info received on {port}')
                     result &= True
+                else:
+                    self.log.stepResult(False,f'Wrong SPD Info received on {port}')
+                    result &= False
             else:
                 self.log.stepResult(False,f'SPD Info Not received on {port}')
                 result &= False
 
         self.log.stepResult(result,f"Verified SPD Info ")
-        #Run postRequisites listed in the test setup configuration file
-        self.testRunPostRequisites()
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()
@@ -126,5 +128,7 @@ class dsHdmiIn_test12_GetSpdInfo_Verify(dsHdmiInHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsHdmiIn_test12_GetSpdInfo_Verify()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsHdmiIn_test12_GetSpdInfo_Verify(summeryLog)
     test.run(False)

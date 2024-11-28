@@ -3,50 +3,31 @@ dsHdmiIn:
   callback:
   assets:
     device:
-      defaults: &defaults
-        artifacts:
-        execute:
-        streams:
-      test1_ConnectionCallback_Verify:
-        <<: *defaults
+      test01_ConnectionCallback_Verify:
         streams: []
-      test2_SignalChangeCallback_Verify:
-        <<: *defaults
-        postCmd:
+      test02_SignalChangeCallback_Verify:
         streams: []
-      test3_PortStatusCallback_Verify:
-        <<: *defaults
+      test03_PortStatusCallback_Verify:
         streams: []
-      test4_VideoModeChangeCallback_Verify:
-        <<: *defaults
+      test04_VideoModeChangeCallback_Verify:
         streams: []
-      test5_AllmChangeCallback_Verify:
-        <<: *defaults
+      test05_AllmChangeCallback_Verify:
         streams: []
-      test6_AVlatencyCallback_Verify:
-        <<: *defaults
+      test06_AVlatencyCallback_Verify:
         streams: []
-      test7_AVIChangeCallback_Verify:
-        <<: *defaults
+      test07_AVIChangeCallback_Verify:
         streams: []
-      test8_SelectPortAndVerifyPortStatus:
-        <<: *defaults
+      test08_SelectPortAndVerifyPortStatus:
         streams: []
-      test9_ScaleVideoAndVerify:
-        <<: *defaults
+      test09_ScaleVideoAndVerify:
         streams: []
       test10_ZoomModeAndVerify:
-        <<: *defaults
         streams: []
       test11_GetEDIDInfo_Verify:
-        <<: *defaults
         streams: []
       test12_GetSpdInfo_Verify:
-        <<: *defaults
         streams: []
       test13_SetAndGetEDIDVersion:
-        <<: *defaults
         streams: []
       test14_SetAndGetEDID2ALLMSupport:
-        <<: *defaults
         streams: []

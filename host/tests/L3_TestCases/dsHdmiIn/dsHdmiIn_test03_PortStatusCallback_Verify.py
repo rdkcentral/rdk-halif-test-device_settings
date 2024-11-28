@@ -26,11 +26,13 @@ import sys
 from enum import Enum, auto
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsHdmiIn.dsHdmiInHelperClass import dsHdmiInHelperClass
+from raft.framework.core.logModule import logModule
 
-class dsHdmiIn_test3_PortStatusCallback_Verify(dsHdmiInHelperClass):
+class dsHdmiIn_test03_PortStatusCallback_Verify(dsHdmiInHelperClass):
     """
     A test class to verify the port status callbacks from HDMI input devices.
 
@@ -39,14 +41,15 @@ class dsHdmiIn_test3_PortStatusCallback_Verify(dsHdmiInHelperClass):
     - Verifying that the status callbacks accurately reflect the active ports.
     """
 
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
-        Initializes the dsHdmiIn_test3_PortStatusCallback_Verify test case.
+        Initializes the dsHdmiIn_test03_PortStatusCallback_Verify test case.
 
         Sets the test name and invokes the superclass constructor.
         """
-        self.testName  = "test3_PortStatusCallback_Verify"
-        super().__init__(self.testName, '1')
+        self.testName  = "test03_PortStatusCallback_Verify"
+        self.qcID = '3'
+        super().__init__(self.testName, self.qcID, log)
 
     def testFunction(self):
         """
@@ -65,9 +68,7 @@ class dsHdmiIn_test3_PortStatusCallback_Verify(dsHdmiInHelperClass):
         Returns:
             bool: Final result of the test, True if all checks are successful, otherwise False.
         """
-
-        self.log.testStart(self.testName, '1')
-
+        
         # Initialize the dsHdmiIn module
         self.testdsHdmiIn.initialise()
 
@@ -96,8 +97,6 @@ class dsHdmiIn_test3_PortStatusCallback_Verify(dsHdmiInHelperClass):
                 result &= False
 
         self.log.stepResult(result,f'Port Status Verified with Callbacks')
-        #Run postRequisites listed in the test setup configuration file
-        self.testRunPostRequisites()
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()
@@ -105,5 +104,7 @@ class dsHdmiIn_test3_PortStatusCallback_Verify(dsHdmiInHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsHdmiIn_test3_PortStatusCallback_Verify()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsHdmiIn_test03_PortStatusCallback_Verify(summeryLog)
     test.run(False)

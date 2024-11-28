@@ -34,6 +34,7 @@ sys.path.append(dir_path+"/../")
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utSuiteNavigator import UTSuiteNavigatorClass
 from raft.framework.plugins.ut_raft.interactiveShell import InteractiveShell
+from raft.framework.plugins.ut_raft.utBaseUtils import utBaseUtils
 
 class dsVideoPortType(Enum):
     dsVIDEOPORT_TYPE_RF     = 0
@@ -53,19 +54,26 @@ class dsDisplayClass():
     This module provides common extensions for device Settings Display Module.
     """
 
-    def __init__(self, deviceProfilePath :str, session=None, targetWorkspace="/tmp" ):
+    def __init__(self, moduleConfigProfileFile :str, session=None, targetWorkspace="/tmp" ):
         """
         Initializes the dsDisplay class function.
         """
 
         self.moduleName = "dsDisplay"
-        self.menuConfig = dir_path+ "/dsDisplay_test_suite.yml"
+        self.testConfigFile = os.path.join(dir_path, "dsDisplay_testConfig.yml")
         self.testSuite = "L3 dsDisplay"
 
         # Load configurations for device profile and menu
-        self.deviceProfile = ConfigRead( deviceProfilePath , self.moduleName)
-        self.utMenu        = UTSuiteNavigatorClass(self.menuConfig, self.moduleName, session)
-        self.testSession   = session
+        self.moduleConfigProfile = ConfigRead(moduleConfigProfileFile , self.moduleName)
+        self.testConfig          = ConfigRead(self.testConfigFile, self.moduleName)
+        self.testConfig.test.execute = os.path.join(targetWorkspace, self.testConfig.test.execute)
+        self.utMenu              = UTSuiteNavigatorClass(self.testConfig, None, session)
+        self.testSession         = session
+        self.utils               = utBaseUtils()
+
+        for artifact in self.testConfig.test.artifacts:
+            filesPath = os.path.join(dir_path, artifact)
+            self.utils.rsync(self.testSession, filesPath, targetWorkspace)
 
          # Start the user interface menu
         self.utMenu.start()
@@ -250,10 +258,12 @@ class dsDisplayClass():
         """
         portLists= []
 
-        ports = self.deviceProfile.get("Video_Ports")
-        for entry in ports:
-            video_port_name = dsVideoPortType(entry).name
-            port_index =  0# Get the index
+        ports = self.moduleConfigProfile.get("Video_Ports")
+        indices = self.moduleConfigProfile.get("VideoPort_Index")
+
+        for i, port in enumerate(ports):
+            video_port_name = dsVideoPortType(port).name
+            port_index = indices[i]
             portLists.append((video_port_name, port_index))
 
         return portLists

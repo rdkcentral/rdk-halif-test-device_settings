@@ -56,12 +56,13 @@ classDiagram
     testControl <|-- ut_raft : inherits
     class ut_raft{
     }
-    ut_raft <|-- L3_TestClasses : inherits
+    ut_raft <|-- dsCompositeInHelperClass : inherits
+    dsCompositeInHelperClass <|-- L3_TestClasses : inherits
     L3_TestClasses ..> dsCompositeIn : uses
     note for testControl "uses rackConfig.yaml and deviceConfig.yaml"
     note for dsCompositeIn "uses platformProfile.yaml"
     note for L3_TestClasses "uses testSetupConfig.yaml"
-    note for ut_raft "suite Navigator uses testSuite.yaml"
+    note for ut_raft "suite Navigator uses testConfig.yaml"
 ```
 
 - **testControl**
@@ -97,9 +98,9 @@ classDiagram
   - Example configuration file [dsCompositeIn_Settings](https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/3.0.0/profiles/sink/Sink_CompositeInput.yaml)
 
 - **testSetupConfig.yaml**
-  - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams, setting environment variables etc.
-  - Example configuration file [dsCompositeIn_L3_testSetup.yml](../../../host/tests/dsCompositeIn_L3_Tests/dsCompositeIn_L3_testSetup.yml)
+  - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams etc.
+  - Example configuration file [dsCompositeIn_L3_testSetup.yml](../../../host/tests/L3_TestCases/dsCompositeIn/dsCompositeIn_L3_testSetup.yml)
 
-- **testSuite.yaml**
+- **testConfig.yaml**
   - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
-  - Example configuration file [dsCompositeIn_test_suite.yml](../../../host/tests/dsClasses/dsCompositeIn_test_suite.yml)
+  - Example configuration file [dsCompositeIn_testConfig.yml](../../../host/tests/dsClasses/dsCompositeIn_testConfig.yml)

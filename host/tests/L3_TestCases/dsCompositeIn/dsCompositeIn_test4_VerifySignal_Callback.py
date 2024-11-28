@@ -29,6 +29,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsCompositeInHelperClass import dsCompositeInHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsCompositeIn_test4_VerifySignal_Callback(dsCompositeInHelperClass):
     """
@@ -39,7 +40,7 @@ class dsCompositeIn_test4_VerifySignal_Callback(dsCompositeInHelperClass):
     CompositeIn ports, and performing verification of compositeIn output.
     """
 
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test4_VerifySignal_Callback test .
 
@@ -47,7 +48,8 @@ class dsCompositeIn_test4_VerifySignal_Callback(dsCompositeInHelperClass):
             None.
         """
         self.testName  = "test4_VerifySignal_Callback"
-        super().__init__(self.testName, '4')
+        self.qcID = '4'
+        super().__init__(self.testName, self.qcID, log)
 
      #TODO: Current version supports only manual verification.
     def CheckDeviceStatus(self, manual=False, connect=False, port_type:str=0):
@@ -81,8 +83,6 @@ class dsCompositeIn_test4_VerifySignal_Callback(dsCompositeInHelperClass):
             bool: Final result of the test.
         """
 
-        self.log.testStart("test4_VerifySignal_Callback", '4')
-
         # Initialize the dsCompositeIn module
         self.testdsCompositeIn.initialise()
 
@@ -113,5 +113,7 @@ class dsCompositeIn_test4_VerifySignal_Callback(dsCompositeInHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsCompositeIn_test4_VerifySignal_Callback()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsCompositeIn_test4_VerifySignal_Callback(summeryLog)
     test.run(False)

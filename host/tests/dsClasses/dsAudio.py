@@ -21,11 +21,12 @@
 # *
 #* ******************************************************************************
 
-import yaml
+import subprocess
 import os
 import sys
 from enum import Enum, auto
 import re
+import yaml
 
 # Add parent directory to the system path for module imports
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -34,6 +35,7 @@ sys.path.append(os.path.join(dir_path, "../"))
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utSuiteNavigator import UTSuiteNavigatorClass
 from raft.framework.plugins.ut_raft.interactiveShell import InteractiveShell
+from raft.framework.plugins.ut_raft.utBaseUtils import utBaseUtils
 
 class dsAudioPortType(Enum):
     """Enumeration for different audio port types."""
@@ -74,26 +76,33 @@ class dsAudioClass():
     This module provides common functionalities and extensions for the device Settings Audio Module.
     """
 
-    moduleName = "dsAudio"
-    menuConfig = os.path.join(dir_path, "dsAudio_test_suite.yml")
-    testSuite = "L3 dsAudio"
-
-    def __init__(self, deviceProfilePath:str, session=None ):
+    def __init__(self, moduleConfigProfileFile :str, session=None, targetWorkspace="/tmp"):
         """
         Initializes the dsAudioClass instance with configuration settings.
 
         Args:
-            deviceProfilePath (str): Path to the device profile configuration file.
+            moduleConfigProfileFile  (str): Path to the device profile configuration file.
             session: Optional; session object for the user interface.
 
         Returns:
             None
         """
+        self.moduleName = "dsAudio"
+        self.testConfigFile = os.path.join(dir_path, "dsAudio_testConfig.yml")
+        self.testSuite = "L3 dsAudio"
+
         # Load configurations for device profile and menu
-        self.deviceProfile = ConfigRead( deviceProfilePath, self.moduleName)
-        self.suitConfig    = ConfigRead(self.menuConfig, self.moduleName)
-        self.utMenu        = UTSuiteNavigatorClass(self.menuConfig, self.moduleName, session)
+        self.moduleConfigProfile = ConfigRead( moduleConfigProfileFile , self.moduleName)
+        self.testConfig    = ConfigRead(self.testConfigFile, self.moduleName)
+        self.testConfig.test.execute = os.path.join(targetWorkspace, self.testConfig.test.execute)
+        self.utMenu        = UTSuiteNavigatorClass(self.testConfig, None, session)
         self.testSession   = session
+        self.utils         = utBaseUtils()
+        self.ports = self.moduleConfigProfile.fields.get("Ports")
+
+        for artifact in self.testConfig.test.artifacts:
+            filesPath = os.path.join(dir_path, artifact)
+            self.utils.rsync(self.testSession, filesPath, targetWorkspace)
 
         # Start the user interface menu
         self.utMenu.start()
@@ -791,13 +800,11 @@ class dsAudioClass():
                 - index (int): The index of the port.
             Returns an empty list if no ports are found.
         """
-
-        ports = self.deviceProfile.get("Ports")
-        if not ports:
+        if not self.ports:
             return []  # Handle empty ports list
 
         supported_ports = []
-        for entry in ports.values():
+        for entry in self.ports.values():
             supported_ports.append((dsAudioPortType(entry['Typeid']).name, entry['Index']))
 
         return supported_ports
@@ -815,8 +822,7 @@ class dsAudioClass():
                 - 1 for a source device.
                 - None if the device type is unknown or unsupported.
         """
-
-        type = self.deviceProfile.get("Type")
+        type = self.moduleConfigProfile.fields.get("Type")
         if type == "sink":
             return 0
         elif type == "source":
@@ -836,12 +842,10 @@ class dsAudioClass():
         Returns:
             bool: True if the feature is supported by the specified port, False otherwise.
         """
-
-        ports = self.deviceProfile.get("Ports")
-        if not ports:
+        if not self.ports:
             return False
 
-        for entry in ports.values():
+        for entry in self.ports.values():
             if (dsAudioPortType(entry['Typeid']).name == audio_port
                 and entry['Index'] == port_index
                 and entry["MS12_Capabilities"] & dsMS12Capabilities[feature].value):
@@ -860,12 +864,10 @@ class dsAudioClass():
         Returns:
             bool: True if the port supports audio compression, False otherwise.
         """
-
-        ports = self.deviceProfile.get("Ports")
-        if not ports:
+        if not self.ports:
             return False
 
-        for entry in ports.values():
+        for entry in self.ports.values():
             if (dsAudioPortType(entry['Typeid']).name == audio_port
                 and entry['Index'] == port_index
                 and entry["number_of_supported_compressions"] > 0 ):
@@ -884,12 +886,11 @@ class dsAudioClass():
         Returns:
             list: A list of supported output modes for the specified audio port. If no ports or modes are found, returns an empty list.
         """
-        ports = self.deviceProfile.get("Ports")
-        if not ports:
+        if not self.ports:
             return []
 
         output_modes = []
-        for entry in ports.values():
+        for entry in self.ports.values():
             if (dsAudioPortType(entry['Typeid']).name == audio_port
                 and entry['Index'] == port_index):
                 for mode in entry['stereo_modes']:
@@ -907,11 +908,10 @@ class dsAudioClass():
         Returns:
             list: A list of supported MS12 audio profiles. If no profiles are found, returns an empty list.
         """
-        ports = self.deviceProfile.get("Ports")
-        if not ports:
+        if not self.ports:
             return []
 
-        for entry in ports.values():
+        for entry in self.ports.values():
             if (dsAudioPortType(entry['Typeid']).name == audio_port
                 and entry['Index'] == port_index):
                 return entry['MS12_AudioProfiles']

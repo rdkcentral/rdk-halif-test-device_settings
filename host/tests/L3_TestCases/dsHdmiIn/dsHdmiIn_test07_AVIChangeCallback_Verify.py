@@ -27,11 +27,13 @@ import time
 from enum import Enum, auto
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsHdmiIn.dsHdmiInHelperClass import dsHdmiInHelperClass
+from raft.framework.core.logModule import logModule
 
-class dsHdmiIn_test7_AVIChangeCallback_Verify(dsHdmiInHelperClass):
+class dsHdmiIn_test07_AVIChangeCallback_Verify(dsHdmiInHelperClass):
     """
     A test class to verify AVI content change callbacks for HDMI input devices.
 
@@ -40,14 +42,15 @@ class dsHdmiIn_test7_AVIChangeCallback_Verify(dsHdmiInHelperClass):
     """
 
 
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
-        Initializes the dsHdmiIn_test7_AVIChangeCallback_Verify test.
+        Initializes the dsHdmiIn_test07_AVIChangeCallback_Verify test.
 
         Sets the test name and calls the superclass constructor.
         """
-        self.testName  = "test7_AVIChangeCallback_Verify"
-        super().__init__(self.testName, '1')
+        self.testName  = "test07_AVIChangeCallback_Verify"
+        self.qcID = '7'
+        super().__init__(self.testName, self.qcID, log)
 
     def CheckDeviceStatus(self, manual=False, port_type:str=0, avi_input:str=0):
         """
@@ -85,8 +88,6 @@ class dsHdmiIn_test7_AVIChangeCallback_Verify(dsHdmiInHelperClass):
             bool: True if all checks are successful, otherwise False.
         """
 
-        self.log.testStart(self.testName, '1')
-
         # Initialize the dsHdmiIn module
         self.testdsHdmiIn.initialise()
         result = True
@@ -113,8 +114,6 @@ class dsHdmiIn_test7_AVIChangeCallback_Verify(dsHdmiInHelperClass):
                 result &= False
 
         self.log.stepResult(result,f"AVI content type Verified ")
-        #Run postRequisites listed in the test setup configuration file
-        self.testRunPostRequisites()
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()
@@ -122,5 +121,7 @@ class dsHdmiIn_test7_AVIChangeCallback_Verify(dsHdmiInHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsHdmiIn_test7_AVIChangeCallback_Verify()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsHdmiIn_test07_AVIChangeCallback_Verify(summeryLog)
     test.run(False)

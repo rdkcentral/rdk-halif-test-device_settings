@@ -21,6 +21,7 @@
 # *
 #* ******************************************************************************
 
+import subprocess
 import yaml
 import os
 import sys
@@ -34,25 +35,39 @@ sys.path.append(dir_path+"/../")
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utSuiteNavigator import UTSuiteNavigatorClass
 from raft.framework.plugins.ut_raft.interactiveShell import InteractiveShell
+from raft.framework.plugins.ut_raft.utBaseUtils import utBaseUtils
 
 class dsCompositeInClass():
-
-    moduleName = "dsCompositeIn"
-    menuConfig =  dir_path + "/dsCompositeIn_test_suite.yml"
-    testSuite = "L3 dsCompositeIn"
 
     """
     Device Settings CompositeIn Class
 
     This module provides common extensions for device Settings CompositeIn Module.
     """
-    def __init__(self, deviceProfilePath:str, session=None, devicePath="/opt/HAL" ):
+    def __init__(self, deviceProfilePath:str, session=None, targetWorkspace="/opt/HAL" ):
         """
         Initializes the dsCompositeIn class function.
+        Args:
+            deviceProfilePath (str): Path to the device profile configuration file.
+            session: Optional; session object for the user interface.
+        Returns:
+            None
         """
+        self.moduleName = "dsCompositeIn"
+        self.testConfigFile =  dir_path + "/dsCompositeIn_testConfig.yml"
+        self.testSuite = "L3 dsCompositeIn"
+
         self.deviceProfile = ConfigRead( deviceProfilePath, self.moduleName)
-        self.utMenu        = UTSuiteNavigatorClass(self.menuConfig, self.moduleName, session)
+        self.testConfig    = ConfigRead(self.testConfigFile, self.moduleName)
+        self.testConfig.test.execute = os.path.join(targetWorkspace, self.testConfig.test.execute)
+        self.utMenu        = UTSuiteNavigatorClass(self.testConfig, None, session)
         self.testSession   = session
+        self.utils         = utBaseUtils()
+
+        for artifact in self.testConfig.test.artifacts:
+            filesPath = os.path.join(dir_path, artifact)
+            self.utils.rsync(self.testSession, filesPath, targetWorkspace)
+
         self.utMenu.start()
 
     def searchPattern(self, haystack, pattern):
