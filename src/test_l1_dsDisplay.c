@@ -845,27 +845,29 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
  * |01|Call dsGetDisplayAspectRatio() without initializing the display sub-system or obtaining a handle | intptr_t handle, dsVideoAspectRatio_t *aspectRatio | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * |02|Initialize the display sub-system and obtain a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
  * |03|Call dsGetDisplay() Loop through all valid ports in numPorts[]|vType: [Valid Port Type]_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
- * |04|Call dsGetDisplayAspectRatio() with an invalid handle| NULL, dsVideoAspectRatio_t *aspectRatio | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
- * |05|Call dsGetDisplayAspectRatio() with an NULL aspectRatio | intptr_t handle, NULL | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
- * |06|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
- * |07|Call dsGetDisplayAspectRatio() without initializing the display sub-system or obtaining a handle | intptr_t handle, dsVideoAspectRatio_t *aspectRatio  | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |04|If the device is a source, call dsGetDisplayAspectRatio() with an invalid handle| NULL, dsVideoAspectRatio_t *aspectRatio | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
+ * |05|If the device is a source, call dsGetDisplayAspectRatio() with an NULL aspectRatio | intptr_t handle, NULL | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
+ * |06|If the device is a sink, call dsGetDisplayAspectRatio() | intptr_t handle, dsVideoAspectRatio_t *aspectRatio | dsERR_OPERATION_NOT_SUPPORTED | API is not supported for sink devices |
+ * |07|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
+ * |08|Call dsGetDisplayAspectRatio() without initializing the display sub-system or obtaining a handle | intptr_t handle, dsVideoAspectRatio_t *aspectRatio  | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  *
  * @note The ability to test scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might require specific setup or environment configuration.
  *
  */
+
 void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
     // Start of the test
     gTestID = 12;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
-    intptr_t displayHandle =-1;
+    intptr_t displayHandle = -1;
     dsVideoPortType_t vType;
     dsVideoAspectRatio_t aspectRatio;
 
     // Step 01: Call dsGetDisplayAspectRatio() without initializing the display sub-system
     result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio);
-    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // Step 02: Initialize the display sub-system
@@ -882,23 +884,30 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
         result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-        // Step 04: Call dsGetDisplayAspectRatio() with an invalid handle
-        result = dsGetDisplayAspectRatio((intptr_t)NULL, &aspectRatio);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if (gSourceType == 1) {
+           // Step 04: Call dsGetDisplayAspectRatio() with an invalid handle for source devices
+            result = dsGetDisplayAspectRatio((intptr_t)NULL, &aspectRatio);
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
-        // Step 05: Call dsGetDisplayAspectRatio() with a NULL aspectRatio
-        result = dsGetDisplayAspectRatio(displayHandle, NULL);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+            // Step 05: Call dsGetDisplayAspectRatio() with a NULL aspectRatio for source devices
+            result = dsGetDisplayAspectRatio(displayHandle, NULL);
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+        } else if (gSourceType == 0) {
+            // Step 06: Expect dsERR_OPERATION_NOT_SUPPORTED for sink devices
+            result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio);
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
     }
 
-    // Step 06: Terminate the display sub-system
+    // Step 07: Terminate the display sub-system
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // Step 07: Call dsGetDisplayAspectRatio() without initializing the display sub-system
+    // Step 08: Call dsGetDisplayAspectRatio() without initializing the display sub-system
     result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio);
-    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // End of the test
@@ -1050,6 +1059,32 @@ static UT_test_suite_t * pSuite = NULL;
  */
 int test_l1_dsDisplay_register ( void )
 {
+    ut_kvp_status_t status;
+
+    /* Get the Device Type */
+    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsDisplay.Type", gDeviceType, TEST_DS_DEVICE_TYPE_SIZE);
+
+    if (status == UT_KVP_STATUS_SUCCESS )
+    {
+        if (!strncmp(gDeviceType, TEST_TYPE_SOURCE_VALUE, TEST_DS_DEVICE_TYPE_SIZE))
+        {
+            gSourceType = 1;
+        }
+        else if(!strncmp(gDeviceType, TEST_TYPE_SINK_VALUE, TEST_DS_DEVICE_TYPE_SIZE))
+        {
+            gSourceType = 0;
+        }
+        else
+        {
+            UT_LOG_ERROR("Invalid platform type: %s", gDeviceType);
+            return -1;
+        }
+    }
+    else {
+        UT_LOG_ERROR("Failed to get the platform type");
+        return -1;
+    }
+
     /* add a suite to the registry */
     pSuite = UT_add_suite( "[L1 dsDisplay]", NULL, NULL );
     if ( NULL == pSuite)
