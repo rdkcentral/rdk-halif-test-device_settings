@@ -34,28 +34,41 @@ sys.path.append(dir_path+"/../")
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utSuiteNavigator import UTSuiteNavigatorClass
 from raft.framework.plugins.ut_raft.interactiveShell import InteractiveShell
+from raft.framework.plugins.ut_raft.utBaseUtils import utBaseUtils
 
 class dsHostClass():
-
-    moduleName = "dsHost"
-    menuConfig =  dir_path + "/dsHost_test_suite.yml"
-    testSuite = "L3 dsHost"
 
     """
     Device Settings Host Class
 
     This module provides common extensions for device Settings Host Module.
     """
-    def __init__(self, deviceProfilePath:str, session=None ):
+    def __init__(self, moduleConfigProfileFile:str, session=None, targetWorkspace="/tmp" ):
         """
         Initializes the dsHost class function.
+
+        Args:
+            moduleConfigProfileFile  (str): Path to the device profile configuration file.
+            session: Optional; session object for the user interface.
+
+        Returns:
+            None
         """
 
         self.moduleName = "dsHost"
-        self.menuConfig =  dir_path + "/dsHost_test_suite.yml"
+        self.testConfigFile =  os.path.join(dir_path, "dsHost_testConfig.yml")
+        self.testConfig    = ConfigRead(self.testConfigFile, self.moduleName)
+        self.testConfig.test.execute = os.path.join(targetWorkspace, self.testConfig.test.execute)
         self.testSuite = "L3 dsHost"
-        self.deviceProfile = ConfigRead( deviceProfilePath, self.moduleName)
-        self.utMenu        = UTSuiteNavigatorClass(self.menuConfig, self.moduleName, session)
+        
+        self.deviceProfile = ConfigRead( moduleConfigProfileFile, self.moduleName)
+        self.utMenu        = UTSuiteNavigatorClass(self.testConfig, None, session)
+        self.testSession = session
+        self.utils         = utBaseUtils()
+
+        for artifact in self.testConfig.test.artifacts:
+            filesPath = os.path.join(dir_path, artifact)
+            self.utils.rsync(self.testSession, filesPath, targetWorkspace)
 
         self.utMenu.start()
 

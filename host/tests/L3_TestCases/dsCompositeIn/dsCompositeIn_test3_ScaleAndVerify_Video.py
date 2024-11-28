@@ -28,6 +28,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsCompositeInHelperClass import dsCompositeInHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsCompositeIn_test3_ScaleAndVerify_Video(dsCompositeInHelperClass):
     """
@@ -38,7 +39,7 @@ class dsCompositeIn_test3_ScaleAndVerify_Video(dsCompositeInHelperClass):
     CompositeIn ports, and performing verification of compositeIn output.
     """
 
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test3_ScaleAndVerify_Video test .
 
@@ -46,7 +47,8 @@ class dsCompositeIn_test3_ScaleAndVerify_Video(dsCompositeInHelperClass):
             None.
         """
         self.testName  = "test3_ScaleAndVerify_Video"
-        super().__init__(self.testName, '3')
+        self.qcID = '3'
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def CheckDeviceStatusAndVerifyVideoScale(self, manual=False, port_type:str=0, videoscale:str=0):
@@ -79,8 +81,6 @@ class dsCompositeIn_test3_ScaleAndVerify_Video(dsCompositeInHelperClass):
             bool: Final result of the test.
         """
 
-        self.log.testStart("test3_ScaleAndVerify_Video", '3')
-
         # Initialize the dsCompositeIn module
         self.testdsCompositeIn.initialise()
 
@@ -110,5 +110,7 @@ class dsCompositeIn_test3_ScaleAndVerify_Video(dsCompositeInHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsCompositeIn_test3_ScaleAndVerify_Video()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsCompositeIn_test3_ScaleAndVerify_Video(summeryLog)
     test.run(False)

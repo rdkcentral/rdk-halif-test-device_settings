@@ -27,7 +27,8 @@ import sys
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
 
-from L3_TestCases.dsDisplay.dsDisplayHelperClass import dsDisplayHelperClass
+from dsDisplayHelperClass import dsDisplayHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsDisplay_test04_TestVerifyDisplayEdidBytes(dsDisplayHelperClass):
 
@@ -38,16 +39,17 @@ class dsDisplay_test04_TestVerifyDisplayEdidBytes(dsDisplayHelperClass):
     downloading necessary test assets, retrieving the EdidBytes, and performing verification.
     """
 
-    # Class variables
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test04_TestVerifyDisplayEdidBytes test .
 
         Args:
             None.
         """
+        # Class variables
         self.testName  = "test04_TestVerifyDisplayEdidBytes"
-        super().__init__(self.testName,'4')
+        self.qcID = '4'
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testConnectDisplay(self, port:str, display:str, manual=False):
@@ -79,7 +81,6 @@ class dsDisplay_test04_TestVerifyDisplayEdidBytes(dsDisplayHelperClass):
         return monitorName
 
     def testFunction(self):
-        self.log.testStart(self.testName, '4')
 
         # Initialize the dsDisplay module
         self.testdsDisplay.initialise()
@@ -112,5 +113,7 @@ class dsDisplay_test04_TestVerifyDisplayEdidBytes(dsDisplayHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsDisplay_test04_TestVerifyDisplayEdidBytes()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsDisplay_test04_TestVerifyDisplayEdidBytes(summeryLog)
     test.run(False)

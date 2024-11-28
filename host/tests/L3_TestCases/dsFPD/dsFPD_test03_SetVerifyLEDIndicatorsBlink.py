@@ -28,12 +28,13 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsFPD.dsFPDHelperClass import dsFPDHelperClass
+from raft.framework.core.logModule import logModule
 from dsClasses.dsFPD import dsFPDState
 
 
 class dsFPD_test03_SetVerifyLEDIndicatorsBlink(dsFPDHelperClass):
 
-    def __init__(self):
+    def __init__(self,log:logModule=None):
         """
         Initializes the test03_SetVerifyLEDIndicatorsBlink test .
 
@@ -43,7 +44,8 @@ class dsFPD_test03_SetVerifyLEDIndicatorsBlink(dsFPDHelperClass):
         self.testName  = "test03_SetVerifyLEDIndicatorsBlink"
         self.duration = 1000
         self.iteration = 5
-        super().__init__(self.testName, '3')
+        self.qcID = '3'
+        super().__init__(self.testName, self.qcID,log)
 
 
     #TODO: Current version supports only manual verification.
@@ -70,8 +72,6 @@ class dsFPD_test03_SetVerifyLEDIndicatorsBlink(dsFPDHelperClass):
         Returns:
             bool: final result of the test.
         """
-
-        self.log.testStart(self.testName, '3')
 
         # initialize the dsFPD module
         self.testdsFPD.initialise()
@@ -100,5 +100,7 @@ class dsFPD_test03_SetVerifyLEDIndicatorsBlink(dsFPDHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsFPD_test03_SetVerifyLEDIndicatorsBlink()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsFPD_test03_SetVerifyLEDIndicatorsBlink(summeryLog)
     test.run(False)

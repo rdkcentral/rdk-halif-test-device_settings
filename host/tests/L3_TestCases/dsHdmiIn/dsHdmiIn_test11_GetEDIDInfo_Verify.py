@@ -26,9 +26,11 @@ import sys
 from enum import Enum, auto
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(dir_path))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from L3_TestCases.dsHdmiIn.dsHdmiInHelperClass import dsHdmiInHelperClass
+from raft.framework.core.logModule import logModule
 
 class dsHdmiIn_test11_GetEDIDInfo_Verify(dsHdmiInHelperClass):
     """
@@ -39,7 +41,7 @@ class dsHdmiIn_test11_GetEDIDInfo_Verify(dsHdmiInHelperClass):
     """
 
 
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test11_GetEDID Info_Verify test .
 
@@ -47,7 +49,8 @@ class dsHdmiIn_test11_GetEDIDInfo_Verify(dsHdmiInHelperClass):
             None.
         """
         self.testName  = "test11_GetEDIDInfo_Verify"
-        super().__init__(self.testName, '1')
+        self.qcID = '11'
+        super().__init__(self.testName, self.qcID, log)
 
     def testFunction(self):
         """
@@ -61,8 +64,6 @@ class dsHdmiIn_test11_GetEDIDInfo_Verify(dsHdmiInHelperClass):
         Returns:
             None
         """
-
-        self.log.testStart(self.testName, '1')
 
         # Initialize the dsHDMIIn module
         self.testdsHdmiIn.initialise()
@@ -85,7 +86,7 @@ class dsHdmiIn_test11_GetEDIDInfo_Verify(dsHdmiInHelperClass):
             #get EDID Info on particular Hdmi input to true and false
             edid_values = self.testdsHdmiIn.getEdidInfo(port)
             if edid_values:
-                edid_list = self.testdsHdmiIn.deviceProfile.get("edidBytes")
+                edid_list = self.moduleConfigProfile.fields.get("edidBytes")
                 if edid_values[8] == str(edid_list[8]) and edid_values[9] == str(edid_list[9]):
                     self.log.stepResult(True,f'Verified EDID Info received on {port}')
                     result &= True
@@ -94,8 +95,6 @@ class dsHdmiIn_test11_GetEDIDInfo_Verify(dsHdmiInHelperClass):
                 result &= False
 
         self.log.stepResult(result,f"Verified EDID Info ")
-        #Run postRequisites listed in the test setup configuration file
-        self.testRunPostRequisites()
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()
@@ -103,5 +102,7 @@ class dsHdmiIn_test11_GetEDIDInfo_Verify(dsHdmiInHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = dsHdmiIn_test11_GetEDIDInfo_Verify()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsHdmiIn_test11_GetEDIDInfo_Verify(summeryLog)
     test.run(False)

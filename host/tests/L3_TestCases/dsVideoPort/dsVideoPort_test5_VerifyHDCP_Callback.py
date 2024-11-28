@@ -24,103 +24,30 @@
 import os
 import sys
 
-# Append the parent directory to system path for module imports
+# Get directory path and append to system path
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(dir_path+"/../../")
+sys.path.append(os.path.join(dir_path, "../../"))
 
 # Import required classes from modules
-from dsClasses.dsVideoPort import dsVideoPortClass
-from raft.framework.plugins.ut_raft import utHelperClass
-from raft.framework.plugins.ut_raft.configRead import ConfigRead
-from raft.framework.plugins.ut_raft.utPlayer import utPlayer
-from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
+from dsVideoPortHelperClass import dsVideoPortHelperClass
+from raft.framework.core.logModule import logModule
 
-class dsVideoPort_test5_VerifyHDCP_Callback(utHelperClass):
+class dsVideoPort_test5_VerifyHDCP_Callback(dsVideoPortHelperClass):
     """
     Test class for verifying HDCP callback during HDMI plug/unplug.
     """
 
-    testName  = "test5_VerifyHDCP_Callback"
-    testSetupPath = dir_path + "/dsVideoPort_L3_testSetup.yml"
-    moduleName = "dsVideoPort"
-    rackDevice = "dut"
-
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test5_VerifyHDCP_Callback test with necessary setup.
 
         Args:
             None.
         """
-        super().__init__(self.testName, '1')
+        self.testName  = "test5_VerifyHDCP_Callback"
+        self.qcID      = '5'
 
-        # Test Setup configuration file
-        self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
-
-        # Open Session for player
-        #self.player_session = self.dut.getConsoleSession("ssh_player")
-
-        # Open Session for hal test
-        self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
-
-        #player = self.cpe.get("test").get("player")
-
-        # Create player Class
-        #self.testPlayer = utPlayer(self.player_session, player)
-
-         # Create user response Class
-        self.testUserResponse = utUserResponse()
-
-        # Get path to device profile file
-        self.deviceProfile = dir_path + "/" + self.cpe.get("test").get("profile")
-
-    def testDownloadAssets(self):
-        """
-        Downloads the artifacts and streams listed in test-setup configuration file to the dut.
-
-        Args:
-            None.
-        """
-
-        # List of streams with path
-        self.testStreams = []
-
-        self.deviceDownloadPath = self.cpe.get("target_directory")
-
-        #download test artifacts to device
-        url = self.testSetup.assets.device.test5_VerifyHDCP_Callback.artifacts
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-
-        #download test streams to device
-        url = self.testSetup.assets.device.test5_VerifyHDCP_Callback.streams
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            for streampath in url:
-                self.testStreams.append(self.deviceDownloadPath + "/" + os.path.basename(streampath))
-
-    def testCleanAssets(self):
-        """
-        Removes the assets copied to the dut.
-
-        Args:
-            None.
-        """
-        self.deleteFromDevice(self.testStreams)
-
-    def testRunPrerequisites(self):
-        """
-        Runs Prerequisite commands listed in test-setup configuration file on the dut.
-
-        Args:
-            None.
-        """
-
-        #Run test specific commands
-        cmds = self.testSetup.assets.device.test5_VerifyHDCP_Callback.execute
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
+        super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def testUnplugHDMI(self, unplug:True, manual=False):
@@ -158,7 +85,7 @@ class dsVideoPort_test5_VerifyHDCP_Callback(utHelperClass):
             return True
         return False
 
-    def testEnablePortAndVerifyHDCP(self, port, index):
+    def testVerifyHDCP(self ):
         """
         Enables a video port, performs HDMI plug/unplug actions, and verifies HDCP callbacks.
 
@@ -169,11 +96,6 @@ class dsVideoPort_test5_VerifyHDCP_Callback(utHelperClass):
         Returns:
             bool: Result of the HDCP verification.
         """
-        self.log.stepStart(f'Enable {port} Port')
-        self.testdsVideoPort.enablePort(port, index)
-
-        # Enable HDCP for the port
-        self.testdsVideoPort.enable_HDCP(port, index)
 
         # Verify unplug HDMI event
         result = self.testUnplugHDMI(unplug=True, manual=True)
@@ -200,22 +122,17 @@ class dsVideoPort_test5_VerifyHDCP_Callback(utHelperClass):
         Returns:
             bool: Final result of the test.
         """
-        self.testDownloadAssets()
-        self.testRunPrerequisites()
-
-        # Initialize the dsVideoPort class
-        self.testdsVideoPort = dsVideoPortClass(self.deviceProfile, self.hal_session)
-        self.testdsVideoPort.initialise()
 
         # Loop through all supported video ports and verify HDCP callbacks
         for port, index in self.testdsVideoPort.getSupportedPorts():
-            result = self.testEnablePortAndVerifyHDCP(port, index)
-
-        self.testCleanAssets()
-        del self.testdsVideoPort
+            self.testEnablePort(port, index)
+            self.log.stepStart(f'Verify Callback of {port} ')
+            result = self.testVerifyHDCP()
 
         return result
 
 if __name__ == '__main__':
-    test = dsVideoPort_test5_VerifyHDCP_Callback()
+    summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
+    summeryLog = logModule(summerLogName, level=logModule.INFO)
+    test = dsVideoPort_test5_VerifyHDCP_Callback(summeryLog)
     test.run(False)
