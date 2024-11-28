@@ -203,6 +203,34 @@ class dsCompositeInClass():
 
         return None
 
+    def getVideoModeChangeCallbackStatus(self):
+        """
+        Retrieves the CompositeIn videomode details from the device using a callback.
+
+        This function reads the output from the device session to detect the
+        video mode details. The callback message contains the port number
+        and the video resolution details. The function parses the message
+        and returns the port ,resolution, framerate and None if not present.
+
+        Args:
+            None.
+        Returns:
+            tuple:
+                - port (str): The CompositeIn port number as a string.
+                - videoResolution (str): Video resolution as a string.
+                - videoFramerate (str): Video framerate as a string.
+            None: If no matching signal status is found.
+        """
+
+        result = self.testSession.read_until("Received VideomodeChange callback port:")
+        callpattern = r"Received VideomodeChange callback port: \[(\w+)\], videoResolution: \[(\w+)\], videoFrameRate: \[(\w+)\]"
+        status = self.searchPattern(result, callpattern)
+
+        if status:
+            return status
+
+        return None
+
     def getStatus(self):
         """
         Gets the status of compositeIn ports.
