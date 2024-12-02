@@ -13,3 +13,5 @@ dsCompositeIn:
         streams:
       test4_VerifySignal_Callback:
         streams:
+      test5_VerifyVideoMode_Callback:
+        streams:

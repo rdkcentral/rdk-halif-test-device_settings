@@ -88,6 +88,8 @@ static int32_t gTestID    = 1;
 static bool                    gConnectionStatus = false;
 static dsCompInSignalStatus_t  gSignalStatus  = dsCOMP_IN_SIGNAL_STATUS_NONE;
 static dsCompositeInStatus_t        gStatusChange;
+static dsVideoResolution_t gVideoResolution = dsVIDEO_PIXELRES_720x480;
+static dsVideoFrameRate_t gFrameRate = dsVIDEO_FRAMERATE_UNKNOWN;
 
 /* Mapping table for dsError_t */
 const static ut_control_keyStringMapping_t dsError_mapTable [] = {
@@ -115,6 +117,34 @@ const static ut_control_keyStringMapping_t dsCompInSignalStatusMappingTable[] = 
     {NULL, -1}
 };
 
+/* Mapping table for dsVideoResolution_t */
+const static ut_control_keyStringMapping_t dsCompInResolutionMappingTable[] = {
+    {"dsVIDEO_PIXELRES_720x480", (int32_t)dsVIDEO_PIXELRES_720x480},
+    {"dsVIDEO_PIXELRES_720x576", (int32_t)dsVIDEO_PIXELRES_720x576},
+    {"dsVIDEO_PIXELRES_1280x720", (int32_t)dsVIDEO_PIXELRES_1280x720},
+    {"dsVIDEO_PIXELRES_1366x768", (int32_t)dsVIDEO_PIXELRES_1366x768},
+    {"dsVIDEO_PIXELRES_1920x1080", (int32_t)dsVIDEO_PIXELRES_1920x1080},
+    {"dsVIDEO_PIXELRES_3840x2160", (int32_t)dsVIDEO_PIXELRES_3840x2160},
+    {"dsVIDEO_PIXELRES_4096x2160", (int32_t)dsVIDEO_PIXELRES_4096x2160},
+    {"dsVIDEO_PIXELRES_MAX", (int32_t)dsVIDEO_PIXELRES_MAX},
+    {NULL, -1}
+};
+
+/* Mapping table for dsVideoFrameRate_t */
+const static ut_control_keyStringMapping_t dsCompInFrameRateMappingTable[] = {
+    {"dsVIDEO_FRAMERATE_UNKNOWN", (int32_t)dsVIDEO_FRAMERATE_UNKNOWN},
+    {"dsVIDEO_FRAMERATE_24", (int32_t)dsVIDEO_FRAMERATE_24},
+    {"dsVIDEO_FRAMERATE_25", (int32_t)dsVIDEO_FRAMERATE_25},
+    {"dsVIDEO_FRAMERATE_30", (int32_t)dsVIDEO_FRAMERATE_30},
+    {"dsVIDEO_FRAMERATE_60", (int32_t)dsVIDEO_FRAMERATE_60},
+    {"dsVIDEO_FRAMERATE_23dot98", (int32_t)dsVIDEO_FRAMERATE_23dot98},
+    {"dsVIDEO_FRAMERATE_29dot97", (int32_t)dsVIDEO_FRAMERATE_29dot97},
+    {"dsVIDEO_FRAMERATE_50", (int32_t)dsVIDEO_FRAMERATE_50},
+    {"dsVIDEO_FRAMERATE_59dot94", (int32_t)dsVIDEO_FRAMERATE_59dot94},
+    {"dsVIDEO_FRAMERATE_MAX", (int32_t)dsVIDEO_FRAMERATE_MAX},
+    {NULL, -1}
+};
+
 /* Mapping table for dsCompositeInPort_t */
 const static ut_control_keyStringMapping_t dsCompositeInPortMappingTable[] = {
     {"dsCOMPOSITE_IN_PORT_NONE", (int32_t)dsCOMPOSITE_IN_PORT_NONE},
@@ -123,7 +153,6 @@ const static ut_control_keyStringMapping_t dsCompositeInPortMappingTable[] = {
     {"dsCOMPOSITE_IN_PORT_MAX", (int32_t)dsCOMPOSITE_IN_PORT_MAX},
     {NULL, -1}
 };
-
 
 /* Mapping table for boolean values */
 const static ut_control_keyStringMapping_t bool_mapTable [] = {
@@ -206,6 +235,22 @@ static void compositeInStatusChangeCB(dsCompositeInStatus_t inputStatus)
 }
 
 /**
+ * @brief Callback function for CompositeIn port video mode change.
+ *
+ * This function is invoked whenever a video mode change occurs in the Comosite Input video.
+ */
+static void compositeInVideoModeChangeCB(dsCompositeInPort_t port, dsVideoPortResolution_t videoResolution)
+{
+    UT_LOG_INFO("Received VideomodeChange callback port: [%s], videoResolution: [%s], videoFrameRate: [%s]\n",
+                 UT_Control_GetMapString(dsCompositeInPortMappingTable, port),
+                 UT_Control_GetMapString(dsCompInResolutionMappingTable, videoResolution.pixelResolution),
+                 UT_Control_GetMapString(dsCompInFrameRateMappingTable, videoResolution.frameRate));
+
+    gVideoResolution = videoResolution.pixelResolution;
+    gFrameRate = videoResolution.frameRate;
+}
+
+/**
 * @brief This test initializes the CompositeIn Module.
 *
 * This test function initializes the CompositeIn Module.
@@ -246,6 +291,13 @@ void test_l3_CompositeIn_initialize(void)
     ret = dsCompositeInRegisterStatusChangeCB(compositeInStatusChangeCB);
     UT_LOG_INFO("Result dsCompositeInRegisterStatusChangeCB(IN:CBFunc:[0x%0X]) dsError_t:[%s]",
                         compositeInStatusChangeCB, UT_Control_GetMapString(dsError_mapTable, ret));
+    ASSERT(ret == dsERR_NONE);
+
+    /* Register videomode change callback */
+    UT_LOG_INFO("Calling dsCompositeInRegisterVideoModeUpdateCB(IN:CBFunc:[0x%0X])", compositeInVideoModeChangeCB);
+    ret = dsCompositeInRegisterVideoModeUpdateCB(compositeInVideoModeChangeCB);
+    UT_LOG_INFO("Result dsCompositeInRegisterVideoModeUpdateCB(IN:CBFunc:[0x%0X]) dsError_t:[%s]",
+                        compositeInVideoModeChangeCB, UT_Control_GetMapString(dsError_mapTable, ret));
     ASSERT(ret == dsERR_NONE);
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
