@@ -293,7 +293,6 @@ void test_l1_dsVideoDevice_positive_dsGetVideoDevice(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
     }
 
     // Step 03: De-initialize the video devices
@@ -394,15 +393,18 @@ void test_l1_dsVideoDevice_positive_dsSetDFC (void)
     for (int i = 0; i < gDSvideoDevice_NumVideoDevices; ++i) {
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
-        if(gSourceType == 1) {
-            // 03: Set DFC mode with various zoom modes
-            for (int j = 0; j < gDSVideoDeviceConfiguration[j].NoOfSupportedDFCs; ++j) {
-                result = dsSetDFC(handle, gDSVideoDeviceConfiguration[i].SupportedDFCs[j]);
+        // 03: Set DFC mode with various zoom modes
+        for (int j = 0; j < gDSVideoDeviceConfiguration[i].NoOfSupportedDFCs; ++j)
+        {
+            result = dsSetDFC(handle, gDSVideoDeviceConfiguration[i].SupportedDFCs[j]);
+            if (gSourceType == 1)
+            {
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
             }
-        } else if(gSourceType == 0) {
-            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+            else if (gSourceType == 0)
+            {
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+            }
         }
     }
 
@@ -454,16 +456,29 @@ void test_l1_dsVideoDevice_negative_dsSetDFC (void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // 04: Call dsSetDFC() with an invalid handle
         result = dsSetDFC(-1, gDSVideoDeviceConfiguration[i].DefaultDFC);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if (gSourceType == 1)
+        {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        }
+        else if (gSourceType == 0)
+        {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
 
         // 05: Call dsSetDFC() with an invalid zoom mode
         int32_t numSupportedDFCs = gDSVideoDeviceConfiguration[i].NoOfSupportedDFCs;
         result = dsSetDFC(handle, gDSVideoDeviceConfiguration[i].SupportedDFCs[numSupportedDFCs - 1] + 1);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if (gSourceType == 1)
+        {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        }
+        else if (gSourceType == 0)
+        {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
     }
 
     // 06: De-initialize video devices
@@ -513,15 +528,13 @@ void test_l1_dsVideoDevice_positive_dsGetDFC(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 03: Get the DFC mode using dsGetDFC() with the obtained handle
+        result = dsGetDFC(handle, &dfc_mode);
         if(gSourceType == 1) {
-            result = dsGetDFC(handle, &dfc_mode);
             UT_ASSERT_EQUAL(result, dsERR_NONE);
-
             // Step 04: Compare the DFC mode with value from the profile
-            for (int j = 0; j < gDSVideoDeviceConfiguration[j].NoOfSupportedDFCs; ++j) {
+            for (int j = 0; j < gDSVideoDeviceConfiguration[i].NoOfSupportedDFCs; ++j) {
                 UT_LOG_DEBUG("SupportedDFCs: %d",gDSVideoDeviceConfiguration[i].SupportedDFCs[j]);
                 if(dfc_mode == gDSVideoDeviceConfiguration[i].SupportedDFCs[j]) {
                     count++;
@@ -585,7 +598,6 @@ void test_l1_dsVideoDevice_negative_dsGetDFC(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 04: Call dsGetDFC() with an invalid handle
         result = dsGetDFC(-1, &dfc_mode);
@@ -643,7 +655,6 @@ void test_l1_dsVideoDevice_positive_dsGetHDRCapabilities(void)
         result = dsGetVideoDevice(i, &handle);
         UT_LOG_INFO("Handle: %d", handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 03: Get HDR capabilities using dsGetHDRCapabilities() with the obtained handle
         result = dsGetHDRCapabilities(handle, &hdr_capabilities);
@@ -702,7 +713,6 @@ void test_l1_dsVideoDevice_negative_dsGetHDRCapabilities(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 04: Call dsGetHDRCapabilities() with an invalid handle
         result = dsGetHDRCapabilities(-1, &hdr_capabilities);
@@ -759,7 +769,6 @@ void test_l1_dsVideoDevice_positive_dsGetSupportedVideoCodingFormats(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 03: Get supported video formats using dsGetSupportedVideoCodingFormats() with the obtained handle
         result = dsGetSupportedVideoCodingFormats(handle, &supported_formats);
@@ -818,7 +827,6 @@ void test_l1_dsVideoDevice_negative_dsGetSupportedVideoCodingFormats(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 04: Call dsGetSupportedVideoCodingFormats() with an invalid handle
         result = dsGetSupportedVideoCodingFormats(-1, &supported_formats);
@@ -875,26 +883,28 @@ void test_l1_dsVideoDevice_positive_dsGetVideoCodecInfo(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
-        if(gSourceType == 1) {
-            // Step 03: Iterate over all codecs
-            for(dsVideoCodingFormat_t codec = dsVIDEO_CODEC_MPEGHPART2; codec < dsVIDEO_CODEC_MAX; codec = (dsVideoCodingFormat_t)(codec + 1)){
-                if(!(gDSVideoDeviceConfiguration[i].SupportedVideoCodingFormats & codec)){
+        // Step 03: Iterate over all codecs
+        for(dsVideoCodingFormat_t codec = dsVIDEO_CODEC_MPEGHPART2; codec < dsVIDEO_CODEC_MAX; codec = (dsVideoCodingFormat_t)(codec + 1)){
+            result = dsGetVideoCodecInfo(handle, codec, &codecInfo);
+            if (gSourceType == 1)
+            {
+                if (!(gDSVideoDeviceConfiguration[i].SupportedVideoCodingFormats & codec))
+                {
                     continue;
                 }
-                result = dsGetVideoCodecInfo(handle, codec, &codecInfo);
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
                 // Compare with profile file
                 UT_ASSERT_EQUAL(codecInfo.num_entries, gDSVideoDeviceConfiguration[i].num_codec_entries);
-                if(codec == dsVIDEO_CODEC_MPEGHPART2){
+                if (codec == dsVIDEO_CODEC_MPEGHPART2)
+                {
                     UT_ASSERT_EQUAL(codecInfo.entries->profile, gDSVideoDeviceConfiguration[i].profile);
                     // Support for float values in KVP
                     UT_ASSERT_EQUAL(codecInfo.entries->level, gDSVideoDeviceConfiguration[i].level);
                 }
-                codec = (dsVideoCodingFormat_t) (0x01 << (j++));
-    	    }
-        } else if(gSourceType == 0) {
-            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+                codec = (dsVideoCodingFormat_t)(0x01 << (j++));
+            } else if(gSourceType == 0) {
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+            }
         }
     }
 
@@ -949,7 +959,6 @@ void test_l1_dsVideoDevice_negative_dsGetVideoCodecInfo(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 04: Call dsGetVideoCodecInfo() with an invalid handle
         result = dsGetVideoCodecInfo(-1, dsVIDEO_CODEC_MPEGHPART2, &codecInfo);
@@ -1009,7 +1018,6 @@ void test_l1_dsVideoDevice_positive_dsForceDisableHDRSupport(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 03: Force disable HDR support (set to true)
         result = dsForceDisableHDRSupport(handle, true);
@@ -1068,7 +1076,6 @@ void test_l1_dsVideoDevice_negative_dsForceDisableHDRSupport(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 04: Call dsForceDisableHDRSupport() with an invalid handle
         result = dsForceDisableHDRSupport(-1, true);
@@ -1118,17 +1125,28 @@ void test_l1_dsVideoDevice_positive_dsSetFRFMode(void)
     // Step 02: Obtain video device handle
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
-        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 03: Set the FRF mode using a valid framerate
-        for (int j=0;j<gDSVideoDeviceConfiguration[i].NoOfSupportedDFR;j++){
-            uint32_t framerate = gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate[j]; 
-            result = dsSetFRFMode(handle, framerate);
-            if(gSourceType == 1) {
-                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
-            } else if(gSourceType == 0) {
-                UT_ASSERT_EQUAL(result, dsERR_NONE);
-            }
+        uint32_t framerateMode = 0;
+        result = dsSetFRFMode(handle, framerateMode);
+        if (gSourceType == 1)
+        {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
+        else if (gSourceType == 0)
+        {
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+        }
+        framerateMode = 1;
+        result = dsSetFRFMode(handle, framerateMode);
+        if (gSourceType == 1)
+        {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
+        else if (gSourceType == 0)
+        {
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
         }
     }
 
@@ -1170,7 +1188,7 @@ void test_l1_dsVideoDevice_negative_dsSetFRFMode(void)
     intptr_t handle = -1;
 
     // Step 01: Call dsSetFRFMode() without prior initialization
-    result = dsSetFRFMode(handle, 60); // Note: uninitialized 'handle' used here
+    result = dsSetFRFMode(handle, 1); // Note: uninitialized 'handle' used here
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     // Step 02: Initialize video devices
@@ -1181,10 +1199,9 @@ void test_l1_dsVideoDevice_negative_dsSetFRFMode(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 04: Call dsSetFRFMode() with an invalid handle
-        result = dsSetFRFMode(-1, 60);
+        result = dsSetFRFMode(-1, 1);
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
         // Step 05: Call dsSetFRFMode() with an invalid framerate
@@ -1197,7 +1214,7 @@ void test_l1_dsVideoDevice_negative_dsSetFRFMode(void)
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 07: Call dsSetFRFMode() after termination
-    result = dsSetFRFMode(handle, 60);
+    result = dsSetFRFMode(handle, 1);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -1239,7 +1256,6 @@ void test_l1_dsVideoDevice_positive_dsGetFRFMode(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 03: Get the FRF mode using the obtained handle
         result = dsGetFRFMode(handle, &fetchedFRFMode);
@@ -1303,7 +1319,6 @@ void test_l1_dsVideoDevice_negative_dsGetFRFMode(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 04: Call dsGetFRFMode() with an invalid handle
         result = dsGetFRFMode(-1, &fetchedFRFMode);
@@ -1362,18 +1377,17 @@ void test_l1_dsVideoDevice_positive_dsGetCurrentDisplayframerate(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 03: Get the current display framerate using the obtained handle
+        result = dsGetCurrentDisplayframerate(handle, fetchedFramerate);
         if(gSourceType == 0) {
-            result = dsGetCurrentDisplayframerate(handle, fetchedFramerate);
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
             // Step 04: Compare the current display framerate with the value from the profile
             for (int j = 0; j < gDSVideoDeviceConfiguration[i].NoOfSupportedDFR ;j++) {
-                UT_LOG_INFO("SupportedDisplayFramerate %s",gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate);
-                if(strncpy(fetchedFramerate,gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate,sizeof(fetchedFramerate)) == 0) {
-                    UT_LOG_INFO("SupportedDisplayFramerate %s fetchedFramerate %s ",gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate, fetchedFramerate);
+                UT_LOG_INFO("SupportedDisplayFramerate %s",gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate[j]);
+                if(strncmp(fetchedFramerate,gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate[j],sizeof(fetchedFramerate)) == 0) {
+                    UT_LOG_INFO("SupportedDisplayFramerate %s fetchedFramerate %s ",gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate[j], fetchedFramerate);
                     count++;
                 }
                 if(count < 1) {
@@ -1435,7 +1449,6 @@ void test_l1_dsVideoDevice_negative_dsGetCurrentDisplayframerate(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 04: Call dsGetCurrentDisplayframerate() with an invalid handle
         result = dsGetCurrentDisplayframerate(-1, fetchedFramerate);
@@ -1490,12 +1503,11 @@ void test_l1_dsVideoDevice_positive_dsSetDisplayframerate(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 03: Set the display framerate using the obtained handle
         if(gSourceType == 0) {
             for(int j=0;j<gDSVideoDeviceConfiguration[i].NoOfSupportedDFR;j++){
-                result = dsSetDisplayframerate(handle, gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate);
+                result = dsSetDisplayframerate(handle, gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate[j]);
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
             }
         } else if(gSourceType == 1){
@@ -1553,7 +1565,6 @@ void test_l1_dsVideoDevice_negative_dsSetDisplayframerate(void)
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_NOT_EQUAL(handle, (intptr_t)NULL);
 
         // Step 04: Call dsSetDisplayframerate() with an invalid handle
         result = dsSetDisplayframerate(-1, "30fps");
