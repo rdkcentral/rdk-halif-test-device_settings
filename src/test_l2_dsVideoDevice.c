@@ -119,7 +119,7 @@ void test_l2_dsVideoDevice_SetAndGetDFC_source(void)
             UT_LOG_ERROR("dsGetVideoDevice failed with status: %d", retStatus);
             continue;
         }
-        for (int j = 0;j < gDSVideoDeviceConfiguration[j].NoOfSupportedDFCs; j++)
+        for (int j = 0;j < gDSVideoDeviceConfiguration[i].NoOfSupportedDFCs; j++)
         {
             UT_LOG_DEBUG("Invoking dsSetDFC with handle: %ld, dfc: %d", handle, gDSVideoDeviceConfiguration[i].SupportedDFCs[j]);
             retStatus = dsSetDFC(handle, gDSVideoDeviceConfiguration[i].SupportedDFCs[j]);
@@ -357,7 +357,7 @@ void test_l2_dsVideoDevice_SetAndVerifyDisplayframerate_sink(void)
 
     dsError_t ret;
     intptr_t handle;
-    char getframerate[dsVIDEO_FRAMERATE_MAX] = {0};
+    char getframerate[DS_VIDEO_DEVICE_MAX_FRAMERATE_LEN] = {0};
 
     UT_LOG_DEBUG("Invoking dsVideoDeviceInit");
     ret = dsVideoDeviceInit();
@@ -379,7 +379,7 @@ void test_l2_dsVideoDevice_SetAndVerifyDisplayframerate_sink(void)
         for (int j=0;j<gDSVideoDeviceConfiguration[i].NoOfSupportedDFR;j++)
         {
             UT_LOG_DEBUG("Invoking dsSetDisplayframerate with handle: %ld", handle);
-            ret = dsSetDisplayframerate(handle, gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate);
+            ret = dsSetDisplayframerate(handle, gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate[j]);
             UT_ASSERT_EQUAL(ret, dsERR_NONE);
             UT_LOG_DEBUG("dsSetDisplayframerate return status: %d", ret);
             if(ret != dsERR_NONE)
@@ -392,7 +392,75 @@ void test_l2_dsVideoDevice_SetAndVerifyDisplayframerate_sink(void)
             ret = dsGetCurrentDisplayframerate(handle, getframerate);
             UT_ASSERT_EQUAL(ret, dsERR_NONE);
             UT_LOG_DEBUG("dsGetCurrentDisplayframerate return status: %d, framerate: %s", ret, getframerate);
-            UT_ASSERT_STRING_EQUAL(gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate, getframerate);
+            UT_ASSERT_STRING_EQUAL(gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate[j], getframerate);
+        } /* for(j) */
+    } /* for(i) */
+
+    UT_LOG_DEBUG("Invoking dsVideoDeviceTerm");
+    ret = dsVideoDeviceTerm();
+    UT_LOG_DEBUG("dsVideoDeviceTerm return status: %d", ret);
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
+}
+
+/**
+* @brief Test to verify the setting and getting of display FRF mode for dsVideoDevice
+*
+* This test case is designed to validate the functionality of dsSetFRFMode and
+* dsGetFRFMode APIs. The test involves setting a FRF Mode for
+* a video device and then getting the current FRF Mode to verify if the set value
+* is correctly retrieved.
+*
+* **Test Group ID:** 02@n
+* **Test Case ID:** 006@n
+*
+* **Test Procedure:**
+* Refer to Test specification documentation [ds-video-device_L2-Low-Level_TestSpec.md](../docs/pages/ds-video-device_L2-Low-Level_TestSpec.md)
+*/
+void test_l2_dsVideoDevice_SetAndVerifyFRFMode_sink(void)
+{
+    gTestID = 6;
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t ret;
+    intptr_t handle;
+    int FRFMode;
+
+    UT_LOG_DEBUG("Invoking dsVideoDeviceInit");
+    ret = dsVideoDeviceInit();
+    UT_LOG_DEBUG("dsVideoDeviceInit return status: %d", ret);
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+
+    for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++)
+    {
+        UT_LOG_DEBUG("Invoking dsGetVideoDevice with index :%d",i);
+        ret = dsGetVideoDevice(i, &handle);
+        UT_LOG_DEBUG("dsGetVideoDevice return status: %d, handle: %ld", ret, handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        if(ret != dsERR_NONE)
+        {
+            UT_LOG_ERROR("dsGetVideoDevice failed with error %d", ret);
+            continue;
+        }
+        //FRF Mode is 0 or disable 1 for Enable.Loop through twice to set 0 and 1
+        for (int j=0;j<2;j++)
+        {
+            UT_LOG_DEBUG("Invoking dsSetFRFMode with handle: %ld", handle);
+            ret = dsSetFRFMode(handle, j);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
+            UT_LOG_DEBUG("dsSetFRFMode return status: %d", ret);
+            if(ret != dsERR_NONE)
+            {
+                UT_LOG_ERROR("dsGetVideoDevice failed with error %d", ret);
+                continue;
+            }
+
+            UT_LOG_DEBUG("Invoking dsGetFRFMode with handle: %ld", handle);
+            ret = dsGetFRFMode(handle, &FRFMode);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
+            UT_LOG_DEBUG("dsGetFRFMode return status: %d, framerate: %d", ret, FRFMode);
+            UT_ASSERT_EQUAL(j,FRFMode);
         } /* for(j) */
     } /* for(i) */
 
@@ -434,6 +502,7 @@ int test_l2_dsVideoDevice_register(void)
 
     if(gSourceType == 0) {
         UT_add_test( pSuite, "L2_SetAndVerifyDisplayframerate_Sink", test_l2_dsVideoDevice_SetAndVerifyDisplayframerate_sink);
+        UT_add_test( pSuite, "L2_SetAndVerifyFRFMode_Sink", test_l2_dsVideoDevice_SetAndVerifyFRFMode_sink);
     }
 
     if(gSourceType == 1) {

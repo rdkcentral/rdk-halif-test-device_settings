@@ -102,6 +102,8 @@ void test_l2_dsDisplay_RetrieveAndValidateEDID_sink(void)
     int length = 0; // Initialize the length to 0.
     unsigned char edid_profile;
     char key_string[DS_DSIPLAY_KVP_SIZE];
+    dsVideoPortType_t vType;
+    uint32_t portIndex;
 
     // Step 1: Call dsDisplayInit
     ret = dsDisplayInit();
@@ -109,44 +111,58 @@ void test_l2_dsDisplay_RetrieveAndValidateEDID_sink(void)
     UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
 
     // Step 2: Call dsGetDisplay
-    ret = dsGetDisplay(dsVIDEOPORT_TYPE_INTERNAL, 0, &handle);
-    UT_LOG_INFO("Invoked dsGetDisplay() with dsVIDEOPORT_TYPE_INTERNAL and index 0, returned: %d, handle: %ld\n", ret, handle);
-    UT_ASSERT_EQUAL(ret, dsERR_NONE);
-    if (ret != dsERR_NONE)
-    {
-        // Call dsDisplayTerm if dsGetEDID fails
-        dsDisplayTerm();
-        return;
-    }
+    uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
+    for (size_t i = 0; i < numPorts; i++) {
 
-    // Step 3: Call dsGetEDID
-    ret = dsGetEDID(handle, &edid);
-    UT_ASSERT_EQUAL(ret, dsERR_NONE);
-    UT_LOG_INFO("Invoked dsGetEDID() with handle %ld, returned: %d, productCode: %d\n", handle, ret, edid.productCode);
+        // Fetch the video port type dynamically
+        snprintf(key_string, sizeof(key_string), "dsDisplay/Video_Ports/%ld", i);
+        vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_string);
+        UT_LOG_INFO("Invoked dsGetDisplay() with video port type: %d\n", vType);
 
-    UT_ASSERT_KVP_EQUAL_PROFILE_UINT32(edid.productCode, "dsDisplay/EDID_Data/productCode");
+        // Fetch the video port index dynamically
+        snprintf(key_string, sizeof(key_string), "dsDisplay/VideoPort_Index/%ld", i);
+        portIndex = UT_KVP_PROFILE_GET_UINT32(key_string);
+        UT_LOG_INFO("Invoked dsGetDisplay() with port index: %d\n", portIndex);
 
-    // Step 4: Call dsGetEDIDBytes
-    ret = dsGetEDIDBytes(handle, edidBytes, &length);
-    UT_ASSERT_EQUAL(ret, dsERR_NONE);
-    UT_LOG_INFO("Invoked dsGetEDIDBytes() with handle %ld, returned: %d, Manufacturer ID: %d\n", handle, ret, edidBytes[8] << 8 | edidBytes[9]);
-    if (ret != dsERR_NONE)
-    {
-        // Call dsDisplayTerm if dsGetEDIDBytes fails
-        dsDisplayTerm();
-        return;
-    }
-
-    // Manufacturer ID
-    for( uint8_t i = 8; i < 9; i++)
-    {
-        snprintf(key_string, DS_DSIPLAY_KVP_SIZE, "dsDisplay.edidBytes.%d", i);
-        edid_profile = UT_KVP_PROFILE_GET_UINT8(key_string);
-        if(edid_profile != edidBytes[i])
+        ret = dsGetDisplay(vType, portIndex, &handle);
+        UT_LOG_INFO("Invoked dsGetDisplay() with vType: %d and portIndex: %d, returned: %d, handle: %ld\n", vType, portIndex, ret, handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        if (ret != dsERR_NONE)
         {
-            UT_FAIL("edid check failed");
-            UT_LOG_ERROR("edid byte: %x, expected value: %x", edidBytes[i], edid_profile);
-            break;
+            // Call dsDisplayTerm if dsGetDisplay fails
+            dsDisplayTerm();
+            return;
+        }
+
+        // Step 3: Call dsGetEDID
+        ret = dsGetEDID(handle, &edid);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_LOG_INFO("Invoked dsGetEDID() with handle %ld, returned: %d, productCode: %d\n", handle, ret, edid.productCode);
+
+        UT_ASSERT_KVP_EQUAL_PROFILE_UINT32(edid.productCode, "dsDisplay/EDID_Data/productCode");
+
+        // Step 4: Call dsGetEDIDBytes
+        ret = dsGetEDIDBytes(handle, edidBytes, &length);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_LOG_INFO("Invoked dsGetEDIDBytes() with handle %ld, returned: %d, Manufacturer ID: %d\n", handle, ret, edidBytes[8] << 8 | edidBytes[9]);
+        if (ret != dsERR_NONE)
+        {
+            // Call dsDisplayTerm if dsGetEDIDBytes fails
+            dsDisplayTerm();
+            return;
+        }
+
+        // Manufacturer ID check
+        for( uint8_t i = 8; i < 9; i++)
+        {
+            snprintf(key_string, DS_DSIPLAY_KVP_SIZE, "dsDisplay.edidBytes.%d", i);
+            edid_profile = UT_KVP_PROFILE_GET_UINT8(key_string);
+            if(edid_profile != edidBytes[i])
+            {
+                UT_FAIL("edid check failed");
+                UT_LOG_ERROR("edid byte: %x, expected value: %x", edidBytes[i], edid_profile);
+                break;
+            }
         }
     }
 
@@ -157,6 +173,7 @@ void test_l2_dsDisplay_RetrieveAndValidateEDID_sink(void)
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
+
 
 /**
 * @brief This test aims to verify the default aspect ratio of the source in the L2 dsDisplay module
@@ -178,6 +195,9 @@ void test_l2_dsDisplay_TestDefaultAspectRatio_source(void)
     dsError_t ret = dsERR_NONE; // Initialize the return status to dsERR_NONE.
     intptr_t handle = 0; //Initialize handle to 0.
     dsVideoAspectRatio_t aspectRatio = dsVIDEO_ASPECT_RATIO_MAX; // Initialize aspect ratio with MAX value.
+    char key_string[DS_DSIPLAY_KVP_SIZE];
+    dsVideoPortType_t vType;
+    uint32_t portIndex;
 
     // Step 1: Call dsDisplayInit()
     UT_LOG_DEBUG("Invoking dsDisplayInit()");
@@ -185,29 +205,42 @@ void test_l2_dsDisplay_TestDefaultAspectRatio_source(void)
     UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
 
     // Step 2: Call dsGetDisplay()
-    UT_LOG_DEBUG("Invoking dsGetDisplay() with dsVIDEOPORT_TYPE_HDMI and index 0");
-    ret = dsGetDisplay(dsVIDEOPORT_TYPE_HDMI, 0, &handle);
-    UT_ASSERT_EQUAL(ret, dsERR_NONE);
-    if (ret != dsERR_NONE)
-    {
-        UT_LOG_ERROR("dsGetDisplay() failed with error: %d\n", ret);
-        dsDisplayTerm();
-        return;
-    }
+    uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
+    for (size_t i = 0; i < numPorts; i++) {
 
-    // Step 3: Call dsGetDisplayAspectRatio()
-    UT_LOG_DEBUG("Invoking dsGetDisplayAspectRatio() with handle obtained from dsGetDisplay()");
-    ret = dsGetDisplayAspectRatio(handle, &aspectRatio);
-    UT_ASSERT_EQUAL(ret, dsERR_NONE);
-    UT_ASSERT_EQUAL(aspectRatio, dsVIDEO_ASPECT_RATIO_16x9);
-    if (ret != dsERR_NONE || aspectRatio != dsVIDEO_ASPECT_RATIO_16x9)
-    {
-        UT_LOG_ERROR("dsGetDisplayAspectRatio() failed with error: %d\n", ret);
-    }
+        // Fetch the video port type dynamically
+        snprintf(key_string, sizeof(key_string), "dsDisplay/Video_Ports/%ld", i);
+        vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_string);
+        UT_LOG_DEBUG("Invoking dsGetDisplay() with video port type: %d", vType);
 
-    // Step 4: Verify aspect ratio
-    UT_LOG_DEBUG("Verifying that the aspect ratio is dsVIDEO_ASPECT_RATIO_16x9");
-    UT_ASSERT_EQUAL(aspectRatio, dsVIDEO_ASPECT_RATIO_16x9);
+        // Fetch the video port index dynamically
+        snprintf(key_string, sizeof(key_string), "dsDisplay/VideoPort_Index/%ld", i);
+        portIndex = UT_KVP_PROFILE_GET_UINT32(key_string);
+        UT_LOG_DEBUG("Invoking dsGetDisplay() with port index: %d", portIndex);
+
+        ret = dsGetDisplay(vType, portIndex, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        if (ret != dsERR_NONE)
+        {
+            UT_LOG_ERROR("dsGetDisplay() failed with error: %d\n", ret);
+            dsDisplayTerm();
+            return;
+        }
+
+        // Step 3: Call dsGetDisplayAspectRatio() with the obtained handle
+        UT_LOG_DEBUG("Invoking dsGetDisplayAspectRatio() with handle obtained from dsGetDisplay()");
+        ret = dsGetDisplayAspectRatio(handle, &aspectRatio);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_EQUAL(aspectRatio, dsVIDEO_ASPECT_RATIO_16x9);
+        if (ret != dsERR_NONE || aspectRatio != dsVIDEO_ASPECT_RATIO_16x9)
+        {
+            UT_LOG_ERROR("dsGetDisplayAspectRatio() failed with error: %d\n", ret);
+        }
+
+        // Step 4: Verify aspect ratio
+        UT_LOG_DEBUG("Verifying that the aspect ratio is dsVIDEO_ASPECT_RATIO_16x9");
+        UT_ASSERT_EQUAL(aspectRatio, dsVIDEO_ASPECT_RATIO_16x9);
+    }
 
     // Step 5: Call dsDisplayTerm()
     UT_LOG_DEBUG("Invoking dsDisplayTerm()");
@@ -216,6 +249,7 @@ void test_l2_dsDisplay_TestDefaultAspectRatio_source(void)
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
+
 
 static UT_test_suite_t * pSuite = NULL;
 /**

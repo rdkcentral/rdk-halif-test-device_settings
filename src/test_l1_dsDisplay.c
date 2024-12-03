@@ -324,11 +324,13 @@ void test_l1_dsDisplay_positive_dsGetDisplay(void) {
     int result;
     dsVideoPortType_t vType;
     intptr_t displayHandle1, displayHandle2;
+    uint32_t portIndex;
 
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
+
     uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
     for (size_t i = 0; i < numPorts; i++) {
         char key_str[64];
@@ -336,19 +338,23 @@ void test_l1_dsDisplay_positive_dsGetDisplay(void) {
         vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
         UT_LOG("\n In %s Port Type: [%d]\n", __FUNCTION__, vType);
 
-        // Step 02: Call dsGetDisplay() for each valid port
-        result = dsGetDisplay(vType, i, &displayHandle1);
+        snprintf(key_str, sizeof(key_str), "dsDisplay/VideoPort_Index/%ld", i);
+        portIndex = UT_KVP_PROFILE_GET_UINT32(key_str);
+        UT_LOG("\n In %s Video Port Index: [%d]\n", __FUNCTION__, portIndex);
+
+        // Step 02: Call dsGetDisplay() for each valid port with the index
+        result = dsGetDisplay(vType, portIndex, &displayHandle1);
         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_LOG("Display handle for port type %d: %ld\n", vType, (long)displayHandle1);
+        UT_LOG("Display handle for port type %d with index %d: %ld\n", vType, portIndex, (long)displayHandle1);
 
         // Step 03: Call the last value again, and compare the results
-        result = dsGetDisplay(vType, i, &displayHandle2);
+        result = dsGetDisplay(vType, portIndex, &displayHandle2);
         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, displayHandle1, displayHandle2);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_LOG("\n In %s Comparison: [%d = %d]\n", __FUNCTION__, result);
         UT_ASSERT_EQUAL(displayHandle1, displayHandle2);
-        UT_LOG("Repeated display handle for port type %d: %ld\n", vType, (long)displayHandle2);
+        UT_LOG("Repeated display handle for port type %d with index %d: %ld\n", vType, portIndex, (long)displayHandle2);
     }
 
     // Step 04: Terminate the display sub-system
@@ -359,6 +365,7 @@ void test_l1_dsDisplay_positive_dsGetDisplay(void) {
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
+
 
 /**
  * @brief Ensure dsGetDisplay() returns correct error codes during negative scenarios
@@ -464,8 +471,9 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
     int result;
     intptr_t displayHandle;
     dsVideoPortType_t vType;
-    dsDisplayEDID_t *edid1 = {0};
-    dsDisplayEDID_t *edid2 = {0};
+    dsDisplayEDID_t edid1;
+    dsDisplayEDID_t edid2;
+    uint32_t portIndex;
 
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
@@ -478,35 +486,40 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
         char key_str[64];
         snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
         vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
+        UT_LOG("\n In %s Port Type: [%d]\n", __FUNCTION__, vType);
 
-        // Step 02: Get the display device handle
-        result = dsGetDisplay(vType, i, &displayHandle);
+        snprintf(key_str, sizeof(key_str), "dsDisplay/VideoPort_Index/%ld", i);
+        portIndex = UT_KVP_PROFILE_GET_UINT32(key_str);
+        UT_LOG("\n In %s Video Port Index: [%d]\n", __FUNCTION__, portIndex);
+
+        // Step 02: Get the display device handle using portIndex
+        result = dsGetDisplay(vType, portIndex, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 03: Call dsGetEDID() with the obtained handle
-        result = dsGetEDID(displayHandle, edid1);
+        result = dsGetEDID(displayHandle, &edid1);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 04: Call dsGetEDID() again with the same handle
-        result = dsGetEDID(displayHandle, edid2);
+        result = dsGetEDID(displayHandle, &edid2);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 05: Compare the returned results
         if(gSourceType == 0){
-            UT_ASSERT_EQUAL(edid1->productCode , edid2->productCode);
-            UT_ASSERT_EQUAL(edid1->serialNumber , edid2->serialNumber);
-            UT_ASSERT_EQUAL(edid1->manufactureYear , edid2->manufactureYear);
-            UT_ASSERT_EQUAL(edid1->manufactureWeek , edid2->manufactureWeek);
-            UT_ASSERT_EQUAL(edid1->hdmiDeviceType , edid2->hdmiDeviceType);
-            UT_ASSERT_EQUAL(edid1->isRepeater , edid2->isRepeater);
-            UT_ASSERT_EQUAL(edid1->physicalAddressA , edid2->physicalAddressA);
-            UT_ASSERT_EQUAL(edid1->physicalAddressB , edid2->physicalAddressB);
-            UT_ASSERT_EQUAL(edid1->physicalAddressC , edid2->physicalAddressC);
-            UT_ASSERT_EQUAL(edid1->physicalAddressD , edid2->physicalAddressD);
-            UT_ASSERT_EQUAL(edid1->numOfSupportedResolution , edid2->numOfSupportedResolution);
-            UT_ASSERT_EQUAL(edid2->monitorName, edid2->monitorName);
+            UT_ASSERT_EQUAL(edid1.productCode , edid2.productCode);
+            UT_ASSERT_EQUAL(edid1.serialNumber , edid2.serialNumber);
+            UT_ASSERT_EQUAL(edid1.manufactureYear , edid2.manufactureYear);
+            UT_ASSERT_EQUAL(edid1.manufactureWeek , edid2.manufactureWeek);
+            UT_ASSERT_EQUAL(edid1.hdmiDeviceType , edid2.hdmiDeviceType);
+            UT_ASSERT_EQUAL(edid1.isRepeater , edid2.isRepeater);
+            UT_ASSERT_EQUAL(edid1.physicalAddressA , edid2.physicalAddressA);
+            UT_ASSERT_EQUAL(edid1.physicalAddressB , edid2.physicalAddressB);
+            UT_ASSERT_EQUAL(edid1.physicalAddressC , edid2.physicalAddressC);
+            UT_ASSERT_EQUAL(edid1.physicalAddressD , edid2.physicalAddressD);
+            UT_ASSERT_EQUAL(edid1.numOfSupportedResolution , edid2.numOfSupportedResolution);
+            UT_ASSERT_STRING_EQUAL(edid2.monitorName, edid2.monitorName);
         } else if(gSourceType == 1){
-            UT_ASSERT_EQUAL((memcmp(edid1, edid2, sizeof(dsDisplayEDID_t))), 0);
+            UT_ASSERT_EQUAL((memcmp(&edid1, &edid2, sizeof(dsDisplayEDID_t))), 0);
         }
     }
 
@@ -518,6 +531,7 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
+
 
 /**
  * @brief Ensure dsGetEDID() returns correct error codes during negative scenarios
@@ -627,6 +641,7 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
     dsVideoPortType_t vType;
     unsigned char *edid = NULL;
     int length = 0;
+    uint32_t portIndex;
 
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
@@ -640,7 +655,13 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
         char key_str[64];
         snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
         vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
-        result = dsGetDisplay(vType, i, &displayHandle);
+        UT_LOG("\n In %s Port Type: [%d]\n", __FUNCTION__, vType);
+
+        snprintf(key_str, sizeof(key_str), "dsDisplay/VideoPort_Index/%ld", i);
+        portIndex = UT_KVP_PROFILE_GET_UINT32(key_str);
+        UT_LOG("\n In %s Video Port Index: [%d]\n", __FUNCTION__, portIndex);
+
+        result = dsGetDisplay(vType, portIndex, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         if(result != dsERR_NONE)
         {
@@ -671,6 +692,7 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
+
 
 /**
  * @brief Ensure dsGetEDIDBytes() returns correct error codes during negative scenarios
@@ -792,6 +814,7 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
     intptr_t displayHandle;
     dsVideoPortType_t vType;
     dsVideoAspectRatio_t aspectRatio = dsVIDEO_ASPECT_RATIO_MAX;
+    uint32_t portIndex;
 
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
@@ -804,7 +827,13 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
         char key_str[64];
         snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
         vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
-        result = dsGetDisplay(vType, i, &displayHandle);
+        UT_LOG("\n In %s Port Type: [%d]\n", __FUNCTION__, vType);
+
+        snprintf(key_str, sizeof(key_str), "dsDisplay/VideoPort_Index/%ld", i);
+        portIndex = UT_KVP_PROFILE_GET_UINT32(key_str);
+        UT_LOG("\n In %s Video Port Index: [%d]\n", __FUNCTION__, portIndex);
+
+        result = dsGetDisplay(vType, portIndex, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 03: Call dsGetDisplayAspectRatio() with the obtained handle
@@ -828,6 +857,7 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
+
 /**
  * @brief Ensure dsGetDisplayAspectRatio() returns correct error codes during negative scenarios
  *
@@ -845,27 +875,29 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
  * |01|Call dsGetDisplayAspectRatio() without initializing the display sub-system or obtaining a handle | intptr_t handle, dsVideoAspectRatio_t *aspectRatio | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  * |02|Initialize the display sub-system and obtain a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
  * |03|Call dsGetDisplay() Loop through all valid ports in numPorts[]|vType: [Valid Port Type]_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
- * |04|Call dsGetDisplayAspectRatio() with an invalid handle| NULL, dsVideoAspectRatio_t *aspectRatio | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
- * |05|Call dsGetDisplayAspectRatio() with an NULL aspectRatio | intptr_t handle, NULL | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
- * |06|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
- * |07|Call dsGetDisplayAspectRatio() without initializing the display sub-system or obtaining a handle | intptr_t handle, dsVideoAspectRatio_t *aspectRatio  | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
+ * |04|If the device is a source, call dsGetDisplayAspectRatio() with an invalid handle| NULL, dsVideoAspectRatio_t *aspectRatio | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
+ * |05|If the device is a source, call dsGetDisplayAspectRatio() with an NULL aspectRatio | intptr_t handle, NULL | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
+ * |06|If the device is a sink, call dsGetDisplayAspectRatio() | intptr_t handle, dsVideoAspectRatio_t *aspectRatio | dsERR_OPERATION_NOT_SUPPORTED | API is not supported for sink devices |
+ * |07|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
+ * |08|Call dsGetDisplayAspectRatio() without initializing the display sub-system or obtaining a handle | intptr_t handle, dsVideoAspectRatio_t *aspectRatio  | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
  *
  * @note The ability to test scenarios like dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might require specific setup or environment configuration.
  *
  */
+
 void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
     // Start of the test
     gTestID = 12;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
-    intptr_t displayHandle =-1;
+    intptr_t displayHandle = -1;
     dsVideoPortType_t vType;
     dsVideoAspectRatio_t aspectRatio;
 
     // Step 01: Call dsGetDisplayAspectRatio() without initializing the display sub-system
     result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio);
-    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // Step 02: Initialize the display sub-system
@@ -882,23 +914,30 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
         result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-        // Step 04: Call dsGetDisplayAspectRatio() with an invalid handle
-        result = dsGetDisplayAspectRatio((intptr_t)NULL, &aspectRatio);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if (gSourceType == 1) {
+           // Step 04: Call dsGetDisplayAspectRatio() with an invalid handle for source devices
+            result = dsGetDisplayAspectRatio((intptr_t)NULL, &aspectRatio);
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
-        // Step 05: Call dsGetDisplayAspectRatio() with a NULL aspectRatio
-        result = dsGetDisplayAspectRatio(displayHandle, NULL);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+            // Step 05: Call dsGetDisplayAspectRatio() with a NULL aspectRatio for source devices
+            result = dsGetDisplayAspectRatio(displayHandle, NULL);
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+        } else if (gSourceType == 0) {
+            // Step 06: Expect dsERR_OPERATION_NOT_SUPPORTED for sink devices
+            result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio);
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
     }
 
-    // Step 06: Terminate the display sub-system
+    // Step 07: Terminate the display sub-system
     result = dsDisplayTerm();
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // Step 07: Call dsGetDisplayAspectRatio() without initializing the display sub-system
+    // Step 08: Call dsGetDisplayAspectRatio() without initializing the display sub-system
     result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio);
-    CHECK_FOR_EXTENDED_ERROR_CODE( result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // End of the test
@@ -937,6 +976,7 @@ void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback(void) {
     int result;
     dsVideoPortType_t vType;
     intptr_t displayHandle;
+    uint32_t portIndex;
 
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
@@ -949,7 +989,13 @@ void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback(void) {
         char key_str[64];
         snprintf(key_str, sizeof(key_str), "dsDisplay/Video_Ports/%ld", i);
         vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
-        result = dsGetDisplay(vType, i, &displayHandle);
+        UT_LOG("\n In %s Port Type: [%d]\n", __FUNCTION__, vType);
+
+        snprintf(key_str, sizeof(key_str), "dsDisplay/VideoPort_Index/%ld", i);
+        portIndex = UT_KVP_PROFILE_GET_UINT32(key_str);
+        UT_LOG("\n In %s Video Port Index: [%d]\n", __FUNCTION__, portIndex);
+
+        result = dsGetDisplay(vType, portIndex, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 03: Call dsRegisterDisplayEventCallback() with the obtained handle and a valid callback function
@@ -965,6 +1011,7 @@ void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback(void) {
     // End of the test
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
+
 
 /**
  * @brief Ensure dsRegisterDisplayEventCallback() returns correct error codes during negative scenarios
@@ -1050,6 +1097,32 @@ static UT_test_suite_t * pSuite = NULL;
  */
 int test_l1_dsDisplay_register ( void )
 {
+    ut_kvp_status_t status;
+
+    /* Get the Device Type */
+    status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsDisplay.Type", gDeviceType, TEST_DS_DEVICE_TYPE_SIZE);
+
+    if (status == UT_KVP_STATUS_SUCCESS )
+    {
+        if (!strncmp(gDeviceType, TEST_TYPE_SOURCE_VALUE, TEST_DS_DEVICE_TYPE_SIZE))
+        {
+            gSourceType = 1;
+        }
+        else if(!strncmp(gDeviceType, TEST_TYPE_SINK_VALUE, TEST_DS_DEVICE_TYPE_SIZE))
+        {
+            gSourceType = 0;
+        }
+        else
+        {
+            UT_LOG_ERROR("Invalid platform type: %s", gDeviceType);
+            return -1;
+        }
+    }
+    else {
+        UT_LOG_ERROR("Failed to get the platform type");
+        return -1;
+    }
+
     /* add a suite to the registry */
     pSuite = UT_add_suite( "[L1 dsDisplay]", NULL, NULL );
     if ( NULL == pSuite)

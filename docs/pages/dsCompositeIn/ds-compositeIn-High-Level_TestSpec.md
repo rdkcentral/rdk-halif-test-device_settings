@@ -40,6 +40,7 @@ High level overview:
 |5|[Callback for connection Status](#callback-for-connection-status)|The test aims to verify the Callback function used for notifying applications of the COMPOSITE In hot plug/unplug status.|
 |6|[Callback for Signal Change](#callback-for-signal-change)|The test aims to verify the callback function used to inform applications about changes in the signal status of the Composite In.(NoSignal/UnstableSignal/NotSupportedSignal/StableSignal)|
 |7|[Callback for Status Change](#callback-for-status-change)|The test validates the functionality of the callback function designed to notify applications of Composite Input status change events.(Port,IsPresented flag status)|
+|8|[Callback for Video Mode Change](#callback-for-video-mode-change)|The test validates the functionality of the callback function designed to notify applications of Composite Input video mode change events.(Port,resolution status)|
 -----------
 
 ## Get Number of Inputs
@@ -169,3 +170,24 @@ Emulator will boot with the port informations coming from the configuration file
 ### Control Plane Requirement - Callback for Status Change
 
 Connecting and disconnecting source devices in the CompositeIn will be handled by the Control Plane.
+
+
+## Callback for video mode change
+
+|Description|HAL APIs|L2|L3|Control plane requirements|
+|-----------|--------|--|--|--------------------------|
+|Verify that the callback function properly updates the video mode changes and notifies the application when a COMPOSITE Input video mode changes after the composite signal is stable |dsCompositeInRegisterVideoModeUpdateCB|N|Y|Y|
+
+### Test Startup Requirement - Callback for video mode change
+
+Launching of the source device with the CompositeIn connected.
+
+### Emulator Requirement - Callback for video mode change
+
+Emulator will boot with the port information and its video mode change information received from the configuration file.
+
+### Control Plane Requirement - Callback for video mode change
+
+- Connecting and disconnecting source devices in the CompositeIn will be handled by the Control Plane.
+- Provide resolution changes or configurations changes on the connected device that changes the video mode info.
+

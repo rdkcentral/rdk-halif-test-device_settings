@@ -11,6 +11,7 @@
 
 - `L1`  - Functional Tests
 - `L2`  - Module functional Testing
+- `L3`  - Module testing with External Stimulus is required to validate and control device
 - `HAL` - Hardware Abstraction Layer
 - `API` - Application Programming Interface
 - `DS`  - Device Settings
@@ -38,22 +39,14 @@ This repository contains the Unit Test Suites (L1 & L2) for the following submod
 |SNo|Document Name|Document Description|Document Link|
 |---|-------------|--------------------|-------------|
 |1|Device Settings `HAL`|This document provides specific information on each `DS` sub-module's `APIs` for which tests are written in this module|[`DS` `HAL` Guide](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/docs/pages/README.md)|
-|2|`DS` Audio High-Level Test Spec |`High Level Test Specification` Documentation for `DS` Audio module.|[ds-audio_High-Level_TestSpecification.md]( docs/pages/ds-audio_High-Level_TestSpecification.md)|
-|3|`DS` Audio `L2` Low-Level Test Spec |`L2` `Low Level Test Specification` Documentation for `DS` Audio module|[ds-audio_L2_Low-Level_TestSpecification.md]( docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)|
-|4|`DS` Video Device High-Level Test Spec |`High Level Test Specification` Documentation for `DS` Video Device module.|[ds-video-device_High-Level_TestSpec.md]( docs/pages/ds-video-device_High-Level_TestSpec.md)|
-|5|`DS` Video Device `L2` Low-Level Test Spec |`L2` `Low Level Test Specification` Documentation for `DS` Video Device module|[ds-video-device_L2-Low-Level_TestSpec.md]( docs/pages/ds-video-device_L2-Low-Level_TestSpec.md)|
-|6|`DS` Video Port High-Level Test Spec |`High Level Test Specification` Documentation for `DS` Video Port module.|[ds-video-port_High-Level_TestSpec.md]( docs/pages/ds-video-port_High-Level_TestSpec.md)|
-|7|`DS` Video Port `L2` Low-Level Test Spec |`L2` `Low Level Test Specification` Documentation for `DS` Video Port module|[ds-video-port_L2_Low-Level_TestSpecification.md]( docs/pages/ds-video-port_L2_Low-Level_TestSpecification.md)|
-|8|`DS` Display High-Level Test Spec |`High Level Test Specification` Documentation for `DS` Display module.|[ds-display-high-Level_TestSpec.md]( docs/pages/ds-display-high-Level_TestSpec.md)|
-|9|`DS` Display `L2` Low-Level Test Spec |`L2` `Low Level Test Specification` Documentation for `DS` Display module|[ds-display-L2-Low-Level_TestSpec.md]( docs/pages/ds-display-L2-Low-Level_TestSpec.md)|
-|10|`DS` Front Panel Display High-Level Test Spec |`High Level Test Specification` Documentation for `DS` Front Panel Display module.|[ds-front-panel-display_High-Level_TestSpec.md]( docs/pages/ds-front-panel-display_High-Level_TestSpec.md)|
-|11|`DS` Front Panel Display `L2` Low-Level Test Spec |`L2` `Low Level Test Specification` Documentation for `DS` Front Panel Display module|[ds-front-panel-display_L2_Low-Level_TestSpecification.md]( docs/pages/ds-front-panel-display_L2_Low-Level_TestSpecification.md)|
-|12|`DS` Host High-Level Test Spec |`High Level Test Specification` Documentation for `DS` Host module.|[ds-host_High-Level_TestSpecification.md]( docs/pages/ds-host_High-Level_TestSpecification.md)|
-|13|`DS` Host `L2` Low-Level Test Spec |`L2` `Low Level Test Specification` Documentation for `DS` Host module|[ds-host_L2_Low-Level_TestSpecification.md]( docs/pages/ds-host_L2_Low-Level_TestSpecification.md)|
-|14|`DS` HDMI Input High-Level Test Spec |`High Level Test Specification` Documentation for `DS` HDMI Input module.|[ds-hdmi-in-High-Level_TestSpec.md]( docs/pages/ds-hdmi-in-High-Level_TestSpec.md)|
-|15|`DS` HDMI Input `L2` Low-Level Test Spec |`L2` `Low Level Test Specification` Documentation for `DS` HDMI Input module|[ds-hdmi-in-L2-Low-Level_TestSpec.md]( docs/pages/ds-hdmi-in-L2-Low-Level_TestSpec.md)|
-|16|`DS` Composite Input High-Level Test Spec |`High Level Test Specification` Documentation for `DS` Composite Input module.|[ds-compositeIn-High-Level_TestSpec.md]( docs/pages/ds-compositeIn-High-Level_TestSpec.md)|
-|17|`DS` Composite Input `L2` Low-Level Test Spec |`L2` `Low Level Test Specification` Documentation for `DS` Composite Input module|[ds-compositeIn-L2-Low-Level_TestSpec.md]( docs/pages/ds-compositeIn-L2-Low-Level_TestSpec.md)|
+|2|`DS` Audio Test Suits Specifications |`L1`,`L2`,`L3` Test Specification Documentation for `DS` Audio module.|[dsAudioTestDoc]( docs/pages/dsAudio/)|
+|3|`DS` Video Device Test Suits Specifications |`L1`,`L2`,`L3` Test Specification Documentation for `DS` Video Device module.|[dsVideoDeviceTestDoc]( docs/pages/dsVideoDevice/)|
+|4|`DS` Video Port  Test Suits Specifications |`L1`,`L2`,`L3` Test Specification Documentation for `DS` Video Port  module.|[dsVideoPortTestDoc]( docs/pages/dsVideoPort/)|
+|5|`DS` Display Test Suits Specifications |`L1`,`L2`,`L3` Test Specification Documentation for `DS` Display module.|[dsDisplayTestDoc]( docs/pages/dsDisplay/)|
+|6|`DS` Front Panel Display Test Suits Specifications |`L1`,`L2`,`L3` Test Specification Documentation for `DS` Front Panel Display module.|[dsFPDTestDoc]( docs/pages/dsFPD/)|
+|7|`DS` Host Test Suits Specifications |`L1`,`L2`,`L3` Test Specification Documentation for `DS` Host module.|[dsHostTestDoc]( docs/pages/dsHost/)|
+|8|`DS` HDMI Input Test Suits Specifications |`L1`,`L2`,`L3` Test Specification Documentation for `DS` HDMI Input module.|[dsHDMIInTestDoc]( docs/pages/dsHDMIIn/)|
+|9|`DS` Composite Input Test Suits Specifications |`L1`,`L2`,`L3` Test Specification Documentation for `DS` Composite Input module.|[dsCompositeInTestDoc]( docs/pages/dsCompositeIn/)|
 
 ## Notes
 
@@ -72,3 +65,5 @@ Alternatively, use the run.sh script with the profile file:
  ```
 
 - Profiles files defines the configuration for the platform available for sink and source [profile yaml file](./profiles/)
+
+- Install Python Environment and Activation Scripts please check the[HPK Documentation](https://github.com/rdkcentral/rdk-hpk-documentation/blob/main/README.md)

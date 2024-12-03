@@ -87,3 +87,10 @@ dsError_t dsCompositeInRegisterStatusChangeCB(dsCompositeInStatusChangeCB_t CBFu
   return (dsError_t)0;
 }
 
+dsError_t dsCompositeInRegisterVideoModeUpdateCB(dsCompositeInVideoModeUpdateCB_t CBFunc)
+{
+  /*TODO: Implement Me!*/
+  (void)CBFunc;
+  return (dsError_t)0;
+}
+

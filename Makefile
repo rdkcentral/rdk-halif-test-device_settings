@@ -23,6 +23,12 @@ ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 BIN_DIR := $(ROOT_DIR)/bin
 TOP_DIR := $(ROOT_DIR)
 
+RED:='\033[0;31m'
+GREEN:='\033[0;32m'
+YELLOW:='\033[0;33m'
+NC:='\033[0m'
+ECHOE = /bin/echo -e
+
 SRC_DIRS = $(ROOT_DIR)/src
 INC_DIRS := $(ROOT_DIR)/../include
 INC_DIRS += $(ROOT_DIR)/profiles/include
@@ -34,11 +40,13 @@ $(info TARGET NOT SET )
 $(info TARGET FORCED TO Linux)
 TARGET=linux
 SRC_DIRS += $(ROOT_DIR)/skeletons/src
+CC := gcc -ggdb -o0 -Wall
 endif
 
 $(info TARGET [$(TARGET)])
 
 ifeq ($(TARGET),arm)
+# Build and link a skeleton library which can be overriden by the real one
 HAL_LIB_DIR := $(ROOT_DIR)/libs
 YLDFLAGS = -Wl,-rpath,$(HAL_LIB_DIR) -L$(HAL_LIB_DIR) -l$(HAL_LIB)
 ifeq ("$(wildcard $(HAL_LIB_DIR)/lib$(HAL_LIB).so)","")
@@ -56,25 +64,52 @@ export TARGET
 export TOP_DIR
 export HAL_LIB_DIR
 
-.PHONY: clean list build
+.PHONY: clean list build cleanlibs clean cleanall skeleton
 
 build: $(SETUP_SKELETON_LIBS)
 	@echo UT [$@]
-	make -C ./ut-core framework
-	make -C ./ut-core test
+	make -C ./ut-core TARGET=${TARGET}
+	rm -rf $(BIN_DIR)/lib$(HAL_LIB).so
+	rm -rf $(ROOT_DIR)/libs/lib$(HAL_LIB).so
 
 #Build against the real library leads to the SOC library dependency also.SOC lib dependency cannot be specified in the ut Makefile, since it is supposed to be common across may platforms. So in order to over come this situation, creating a template SKELETON library with empty templates so that the template library wont have any other Soc dependency. And in the real platform mount copy bind with the actual library will work fine.
 skeleton:
-	echo $(CC)
+	@echo Skeleton Building [$@]
 	mkdir -p $(HAL_LIB_DIR)
 	$(CC) -fPIC -shared -I$(ROOT_DIR)/../include $(SKELETON_SRCS) -o $(HAL_LIB_DIR)/lib$(HAL_LIB).so
 
 list:
-	@echo UT [$@]
-	make -C ./ut-core list
+	@${ECHOE} --------- ut - list ----------------
+	@${ECHOE}
+	@${ECHOE} ${YELLOW}CC:${NC} $(CC)
+	@${ECHOE}
+	@${ECHOE} ${YELLOW}TOP_DIR:${NC} $(TOP_DIR)
+	@${ECHOE}
+	@${ECHOE} ${YELLOW}BIN_DIR:${NC} $(BIN_DIR)
+	@${ECHOE}
+	@${ECHOE} ${YELLOW}HAL_LIB_DIR:${NC} $(HAL_LIB_DIR)
+	@${ECHOE}
+	@${ECHOE} ${YELLOW}YLDFLAGS:${NC} $(YLDFLAGS)
+	@${ECHOE}
+	@${ECHOE} ${YELLOW}TARGET:${NC} $(TARGET)
+	@${ECHOE}
+	make -C ./ut-core TARGET=${TARGET} list
 
-clean:
-	@echo UT [$@]
-	make -C ./ut-core cleanall
+printenv:
+	@${ECHOE} ${YELLOW}"Environment variables: [UT]"${NC}
+	@${ECHOE} ${YELLOW}"---------------------------"${NC}
+	@$(foreach v, $(.VARIABLES), $(info $(v) = $($(v))))
+	@${ECHOE} ${YELLOW}"---------------------------"${NC}
+	make -C ./ut-core TARGET=${TARGET} printenv
+
+cleanlibs:
 	rm -rf $(BIN_DIR)/lib$(HAL_LIB).so
-	rm -rf $(ROOT_DIR)/libs/lib$(HAL_LIB).so
+	rm -rf $(HAL_LIB_DIR)/libs/lib$(HAL_LIB).so
+
+clean: cleanlibs
+	@echo clean [$@]
+	make -C ./ut-core TARGET=${TARGET} clean
+
+cleanall: cleanlibs
+	@echo cleanall [$@]
+	make -C ./ut-core TARGET=${TARGET} cleanall

@@ -80,7 +80,8 @@
 #define DS_VIDEO_PORT_MODULE_NAME             "dsVideoPort"
 
 /* Video Port configuration */
-typedef struct _dsVideoPortConfiguration_t {
+typedef struct 
+{
     dsVideoPortType_t typeid;
     uint16_t index;
     char     port_name[DS_VIDEO_PORT_NAME_SIZE];

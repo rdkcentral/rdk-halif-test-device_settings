@@ -251,3 +251,46 @@ B -->|End of loop|H[Call dsVideoDeviceTerm]
 H -->|dsERR_NONE|I[Test case pass]
 H -->|Failure|H1[Test case fail]
 ```
+
+### Test 6
+
+|Title|Details|
+|-----|-------|
+|Function Name|`test_l2_dsVideoDevice_SetAndVerifyFRFMode_sink`|
+|Description|Loop through each supported video device and Set the display frame rate mode for each video device and verify using get|
+|Test Group|02|
+|Test Case ID|006|
+|Priority|High|
+
+**Pre-Conditions**
+None
+
+**Dependencies**
+None
+
+**User Interaction**
+If user chose to run the test in interactive mode, then the test case has to be selected via console.
+
+#### Test Procedure - Test 5
+
+|Variation / Steps|Description|Test Data|Expected Result|Notes|
+|-----------------|-----------|---------|---------------|-----|
+|01|Initialize video device using `dsVideoDeviceInit`|None|`dsERR_NONE`|Should be successful|
+|02|Get video device handle using `dsGetVideoDevice` with index 0 , Loop through each supported video device|index = 0 to `dsVideoDevice/NumVideoDevices` from the configuration file, handle = valid pointer|`dsERR_NONE`|Should be successful|
+|03|Set the frame rate mode for each video device using `dsSetFRFMode`|handle = obtained handle, frfMode = 0 and 1 |dsERR_NONE|Should be successful|
+|04|Verify the set frame rate mode using `dsGetFRFMode`|handle = obtained handle, frfMode = valid intiger pointer|`dsERR_NONE`|Should be successful|
+|05|Terminate video device using `dsVideoDeviceTerm`|None|`dsERR_NONE`|Should be successful|
+
+```mermaid
+graph TB
+A[Call dsVideoDeviceInit] -->|dsERR_NONE|B{Loop through each <br> supported video device}
+A -->|Failure|A1[Test case fail]
+B --> E[Call dsSetFRFMode with handle and frfMode 0 and 1]
+E -->|dsERR_NONE|F[Call dsGetFRFMode ]
+F -->|dsERR_NONE and frfMode matches|B
+F --> |!dsERR_NONE and frfMode doesn't match|F1[Test case fail]
+F1 --> B
+B -->|End of loop|H[Call dsVideoDeviceTerm]
+H -->|dsERR_NONE|I[Test case pass]
+H -->|Failure|H1[Test case fail]
+```
