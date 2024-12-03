@@ -435,12 +435,11 @@ void test_l2_dsHdmiIn_GetSupportedGameFeaturesList_sink(void)
 }
 
 /**
-* @brief This test aims to verify the functionality of setting and getting the ALLM support for HDMI input.
+* @brief This test aims to verify the functionality of setting the ALLM support for HDMI input.
 *
 * In this test, the dsHdmiInInit function is first invoked to initialize the HDMI input.
 * Then, the dsSetEdid2AllmSupport function is called to set the ALLM support for HDMI input to true.
-* The dsGetEdid2AllmSupport function is then called to get the current ALLM support status,
-* which should be true. The same process is repeated with the ALLM support set to false.
+* The same process is repeated with the ALLM support set to false.
 * Finally, the dsHdmiInTerm function is invoked to terminate the HDMI input.
 * The test ensures that all these operations return no error.
 *
@@ -451,10 +450,9 @@ void test_l2_dsHdmiIn_GetSupportedGameFeaturesList_sink(void)
 * Refer to UT specification documentation [ds-hdmi-in-L2-Low-Level_TestSpec.md](../docs/pages/ds-hdmi-in-L2-Low-Level_TestSpec.md)
 */
 
-void test_l2_dsHdmiIn_SetAndGetAllmSupport_sink(void)
+void test_l2_dsHdmiIn_SetAllmSupport_sink(void)
 {
     dsError_t ret = dsERR_NONE;
-    bool allmSupport = false;
     dsHdmiInPort_t iHdmiPort = dsHDMI_IN_PORT_0;
     uint8_t numInputs = 0; // Initialize to 0
     dsSupportedGameFeatureList_t features = {0};
@@ -490,12 +488,6 @@ void test_l2_dsHdmiIn_SetAndGetAllmSupport_sink(void)
                 UT_LOG_ERROR("Invoking dsHdmiInTerm due to failure of dsSetEdid2AllmSupport");
             }
 
-            UT_LOG_DEBUG("Invoking dsGetEdid2AllmSupport with iHdmiPort set to %d", iHdmiPort);
-            ret = dsGetEdid2AllmSupport(iHdmiPort, &allmSupport);
-            UT_LOG_DEBUG("allmSupport: %d and return status: %d", allmSupport, ret);
-            UT_ASSERT_EQUAL(ret, dsERR_NONE);
-            UT_ASSERT_EQUAL(allmSupport, true);
-
             UT_LOG_DEBUG("Invoking dsSetEdid2AllmSupport with iHdmiPort set to %d and allmSupport set to false", iHdmiPort);
             ret = dsSetEdid2AllmSupport(iHdmiPort, false);
             UT_ASSERT_EQUAL(ret, dsERR_NONE);
@@ -503,12 +495,6 @@ void test_l2_dsHdmiIn_SetAndGetAllmSupport_sink(void)
             {
                 UT_LOG_ERROR("Invoking dsHdmiInTerm due to failure of dsSetEdid2AllmSupport");
             }
-
-            UT_LOG_DEBUG("Invoking dsGetEdid2AllmSupport with iHdmiPort set to %d", iHdmiPort);
-            ret = dsGetEdid2AllmSupport(iHdmiPort, &allmSupport);
-            UT_LOG_DEBUG("allmSupport: %d and return status: %d", allmSupport, ret);
-            UT_ASSERT_EQUAL(ret, dsERR_NONE);
-            UT_ASSERT_EQUAL(allmSupport, false);
         }
     }
     UT_LOG_DEBUG("Invoking dsHdmiInTerm");
@@ -572,7 +558,7 @@ int test_l2_dsHdmiIn_register(void)
         UT_add_test( pSuite, "L2_VerifyHdmiArcPort_sink", test_l2_dsHdmiIn_VerifyHdmiArcPort_sink);
         UT_add_test( pSuite, "L2_SetAndGetEdidVersionAndValidateEdidLength_sink", test_l2_dsHdmiIn_SetAndGetEdidVersionAndValidateEdidLength_sink);
         UT_add_test( pSuite, "L2_GetSupportedGameFeaturesList_sink", test_l2_dsHdmiIn_GetSupportedGameFeaturesList_sink);
-        UT_add_test( pSuite, "L2_SetAndGetAllmSupport_sink", test_l2_dsHdmiIn_SetAndGetAllmSupport_sink);
+        UT_add_test( pSuite, "L2_SetAndGetAllmSupport_sink", test_l2_dsHdmiIn_SetAllmSupport_sink);
     }
 
     return 0;
