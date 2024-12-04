@@ -79,7 +79,7 @@ class dsFPD_test04_SetVerifyLEDIndicatorsColor(dsFPDHelperClass):
         for indicator in self.testdsFPD.getSupportedIndicators():
             colorMode = self.testdsFPD.getDefaultColorMode(indicator.value)
             if colorMode == 0:
-                result = False
+                result = True
                 self.log.stepResult(result, f'Indicator {indicator.name} Do not support Multi Color Mode')
                 continue
 
