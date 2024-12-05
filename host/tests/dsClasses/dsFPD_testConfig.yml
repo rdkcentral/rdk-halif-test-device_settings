@@ -5,7 +5,7 @@ dsFPD:  # Prefix must always exist
     test:
         artifacts:
           - "../../../bin"
-        execute: "bin/run.sh" #Execute command
+        execute: "run.sh" #Execute command
         type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
         suites:
             0:
