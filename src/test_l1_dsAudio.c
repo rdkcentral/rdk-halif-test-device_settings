@@ -1851,7 +1851,7 @@ void test_l1_dsAudio_positive_dsSetVolumeLeveller(void)
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
 
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x04)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x08)
         {
             // Step 03: Set Volume Leveller with valid mode and level for each audio port
             // Assuming dsVolumeLeveller_t is a struct or similar with mode and level fields
@@ -1948,7 +1948,7 @@ void test_l1_dsAudio_negative_dsSetVolumeLeveller(void)
         volLeveller.mode = invalid_mode;
         volLeveller.level = valid_level;
         result = dsSetVolumeLeveller(handle, volLeveller);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x04)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x08)
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
@@ -1961,7 +1961,7 @@ void test_l1_dsAudio_negative_dsSetVolumeLeveller(void)
         volLeveller.mode = valid_mode;
         volLeveller.level = invalid_level;
         result = dsSetVolumeLeveller(handle, volLeveller);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x04)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x08)
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
