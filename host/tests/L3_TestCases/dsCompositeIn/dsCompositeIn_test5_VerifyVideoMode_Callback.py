@@ -64,10 +64,13 @@ class dsCompositeIn_test5_VerifyVideoMode_Callback(dsCompositeInHelperClass):
         Returns:
             bool
         """
-        if manual == True and connect == True:
-            return self.testUserResponse.getUserYN(f"Check if CompositeIn source is connected to {port_type} and press Y:")
-        elif manual == True and connect == False:
-            return self.testUserResponse.getUserYN(f"Change the resolution of video played from CompositeIn source device connected to {port_type} and press Y:")
+        if manual:
+            message = (
+            f"Check if CompositeIn source is connected to {port_type} and press Y:"
+            if connect
+            else f"Change the resolution of the video played from CompositeIn source device connected to {port_type} and press Y:"
+            )
+            return self.testUserResponse.getUserYN(message)
         else :
             #TODO: Add automation verification methods
             return False
