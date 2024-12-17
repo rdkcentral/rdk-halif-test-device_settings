@@ -427,7 +427,6 @@ Control plane connects/ disconnects the external devices. Validates the ALLM by 
 ### Test Startup Requirement - Get `HDMI` Version
 
 - The test begins with the configured `HDMI` input port numbers.
-- Connection of the source device with the `HDMI` Input
 
 ### Emulator Requirement - Get `HDMI` Version
 
