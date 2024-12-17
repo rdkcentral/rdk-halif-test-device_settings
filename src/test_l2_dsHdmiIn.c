@@ -540,6 +540,7 @@ void test_l2_dsHdmiIn_GetHdmiVersionAndValidate_sink(void)
     dsError_t ret = dsERR_NONE;
     uint8_t numInputs = 0; // Initialize to 0
     dsHdmiMaxCapabilityVersion_t getVersion = HDMI_COMPATIBILITY_VERSION_MAX;
+    char keyString[DS_HDMIIN_KEY_SIZE] = {0};
 
     UT_LOG_DEBUG("Invoking dsHdmiInInit");
     ret = dsHdmiInInit();
@@ -552,7 +553,6 @@ void test_l2_dsHdmiIn_GetHdmiVersionAndValidate_sink(void)
     }
 
     UT_ASSERT_TRUE(numInputs >= 0 && numInputs <= UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts"));
-    dsHdmiMaxCapabilityVersion_t version = UT_KVP_PROFILE_GET_UINT32("dsHdmiIn/HdmiCompatibilityVersion");
 
     for (int port = dsHDMI_IN_PORT_0; port < numInputs; port++)
     {
@@ -563,6 +563,8 @@ void test_l2_dsHdmiIn_GetHdmiVersionAndValidate_sink(void)
         {
             UT_LOG_ERROR("Failed to get EDID version\n");
         }
+        snprintf(keyString, DS_HDMIIN_KEY_SIZE, "dsHdmiIn/HdmiCompatibilityVersion/%d", port);
+        dsHdmiMaxCapabilityVersion_t version = UT_KVP_PROFILE_GET_UINT32(keyString);
         UT_ASSERT_EQUAL(getVersion, version);
     }
     UT_LOG_DEBUG("Invoking dsHdmiInTerm");

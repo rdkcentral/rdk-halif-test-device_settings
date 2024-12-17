@@ -76,6 +76,7 @@
 #include <ut_log.h>
 #include <ut_kvp_profile.h>
 #include "test_parse_configuration.h"
+#define DS_HDMIIN_KEY_SIZE 64
 
 static int gTestGroup = 1;
 static int gTestID = 1;
@@ -2590,6 +2591,7 @@ void test_l1_dsHdmiIn_positive_dsGetHdmiVersion(void) {
     dsHdmiMaxCapabilityVersion_t version = HDMI_COMPATIBILITY_VERSION_MAX;
     uint8_t numInputPorts = 0;
     numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
+    char keyString[DS_HDMIIN_KEY_SIZE] = {0};
 
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
@@ -2602,7 +2604,8 @@ void test_l1_dsHdmiIn_positive_dsGetHdmiVersion(void) {
 
             // Step 3: compare the version with value read from yaml file
             UT_LOG("version : %d\n", version);
-            UT_ASSERT_KVP_EQUAL_PROFILE_UINT32(version, "dsHdmiIn/HdmiCompatibilityVersion");
+            snprintf(keyString, DS_HDMIIN_KEY_SIZE, "dsHdmiIn/HdmiCompatibilityVersion/%d", port);
+            UT_ASSERT_KVP_EQUAL_PROFILE_UINT32(version, keyString);
         }
     } else if (gSourceType == 1) {
        // Step 4: Call dsGetHdmiVersion() with valid ports
