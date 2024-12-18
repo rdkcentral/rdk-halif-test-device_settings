@@ -44,7 +44,7 @@ Below are top test use-case for the Composite Input.
 |2|Verify the CompositeIn active port status with callbacks|Connect a CompositeIn source device, select the CompositeIn port and check the callbacks is triggered when the active status changes(i.e like isPresented, activeport)|`dsCompositeInRegisterStatusChangeCB()`|
 |3|Scale the video and verify |Play the video stream(`vts_SDR_stream`) in CompositeIn source device connected to the active CompositeIn port and scale the video resolution|`dsCompositeInScaleVideo()`|
 |4|Verify the CompositeIn Signal change with callback| Connect a CompositeIn source device, select the CompositeIn port and check the callback is triggered when the change in signal status occurs(i.e like no signal , unstable signal, stable signal)|`dsCompositeInRegisterSignalChangeCB()`|
-|5|Verify the CompositeIn video mode change with callback| Connect a CompositeIn source device, select the CompositeIn port and check the callback is triggered when the change in video mode on source device occurs|`dsCompositeInRegisterVideoModeUpdateCB()`|
+|5|Verify the CompositeIn video mode change with callback| Connect a CompositeIn source device, select the CompositeIn port, and verify that the callback is triggered when there is a change in the video mode on the source device|`dsCompositeInRegisterVideoModeUpdateCB()`|
 
 ## Level 3 Python Test Cases High Level Overview
 
