@@ -224,10 +224,12 @@ class dsCompositeInClass():
 
         result = self.testSession.read_until("Received VideomodeChange callback port:")
         callpattern = r"Received VideomodeChange callback port: \[(\w+)\], videoResolution: \[(\w+)\], videoFrameRate: \[(\w+)\]"
-        status = self.searchPattern(result, callpattern)
-
-        if status:
-            return status
+        match = re.search(callpattern, result)
+        if match:
+            output1 = match.group(1)
+            output2 = match.group(2)
+            output3 = match.group(3)
+            return output1, output2, output3
 
         return None
 
