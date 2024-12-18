@@ -158,3 +158,4 @@ dsVideoPort:  # Prefix must always exist
                   - "Get HDCPReceiverProtocol"
                   - "Get IgnoreEDIDStatus"
                   - "Get PreferredColorDepth"
+                  - "Set AllmMode"
