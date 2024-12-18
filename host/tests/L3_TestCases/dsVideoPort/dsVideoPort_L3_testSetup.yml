@@ -31,3 +31,5 @@ dsVideoPort:  # Prefix must always exist
         streams: #list of streams to be copied
       test9_VerifyBackgroundColor:
         streams: #list of streams to be copied
+      test10_VerifyALLM_Mode:
+        streams: #list of streams to be copied

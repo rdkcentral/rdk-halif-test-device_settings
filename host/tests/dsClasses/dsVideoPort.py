@@ -585,6 +585,53 @@ class dsVideoPortClass():
 
         result = self.utMenu.select(self.testSuite, "ResetOutputToSDR", promptWithAnswers)
 
+    def setAllmMode(self, video_port:int,  port_index:int=0, mode:str="Disable"):
+        """
+        Resets the video output to Standard Dynamic Range (SDR) for the specified video port.
+
+        This method allows you to This method allows you to enables or disables the Auto Low Latency Mode (ALLM) 
+        for a HDMI output video port on source devices, as per the HDMI 2.1 specification.
+
+
+        Args:
+            video_port (int): The enumeration value representing the video port.
+                            Refer to the dsVideoPortType enum for valid options.
+            port_index (int, optional): The index of the specific port to reset. Defaults to 0.
+            mode (str, optional) : ALLM mode, defaults to "Disable"
+
+        Returns:
+            None
+
+        Example:
+            setAllmMode(video_port=dsVIDEOPORT_TYPE_HDMI, port_index=0, mode:str="Disable")
+        """
+        promptWithAnswers = [
+            {
+                "query_type": "list",
+                "query": "Select the Video Port",
+                "input": "dsVIDEOPORT_TYPE_HDMI"
+            },
+            {
+                "query_type": "direct",
+                "query": "Select the Video Port Index[0-9]:",
+                "input": "0"
+            },
+            {
+                "query_type": "list",
+                "query": "Choose ALLM mode to be Enable/Disable:",
+                "input": "Disable"
+            }
+        ]
+
+        # Convert input arguments to strings and update the prompts
+        promptWithAnswers[0]["input"] = str(video_port)
+        promptWithAnswers[1]["input"] = str(port_index)
+        promptWithAnswers[2]["input"] = str(mode)
+
+
+        result = self.utMenu.select(self.testSuite, "Set AllmMode", promptWithAnswers)
+
+
     def select_PreferredColorDepth(self,video_port:int, port_index:int=0,color_depth:int=0):
         """
         Sets the preferred color depth for the specified video port.
