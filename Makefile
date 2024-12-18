@@ -35,13 +35,19 @@ INC_DIRS += $(ROOT_DIR)/profiles/include
 HAL_LIB := dshal
 SKELETON_SRCS := $(ROOT_DIR)/skeletons/src/*
 
+# Check if TARGET is unset
 ifeq ($(TARGET),)
-$(info TARGET NOT SET )
-$(info TARGET FORCED TO Linux)
-TARGET=linux
-SRC_DIRS += $(ROOT_DIR)/skeletons/src
-CC := gcc -ggdb -o0 -Wall
+    $(info TARGET NOT SET )
+    $(info TARGET FORCED TO linux)
+    TARGET = linux
 endif
+
+# Handle specific TARGET values
+ifeq ($(TARGET), linux)
+    SRC_DIRS += $(ROOT_DIR)/skeletons/src
+    CC := gcc -ggdb -o0 -Wall
+endif
+
 
 $(info TARGET [$(TARGET)])
 
