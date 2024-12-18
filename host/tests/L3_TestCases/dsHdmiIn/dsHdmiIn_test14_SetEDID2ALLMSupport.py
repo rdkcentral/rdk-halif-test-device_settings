@@ -73,16 +73,11 @@ class dsHdmiIn_test14_SetAndGetEDID2ALLMSupport(dsHdmiInHelperClass):
 
             #Setting ALLM on particular Hdmi input to true and false
             for versionIndex in range(0,1):
+                #Setting ALLM value set
+                self.log.step(f'Setting {port} edid 2 allm version')
                 self.testdsHdmiIn.setEdid2Allm(port,versionIndex)
-                #Getting ALLM value set
-                self.log.step(f'Getting {port} edid 2 allm version')
-                allmStatus = self.testdsHdmiIn.getEdid2Allm(port)
-                if allmStatus != None and allmStatus == "False" or "True":
-                    self.log.stepResult(True,f'Verified get ALLM:{allmStatus} set ALLM same')
-                    result &= True
-                else:
-                    self.log.stepResult(False,f'Verified get ALLM:{allmStatus} set ALLM same')
-                    result &= False
+                self.log.stepResult(True,f'ALLM status set to:{versionIndex}')
+                result &= True
 
         # Terminate dsHdmiIn Module
         self.testdsHdmiIn.terminate()

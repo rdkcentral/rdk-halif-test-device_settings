@@ -29,5 +29,5 @@ dsHdmiIn:
         streams: []
       test13_SetAndGetEDIDVersion:
         streams: []
-      test14_SetAndGetEDID2ALLMSupport:
+      test14_SetEDID2ALLMSupport:
         streams: []
