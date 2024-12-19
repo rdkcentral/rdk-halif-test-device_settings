@@ -2644,13 +2644,16 @@ void test_l1_dsHdmiIn_negative_dsGetHdmiVersion(void) {
 
     gTestID = 52;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    dsError_t  result = dsERR_NONE;
     dsHdmiMaxCapabilityVersion_t version = HDMI_COMPATIBILITY_VERSION_MAX;
     uint8_t numInputPorts = 0;
     numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
 
-    // Step 1: Call dsGetHdmiVersion() without initializing the HDMI input sub-system
-    dsError_t result = dsGetHdmiVersion(dsHDMI_IN_PORT_0, &version);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
+        // Step 1: Call dsGetHdmiVersion() without initializing the HDMI input sub-system
+        result = dsGetHdmiVersion(port, &version);
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    }
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
@@ -2670,9 +2673,11 @@ void test_l1_dsHdmiIn_negative_dsGetHdmiVersion(void) {
     // Step 5: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
 
-    // Step 6: Call dsGetHdmiVersion() without initializing the HDMI input sub-system
-    result = dsGetHdmiVersion(dsHDMI_IN_PORT_0, &version);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
+        // Step 6: Call dsGetHdmiVersion() without initializing the HDMI input sub-system
+        result = dsGetHdmiVersion(port, &version);
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    }
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
