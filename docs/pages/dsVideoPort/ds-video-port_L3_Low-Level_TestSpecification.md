@@ -56,6 +56,7 @@ Below are top test use-case for the video port.
 |7|Resets the video output to `SDR` for Source |Play the `HDR` stream and verify the video content formats|`dsResetOutputToSDR()`|`Y`|`NA`|1|
 |8|Select preferred color depth for Source|Select the Color depth from Supported list & verify|`dsSetPreferredColorDepth()`|`Y`|`NA`|`NA`|
 |9|sets the background color for Source |Select the background color form supported list & verify|`dsSetBackgroundColor()`|`Y`|`NA`|`NA`|
+|10|Enables/Disables ALLM mode for HDMI output video port |Select the ALLM mode for HDMI output video port and verify|`dsSetAllmEnabled()`|`Y`|`NA`|`NA`|
 
 ## Level 3 Python Test Cases High Level Overview
 
