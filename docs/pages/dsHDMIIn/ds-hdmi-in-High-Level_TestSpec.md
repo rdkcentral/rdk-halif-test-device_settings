@@ -59,6 +59,7 @@ High level overview:
 |17|[Get AV latency](#get-av-latency)|The test validates by getting the current av latency.|
 |18|[Get `ALLM` status](#get-allm-status)|The test aims to verify that `ALLM` status is enabled or disabled for the specific `HDMI` input port.|
 |19|[Get and Set `EDID` to all `ALLM` Support](#get-and-set-edid-to-all-allm-support)|The test aims to verfiy by setting and getting the `EDID` `ALLM` support.|
+|20|[Get `HDMI` version](#get-hdmi-version)|The test is to validate getting the `HDMI` compatibility version|
 -----------
 
 ## Get Number of Inputs
@@ -416,3 +417,21 @@ Emulator will boot with the `ALLM` support information.
 ### Control Plane Requirement - Get and Set `EDID` to all `ALLM` Support
 
 Control plane connects/ disconnects the external devices. Validates the ALLM by analyzers.
+
+## Get `HDMI` Version
+
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Get `HDMI` Version|Get `HDMI` Version and Validate with the version from profile file|dsGetHdmiVersion()|`Y`|`N`|`N`|`Y`|`NA`|
+
+### Test Startup Requirement - Get `HDMI` Version
+
+- The test begins with the configured `HDMI` input port numbers.
+
+### Emulator Requirement - Get `HDMI` Version
+
+Emulator will boot with the `EDID` coming from the configuration file.
+
+### Control Plane Requirement - Get `HDMI` Version
+
+None
