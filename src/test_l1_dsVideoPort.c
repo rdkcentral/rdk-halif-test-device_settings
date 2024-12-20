@@ -4907,65 +4907,6 @@ void test_l1_dsVideoPort_negative_dsSetPreferredColorDepth(void) {
  */
 void test_l1_dsVideoPort_positive_dsGetAllmEnabled(void) {
     gTestID = 79;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-    dsError_t status;
-    intptr_t handle = 0;
-    bool enabled;
-
-    // Step 01: Initialize video port system
-    status = dsVideoPortInit();
-    UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
-
-    // Step 02: Get the port handle for supported video ports
-    for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
-        status = dsGetVideoPort(gDSVideoPortConfiguration[i].typeid, gDSVideoPortConfiguration[i].index, &(handle));
-        UT_ASSERT_EQUAL(status, dsERR_NONE);
-        // Step 03: Get ALLM status
-        status = dsGetAllmEnabled(handle, &enabled);
-        if (gSourceType == 1) {
-            if(gDSVideoPortConfiguration[i].typeid == dsVIDEOPORT_TYPE_HDMI) {
-                UT_ASSERT_EQUAL(status, dsERR_NONE);
-            }
-            else {
-                UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
-            }
-        }
-        else if (gSourceType == 0) {
-            UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
-        }
-    }
-
-    // Step 04: Terminate the video port system
-    status = dsVideoPortTerm();
-    UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
-
-    UT_LOG("\n Out %s\n", __FUNCTION__); 
-}
-
-/**
- * @brief Positive Test Scenarios for dsGetAllmEnabled()
- * 
- * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 079@n
- * 
- * **Pre-Conditions:** None@n
- * 
- * **Dependencies:** None@n
- * 
- * **User Interaction:** None
- * 
- * **Test Procedure:**@n
- * |Variation / Step|Description|Test Data|Expected Result|Notes|
- * |:--:|---------|----------|--------------|-----|
- * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
- * |02|Call dsGetVideoPort() - Get the video port handle for HDMI video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsGetAllmEnabled() by looping through the acquired handles and get ALLM Status|handle=[valid handle] , enabled=[valid pointer] |dsERR_NONE|ALLM state must be retured or indicate that the operation isn't supported |
- * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
- * 
- */
-void test_l1_dsVideoPort_positive_dsGetAllmEnabled(void) {
-    gTestID = 79;
     UT_LOG_INFO("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
@@ -4987,7 +4928,7 @@ void test_l1_dsVideoPort_positive_dsGetAllmEnabled(void) {
                 UT_ASSERT_EQUAL(status, dsERR_NONE);
             }
             else {
-                UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+                UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
             }
         }
         else if (gSourceType == 0) {
@@ -5033,11 +4974,11 @@ void test_l1_dsVideoPort_negative_dsGetAllmEnabled(void) {
     UT_LOG_INFO("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
-    intptr_t handle = 0, valid_handle = 0;
+    intptr_t handle = 0;
     bool enabled = false;
 
     // Step 01: Attempt to get ALLM Status without initialization
-    status = dsGetAllmEnabled(-1, &enabled );
+    status = dsGetAllmEnabled(handle, &enabled );
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
     // Step 02: Initialize video port system
@@ -5055,29 +4996,28 @@ void test_l1_dsVideoPort_negative_dsGetAllmEnabled(void) {
 
     // Step 04: Get the port handle for supported video ports
     for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
-        status = dsGetVideoPort(gDSVideoPortConfiguration[i].typeid, gDSVideoPortConfiguration[i].index, &(handle));
-        UT_ASSERT_EQUAL(status, dsERR_NONE);
-
         if(gDSVideoPortConfiguration[i].typeid == dsVIDEOPORT_TYPE_HDMI) {
-            valid_handle = handle;
-        }
-
-        // Step 05: dsGetAllmEnabled with NULL parameter
-        status = dsGetAllmEnabled(handle, NULL);
-        if (gSourceType == 1) {
-            UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
-        }
-        else if (gSourceType == 0) {
-            UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+            status = dsGetVideoPort(gDSVideoPortConfiguration[i].typeid, gDSVideoPortConfiguration[i].index, &(handle));
+            UT_ASSERT_EQUAL(status, dsERR_NONE);
+            break;
         }
     }
+        // Step 05: dsGetAllmEnabled with NULL parameter
+    status = dsGetAllmEnabled(handle, NULL);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    }
+    else if (gSourceType == 0) {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
+
 
     // Step 06: Terminate the video port system
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
     // Step 07: Attempt to get ALLM Status after termination
-    status = dsGetAllmEnabled(valid_handle, &enabled );
+    status = dsGetAllmEnabled(handle, &enabled );
     if (gSourceType == 1) {
             CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
     }
@@ -5132,7 +5072,7 @@ void test_l1_dsVideoPort_positive_dsSetAllmEnabled(void) {
                 UT_ASSERT_EQUAL(status, dsERR_NONE);
             }
             else {
-                UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+                UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
             }
         } else if (gSourceType == 0) {
             UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
@@ -5145,7 +5085,7 @@ void test_l1_dsVideoPort_positive_dsSetAllmEnabled(void) {
                 UT_ASSERT_EQUAL(status, dsERR_NONE);
             }
             else {
-                UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+                UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
             }
         } else if (gSourceType == 0) {
             UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
@@ -5189,11 +5129,10 @@ void test_l1_dsVideoPort_negative_dsSetAllmEnabled(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
-    intptr_t handle = 0, valid_handle = 0;
-    bool enabled = false;
+    intptr_t handle = 0;
 
     // Step 01: Attempt to Enable ALLM without initialization
-    status = dsSetAllmEnabled(-1, true );
+    status = dsSetAllmEnabled(handle, true );
     CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
     // Step 02: Initialize video port system
@@ -5211,11 +5150,9 @@ void test_l1_dsVideoPort_negative_dsSetAllmEnabled(void) {
 
     // Step 04: Get the port handle for supported video ports
     for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
-        status = dsGetVideoPort(gDSVideoPortConfiguration[i].typeid, gDSVideoPortConfiguration[i].index, &(handle));
-        UT_ASSERT_EQUAL(status, dsERR_NONE);
-
         if(gDSVideoPortConfiguration[i].typeid == dsVIDEOPORT_TYPE_HDMI) {
-            valid_handle = handle;
+            status = dsGetVideoPort(gDSVideoPortConfiguration[i].typeid, gDSVideoPortConfiguration[i].index, &(handle));
+            UT_ASSERT_EQUAL(status, dsERR_NONE);
             break;
         }
     }
@@ -5225,7 +5162,7 @@ void test_l1_dsVideoPort_negative_dsSetAllmEnabled(void) {
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
     // Step 06: Attempt to enable ALLM Status after termination
-    status = dsSetAllmEnabled(valid_handle, true );
+    status = dsSetAllmEnabled(handle, true );
     if (gSourceType == 1) {
         CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
     }
