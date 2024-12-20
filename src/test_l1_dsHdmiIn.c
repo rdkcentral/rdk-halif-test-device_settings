@@ -2651,8 +2651,8 @@ void test_l1_dsHdmiIn_negative_dsGetHdmiVersion(void) {
 
     for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
         // Step 1: Call dsGetHdmiVersion() without initializing the HDMI input sub-system
-        result = dsGetHdmiVersion(port, &version);
-        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+        result = dsGetHdmiVersion(port, &version);  
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, gSourceType == 0 ? dsERR_NOT_INITIALIZED : dsERR_OPERATION_NOT_SUPPORTED, dsERR_NONE);
     }
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
@@ -2676,7 +2676,7 @@ void test_l1_dsHdmiIn_negative_dsGetHdmiVersion(void) {
     for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
         // Step 6: Call dsGetHdmiVersion() without initializing the HDMI input sub-system
         result = dsGetHdmiVersion(port, &version);
-        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, gSourceType == 0 ? dsERR_NOT_INITIALIZED : dsERR_OPERATION_NOT_SUPPORTED, dsERR_NONE);
     }
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
