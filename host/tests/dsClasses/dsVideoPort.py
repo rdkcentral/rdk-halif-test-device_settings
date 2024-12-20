@@ -589,9 +589,8 @@ class dsVideoPortClass():
         """
         Enables/Disables ALLM mode for HDMI output video port.
 
-        This method allows you to This method allows you to enables or disables  
-        the Auto Low Latency Mode (ALLM) for a HDMI output video port on source devices, 
-        as per the HDMI 2.1 specification.
+        This method allows you to enables or disables the Auto Low Latency Mode (ALLM) 
+        for a HDMI output video port on source devices, as per the HDMI 2.1 specification.
 
 
         Args:
@@ -636,9 +635,9 @@ class dsVideoPortClass():
         """
         Checks whether ALLM mode of HDMI output video port is enabled or not.
 
-        This method allows the user to obtain the current resolution settings
-        of a particular video output, which is useful for ensuring compatibility
-        with display devices or for troubleshooting display issues.
+        This method allows you to check whether the Auto Low Latency Mode (ALLM) 
+        for a HDMI output video port on source devices is enabled or disabled, as 
+        per the HDMI 2.1 specification.
 
         Args:
             video_port (int): The enumeration value representing the video port.
@@ -647,8 +646,7 @@ class dsVideoPortClass():
                                         Defaults to 0.
 
         Returns:
-            list: A list containing the current resolution settings, including
-                width, height, and possibly other related information.
+            list: A list containing the information on status of the ALLM mode.
 
         Example:
             getAllmMode(self,video_port:int, port_index:int=0):
