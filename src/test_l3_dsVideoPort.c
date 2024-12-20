@@ -676,7 +676,7 @@ void dsVideoPort_GetVideoEOTF()
 
 void dsVideoPort_SetAllmEnabled()
 {
-    dsError_t status   = dsERR_NONE;
+    dsError_t status = dsERR_NONE;
     int32_t choice = 0;
     int32_t j = 0;
 
@@ -694,37 +694,20 @@ void dsVideoPort_SetAllmEnabled()
     scanf("%d", &choice);
     readAndDiscardRestOfLine(stdin);
 
-    if(choice < 0 || choice > 1) 
+    if(choice == 0 || choice == 1) 
     {
-       UT_LOG_ERROR("\nInvalid ALLM mode selected\n");
-       goto exit;
+        UT_LOG_INFO("Calling dsSetAllmEnabled(IN:Handle:[0x%0X],IN:ALLM_Status:[]) ", gHandle);
+        status = dsSetAllmEnabled(gHandle, choice);
+        UT_LOG_INFO("Result dsSetAllmEnabled(IN:Handle:[0x%0X],IN:ALLM_Status:[%s]) ,dsError_t=[%s]",
+                        gHandle, UT_Control_GetMapString(boolMappingTable, choice), 
+                        UT_Control_GetMapString(dsErrorMappingTable, status));
+        DS_ASSERT(status == dsERR_NONE);
     }
-
-    UT_LOG_INFO("Calling dsSetAllmEnabled(IN:Handle:[0x%0X],IN:ALLM_Status:[]) ", gHandle);
-    status = dsSetAllmEnabled(gHandle, choice);
-    UT_LOG_INFO("Result dsSetAllmEnabled(IN:Handle:[0x%0X],IN:ALLM_Status:[%s]) ,dsError_t=[%s]",gHandle, UT_Control_GetMapString(boolMappingTable, choice),\
-                    UT_Control_GetMapString(dsErrorMappingTable, status));
-    exit:
-        UT_LOG_INFO("OUT %s ",__FUNCTION__);
-    
-}
-
-void dsVideoPort_GetAllmEnabled()
-{
-    dsError_t status   = dsERR_NONE;
-    bool AllmMode;
-
-    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
-
-    dsVideoPort_getHandle();
-    
-    UT_LOG_INFO("Calling dsGetAllmEnabled(IN:Handle:[0x%0X],OUT:ALLM_Status:[]) ", gHandle);
-    status = dsGetAllmEnabled(gHandle, &AllmMode);
-    UT_LOG_INFO("Result dsGetAllmEnabled(IN:Handle:[0x%0X],OUT:ALLM_Status:[%s]) ,dsError_t=[%s]",gHandle, AllmMode,\
-                    UT_Control_GetMapString(dsErrorMappingTable, status));
-    exit:
-        UT_LOG_INFO("OUT %s ",__FUNCTION__);
-    
+    else
+    {
+        UT_LOG_ERROR("\nInvalid ALLM mode selected\n");
+    }
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
 

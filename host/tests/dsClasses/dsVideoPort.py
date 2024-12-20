@@ -587,10 +587,11 @@ class dsVideoPortClass():
 
     def setAllmMode(self, video_port:int,  port_index:int=0, mode:str="Disable"):
         """
-        Resets the video output to Standard Dynamic Range (SDR) for the specified video port.
+        Enables/Disables ALLM mode for HDMI output video port.
 
-        This method allows you to This method allows you to enables or disables the Auto Low Latency Mode (ALLM) 
-        for a HDMI output video port on source devices, as per the HDMI 2.1 specification.
+        This method allows you to This method allows you to enables or disables  
+        the Auto Low Latency Mode (ALLM) for a HDMI output video port on source devices, 
+        as per the HDMI 2.1 specification.
 
 
         Args:
@@ -631,7 +632,53 @@ class dsVideoPortClass():
 
         result = self.utMenu.select(self.testSuite, "Set AllmMode", promptWithAnswers)
 
+    def getAllmMode(self,video_port:int, port_index:int=0):
+        """
+        Checks whether ALLM mode of HDMI output video port is enabled or not.
 
+        This method allows the user to obtain the current resolution settings
+        of a particular video output, which is useful for ensuring compatibility
+        with display devices or for troubleshooting display issues.
+
+        Args:
+            video_port (int): The enumeration value representing the video port.
+                            Refer to the dsVideoPortType enum for valid options.
+            port_index (int, optional): The index of the specific port to query.
+                                        Defaults to 0.
+
+        Returns:
+            list: A list containing the current resolution settings, including
+                width, height, and possibly other related information.
+
+        Example:
+            getAllmMode(self,video_port:int, port_index:int=0):
+        """
+
+        # Prepare prompts for user input to select the video port and index
+        promptWithAnswers = [
+            {
+                "query_type": "list",
+                "query": "Select the Video Port",
+                "input": "dsVIDEOPORT_TYPE_HDMI"
+            },
+            {
+                "query_type": "direct",
+                "query": "Select the Video Port Index[0-9]:",
+                "input": "0"
+            }
+        ]
+
+        # Convert input arguments to strings and update the prompts
+        promptWithAnswers[0]["input"] = str(video_port)
+        promptWithAnswers[1]["input"] = str(port_index)
+
+        result = self.utMenu.select(self.testSuite, "Get AllmMode", promptWithAnswers)
+
+        # Extract and return the output values from the result
+        output_list = self.extract_output_values(result)
+
+        return output_list
+    
     def select_PreferredColorDepth(self,video_port:int, port_index:int=0,color_depth:int=0):
         """
         Sets the preferred color depth for the specified video port.
