@@ -56,7 +56,7 @@ class dsVideoPort_test10_VerifyALLM_Mode(dsVideoPortHelperClass):
 
 
     #TODO: Current version supports only manual verification.
-    def testVerifyAllmMode(self, manual=False):
+    def testVerifyAllmMode(self, manual=False, mode:str=''):
         """
         Verifies Enables/Disables ALLM mode for HDMI output video port..
 
@@ -67,12 +67,12 @@ class dsVideoPort_test10_VerifyALLM_Mode(dsVideoPortHelperClass):
         Returns:
             bool: Result of the ALLM mode verification.
         """
-        if manual == True:
-            #hdcpVersion = self.testdsVideoPort.getHDCPVersion()
-            return self.testUserResponse.getUserYN(f'Is ALLM Mode (Enable/Disable) is displayed on Analyzer (Y/N): ')
-        else :
+        if manual == True and mode == 'Enable':
+            return self.testUserResponse.getUserYN(f'Is ALLM Mode Enabled and it is displayed on Analyzer (Y/N): ')
+        elif manual == True and mode == 'Disable':
             #TODO: Add automation verification methods
-            return False
+            return self.testUserResponse.getUserYN(f'Is ALLM Mode Disabled and it is displayed on Analyzer (Y/N): ')
+        return False
 
     def testFunction(self):
         """
@@ -92,7 +92,7 @@ class dsVideoPort_test10_VerifyALLM_Mode(dsVideoPortHelperClass):
 
             # Verify ALLM Mode when enabled
             self.log.stepStart(f'Verify ALLM mode Enabled')
-            result = self.testVerifyAllmMode(True)
+            result = self.testVerifyAllmMode(True,'Enable')
             self.log.stepResult(result, f'Verified ALLM mode Enabled')
 
             # Set the ALLM Mode as Disable
@@ -100,7 +100,7 @@ class dsVideoPort_test10_VerifyALLM_Mode(dsVideoPortHelperClass):
 
             # Verify ALLM Mode when disabled
             self.log.stepStart(f'Verify ALLM mode Disabled')
-            result = self.testVerifyAllmMode(True)
+            result = self.testVerifyAllmMode(True,'Disable')
             self.log.stepResult(result, f'Verified ALLM mode Disabled')
 
         return result

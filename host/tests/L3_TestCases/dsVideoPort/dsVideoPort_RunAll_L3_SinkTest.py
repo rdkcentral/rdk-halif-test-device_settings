@@ -34,7 +34,7 @@ sys.path.append(os.path.join(dir_path, "../../raft"))
 from raft.framework.core.logModule import logModule
 
 def RunAll_L3_Sink():
-    skipTests = ["test4","test5","test6","test7","test8","test9"]
+    skipTests = ["test4","test5","test6","test7","test8","test9","test10"]
 
     # Summery log for all the tests
     dsVideoPortSummerLog = logModule("dsVideoPortSummerLog_Sink", level=logModule.INFO)
