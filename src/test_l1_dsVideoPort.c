@@ -5052,7 +5052,7 @@ void test_l1_dsVideoPort_negative_dsGetAllmEnabled(void) {
  */
 void test_l1_dsVideoPort_positive_dsSetAllmEnabled(void) {
     gTestID = 81;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
     intptr_t handle = 0;
@@ -5096,7 +5096,7 @@ void test_l1_dsVideoPort_positive_dsSetAllmEnabled(void) {
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("\n Out %s\n", __FUNCTION__);
 }
 
 /**
@@ -5126,7 +5126,7 @@ void test_l1_dsVideoPort_positive_dsSetAllmEnabled(void) {
  */
 void test_l1_dsVideoPort_negative_dsSetAllmEnabled(void) {
     gTestID = 82;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
     intptr_t handle = 0;
@@ -5170,7 +5170,7 @@ void test_l1_dsVideoPort_negative_dsSetAllmEnabled(void) {
         UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
     }
 
-    UT_LOG("\n Out %s\n", __FUNCTION__);
+    UT_LOG_INFO("\n Out %s\n", __FUNCTION__);
 }
 
 static UT_test_suite_t * pSuite = NULL;
