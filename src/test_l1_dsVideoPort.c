@@ -4974,7 +4974,7 @@ void test_l1_dsVideoPort_negative_dsGetAllmEnabled(void) {
     UT_LOG_INFO("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
-    intptr_t handle = 0;
+    intptr_t handle = -1;
     bool enabled = false;
 
     // Step 01: Attempt to get ALLM Status without initialization
@@ -5129,7 +5129,7 @@ void test_l1_dsVideoPort_negative_dsSetAllmEnabled(void) {
     UT_LOG_INFO("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
-    intptr_t handle = 0;
+    intptr_t handle = -1;
 
     // Step 01: Attempt to Enable ALLM without initialization
     status = dsSetAllmEnabled(handle, true );
