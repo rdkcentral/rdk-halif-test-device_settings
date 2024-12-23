@@ -70,7 +70,6 @@ class dsVideoPort_test10_VerifyALLM_Mode(dsVideoPortHelperClass):
         if manual == True and mode == 'Enable':
             return self.testUserResponse.getUserYN(f'Is ALLM Mode Enabled and it is displayed on Analyzer (Y/N): ')
         elif manual == True and mode == 'Disable':
-            #TODO: Add automation verification methods
             return self.testUserResponse.getUserYN(f'Is ALLM Mode Disabled and it is displayed on Analyzer (Y/N): ')
         return False
 
