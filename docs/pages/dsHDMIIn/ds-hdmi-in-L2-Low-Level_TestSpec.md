@@ -333,3 +333,42 @@ E -->|Failure| E1[Test case fail]
 F -->|Success| G[Test case success]
 F -->|Failure| F1[Test case fail]
 ```
+
+### Test 8
+
+|Title|Details|
+|--|--|
+|Function Name|`test_l2_dsHdmiIn_GetHdmiVersionAndValidate_sink`|
+|Description|Getting the `HDMI` compatibility version for a given port version and validate it.|
+|Test Group|02|
+|Test Case ID|008|
+|Priority|High|
+
+**Pre-Conditions**
+None
+
+**Dependencies**
+None
+
+**User Interaction**
+If user chose to run the test in interactive mode, then the test case has to be selected via console.
+
+#### Test Procedure - Test 8
+
+| Variation / Steps | Description | Test Data | Expected Result | Notes|
+| -- | --------- | ---------- | -------------- | ----- |
+| 01 | Initialize HDMI input module using `dsHdmiInInit` | None | `dsERR_NONE` | Should be successful |
+| 02 | Get  and validate the `HDMI` compatibility version by comparing with the YAML file for each `HDMI` port using `dsGetHdmiVersion` | hdmiPort = `dsHDMI_IN_PORT_0` to number of supported ports | `dsERR_NONE` | Should be successful |
+| 03 | Terminate `HDMI` input module using `dsHdmiInTerm` | None | `dsERR_NONE` | Should be successful |
+
+```mermaid
+graph TB
+    A[dsHdmiInInit] --> |Success| B[dsGetHdmiVersion]
+    A --> |Failure| A1[Test Case Fail: dsHdmiInInit]
+    B --> |Success| C[Validate with value from profile file]
+    B --> |Failure| B1[Test Case Fail : dsGetHdmiVersion]
+    C --> |Success| D[dsHdmiInTerm]
+    C --> |Failure| C1[Test Case Fail]
+    D --> |Success| E[Test Case Success]
+    D --> |Failure| D1[Test Case Fail]
+```
