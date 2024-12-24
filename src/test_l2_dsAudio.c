@@ -411,7 +411,7 @@ void test_l2_dsAudio_SetAndGetDialogEnhancement(void)
             continue;
         }
 
-        for (level = 0; level <= 16; level++) {
+        for (level = gDSAudioPortConfiguration[port].min_dialog_enhancement_level; level <= gDSAudioPortConfiguration[port].max_dialog_enhancement_level; level++) {
             UT_LOG_DEBUG("Invoking dsSetDialogEnhancement() with handle: %p and level: %d", handle, level);
             ret = dsSetDialogEnhancement(handle, level);
             UT_ASSERT_EQUAL(ret, dsERR_NONE);

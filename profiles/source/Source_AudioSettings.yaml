@@ -82,4 +82,7 @@ dsAudio:
             # dsAUDIO_ATMOS_NOTSUPPORTED               = 0x00,  ///< ATMOS audio not supported
             # dsAUDIO_ATMOS_SUPPORTED                  = 0x01,  ///< ATMOS audio supported
             ATMOS_Capabilities: 0x01  # dsAUDIO_ATMOS_SUPPORTED
+            dialog_enhancement_level:
+                min: 0
+                max: 12
 

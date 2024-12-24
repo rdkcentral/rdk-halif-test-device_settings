@@ -917,6 +917,26 @@ class dsAudioClass():
                 return entry['MS12_AudioProfiles']
         return []
 
+    def getDialogueEnhance(self, audio_port: str, port_index: int = 0):
+        """
+        Retrieves the list of supported MS12 audio profiles for the specified port.
+
+        Args:
+            audio_port (str): The name of the audio port.
+            port_index (int, optional): The index of the audio port. Defaults to 0.
+
+        Returns:
+            list: A list of supported MS12 audio profiles. If no profiles are found, returns an empty list.
+        """
+        if not self.ports:
+            return []
+
+        for entry in self.ports.values():
+            if (dsAudioPortType(entry['Typeid']).name == audio_port
+                and entry['Index'] == port_index):
+                return entry['dialog_enhancement_level']
+        return []
+
     def __del__(self):
         """
         Cleans up and de-initializes the dsAudio helper by stopping the test menu.
