@@ -10,6 +10,7 @@
   - [dsCompositeIn_test2_VerifyStatus_Callback.py](#dscompositein_test2_verifystatus_callbackpy)
   - [dsCompositeIn_test3_ScaleAndVerify_Video.py](#dscompositein_test3_scaleandverify_videopy)
   - [dsCompositeIn_test4_VerifySignal_Callback.py](#dscompositein_test4_verifysignal_callbackpy)
+  - [dsCompositeIn_test5_VerifyVideoMode_Callback.py](#dscompositein_test5_verifyvideomode_callbackpy)
   - [dsCompositeIn_L3_Runall_Sink.py](#dscompositein_l3_runall_sinkpy)
 
 ## Acronyms, Terms and Abbreviations
@@ -113,6 +114,8 @@ dscompositeIn:
         test3_ScaleAndVerify_Video:
           streams:
         test4_VerifySignal_Callback:
+          streams:
+        test5_VerifyVideoMode_Callback:
           streams:
 ```
 
@@ -350,6 +353,69 @@ Success Criteria
   - Press **Y** if the user connected the device and acknowledged it. (this will mark the step as PASS).
 
 - Signal change confirmation:
+
+  - The test will check if the event has reached the device.
+  - If the event is detected will mark the step as PASS
+  - If the event is not detected will mark the step as FAIL
+
+- Repeat for All Ports:
+
+  The test will iterate through all available ports.
+
+- Test Conclusion:
+
+  Upon receiving user responses for all ports, the test will conclude and present a final result: PASS or FAIL based on the user inputs throughout the test execution.
+
+### dsCompositeIn_test5_VerifyVideoMode_Callback.py
+
+#### Platform Support - test05
+
+- Sink
+
+#### User Input Required - test05
+
+**Yes**: User interaction is necessary to connect/Disconnect the device (This will be automated later).
+
+#### Acceptance Criteria - test05
+
+The test detects the video mode change of the compositeIn video.
+
+#### Expected Results - test05
+
+The test checks the video mode change in the composite source
+
+Success Criteria
+
+- Test identifies the video mode change.
+
+#### Test Steps - test05
+
+- Initiate the Test:
+
+  - Select and execute the Python file: **`dsCompositeIn_test5_VerifyVideoMode_Callback.py`**
+  - The test will automatically download all required artifacts, copying them to the designated target directory before commencing execution.
+
+- Device Connect prompt:
+
+    The test will Request the User to connect the Source device to the Composite In port:
+
+  - Question: "Connect the compositeIn source device to Port port_type and press Y: "
+  - Press **Y** if the user connected the device and acknowledged it. (this will mark the step as PASS).
+
+- Device connect confirmation:
+
+  - The test will check if the event has reached the device.
+  - If the event is detected will mark the step as PASS
+  - If the event is not detected will mark the step as FAIL
+
+- Source video resolution change prompt:
+
+    The test will Request the User to change the resolution of video on Source device connected to the Composite In port:
+
+  - Question: "Change the resolution of video played from CompositeIn source device connected to port_type and press Y: "
+  - Press **Y** if the user changed the resolution and acknowledged it. (this will mark the step as PASS).
+
+- Source video resolution change confirmation:
 
   - The test will check if the event has reached the device.
   - If the event is detected will mark the step as PASS
