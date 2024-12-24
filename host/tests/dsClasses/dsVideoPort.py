@@ -675,7 +675,7 @@ class dsVideoPortClass():
         # Extract and return the output values from the result
         output_list = self.extract_output_values(result)
 
-        return output_list
+        return bool(output_list)
     
     def select_PreferredColorDepth(self,video_port:int, port_index:int=0,color_depth:int=0):
         """

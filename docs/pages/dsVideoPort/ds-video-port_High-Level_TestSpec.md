@@ -12,7 +12,7 @@
   - [Check HDR Capability](#check-hdr-capability)
   - [HDCP Management](#hdcp-management)
   - [Color Capabilities](#color-capabilities)
-  - [Check the ALLM mode](#allm-mode)
+  - [Check ALLM mode](#check-allm-mode)
 
 ## Acronyms, Terms and Abbreviations
 
@@ -50,7 +50,7 @@ Interface specification is available here: [dsVideoPort HAL Spec](https://github
 |3|[Check HDR Capability](#check-hdr-capability)|Check `HDR` Capability|
 |4|[HDCP Management](#hdcp-management)|Check `HDCP` Status|
 |5|[Color Capabilities](#color-capabilities)|Check the color capabilities|
-|6|[ALLM Mode](#allm-mode)|Check the ALLM mode|
+|6|[Check ALLM mode](#check-allm-mode)|Check the ALLM mode|
 
 ### Emulator Requirements
 
@@ -199,11 +199,11 @@ Playback the pre-define streams
 
 Verify the Color Space,Color Depth,QuantizationRange,MatrixCoefficients,Background Color with analyzer/external device
 
-### Check the ALLM mode
+### Check ALLM mode
 
 |Test Functionality|Description|HAL API's|L2|L3|Source|Sink|Control plane requirements|
 |------------------|-----------|---------|--|--|------|----|--------------------------|
-|Check the ALLM mode|Enables/Disables ALLM mode for HDMI output video port. This method allows you to enables or disables the Auto Low Latency Mode (ALLM) for a HDMI output video port on source devices, as per the HDMI 2.1 specification.|dsSetAllmEnabled()|`Y`|`Y`|`Y`|`NA`|`Y`|
+|Check ALLM mode|Enables/Disables ALLM mode for HDMI output video port. This method allows you to enables or disables the Auto Low Latency Mode (ALLM) for a HDMI output video port on source devices, as per the HDMI 2.1 specification.|dsSetAllmEnabled()|`Y`|`Y`|`Y`|`NA`|`Y`|
 ||Checks whether ALLM mode of HDMI output video port is enabled or not.|dsGetAllmEnabled()|`Y`|`Y`|`Y`|`NA`|`Y`|
 
 #### Test Startup Requirement-Check the ALLM mode
