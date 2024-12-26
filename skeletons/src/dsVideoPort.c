@@ -335,3 +335,18 @@ dsError_t dsSetPreferredColorDepth(intptr_t handle, dsDisplayColorDepth_t colorD
   return (dsError_t)0;
 }
 
+dsError_t dsSetAllmEnabled (intptr_t  handle, bool enabled)
+{
+  /*TODO: Implement Me!*/
+  (void)handle;
+  (void)enabled;
+  return (dsError_t)0;
+}
+
+dsError_t dsGetAllmEnabled (intptr_t  handle, bool *enabled)
+{
+  /*TODO: Implement Me!*/
+  (void)handle;
+  (void)enabled;
+  return (dsError_t)0;
+}
