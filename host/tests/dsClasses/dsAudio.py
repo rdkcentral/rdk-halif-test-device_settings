@@ -919,14 +919,18 @@ class dsAudioClass():
 
     def getDialogueEnhance(self, audio_port: str, port_index: int = 0):
         """
-        Retrieves the list of supported MS12 audio profiles for the specified port.
+        Retrieves the dialogue enhancement levels supported by a specific audio port.
+
+        This method checks the available audio ports for the specified port type and index,
+        and returns the corresponding dialogue enhancement levels if they are defined.
 
         Args:
-            audio_port (str): The name of the audio port.
-            port_index (int, optional): The index of the audio port. Defaults to 0.
+            audio_port (str): The type of the audio port to query (e.g., HDMI, Optical).
+            port_index (int, optional): The index of the audio port to query. Defaults to 0.
 
         Returns:
-            list: A list of supported MS12 audio profiles. If no profiles are found, returns an empty list.
+            list: A list of dialogue enhancement levels available for the specified port.
+              Returns an empty list if no matching port or enhancement levels are found.
         """
         if not self.ports:
             return []

@@ -168,19 +168,14 @@ int test_dsAudio_parse_configuration()
         snprintf(key_string, DS_AUDIO_KVP_SIZE, "dsAudio/Ports/%d/ATMOS_Capabilities" , i+1);
         gDSAudioPortConfiguration[i].atmos_capabilites = ut_kvp_getUInt16Field( ut_kvp_profile_getInstance(), key_string  );
 
-        // comment code due to bug in : ut_kvp_fieldPresent unable to parse the %d
-        //if(ut_kvp_fieldPresent(ut_kvp_profile_getInstance(),"dsAudio/Ports/%d/dialog_enhancement_level"))
+        snprintf(key_string, DS_AUDIO_KVP_SIZE, "dsAudio/Ports/%d/dialog_enhancement_level" , i+1);
+        if(ut_kvp_fieldPresent(ut_kvp_profile_getInstance(),key_string))
         {
-            //if(ut_kvp_fieldPresent(ut_kvp_profile_getInstance(),"dsAudio/Ports/%d/dialog_enhancement_level/min"))
-            {
-                snprintf(key_string, DS_AUDIO_KVP_SIZE, "dsAudio/Ports/%d/dialog_enhancement_level/min" , i+1);
-                gDSAudioPortConfiguration[i].min_dialog_enhancement_level = ut_kvp_getUInt16Field( ut_kvp_profile_getInstance(), key_string );
-            }
-            //if(ut_kvp_fieldPresent(ut_kvp_profile_getInstance(),"dsAudio/Ports/%d/dialog_enhancement_level/max"))
-            {
-                snprintf(key_string, DS_AUDIO_KVP_SIZE, "dsAudio/Ports/%d/dialog_enhancement_level/max" , i+1);
-                gDSAudioPortConfiguration[i].max_dialog_enhancement_level = ut_kvp_getUInt16Field( ut_kvp_profile_getInstance(), key_string );
-            }
+            snprintf(key_string, DS_AUDIO_KVP_SIZE, "dsAudio/Ports/%d/dialog_enhancement_level/min" , i+1);
+            gDSAudioPortConfiguration[i].min_dialog_enhancement_level = ut_kvp_getUInt16Field( ut_kvp_profile_getInstance(), key_string );
+
+            snprintf(key_string, DS_AUDIO_KVP_SIZE, "dsAudio/Ports/%d/dialog_enhancement_level/max" , i+1);
+            gDSAudioPortConfiguration[i].max_dialog_enhancement_level = ut_kvp_getUInt16Field( ut_kvp_profile_getInstance(), key_string );
         }
 
          // loop to get supported compressions in array
