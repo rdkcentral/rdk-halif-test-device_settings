@@ -518,6 +518,62 @@ void test_l2_dsHdmiIn_SetAndGetAllmSupport_sink(void)
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
+/**
+* @brief Test to get HDMI compatibility version and validate 
+*
+* This test gets the HDMI compatibility version and validate it.
+* It is validated with the HDMI compatibility version the platform specific profile file. This is done to ensure the correct
+* functioning of HDMI input related APIs.
+*
+* **Test Group ID:** 02@n
+* **Test Case ID:** 008@n
+*
+* **Test Procedure:**
+* Refer to UT specification documentation [ds-hdmi-in-L2-Low-Level_TestSpec.md](../docs/pages/ds-hdmi-in-L2-Low-Level_TestSpec.md)
+*/
+
+void test_l2_dsHdmiIn_GetHdmiVersionAndValidate_sink(void)
+{
+    gTestID = 8;
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t ret = dsERR_NONE;
+    uint8_t numInputs = 0; // Initialize to 0
+    dsHdmiMaxCapabilityVersion_t getVersion = HDMI_COMPATIBILITY_VERSION_MAX;
+    char keyString[DS_HDMIIN_KEY_SIZE] = {0};
+
+    UT_LOG_DEBUG("Invoking dsHdmiInInit");
+    ret = dsHdmiInInit();
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+
+    ret = dsHdmiInGetNumberOfInputs(&numInputs);
+    if (ret != dsERR_NONE)
+    {
+        UT_LOG_ERROR("Failed to get the number of hdmi inputs\n");
+    }
+
+    UT_ASSERT_TRUE(numInputs >= 0 && numInputs <= UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts"));
+
+    for (int port = dsHDMI_IN_PORT_0; port < numInputs; port++)
+    {
+        UT_LOG_DEBUG("Invoking dsGetEdidVersion with hdmiPort=%d\n", port);
+        ret = dsGetHdmiVersion(port, &getVersion);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        if (ret != dsERR_NONE)
+        {
+            UT_LOG_ERROR("Failed to get EDID version\n");
+        }
+        snprintf(keyString, DS_HDMIIN_KEY_SIZE, "dsHdmiIn/HdmiCompatibilityVersion/%d", port);
+        dsHdmiMaxCapabilityVersion_t version = UT_KVP_PROFILE_GET_UINT32(keyString);
+        UT_ASSERT_EQUAL(getVersion, version);
+    }
+    UT_LOG_DEBUG("Invoking dsHdmiInTerm");
+    ret = dsHdmiInTerm();
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
+}
+
 static UT_test_suite_t * pSuite = NULL;
 
 /**
@@ -573,6 +629,7 @@ int test_l2_dsHdmiIn_register(void)
         UT_add_test( pSuite, "L2_SetAndGetEdidVersionAndValidateEdidLength_sink", test_l2_dsHdmiIn_SetAndGetEdidVersionAndValidateEdidLength_sink);
         UT_add_test( pSuite, "L2_GetSupportedGameFeaturesList_sink", test_l2_dsHdmiIn_GetSupportedGameFeaturesList_sink);
         UT_add_test( pSuite, "L2_SetAndGetAllmSupport_sink", test_l2_dsHdmiIn_SetAndGetAllmSupport_sink);
+        UT_add_test( pSuite, "L2_GetHdmiVersionAndValidate_sink", test_l2_dsHdmiIn_GetHdmiVersionAndValidate_sink);
     }
 
     return 0;

@@ -76,6 +76,7 @@
 #include <ut_log.h>
 #include <ut_kvp_profile.h>
 #include "test_parse_configuration.h"
+#define DS_HDMIIN_KEY_SIZE 64
 
 static int gTestGroup = 1;
 static int gTestID = 1;
@@ -2564,6 +2565,123 @@ void test_l1_dsHdmiIn_negative_dsGetEdid2AllmSupport_sink(void) {
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
+/**
+ * @brief Ensure dsGetHdmiVersion() correctly retrieves the HDMI compatibility version during positive scenarios.
+ *
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 051@n
+ *
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ *
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Call dsGetHdmiVersion() with all valid ports |[Valid Port], dsHdmiMaxCapabilityVersion_t*| dsERR_NONE | Should Pass |
+ * |03|Compare the values with value read from yaml file and make sure they match || Success | The values should be the same |
+ * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ *
+ */
+void test_l1_dsHdmiIn_positive_dsGetHdmiVersion(void) {
+
+    gTestID = 51;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    dsError_t  result = dsERR_NONE;
+    uint8_t numInputPorts = 0;
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
+    char keyString[DS_HDMIIN_KEY_SIZE] = {0};
+
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
+
+    for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
+        dsHdmiMaxCapabilityVersion_t version = HDMI_COMPATIBILITY_VERSION_MAX;
+        if (gSourceType == 0) {
+            // Step 2: Call dsGetHdmiVersion() with valid values (dsHDMI_IN_PORT_0, dsHdmiMaxCapabilityVersion_t*)
+            result = dsGetHdmiVersion(port, &version);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+            // Step 3: compare the version with value read from yaml file
+            UT_LOG("version : %d\n", version);
+            snprintf(keyString, DS_HDMIIN_KEY_SIZE, "dsHdmiIn/HdmiCompatibilityVersion/%d", port);
+            UT_ASSERT_KVP_EQUAL_PROFILE_UINT32(version, keyString);
+        } else if (gSourceType == 1) {
+            // Step 4: Call dsGetHdmiVersion() with valid ports
+            UT_ASSERT_EQUAL(dsGetHdmiVersion(port, &version), dsERR_OPERATION_NOT_SUPPORTED);
+        }
+    }
+
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
+    UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
+
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsGetHdmiVersion() returns correct error codes during negative scenarios.
+ *
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 052@n
+ *
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ *
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsGetHdmiVersion() without initializing the HDMI input sub-system |dsHDMI_IN_PORT_0, dsHdmiMaxCapabilityVersion_t*| dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsGetHdmiVersion() with invalid inputs |dsHDMI_IN_PORT_MAX, dsHdmiMaxCapabilityVersion_t*| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsGetHdmiVersion() with invalid inputs |[Valid Port], NULL| dsERR_INVALID_PARAM | Should Pass |
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |06|Call dsGetHdmiVersion() without initializing the HDMI input sub-system |dsHDMI_IN_PORT_0, dsHdmiMaxCapabilityVersion_t*| dsERR_NOT_INITIALIZED | Should Pass |
+ *
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
+ *
+ */
+void test_l1_dsHdmiIn_negative_dsGetHdmiVersion(void) {
+
+    gTestID = 52;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    dsError_t  result = dsERR_NONE;
+    dsHdmiMaxCapabilityVersion_t version = HDMI_COMPATIBILITY_VERSION_MAX;
+    uint8_t numInputPorts = 0;
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
+
+    for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
+        // Step 1: Call dsGetHdmiVersion() without initializing the HDMI input sub-system
+        result = dsGetHdmiVersion(port, &version);  
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, gSourceType == 0 ? dsERR_NOT_INITIALIZED : dsERR_OPERATION_NOT_SUPPORTED, dsERR_NONE);
+    }
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
+
+    for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
+        if (gSourceType == 0) {
+            // Step 3: Call dsGetHdmiVersion() with invalid inputs (dsHDMI_IN_PORT_MAX)
+            UT_ASSERT_EQUAL(dsGetHdmiVersion(dsHDMI_IN_PORT_MAX, &version), dsERR_INVALID_PARAM);
+
+            // Step 4: Call dsGetHdmiVersion() with invalid inputs (NULL)
+            UT_ASSERT_EQUAL(dsGetHdmiVersion(port, NULL), dsERR_INVALID_PARAM);
+        } else if (gSourceType == 1) {
+            UT_ASSERT_EQUAL(dsGetHdmiVersion(dsHDMI_IN_PORT_MAX, &version), dsERR_OPERATION_NOT_SUPPORTED);
+            UT_ASSERT_EQUAL(dsGetHdmiVersion(port, NULL), dsERR_OPERATION_NOT_SUPPORTED);
+        }
+    }
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
+    UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
+
+    for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
+        // Step 6: Call dsGetHdmiVersion() without initializing the HDMI input sub-system
+        result = dsGetHdmiVersion(port, &version);
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, gSourceType == 0 ? dsERR_NOT_INITIALIZED : dsERR_OPERATION_NOT_SUPPORTED, dsERR_NONE);
+    }
+
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
 static UT_test_suite_t * pSuite = NULL;
 static UT_test_suite_t * pSuite2 = NULL;
 
@@ -2663,7 +2781,8 @@ int test_l1_dsHdmiIn_register ( void )
     UT_add_test( pSuite2, "dsGetEdid2AllmSupport_l1_positive" ,test_l1_dsHdmiIn_positive_dsGetEdid2AllmSupport_sink );
     UT_add_test( pSuite2, "dsGetEdid2AllmSupport_l1_negative" ,test_l1_dsHdmiIn_negative_dsGetEdid2AllmSupport_sink );
     UT_add_test( pSuite2, "dsIsHdmiARCPort_L1_negative" ,test_l1_dsHdmiIn_negative_dsIsHdmiARCPort_sink );
-
+    UT_add_test( pSuite, "dsGetHdmiVersion_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetHdmiVersion );
+    UT_add_test( pSuite, "dsGetHdmiVersion_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetHdmiVersion );
 
    extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsHdmiIn/features/extendedEnumsSupported" );
 
