@@ -101,6 +101,9 @@ dsAudio:
             # dsAUDIO_ATMOS_ATMOSMETADATA              = 0x02, ///< capable of parsing ATMOS metadata
             # dsAUDIO_ATMOS_MAX                        = 0x03  ///< Out of range
             ATMOS_Capabilities: 0x02  # ATMOSMETADATA
+            dialog_enhancement_level:
+                min: 0
+                max: 12
 
         # Port Number to parse the port details
         2:
@@ -169,6 +172,9 @@ dsAudio:
             # dsAUDIOARCSUPPORT_ARC                    = 0x01,  ///< Audio Return Channel
             # dsAUDIOARCSUPPORT_eARC                   = 0x02,  ///< Enhanced Audio Return Channel
             Arc_Types: 0x01 # dsAUDIOARCSUPPORT_ARC
+            dialog_enhancement_level:
+                min: 0
+                max: 12
 
         # Port Number to parse the port details
         3:
@@ -233,6 +239,9 @@ dsAudio:
             # dsAUDIO_ATMOS_ATMOSMETADATA              = 0x02,  ///< capable of parsing ATMOS metadata
             # dsAUDIO_ATMOS_MAX                        = 0x03   ///< Out of range
             ATMOS_Capabilities: 0  # dsAUDIO_ATMOS_NOTSUPPORTED
+            dialog_enhancement_level:
+                min: 0
+                max: 12
 
         # Port Number to parse the port details
         4:
@@ -297,3 +306,6 @@ dsAudio:
             # dsAUDIO_ATMOS_ATMOSMETADATA              = 0x02,  ///< capable of parsing ATMOS metadata
             # dsAUDIO_ATMOS_MAX                        = 0x03   ///< Out of range
             ATMOS_Capabilities: 0  # dsAUDIO_ATMOS_NOTSUPPORTED
+            dialog_enhancement_level:
+                min: 0
+                max: 12

@@ -89,17 +89,17 @@ int test_dsAudio_parse_configuration()
 
     status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsAudio.Type", gDeviceType, TEST_DS_DEVICE_TYPE_SIZE);
 
-    if (status == UT_KVP_STATUS_SUCCESS ) 
+    if (status == UT_KVP_STATUS_SUCCESS )
     {
-        if (!strncmp(gDeviceType, TEST_TYPE_SOURCE_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) 
+        if (!strncmp(gDeviceType, TEST_TYPE_SOURCE_VALUE, TEST_DS_DEVICE_TYPE_SIZE))
         {
             gSourceType = 1;
         }
-        else if(!strncmp(gDeviceType, TEST_TYPE_SINK_VALUE, TEST_DS_DEVICE_TYPE_SIZE)) 
+        else if(!strncmp(gDeviceType, TEST_TYPE_SINK_VALUE, TEST_DS_DEVICE_TYPE_SIZE))
         {
             gSourceType = 0;
         }
-        else 
+        else
         {
             UT_LOG_ERROR("Invalid platform type: %s", gDeviceType);
             return -1;
@@ -116,21 +116,22 @@ int test_dsAudio_parse_configuration()
 
     gAudioCapabilities    = UT_KVP_PROFILE_GET_UINT32("dsAudio/Audio_Capabilities");
     gDSAudioNumberOfPorts = UT_KVP_PROFILE_GET_UINT32("dsAudio/Number_of_supported_ports");
+    UT_LOG_DEBUG("gDSAudioNumberOfPorts =%d ",gDSAudioNumberOfPorts);
 
     gDSAudioPortConfiguration = (dsAudioPortConfiguration_t*) calloc(gDSAudioNumberOfPorts, sizeof(dsAudioPortConfiguration_t));
-    if(gDSAudioPortConfiguration == NULL) 
+    if(gDSAudioPortConfiguration == NULL)
     {
         UT_LOG_ERROR("Failed to allocate memory for audio configuration structure");
         return -1;
     }
 
-    for(int i = 0; i < gDSAudioNumberOfPorts; i++) 
+    for(int i = 0; i < gDSAudioNumberOfPorts; i++)
     {
 
         snprintf(key_string, DS_AUDIO_KVP_SIZE, "dsAudio/Ports/%d/Typeid" , i+1);
         gDSAudioPortConfiguration[i].typeid = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
 
-        if(gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HDMI_ARC) 
+        if(gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HDMI_ARC)
         {
             snprintf(key_string, DS_AUDIO_KVP_SIZE, "dsAudio/Ports/%d/Arc_Types" , i+1);
             gDSAudioPortConfiguration[i].arc_type = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
@@ -167,22 +168,32 @@ int test_dsAudio_parse_configuration()
         snprintf(key_string, DS_AUDIO_KVP_SIZE, "dsAudio/Ports/%d/ATMOS_Capabilities" , i+1);
         gDSAudioPortConfiguration[i].atmos_capabilites = ut_kvp_getUInt16Field( ut_kvp_profile_getInstance(), key_string  );
 
+        snprintf(key_string, DS_AUDIO_KVP_SIZE, "dsAudio/Ports/%d/dialog_enhancement_level" , i+1);
+        if(ut_kvp_fieldPresent(ut_kvp_profile_getInstance(),key_string))
+        {
+            snprintf(key_string, DS_AUDIO_KVP_SIZE, "dsAudio/Ports/%d/dialog_enhancement_level/min" , i+1);
+            gDSAudioPortConfiguration[i].min_dialog_enhancement_level = ut_kvp_getUInt16Field( ut_kvp_profile_getInstance(), key_string );
+
+            snprintf(key_string, DS_AUDIO_KVP_SIZE, "dsAudio/Ports/%d/dialog_enhancement_level/max" , i+1);
+            gDSAudioPortConfiguration[i].max_dialog_enhancement_level = ut_kvp_getUInt16Field( ut_kvp_profile_getInstance(), key_string );
+        }
+
          // loop to get supported compressions in array
-        for(int j = 0; j < gDSAudioPortConfiguration[i].no_of_supported_compression; j++) 
+        for(int j = 0; j < gDSAudioPortConfiguration[i].no_of_supported_compression; j++)
         {
             snprintf(key_string, DS_AUDIO_KVP_SIZE, "dsAudio/Ports/%d/compressions/%d" , i+1 , j);
             gDSAudioPortConfiguration[i].supported_compressions[j] = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
         }
 
         //loop to get supported stereo modes in array
-        for(int j = 0; j < gDSAudioPortConfiguration[i].no_of_supported_stereo_mode; j++) 
+        for(int j = 0; j < gDSAudioPortConfiguration[i].no_of_supported_stereo_mode; j++)
         {
             snprintf(key_string, DS_AUDIO_KVP_SIZE, "dsAudio/Ports/%d/stereo_modes/%d" , i+1 , j);
             gDSAudioPortConfiguration[i].supported_stereo_mode[j] = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
         }
 
         // loop to get ms12 audio profiles
-        for(int j = 0; j < gDSAudioPortConfiguration[i].ms12_audioprofilecount; j++) 
+        for(int j = 0; j < gDSAudioPortConfiguration[i].ms12_audioprofilecount; j++)
         {
             snprintf(key_string, DS_AUDIO_KVP_SIZE, "dsAudio/Ports/%d/MS12_AudioProfiles/%d" , i+1 , j);
             status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key_string, gDSAudioPortConfiguration[i].ms12_audio_profiles[j], DS_AUDIO_MAX_MS12_PROFILE_LEN);
@@ -194,14 +205,14 @@ int test_dsAudio_parse_configuration()
 
 void test_dsAudio_parse_configuration_term()
 {
-    if(gDSAudioPortConfiguration) 
+    if(gDSAudioPortConfiguration)
     {
         free(gDSAudioPortConfiguration);
     }
 }
 
-/** @} */ // End of DS_HALTEST_PARSE_CONFIG_AUDIO
-/** @} */ // End of Device_Settings_HALTEST_PARSE_CONFIG
+/** @} */ // End of DS_Audio_HALTEST_PARSE_CONFIG
+/** @} */ // End of DS_Audio_HALTEST
 /** @} */ // End of Device_Settings_HALTEST
 /** @} */ // End of Device_Settings
 /** @} */ // End of HPK

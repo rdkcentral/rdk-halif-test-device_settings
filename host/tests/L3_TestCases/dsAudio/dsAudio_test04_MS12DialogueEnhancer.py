@@ -51,9 +51,6 @@ class dsAudio_test04_MS12DialogueEnhancer(dsAudioHelperClass):
         self.qcID = '4'
         self.ms12DAPFeature = "DialogueEnhancer"
 
-        # List of dialogue enhance values for testing
-        self.dialogueEnhance = [0, 8, 16]
-
         super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
@@ -64,7 +61,7 @@ class dsAudio_test04_MS12DialogueEnhancer(dsAudioHelperClass):
         Args:
             stream (str): The stream used for testing.
             port (str): The audio port to verify.
-            level (int): The Dialogue Enhancer level (0-16).
+            level (int): The Dialogue Enhancer Level ranges from 0 to 12(as per 2.6 IDK) or 0 to 16(as per 2.4.1 IDK).
             manual (bool): If True, prompts the user for verification. Defaults to False.
 
         Returns:
@@ -99,6 +96,12 @@ class dsAudio_test04_MS12DialogueEnhancer(dsAudioHelperClass):
                 if self.testdsAudio.getMS12DAPFeatureSupport(port, index, self.ms12DAPFeature):
                     # Enable the audio port
                     self.testdsAudio.enablePort(port, index)
+                    output  = self.testdsAudio.getDialogueEnhance(port, index)
+                    # Storing values in variables
+                    min_value = output['min']
+                    max_value = output['max']
+                    # List of dialogue enhance values for testing
+                    self.dialogueEnhance = [min_value, max_value/2, max_value]
 
                     for level in self.dialogueEnhance:
                         self.log.stepStart(f'MS12 {self.ms12DAPFeature} level:{level} Port:{port} Index:{index} Stream:{stream}')

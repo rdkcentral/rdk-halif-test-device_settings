@@ -975,6 +975,9 @@ void test_l1_dsAudio_positive_dsSetDialogEnhancement(void)
     // Step 02: Get the port handle for all supported audio ports
     for (int i = 0; i < gDSAudioNumberOfPorts; i++)
     {
+        min_de_level = gDSAudioPortConfiguration[i].min_dialog_enhancement_level;
+        max_de_level = gDSAudioPortConfiguration[i].max_dialog_enhancement_level;
+
         if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x04)
         {
             result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);

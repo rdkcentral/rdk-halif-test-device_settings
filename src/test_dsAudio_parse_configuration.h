@@ -75,7 +75,7 @@
 
 #define DS_AUDIO_MOULE_NAME             "dsAudio"
 
-typedef struct 
+typedef struct
 {
     uint16_t typeid;
     uint16_t index;
@@ -92,6 +92,8 @@ typedef struct
     bool     isms11decode;
     int32_t  atmos_capabilites;
     int32_t  arc_type;
+    int32_t  min_dialog_enhancement_level;
+    int32_t  max_dialog_enhancement_level;
 }dsAudioPortConfiguration_t;
 
 /* Global variables */
@@ -106,7 +108,7 @@ void test_dsAudio_parse_configuration_term();
 
 #endif //__TEST_DSAUDIO_PARSE_CONFIG_H__
 
-/** @} */ // End of DS_Audio_HALTEST_PARSE_CONFIG
+/** @} */ // End of DS_Audio_HALTEST_PARSE_CONFIG_HEADER
 /** @} */ // End of DS_Audio_HALTEST
 /** @} */ // End of Device_Settings_HALTEST
 /** @} */ // End of Device_Settings
