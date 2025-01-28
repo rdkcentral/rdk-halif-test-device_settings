@@ -5370,18 +5370,28 @@ void test_l1_dsAudio_positive_dsGetAudioDelay(void)
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
 
-        // Step 03 : Retrieve audio delay
-        result = dsGetAudioDelay(handle, &audioDelay1);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_TRUE(audioDelay1 >= 0 && audioDelay1 <= 200);
+        if(gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HDMI || \
+            gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPDIF || \
+            gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HDMI_ARC )
+        {
+            // Step 03 : Retrieve audio delay
+            result = dsGetAudioDelay(handle, &audioDelay1);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+            UT_ASSERT_TRUE(audioDelay1 >= 0 && audioDelay1 <= 200);
 
-        // Step 04 : Retrieve audio delay and store it in a new array
-        result = dsGetAudioDelay(handle, &audioDelay2);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_TRUE(audioDelay2 >= 0 && audioDelay2 <= 200);
+            // Step 04 : Retrieve audio delay and store it in a new array
+            result = dsGetAudioDelay(handle, &audioDelay2);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+            UT_ASSERT_TRUE(audioDelay2 >= 0 && audioDelay2 <= 200);
 
-        // Step 05: Compare the values
-        UT_ASSERT_EQUAL(audioDelay1, audioDelay2);
+            // Step 05: Compare the values
+            UT_ASSERT_EQUAL(audioDelay1, audioDelay2);
+        }
+        else
+        {
+            result = dsGetAudioDelay(handle, &audioDelay1);
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
     }
 
     // Step 06: Terminate audio ports
