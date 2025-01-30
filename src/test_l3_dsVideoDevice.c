@@ -553,7 +553,7 @@ void test_l3_dsVideoDevice_GetHDRCapabilities()
     dsVideoDevice_getHandle();
     UT_LOG_INFO("Calling dsGetHDRCapabilities(IN:Handle[0x%0X],OUT:HDRCapabilities[])",gdeviceHandle);
     status = dsGetHDRCapabilities(gdeviceHandle, &HDRCapabilities);
-    UT_LOG_INFO("Result dsGetHDRCapabilities(IN:Handle[0x%0X],OUT:HDRCapabilites[0x%02x), dsError_t=[%s] ",gdeviceHandle, \
+    UT_LOG_INFO("Result dsGetHDRCapabilities(IN:Handle[0x%0X],OUT:HDRCapabilites[0x%02x]), dsError_t=[%s] ",gdeviceHandle, \
                                                HDRCapabilities, UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status, dsERR_NONE);
     UT_LOG_INFO("Out %s", __FUNCTION__);
