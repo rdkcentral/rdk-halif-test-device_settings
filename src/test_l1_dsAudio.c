@@ -3811,9 +3811,6 @@ void test_l1_dsAudio_positive_dsGetMS12AudioProfileList(void)
     intptr_t handle = null_handle;
     dsMS12AudioProfileList_t profileList1, profileList2;
 
-    memset(&profileList1, 0, sizeof(dsMS12AudioProfileList_t));
-    memset(&profileList2, 0, sizeof(dsMS12AudioProfileList_t));
-
     // Step 01: Initialize audio ports
     result = dsAudioPortInit();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
