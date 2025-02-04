@@ -977,7 +977,7 @@ void test_l1_dsAudio_positive_dsSetDialogEnhancement(void)
     {
         min_de_level = gDSAudioPortConfiguration[i].min_dialog_enhancement_level;
         max_de_level = gDSAudioPortConfiguration[i].max_dialog_enhancement_level;
-        mid_de_level = (mid_de_level + max_de_level)/2
+        mid_de_level = (min_de_level + max_de_level)/2
 
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
