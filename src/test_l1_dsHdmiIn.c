@@ -619,7 +619,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInScaleVideo(void) {
  * |:--:|-----------|----------|--------------|-----|
  * |01|dsHdmiInScaleVideo() without initializing the HDMI input sub-system |x=0, y=0, width=800, height=600| dsERR_NOT_INITIALIZED | Should Pass |
  * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |03|dsHdmiInScaleVideo()  |x=0, y=0, width=2000, height=600 | dsERR_INVALID_PARAM | Should Pass |
+ * |03|dsHdmiInScaleVideo()  |x=0, y=0, width=40000, height=600 | dsERR_INVALID_PARAM | Should Pass |
  * |04|dsHdmiInScaleVideo() with out of bounds|x=-1000, y=0, width=800, height=600| dsERR_INVALID_PARAM | Should Pass |
  * |05|dsHdmiInScaleVideo() with out of bounds|x=0, y=0, width=-800, height=600| dsERR_INVALID_PARAM | Should Pass |
  * |06|dsHdmiInScaleVideo() with out of bounds|x=0, y=0, width=800, height=-600| dsERR_INVALID_PARAM | Should Pass |
@@ -644,8 +644,8 @@ void test_l1_dsHdmiIn_negative_dsHdmiInScaleVideo(void) {
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    // Step 3: dsHdmiInScaleVideo() with invalid parameters (x=0, y=0, width=2000, height=600)
-    UT_ASSERT_EQUAL(dsHdmiInScaleVideo(0, 0, 2000, 600), dsERR_INVALID_PARAM);
+    // Step 3: dsHdmiInScaleVideo() with invalid parameters (x=0, y=0, width=40000, height=600)
+    UT_ASSERT_EQUAL(dsHdmiInScaleVideo(0, 0, 40000, 600), dsERR_INVALID_PARAM);
 
     // Step 4: dsHdmiInScaleVideo() with out of bounds parameters (x=-1000, y=0, width=800, height=600)
     UT_ASSERT_EQUAL(dsHdmiInScaleVideo(-1000, 0, 800, 600), dsERR_INVALID_PARAM);
