@@ -820,6 +820,7 @@ void test_l1_dsAudio_positive_dsGetDialogEnhancement(void)
     dsError_t result;
     intptr_t handle = null_handle;
     int dialogEnhancementLevel;
+    int min_de_level = 0, max_de_level = 16;
 
     // Step 01: Initialize audio ports
     result = dsAudioPortInit();
@@ -834,11 +835,16 @@ void test_l1_dsAudio_positive_dsGetDialogEnhancement(void)
 
         // Step 03: Get the dialog enhancement levels for each port
 
+        min_de_level = gDSAudioPortConfiguration[i].min_dialog_enhancement_level;
+        max_de_level = gDSAudioPortConfiguration[i].max_dialog_enhancement_level;
+
         result = dsGetDialogEnhancement(handle, &dialogEnhancementLevel);
         if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x04)
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
-            UT_ASSERT_TRUE(dialogEnhancementLevel >= 0 && dialogEnhancementLevel <= 16); // Valid level range check
+
+            // Step 04: Verify the dialog enhancement levels with min_de_level and max_de_level
+            UT_ASSERT_TRUE(dialogEnhancementLevel >= min_de_level && dialogEnhancementLevel <= max_de_level); // Valid level range check
         }
         else
         {
@@ -846,7 +852,7 @@ void test_l1_dsAudio_positive_dsGetDialogEnhancement(void)
         }
     }
 
-    // Step 04: Terminate audio ports
+    // Step 05: Terminate audio ports
     result = dsAudioPortTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
@@ -977,7 +983,7 @@ void test_l1_dsAudio_positive_dsSetDialogEnhancement(void)
     {
         min_de_level = gDSAudioPortConfiguration[i].min_dialog_enhancement_level;
         max_de_level = gDSAudioPortConfiguration[i].max_dialog_enhancement_level;
-        mid_de_level = (min_de_level + max_de_level)/2
+        mid_de_level = (min_de_level + max_de_level)/2;
 
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
