@@ -647,7 +647,9 @@ void test_l1_dsHdmiIn_negative_dsHdmiInScaleVideo(void) {
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
+
     UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
+
     // Step 3: dsHdmiInScaleVideo() with invalid parameters (x=0, y=0, width=40000, height=600)
     UT_ASSERT_EQUAL(dsHdmiInScaleVideo(0, 0, 40000, 600), dsERR_INVALID_PARAM);
 
