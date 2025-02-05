@@ -3834,7 +3834,7 @@ void test_l1_dsAudio_positive_dsGetMS12AudioProfileList(void)
 
             // Step 05: compare the values of profileList arrays
             result = memcmp(profileList1.audioProfileList, profileList2.audioProfileList, sizeof(profileList1.audioProfileList));
-            UT_ASSERT_EQUAL(result, sizeof(profileList1));
+            UT_ASSERT_EQUAL(result, 0);
         }
         else
         {
@@ -4076,9 +4076,9 @@ void test_l1_dsAudio_negative_dsGetMS12AudioProfile(void)
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
 
         // Step 05: Attempt to get MS12 Audio Profile with a null pointer
+        result = dsGetMS12AudioProfile(handle, NULL);
         if ((gSourceType == 0) && (gDSAudioPortConfiguration[i].ms12_audioprofilecount))
         {
-            result = dsGetMS12AudioProfile(handle, NULL);
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
         else
