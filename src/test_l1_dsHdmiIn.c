@@ -568,7 +568,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectPort(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Scale HDMI input video using dsHdmiInScaleVideo() |x=0, y=0, width=800, height=600| dsERR_NONE | Video should be scaled |
+ * |02|Select porta and Scale HDMI input video using dsHdmiInScaleVideo() |x=0, y=0, width=800, height=600| dsERR_NONE | Video should be scaled |
  * |03|Scale HDMI input video using dsHdmiInScaleVideo() |x=10, y=10, width=1000, height=800| dsERR_NONE | Video should be scaled |
  * |04|Scale HDMI input video using dsHdmiInScaleVideo() |x=100, y=100, width=800, height=600| dsERR_NONE | Video should be scaled |
  * |05|Scale HDMI input video using dsHdmiInScaleVideo() |x=0, y=0, width=800, height=600| dsERR_OPERATION_NOT_SUPPORTED | For source devices without HDMI input support |
@@ -622,15 +622,16 @@ void test_l1_dsHdmiIn_positive_dsHdmiInScaleVideo(void) {
  * |:--:|-----------|----------|--------------|-----|
  * |01|dsHdmiInScaleVideo() without initializing the HDMI input sub-system |x=0, y=0, width=800, height=600| dsERR_NOT_INITIALIZED | Should Pass |
  * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |03|dsHdmiInScaleVideo()  |x=0, y=0, width=40000, height=600 | dsERR_INVALID_PARAM | Should Pass |
- * |04|dsHdmiInScaleVideo() with out of bounds|x=-1000, y=0, width=800, height=600| dsERR_INVALID_PARAM | Should Pass |
- * |05|dsHdmiInScaleVideo() with out of bounds|x=0, y=0, width=-800, height=600| dsERR_INVALID_PARAM | Should Pass |
- * |06|dsHdmiInScaleVideo() with out of bounds|x=0, y=0, width=800, height=-600| dsERR_INVALID_PARAM | Should Pass |
- * |07|dsHdmiInScaleVideo() with out of bounds|x=0, y=-1000, width=800, height=600| dsERR_INVALID_PARAM | Should Pass |
- * |08|dsHdmiInScaleVideo() with out of bounds|x=0, y=20000, width=800, height=600| dsERR_INVALID_PARAM | Should Pass |
- * |09|dsHdmiInScaleVideo() with out of bounds|x=20000, y=0, width=800, height=600| dsERR_INVALID_PARAM | Should Pass |
- * |10|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
- * |11|dsHdmiInScaleVideo() after terminating the HDMI input sub-system |x=0, y=0, width=800, height=600| dsERR_NOT_INITIALIZED | Should Pass |
+ * |03|Call dsHdmiInScaleVideo() before selecting port |x=0, y=0, width=8000, height=600 | dsERR_GENERAL | Should Pass |
+ * |04|Select port and call dsHdmiInScaleVideo()  |x=0, y=0, width=40000, height=600 | dsERR_INVALID_PARAM | Should Pass |
+ * |05|dsHdmiInScaleVideo() with out of bounds|x=-1000, y=0, width=800, height=600| dsERR_INVALID_PARAM | Should Pass |
+ * |06|dsHdmiInScaleVideo() with out of bounds|x=0, y=0, width=-800, height=600| dsERR_INVALID_PARAM | Should Pass |
+ * |07|dsHdmiInScaleVideo() with out of bounds|x=0, y=0, width=800, height=-600| dsERR_INVALID_PARAM | Should Pass |
+ * |08|dsHdmiInScaleVideo() with out of bounds|x=0, y=-1000, width=800, height=600| dsERR_INVALID_PARAM | Should Pass |
+ * |09|dsHdmiInScaleVideo() with out of bounds|x=0, y=20000, width=800, height=600| dsERR_INVALID_PARAM | Should Pass |
+ * |10|dsHdmiInScaleVideo() with out of bounds|x=20000, y=0, width=800, height=600| dsERR_INVALID_PARAM | Should Pass |
+ * |11|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |12|dsHdmiInScaleVideo() after terminating the HDMI input sub-system |x=0, y=0, width=800, height=600| dsERR_NOT_INITIALIZED | Should Pass |
  *
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  *
@@ -647,34 +648,34 @@ void test_l1_dsHdmiIn_negative_dsHdmiInScaleVideo(void) {
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-
+    // Step 3: Scale HDMI input video (x=0, y=0, width=800, height=600) before select port
+    UT_ASSERT_EQUAL(dsHdmiInScaleVideo(0, 0, 800, 600), dsERR_GENERAL);
     UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
-
-    // Step 3: dsHdmiInScaleVideo() with invalid parameters (x=0, y=0, width=40000, height=600)
+    // Step 4: dsHdmiInScaleVideo() with invalid parameters (x=0, y=0, width=40000, height=600)
     UT_ASSERT_EQUAL(dsHdmiInScaleVideo(0, 0, 40000, 600), dsERR_INVALID_PARAM);
 
-    // Step 4: dsHdmiInScaleVideo() with out of bounds parameters (x=-1000, y=0, width=800, height=600)
+    // Step 5: dsHdmiInScaleVideo() with out of bounds parameters (x=-1000, y=0, width=800, height=600)
     UT_ASSERT_EQUAL(dsHdmiInScaleVideo(-1000, 0, 800, 600), dsERR_INVALID_PARAM);
 
-    // Step 5: dsHdmiInScaleVideo() with out of bounds parameters (x=0, y=0, width=-800, height=600)
+    // Step 6: dsHdmiInScaleVideo() with out of bounds parameters (x=0, y=0, width=-800, height=600)
     UT_ASSERT_EQUAL(dsHdmiInScaleVideo(0, 0, -800, 600), dsERR_INVALID_PARAM);
 
-    // Step 6: dsHdmiInScaleVideo() with out of bounds parameters (x=0, y=0, width=800, height=-600)
+    // Step 7: dsHdmiInScaleVideo() with out of bounds parameters (x=0, y=0, width=800, height=-600)
     UT_ASSERT_EQUAL(dsHdmiInScaleVideo(0, 0, 800, -600), dsERR_INVALID_PARAM);
 
-    // Step 7: dsHdmiInScaleVideo() with out of bounds parameters (x=0, y=-1000, width=800, height=600)
+    // Step 8: dsHdmiInScaleVideo() with out of bounds parameters (x=0, y=-1000, width=800, height=600)
     UT_ASSERT_EQUAL(dsHdmiInScaleVideo(0, -1000, 800, 600), dsERR_INVALID_PARAM);
 
-    // Step 8: dsHdmiInScaleVideo() with out of bounds parameters (x=0, y=20000, width=800, height=600)
+    // Step 9: dsHdmiInScaleVideo() with out of bounds parameters (x=0, y=20000, width=800, height=600)
     UT_ASSERT_EQUAL(dsHdmiInScaleVideo(0, 20000, 800, 600), dsERR_INVALID_PARAM);
 
-    // Step 9: dsHdmiInScaleVideo() with out of bounds parameters (x=20000, y=0, width=800, height=600)
+    // Step 10: dsHdmiInScaleVideo() with out of bounds parameters (x=20000, y=0, width=800, height=600)
     UT_ASSERT_EQUAL(dsHdmiInScaleVideo(20000, 0, 800, 600), dsERR_INVALID_PARAM);
 
-    // Step 10: Call dsHdmiInTerm() to ensure deinitialization
+    // Step 11: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
 
-    // Step 11: dsHdmiInScaleVideo() after terminating the HDMI input sub-system
+    // Step 12: dsHdmiInScaleVideo() after terminating the HDMI input sub-system
     result = dsHdmiInScaleVideo(0, 0, 800, 600);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
@@ -750,10 +751,11 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSelectZoomMode(void) {
  * |:--:|-----------|----------|--------------|-----|
  * |01|Call dsHdmiInSelectZoomMode() without initializing the HDMI input sub-system |dsVIDEO_ZOOM_NONE| dsERR_NOT_INITIALIZED | Should Pass |
  * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |03|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_0, bool: false, dsVideoPlane_PRIMARY, bool false| dsERR_NONE | Port 0 should be selected |
- * |04|Call dsHdmiInSelectZoomMode() with invalid value |dsVIDEO_ZOOM_MAX| dsERR_INVALID_PARAM | Should Pass |
- * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
- * |06|Call dsHdmiInSelectZoomMode() without terminating the HDMI input sub-system |dsVIDEO_ZOOM_NONE| dsERR_NOT_INITIALIZED | Should Pass |
+ * |03|Call dsHdmiInSelectZoomMode() with before selecting port |dsVIDEO_ZOOM_NONE| dsERR_GENERAL | Should Pass |
+ * |04|Call dsHdmiInSelectPort() |dsHDMI_IN_PORT_0, bool: false, dsVideoPlane_PRIMARY, bool false| dsERR_NONE | Port 0 should be selected |
+ * |05|Call dsHdmiInSelectZoomMode() with invalid value |dsVIDEO_ZOOM_MAX| dsERR_INVALID_PARAM | Should Pass |
+ * |06|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |07|Call dsHdmiInSelectZoomMode() without terminating the HDMI input sub-system |dsVIDEO_ZOOM_NONE| dsERR_NOT_INITIALIZED | Should Pass |
  *
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  *
@@ -774,10 +776,17 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode(void) {
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    // Step 3: Call dsHdmiInSelectPort() to select Port 0
+    // Step 3: Call dsHdmiInSelectZoomMode() before select port
+    result = dsHdmiInSelectZoomMode(dsVIDEO_ZOOM_NONE);
+    if(gSourceType ==1){
+        UT_ASSERT_EQUAL(result,dsERR_GENERAL);
+    }else {
+        UT_ASSERT_EQUAL(result,dsERR_OPERATION_NOT_SUPPORTED);
+    }
+    // Step 4: Call dsHdmiInSelectPort() to select Port 0
     UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
 
-    // Step 4: Call dsHdmiInSelectZoomMode() with invalid value (dsVIDEO_ZOOM_MAX)
+    // Step 5: Call dsHdmiInSelectZoomMode() with invalid value (dsVIDEO_ZOOM_MAX)
     result = dsHdmiInSelectZoomMode(dsVIDEO_ZOOM_MAX);
     if(gSourceType ==1){
         UT_ASSERT_EQUAL(result,dsERR_INVALID_PARAM);
@@ -785,10 +794,10 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode(void) {
         UT_ASSERT_EQUAL(result,dsERR_OPERATION_NOT_SUPPORTED);
     }
 
-    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
+    // Step 6: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
 
-    // Step 6: Call dsHdmiInSelectZoomMode() without terminating the HDMI input sub-system
+    // Step 7: Call dsHdmiInSelectZoomMode() without terminating the HDMI input sub-system
     result = dsHdmiInSelectZoomMode(dsVIDEO_ZOOM_NONE);
     if(gSourceType ==1){
         CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
@@ -812,7 +821,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Retrieve the current HDMI video mode using dsHdmiInGetCurrentVideoMode() |dsVideoPortResolution_t*| dsERR_NONE | Video mode should be retrieved |
+ * |02|Select port and Retrieve the current HDMI video mode using dsHdmiInGetCurrentVideoMode() |dsVideoPortResolution_t*| dsERR_NONE | Video mode should be retrieved |
  * |03|Ensure returned values are the same| |Success| The values should be the same |
  * |04|dsHdmiInGetCurrentVideoMode() to get the current HDMI input video mode of the active port | dsERR_OPERATION_NOT_SUPPORTED| For source devices without HDMI input support
  * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
@@ -874,9 +883,10 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetCurrentVideoMode(void) {
  * |:--:|-----------|----------|--------------|-----|
  * |01|Call dsHdmiInGetCurrentVideoMode() without initializing the HDMI input sub-system |dsVideoPortResolution_t*| dsERR_NOT_INITIALIZED | Should Pass |
  * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |03|dsHdmiInGetCurrentVideoMode() with NULL `resolution` pointer |NULL} dsERR_INVALID_PARAM | Should Pass |
- * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
- * |05|Call dsHdmiInGetCurrentVideoMode() after terminating the HDMI input sub-system |dsVideoPortResolution_t*| dsERR_NOT_INITIALIZED | Should Pass |
+ * |03|dsHdmiInGetCurrentVideoMode() with `resolution` pointer befor selecting port |dsVideoPortResolution_t} dsERR_GENERAL | Should Pass |
+ * |04|Select port and call dsHdmiInGetCurrentVideoMode() with NULL `resolution` pointer |NULL} dsERR_INVALID_PARAM | Should Pass |
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |06|Call dsHdmiInGetCurrentVideoMode() after terminating the HDMI input sub-system |dsVideoPortResolution_t*| dsERR_NOT_INITIALIZED | Should Pass |
  *
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
  *
@@ -894,14 +904,16 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetCurrentVideoMode(void) {
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
+    // Step 3: Call dsHdmiInGetCurrentVideoMode() befor select port
+    UT_ASSERT_EQUAL(dsHdmiInGetCurrentVideoMode(&resolution), dsERR_GENERAL);
     UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
-    // Step 3: dsHdmiInGetCurrentVideoMode() with NULL `resolution` pointer
+    // Step 4: dsHdmiInGetCurrentVideoMode() with NULL `resolution` pointer
     UT_ASSERT_EQUAL(dsHdmiInGetCurrentVideoMode(NULL),dsERR_INVALID_PARAM);
 
-    // Step 4: Call dsHdmiInTerm() to ensure deinitialization
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
     UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
 
-    // Step 5: Call dsHdmiInGetCurrentVideoMode() after terminating the HDMI input sub-system
+    // Step 6: Call dsHdmiInGetCurrentVideoMode() after terminating the HDMI input sub-system
     result = dsHdmiInGetCurrentVideoMode(&resolution);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
