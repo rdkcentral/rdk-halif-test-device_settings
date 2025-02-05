@@ -568,7 +568,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectPort(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Select porta and Scale HDMI input video using dsHdmiInScaleVideo() |x=0, y=0, width=800, height=600| dsERR_NONE | Video should be scaled |
+ * |02|Select port and Scale HDMI input video using dsHdmiInScaleVideo() |x=0, y=0, width=800, height=600| dsERR_NONE | Video should be scaled |
  * |03|Scale HDMI input video using dsHdmiInScaleVideo() |x=10, y=10, width=1000, height=800| dsERR_NONE | Video should be scaled |
  * |04|Scale HDMI input video using dsHdmiInScaleVideo() |x=100, y=100, width=800, height=600| dsERR_NONE | Video should be scaled |
  * |05|Scale HDMI input video using dsHdmiInScaleVideo() |x=0, y=0, width=800, height=600| dsERR_OPERATION_NOT_SUPPORTED | For source devices without HDMI input support |
