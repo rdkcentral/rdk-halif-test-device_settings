@@ -764,6 +764,8 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode(void) {
 
     gTestID = 14;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    uint8_t numInputPorts = 0;
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
     
     // Step 1: Call dsHdmiInSelectZoomMode() without initializing the HDMI input sub-system
     dsError_t result = dsHdmiInSelectZoomMode(dsVIDEO_ZOOM_NONE);
@@ -778,7 +780,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode(void) {
 
     // Step 3: Call dsHdmiInSelectZoomMode() before select port
     result = dsHdmiInSelectZoomMode(dsVIDEO_ZOOM_NONE);
-    if(gSourceType ==1){
+    if(numInputPorts > 0){
         UT_ASSERT_EQUAL(result,dsERR_OPERATION_FAILED);
     }else {
         UT_ASSERT_EQUAL(result,dsERR_OPERATION_NOT_SUPPORTED);
