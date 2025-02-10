@@ -640,7 +640,13 @@ void test_l1_dsHdmiIn_negative_dsHdmiInScaleVideo(void) {
 
     gTestID = 12;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    uint8_t numInputPorts = 0;
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
 
+    if (numInputPorts <= 0) {
+        UT_LOG("\n Out %s\n", __FUNCTION__);
+        return;
+    }
     // Step 1: Call dsHdmiInScaleVideo() without initializing the HDMI input sub-system
     dsError_t result = dsHdmiInScaleVideo(0, 0, 800, 600);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
@@ -769,7 +775,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode(void) {
     
     // Step 1: Call dsHdmiInSelectZoomMode() without initializing the HDMI input sub-system
     dsError_t result = dsHdmiInSelectZoomMode(dsVIDEO_ZOOM_NONE);
-    if(gSourceType == 1 ){
+    if(numInputPorts > 0 ){
         CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     }else{
         UT_ASSERT_EQUAL(result,dsERR_OPERATION_NOT_SUPPORTED);
@@ -790,7 +796,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode(void) {
 
     // Step 5: Call dsHdmiInSelectZoomMode() with invalid value (dsVIDEO_ZOOM_MAX)
     result = dsHdmiInSelectZoomMode(dsVIDEO_ZOOM_MAX);
-    if(gSourceType ==1){
+    if(numInputPorts > 0){
         UT_ASSERT_EQUAL(result,dsERR_INVALID_PARAM);
     }else {
         UT_ASSERT_EQUAL(result,dsERR_OPERATION_NOT_SUPPORTED);
@@ -801,7 +807,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode(void) {
 
     // Step 7: Call dsHdmiInSelectZoomMode() without terminating the HDMI input sub-system
     result = dsHdmiInSelectZoomMode(dsVIDEO_ZOOM_NONE);
-    if(gSourceType ==1){
+    if(numInputPorts > 0){
         CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     }else {
         UT_ASSERT_EQUAL(result,dsERR_OPERATION_NOT_SUPPORTED);
@@ -897,7 +903,13 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetCurrentVideoMode(void) {
 
     gTestID = 16;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    uint8_t numInputPorts = 0;
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
 
+    if (numInputPorts <= 0) {
+        UT_LOG("\n Out %s\n", __FUNCTION__);
+        return;
+    }
     // Step 1: Call dsHdmiInGetCurrentVideoMode() without initializing the HDMI input sub-system
     dsVideoPortResolution_t resolution = {0};
     dsError_t result = dsHdmiInGetCurrentVideoMode(&resolution);
