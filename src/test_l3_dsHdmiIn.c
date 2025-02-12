@@ -1088,6 +1088,8 @@ void test_l3_HdmiIn_set_edid2allmsupport(void)
 }
 
 /**
+* This API is deprecated.
+*
 * @brief This test to get allmsupport.
 *
 * This test function gets allmsupport of HdmiInput port on platform.
@@ -1099,6 +1101,7 @@ void test_l3_HdmiIn_set_edid2allmsupport(void)
 * Refer to Test specification documentation
 * [ds-hdmi-in_halSpec.md](../../docs/pages/ds-hdmi-in_halSpec.md)
 */
+
 void test_l3_HdmiIn_get_edid2allmsupport(void)
 {
     gTestID = 12;
@@ -1193,7 +1196,6 @@ int test_l3_dsHdmiIn_register ( void )
    UT_add_test( pSuite, "Set EdidVersion" ,test_l3_HdmiIn_set_edidversion );
    UT_add_test( pSuite, "Get EdidVersion" ,test_l3_HdmiIn_get_edidversion );
    UT_add_test( pSuite, "Set Edid 2 Allm Support" ,test_l3_HdmiIn_set_edid2allmsupport );
-   UT_add_test( pSuite, "Get Edid 2 Allm Support" ,test_l3_HdmiIn_get_edid2allmsupport );
    UT_add_test( pSuite, "Terminate HdmiIn" ,test_l3_dsHdmiIn_terminate );
 
    return 0;
