@@ -67,6 +67,12 @@ rackConfig:
             username: "root"
             ip: "XXX.XXX.XXX" # IP address of the device
             password: ' '
+        - ssh_player:
+            type: "ssh"
+            port: 10022
+            username: "root"
+            ip: "XXX.XXX.XXX" # IP address of the device
+            password: ' '
         - ssh_hal_test:
             type: "ssh"
             port: 10022
