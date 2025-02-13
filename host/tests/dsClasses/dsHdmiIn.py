@@ -339,6 +339,42 @@ class dsHdmiInClass():
 
         return None
 
+    def getAllmStatus(self, hdmiin_port:str):
+        """
+        Retrieves the HDMI ALLM status from the Get Allm status function.
+
+        This function reads the get allm status function and reads the status from the function.
+
+        Args:
+            hdmiin_port:str - Hdmi input port number to read the allm status
+
+        Returns:
+            tuple:
+                - port_number   : The HDMI port number.
+                - allm_status   : True if the HDMI ALLM bit is enabled, False otherwise.
+            None: If no matching is found return None.
+        """
+
+        promptWithAnswers = [
+            {
+                "query_type": "list",
+                "query": "Select port:",
+                "input": str(hdmiin_port)
+            }
+        ]
+
+        result = self.utMenu.select(self.testSuite, "Get Allm Status", promptWithAnswers)
+
+        allmpattern = r"Result dsGetAllmStatus IN:port:\[(.*?)\]:\[\d+\], OUT:allmStatus:\[(.*?)\]"
+
+        match = re.search(allmpattern, result)
+        if match:
+            hdmi_port = match.group(1)  # Extracts "dsHDMI_IN_PORT_0"
+            allm_status = match.group(2)
+            return hdmi_port, allm_status
+
+        return None
+
     def getAVlatencyCallbackStatus(self):
         """
         Retrieves the HDMI Audio Video latency from the device using a callback.
