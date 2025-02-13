@@ -68,15 +68,16 @@ class dsHdmiInHelperClass(utHelperClass):
         # Load test setup configuration
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
-        # Establish SSH session for accessing HDMI test functions on the DUT
+        # Establish SSH sessions for accessing HDMI test functions on the DUT
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
+        self.player_session = self.dut.getConsoleSession("ssh_player")
 
         # Set up paths and URLs for device test setup
         socVendor = self.cpe.get("soc_vendor")
         deviceTestSetup = self.cpe.get("test")
 
          # Create player 
-        self.testPlayer = utPlayer(self.hal_session, socVendor)
+        self.testPlayer = utPlayer(self.player_session, socVendor)
 
         # User response interface for manual testing
         self.testUserResponse = utUserResponse()

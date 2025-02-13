@@ -55,12 +55,13 @@ class dsCompositeInHelperClass(utHelperClass):
         # Load test setup configuration
         self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
 
-        # Open Sessions for hal test
+        # Open Sessions for hal test and player
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
+        self.player_session = self.dut.getConsoleSession("ssh_player")
         socVendor = self.cpe.get("soc_vendor")
 
-        # Create player and sencodary player Class
-        self.testPlayer = utPlayer(self.hal_session, socVendor)
+        # Create player Class
+        self.testPlayer = utPlayer(self.player_session, socVendor)
 
          # Create user response Class
         self.testUserResponse = utUserResponse()

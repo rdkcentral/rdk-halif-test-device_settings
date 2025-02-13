@@ -820,6 +820,7 @@ void test_l1_dsAudio_positive_dsGetDialogEnhancement(void)
     dsError_t result;
     intptr_t handle = null_handle;
     int dialogEnhancementLevel;
+    int min_de_level = 0, max_de_level = 16;
 
     // Step 01: Initialize audio ports
     result = dsAudioPortInit();
@@ -834,11 +835,16 @@ void test_l1_dsAudio_positive_dsGetDialogEnhancement(void)
 
         // Step 03: Get the dialog enhancement levels for each port
 
+        min_de_level = gDSAudioPortConfiguration[i].min_dialog_enhancement_level;
+        max_de_level = gDSAudioPortConfiguration[i].max_dialog_enhancement_level;
+
         result = dsGetDialogEnhancement(handle, &dialogEnhancementLevel);
         if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x04)
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
-            UT_ASSERT_TRUE(dialogEnhancementLevel >= 0 && dialogEnhancementLevel <= 16); // Valid level range check
+
+            // Step 04: Verify the dialog enhancement levels with min_de_level and max_de_level
+            UT_ASSERT_TRUE(dialogEnhancementLevel >= min_de_level && dialogEnhancementLevel <= max_de_level); // Valid level range check
         }
         else
         {
@@ -846,7 +852,7 @@ void test_l1_dsAudio_positive_dsGetDialogEnhancement(void)
         }
     }
 
-    // Step 04: Terminate audio ports
+    // Step 05: Terminate audio ports
     result = dsAudioPortTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
@@ -977,12 +983,14 @@ void test_l1_dsAudio_positive_dsSetDialogEnhancement(void)
     {
         min_de_level = gDSAudioPortConfiguration[i].min_dialog_enhancement_level;
         max_de_level = gDSAudioPortConfiguration[i].max_dialog_enhancement_level;
+        mid_de_level = (min_de_level + max_de_level)/2;
+
+        result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_NOT_EQUAL(handle, null_handle);
 
         if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x04)
         {
-            result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
-            UT_ASSERT_EQUAL(result, dsERR_NONE);
-            UT_ASSERT_NOT_EQUAL(handle, null_handle);
 
             // Step 03: Set Dialog Enhancement level - Min DE Level(0)
             result = dsSetDialogEnhancement(handle, min_de_level);
@@ -3834,7 +3842,7 @@ void test_l1_dsAudio_positive_dsGetMS12AudioProfileList(void)
 
             // Step 05: compare the values of profileList arrays
             result = memcmp(profileList1.audioProfileList, profileList2.audioProfileList, sizeof(profileList1.audioProfileList));
-            UT_ASSERT_EQUAL(result, sizeof(profileList1));
+            UT_ASSERT_EQUAL(result, 0);
         }
         else
         {
@@ -4076,9 +4084,9 @@ void test_l1_dsAudio_negative_dsGetMS12AudioProfile(void)
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
 
         // Step 05: Attempt to get MS12 Audio Profile with a null pointer
+        result = dsGetMS12AudioProfile(handle, NULL);
         if ((gSourceType == 0) && (gDSAudioPortConfiguration[i].ms12_audioprofilecount))
         {
-            result = dsGetMS12AudioProfile(handle, NULL);
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
         else
@@ -5370,18 +5378,28 @@ void test_l1_dsAudio_positive_dsGetAudioDelay(void)
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
 
-        // Step 03 : Retrieve audio delay
-        result = dsGetAudioDelay(handle, &audioDelay1);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_TRUE(audioDelay1 >= 0 && audioDelay1 <= 200);
+        if(gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HDMI || \
+            gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPDIF || \
+            gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HDMI_ARC )
+        {
+            // Step 03 : Retrieve audio delay
+            result = dsGetAudioDelay(handle, &audioDelay1);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+            UT_ASSERT_TRUE(audioDelay1 >= 0 && audioDelay1 <= 200);
 
-        // Step 04 : Retrieve audio delay and store it in a new array
-        result = dsGetAudioDelay(handle, &audioDelay2);
-        UT_ASSERT_EQUAL(result, dsERR_NONE);
-        UT_ASSERT_TRUE(audioDelay2 >= 0 && audioDelay2 <= 200);
+            // Step 04 : Retrieve audio delay and store it in a new array
+            result = dsGetAudioDelay(handle, &audioDelay2);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+            UT_ASSERT_TRUE(audioDelay2 >= 0 && audioDelay2 <= 200);
 
-        // Step 05: Compare the values
-        UT_ASSERT_EQUAL(audioDelay1, audioDelay2);
+            // Step 05: Compare the values
+            UT_ASSERT_EQUAL(audioDelay1, audioDelay2);
+        }
+        else
+        {
+            result = dsGetAudioDelay(handle, &audioDelay1);
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        }
     }
 
     // Step 06: Terminate audio ports

@@ -765,9 +765,9 @@ class dsAudioClass():
         typeStatusPattern = r"Result dsGetSupportedARCTypes\(IN:handle:\[.*\], OUT:types:\[(dsAUDIOARCSUPPORT_\w+)\]\)"
         type = self.searchPattern(result, typeStatusPattern)
 
-        if "eARC" in type:
+        if type == "dsAUDIOARCSUPPORT_eARC":
             return "eARC"
-        elif "ARC" in type :
+        elif type == "dsAUDIOARCSUPPORT_ARC":
             return "ARC"
         else:
             return "NONE"

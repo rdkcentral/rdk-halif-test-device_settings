@@ -661,6 +661,7 @@ void test_l1_dsVideoDevice_positive_dsGetHDRCapabilities(void)
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 04: Compare the HDR capabilities with the value from the profile
+        UT_LOG_INFO("HDRCapabilities: [0x%02x]", hdr_capabilities);
         UT_ASSERT_EQUAL(hdr_capabilities, gDSVideoDeviceConfiguration[i].HDRCapabilities);
     }
 

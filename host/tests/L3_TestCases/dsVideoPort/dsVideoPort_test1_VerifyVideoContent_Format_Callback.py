@@ -102,7 +102,11 @@ class dsVideoPort_test1_VerifyVideoContent_Format_Callback(dsVideoPortHelperClas
                 result = self.testdsVideoPort.read_Callbacks("Video Format Callback dsHDRStandard_t:")
 
                 if format not in "TechnicolorPrime":
-                    self.log.stepResult(self.find_VideoFormat_Status(result, f'dsHDRSTANDARD_{format}'),f'{format} VideoFormat Callback found')
+                    result = self.find_VideoFormat_Status(result, f'dsHDRSTANDARD_{format}')
+                    if result:
+                        self.log.stepResult(result,f'{format} VideoFormat Callback found')
+                    else:
+                        self.log.stepResult(result,f'{format} VideoFormat Callback Not found')
 
                 if format not in ["NONE", "TechnicolorPrime"]:
                     # Stop the stream playback
