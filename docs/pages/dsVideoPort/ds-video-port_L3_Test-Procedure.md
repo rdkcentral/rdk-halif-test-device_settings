@@ -521,6 +521,8 @@ The test must successfully enable/disable ALLM mode, and the user must confirm t
 
 The test will enable/disable ALLM mode on the HDMI output video port. The user will confirm the correct ALLM mode using a supported AV analyzer.
 
+**Note:** Currently unable to verify this test case.
+
 **Test Steps:**
 
 - Run the Python file `dsVideoPort_test10_VerifyALLM_Mode.py` with the appropriate configuration:
