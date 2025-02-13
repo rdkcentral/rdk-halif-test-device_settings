@@ -47,7 +47,7 @@ class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
             None.
         """
         # Class variables
-        self.testApectRatios = ["16x9", "4x3"]
+        self.testAspectRatios = ["16x9", "4x3"]
         self.testName  = "test03_AspectRatioVerificationTest"
         self.qcID = '3'
         super().__init__(self.testName, self.qcID, log)
@@ -58,7 +58,7 @@ class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
         Gets the aspectratio of the display.
         Args:
             port (str): Port name
-            aspectRatio (str) : aspectRatio ration eg: 4x3, 16x9
+            aspectRatio (str) : aspectRatio ratio eg: 4x3, 16x9
             manual (bool, optional): Manual verification (True: manual, False: other verification methods).
                                     Defaults to other verification methods
         Returns:
@@ -86,12 +86,12 @@ class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
         for port, index in self.testdsDisplay.getSupportedPorts():
             self.testdsDisplay.selectDisplayPort(port, index)
 
-            for aspectRatio in self.testApectRatios:
-                self.log.stepStart(f'Test Display Apect Ration {aspectRatio} Port: {port}')
+            for aspectRatio in self.testAspectRatios:
+                self.log.stepStart(f'Test Display Aspect Ratio {aspectRatio} Port: {port}')
                 self.testChangeDisplayAspectRatio(port, aspectRatio, True)
                 ratio = self.testdsDisplay.getAspectRatio()
                 result = ratio and aspectRatio in ratio
-                self.log.stepResult(result, f'Test Display Apect Ration {aspectRatio} Port: {port}')
+                self.log.stepResult(result, f'Test Display Aspect Ratio {aspectRatio} Port: {port}')
 
         #Terminate dsDisplay Module
         self.testdsDisplay.terminate()
