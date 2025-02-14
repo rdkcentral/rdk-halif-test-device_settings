@@ -16,6 +16,7 @@
   - [dsVideoPort_test7_ResetToSDRMode.py](#dsvideoport_test7_resettosdrmodepy)
   - [dsVideoPort_test8_VerifyColorDepth.py](#dsvideoport_test8_verifycolordepthpy)
   - [dsVideoPort_test9_VerifyBackgroundColor.py](#dsvideoport_test9_verifybackgroundcolorpy)
+  - [dsVideoPort_test10_VerifyALLM_Mode.py](#dsvideoport_test10_verifyallm_modepy)
 
 ## Overview
 
@@ -32,6 +33,7 @@ This document describes the L3 Test case Procedure Documentation for the Device 
 - `HDR` \- High Dynamic Range
 - `HLG` \- Hybrid Log-Gamma
 - `SDR` \- Standard Dynamic Range
+- `ALLM` \- Auto Low Latency Mode
 - `Y`   \- yes supported
 - `NA`  \- Not Supported
 
@@ -496,3 +498,43 @@ dsVideoPort_test9_VerifyBackgroundColor.py --config /host/tests/configs/example_
   - Is dsVIDEO_BGCOLOR_BLACK displayed on the Analyzer (Y/N)?
   - Is dsVIDEO_BGCOLOR_NONE displayed on the Analyzer (Y/N)?
 - If the answers to all three questions are "Yes," the test will pass.
+
+### dsVideoPort_test10_VerifyALLM_Mode.py
+
+**Overview:**
+
+This test is designed to verify the functionality of the dsSetAllmEnabled API in enabling or disabling Auto Low Latency Mode (`ALLM`) for an HDMI output port. The test will check the API's ability to correctly toggle ALLM based on the sink device's compatibility with HDMI 2.1 specifications. Users will validate the `ALLM` status using an AV analyzer.
+
+**Platform Supported:**
+
+Source
+
+**User Input Required:**
+
+Yes: The user is required to verify the `ALLM` mode on an external AV analyzer connected to the device. (This will be automated later).
+
+**Acceptance Criteria:**
+
+The test must successfully enable/disable ALLM mode, and the user must confirm that respective mode is displayed on the AV analyzer for the test to pass.
+
+**Expected Results:**
+
+The test will enable/disable ALLM mode on the HDMI output video port. The user will confirm the correct ALLM mode using a supported AV analyzer.
+
+**Note:** Currently unable to verify this test case.
+
+**Test Steps:**
+
+- Run the Python file `dsVideoPort_test10_VerifyALLM_Mode.py` with the appropriate configuration:
+
+```bash
+dsVideoPort_test10_VerifyALLM_Mode.py --config /host/tests/configs/example_rack_config.yml --deviceConfig /host/tests/configs/deviceConfig.yml
+```
+
+- Download and copy all required assets to the target directory.
+- Enable ALLM mode.
+- Prompt the user to verify that respective ALLM mode is displayed on the AV analyzer.
+- The test will pass if the user confirms that the ALLM mode is enabled.
+- Disable ALLM mode.
+- Prompt the user to verify that respective ALLM mode is displayed on the AV analyzer.
+- The test will pass if the user confirms that the ALLM mode is disabled.

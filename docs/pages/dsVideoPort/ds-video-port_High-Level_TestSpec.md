@@ -12,6 +12,7 @@
   - [Check HDR Capability](#check-hdr-capability)
   - [HDCP Management](#hdcp-management)
   - [Color Capabilities](#color-capabilities)
+  - [Check ALLM mode](#check-allm-mode)
   - [ALLM Status](#allm-status)
 
 ## Acronyms, Terms and Abbreviations
@@ -26,6 +27,7 @@
 - `SDR`    - Standard Dynamic Range
 - `EDID`   - Extended Display Identification Data
 - `EOTF`   - Electro-Optical Transfer Function
+- `ALLM`   - Auto Low Latency Mode
 - `NA`     - Not Applicable
 - `Y`      - Yes
 
@@ -50,6 +52,7 @@ Interface specification is available here: [dsVideoPort HAL Spec](https://github
 |3|[Check HDR Capability](#check-hdr-capability)|Check `HDR` Capability|
 |4|[HDCP Management](#hdcp-management)|Check `HDCP` Status|
 |5|[Color Capabilities](#color-capabilities)|Check the color capabilities|
+|6|[Check ALLM mode](#check-allm-mode)|Check the ALLM mode|
 
 ### Emulator Requirements
 
@@ -198,6 +201,26 @@ Playback the pre-define streams
 
 Verify the Color Space,Color Depth,QuantizationRange,MatrixCoefficients,Background Color with analyzer/external device
 
+
+### Check ALLM mode
+
+|Test Functionality|Description|HAL API's|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|---------|--|--|------|----|--------------------------|
+|Check ALLM mode|Enables/Disables ALLM mode for HDMI output video port. This method allows you to enables or disables the Auto Low Latency Mode (ALLM) for a HDMI output video port on source devices, as per the HDMI 2.1 specification.|dsSetAllmEnabled()|`Y`|`Y`|`Y`|`NA`|`Y`|
+||Checks whether ALLM mode of HDMI output video port is enabled or not.|dsGetAllmEnabled()|`Y`|`Y`|`Y`|`NA`|`Y`|
+
+#### Test Startup Requirement-Check the ALLM mode
+
+`NA`
+
+#### Emulator Requirements-Check the ALLM mode
+
+[Emulator Requirements](#emulator-requirements)
+
+#### Control Plane Requirements-Check the ALLM mode
+
+Check ALLM mode is Enabled or Disabled and verify with analyzer
+
 ### ALLM Status
 
 |Test Functionality|Description|HAL API's|L2|L3|Source|Sink|Control plane requirements|
@@ -216,3 +239,4 @@ Playback the pre-define streams
 #### Control Plane Requirements-ALLM Status
 
 Verify the `ALLM` Status with analyzer/external device
+
