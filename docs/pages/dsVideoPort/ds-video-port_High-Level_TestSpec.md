@@ -13,12 +13,14 @@
   - [HDCP Management](#hdcp-management)
   - [Color Capabilities](#color-capabilities)
   - [Check ALLM mode](#check-allm-mode)
+  - [ALLM Status](#allm-status)
 
 ## Acronyms, Terms and Abbreviations
 
 - `HAL`    - Hardware Abstraction Layer
 - `API`    - Caller Programming Interface
 - `DS`     - Device Settings
+- `ALLM`   - Auto Low Latency Mode
 - `HDMI`   - High-Definition Multimedia Interface
 - `HDCP`   - High-bandwidth Digital Content Protection
 - `HDR`    - High Dynamic Range
@@ -199,6 +201,7 @@ Playback the pre-define streams
 
 Verify the Color Space,Color Depth,QuantizationRange,MatrixCoefficients,Background Color with analyzer/external device
 
+
 ### Check ALLM mode
 
 |Test Functionality|Description|HAL API's|L2|L3|Source|Sink|Control plane requirements|
@@ -217,3 +220,23 @@ Verify the Color Space,Color Depth,QuantizationRange,MatrixCoefficients,Backgrou
 #### Control Plane Requirements-Check the ALLM mode
 
 Check ALLM mode is Enabled or Disabled and verify with analyzer
+
+### ALLM Status
+
+|Test Functionality|Description|HAL API's|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|---------|--|--|------|----|--------------------------|
+|Check `ALLM` Status|Enable/Disable `ALLM` feature and verify with get function|dsSetAllmEnabled(), dsGetAllmEnabled()|`Y`|`NA`|`Y`|`N`|`NA`|
+||Enable/Disable `ALLM` feature and verify with video playback|dsSetAllmEnabled(), dsGetAllmEnabled()|`NA`|`Y`|`Y`|`N`|`Y`|
+
+#### Test Startup Requirement-ALLM Status
+
+Playback the pre-define streams
+
+#### Emulator Requirements-ALLM Status
+
+[Emulator Requirements](#emulator-requirements)
+
+#### Control Plane Requirements-ALLM Status
+
+Verify the `ALLM` Status with analyzer/external device
+
