@@ -101,6 +101,8 @@ const static ut_control_keyStringMapping_t dsHdmiInPort_mapTable [] =
   { "dsHDMI_IN_PORT_0",        (int32_t)dsHDMI_IN_PORT_0    },
   { "dsHDMI_IN_PORT_1",        (int32_t)dsHDMI_IN_PORT_1    },
   { "dsHDMI_IN_PORT_2",        (int32_t)dsHDMI_IN_PORT_2    },
+  { "dsHDMI_IN_PORT_3",        (int32_t)dsHDMI_IN_PORT_3    },
+  { "dsHDMI_IN_PORT_4",        (int32_t)dsHDMI_IN_PORT_4    },
   { "dsHDMI_IN_PORT_MAX",      (int32_t)dsHDMI_IN_PORT_MAX  },
   {  NULL, -1 }
 };
@@ -1134,11 +1136,10 @@ void test_l3_HdmiIn_get_edid2allmsupport(void)
    UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
-
 /**
-* @brief This test terminates the dsHdmiIn.
+* @brief This test to get allmsupport.
 *
-* This test function terminates the dsHdmiIn.
+* This test function gets allmsupport of HdmiInput port on platform.
 *
 * **Test Group ID:** 03@n
 * **Test Case ID:** 013@n
@@ -1147,9 +1148,60 @@ void test_l3_HdmiIn_get_edid2allmsupport(void)
 * Refer to Test specification documentation
 * [ds-hdmi-in_halSpec.md](../../docs/pages/ds-hdmi-in_halSpec.md)
 */
-void test_l3_dsHdmiIn_terminate(void)
+void test_l3_HdmiIn_get_allmstatus(void)
 {
     gTestID = 13;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t ret   = dsERR_NONE;
+    dsHdmiInPort_t port = dsHDMI_IN_PORT_MAX;
+    int32_t select = 0;
+    bool allmStatus = false;
+
+    listPorts();
+    UT_LOG_MENU_INFO("Select port:");
+    readInput(&select);
+    if (select < dsHDMI_IN_PORT_0 || select >= dsHDMI_IN_PORT_MAX)
+    {
+        UT_LOG_ERROR("\nInvalid port selected\n");
+        UT_LOG_INFO("Out %s", __FUNCTION__);
+        return;
+    }
+
+    port = select;
+
+    UT_LOG_INFO("Calling dsGetAllmStatus IN:port:[%s]:[%d], OUT:allmStatus:[ ]",
+                 UT_Control_GetMapString(dsHdmiInPort_mapTable, port), port);
+
+    ret = dsGetAllmStatus(port, &allmStatus);
+
+    UT_LOG_INFO("Result dsGetAllmStatus IN:port:[%s]:[%d], OUT:allmStatus:[%s], dsError_t:[%s]",
+                 UT_Control_GetMapString(dsHdmiInPort_mapTable, port), port,
+                 UT_Control_GetMapString(bool_mapTable, allmStatus),
+                 UT_Control_GetMapString(dsError_mapTable, ret));
+
+    DS_ASSERT(ret == dsERR_NONE || ret == dsERR_OPERATION_NOT_SUPPORTED ||
+              ret == dsERR_NOT_INITIALIZED || ret == dsERR_INVALID_PARAM ||
+              ret == dsERR_OPERATION_FAILED);
+
+    UT_LOG_INFO("Out %s", __FUNCTION__);
+}
+
+/**
+* @brief This test terminates the dsHdmiIn.
+*
+* This test function terminates the dsHdmiIn.
+*
+* **Test Group ID:** 03@n
+* **Test Case ID:** 014@n
+*
+* **Test Procedure:**
+* Refer to Test specification documentation
+* [ds-hdmi-in_halSpec.md](../../docs/pages/ds-hdmi-in_halSpec.md)
+*/
+void test_l3_dsHdmiIn_terminate(void)
+{
+    gTestID = 14;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret = dsERR_NONE;
@@ -1194,6 +1246,7 @@ int test_l3_dsHdmiIn_register ( void )
    UT_add_test( pSuite, "Get EdidVersion" ,test_l3_HdmiIn_get_edidversion );
    UT_add_test( pSuite, "Set Edid 2 Allm Support" ,test_l3_HdmiIn_set_edid2allmsupport );
    UT_add_test( pSuite, "Get Edid 2 Allm Support" ,test_l3_HdmiIn_get_edid2allmsupport );
+   UT_add_test( pSuite, "Get Allm Status" ,test_l3_HdmiIn_get_allmstatus );
    UT_add_test( pSuite, "Terminate HdmiIn" ,test_l3_dsHdmiIn_terminate );
 
    return 0;
