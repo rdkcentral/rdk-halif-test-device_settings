@@ -2273,46 +2273,46 @@ int test_l2_dsAudio_register(void)
     }
 
     // List of test function names and strings
-    UT_add_test( pSuite, "L2_EnableDisableAndVerifyAudioPortStatus", test_l2_dsAudio_EnableDisableAndVerifyAudioPortStatus);
+    UT_add_test( pSuite, "EnableDisableVerifyPortStatus", test_l2_dsAudio_EnableDisableAndVerifyAudioPortStatus);
     if(gSourceType == 0) {
-        UT_add_test( pSuite, "l2_dsAudio_CheckHeadphoneConnectionStatus_sink", test_l2_dsAudio_CheckHeadphoneConnectionStatus_sink);
+        UT_add_test( pSuite, "CheckHeadphoneConnectionStatus", test_l2_dsAudio_CheckHeadphoneConnectionStatus_sink);
     }
-    UT_add_test( pSuite, "L2_RetrieveAndVerifyMS12Capabilities", test_l2_dsAudio_RetrieveAndVerifyMS12Capabilities);
-    UT_add_test( pSuite, "L2_SetAndGetAudioCompression", test_l2_dsAudio_SetAndGetAudioCompression);
-    UT_add_test( pSuite, "L2_SetAndGetDialogEnhancement", test_l2_dsAudio_SetAndGetDialogEnhancement);
-    UT_add_test( pSuite, "L2_SetAndGetDolbyVolumeMode", test_l2_dsAudio_SetAndGetDolbyVolumeMode);
-    UT_add_test( pSuite, "L2_SetAndGetIntelligentEqualizerMode", test_l2_dsAudio_SetAndGetIntelligentEqualizerMode);
-    UT_add_test( pSuite, "L2_SetAndGetVolumeLeveller", test_l2_dsAudio_SetAndGetVolumeLeveller);
-    UT_add_test( pSuite, "L2_SetAndGetBassEnhancer", test_l2_dsAudio_SetAndGetBassEnhancer);
-    UT_add_test( pSuite, "L2_EnableAndVerifySurroundDecoder", test_l2_dsAudio_EnableAndVerifySurroundDecoder);
-    UT_add_test( pSuite, "L2_SetAndGetDRCMode", test_l2_dsAudio_SetAndGetDRCMode);
-    UT_add_test( pSuite, "L2_SetAndGetSurroundVirtualizer", test_l2_dsAudio_SetAndGetSurroundVirtualizer);
-    UT_add_test( pSuite, "L2_SetAndGetMISteering", test_l2_dsAudio_SetAndGetMISteering);
-    UT_add_test( pSuite, "L2_SetAndGetGraphicEqualizerMode", test_l2_dsAudio_SetAndGetGraphicEqualizerMode);
-    UT_add_test( pSuite, "L2_EnableDisableAndRetrieveLEConfig", test_l2_dsAudio_EnableDisableAndRetrieveLEConfig);
-    UT_add_test( pSuite, "L2_CheckMS12DecodeSupport", test_l2_dsAudio_CheckMS12DecodeSupport);
-    UT_add_test( pSuite, "L2_CheckMS11DecodeSupport", test_l2_dsAudio_CheckMS11DecodeSupport);
+    UT_add_test( pSuite, "GetAndVerifyMS12Capabilities", test_l2_dsAudio_RetrieveAndVerifyMS12Capabilities);
+    UT_add_test( pSuite, "SetAndGetAudioCompression", test_l2_dsAudio_SetAndGetAudioCompression);
+    UT_add_test( pSuite, "SetAndGetDialogEnhancement", test_l2_dsAudio_SetAndGetDialogEnhancement);
+    UT_add_test( pSuite, "SetAndGetDolbyVolumeMode", test_l2_dsAudio_SetAndGetDolbyVolumeMode);
+    UT_add_test( pSuite, "SetAndGetIntelligentEqualizerMode", test_l2_dsAudio_SetAndGetIntelligentEqualizerMode);
+    UT_add_test( pSuite, "SetAndGetVolumeLeveller", test_l2_dsAudio_SetAndGetVolumeLeveller);
+    UT_add_test( pSuite, "SetAndGetBassEnhancer", test_l2_dsAudio_SetAndGetBassEnhancer);
+    UT_add_test( pSuite, "EnableAndVerifySurroundDecoder", test_l2_dsAudio_EnableAndVerifySurroundDecoder);
+    UT_add_test( pSuite, "SetAndGetDRCMode", test_l2_dsAudio_SetAndGetDRCMode);
+    UT_add_test( pSuite, "SetAndGetSurroundVirtualizer", test_l2_dsAudio_SetAndGetSurroundVirtualizer);
+    UT_add_test( pSuite, "SetAndGetMISteering", test_l2_dsAudio_SetAndGetMISteering);
+    UT_add_test( pSuite, "SetAndGetGraphicEqualizerMode", test_l2_dsAudio_SetAndGetGraphicEqualizerMode);
+    UT_add_test( pSuite, "EnableDisableAndRetrieveLEConfig", test_l2_dsAudio_EnableDisableAndRetrieveLEConfig);
+    UT_add_test( pSuite, "CheckMS12DecodeSupport", test_l2_dsAudio_CheckMS12DecodeSupport);
+    UT_add_test( pSuite, "CheckMS11DecodeSupport", test_l2_dsAudio_CheckMS11DecodeSupport);
     if(gSourceType == 0) {
-        UT_add_test( pSuite, "L2_VerifyMS12AudioProfiles_sink", test_l2_dsAudio_VerifyMS12AudioProfiles_sink);
-        UT_add_test( pSuite, "L2_SetAndGetMS12AudioProfile_sink", test_l2_dsAudio_SetAndGetMS12AudioProfile_sink);
+        UT_add_test( pSuite, "VerifyMS12AudioProfiles", test_l2_dsAudio_VerifyMS12AudioProfiles_sink);
+        UT_add_test( pSuite, "SetAndGetMS12AudioProfile", test_l2_dsAudio_SetAndGetMS12AudioProfile_sink);
     }
 
-    UT_add_test( pSuite, "L2_SetAndGetStereoMode", test_l2_dsAudio_SetAndGetStereoMode);
+    UT_add_test( pSuite, "SetAndGetStereoMode", test_l2_dsAudio_SetAndGetStereoMode);
     if(gSourceType == 0) {
-        UT_add_test( pSuite, "L2_SetAndGetStereoAuto_sink", test_l2_dsAudio_SetAndGetStereoAuto_sink);
-        UT_add_test( pSuite, "L2_SetAndGetAudioGain_sink", test_l2_dsAudio_SetAndGetAudioGain_sink);
-        UT_add_test( pSuite, "L2_SetAndGetAudioLevel_sink", test_l2_dsAudio_SetAndGetAudioLevel_sink);
+        UT_add_test( pSuite, "SetAndGetStereoAuto", test_l2_dsAudio_SetAndGetStereoAuto_sink);
+        UT_add_test( pSuite, "SetAndGetAudioGain", test_l2_dsAudio_SetAndGetAudioGain_sink);
+        UT_add_test( pSuite, "SetAndGetAudioLevel", test_l2_dsAudio_SetAndGetAudioLevel_sink);
     }
-    UT_add_test( pSuite, "L2_AudioMuteVerification", test_l2_dsAudio_AudioMuteVerification);
-    UT_add_test( pSuite, "L2_SetAndGetAudioDelay", test_l2_dsAudio_SetAndGetAudioDelay);
+    UT_add_test( pSuite, "AudioMuteVerification", test_l2_dsAudio_AudioMuteVerification);
+    UT_add_test( pSuite, "SetAndGetAudioDelay", test_l2_dsAudio_SetAndGetAudioDelay);
     if(gSourceType == 0) {
-        UT_add_test( pSuite, "L2_VerifyAtmosCapabilities_sink", test_l2_dsAudio_VerifyAtmosCapabilities_sink);
+        UT_add_test( pSuite, "VerifyAtmosCapabilities", test_l2_dsAudio_VerifyAtmosCapabilities_sink);
     }
-    UT_add_test( pSuite, "L2_GetAudioCapabilities", test_l2_dsAudio_GetAudioCapabilities);
-    UT_add_test( pSuite, "L2_EnableDisableRetrieveAudioMixing", test_l2_dsAudio_EnableDisableRetrieveAudioMixing);
-    UT_add_test( pSuite, "L2_AudioPortControl", test_l2_dsAudio_AudioPortControl);
-    UT_add_test( pSuite, "L2_SetAndGetPrimaryLanguage", test_l2_dsAudio_SetAndGetPrimaryLanguage);
-    UT_add_test( pSuite, "L2_SetAndGetSecondaryLanguage", test_l2_dsAudio_SetAndGetSecondaryLanguage);
+    UT_add_test( pSuite, "GetAudioCapabilities", test_l2_dsAudio_GetAudioCapabilities);
+    UT_add_test( pSuite, "EnableDisableRetrieveAudioMixing", test_l2_dsAudio_EnableDisableRetrieveAudioMixing);
+    UT_add_test( pSuite, "AudioPortControl", test_l2_dsAudio_AudioPortControl);
+    UT_add_test( pSuite, "SetAndGetPrimaryLanguage", test_l2_dsAudio_SetAndGetPrimaryLanguage);
+    UT_add_test( pSuite, "SetAndGetSecondaryLanguage", test_l2_dsAudio_SetAndGetSecondaryLanguage);
 
     return 0;
 }
