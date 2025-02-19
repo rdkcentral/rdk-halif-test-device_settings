@@ -1,0 +1,47 @@
+dsVideoDevice:
+  description: "dsVideoDevice Device Settings L1 and L2 test setup"
+  test_suites: # List of L1 and L2 test suites
+    - name: "L1 dsVideoDevice" # Name of the test suit to run
+      test_cases: # List of test cases to execute, if empty test runs all test cases with `r` option
+        - dsVideoDeviceInit_positive
+        - dsVideoDeviceTerm_positive
+        - dsGetVideoDevice_positive
+        - dsSetDFC_positive
+        - dsGetHDRCaps_positive
+        - dsGetSupportVidFormats_positive
+        - dsGetVideoCodecInfo_positive
+        - dsSetFRFMode_positive
+        - dsGetFRFMode_positive
+        - dsGetCurrDispFramerate_positive
+        - dsSetDisplayframerate_positive
+        - dsRegFrameratePreCB_positive
+        - dsRegFrameratePostCB_positive
+        - dsVideoDeviceInit_negative
+        - dsVideoDeviceTerm_negative
+        - dsGetVideoDevice_negative
+        - dsSetDFC_negative
+        - dsGetHDRCaps_negative
+        - dsGetSupportVidFormats_negative
+        - dsGetVideoCodecInfo_negative
+        - dsSetFRFMode_negative
+        - dsGetFRFMode_negative
+        - dsGetCurrDispFramerate_negative
+        - dsSetDisplayframerate_negative
+        - dsRegFrameratePreCB_negative
+        - dsRegFrameratePostCB_negative
+        - dsGetDFC_positive
+        - dsForceDisableHDR_positive
+        - dsGetDFC_negative
+        - dsForceDisableHDR_negative
+    - name: "L2 dsVideoDevice - Sink"
+      test_cases:
+        - GetHDRCapabilities
+        - GetSupportedVideoCodingFormats
+        - SetAndVerifyDisplayframerate
+        - SetAndVerifyFRFMode
+#    - name: "L2 dsVideoDevice - Source"
+#      test_cases:
+#        - GetHDRCapabilities
+#        - GetSupportedVideoCodingFormats
+#        - SetAndGetDFC
+#        - GetVideoCodecInfo
