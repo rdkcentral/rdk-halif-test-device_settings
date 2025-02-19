@@ -86,28 +86,46 @@ class dsHdmiIn_test05_AllmChangeCallback_Verify(dsHdmiInHelperClass):
 
         Args:
             manual (bool, optional): Indicates whether manual verification is required.
-                                     Defaults to False (for automation methods).
+                                    Defaults to False (for automation methods).
             port_type (str): HDMI port type as a string.
             allm_change (bool, optional): Indicates if ALLM mode change is being requested.
-                                           Defaults to False.
+                                        Defaults to False.
             allm_input (str): Desired ALLM input state ('ON' or 'OFF').
 
         Returns:
             bool: True if verification is successful; otherwise, False.
         """
+        # Get callback status
         allmStatus = self.testdsHdmiIn.getAllmCallbackStatus()
         if allmStatus != None:
-            actual_port, actual_status = allmStatus
+            callback_port, callback_status = allmStatus
         else:
-            self.log.stepResult(False,f"No callbacks found on port: {port}")
+            self.log.stepResult(False, f"No callbacks found on port: {port}")
             return False
 
-        if actual_port == port and actual_status == expected_status:
-            self.log.stepResult(True,f"ALLM mode: {actual_status} on port: {actual_port} confirmed in Callback")
-            return True
+        # Validate callback status
+        if callback_port == port and callback_status == expected_status:
+            self.log.stepResult(True, f"ALLM mode: {callback_status} on port: {callback_port} confirmed in Callback")
         else:
-            self.log.stepResult(False,f"Unexpected ALLM mode: {actual_status} on port: {actual_port} in Callback")
+            self.log.stepResult(False, f"Unexpected ALLM mode: {callback_status} on port: {callback_port} in Callback")
             return False
+
+        # Additional check using get_allm_status
+        result = self.testdsHdmiIn.getAllmStatus(port)
+        if result is not None:
+            get_port, get_status = result
+            if get_port == port and get_status == expected_status:
+                self.log.stepResult(True, f"ALLM mode: {get_status} on port: {get_port} confirmed via get_allm_status")
+            else:
+                self.log.stepResult(False, f"Unexpected ALLM mode: {get_status} on port: {get_port} via get_allm_status")
+                return False
+        else:
+            self.log.stepResult(False, f"Failed to get ALLM status via get_allm_status for port: {port}")
+            return False
+
+        # If both checks pass, return True
+        return True
+
 
     def testFunction(self):
         """

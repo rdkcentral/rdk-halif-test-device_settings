@@ -17,17 +17,19 @@ dsVideoPort:  # Prefix must always exist
         streams:
           - "vts_SDR_stream.mp4"
       test3_VerifyHDCP_Version:
-        streams: #list of streams to be copied to device
+        streams: #stream is not required for this test
       test4_VerifyResolution:
-        streams: #list of streams to be copied to device
+        streams: #stream is not required for this test
       test5_VerifyHDCP_Callback:
-        streams: #list of streams to be copied to device
+        streams: #stream is not required for this test
       test6_VerifyVideoContentFormats:
-        streams: #list of streams to be copied to device
+        streams: #stream is not required for this test
       test7_ResetToSDRMode:
         streams:
           - "vts_HDR10_stream.mp4"
       test8_VerifyColorDepth:
-        streams: #list of streams to be copied
+        streams: #stream is not required for this test
       test9_VerifyBackgroundColor:
-        streams: #list of streams to be copied
+        streams: #stream is not required for this test
+      test10_VerifyALLM_Mode:
+        streams: #stream is not required for this test

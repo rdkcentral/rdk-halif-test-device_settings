@@ -82,4 +82,5 @@ dsHdmiIn:  # Prefix must always exist
                     - "Get EdidVersion"
                     - "Set Edid 2 Allm Support"
                     - "Get Edid 2 Allm Support"
+                    - "Get Allm Status"
                     - "Terminate HdmiIn"

@@ -674,6 +674,62 @@ void dsVideoPort_GetVideoEOTF()
     UT_LOG_INFO("OUT %s ",__FUNCTION__);
 }
 
+void dsVideoPort_SetAllmEnabled()
+{
+    dsError_t status = dsERR_NONE;
+    int32_t choice = 0;
+    int32_t j = 0;
+
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
+
+    dsVideoPort_getHandle();
+    UT_LOG_INFO(" \t  Supported ALLM Modes are:");
+    for (j = 0; j < 2; j++)
+    {
+        UT_LOG_INFO("\t%d. %-20s", j,((j==0)?"Disable":"Enable"));
+    }
+
+    UT_LOG_INFO("------------------------------------------");
+    UT_LOG_INFO(" Choose ALLM mode to be Enable/Disable:");
+    scanf("%d", &choice);
+    readAndDiscardRestOfLine(stdin);
+
+    if(choice == 0 || choice == 1) 
+    {
+        UT_LOG_INFO("Calling dsSetAllmEnabled(IN:Handle:[0x%0X],IN:ALLM_Status:[]) ", gHandle);
+        status = dsSetAllmEnabled(gHandle, choice);
+        UT_LOG_INFO("Result dsSetAllmEnabled(IN:Handle:[0x%0X],IN:ALLM_Status:[%s]) ,dsError_t=[%s]",
+                        gHandle, UT_Control_GetMapString(boolMappingTable, choice), 
+                        UT_Control_GetMapString(dsErrorMappingTable, status));
+        DS_ASSERT(status == dsERR_NONE);
+    }
+    else
+    {
+        UT_LOG_ERROR("\nInvalid ALLM mode selected\n");
+    }
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
+}
+
+void dsVideoPort_GetAllmEnabled()
+{
+    dsError_t status   = dsERR_NONE;
+    bool AllmMode = false;
+
+    UT_LOG_INFO("IN %s gTestGroup:%d ",__FUNCTION__,UT_TESTS_L3);
+
+    dsVideoPort_getHandle();
+    
+    UT_LOG_INFO("Calling dsGetAllmEnabled(IN:Handle:[0x%0X],OUT:ALLM_Status:[]) ", gHandle);
+    status = dsGetAllmEnabled(gHandle, &AllmMode);
+    UT_LOG_INFO("Result dsGetAllmEnabled(IN:Handle:[0x%0X],OUT:ALLM_Status:[%s]) ,dsError_t=[%s]",
+                    gHandle, UT_Control_GetMapString(boolMappingTable, AllmMode),
+                    UT_Control_GetMapString(dsErrorMappingTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
+    
+}
+
+
 void dsVideoPort_IsOutputHDR()
 {
     dsError_t status   = dsERR_NONE;
@@ -992,6 +1048,8 @@ int test_l3_dsVideoPort_register(void)
     UT_add_test( pSuite, "Get HDCPReceiverProtocol",dsVideoPort_GetHDCPReceiverProtocol);
     UT_add_test( pSuite, "Get IgnoreEDIDStatus",dsVideoPort_GetIgnoreEDIDStatus);
     UT_add_test( pSuite, "Get PreferredColorDepth",dsVideoPort_GetPreferredColorDepth);
+    UT_add_test( pSuite, "Set AllmMode",dsVideoPort_SetAllmEnabled);
+    UT_add_test( pSuite, "Get AllmMode",dsVideoPort_GetAllmEnabled);
 
     return 0;
 }
