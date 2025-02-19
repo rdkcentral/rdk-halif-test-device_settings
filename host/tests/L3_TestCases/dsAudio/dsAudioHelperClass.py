@@ -50,6 +50,7 @@ class dsAudioHelperClass(utHelperClass):
         self.testSetupPath = os.path.join(dir_path, "dsAudio_L3_testSetup.yml")
         self.moduleName = "dsAudio"
         self.rackDevice = "dut"
+        self.testsuite  = "L3 dsAudio"
 
         super().__init__(testName, qcId, log)
 
@@ -149,7 +150,7 @@ class dsAudioHelperClass(utHelperClass):
         self.testRunPrerequisites()
 
         # Create the dsAudio class
-        self.testdsAudio = dsAudioClass(self.moduleConfigProfileFile, self.hal_session, self.targetWorkspace)
+        self.testdsAudio = dsAudioClass(self.moduleConfigProfileFile, self.hal_session, self.testsuite, self.targetWorkspace)
 
         return True
 
