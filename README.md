@@ -118,5 +118,5 @@ Alternatively, use the run.sh script with the profile file:
 ### Running the `L3` test cases
 
 - For running the L3 test suite, a host PC or server with a Python environment is required.
-- Install Python Environment and Activation Scripts as detailed in the [HPK Documentation](https://github.com/rdkcentral/rdk-hpk-documentation/blob/main/README.md)
+- Install Python Environment and Activation Scripts as detailed in the [HPK Documentation](https://github.com/rdkcentral/rdk-hpk-documentation/tree/main?tab=readme-ov-file#installing-the-python-environment-for-l3-testing-suite)
 - To run the test cases of `DS` sub-modules follow the [L3 TestProcedure docs](./docs/pages/)
