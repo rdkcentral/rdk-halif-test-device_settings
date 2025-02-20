@@ -80,20 +80,22 @@ class dsAudio_L1_L2_tests(utHelperClass):
             testdsAudio = dsAudioClass(self.moduleConfigProfileFile, self.session, testsuite_name, self.targetWorkspace)
             test_cases = testsuite.get("test_cases")
 
-            if test_cases:
+            if len(test_cases) == 1 and test_cases[0] == "all":
+                self.log.stepStart(f'Test Suit: {testsuite_name} Run all Tests cases')
+                # If 'all' test case mentioned in list, run all tests with 'r' option
+                result = testdsAudio.runTest()
+                finalresult &= result
+                self.log.stepResult(result, f'Test Suit: {testsuite_name} Run all Tests cases')
+            else:
                 for test_case in testsuite.get("test_cases"):
                     self.log.stepStart(f'Test Suit: {testsuite_name} Test Case: {test_case}')
                     result = testdsAudio.runTest(test_case)
                     finalresult &= result
                     self.log.stepResult(result, f'Test Suit: {testsuite_name} Test Case: {test_case}')
-            else:
-                self.log.stepStart(f'Test Suit: {testsuite_name} Run all Tests cases')
-                # If no test cases are listed, run all tests with 'r' option
-                result = testdsAudio.runTest()
-                finalresult &= result
-                self.log.stepResult(result, f'Test Suit: {testsuite_name} Run all Tests cases')
 
             del testdsAudio
+
+        return finalresult
 
 if __name__ == '__main__':
     summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"

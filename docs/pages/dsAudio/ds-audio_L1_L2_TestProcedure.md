@@ -73,7 +73,7 @@ In this file, update the configuration to define the console sessions for the `D
 
 |Console Session|Description|
 |---------------|-----------|
-|default|Downloads the streams required for test cases|
+|default|To run the `HAL` binary|
 
 ```yaml
 rackConfig:

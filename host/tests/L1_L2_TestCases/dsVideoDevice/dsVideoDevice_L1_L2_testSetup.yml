@@ -1,8 +1,11 @@
 dsVideoDevice:
   description: "dsVideoDevice Device Settings L1 and L2 test setup"
   test_suites: # List of L1 and L2 test suites
+    #- name: "L1 dsVideoDevice" # Name of the test suit to run
+    #  test_cases: # List of test cases to execute, to run all test cases in test suite with R option use `all`
+    #    - all
     - name: "L1 dsVideoDevice" # Name of the test suit to run
-      test_cases: # List of test cases to execute, if empty test runs all test cases with `r` option
+      test_cases: # List of test cases to execute, to run all test cases in test suite with R option use `all`
         - dsVideoDeviceInit_positive
         - dsVideoDeviceTerm_positive
         - dsGetVideoDevice_positive
