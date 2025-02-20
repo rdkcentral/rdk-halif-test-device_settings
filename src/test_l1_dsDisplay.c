@@ -495,6 +495,9 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
         // Step 02: Get the display device handle using portIndex
         result = dsGetDisplay(vType, portIndex, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(displayHandle);
+        if (displayHandle == 0)
+            break;
 
         // Step 03: Call dsGetEDID() with the obtained handle
         result = dsGetEDID(displayHandle, &edid1);
@@ -586,6 +589,9 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
         vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
         result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(displayHandle);
+        if (displayHandle == 0)
+            break;
 
         // Step 04: Call dsGetEDID() with an invalid handle
         result = dsGetEDID((intptr_t)NULL, edid);
@@ -663,6 +669,9 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
 
         result = dsGetDisplay(vType, portIndex, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(displayHandle);
+        if (displayHandle == 0)
+            break;
         if(result != dsERR_NONE)
         {
             UT_FAIL("Failed to get display handle");
@@ -752,6 +761,9 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
         vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
         result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(displayHandle);
+        if (displayHandle == 0)
+            break;
 
         // Step 04: Call dsGetEDIDBytes() with an invalid handle
         result = dsGetEDIDBytes((intptr_t)NULL, edid, &length);
@@ -835,6 +847,9 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
 
         result = dsGetDisplay(vType, portIndex, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(displayHandle);
+        if (displayHandle == 0)
+            break;
 
         // Step 03: Call dsGetDisplayAspectRatio() with the obtained handle
         if(gSourceType == 1){
@@ -913,6 +928,9 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
         vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
         result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(displayHandle);
+        if (displayHandle == 0)
+            break;
 
         if (gSourceType == 1) {
            // Step 04: Call dsGetDisplayAspectRatio() with an invalid handle for source devices
@@ -997,6 +1015,9 @@ void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback(void) {
 
         result = dsGetDisplay(vType, portIndex, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(displayHandle);
+        if (displayHandle == 0)
+            break;
 
         // Step 03: Call dsRegisterDisplayEventCallback() with the obtained handle and a valid callback function
         result = dsRegisterDisplayEventCallback(displayHandle, testDisplayCallback);
@@ -1064,6 +1085,9 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
         vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
         result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(displayHandle);
+        if (displayHandle == 0)
+            break;
 
         // Step 04: Call dsRegisterDisplayEventCallback() with a NULL handle
         result = dsRegisterDisplayEventCallback((intptr_t)NULL, testDisplayCallback);
