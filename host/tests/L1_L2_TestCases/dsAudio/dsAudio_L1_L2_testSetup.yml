@@ -1,8 +1,11 @@
 dsAudio:
   description: "dsAudio Device Settings L1 and L2 test setup"
-  test_suites:
-    - name: "L1 dsAudio"
-      test_cases:
+  test_suites: # List of L1 and L2 test suites
+    #- name: "L1 dsAudio"
+    #  test_cases:
+    #    - all
+    - name: "L1 dsAudio" # Name of the test suit to run
+      test_cases: # List of test cases to execute, to run all test cases in test suite with R option use `all`
         - dsAudioPortInit_pos
         - dsAudioPortInit_neg
         - dsAudioPortTerm_pos
