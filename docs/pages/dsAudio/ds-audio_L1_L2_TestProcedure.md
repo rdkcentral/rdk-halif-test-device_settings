@@ -129,12 +129,9 @@ eg:
 dsAudio:
   description: "dsAudio Device Settings L1 and L2 test setup"
   test_suites: # List of test suites to run
-    - name: "L1 dsAudio" # Name of the test suit
-      test_cases: # List of test cases to run in the testsuit, if list is empty test select `R` option to run all test available in test suit
-        - dsAudioPortInit_positive
-        - dsAudioPortInit_negative
     - name: "L1 dsAudio"
-      test_cases: # Runs all tests in the test suit
+      test_cases: # List of test cases to execute, to run all test cases in test suite with R option use `all`
+        - all
     - name: "L1 dsAudio"
       test_cases:
         - dsAudioPortTerm_negative
