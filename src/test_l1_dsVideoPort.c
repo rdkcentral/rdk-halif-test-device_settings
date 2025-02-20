@@ -321,6 +321,7 @@ void test_l1_dsVideoPort_positive_dsGetVideoPort(void) {
     for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
         status = dsGetVideoPort(gDSVideoPortConfiguration[i].typeid, gDSVideoPortConfiguration[i].index, &(handle[i]));
         UT_ASSERT_EQUAL(status, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle[i]);
         if(i == gDSvideoPort_NumberOfPorts-1)
         {
             lastHandle = handle[i];
@@ -330,6 +331,7 @@ void test_l1_dsVideoPort_positive_dsGetVideoPort(void) {
     // Step 03: Compare with the last handle
     status = dsGetVideoPort(gDSVideoPortConfiguration[gDSvideoPort_NumberOfPorts-1].typeid, gDSVideoPortConfiguration[gDSvideoPort_NumberOfPorts-1].index, &(handle[gDSvideoPort_NumberOfPorts-1]));
     UT_ASSERT_EQUAL(status, dsERR_NONE);
+    UT_ASSERT_PTR_NOT_NULL(handle[gDSvideoPort_NumberOfPorts-1]);
 
     //getting last handle in to new handle for comparision
     newHandle = handle[gDSvideoPort_NumberOfPorts-1];
