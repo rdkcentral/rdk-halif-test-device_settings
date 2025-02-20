@@ -66,10 +66,18 @@
 #include <ut.h>
 #include "test_parse_configuration.h"
 
+#ifndef HALIF_TEST_TAG_VERSION
+#define HALIF_TEST_TAG_VERSION "1.0.0"
+#endif
+
 extern int UT_register_tests(void);
 
 int main(int argc, char** argv)
 {
+    printf("\n\n==========================================================================\n");
+    printf("\n\t\tDeviceSettings HALIF Test Version: \033[0;32m%s\033[0m\n",HALIF_TEST_TAG_VERSION);
+    printf("\n==========================================================================\n\n");
+
     /* Register tests as required, then call the UT-main to support switches and triggering */
     UT_init(argc, argv);
 
