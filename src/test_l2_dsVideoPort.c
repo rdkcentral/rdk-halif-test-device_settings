@@ -118,6 +118,9 @@ void test_l2_dsVideoPort_EnableDisabledVideoPorts(void)
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
             continue;
         }
+        UT_ASSERT_PTR_NOT_NULL(handle);
+        if (handle == 0)
+            break;
 
         UT_LOG_DEBUG("Invoking dsEnableVideoPort() with handle: %ld and enabled: true", handle);
         ret = dsEnableVideoPort(handle, true);
@@ -189,6 +192,9 @@ void test_l2_dsVideoPort_VerifyDisplayAndPortStatus(void)
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
             continue;
         }
+        UT_ASSERT_PTR_NOT_NULL(handle);
+        if (handle == 0)
+            break;
 
         UT_LOG_DEBUG("Invoking dsIsDisplayConnected with handle: %ld", handle);
         ret = dsIsDisplayConnected(handle, &connected);
@@ -273,6 +279,9 @@ void test_l2_dsVideoPort_RetrieveAndVerifySurroundModeCapabilities(void)
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
             continue;
         }
+        UT_ASSERT_PTR_NOT_NULL(handle);
+        if (handle == 0)
+            break;
 
         UT_LOG_DEBUG("Invoking dsIsDisplaySurround() with handle %ld", handle);
         ret = dsIsDisplaySurround(handle, &surround);
@@ -339,6 +348,9 @@ void test_l2_dsVideoPort_SetAndGetResolution_source(void)
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
             continue;
         }
+        UT_ASSERT_PTR_NOT_NULL(handle);
+        if (handle == 0)
+            break;
 
         for (int i = 0; i < gDSVideoPortConfiguration[port].numSupportedResolutions; i++) {
             dsVideoPortResolution_t getResolution;
@@ -423,6 +435,9 @@ void test_l2_dsVideoPort_VerifySupportedTvResolutions(void)
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
             continue;
         }
+        UT_ASSERT_PTR_NOT_NULL(handle);
+        if (handle == 0)
+            break;
 
         UT_LOG_DEBUG("Invoking dsSupportedTvResolutions with handle: %ld", handle);
         ret = dsSupportedTvResolutions(handle, &resolutions);
@@ -483,6 +498,9 @@ void test_l2_dsVideoPort_GetHDRCapabilities(void)
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
             continue;
         }
+        UT_ASSERT_PTR_NOT_NULL(handle);
+        if (handle == 0)
+            break;
 
         UT_LOG_DEBUG("Invoking dsGetTVHDRCapabilities() with handle: %ld", handle);
         ret = dsGetTVHDRCapabilities(handle, &capabilities);
@@ -543,6 +561,9 @@ void test_l2_dsVideoPort_GetHDCPStatus(void)
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
             continue;
         }
+        UT_ASSERT_PTR_NOT_NULL(handle);
+        if (handle == 0)
+            break;
 
         UT_LOG_DEBUG("Invoking dsGetHDCPStatus() with handle: %ld", handle);
         ret = dsGetHDCPStatus(handle, &status);
@@ -614,6 +635,9 @@ void test_l2_dsVideoPort_VerifyHDCPProtocolStatus(void)
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
             continue;
         }
+        UT_ASSERT_PTR_NOT_NULL(handle);
+        if (handle == 0)
+            break;
 
         UT_LOG_DEBUG("Invoking dsGetHDCPProtocol with handle: %ld", handle);
         ret = dsGetHDCPProtocol(handle, &protocolVersion);
@@ -669,6 +693,9 @@ void test_l2_dsVideoPort_SetAndGetHdmiPreference(void)
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
             continue;
         }
+        UT_ASSERT_PTR_NOT_NULL(handle);
+        if (handle == 0)
+            break;
 
         UT_LOG_DEBUG("Invoking dsGetHDCPProtocol with handle: %ld", handle);
         ret = dsGetHDCPProtocol(handle, &protocolVersion);
@@ -740,6 +767,9 @@ void test_l2_dsVideoPort_GetColorSpace(void)
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
             continue;
         }
+        UT_ASSERT_PTR_NOT_NULL(handle);
+        if (handle == 0)
+            break;
 
         UT_LOG_DEBUG("Invoking dsGetColorSpace() with handle obtained from previous step");
         ret = dsGetColorSpace(handle, &color_space);
@@ -795,6 +825,9 @@ void test_l2_dsVideoPort_CheckColorDepthCapabilities_source(void)
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
             continue;
         }
+        UT_ASSERT_PTR_NOT_NULL(handle);
+        if (handle == 0)
+            break;
 
         UT_LOG_DEBUG("Invoking dsColorDepthCapabilities with handle");
         ret = dsColorDepthCapabilities(handle, &colorDepthCapability);
@@ -849,6 +882,9 @@ void test_l2_dsVideoPort_GetColorDepth(void)
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
             continue;
         }
+        UT_ASSERT_PTR_NOT_NULL(handle);
+        if (handle == 0)
+            break;
 
         UT_LOG_DEBUG("Invoking dsGetColorDepth() with handle=%ld", handle);
         ret = dsGetColorDepth(handle, &color_depth);
@@ -902,6 +938,9 @@ void test_l2_dsVideoPort_SetAndGetPreferredColorDepth_source(void)
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
             continue;
         }
+        UT_ASSERT_PTR_NOT_NULL(handle);
+        if (handle == 0)
+            break;
 
         for (int j = dsDISPLAY_COLORDEPTH_8BIT; j <= dsDISPLAY_COLORDEPTH_AUTO; j++) {
             colorDepthSet = j;
@@ -973,6 +1012,9 @@ void test_l2_dsVideoPort_GetQuantizationRange(void)
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
             continue;
         }
+        UT_ASSERT_PTR_NOT_NULL(handle);
+        if (handle == 0)
+            break;
 
         UT_LOG_DEBUG("Invoking dsGetQuantizationRange() with handle obtained from previous step");
         ret = dsGetQuantizationRange(handle, &quantization_range);
@@ -1033,6 +1075,9 @@ void test_l2_dsVideoPort_GetMatrixCoefficients(void)
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
             continue;
         }
+        UT_ASSERT_PTR_NOT_NULL(handle);
+        if (handle == 0)
+            break;
 
         UT_LOG_DEBUG("Invoking dsGetMatrixCoefficients() with handle obtained from previous step");
         ret = dsGetMatrixCoefficients(handle, &matrix_coefficients);
@@ -1096,6 +1141,9 @@ void test_l2_dsVideoPort_CheckALLMStatus_source(void)
             UT_LOG_ERROR("dsGetVideoPort failed with error: %d", ret);
             continue;
         }
+        UT_ASSERT_PTR_NOT_NULL(handle);
+        if (handle == 0)
+            break;
 
         UT_LOG_DEBUG("Invoking dsSetAllmEnabled() with true");
         ret = dsSetAllmEnabled(handle, true);
