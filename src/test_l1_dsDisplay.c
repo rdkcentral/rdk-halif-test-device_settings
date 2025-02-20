@@ -346,12 +346,14 @@ void test_l1_dsDisplay_positive_dsGetDisplay(void) {
         result = dsGetDisplay(vType, portIndex, &displayHandle1);
         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(displayHandle1);
         UT_LOG("Display handle for port type %d with index %d: %ld\n", vType, portIndex, (long)displayHandle1);
 
         // Step 03: Call the last value again, and compare the results
         result = dsGetDisplay(vType, portIndex, &displayHandle2);
         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, displayHandle1, displayHandle2);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(displayHandle2);
         UT_LOG("\n In %s Comparison: [%d = %d]\n", __FUNCTION__, result);
         UT_ASSERT_EQUAL(displayHandle1, displayHandle2);
         UT_LOG("Repeated display handle for port type %d with index %d: %ld\n", vType, portIndex, (long)displayHandle2);
