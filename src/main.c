@@ -67,7 +67,7 @@
 #include "test_parse_configuration.h"
 
 #ifndef HALIF_TEST_TAG_VERSION
-#define HALIF_TEST_TAG_VERSION "1.0.0"
+#define HALIF_TEST_TAG_VERSION "Not Defined"
 #endif
 
 extern int UT_register_tests(void);
