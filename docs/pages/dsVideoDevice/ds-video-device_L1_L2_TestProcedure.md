@@ -20,46 +20,13 @@
 
 ## Run L1 and L2 Test directly (without python)
 
-- Copy the hal binaries, libraries and the profile to the `DUT`
-
-eg:
-```bash
-    scp bin/run.sh <user>@<ip>:/tmp/dsVideoDevice/ -p <port number>
-    scp bin/hal_test <user>@<ip>:/tmp/dsVideoDevice/ -p <port number>
-    scp bin/libut_control.so <user>@<ip>:/tmp/dsVideoDevice/ -p <port number>
-    scp profile/<profile.yaml> <user>@<ip>:/tmp/dsVideoDevice/ -p <port number>
-```
-
-- on `DUT` run the test
-
-```bash
-    cd /tmp/dsVideoDevice
-    ./run.sh -p <profile.yaml>
-```
-
-- Run all the test cases or individual cases by selecting corresponding menu option
-
-```bash
-***************** CUNIT CONSOLE - MAIN MENU ******************************
-(R)un  (S)elect  (L)ist  (A)ctivate  (F)ailures  (O)ptions  (H)elp  (Q)uit
-Enter command: H
-
-Commands:  R - run all tests in all suites
-           S - Select a suite to run or modify
-           L - List all registered suites
-           A - Activate or deactivate a suite (toggle)
-           F - Show failures from last test run
-           O - Set CUnit options
-           H - Show this help message
-           Q - Quit the application
-
-```
+Refer [Running L1 and L2 Test suits](https://github.com/rdkcentral/rdk-hpk-documentation/tree/1.4.5?tab=readme-ov-file#running-the-l1-l2-test-suite-on-the-target)
 
 ## Run L1 and L2 using python
 
 ### Setting Up Test Environment
 
-To execute `HAL` `L1` and `L2` Python test cases, need a Python environment. Follow these steps mentioned in [HPK Public Documentation](https://github.com/rdkcentral/rdk-hpk-documentation/blob/main/README.md)
+To execute `HAL` `L1` and `L2` Python test cases, need a Python environment. Follow these steps mentioned in [HPK Public Documentation](https://github.com/rdkcentral/rdk-hpk-documentation/?tab=readme-ov-file#installing-the-python-environment-for-l3-testing-suite)
 
 ### Update Configuration Files
 
