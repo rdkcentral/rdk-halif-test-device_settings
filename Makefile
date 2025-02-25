@@ -34,6 +34,7 @@ INC_DIRS := $(ROOT_DIR)/../include
 INC_DIRS += $(ROOT_DIR)/profiles/include
 HAL_LIB := dshal
 SKELETON_SRCS := $(ROOT_DIR)/skeletons/src/*
+TARGET_EXEC :=hal_test_$(HAL_LIB)
 
 # Export the tag version
 VERSION := $(shell git describe --tags | head -n1)
@@ -74,6 +75,7 @@ export TARGET
 export TOP_DIR
 export HAL_LIB_DIR
 export KCFLAGS
+export TARGET_EXEC
 
 .PHONY: clean list build cleanlibs clean cleanall skeleton
 
