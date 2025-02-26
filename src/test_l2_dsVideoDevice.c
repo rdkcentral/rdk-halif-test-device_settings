@@ -119,6 +119,11 @@ void test_l2_dsVideoDevice_SetAndGetDFC_source(void)
             UT_LOG_ERROR("dsGetVideoDevice failed with status: %d", retStatus);
             continue;
         }
+
+        UT_ASSERT_PTR_NOT_NULL(handle);
+        if (handle == 0)
+            break;
+
         for (int j = 0;j < gDSVideoDeviceConfiguration[i].NoOfSupportedDFCs; j++)
         {
             UT_LOG_DEBUG("Invoking dsSetDFC with handle: %ld, dfc: %d", handle, gDSVideoDeviceConfiguration[i].SupportedDFCs[j]);
@@ -188,6 +193,10 @@ void test_l2_dsVideoDevice_GetHDRCapabilities(void)
             UT_LOG_ERROR("dsGetVideoDevice failed with status: %d", ret);
             continue;
         }
+
+        UT_ASSERT_PTR_NOT_NULL(handle);
+        if (handle == 0)
+            break;
 
         UT_LOG_DEBUG("Invoking dsGetHDRCapabilities with handle: %ld", handle);
         ret = dsGetHDRCapabilities(handle, &capabilities);
@@ -305,6 +314,10 @@ void test_l2_dsVideoDevice_GetVideoCodecInfo_source(void)
             continue;
         }
 
+        UT_ASSERT_PTR_NOT_NULL(handle);
+        if (handle == 0)
+            break;
+
         for(codec = dsVIDEO_CODEC_MPEGHPART2 ; codec < dsVIDEO_CODEC_MAX; )
         {
             if(!(gDSVideoDeviceConfiguration[i].SupportedVideoCodingFormats & codec))
@@ -376,6 +389,10 @@ void test_l2_dsVideoDevice_SetAndVerifyDisplayframerate_sink(void)
             continue;
         }
 
+        UT_ASSERT_PTR_NOT_NULL(handle);
+        if (handle == 0)
+            break;
+
         for (int j=0;j<gDSVideoDeviceConfiguration[i].NoOfSupportedDFR;j++)
         {
             UT_LOG_DEBUG("Invoking dsSetDisplayframerate with handle: %ld", handle);
@@ -443,6 +460,11 @@ void test_l2_dsVideoDevice_SetAndVerifyFRFMode_sink(void)
             UT_LOG_ERROR("dsGetVideoDevice failed with error %d", ret);
             continue;
         }
+
+        UT_ASSERT_PTR_NOT_NULL(handle);
+        if (handle == 0)
+            break;
+
         //FRF Mode is 0 or disable 1 for Enable.Loop through twice to set 0 and 1
         for (int j=0;j<2;j++)
         {
