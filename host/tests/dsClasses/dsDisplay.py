@@ -246,14 +246,14 @@ class dsDisplayClass():
         Args:
             None
         Returns:
-            str: The display event type (e.g., 'dsVIDEO_EVENT_CONNECTED').
-            None: If no matching event status is found.
+            str: List of display events.
+            empty list: If no matching event status is found.
         """
 
         result = self.testSession.read_until("Display EventCallback(IN:handle:")
-        callpattern = r"Display EventCallback\(IN:handle:\[.*\], dsDisplayEvent_t:\[(\w+)\]"
-        status = self.searchPattern(result, callpattern)
-        return status
+        pattern = r"Display EventCallback\(IN:.*?dsDisplayEvent_t:\[([^\]]+)\]"
+        events = re.findall(pattern, result)
+        return events
 
     def terminate(self):
         """

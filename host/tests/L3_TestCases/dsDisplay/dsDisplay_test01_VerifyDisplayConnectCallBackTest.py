@@ -47,7 +47,7 @@ class dsDisplay_test01_VerifyDisplayConnectCallBackTest(dsDisplayHelperClass):
             None.
         """
         # Class variables
-        self.testEvents = ["CONNECT", "DISCONNECT", "RXSENSE_ON", "RXSENSE_OFF", "HDCPPROTOCOL_CHANGE"]
+        self.testEvents = ["dsDISPLAY_EVENT_CONNECTED", "dsDISPLAY_EVENT_DISCONNECTED", "dsDISPLAY_RXSENSE_ON", "dsDISPLAY_RXSENSE_OFF", "dsDISPLAY_HDCPPROTOCOL_CHANGE"]
         self.testName  = "test01_VerifyDisplayConnectCallBackTest"
         self.qcID = '1'
         super().__init__(self.testName, self.qcID, log)
@@ -88,8 +88,12 @@ class dsDisplay_test01_VerifyDisplayConnectCallBackTest(dsDisplayHelperClass):
             for event in self.testEvents:
                 self.log.stepStart(f'Test Display Event {event} for the Port {port}')
                 self.testRaiseDisplayEvent(port, event,True)
-                status = self.testdsDisplay.getDisplayEventFromCallback()
-                result = status and event in status
+                eventsGenerated = self.testdsDisplay.getDisplayEventFromCallback()
+                result = False
+                for eventgen in eventsGenerated:
+                    if event == eventgen:
+                        result = True
+                        break
                 self.log.stepResult(result, f'Test Display Event {event} for the Port {port}')
 
         #Terminate dsDisplay Module
