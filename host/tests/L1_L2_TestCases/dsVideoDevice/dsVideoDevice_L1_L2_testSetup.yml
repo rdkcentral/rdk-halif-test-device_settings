@@ -1,50 +1,161 @@
+# This is a sample test configuration file. Users can customize the YAML entries as needed
+# This test configuration file includes sample YAML entries for executing various combinations
 dsVideoDevice:
   description: "dsVideoDevice Device Settings L1 and L2 test setup"
   test_suites: # List of L1 and L2 test suites
+
+    ######################################
+    # Entry to run all test case
+    ######################################
     #- name: "L1 dsVideoDevice" # Name of the test suit to run
     #  test_cases: # List of test cases to execute, to run all test cases in test suite with R option use `all`
     #    - all
-    - name: "L1 dsVideoDevice" # Name of the test suit to run
-      test_cases: # List of test cases to execute, to run all test cases in test suite with R option use `all`
-        - dsVideoDeviceInit_positive
-        - dsVideoDeviceTerm_positive
-        - dsGetVideoDevice_positive
-        - dsSetDFC_positive
-        - dsGetHDRCaps_positive
-        - dsGetSupportVidFormats_positive
-        - dsGetVideoCodecInfo_positive
-        - dsSetFRFMode_positive
-        - dsGetFRFMode_positive
-        - dsGetCurrDispFramerate_positive
-        - dsSetDisplayframerate_positive
-        - dsRegFrameratePreCB_positive
-        - dsRegFrameratePostCB_positive
-        - dsVideoDeviceInit_negative
-        - dsVideoDeviceTerm_negative
-        - dsGetVideoDevice_negative
-        - dsSetDFC_negative
-        - dsGetHDRCaps_negative
-        - dsGetSupportVidFormats_negative
-        - dsGetVideoCodecInfo_negative
-        - dsSetFRFMode_negative
-        - dsGetFRFMode_negative
-        - dsGetCurrDispFramerate_negative
-        - dsSetDisplayframerate_negative
-        - dsRegFrameratePreCB_negative
-        - dsRegFrameratePostCB_negative
-        - dsGetDFC_positive
-        - dsForceDisableHDR_positive
-        - dsGetDFC_negative
-        - dsForceDisableHDR_negative
-    - name: "L2 dsVideoDevice - Sink"
+
+    #######################################
+    # Entries to run individual test cases
+    #######################################
+    - name: "L1 dsVideoDevice"
       test_cases:
-        - GetHDRCapabilities
-        - GetSupportedVideoCodingFormats
-        - SetAndVerifyDisplayframerate
-        - SetAndVerifyFRFMode
-#    - name: "L2 dsVideoDevice - Source"
-#      test_cases:
-#        - GetHDRCapabilities
-#        - GetSupportedVideoCodingFormats
-#        - SetAndGetDFC
-#        - GetVideoCodecInfo
+        - dsVideoDeviceInit_positive
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsVideoDeviceTerm_positive
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsGetVideoDevice_positive
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsSetDFC_positive
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsGetHDRCaps_positive
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsGetSupportVidFormats_positive
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsGetVideoCodecInfo_positive
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsSetFRFMode_positive
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsGetFRFMode_positive
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsGetCurrDispFramerate_positive
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsSetDisplayframerate_positive
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsRegFrameratePreCB_positive
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsRegFrameratePostCB_positive
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsVideoDeviceInit_negative
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsVideoDeviceTerm_negative
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsGetVideoDevice_negative
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsSetDFC_negative
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsGetHDRCaps_negative
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsGetSupportVidFormats_negative
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsGetVideoCodecInfo_negative
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsSetFRFMode_negative
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsGetFRFMode_negative
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsGetCurrDispFramerate_negative
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsSetDisplayframerate_negative
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsRegFrameratePreCB_negative
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsRegFrameratePostCB_negative
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsGetDFC_positive
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsForceDisableHDR_positive
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsGetDFC_negative
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsForceDisableHDR_negative
+
+    ######################################
+    # Entries to run selected test case
+    ######################################
+    #- name: "L1 dsVideoDevice"
+    #  test_cases:
+    #    - dsVideoDeviceInit_positive
+    #    - dsVideoDeviceTerm_positive
+    #    - dsGetVideoDevice_positive
+    #    - dsSetDFC_positive
+    #    - dsGetHDRCaps_positive
+    #    - dsGetSupportVidFormats_positive
+    #    - dsGetVideoCodecInfo_positive
+    #    - dsSetFRFMode_positive
+    #    - dsGetFRFMode_positive
+    #    - dsGetCurrDispFramerate_positive
+    #    - dsSetDisplayframerate_positive
+    #    - dsRegFrameratePreCB_positive
+    #    - dsRegFrameratePostCB_positive
+    #    - dsVideoDeviceInit_negative
+
+    #######################################
+    # Entries to run individual test cases
+    #######################################
+    #- name: "L2 dsVideoDevice - Sink"
+    #  test_cases:
+    #    - GetHDRCapabilities
+    #- name: "L2 dsVideoDevice - Sink"
+    #  test_cases:
+    #    - GetSupportedVideoCodingFormats
+    #- name: "L2 dsVideoDevice - Sink"
+    #  test_cases:
+    #    - SetAndVerifyDisplayframerate
+    #- name: "L2 dsVideoDevice - Sink"
+    #  test_cases:
+    #    - SetAndVerifyFRFMode
+    ######################################
+    # Entries to run selected test case
+    ######################################
+    #- name: "L2 dsVideoDevice - Sink"
+    #  test_cases:
+    #    - GetHDRCapabilities
+    #    - GetSupportedVideoCodingFormats
+    #    - SetAndVerifyDisplayframerate
+    #    - SetAndVerifyFRFMode
+
+    ######################################
+    # Entries to run selected test case
+    ######################################
+    #- name: "L2 dsVideoDevice - Source"
+    #  test_cases:
+    #    - GetHDRCapabilities
+    #    - GetSupportedVideoCodingFormats
+    #    - SetAndGetDFC
+    #    - GetVideoCodecInfo
