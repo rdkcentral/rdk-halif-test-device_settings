@@ -40,7 +40,8 @@ In this file, update the configuration to define the console sessions for the `D
 
 |Console Session|Description|
 |---------------|-----------|
-|default|To run the `HAL` binary|
+|default|Used by raft|
+|ssh_hal_test|To run the `HAL` binary|
 
 ```yaml
 rackConfig:
@@ -50,6 +51,12 @@ rackConfig:
       platform: "stb"
       consoles:
         - default:
+            type: "ssh"
+            port: 10022
+            username: "root"
+            ip: "XXX.XXX.XXX" # IP address of the device
+            password: ' '
+        - ssh_hal_test:
             type: "ssh"
             port: 10022
             username: "root"

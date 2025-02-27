@@ -142,6 +142,8 @@ class dsAudioClass():
         """
         output = self.utMenu.select( self.testSuite, test_case)
         results = self.utMenu.collect_results(output)
+        if results == None:
+            results = False
         return results
 
     def initialise(self, device_type:int=0):
