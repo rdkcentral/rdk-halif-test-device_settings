@@ -60,6 +60,7 @@ class dsVideoDevice_L1_L2_tests(utHelperClass):
         # Load test setup configuration
         testSetupPath = os.path.join(dir_path, "dsVideoDevice_L1_L2_testSetup.yml")
         self.testSetup = ConfigRead(testSetupPath, moduleName)
+        self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
 
     def testFunction(self):
         """
@@ -76,7 +77,7 @@ class dsVideoDevice_L1_L2_tests(utHelperClass):
             testsuite_name = testsuite.get("name")
 
             # Create the dsVideoDevice class
-            testdVideoDevice = dsVideoDeviceClass(self.moduleConfigProfileFile, self.session, testsuite_name, self.targetWorkspace)
+            testdVideoDevice = dsVideoDeviceClass(self.moduleConfigProfileFile, self.hal_session, testsuite_name, self.targetWorkspace)
             test_cases = testsuite.get("test_cases")
 
             if len(test_cases) == 1 and test_cases[0] == "all":
