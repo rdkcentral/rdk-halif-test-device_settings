@@ -118,6 +118,7 @@ void test_l2_dsAudio_EnableDisableAndVerifyAudioPortStatus(void)
 
         ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort failed with error: %d", ret);
             continue;
@@ -203,6 +204,7 @@ void test_l2_dsAudio_CheckHeadphoneConnectionStatus_sink(void)
         ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_LOG_DEBUG("Return status: %d, Handle: %p", ret, handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
             continue;
@@ -268,6 +270,7 @@ void test_l2_dsAudio_RetrieveAndVerifyMS12Capabilities(void)
         retStatus = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_LOG_DEBUG("Return status: %d, Handle: %p", retStatus, handle);
         UT_ASSERT_EQUAL(retStatus, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (retStatus != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", retStatus);
             continue;
@@ -334,6 +337,7 @@ void test_l2_dsAudio_SetAndGetAudioCompression(void)
 
         ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort failed with error: %d", ret);
             continue;
@@ -406,6 +410,7 @@ void test_l2_dsAudio_SetAndGetDialogEnhancement(void)
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: %d", gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index);
         ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort() failed with error: %d", ret);
             continue;
@@ -478,6 +483,7 @@ void test_l2_dsAudio_SetAndGetDolbyVolumeMode(void)
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: %d", gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index);
         ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
             continue;
@@ -561,6 +567,7 @@ void test_l2_dsAudio_SetAndGetIntelligentEqualizerMode(void)
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: %d", gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index);
         ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
             continue;
@@ -638,6 +645,7 @@ void test_l2_dsAudio_SetAndGetVolumeLeveller(void)
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: %d", gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index);
         retStatus = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(retStatus, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (retStatus != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", retStatus);
             continue;
@@ -717,6 +725,7 @@ void test_l2_dsAudio_SetAndGetBassEnhancer(void)
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: %d", gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index);
         ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
             continue;
@@ -789,6 +798,7 @@ void test_l2_dsAudio_EnableAndVerifySurroundDecoder(void)
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: %d", gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index);
         ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
             continue;
@@ -876,6 +886,7 @@ void test_l2_dsAudio_SetAndGetDRCMode(void)
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: %d", gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index);
         ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
             continue;
@@ -951,6 +962,7 @@ void test_l2_dsAudio_SetAndGetSurroundVirtualizer(void)
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: %d", gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index);
         ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
             continue;
@@ -1028,6 +1040,7 @@ void test_l2_dsAudio_SetAndGetMISteering(void)
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: %d", gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index);
         ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
             continue;
@@ -1119,6 +1132,7 @@ void test_l2_dsAudio_SetAndGetGraphicEqualizerMode(void)
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: %d", gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index);
         ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
             continue;
@@ -1193,6 +1207,7 @@ void test_l2_dsAudio_EnableDisableAndRetrieveLEConfig(void)
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: %d", gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index);
         ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
             continue;
@@ -1273,6 +1288,7 @@ void test_l2_dsAudio_CheckMS12DecodeSupport(void)
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: %d", gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index);
         ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
             continue;
@@ -1333,6 +1349,7 @@ void test_l2_dsAudio_CheckMS11DecodeSupport(void)
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: %d", gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index);
         ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
             continue;
@@ -1391,6 +1408,7 @@ void test_l2_dsAudio_VerifyMS12AudioProfiles_sink(void)
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: %d", gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index);
         ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
             continue;
@@ -1460,6 +1478,7 @@ void test_l2_dsAudio_SetAndGetMS12AudioProfile_sink(void)
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: %d", gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index);
         ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
             continue;
@@ -1542,6 +1561,7 @@ void test_l2_dsAudio_SetAndGetStereoMode(void)
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: %d", gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index);
         ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
             continue;
@@ -1606,6 +1626,7 @@ void test_l2_dsAudio_SetAndGetStereoAuto_sink(void)
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: %d", gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index);
         ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
             continue;
@@ -1672,6 +1693,7 @@ void test_l2_dsAudio_SetAndGetAudioGain_sink(void)
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: %d", gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index);
         ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
             continue;
@@ -1737,6 +1759,7 @@ void test_l2_dsAudio_SetAndGetAudioLevel_sink(void)
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: %d", gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index);
         ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
             continue;
@@ -1801,6 +1824,7 @@ void test_l2_dsAudio_AudioMuteVerification(void)
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: %d", gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index);
         ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
             continue;
@@ -1877,6 +1901,7 @@ void test_l2_dsAudio_SetAndGetAudioDelay(void)
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: %d", gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index);
         ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
             continue;
@@ -1941,6 +1966,7 @@ void test_l2_dsAudio_VerifyAtmosCapabilities_sink(void)
         UT_LOG_DEBUG("Invoking dsGetAudioPort with type: %d and index: %d", gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index);
         ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
         if (ret != dsERR_NONE) {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
             continue;
@@ -1997,6 +2023,7 @@ void test_l2_dsAudio_GetAudioCapabilities(void)
     retStatus = dsGetAudioPort(gDSAudioPortConfiguration[0].typeid, gDSAudioPortConfiguration[0].index, &handle);
     UT_LOG_DEBUG("Return status: %d, Handle: %p", retStatus, handle);
     UT_ASSERT_EQUAL(retStatus, dsERR_NONE);
+    UT_ASSERT_PTR_NOT_NULL(handle);
 
     UT_LOG_DEBUG("Invoking dsGetAudioCapabilities with handle obtained from previous step");
     retStatus = dsGetAudioCapabilities(handle, &capabilities);
@@ -2046,6 +2073,7 @@ void test_l2_dsAudio_EnableDisableRetrieveAudioMixing(void)
                              gDSAudioPortConfiguration[0].index);
     ret = dsGetAudioPort(gDSAudioPortConfiguration[0].typeid, gDSAudioPortConfiguration[0].index, &handle);
     UT_ASSERT_EQUAL(ret, dsERR_NONE);
+    UT_ASSERT_PTR_NOT_NULL(handle);
 
     UT_LOG_DEBUG("Invoking dsSetAssociatedAudioMixing with handle: %p and mixing: true", handle);
     ret = dsSetAssociatedAudioMixing(handle, true);
@@ -2107,6 +2135,7 @@ void test_l2_dsAudio_AudioPortControl(void)
                                           gDSAudioPortConfiguration[0].index);
     ret = dsGetAudioPort(gDSAudioPortConfiguration[0].typeid, gDSAudioPortConfiguration[0].index, &handle);
     UT_ASSERT_EQUAL(ret, dsERR_NONE);
+    UT_ASSERT_PTR_NOT_NULL(handle);
 
     UT_LOG_DEBUG("Invoking dsSetAssociatedAudioMixing() with handle=%p and mixing=true", handle);
     ret = dsSetAssociatedAudioMixing(handle, true);
@@ -2166,6 +2195,7 @@ void test_l2_dsAudio_SetAndGetPrimaryLanguage(void)
     ret = dsGetAudioPort(gDSAudioPortConfiguration[0].typeid, gDSAudioPortConfiguration[0].index, &handle);
     UT_LOG_DEBUG("Return status: %d, Handle: %p", ret, handle);
     UT_ASSERT_EQUAL(ret, dsERR_NONE);
+    UT_ASSERT_PTR_NOT_NULL(handle);
 
     UT_LOG_DEBUG("Invoking dsSetPrimaryLanguage() with handle and valid language code");
     ret = dsSetPrimaryLanguage(handle, setLang);
@@ -2221,6 +2251,7 @@ void test_l2_dsAudio_SetAndGetSecondaryLanguage(void)
     ret = dsGetAudioPort(gDSAudioPortConfiguration[0].typeid, gDSAudioPortConfiguration[0].index, &handle);
     UT_LOG_DEBUG("Return status: %d, Handle: %p", ret, handle);
     UT_ASSERT_EQUAL(ret, dsERR_NONE);
+    UT_ASSERT_PTR_NOT_NULL(handle);
 
     UT_LOG_DEBUG("Invoking dsSetSecondaryLanguage with handle and valid language code");
     ret = dsSetSecondaryLanguage(handle, setLang);
