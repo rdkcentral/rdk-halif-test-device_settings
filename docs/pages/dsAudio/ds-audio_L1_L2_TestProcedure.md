@@ -98,7 +98,7 @@ Example Test Setup configuration File: [dsAudio_L1_L2_testSetup.yml](../../../..
 
 This `yaml` contains the list of test_suites and test_cases to run
 
-To run each test_case separately update the yaml file as shown in below example:
+To execute each test_case individually, update the YAML file as shown in the example below:
 
 ```yaml
 dsAudio:
@@ -118,7 +118,7 @@ dsAudio:
         - dsGetAudioFormat_positive
 ```
 
-To run all test_cases under a test_suite update the yaml file as shown in below example:
+To execute all test_cases within a test_suite, update the YAML file as shown in the example below:
 
 ```yaml
 dsAudio:
@@ -129,7 +129,7 @@ dsAudio:
         - all
 ```
 
-To run multiple test_suites update the yaml file as shown in below example:
+To execute multiple test_suites, update the YAML file as shown in the example below:
 
 ```yaml
 dsAudio:

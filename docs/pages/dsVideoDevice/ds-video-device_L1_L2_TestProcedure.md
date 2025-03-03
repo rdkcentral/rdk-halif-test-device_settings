@@ -98,7 +98,36 @@ Example Test Setup configuration File: [dsVideoDevice_L1_L2_testSetup.yml](../..
 
 This `yaml` contains the list of test_suites and test_cases to run
 
-eg:
+To execute each test_case individually, update the YAML file as shown in the example below:
+
+```yaml
+dsVideoDevice:
+  description: "dsVideoDevice Device Settings L1 and L2 test setup"
+  test_suites:
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsVideoDeviceInit_positive
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsVideoDeviceTerm_positive
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - dsGetVideoDevice_positive
+```
+
+To execute all test_cases within a test_suite, update the YAML file as shown in the example below:
+
+```yaml
+dsVideoDevice:
+  description: "dsVideoDevice Device Settings L1 and L2 test setup"
+  test_suites:
+    - name: "L1 dsVideoDevice"
+      test_cases:
+        - all
+```
+
+To execute multiple test_suites, update the YAML file as shown in the example below:
+
 ```yaml
 dsVideoDevice:
   description: "dsVideoDevice Device Settings L1 and L2 test setup"
