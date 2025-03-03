@@ -98,14 +98,43 @@ Example Test Setup configuration File: [dsAudio_L1_L2_testSetup.yml](../../../..
 
 This `yaml` contains the list of test_suites and test_cases to run
 
-eg:
+To run each test_case separately update the yaml file as shown in below example:
+
 ```yaml
 dsAudio:
   description: "dsAudio Device Settings L1 and L2 test setup"
-  test_suites: # List of test suites to run
+  test_suites:
     - name: "L1 dsAudio"
-      test_cases: # List of test cases to execute, to run all test cases in test suite with R option use `all`
+      test_cases:
+        - dsAudioPortTerm_negative
+    - name: "L1 dsAudio"
+      test_cases:
+        - dsGetAudioPort_positive
+    - name: "L1 dsAudio"
+      test_cases:
+        - dsGetAudioPort_negative
+    - name: "L1 dsAudio"
+      test_cases:
+        - dsGetAudioFormat_positive
+```
+
+To run all test_cases under a test_suite update the yaml file as shown in below example:
+
+```yaml
+dsAudio:
+  description: "dsAudio Device Settings L1 and L2 test setup"
+  test_suites:
+    - name: "L1 dsAudio"
+      test_cases:
         - all
+```
+
+To run multiple test_suites update the yaml file as shown in below example:
+
+```yaml
+dsAudio:
+  description: "dsAudio Device Settings L1 and L2 test setup"
+  test_suites:
     - name: "L1 dsAudio"
       test_cases:
         - dsAudioPortTerm_negative
@@ -118,7 +147,7 @@ dsAudio:
         - GetAndVerifyMS12Capabilities
         - SetAndGetAudioCompression
         - SetAndGetDialogEnhancement
-    - name: "L2 dsAudio - Sink"
+    - name: "L2 dsAudio - Source"
       test_cases:
         - SetAndGetVolumeLeveller
         - SetAndGetBassEnhancer
