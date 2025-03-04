@@ -779,13 +779,13 @@ int test_l2_dsFPD_register(void)
     }
     // List of test function names and strings
 
-    UT_add_test( pSuite, "L2_dsFPD_SetFPstateON_SetBrightness", test_l2_dsFPD_SetFPstateON_SetBrightness);
-    UT_add_test( pSuite, "L2_dsFPD_SetFPstateOFF_SetBrightness", test_l2_dsFPD_SetFPstateOFF_SetBrightness);
-    UT_add_test( pSuite, "L2_dsFPD_SetFPstateOFF_SetBlink", test_l2_dsFPD_SetFPstateOFF_SetBlink);
-    UT_add_test( pSuite, "L2_dsFPD_SetFPstateON_Multi_SetColor", test_l2_dsFPD_SetFPstateON_Multi_SetColor);
-    UT_add_test( pSuite, "L2_dsFPD_SetFPstateOFF_SetColor", test_l2_dsFPD_SetFPstateOFF_SetColor);
-    UT_add_test( pSuite, "L2_dsFPD_SetFPstateON_Single_SetColor", test_l2_dsFPD_SetFPstateON_Single_SetColor);
-    UT_add_test( pSuite, "L2_dsFPD_VerifyLEDStateTransitions", test_l2_dsFPD_VerifyLEDStateTransitions);
+    UT_add_test( pSuite, "SetFPstateON_Brightness", test_l2_dsFPD_SetFPstateON_SetBrightness);
+    UT_add_test( pSuite, "SetFPstateOFF_Brightness", test_l2_dsFPD_SetFPstateOFF_SetBrightness);
+    UT_add_test( pSuite, "SetFPstateOFF_Blink", test_l2_dsFPD_SetFPstateOFF_SetBlink);
+    UT_add_test( pSuite, "SetFPstateON_MultiColor", test_l2_dsFPD_SetFPstateON_Multi_SetColor);
+    UT_add_test( pSuite, "SetFPstateOFF_Color", test_l2_dsFPD_SetFPstateOFF_SetColor);
+    UT_add_test( pSuite, "SetFPstateON_SingleColor", test_l2_dsFPD_SetFPstateON_Single_SetColor);
+    UT_add_test( pSuite, "VerifyLEDTransitions", test_l2_dsFPD_VerifyLEDStateTransitions);
 
     return 0;
 }
