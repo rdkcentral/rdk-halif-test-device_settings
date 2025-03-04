@@ -13,24 +13,24 @@ dsDisplay:
             0:
                 name: "L1 dsDisplay - Sink"
                 tests:
-                    - "dsDisplayInit_L1_positive"
-                    - "dsDisplayInit_L1_negative"
-                    - "dsDisplayTerm_L1_positive"
-                    - "dsDisplayTerm_L1_negative"
-                    - "dsGetDisplay_L1_positive"
-                    - "dsGetDisplay_L1_negative"
-                    - "dsGetEDID_L1_positive"
-                    - "dsGetEDID_L1_negative"
-                    - "dsGetEDIDBytes_L1_positive"
-                    - "dsGetEDIDBytes_L1_negative"
-                    - "dsGetDisplayAspectRatio_L1_positive"
-                    - "dsGetDisplayAspectRatio_L1_negative"
-                    - "dsRegisterDisplayEventCallback_L1_positive"
-                    - "dsRegisterDisplayEventCallback_L1_negative"
+                    - "dsDisplayInit_pos"
+                    - "dsDisplayInit_neg"
+                    - "dsDisplayTerm_pos"
+                    - "dsDisplayTerm_neg"
+                    - "dsGetDisplay_pos"
+                    - "dsGetDisplay_neg"
+                    - "dsGetEDID_pos"
+                    - "dsGetEDID_neg"
+                    - "dsGetEDIDBytes_pos"
+                    - "dsGetEDIDBytes_neg"
+                    - "dsGetDisplayAspectRatio_pos"
+                    - "dsGetDisplayAspectRatio_neg"
+                    - "dsRegisterDisplayEventCallback_pos"
+                    - "dsRegisterDisplayEventCallback_neg"
             1:
                 name: "L2 dsDisplay - Sink"
                 tests:
-                    - L2_RetrieveAndValidateEDID_sink
+                    - RetrieveAndValidateEDID_sink
             2:
                 name: "L3 dsDisplay"
                 tests:
