@@ -119,7 +119,7 @@ void test_l1_dsDisplay_positive_dsDisplayInit(void) {
     gTestID = 1;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
 
     // Step 01: Initialize the display module
     result = dsDisplayInit();
@@ -171,7 +171,7 @@ void test_l1_dsDisplay_negative_dsDisplayInit(void) {
     gTestID = 2;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
 
     // Step 01: Initialize the display module
     result = dsDisplayInit();
@@ -217,7 +217,7 @@ void test_l1_dsDisplay_positive_dsDisplayTerm(void) {
     gTestID = 3;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
 
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
@@ -270,7 +270,7 @@ void test_l1_dsDisplay_negative_dsDisplayTerm(void) {
     gTestID = 4;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
 
     // Step 01: Call dsDisplayTerm() without initializing the display sub-system
     result = dsDisplayTerm();
@@ -321,7 +321,7 @@ void test_l1_dsDisplay_positive_dsGetDisplay(void) {
     gTestID = 5;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
     dsVideoPortType_t vType;
     intptr_t displayHandle1, displayHandle2;
     uint32_t portIndex;
@@ -351,7 +351,7 @@ void test_l1_dsDisplay_positive_dsGetDisplay(void) {
 
         // Step 03: Call the last value again, and compare the results
         result = dsGetDisplay(vType, portIndex, &displayHandle2);
-        UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, displayHandle1, displayHandle2);
+        UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_PTR_NOT_NULL(displayHandle2);
         UT_LOG("\n In %s Comparison: [%d = %d]\n", __FUNCTION__, result);
@@ -399,7 +399,7 @@ void test_l1_dsDisplay_negative_dsGetDisplay(void) {
     gTestID = 6;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
     intptr_t displayHandle;
     dsVideoPortType_t vType;
 
@@ -470,7 +470,7 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
     gTestID = 7;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
     intptr_t displayHandle;
     dsVideoPortType_t vType;
     dsDisplayEDID_t edid1;
@@ -568,7 +568,7 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
     gTestID = 8;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
     intptr_t displayHandle=-1;
     dsVideoPortType_t vType;
     dsDisplayEDID_t *edid = {0};
@@ -644,7 +644,7 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
     gTestID = 9;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
     intptr_t displayHandle;
     dsVideoPortType_t vType;
     unsigned char *edid = NULL;
@@ -736,7 +736,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
     gTestID = 10;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
     dsVideoPortType_t vType;
     intptr_t displayHandle =-1;
     unsigned char *edid = NULL;
@@ -824,7 +824,7 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
     gTestID = 11;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
     intptr_t displayHandle;
     dsVideoPortType_t vType;
     dsVideoAspectRatio_t aspectRatio = dsVIDEO_ASPECT_RATIO_MAX;
@@ -854,8 +854,8 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
             break;
 
         // Step 03: Call dsGetDisplayAspectRatio() with the obtained handle
+        result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio);
         if(gSourceType == 1){
-            result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio);
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
             // Step 04: Compare the results with default value
@@ -907,7 +907,7 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
     gTestID = 12;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
     intptr_t displayHandle = -1;
     dsVideoPortType_t vType;
     dsVideoAspectRatio_t aspectRatio;
@@ -993,7 +993,7 @@ void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback(void) {
     gTestID = 13;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
     dsVideoPortType_t vType;
     intptr_t displayHandle;
     uint32_t portIndex;
@@ -1066,7 +1066,7 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
     gTestID = 14;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
     dsVideoPortType_t vType;
     intptr_t displayHandle =-1;
     // Step 01: Call dsRegisterDisplayEventCallback() without initializing the display sub-system
