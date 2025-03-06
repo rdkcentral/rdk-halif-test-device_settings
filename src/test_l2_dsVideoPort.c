@@ -1150,24 +1150,24 @@ int test_l2_dsVideoPort_register(void)
         return -1;
     }
 
-    UT_add_test( pSuite, "L2_EnableDisabledVideoPorts", test_l2_dsVideoPort_EnableDisabledVideoPorts);
-    UT_add_test( pSuite, "L2_VerifyDisplayAndPortStatus", test_l2_dsVideoPort_VerifyDisplayAndPortStatus);
-    UT_add_test( pSuite, "L2_RetrieveAndVerifySurroundModeCapabilities", test_l2_dsVideoPort_RetrieveAndVerifySurroundModeCapabilities);
-    UT_add_test( pSuite, "L2_VerifySupportedTvResolutions", test_l2_dsVideoPort_VerifySupportedTvResolutions);
-    UT_add_test( pSuite, "L2_GetHDRCapabilities", test_l2_dsVideoPort_GetHDRCapabilities);
-    UT_add_test( pSuite, "L2_GetHDCPStatus", test_l2_dsVideoPort_GetHDCPStatus);
-    UT_add_test( pSuite, "L2_VerifyHDCPProtocolStatus", test_l2_dsVideoPort_VerifyHDCPProtocolStatus);
-    UT_add_test( pSuite, "L2_SetAndGetHdmiPreference", test_l2_dsVideoPort_SetAndGetHdmiPreference);
-    UT_add_test( pSuite, "L2_GetColorSpace", test_l2_dsVideoPort_GetColorSpace);
-    UT_add_test( pSuite, "L2_GetColorDepth", test_l2_dsVideoPort_GetColorDepth);
-    UT_add_test( pSuite, "L2_GetQuantizationRange", test_l2_dsVideoPort_GetQuantizationRange);
-    UT_add_test( pSuite, "L2_GetMatrixCoefficients", test_l2_dsVideoPort_GetMatrixCoefficients);
+    UT_add_test( pSuite, "EnableDisabledVideoPorts", test_l2_dsVideoPort_EnableDisabledVideoPorts);
+    UT_add_test( pSuite, "VerifyDisplayAndPortStatus", test_l2_dsVideoPort_VerifyDisplayAndPortStatus);
+    UT_add_test( pSuite, "RetrieveVerifySurroundModeCapb", test_l2_dsVideoPort_RetrieveAndVerifySurroundModeCapabilities);
+    UT_add_test( pSuite, "VerifySupportedTvRes", test_l2_dsVideoPort_VerifySupportedTvResolutions);
+    UT_add_test( pSuite, "GetHDRCapabilities", test_l2_dsVideoPort_GetHDRCapabilities);
+    UT_add_test( pSuite, "GetHDCPStatus", test_l2_dsVideoPort_GetHDCPStatus);
+    UT_add_test( pSuite, "VerifyHDCPProtocolStatus", test_l2_dsVideoPort_VerifyHDCPProtocolStatus);
+    UT_add_test( pSuite, "SetAndGetHdmiPreference", test_l2_dsVideoPort_SetAndGetHdmiPreference);
+    UT_add_test( pSuite, "GetColorSpace", test_l2_dsVideoPort_GetColorSpace);
+    UT_add_test( pSuite, "GetColorDepth", test_l2_dsVideoPort_GetColorDepth);
+    UT_add_test( pSuite, "GetQuantizationRange", test_l2_dsVideoPort_GetQuantizationRange);
+    UT_add_test( pSuite, "GetMatrixCoefficients", test_l2_dsVideoPort_GetMatrixCoefficients);
     if(gSourceType == 1) {
         // add the test suite for source type
-        UT_add_test( pSuite, "L2_SetAndGetResolution_source", test_l2_dsVideoPort_SetAndGetResolution_source);
-        UT_add_test( pSuite, "L2_SetAndGetPreferredColorDepth_source", test_l2_dsVideoPort_SetAndGetPreferredColorDepth_source);
-        UT_add_test( pSuite, "L2_CheckColorDepthCapabilities_source", test_l2_dsVideoPort_CheckColorDepthCapabilities_source);
-        UT_add_test( pSuite, "L2_CheckALLMStatus_source", test_l2_dsVideoPort_CheckALLMStatus_source);
+        UT_add_test( pSuite, "SetAndGetResolution_src", test_l2_dsVideoPort_SetAndGetResolution_source);
+        UT_add_test( pSuite, "SetAndGetPreferredColorDepth_src", test_l2_dsVideoPort_SetAndGetPreferredColorDepth_source);
+        UT_add_test( pSuite, "CheckColorDepthCapb_src", test_l2_dsVideoPort_CheckColorDepthCapabilities_source);
+        UT_add_test( pSuite, "CheckALLMStatus_src", test_l2_dsVideoPort_CheckALLMStatus_source);
     }
 
     return 0;
