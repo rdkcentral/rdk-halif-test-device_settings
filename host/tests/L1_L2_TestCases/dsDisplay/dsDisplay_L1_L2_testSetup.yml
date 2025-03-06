@@ -71,6 +71,13 @@ dsDisplay:
     ######################################
     # Entries to run selected test case
     ######################################
-    #- name: "L2 dsDisplay"
+    #- name: "L2 dsDisplay Sink"
     #  test_cases:
     #    - RetrieveAndValidateEDID_sink
+
+    ######################################
+    # Entries to run selected test case
+    ######################################
+    #- name: "L2 dsDisplay Source"
+    #  test_cases:
+    #    - TestDefaultAspectRatio_src

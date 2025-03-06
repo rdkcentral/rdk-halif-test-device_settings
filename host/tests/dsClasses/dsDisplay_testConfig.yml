@@ -28,7 +28,7 @@ dsDisplay:
                     - "dsRegisterDisplayEventCallback_pos"
                     - "dsRegisterDisplayEventCallback_neg"
             1:
-                name: "L2 dsDisplay - Sink"
+                name: "L2 dsDisplay Sink"
                 tests:
                     - RetrieveAndValidateEDID_sink
             2:
