@@ -325,6 +325,42 @@ dsVideoPort:
     #######################################
     # Entries to run individual test cases
     #######################################
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - EnableDisabledVideoPorts
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - VerifyDisplayAndPortStatus
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - RetrieveVerifySurroundModeCapb
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - VerifySupportedTvRes
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - GetHDRCapabilities
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - GetHDCPStatus
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - VerifyHDCPProtocolStatus
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - SetAndGetHdmiPreference
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - GetColorSpace
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - GetColorDepth
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - GetQuantizationRange
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - GetMatrixCoefficients
    # - name: "L2 dsVideoPort - Source"
    #  test_cases:
    #    - SetAndGetResolution_src
@@ -337,12 +373,25 @@ dsVideoPort:
    #- name: "L2 dsVideoPort - Source"
    #  test_cases:
    #    - CheckALLMStatus_src
+  
     
     ######################################
     # Entries to run selected test case
     ######################################
    # - name: "L2 dsVideoPort - Source"
    #  test_cases:
+   #    - EnableDisabledVideoPorts
+   #    - VerifyDisplayAndPortStatus 
+   #    - RetrieveVerifySurroundModeCapb
+   #    - VerifySupportedTvRes
+   #    - GetHDRCapabilities
+   #    - GetHDCPStatus
+   #    - VerifyHDCPProtocolStatus
+   #    - SetAndGetHdmiPreference
+   #    - GetColorSpace
+   #    - GetColorDepth
+   #    - GetQuantizationRange
+   #    - GetMatrixCoefficients
    #    - SetAndGetResolution_src
    #    - SetAndGetPreferredColorDepth_src
    #    - CheckColorDepthCapb_src
