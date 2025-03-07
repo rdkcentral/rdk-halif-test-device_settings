@@ -58,15 +58,14 @@ dsHdmiIn:  # Prefix must always exist
                     - "dsGetSupportedGameFeaturesList_L1_negative"
                     - "dsGetAVLatency_L1_negative"
                     - "dsSetEdid2AllmSupport_l1_negative"
-                    - "dsGetEdid2AllmSupport_l1_positive"
-                    - "dsGetEdid2AllmSupport_l1_negative"
                     - "dsIsHdmiARCPort_L1_negative"
             1:
                 name: "L2 dsHdmiIn - Sink"
                 tests:
-                    - "L2_GetNumberOfInputs"
-                    - "L2_GetStatus"
-                    - "L2_VerifyHdmiInputPortStatus"
+                    - "L2_VerifyHdmiArcPort_sink"
+                    - "L2_SetAndGetEdidVersionAndValidateEdidLength_sink"
+                    - "L2_GetSupportedGameFeaturesList_sink"
+                    - "L2_GetHdmiVersionAndValidate_sink"
             2:
                 name: "L3 dsHdmiIn"
                 tests:
@@ -81,6 +80,5 @@ dsHdmiIn:  # Prefix must always exist
                     - "Set EdidVersion"
                     - "Get EdidVersion"
                     - "Set Edid 2 Allm Support"
-                    - "Get Edid 2 Allm Support"
                     - "Get Allm Status"
                     - "Terminate HdmiIn"

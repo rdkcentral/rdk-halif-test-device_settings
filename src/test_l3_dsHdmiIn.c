@@ -1095,53 +1095,6 @@ void test_l3_HdmiIn_set_edid2allmsupport(void)
 * This test function gets allmsupport of HdmiInput port on platform.
 *
 * **Test Group ID:** 03@n
-* **Test Case ID:** 012@n
-*
-* **Test Procedure:**
-* Refer to Test specification documentation
-* [ds-hdmi-in_halSpec.md](../../docs/pages/ds-hdmi-in_halSpec.md)
-*/
-void test_l3_HdmiIn_get_edid2allmsupport(void)
-{
-    gTestID = 12;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-    dsError_t ret   = dsERR_NONE;
-    dsHdmiInPort_t port = dsHDMI_IN_PORT_MAX;
-    int32_t select = 0;
-    bool allmsupport = false;
-
-    listPorts();
-    readInput(&select);
-    if(select < dsHDMI_IN_PORT_0 || select >= dsHDMI_IN_PORT_MAX)
-    {
-        UT_LOG_ERROR("\nInvalid port selected\n");
-        UT_LOG_INFO("Out %s", __FUNCTION__);
-        return;
-    }
-
-    port = select;
-
-    UT_LOG_INFO("Calling dsGetEdid2AllmSupport IN:port:[%s]:[%d], OUT:allmsupport:[ ]",
-                 UT_Control_GetMapString(dsHdmiInPort_mapTable, port), port),
-
-    ret = dsGetEdid2AllmSupport(port, &allmsupport);
-
-    UT_LOG_INFO("Result dsGetEdid2AllmSupport IN:port:[%s]:[%d], OUT:allmsupport:[%s],dsError_t:[%s]",
-                 UT_Control_GetMapString(dsHdmiInPort_mapTable, port), port,
-                 UT_Control_GetMapString(bool_mapTable, allmsupport),
-                 UT_Control_GetMapString(dsError_mapTable, ret));
-    DS_ASSERT(ret == dsERR_NONE);
-
-   UT_LOG_INFO("Out %s", __FUNCTION__);
-}
-
-/**
-* @brief This test to get allmsupport.
-*
-* This test function gets allmsupport of HdmiInput port on platform.
-*
-* **Test Group ID:** 03@n
 * **Test Case ID:** 013@n
 *
 * **Test Procedure:**
@@ -1245,7 +1198,6 @@ int test_l3_dsHdmiIn_register ( void )
    UT_add_test( pSuite, "Set EdidVersion" ,test_l3_HdmiIn_set_edidversion );
    UT_add_test( pSuite, "Get EdidVersion" ,test_l3_HdmiIn_get_edidversion );
    UT_add_test( pSuite, "Set Edid 2 Allm Support" ,test_l3_HdmiIn_set_edid2allmsupport );
-   UT_add_test( pSuite, "Get Edid 2 Allm Support" ,test_l3_HdmiIn_get_edid2allmsupport );
    UT_add_test( pSuite, "Get Allm Status" ,test_l3_HdmiIn_get_allmstatus );
    UT_add_test( pSuite, "Terminate HdmiIn" ,test_l3_dsHdmiIn_terminate );
 

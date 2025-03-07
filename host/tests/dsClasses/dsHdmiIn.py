@@ -745,33 +745,6 @@ class dsHdmiInClass():
 
         result = self.utMenu.select(self.testSuite, "Set Edid 2 Allm Support", promptWithAnswers)
 
-    def getEdid2Allm(self, port_type:str=0):
-        """
-        Gets edid 2 allm support.
-
-        Args:
-            None.
-        Returns:
-            true if sets to true  otherwise false.
-        """
-        promptWithAnswers = [
-            {
-                "query_type": "direct",
-                "query": "List of supported ports:",
-                "input": str(port_type)
-            }
-        ]
-
-        result = self.utMenu.select( self.testSuite, "Get Edid 2 Allm Support", promptWithAnswers)
-
-        typeStatusPattern = r"Result dsGetEdid2AllmSupport IN:port:\[(\w+)\]:\[.*\] OUT:allmsupport:\[(\w+)\]"
-        match = re.search(typeStatusPattern, result)
-        if match:
-            edid2allm = match.group(2)
-            return edid2allm
-
-        return None
-
     def __del__(self):
         """
         De-Initializes the dsHdmiIn helper function.

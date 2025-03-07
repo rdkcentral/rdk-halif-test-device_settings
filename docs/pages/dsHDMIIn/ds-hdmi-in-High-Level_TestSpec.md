@@ -403,8 +403,7 @@ None
 
 |Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |------------------|-----------|--------|--|--|------|----|--------------------------|
-|Get and Set `EDID` to all `ALLM` Support|Set and Get the `ALLM` support to `EDID` version 2.0 without connecting any source devices.|dsSetEdid2AllmSupport(), dsGetEdid2AllmSupport()|`Y`|`N`|`N`|`Y`|`NA`|
-||Set and Get `ALLM` support to `EDID` Version 2.0 with the connected external source device|dsSetEdid2AllmSupport(), dsGetEdid2AllmSupport()|`N`|`Y`|`N`|`Y`|`Y`|
+|Get and Set `EDID` to all `ALLM` Support|Set `ALLM` support to `EDID` Version 2.0 with the connected external source device|dsSetEdid2AllmSupport()|`N`|`Y`|`N`|`Y`|`Y`|
 
 ### Test Startup Requirement - Get and Set `EDID` to all `ALLM` Support
 
