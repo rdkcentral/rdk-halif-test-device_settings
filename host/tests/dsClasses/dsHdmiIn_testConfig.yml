@@ -9,6 +9,41 @@ dsHdmiIn:  # Prefix must always exist
         type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
         suites:
             0:
+                name: "L1 dsHdmiIn - Source"
+                tests:
+                    - "dsHdmiInInit_pos"
+                    - "dsHdmiInTerm_pos"
+                    - "dsHdmiInGetInputs_pos"
+                    - "dsHdmiInGetStatus_pos"
+                    - "dsHdmiInSelectPort_pos"
+                    - "dsHdmiInScaleVideo_pos"
+                    - "dsHdmiInGetVideoMode_pos"
+                    - "dsHdmiInConnectCB_pos"
+                    - "dsHdmiInSigChangeCB_pos"
+                    - "dsHdmiInStatChangeCB_pos"
+                    - "dsHdmiInVMUpdateCB_pos"
+                    - "dsHdmiInAllmChangeCB_pos"
+                    - "dsHdmiInAVLatChangeCB_pos"
+                    - "dsHdmiInAviContTypeCB_pos"
+                    - "dsHdmiInInit_neg"
+                    - "dsHdmiInTerm_neg"
+                    - "dsHdmiInGetInputs_neg"
+                    - "dsHdmiInSelectPort_neg"
+                    - "dsHdmiInScaleVideo_neg"
+                    - "dsHdmiInGetVideoMode_neg"
+                    - "dsHdmiInConnectCB_neg"
+                    - "dsHdmiInSignalChangeCB_neg"
+                    - "dsHdmiInStatusChangeCB_neg"
+                    - "dsHdmiInVMUpdateCB_neg"
+                    - "dsHdmiInAllmChangeCB_neg"
+                    - "dsHdmiInAVLatChangeCB_neg"
+                    - "dsHdmiInAviContTypeCB_neg"
+                    - "dsHdmiInGetStatus_neg"
+                    - "dsHdmiInSelZoomMode_pos"
+                    - "dsHdmiInSelZoomMode_neg"
+                    - "dsGetHdmiVersion_pos"
+                    - "dsGetHdmiVersion_neg"
+            1:
                 name: "L1 dsHdmiIn - Sink"
                 tests:
                     - "dsHdmiInInit_pos"
@@ -63,15 +98,26 @@ dsHdmiIn:  # Prefix must always exist
                     - "dsIsHdmiARCPort_neg"
                     - "dsGetHdmiVersion_pos"
                     - "dsGetHdmiVersion_neg"
-            1:
+            
+            2:
+                name: "L2 dsHdmiIn - Source"
+                tests:
+                    - "GetNumberOfInputs"
+                    - "GetStatus"
+                    - "VerifyHdmiInputPortStatus"
+
+            3:
                 name: "L2 dsHdmiIn - Sink"
                 tests:
+                    - "GetNumberOfInputs"
+                    - "GetStatus"
+                    - "VerifyHdmiInputPortStatus"
                     - "VerifyHdmiArcPort_sink"
                     - "SetGetEdidVer_EdidLength_sink"
                     - "GetGameFeaturesList_sink"
                     - "SetAndGetAllmSupport_sink"
                     - "GetHdmiVersionValidate_sink"
-            2:
+            4:
                 name: "L3 dsHdmiIn"
                 tests:
                     - "Initialize HdmiIn"

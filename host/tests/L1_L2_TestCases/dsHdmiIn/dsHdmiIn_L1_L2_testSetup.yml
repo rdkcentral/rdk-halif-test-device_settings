@@ -11,540 +11,315 @@ dsHdmiIn:
     #  test_cases:
     #    - all
 
+    ######################################
+    # Entry to run all test case
+    ######################################
+    #- name: "L1 dsHdmiIn - Sink"
+    #  test_cases:
+    #    - all
+
     #######################################
     # Entries to run individual test cases
     #######################################
     - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsAudioPortInit_pos
+        - dsHdmiInInit_pos
     - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsAudioPortInit_neg
+        - dsHdmiInTerm_pos
     - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsAudioPortTerm_pos
+        - dsHdmiInGetInputs_pos
     - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsAudioPortTerm_neg
+        - dsHdmiInGetStatus_pos
     - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsGetAudioPort_pos
+        - dsHdmiInSelectPort_pos
     - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsGetAudioPort_neg
+        - dsHdmiInScaleVideo_pos
     - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsGetAudioFormat_pos
+        - dsHdmiInGetVideoMode_pos
     - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsGetAudioFormat_neg
+        - dsHdmiInConnectCB_pos
     - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsGetAudioCompression_pos
+        - dsHdmiInSigChangeCB_pos
     - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsGetAudioCompression_neg
+        - dsHdmiInStatChangeCB_pos
     - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsSetAudioCompression_pos
-    - name: "L1 dsAudio"
+        - dsHdmiInVMUpdateCB_pos
+    - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsSetAudioCompression_neg
-    - name: "L1 dsAudio"
+        - dsHdmiInAllmChangeCB_pos
+    - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsGetDialogEnhance_pos
-    - name: "L1 dsAudio"
+        - dsHdmiInAVLatChangeCB_pos
+    - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsGetDialogEnhance_neg
-    - name: "L1 dsAudio"
+        - dsHdmiInAviContTypeCB_pos
+    - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsSetDialogEnhance_pos
-    - name: "L1 dsAudio"
+        - dsHdmiInInit_neg
+    - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsSetDialogEnhance_neg
-    - name: "L1 dsAudio"
+        - dsHdmiInTerm_neg
+    - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsGetDolbyVolumeMode_pos
-    - name: "L1 dsAudio"
+        - dsHdmiInGetInputs_neg
+    - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsGetDolbyVolumeMode_neg
-    - name: "L1 dsAudio"
+        - dsHdmiInSelectPort_neg
+    - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsSetDolbyVolumeMode_pos
-    - name: "L1 dsAudio"
+        - dsHdmiInScaleVideo_neg
+    - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsSetDolbyVolumeMode_neg
-    - name: "L1 dsAudio"
+        - dsHdmiInGetVideoMode_neg
+    - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsGetIntelliEqMode_pos
-    - name: "L1 dsAudio"
+        - dsHdmiInConnectCB_neg
+    - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsGetIntelliEqMode_neg
-    - name: "L1 dsAudio"
+        - dsHdmiInSignalChangeCB_neg
+    - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsSetIntelliEqMode_pos
-    - name: "L1 dsAudio"
+        - dsHdmiInStatusChangeCB_neg
+    - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsSetIntelliEqMode_neg
-    - name: "L1 dsAudio"
+        - dsHdmiInVMUpdateCB_neg
+    - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsGetVolumeLeveller_pos
-    - name: "L1 dsAudio"
+        - dsHdmiInAllmChangeCB_neg
+    - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsGetVolumeLeveller_neg
-    - name: "L1 dsAudio"
+        - dsHdmiInAVLatChangeCB_neg
+    - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsSetVolumeLeveller_pos
-    - name: "L1 dsAudio"
+        - dsHdmiInAviContTypeCB_neg
+    - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsSetVolumeLeveller_neg
-    - name: "L1 dsAudio"
+        - dsHdmiInGetStatus_neg
+    - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsGetBassEnhancer_pos
-    - name: "L1 dsAudio"
+        - dsHdmiInSelZoomMode_pos
+    - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsGetBassEnhancer_neg
-    - name: "L1 dsAudio"
+        - dsHdmiInSelZoomMode_neg
+    - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsSetBassEnhancer_pos
-    - name: "L1 dsAudio"
+        - dsGetHdmiVersion_pos
+    - name: "L1 dsHdmiIn - Source"
       test_cases:
-        - dsSetBassEnhancer_neg
-    - name: "L1 dsAudio"
+        - dsGetHdmiVersion_neg
+
+    #######################################
+    # Entries to run individual test cases
+    #######################################
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsIsSurroundDecoderOn_pos
-    - name: "L1 dsAudio"
+        - dsHdmiInInit_pos
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsIsSurroundDecoderOn_neg
-    - name: "L1 dsAudio"
+        - dsHdmiInTerm_pos
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsEnableSurroundDecoder_pos
-    - name: "L1 dsAudio"
+        - dsHdmiInGetInputs_pos
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsEnableSurroundDecoder_neg
-    - name: "L1 dsAudio"
+        - dsHdmiInGetStatus_pos
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsGetDRCMode_pos
-    - name: "L1 dsAudio"
+        - dsHdmiInSelectPort_pos
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsGetDRCMode_neg
-    - name: "L1 dsAudio"
+        - dsHdmiInScaleVideo_pos
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsSetDRCMode_pos
-    - name: "L1 dsAudio"
+        - dsHdmiInGetVideoMode_pos
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsSetDRCMode_neg
-    - name: "L1 dsAudio"
+        - dsHdmiInConnectCB_pos
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsGetSurroundVirt_pos
-    - name: "L1 dsAudio"
+        - dsHdmiInSigChangeCB_pos
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsGetSurroundVirt_neg
-    - name: "L1 dsAudio"
+        - dsHdmiInStatChangeCB_pos
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsSetSurroundVirt_pos
-    - name: "L1 dsAudio"
+        - dsHdmiInVMUpdateCB_pos
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsSetSurroundVirt_neg
-    - name: "L1 dsAudio"
+        - dsHdmiInAllmChangeCB_pos
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsGetMISteering_pos
-    - name: "L1 dsAudio"
+        - dsHdmiInAVLatChangeCB_pos
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsGetMISteering_neg
-    - name: "L1 dsAudio"
+        - dsHdmiInAviContTypeCB_pos
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsSetMISteering_pos
-    - name: "L1 dsAudio"
+        - dsHdmiInInit_neg
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsSetMISteering_neg
-    - name: "L1 dsAudio"
+        - dsHdmiInTerm_neg
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsGetGraphicEqMode_pos
-    - name: "L1 dsAudio"
+        - dsHdmiInGetInputs_neg
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsGetGraphicEqMode_neg
-    - name: "L1 dsAudio"
+        - dsHdmiInSelectPort_neg
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsSetGraphicEqMode_pos
-    - name: "L1 dsAudio"
+        - dsHdmiInScaleVideo_neg
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsSetGraphicEqMode_neg
-    - name: "L1 dsAudio"
+        - dsHdmiInGetVideoMode_neg
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsGetMS12AudioProfList_pos
-    - name: "L1 dsAudio"
+        - dsHdmiInConnectCB_neg
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsGetMS12AudioProfList_neg
-    - name: "L1 dsAudio"
+        - dsHdmiInSignalChangeCB_neg
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsGetMS12AudioProf_pos
-    - name: "L1 dsAudio"
+        - dsHdmiInStatusChangeCB_neg
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsGetMS12AudioProf_neg
-    - name: "L1 dsAudio"
+        - dsHdmiInVMUpdateCB_neg
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsGetStereoMode_pos
-    - name: "L1 dsAudio"
+        - dsHdmiInAllmChangeCB_neg
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsGetStereoMode_neg
-    - name: "L1 dsAudio"
+        - dsHdmiInAVLatChangeCB_neg
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsSetStereoMode_pos
-    - name: "L1 dsAudio"
+        - dsHdmiInAviContTypeCB_neg
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsSetStereoMode_neg
-    - name: "L1 dsAudio"
+        - dsHdmiInGetStatus_neg
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsGetStereoAuto_pos
-    - name: "L1 dsAudio"
+        - dsHdmiInSelZoomMode_pos
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsGetStereoAuto_neg
-    - name: "L1 dsAudio"
+        - dsHdmiInSelZoomMode_neg
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsSetStereoAuto_pos
-    - name: "L1 dsAudio"
+        - dsIsHdmiARCPort_pos
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsSetStereoAuto_neg
-    - name: "L1 dsAudio"
+        - dsGetEDIDBytesInfo_pos
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsGetAudioGain_pos
-    - name: "L1 dsAudio"
+        - dsGetHDMISPDInfo_pos
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsGetAudioGain_neg
-    - name: "L1 dsAudio"
+        - dsSetEdidVersion_pos
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsSetAudioGain_pos
-    - name: "L1 dsAudio"
+        - dsGetEdidVersion_pos
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsSetAudioGain_neg
-    - name: "L1 dsAudio"
+        - dsGetAllmStatus_pos
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsGetAudioLevel_pos
-    - name: "L1 dsAudio"
+        - dsGetGameFeaturesList_pos
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsGetAudioLevel_neg
-    - name: "L1 dsAudio"
+        - dsGetAVLatency_pos
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsSetAudioLevel_pos
-    - name: "L1 dsAudio"
+        - dsSetEdid2AllmSupport_pos
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsSetAudioLevel_neg
-    - name: "L1 dsAudio"
+        - dsGetEDIDBytesInfo_neg
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsGetAudioDelay_pos
-    - name: "L1 dsAudio"
+        - dsGetHDMISPDInfo_neg
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsGetAudioDelay_neg
-    - name: "L1 dsAudio"
+        - dsSetEdidVersion_neg
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsSetAudioDelay_pos
-    - name: "L1 dsAudio"
+        - dsGetEdidVersion_neg
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsSetAudioDelay_neg
-    - name: "L1 dsAudio"
+        - dsGetAllmStatus_neg
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsSetAudioAtmosOutMode_pos
-    - name: "L1 dsAudio"
+        - dsGetGameFeaturesList_neg
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsSetAudioAtmosOutMode_neg
-    - name: "L1 dsAudio"
+        - dsGetAVLatency_neg
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsGetSinkDeviceAtmosCap_pos
-    - name: "L1 dsAudio"
+        - dsSetEdid2AllmSupport_neg
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsGetSinkDeviceAtmosCap_neg
-    - name: "L1 dsAudio"
+        - dsGetEdid2AllmSupport_pos
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsIsAudioMute_pos
-    - name: "L1 dsAudio"
+        - dsGetEdid2AllmSupport_neg
+    - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsIsAudioMute_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsIsAudioPortEnabled_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsIsAudioPortEnabled_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsEnableAudioPort_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsEnableAudioPort_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsEnableLEConfig_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsEnableLEConfig_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsGetLEConfig_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsGetLEConfig_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsSetMS12AudioProf_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsSetMS12AudioProf_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsSetAudioMute_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsSetAudioMute_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsIsAudioMSDecode_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsIsAudioMSDecode_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsIsAudioMS12Decode_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsIsAudioMS12Decode_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsAudioOutIsConn_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsAudioOutIsConn_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsAudioOutRegConnCB_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsAudioOutRegConnCB_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsAudioFmtUpdateRegCB_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsAudioFmtUpdateRegCB_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsGetAudioCaps_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsGetAudioCaps_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsGetMS12Caps_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsGetMS12Caps_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsSetAssocAudioMixing_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsSetAssocAudioMixing_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsGetAssocAudioMixing_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsGetAssocAudioMixing_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsSetFaderControl_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsSetFaderControl_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsGetFaderControl_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsGetFaderControl_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsSetPrimaryLang_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsSetPrimaryLang_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsGetPrimaryLang_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsGetPrimaryLang_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsSetSecondaryLang_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsSetSecondaryLang_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsGetSecondaryLang_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsGetSecondaryLang_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsSetAudioMixLevels_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsSetAudioMixLevels_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsAudioAtmosCapsRegCB_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsAudioAtmosCapsRegCB_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsGetSupportedARCTypes_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsGetSupportedARCTypes_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsAudioSetSAD_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsAudioSetSAD_neg
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsAudioEnableARC_pos
-    - name: "L1 dsAudio"
-      test_cases:
-        - dsAudioEnableARC_neg
+        - dsIsHdmiARCPort_neg
 
     ######################################
     # Entries to run selected test case
     ######################################
-    #- name: "L1 dsAudio"  # Name of the test suit to run
+    #- name: "L1 dsHdmiIn - Source"  # Name of the test suit to run
     #  test_cases:  # List of test cases to execute, to run all test cases in test suite with R option use `all`
-    #    - dsAudioPortInit_pos
-    #    - dsAudioPortInit_neg
-    #    - dsAudioPortTerm_pos
-    #    - dsAudioPortTerm_neg
-    #    - dsGetAudioPort_pos
-    #    - dsGetAudioPort_neg
-    #    - dsGetAudioFormat_pos
-    #    - dsGetAudioFormat_neg
-    #    - dsGetAudioCompression_pos
-    #    - dsGetAudioCompression_neg
-    #    - dsSetAudioCompression_pos
+    #    - dsHdmiInInit_pos
+    #    - dsHdmiInTerm_pos
+    #    - dsHdmiInGetInputs_pos
+    #    - dsHdmiInGetStatus_pos
+    #    - dsHdmiInSelectPort_pos
+    #    - dsHdmiInScaleVideo_pos
+    #    - dsHdmiInGetVideoMode_pos
+    #    - dsHdmiInConnectCB_pos
+    #    - dsHdmiInSigChangeCB_pos
+    #    - dsHdmiInStatChangeCB_pos
+    #    - dsHdmiInVMUpdateCB_pos
+
+    ######################################
+    # Entry to run all test case
+    ######################################
+    #- name: "L2 dsHdmiIn - Sink"
+    #  test_cases:
+    #    - all
 
     #######################################
     # Entries to run individual test cases
     #######################################
-    #- name: "L2 dsAudio - Sink"
+    #- name: "L2 dsHdmiIn - Sink"
     #  test_cases:
-    #    - EnableDisableVerifyPortStatus
-    #- name: "L2 dsAudio - Sink"
+    #    - GetNumberOfInputs
+    #- name: "L2 dsHdmiIn - Sink"
     #  test_cases:
-    #    - GetAndVerifyMS12Capabilities
-    #- name: "L2 dsAudio - Sink"
+    #    - GetStatus
+    #- name: "L2 dsHdmiIn - Sink"
     #  test_cases:
-    #    - SetAndGetAudioCompression
-    #- name: "L2 dsAudio - Sink"
+    #    - VerifyHdmiInputPortStatus
+    #- name: "L2 dsHdmiIn - Sink"
     #  test_cases:
-    #    - SetAndGetDialogEnhancement
-    #- name: "L2 dsAudio - Sink"
+    #    - VerifyHdmiArcPort_sink
+    #- name: "L2 dsHdmiIn - Sink"
     #  test_cases:
-    #    - SetAndGetDolbyVolumeMode
-    #- name: "L2 dsAudio - Sink"
+    #    - SetGetEdidVer_EdidLength_sink
+    #- name: "L2 dsHdmiIn - Sink"
     #  test_cases:
-    #    - SetAndGetIntelligentEqualizerMode
-    #- name: "L2 dsAudio - Sink"
+    #    - GetGameFeaturesList_sink
+    #- name: "L2 dsHdmiIn - Sink"
     #  test_cases:
-    #    - SetAndGetVolumeLeveller
-    #- name: "L2 dsAudio - Sink"
+    #    - SetAndGetAllmSupport_sink
+    #- name: "L2 dsHdmiIn - Sink"
     #  test_cases:
-    #    - SetAndGetBassEnhancer
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - EnableAndVerifySurroundDecoder
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetDRCMode
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetSurroundVirtualizer
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetMISteering
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetGraphicEqualizerMode
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - EnableDisableAndRetrieveLEConfig
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - CheckMS12DecodeSupport
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - CheckMS11DecodeSupport
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetStereoMode
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - AudioMuteVerification
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetAudioDelay
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - GetAudioCapabilities
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - EnableDisableRetrieveAudioMixing
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - AudioPortControl
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetPrimaryLanguage
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetSecondaryLanguage
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - CheckHeadphoneConnectionStatus
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - VerifyMS12AudioProfiles
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetMS12AudioProfile
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetStereoAuto
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetAudioGain
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetAudioLevel
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - VerifyAtmosCapabilities
-
-    ######################################
-    # Entries to run selected test case
-    ######################################
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - EnableDisableVerifyPortStatus
-    #    - GetAndVerifyMS12Capabilities
-    #    - SetAndGetAudioCompression
-    #    - SetAndGetDialogEnhancement
-    #    - SetAndGetDolbyVolumeMode
-    #    - SetAndGetIntelligentEqualizerMode
-    #    - SetAndGetVolumeLeveller
-    #    - SetAndGetBassEnhancer
-    #    - EnableAndVerifySurroundDecoder
-    #    - SetAndGetDRCMode
-    #    - SetAndGetSurroundVirtualizer
-    #    - SetAndGetMISteering
+    #    - GetHdmiVersionValidate_sink
