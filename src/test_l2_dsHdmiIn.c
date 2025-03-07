@@ -620,16 +620,16 @@ int test_l2_dsHdmiIn_register(void)
     }
 
     // List of test function names and strings
-    UT_add_test( pSuite, "L2_GetNumberOfInputs", test_l2_dsHdmiIn_GetNumberOfInputs);
-    UT_add_test( pSuite, "L2_GetStatus", test_l2_dsHdmiIn_GetStatus);
-    UT_add_test( pSuite, "L2_VerifyHdmiInputPortStatus", test_l2_dsHdmiIn_VerifyHdmiInputPortStatus);
+    UT_add_test( pSuite, "GetNumberOfInputs", test_l2_dsHdmiIn_GetNumberOfInputs);
+    UT_add_test( pSuite, "GetStatus", test_l2_dsHdmiIn_GetStatus);
+    UT_add_test( pSuite, "VerifyHdmiInputPortStatus", test_l2_dsHdmiIn_VerifyHdmiInputPortStatus);
 
     if ( source_type == 0 ){
-        UT_add_test( pSuite, "L2_VerifyHdmiArcPort_sink", test_l2_dsHdmiIn_VerifyHdmiArcPort_sink);
-        UT_add_test( pSuite, "L2_SetAndGetEdidVersionAndValidateEdidLength_sink", test_l2_dsHdmiIn_SetAndGetEdidVersionAndValidateEdidLength_sink);
-        UT_add_test( pSuite, "L2_GetSupportedGameFeaturesList_sink", test_l2_dsHdmiIn_GetSupportedGameFeaturesList_sink);
-        UT_add_test( pSuite, "L2_SetAndGetAllmSupport_sink", test_l2_dsHdmiIn_SetAndGetAllmSupport_sink);
-        UT_add_test( pSuite, "L2_GetHdmiVersionAndValidate_sink", test_l2_dsHdmiIn_GetHdmiVersionAndValidate_sink);
+        UT_add_test( pSuite, "VerifyHdmiArcPort_sink", test_l2_dsHdmiIn_VerifyHdmiArcPort_sink);
+        UT_add_test( pSuite, "SetGetEdidVer_EdidLength_sink", test_l2_dsHdmiIn_SetAndGetEdidVersionAndValidateEdidLength_sink);
+        UT_add_test( pSuite, "GetGameFeaturesList_sink", test_l2_dsHdmiIn_GetSupportedGameFeaturesList_sink);
+        UT_add_test( pSuite, "SetAndGetAllmSupport_sink", test_l2_dsHdmiIn_SetAndGetAllmSupport_sink);
+        UT_add_test( pSuite, "GetHdmiVersionValidate_sink", test_l2_dsHdmiIn_GetHdmiVersionAndValidate_sink);
     }
 
     return 0;
