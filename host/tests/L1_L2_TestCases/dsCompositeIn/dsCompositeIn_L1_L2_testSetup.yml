@@ -1,0 +1,85 @@
+# This is a sample test configuration file. Users can customize the YAML entries as needed
+# This test configuration file includes sample YAML entries for executing various combinations
+dsCompositeIn:
+  description: "dsCompositeIn Device Settings L1 and L2 test setup"
+  test_suites: # List of L1 and L2 test suites
+
+    ######################################
+    # Entry to run all test case
+    ######################################
+    #- name: "L1 dsCompositeIn - Sink"
+    #  test_cases:
+    #    - all
+
+    #######################################
+    # Entries to run individual test cases
+    #######################################
+    - name: "L1 dsCompositeIn - Sink"
+      test_cases:
+        - dsCompositeInInit_L1_pos
+    - name: "L1 dsCompositeIn - Sink"
+      test_cases:
+        - dsCompositeInInit_L1_neg
+    - name: "L1 dsCompositeIn - Sink"
+      test_cases:
+        - dsCompositeInTerm_L1_pos
+    - name: "L1 dsCompositeIn - Sink"
+      test_cases:
+        - dsCompositeInTerm_L1_neg
+    - name: "L1 dsCompositeIn - Sink"
+      test_cases:
+        - dsGetNuOfInputs_L1_pos
+    - name: "L1 dsCompositeIn - Sink"
+      test_cases:
+        - dsGetNumberOfInputs_L1_neg
+    - name: "L1 dsCompositeIn - Sink"
+      test_cases:
+        - dsGetStatus_L1_pos
+    - name: "L1 dsCompositeIn - Sink"
+      test_cases:
+        - dsGetStatus_L1_neg
+    - name: "L1 dsCompositeIn - Sink"
+      test_cases:
+        - dsSelectPort_L1_pos
+    - name: "L1 dsCompositeIn - Sink"
+      test_cases:
+        - dsSelectPort_L1_neg
+    - name: "L1 dsCompositeIn - Sink"
+      test_cases:
+        - dsScaleVideo_L1_pos
+    - name: "L1 dsCompositeIn - Sink"
+      test_cases:
+        - dsScaleVideo_L1_neg
+    - name: "L1 dsCompositeIn - Sink"
+      test_cases:
+        - dsRegisterConnectCB_L1_pos
+    - name: "L1 dsCompositeIn - Sink"
+      test_cases:
+        - dsRegisterConnectCB_L1_neg
+    - name: "L1 dsCompositeIn - Sink"
+      test_cases:
+        - dsRegisterSigChangeCB_L1_pos
+    - name: "L1 dsCompositeIn - Sink"
+      test_cases:
+        - dsRegisterSigChangeCB_L1_neg
+    - name: "L1 dsCompositeIn - Sink"
+      test_cases:
+        - dsRegisterStatChangeCB_L1_pos
+    - name: "L1 dsCompositeIn - Sink"
+      test_cases:
+        - dsRegisterStatChangeCB_L1_neg
+    - name: "L1 dsCompositeIn - Sink"
+      test_cases:
+        - dsVidModeUpdateCB_L1_pos
+    - name: "L1 dsCompositeIn - Sink"
+      test_cases:
+        - dsVidModeUpdateCB_L1_neg
+    - name: "L2 dsCompositeIn sink devices"
+      test_cases:
+        - GetNumberOfInputs
+    - name: "L2 dsCompositeIn sink devices"
+      test_cases:
+        - VerifyInputStatus
+    - name: "L2 dsCompositeIn sink devices"
+      test_cases:
+        - VerifyPortSelectionAndStatus
