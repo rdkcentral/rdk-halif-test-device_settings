@@ -497,17 +497,17 @@ int test_l2_dsVideoDevice_register(void)
         return -1;
     }
 
-    UT_add_test( pSuite, "L2_GetHDRCapabilities", test_l2_dsVideoDevice_GetHDRCapabilities);
-    UT_add_test( pSuite, "L2_GetSupportedVideoCodingFormats", test_l2_dsVideoDevice_GetSupportedVideoCodingFormats);
+    UT_add_test( pSuite, "GetHDRCapabilities", test_l2_dsVideoDevice_GetHDRCapabilities);
+    UT_add_test( pSuite, "GetSupportedVideoCodingFormats", test_l2_dsVideoDevice_GetSupportedVideoCodingFormats);
 
     if(gSourceType == 0) {
-        UT_add_test( pSuite, "L2_SetAndVerifyDisplayframerate_Sink", test_l2_dsVideoDevice_SetAndVerifyDisplayframerate_sink);
-        UT_add_test( pSuite, "L2_SetAndVerifyFRFMode_Sink", test_l2_dsVideoDevice_SetAndVerifyFRFMode_sink);
+        UT_add_test( pSuite, "SetAndVerifyDisplayframerate", test_l2_dsVideoDevice_SetAndVerifyDisplayframerate_sink);
+        UT_add_test( pSuite, "SetAndVerifyFRFMode", test_l2_dsVideoDevice_SetAndVerifyFRFMode_sink);
     }
 
     if(gSourceType == 1) {
-        UT_add_test( pSuite, "L2_SetAndGetDFC_source", test_l2_dsVideoDevice_SetAndGetDFC_source);
-        UT_add_test( pSuite, "L2_GetVideoCodecInfo_source", test_l2_dsVideoDevice_GetVideoCodecInfo_source);
+        UT_add_test( pSuite, "SetAndGetDFC", test_l2_dsVideoDevice_SetAndGetDFC_source);
+        UT_add_test( pSuite, "GetVideoCodecInfo", test_l2_dsVideoDevice_GetVideoCodecInfo_source);
     }
 
     return 0;
