@@ -1,0 +1,153 @@
+# This is a sample test configuration file. Users can customize the YAML entries as needed
+# This test configuration file includes sample YAML entries for executing various combinations
+dsFPD:
+  description: "dsFPD Device Settings L1 and L2 test setup"
+  test_suites: # List of L1 and L2 test suites
+
+    ######################################
+    # Entry to run all test case
+    ######################################
+    - name: "L1 dsFPD" # Name of the test suit to run
+      test_cases: # List of test cases to execute, to run all test cases in test suite with R option use `all`
+        - all
+
+    #######################################
+    # Entries to run individual test cases
+    #######################################
+   # - name: "L1 dsFPD"
+   #   test_cases:
+   #     - dsFPInit_pos
+   # - name: "L1 dsFPD"
+   #   test_cases:
+   #     - dsFPInit_neg
+   # - name: "L1 dsFPD"
+   #   test_cases:
+   #     - dsFPTerm_pos
+   # - name: "L1 dsFPD"
+   #   test_cases:
+   #     - dsFPTerm_neg
+   # - name: "L1 dsFPD"
+   #   test_cases:
+   #     - dsSetFPState_pos
+   # - name: "L1 dsFPD"
+   #   test_cases:
+   #     - dsSetFPState_neg
+   # - name: "L1 dsFPD"
+   #   test_cases:
+   #     - dsSetFPBlink_pos
+   # - name: "L1 dsFPD"
+   #   test_cases:
+   #   - dsSetFPBlink_neg
+   # - name: "L1 dsFPD"
+   #   test_cases:
+   #     - dsSetFPBrightness_pos
+   # - name: "L1 dsFPD"
+   #   test_cases:
+   #     - dsSetFPBrightness_neg
+   # - name: "L1 dsFPD"
+   #   test_cases:
+   #     - dsGetFPBrightness_pos
+   # - name: "L1 dsFPD"
+   #   test_cases:
+   #     - dsGetFPBrightness_neg
+   # - name: "L1 dsFPD"
+   #   test_cases:
+   #     - dsGetFPState_pos
+   # - name: "L1 dsFPD"
+   #   test_cases:
+   #     - dsGetFPState_neg
+   # - name: "L1 dsFPD"
+   #   test_cases:
+   #     - dsSetFPColor_pos
+   # - name: "L1 dsFPD"
+   #   test_cases:
+   #     - dsGetFPColor_pos
+   # - name: "L1 dsFPD"
+   #   test_cases:
+   #     - dsGetFPColor_neg
+   # - name: "L1 dsFPD"
+   #   test_cases:
+   #     - dsFPSetLEDState_pos
+   # - name: "L1 dsFPD"
+   #   test_cases:
+   #     - dsFPGetSupportedLEDStates_pos
+   # - name: "L1 dsFPD"
+   #   test_cases:
+   #     - dsFPGetSupportedLEDStates_neg
+   # - name: "L1 dsFPD"
+   #   test_cases:
+   #     - dsFPSetLEDState_neg
+   # - name: "L1 dsFPD"
+   #   test_cases:
+   #     - dsFPGetLEDState_pos
+   # - name: "L1 dsFPD"
+   #   test_cases:
+   #     - dsFPGetLEDState_neg
+    
+    ######################################
+    # Entries to run selected test case
+    ######################################
+    #- name: "L1 dsFPD"
+    #  test_cases:
+    #    - "dsFPInit_pos"
+    #    - "dsFPInit_neg"
+    #    - "dsFPTerm_pos"
+    #    - "dsFPTerm_neg"
+    #    - "dsSetFPState_pos"
+    #    - "dsSetFPState_neg"
+    #    - "dsSetFPBlink_pos"
+    #    - "dsSetFPBlink_neg"
+    #    - "dsSetFPBrightness_pos"
+    #    - "dsSetFPBrightness_neg"
+    #    - "dsGetFPBrightness_pos"
+    #    - "dsGetFPBrightness_neg"
+    #    - "dsGetFPState_pos"
+    #    - "dsGetFPState_neg"
+    #    - "dsSetFPColor_pos"
+    #    - "dsSetFPColor_neg"
+    #    - "dsGetFPColor_pos"
+    #    - "dsGetFPColor_neg"
+    #    - "dsFPSetLEDState_pos"
+    #    - "dsFPGetSupportedLEDStates_pos"
+    #    - "dsFPGetSupportedLEDStates_neg"
+    #    - "dsFPSetLEDState_neg"
+    #    - "dsFPGetLEDState_pos"
+    #    - "dsFPGetLEDState_neg"
+
+    #######################################
+    # Entries to run individual test cases
+    #######################################
+    #- name: "L2 dsFPD"
+    #  test_cases:
+    #    - SetFPstateON_SetBrightness
+    #- name: "L2 dsFPD"
+    #  test_cases:
+    #    - SetFPstateOFF_SetBrightness
+    #- name: "L2 dsFPD"
+    #  test_cases:
+    #    - SetFPstateOFF_SetBlink
+    #- name: "L2 dsFPD"
+    #  test_cases:
+    #    - SetFPstateON_Multi_SetColor
+    #- name: "L2 dsFPD"
+    #  test_cases:
+    #    - SetFPstateOFF_SetColor
+    #- name: "L2 dsFPD"
+    #  test_cases:
+    #    - SetFPstateON_Single_SetColor
+    #- name: "L2 dsFPD"
+    #  test_cases:
+    #    - VerifyLEDStateTransitions
+    ######################################
+    # Entries to run selected test case
+    ######################################
+    #- name: "L2 dsFPD"
+    #  test_cases:
+    #    - SetFPstateON_Brightness
+    #    - SetFPstateOFF_Brightnes
+    #    - SetFPstateOFF_Blink
+    #    - SetFPstateON_MultiColor
+    #    - SetFPstateOFF_Color
+    #    - SetFPstateON_SingleColor
+    #    - VerifyLEDTransitions   
+    
