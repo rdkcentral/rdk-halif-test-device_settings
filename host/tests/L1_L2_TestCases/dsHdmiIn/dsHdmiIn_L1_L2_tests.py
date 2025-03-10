@@ -92,9 +92,7 @@ class dsHdmiIn_L1_L2_tests(utHelperClass):
                     result = testdsHdmiIn.runTest(test_case)
                     finalresult &= result
                     self.log.stepResult(result, f'Test Suit: {testsuite_name} Test Case: {test_case}')
-
             del testdsHdmiIn
-
         return finalresult
 
 if __name__ == '__main__':
