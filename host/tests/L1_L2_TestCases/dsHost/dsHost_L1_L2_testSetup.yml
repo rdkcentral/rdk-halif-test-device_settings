@@ -1,0 +1,68 @@
+# This is a sample test configuration file. Users can customize the YAML entries as needed
+# This test configuration file includes sample YAML entries for executing various combinations
+dsHost:
+  description: "dsHost Device Settings L1 and L2 test setup"
+  test_suites: # List of L1 and L2 test suites
+
+    ######################################
+    # Entry to run all test case
+    ######################################
+    #- name: "L1 dsHost" 
+    #  test_cases: 
+    #    - all
+    ######################################
+    # Entries to run individual L1 test cases
+    ######################################
+    - name: "L1 dsHost" 
+      test_cases: 
+        - dsHostInit_L1_positive
+    - name: "L1 dsHost" 
+      test_cases: 
+        - dsHostInit_L1_negative
+    - name: "L1 dsHost" 
+      test_cases: 
+        - dsHostTerm_L1_positive
+    - name: "L1 dsHost" 
+      test_cases: 
+        - dsHostTerm_L1_negative
+    - name: "L1 dsHost" 
+      test_cases: 
+        - dsGetCPUTemperature_L1_positive
+    - name: "L1 dsHost" 
+      test_cases: 
+        - dsGetSocIDFromSDK_L1_positive
+    - name: "L1 dsHost" 
+      test_cases: 
+        - dsGetSocIDFromSDK_L1_negative
+    - name: "L1 dsHost" 
+      test_cases: 
+        - dsGetCPUTemperature_L1_negative
+    - name: "L1 dsHost" 
+      test_cases: 
+        - dsGetHostEDID_L1_positive
+    - name: "L1 dsHost" 
+      test_cases: 
+        - dsGetHostEDID_L1_negative
+    ######################################
+    # Entries to run individual L2 Source
+    # test cases
+    ######################################
+    - name: "L2 dsHost - Source" 
+      test_cases: 
+        - L2_GetCPUTemperature
+    - name: "L2 dsHost - Source" 
+      test_cases: 
+        - L2_GetAndVerifySocID
+    ######################################
+    # Entries to run individual L2 Sink
+    # test cases
+    ######################################
+    - name: "L2 dsHost - Sink" 
+      test_cases: 
+        - L2_GetCPUTemperature
+    - name: "L2 dsHost - Sink" 
+      test_cases: 
+        - L2_GetAndVerifySocID
+    - name: "L2 dsHost - Sink" 
+      test_cases: 
+        - L2_ValidateHostEDID
