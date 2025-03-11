@@ -60,6 +60,7 @@ class dsCompositeInClass():
         self.deviceProfile = ConfigRead( deviceProfilePath, self.moduleName)
         self.testConfig    = ConfigRead(self.testConfigFile, self.moduleName)
         self.testConfig.test.execute = os.path.join(targetWorkspace, self.testConfig.test.execute)
+        self.testConfig.test.execute = self.testConfig.test.execute + f" -p {os.path.basename(deviceProfilePath)}"
         self.utMenu        = UTSuiteNavigatorClass(self.testConfig, None, session)
         self.testSession   = session
         self.utils         = utBaseUtils()
@@ -67,6 +68,9 @@ class dsCompositeInClass():
         for artifact in self.testConfig.test.artifacts:
             filesPath = os.path.join(dir_path, artifact)
             self.utils.rsync(self.testSession, filesPath, targetWorkspace)
+
+        # Copy the profile file to the target
+        self.utils.scpCopy(self.testSession, deviceProfilePath, targetWorkspace)
 
         self.utMenu.start()
 
