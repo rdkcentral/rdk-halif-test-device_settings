@@ -44,7 +44,7 @@ class dsCompositeInClass():
 
     This module provides common extensions for device Settings CompositeIn Module.
     """
-    def __init__(self, deviceProfilePath:str, session=None, targetWorkspace="/opt/HAL" ):
+    def __init__(self, deviceProfilePath:str, session=None,testSuite:str="L3 dsCompositeIn", targetWorkspace="/opt/HAL" ):
         """
         Initializes the dsCompositeIn class function.
         Args:
@@ -55,11 +55,12 @@ class dsCompositeInClass():
         """
         self.moduleName = "dsCompositeIn"
         self.testConfigFile =  dir_path + "/dsCompositeIn_testConfig.yml"
-        self.testSuite = "L3 dsCompositeIn"
+        self.testSuite = testSuite
 
         self.deviceProfile = ConfigRead( deviceProfilePath, self.moduleName)
         self.testConfig    = ConfigRead(self.testConfigFile, self.moduleName)
         self.testConfig.test.execute = os.path.join(targetWorkspace, self.testConfig.test.execute)
+        self.testConfig.test.execute = self.testConfig.test.execute + f" -p {os.path.basename(deviceProfilePath)}"
         self.utMenu        = UTSuiteNavigatorClass(self.testConfig, None, session)
         self.testSession   = session
         self.utils         = utBaseUtils()
@@ -67,6 +68,9 @@ class dsCompositeInClass():
         for artifact in self.testConfig.test.artifacts:
             filesPath = os.path.join(dir_path, artifact)
             self.utils.rsync(self.testSession, filesPath, targetWorkspace)
+
+        # Copy the profile file to the target
+        self.utils.scpCopy(self.testSession, deviceProfilePath, targetWorkspace)
 
         self.utMenu.start()
 
@@ -78,6 +82,21 @@ class dsCompositeInClass():
             return output1, output2
         return None
 
+    def runTest(self, test_case:str=None):
+        """
+        Runs the test case passed to this funtion
+
+        Args:
+            test_case (str, optional): test case name to run, default runs all test
+
+        Returns:
+            bool: True - test pass, False - test fails
+        """
+        output = self.utMenu.select( self.testSuite, test_case)
+        results = self.utMenu.collect_results(output)
+        if results == None:
+            results = False
+        return results
     def initialise(self):
         """
         Initializes the device settings CompositeIn module.
