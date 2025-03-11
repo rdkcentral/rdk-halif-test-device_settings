@@ -1,0 +1,83 @@
+# This is a sample test configuration file. Users can customize the YAML entries as needed
+# This test configuration file includes sample YAML entries for executing various combinations
+dsDisplay:
+  description: "dsDisplay Device Settings L1 and L2 test setup"
+  test_suites: # List of L1 and L2 test suites
+
+    ######################################
+    # Entry to run all test case
+    ######################################
+    - name: "L1 dsDisplay" # Name of the test suit to run
+      test_cases: # List of test cases to execute, to run all test cases in test suite with R option use `all`
+        - all
+
+    #######################################
+    # Entries to run individual test cases
+    #######################################
+   # - name: "L1 dsDisplay"
+   #   test_cases:
+   #     - dsDisplayInit_pos
+   # - name: "L1 dsDisplay"
+   #   test_cases:
+   #     - dsDisplayInit_neg
+   # - name: "L1 dsDisplay"
+   #   test_cases:
+   #     - dsDisplayTerm_pos
+   # - name: "L1 dsDisplay"
+   #   test_cases:
+   #     - dsDisplayTerm_neg
+   # - name: "L1 dsDisplay"
+   #   test_cases:
+   #     - dsGetDisplay_pos
+   # - name: "L1 dsDisplay"
+   #   test_cases:
+   #     - dsGetDisplay_neg
+   # - name: "L1 dsDisplay"
+   #   test_cases:
+   #     - dsGetEDID_pos
+   # - name: "L1 dsDisplay"
+   #   test_cases:
+   #     - dsGetEDID_neg
+   # - name: "L1 dsDisplay"
+   #   test_cases:
+   #     - dsGetEDIDBytes_pos
+   # - name: "L1 dsDisplay"
+   #   test_cases:
+   #     - dsGetEDIDBytes_neg
+   # - name: "L1 dsDisplay"
+   #   test_cases:
+   #     - dsGetDisplayAspectRatio_pos
+   # - name: "L1 dsDisplay"
+   #   test_cases:
+   #     - dsGetDisplayAspectRatio_neg
+   # - name: "L1 dsDisplay"
+   #   test_cases:
+   #     - dsRegisterDisplayEventCallback_pos
+   # - name: "L1 dsDisplay"
+   #   test_cases:
+   #     - dsRegisterDisplayEventCallback_neg
+       
+    ######################################
+    # Entries to run selected test case
+    ######################################
+    #- name: "L1 dsDisplay"
+    #  test_cases:
+    #    - dsDisplayInit_pos
+    #    - dsDisplayInit_neg
+    #    - dsDisplayTerm_pos
+    #    - dsDisplayTerm_neg
+    #    - dsGetDisplay_pos 
+    
+    ######################################
+    # Entries to run selected test case
+    ######################################
+    #- name: "L2 dsDisplay Sink"
+    #  test_cases:
+    #    - RetrieveAndValidateEDID_sink
+
+    ######################################
+    # Entries to run selected test case
+    ######################################
+    #- name: "L2 dsDisplay Source"
+    #  test_cases:
+    #    - TestDefaultAspectRatio_src

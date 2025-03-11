@@ -1130,20 +1130,20 @@ int test_l1_dsDisplay_register ( void )
         return -1;
     }
 
-    UT_add_test( pSuite, "dsDisplayInit_L1_positive" ,test_l1_dsDisplay_positive_dsDisplayInit );
-    UT_add_test( pSuite, "dsDisplayInit_L1_negative" ,test_l1_dsDisplay_negative_dsDisplayInit );
-    UT_add_test( pSuite, "dsDisplayTerm_L1_positive" ,test_l1_dsDisplay_positive_dsDisplayTerm );
-    UT_add_test( pSuite, "dsDisplayTerm_L1_negative" ,test_l1_dsDisplay_negative_dsDisplayTerm );
-    UT_add_test( pSuite, "dsGetDisplay_L1_positive" ,test_l1_dsDisplay_positive_dsGetDisplay );
-    UT_add_test( pSuite, "dsGetDisplay_L1_negative" ,test_l1_dsDisplay_negative_dsGetDisplay );
-    UT_add_test( pSuite, "dsGetEDID_L1_positive" ,test_l1_dsDisplay_positive_dsGetEDID );
-    UT_add_test( pSuite, "dsGetEDID_L1_negative" ,test_l1_dsDisplay_negative_dsGetEDID );
-    UT_add_test( pSuite, "dsGetEDIDBytes_L1_positive" ,test_l1_dsDisplay_positive_dsGetEDIDBytes );
-    UT_add_test( pSuite, "dsGetEDIDBytes_L1_negative" ,test_l1_dsDisplay_negative_dsGetEDIDBytes );
-    UT_add_test( pSuite, "dsGetDisplayAspectRatio_L1_positive" ,test_l1_dsDisplay_positive_dsGetDisplayAspectRatio );
-    UT_add_test( pSuite, "dsGetDisplayAspectRatio_L1_negative" ,test_l1_dsDisplay_negative_dsGetDisplayAspectRatio );
-    UT_add_test( pSuite, "dsRegisterDisplayEventCallback_L1_positive" ,test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback );
-    UT_add_test( pSuite, "dsRegisterDisplayEventCallback_L1_negative" ,test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback );
+    UT_add_test( pSuite, "dsDisplayInit_pos" ,test_l1_dsDisplay_positive_dsDisplayInit );
+    UT_add_test( pSuite, "dsDisplayInit_neg" ,test_l1_dsDisplay_negative_dsDisplayInit );
+    UT_add_test( pSuite, "dsDisplayTerm_pos" ,test_l1_dsDisplay_positive_dsDisplayTerm );
+    UT_add_test( pSuite, "dsDisplayTerm_neg" ,test_l1_dsDisplay_negative_dsDisplayTerm );
+    UT_add_test( pSuite, "dsGetDisplay_pos" ,test_l1_dsDisplay_positive_dsGetDisplay );
+    UT_add_test( pSuite, "dsGetDisplay_neg" ,test_l1_dsDisplay_negative_dsGetDisplay );
+    UT_add_test( pSuite, "dsGetEDID_pos" ,test_l1_dsDisplay_positive_dsGetEDID );
+    UT_add_test( pSuite, "dsGetEDID_neg" ,test_l1_dsDisplay_negative_dsGetEDID );
+    UT_add_test( pSuite, "dsGetEDIDBytes_pos" ,test_l1_dsDisplay_positive_dsGetEDIDBytes );
+    UT_add_test( pSuite, "dsGetEDIDBytes_neg" ,test_l1_dsDisplay_negative_dsGetEDIDBytes );
+    UT_add_test( pSuite, "dsGetDisplayAspectRatio_pos" ,test_l1_dsDisplay_positive_dsGetDisplayAspectRatio );
+    UT_add_test( pSuite, "dsGetDisplayAspectRatio_neg" ,test_l1_dsDisplay_negative_dsGetDisplayAspectRatio );
+    UT_add_test( pSuite, "dsRegisterDisplayEventCallback_pos" ,test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback );
+    UT_add_test( pSuite, "dsRegisterDisplayEventCallback_neg" ,test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback );
 
     extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsDisplay/features/extendedEnumsSupported" );
 

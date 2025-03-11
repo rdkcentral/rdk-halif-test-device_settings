@@ -115,28 +115,47 @@ class dsVideoPortClass():
 
     This module provides common extensions for device Settings VideoPort Module.
     """
-    def __init__(self, moduleConfigProfileFile :str, session=None, targetWorkspace="/tmp"):
+    def __init__(self, moduleConfigProfileFile :str, session=None, testSuite:str="L3 dsVideoPort", targetWorkspace="/tmp"):
         """
         Initializes the dsVideoPort class function.
         """
         self.moduleName     = "dsVideoPort"
         self.testConfigFile = os.path.join(dir_path, "dsVideoPort_testConfig.yml")
-        self.testSuite      = "L3 dsVideoPort"
+        self.testSuite      = testSuite
 
         self.moduleConfigProfile     = ConfigRead(moduleConfigProfileFile , self.moduleName)
         self.testConfig              = ConfigRead(self.testConfigFile, self.moduleName)
         self.testConfig.test.execute = os.path.join(targetWorkspace, self.testConfig.test.execute)
+        self.testConfig.test.execute = self.testConfig.test.execute + f" -p {os.path.basename(moduleConfigProfileFile)}"
         self.utMenu                  = UTSuiteNavigatorClass(self.testConfig, None, session)
         self.testSession             = session
         self.utils                   = utBaseUtils()
         self.ports                   = self.moduleConfigProfile.fields.get("Ports")
 
+        # Copy bin files to the target
         for artifact in self.testConfig.test.artifacts:
             filesPath = os.path.join(dir_path, artifact)
             self.utils.rsync(self.testSession, filesPath, targetWorkspace)
 
+        # Copy the profile file to the target
+        self.utils.scpCopy(self.testSession, moduleConfigProfileFile, targetWorkspace)
+
         # Start the user interface menu
         self.utMenu.start()
+
+    def runTest(self, test_case:str=None):
+        """
+        Runs the test case passed to this funtion
+        Args:
+            test_case (str, optional): test case name to run, default runs all test
+        Returns:
+            bool: True - test pass, False - test fails
+        """
+        output = self.utMenu.select( self.testSuite, test_case)
+        results = self.utMenu.collect_results(output)
+        if results == None:
+            results = False
+        return results
 
     def extract_output_values(self, result: str, out_pattern: str = r'OUT:[\w_]+:\[([\w_]+)\]') -> list:
         """
