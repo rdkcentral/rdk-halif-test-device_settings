@@ -64,6 +64,38 @@ dsError_t dsGetDisplayAspectRatio(intptr_t handle, dsVideoAspectRatio_t* aspectR
   return (dsError_t)0;
 }
 
+dsError_t dsSetAVIContentType(intptr_t handle, dsAviContentType_t contentType)
+{
+  /*TODO: Implement Me!*/
+  (void)handle;
+  (void)contentType;
+  return (dsError_t)0;
+}
+
+dsError_t dsGetAVIContentType(intptr_t handle, dsAviContentType_t* contentType)
+{
+  /*TODO: Implement Me!*/
+  (void)handle;
+  (void)contentType;
+  return (dsError_t)0;
+}
+
+dsError_t dsSetAVIScanInformation(intptr_t handle, dsAVIScanInformation_t scanInfo)
+{
+  /*TODO: Implement Me!*/
+  (void)handle;
+  (void)scanInfo;
+  return (dsError_t)0;
+}
+
+dsError_t dsGetAVIScanInformation(intptr_t handle, dsAVIScanInformation_t* scanInfo)
+{
+  /*TODO: Implement Me!*/
+  (void)handle;
+  (void)scanInfo;
+  return (dsError_t)0;
+}
+
 dsError_t dsDisplayTerm(void)
 {
   /*TODO: Implement Me!*/
