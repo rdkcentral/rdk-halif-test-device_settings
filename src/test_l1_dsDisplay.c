@@ -1413,7 +1413,7 @@ void test_l1_dsDisplay_negative_dsSetAVIContentType(void) {
 
         } else if (gSourceType == 0) {
             // Step 06: Expect dsERR_OPERATION_NOT_SUPPORTED for sink devices
-            result = dsSetAVIContentType(displayHandle, &contentType);
+            result = dsSetAVIContentType(displayHandle, contentType);
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
     }
@@ -1424,7 +1424,7 @@ void test_l1_dsDisplay_negative_dsSetAVIContentType(void) {
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 08: Call dsSetAVIContentType() without initializing the display sub-system
-    result = dsSetAVIContentType(displayHandle, &contentType);
+    result = dsSetAVIContentType(displayHandle, contentType);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
@@ -1731,7 +1731,7 @@ void test_l1_dsDisplay_negative_dsSetAVIScanInformation(void) {
 
         } else if (gSourceType == 0) {
             // Step 06: Expect dsERR_OPERATION_NOT_SUPPORTED for sink devices
-            result = dsSetAVIScanInformation(displayHandle, &scanInfo);
+            result = dsSetAVIScanInformation(displayHandle, scanInfo);
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
     }
@@ -1742,7 +1742,7 @@ void test_l1_dsDisplay_negative_dsSetAVIScanInformation(void) {
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 08: Call dsSetAVIScanInformation() without initializing the display sub-system
-    result = dsSetAVIScanInformation(displayHandle, &scanInfo);
+    result = dsSetAVIScanInformation(displayHandle, scanInfo);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
