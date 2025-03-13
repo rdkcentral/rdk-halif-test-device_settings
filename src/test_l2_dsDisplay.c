@@ -297,7 +297,7 @@ void test_l2_dsDisplay_SetAndGetAVIContentType_source(void)
 
         ret = dsGetDisplay(vType, portIndex, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
-	UT_ASSERT_PTR_NOT_NULL(displayHandle);
+	UT_ASSERT_PTR_NOT_NULL(handle);
         if (ret != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetDisplay() failed with error: %d\n", ret);
