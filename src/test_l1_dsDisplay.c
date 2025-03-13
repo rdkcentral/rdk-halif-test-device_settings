@@ -1118,7 +1118,7 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
  * @brief Ensure dsGetAVIContentType() retrieves the AVI content type signalling info correctly during positive scenarios
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 011@n
+ * **Test Case ID:** 015@n
  *
  * **Pre-Conditions:**@n
  *
@@ -1137,7 +1137,7 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
  */
 void test_l1_dsDisplay_positive_dsGetAVIContentType(void) {
     // Start of the test
-    gTestID = 11;
+    gTestID = 15;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
@@ -1165,15 +1165,15 @@ void test_l1_dsDisplay_positive_dsGetAVIContentType(void) {
 
         result = dsGetDisplay(vType, portIndex, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+	UT_ASSERT_PTR_NOT_NULL(displayHandle);
 
         // Step 03: Call dsGetAVIContentType() with the obtained handle
+        result = dsGetAVIContentType(displayHandle, &contentType);
         if(gSourceType == 1){
-            result = dsGetAVIContentType(displayHandle, &contentType);
             UT_ASSERT_EQUAL(result, dsERR_NONE);
             // Step 04: Compare the results with default value
             UT_ASSERT_EQUAL(contentType, dsAVICONTENT_TYPE_NOT_SIGNALLED);
         } else if(gSourceType == 0){
-		    result = dsGetAVIContentType(displayHandle, &contentType);
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
     }
@@ -1192,7 +1192,7 @@ void test_l1_dsDisplay_positive_dsGetAVIContentType(void) {
  * @brief Ensure dsGetAVIContentType() returns correct error codes during negative scenarios
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 012@n
+ * **Test Case ID:** 16@n
  *
  * **Pre-Conditions:**@n
  *
@@ -1217,7 +1217,7 @@ void test_l1_dsDisplay_positive_dsGetAVIContentType(void) {
 
 void test_l1_dsDisplay_negative_dsGetAVIContentType(void) {
     // Start of the test
-    gTestID = 12;
+    gTestID = 16;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
@@ -1227,7 +1227,7 @@ void test_l1_dsDisplay_negative_dsGetAVIContentType(void) {
 
     // Step 01: Call dsGetAVIContentType() without initializing the display sub-system
     result = dsGetAVIContentType(displayHandle, &contentType);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // Step 02: Initialize the display sub-system
@@ -1243,6 +1243,7 @@ void test_l1_dsDisplay_negative_dsGetAVIContentType(void) {
         vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
         result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+	UT_ASSERT_PTR_NOT_NULL(displayHandle);
 
         if (gSourceType == 1) {
            // Step 04: Call dsGetAVIContentType() with an invalid handle for source devices
@@ -1267,7 +1268,7 @@ void test_l1_dsDisplay_negative_dsGetAVIContentType(void) {
 
     // Step 08: Call dsGetAVIContentType() without initializing the display sub-system
     result = dsGetAVIContentType(displayHandle, &contentType);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // End of the test
@@ -1278,7 +1279,7 @@ void test_l1_dsDisplay_negative_dsGetAVIContentType(void) {
  * @brief Ensure dsSetAVIContentType() configures the AVI content type signalling info correctly during positive scenarios
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 011@n
+ * **Test Case ID:** 17@n
  *
  * **Pre-Conditions:**@n
  *
@@ -1290,13 +1291,13 @@ void test_l1_dsDisplay_negative_dsGetAVIContentType(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize the display sub-system and get a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
  * |02|Call dsGetDisplay() Loop through all valid ports in numPorts[]|vType: [Valid Port Type]_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
- * |03|If the device is a source,call dsSetAVIContentType() with the obtained display device handle | intptr_t handle, dsAviContentType_t contentType | dsERR_NONE and valid content type | AVI content type signalling for HDMI should be configured successfully |
+ * |03|If the device is a source,call dsSetAVIContentType() with the obtained display device handle | intptr_t handle, dsAviContentType_t contentType | dsERR_NONE | AVI content type signalling for HDMI should be configured successfully |
  * |04|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
  *
  */
 void test_l1_dsDisplay_positive_dsSetAVIContentType(void) {
     // Start of the test
-    gTestID = 11;
+    gTestID = 17;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
@@ -1323,17 +1324,18 @@ void test_l1_dsDisplay_positive_dsSetAVIContentType(void) {
 
         result = dsGetDisplay(vType, portIndex, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+	UT_ASSERT_PTR_NOT_NULL(displayHandle);
 
         // Step 03: Set AVI info frame contentType by looping through dsAviContentType_t enum
-		for(dsAviContentType_t contentType = dsAVICONTENT_TYPE_GRAPHICS; contentType < dsAVICONTENT_TYPE_MAX ; contentType++)
-		{
-		    result = dsSetAVIContentType(displayHandle, contentType);
+	for(dsAviContentType_t contentType = dsAVICONTENT_TYPE_GRAPHICS; contentType < dsAVICONTENT_TYPE_MAX ; contentType++)
+	{
+            result = dsSetAVIContentType(displayHandle, contentType);
             if (gSourceType == 1) {
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
             } else if (gSourceType == 0) {
                 UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
             }
-		}
+	}
     }
 
     // Step 04: Terminate the display sub-system
@@ -1350,7 +1352,7 @@ void test_l1_dsDisplay_positive_dsSetAVIContentType(void) {
  * @brief Ensure dsSetAVIContentType() returns correct error codes during negative scenarios
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 012@n
+ * **Test Case ID:** 18@n
  *
  * **Pre-Conditions:**@n
  *
@@ -1375,7 +1377,7 @@ void test_l1_dsDisplay_positive_dsSetAVIContentType(void) {
 
 void test_l1_dsDisplay_negative_dsSetAVIContentType(void) {
     // Start of the test
-    gTestID = 12;
+    gTestID = 18;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
@@ -1385,7 +1387,7 @@ void test_l1_dsDisplay_negative_dsSetAVIContentType(void) {
 
     // Step 01: Call dsSetAVIContentType() without initializing the display sub-system
     result = dsSetAVIContentType(displayHandle, contentType);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // Step 02: Initialize the display sub-system
@@ -1401,6 +1403,7 @@ void test_l1_dsDisplay_negative_dsSetAVIContentType(void) {
         vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
         result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+	UT_ASSERT_PTR_NOT_NULL(displayHandle);
 
         if (gSourceType == 1) {
            // Step 04: Call dsSetAVIContentType() with an invalid handle for source devices
@@ -1425,7 +1428,7 @@ void test_l1_dsDisplay_negative_dsSetAVIContentType(void) {
 
     // Step 08: Call dsSetAVIContentType() without initializing the display sub-system
     result = dsSetAVIContentType(displayHandle, contentType);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED,dsERR_OPERATION_NOT_SUPPORTED);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // End of the test
@@ -1436,7 +1439,7 @@ void test_l1_dsDisplay_negative_dsSetAVIContentType(void) {
  * @brief Ensure dsGetAVIScanInformation() retrieves the AVI scan information signalling correctly during positive scenarios
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 011@n
+ * **Test Case ID:** 19@n
  *
  * **Pre-Conditions:**@n
  *
@@ -1455,7 +1458,7 @@ void test_l1_dsDisplay_negative_dsSetAVIContentType(void) {
  */
 void test_l1_dsDisplay_positive_dsGetAVIScanInformation(void) {
     // Start of the test
-    gTestID = 11;
+    gTestID = 19;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
@@ -1483,15 +1486,15 @@ void test_l1_dsDisplay_positive_dsGetAVIScanInformation(void) {
 
         result = dsGetDisplay(vType, portIndex, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+	UT_ASSERT_PTR_NOT_NULL(displayHandle);
 
         // Step 03: Call dsGetAVIScanInformation() with the obtained handle
+        result = dsGetAVIScanInformation(displayHandle, &scanInfo);
         if(gSourceType == 1){
-            result = dsGetAVIScanInformation(displayHandle, &scanInfo);
             UT_ASSERT_EQUAL(result, dsERR_NONE);
             // Step 04: Compare the results with default value
             UT_ASSERT_EQUAL(scanInfo, dsAVI_SCAN_TYPE_NO_DATA );
         } else if(gSourceType == 0){
-		    result = dsGetAVIScanInformation(displayHandle, &scanInfo);
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
     }
@@ -1510,7 +1513,7 @@ void test_l1_dsDisplay_positive_dsGetAVIScanInformation(void) {
  * @brief Ensure dsGetAVIScanInformation() returns correct error codes during negative scenarios
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 012@n
+ * **Test Case ID:** 20@n
  *
  * **Pre-Conditions:**@n
  *
@@ -1535,7 +1538,7 @@ void test_l1_dsDisplay_positive_dsGetAVIScanInformation(void) {
 
 void test_l1_dsDisplay_negative_dsGetAVIScanInformation(void) {
     // Start of the test
-    gTestID = 12;
+    gTestID = 20;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
@@ -1545,7 +1548,7 @@ void test_l1_dsDisplay_negative_dsGetAVIScanInformation(void) {
 
     // Step 01: Call dsGetAVIScanInformation() without initializing the display sub-system
     result = dsGetAVIScanInformation(displayHandle, &scanInfo);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED,dsERR_OPERATION_NOT_SUPPORTED);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // Step 02: Initialize the display sub-system
@@ -1561,6 +1564,7 @@ void test_l1_dsDisplay_negative_dsGetAVIScanInformation(void) {
         vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
         result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+	UT_ASSERT_PTR_NOT_NULL(displayHandle);
 
         if (gSourceType == 1) {
            // Step 04: Call dsGetAVIScanInformation() with an invalid handle for source devices
@@ -1585,7 +1589,7 @@ void test_l1_dsDisplay_negative_dsGetAVIScanInformation(void) {
 
     // Step 08: Call dsGetAVIScanInformation() without initializing the display sub-system
     result = dsGetAVIScanInformation(displayHandle, &scanInfo);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED,dsERR_OPERATION_NOT_SUPPORTED);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // End of the test
@@ -1596,7 +1600,7 @@ void test_l1_dsDisplay_negative_dsGetAVIScanInformation(void) {
  * @brief Ensure dsSetAVIScanInformation() configures the AVI scan info signalling info correctly during positive scenarios
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 011@n
+ * **Test Case ID:** 21@n
  *
  * **Pre-Conditions:**@n
  *
@@ -1608,13 +1612,13 @@ void test_l1_dsDisplay_negative_dsGetAVIScanInformation(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Initialize the display sub-system and get a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
  * |02|Call dsGetDisplay() Loop through all valid ports in numPorts[]|vType: [Valid Port Type]_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
- * |03|If the device is a source,call dsSetAVIScanInformation() with the obtained display device handle | intptr_t handle, dsAVIScanInformation_t scanInfo | dsERR_NONE and valid scan info | AVI scan info signalling for HDMI should be configured successfully |
+ * |03|If the device is a source,call dsSetAVIScanInformation() with the obtained display device handle | intptr_t handle, dsAVIScanInformation_t scanInfo | dsERR_OPERATION_NOT_SUPPORTED | AVI scan info signalling not supported when HDMI disconnected|
  * |04|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
  *
  */
 void test_l1_dsDisplay_positive_dsSetAVIScanInformation(void) {
     // Start of the test
-    gTestID = 11;
+    gTestID = 21;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
@@ -1641,17 +1645,19 @@ void test_l1_dsDisplay_positive_dsSetAVIScanInformation(void) {
 
         result = dsGetDisplay(vType, portIndex, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+	UT_ASSERT_PTR_NOT_NULL(displayHandle);
 
         // Step 03: Set AVI info frame scanInfo by looping through dsAVIScanInformation_t enum
-		for(dsAVIScanInformation_t scanInfo = dsAVI_SCAN_TYPE_NO_DATA; scanInfo < dsAVI_SCAN_TYPE_MAX ; scanInfo++)
-		{
-		    result = dsSetAVIScanInformation(displayHandle, scanInfo);
+	for(dsAVIScanInformation_t scanInfo = dsAVI_SCAN_TYPE_NO_DATA; scanInfo < dsAVI_SCAN_TYPE_MAX ; scanInfo++)
+	{
+	    // API return not supported when HDMI disconnected
+	    result = dsSetAVIScanInformation(displayHandle, scanInfo);
             if (gSourceType == 1) {
-                UT_ASSERT_EQUAL(result, dsERR_NONE);
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
             } else if (gSourceType == 0) {
                 UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
             }
-		}
+	}
     }
 
     // Step 04: Terminate the display sub-system
@@ -1668,7 +1674,7 @@ void test_l1_dsDisplay_positive_dsSetAVIScanInformation(void) {
  * @brief Ensure dsSetAVIScanInformation() returns correct error codes during negative scenarios
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 012@n
+ * **Test Case ID:** 22@n
  *
  * **Pre-Conditions:**@n
  *
@@ -1682,7 +1688,7 @@ void test_l1_dsDisplay_positive_dsSetAVIScanInformation(void) {
  * |02|Initialize the display sub-system and obtain a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
  * |03|Call dsGetDisplay() Loop through all valid ports in numPorts[]|vType: [Valid Port Type]_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
  * |04|If the device is a source, call dsSetAVIScanInformation() with an invalid handle| NULL, dsAVIScanInformation_t scanInfo | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
- * |05|If the device is a source, call dsSetAVIScanInformation() with an invalid scanInfo | intptr_t handle, invalid scanInfo | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
+ * |05|If the device is a source, call dsSetAVIScanInformation() with an invalid scanInfo | intptr_t handle, invalid scanInfo | dsERR_OPERATION_NOT_SUPPORTED | Should return error indicating operation not supported when HDMI disconnected |
  * |06|If the device is a sink, call dsSetAVIScanInformation() | intptr_t handle, dsAVIScanInformation_t scanInfo | dsERR_OPERATION_NOT_SUPPORTED | API is not supported for sink devices |
  * |07|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
  * |08|Call dsSetAVIScanInformation() without initializing the display sub-system or obtaining a handle | intptr_t handle, dsAVIScanInformation_t scanInfo  | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
@@ -1693,7 +1699,7 @@ void test_l1_dsDisplay_positive_dsSetAVIScanInformation(void) {
 
 void test_l1_dsDisplay_negative_dsSetAVIScanInformation(void) {
     // Start of the test
-    gTestID = 12;
+    gTestID = 22;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result;
@@ -1703,7 +1709,7 @@ void test_l1_dsDisplay_negative_dsSetAVIScanInformation(void) {
 
     // Step 01: Call dsSetAVIScanInformation() without initializing the display sub-system
     result = dsSetAVIScanInformation(displayHandle, scanInfo);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // Step 02: Initialize the display sub-system
@@ -1719,6 +1725,7 @@ void test_l1_dsDisplay_negative_dsSetAVIScanInformation(void) {
         vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
         result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+	UT_ASSERT_PTR_NOT_NULL(displayHandle);
 
         if (gSourceType == 1) {
            // Step 04: Call dsSetAVIScanInformation() with an invalid handle for source devices
@@ -1726,8 +1733,9 @@ void test_l1_dsDisplay_negative_dsSetAVIScanInformation(void) {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
             // Step 05: Call dsSetAVIScanInformation() with a NULL scanInfo for source devices
+	    // API returns not supported when HDMI disconnected
             result = dsSetAVIScanInformation(displayHandle, dsAVICONTENT_TYPE_MAX);
-            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
 
         } else if (gSourceType == 0) {
             // Step 06: Expect dsERR_OPERATION_NOT_SUPPORTED for sink devices
@@ -1743,7 +1751,7 @@ void test_l1_dsDisplay_negative_dsSetAVIScanInformation(void) {
 
     // Step 08: Call dsSetAVIScanInformation() without initializing the display sub-system
     result = dsSetAVIScanInformation(displayHandle, scanInfo);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // End of the test
