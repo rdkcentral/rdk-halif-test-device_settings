@@ -96,6 +96,22 @@ dsError_t dsGetAVIScanInformation(intptr_t handle, dsAVIScanInformation_t* scanI
   return (dsError_t)0;
 }
 
+dsError_t dsSetAllmEnabled (intptr_t  handle, bool enabled)
+{
+  /*TODO: Implement Me!*/
+  (void)handle;
+  (void)enabled;
+  return (dsError_t)0;
+}
+
+dsError_t dsGetAllmEnabled (intptr_t  handle, bool *enabled)
+{
+  /*TODO: Implement Me!*/
+  (void)handle;
+  (void)enabled;
+  return (dsError_t)0;
+}
+
 dsError_t dsDisplayTerm(void)
 {
   /*TODO: Implement Me!*/
