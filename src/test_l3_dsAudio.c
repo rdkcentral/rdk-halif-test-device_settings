@@ -1895,12 +1895,12 @@ void test_l3_dsAudio_ms12Profile(void)
     }
 
     UT_LOG_INFO("Calling dsSetMS12AudioProfile(IN:handle:[0x%0X], IN:profile:[%s])",
-                 handle, profileList[choice-1]);
+                 handle, profileList[choice]);
 
     ret = dsSetMS12AudioProfile(handle, profileList[choice]);
 
     UT_LOG_INFO("Result dsSetMS12AudioProfile(IN:handle:[0x%0X], IN:profile:[%s]) dsError_t:[%s]",
-                handle, profileList[choice-1],
+                handle, profileList[choice],
                 UT_Control_GetMapString(dsError_mapTable, ret));
 
     DS_ASSERT(ret == dsERR_NONE);
