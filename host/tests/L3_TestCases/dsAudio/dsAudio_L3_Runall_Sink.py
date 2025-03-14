@@ -33,9 +33,12 @@ sys.path.append(os.path.join(dir_path, "../../raft"))
 
 from raft.framework.core.logModule import logModule
 
-def Runall_L3():
+def Runall_L3(selected_tests=None):
+    if selected_tests is None:
+        selected_tests = []
+
     skipTests = []
-    # Summery log for all the tests
+    # Summary log for all the tests
     dsAudioSummerLog = logModule("dsAudioSummerLog_Sink", level=logModule.INFO)
 
     testDirectory = Path(dir_path)
@@ -48,12 +51,19 @@ def Runall_L3():
         # Construct module name from file name, excluding .py extension
         module_name = test_module_path.stem
         skip = False
+
+        # Skip tests if they are in the skipTests list
         for skipTest in skipTests:
             if skipTest in module_name:
                 skip = True
                 break
         if skip:
             continue
+
+        # If selected_tests is provided, only run tests that match the selected string
+        if selected_tests and not any(test_str in module_name for test_str in selected_tests):
+            continue  # Skip this test if it does not match any of the selected test strings
+
         try:
             # Dynamically import the module
             module = importlib.import_module(module_name)

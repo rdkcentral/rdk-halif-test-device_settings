@@ -26,16 +26,21 @@ import sys
 import importlib
 from pathlib import Path
 
+
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(dir_path))
+sys.path.append(dir_path)
 sys.path.append(os.path.join(dir_path, "../../"))
 sys.path.append(os.path.join(dir_path, "../../raft"))
 
 from raft.framework.core.logModule import logModule
 
-def Runall_L3():
+def Runall_L3(selected_tests=None):
+    if selected_tests is None:
+        selected_tests = []
+
     skipTests = ["test2"]
-    # Summery log for all the tests
+
+    # Summary log for all the tests
     dsVideoDeviceSummerLog = logModule("dsVideoDeviceSummerLog_Sink", level=logModule.INFO)
 
     testDirectory = Path(dir_path)
@@ -45,21 +50,21 @@ def Runall_L3():
 
     # Run each test by dynamically importing and instantiating
     for test_module_path in test_modules:
-        # Construct module name from file name, excluding .py extension
         module_name = test_module_path.stem
-        skip = False
-        for skipTest in skipTests:
-            if skipTest in module_name:
-                skip = True
-                break
-        if skip:
+
+        # Skip tests in skipTests list
+        if any(skipTest in module_name for skipTest in skipTests):
             continue
+
+        # Run only selected tests if specified
+        if selected_tests and not any(test_str in module_name for test_str in selected_tests):
+            continue
+
         try:
             # Dynamically import the module
             module = importlib.import_module(module_name)
 
             # Dynamically access the test class from the module
-            # Assuming each test file has only one class named the same as the module
             test_class = getattr(module, module_name)
 
             # Instantiate and run the test

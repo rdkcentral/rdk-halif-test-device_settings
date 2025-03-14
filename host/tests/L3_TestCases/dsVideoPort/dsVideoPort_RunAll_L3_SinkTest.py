@@ -33,7 +33,7 @@ sys.path.append(os.path.join(dir_path, "../../raft"))
 
 from raft.framework.core.logModule import logModule
 
-def RunAll_L3_Sink():
+def RunAll_L3_Sink(selected_tests=None):
     skipTests = ["test4","test5","test6","test7","test8","test9","test10"]
 
     # Summery log for all the tests
@@ -55,6 +55,11 @@ def RunAll_L3_Sink():
                 break
         if skip:
             continue
+
+        # Run only selected tests if specified
+        if selected_tests and not any(test_str in module_name for test_str in selected_tests):
+            continue
+
         try:
             # Dynamically import the module
             module = importlib.import_module(module_name)
