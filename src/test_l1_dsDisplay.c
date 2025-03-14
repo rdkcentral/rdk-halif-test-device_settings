@@ -1787,7 +1787,7 @@ void test_l1_dsDisplay_positive_dsGetAllmEnabled(void) {
     int result;
     intptr_t displayHandle;
     dsVideoPortType_t vType;
-    bool enabled = false;
+    bool enabled;
     uint32_t portIndex;
 
     // Step 01: Initialize the display sub-system
@@ -2031,7 +2031,7 @@ void test_l1_dsDisplay_negative_dsSetAllmEnabled(void) {
     int result;
     intptr_t displayHandle = -1;
     dsVideoPortType_t vType;
-    bool enabled;
+    bool enabled = false;
 
     // Step 01: Call dsSetAllmEnabled() without initializing the display sub-system
     result = dsSetAllmEnabled(displayHandle, enabled);
