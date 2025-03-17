@@ -91,12 +91,13 @@ dsAudio:
           - "streams/tones_string_48k_stereo.wav"
           - "streams/tones_string_48k_stereo.ac3"
           - "streams/tones_string_48k_stereo.eac3"
-          - "streams/tones_string_48k_stereo.aac"
-          - "streams/tones_string_48k_stereo.ogg"
-          - "streams/tones_string_48k_stereo.wma"
           - "streams/ac4_multilanguage.trp"
           - "streams/eac3_atmos.trp"
           - "streams/ac4_atmos.trp"
+          - "streams/tones_string_48k_stereo.aac"
+          - "streams/tones_string_48k_stereo.ogg"
+          - "streams/tones_string_48k_stereo.wma"
+
       test23_AssociateMix:
         streams:
           - "streams/ac4_multilanguage.trp"
