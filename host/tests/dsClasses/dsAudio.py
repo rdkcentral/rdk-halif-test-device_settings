@@ -53,6 +53,25 @@ class dsAudioStereoMode(Enum):
     dsAUDIO_STEREO_DD       = auto()
     dsAUDIO_STEREO_DDPLUS   = auto()
 
+class dsAudioFormatCodecs(Enum):
+    """Enumeration for different audio format codecs."""
+    dsAUDIO_FORMAT_NONE                   = 0
+    dsAUDIO_FORMAT_PCM                    = auto()
+    dsAUDIO_FORMAT_DOLBY_AC3              = auto()
+    dsAUDIO_FORMAT_DOLBY_EAC3             = auto()
+    dsAUDIO_FORMAT_DOLBY_AC4              = auto()
+    dsAUDIO_FORMAT_DOLBY_MAT              = auto()
+    dsAUDIO_FORMAT_DOLBY_TRUEHD           = auto()
+    dsAUDIO_FORMAT_DOLBY_EAC3_ATMOS       = auto()
+    dsAUDIO_FORMAT_DOLBY_TRUEHD_ATMOS     = auto()
+    dsAUDIO_FORMAT_DOLBY_MAT_ATMOS        = auto()
+    dsAUDIO_FORMAT_DOLBY_AC4_ATMOS        = auto()
+    dsAUDIO_FORMAT_AAC                    = auto()
+    dsAUDIO_FORMAT_VORBIS                 = auto()
+    dsAUDIO_FORMAT_WMA                    = auto()
+    dsAUDIO_FORMAT_UNKNOWN                = auto()
+    dsAUDIO_FORMAT_MAX                    = auto()
+
 class dsMS12Capabilities(Enum):
     """Enumeration for audio processing capabilities."""
     DolbyVolume          = 0x01
@@ -98,6 +117,7 @@ class dsAudioClass():
         self.testSession   = session
         self.utils         = utBaseUtils()
         self.ports = self.moduleConfigProfile.fields.get("Ports")
+        self.codecs = self.moduleConfigProfile.fields.get("Audio_format_codecs")
 
         # Copy bin files to the target
         for artifact in self.testConfig.test.artifacts:
@@ -737,7 +757,7 @@ class dsAudioClass():
 
     def getAudioFormat(self):
         """
-        Retrieves the current audio format being Played.
+        Retrieves the current audio format being played, based on `dsAudioFormatCodecs`.
 
         Args:
             None.
@@ -745,11 +765,12 @@ class dsAudioClass():
         Returns:
             str: The audio format in use, as a string (e.g., 'dsAUDIO_FORMAT_DD', 'dsAUDIO_FORMAT_AAC').
         """
-        result = self.utMenu.select( self.testSuite, "Get Audio Format")
-        audioFormatPattern = r"Result dsGetAudioFormat\(IN:handle:\[.*\], OUT:audioFormat:\[(dsAUDIO_FORMAT_\w+)\]\)"
-        audioFormat = self.searchPattern(result, audioFormatPattern)
 
-        return audioFormat
+        audio_format_codecs = []
+        for entry in self.codecs.values():
+            audio_format_codecs.append((dsAudioFormatCodecs(entry['Typeid']).name, entry['Index']))
+
+        return audio_format_codecs
 
     def getAudioFormatCallbackStatus(self):
         """

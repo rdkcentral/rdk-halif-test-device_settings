@@ -33,6 +33,37 @@ dsAudio:
     # dsAUDIOSUPPORT_Invalid          = 0x80,    ///< Invalid
     Audio_Capabilities: 0x37  # dsAUDIOSUPPORT_ATMOS | dsAUDIOSUPPORT_DAPv2 | dsAUDIOSUPPORT_MS12 | dsAUDIOSUPPORT_DD | dsAUDIOSUPPORT_DDPLUS
 
+    # Number of supported Audio format Codecs
+    Number_of_supported_Audio_format_codecs: 10
+
+    # dsAUDIO_FORMAT_NONE                   = 0x00,     ///< No audio format
+    # dsAUDIO_FORMAT_PCM                    = 0x01,     ///< Pulse-code Modulation audio format
+    # dsAUDIO_FORMAT_DOLBY_AC3              = 0x02,     ///< Audio Compression 3 audio format
+    # dsAUDIO_FORMAT_DOLBY_EAC3             = 0x03,     ///< Enhance Audio Compression 3 audio format
+    # dsAUDIO_FORMAT_DOLBY_AC4              = 0x04,     ///< Audio Compression 4 audio format
+    # dsAUDIO_FORMAT_DOLBY_MAT              = 0x05,     ///< Metadata-enhanced Audio Transmission audio format
+    # dsAUDIO_FORMAT_DOLBY_TRUEHD           = 0x06,     ///< Dolby TrueHD audio format
+    # dsAUDIO_FORMAT_DOLBY_EAC3_ATMOS       = 0x07,     ///< Audio Compression 3 Dolby Atmos audio format
+    # dsAUDIO_FORMAT_DOLBY_TRUEHD_ATMOS     = 0x08,     ///< Dolby TrueHD Dolby Atmos audio format
+    # dsAUDIO_FORMAT_DOLBY_MAT_ATMOS        = 0x09,     ///< Metadata-enhanced Audio Transmission Dolby Atmos audio format
+    # dsAUDIO_FORMAT_DOLBY_AC4_ATMOS        = 0x0A,     ///< Audio Compression 4 Dolby Atmos audio format
+    # dsAUDIO_FORMAT_AAC                    = 0x0B,     ///< Advanced Audio Coding
+    # dsAUDIO_FORMAT_VORBIS                 = 0x0C,     ///< Vorbis sound audio format
+    # dsAUDIO_FORMAT_WMA                    = 0x0D,     ///< Windows Media audio format
+    # dsAUDIO_FORMAT_UNKNOWN                = 0x0E,     ///< Unknown audio format
+    # dsAUDIO_FORMAT_MAX                    = 0x0F      ///< Out of range
+    Audio_format_codecs:
+     - 0x00     # dsAUDIO_FORMAT_NONE
+     - 0x01     # dsAUDIO_FORMAT_PCM
+     - 0x02     # dsAUDIO_FORMAT_DOLBY_AC3
+     - 0x03     # dsAUDIO_FORMAT_DOLBY_EAC3
+     - 0x04     # dsAUDIO_FORMAT_DOLBY_AC4
+     - 0x07     # dsAUDIO_FORMAT_DOLBY_EAC3_ATMOS
+     - 0x0A     # dsAUDIO_FORMAT_DOLBY_AC4_ATMOS
+     - 0x0B     # dsAUDIO_FORMAT_AAC
+     - 0x0C     # dsAUDIO_FORMAT_VORBIS
+     - 0x0D     # dsAUDIO_FORMAT_WMA
+
     # Port details
     Ports:
         # Port Number to parse the port details

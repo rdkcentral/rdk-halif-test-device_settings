@@ -54,8 +54,8 @@ class dsAudio_test22_AudioFormat(dsAudioHelperClass):
         self.qcID = '22'
         self.testName  = "test22_AudioFormat"
 
-        # List of audio formats for testing
-        self.audioFormats = ["PCM", "AC3", "EAC3", "AAC", "VORBIS", "WMA", "AC4", "EAC3_ATMOS", "AC4_ATMOS"]
+        audioFormats = self.testdsAudio.getAudioFormat()
+        self.supportedAudioFormats = audioFormats.audio_format_codecs()
 
         super().__init__(self.testName, self.qcID, log)
 
@@ -74,33 +74,34 @@ class dsAudio_test22_AudioFormat(dsAudioHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        self.log.stepStart(f'Audio Format NONE Test')
+        for format, stream in zip(self.supportedAudioFormats, self.testStreams):
 
-        # Get the Audio Format
-        audioFormat = self.testdsAudio.getAudioFormat()
+            if "NONE" in format:
+                self.log.stepStart(f'Audio Format NONE Test')
+                # Get the Audio Format
+                audioFormat = self.testdsAudio.getAudioFormat()
+                self.log.stepResult(f'Audio Format NONE Test')
 
-        self.log.stepResult("NONE" in audioFormat, f'Audio Format NONE Test')
+            else:
+                # Start the stream playback
+                self.testPlayer.play(stream)
+                time.sleep(3)
 
-        for format, stream in zip(self.audioFormats, self.testStreams):
-            # Start the stream playback
-            self.testPlayer.play(stream)
-            time.sleep(3)
+                self.log.stepStart(f'Audio Format {format} Callback Test')
 
-            self.log.stepStart(f'Audio Format {format} Callback Test')
+                cbAudioFormat = self.testdsAudio.getAudioFormatCallbackStatus()
 
-            cbAudioFormat = self.testdsAudio.getAudioFormatCallbackStatus()
+                self.log.stepResult(cbAudioFormat and format in cbAudioFormat, f'Audio Format {format} Callback Test')
 
-            self.log.stepResult(cbAudioFormat and format in cbAudioFormat, f'Audio Format {format} Callback Test')
+                self.log.stepStart(f'Audio Format {format} Test')
 
-            self.log.stepStart(f'Audio Format {format} Test')
+                # Get the Audio Format
+                audioFormat = self.testdsAudio.getAudioFormat()
 
-            # Get the Audio Format
-            audioFormat = self.testdsAudio.getAudioFormat()
+                self.log.stepResult(format in audioFormat, f'Audio Format {format} Test')
 
-            self.log.stepResult(format in audioFormat, f'Audio Format {format} Test')
-
-            # Stop the stream playback
-            self.testPlayer.stop()
+                # Stop the stream playback
+                self.testPlayer.stop()
 
         # Terminate dsAudio Module
         self.testdsAudio.terminate()
