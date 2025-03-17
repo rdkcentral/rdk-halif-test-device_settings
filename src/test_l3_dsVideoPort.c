@@ -638,20 +638,21 @@ void dsVideoPort_SetResolution()
     scanf("%d", &choice);
     readAndDiscardRestOfLine(stdin);
     setResolution.interlaced = (choice == dsVIDEO_SCANMODE_INTERLACED);
+    interlaced = choice;
 
     UT_LOG_INFO("Calling dsSetResolution(IN:Handle:[0x%0X],In:dsVideoPortResolution_t(dsVideoResolution_t:[%s]) ", gHandle,\
                     UT_Control_GetMapString(dsVideoResolutionMappingTable, setResolution.pixelResolution));
     UT_LOG_INFO("dsVideoAspectRatio_t:[%s],dsVideoStereoScopicMode_t:[%s])",UT_Control_GetMapString(dsVideoAspectRatioMappingTable, setResolution.aspectRatio),\
                          UT_Control_GetMapString(dsVideoStereoScopicModeMappingTable, setResolution.stereoScopicMode));
     UT_LOG_INFO("dsVideoFrameRate_t:[%s],interlaced:[%s])",UT_Control_GetMapString(dsVideoFrameRateMappingTable, setResolution.frameRate),\
-                         UT_Control_GetMapString(boolMappingTable, setResolution.interlaced));
+                         UT_Control_GetMapString(dsVideoScanModeMappingTable, interlaced));
     status = dsSetResolution(gHandle, &setResolution);
     UT_LOG_INFO("Result dsSetResolution(IN:Handle:[0x%0X],In:dsVideoPortResolution_t(dsVideoResolution_t:[%s]) ", gHandle,\
                     UT_Control_GetMapString(dsVideoResolutionMappingTable, setResolution.pixelResolution));
     UT_LOG_INFO("dsVideoAspectRatio_t:[%s],dsVideoStereoScopicMode_t:[%s])",UT_Control_GetMapString(dsVideoAspectRatioMappingTable, setResolution.aspectRatio),\
                          UT_Control_GetMapString(dsVideoStereoScopicModeMappingTable, setResolution.stereoScopicMode));
     UT_LOG_INFO("dsVideoFrameRate_t:[%s],interlaced:[%s]),dsError_t=[%s])",UT_Control_GetMapString(dsVideoFrameRateMappingTable, setResolution.frameRate),\
-                         UT_Control_GetMapString(boolMappingTable, setResolution.interlaced),\
+                         UT_Control_GetMapString(dsVideoScanModeMappingTable, interlaced),\
                          UT_Control_GetMapString(dsErrorMappingTable, status));
     DS_ASSERT(status == dsERR_NONE);
 
