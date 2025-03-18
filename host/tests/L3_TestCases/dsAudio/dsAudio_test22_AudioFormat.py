@@ -54,8 +54,8 @@ class dsAudio_test22_AudioFormat(dsAudioHelperClass):
         self.qcID = '22'
         self.testName  = "test22_AudioFormat"
 
-        audioFormats = self.testdsAudio.getAudioFormat()
-        self.supportedAudioFormats = audioFormats.audio_format_codecs()
+        # List of audio formats for testing
+        self.audioFormats = ["dsAUDIO_FORMAT_PCM", "dsAUDIO_FORMAT_DOLBY_AC3", "dsAUDIO_FORMAT_DOLBY_EAC3", "dsAUDIO_FORMAT_AAC", "dsAUDIO_FORMAT_VORBIS", "dsAUDIO_FORMAT_WMA", "dsAUDIO_FORMAT_DOLBY_AC4", "dsAUDIO_FORMAT_DOLBY_EAC3_ATMOS", "dsAUDIO_FORMAT_DOLBY_AC4_ATMOS"]
 
         super().__init__(self.testName, self.qcID, log)
 
@@ -74,34 +74,41 @@ class dsAudio_test22_AudioFormat(dsAudioHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        for format, stream in zip(self.supportedAudioFormats, self.testStreams):
+        self.log.stepStart(f'Audio Format NONE Test')
 
-            if "NONE" in format:
-                self.log.stepStart(f'Audio Format NONE Test')
-                # Get the Audio Format
-                audioFormat = self.testdsAudio.getAudioFormat()
-                self.log.stepResult(f'Audio Format NONE Test')
+        # Get the Audio Format
+        audioFormat = self.testdsAudio.getAudioFormat()
 
-            else:
-                # Start the stream playback
-                self.testPlayer.play(stream)
-                time.sleep(3)
+        self.log.stepResult("NONE" in audioFormat, f'Audio Format NONE Test')
 
-                self.log.stepStart(f'Audio Format {format} Callback Test')
+        self.supportedCodecs = self.testdsAudio.getSupportedAudioCodecs()
 
-                cbAudioFormat = self.testdsAudio.getAudioFormatCallbackStatus()
+        for format, codec, stream in zip(self.audioFormats, self.supportedCodecs, self.testStreams):
+            if format not in codec:
+                print(f"Skipping unsupported codec: {codec}")
+                continue  # Skip unsupported formats
 
-                self.log.stepResult(cbAudioFormat and format in cbAudioFormat, f'Audio Format {format} Callback Test')
+            print(f"Testing supported codec: {codec}")
 
-                self.log.stepStart(f'Audio Format {format} Test')
+            # Start the stream playback
+            self.testPlayer.play(stream)
+            time.sleep(3)
 
-                # Get the Audio Format
-                audioFormat = self.testdsAudio.getAudioFormat()
+            self.log.stepStart(f'Audio Format {format} Callback Test')
 
-                self.log.stepResult(format in audioFormat, f'Audio Format {format} Test')
+            cbAudioFormat = self.testdsAudio.getAudioFormatCallbackStatus()
 
-                # Stop the stream playback
-                self.testPlayer.stop()
+            self.log.stepResult(cbAudioFormat and format in cbAudioFormat, f'Audio Format {format} Callback Test')
+
+            self.log.stepStart(f'Audio Format {format} Test')
+
+            # Get the Audio Format
+            audioFormat = self.testdsAudio.getAudioFormat()
+
+            self.log.stepResult(format in audioFormat, f'Audio Format {format} Test')
+
+            # Stop the stream playback
+            self.testPlayer.stop()
 
         # Terminate dsAudio Module
         self.testdsAudio.terminate()

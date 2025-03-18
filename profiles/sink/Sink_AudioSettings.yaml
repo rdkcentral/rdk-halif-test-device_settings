@@ -33,8 +33,8 @@ dsAudio:
     # dsAUDIOSUPPORT_Invalid          = 0x80,    ///< Invalid
     Audio_Capabilities: 0x37  # dsAUDIOSUPPORT_ATMOS | dsAUDIOSUPPORT_DAPv2 | dsAUDIOSUPPORT_MS12 | dsAUDIOSUPPORT_DD | dsAUDIOSUPPORT_DDPLUS
 
-    # Number of supported Audio format Codecs
-    Number_of_supported_Audio_format_codecs: 10
+    # Number of supported Audio Codecs
+    Number_of_Supported_Codecs: 9
 
     # dsAUDIO_FORMAT_NONE                   = 0x00,     ///< No audio format
     # dsAUDIO_FORMAT_PCM                    = 0x01,     ///< Pulse-code Modulation audio format
@@ -52,8 +52,7 @@ dsAudio:
     # dsAUDIO_FORMAT_WMA                    = 0x0D,     ///< Windows Media audio format
     # dsAUDIO_FORMAT_UNKNOWN                = 0x0E,     ///< Unknown audio format
     # dsAUDIO_FORMAT_MAX                    = 0x0F      ///< Out of range
-    Audio_format_codecs:
-     - 0x00     # dsAUDIO_FORMAT_NONE
+    supportedCodecs:
      - 0x01     # dsAUDIO_FORMAT_PCM
      - 0x02     # dsAUDIO_FORMAT_DOLBY_AC3
      - 0x03     # dsAUDIO_FORMAT_DOLBY_EAC3

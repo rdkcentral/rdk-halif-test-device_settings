@@ -53,7 +53,7 @@ class dsAudioStereoMode(Enum):
     dsAUDIO_STEREO_DD       = auto()
     dsAUDIO_STEREO_DDPLUS   = auto()
 
-class dsAudioFormatCodecs(Enum):
+class dsAudioCodecs(Enum):
     """Enumeration for different audio format codecs."""
     dsAUDIO_FORMAT_NONE                   = 0
     dsAUDIO_FORMAT_PCM                    = auto()
@@ -117,7 +117,7 @@ class dsAudioClass():
         self.testSession   = session
         self.utils         = utBaseUtils()
         self.ports = self.moduleConfigProfile.fields.get("Ports")
-        self.codecs = self.moduleConfigProfile.fields.get("Audio_format_codecs")
+        self.codecs = self.moduleConfigProfile.fields.get("supportedCodecs")
 
         # Copy bin files to the target
         for artifact in self.testConfig.test.artifacts:
@@ -757,7 +757,7 @@ class dsAudioClass():
 
     def getAudioFormat(self):
         """
-        Retrieves the current audio format being played, based on `dsAudioFormatCodecs`.
+        Retrieves the current audio format being Played.
 
         Args:
             None.
@@ -765,12 +765,27 @@ class dsAudioClass():
         Returns:
             str: The audio format in use, as a string (e.g., 'dsAUDIO_FORMAT_DD', 'dsAUDIO_FORMAT_AAC').
         """
+        result = self.utMenu.select( self.testSuite, "Get Audio Format")
+        audioFormatPattern = r"Result dsGetAudioFormat\(IN:handle:\[.*\], OUT:audioFormat:\[(dsAUDIO_FORMAT_\w+)\]\)"
+        audioFormat = self.searchPattern(result, audioFormatPattern)
 
-        audio_format_codecs = []
+        return audioFormat
+
+    def getSupportedAudioCodecs(self):
+        """
+        Retrieves the supported Audio Codecs, based on `dsAudioCodecs`.
+
+        Args:
+            None.
+
+        Returns:
+            str: list of platform supported audio codecs as per the profile yaml (e.g., 'dsAUDIO_FORMAT_DD', 'dsAUDIO_FORMAT_AAC').
+        """
+        supported_codecs = []
         for entry in self.codecs.values():
-            audio_format_codecs.append((dsAudioFormatCodecs(entry['Typeid']).name, entry['Index']))
+            supported_codecs.append((dsAudioCodecs(entry['Typeid']).name, entry['Index']))
 
-        return audio_format_codecs
+        return supported_codecs
 
     def getAudioFormatCallbackStatus(self):
         """
