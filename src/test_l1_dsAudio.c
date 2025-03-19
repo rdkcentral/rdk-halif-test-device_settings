@@ -7203,14 +7203,13 @@ void test_l1_dsAudio_positive_dsAudioOutIsConnected(void)
     // Steps 02 and 03: Get port handle and check connection status
     for (int i = 0; i < gDSAudioNumberOfPorts; i++)
     {
-        if (gDSAudioPortConfiguration[i].typeid != dsAUDIOPORT_TYPE_HEADPHONE)
-            continue;
+        
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
 
         result = dsAudioOutIsConnected(handle, &isConnected);
-        if (gSourceType == 0)
+        if ((gSourceType == 0)&&(gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HEADPHONE))
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
         }
@@ -7290,15 +7289,13 @@ void test_l1_dsAudio_negative_dsAudioOutIsConnected(void)
     // Step 04: Loop through kPorts to get audio port handle
     for (int i = 0; i < gDSAudioNumberOfPorts; i++)
     {
-        if (gDSAudioPortConfiguration[i].typeid != dsAUDIOPORT_TYPE_HEADPHONE)
-            continue;
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
 
         // Step 05: Test with Null pointer
         result = dsAudioOutIsConnected(handle, NULL);
-        if (gSourceType == 0)
+        if ((gSourceType == 0)&&(gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HEADPHONE))
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
