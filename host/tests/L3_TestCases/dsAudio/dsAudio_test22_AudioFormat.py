@@ -83,12 +83,12 @@ class dsAudio_test22_AudioFormat(dsAudioHelperClass):
 
         self.supportedCodecs = self.testdsAudio.getSupportedAudioCodecs()
 
-        for format, codec, stream in zip(self.audioFormats, self.supportedCodecs, self.testStreams):
-            if format not in codec:
-                print(f"Skipping unsupported codec: {codec}")
+        for format, stream in zip(self.audioFormats, self.testStreams):
+            if format not in self.supportedCodecs:
+                self.log.step(f"Skipping unsupported codec: {format}")
                 continue  # Skip unsupported formats
 
-            print(f"Testing supported codec: {codec}")
+            self.log.step(f"Testing supported codec: {format}")
 
             # Start the stream playback
             self.testPlayer.play(stream)

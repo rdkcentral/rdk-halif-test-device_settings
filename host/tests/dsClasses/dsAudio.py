@@ -782,8 +782,8 @@ class dsAudioClass():
             str: list of platform supported audio codecs as per the profile yaml (e.g., 'dsAUDIO_FORMAT_DD', 'dsAUDIO_FORMAT_AAC').
         """
         supported_codecs = []
-        for entry in self.codecs.values():
-            supported_codecs.append((dsAudioCodecs(entry['Typeid']).name, entry['Index']))
+        for entry in self.codecs:
+            supported_codecs.append(dsAudioCodecs(entry).name)
 
         return supported_codecs
 
