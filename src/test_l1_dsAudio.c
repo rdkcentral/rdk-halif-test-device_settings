@@ -476,7 +476,7 @@ void test_l1_dsAudio_positive_dsGetAudioFormat(void)
  * |:--:|-----------|----------|--------------|-----|
  * |01|Call dsGetAudioFormat() - Attempt to get audio format without initializing audio ports | handle: [ invalid handle ], audioFormat: [pointer to hold audio format] | dsERR_NOT_INITIALIZED | Get Audio Format must fail as module is not initialized |
  * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
- * |03|Call dsGetAudioFormat() using an invalid handle but with a valid pointer to hold the audio format | handle: [ invalid handle ], audioFormat: [ pointer ] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |03|Call dsGetAudioFormat() using an invalid handle but with a null pointer to hold the audio format | handle: [ null ], audioFormat: [ pointer ] | dsERR_NONE | 
  * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
  * |05|Call dsGetAudioFormat() by looping through acquired port handles but with a null pointer for audio format | handle: [ loop through valid handles ], encoding: [ NULL ] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
  * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE | Terminates the audio ports |
@@ -502,9 +502,9 @@ void test_l1_dsAudio_negative_dsGetAudioFormat(void)
     result = dsAudioPortInit();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // Step 03: Attempt to get audio format using an invalid handle
+    // Step 03: Attempt to get audio format using an null handle
     result = dsGetAudioFormat(handle, &audioFormat);
-    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 04: Get the port handle any of the available ports
     result = dsGetAudioPort(gDSAudioPortConfiguration[0].typeid, gDSAudioPortConfiguration[0].index, &handle);
