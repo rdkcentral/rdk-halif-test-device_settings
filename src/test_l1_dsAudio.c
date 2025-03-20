@@ -4724,7 +4724,7 @@ void test_l1_dsAudio_positive_dsGetAudioGain(void)
 
         // Step 03: Get audio gain for each port
         result = dsGetAudioGain(handle, &gain1);
-        if (gSourceType == 0)
+        if ((gSourceType == 0) && (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER))
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
             UT_ASSERT_TRUE(gain1 >= -2080 && gain1 <= 480);
@@ -4815,7 +4815,7 @@ void test_l1_dsAudio_negative_dsGetAudioGain(void)
 
         // Step 05: Attempt to get audio gain using a valid handle but null pointer for gain
         result = dsGetAudioGain(handle, NULL);
-        if (gSourceType == 0)
+        if ((gSourceType == 0) && (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER))
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
@@ -4885,7 +4885,7 @@ void test_l1_dsAudio_positive_dsSetAudioGain(void)
 
         // Step 03: Set audio gain for each port
         result = dsSetAudioGain(handle, gain_min);
-        if (gSourceType == 0)
+        if ((gSourceType == 0) && (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER))
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -4976,7 +4976,7 @@ void test_l1_dsAudio_negative_dsSetAudioGain(void)
 
         // Step 05: Attempt to set audio gain using a valid handle but out of range gain value
         result = dsSetAudioGain(handle, invalid_gain_neg);
-        if (gSourceType == 0)
+        if ((gSourceType == 0) && (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER))
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
@@ -5051,7 +5051,9 @@ void test_l1_dsAudio_positive_dsGetAudioLevel(void)
 
         // Step 03: Get the audio level values
         result = dsGetAudioLevel(handle, &audioLevel1);
-        if (gSourceType == 0)
+        if ((gSourceType == 0) &&
+            ((gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HEADPHONE) ||
+             (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER)))
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
             UT_ASSERT_TRUE(audioLevel1 >= 0 && audioLevel1 <= 100);
@@ -5145,7 +5147,9 @@ void test_l1_dsAudio_negative_dsGetAudioLevel(void)
 
         // Step 05: Attempt to get audio level with NULL pointer
         result = dsGetAudioLevel(handle, NULL);
-        if (gSourceType == 0)
+        if ((gSourceType == 0) &&
+            ((gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HEADPHONE) ||
+             (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER)))
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
@@ -5214,7 +5218,9 @@ void test_l1_dsAudio_positive_dsSetAudioLevel(void)
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
 
         result = dsSetAudioLevel(handle, minAudioLevel);
-        if (gSourceType == 0)
+        if ((gSourceType == 0) &&
+            ((gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HEADPHONE) ||
+             (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER)))
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -5305,7 +5311,9 @@ void test_l1_dsAudio_negative_dsSetAudioLevel(void)
 
         // Step 05 : Attempt to set Audio level with invalid values
         result = dsSetAudioLevel(handle, invalid_audio_level_neg);
-        if (gSourceType == 0)
+        if ((gSourceType == 0) &&
+            ((gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HEADPHONE) ||
+             (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER)))
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
@@ -7195,12 +7203,13 @@ void test_l1_dsAudio_positive_dsAudioOutIsConnected(void)
     // Steps 02 and 03: Get port handle and check connection status
     for (int i = 0; i < gDSAudioNumberOfPorts; i++)
     {
+        
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
 
         result = dsAudioOutIsConnected(handle, &isConnected);
-        if (gSourceType == 0)
+        if ((gSourceType == 0)&&(gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HEADPHONE))
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
         }
@@ -7286,7 +7295,7 @@ void test_l1_dsAudio_negative_dsAudioOutIsConnected(void)
 
         // Step 05: Test with Null pointer
         result = dsAudioOutIsConnected(handle, NULL);
-        if (gSourceType == 0)
+        if ((gSourceType == 0)&&(gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HEADPHONE))
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }

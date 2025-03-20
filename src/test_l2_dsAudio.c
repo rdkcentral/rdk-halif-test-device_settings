@@ -1730,7 +1730,8 @@ void test_l2_dsAudio_SetAndGetAudioLevel_sink(void)
     UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
 
     for (int port = 0; port < gDSAudioNumberOfPorts; port++) {
-        if(gDSAudioPortConfiguration[port].typeid != dsAUDIOPORT_TYPE_SPEAKER) {
+        if (gDSAudioPortConfiguration[port].typeid != dsAUDIOPORT_TYPE_SPEAKER && gDSAudioPortConfiguration[port].typeid != dsAUDIOPORT_TYPE_HEADPHONE)
+        {
             continue;
         }
 
