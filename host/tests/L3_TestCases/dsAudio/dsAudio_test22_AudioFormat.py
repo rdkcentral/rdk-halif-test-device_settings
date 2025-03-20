@@ -55,7 +55,7 @@ class dsAudio_test22_AudioFormat(dsAudioHelperClass):
         self.testName  = "test22_AudioFormat"
 
         # List of audio formats for testing
-        self.audioFormats = ["PCM", "AC3", "EAC3", "AAC", "VORBIS", "WMA", "AC4", "EAC3_ATMOS", "AC4_ATMOS"]
+        self.audioFormats = ["dsAUDIO_FORMAT_PCM", "dsAUDIO_FORMAT_DOLBY_AC3", "dsAUDIO_FORMAT_DOLBY_EAC3", "dsAUDIO_FORMAT_AAC", "dsAUDIO_FORMAT_VORBIS", "dsAUDIO_FORMAT_WMA", "dsAUDIO_FORMAT_DOLBY_AC4", "dsAUDIO_FORMAT_DOLBY_EAC3_ATMOS", "dsAUDIO_FORMAT_DOLBY_AC4_ATMOS"]
 
         super().__init__(self.testName, self.qcID, log)
 
@@ -81,7 +81,15 @@ class dsAudio_test22_AudioFormat(dsAudioHelperClass):
 
         self.log.stepResult("NONE" in audioFormat, f'Audio Format NONE Test')
 
+        self.supportedCodecs = self.testdsAudio.getSupportedAudioCodecs()
+
         for format, stream in zip(self.audioFormats, self.testStreams):
+            if format not in self.supportedCodecs:
+                self.log.step(f"Skipping unsupported codec: {format}")
+                continue  # Skip unsupported formats
+
+            self.log.step(f"Testing supported codec: {format}")
+
             # Start the stream playback
             self.testPlayer.play(stream)
             time.sleep(3)
