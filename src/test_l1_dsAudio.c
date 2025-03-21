@@ -315,8 +315,6 @@ void test_l1_dsAudio_positive_dsGetAudioPort(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Remember last handle for comparison in next step
         if (i == (gDSAudioNumberOfPorts - 1))
@@ -383,8 +381,6 @@ void test_l1_dsAudio_negative_dsGetAudioPort(void)
         result = dsGetAudioPort(dsAUDIOPORT_TYPE_MAX, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         UT_ASSERT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 04: Invalid index
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, -1, &handle);
@@ -571,8 +567,6 @@ void test_l1_dsAudio_positive_dsGetAudioCompression(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         if (gDSAudioPortConfiguration[i].no_of_supported_compression)
         {
@@ -652,8 +646,6 @@ void test_l1_dsAudio_negative_dsGetAudioCompression(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to get audio compression with a null pointer for audio compression
         result = dsGetAudioCompression(handle, NULL);
@@ -711,8 +703,6 @@ void test_l1_dsAudio_positive_dsSetAudioCompression(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         for (int j = 0; j < gDSAudioPortConfiguration[i].no_of_supported_compression; j++)
         {
@@ -781,8 +771,6 @@ void test_l1_dsAudio_negative_dsSetAudioCompression(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Set out of range compression value (-10)
         result = dsSetAudioCompression(handle, out_of_range_neg);
@@ -844,8 +832,6 @@ void test_l1_dsAudio_positive_dsGetDialogEnhancement(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Get the dialog enhancement levels for each port
 
@@ -930,8 +916,6 @@ void test_l1_dsAudio_negative_dsGetDialogEnhancement(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to get dialog enhancement with a null pointer
         result = dsGetDialogEnhancement(handle, NULL);
@@ -1004,9 +988,6 @@ void test_l1_dsAudio_positive_dsSetDialogEnhancement(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
-
 
         if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x04)
         {
@@ -1095,8 +1076,6 @@ void test_l1_dsAudio_negative_dsSetDialogEnhancement(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to set dialog enhancement with an invalid level(20)
         result = dsSetDialogEnhancement(handle, invalid_de_level_pos);
@@ -1167,8 +1146,6 @@ void test_l1_dsAudio_positive_dsGetDolbyVolumeMode(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Get the Dolby Volume mode for each port
         result = dsGetDolbyVolumeMode(handle, &dolbyVolumeMode);
@@ -1246,8 +1223,6 @@ void test_l1_dsAudio_negative_dsGetDolbyVolumeMode(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to get Dolby Volume mode with a null pointer
         result = dsGetDolbyVolumeMode(handle, NULL);
@@ -1315,8 +1290,6 @@ void test_l1_dsAudio_positive_dsSetDolbyVolumeMode(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Set Dolby Volume Mode for each port and for each valid mode
         result = dsSetDolbyVolumeMode(handle, mode);
@@ -1394,8 +1367,6 @@ void test_l1_dsAudio_negative_dsSetDolbyVolumeMode(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
     }
 
     // Step 05: Terminate audio ports
@@ -1451,8 +1422,6 @@ void test_l1_dsAudio_positive_dsGetIntelligentEqualizerMode(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Get the Intelligent Equalizer Mode for each port
         result = dsGetIntelligentEqualizerMode(handle, &intelligentEqualizerMode);
@@ -1531,8 +1500,6 @@ void test_l1_dsAudio_negative_dsGetIntelligentEqualizerMode(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to get Intelligent Equalizer Mode with a null pointer
         result = dsGetIntelligentEqualizerMode(handle, NULL);
@@ -1598,8 +1565,6 @@ void test_l1_dsAudio_positive_dsSetIntelligentEqualizerMode(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x02)
         {
@@ -1686,8 +1651,6 @@ void test_l1_dsAudio_negative_dsSetIntelligentEqualizerMode(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to set Intelligent Equalizer Mode with an invalid mode value
         result = dsSetIntelligentEqualizerMode(handle, invalid_mode);
@@ -1754,8 +1717,6 @@ void test_l1_dsAudio_positive_dsGetVolumeLeveller(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Get the Volume Leveller settings for each port
         result = dsGetVolumeLeveller(handle, &volLeveller);
@@ -1833,8 +1794,6 @@ void test_l1_dsAudio_negative_dsGetVolumeLeveller(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to get Volume Leveller settings with a null pointer
         result = dsGetVolumeLeveller(handle, NULL);
@@ -1902,8 +1861,6 @@ void test_l1_dsAudio_positive_dsSetVolumeLeveller(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x08)
         {
@@ -1997,8 +1954,6 @@ void test_l1_dsAudio_negative_dsSetVolumeLeveller(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to set Volume Leveller with a invalid mode
         volLeveller.mode = invalid_mode;
@@ -2083,8 +2038,6 @@ void test_l1_dsAudio_positive_dsGetBassEnhancer(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Get the Bass Enhancer of each port
         result = dsGetBassEnhancer(handle, &boostarray1);
@@ -2168,8 +2121,6 @@ void test_l1_dsAudio_negative_dsGetBassEnhancer(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to get Bass Enhancer with a null pointer
         result = dsGetBassEnhancer(handle, NULL);
@@ -2236,8 +2187,6 @@ void test_l1_dsAudio_positive_dsSetBassEnhancer(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x10)
         {
@@ -2322,8 +2271,6 @@ void test_l1_dsAudio_negative_dsSetBassEnhancer(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to set Bass Enhancer with an invalid boost value
         result = dsSetBassEnhancer(handle, invalidBoost_pos);
@@ -2393,8 +2340,6 @@ void test_l1_dsAudio_positive_dsIsSurroundDecoderEnabled(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Check if the Surround Decoder is enabled for each port
         result = dsIsSurroundDecoderEnabled(handle, &surroundDecoderEnabled);
@@ -2472,8 +2417,6 @@ void test_l1_dsAudio_negative_dsIsSurroundDecoderEnabled(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to check Surround Decoder status with a null pointer
         result = dsIsSurroundDecoderEnabled(handle, NULL);
@@ -2540,8 +2483,6 @@ void test_l1_dsAudio_positive_dsEnableSurroundDecoder(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Enable Surround Decoder for each port
         result = dsEnableSurroundDecoder(handle, enabledValue);
@@ -2619,8 +2560,6 @@ void test_l1_dsAudio_negative_dsEnableSurroundDecoder(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
     }
 
     // Step 05: Terminate audio ports
@@ -2678,8 +2617,6 @@ void test_l1_dsAudio_positive_dsGetDRCMode(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Get the DRC mode for each port
         result = dsGetDRCMode(handle, &drcModearray1);
@@ -2764,8 +2701,6 @@ void test_l1_dsAudio_negative_dsGetDRCMode(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to get DRC Mode with an invalid pointer
         result = dsGetDRCMode(handle, NULL);
@@ -2832,8 +2767,6 @@ void test_l1_dsAudio_positive_dsSetDRCMode(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Set DRC Mode for each port with valid values
         result = dsSetDRCMode(handle, mode);
@@ -2911,8 +2844,6 @@ void test_l1_dsAudio_negative_dsSetDRCMode(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to set DRC Mode with an invalid mode value
         result = dsSetDRCMode(handle, invalidMode);
@@ -2981,8 +2912,6 @@ void test_l1_dsAudio_positive_dsGetSurroundVirtualizer(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Get the Surround Virtualizer level for each port
         result = dsGetSurroundVirtualizer(handle, &surroundVirtualizer1);
@@ -3072,8 +3001,6 @@ void test_l1_dsAudio_negative_dsGetSurroundVirtualizer(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to get Surround Virtualizer with an invalid pointer
         result = dsGetSurroundVirtualizer(handle, NULL);
@@ -3141,8 +3068,6 @@ void test_l1_dsAudio_positive_dsSetSurroundVirtualizer(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Set Surround Virtualizer with valid mode and boost values for each port
         for (int mode = 0; mode <= 2; mode++)
@@ -3239,8 +3164,6 @@ void test_l1_dsAudio_negative_dsSetSurroundVirtualizer(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to set Surround Virtualizer with invalid mode value
         virtualizer.mode = invalid_mode;
@@ -3319,8 +3242,6 @@ void test_l1_dsAudio_positive_dsGetMISteering(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Get the MI Steering status for each port
         result = dsGetMISteering(handle, &miSteeringEnabled1);
@@ -3405,8 +3326,6 @@ void test_l1_dsAudio_negative_dsGetMISteering(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to get MI Steering with an invalid pointer
         result = dsGetMISteering(handle, NULL);
@@ -3473,8 +3392,6 @@ void test_l1_dsAudio_positive_dsSetMISteering(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Enable or Disable MI Steering for each port
         result = dsSetMISteering(handle, enabledValue);
@@ -3594,6 +3511,7 @@ void test_l1_dsAudio_positive_dsGetGraphicEqualizerMode(void)
     dsError_t result;
     intptr_t handle = null_handle;
     int graphicEqMode1, graphicEqMode2;
+
     // Step 01: Initialize audio ports
     result = dsAudioPortInit();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
@@ -3604,8 +3522,6 @@ void test_l1_dsAudio_positive_dsGetGraphicEqualizerMode(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Get the Graphic Equalizer Mode for each port
         result = dsGetGraphicEqualizerMode(handle, &graphicEqMode1);
@@ -3692,8 +3608,6 @@ void test_l1_dsAudio_negative_dsGetGraphicEqualizerMode(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to get Graphic Equalizer Mode with an invalid pointer
         result = dsGetGraphicEqualizerMode(handle, NULL);
@@ -3760,8 +3674,6 @@ void test_l1_dsAudio_positive_dsSetGraphicEqualizerMode(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Set Graphic Equalizer Mode for each port
         for (int j = 0; j < sizeof(validModes) / sizeof(validModes[0]); j++)
@@ -3842,8 +3754,6 @@ void test_l1_dsAudio_negative_dsSetGraphicEqualizerMode(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to set Graphic Equalizer Mode with an invalid mode value
         result = dsSetGraphicEqualizerMode(handle, invalid_mode_neg);
@@ -3919,8 +3829,6 @@ void test_l1_dsAudio_positive_dsGetMS12AudioProfileList(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Get the list of supported MS12 audio profiles for each port
         result = dsGetMS12AudioProfileList(handle, &profileList1);
@@ -4014,8 +3922,6 @@ void test_l1_dsAudio_negative_dsGetMS12AudioProfileList(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to get MS12 Audio Profile List with a null pointer
         result = dsGetMS12AudioProfileList(handle, NULL);
@@ -4087,8 +3993,6 @@ void test_l1_dsAudio_positive_dsGetMS12AudioProfile(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         if ((gSourceType == 0) && (gDSAudioPortConfiguration[i].ms12_audioprofilecount))
         {
@@ -4178,8 +4082,6 @@ void test_l1_dsAudio_negative_dsGetMS12AudioProfile(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to get MS12 Audio Profile with a null pointer
         result = dsGetMS12AudioProfile(handle, NULL);
@@ -4252,8 +4154,6 @@ void test_l1_dsAudio_positive_dsGetStereoMode(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Retrieve the stereo mode - first time
         result = dsGetStereoMode(handle, &stereoMode1);
@@ -4325,8 +4225,6 @@ void test_l1_dsAudio_negative_dsGetStereoMode(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to get stereo mode with a NULL pointer
         result = dsGetStereoMode(handle, NULL);
@@ -4382,8 +4280,6 @@ void test_l1_dsAudio_positive_dsSetStereoMode(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Set the stereo mode
         for (int j = 1; j < gDSAudioPortConfiguration[i].no_of_supported_stereo_mode; j++)
@@ -4450,8 +4346,6 @@ void test_l1_dsAudio_negative_dsSetStereoMode(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 04: Attempt to set stereo mode with an invalid mode
         result = dsSetStereoMode(handle, dsAUDIO_STEREO_MAX);
@@ -4509,8 +4403,6 @@ void test_l1_dsAudio_positive_dsGetStereoAuto(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Get the current auto mode
         result = dsGetStereoAuto(handle, &autoMode1);
@@ -4603,8 +4495,6 @@ void test_l1_dsAudio_negative_dsGetStereoAuto(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to get stereo auto with a NULL pointer
         result = dsGetStereoAuto(handle, NULL);
@@ -4674,8 +4564,6 @@ void test_l1_dsAudio_positive_dsSetStereoAuto(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Set auto mode for each port
         result = dsSetStereoAuto(handle, gDSAudioPortConfiguration[i].stereo_auto_mode);
@@ -4761,8 +4649,6 @@ void test_l1_dsAudio_negative_dsSetStereoAuto(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Set a invalid auto mode
         result = dsSetStereoAuto(handle, invalidAutoMode);
@@ -4835,8 +4721,6 @@ void test_l1_dsAudio_positive_dsGetAudioGain(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Get audio gain for each port
         result = dsGetAudioGain(handle, &gain1);
@@ -4928,8 +4812,6 @@ void test_l1_dsAudio_negative_dsGetAudioGain(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to get audio gain using a valid handle but null pointer for gain
         result = dsGetAudioGain(handle, NULL);
@@ -5000,8 +4882,6 @@ void test_l1_dsAudio_positive_dsSetAudioGain(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Set audio gain for each port
         result = dsSetAudioGain(handle, gain_min);
@@ -5093,8 +4973,6 @@ void test_l1_dsAudio_negative_dsSetAudioGain(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to set audio gain using a valid handle but out of range gain value
         result = dsSetAudioGain(handle, invalid_gain_neg);
@@ -5170,8 +5048,6 @@ void test_l1_dsAudio_positive_dsGetAudioLevel(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Get the audio level values
         result = dsGetAudioLevel(handle, &audioLevel1);
@@ -5268,8 +5144,6 @@ void test_l1_dsAudio_negative_dsGetAudioLevel(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to get audio level with NULL pointer
         result = dsGetAudioLevel(handle, NULL);
@@ -5342,8 +5216,6 @@ void test_l1_dsAudio_positive_dsSetAudioLevel(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         result = dsSetAudioLevel(handle, minAudioLevel);
         if ((gSourceType == 0) &&
@@ -5436,8 +5308,6 @@ void test_l1_dsAudio_negative_dsSetAudioLevel(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05 : Attempt to set Audio level with invalid values
         result = dsSetAudioLevel(handle, invalid_audio_level_neg);
@@ -5515,8 +5385,6 @@ void test_l1_dsAudio_positive_dsGetAudioDelay(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         if(gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HDMI || \
             gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPDIF || \
@@ -5600,8 +5468,6 @@ void test_l1_dsAudio_negative_dsGetAudioDelay(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to get Audio delay with NULL param
         result = dsGetAudioDelay(handle, NULL);
@@ -5658,9 +5524,6 @@ void test_l1_dsAudio_positive_dsSetAudioDelay(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
-
         if(gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HDMI || \
             gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPDIF || \
             gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HDMI_ARC )
@@ -5740,8 +5603,6 @@ void test_l1_dsAudio_negative_dsSetAudioDelay(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to set invalid audio delay
         result = dsSetAudioDelay(handle, invalid_audio_delay);
@@ -5799,8 +5660,6 @@ void test_l1_dsAudio_positive_dsSetAudioAtmosOutputMode(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Enable ATMOS Output mode
         result = dsSetAudioAtmosOutputMode(handle, enable);
@@ -5919,8 +5778,6 @@ void test_l1_dsAudio_positive_dsGetSinkDeviceAtmosCapability(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03 : Get ATMOS capability of ports in array
         result = dsGetSinkDeviceAtmosCapability(handle, &atmosCapability1);
@@ -5992,8 +5849,6 @@ void test_l1_dsAudio_negative_dsGetSinkDeviceAtmosCapability(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to get ATMOS capability with Null capability pointer
         result = dsGetSinkDeviceAtmosCapability(handle, NULL);
@@ -6052,8 +5907,6 @@ void test_l1_dsAudio_positive_dsIsAudioMute(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03:Get  Mute status in array
         result = dsIsAudioMute(handle, &muteStatus1);
@@ -6179,8 +6032,6 @@ void test_l1_dsAudio_positive_dsIsAudioPortEnabled(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Get Enabled status in array
         result = dsIsAudioPortEnabled(handle, &enabledStatus1);
@@ -6302,8 +6153,6 @@ void test_l1_dsAudio_positive_dsEnableAudioPort(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         result = dsEnableAudioPort(handle, true);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -6431,8 +6280,6 @@ void test_l1_dsAudio_positive_dsEnableMS12Config(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Loop through all MS12 features
         for (dsMS12FEATURE_t feature = dsMS12FEATURE_DAPV2; feature <= dsMS12FEATURE_MAX; feature++)
@@ -6504,8 +6351,6 @@ void test_l1_dsAudio_negative_dsEnableMS12Config(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to enable an unsupported MS12 feature
         result = dsEnableMS12Config(handle, dsMS12FEATURE_MAX, true); // Assuming UNSUPPORTED_MS12_FEATURE is defined
@@ -6561,8 +6406,6 @@ void test_l1_dsAudio_positive_dsEnableLEConfig(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Enable LE Config
         result = dsEnableLEConfig(handle, true);
@@ -6696,8 +6539,6 @@ void test_l1_dsAudio_positive_dsGetLEConfig(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Retrieve LE Config
         result = dsGetLEConfig(handle, &leconfig1);
@@ -6782,8 +6623,6 @@ void test_l1_dsAudio_negative_dsGetLEConfig(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Setp 05:Attempt to get LE Config with NULL pointer
         result = dsGetLEConfig(handle, NULL);
@@ -6849,8 +6688,6 @@ void test_l1_dsAudio_positive_dsSetMS12AudioProfile(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Set MS12 Audio Profile
         if (gSourceType == 0)
@@ -6938,8 +6775,6 @@ void test_l1_dsAudio_negative_dsSetMS12AudioProfile(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Attempt to set MS12 Audio Profile with null profile string
         result = dsSetMS12AudioProfile(handle, NULL);
@@ -7010,8 +6845,6 @@ void test_l1_dsAudio_positive_dsSetAudioMute(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Set Mute
         result = dsSetAudioMute(handle, mute);
@@ -7133,8 +6966,6 @@ void test_l1_dsAudio_positive_dsIsAudioMSDecode(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         result = dsIsAudioMSDecode(handle, &hasMS11Decode);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -7199,8 +7030,6 @@ void test_l1_dsAudio_negative_dsIsAudioMSDecode(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Test with valid handle and invalid pointer
         result = dsIsAudioMSDecode(handle, NULL);
@@ -7257,8 +7086,6 @@ void test_l1_dsAudio_positive_dsIsAudioMS12Decode(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         result = dsIsAudioMS12Decode(handle, &hasMS12Decode);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -7323,8 +7150,6 @@ void test_l1_dsAudio_negative_dsIsAudioMS12Decode(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Test with valid handle and NULL pointer
         result = dsIsAudioMS12Decode(handle, NULL);
@@ -7382,8 +7207,6 @@ void test_l1_dsAudio_positive_dsAudioOutIsConnected(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         result = dsAudioOutIsConnected(handle, &isConnected);
         if ((gSourceType == 0)&&(gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HEADPHONE))
@@ -7469,8 +7292,6 @@ void test_l1_dsAudio_negative_dsAudioOutIsConnected(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Test with Null pointer
         result = dsAudioOutIsConnected(handle, NULL);
@@ -7757,8 +7578,6 @@ void test_l1_dsAudio_positive_dsGetAudioCapabilities(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Get audio capabilities in an array
         result = dsGetAudioCapabilities(handle, &capabilities1);
@@ -7829,8 +7648,6 @@ void test_l1_dsAudio_negative_dsGetAudioCapabilities(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Call with NULL capabilities pointer
         result = dsGetAudioCapabilities(handle, NULL);
@@ -7890,8 +7707,6 @@ void test_l1_dsAudio_positive_dsGetMS12Capabilities(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Get MS12 capabilities
         result = dsGetMS12Capabilities(handle, &ms12Capabilities1);
@@ -7963,8 +7778,6 @@ void test_l1_dsAudio_negative_dsGetMS12Capabilities(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Call with NULL capabilities pointer
         result = dsGetMS12Capabilities(handle, NULL);
@@ -8021,8 +7834,6 @@ void test_l1_dsAudio_positive_dsSetAssociatedAudioMixing(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Enable associated audio mixing
         result = dsSetAssociatedAudioMixing(handle, true); // Enable mixing
@@ -8143,8 +7954,6 @@ void test_l1_dsAudio_positive_dsGetAssociatedAudioMixing(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Get audio mixing status
         result = dsGetAssociatedAudioMixing(handle, &mixing1);
@@ -8216,8 +8025,6 @@ void test_l1_dsAudio_negative_dsGetAssociatedAudioMixing(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Call with NULL mixing pointer
         result = dsGetAssociatedAudioMixing(handle, &mixing);
@@ -8275,8 +8082,6 @@ void test_l1_dsAudio_positive_dsSetFaderControl(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Set mixer balance to -32
         result = dsSetFaderControl(handle, mixerbalance_neg);
@@ -8346,8 +8151,6 @@ void test_l1_dsAudio_negative_dsSetFaderControl(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Call with out of range mixer balance
         result = dsSetFaderControl(handle, invalidMixerBalance);
@@ -8406,8 +8209,6 @@ void test_l1_dsAudio_positive_dsGetFaderControl(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Get mixer balance
         result = dsGetFaderControl(handle, &mixerBalance1);
@@ -8479,8 +8280,6 @@ void test_l1_dsAudio_negative_dsGetFaderControl(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Call dsGetFaderControl() with a NULL mixer balance pointer
         result = dsGetFaderControl(handle, NULL);
@@ -8537,8 +8336,6 @@ void test_l1_dsAudio_positive_dsSetPrimaryLanguage(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 03: Set AC4 primary language
         result = dsSetPrimaryLanguage(handle, primaryLanguage);
@@ -8604,8 +8401,6 @@ void test_l1_dsAudio_negative_dsSetPrimaryLanguage(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 04: Call with NULL language pointer
         result = dsSetPrimaryLanguage(handle, NULL);
@@ -8669,8 +8464,6 @@ void test_l1_dsAudio_positive_dsGetPrimaryLanguage(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Fetch AC4 Primary language in array
         result = dsGetPrimaryLanguage(handle, primaryLanguage);
@@ -8742,8 +8535,6 @@ void test_l1_dsAudio_negative_dsGetPrimaryLanguage(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Call with NULL language pointer
         result = dsGetPrimaryLanguage(handle, NULL);
@@ -8799,8 +8590,6 @@ void test_l1_dsAudio_positive_dsSetSecondaryLanguage(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Set Secondary language
         result = dsSetSecondaryLanguage(handle, "ENG");
@@ -8865,8 +8654,6 @@ void test_l1_dsAudio_negative_dsSetSecondaryLanguage(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Call with NULL language pointer
         result = dsSetSecondaryLanguage(handle, NULL);
@@ -8929,8 +8716,6 @@ void test_l1_dsAudio_positive_dsGetSecondaryLanguage(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Get Secondary language in a array
         result = dsGetSecondaryLanguage(handle, languageCode);
@@ -9002,8 +8787,6 @@ void test_l1_dsAudio_negative_dsGetSecondaryLanguage(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         // Step 05: Call with NULL language pointer
         result = dsGetSecondaryLanguage(handle, NULL);
@@ -9060,8 +8843,6 @@ void test_l1_dsAudio_positive_dsSetAudioMixerLevels(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         if (result == dsERR_NONE)
         {
@@ -9143,8 +8924,6 @@ void test_l1_dsAudio_negative_dsSetAudioMixerLevels(void)
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
-        if (handle == null_handle)
-            continue;
 
         if (result == dsERR_NONE)
         {
@@ -9324,8 +9103,6 @@ void test_l1_dsAudio_positive_dsGetSupportedARCTypes(void)
             result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
             UT_ASSERT_EQUAL(result, dsERR_NONE);
             UT_ASSERT_NOT_EQUAL(handle, null_handle);
-            if (handle == null_handle)
-                continue;
 
             // Step 03: supported ARC types of the connected ARC/eARC
             result = dsGetSupportedARCTypes(handle, &types);
@@ -9418,8 +9195,6 @@ void test_l1_dsAudio_negative_dsGetSupportedARCTypes(void)
             result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
             UT_ASSERT_EQUAL(result, dsERR_NONE);
             UT_ASSERT_NOT_EQUAL(handle, null_handle);
-           if (handle == null_handle)
-               continue;
 
             // Step 05: Attempt to get SupportedARCTypes with a null pointer
             result = dsGetSupportedARCTypes(handle, NULL);
@@ -9502,8 +9277,6 @@ void test_l1_dsAudio_positive_dsAudioSetSAD(void)
             result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
             UT_ASSERT_EQUAL(result, dsERR_NONE);
             UT_ASSERT_NOT_EQUAL(handle, null_handle);
-            if (handle == null_handle)
-                continue;
 
             // Step 03: Set SAD for HDMI ARC port
             result = dsAudioSetSAD(handle, sadlist);
@@ -9608,8 +9381,6 @@ void test_l1_dsAudio_negative_dsAudioSetSAD(void)
             result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
             UT_ASSERT_EQUAL(result, dsERR_NONE);
             UT_ASSERT_NOT_EQUAL(handle, null_handle);
-            if (handle == null_handle)
-                continue;
 
             // Step 05: Attempt to set Short Audio Descriptor with an invalid sad value
             result = dsAudioSetSAD(handle, sadlist1);
@@ -9687,8 +9458,6 @@ void test_l1_dsAudio_positive_dsAudioEnableARC(void)
             result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
             UT_ASSERT_EQUAL(result, dsERR_NONE);
             UT_ASSERT_NOT_EQUAL(handle, null_handle);
-            if (handle == null_handle)
-                continue;
 
             // Loop through all arc types
             for (dsAudioARCTypes_t type = dsAUDIOARCSUPPORT_ARC; type <= dsAUDIOARCSUPPORT_eARC; type++)
@@ -9799,8 +9568,6 @@ void test_l1_dsAudio_negative_dsAudioEnableARC(void)
             result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
             UT_ASSERT_EQUAL(result, dsERR_NONE);
             UT_ASSERT_NOT_EQUAL(handle, null_handle);
-            if (handle == null_handle)
-                continue;
 
             // Step 05: Attempt to enable unsupported ARC/eARC
             arcstatus.type = 0x03;
