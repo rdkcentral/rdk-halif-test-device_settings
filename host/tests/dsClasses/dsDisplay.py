@@ -54,7 +54,7 @@ class dsDisplayClass():
     This module provides common extensions for device Settings Display Module.
     """
 
-    def __init__(self, moduleConfigProfileFile :str, session=None, testSuite:str="L3 dsDisplay", targetWorkspace="/tmp" ):
+    def __init__(self, moduleConfigProfileFile :str, session=None, testSuite:str="L3 dsDisplay", targetWorkspace="/tmp" , copyArtifacts:bool=True):
         """
         Initializes the dsDisplay class function.
         """
@@ -72,13 +72,14 @@ class dsDisplayClass():
         self.testSession         = session
         self.utils               = utBaseUtils()
 
-        # Copy bin files to the target
-        for artifact in self.testConfig.test.artifacts:
-            filesPath = os.path.join(dir_path, artifact)
-            self.utils.rsync(self.testSession, filesPath, targetWorkspace)
+        if copyArtifacts:
+            # Copy bin files to the target
+            for artifact in self.testConfig.test.artifacts:
+                filesPath = os.path.join(dir_path, artifact)
+                self.utils.rsync(self.testSession, filesPath, targetWorkspace)
 
-        # Copy the profile file to the target
-        self.utils.scpCopy(self.testSession, moduleConfigProfileFile, targetWorkspace)
+            # Copy the profile file to the target
+            self.utils.scpCopy(self.testSession, moduleConfigProfileFile, targetWorkspace)
         
         # Start the user interface menu
         self.utMenu.start()

@@ -63,7 +63,7 @@ class dsVideoDeviceClass():
     This module provides common extensions for device Settings Videodevice Module.
     """
 
-    def __init__(self, moduleConfigProfileFile :str, session=None, testSuite:str="L3 dsVideoDevice", targetWorkspace="/tmp"):
+    def __init__(self, moduleConfigProfileFile :str, session=None, testSuite:str="L3 dsVideoDevice", targetWorkspace="/tmp", copyArtifacts:bool=True):
         """
         Initializes the dsVideodevice class function.
         """
@@ -82,12 +82,13 @@ class dsVideoDeviceClass():
 
         self.utils         = utBaseUtils()
 
-        for artifact in self.testConfig.test.artifacts:
-            filesPath = os.path.join(dir_path, artifact)
-            self.utils.rsync(self.testSession, filesPath, targetWorkspace)
+        if copyArtifacts:
+            for artifact in self.testConfig.test.artifacts:
+                filesPath = os.path.join(dir_path, artifact)
+                self.utils.rsync(self.testSession, filesPath, targetWorkspace)
 
-        # Copy the profile file to the target
-        self.utils.scpCopy(self.testSession, moduleConfigProfileFile, targetWorkspace)
+            # Copy the profile file to the target
+            self.utils.scpCopy(self.testSession, moduleConfigProfileFile, targetWorkspace)
 
         self.utMenu.start()
 
