@@ -4,59 +4,59 @@ dsDisplay:
   description: "dsDisplay Device Settings L1 and L2 test setup"
   test_suites: # List of L1 and L2 test suites
 
+
     ######################################
     # Entry to run all test case
     ######################################
-    - name: "L1 dsDisplay" # Name of the test suit to run
-      test_cases: # List of test cases to execute, to run all test cases in test suite with R option use `all`
-        - all
-
+    #- name: "L1 dsDisplay" # Name of the test suit to run
+    #  test_cases: # List of test cases to execute, to run all test cases in test suite with R option use `all`
+    #    - all
     #######################################
     # Entries to run individual test cases
     #######################################
-   # - name: "L1 dsDisplay"
-   #   test_cases:
-   #     - dsDisplayInit_pos
-   # - name: "L1 dsDisplay"
-   #   test_cases:
-   #     - dsDisplayInit_neg
-   # - name: "L1 dsDisplay"
-   #   test_cases:
-   #     - dsDisplayTerm_pos
-   # - name: "L1 dsDisplay"
-   #   test_cases:
-   #     - dsDisplayTerm_neg
-   # - name: "L1 dsDisplay"
-   #   test_cases:
-   #     - dsGetDisplay_pos
-   # - name: "L1 dsDisplay"
-   #   test_cases:
-   #     - dsGetDisplay_neg
-   # - name: "L1 dsDisplay"
-   #   test_cases:
-   #     - dsGetEDID_pos
-   # - name: "L1 dsDisplay"
-   #   test_cases:
-   #     - dsGetEDID_neg
-   # - name: "L1 dsDisplay"
-   #   test_cases:
-   #     - dsGetEDIDBytes_pos
-   # - name: "L1 dsDisplay"
-   #   test_cases:
-   #     - dsGetEDIDBytes_neg
-   # - name: "L1 dsDisplay"
-   #   test_cases:
-   #     - dsGetDisplayAspectRatio_pos
-   # - name: "L1 dsDisplay"
-   #   test_cases:
-   #     - dsGetDisplayAspectRatio_neg
-   # - name: "L1 dsDisplay"
-   #   test_cases:
-   #     - dsRegisterDisplayEventCallback_pos
-   # - name: "L1 dsDisplay"
-   #   test_cases:
-   #     - dsRegisterDisplayEventCallback_neg
-       
+    - name: "L1 dsDisplay"
+      test_cases:
+        - dsDisplayInit_pos
+    - name: "L1 dsDisplay"
+      test_cases:
+        - dsDisplayInit_neg
+    - name: "L1 dsDisplay"
+      test_cases:
+        - dsDisplayTerm_pos
+    - name: "L1 dsDisplay"
+      test_cases:
+        - dsDisplayTerm_neg
+    - name: "L1 dsDisplay"
+      test_cases:
+        - dsGetDisplay_pos
+    - name: "L1 dsDisplay"
+      test_cases:
+        - dsGetDisplay_neg
+    - name: "L1 dsDisplay"
+      test_cases:
+        - dsGetEDID_pos
+    - name: "L1 dsDisplay"
+      test_cases:
+        - dsGetEDID_neg
+    - name: "L1 dsDisplay"
+      test_cases:
+        - dsGetEDIDBytes_pos
+    - name: "L1 dsDisplay"
+      test_cases:
+        - dsGetEDIDBytes_neg
+    - name: "L1 dsDisplay"
+      test_cases:
+        - dsGetDisplayAspectRatio_pos
+    - name: "L1 dsDisplay"
+      test_cases:
+        - dsGetDisplayAspectRatio_neg
+    - name: "L1 dsDisplay"
+      test_cases:
+        - dsRegisterDisplayEventCB_pos
+    - name: "L1 dsDisplay"
+      test_cases:
+        - dsRegisterDisplayEventCB_neg
+
     ######################################
     # Entries to run selected test case
     ######################################
@@ -66,14 +66,14 @@ dsDisplay:
     #    - dsDisplayInit_neg
     #    - dsDisplayTerm_pos
     #    - dsDisplayTerm_neg
-    #    - dsGetDisplay_pos 
-    
+    #    - dsGetDisplay_pos
+
     ######################################
     # Entries to run selected test case
     ######################################
-    #- name: "L2 dsDisplay Sink"
-    #  test_cases:
-    #    - RetrieveAndValidateEDID_sink
+    - name: "L2 dsDisplay Sink"
+      test_cases:
+        - RetrieveAndValidateEDID_sink
 
     ######################################
     # Entries to run selected test case

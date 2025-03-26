@@ -98,7 +98,7 @@ dsHdmiIn:  # Prefix must always exist
                     - "dsIsHdmiARCPort_neg"
                     - "dsGetHdmiVersion_pos"
                     - "dsGetHdmiVersion_neg"
-            
+
             2:
                 name: "L2 dsHdmiIn - Source"
                 tests:
