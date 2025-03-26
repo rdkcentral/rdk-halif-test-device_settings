@@ -308,12 +308,12 @@ void test_l2_dsDisplay_SetAndGetAVIContentType_source(void)
         // Step 03: Set AVI info frame contentType by looping through dsAviContentType_t enum
 	for(dsAviContentType_t contentTypeSet = dsAVICONTENT_TYPE_GRAPHICS; contentTypeSet < dsAVICONTENT_TYPE_MAX ; contentTypeSet++)
 	{
-	    UT_LOG_DEBUG("Invoking dsSetAVIContentType with handle: %ld", handle);
+	    UT_LOG_DEBUG("Invoking dsSetAVIContentType with handle: %ld\n", handle);
 	    ret = dsSetAVIContentType(handle, contentTypeSet);
             if (ret != dsERR_NONE) {
                 UT_LOG_ERROR("dsSetAVIContentType failed with error: %d", ret);
             }
-            UT_LOG_DEBUG("Invoking dsGetAVIContentType with handle: %ld", handle);
+            UT_LOG_DEBUG("Invoking dsGetAVIContentType with handle: %ld\n", handle);
             ret = dsGetAVIContentType(handle, &contentTypeGet);
             if (ret != dsERR_NONE) {
                 UT_LOG_ERROR("dsGetAVIContentType failed with error: %d", ret);
