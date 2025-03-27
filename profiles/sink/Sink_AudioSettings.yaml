@@ -308,7 +308,7 @@ dsAudio:
             #dsAUDIO_STEREO_DD                        = 0x05,   ///< Dolby Digital
             #dsAUDIO_STEREO_DDPLUS                    = 0x06,   ///< Dolby Digital Plus
             #dsAUDIO_STEREO_MAX                       = 0x07    ///< Out of range
-            stereo_modes:
+            stereo_modes: []
             stereo_auto_mode: false
             # dsMS12SUPPORT_NONE                       = 0x0,   ///< MS12 Supported None
             # dsMS12SUPPORT_DolbyVolume                = 0x01,  //< MS12 supported Dolby Volume
