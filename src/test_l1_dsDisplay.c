@@ -1168,8 +1168,8 @@ int test_l1_dsDisplay_register ( void )
     UT_add_test( pSuite, "dsGetEDIDBytes_neg" ,test_l1_dsDisplay_negative_dsGetEDIDBytes );
     UT_add_test( pSuite, "dsGetDisplayAspectRatio_pos" ,test_l1_dsDisplay_positive_dsGetDisplayAspectRatio );
     UT_add_test( pSuite, "dsGetDisplayAspectRatio_neg" ,test_l1_dsDisplay_negative_dsGetDisplayAspectRatio );
-    UT_add_test( pSuite, "dsRegisterDisplayEventCallback_pos" ,test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback );
-    UT_add_test( pSuite, "dsRegisterDisplayEventCallback_neg" ,test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback );
+    UT_add_test( pSuite, "dsRegisterDisplayEventCB_pos" ,test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback );
+    UT_add_test( pSuite, "dsRegisterDisplayEventCB_neg" ,test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback );
 
     extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsDisplay/features/extendedEnumsSupported" );
 

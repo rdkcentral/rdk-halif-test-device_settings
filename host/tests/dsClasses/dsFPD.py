@@ -79,7 +79,7 @@ class dsFPDClass():
 
     This module provides common extensions for device Settings Front Panel Device Module.
     """
-    def __init__(self, moduleConfigProfileFile:str, session=None, testSuite:str="L3 Front Panel Functions", targetPath = "/tmp" ):
+    def __init__(self, moduleConfigProfileFile:str, session=None, testSuite:str="L3 Front Panel Functions", targetPath = "/tmp" , copyArtifacts:bool=True):
         """
         Initializes the dsFPD class function.
         
@@ -102,13 +102,14 @@ class dsFPDClass():
         self.testSession    = session
         self.utils          = utBaseUtils()
 
-        # download the binaries to execute.
-        for artifact in self.testConfig.test.artifacts:
-            filesPath = os.path.join(dir_path, artifact)
-            self.utils.rsync(self.testSession, filesPath, targetPath)
+        if copyArtifacts:
+            # download the binaries to execute.
+            for artifact in self.testConfig.test.artifacts:
+                filesPath = os.path.join(dir_path, artifact)
+                self.utils.rsync(self.testSession, filesPath, targetPath)
 
-        # Copy the profile file to the target
-        self.utils.scpCopy(self.testSession, moduleConfigProfileFile, targetPath)
+            # Copy the profile file to the target
+            self.utils.scpCopy(self.testSession, moduleConfigProfileFile, targetPath)
 
         #start the interface menu.
         self.utMenu.start()

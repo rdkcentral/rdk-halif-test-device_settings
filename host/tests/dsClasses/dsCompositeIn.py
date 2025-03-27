@@ -44,7 +44,7 @@ class dsCompositeInClass():
 
     This module provides common extensions for device Settings CompositeIn Module.
     """
-    def __init__(self, deviceProfilePath:str, session=None,testSuite:str="L3 dsCompositeIn", targetWorkspace="/opt/HAL" ):
+    def __init__(self, deviceProfilePath:str, session=None,testSuite:str="L3 dsCompositeIn", targetWorkspace="/opt/HAL" , copyArtifacts:bool=True):
         """
         Initializes the dsCompositeIn class function.
         Args:
@@ -65,12 +65,13 @@ class dsCompositeInClass():
         self.testSession   = session
         self.utils         = utBaseUtils()
 
-        for artifact in self.testConfig.test.artifacts:
-            filesPath = os.path.join(dir_path, artifact)
-            self.utils.rsync(self.testSession, filesPath, targetWorkspace)
+        if copyArtifacts:
+            for artifact in self.testConfig.test.artifacts:
+                filesPath = os.path.join(dir_path, artifact)
+                self.utils.rsync(self.testSession, filesPath, targetWorkspace)
 
-        # Copy the profile file to the target
-        self.utils.scpCopy(self.testSession, deviceProfilePath, targetWorkspace)
+            # Copy the profile file to the target
+            self.utils.scpCopy(self.testSession, deviceProfilePath, targetWorkspace)
 
         self.utMenu.start()
 

@@ -43,7 +43,7 @@ class dsHostClass():
 
     This module provides common extensions for device Settings Host Module.
     """
-    def __init__(self, moduleConfigProfileFile:str, session=None, testSuite:str="L3 dsHost",targetWorkspace="/tmp" ):
+    def __init__(self, moduleConfigProfileFile:str, session=None, testSuite:str="L3 dsHost",targetWorkspace="/tmp" , copyArtifacts:bool=True):
         """
         Initializes the dsHost class function.
 
@@ -67,12 +67,13 @@ class dsHostClass():
         self.testSession = session
         self.utils         = utBaseUtils()
 
-        for artifact in self.testConfig.test.artifacts:
-            filesPath = os.path.join(dir_path, artifact)
-            self.utils.rsync(self.testSession, filesPath, targetWorkspace)
+        if copyArtifacts:
+            for artifact in self.testConfig.test.artifacts:
+                filesPath = os.path.join(dir_path, artifact)
+                self.utils.rsync(self.testSession, filesPath, targetWorkspace)
 
-        # Copy the profile file to the target
-        self.utils.scpCopy(self.testSession, moduleConfigProfileFile, targetWorkspace)
+            # Copy the profile file to the target
+            self.utils.scpCopy(self.testSession, moduleConfigProfileFile, targetWorkspace)
 
         self.utMenu.start()
 

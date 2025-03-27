@@ -25,8 +25,8 @@ dsDisplay:
                     - "dsGetEDIDBytes_neg"
                     - "dsGetDisplayAspectRatio_pos"
                     - "dsGetDisplayAspectRatio_neg"
-                    - "dsRegisterDisplayEventCallback_pos"
-                    - "dsRegisterDisplayEventCallback_neg"
+                    - "dsRegisterDisplayEventCB_pos"
+                    - "dsRegisterDisplayEventCB_neg"
             1:
                 name: "L2 dsDisplay Sink"
                 tests:

@@ -2719,7 +2719,6 @@ void test_l1_dsHdmiIn_negative_dsGetHdmiVersion(void) {
 }
 
 static UT_test_suite_t * pSuite = NULL;
-static UT_test_suite_t * pSuite2 = NULL;
 
 /**
  * @brief Register the main test(s) for this module
@@ -2729,7 +2728,6 @@ static UT_test_suite_t * pSuite2 = NULL;
 int test_l1_dsHdmiIn_register ( void )
 {
     ut_kvp_status_t status = UT_KVP_STATUS_SUCCESS;
-    pSuite2 = UT_add_suite( "[L1 dsHdmiIn --  advanced]", NULL, NULL );
 
     status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsHdmiIn.Type", gDeviceType, TEST_DS_DEVICE_TYPE_SIZE);
 
@@ -2791,7 +2789,7 @@ int test_l1_dsHdmiIn_register ( void )
     UT_add_test( pSuite, "dsHdmiInAllmChangeCB_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInRegisterAllmChangeCB );
     UT_add_test( pSuite, "dsHdmiInAVLatChangeCB_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInRegisterAVLatencyChangeCB );
     UT_add_test( pSuite, "dsHdmiInAviContTypeCB_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInRegisterAviContentTypeChangeCB );
-    UT_add_test( pSuite2, "dsHdmiInGetStatus_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInGetStatus );
+    UT_add_test( pSuite, "dsHdmiInGetStatus_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInGetStatus );
 
 
     UT_add_test( pSuite, "dsHdmiInSelZoomMode_pos" ,test_l1_dsHdmiIn_positive_dsHdmiInSelectZoomMode );
@@ -2814,9 +2812,9 @@ int test_l1_dsHdmiIn_register ( void )
     UT_add_test( pSuite, "dsGetGameFeaturesList_neg" ,test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList_sink );
     UT_add_test( pSuite, "dsGetAVLatency_neg" ,test_l1_dsHdmiIn_negative_dsGetAVLatency_sink );
     UT_add_test( pSuite, "dsSetEdid2AllmSupport_neg" ,test_l1_dsHdmiIn_negative_dsSetEdid2AllmSupport_sink );
-    UT_add_test( pSuite2, "dsGetEdid2AllmSupport_pos" ,test_l1_dsHdmiIn_positive_dsGetEdid2AllmSupport_sink );
-    UT_add_test( pSuite2, "dsGetEdid2AllmSupport_neg" ,test_l1_dsHdmiIn_negative_dsGetEdid2AllmSupport_sink );
-    UT_add_test( pSuite2, "dsIsHdmiARCPort_neg" ,test_l1_dsHdmiIn_negative_dsIsHdmiARCPort_sink );
+    UT_add_test( pSuite, "dsGetEdid2AllmSupport_pos" ,test_l1_dsHdmiIn_positive_dsGetEdid2AllmSupport_sink );
+    UT_add_test( pSuite, "dsGetEdid2AllmSupport_neg" ,test_l1_dsHdmiIn_negative_dsGetEdid2AllmSupport_sink );
+    UT_add_test( pSuite, "dsIsHdmiARCPort_neg" ,test_l1_dsHdmiIn_negative_dsIsHdmiARCPort_sink );
     UT_add_test( pSuite, "dsGetHdmiVersion_pos" ,test_l1_dsHdmiIn_positive_dsGetHdmiVersion );
     UT_add_test( pSuite, "dsGetHdmiVersion_neg" ,test_l1_dsHdmiIn_negative_dsGetHdmiVersion );
 

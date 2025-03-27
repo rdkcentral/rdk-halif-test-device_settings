@@ -524,7 +524,7 @@ void test_l1_dsHost_positive_dsGetHostEDID(void) {
     gTestID = 9;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    unsigned char edid1[EDID_MAX_DATA_SIZE] = {0};  
+    unsigned char edid1[EDID_MAX_DATA_SIZE] = {0};
     unsigned char edid2[EDID_MAX_DATA_SIZE] = {0};
     int length1 = 0;
     int length2 = 0;
@@ -621,7 +621,6 @@ void test_l1_dsHost_negative_dsGetHostEDID(void) {
 }
 
 static UT_test_suite_t * pSuite = NULL;
-static UT_test_suite_t * pSuite2 = NULL;
 
 /**
  * @brief Register the main test(s) for this module
@@ -632,12 +631,8 @@ int test_l1_dsHost_register ( void )
 {
     /* add a suite to the registry */
     pSuite = UT_add_suite( "[L1 dsHost]", NULL, NULL );
-    pSuite2 = UT_add_suite( "[L1 dsHost -- advanced]", NULL, NULL );
+
     if ( NULL == pSuite )
-    {
-        return -1;
-    }
-    if ( NULL == pSuite2 )
     {
         return -1;
     }
@@ -653,13 +648,13 @@ int test_l1_dsHost_register ( void )
     UT_add_test( pSuite, "dsGetCPUTemperature_L1_negative" ,test_l1_dsHost_negative_dsGetCPUTemperature );
 
 
-    UT_add_test( pSuite2, "dsGetHostEDID_L1_positive" ,test_l1_dsHost_positive_dsGetHostEDID );
-    UT_add_test( pSuite2, "dsGetHostEDID_L1_negative" ,test_l1_dsHost_negative_dsGetHostEDID );
+    UT_add_test( pSuite, "dsGetHostEDID_L1_positive" ,test_l1_dsHost_positive_dsGetHostEDID );
+    UT_add_test( pSuite, "dsGetHostEDID_L1_negative" ,test_l1_dsHost_negative_dsGetHostEDID );
 
     extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsHost/features/extendedEnumsSupported" );
 
     return 0;
-} 
+}
 
 /** @} */ // End of DS_Host_HALTEST_L1
 /** @} */ // End of DS_Host_HALTEST

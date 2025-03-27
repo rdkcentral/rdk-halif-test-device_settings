@@ -271,7 +271,12 @@ dsHdmiIn:
     - name: "L1 dsHdmiIn - Sink"
       test_cases:
         - dsIsHdmiARCPort_neg
-
+    - name: "L1 dsHdmiIn - Sink"
+      test_cases:
+        - dsGetHdmiVersion_pos
+    - name: "L1 dsHdmiIn - Sink"
+      test_cases:
+        - dsGetHdmiVersion_neg
     ######################################
     # Entries to run selected test case
     ######################################
