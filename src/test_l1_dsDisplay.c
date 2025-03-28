@@ -2140,10 +2140,10 @@ int test_l1_dsDisplay_register ( void )
     UT_add_test( pSuite,"dsGetAVIContentType_neg",test_l1_dsDisplay_negative_dsGetAVIContentType);
     UT_add_test( pSuite,"dsSetAVIContentType_pos",test_l1_dsDisplay_positive_dsSetAVIContentType);
     UT_add_test( pSuite,"dsSetAVIContentType_neg",test_l1_dsDisplay_negative_dsSetAVIContentType);
-    UT_add_test( pSuite,"dsGetAVIScanInformation_pos",test_l1_dsDisplay_positive_dsGetAVIScanInformation);
-    UT_add_test( pSuite,"dsGetAVIScanInformation_neg",test_l1_dsDisplay_negative_dsGetAVIScanInformation);
-    UT_add_test( pSuite,"dsSetAVIScanInformation_pos",test_l1_dsDisplay_positive_dsSetAVIScanInformation);
-    UT_add_test( pSuite,"dsSetAVIScanInformation_neg",test_l1_dsDisplay_negative_dsSetAVIScanInformation);
+    UT_add_test( pSuite,"dsGetAVIScanInfo_pos",test_l1_dsDisplay_positive_dsGetAVIScanInformation);
+    UT_add_test( pSuite,"dsGetAVIScanInfo_neg",test_l1_dsDisplay_negative_dsGetAVIScanInformation);
+    UT_add_test( pSuite,"dsSetAVIScanInfo_pos",test_l1_dsDisplay_positive_dsSetAVIScanInformation);
+    UT_add_test( pSuite,"dsSetAVIScanInfo_neg",test_l1_dsDisplay_negative_dsSetAVIScanInformation);
     UT_add_test( pSuite,"dsGetAllmEnabled_pos",test_l1_dsDisplay_positive_dsGetAllmEnabled);
     UT_add_test( pSuite,"dsGetAllmEnabled_neg",test_l1_dsDisplay_negative_dsGetAllmEnabled);
     UT_add_test( pSuite,"dsSetAllmEnabled_pos",test_l1_dsDisplay_positive_dsSetAllmEnabled);
