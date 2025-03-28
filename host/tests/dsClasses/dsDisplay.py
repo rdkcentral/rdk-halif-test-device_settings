@@ -54,28 +54,34 @@ class dsDisplayClass():
     This module provides common extensions for device Settings Display Module.
     """
 
-    def __init__(self, moduleConfigProfileFile :str, session=None, targetWorkspace="/tmp" ):
+    def __init__(self, moduleConfigProfileFile :str, session=None, testSuite:str="L3 dsDisplay", targetWorkspace="/tmp" , copyArtifacts:bool=True):
         """
         Initializes the dsDisplay class function.
         """
 
         self.moduleName = "dsDisplay"
         self.testConfigFile = os.path.join(dir_path, "dsDisplay_testConfig.yml")
-        self.testSuite = "L3 dsDisplay"
+        self.testSuite = testSuite
 
         # Load configurations for device profile and menu
         self.moduleConfigProfile = ConfigRead(moduleConfigProfileFile , self.moduleName)
         self.testConfig          = ConfigRead(self.testConfigFile, self.moduleName)
         self.testConfig.test.execute = os.path.join(targetWorkspace, self.testConfig.test.execute)
+        self.testConfig.test.execute = self.testConfig.test.execute + f" -p {os.path.basename(moduleConfigProfileFile)}"
         self.utMenu              = UTSuiteNavigatorClass(self.testConfig, None, session)
         self.testSession         = session
         self.utils               = utBaseUtils()
 
-        for artifact in self.testConfig.test.artifacts:
-            filesPath = os.path.join(dir_path, artifact)
-            self.utils.rsync(self.testSession, filesPath, targetWorkspace)
+        if copyArtifacts:
+            # Copy bin files to the target
+            for artifact in self.testConfig.test.artifacts:
+                filesPath = os.path.join(dir_path, artifact)
+                self.utils.rsync(self.testSession, filesPath, targetWorkspace)
 
-         # Start the user interface menu
+            # Copy the profile file to the target
+            self.utils.scpCopy(self.testSession, moduleConfigProfileFile, targetWorkspace)
+        
+        # Start the user interface menu
         self.utMenu.start()
 
     def searchPattern(self, haystack, pattern):
@@ -97,6 +103,22 @@ class dsDisplayClass():
         if match:
             return match.group(1)
         return None
+
+    def runTest(self, test_case:str=None):
+        """
+        Runs the test case passed to this funtion
+
+        Args:
+            test_case (str, optional): test case name to run, default runs all test
+
+        Returns:
+            bool: True - test pass, False - test fails
+        """
+        output = self.utMenu.select( self.testSuite, test_case)
+        results = self.utMenu.collect_results(output)
+        if results == None:
+            results = False
+        return results
 
     def initialise(self):
         """
@@ -225,14 +247,14 @@ class dsDisplayClass():
         Args:
             None
         Returns:
-            str: The display event type (e.g., 'dsVIDEO_EVENT_CONNECTED').
-            None: If no matching event status is found.
+            str: List of display events.
+            empty list: If no matching event status is found.
         """
 
         result = self.testSession.read_until("Display EventCallback(IN:handle:")
-        callpattern = r"Display EventCallback\(IN:handle:\[.*\], dsDisplayEvent_t:\[(\w+)\]"
-        status = self.searchPattern(result, callpattern)
-        return status
+        pattern = r"Display EventCallback\(IN:.*?dsDisplayEvent_t:\[([^\]]+)\]"
+        events = re.findall(pattern, result)
+        return events
 
     def terminate(self):
         """

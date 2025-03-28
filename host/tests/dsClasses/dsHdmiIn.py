@@ -117,7 +117,7 @@ class dsHdmiInClass():
 
     This module provides common extensions for device Settings HdmiIn Module.
     """
-    def __init__(self, moduleConfigProfileFile :str, session=None, targetWorkspace="/tmp"):
+    def __init__(self, moduleConfigProfileFile :str, session=None, testSuite:str="L3 dsHdmiIn", targetWorkspace="/tmp", copyArtifacts:bool=True):
         """
         Initializes the dsHdmiIn class function with configuration settings.
 
@@ -127,18 +127,24 @@ class dsHdmiInClass():
         """
         self.moduleName    = "dsHdmiIn"
         self.testConfigFile    =  os.path.join(dir_path, "dsHdmiIn_testConfig.yml")
-        self.testSuite     = "L3 dsHdmiIn"
+        self.testSuite     = testSuite
 
         # Load configurations for device profile and menu
         self.testConfig    = ConfigRead(self.testConfigFile, self.moduleName)
         self.testConfig.test.execute = os.path.join(targetWorkspace, self.testConfig.test.execute)
+        self.testConfig.test.execute = self.testConfig.test.execute + f" -p {os.path.basename(moduleConfigProfileFile)}"
         self.utMenu        = UTSuiteNavigatorClass(self.testConfig, None, session)
         self.testSession   = session
         self.utils         = utBaseUtils()
 
-        for artifact in self.testConfig.test.artifacts:
-            filesPath = os.path.join(dir_path, artifact)
-            self.utils.rsync(self.testSession, filesPath, targetWorkspace)
+        if copyArtifacts:
+            # Copy bin files to the target
+            for artifact in self.testConfig.test.artifacts:
+                filesPath = os.path.join(dir_path, artifact)
+                self.utils.rsync(self.testSession, filesPath, targetWorkspace)
+
+            # Copy the profile file to the target
+            self.utils.scpCopy(self.testSession, moduleConfigProfileFile, targetWorkspace)
 
         self.utMenu.start()
 
@@ -147,6 +153,20 @@ class dsHdmiInClass():
         if match:
             return match.group(1)
         return None
+
+    def runTest(self, test_case:str=None):
+        """
+        Runs the test case passed to this funtion
+        Args:
+            test_case (str, optional): test case name to run, default runs all test
+        Returns:
+            bool: True - test pass, False - test fails
+        """
+        output = self.utMenu.select( self.testSuite, test_case)
+        results = self.utMenu.collect_results(output)
+        if results == None:
+            results = False
+        return results
 
     def initialise(self, device_type:int=0):
         """

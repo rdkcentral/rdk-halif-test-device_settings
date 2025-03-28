@@ -48,13 +48,13 @@ dsAudio:
           - "streams/tone_bassrange_150Hz_48k_Stereo.ac3"
       test09_MS12SurroundDecoder:
         streams:
-          - "streams/test_surroundDecoder.mp4"
+          - "streams/test_surroundDecoder.trp"
       test10_MS12DRCMode:
         streams:
           - "streams/tone_500Hz_compress_48k_stereo.ac3"
       test11_MS12SurroundVirtualizer:
         streams:
-          - "streams/test_surroundVirualizer.mp4"
+          - "streams/test_surroundVirtualizer.trp"
       test12_MS12MISteering:
         streams:
           - "streams/tones_string_48k_stereo.ac3"
@@ -94,15 +94,15 @@ dsAudio:
           - "streams/tones_string_48k_stereo.aac"
           - "streams/tones_string_48k_stereo.ogg"
           - "streams/tones_string_48k_stereo.wma"
-          - "streams/ac4_multilanguage.mp4"
-          - "streams/eac3_atmos.mp4"
-          - "streams/ac4_atmos.mp4"
+          - "streams/ac4_multilanguage.trp"
+          - "streams/eac3_atmos.trp"
+          - "streams/ac4_atmos.trp"
       test23_AssociateMix:
         streams:
-          - "streams/ac4_multilanguage.mp4"
+          - "streams/ac4_multilanguage.trp"
       test24_PrimarySecondaryLanguage:
         streams:
-          - "streams/ac4_multilanguage.mp4"
+          - "streams/ac4_multilanguage.trp"
       test25_AudioMix:
         streams:
           - "streams/primary_audio_48k_2ch.ac3"

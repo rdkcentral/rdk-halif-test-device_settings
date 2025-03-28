@@ -50,6 +50,7 @@ class dsVideoPortHelperClass(utHelperClass):
         self.testSetupPath = os.path.join(dir_path, "dsVideoPort_L3_testSetup.yml")
         self.moduleName = "dsVideoPort"
         self.rackDevice = "dut"
+        self.testsuite  = "L3 dsVideoPort"
 
         super().__init__(testName, qcId, log)
 
@@ -183,7 +184,7 @@ class dsVideoPortHelperClass(utHelperClass):
         self.test_downloadSingleStream()
 
         # Create the dsVideoPort class
-        self.testdsVideoPort = dsVideoPortClass(self.moduleConfigProfileFile, self.hal_session, self.targetWorkspace)
+        self.testdsVideoPort = dsVideoPortClass(self.moduleConfigProfileFile, self.hal_session, self.testsuite, self.targetWorkspace)
         self.log.testStart(self.testName, self.qcId)
         self.testdsVideoPort.initialise()
 

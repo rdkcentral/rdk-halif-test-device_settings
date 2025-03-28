@@ -119,7 +119,7 @@ void test_l1_dsDisplay_positive_dsDisplayInit(void) {
     gTestID = 1;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
 
     // Step 01: Initialize the display module
     result = dsDisplayInit();
@@ -171,7 +171,7 @@ void test_l1_dsDisplay_negative_dsDisplayInit(void) {
     gTestID = 2;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
 
     // Step 01: Initialize the display module
     result = dsDisplayInit();
@@ -217,7 +217,7 @@ void test_l1_dsDisplay_positive_dsDisplayTerm(void) {
     gTestID = 3;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
 
     // Step 01: Initialize the display sub-system
     result = dsDisplayInit();
@@ -270,7 +270,7 @@ void test_l1_dsDisplay_negative_dsDisplayTerm(void) {
     gTestID = 4;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
 
     // Step 01: Call dsDisplayTerm() without initializing the display sub-system
     result = dsDisplayTerm();
@@ -321,7 +321,7 @@ void test_l1_dsDisplay_positive_dsGetDisplay(void) {
     gTestID = 5;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
     dsVideoPortType_t vType;
     intptr_t displayHandle1, displayHandle2;
     uint32_t portIndex;
@@ -346,12 +346,14 @@ void test_l1_dsDisplay_positive_dsGetDisplay(void) {
         result = dsGetDisplay(vType, portIndex, &displayHandle1);
         UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(displayHandle1);
         UT_LOG("Display handle for port type %d with index %d: %ld\n", vType, portIndex, (long)displayHandle1);
 
         // Step 03: Call the last value again, and compare the results
         result = dsGetDisplay(vType, portIndex, &displayHandle2);
-        UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, displayHandle1, displayHandle2);
+        UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(displayHandle2);
         UT_LOG("\n In %s Comparison: [%d = %d]\n", __FUNCTION__, result);
         UT_ASSERT_EQUAL(displayHandle1, displayHandle2);
         UT_LOG("Repeated display handle for port type %d with index %d: %ld\n", vType, portIndex, (long)displayHandle2);
@@ -397,7 +399,7 @@ void test_l1_dsDisplay_negative_dsGetDisplay(void) {
     gTestID = 6;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
     intptr_t displayHandle;
     dsVideoPortType_t vType;
 
@@ -468,7 +470,7 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
     gTestID = 7;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
     intptr_t displayHandle;
     dsVideoPortType_t vType;
     dsDisplayEDID_t edid1;
@@ -495,6 +497,9 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
         // Step 02: Get the display device handle using portIndex
         result = dsGetDisplay(vType, portIndex, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(displayHandle);
+        if (displayHandle == 0)
+            break;
 
         // Step 03: Call dsGetEDID() with the obtained handle
         result = dsGetEDID(displayHandle, &edid1);
@@ -563,7 +568,7 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
     gTestID = 8;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
     intptr_t displayHandle=-1;
     dsVideoPortType_t vType;
     dsDisplayEDID_t *edid = {0};
@@ -586,6 +591,9 @@ void test_l1_dsDisplay_negative_dsGetEDID(void) {
         vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
         result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(displayHandle);
+        if (displayHandle == 0)
+            break;
 
         // Step 04: Call dsGetEDID() with an invalid handle
         result = dsGetEDID((intptr_t)NULL, edid);
@@ -636,7 +644,7 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
     gTestID = 9;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
     intptr_t displayHandle;
     dsVideoPortType_t vType;
     unsigned char *edid = NULL;
@@ -663,6 +671,9 @@ void test_l1_dsDisplay_positive_dsGetEDIDBytes(void) {
 
         result = dsGetDisplay(vType, portIndex, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(displayHandle);
+        if (displayHandle == 0)
+            break;
         if(result != dsERR_NONE)
         {
             UT_FAIL("Failed to get display handle");
@@ -725,7 +736,7 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
     gTestID = 10;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
     dsVideoPortType_t vType;
     intptr_t displayHandle =-1;
     unsigned char *edid = NULL;
@@ -752,6 +763,9 @@ void test_l1_dsDisplay_negative_dsGetEDIDBytes(void) {
         vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
         result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(displayHandle);
+        if (displayHandle == 0)
+            break;
 
         // Step 04: Call dsGetEDIDBytes() with an invalid handle
         result = dsGetEDIDBytes((intptr_t)NULL, edid, &length);
@@ -810,7 +824,7 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
     gTestID = 11;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
     intptr_t displayHandle;
     dsVideoPortType_t vType;
     dsVideoAspectRatio_t aspectRatio = dsVIDEO_ASPECT_RATIO_MAX;
@@ -835,10 +849,13 @@ void test_l1_dsDisplay_positive_dsGetDisplayAspectRatio(void) {
 
         result = dsGetDisplay(vType, portIndex, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(displayHandle);
+        if (displayHandle == 0)
+            break;
 
         // Step 03: Call dsGetDisplayAspectRatio() with the obtained handle
+        result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio);
         if(gSourceType == 1){
-            result = dsGetDisplayAspectRatio(displayHandle, &aspectRatio);
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
             // Step 04: Compare the results with default value
@@ -890,7 +907,7 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
     gTestID = 12;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
     intptr_t displayHandle = -1;
     dsVideoPortType_t vType;
     dsVideoAspectRatio_t aspectRatio;
@@ -913,6 +930,9 @@ void test_l1_dsDisplay_negative_dsGetDisplayAspectRatio(void) {
         vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
         result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(displayHandle);
+        if (displayHandle == 0)
+            break;
 
         if (gSourceType == 1) {
            // Step 04: Call dsGetDisplayAspectRatio() with an invalid handle for source devices
@@ -973,7 +993,7 @@ void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback(void) {
     gTestID = 13;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
     dsVideoPortType_t vType;
     intptr_t displayHandle;
     uint32_t portIndex;
@@ -997,6 +1017,9 @@ void test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback(void) {
 
         result = dsGetDisplay(vType, portIndex, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(displayHandle);
+        if (displayHandle == 0)
+            break;
 
         // Step 03: Call dsRegisterDisplayEventCallback() with the obtained handle and a valid callback function
         result = dsRegisterDisplayEventCallback(displayHandle, testDisplayCallback);
@@ -1043,7 +1066,7 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
     gTestID = 14;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    int result;
+    int result = 0;
     dsVideoPortType_t vType;
     intptr_t displayHandle =-1;
     // Step 01: Call dsRegisterDisplayEventCallback() without initializing the display sub-system
@@ -1064,6 +1087,9 @@ void test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback(void) {
         vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_str);
         result = dsGetDisplay(vType, i, &displayHandle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(displayHandle);
+        if (displayHandle == 0)
+            break;
 
         // Step 04: Call dsRegisterDisplayEventCallback() with a NULL handle
         result = dsRegisterDisplayEventCallback((intptr_t)NULL, testDisplayCallback);
@@ -1130,20 +1156,20 @@ int test_l1_dsDisplay_register ( void )
         return -1;
     }
 
-    UT_add_test( pSuite, "dsDisplayInit_L1_positive" ,test_l1_dsDisplay_positive_dsDisplayInit );
-    UT_add_test( pSuite, "dsDisplayInit_L1_negative" ,test_l1_dsDisplay_negative_dsDisplayInit );
-    UT_add_test( pSuite, "dsDisplayTerm_L1_positive" ,test_l1_dsDisplay_positive_dsDisplayTerm );
-    UT_add_test( pSuite, "dsDisplayTerm_L1_negative" ,test_l1_dsDisplay_negative_dsDisplayTerm );
-    UT_add_test( pSuite, "dsGetDisplay_L1_positive" ,test_l1_dsDisplay_positive_dsGetDisplay );
-    UT_add_test( pSuite, "dsGetDisplay_L1_negative" ,test_l1_dsDisplay_negative_dsGetDisplay );
-    UT_add_test( pSuite, "dsGetEDID_L1_positive" ,test_l1_dsDisplay_positive_dsGetEDID );
-    UT_add_test( pSuite, "dsGetEDID_L1_negative" ,test_l1_dsDisplay_negative_dsGetEDID );
-    UT_add_test( pSuite, "dsGetEDIDBytes_L1_positive" ,test_l1_dsDisplay_positive_dsGetEDIDBytes );
-    UT_add_test( pSuite, "dsGetEDIDBytes_L1_negative" ,test_l1_dsDisplay_negative_dsGetEDIDBytes );
-    UT_add_test( pSuite, "dsGetDisplayAspectRatio_L1_positive" ,test_l1_dsDisplay_positive_dsGetDisplayAspectRatio );
-    UT_add_test( pSuite, "dsGetDisplayAspectRatio_L1_negative" ,test_l1_dsDisplay_negative_dsGetDisplayAspectRatio );
-    UT_add_test( pSuite, "dsRegisterDisplayEventCallback_L1_positive" ,test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback );
-    UT_add_test( pSuite, "dsRegisterDisplayEventCallback_L1_negative" ,test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback );
+    UT_add_test( pSuite, "dsDisplayInit_pos" ,test_l1_dsDisplay_positive_dsDisplayInit );
+    UT_add_test( pSuite, "dsDisplayInit_neg" ,test_l1_dsDisplay_negative_dsDisplayInit );
+    UT_add_test( pSuite, "dsDisplayTerm_pos" ,test_l1_dsDisplay_positive_dsDisplayTerm );
+    UT_add_test( pSuite, "dsDisplayTerm_neg" ,test_l1_dsDisplay_negative_dsDisplayTerm );
+    UT_add_test( pSuite, "dsGetDisplay_pos" ,test_l1_dsDisplay_positive_dsGetDisplay );
+    UT_add_test( pSuite, "dsGetDisplay_neg" ,test_l1_dsDisplay_negative_dsGetDisplay );
+    UT_add_test( pSuite, "dsGetEDID_pos" ,test_l1_dsDisplay_positive_dsGetEDID );
+    UT_add_test( pSuite, "dsGetEDID_neg" ,test_l1_dsDisplay_negative_dsGetEDID );
+    UT_add_test( pSuite, "dsGetEDIDBytes_pos" ,test_l1_dsDisplay_positive_dsGetEDIDBytes );
+    UT_add_test( pSuite, "dsGetEDIDBytes_neg" ,test_l1_dsDisplay_negative_dsGetEDIDBytes );
+    UT_add_test( pSuite, "dsGetDisplayAspectRatio_pos" ,test_l1_dsDisplay_positive_dsGetDisplayAspectRatio );
+    UT_add_test( pSuite, "dsGetDisplayAspectRatio_neg" ,test_l1_dsDisplay_negative_dsGetDisplayAspectRatio );
+    UT_add_test( pSuite, "dsRegisterDisplayEventCB_pos" ,test_l1_dsDisplay_positive_dsRegisterDisplayEventCallback );
+    UT_add_test( pSuite, "dsRegisterDisplayEventCB_neg" ,test_l1_dsDisplay_negative_dsRegisterDisplayEventCallback );
 
     extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsDisplay/features/extendedEnumsSupported" );
 

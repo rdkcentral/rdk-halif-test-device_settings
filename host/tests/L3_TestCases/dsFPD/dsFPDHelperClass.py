@@ -48,6 +48,7 @@ class dsFPDHelperClass(utHelperClass):
         self.testSetupPath = os.path.join(dir_path, "dsFPD_L3_testSetup.yml")
         self.moduleName = "dsFPD"
         self.rackDevice = "dut"
+        self.testsuite  = "L3 Front Panel Functions"
 
         super().__init__(testName, qcId, log)
 
@@ -101,7 +102,7 @@ class dsFPDHelperClass(utHelperClass):
         """
 
         # Create the dsFPD class
-        self.testdsFPD = dsFPDClass(self.moduleConfigProfileFile, self.hal_session, self.targetPath)
+        self.testdsFPD = dsFPDClass(self.moduleConfigProfileFile, self.hal_session, self.testsuite, self.targetPath)
 
         return True
 

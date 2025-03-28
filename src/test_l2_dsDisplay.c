@@ -127,7 +127,8 @@ void test_l2_dsDisplay_RetrieveAndValidateEDID_sink(void)
         ret = dsGetDisplay(vType, portIndex, &handle);
         UT_LOG_INFO("Invoked dsGetDisplay() with vType: %d and portIndex: %d, returned: %d, handle: %ld\n", vType, portIndex, ret, handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
-        if (ret != dsERR_NONE)
+        UT_ASSERT_PTR_NOT_NULL(handle);
+        if ((ret != dsERR_NONE) || (handle == 0))
         {
             // Call dsDisplayTerm if dsGetDisplay fails
             dsDisplayTerm();
@@ -220,7 +221,8 @@ void test_l2_dsDisplay_TestDefaultAspectRatio_source(void)
 
         ret = dsGetDisplay(vType, portIndex, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
-        if (ret != dsERR_NONE)
+        UT_ASSERT_PTR_NOT_NULL(handle);
+        if ((ret != dsERR_NONE) || (handle == 0))
         {
             UT_LOG_ERROR("dsGetDisplay() failed with error: %d\n", ret);
             dsDisplayTerm();
@@ -294,10 +296,10 @@ int test_l2_dsDisplay_register(void)
     }
     // List of test function names and strings
     if(source_type == 0) {
-        UT_add_test( pSuite, "L2_RetrieveAndValidateEDID_sink", test_l2_dsDisplay_RetrieveAndValidateEDID_sink);
+        UT_add_test( pSuite, "RetrieveAndValidateEDID_sink", test_l2_dsDisplay_RetrieveAndValidateEDID_sink);
     }
     else if ( source_type == 1 ){
-        UT_add_test( pSuite, "L2_TestDefaultAspectRatio_source", test_l2_dsDisplay_TestDefaultAspectRatio_source);
+        UT_add_test( pSuite, "TestDefaultAspectRatio_src", test_l2_dsDisplay_TestDefaultAspectRatio_source);
     }
 
     return 0;

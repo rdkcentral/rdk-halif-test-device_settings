@@ -279,9 +279,9 @@ int test_l2_dsCompositeIn_register(void)
     }
     // List of test function names and strings
 
-    UT_add_test( pSuite, "L2_GetNumberOfInputs", test_l2_dsCompositeIn_GetNumberOfInputs);
-    UT_add_test( pSuite, "L2_VerifyCompositeInputStatus", test_l2_dsCompositeIn_VerifyCompositeInputStatus);
-    UT_add_test( pSuite, "L2_VerifyCompositeInPortSelectionAndStatus", test_l2_dsCompositeIn_VerifyCompositeInPortSelectionAndStatus);
+    UT_add_test( pSuite, "GetNumberOfInputs", test_l2_dsCompositeIn_GetNumberOfInputs);
+    UT_add_test( pSuite, "VerifyInputStatus", test_l2_dsCompositeIn_VerifyCompositeInputStatus);
+    UT_add_test( pSuite, "VerifyPortSelectionAndStatus", test_l2_dsCompositeIn_VerifyCompositeInPortSelectionAndStatus);
 
     return 0;
 }

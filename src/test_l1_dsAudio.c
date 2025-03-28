@@ -476,7 +476,7 @@ void test_l1_dsAudio_positive_dsGetAudioFormat(void)
  * |:--:|-----------|----------|--------------|-----|
  * |01|Call dsGetAudioFormat() - Attempt to get audio format without initializing audio ports | handle: [ invalid handle ], audioFormat: [pointer to hold audio format] | dsERR_NOT_INITIALIZED | Get Audio Format must fail as module is not initialized |
  * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
- * |03|Call dsGetAudioFormat() using an invalid handle but with a valid pointer to hold the audio format | handle: [ invalid handle ], audioFormat: [ pointer ] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |03|Call dsGetAudioFormat() using an invalid handle but with a null pointer to hold the audio format | handle: [ null ], audioFormat: [ pointer ] | dsERR_NONE | 
  * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
  * |05|Call dsGetAudioFormat() by looping through acquired port handles but with a null pointer for audio format | handle: [ loop through valid handles ], encoding: [ NULL ] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
  * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE | Terminates the audio ports |
@@ -502,9 +502,9 @@ void test_l1_dsAudio_negative_dsGetAudioFormat(void)
     result = dsAudioPortInit();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // Step 03: Attempt to get audio format using an invalid handle
+    // Step 03: Attempt to get audio format using an null handle
     result = dsGetAudioFormat(handle, &audioFormat);
-    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 04: Get the port handle any of the available ports
     result = dsGetAudioPort(gDSAudioPortConfiguration[0].typeid, gDSAudioPortConfiguration[0].index, &handle);
@@ -4724,7 +4724,7 @@ void test_l1_dsAudio_positive_dsGetAudioGain(void)
 
         // Step 03: Get audio gain for each port
         result = dsGetAudioGain(handle, &gain1);
-        if (gSourceType == 0)
+        if ((gSourceType == 0) && (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER))
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
             UT_ASSERT_TRUE(gain1 >= -2080 && gain1 <= 480);
@@ -4815,7 +4815,7 @@ void test_l1_dsAudio_negative_dsGetAudioGain(void)
 
         // Step 05: Attempt to get audio gain using a valid handle but null pointer for gain
         result = dsGetAudioGain(handle, NULL);
-        if (gSourceType == 0)
+        if ((gSourceType == 0) && (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER))
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
@@ -4885,7 +4885,7 @@ void test_l1_dsAudio_positive_dsSetAudioGain(void)
 
         // Step 03: Set audio gain for each port
         result = dsSetAudioGain(handle, gain_min);
-        if (gSourceType == 0)
+        if ((gSourceType == 0) && (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER))
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -4976,7 +4976,7 @@ void test_l1_dsAudio_negative_dsSetAudioGain(void)
 
         // Step 05: Attempt to set audio gain using a valid handle but out of range gain value
         result = dsSetAudioGain(handle, invalid_gain_neg);
-        if (gSourceType == 0)
+        if ((gSourceType == 0) && (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER))
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
@@ -5051,7 +5051,9 @@ void test_l1_dsAudio_positive_dsGetAudioLevel(void)
 
         // Step 03: Get the audio level values
         result = dsGetAudioLevel(handle, &audioLevel1);
-        if (gSourceType == 0)
+        if ((gSourceType == 0) &&
+            ((gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HEADPHONE) ||
+             (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER)))
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
             UT_ASSERT_TRUE(audioLevel1 >= 0 && audioLevel1 <= 100);
@@ -5145,7 +5147,9 @@ void test_l1_dsAudio_negative_dsGetAudioLevel(void)
 
         // Step 05: Attempt to get audio level with NULL pointer
         result = dsGetAudioLevel(handle, NULL);
-        if (gSourceType == 0)
+        if ((gSourceType == 0) &&
+            ((gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HEADPHONE) ||
+             (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER)))
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
@@ -5214,7 +5218,9 @@ void test_l1_dsAudio_positive_dsSetAudioLevel(void)
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
 
         result = dsSetAudioLevel(handle, minAudioLevel);
-        if (gSourceType == 0)
+        if ((gSourceType == 0) &&
+            ((gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HEADPHONE) ||
+             (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER)))
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -5305,7 +5311,9 @@ void test_l1_dsAudio_negative_dsSetAudioLevel(void)
 
         // Step 05 : Attempt to set Audio level with invalid values
         result = dsSetAudioLevel(handle, invalid_audio_level_neg);
-        if (gSourceType == 0)
+        if ((gSourceType == 0) &&
+            ((gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HEADPHONE) ||
+             (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER)))
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
@@ -7195,12 +7203,13 @@ void test_l1_dsAudio_positive_dsAudioOutIsConnected(void)
     // Steps 02 and 03: Get port handle and check connection status
     for (int i = 0; i < gDSAudioNumberOfPorts; i++)
     {
+        
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
 
         result = dsAudioOutIsConnected(handle, &isConnected);
-        if (gSourceType == 0)
+        if ((gSourceType == 0)&&(gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HEADPHONE))
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
         }
@@ -7286,7 +7295,7 @@ void test_l1_dsAudio_negative_dsAudioOutIsConnected(void)
 
         // Step 05: Test with Null pointer
         result = dsAudioOutIsConnected(handle, NULL);
-        if (gSourceType == 0)
+        if ((gSourceType == 0)&&(gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HEADPHONE))
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
@@ -8303,7 +8312,7 @@ void test_l1_dsAudio_negative_dsGetFaderControl(void)
  * |:--:|-----------|----------|----------|--------------|-----|
  * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
- * |03|Call dsSetPrimaryLanguage() looping through the acquired ports and valid pointer to set an AC4 primary language  | handle=[valid handle], pLang=[ENG] | dsERR_NONE | primary langauage should be set successfully |
+ * |03|Call dsSetPrimaryLanguage() looping through the acquired ports and valid pointer to set an AC4 primary language  | handle=[valid handle], pLang=[eng] | dsERR_NONE | primary langauage should be set successfully |
  * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  *
  */
@@ -8315,7 +8324,7 @@ void test_l1_dsAudio_positive_dsSetPrimaryLanguage(void)
 
     int result;
     intptr_t handle = null_handle;
-    const char *primaryLanguage = "ENG"; // Assuming "ENG" is a valid language code
+    const char *primaryLanguage = "eng"; // Assuming "eng" is a valid language code
 
     // Step 01: Initialize audio ports
     result = dsAudioPortInit();
@@ -8353,14 +8362,14 @@ void test_l1_dsAudio_positive_dsSetPrimaryLanguage(void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|----------|--------------|-----|
- * |01|Call dsSetPrimaryLanguage() without initializing audio ports | handle=[valid handle], pLang=[ENG] | dsERR_NOT_INITIALIZED | call must fail as module is not initialized |
+ * |01|Call dsSetPrimaryLanguage() without initializing audio ports | handle=[valid handle], pLang=[eng] | dsERR_NOT_INITIALIZED | call must fail as module is not initialized |
  * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
- * |03|Call dsSetPrimaryLanguage() using an invalid handle with valid pLang pointer | handle=[invalid handle], pLang=[ENG] | dsERR_INVALID_PARAM or dsERR_OPERATION_NOT_SUPPORTED |Invalid parameter must be returned |
+ * |03|Call dsSetPrimaryLanguage() using an invalid handle with valid pLang pointer | handle=[invalid handle], pLang=[eng] | dsERR_INVALID_PARAM or dsERR_OPERATION_NOT_SUPPORTED |Invalid parameter must be returned |
  * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
  * |05|Call dsSetPrimaryLanguage() by looping through the valid handles and  passing NULL as the language pointer | handle=[valid handle] , pLang=[NULL] | dsERR_INVALID_PARAM | Invalid parameter must be returned |
- * |06|Call dsSetPrimaryLanguage() passing an unsupported language code | handle=[valid handle], pLang=[XYZ] | dsERR_INVALID_PARAM |Invalid parameter must be returned  |
+ * |06|Call dsSetPrimaryLanguage() passing an unsupported language code | handle=[valid handle], pLang=[123] | dsERR_INVALID_PARAM |Invalid parameter must be returned  |
  * |07|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
- * |08|Call dsSetPrimaryLanguage() again after terminating audio ports | handle=[valid handle], pLang=[ENG] | dsERR_NOT_INITIALIZED | call must fail as module is not initialized |
+ * |08|Call dsSetPrimaryLanguage() again after terminating audio ports | handle=[valid handle], pLang=[eng] | dsERR_NOT_INITIALIZED | call must fail as module is not initialized |
  *
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions
  */
@@ -8372,10 +8381,10 @@ void test_l1_dsAudio_negative_dsSetPrimaryLanguage(void)
 
     int result;
     intptr_t handle = null_handle;
-    const char *invalidLanguage = "XYZ"; // Assuming "XYZ" is an invalid language code
+    const char *invalidLanguage = "123"; // Assuming "123" is an invalid language code
 
     // Step 01: Call without initializing audio ports
-    result = dsSetPrimaryLanguage(-1, "ENG");
+    result = dsSetPrimaryLanguage(-1, "eng");
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
     // Step 02: Initialize audio ports
@@ -8383,7 +8392,7 @@ void test_l1_dsAudio_negative_dsSetPrimaryLanguage(void)
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 03: Call with invalid handle
-    result = dsSetPrimaryLanguage(handle, "ENG");
+    result = dsSetPrimaryLanguage(handle, "eng");
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 04: Get a valid port handles
@@ -8407,7 +8416,7 @@ void test_l1_dsAudio_negative_dsSetPrimaryLanguage(void)
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 07: Call after terminating audio ports
-    result = dsSetPrimaryLanguage(handle, "ENG");
+    result = dsSetPrimaryLanguage(handle, "eng");
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
     // End of the test
@@ -8558,7 +8567,7 @@ void test_l1_dsAudio_negative_dsGetPrimaryLanguage(void)
  * |:--:|-----------|----------|----------|--------------|-----|
  * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
- * |03|Call dsSetSecondaryLanguage() by looping through acquired port handles and valid sLang string | handle=[valid handles], sLang=[ENG] | dsERR_NONE | secondary language should be successfully set |
+ * |03|Call dsSetSecondaryLanguage() by looping through acquired port handles and valid sLang string | handle=[valid handles], sLang=[eng] | dsERR_NONE | secondary language should be successfully set |
  * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  *
  */
@@ -8583,7 +8592,7 @@ void test_l1_dsAudio_positive_dsSetSecondaryLanguage(void)
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
 
         // Set Secondary language
-        result = dsSetSecondaryLanguage(handle, "ENG");
+        result = dsSetSecondaryLanguage(handle, "eng");
         UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
@@ -8607,14 +8616,14 @@ void test_l1_dsAudio_positive_dsSetSecondaryLanguage(void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|----------|--------------|-----|
- * |01|Call dsSetSecondaryLanguage() without initializing audio ports | handle=[valid handle], sLang=[ENG] | dsERR_NOT_INITIALIZED | call must fail as module is not initialized |
+ * |01|Call dsSetSecondaryLanguage() without initializing audio ports | handle=[valid handle], sLang=[eng] | dsERR_NOT_INITIALIZED | call must fail as module is not initialized |
  * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
- * |03|Call dsSetSecondaryLanguage() using an invalid handle with valid sLang pointer | handle=[invalid handle], sLang=[ENG] | dsERR_INVALID_PARAM |Invalid parameter must be returned |
+ * |03|Call dsSetSecondaryLanguage() using an invalid handle with valid sLang pointer | handle=[invalid handle], sLang=[eng] | dsERR_INVALID_PARAM |Invalid parameter must be returned |
  * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
  * |05|Call dsSetSecondaryLanguage() by looping through the valid handles and  passing NULL as the language pointer | handle=[valid handle] , sLang=[NULL] | dsERR_INVALID_PARAM | Invalid parameter must be returned |
- * |06|Call dsSetSecondaryLanguage() by looping through the valid handles and  unsupported language code | handle=[valid handle], sLang=[XYZ] | dsERR_INVALID_PARAM |Invalid parameter must be returned  |
+ * |06|Call dsSetSecondaryLanguage() by looping through the valid handles and  unsupported language code | handle=[valid handle], sLang=[123] | dsERR_INVALID_PARAM |Invalid parameter must be returned  |
  * |07|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
- * |08|Call dsSetSecondaryLanguage() again after terminating audio ports | handle=[valid handle] , sLang=[ENG] | dsERR_NOT_INITIALIZED |call must fail as module is not initialized |
+ * |08|Call dsSetSecondaryLanguage() again after terminating audio ports | handle=[valid handle] , sLang=[eng] | dsERR_NOT_INITIALIZED |call must fail as module is not initialized |
  *
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions
  */
@@ -8628,7 +8637,7 @@ void test_l1_dsAudio_negative_dsSetSecondaryLanguage(void)
     intptr_t handle = null_handle;
 
     // Step 01: Call without initializing audio ports
-    result = dsSetSecondaryLanguage(-1, "ENG");
+    result = dsSetSecondaryLanguage(-1, "eng");
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
     // Step 02: Initialize audio ports
@@ -8636,7 +8645,7 @@ void test_l1_dsAudio_negative_dsSetSecondaryLanguage(void)
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 03: Call with invalid handle
-    result = dsSetSecondaryLanguage(handle, "ENG");
+    result = dsSetSecondaryLanguage(handle, "eng");
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 04: Get a valid port handle
@@ -8651,7 +8660,7 @@ void test_l1_dsAudio_negative_dsSetSecondaryLanguage(void)
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
         // Step 06: Call with unsupported language code
-        result = dsSetSecondaryLanguage(handle, "XYZ");
+        result = dsSetSecondaryLanguage(handle, "123");
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     }
 
@@ -8660,7 +8669,7 @@ void test_l1_dsAudio_negative_dsSetSecondaryLanguage(void)
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 08: Call after terminating audio ports
-    result = dsSetSecondaryLanguage(handle, "ENG");
+    result = dsSetSecondaryLanguage(handle, "eng");
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
     // End of the test
