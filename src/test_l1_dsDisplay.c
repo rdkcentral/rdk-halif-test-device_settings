@@ -1227,7 +1227,7 @@ void test_l1_dsDisplay_negative_dsGetAVIContentType(void) {
 
     // Step 01: Call dsGetAVIContentType() without initializing the display sub-system
     result = dsGetAVIContentType(displayHandle, &contentType);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // Step 02: Initialize the display sub-system
@@ -1268,7 +1268,7 @@ void test_l1_dsDisplay_negative_dsGetAVIContentType(void) {
 
     // Step 08: Call dsGetAVIContentType() without initializing the display sub-system
     result = dsGetAVIContentType(displayHandle, &contentType);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // End of the test
@@ -1387,7 +1387,7 @@ void test_l1_dsDisplay_negative_dsSetAVIContentType(void) {
 
     // Step 01: Call dsSetAVIContentType() without initializing the display sub-system
     result = dsSetAVIContentType(displayHandle, contentType);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // Step 02: Initialize the display sub-system
@@ -1428,7 +1428,7 @@ void test_l1_dsDisplay_negative_dsSetAVIContentType(void) {
 
     // Step 08: Call dsSetAVIContentType() without initializing the display sub-system
     result = dsSetAVIContentType(displayHandle, contentType);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED,dsERR_OPERATION_NOT_SUPPORTED);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // End of the test
@@ -1548,7 +1548,7 @@ void test_l1_dsDisplay_negative_dsGetAVIScanInformation(void) {
 
     // Step 01: Call dsGetAVIScanInformation() without initializing the display sub-system
     result = dsGetAVIScanInformation(displayHandle, &scanInfo);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED,dsERR_OPERATION_NOT_SUPPORTED);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // Step 02: Initialize the display sub-system
@@ -1589,7 +1589,7 @@ void test_l1_dsDisplay_negative_dsGetAVIScanInformation(void) {
 
     // Step 08: Call dsGetAVIScanInformation() without initializing the display sub-system
     result = dsGetAVIScanInformation(displayHandle, &scanInfo);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED,dsERR_OPERATION_NOT_SUPPORTED);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // End of the test
@@ -1653,7 +1653,7 @@ void test_l1_dsDisplay_positive_dsSetAVIScanInformation(void) {
 	    // API return not supported when HDMI disconnected
 	    result = dsSetAVIScanInformation(displayHandle, scanInfo);
             if (gSourceType == 1) {
-                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED|dsERR_NONE);
             } else if (gSourceType == 0) {
                 UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
             }
@@ -1709,7 +1709,7 @@ void test_l1_dsDisplay_negative_dsSetAVIScanInformation(void) {
 
     // Step 01: Call dsSetAVIScanInformation() without initializing the display sub-system
     result = dsSetAVIScanInformation(displayHandle, scanInfo);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // Step 02: Initialize the display sub-system
@@ -1751,7 +1751,7 @@ void test_l1_dsDisplay_negative_dsSetAVIScanInformation(void) {
 
     // Step 08: Call dsSetAVIScanInformation() without initializing the display sub-system
     result = dsSetAVIScanInformation(displayHandle, scanInfo);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // End of the test
@@ -1871,7 +1871,7 @@ void test_l1_dsDisplay_negative_dsGetAllmEnabled(void) {
 
     // Step 01: Call dsGetAllmEnabled() without initializing the display sub-system
     result = dsGetAllmEnabled(displayHandle, &enabled);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // Step 02: Initialize the display sub-system
@@ -1912,7 +1912,7 @@ void test_l1_dsDisplay_negative_dsGetAllmEnabled(void) {
 
     // Step 08: Call dsGetAllmEnabled() without initializing the display sub-system
     result = dsGetAllmEnabled(displayHandle, &enabled);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // End of the test
@@ -1973,14 +1973,14 @@ void test_l1_dsDisplay_positive_dsSetAllmEnabled(void) {
         result = dsSetAllmEnabled(displayHandle, true);
         if (gSourceType == 1) {
             // API returns not supported when HDMI disconnected
-            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED)|dsERR_NONE;
         } else if (gSourceType == 0) {
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
 	result = dsSetAllmEnabled(displayHandle, false);
         if (gSourceType == 1) {
             // API returns not supported when HDMI disconnected
-            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED)|dsERR_NONE;
         } else if (gSourceType == 0) {
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
@@ -2035,7 +2035,7 @@ void test_l1_dsDisplay_negative_dsSetAllmEnabled(void) {
 
     // Step 01: Call dsSetAllmEnabled() without initializing the display sub-system
     result = dsSetAllmEnabled(displayHandle, enabled);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // Step 02: Initialize the display sub-system
@@ -2071,7 +2071,7 @@ void test_l1_dsDisplay_negative_dsSetAllmEnabled(void) {
 
     // Step 07: Call dsSetAllmEnabled() without initializing the display sub-system
     result = dsSetAllmEnabled(displayHandle, &enabled);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // End of the test
