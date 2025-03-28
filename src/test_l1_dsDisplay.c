@@ -1227,7 +1227,11 @@ void test_l1_dsDisplay_negative_dsGetAVIContentType(void) {
 
     // Step 01: Call dsGetAVIContentType() without initializing the display sub-system
     result = dsGetAVIContentType(displayHandle, &contentType);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    } else if (gSourceType == 0) {
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    }
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // Step 02: Initialize the display sub-system
@@ -1268,7 +1272,11 @@ void test_l1_dsDisplay_negative_dsGetAVIContentType(void) {
 
     // Step 08: Call dsGetAVIContentType() without initializing the display sub-system
     result = dsGetAVIContentType(displayHandle, &contentType);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    } else if (gSourceType == 0) {
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    }
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // End of the test
@@ -1387,7 +1395,11 @@ void test_l1_dsDisplay_negative_dsSetAVIContentType(void) {
 
     // Step 01: Call dsSetAVIContentType() without initializing the display sub-system
     result = dsSetAVIContentType(displayHandle, contentType);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    } else if (gSourceType == 0) {
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    }
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // Step 02: Initialize the display sub-system
@@ -1428,7 +1440,11 @@ void test_l1_dsDisplay_negative_dsSetAVIContentType(void) {
 
     // Step 08: Call dsSetAVIContentType() without initializing the display sub-system
     result = dsSetAVIContentType(displayHandle, contentType);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    } else if (gSourceType == 0) {
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    }
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // End of the test
@@ -1548,7 +1564,11 @@ void test_l1_dsDisplay_negative_dsGetAVIScanInformation(void) {
 
     // Step 01: Call dsGetAVIScanInformation() without initializing the display sub-system
     result = dsGetAVIScanInformation(displayHandle, &scanInfo);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    } else if (gSourceType == 0) {
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    }
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // Step 02: Initialize the display sub-system
@@ -1589,7 +1609,11 @@ void test_l1_dsDisplay_negative_dsGetAVIScanInformation(void) {
 
     // Step 08: Call dsGetAVIScanInformation() without initializing the display sub-system
     result = dsGetAVIScanInformation(displayHandle, &scanInfo);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    } else if (gSourceType == 0) {
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    }
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // End of the test
@@ -1709,7 +1733,11 @@ void test_l1_dsDisplay_negative_dsSetAVIScanInformation(void) {
 
     // Step 01: Call dsSetAVIScanInformation() without initializing the display sub-system
     result = dsSetAVIScanInformation(displayHandle, scanInfo);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    } else if (gSourceType == 0) {
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    }
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // Step 02: Initialize the display sub-system
@@ -1751,7 +1779,11 @@ void test_l1_dsDisplay_negative_dsSetAVIScanInformation(void) {
 
     // Step 08: Call dsSetAVIScanInformation() without initializing the display sub-system
     result = dsSetAVIScanInformation(displayHandle, scanInfo);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    } else if (gSourceType == 0) {
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    }
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // End of the test
@@ -1871,7 +1903,11 @@ void test_l1_dsDisplay_negative_dsGetAllmEnabled(void) {
 
     // Step 01: Call dsGetAllmEnabled() without initializing the display sub-system
     result = dsGetAllmEnabled(displayHandle, &enabled);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    } else if (gSourceType == 0) {
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    }
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // Step 02: Initialize the display sub-system
@@ -1912,7 +1948,11 @@ void test_l1_dsDisplay_negative_dsGetAllmEnabled(void) {
 
     // Step 08: Call dsGetAllmEnabled() without initializing the display sub-system
     result = dsGetAllmEnabled(displayHandle, &enabled);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    } else if (gSourceType == 0) {
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    }
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // End of the test
@@ -2035,7 +2075,11 @@ void test_l1_dsDisplay_negative_dsSetAllmEnabled(void) {
 
     // Step 01: Call dsSetAllmEnabled() without initializing the display sub-system
     result = dsSetAllmEnabled(displayHandle, enabled);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    } else if (gSourceType == 0) {
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    }
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // Step 02: Initialize the display sub-system
@@ -2059,7 +2103,7 @@ void test_l1_dsDisplay_negative_dsSetAllmEnabled(void) {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         } else if (gSourceType == 0) {
             // Step 05: Expect dsERR_OPERATION_NOT_SUPPORTED for sink devices
-            result = dsSetAllmEnabled(displayHandle, &enabled);
+            result = dsSetAllmEnabled(displayHandle, enabled);
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
     }
@@ -2070,8 +2114,12 @@ void test_l1_dsDisplay_negative_dsSetAllmEnabled(void) {
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 07: Call dsSetAllmEnabled() without initializing the display sub-system
-    result = dsSetAllmEnabled(displayHandle, &enabled);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    result = dsSetAllmEnabled(displayHandle, enabled);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    } else if (gSourceType == 0) {
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    }
     UT_LOG("\n In %s Return value: [%d]\n", __FUNCTION__, result);
 
     // End of the test
