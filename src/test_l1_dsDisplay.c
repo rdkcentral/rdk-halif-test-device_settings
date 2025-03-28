@@ -1973,14 +1973,14 @@ void test_l1_dsDisplay_positive_dsSetAllmEnabled(void) {
         result = dsSetAllmEnabled(displayHandle, true);
         if (gSourceType == 1) {
             // API returns not supported when HDMI disconnected
-            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED)|dsERR_NONE;
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED|dsERR_NONE);
         } else if (gSourceType == 0) {
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
 	result = dsSetAllmEnabled(displayHandle, false);
         if (gSourceType == 1) {
             // API returns not supported when HDMI disconnected
-            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED)|dsERR_NONE;
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED|dsERR_NONE);
         } else if (gSourceType == 0) {
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
