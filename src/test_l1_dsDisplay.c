@@ -1762,7 +1762,7 @@ void test_l1_dsDisplay_negative_dsSetAVIScanInformation(void) {
 
             // Step 05: Call dsSetAVIScanInformation() with a NULL scanInfo for source devices
             result = dsSetAVIScanInformation(displayHandle, dsAVI_SCAN_TYPE_MAX);
-	    UT_ASSERT_TRUE(result, dsERR_INVALID_PARAM);
+	    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
         } else if (gSourceType == 0) {
             // Step 06: Expect dsERR_OPERATION_NOT_SUPPORTED for sink devices
