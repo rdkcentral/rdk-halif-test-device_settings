@@ -1677,7 +1677,7 @@ void test_l1_dsDisplay_positive_dsSetAVIScanInformation(void) {
 	    // API return not supported when HDMI disconnected
 	    result = dsSetAVIScanInformation(displayHandle, scanInfo);
             if (gSourceType == 1) {
-                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED|dsERR_NONE);
+		UT_ASSERT_TRUE(result == dsERR_OPERATION_NOT_SUPPORTED || result == dsERR_NONE);
             } else if (gSourceType == 0) {
                 UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
             }
@@ -1712,7 +1712,7 @@ void test_l1_dsDisplay_positive_dsSetAVIScanInformation(void) {
  * |02|Initialize the display sub-system and obtain a display device handle | | dsERR_NONE | Initialization and handle retrieval should succeed |
  * |03|Call dsGetDisplay() Loop through all valid ports in numPorts[]|vType: [Valid Port Type]_INPUT, int, intptr_t*  | dsERR_NONE and valid handle | Handle of the display device should be retrieved successfully |
  * |04|If the device is a source, call dsSetAVIScanInformation() with an invalid handle| NULL, dsAVIScanInformation_t scanInfo | dsERR_INVALID_PARAM | Should return error indicating invalid handle |
- * |05|If the device is a source, call dsSetAVIScanInformation() with an invalid scanInfo | intptr_t handle, invalid scanInfo | dsERR_OPERATION_NOT_SUPPORTED | Should return error indicating operation not supported when HDMI disconnected |
+ * |05|If the device is a source, call dsSetAVIScanInformation() with an invalid scanInfo | intptr_t handle, invalid scanInfo | dsERR_INVALID_PARAM | Should return error indicating invalid param |
  * |06|If the device is a sink, call dsSetAVIScanInformation() | intptr_t handle, dsAVIScanInformation_t scanInfo | dsERR_OPERATION_NOT_SUPPORTED | API is not supported for sink devices |
  * |07|Terminate the display sub-system with dsDisplayTerm() | | dsERR_NONE | Termination should succeed |
  * |08|Call dsSetAVIScanInformation() without initializing the display sub-system or obtaining a handle | intptr_t handle, dsAVIScanInformation_t scanInfo  | dsERR_NOT_INITIALIZED | Should return error indicating the module is not initialized |
@@ -1761,9 +1761,8 @@ void test_l1_dsDisplay_negative_dsSetAVIScanInformation(void) {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
             // Step 05: Call dsSetAVIScanInformation() with a NULL scanInfo for source devices
-	    // API returns not supported when HDMI disconnected
-            result = dsSetAVIScanInformation(displayHandle, dsAVICONTENT_TYPE_MAX);
-            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+            result = dsSetAVIScanInformation(displayHandle, dsAVI_SCAN_TYPE_MAX);
+	    UT_ASSERT_TRUE(result, dsERR_INVALID_PARAM);
 
         } else if (gSourceType == 0) {
             // Step 06: Expect dsERR_OPERATION_NOT_SUPPORTED for sink devices
@@ -2013,14 +2012,14 @@ void test_l1_dsDisplay_positive_dsSetAllmEnabled(void) {
         result = dsSetAllmEnabled(displayHandle, true);
         if (gSourceType == 1) {
             // API returns not supported when HDMI disconnected
-            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED|dsERR_NONE);
+	    UT_ASSERT_TRUE(result == dsERR_OPERATION_NOT_SUPPORTED || result == dsERR_NONE);
         } else if (gSourceType == 0) {
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
 	result = dsSetAllmEnabled(displayHandle, false);
         if (gSourceType == 1) {
             // API returns not supported when HDMI disconnected
-            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED|dsERR_NONE);
+	    UT_ASSERT_TRUE(result == dsERR_OPERATION_NOT_SUPPORTED || result == dsERR_NONE);
         } else if (gSourceType == 0) {
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
