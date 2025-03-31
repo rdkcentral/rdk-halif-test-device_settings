@@ -131,6 +131,7 @@ class dsHdmiInClass():
 
         # Load configurations for device profile and menu
         self.testConfig    = ConfigRead(self.testConfigFile, self.moduleName)
+        self.deviceProfile = ConfigRead( moduleConfigProfileFile , self.moduleName)
         self.testConfig.test.execute = os.path.join(targetWorkspace, self.testConfig.test.execute)
         self.testConfig.test.execute = self.testConfig.test.execute + f" -p {os.path.basename(moduleConfigProfileFile)}"
         self.utMenu        = UTSuiteNavigatorClass(self.testConfig, None, session)
@@ -660,6 +661,45 @@ class dsHdmiInClass():
 
         result = self.utMenu.select(self.testSuite, "Set EdidVersion", promptWithAnswers)
 
+    def getSupportedEdidVersion(self):
+        """
+        Gets the EDID version.
+
+        Args:
+            None.
+
+        Returns:
+            list: List of EDID versions.
+        """
+        # Get the EDID version from the profile
+        edidVersions = self.deviceProfile.EdidVersion
+
+        # Check if EdidVersion exists
+        if edidVersions is None:
+            return []
+
+        outEdidVersion = []
+        for edidVersion in edidVersions:
+            # Assuming hdmiEdidVersion is an Enum mapping the versions
+            outEdidVersion.append(hdmiEdidVersion(edidVersion).name)
+
+        return outEdidVersion
+
+    def getSupportedPortsByEdidVersion(self, edidVersion):
+        """
+        Retrieves a list of HDMI input ports that support a specific EDID version.
+
+        Args:
+            edid_version (str): The EDID version to filter for (e.g., "HDMI_EDID_VER_20").
+
+        Returns:
+            list: A list of ports supporting the specified EDID version.
+        """
+        return [
+            port for port, version in zip(self.getSupportedPorts(), self.getSupportedEdidVersion())
+            if version == edidVersion
+        ]
+
     def getEdidVersion(self, port_type:str=0):
         """
         Gets edidversion.
@@ -751,7 +791,7 @@ class dsHdmiInClass():
         """
         promptWithAnswers = [
             {
-                "query_type": "direct",
+                "query_type": "list",
                 "query": "List of supported ports:",
                 "input": str(port_type)
             },

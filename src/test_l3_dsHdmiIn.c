@@ -1080,7 +1080,7 @@ void test_l3_HdmiIn_set_edid2allmsupport(void)
 
     ret = dsSetEdid2AllmSupport(port, allmsupport);
 
-    UT_LOG_INFO("Calling dsSetEdid2AllmSupport IN:port:[%s]:[%d] ,IN:allmsupport:[%s],dsError_t:[%s]",
+    UT_LOG_INFO("Result dsSetEdid2AllmSupport IN:port:[%s]:[%d] ,IN:allmsupport:[%s],dsError_t:[%s]",
                  UT_Control_GetMapString(dsHdmiInPort_mapTable, port), port,
                  UT_Control_GetMapString(bool_mapTable, allmsupport),
                  UT_Control_GetMapString(dsError_mapTable, ret));

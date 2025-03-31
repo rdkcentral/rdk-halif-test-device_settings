@@ -58,7 +58,7 @@ High level overview:
 |16|[Get Supported Game Feature List](#get-supported-game-feature-list)|The test verifies by getting the all supported game features in the list.|
 |17|[Get AV latency](#get-av-latency)|The test validates by getting the current av latency.|
 |18|[Get `ALLM` status](#get-allm-status)|The test aims to verify that `ALLM` status is enabled or disabled for the specific `HDMI` input port.|
-|19|[Get and Set `EDID` to all `ALLM` Support](#get-and-set-edid-to-all-allm-support)|The test aims to verfiy by setting and getting the `EDID` `ALLM` support.|
+|19|[Set `EDID` to all `ALLM` Support](#set-edid-to-all-allm-support)|The test aims to verfiy by setting and getting the `EDID` `ALLM` support.|
 |20|[Get `HDMI` version](#get-hdmi-version)|The test is to validate getting the `HDMI` compatibility version|
 -----------
 
@@ -399,21 +399,21 @@ Emulator will boot with the `ALLM` configuration details.
 
 None
 
-## Get and Set `EDID` to all `ALLM` Support
+## Set `EDID` to all `ALLM` Support
 
 |Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |------------------|-----------|--------|--|--|------|----|--------------------------|
-|Get and Set `EDID` to all `ALLM` Support|Set `ALLM` support to `EDID` Version 2.0 with the connected external source device|dsSetEdid2AllmSupport()|`N`|`Y`|`N`|`Y`|`Y`|
+|Set `EDID` to all `ALLM` Support|Set `ALLM` support to `EDID` Version 2.0 with the connected external source device|dsSetEdid2AllmSupport()|`N`|`Y`|`N`|`Y`|`Y`|
 
-### Test Startup Requirement - Get and Set `EDID` to all `ALLM` Support
+### Test Startup Requirement - Set `EDID` to all `ALLM` Support
 
 Connection of the Game console source device with the `HDMI` Input.
 
-### Emulator Requirement - Get and Set `EDID` to all `ALLM` Support
+### Emulator Requirement - Set `EDID` to all `ALLM` Support
 
 Emulator will boot with the `ALLM` support information.
 
-### Control Plane Requirement - Get and Set `EDID` to all `ALLM` Support
+### Control Plane Requirement - Set `EDID` to all `ALLM` Support
 
 Control plane connects/ disconnects the external devices. Validates the ALLM by analyzers.
 

@@ -19,7 +19,7 @@
   - [dsHdmiIn_test11_GetEDIDInfo_Verify.py](#dshdmiin_test11_getedidinfo_verifypy)
   - [dsHdmiIn_test12_GetSpdInfo_Verify.py](#dshdmiin_test12_getspdinfo_verifypy)
   - [dsHdmiIn_test13_SetAndGetEDIDVersion.py](#dshdmiin_test13_setandgetedidversionpy)
-  - [dsHdmiIn_test14_SetAndGetEDID2ALLMSupport.py](#dshdmiin_test14_setandgetedid2allmsupportpy)
+  - [dsHdmiIn_test14_SetEDID2ALLMSupport.py](#dshdmiin_test14_setedid2allmsupportpy)
   - [dsHdmiIn_L3_Runall_Sink.py](#dshdmiin_l3_runall_sinkpy)
 
 ## Acronyms, Terms and Abbreviations
@@ -830,7 +830,7 @@ This test set EDID version and verifies the same by retrieving the EDID version.
 
   Once all necessary user actions are completed, the test will evaluate the results and display whether the test Passed or Failed.
 
-### dsHdmiIn_test14_SetAndGetEDID2ALLMSupport.py
+### dsHdmiIn_test14_SetEDID2ALLMSupport.py
 
 #### Platform Supported - test14
 
@@ -850,17 +850,26 @@ This test set ALLM and verifies the same by retrieving the ALLM.
 
 #### Test Steps - test14
 
-  - Run the Python script **`dsHdmiIn_test14_SetAndGetEDID2ALLMSupport.py`**
+  - Run the Python script **`dsHdmiIn_test14_SetEDID2ALLMSupport.py`**
   - The test will automatically download all required artifacts and streams, copying them to the designated target directory before commencing execution.
   - ALLM version Verification:
 
-  - Test will sets and get the ALLM.
-  - If the set and retrieved ALLM support statuses match, the test will mark the step as PASS.
-  - If the set and retrieved ALLM support statuses do not match, the test will mark the step as FAIL.
+  - The test sets the ALLM flag.
+  - The user must manually verify it using the HDMI analyzer.
+  - In the HDMI analyzer - quantum data Analyzer M41h, follow these steps:
+    - Go to Generator.
+    - Navigate to Tools.
+    - Select EDID Decode.
+    - Click Read.
+    - Select Block 2 at the bottom.
+    - Go to Column 5 and check the ALLM flag.
+    - Y indicates 1 (Enabled).
+    - N indicates 0 (Disabled).
+  - If the test meets the requirement, the step will be marked as PASS.
+  - If the test does not meet the requirement in the analyzer, the step will be marked as FAIL.
+  - Repeat for all EDID 2.0-supported ports.
 
-  - Repeat for All Ports:
-
-  The test will iterate through all available Hdmi IN ports, sets ALLM and verifies by retrieving ALLM.
+  The test will iterate through all available Hdmi IN EDID 2.0 supported ports, sets ALLM and verifies by Manual method.
 
 - Test Conclusion:
 
