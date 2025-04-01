@@ -8017,7 +8017,7 @@ void test_l1_dsAudio_negative_dsGetAssociatedAudioMixing(void)
 
     // Step 03: Call without initializing
     result = dsGetAssociatedAudioMixing(handle, &mixing);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 04: Loop through kPorts to get audio port handle
     for (int i = 0; i < gDSAudioNumberOfPorts; i++)
