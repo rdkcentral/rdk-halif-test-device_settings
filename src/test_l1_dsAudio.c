@@ -8015,7 +8015,7 @@ void test_l1_dsAudio_negative_dsGetAssociatedAudioMixing(void)
     result = dsAudioPortInit();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // Step 03: Call without initializing
+    // Step 03: Call with invalid handle
     result = dsGetAssociatedAudioMixing(handle, &mixing);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
