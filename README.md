@@ -7,6 +7,8 @@
 - [Reference Documents](#reference-documents)
 - [How to build the test suite](#how-to-build-the-test-suite)
 - [Notes](#notes)
+- [Manual way of running the L1 and L2 test cases](#manual-way-of-running-the-l1-and-l2-test-cases)
+- [Setting Python environment for running the L1 L2 and L3 automation test cases](#setting-python-environment-for-running-the-l1-l2-and-l3-automation-test-cases)
 
 ## Acronyms, Terms and Abbreviations
 
@@ -101,7 +103,7 @@ build_ut.sh TARGET=arm
 
 - `build_ut.sh` script will clone the hal-test repo, ut-core and generate a `hal_test_dshal` binary in `ut/bin/` upon successful completion.
 
-### Running the `L1` and `L2` test cases
+### Manual way of running the `L1` and `L2` test cases
 
 ```bash
  ./hal_test_dshal -p Sink_AudioSettings.yaml
@@ -115,8 +117,9 @@ Alternatively, use the run.sh script with the profile file:
 
 - Profiles files defines the configuration for the platform available for sink and source [profile yaml file](./profiles/)
 
-### Running the `L3` test cases
+### Setting Python environment for running the `L1` `L2` and `L3` automation test cases
 
-- For running the L3 test suite, a host PC or server with a Python environment is required.
+- For running the `L1` `L2` and `L3` test suite, a host PC or server with a Python environment is required.
 - Install Python Environment and Activation Scripts as detailed in the [HPK Documentation](https://github.com/rdkcentral/rdk-hpk-documentation/tree/main?tab=readme-ov-file#installing-the-python-environment-for-l3-testing-suite)
-- To run the test cases of `DS` sub-modules follow the [L3 TestProcedure docs](./docs/pages/)
+- To run the `L1` and `L2` test cases of `DS` sub-modules follow the [L1 L2 TestProcedure docs](./docs/pages/)
+- To run the `L3` test cases of `DS` sub-modules follow the [L3 TestProcedure docs](./docs/pages/)

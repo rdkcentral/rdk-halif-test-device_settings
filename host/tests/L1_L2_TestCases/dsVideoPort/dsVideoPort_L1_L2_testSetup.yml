@@ -248,18 +248,6 @@ dsVideoPort:
    #- name: "L1 dsVideoPort"
    #  test_cases:
    #    - dsSetPreferredColorDepth_neg
-   #- name: "L1 dsVideoPort"
-   #  test_cases:
-   #    - dsGetAllmEnabled_pos
-   #- name: "L1 dsVideoPort"
-   #  test_cases:
-   #    - dsGetAllmEnabled_neg
-   #- name: "L1 dsVideoPort"
-   #  test_cases:
-   #    - dsSetAllmEnabled_pos
-   #- name: "L1 dsVideoPort"
-   #  test_cases:
-   #    - dsSetAllmEnabled_neg
     
     ######################################
     # Entries to run selected test case
@@ -370,10 +358,6 @@ dsVideoPort:
    #- name: "L2 dsVideoPort - Source"
    #  test_cases:
    #    - CheckColorDepthCapb_src
-   #- name: "L2 dsVideoPort - Source"
-   #  test_cases:
-   #    - CheckALLMStatus_src
-  
     
     ######################################
     # Entries to run selected test case
@@ -395,4 +379,3 @@ dsVideoPort:
    #    - SetAndGetResolution_src
    #    - SetAndGetPreferredColorDepth_src
    #    - CheckColorDepthCapb_src
-   #    - CheckALLMStatus_src
