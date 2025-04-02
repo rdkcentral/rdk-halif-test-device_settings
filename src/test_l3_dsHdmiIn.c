@@ -192,7 +192,7 @@ const static ut_control_keyStringMapping_t dsAviContentType_mapTable [] =
   { "dsAVICONTENT_TYPE_PHOTO",       (int32_t)dsAVICONTENT_TYPE_PHOTO    },
   { "dsAVICONTENT_TYPE_CINEMA",      (int32_t)dsAVICONTENT_TYPE_CINEMA   },
   { "dsAVICONTENT_TYPE_GAME",        (int32_t)dsAVICONTENT_TYPE_GAME     },
-  { "dsAVICONTENT_TYPE_INVALID",     (int32_t)dsAVICONTENT_TYPE_INVALID  },
+  { "dsAVICONTENT_TYPE_NOT_SIGNALLED",(int32_t)dsAVICONTENT_TYPE_NOT_SIGNALLED },
   { "dsAVICONTENT_TYPE_MAX",         (int32_t)dsAVICONTENT_TYPE_MAX      },
   {  NULL, -1 }
 };

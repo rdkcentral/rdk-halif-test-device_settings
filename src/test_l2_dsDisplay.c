@@ -252,6 +252,85 @@ void test_l2_dsDisplay_TestDefaultAspectRatio_source(void)
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
+/**
+* @brief This test aims to verify the AVI content type of the source in the L2 dsDisplay module
+*
+* The test case initializes the display device, gets the display handle, sets the AVI content type with dsSetAVIContentType and verifies it with the dsGetAVIContentType.
+*
+* **Test Group ID:** 02@n
+* **Test Case ID:** 003@n
+*
+* **Test Procedure:**
+* Refer to UT specification documentation [dsDisplay_L2_Low-Level_TestSpecification.md](../docs/pages/ds-display-L2-Low-Level_TestSpec.md)
+*/
+
+void test_l2_dsDisplay_SetAndGetAVIContentType_source(void)
+{
+    gTestID = 3;
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t ret = dsERR_NONE; // Initialize the return status to dsERR_NONE.
+    intptr_t handle = 0; //Initialize handle to 0.
+    dsAviContentType_t contentTypeGet = dsAVICONTENT_TYPE_MAX; // Initialize content type with MAX value.
+    char key_string[DS_DSIPLAY_KVP_SIZE];
+    dsVideoPortType_t vType;
+    uint32_t portIndex;
+
+    // Step 1: Call dsDisplayInit()
+    UT_LOG_DEBUG("Invoking dsDisplayInit()");
+    ret = dsDisplayInit();
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+
+    // Step 2: Call dsGetDisplay()
+    uint32_t numPorts = UT_KVP_PROFILE_GET_UINT32("dsDisplay/Number_of_ports");
+    for (size_t i = 0; i < numPorts; i++) {
+
+        // Fetch the video port type dynamically
+        snprintf(key_string, sizeof(key_string), "dsDisplay/Video_Ports/%ld", i);
+        vType = (dsVideoPortType_t) UT_KVP_PROFILE_GET_UINT32(key_string);
+        UT_LOG_DEBUG("Invoking dsGetDisplay() with video port type: %d", vType);
+
+        // Fetch the video port index dynamically
+        snprintf(key_string, sizeof(key_string), "dsDisplay/VideoPort_Index/%ld", i);
+        portIndex = UT_KVP_PROFILE_GET_UINT32(key_string);
+        UT_LOG_DEBUG("Invoking dsGetDisplay() with port index: %d", portIndex);
+
+        ret = dsGetDisplay(vType, portIndex, &handle);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+	UT_ASSERT_PTR_NOT_NULL(handle);
+        if (ret != dsERR_NONE)
+        {
+            UT_LOG_ERROR("dsGetDisplay() failed with error: %d\n", ret);
+            dsDisplayTerm();
+            return;
+        }
+
+        // Step 03: Set AVI info frame contentType by looping through dsAviContentType_t enum
+	for(dsAviContentType_t contentTypeSet = dsAVICONTENT_TYPE_GRAPHICS; contentTypeSet < dsAVICONTENT_TYPE_MAX ; contentTypeSet++)
+	{
+	    UT_LOG_DEBUG("Invoking dsSetAVIContentType with handle: %ld\n", handle);
+	    ret = dsSetAVIContentType(handle, contentTypeSet);
+            if (ret != dsERR_NONE) {
+                UT_LOG_ERROR("dsSetAVIContentType failed with error: %d", ret);
+            }
+            UT_LOG_DEBUG("Invoking dsGetAVIContentType with handle: %ld\n", handle);
+            ret = dsGetAVIContentType(handle, &contentTypeGet);
+            if (ret != dsERR_NONE) {
+                UT_LOG_ERROR("dsGetAVIContentType failed with error: %d", ret);
+            }
+            UT_LOG_DEBUG("AVI content type set: %d, AVI content type get: %d", contentTypeSet, contentTypeGet);
+            UT_ASSERT_EQUAL(contentTypeSet, contentTypeGet);
+	} /* for (AVI) */
+    } /* for (port) */
+
+    // Step 5: Call dsDisplayTerm()
+    UT_LOG_DEBUG("Invoking dsDisplayTerm()");
+    ret = dsDisplayTerm();
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
+}
+
 
 static UT_test_suite_t * pSuite = NULL;
 /**
@@ -300,6 +379,7 @@ int test_l2_dsDisplay_register(void)
     }
     else if ( source_type == 1 ){
         UT_add_test( pSuite, "TestDefaultAspectRatio_src", test_l2_dsDisplay_TestDefaultAspectRatio_source);
+	UT_add_test( pSuite, "SetAndGetAVIContentType_src",test_l2_dsDisplay_SetAndGetAVIContentType_source);
     }
 
     return 0;

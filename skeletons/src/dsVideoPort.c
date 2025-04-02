@@ -91,21 +91,6 @@ dsError_t dsIsVideoPortActive(intptr_t handle, bool* active)
   return (dsError_t)0;
 }
 
-dsError_t dsSetAllmEnabled (intptr_t  handle, bool enabled)
-{
-  /*TODO: Implement Me!*/
-  (void)handle;
-  (void)enabled;
-  return (dsError_t)0;
-}
-
-dsError_t dsGetAllmEnabled (intptr_t  handle, bool *enabled)
-{
-  /*TODO: Implement Me!*/
-  (void)handle;
-  (void)enabled;
-  return (dsError_t)0;
-}
 
 dsError_t dsEnableHDCP(intptr_t handle, bool contentProtect, char* hdcpKey, size_t keySize)
 {
