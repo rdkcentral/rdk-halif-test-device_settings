@@ -202,7 +202,7 @@ dsHdmiIn:
     - name: "L1 dsHdmiIn - Sink"
       test_cases:
         - dsHdmiInAviContTypeCB_neg
-    - name: "L1 dsHdmiIn - Sink"
+    - name: "L1 dsHdmiIn --  advanced"
       test_cases:
         - dsHdmiInGetStatus_neg
     - name: "L1 dsHdmiIn - Sink"
@@ -262,13 +262,13 @@ dsHdmiIn:
     - name: "L1 dsHdmiIn - Sink"
       test_cases:
         - dsSetEdid2AllmSupport_neg
-    - name: "L1 dsHdmiIn - Sink"
+    - name: "L1 dsHdmiIn --  advanced"
       test_cases:
         - dsGetEdid2AllmSupport_pos
-    - name: "L1 dsHdmiIn - Sink"
+    - name: "L1 dsHdmiIn --  advanced"
       test_cases:
         - dsGetEdid2AllmSupport_neg
-    - name: "L1 dsHdmiIn - Sink"
+    - name: "L1 dsHdmiIn --  advanced"
       test_cases:
         - dsIsHdmiARCPort_neg
     - name: "L1 dsHdmiIn - Sink"

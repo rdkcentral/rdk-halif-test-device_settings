@@ -62,7 +62,7 @@ class dsHdmiInHelperClass(utHelperClass):
         self.testSetupPath = os.path.join(dir_path, "dsHdmiIn_L3_testSetup.yml")
         self.moduleName = "dsHdmiIn"
         self.rackDevice = "dut"
-
+        self.testsuite = "L3 dsHdmiIn"
         super().__init__(testName, qcId, log)
 
         # Load test setup configuration
@@ -121,7 +121,7 @@ class dsHdmiInHelperClass(utHelperClass):
         """
 
         # Create the dsHdmiIn class
-        self.testdsHdmiIn = dsHdmiInClass(self.moduleConfigProfileFile, self.hal_session, self.targetWorkspace)
+        self.testdsHdmiIn = dsHdmiInClass(self.moduleConfigProfileFile, self.hal_session, self.testsuite, self.targetWorkspace)
 
         return True
 

@@ -73,7 +73,7 @@ class dsHdmiIn_test13_SetAndGetEDIDVersion(dsHdmiInHelperClass):
             self.log.stepStart(f'{port} Port')
 
             #get the list EDID versions
-            edidVersionList = self.testdsHdmiIn.getEDIDVersionList()
+            edidVersionList = self.moduleConfigProfile.get("edidversions")
 
             #Setting EDID Version on particular Hdmi input
             for edidVersion in edidVersionList:

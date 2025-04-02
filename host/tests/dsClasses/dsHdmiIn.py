@@ -105,12 +105,6 @@ class hdmiInZoomMode(Enum):
       dsVIDEO_ZOOM_WIDE_4_3 = 11
       dsVIDEO_ZOOM_MAX = 12
 
-class hdmiEdidVersion(Enum):
-      HDMI_EDID_VER_14 = 0
-      HDMI_EDID_VER_20 = 1
-      HDMI_EDID_VER_MAX = 2
-
-
 class dsHdmiInClass():
     """
     Device Settings HdmiIn Class
@@ -616,23 +610,6 @@ class dsHdmiInClass():
         ]
 
         result = self.utMenu.select(self.testSuite, "Zoom Mode", promptWithAnswers)
-
-    def getEDIDVersionList(self):
-        """
-        gets supported EDID versions as list.
-
-        Args:
-            None.
-
-        Returns:
-            A list of EDID list please refer  enum class.
-        """
-
-        edidList = []
-        for edidindex in hdmiEdidVersion:
-            edidList.append(hdmiEdidVersion(edidindex).name)
-
-        return edidList
 
     def setEdidVersion(self, port_type:str=0, edidversion:str=0):
         """
