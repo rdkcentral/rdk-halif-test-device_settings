@@ -52,7 +52,7 @@ class dsHdmiIn_test07_AVIChangeCallback_Verify(dsHdmiInHelperClass):
         self.qcID = '7'
         super().__init__(self.testName, self.qcID, log)
 
-    def CheckDeviceStatus(self, manual=False, port_type:str=0, avi_input:str=0):
+    def CheckDeviceStatus(self, manual=False, port_type:str=0, avi_input:str=0, avi_content:str=""):
         """
         Verifies whether the HDMI input device is connected and active.
 
@@ -70,7 +70,7 @@ class dsHdmiIn_test07_AVIChangeCallback_Verify(dsHdmiInHelperClass):
             time.sleep(3)
             return self.testUserResponse.getUserYN(f'Is HdmiIn device connected and Displayed is ON {port_type} press Y/N:')
         elif manual == True and avi_input == True:
-            return self.testUserResponse.getUserYN(f'Change the AVI Content on device connected to {port_type} and press Enter:')
+            return self.testUserResponse.getUserYN(f'Change the AVI Content to {avi_content} on device connected to {port_type} and press Enter:')
         else :
             #TODO: Add automation verification methods
             return False
@@ -90,7 +90,7 @@ class dsHdmiIn_test07_AVIChangeCallback_Verify(dsHdmiInHelperClass):
 
         # Initialize the dsHdmiIn module
         self.testdsHdmiIn.initialise()
-        result = True
+        result = False
 
         # Loop through the supported HdmiIn ports
         for port in self.testdsHdmiIn.getSupportedPorts():
@@ -103,15 +103,26 @@ class dsHdmiIn_test07_AVIChangeCallback_Verify(dsHdmiInHelperClass):
                 self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
                 time.sleep(5)
                 self.log.step(f'Port Selected {port}')
-            self.CheckDeviceStatus(True, port, True)
-            time.sleep(5)
-            aviStatus = self.testdsHdmiIn.getAVIContentCallbackStatus()
-            if aviStatus != None and aviStatus[0] == port:
-                self.log.stepResult(True,f'AVI content type:{aviStatus[1]} on port:{aviStatus[0]} found')
-                result &= True
-            else:
-                self.log.stepResult(False,f'AVI content callback not found on port:{port}')
-                result &= False
+
+            #get the list avi content type list
+            aviContentTypeList = self.testdsHdmiIn.getAviContentTypeList()
+            for aviContentType in aviContentTypeList:
+                if aviContentType not in ["dsAVICONTENT_TYPE_INVALID", "dsAVICONTENT_TYPE_MAX"]:
+                    self.CheckDeviceStatus(True, port, True, aviContentType)
+                    time.sleep(5)
+                    aviStatus = self.testdsHdmiIn.getAVIContentCallbackStatus()
+                    if aviStatus != None and aviStatus[0] == port:
+                        self.log.stepResult(True,f'AVI content type:{aviStatus[1]} on port:{aviStatus[0]} found')
+                        self.log.step(f'Verify content type')
+                        if (aviContentType == aviStatus[1]):
+                            self.log.stepResult(True,f'AVI content type is same as the one USER set')
+                            result &= True
+                        else:
+                            self.log.stepResult(False,f'AVI content type is not same as the one USER set')
+                            result &= False
+                    else:
+                        self.log.stepResult(False,f'AVI content callback not found on port:{port}')
+                        result &= False
 
         self.log.stepResult(result,f"AVI content type Verified ")
 
