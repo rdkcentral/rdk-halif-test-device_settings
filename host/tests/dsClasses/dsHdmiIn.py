@@ -597,6 +597,22 @@ class dsHdmiInClass():
 
         return videoZoomModeList
 
+    def getAviContentTypeList(self):
+        """
+        gets supported avi content types as list.
+
+        Args:
+            None.
+
+        Returns:
+            A list of avi content types please refer hdmiInAviContentType enum class.
+        """
+
+        aviContentTypeList = []
+        for modeindex in hdmiInAviContentType:
+            aviContentTypeList.append(hdmiInAviContentType(modeindex).name)
+
+        return aviContentTypeList
 
     def setHdmiInZoomMode(self, zoom_mode:str=0):
         """
