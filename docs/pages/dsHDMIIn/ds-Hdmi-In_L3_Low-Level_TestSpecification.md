@@ -60,7 +60,7 @@ Below are top test use-case for the HdmiIn port.
 |11|Get and verify the `EDID` of selected port|Select the HdmiInput and get the `EDID` for that particular Input port|`dsGetEDIDBytesInfo()`|`NA`|`Y`|
 |12|Get and verify the `SPD` info of selected port|Select the HdmiInput and get the `SPD` info for that particular Input port|`dsGetHDMISPDInfo()`|`NA`|`Y`|
 |13|Set and verify the `EDID` version on selected port|Set the `EDID` version and verify by retrieving the `EDID` version|`dsSetEdidVersion()`,`dsGetEdidVersion()`|`NA`|`Y`|
-|14|Set and verify `EDID` to `ALLM` support on selected port|Set and retrieve `ALLM` on selected port connected with game controller on 4k supported panel|`dsSetEdid2AllmSupport()`,`dsGetEdid2AllmSupport()`|`NA`|`Y`|
+|14|Set and verify `EDID` to `ALLM` support on selected port|Set `ALLM` on selected port connected with game controller on 4k supported panel and verify it|`dsSetEdid2AllmSupport()`|`NA`|`Y`|
 
 ## Level 3 Python Test Cases High Level Overview
 

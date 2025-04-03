@@ -264,12 +264,6 @@ dsHdmiIn:
         - dsSetEdid2AllmSupport_neg
     - name: "L1 dsHdmiIn - Sink"
       test_cases:
-        - dsGetEdid2AllmSupport_pos
-    - name: "L1 dsHdmiIn - Sink"
-      test_cases:
-        - dsGetEdid2AllmSupport_neg
-    - name: "L1 dsHdmiIn - Sink"
-      test_cases:
         - dsIsHdmiARCPort_neg
     - name: "L1 dsHdmiIn - Sink"
       test_cases:
@@ -322,9 +316,6 @@ dsHdmiIn:
     - name: "L2 dsHdmiIn - Sink"
       test_cases:
         - GetGameFeaturesList_sink
-    - name: "L2 dsHdmiIn - Sink"
-      test_cases:
-        - SetAndGetAllmSupport_sink
     - name: "L2 dsHdmiIn - Sink"
       test_cases:
         - GetHdmiVersionValidate_sink
