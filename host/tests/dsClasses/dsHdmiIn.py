@@ -645,6 +645,8 @@ class dsHdmiInClass():
             A list of EDID list please refer  enum class.
         """
 
+        hdmiEdidVersion = self.deviceProfile.get("supportededidversions")
+
         edidList = []
         for edidindex in hdmiEdidVersion:
             edidList.append(hdmiEdidVersion(edidindex).name)
