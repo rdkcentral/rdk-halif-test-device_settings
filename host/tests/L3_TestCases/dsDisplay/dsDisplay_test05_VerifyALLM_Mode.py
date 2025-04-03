@@ -29,10 +29,11 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 # Import required classes from modules
-from dsVideoPortHelperClass import dsVideoPortHelperClass
+from dsDisplayHelperClass import dsDisplayHelperClass
 from raft.framework.core.logModule import logModule
 
-class dsVideoPort_test10_VerifyALLM_Mode(dsVideoPortHelperClass):
+
+class dsDisplay_test05_VerifyALLM_Mode(dsDisplayHelperClass):
     """
     A class to test and verify Enables/Disables ALLM mode for HDMI output video port.
 
@@ -49,8 +50,8 @@ class dsVideoPort_test10_VerifyALLM_Mode(dsVideoPortHelperClass):
 
         Initializes sessions, reads the test setup, and prepares the user response.
         """
-        self.testName  = "test10_VerifyALLM_Mode"
-        self.qcID      = '10'
+        self.testName  = "test05_VerifyALLM_Mode"
+        self.qcID      = '5'
 
         super().__init__(self.testName, self.qcID, log)
 
@@ -82,12 +83,14 @@ class dsVideoPort_test10_VerifyALLM_Mode(dsVideoPortHelperClass):
         Returns:
             bool: Final result of the ALLM Mode verification.
         """
+        # Initialize the dsDisplay module
+        self.testdsDisplay.initialise()
 
         # Loop through supported video ports and verify ALLM Mode
-        for port, index in self.testdsVideoPort.getSupportedPorts():
-            self.testEnablePort(port, index)
+        for port, index in self.testdsDisplay.getSupportedPorts():
+            self.testdsDisplay.selectDisplayPort(port, index)
             # Set the ALLM Mode as Enable
-            self.testdsVideoPort.setAllmMode(port, index, 'Enable')
+            self.testdsDisplay.setAllmMode('Enable')
 
             # Verify ALLM Mode when enabled
             self.log.stepStart(f'Verify ALLM mode Enabled')
@@ -95,7 +98,7 @@ class dsVideoPort_test10_VerifyALLM_Mode(dsVideoPortHelperClass):
             self.log.stepResult(result, f'Verified ALLM mode Enabled')
 
             # Set the ALLM Mode as Disable
-            self.testdsVideoPort.setAllmMode(port, index, 'Disable')
+            self.testdsDisplay.setAllmMode('Disable')
 
             # Verify ALLM Mode when disabled
             self.log.stepStart(f'Verify ALLM mode Disabled')
@@ -107,5 +110,5 @@ class dsVideoPort_test10_VerifyALLM_Mode(dsVideoPortHelperClass):
 if __name__ == '__main__':
     summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
     summeryLog = logModule(summerLogName, level=logModule.INFO)
-    test = dsVideoPort_test10_VerifyALLM_Mode(summeryLog)
+    test = dsDisplay_test05_VerifyALLM_Mode(summeryLog)
     test.run(False)

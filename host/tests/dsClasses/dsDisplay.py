@@ -103,6 +103,35 @@ class dsDisplayClass():
         if match:
             return match.group(1)
         return None
+    
+    def extract_output_values(self, result: str, out_pattern: str = r'OUT:[\w_]+:\[([\w_]+)\]') -> list:
+        """
+        Extracts values from a given result string based on a specified pattern.
+
+        This method uses a regular expression to find and extract relevant output
+        values from the provided result string. It is particularly useful for
+        parsing structured output from commands or logs.
+
+        Args:
+            result (str): The input string from which to extract values.
+                        This string typically contains multiple lines of output.
+            out_pattern (str, optional): The regex pattern to use for matching
+                                        the desired output values. Defaults to
+                                        a pattern that captures values in the
+                                        format 'OUT:<identifier>:[<value>]'.
+
+        Returns:
+            list: A list of extracted values that match the specified pattern.
+
+        Example:
+            extracted_values = extract_output_values(result="OUT:Example:[Value1]\nOUT:Example:[Value2]")
+        """
+
+        # Find all matches in the result string using the provided pattern
+        out_values = re.findall(out_pattern, result, re.MULTILINE)
+
+        # Return the extracted values as a list
+        return list(out_values)
 
     def runTest(self, test_case:str=None):
         """
@@ -220,6 +249,65 @@ class dsDisplayClass():
         edid_bytes = [int(match, 16) for match in re.findall(pattern, result)]
 
         return edid_bytes
+    
+    def setAllmMode(self, mode:str="Disable"):
+        """
+        Enables/Disables ALLM mode for HDMI output video port.
+
+        This method allows you to enables or disables the Auto Low Latency Mode (ALLM) 
+        for a HDMI output video port on source devices, as per the HDMI 2.1 specification.
+
+
+        Args:
+            mode (str, optional) : ALLM mode, defaults to "Disable"
+
+        Returns:
+            None
+
+        Example:
+            setAllmMode(mode:str="Disable")
+        """
+        promptWithAnswers = [
+            {
+                "query_type": "list",
+                "query": "Choose ALLM mode to be Enable/Disable:",
+                "input": "Disable"
+            }
+        ]
+
+        # Convert input arguments to strings and update the prompts
+        promptWithAnswers[0]["input"] = str(mode)
+
+
+        result = self.utMenu.select(self.testSuite, "Set Allm Enabled", promptWithAnswers)
+
+    def getAllmMode(self):
+        """
+        Checks whether ALLM mode of HDMI output video port is enabled or not.
+
+        This method allows you to check whether the Auto Low Latency Mode (ALLM) 
+        for a HDMI output video port on source devices is enabled or disabled, as 
+        per the HDMI 2.1 specification.
+
+        Args:
+            video_port (int): The enumeration value representing the video port.
+                            Refer to the dsVideoPortType enum for valid options.
+            port_index (int, optional): The index of the specific port to query.
+                                        Defaults to 0.
+
+        Returns:
+            list: A list containing the information on status of the ALLM mode.
+
+        Example:
+            getAllmMode(self):
+        """
+        result = self.utMenu.select(self.testSuite, "Get Allm Enabled")
+
+        # Extract and return the output values from the result
+        output_list = self.extract_output_values(result)
+
+        return bool(output_list)
+
 
     def getAspectRatio(self):
         """

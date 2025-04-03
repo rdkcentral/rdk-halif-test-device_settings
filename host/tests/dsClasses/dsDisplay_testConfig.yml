@@ -39,6 +39,8 @@ dsDisplay:
                     - "Get display EDID"
                     - "Get display EDIDBytes"
                     - "Get display AspectRatio"
+                    - "Set Allm Enabled"
+                    - "Get Allm Enabled"
                     - "Terminate dsDisplay"
 
 
