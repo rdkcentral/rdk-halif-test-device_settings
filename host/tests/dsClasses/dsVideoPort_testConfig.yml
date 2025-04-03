@@ -113,10 +113,6 @@ dsVideoPort:  # Prefix must always exist
                     - "dsGetPreferredColorDepth_neg"
                     - "dsSetPreferredColorDepth_pos"
                     - "dsSetPreferredColorDepth_neg"
-                    - "dsGetAllmEnabled_pos"
-                    - "dsGetAllmEnabled_neg"
-                    - "dsSetAllmEnabled_pos"
-                    - "dsSetAllmEnabled_neg"
             1:
                 name: "L2 dsVideoPort - Sink"
                 tests:
@@ -135,7 +131,6 @@ dsVideoPort:  # Prefix must always exist
                     - "SetAndGetResolution_src"
                     - "SetAndGetPreferredColorDepth_src"
                     - "CheckColorDepthCapb_src"
-                    - "CheckALLMStatus_src"
             2:
                 name: "L3 dsVideoPort"
                 tests:
@@ -163,4 +158,3 @@ dsVideoPort:  # Prefix must always exist
                   - "Get HDCPReceiverProtocol"
                   - "Get IgnoreEDIDStatus"
                   - "Get PreferredColorDepth"
-                  - "Set AllmMode"
