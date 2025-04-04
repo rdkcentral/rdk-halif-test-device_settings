@@ -2492,120 +2492,10 @@ void test_l1_dsHdmiIn_negative_dsSetEdid2AllmSupport_sink(void) {
 }
 
 /**
- * @brief Ensure dsGetEdid2AllmSupport() gets the EDID ALLM support correctly during positive scenarios.
- *
- * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 049@n
- *
- * **Dependencies:** None@n
- * **User Interaction:** None
- *
- * **Test Procedure:**@n
- * |Variation / Step|Description|Test Data|Expected Result|Notes|
- * |:--:|-----------|----------|--------------|-----|
- * |01|Initialize HDMI input using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|Call dsGetEdid2AllmSupport() with all valid ports, and call the last port twice to verify EDID ALLM support | iHdmiPort: dsHDMI_IN_PORT_0, allmSupport: bool* | dsERR_NONE | Should Pass |
- * |03|Compare the returned values from steps 2/3 and verify that they are the same |  | success | The values should be the same |
- * |04|Call dsGetEdid2AllmSupport() with  valid ports | dsERR_OPERATION_NOT_SUPPORTED | For source devices
- * |05|Terminate the HDMI input using dsHdmiInTerm() | | dsERR_NONE | Clean up after test |
- *
- * @note Ensure that the device supports querying of the EDID ALLM feature before running this test.
- *
- */
-void test_l1_dsHdmiIn_positive_dsGetEdid2AllmSupport_sink(void) {
-
-    gTestID = 49;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    bool allmSupport1 = 0;
-    bool allmSupport2 = 0;
-    dsError_t  result = dsERR_NONE;
-    uint8_t numInputPorts = 0;
-
-    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
-
-    // Step 1: Initialize HDMI input using dsHdmiInInit()
-    UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
-
-    if (gSourceType == 0) {
-
-        // Step 2 to 3: Call dsGetEdid2AllmSupport() to verify EDID ALLM support
-        for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
-            result = dsGetEdid2AllmSupport(port, &allmSupport1);
-            UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-            result = dsGetEdid2AllmSupport(port, &allmSupport2);
-            UT_ASSERT_EQUAL(result, dsERR_NONE);
-
-            UT_ASSERT_EQUAL(allmSupport1, allmSupport2);
-        }
-
-    } else if (gSourceType == 1) {
-      // Step 4:Call dsGetEdid2AllmSupport() with valid ports
-      UT_ASSERT_EQUAL(dsGetEdid2AllmSupport(dsHDMI_IN_PORT_0, &allmSupport1), dsERR_OPERATION_NOT_SUPPORTED);
-    }
-
-    // Step 5: Terminate the HDMI input using dsHdmiInTerm()
-    UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
-
-    UT_LOG("\n Out %s\n", __FUNCTION__);
-}
-
-/**
- * @brief Ensure dsGetEdid2AllmSupport() returns correct error codes during negative scenarios.
- *
- * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 050@n
- *
- * **Dependencies:** None@n
- * **User Interaction:** None
- *
- * **Test Procedure:**@n
- * |Variation / Step|Description|Test Data|Expected Result|Notes|
- * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsGetEdid2AllmSupport() without initializing the HDMI input sub-system | iHdmiPort: dsHDMI_IN_PORT_0, allmSupport: bool* | dsERR_NOT_INITIALIZED | Should Pass |
- * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |03|Call dsGetEdid2AllmSupport() with invalid inputs | iHdmiPort: dsHDMI_IN_PORT_MAX, allmSupport: bool* | dsERR_INVALID_PARAM | Should Pass |
- * |04|Call dsGetEdid2AllmSupport() with invalid inputs | iHdmiPort: dsHDMI_IN_PORT_0, allmSupport: NULL | dsERR_INVALID_PARAM | Should Pass |
- * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
- * |06|Call dsGetEdid2AllmSupport() without initializing the HDMI input sub-system again | iHdmiPort: dsHDMI_IN_PORT_0, allmSupport: bool* | dsERR_NOT_INITIALIZED | Should Pass |
- *
- * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported or fails due to other reasons.
- *
- */
-void test_l1_dsHdmiIn_negative_dsGetEdid2AllmSupport_sink(void) {
-
-    gTestID = 50;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    bool allmSupport = false;
-
-    // Step 1: Call dsGetEdid2AllmSupport() without initializing the HDMI input sub-system
-    dsError_t result = dsGetEdid2AllmSupport(dsHDMI_IN_PORT_0, &allmSupport);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
-
-    // Step 2: Initialize HDMI input using dsHdmiInInit()
-    UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
-
-    // Step 3: Call dsGetEdid2AllmSupport() with invalid inputs
-    UT_ASSERT_EQUAL(dsGetEdid2AllmSupport(dsHDMI_IN_PORT_MAX, &allmSupport), dsERR_INVALID_PARAM);
-
-    // Step 4: Call dsGetEdid2AllmSupport() with invalid inputs
-    UT_ASSERT_EQUAL(dsGetEdid2AllmSupport(dsHDMI_IN_PORT_0, NULL), dsERR_INVALID_PARAM);
-
-    // Step 5: Terminate the HDMI input using dsHdmiInTerm()
-    UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
-
-    // Step 6: Call dsGetEdid2AllmSupport() without initializing the HDMI input sub-system again
-    result = dsGetEdid2AllmSupport(dsHDMI_IN_PORT_0, &allmSupport);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
-
-    UT_LOG("\n Out %s\n", __FUNCTION__);
-}
-
-/**
  * @brief Ensure dsGetHdmiVersion() correctly retrieves the HDMI compatibility version during positive scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 051@n
+ * **Test Case ID:** 049@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2621,7 +2511,7 @@ void test_l1_dsHdmiIn_negative_dsGetEdid2AllmSupport_sink(void) {
  */
 void test_l1_dsHdmiIn_positive_dsGetHdmiVersion(void) {
 
-    gTestID = 51;
+    gTestID = 49;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsError_t  result = dsERR_NONE;
     uint8_t numInputPorts = 0;
@@ -2658,7 +2548,7 @@ void test_l1_dsHdmiIn_positive_dsGetHdmiVersion(void) {
  * @brief Ensure dsGetHdmiVersion() returns correct error codes during negative scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 052@n
+ * **Test Case ID:** 050@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2678,7 +2568,7 @@ void test_l1_dsHdmiIn_positive_dsGetHdmiVersion(void) {
  */
 void test_l1_dsHdmiIn_negative_dsGetHdmiVersion(void) {
 
-    gTestID = 52;
+    gTestID = 50;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsError_t  result = dsERR_NONE;
     dsHdmiMaxCapabilityVersion_t version = HDMI_COMPATIBILITY_VERSION_MAX;
@@ -2719,7 +2609,6 @@ void test_l1_dsHdmiIn_negative_dsGetHdmiVersion(void) {
 }
 
 static UT_test_suite_t * pSuite = NULL;
-static UT_test_suite_t * pSuite2 = NULL;
 
 /**
  * @brief Register the main test(s) for this module
@@ -2729,7 +2618,6 @@ static UT_test_suite_t * pSuite2 = NULL;
 int test_l1_dsHdmiIn_register ( void )
 {
     ut_kvp_status_t status = UT_KVP_STATUS_SUCCESS;
-    pSuite2 = UT_add_suite( "[L1 dsHdmiIn --  advanced]", NULL, NULL );
 
     status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), "dsHdmiIn.Type", gDeviceType, TEST_DS_DEVICE_TYPE_SIZE);
 
@@ -2764,61 +2652,58 @@ int test_l1_dsHdmiIn_register ( void )
         return -1;
     }
 
-    UT_add_test( pSuite, "dsHdmiInInit_L1_positive" ,test_l1_dsHdmiIn_positive_dsHdmiInInit );
-    UT_add_test( pSuite, "dsHdmiInTerm_L1_positive" ,test_l1_dsHdmiIn_positive_dsHdmiInTerm );
-    UT_add_test( pSuite, "dsHdmiInGetNumberOfInputs_L1_positive" ,test_l1_dsHdmiIn_positive_dsHdmiInGetNumberOfInputs);
-    UT_add_test( pSuite, "dsHdmiInGetStatus_L1_positive" ,test_l1_dsHdmiIn_positive_dsHdmiInGetStatus );
-    UT_add_test( pSuite, "dsHdmiInSelectPort_L1_positive" ,test_l1_dsHdmiIn_positive_dsHdmiInSelectPort );
-    UT_add_test( pSuite, "dsHdmiInScaleVideo_L1_positive" ,test_l1_dsHdmiIn_positive_dsHdmiInScaleVideo );
-    UT_add_test( pSuite, "dsHdmiInGetCurrentVideoMode_L1_positive" ,test_l1_dsHdmiIn_positive_dsHdmiInGetCurrentVideoMode );
-    UT_add_test( pSuite, "dsHdmiInRegisterConnectCB_L1_positive" ,test_l1_dsHdmiIn_positive_dsHdmiInRegisterConnectCB );
-    UT_add_test( pSuite, "dsHdmiInRegisterSignalChangeCB_L1_positive" ,test_l1_dsHdmiIn_positive_dsHdmiInRegisterSignalChangeCB );
-    UT_add_test( pSuite, "dsHdmiInRegisterStatusChangeCB_L1_positive" ,test_l1_dsHdmiIn_positive_dsHdmiInRegisterStatusChangeCB );
-    UT_add_test( pSuite, "dsHdmiInRegisterVideoModeUpdateCB_L1_positive" ,test_l1_dsHdmiIn_positive_dsHdmiInRegisterVideoModeUpdateCB );
-    UT_add_test( pSuite, "dsHdmiInRegisterAllmChangeCB_L1_positive" ,test_l1_dsHdmiIn_positive_dsHdmiInRegisterAllmChangeCB );
-    UT_add_test( pSuite, "dsHdmiInRegisterAVLatencyChangeCB_L1_positive" ,test_l1_dsHdmiIn_positive_dsHdmiInRegisterAVLatencyChangeCB );
-    UT_add_test( pSuite, "dsHdmiInRegisterAviContentTypeChangeCB_L1_positive" ,test_l1_dsHdmiIn_positive_dsHdmiInRegisterAviContentTypeChangeCB );
-    UT_add_test( pSuite, "dsHdmiInInit_L1_negative" ,test_l1_dsHdmiIn_negative_dsHdmiInInit );
-    UT_add_test( pSuite, "dsHdmiInTerm_L1_negative" ,test_l1_dsHdmiIn_negative_dsHdmiInTerm );
-    UT_add_test( pSuite, "dsHdmiInGetNumberOfInputs_L1_negative" ,test_l1_dsHdmiIn_negative_dsHdmiInGetNumberOfInputs);
-    UT_add_test( pSuite, "dsHdmiInSelectPort_L1_negative" ,test_l1_dsHdmiIn_negative_dsHdmiInSelectPort );
-    UT_add_test( pSuite, "dsHdmiInScaleVideo_L1_negative" ,test_l1_dsHdmiIn_negative_dsHdmiInScaleVideo );
-    UT_add_test( pSuite, "dsHdmiInGetCurrentVideoMode_L1_negative" ,test_l1_dsHdmiIn_negative_dsHdmiInGetCurrentVideoMode );
-    UT_add_test( pSuite, "dsHdmiInRegisterConnectCB_L1_negative" ,test_l1_dsHdmiIn_negative_dsHdmiInRegisterConnectCB );
-    UT_add_test( pSuite, "dsHdmiInRegisterSignalChangeCB_L1_negative" ,test_l1_dsHdmiIn_negative_dsHdmiInRegisterSignalChangeCB );
-    UT_add_test( pSuite, "dsHdmiInRegisterStatusChangeCB_L1_negative" ,test_l1_dsHdmiIn_negative_dsHdmiInRegisterStatusChangeCB );
-    UT_add_test( pSuite, "dsHdmiInRegisterVideoModeUpdateCB_L1_negative" ,test_l1_dsHdmiIn_negative_dsHdmiInRegisterVideoModeUpdateCB );
-    UT_add_test( pSuite, "dsHdmiInRegisterAllmChangeCB_L1_negative" ,test_l1_dsHdmiIn_negative_dsHdmiInRegisterAllmChangeCB );
-    UT_add_test( pSuite, "dsHdmiInRegisterAVLatencyChangeCB_L1_negative" ,test_l1_dsHdmiIn_negative_dsHdmiInRegisterAVLatencyChangeCB );
-    UT_add_test( pSuite, "dsHdmiInRegisterAviContentTypeChangeCB_L1_negative" ,test_l1_dsHdmiIn_negative_dsHdmiInRegisterAviContentTypeChangeCB );
-    UT_add_test( pSuite2, "dsHdmiInGetStatus_L1_negative" ,test_l1_dsHdmiIn_negative_dsHdmiInGetStatus );
+    UT_add_test( pSuite, "dsHdmiInInit_pos" ,test_l1_dsHdmiIn_positive_dsHdmiInInit );
+    UT_add_test( pSuite, "dsHdmiInTerm_pos" ,test_l1_dsHdmiIn_positive_dsHdmiInTerm );
+    UT_add_test( pSuite, "dsHdmiInGetInputs_pos" ,test_l1_dsHdmiIn_positive_dsHdmiInGetNumberOfInputs);
+    UT_add_test( pSuite, "dsHdmiInGetStatus_pos" ,test_l1_dsHdmiIn_positive_dsHdmiInGetStatus );
+    UT_add_test( pSuite, "dsHdmiInSelectPort_pos" ,test_l1_dsHdmiIn_positive_dsHdmiInSelectPort );
+    UT_add_test( pSuite, "dsHdmiInScaleVideo_pos" ,test_l1_dsHdmiIn_positive_dsHdmiInScaleVideo );
+    UT_add_test( pSuite, "dsHdmiInGetVideoMode_pos" ,test_l1_dsHdmiIn_positive_dsHdmiInGetCurrentVideoMode );
+    UT_add_test( pSuite, "dsHdmiInConnectCB_pos" ,test_l1_dsHdmiIn_positive_dsHdmiInRegisterConnectCB );
+    UT_add_test( pSuite, "dsHdmiInSigChangeCB_pos" ,test_l1_dsHdmiIn_positive_dsHdmiInRegisterSignalChangeCB );
+    UT_add_test( pSuite, "dsHdmiInStatChangeCB_pos" ,test_l1_dsHdmiIn_positive_dsHdmiInRegisterStatusChangeCB );
+    UT_add_test( pSuite, "dsHdmiInVMUpdateCB_pos" ,test_l1_dsHdmiIn_positive_dsHdmiInRegisterVideoModeUpdateCB );
+    UT_add_test( pSuite, "dsHdmiInAllmChangeCB_pos" ,test_l1_dsHdmiIn_positive_dsHdmiInRegisterAllmChangeCB );
+    UT_add_test( pSuite, "dsHdmiInAVLatChangeCB_pos" ,test_l1_dsHdmiIn_positive_dsHdmiInRegisterAVLatencyChangeCB );
+    UT_add_test( pSuite, "dsHdmiInAviContTypeCB_pos" ,test_l1_dsHdmiIn_positive_dsHdmiInRegisterAviContentTypeChangeCB );
+    UT_add_test( pSuite, "dsHdmiInInit_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInInit );
+    UT_add_test( pSuite, "dsHdmiInTerm_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInTerm );
+    UT_add_test( pSuite, "dsHdmiInGetInputs_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInGetNumberOfInputs);
+    UT_add_test( pSuite, "dsHdmiInSelectPort_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInSelectPort );
+    UT_add_test( pSuite, "dsHdmiInScaleVideo_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInScaleVideo );
+    UT_add_test( pSuite, "dsHdmiInGetVideoMode_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInGetCurrentVideoMode );
+    UT_add_test( pSuite, "dsHdmiInConnectCB_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInRegisterConnectCB );
+    UT_add_test( pSuite, "dsHdmiInSignalChangeCB_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInRegisterSignalChangeCB );
+    UT_add_test( pSuite, "dsHdmiInStatusChangeCB_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInRegisterStatusChangeCB );
+    UT_add_test( pSuite, "dsHdmiInVMUpdateCB_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInRegisterVideoModeUpdateCB );
+    UT_add_test( pSuite, "dsHdmiInAllmChangeCB_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInRegisterAllmChangeCB );
+    UT_add_test( pSuite, "dsHdmiInAVLatChangeCB_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInRegisterAVLatencyChangeCB );
+    UT_add_test( pSuite, "dsHdmiInAviContTypeCB_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInRegisterAviContentTypeChangeCB );
+    UT_add_test( pSuite, "dsHdmiInGetStatus_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInGetStatus );
 
 
-    UT_add_test( pSuite, "dsHdmiInSelectZoomMode_L1_positive" ,test_l1_dsHdmiIn_positive_dsHdmiInSelectZoomMode );
-    UT_add_test( pSuite, "dsHdmiInSelectZoomMode_L1_negative" ,test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode );
-
-    UT_add_test( pSuite, "dsIsHdmiARCPort_L1_positive" ,test_l1_dsHdmiIn_positive_dsIsHdmiARCPort_sink );
-    UT_add_test( pSuite, "dsGetEDIDBytesInfo_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo_sink );
-    UT_add_test( pSuite, "dsGetHDMISPDInfo_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo_sink );
-    UT_add_test( pSuite, "dsSetEdidVersion_L1_positive" ,test_l1_dsHdmiIn_positive_dsSetEdidVersion_sink );
-    UT_add_test( pSuite, "dsGetEdidVersion_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetEdidVersion_sink );
-    UT_add_test( pSuite, "dsGetAllmStatus_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetAllmStatus_sink );
-    UT_add_test( pSuite, "dsGetSupportedGameFeaturesList_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetSupportedGameFeaturesList_sink );
-    UT_add_test( pSuite, "dsGetAVLatency_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetAVLatency_sink );
-    UT_add_test( pSuite, "dsSetEdid2AllmSupport_l1_positive" ,test_l1_dsHdmiIn_positive_dsSetEdid2AllmSupport_sink );
-    UT_add_test( pSuite, "dsGetEDIDBytesInfo_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo_sink );
-    UT_add_test( pSuite, "dsGetHDMISPDInfo_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo_sink );
-    UT_add_test( pSuite, "dsSetEdidVersion_L1_negative" ,test_l1_dsHdmiIn_negative_dsSetEdidVersion_sink );
-    UT_add_test( pSuite, "dsGetEdidVersion_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetEdidVersion_sink );
-    UT_add_test( pSuite, "dsGetAllmStatus_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetAllmStatus_sink );
-    UT_add_test( pSuite, "dsGetSupportedGameFeaturesList_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList_sink );
-    UT_add_test( pSuite, "dsGetAVLatency_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetAVLatency_sink );
-    UT_add_test( pSuite, "dsSetEdid2AllmSupport_l1_negative" ,test_l1_dsHdmiIn_negative_dsSetEdid2AllmSupport_sink );
-    UT_add_test( pSuite2, "dsGetEdid2AllmSupport_l1_positive" ,test_l1_dsHdmiIn_positive_dsGetEdid2AllmSupport_sink );
-    UT_add_test( pSuite2, "dsGetEdid2AllmSupport_l1_negative" ,test_l1_dsHdmiIn_negative_dsGetEdid2AllmSupport_sink );
-    UT_add_test( pSuite2, "dsIsHdmiARCPort_L1_negative" ,test_l1_dsHdmiIn_negative_dsIsHdmiARCPort_sink );
-    UT_add_test( pSuite, "dsGetHdmiVersion_L1_positive" ,test_l1_dsHdmiIn_positive_dsGetHdmiVersion );
-    UT_add_test( pSuite, "dsGetHdmiVersion_L1_negative" ,test_l1_dsHdmiIn_negative_dsGetHdmiVersion );
+    UT_add_test( pSuite, "dsHdmiInSelZoomMode_pos" ,test_l1_dsHdmiIn_positive_dsHdmiInSelectZoomMode );
+    UT_add_test( pSuite, "dsHdmiInSelZoomMode_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInSelectZoomMode );
+    UT_add_test( pSuite, "dsIsHdmiARCPort_pos" ,test_l1_dsHdmiIn_positive_dsIsHdmiARCPort_sink );
+    UT_add_test( pSuite, "dsGetEDIDBytesInfo_pos" ,test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo_sink );
+    UT_add_test( pSuite, "dsGetHDMISPDInfo_pos" ,test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo_sink );
+    UT_add_test( pSuite, "dsSetEdidVersion_pos" ,test_l1_dsHdmiIn_positive_dsSetEdidVersion_sink );
+    UT_add_test( pSuite, "dsGetEdidVersion_pos" ,test_l1_dsHdmiIn_positive_dsGetEdidVersion_sink );
+    UT_add_test( pSuite, "dsGetAllmStatus_pos" ,test_l1_dsHdmiIn_positive_dsGetAllmStatus_sink );
+    UT_add_test( pSuite, "dsGetGameFeaturesList_pos" ,test_l1_dsHdmiIn_positive_dsGetSupportedGameFeaturesList_sink );
+    UT_add_test( pSuite, "dsGetAVLatency_pos" ,test_l1_dsHdmiIn_positive_dsGetAVLatency_sink );
+    UT_add_test( pSuite, "dsSetEdid2AllmSupport_pos" ,test_l1_dsHdmiIn_positive_dsSetEdid2AllmSupport_sink );
+    UT_add_test( pSuite, "dsGetEDIDBytesInfo_neg" ,test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo_sink );
+    UT_add_test( pSuite, "dsGetHDMISPDInfo_neg" ,test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo_sink );
+    UT_add_test( pSuite, "dsSetEdidVersion_neg" ,test_l1_dsHdmiIn_negative_dsSetEdidVersion_sink );
+    UT_add_test( pSuite, "dsGetEdidVersion_neg" ,test_l1_dsHdmiIn_negative_dsGetEdidVersion_sink );
+    UT_add_test( pSuite, "dsGetAllmStatus_neg" ,test_l1_dsHdmiIn_negative_dsGetAllmStatus_sink );
+    UT_add_test( pSuite, "dsGetGameFeaturesList_neg" ,test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList_sink );
+    UT_add_test( pSuite, "dsGetAVLatency_neg" ,test_l1_dsHdmiIn_negative_dsGetAVLatency_sink );
+    UT_add_test( pSuite, "dsSetEdid2AllmSupport_neg" ,test_l1_dsHdmiIn_negative_dsSetEdid2AllmSupport_sink );
+    UT_add_test( pSuite, "dsIsHdmiARCPort_neg" ,test_l1_dsHdmiIn_negative_dsIsHdmiARCPort_sink );
+    UT_add_test( pSuite, "dsGetHdmiVersion_pos" ,test_l1_dsHdmiIn_positive_dsGetHdmiVersion );
+    UT_add_test( pSuite, "dsGetHdmiVersion_neg" ,test_l1_dsHdmiIn_negative_dsGetHdmiVersion );
 
    extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsHdmiIn/features/extendedEnumsSupported" );
 

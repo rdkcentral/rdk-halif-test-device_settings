@@ -1,0 +1,381 @@
+# This is a sample test configuration file. Users can customize the YAML entries as needed
+# This test configuration file includes sample YAML entries for executing various combinations
+dsVideoPort:
+  description: "dsVideoPort Device Settings L1 and L2 test setup"
+  test_suites: # List of L1 and L2 test suites
+
+    ######################################
+    # Entry to run all test case
+    ######################################
+    - name: "L1 dsVideoPort" # Name of the test suit to run
+      test_cases: # List of test cases to execute, to run all test cases in test suite with R option use `all`
+        - all
+
+    #######################################
+    # Entries to run individual test cases
+    #######################################
+   # - name: "L1 dsVideoPort"
+   #   test_cases:
+   #    - dsVideoPortInit_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #   - dsVideoPortInit_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsVideoPortTerm_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsVideoPortTerm_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetVideoPort_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetVideoPort_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsIsVideoPortEnabled_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsIsVideoPortEnabled_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsIsDisplayConnected_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsIsDisplayConnected_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsIsDisplaySurround_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsIsDisplaySurround_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetSurroundMode_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetSurroundMode_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - VideoFormatUpdateRegCB_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - VideoFormatUpdateRegCB_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsIsVideoPortActive_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsIsVideoPortActive_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsEnableHDCP_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsEnableHDCP_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsIsHDCPEnabled_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsIsHDCPEnabled_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsEnableVideoPort_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #   - dsEnableVideoPort_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsSetResolution_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #   - dsSetResolution_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #   - dsGetResolution_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetResolution_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsRegisterHdcpStatusCB_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsRegisterHdcpStatusCB_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetHDCPStatus_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetHDCPStatus_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetHDCPProtocol_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetHDCPProtocol_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - GetHDCPReceiverProtocol_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - GetHDCPReceiverProtocol_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - GetHDCPCurrentProtocol_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - GetHDCPCurrentProtocol_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetTVHDRCapabilities_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetTVHDRCapabilities_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsSupportedTvResolutions_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsSupportedTvResolutions_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - SetForceDisable4KSupport_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - SetForceDisable4KSupport_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - GetForceDisable4KSupport_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - GetForceDisable4KSupport_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetVideoEOTF_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetVideoEOTF_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetMatrixCoefficients_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetMatrixCoefficients_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetColorDepth_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetColorDepth_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetColorSpace_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetColorSpace_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetQuantizationRange_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetQuantizationRange_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetCurrentOutputSettings_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetCurrentOutputSettings_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsIsOutputHDR_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsIsOutputHDR_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsResetOutputToSDR_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsResetOutputToSDR_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsSetHdmiPreference_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsSetHdmiPreference_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetHdmiPreference_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetHdmiPreference_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetIgnoreEDIDStatus_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetIgnoreEDIDStatus_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsSetBackgroundColor_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsSetBackgroundColor_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsSetForceHDRMode_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsSetForceHDRMode_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsColorDepthCapb_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsColorDepthCapb_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetPreferredColorDepth_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsGetPreferredColorDepth_neg
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsSetPreferredColorDepth_pos
+   #- name: "L1 dsVideoPort"
+   #  test_cases:
+   #    - dsSetPreferredColorDepth_neg
+    
+    ######################################
+    # Entries to run selected test case
+    ######################################
+    #- name: "L1 dsVideoPort"
+    #  test_cases:
+    #    - dsVideoPortInit_pos
+    #    - dsVideoPortInit_neg
+    #    - dsIsVideoPortEnabled_pos
+    #    - dsIsVideoPortActive_pos
+    #    - dsGetSurroundMode_pos
+    #    - VideoFormatUpdateRegCB_pos
+
+    #######################################
+    # Entries to run individual test cases
+    #######################################
+   # - name: "L2 dsVideoPort - Sink"
+   #  test_cases:
+   #    - EnableDisabledVideoPorts
+   #- name: "L2 dsVideoPort - Sink"
+   #  test_cases:
+   #    - VerifyDisplayAndPortStatus
+   #- name: "L2 dsVideoPort - Sink"
+   #  test_cases:
+   #    - RetrieveVerifySurroundModeCapb
+   #- name: "L2 dsVideoPort - Sink"
+   #  test_cases:
+   #    - VerifySupportedTvRes
+   #- name: "L2 dsVideoPort - Sink"
+   #  test_cases:
+   #    - GetHDRCapabilities
+   #- name: "L2 dsVideoPort - Sink"
+   #  test_cases:
+   #    - GetHDCPStatus
+   #- name: "L2 dsVideoPort - Sink"
+   #  test_cases:
+   #    - VerifyHDCPProtocolStatus
+   #- name: "L2 dsVideoPort - Sink"
+   #  test_cases:
+   #    - SetAndGetHdmiPreference
+   #- name: "L2 dsVideoPort - Sink"
+   #  test_cases:
+   #    - GetColorSpace
+   #- name: "L2 dsVideoPort - Sink"
+   #  test_cases:
+   #    - GetColorDepth
+   #- name: "L2 dsVideoPort - Sink"
+   #  test_cases:
+   #    - GetQuantizationRange
+   #- name: "L2 dsVideoPort - Sink"
+   #  test_cases:
+   #    - GetMatrixCoefficients
+    ######################################
+    # Entries to run selected test case
+    ######################################
+    #- name: "L2 dsVideoPort - Sink"
+    #  test_cases:
+    #    - GetHDRCapabilities
+    #    - SetAndGetHdmiPreference
+    #    - GetColorSpace
+    #    - GetQuantizationRange
+
+    #######################################
+    # Entries to run individual test cases
+    #######################################
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - EnableDisabledVideoPorts
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - VerifyDisplayAndPortStatus
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - RetrieveVerifySurroundModeCapb
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - VerifySupportedTvRes
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - GetHDRCapabilities
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - GetHDCPStatus
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - VerifyHDCPProtocolStatus
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - SetAndGetHdmiPreference
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - GetColorSpace
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - GetColorDepth
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - GetQuantizationRange
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - GetMatrixCoefficients
+   # - name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - SetAndGetResolution_src
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - SetAndGetPreferredColorDepth_src
+   #- name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - CheckColorDepthCapb_src
+    
+    ######################################
+    # Entries to run selected test case
+    ######################################
+   # - name: "L2 dsVideoPort - Source"
+   #  test_cases:
+   #    - EnableDisabledVideoPorts
+   #    - VerifyDisplayAndPortStatus 
+   #    - RetrieveVerifySurroundModeCapb
+   #    - VerifySupportedTvRes
+   #    - GetHDRCapabilities
+   #    - GetHDCPStatus
+   #    - VerifyHDCPProtocolStatus
+   #    - SetAndGetHdmiPreference
+   #    - GetColorSpace
+   #    - GetColorDepth
+   #    - GetQuantizationRange
+   #    - GetMatrixCoefficients
+   #    - SetAndGetResolution_src
+   #    - SetAndGetPreferredColorDepth_src
+   #    - CheckColorDepthCapb_src

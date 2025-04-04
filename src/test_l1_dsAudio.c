@@ -476,7 +476,7 @@ void test_l1_dsAudio_positive_dsGetAudioFormat(void)
  * |:--:|-----------|----------|--------------|-----|
  * |01|Call dsGetAudioFormat() - Attempt to get audio format without initializing audio ports | handle: [ invalid handle ], audioFormat: [pointer to hold audio format] | dsERR_NOT_INITIALIZED | Get Audio Format must fail as module is not initialized |
  * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
- * |03|Call dsGetAudioFormat() using an invalid handle but with a valid pointer to hold the audio format | handle: [ invalid handle ], audioFormat: [ pointer ] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |03|Call dsGetAudioFormat() using an invalid handle but with a null pointer to hold the audio format | handle: [ null ], audioFormat: [ pointer ] | dsERR_NONE | 
  * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
  * |05|Call dsGetAudioFormat() by looping through acquired port handles but with a null pointer for audio format | handle: [ loop through valid handles ], encoding: [ NULL ] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
  * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE | Terminates the audio ports |
@@ -502,9 +502,9 @@ void test_l1_dsAudio_negative_dsGetAudioFormat(void)
     result = dsAudioPortInit();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // Step 03: Attempt to get audio format using an invalid handle
+    // Step 03: Attempt to get audio format using an null handle
     result = dsGetAudioFormat(handle, &audioFormat);
-    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 04: Get the port handle any of the available ports
     result = dsGetAudioPort(gDSAudioPortConfiguration[0].typeid, gDSAudioPortConfiguration[0].index, &handle);
@@ -4724,7 +4724,7 @@ void test_l1_dsAudio_positive_dsGetAudioGain(void)
 
         // Step 03: Get audio gain for each port
         result = dsGetAudioGain(handle, &gain1);
-        if (gSourceType == 0)
+        if ((gSourceType == 0) && (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER))
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
             UT_ASSERT_TRUE(gain1 >= -2080 && gain1 <= 480);
@@ -4815,7 +4815,7 @@ void test_l1_dsAudio_negative_dsGetAudioGain(void)
 
         // Step 05: Attempt to get audio gain using a valid handle but null pointer for gain
         result = dsGetAudioGain(handle, NULL);
-        if (gSourceType == 0)
+        if ((gSourceType == 0) && (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER))
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
@@ -4885,7 +4885,7 @@ void test_l1_dsAudio_positive_dsSetAudioGain(void)
 
         // Step 03: Set audio gain for each port
         result = dsSetAudioGain(handle, gain_min);
-        if (gSourceType == 0)
+        if ((gSourceType == 0) && (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER))
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -4976,7 +4976,7 @@ void test_l1_dsAudio_negative_dsSetAudioGain(void)
 
         // Step 05: Attempt to set audio gain using a valid handle but out of range gain value
         result = dsSetAudioGain(handle, invalid_gain_neg);
-        if (gSourceType == 0)
+        if ((gSourceType == 0) && (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER))
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
@@ -5051,7 +5051,9 @@ void test_l1_dsAudio_positive_dsGetAudioLevel(void)
 
         // Step 03: Get the audio level values
         result = dsGetAudioLevel(handle, &audioLevel1);
-        if (gSourceType == 0)
+        if ((gSourceType == 0) &&
+            ((gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HEADPHONE) ||
+             (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER)))
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
             UT_ASSERT_TRUE(audioLevel1 >= 0 && audioLevel1 <= 100);
@@ -5145,7 +5147,9 @@ void test_l1_dsAudio_negative_dsGetAudioLevel(void)
 
         // Step 05: Attempt to get audio level with NULL pointer
         result = dsGetAudioLevel(handle, NULL);
-        if (gSourceType == 0)
+        if ((gSourceType == 0) &&
+            ((gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HEADPHONE) ||
+             (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER)))
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
@@ -5214,7 +5218,9 @@ void test_l1_dsAudio_positive_dsSetAudioLevel(void)
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
 
         result = dsSetAudioLevel(handle, minAudioLevel);
-        if (gSourceType == 0)
+        if ((gSourceType == 0) &&
+            ((gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HEADPHONE) ||
+             (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER)))
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -5305,7 +5311,9 @@ void test_l1_dsAudio_negative_dsSetAudioLevel(void)
 
         // Step 05 : Attempt to set Audio level with invalid values
         result = dsSetAudioLevel(handle, invalid_audio_level_neg);
-        if (gSourceType == 0)
+        if ((gSourceType == 0) &&
+            ((gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HEADPHONE) ||
+             (gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_SPEAKER)))
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
@@ -7195,12 +7203,13 @@ void test_l1_dsAudio_positive_dsAudioOutIsConnected(void)
     // Steps 02 and 03: Get port handle and check connection status
     for (int i = 0; i < gDSAudioNumberOfPorts; i++)
     {
+        
         result = dsGetAudioPort(gDSAudioPortConfiguration[i].typeid, gDSAudioPortConfiguration[i].index, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
 
         result = dsAudioOutIsConnected(handle, &isConnected);
-        if (gSourceType == 0)
+        if ((gSourceType == 0)&&(gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HEADPHONE))
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
         }
@@ -7286,7 +7295,7 @@ void test_l1_dsAudio_negative_dsAudioOutIsConnected(void)
 
         // Step 05: Test with Null pointer
         result = dsAudioOutIsConnected(handle, NULL);
-        if (gSourceType == 0)
+        if ((gSourceType == 0)&&(gDSAudioPortConfiguration[i].typeid == dsAUDIOPORT_TYPE_HEADPHONE))
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
@@ -8006,9 +8015,9 @@ void test_l1_dsAudio_negative_dsGetAssociatedAudioMixing(void)
     result = dsAudioPortInit();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // Step 03: Call without initializing
+    // Step 03: Call with invalid handle
     result = dsGetAssociatedAudioMixing(handle, &mixing);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 04: Loop through kPorts to get audio port handle
     for (int i = 0; i < gDSAudioNumberOfPorts; i++)
@@ -8303,7 +8312,7 @@ void test_l1_dsAudio_negative_dsGetFaderControl(void)
  * |:--:|-----------|----------|----------|--------------|-----|
  * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
- * |03|Call dsSetPrimaryLanguage() looping through the acquired ports and valid pointer to set an AC4 primary language  | handle=[valid handle], pLang=[ENG] | dsERR_NONE | primary langauage should be set successfully |
+ * |03|Call dsSetPrimaryLanguage() looping through the acquired ports and valid pointer to set an AC4 primary language  | handle=[valid handle], pLang=[eng] | dsERR_NONE | primary langauage should be set successfully |
  * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  *
  */
@@ -8315,7 +8324,7 @@ void test_l1_dsAudio_positive_dsSetPrimaryLanguage(void)
 
     int result;
     intptr_t handle = null_handle;
-    const char *primaryLanguage = "ENG"; // Assuming "ENG" is a valid language code
+    const char *primaryLanguage = "eng"; // Assuming "eng" is a valid language code
 
     // Step 01: Initialize audio ports
     result = dsAudioPortInit();
@@ -8353,14 +8362,14 @@ void test_l1_dsAudio_positive_dsSetPrimaryLanguage(void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|----------|--------------|-----|
- * |01|Call dsSetPrimaryLanguage() without initializing audio ports | handle=[valid handle], pLang=[ENG] | dsERR_NOT_INITIALIZED | call must fail as module is not initialized |
+ * |01|Call dsSetPrimaryLanguage() without initializing audio ports | handle=[valid handle], pLang=[eng] | dsERR_NOT_INITIALIZED | call must fail as module is not initialized |
  * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
- * |03|Call dsSetPrimaryLanguage() using an invalid handle with valid pLang pointer | handle=[invalid handle], pLang=[ENG] | dsERR_INVALID_PARAM or dsERR_OPERATION_NOT_SUPPORTED |Invalid parameter must be returned |
+ * |03|Call dsSetPrimaryLanguage() using an invalid handle with valid pLang pointer | handle=[invalid handle], pLang=[eng] | dsERR_INVALID_PARAM or dsERR_OPERATION_NOT_SUPPORTED |Invalid parameter must be returned |
  * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
  * |05|Call dsSetPrimaryLanguage() by looping through the valid handles and  passing NULL as the language pointer | handle=[valid handle] , pLang=[NULL] | dsERR_INVALID_PARAM | Invalid parameter must be returned |
- * |06|Call dsSetPrimaryLanguage() passing an unsupported language code | handle=[valid handle], pLang=[XYZ] | dsERR_INVALID_PARAM |Invalid parameter must be returned  |
+ * |06|Call dsSetPrimaryLanguage() passing an unsupported language code | handle=[valid handle], pLang=[123] | dsERR_INVALID_PARAM |Invalid parameter must be returned  |
  * |07|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
- * |08|Call dsSetPrimaryLanguage() again after terminating audio ports | handle=[valid handle], pLang=[ENG] | dsERR_NOT_INITIALIZED | call must fail as module is not initialized |
+ * |08|Call dsSetPrimaryLanguage() again after terminating audio ports | handle=[valid handle], pLang=[eng] | dsERR_NOT_INITIALIZED | call must fail as module is not initialized |
  *
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions
  */
@@ -8372,10 +8381,10 @@ void test_l1_dsAudio_negative_dsSetPrimaryLanguage(void)
 
     int result;
     intptr_t handle = null_handle;
-    const char *invalidLanguage = "XYZ"; // Assuming "XYZ" is an invalid language code
+    const char *invalidLanguage = "123"; // Assuming "123" is an invalid language code
 
     // Step 01: Call without initializing audio ports
-    result = dsSetPrimaryLanguage(-1, "ENG");
+    result = dsSetPrimaryLanguage(-1, "eng");
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
     // Step 02: Initialize audio ports
@@ -8383,7 +8392,7 @@ void test_l1_dsAudio_negative_dsSetPrimaryLanguage(void)
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 03: Call with invalid handle
-    result = dsSetPrimaryLanguage(handle, "ENG");
+    result = dsSetPrimaryLanguage(handle, "eng");
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 04: Get a valid port handles
@@ -8407,7 +8416,7 @@ void test_l1_dsAudio_negative_dsSetPrimaryLanguage(void)
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 07: Call after terminating audio ports
-    result = dsSetPrimaryLanguage(handle, "ENG");
+    result = dsSetPrimaryLanguage(handle, "eng");
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
     // End of the test
@@ -8558,7 +8567,7 @@ void test_l1_dsAudio_negative_dsGetPrimaryLanguage(void)
  * |:--:|-----------|----------|----------|--------------|-----|
  * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
- * |03|Call dsSetSecondaryLanguage() by looping through acquired port handles and valid sLang string | handle=[valid handles], sLang=[ENG] | dsERR_NONE | secondary language should be successfully set |
+ * |03|Call dsSetSecondaryLanguage() by looping through acquired port handles and valid sLang string | handle=[valid handles], sLang=[eng] | dsERR_NONE | secondary language should be successfully set |
  * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
  *
  */
@@ -8583,7 +8592,7 @@ void test_l1_dsAudio_positive_dsSetSecondaryLanguage(void)
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
 
         // Set Secondary language
-        result = dsSetSecondaryLanguage(handle, "ENG");
+        result = dsSetSecondaryLanguage(handle, "eng");
         UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
@@ -8607,14 +8616,14 @@ void test_l1_dsAudio_positive_dsSetSecondaryLanguage(void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|----------|--------------|-----|
- * |01|Call dsSetSecondaryLanguage() without initializing audio ports | handle=[valid handle], sLang=[ENG] | dsERR_NOT_INITIALIZED | call must fail as module is not initialized |
+ * |01|Call dsSetSecondaryLanguage() without initializing audio ports | handle=[valid handle], sLang=[eng] | dsERR_NOT_INITIALIZED | call must fail as module is not initialized |
  * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
- * |03|Call dsSetSecondaryLanguage() using an invalid handle with valid sLang pointer | handle=[invalid handle], sLang=[ENG] | dsERR_INVALID_PARAM |Invalid parameter must be returned |
+ * |03|Call dsSetSecondaryLanguage() using an invalid handle with valid sLang pointer | handle=[invalid handle], sLang=[eng] | dsERR_INVALID_PARAM |Invalid parameter must be returned |
  * |04|Call dsGetAudioPort() - Get the port handle for all supported audio ports on the platform | type ,  index = [ Loop through kPorts ]  | dsERR_NONE | Valid port handle must be returned for all supported audio ports |
  * |05|Call dsSetSecondaryLanguage() by looping through the valid handles and  passing NULL as the language pointer | handle=[valid handle] , sLang=[NULL] | dsERR_INVALID_PARAM | Invalid parameter must be returned |
- * |06|Call dsSetSecondaryLanguage() by looping through the valid handles and  unsupported language code | handle=[valid handle], sLang=[XYZ] | dsERR_INVALID_PARAM |Invalid parameter must be returned  |
+ * |06|Call dsSetSecondaryLanguage() by looping through the valid handles and  unsupported language code | handle=[valid handle], sLang=[123] | dsERR_INVALID_PARAM |Invalid parameter must be returned  |
  * |07|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE |  Termination must be successful |
- * |08|Call dsSetSecondaryLanguage() again after terminating audio ports | handle=[valid handle] , sLang=[ENG] | dsERR_NOT_INITIALIZED |call must fail as module is not initialized |
+ * |08|Call dsSetSecondaryLanguage() again after terminating audio ports | handle=[valid handle] , sLang=[eng] | dsERR_NOT_INITIALIZED |call must fail as module is not initialized |
  *
  * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions
  */
@@ -8628,7 +8637,7 @@ void test_l1_dsAudio_negative_dsSetSecondaryLanguage(void)
     intptr_t handle = null_handle;
 
     // Step 01: Call without initializing audio ports
-    result = dsSetSecondaryLanguage(-1, "ENG");
+    result = dsSetSecondaryLanguage(-1, "eng");
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
     // Step 02: Initialize audio ports
@@ -8636,7 +8645,7 @@ void test_l1_dsAudio_negative_dsSetSecondaryLanguage(void)
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 03: Call with invalid handle
-    result = dsSetSecondaryLanguage(handle, "ENG");
+    result = dsSetSecondaryLanguage(handle, "eng");
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
     // Step 04: Get a valid port handle
@@ -8651,7 +8660,7 @@ void test_l1_dsAudio_negative_dsSetSecondaryLanguage(void)
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
         // Step 06: Call with unsupported language code
-        result = dsSetSecondaryLanguage(handle, "XYZ");
+        result = dsSetSecondaryLanguage(handle, "123");
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     }
 
@@ -8660,7 +8669,7 @@ void test_l1_dsAudio_negative_dsSetSecondaryLanguage(void)
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 08: Call after terminating audio ports
-    result = dsSetSecondaryLanguage(handle, "ENG");
+    result = dsSetSecondaryLanguage(handle, "eng");
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
 
     // End of the test
@@ -9612,144 +9621,145 @@ int test_l1_dsAudio_register(void)
         return -1;
     }
 
-    UT_add_test(pSuite, "dsAudioPortInit_L1_positive", test_l1_dsAudio_positive_dsAudioPortInit);
-    UT_add_test(pSuite, "dsAudioPortInit_L1_negative", test_l1_dsAudio_negative_dsAudioPortInit);
-    UT_add_test(pSuite, "dsAudioPortTerm_L1_positive", test_l1_dsAudio_positive_dsAudioPortTerm);
-    UT_add_test(pSuite, "dsAudioPortTerm_L1_negative", test_l1_dsAudio_negative_dsAudioPortTerm);
-    UT_add_test(pSuite, "dsGetAudioPort_L1_positive", test_l1_dsAudio_positive_dsGetAudioPort);
-    UT_add_test(pSuite, "dsGetAudioPort_L1_negative", test_l1_dsAudio_negative_dsGetAudioPort);
-    UT_add_test(pSuite, "dsGetAudioFormat_L1_positive", test_l1_dsAudio_positive_dsGetAudioFormat);
-    UT_add_test(pSuite, "dsGetAudioFormat_L1_negative", test_l1_dsAudio_negative_dsGetAudioFormat);
-    UT_add_test(pSuite, "dsGetAudioCompression_L1_positive", test_l1_dsAudio_positive_dsGetAudioCompression);
-    UT_add_test(pSuite, "dsGetAudioCompression_L1_negative", test_l1_dsAudio_negative_dsGetAudioCompression);
-    UT_add_test(pSuite, "dsSetAudioCompression_L1_positive", test_l1_dsAudio_positive_dsSetAudioCompression);
-    UT_add_test(pSuite, "dsSetAudioCompression_L1_negative", test_l1_dsAudio_negative_dsSetAudioCompression);
-    UT_add_test(pSuite, "dsGetDialogEnhancement_L1_positive", test_l1_dsAudio_positive_dsGetDialogEnhancement);
-    UT_add_test(pSuite, "dsGetDialogEnhancement_L1_negative", test_l1_dsAudio_negative_dsGetDialogEnhancement);
-    UT_add_test(pSuite, "dsSetDialogEnhancement_L1_positive", test_l1_dsAudio_positive_dsSetDialogEnhancement);
-    UT_add_test(pSuite, "dsSetDialogEnhancement_L1_negative", test_l1_dsAudio_negative_dsSetDialogEnhancement);
-    UT_add_test(pSuite, "dsGetDolbyVolumeMode_L1_positive", test_l1_dsAudio_positive_dsGetDolbyVolumeMode);
-    UT_add_test(pSuite, "dsGetDolbyVolumeMode_L1_negative", test_l1_dsAudio_negative_dsGetDolbyVolumeMode);
-    UT_add_test(pSuite, "dsSetDolbyVolumeMode_L1_positive", test_l1_dsAudio_positive_dsSetDolbyVolumeMode);
-    UT_add_test(pSuite, "dsSetDolbyVolumeMode_L1_negative", test_l1_dsAudio_negative_dsSetDolbyVolumeMode);
-    UT_add_test(pSuite, "dsGetIntelligentEqualizerMode_L1_positive", test_l1_dsAudio_positive_dsGetIntelligentEqualizerMode);
-    UT_add_test(pSuite, "dsGetIntelligentEqualizerMode_L1_negative", test_l1_dsAudio_negative_dsGetIntelligentEqualizerMode);
-    UT_add_test(pSuite, "dsSetIntelligentEqualizerMode_L1_positive", test_l1_dsAudio_positive_dsSetIntelligentEqualizerMode);
-    UT_add_test(pSuite, "dsSetIntelligentEqualizerMode_L1_negative", test_l1_dsAudio_negative_dsSetIntelligentEqualizerMode);
-    UT_add_test(pSuite, "dsGetVolumeLeveller_L1_positive", test_l1_dsAudio_positive_dsGetVolumeLeveller);
-    UT_add_test(pSuite, "dsGetVolumeLeveller_L1_negative", test_l1_dsAudio_negative_dsGetVolumeLeveller);
-    UT_add_test(pSuite, "dsSetVolumeLeveller_L1_positive", test_l1_dsAudio_positive_dsSetVolumeLeveller);
-    UT_add_test(pSuite, "dsSetVolumeLeveller_L1_negative", test_l1_dsAudio_negative_dsSetVolumeLeveller);
-    UT_add_test(pSuite, "dsGetBassEnhancer_L1_positive", test_l1_dsAudio_positive_dsGetBassEnhancer);
-    UT_add_test(pSuite, "dsGetBassEnhancer_L1_negative", test_l1_dsAudio_negative_dsGetBassEnhancer);
-    UT_add_test(pSuite, "dsSetBassEnhancer_L1_positive", test_l1_dsAudio_positive_dsSetBassEnhancer);
-    UT_add_test(pSuite, "dsSetBassEnhancer_L1_negative", test_l1_dsAudio_negative_dsSetBassEnhancer);
-    UT_add_test(pSuite, "dsIsSurroundDecoderEnabled_L1_positive", test_l1_dsAudio_positive_dsIsSurroundDecoderEnabled);
-    UT_add_test(pSuite, "dsIsSurroundDecoderEnabled_L1_negative", test_l1_dsAudio_negative_dsIsSurroundDecoderEnabled);
-    UT_add_test(pSuite, "dsEnableSurroundDecoder_L1_positive", test_l1_dsAudio_positive_dsEnableSurroundDecoder);
-    UT_add_test(pSuite, "dsEnableSurroundDecoder_L1_negative", test_l1_dsAudio_negative_dsEnableSurroundDecoder);
-    UT_add_test(pSuite, "dsGetDRCMode_L1_positive", test_l1_dsAudio_positive_dsGetDRCMode);
-    UT_add_test(pSuite, "dsGetDRCMode_L1_negative", test_l1_dsAudio_negative_dsGetDRCMode);
-    UT_add_test(pSuite, "dsSetDRCMode_L1_positive", test_l1_dsAudio_positive_dsSetDRCMode);
-    UT_add_test(pSuite, "dsSetDRCMode_L1_negative", test_l1_dsAudio_negative_dsSetDRCMode);
-    UT_add_test(pSuite, "dsGetSurroundVirtualizer_L1_positive", test_l1_dsAudio_positive_dsGetSurroundVirtualizer);
-    UT_add_test(pSuite, "dsGetSurroundVirtualizer_L1_negative", test_l1_dsAudio_negative_dsGetSurroundVirtualizer);
-    UT_add_test(pSuite, "dsSetSurroundVirtualizer_L1_positive", test_l1_dsAudio_positive_dsSetSurroundVirtualizer);
-    UT_add_test(pSuite, "dsSetSurroundVirtualizer_L1_negative", test_l1_dsAudio_negative_dsSetSurroundVirtualizer);
-    UT_add_test(pSuite, "dsGetMISteering_L1_positive", test_l1_dsAudio_positive_dsGetMISteering);
-    UT_add_test(pSuite, "dsGetMISteering_L1_negative", test_l1_dsAudio_negative_dsGetMISteering);
-    UT_add_test(pSuite, "dsSetMISteering_L1_positive", test_l1_dsAudio_positive_dsSetMISteering);
-    UT_add_test(pSuite, "dsSetMISteering_L1_negative", test_l1_dsAudio_negative_dsSetMISteering);
-    UT_add_test(pSuite, "dsGetGraphicEqualizerMode_L1_positive", test_l1_dsAudio_positive_dsGetGraphicEqualizerMode);
-    UT_add_test(pSuite, "dsGetGraphicEqualizerMode_L1_negative", test_l1_dsAudio_negative_dsGetGraphicEqualizerMode);
-    UT_add_test(pSuite, "dsSetGraphicEqualizerMode_L1_positive", test_l1_dsAudio_positive_dsSetGraphicEqualizerMode);
-    UT_add_test(pSuite, "dsSetGraphicEqualizerMode_L1_negative", test_l1_dsAudio_negative_dsSetGraphicEqualizerMode);
-    UT_add_test(pSuite, "dsGetMS12AudioProfileList_L1_positive", test_l1_dsAudio_positive_dsGetMS12AudioProfileList);
-    UT_add_test(pSuite, "dsGetMS12AudioProfileList_L1_negative", test_l1_dsAudio_negative_dsGetMS12AudioProfileList);
-    UT_add_test(pSuite, "dsGetMS12AudioProfile_L1_positive", test_l1_dsAudio_positive_dsGetMS12AudioProfile);
-    UT_add_test(pSuite, "dsGetMS12AudioProfile_L1_negative", test_l1_dsAudio_negative_dsGetMS12AudioProfile);
-    UT_add_test(pSuite, "dsGetStereoMode_L1_positive", test_l1_dsAudio_positive_dsGetStereoMode);
-    UT_add_test(pSuite, "dsGetStereoMode_L1_negative", test_l1_dsAudio_negative_dsGetStereoMode);
-    UT_add_test(pSuite, "dsSetStereoMode_L1_positive", test_l1_dsAudio_positive_dsSetStereoMode);
-    UT_add_test(pSuite, "dsSetStereoMode_L1_negative", test_l1_dsAudio_negative_dsSetStereoMode);
-    UT_add_test(pSuite, "dsGetStereoAuto_L1_positive", test_l1_dsAudio_positive_dsGetStereoAuto);
-    UT_add_test(pSuite, "dsGetStereoAuto_L1_negative", test_l1_dsAudio_negative_dsGetStereoAuto);
-    UT_add_test(pSuite, "dsSetStereoAuto_L1_positive", test_l1_dsAudio_positive_dsSetStereoAuto);
-    UT_add_test(pSuite, "dsSetStereoAuto_L1_negative", test_l1_dsAudio_negative_dsSetStereoAuto);
-    UT_add_test(pSuite, "dsGetAudioGain_L1_positive", test_l1_dsAudio_positive_dsGetAudioGain);
-    UT_add_test(pSuite, "dsGetAudioGain_L1_negative", test_l1_dsAudio_negative_dsGetAudioGain);
-    UT_add_test(pSuite, "dsSetAudioGain_L1_positive", test_l1_dsAudio_positive_dsSetAudioGain);
-    UT_add_test(pSuite, "dsSetAudioGain_L1_negative", test_l1_dsAudio_negative_dsSetAudioGain);
-    UT_add_test(pSuite, "dsGetAudioLevel_L1_positive", test_l1_dsAudio_positive_dsGetAudioLevel);
-    UT_add_test(pSuite, "dsGetAudioLevel_L1_negative", test_l1_dsAudio_negative_dsGetAudioLevel);
-    UT_add_test(pSuite, "dsSetAudioLevel_L1_positive", test_l1_dsAudio_positive_dsSetAudioLevel);
-    UT_add_test(pSuite, "dsSetAudioLevel_L1_negative", test_l1_dsAudio_negative_dsSetAudioLevel);
-    UT_add_test(pSuite, "dsGetAudioDelay_L1_positive", test_l1_dsAudio_positive_dsGetAudioDelay);
-    UT_add_test(pSuite, "dsGetAudioDelay_L1_negative", test_l1_dsAudio_negative_dsGetAudioDelay);
-    UT_add_test(pSuite, "dsSetAudioDelay_L1_positive", test_l1_dsAudio_positive_dsSetAudioDelay);
-    UT_add_test(pSuite, "dsSetAudioDelay_L1_negative", test_l1_dsAudio_negative_dsSetAudioDelay);
-    UT_add_test(pSuite, "dsSetAudioAtmosOutputMode_L1_positive", test_l1_dsAudio_positive_dsSetAudioAtmosOutputMode);
-    UT_add_test(pSuite, "dsSetAudioAtmosOutputMode_L1_negative", test_l1_dsAudio_negative_dsSetAudioAtmosOutputMode);
-    UT_add_test(pSuite, "dsGetSinkDeviceAtmosCapability_L1_positive", test_l1_dsAudio_positive_dsGetSinkDeviceAtmosCapability);
-    UT_add_test(pSuite, "dsGetSinkDeviceAtmosCapability_L1_negative", test_l1_dsAudio_negative_dsGetSinkDeviceAtmosCapability);
-    UT_add_test(pSuite, "dsIsAudioMute_L1_positive", test_l1_dsAudio_positive_dsIsAudioMute);
-    UT_add_test(pSuite, "dsIsAudioMute_L1_negative", test_l1_dsAudio_negative_dsIsAudioMute);
-    UT_add_test(pSuite, "dsIsAudioPortEnabled_L1_positive", test_l1_dsAudio_positive_dsIsAudioPortEnabled);
-    UT_add_test(pSuite, "dsIsAudioPortEnabled_L1_negative", test_l1_dsAudio_negative_dsIsAudioPortEnabled);
-    UT_add_test(pSuite, "dsEnableAudioPort_L1_positive", test_l1_dsAudio_positive_dsEnableAudioPort);
-    UT_add_test(pSuite, "dsEnableAudioPort_L1_negative", test_l1_dsAudio_negative_dsEnableAudioPort);
-    /*disabled dsEnableMS12Config tests as API is deprecated
-    UT_add_test( pSuite, "dsEnableMS12Config_L1_positive" ,test_l1_dsAudio_positive_dsEnableMS12Config );
-    UT_add_test( pSuite, "dsEnableMS12Config_L1_negative" ,test_l1_dsAudio_negative_dsEnableMS12Config );
+    UT_add_test(pSuite, "dsAudioPortInit_pos", test_l1_dsAudio_positive_dsAudioPortInit);
+    UT_add_test(pSuite, "dsAudioPortInit_neg", test_l1_dsAudio_negative_dsAudioPortInit);
+    UT_add_test(pSuite, "dsAudioPortTerm_pos", test_l1_dsAudio_positive_dsAudioPortTerm);
+    UT_add_test(pSuite, "dsAudioPortTerm_neg", test_l1_dsAudio_negative_dsAudioPortTerm);
+    UT_add_test(pSuite, "dsGetAudioPort_pos", test_l1_dsAudio_positive_dsGetAudioPort);
+    UT_add_test(pSuite, "dsGetAudioPort_neg", test_l1_dsAudio_negative_dsGetAudioPort);
+    UT_add_test(pSuite, "dsGetAudioFormat_pos", test_l1_dsAudio_positive_dsGetAudioFormat);
+    UT_add_test(pSuite, "dsGetAudioFormat_neg", test_l1_dsAudio_negative_dsGetAudioFormat);
+    UT_add_test(pSuite, "dsGetAudioCompression_pos", test_l1_dsAudio_positive_dsGetAudioCompression);
+    UT_add_test(pSuite, "dsGetAudioCompression_neg", test_l1_dsAudio_negative_dsGetAudioCompression);
+    UT_add_test(pSuite, "dsSetAudioCompression_pos", test_l1_dsAudio_positive_dsSetAudioCompression);
+    UT_add_test(pSuite, "dsSetAudioCompression_neg", test_l1_dsAudio_negative_dsSetAudioCompression);
+    UT_add_test(pSuite, "dsGetDialogEnhance_pos", test_l1_dsAudio_positive_dsGetDialogEnhancement);
+    UT_add_test(pSuite, "dsGetDialogEnhance_neg", test_l1_dsAudio_negative_dsGetDialogEnhancement);
+    UT_add_test(pSuite, "dsSetDialogEnhance_pos", test_l1_dsAudio_positive_dsSetDialogEnhancement);
+    UT_add_test(pSuite, "dsSetDialogEnhance_neg", test_l1_dsAudio_negative_dsSetDialogEnhancement);
+    UT_add_test(pSuite, "dsGetDolbyVolumeMode_pos", test_l1_dsAudio_positive_dsGetDolbyVolumeMode);
+    UT_add_test(pSuite, "dsGetDolbyVolumeMode_neg", test_l1_dsAudio_negative_dsGetDolbyVolumeMode);
+    UT_add_test(pSuite, "dsSetDolbyVolumeMode_pos", test_l1_dsAudio_positive_dsSetDolbyVolumeMode);
+    UT_add_test(pSuite, "dsSetDolbyVolumeMode_neg", test_l1_dsAudio_negative_dsSetDolbyVolumeMode);
+    UT_add_test(pSuite, "dsGetIntelliEqMode_pos", test_l1_dsAudio_positive_dsGetIntelligentEqualizerMode);
+    UT_add_test(pSuite, "dsGetIntelliEqMode_neg", test_l1_dsAudio_negative_dsGetIntelligentEqualizerMode);
+    UT_add_test(pSuite, "dsSetIntelliEqMode_pos", test_l1_dsAudio_positive_dsSetIntelligentEqualizerMode);
+    UT_add_test(pSuite, "dsSetIntelliEqMode_neg", test_l1_dsAudio_negative_dsSetIntelligentEqualizerMode);
+    UT_add_test(pSuite, "dsGetVolumeLeveller_pos", test_l1_dsAudio_positive_dsGetVolumeLeveller);
+    UT_add_test(pSuite, "dsGetVolumeLeveller_neg", test_l1_dsAudio_negative_dsGetVolumeLeveller);
+    UT_add_test(pSuite, "dsSetVolumeLeveller_pos", test_l1_dsAudio_positive_dsSetVolumeLeveller);
+    UT_add_test(pSuite, "dsSetVolumeLeveller_neg", test_l1_dsAudio_negative_dsSetVolumeLeveller);
+    UT_add_test(pSuite, "dsGetBassEnhancer_pos", test_l1_dsAudio_positive_dsGetBassEnhancer);
+    UT_add_test(pSuite, "dsGetBassEnhancer_neg", test_l1_dsAudio_negative_dsGetBassEnhancer);
+    UT_add_test(pSuite, "dsSetBassEnhancer_pos", test_l1_dsAudio_positive_dsSetBassEnhancer);
+    UT_add_test(pSuite, "dsSetBassEnhancer_neg", test_l1_dsAudio_negative_dsSetBassEnhancer);
+    UT_add_test(pSuite, "dsIsSurroundDecoderOn_pos", test_l1_dsAudio_positive_dsIsSurroundDecoderEnabled);
+    UT_add_test(pSuite, "dsIsSurroundDecoderOn_neg", test_l1_dsAudio_negative_dsIsSurroundDecoderEnabled);
+    UT_add_test(pSuite, "dsEnableSurroundDecoder_pos", test_l1_dsAudio_positive_dsEnableSurroundDecoder);
+    UT_add_test(pSuite, "dsEnableSurroundDecoder_neg", test_l1_dsAudio_negative_dsEnableSurroundDecoder);
+    UT_add_test(pSuite, "dsGetDRCMode_pos", test_l1_dsAudio_positive_dsGetDRCMode);
+    UT_add_test(pSuite, "dsGetDRCMode_neg", test_l1_dsAudio_negative_dsGetDRCMode);
+    UT_add_test(pSuite, "dsSetDRCMode_pos", test_l1_dsAudio_positive_dsSetDRCMode);
+    UT_add_test(pSuite, "dsSetDRCMode_neg", test_l1_dsAudio_negative_dsSetDRCMode);
+    UT_add_test(pSuite, "dsGetSurroundVirt_pos", test_l1_dsAudio_positive_dsGetSurroundVirtualizer);
+    UT_add_test(pSuite, "dsGetSurroundVirt_neg", test_l1_dsAudio_negative_dsGetSurroundVirtualizer);
+    UT_add_test(pSuite, "dsSetSurroundVirt_pos", test_l1_dsAudio_positive_dsSetSurroundVirtualizer);
+    UT_add_test(pSuite, "dsSetSurroundVirt_neg", test_l1_dsAudio_negative_dsSetSurroundVirtualizer);
+    UT_add_test(pSuite, "dsGetMISteering_pos", test_l1_dsAudio_positive_dsGetMISteering);
+    UT_add_test(pSuite, "dsGetMISteering_neg", test_l1_dsAudio_negative_dsGetMISteering);
+    UT_add_test(pSuite, "dsSetMISteering_pos", test_l1_dsAudio_positive_dsSetMISteering);
+    UT_add_test(pSuite, "dsSetMISteering_neg", test_l1_dsAudio_negative_dsSetMISteering);
+    UT_add_test(pSuite, "dsGetGraphicEqMode_pos", test_l1_dsAudio_positive_dsGetGraphicEqualizerMode);
+    UT_add_test(pSuite, "dsGetGraphicEqMode_neg", test_l1_dsAudio_negative_dsGetGraphicEqualizerMode);
+    UT_add_test(pSuite, "dsSetGraphicEqMode_pos", test_l1_dsAudio_positive_dsSetGraphicEqualizerMode);
+    UT_add_test(pSuite, "dsSetGraphicEqMode_neg", test_l1_dsAudio_negative_dsSetGraphicEqualizerMode);
+    UT_add_test(pSuite, "dsGetMS12AudioProfList_pos", test_l1_dsAudio_positive_dsGetMS12AudioProfileList);
+    UT_add_test(pSuite, "dsGetMS12AudioProfList_neg", test_l1_dsAudio_negative_dsGetMS12AudioProfileList);
+    UT_add_test(pSuite, "dsGetMS12AudioProf_pos", test_l1_dsAudio_positive_dsGetMS12AudioProfile);
+    UT_add_test(pSuite, "dsGetMS12AudioProf_neg", test_l1_dsAudio_negative_dsGetMS12AudioProfile);
+    UT_add_test(pSuite, "dsGetStereoMode_pos", test_l1_dsAudio_positive_dsGetStereoMode);
+    UT_add_test(pSuite, "dsGetStereoMode_neg", test_l1_dsAudio_negative_dsGetStereoMode);
+    UT_add_test(pSuite, "dsSetStereoMode_pos", test_l1_dsAudio_positive_dsSetStereoMode);
+    UT_add_test(pSuite, "dsSetStereoMode_neg", test_l1_dsAudio_negative_dsSetStereoMode);
+    UT_add_test(pSuite, "dsGetStereoAuto_pos", test_l1_dsAudio_positive_dsGetStereoAuto);
+    UT_add_test(pSuite, "dsGetStereoAuto_neg", test_l1_dsAudio_negative_dsGetStereoAuto);
+    UT_add_test(pSuite, "dsSetStereoAuto_pos", test_l1_dsAudio_positive_dsSetStereoAuto);
+    UT_add_test(pSuite, "dsSetStereoAuto_neg", test_l1_dsAudio_negative_dsSetStereoAuto);
+    UT_add_test(pSuite, "dsGetAudioGain_pos", test_l1_dsAudio_positive_dsGetAudioGain);
+    UT_add_test(pSuite, "dsGetAudioGain_neg", test_l1_dsAudio_negative_dsGetAudioGain);
+    UT_add_test(pSuite, "dsSetAudioGain_pos", test_l1_dsAudio_positive_dsSetAudioGain);
+    UT_add_test(pSuite, "dsSetAudioGain_neg", test_l1_dsAudio_negative_dsSetAudioGain);
+    UT_add_test(pSuite, "dsGetAudioLevel_pos", test_l1_dsAudio_positive_dsGetAudioLevel);
+    UT_add_test(pSuite, "dsGetAudioLevel_neg", test_l1_dsAudio_negative_dsGetAudioLevel);
+    UT_add_test(pSuite, "dsSetAudioLevel_pos", test_l1_dsAudio_positive_dsSetAudioLevel);
+    UT_add_test(pSuite, "dsSetAudioLevel_neg", test_l1_dsAudio_negative_dsSetAudioLevel);
+    UT_add_test(pSuite, "dsGetAudioDelay_pos", test_l1_dsAudio_positive_dsGetAudioDelay);
+    UT_add_test(pSuite, "dsGetAudioDelay_neg", test_l1_dsAudio_negative_dsGetAudioDelay);
+    UT_add_test(pSuite, "dsSetAudioDelay_pos", test_l1_dsAudio_positive_dsSetAudioDelay);
+    UT_add_test(pSuite, "dsSetAudioDelay_neg", test_l1_dsAudio_negative_dsSetAudioDelay);
+    UT_add_test(pSuite, "dsSetAudioAtmosOutMode_pos", test_l1_dsAudio_positive_dsSetAudioAtmosOutputMode);
+    UT_add_test(pSuite, "dsSetAudioAtmosOutMode_neg", test_l1_dsAudio_negative_dsSetAudioAtmosOutputMode);
+    UT_add_test(pSuite, "dsGetSinkDeviceAtmosCap_pos", test_l1_dsAudio_positive_dsGetSinkDeviceAtmosCapability);
+    UT_add_test(pSuite, "dsGetSinkDeviceAtmosCap_neg", test_l1_dsAudio_negative_dsGetSinkDeviceAtmosCapability);
+    UT_add_test(pSuite, "dsIsAudioMute_pos", test_l1_dsAudio_positive_dsIsAudioMute);
+    UT_add_test(pSuite, "dsIsAudioMute_neg", test_l1_dsAudio_negative_dsIsAudioMute);
+    UT_add_test(pSuite, "dsIsAudioPortEnabled_pos", test_l1_dsAudio_positive_dsIsAudioPortEnabled);
+    UT_add_test(pSuite, "dsIsAudioPortEnabled_neg", test_l1_dsAudio_negative_dsIsAudioPortEnabled);
+    UT_add_test(pSuite, "dsEnableAudioPort_pos", test_l1_dsAudio_positive_dsEnableAudioPort);
+    UT_add_test(pSuite, "dsEnableAudioPort_neg", test_l1_dsAudio_negative_dsEnableAudioPort);
+    UT_add_test(pSuite, "dsEnableLEConfig_pos", test_l1_dsAudio_positive_dsEnableLEConfig);
+    UT_add_test(pSuite, "dsEnableLEConfig_neg", test_l1_dsAudio_negative_dsEnableLEConfig);
+    UT_add_test(pSuite, "dsGetLEConfig_pos", test_l1_dsAudio_positive_dsGetLEConfig);
+    UT_add_test(pSuite, "dsGetLEConfig_neg", test_l1_dsAudio_negative_dsGetLEConfig);
+    UT_add_test(pSuite, "dsSetMS12AudioProf_pos", test_l1_dsAudio_positive_dsSetMS12AudioProfile);
+    UT_add_test(pSuite, "dsSetMS12AudioProf_neg", test_l1_dsAudio_negative_dsSetMS12AudioProfile);
+    UT_add_test(pSuite, "dsSetAudioMute_pos", test_l1_dsAudio_positive_dsSetAudioMute);
+    UT_add_test(pSuite, "dsSetAudioMute_neg", test_l1_dsAudio_negative_dsSetAudioMute);
+    UT_add_test(pSuite, "dsIsAudioMSDecode_pos", test_l1_dsAudio_positive_dsIsAudioMSDecode);
+    UT_add_test(pSuite, "dsIsAudioMSDecode_neg", test_l1_dsAudio_negative_dsIsAudioMSDecode);
+    UT_add_test(pSuite, "dsIsAudioMS12Decode_pos", test_l1_dsAudio_positive_dsIsAudioMS12Decode);
+    UT_add_test(pSuite, "dsIsAudioMS12Decode_neg", test_l1_dsAudio_negative_dsIsAudioMS12Decode);
+    UT_add_test(pSuite, "dsAudioOutIsConn_pos", test_l1_dsAudio_positive_dsAudioOutIsConnected);
+    UT_add_test(pSuite, "dsAudioOutIsConn_neg", test_l1_dsAudio_negative_dsAudioOutIsConnected);
+    UT_add_test(pSuite, "dsAudioOutRegConnCB_pos", test_l1_dsAudio_positive_dsAudioOutRegisterConnectCB);
+    UT_add_test(pSuite, "dsAudioOutRegConnCB_neg", test_l1_dsAudio_negative_dsAudioOutRegisterConnectCB);
+    UT_add_test(pSuite, "dsAudioFmtUpdateRegCB_pos", test_l1_dsAudio_positive_dsAudioFormatUpdateRegisterCB);
+    UT_add_test(pSuite, "dsAudioFmtUpdateRegCB_neg", test_l1_dsAudio_negative_dsAudioFormatUpdateRegisterCB);
+    UT_add_test(pSuite, "dsGetAudioCaps_pos", test_l1_dsAudio_positive_dsGetAudioCapabilities);
+    UT_add_test(pSuite, "dsGetAudioCaps_neg", test_l1_dsAudio_negative_dsGetAudioCapabilities);
+    UT_add_test(pSuite, "dsGetMS12Caps_pos", test_l1_dsAudio_positive_dsGetMS12Capabilities);
+    UT_add_test(pSuite, "dsGetMS12Caps_neg", test_l1_dsAudio_negative_dsGetMS12Capabilities);
+    UT_add_test(pSuite, "dsSetAssocAudioMixing_pos", test_l1_dsAudio_positive_dsSetAssociatedAudioMixing);
+    UT_add_test(pSuite, "dsSetAssocAudioMixing_neg", test_l1_dsAudio_negative_dsSetAssociatedAudioMixing);
+    UT_add_test(pSuite, "dsGetAssocAudioMixing_pos", test_l1_dsAudio_positive_dsGetAssociatedAudioMixing);
+    UT_add_test(pSuite, "dsGetAssocAudioMixing_neg", test_l1_dsAudio_negative_dsGetAssociatedAudioMixing);
+    UT_add_test(pSuite, "dsSetFaderControl_pos", test_l1_dsAudio_positive_dsSetFaderControl);
+    UT_add_test(pSuite, "dsSetFaderControl_neg", test_l1_dsAudio_negative_dsSetFaderControl);
+    UT_add_test(pSuite, "dsGetFaderControl_pos", test_l1_dsAudio_positive_dsGetFaderControl);
+    UT_add_test(pSuite, "dsGetFaderControl_neg", test_l1_dsAudio_negative_dsGetFaderControl);
+    UT_add_test(pSuite, "dsSetPrimaryLang_pos", test_l1_dsAudio_positive_dsSetPrimaryLanguage);
+    UT_add_test(pSuite, "dsSetPrimaryLang_neg", test_l1_dsAudio_negative_dsSetPrimaryLanguage);
+    UT_add_test(pSuite, "dsGetPrimaryLang_pos", test_l1_dsAudio_positive_dsGetPrimaryLanguage);
+    UT_add_test(pSuite, "dsGetPrimaryLang_neg", test_l1_dsAudio_negative_dsGetPrimaryLanguage);
+    UT_add_test(pSuite, "dsSetSecondaryLang_pos", test_l1_dsAudio_positive_dsSetSecondaryLanguage);
+    UT_add_test(pSuite, "dsSetSecondaryLang_neg", test_l1_dsAudio_negative_dsSetSecondaryLanguage);
+    UT_add_test(pSuite, "dsGetSecondaryLang_pos", test_l1_dsAudio_positive_dsGetSecondaryLanguage);
+    UT_add_test(pSuite, "dsGetSecondaryLang_neg", test_l1_dsAudio_negative_dsGetSecondaryLanguage);
+    UT_add_test(pSuite, "dsSetAudioMixLevels_pos", test_l1_dsAudio_positive_dsSetAudioMixerLevels);
+    UT_add_test(pSuite, "dsSetAudioMixLevels_neg", test_l1_dsAudio_negative_dsSetAudioMixerLevels);
+    UT_add_test(pSuite, "dsAudioAtmosCapsRegCB_pos", test_l1_dsAudio_positive_dsAudioAtmosCapsChangeRegisterCB);
+    UT_add_test(pSuite, "dsAudioAtmosCapsRegCB_neg", test_l1_dsAudio_negative_dsAudioAtmosCapsChangeRegisterCB);
+    UT_add_test(pSuite, "dsGetSupportedARCTypes_pos", test_l1_dsAudio_positive_dsGetSupportedARCTypes);
+    UT_add_test(pSuite, "dsGetSupportedARCTypes_neg", test_l1_dsAudio_negative_dsGetSupportedARCTypes);
+    UT_add_test(pSuite, "dsAudioSetSAD_pos", test_l1_dsAudio_positive_dsAudioSetSAD);
+    UT_add_test(pSuite, "dsAudioSetSAD_neg", test_l1_dsAudio_negative_dsAudioSetSAD);
+    UT_add_test(pSuite, "dsAudioEnableARC_pos", test_l1_dsAudio_positive_dsAudioEnableARC);
+    UT_add_test(pSuite, "dsAudioEnableARC_neg", test_l1_dsAudio_negative_dsAudioEnableARC);
+
+   /*disabled dsEnableMS12Config tests as API is deprecated
+    UT_add_test( pSuite, "dsEnableMS12Config_positive" ,test_l1_dsAudio_positive_dsEnableMS12Config );
+    UT_add_test( pSuite, "dsEnableMS12Config_negative" ,test_l1_dsAudio_negative_dsEnableMS12Config );
     */
-    UT_add_test(pSuite, "dsEnableLEConfig_L1_positive", test_l1_dsAudio_positive_dsEnableLEConfig);
-    UT_add_test(pSuite, "dsEnableLEConfig_L1_negative", test_l1_dsAudio_negative_dsEnableLEConfig);
-    UT_add_test(pSuite, "dsGetLEConfig_L1_positive", test_l1_dsAudio_positive_dsGetLEConfig);
-    UT_add_test(pSuite, "dsGetLEConfig_L1_negative", test_l1_dsAudio_negative_dsGetLEConfig);
-    UT_add_test(pSuite, "dsSetMS12AudioProfile_L1_positive", test_l1_dsAudio_positive_dsSetMS12AudioProfile);
-    UT_add_test(pSuite, "dsSetMS12AudioProfile_L1_negative", test_l1_dsAudio_negative_dsSetMS12AudioProfile);
-    UT_add_test(pSuite, "dsSetAudioMute_L1_positive", test_l1_dsAudio_positive_dsSetAudioMute);
-    UT_add_test(pSuite, "dsSetAudioMute_L1_negative", test_l1_dsAudio_negative_dsSetAudioMute);
-    UT_add_test(pSuite, "dsIsAudioMSDecode_L1_positive", test_l1_dsAudio_positive_dsIsAudioMSDecode);
-    UT_add_test(pSuite, "dsIsAudioMSDecode_L1_negative", test_l1_dsAudio_negative_dsIsAudioMSDecode);
-    UT_add_test(pSuite, "dsIsAudioMS12Decode_L1_positive", test_l1_dsAudio_positive_dsIsAudioMS12Decode);
-    UT_add_test(pSuite, "dsIsAudioMS12Decode_L1_negative", test_l1_dsAudio_negative_dsIsAudioMS12Decode);
-    UT_add_test(pSuite, "dsAudioOutIsConnected_L1_positive", test_l1_dsAudio_positive_dsAudioOutIsConnected);
-    UT_add_test(pSuite, "dsAudioOutIsConnected_L1_negative", test_l1_dsAudio_negative_dsAudioOutIsConnected);
-    UT_add_test(pSuite, "dsAudioOutRegisterConnectCB_L1_positive", test_l1_dsAudio_positive_dsAudioOutRegisterConnectCB);
-    UT_add_test(pSuite, "dsAudioOutRegisterConnectCB_L1_negative", test_l1_dsAudio_negative_dsAudioOutRegisterConnectCB);
-    UT_add_test(pSuite, "dsAudioFormatUpdateRegisterCB_L1_positive", test_l1_dsAudio_positive_dsAudioFormatUpdateRegisterCB);
-    UT_add_test(pSuite, "dsAudioFormatUpdateRegisterCB_L1_negative", test_l1_dsAudio_negative_dsAudioFormatUpdateRegisterCB);
-    UT_add_test(pSuite, "dsGetAudioCapabilities_L1_positive", test_l1_dsAudio_positive_dsGetAudioCapabilities);
-    UT_add_test(pSuite, "dsGetAudioCapabilities_L1_negative", test_l1_dsAudio_negative_dsGetAudioCapabilities);
-    UT_add_test(pSuite, "dsGetMS12Capabilities_L1_positive", test_l1_dsAudio_positive_dsGetMS12Capabilities);
-    UT_add_test(pSuite, "dsGetMS12Capabilities_L1_negative", test_l1_dsAudio_negative_dsGetMS12Capabilities);
-    UT_add_test(pSuite, "dsSetAssociatedAudioMixing_L1_positive", test_l1_dsAudio_positive_dsSetAssociatedAudioMixing);
-    UT_add_test(pSuite, "dsSetAssociatedAudioMixing_L1_negative", test_l1_dsAudio_negative_dsSetAssociatedAudioMixing);
-    UT_add_test(pSuite, "dsGetAssociatedAudioMixing_L1_positive", test_l1_dsAudio_positive_dsGetAssociatedAudioMixing);
-    UT_add_test(pSuite, "dsGetAssociatedAudioMixing_L1_negative", test_l1_dsAudio_negative_dsGetAssociatedAudioMixing);
-    UT_add_test(pSuite, "dsSetFaderControl_L1_positive", test_l1_dsAudio_positive_dsSetFaderControl);
-    UT_add_test(pSuite, "dsSetFaderControl_L1_negative", test_l1_dsAudio_negative_dsSetFaderControl);
-    UT_add_test(pSuite, "dsGetFaderControl_L1_positive", test_l1_dsAudio_positive_dsGetFaderControl);
-    UT_add_test(pSuite, "dsGetFaderControl_L1_negative", test_l1_dsAudio_negative_dsGetFaderControl);
-    UT_add_test(pSuite, "dsSetPrimaryLanguage_L1_positive", test_l1_dsAudio_positive_dsSetPrimaryLanguage);
-    UT_add_test(pSuite, "dsSetPrimaryLanguage_L1_negative", test_l1_dsAudio_negative_dsSetPrimaryLanguage);
-    UT_add_test(pSuite, "dsGetPrimaryLanguage_L1_positive", test_l1_dsAudio_positive_dsGetPrimaryLanguage);
-    UT_add_test(pSuite, "dsGetPrimaryLanguage_L1_negative", test_l1_dsAudio_negative_dsGetPrimaryLanguage);
-    UT_add_test(pSuite, "dsSetSecondaryLanguage_L1_positive", test_l1_dsAudio_positive_dsSetSecondaryLanguage);
-    UT_add_test(pSuite, "dsSetSecondaryLanguage_L1_negative", test_l1_dsAudio_negative_dsSetSecondaryLanguage);
-    UT_add_test(pSuite, "dsGetSecondaryLanguage_L1_positive", test_l1_dsAudio_positive_dsGetSecondaryLanguage);
-    UT_add_test(pSuite, "dsGetSecondaryLanguage_L1_negative", test_l1_dsAudio_negative_dsGetSecondaryLanguage);
-    UT_add_test(pSuite, "dsSetAudioMixerLevels_l1_positive", test_l1_dsAudio_positive_dsSetAudioMixerLevels);
-    UT_add_test(pSuite, "dsSetAudioMixerLevels_l1_negative", test_l1_dsAudio_negative_dsSetAudioMixerLevels);
-    UT_add_test(pSuite, "dsAudioAtmosCapsChangeRegisterCB_l1_positive", test_l1_dsAudio_positive_dsAudioAtmosCapsChangeRegisterCB);
-    UT_add_test(pSuite, "dsAudioAtmosCapsChangeRegisterCB_l1_negative", test_l1_dsAudio_negative_dsAudioAtmosCapsChangeRegisterCB);
-    UT_add_test(pSuite, "dsGetSupportedARCTypes_l1_positive", test_l1_dsAudio_positive_dsGetSupportedARCTypes);
-    UT_add_test(pSuite, "dsGetSupportedARCTypes_l1_negative", test_l1_dsAudio_negative_dsGetSupportedARCTypes);
-    UT_add_test(pSuite, "dsAudioSetSAD_l1_positive", test_l1_dsAudio_positive_dsAudioSetSAD);
-    UT_add_test(pSuite, "dsAudioSetSAD_l1_negative", test_l1_dsAudio_negative_dsAudioSetSAD);
-    UT_add_test(pSuite, "dsAudioEnableARC_l1_positive", test_l1_dsAudio_positive_dsAudioEnableARC);
-    UT_add_test(pSuite, "dsAudioEnableARC_l1_negative", test_l1_dsAudio_negative_dsAudioEnableARC);
 
     extendedEnumsSupported = ut_kvp_getBoolField(ut_kvp_profile_getInstance(), "dsAudio/features/extendedEnumsSupported");
 

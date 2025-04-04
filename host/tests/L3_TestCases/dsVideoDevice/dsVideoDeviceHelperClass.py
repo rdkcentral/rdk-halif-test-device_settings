@@ -49,6 +49,7 @@ class dsVideoDeviceHelperClass(utHelperClass):
         self.testSetupPath = os.path.join(dir_path, "dsVideoDevice_L3_testSetup.yml")
         self.moduleName = "dsVideoDevice"
         self.rackDevice = "dut"
+        self.testsuite  =  "L3 dsVideoDevice"
 
         super().__init__(testName, qcId, log)
 
@@ -133,7 +134,7 @@ class dsVideoDeviceHelperClass(utHelperClass):
         self.testDownloadSingleStream()
 
         # Create the dsVideoDevice class
-        self.testdsVideoDevice = dsVideoDeviceClass(self.moduleConfigProfileFile, self.hal_session, self.targetWorkspace)
+        self.testdsVideoDevice = dsVideoDeviceClass(self.moduleConfigProfileFile, self.hal_session, self.testsuite, self.targetWorkspace)
 
         return True
 

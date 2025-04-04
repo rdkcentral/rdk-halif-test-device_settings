@@ -201,14 +201,6 @@ dsError_t dsSetEdid2AllmSupport(dsHdmiInPort_t iHdmiPort, bool allmSupport)
   return (dsError_t)0;
 }
 
-dsError_t dsGetEdid2AllmSupport(dsHdmiInPort_t iHdmiPort, bool *allmSupport)
-{
-  /*TODO: Implement Me!*/
-  (void)iHdmiPort;
-  (void)allmSupport;
-  return (dsError_t)0;
-}
-
 dsError_t dsGetHdmiVersion(dsHdmiInPort_t iHdmiPort, dsHdmiMaxCapabilityVersion_t* iVersion)
 {
   /*TODO: Implement Me!*/

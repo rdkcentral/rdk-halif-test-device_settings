@@ -50,6 +50,7 @@ class dsDisplayHelperClass(utHelperClass):
         self.monitorDeatilsPath = os.path.join(dir_path, "dsDisplay_test_MonitorDetails.yml")
         self.moduleName = "dsDisplay"
         self.rackDevice = "dut"
+        self.testsuite  = "L3 dsDisplay"
 
         super().__init__(testName, qcId, log)
 
@@ -236,7 +237,7 @@ class dsDisplayHelperClass(utHelperClass):
         """
 
         # Create the dsDisplay class
-        self.testdsDisplay = dsDisplayClass(self.moduleConfigProfileFile, self.hal_session, self.targetWorkspace)
+        self.testdsDisplay = dsDisplayClass(self.moduleConfigProfileFile, self.hal_session, self.testsuite, self.targetWorkspace)
 
         return True
 

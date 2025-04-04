@@ -30,52 +30,57 @@ dsVideoDevice:  # Prefix must always exist
         #List of artifacts folders, test class copies the content of folder to the target device workspace
           - "../../../bin/"
         # exectute command, this will appended with the target device workspace path
-        execute: "run.sh" 
+        execute: "run.sh"
         type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
         suites:
             0:
                 name: "L1 dsVideoDevice - Sink"
                 tests:
-                    - "dsVideoDeviceInit_L1_positive"
-                    - "dsVideoDeviceTerm_L1_positive"
-                    - "dsGetVideoDevice_L1_positive"
-                    - "dsSetDFC_L1_positive"
-                    - "dsGetHDRCapabilities_L1_positive"
-                    - "dsGetSupportedVideoCodingFormats_L1_positive"
-                    - "dsGetVideoCodecInfo_L1_positive"
-                    - "dsSetFRFMode_L1_positive"
-                    - "dsGetFRFMode_L1_positive"
-                    - "dsGetCurrentDisplayframerate_L1_positive"
-                    - "dsSetDisplayframerate_L1_positive"
-                    - "dsRegisterFrameratePreChangeCB_L1_positive"
-                    - "dsRegisterFrameratePostChangeCB_L1_positive"
-                    - "dsVideoDeviceInit_L1_negative"
-                    - "dsVideoDeviceTerm_L1_negative"
-                    - "dsGetVideoDevice_L1_negative"
-                    - "dsSetDFC_L1_negative"
-                    - "dsGetHDRCapabilities_L1_negative"
-                    - "dsGetSupportedVideoCodingFormats_L1_negative"
-                    - "dsGetVideoCodecInfo_L1_negative"
-                    - "dsSetFRFMode_L1_negative"
-                    - "dsGetFRFMode_L1_negative"
-                    - "dsGetCurrentDisplayframerate_L1_negative"
-                    - "dsSetDisplayframerate_L1_negative"
-                    - "dsRegisterFrameratePreChangeCB_L1_negative"
-                    - "dsRegisterFrameratePostChangeCB_L1_negative"
-                    - "dsGetDFC_L1_positive"
-                    - "dsForceDisableHDRSupport_L1_positive"
-                    - "dsGetDFC_L1_negative"
-                    - "dsForceDisableHDRSupport_L1_negative"
+                    - dsVideoDeviceInit_positive
+                    - dsVideoDeviceTerm_positive
+                    - dsGetVideoDevice_positive
+                    - dsSetDFC_positive
+                    - dsGetHDRCaps_positive
+                    - dsGetSupportVidFormats_positive
+                    - dsGetVideoCodecInfo_positive
+                    - dsSetFRFMode_positive
+                    - dsGetFRFMode_positive
+                    - dsGetCurrDispFramerate_positive
+                    - dsSetDisplayframerate_positive
+                    - dsRegFrameratePreCB_positive
+                    - dsRegFrameratePostCB_positive
+                    - dsVideoDeviceInit_negative
+                    - dsVideoDeviceTerm_negative
+                    - dsGetVideoDevice_negative
+                    - dsSetDFC_negative
+                    - dsGetHDRCaps_negative
+                    - dsGetSupportVidFormats_negative
+                    - dsGetVideoCodecInfo_negative
+                    - dsSetFRFMode_negative
+                    - dsGetFRFMode_negative
+                    - dsGetCurrDispFramerate_negative
+                    - dsSetDisplayframerate_negative
+                    - dsRegFrameratePreCB_negative
+                    - dsRegFrameratePostCB_negative
+                    - dsGetDFC_positive
+                    - dsForceDisableHDR_positive
+                    - dsGetDFC_negative
+                    - dsForceDisableHDR_negative
             1:
                 name: "L2 dsVideoDevice - Sink"
                 tests:
-                    - "L2_GetHDRCapabilities"
-                    - "L2_GetSupportedVideoCodingFormats"
-                    - "L2_SetAndVerifyDisplayframerate_Sink"
-                    - "L2_SetAndVerifyFRFMode_Sink"
-                    - "L2_SetAndGetDFC_source"
-                    - "L2_GetVideoCodecInfo_source"
+                    - GetHDRCapabilities
+                    - GetSupportedVideoCodingFormats
+                    - SetAndVerifyDisplayframerate
+                    - SetAndVerifyFRFMode
             2:
+                name: "L2 dsVideoDevice - Source"
+                tests:
+                    - GetHDRCapabilities
+                    - GetSupportedVideoCodingFormats
+                    - SetAndGetDFC
+                    - GetVideoCodecInfo
+            3:
                 name: "L3 dsVideoDevice"
                 tests:
                     - "VideoDevice_Init"
@@ -88,4 +93,4 @@ dsVideoDevice:  # Prefix must always exist
                     - "GetZoomMode"
                     - "GetVideoCodecInfo"
                     - "VideoDevice_Term"
-                    
+

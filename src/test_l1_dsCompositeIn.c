@@ -1050,26 +1050,26 @@ int test_l1_dsCompositeIn_register ( void )
     }
 
     if ( source_type == 0 ){
-        UT_add_test( pSuite, "dsCompositeInInit_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInInit );
-        UT_add_test( pSuite, "dsCompositeInInit_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInInit );
-        UT_add_test( pSuite, "dsCompositeInTerm_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInTerm );
-        UT_add_test( pSuite, "dsCompositeInTerm_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInTerm );
-        UT_add_test( pSuite, "dsCompositeInGetNumberOfInputs_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInGetNumberOfInputs );
-        UT_add_test( pSuite, "dsCompositeInGetNumberOfInputs_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInGetNumberOfInputs );
-        UT_add_test( pSuite, "dsCompositeInGetStatus_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInGetStatus );
-        UT_add_test( pSuite, "dsCompositeInGetStatus_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInGetStatus );
-        UT_add_test( pSuite, "dsCompositeInSelectPort_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInSelectPort );
-        UT_add_test( pSuite, "dsCompositeInSelectPort_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInSelectPort );
-        UT_add_test( pSuite, "dsCompositeInScaleVideo_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInScaleVideo );
-        UT_add_test( pSuite, "dsCompositeInScaleVideo_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInScaleVideo );
-        UT_add_test( pSuite, "dsCompositeInRegisterConnectCB_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInRegisterConnectCB );
-        UT_add_test( pSuite, "dsCompositeInRegisterConnectCB_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInRegisterConnectCB );
-        UT_add_test( pSuite, "dsCompositeInRegisterSignalChangeCB_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInRegisterSignalChangeCB );
-        UT_add_test( pSuite, "dsCompositeInRegisterSignalChangeCB_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInRegisterSignalChangeCB );
-        UT_add_test( pSuite, "dsCompositeInRegisterStatusChangeCB_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInRegisterStatusChangeCB );
-        UT_add_test( pSuite, "dsCompositeInRegisterStatusChangeCB_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInRegisterStatusChangeCB );
-	UT_add_test( pSuite, "dsCompositeInRegisterVideoModeUpdateCB_L1_positive" ,test_l1_dsCompositeIn_positive_dsCompositeInRegisterVideoModeUpdateCB );
-	UT_add_test( pSuite, "dsCompositeInRegisterVideoModeUpdateCB_L1_negative" ,test_l1_dsCompositeIn_negative_dsCompositeInRegisterVideoModeUpdateCB );
+        UT_add_test( pSuite, "dsCompositeInInit_L1_pos" ,test_l1_dsCompositeIn_positive_dsCompositeInInit );
+        UT_add_test( pSuite, "dsCompositeInInit_L1_neg" ,test_l1_dsCompositeIn_negative_dsCompositeInInit );
+        UT_add_test( pSuite, "dsCompositeInTerm_L1_pos" ,test_l1_dsCompositeIn_positive_dsCompositeInTerm );
+        UT_add_test( pSuite, "dsCompositeInTerm_L1_neg" ,test_l1_dsCompositeIn_negative_dsCompositeInTerm );
+        UT_add_test( pSuite, "dsGetNuOfInputs_L1_pos" ,test_l1_dsCompositeIn_positive_dsCompositeInGetNumberOfInputs );
+        UT_add_test( pSuite, "dsGetNumberOfInputs_L1_neg" ,test_l1_dsCompositeIn_negative_dsCompositeInGetNumberOfInputs );
+        UT_add_test( pSuite, "dsGetStatus_L1_pos" ,test_l1_dsCompositeIn_positive_dsCompositeInGetStatus );
+        UT_add_test( pSuite, "dsGetStatus_L1_neg" ,test_l1_dsCompositeIn_negative_dsCompositeInGetStatus );
+        UT_add_test( pSuite, "dsSelectPort_L1_pos" ,test_l1_dsCompositeIn_positive_dsCompositeInSelectPort );
+        UT_add_test( pSuite, "dsSelectPort_L1_neg" ,test_l1_dsCompositeIn_negative_dsCompositeInSelectPort );
+        UT_add_test( pSuite, "dsScaleVideo_L1_pos" ,test_l1_dsCompositeIn_positive_dsCompositeInScaleVideo );
+        UT_add_test( pSuite, "dsScaleVideo_L1_neg" ,test_l1_dsCompositeIn_negative_dsCompositeInScaleVideo );
+        UT_add_test( pSuite, "dsRegisterConnectCB_L1_pos" ,test_l1_dsCompositeIn_positive_dsCompositeInRegisterConnectCB );
+        UT_add_test( pSuite, "dsRegisterConnectCB_L1_neg" ,test_l1_dsCompositeIn_negative_dsCompositeInRegisterConnectCB );
+        UT_add_test( pSuite, "dsRegisterSigChangeCB_L1_pos" ,test_l1_dsCompositeIn_positive_dsCompositeInRegisterSignalChangeCB );
+        UT_add_test( pSuite, "dsRegisterSigChangeCB_L1_neg" ,test_l1_dsCompositeIn_negative_dsCompositeInRegisterSignalChangeCB );
+        UT_add_test( pSuite, "dsRegisterStatChangeCB_L1_pos" ,test_l1_dsCompositeIn_positive_dsCompositeInRegisterStatusChangeCB );
+        UT_add_test( pSuite, "dsRegisterStatChangeCB_L1_neg" ,test_l1_dsCompositeIn_negative_dsCompositeInRegisterStatusChangeCB );
+	UT_add_test( pSuite, "dsVidModeUpdateCB_L1_pos" ,test_l1_dsCompositeIn_positive_dsCompositeInRegisterVideoModeUpdateCB );
+	UT_add_test( pSuite, "dsVidModeUpdateCB_L1_neg" ,test_l1_dsCompositeIn_negative_dsCompositeInRegisterVideoModeUpdateCB );
 	extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsCompositeIn/features/extendedEnumsSupported" );
     }
     return 0;

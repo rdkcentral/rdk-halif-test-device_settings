@@ -49,6 +49,7 @@ class dsCompositeInHelperClass(utHelperClass):
         self.testSetupPath = os.path.join(dir_path, "dsCompositeIn_L3_testSetup.yml")
         self.moduleName = "dsCompositeIn"
         self.rackDevice = "dut"
+        self.testsuite  = "L3 dsCompositeIn"
 
         super().__init__(testName, qcId, log)
 
@@ -86,7 +87,7 @@ class dsCompositeInHelperClass(utHelperClass):
         """
 
         # Create the dsCompositeIn class
-        self.testdsCompositeIn = dsCompositeInClass(self.deviceProfile, self.hal_session, self.targetWorkspace)
+        self.testdsCompositeIn = dsCompositeInClass(self.deviceProfile, self.hal_session,self.testsuite, self.targetWorkspace)
 
         return True
 

@@ -117,7 +117,7 @@ class dsHdmiInClass():
 
     This module provides common extensions for device Settings HdmiIn Module.
     """
-    def __init__(self, moduleConfigProfileFile :str, session=None, targetWorkspace="/tmp"):
+    def __init__(self, moduleConfigProfileFile :str, session=None, testSuite:str="L3 dsHdmiIn", targetWorkspace="/tmp", copyArtifacts:bool=True):
         """
         Initializes the dsHdmiIn class function with configuration settings.
 
@@ -127,18 +127,25 @@ class dsHdmiInClass():
         """
         self.moduleName    = "dsHdmiIn"
         self.testConfigFile    =  os.path.join(dir_path, "dsHdmiIn_testConfig.yml")
-        self.testSuite     = "L3 dsHdmiIn"
+        self.testSuite     = testSuite
 
         # Load configurations for device profile and menu
         self.testConfig    = ConfigRead(self.testConfigFile, self.moduleName)
+        self.deviceProfile = ConfigRead( moduleConfigProfileFile , self.moduleName)
         self.testConfig.test.execute = os.path.join(targetWorkspace, self.testConfig.test.execute)
+        self.testConfig.test.execute = self.testConfig.test.execute + f" -p {os.path.basename(moduleConfigProfileFile)}"
         self.utMenu        = UTSuiteNavigatorClass(self.testConfig, None, session)
         self.testSession   = session
         self.utils         = utBaseUtils()
 
-        for artifact in self.testConfig.test.artifacts:
-            filesPath = os.path.join(dir_path, artifact)
-            self.utils.rsync(self.testSession, filesPath, targetWorkspace)
+        if copyArtifacts:
+            # Copy bin files to the target
+            for artifact in self.testConfig.test.artifacts:
+                filesPath = os.path.join(dir_path, artifact)
+                self.utils.rsync(self.testSession, filesPath, targetWorkspace)
+
+            # Copy the profile file to the target
+            self.utils.scpCopy(self.testSession, moduleConfigProfileFile, targetWorkspace)
 
         self.utMenu.start()
 
@@ -147,6 +154,20 @@ class dsHdmiInClass():
         if match:
             return match.group(1)
         return None
+
+    def runTest(self, test_case:str=None):
+        """
+        Runs the test case passed to this funtion
+        Args:
+            test_case (str, optional): test case name to run, default runs all test
+        Returns:
+            bool: True - test pass, False - test fails
+        """
+        output = self.utMenu.select( self.testSuite, test_case)
+        results = self.utMenu.collect_results(output)
+        if results == None:
+            results = False
+        return results
 
     def initialise(self, device_type:int=0):
         """
@@ -576,6 +597,22 @@ class dsHdmiInClass():
 
         return videoZoomModeList
 
+    def getAviContentTypeList(self):
+        """
+        gets supported avi content types as list.
+
+        Args:
+            None.
+
+        Returns:
+            A list of avi content types please refer hdmiInAviContentType enum class.
+        """
+
+        aviContentTypeList = []
+        for modeindex in hdmiInAviContentType:
+            aviContentTypeList.append(hdmiInAviContentType(modeindex).name)
+
+        return aviContentTypeList
 
     def setHdmiInZoomMode(self, zoom_mode:str=0):
         """
@@ -608,8 +645,10 @@ class dsHdmiInClass():
             A list of EDID list please refer  enum class.
         """
 
+        hdmiEdidVersionlist = self.deviceProfile.get("supportedEdidVersions")
+
         edidList = []
-        for edidindex in hdmiEdidVersion:
+        for edidindex in hdmiEdidVersionlist:
             edidList.append(hdmiEdidVersion(edidindex).name)
 
         return edidList
@@ -639,6 +678,45 @@ class dsHdmiInClass():
         ]
 
         result = self.utMenu.select(self.testSuite, "Set EdidVersion", promptWithAnswers)
+
+    def getSupportedEdidVersion(self):
+        """
+        Gets the EDID version.
+
+        Args:
+            None.
+
+        Returns:
+            list: List of EDID versions.
+        """
+        # Get the EDID version from the profile
+        edidVersions = self.deviceProfile.EdidVersion
+
+        # Check if EdidVersion exists
+        if edidVersions is None:
+            return []
+
+        outEdidVersion = []
+        for edidVersion in edidVersions:
+            # Assuming hdmiEdidVersion is an Enum mapping the versions
+            outEdidVersion.append(hdmiEdidVersion(edidVersion).name)
+
+        return outEdidVersion
+
+    def getSupportedPortsByEdidVersion(self, edidVersion):
+        """
+        Retrieves a list of HDMI input ports that support a specific EDID version.
+
+        Args:
+            edid_version (str): The EDID version to filter for (e.g., "HDMI_EDID_VER_20").
+
+        Returns:
+            list: A list of ports supporting the specified EDID version.
+        """
+        return [
+            port for port, version in zip(self.getSupportedPorts(), self.getSupportedEdidVersion())
+            if version == edidVersion
+        ]
 
     def getEdidVersion(self, port_type:str=0):
         """
@@ -731,7 +809,7 @@ class dsHdmiInClass():
         """
         promptWithAnswers = [
             {
-                "query_type": "direct",
+                "query_type": "list",
                 "query": "List of supported ports:",
                 "input": str(port_type)
             },
@@ -744,33 +822,6 @@ class dsHdmiInClass():
         ]
 
         result = self.utMenu.select(self.testSuite, "Set Edid 2 Allm Support", promptWithAnswers)
-
-    def getEdid2Allm(self, port_type:str=0):
-        """
-        Gets edid 2 allm support.
-
-        Args:
-            None.
-        Returns:
-            true if sets to true  otherwise false.
-        """
-        promptWithAnswers = [
-            {
-                "query_type": "direct",
-                "query": "List of supported ports:",
-                "input": str(port_type)
-            }
-        ]
-
-        result = self.utMenu.select( self.testSuite, "Get Edid 2 Allm Support", promptWithAnswers)
-
-        typeStatusPattern = r"Result dsGetEdid2AllmSupport IN:port:\[(\w+)\]:\[.*\] OUT:allmsupport:\[(\w+)\]"
-        match = re.search(typeStatusPattern, result)
-        if match:
-            edid2allm = match.group(2)
-            return edid2allm
-
-        return None
 
     def __del__(self):
         """
