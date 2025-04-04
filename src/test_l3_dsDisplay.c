@@ -452,9 +452,9 @@ void test_l3_dsDisplay_SetAllmEnabled()
     dsError_t status = dsERR_NONE;
     int32_t choice = -1;
     int32_t j = 0;
-	gTestID = 6;
+    gTestID = 6;
     
-	UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     UT_LOG_INFO(" \t  Supported ALLM Modes are:");
     for (j = 0; j < 2; j++)

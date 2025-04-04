@@ -90,7 +90,7 @@ class dsDisplay_test05_VerifyALLM_Mode(dsDisplayHelperClass):
         for port, index in self.testdsDisplay.getSupportedPorts():
             self.testdsDisplay.selectDisplayPort(port, index)
 
-            hdmi_version = self.testUserResponse.getUserYN(f'Please connect HDMI port on TV with 2.x (Y/N):')
+            hdmi_version = self.testUserResponse.getUserYN(f'Please use an HDMI port on your HDMI analyzer/ TV that supports HDMI 2.x (Y/N):')
             if hdmi_version:
                 # Set the ALLM Mode as Enable
                 self.testdsDisplay.setAllmMode('Enable')
@@ -108,7 +108,7 @@ class dsDisplay_test05_VerifyALLM_Mode(dsDisplayHelperClass):
                 result = self.testVerifyAllmMode(True,'Disable')
                 self.log.stepResult(result, f'Verified ALLM mode Disabled')
             else:
-                self.log.stepResult(False, f'ALLM feature is supported only on HDMI version 2.x')
+                self.log.stepResult(False, f'The ALLM feature is only available on devices/TVs with HDMI 2.x ports. Therefore, testing this feature is not possible with the current setup/equipment.')
 
         return result
 

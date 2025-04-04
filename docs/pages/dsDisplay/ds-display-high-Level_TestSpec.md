@@ -120,7 +120,7 @@ Emulator will boot with the predefined set of HDCP keys coming from the configur
 
 #### Test Startup Requirement-Check the ALLM mode
 
-`NA`
+A device must have HDMI 2.x capabilities
 
 #### Emulator Requirements-Check the ALLM mode
 
@@ -128,13 +128,13 @@ Emulator will boot with the predefined set of HDCP keys coming from the configur
 
 #### Control Plane Requirements-Check the ALLM mode
 
-Check ALLM mode is Enabled or Disabled and verify with analyzer
+Check ALLM mode is Enabled or Disabled and verify with HDMI analyzer
 
 #### ALLM Status
 
 |Test Functionality|Description|HAL API's|L2|L3|Source|Sink|Control plane requirements|
 |------------------|-----------|---------|--|--|------|----|--------------------------|
-|Check `ALLM` Status|Enable/Disable `ALLM` feature and verify with analyzer|dsSetAllmEnabled()|`Y`|`NA`|`Y`|`N`|`NA`|
+|Check `ALLM` Status|Enable/Disable `ALLM` feature and verify with HDMI analyzer|dsSetAllmEnabled()|`Y`|`Y`|`Y`|`N`|`NA`|
 
 #### Test Startup Requirement-ALLM Status
 
@@ -146,4 +146,4 @@ Connect HDMI port on TV with 2.x specification
 
 #### Control Plane Requirements-ALLM Status
 
-Verify the `ALLM` Status with analyzer/external device
+Verify the `ALLM` Status with HDMI analyzer/external device
