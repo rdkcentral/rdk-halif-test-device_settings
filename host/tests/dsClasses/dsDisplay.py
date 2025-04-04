@@ -252,10 +252,10 @@ class dsDisplayClass():
     
     def setAllmMode(self, mode:str="Disable"):
         """
-        Enables/Disables ALLM mode for HDMI output video port.
+        Enables/Disables ALLM mode for HDMI output port connected to display.
 
         This method allows you to enables or disables the Auto Low Latency Mode (ALLM) 
-        for a HDMI output video port on source devices, as per the HDMI 2.1 specification.
+        for HDMI output port connected to display, as per the HDMI 2.1 specification.
 
 
         Args:
@@ -283,17 +283,11 @@ class dsDisplayClass():
 
     def getAllmMode(self):
         """
-        Checks whether ALLM mode of HDMI output video port is enabled or not.
+        Checks whether ALLM mode of HDMI output port connected to display is enabled or not.
 
         This method allows you to check whether the Auto Low Latency Mode (ALLM) 
-        for a HDMI output video port on source devices is enabled or disabled, as 
+        for a HDMI output port connected to display is enabled or disabled, as 
         per the HDMI 2.1 specification.
-
-        Args:
-            video_port (int): The enumeration value representing the video port.
-                            Refer to the dsVideoPortType enum for valid options.
-            port_index (int, optional): The index of the specific port to query.
-                                        Defaults to 0.
 
         Returns:
             list: A list containing the information on status of the ALLM mode.

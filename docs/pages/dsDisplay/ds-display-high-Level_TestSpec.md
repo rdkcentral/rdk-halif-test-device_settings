@@ -115,8 +115,8 @@ Emulator will boot with the predefined set of HDCP keys coming from the configur
 
 |Test Functionality|Description|HAL API's|L2|L3|Source|Sink|Control plane requirements|
 |------------------|-----------|---------|--|--|------|----|--------------------------|
-|Check ALLM mode|Enables/Disables ALLM mode for HDMI output video port. This method allows you to enables or disables the Auto Low Latency Mode (ALLM) for a HDMI output video port on source devices, as per the HDMI 2.1 specification.|dsSetAllmEnabled()|`Y`|`Y`|`Y`|`NA`|`Y`|
-||Checks whether ALLM mode of HDMI output video port is enabled or not.|dsGetAllmEnabled()|`Y`|`Y`|`Y`|`NA`|`Y`|
+|Check ALLM mode|Enables/Disables ALLM mode for HDMI output port connected to display. For source devices, this function enables or disables the ALLM mode for specified HDMI output port.|dsSetAllmEnabled()|`Y`|`Y`|`Y`|`NA`|`Y`|
+||Checks whether ALLM mode of HDMI output port connected to display is enabled or not.|dsGetAllmEnabled()|`Y`|`Y`|`Y`|`NA`|`Y`|
 
 #### Test Startup Requirement-Check the ALLM mode
 
@@ -130,16 +130,15 @@ Emulator will boot with the predefined set of HDCP keys coming from the configur
 
 Check ALLM mode is Enabled or Disabled and verify with analyzer
 
-### ALLM Status
+#### ALLM Status
 
 |Test Functionality|Description|HAL API's|L2|L3|Source|Sink|Control plane requirements|
 |------------------|-----------|---------|--|--|------|----|--------------------------|
-|Check `ALLM` Status|Enable/Disable `ALLM` feature and verify with get function|dsSetAllmEnabled(), dsGetAllmEnabled()|`Y`|`NA`|`Y`|`N`|`NA`|
-||Enable/Disable `ALLM` feature and verify with video playback|dsSetAllmEnabled(), dsGetAllmEnabled()|`NA`|`Y`|`Y`|`N`|`Y`|
+|Check `ALLM` Status|Enable/Disable `ALLM` feature and verify with analyzer|dsSetAllmEnabled()|`Y`|`NA`|`Y`|`N`|`NA`|
 
 #### Test Startup Requirement-ALLM Status
 
-Playback the pre-define streams
+Connect HDMI port on TV with 2.x specification
 
 #### Emulator Requirements-ALLM Status
 

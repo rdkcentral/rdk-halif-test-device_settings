@@ -35,7 +35,7 @@ from raft.framework.core.logModule import logModule
 
 class dsDisplay_test05_VerifyALLM_Mode(dsDisplayHelperClass):
     """
-    A class to test and verify Enables/Disables ALLM mode for HDMI output video port.
+    A class to test and verify Enables/Disables ALLM mode for HDMI output port.
 
     Attributes:
         testName (str): Name of the test.
@@ -59,7 +59,7 @@ class dsDisplay_test05_VerifyALLM_Mode(dsDisplayHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifyAllmMode(self, manual=False, mode:str=''):
         """
-        Verifies Enables/Disables ALLM mode for HDMI output video port..
+        Verifies Enables/Disables ALLM mode for HDMI output port..
 
         Args:
             manual (bool, optional): If True, manual verification is done using user response; otherwise,
@@ -76,7 +76,7 @@ class dsDisplay_test05_VerifyALLM_Mode(dsDisplayHelperClass):
 
     def testFunction(self):
         """
-        Main test function that enables video ports and verifies the ALLM Mode.
+        Main test function that Enables/Disables ALLM mode for HDMI output port connected to display.
 
         Downloads assets, runs prerequisites, enables/disables ports, and verifies ALLM Mode.
 
@@ -86,7 +86,7 @@ class dsDisplay_test05_VerifyALLM_Mode(dsDisplayHelperClass):
         # Initialize the dsDisplay module
         self.testdsDisplay.initialise()
 
-        # Loop through supported video ports and verify ALLM Mode
+        # Loop through supported ports and verify ALLM Mode
         for port, index in self.testdsDisplay.getSupportedPorts():
             self.testdsDisplay.selectDisplayPort(port, index)
 
