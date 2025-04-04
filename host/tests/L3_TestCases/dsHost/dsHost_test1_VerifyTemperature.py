@@ -50,6 +50,7 @@ class dsHost_test1_VerifyTemperature(utHelperClass):
         self.moduleName = "dsHost"
         self.rackDevice = "dut"
         self.qcID = '1'
+        self.testsuite  = "L3 dsHost"
 
         
         super().__init__(self.testName, self.qcID, log)
@@ -77,7 +78,7 @@ class dsHost_test1_VerifyTemperature(utHelperClass):
         """
         
         # Create the dsHost class
-        self.testdsHost = dsHostClass(self.moduleConfigProfileFile, self.hal_session, self.targetWorkspace)
+        self.testdsHost = dsHostClass(self.moduleConfigProfileFile, self.hal_session, self.testsuite, self.targetWorkspace)
 
         self.log.stepStart(f'dsHost_test1_VerifyTemperature')
 
