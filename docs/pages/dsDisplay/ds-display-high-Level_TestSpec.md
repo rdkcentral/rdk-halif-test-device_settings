@@ -44,6 +44,7 @@ High level overview:
 |1|[Get EDID Information](#get-edid-information)|Test validates the accuracy and functionality of the display device module's functions (dsGetEDID and dsGetEDIDBytes) in retrieving the Extended Display Identification Data (EDID) from connected display devices|
 |2|[Get Aspect Ratio](#get-aspect-ratio)| Test provides the aspect ratio of the display device|
 |3|[Callback Registration for Display Related Events](#callback-registration-for-display-related-events)|To verify the callback registration for display related events. The display events are Display connected event, Display disconnected event, Rx Sense ON event, Rx Sense OFF event, HDCP protocol version change event|
+|4|[Check ALLM mode](#check-allm-mode)|Check the ALLM mode|
 -----------
 
 ## Get EDID Information
@@ -109,3 +110,40 @@ Emulator will boot with the predefined set of HDCP keys coming from the configur
 
 - The control plane will generate events for HDMI connection and disconnection. It also supplies signals to the receiving devices to initiate the Rx Sense ON/Rx Sense OFF events.
 - The Control Plane will handle connection/disconnection, measuring the timing between both and ensuring it meets the expected time.
+
+### Check ALLM mode
+
+|Test Functionality|Description|HAL API's|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|---------|--|--|------|----|--------------------------|
+|Check ALLM mode|Enables/Disables ALLM mode for HDMI output port connected to display. For source devices, this function enables or disables the ALLM mode for specified HDMI output port.|dsSetAllmEnabled()|`Y`|`Y`|`Y`|`NA`|`Y`|
+||Checks whether ALLM mode of HDMI output port connected to display is enabled or not.|dsGetAllmEnabled()|`Y`|`Y`|`Y`|`NA`|`Y`|
+
+#### Test Startup Requirement-Check the ALLM mode
+
+A device must have HDMI 2.x capabilities
+
+#### Emulator Requirements-Check the ALLM mode
+
+[Emulator Requirements](#emulator-requirements)
+
+#### Control Plane Requirements-Check the ALLM mode
+
+Check ALLM mode is Enabled or Disabled and verify with HDMI analyzer
+
+#### ALLM Status
+
+|Test Functionality|Description|HAL API's|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|---------|--|--|------|----|--------------------------|
+|Check `ALLM` Status|Enable/Disable `ALLM` feature and verify with HDMI analyzer|dsSetAllmEnabled()|`Y`|`Y`|`Y`|`N`|`NA`|
+
+#### Test Startup Requirement-ALLM Status
+
+Connect HDMI port on TV with 2.x specification
+
+#### Emulator Requirements-ALLM Status
+
+[Emulator Requirements](#emulator-requirements)
+
+#### Control Plane Requirements-ALLM Status
+
+Verify the `ALLM` Status with HDMI analyzer/external device
