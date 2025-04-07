@@ -473,8 +473,8 @@ void test_l1_dsDisplay_positive_dsGetEDID(void) {
     int result = 0;
     intptr_t displayHandle;
     dsVideoPortType_t vType;
-    dsDisplayEDID_t edid1;
-    dsDisplayEDID_t edid2;
+    dsDisplayEDID_t edid1 = {0};
+    dsDisplayEDID_t edid2 = {0};
     uint32_t portIndex;
 
     // Step 01: Initialize the display sub-system
