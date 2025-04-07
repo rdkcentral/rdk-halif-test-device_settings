@@ -2013,7 +2013,7 @@ void test_l2_dsAudio_GetAudioCapabilities(void)
 
     dsError_t retStatus;
     intptr_t handle;
-    int capabilities;
+    int capabilities = 0;
 
     UT_LOG_DEBUG("Invoking dsAudioPortInit");
     retStatus = dsAudioPortInit();
