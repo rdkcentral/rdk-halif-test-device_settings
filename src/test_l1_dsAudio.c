@@ -7566,7 +7566,7 @@ void test_l1_dsAudio_positive_dsGetAudioCapabilities(void)
 
     int result;
     intptr_t handle = null_handle;
-    int capabilities1, capabilities2;
+    int capabilities1 = 0, capabilities2 = 0;
 
     // Step 01: Initialize audio ports
     result = dsAudioPortInit();
