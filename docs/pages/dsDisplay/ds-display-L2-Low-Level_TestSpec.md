@@ -127,3 +127,47 @@ C -->|!=dsERR_NONE| I[Test case fail]
 D -->|Not Verified| J[Test case fail]
 E -->|!=dsERR_NONE| K[Test case fail]
 ```
+
+### Test 3
+
+|Title|Details|
+|--|--|
+|Function Name|`test_l2_dsDisplay_SetAndGetAVIContentType_source`|
+|Description|Configures the AVI InfoFrame content type signalling for HDMI output port connected to display.
+For source devices, this function configures the AVI InfoFrame ITC, CN1 and CN0 bits. AVI InfoFrame set remains until the power mode change or device reboot.|
+|Test Group|02|
+|Test Case ID|003|
+|Priority|High|
+
+**Pre-Conditions**
+None
+
+**Dependencies**
+None
+
+**User Interaction**
+If user chose to run the test in interactive mode, then the test case has to be selected via console.
+
+#### Test Procedure - Test 3
+
+| Variation / Steps | Description | Test Data | Expected Result | Notes|
+| -- | --------- | ---------- | -------------- | ----- |
+| 01 | Initialize the display using `dsDisplayInit` | None | `dsERR_NONE` | Should be successful |
+| 02 | Get the display handle using `dsGetDisplay` with `dsVIDEOPORT_TYPE_HDMI` and index 0 | `dsVIDEOPORT_TYPE_HDMI`, 0 | `dsERR_NONE` | Should be successful |
+| 03 | Set AVI info frame contentType by looping through dsAviContentType_t enum using `dsSetAVIContentType` with the handle obtained from `dsGetDisplay` | handle obtained from `dsGetDisplay` and contentType | `dsERR_NONE` | Should be successful |
+| 04 | Get AVI info frame contentType using `dsGetAVIContentType` and verify that the set and get AVI contenttype is equal  | None |  | Should be successful |
+| 05 | Terminate the display using `dsDisplayTerm` | None | `dsERR_NONE` | Should be successful |
+
+```mermaid
+graph TB
+A[Call dsDisplayInit] -->|dsERR_NONE| B[Call dsGetDisplay]
+B -->|dsERR_NONE| C[Call dsSetAVIContentType]
+C -->|dsERR_NONE| D[Call dsGetAVIContentType]
+D -->|Verified| E[Verify that the set and get AVI contenttype is equal]
+E -->|dsERR_NONE| F[Call dsDisplayTerm]
+A -->|!=dsERR_NONE| G[Test case success]
+B -->|!=dsERR_NONE| H[Test case fail]
+C -->|!=dsERR_NONE| I[Test case fail]
+D -->|Not Verified| J[Test case fail]
+E -->|!=dsERR_NONE| K[Test case fail]
+```
