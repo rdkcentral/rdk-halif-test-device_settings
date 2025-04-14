@@ -490,6 +490,118 @@ void test_l2_dsHdmiIn_GetHdmiVersionAndValidate_sink(void)
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
+/**
+* @brief Test to enable and disable VRR and get the supported VRR Type for HDMI input
+*
+* This test enables the VRR support for HDMI input ports and then gets the current VRR type of the particular HDMI port.
+*
+* **Test Group ID:** 02@n
+* **Test Case ID:** 008@n
+*
+* **Test Procedure:**
+* Refer to UT specification documentation [ds-hdmi-in-L2-Low-Level_TestSpec.md](../docs/pages/ds-hdmi-in-L2-Low-Level_TestSpec.md)
+*/
+
+void test_l2_dsHdmiIn_SetAndGetVRRSupportAndVRRType_sink(void)
+{
+    gTestID = 8;
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t ret = dsERR_NONE;
+    uint8_t numInputs = 0; // Initialize to 0
+    dsVRRType_t vrrType = dsVRR_NONE;
+
+    UT_LOG_DEBUG("Invoking dsHdmiInInit");
+    ret = dsHdmiInInit();
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+
+    ret = dsHdmiInGetNumberOfInputs(&numInputs);
+    if (ret != dsERR_NONE)
+    {
+        UT_LOG_ERROR("Failed to get the number of hdmi inputs\n");
+    }
+
+    UT_ASSERT_TRUE(numInputs >= 0 && numInputs <= UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts"));
+
+    for (int i = dsHDMI_IN_PORT_0; i < numInputs; i++)
+    {
+
+	bool vrrSupport = false;
+
+        if(i == dsHDMI_IN_PORT_2 || i == dsHDMI_IN_PORT_3)
+        {
+            UT_LOG_DEBUG("Invoking dsHdmiInGetVRRSupport with hdmiPort=%d \n", hdmiPort[i]);
+            ret = dsHdmiInGetVRRSupport(hdmiPort[i], &vrrSupport);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
+            if (ret != dsERR_NONE)
+            {
+                UT_LOG_ERROR("Failed to get VRR Support\n");
+                continue;
+            }
+
+	    if(vrrSupport == true)
+	    {
+	        UT_LOG_DEBUG("Invoking dsHdmiInGetVRRStatus with hdmiPort=%d\n", hdmiPort[i]);
+                ret = dsHdmiInGetVRRStatus(hdmiPort[i], &vrrType);
+                UT_ASSERT_EQUAL(ret, dsERR_NONE);
+                if (ret != dsERR_NONE)
+		{
+                    UT_LOG_ERROR("Failed to get VRR Support Type\n");
+                }
+            }
+	    else
+	    {
+		vrrSupport = true;
+		UT_LOG_DEBUG("Invoking dsHdmiInSetVRRSupport with hdmiPort=%d and VRR status %d\n", hdmiPort[i], vrrSupport);
+                ret = dsHdmiInSetVRRSupport(hdmiPort[i], vrrSupport);
+                UT_ASSERT_EQUAL(ret, dsERR_NONE);
+                if (ret != dsERR_NONE)
+		{
+                    UT_LOG_ERROR("Failed to set VRR Support\n");
+                }
+
+		UT_LOG_DEBUG("Invoking dsHdmiInGetVRRStatus with hdmiPort=%d\n", hdmiPort[i]);
+                ret = dsHdmiInGetVRRStatus(hdmiPort[i], &vrrType);
+                UT_ASSERT_EQUAL(ret, dsERR_NONE);
+                if (ret != dsERR_NONE)
+		{
+                    UT_LOG_ERROR("Failed to get VRR Support Type\n");
+                }
+	   }
+        }
+
+	else if (i == dsHDMI_IN_PORT_0 || i == dsHDMI_IN_PORT_1)
+	{
+	    UT_LOG_DEBUG("Invoking dsHdmiInGetVRRSupport with hdmiPort=%d \n", hdmiPort[i]);
+            ret = dsHdmiInGetVRRSupport(hdmiPort[i], &vrrSupport);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
+            if (ret != dsERR_NONE)
+            {
+                UT_LOG_ERROR("Failed to get VRR Support\n");
+                continue;
+            }
+
+	    if(vrrSupport == false)
+	    {
+		UT_LOG_DEBUG("Invoking dsHdmiInGetVRRStatus with hdmiPort=%d\n", hdmiPort[i]);
+                ret = dsHdmiInGetVRRStatus(hdmiPort[i], &vrrType);
+                UT_ASSERT_EQUAL(ret, dsERR_NONE);
+                if (ret != dsERR_NONE)
+		{
+                    UT_LOG_ERROR("Failed to get VRR Support Type\n");
+                }
+		UT_ASSERT_EQUAL_FATAL(vrrType, dsVRR_NONE);
+            }
+	}
+    }
+
+    UT_LOG_DEBUG("Invoking dsHdmiInTerm");
+    ret = dsHdmiInTerm();
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
+}
+
 static UT_test_suite_t * pSuite = NULL;
 
 /**
@@ -545,6 +657,7 @@ int test_l2_dsHdmiIn_register(void)
         UT_add_test( pSuite, "SetGetEdidVer_EdidLength_sink", test_l2_dsHdmiIn_SetAndGetEdidVersionAndValidateEdidLength_sink);
         UT_add_test( pSuite, "GetGameFeaturesList_sink", test_l2_dsHdmiIn_GetSupportedGameFeaturesList_sink);
         UT_add_test( pSuite, "GetHdmiVersionValidate_sink", test_l2_dsHdmiIn_GetHdmiVersionAndValidate_sink);
+	UT_add_test( pSuite, "SetGetHdmiVRRSupport_Type_sink", test_l2_dsHdmiIn_SetAndGetVRRSupportAndVRRType_sink);
     }
 
     return 0;
