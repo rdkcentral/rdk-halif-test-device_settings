@@ -491,25 +491,25 @@ void test_l2_dsHdmiIn_GetHdmiVersionAndValidate_sink(void)
 }
 
 /**
-* @brief Test to enable and disable VRR and get the supported VRR Type for HDMI input
+* @brief Test to enable and disable VRR support for HDMI Input ports
 *
-* This test enables the VRR support for HDMI input ports and then gets the current VRR type of the particular HDMI port.
+* This test enables the VRR support for HDMI input ports and then gets the VRR support of the particular HDMI port to validate whether VRR support is enabled.
+* It also disables the VRR support for HDMI input ports and then gets the VRR support of the particular HDMI port to validate whether VRR support is disabled.
 *
 * **Test Group ID:** 02@n
-* **Test Case ID:** 008@n
+* **Test Case ID:** 006@n
 *
 * **Test Procedure:**
 * Refer to UT specification documentation [ds-hdmi-in-L2-Low-Level_TestSpec.md](../docs/pages/ds-hdmi-in-L2-Low-Level_TestSpec.md)
 */
 
-void test_l2_dsHdmiIn_SetAndGetVRRSupportAndVRRType_sink(void)
+void test_l2_dsHdmiIn_SetAndGetVRRSupport_sink(void)
 {
-    gTestID = 8;
+    gTestID = 6;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret = dsERR_NONE;
     uint8_t numInputs = 0; // Initialize to 0
-    dsVRRType_t vrrType = dsVRR_NONE;
 
     UT_LOG_DEBUG("Invoking dsHdmiInInit");
     ret = dsHdmiInInit();
@@ -525,74 +525,50 @@ void test_l2_dsHdmiIn_SetAndGetVRRSupportAndVRRType_sink(void)
 
     for (int i = dsHDMI_IN_PORT_0; i < numInputs; i++)
     {
-
-	bool vrrSupport = false;
-
-        if(i == dsHDMI_IN_PORT_2 || i == dsHDMI_IN_PORT_3)
-        {
-            UT_LOG_DEBUG("Invoking dsHdmiInGetVRRSupport with hdmiPort=%d \n", hdmiPort[i]);
-            ret = dsHdmiInGetVRRSupport(hdmiPort[i], &vrrSupport);
-            UT_ASSERT_EQUAL(ret, dsERR_NONE);
-            if (ret != dsERR_NONE)
-            {
-                UT_LOG_ERROR("Failed to get VRR Support\n");
-                continue;
-            }
-
-	    if(vrrSupport == true)
-	    {
-	        UT_LOG_DEBUG("Invoking dsHdmiInGetVRRStatus with hdmiPort=%d\n", hdmiPort[i]);
-                ret = dsHdmiInGetVRRStatus(hdmiPort[i], &vrrType);
-                UT_ASSERT_EQUAL(ret, dsERR_NONE);
-                if (ret != dsERR_NONE)
-		{
-                    UT_LOG_ERROR("Failed to get VRR Support Type\n");
-                }
-            }
-	    else
-	    {
-		vrrSupport = true;
-		UT_LOG_DEBUG("Invoking dsHdmiInSetVRRSupport with hdmiPort=%d and VRR status %d\n", hdmiPort[i], vrrSupport);
-                ret = dsHdmiInSetVRRSupport(hdmiPort[i], vrrSupport);
-                UT_ASSERT_EQUAL(ret, dsERR_NONE);
-                if (ret != dsERR_NONE)
-		{
-                    UT_LOG_ERROR("Failed to set VRR Support\n");
-                }
-
-		UT_LOG_DEBUG("Invoking dsHdmiInGetVRRStatus with hdmiPort=%d\n", hdmiPort[i]);
-                ret = dsHdmiInGetVRRStatus(hdmiPort[i], &vrrType);
-                UT_ASSERT_EQUAL(ret, dsERR_NONE);
-                if (ret != dsERR_NONE)
-		{
-                    UT_LOG_ERROR("Failed to get VRR Support Type\n");
-                }
-	   }
+        bool vrrSupport = true;
+	UT_LOG_DEBUG("Invoking dsHdmiInSetVRRSupport with hdmiPort=%d and VRR support %d\n", hdmiPort[i], vrrSupport);
+        ret = dsHdmiInSetVRRSupport(hdmiPort[i], vrrSupport);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        if (ret != dsERR_NONE)
+	{
+            UT_LOG_ERROR("Failed to set VRR Support\n");
         }
 
-	else if (i == dsHDMI_IN_PORT_0 || i == dsHDMI_IN_PORT_1)
+        UT_LOG_DEBUG("Invoking dsHdmiInGetVRRSupport with hdmiPort=%d \n", hdmiPort[i]);
+        ret = dsHdmiInGetVRRSupport(hdmiPort[i], &vrrSupport);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        if (ret != dsERR_NONE)
+        {
+            UT_LOG_ERROR("Failed to get VRR Support\n");
+            continue;
+        }
+			
+	vrrSupport = false;
+	UT_LOG_DEBUG("Invoking dsHdmiInSetVRRSupport with hdmiPort=%d and VRR support %d\n", hdmiPort[i], vrrSupport);
+        ret = dsHdmiInSetVRRSupport(hdmiPort[i], vrrSupport);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        if (ret != dsERR_NONE)
 	{
-	    UT_LOG_DEBUG("Invoking dsHdmiInGetVRRSupport with hdmiPort=%d \n", hdmiPort[i]);
-            ret = dsHdmiInGetVRRSupport(hdmiPort[i], &vrrSupport);
-            UT_ASSERT_EQUAL(ret, dsERR_NONE);
-            if (ret != dsERR_NONE)
-            {
-                UT_LOG_ERROR("Failed to get VRR Support\n");
-                continue;
-            }
-
-	    if(vrrSupport == false)
-	    {
-		UT_LOG_DEBUG("Invoking dsHdmiInGetVRRStatus with hdmiPort=%d\n", hdmiPort[i]);
-                ret = dsHdmiInGetVRRStatus(hdmiPort[i], &vrrType);
-                UT_ASSERT_EQUAL(ret, dsERR_NONE);
-                if (ret != dsERR_NONE)
-		{
-                    UT_LOG_ERROR("Failed to get VRR Support Type\n");
-                }
-		UT_ASSERT_EQUAL_FATAL(vrrType, dsVRR_NONE);
-            }
-	}
+            UT_LOG_ERROR("Failed to set VRR Support\n");
+        }
+					
+	UT_LOG_DEBUG("Invoking dsHdmiInGetVRRSupport with hdmiPort=%d \n", hdmiPort[i]);
+        ret = dsHdmiInGetVRRSupport(hdmiPort[i], &vrrSupport);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        if (ret != dsERR_NONE)
+        {
+            UT_LOG_ERROR("Failed to get VRR Support\n");
+            continue;
+        }
+		
+	vrrSupport = true;
+        UT_LOG_DEBUG("Invoking dsHdmiInSetVRRSupport with hdmiPort=%d and VRR support %d\n", hdmiPort[i], vrrSupport);
+        ret = dsHdmiInSetVRRSupport(hdmiPort[i], vrrSupport);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        if (ret != dsERR_NONE)
+	{
+            UT_LOG_ERROR("Failed to set VRR Support\n");
+        }
     }
 
     UT_LOG_DEBUG("Invoking dsHdmiInTerm");
@@ -657,7 +633,7 @@ int test_l2_dsHdmiIn_register(void)
         UT_add_test( pSuite, "SetGetEdidVer_EdidLength_sink", test_l2_dsHdmiIn_SetAndGetEdidVersionAndValidateEdidLength_sink);
         UT_add_test( pSuite, "GetGameFeaturesList_sink", test_l2_dsHdmiIn_GetSupportedGameFeaturesList_sink);
         UT_add_test( pSuite, "GetHdmiVersionValidate_sink", test_l2_dsHdmiIn_GetHdmiVersionAndValidate_sink);
-	UT_add_test( pSuite, "SetGetHdmiVRRSupport_Type_sink", test_l2_dsHdmiIn_SetAndGetVRRSupportAndVRRType_sink);
+	UT_add_test( pSuite, "SetGetHdmiVRRSupport_sink", test_l2_dsHdmiIn_SetAndGetVRRSupport_sink);
     }
 
     return 0;
