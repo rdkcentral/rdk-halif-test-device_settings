@@ -523,19 +523,19 @@ void test_l2_dsHdmiIn_SetAndGetVRRSupport_sink(void)
 
     UT_ASSERT_TRUE(numInputs >= 0 && numInputs <= UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts"));
 
-    for (int i = dsHDMI_IN_PORT_0; i < numInputs; i++)
+    for (int port = dsHDMI_IN_PORT_0; port < numInputs; port++)
     {
         bool vrrSupport = true;
-	UT_LOG_DEBUG("Invoking dsHdmiInSetVRRSupport with hdmiPort=%d and VRR support %d\n", hdmiPort[i], vrrSupport);
-        ret = dsHdmiInSetVRRSupport(hdmiPort[i], vrrSupport);
+	UT_LOG_DEBUG("Invoking dsHdmiInSetVRRSupport with hdmiPort=%d and VRR support %d\n", port, vrrSupport);
+        ret = dsHdmiInSetVRRSupport(port, vrrSupport);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
 	{
             UT_LOG_ERROR("Failed to set VRR Support\n");
         }
 
-        UT_LOG_DEBUG("Invoking dsHdmiInGetVRRSupport with hdmiPort=%d \n", hdmiPort[i]);
-        ret = dsHdmiInGetVRRSupport(hdmiPort[i], &vrrSupport);
+        UT_LOG_DEBUG("Invoking dsHdmiInGetVRRSupport with hdmiPort=%d \n", port);
+        ret = dsHdmiInGetVRRSupport(port, &vrrSupport);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
@@ -544,16 +544,16 @@ void test_l2_dsHdmiIn_SetAndGetVRRSupport_sink(void)
         }
 			
 	vrrSupport = false;
-	UT_LOG_DEBUG("Invoking dsHdmiInSetVRRSupport with hdmiPort=%d and VRR support %d\n", hdmiPort[i], vrrSupport);
-        ret = dsHdmiInSetVRRSupport(hdmiPort[i], vrrSupport);
+	UT_LOG_DEBUG("Invoking dsHdmiInSetVRRSupport with hdmiPort=%d and VRR support %d\n", port, vrrSupport);
+        ret = dsHdmiInSetVRRSupport(port, vrrSupport);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
 	{
             UT_LOG_ERROR("Failed to set VRR Support\n");
         }
 					
-	UT_LOG_DEBUG("Invoking dsHdmiInGetVRRSupport with hdmiPort=%d \n", hdmiPort[i]);
-        ret = dsHdmiInGetVRRSupport(hdmiPort[i], &vrrSupport);
+	UT_LOG_DEBUG("Invoking dsHdmiInGetVRRSupport with hdmiPort=%d \n", port);
+        ret = dsHdmiInGetVRRSupport(port, &vrrSupport);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
         {
@@ -562,8 +562,8 @@ void test_l2_dsHdmiIn_SetAndGetVRRSupport_sink(void)
         }
 		
 	vrrSupport = true;
-        UT_LOG_DEBUG("Invoking dsHdmiInSetVRRSupport with hdmiPort=%d and VRR support %d\n", hdmiPort[i], vrrSupport);
-        ret = dsHdmiInSetVRRSupport(hdmiPort[i], vrrSupport);
+        UT_LOG_DEBUG("Invoking dsHdmiInSetVRRSupport with hdmiPort=%d and VRR support %d\n", port, vrrSupport);
+        ret = dsHdmiInSetVRRSupport(port, vrrSupport);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
 	{

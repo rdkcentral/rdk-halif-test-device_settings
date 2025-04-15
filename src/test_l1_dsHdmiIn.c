@@ -1571,6 +1571,10 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAviContentTypeChangeCB(void) {
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
+void mockVRRSignalChangeCallback(dsHdmiInPort_t port, dsVRRType_t vrrType){
+// Mock implementation, can be customized for testing
+}
+
 /**
  * @brief Ensure dsHdmiInRegisterVRRChangeCB() correctly registers a callback during positive scenarios.
  *
@@ -1656,11 +1660,6 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterVRRChangeCB(void) {
     CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
-}
-
-
-void mockVRRSignalChangeCallback(dsHdmiInPort_t port, bool allm_mode){
-// Mock implementation, can be customized for testing
 }
 
 /**
