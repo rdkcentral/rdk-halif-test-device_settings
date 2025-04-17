@@ -1644,7 +1644,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterVRRChangeCB(void) {
 
     // Step 1: Call dsHdmiInRegisterVRRChangeCB() without initializing the HDMI input sub-system
     dsError_t result = dsHdmiInRegisterVRRChangeCB(mockVRRSignalChangeCallback);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
@@ -1657,7 +1657,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterVRRChangeCB(void) {
 
     // Step 5: Call dsHdmiInRegisterVRRChangeCB() after terminating the HDMI input sub-system
     result = dsHdmiInRegisterVRRChangeCB(mockVRRSignalChangeCallback);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -2742,7 +2742,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetVRRSupport_sink(void) {
 
             UT_ASSERT_EQUAL(vrr_support_1, vrr_support_2);
 
-        }
+       }
     } else if (gSourceType == 1) {
        // Step 4: Call dsHdmiInGetVRRSupport() with valid ports
        UT_ASSERT_EQUAL(dsHdmiInGetVRRSupport(dsHDMI_IN_PORT_0, &vrr_support_1), dsERR_OPERATION_NOT_SUPPORTED);
@@ -2784,7 +2784,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetVRRSupport_sink(void) {
 
     // Step 1: Call dsHdmiInGetVRRSupport() without initializing the HDMI input sub-system
     dsError_t result = dsHdmiInGetVRRSupport(dsHDMI_IN_PORT_0, &vrr_support);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
@@ -2800,7 +2800,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetVRRSupport_sink(void) {
 
     // Step 6: Call dsHdmiInGetVRRSupport() without initializing the HDMI input sub-system
     result = dsHdmiInGetVRRSupport(dsHDMI_IN_PORT_0, &vrr_support);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -2880,7 +2880,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSetVRRSupport_sink(void) {
 
     // Step 1: Call dsHdmiInSetVRRSupport() without prior initialization of HDMI input
     dsError_t result = dsHdmiInSetVRRSupport(dsHDMI_IN_PORT_0, true);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 2: Initialize HDMI input using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
@@ -2893,7 +2893,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSetVRRSupport_sink(void) {
 
     // Step 5: Call dsHdmiInSetVRRSupport() after termination
     result = dsHdmiInSetVRRSupport(dsHDMI_IN_PORT_0, true);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -2922,8 +2922,8 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetVRRStatus_sink(void) {
     gTestID = 57;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsError_t  result = dsERR_NONE;
-    dsVRRType_t vrr_type_1 = false;
-    dsVRRType_t vrr_type_2 = false;
+    dsVRRType_t vrr_type_1 = dsVRR_NONE;
+    dsVRRType_t vrr_type_2 = dsVRR_NONE;
     uint8_t numInputPorts = 0;
     numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
 
@@ -2979,11 +2979,11 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetVRRStatus_sink(void) {
 
     gTestID = 58;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsVRRType_t vrr_type = false;
+    dsVRRType_t vrr_type = dsVRR_NONE;
 
     // Step 1: Call dsHdmiInGetVRRStatus() without initializing the HDMI input sub-system
     dsError_t result = dsHdmiInGetVRRStatus(dsHDMI_IN_PORT_0, &vrr_type);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
@@ -2999,7 +2999,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetVRRStatus_sink(void) {
 
     // Step 6: Call dsHdmiInGetVRRStatus() without initializing the HDMI input sub-system
     result = dsHdmiInGetVRRStatus(dsHDMI_IN_PORT_0, &vrr_type);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }

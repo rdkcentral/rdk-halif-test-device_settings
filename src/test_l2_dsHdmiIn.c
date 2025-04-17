@@ -525,26 +525,9 @@ void test_l2_dsHdmiIn_SetAndGetVRRSupport_sink(void)
 
     for (int port = dsHDMI_IN_PORT_0; port < numInputs; port++)
     {
-        bool vrrSupport = true;
-	UT_LOG_DEBUG("Invoking dsHdmiInSetVRRSupport with hdmiPort=%d and VRR support %d\n", port, vrrSupport);
-        ret = dsHdmiInSetVRRSupport(port, vrrSupport);
-        UT_ASSERT_EQUAL(ret, dsERR_NONE);
-        if (ret != dsERR_NONE)
-	{
-            UT_LOG_ERROR("Failed to set VRR Support\n");
-        }
-
-        UT_LOG_DEBUG("Invoking dsHdmiInGetVRRSupport with hdmiPort=%d \n", port);
-        ret = dsHdmiInGetVRRSupport(port, &vrrSupport);
-        UT_ASSERT_EQUAL(ret, dsERR_NONE);
-        if (ret != dsERR_NONE)
-        {
-            UT_LOG_ERROR("Failed to get VRR Support\n");
-            continue;
-        }
 			
 	vrrSupport = false;
-	UT_LOG_DEBUG("Invoking dsHdmiInSetVRRSupport with hdmiPort=%d and VRR support %d\n", port, vrrSupport);
+	UT_LOG_DEBUG("Invoking dsHdmiInSetVRRSupport with hdmiPort = %d and VRR support %d\n", port, vrrSupport);
         ret = dsHdmiInSetVRRSupport(port, vrrSupport);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
@@ -552,7 +535,7 @@ void test_l2_dsHdmiIn_SetAndGetVRRSupport_sink(void)
             UT_LOG_ERROR("Failed to set VRR Support\n");
         }
 					
-	UT_LOG_DEBUG("Invoking dsHdmiInGetVRRSupport with hdmiPort=%d \n", port);
+	UT_LOG_DEBUG("Invoking dsHdmiInGetVRRSupport with hdmiPort = %d \n", port);
         ret = dsHdmiInGetVRRSupport(port, &vrrSupport);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
@@ -562,7 +545,7 @@ void test_l2_dsHdmiIn_SetAndGetVRRSupport_sink(void)
         }
 		
 	vrrSupport = true;
-        UT_LOG_DEBUG("Invoking dsHdmiInSetVRRSupport with hdmiPort=%d and VRR support %d\n", port, vrrSupport);
+        UT_LOG_DEBUG("Invoking dsHdmiInSetVRRSupport with hdmiPort = %d and VRR support %d\n", port, vrrSupport);
         ret = dsHdmiInSetVRRSupport(port, vrrSupport);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         if (ret != dsERR_NONE)
