@@ -144,6 +144,26 @@ const static ut_control_keyStringMapping_t dsVideoAspectRatio_mapTable[] = {
     {NULL, -1}
 };
 
+/* dsAviContentType_t */
+const static ut_control_keyStringMapping_t dsAviContentType_mapTable[] = {
+    {"dsAVICONTENT_TYPE_GRAPHICS", (int32_t)dsAVICONTENT_TYPE_GRAPHICS},
+    {"dsAVICONTENT_TYPE_PHOTO", (int32_t)dsAVICONTENT_TYPE_PHOTO},
+    {"dsAVICONTENT_TYPE_CINEMA", (int32_t)dsAVICONTENT_TYPE_CINEMA},
+    {"dsAVICONTENT_TYPE_GAME", (int32_t)dsAVICONTENT_TYPE_GAME},
+    {"dsAVICONTENT_TYPE_NOT_SIGNALLED", (int32_t)dsAVICONTENT_TYPE_NOT_SIGNALLED},
+    {"dsAVICONTENT_TYPE_MAX", (int32_t)dsAVICONTENT_TYPE_MAX},
+    {NULL, -1}
+};
+
+/* dsAVIScanInformation_t */
+const static ut_control_keyStringMapping_t dsAVIScanInformation_mapTable[] = {
+    {"dsAVI_SCAN_TYPE_NO_DATA",   (int32_t)dsAVI_SCAN_TYPE_NO_DATA},
+    {"dsAVI_SCAN_TYPE_OVERSCAN",  (int32_t)dsAVI_SCAN_TYPE_OVERSCAN},
+    {"dsAVI_SCAN_TYPE_UNDERSCAN", (int32_t)dsAVI_SCAN_TYPE_UNDERSCAN},
+    {"dsAVI_SCAN_TYPE_MAX",       (int32_t)dsAVI_SCAN_TYPE_MAX},
+    {NULL, -1}
+};
+
 /* bool */
 const static ut_control_keyStringMapping_t bool_mapTable[] =
 {
@@ -280,7 +300,7 @@ void test_l3_dsDisplay_initialize(void)
  */
 void test_l3_dsDisplay_select_display_port(void)
 {
-    gTestID = 6;
+    gTestID = 2;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
@@ -510,11 +530,10 @@ void test_l3_dsDisplay_GetAllmEnabled()
     DS_ASSERT(status == dsERR_NONE);
     UT_LOG_INFO("OUT %s ",__FUNCTION__);   
 }
-
-/**
- * @brief This test terminates the dsDisplay Module.
+/*
+ * @brief Sets the AVI content type of the display.
  *
- * This test function terminates the dsDisplay Module.
+ * Sets the AVI content type of the display.
  *
  * **Test Group ID:** 03@n
  * **Test Case ID:** 008@n
@@ -523,9 +542,173 @@ void test_l3_dsDisplay_GetAllmEnabled()
  * Refer to Test specification documentation
  * [ds-display_L3_Low-Level_TestSpecification.md](../../docs/pages/ds-display_L3_Low-Level_TestSpecification.md)
  */
-void test_l3_dsDisplay_terminate(void)
+void test_l3_dsDisplay_set_avicontenttype(void)
 {
     gTestID = 8;
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t status = dsERR_NONE;
+    int32_t choice = 0;
+    dsAviContentType_t contentType = dsAVICONTENT_TYPE_MAX;
+
+    UT_LOG_INFO("Supported AVI Content Types:");
+    UT_LOG_INFO("------------------------------------------");
+
+    for (int i = 0; i < dsAVICONTENT_TYPE_MAX; i++) {
+        UT_LOG_INFO("\t%d. %s", i, UT_Control_GetMapString(dsAviContentType_mapTable, i));
+    }
+
+    UT_LOG_INFO("Select AVI Content Type to set: ");
+    scanf("%d", &choice);
+    readAndDiscardRestOfLine(stdin);
+    contentType = (dsAviContentType_t)choice;
+
+    UT_LOG_INFO("Calling dsSetAVIContentType(IN:handle:[0x%0X], contentType:[%s])",
+                gDisplayHandle, UT_Control_GetMapString(dsAviContentType_mapTable, contentType));
+
+    status = dsSetAVIContentType(gDisplayHandle, contentType);
+
+    UT_LOG_INFO("Result dsSetAVIContentType(handle:[0x%0X], contentType:[%s], dsError_t:[%s])",
+                gDisplayHandle,
+                UT_Control_GetMapString(dsAviContentType_mapTable, contentType),
+                UT_Control_GetMapString(dsDisplayError_mapTable, status));
+
+    DS_ASSERT(status == dsERR_NONE);
+
+    UT_LOG_INFO("OUT %s", __FUNCTION__);
+}
+
+/**
+ * @brief Retrieves the AVI content type of the display.
+ *
+ * Retrieves the AVI content type of the display.
+ *
+ * **Test Group ID:** 03@n
+ * **Test Case ID:** 009@n
+ *
+ * **Test Procedure:**
+ * Refer to Test specification documentation
+ * [ds-display_L3_Low-Level_TestSpecification.md](../../docs/pages/ds-display_L3_Low-Level_TestSpecification.md)
+ */
+void test_l3_dsDisplay_get_avicontenttype(void)
+{
+    gTestID = 9;
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t status = dsERR_NONE;
+    dsAviContentType_t contentType = dsAVICONTENT_TYPE_MAX;
+
+    UT_LOG_INFO("Calling dsGetAVIContentType(IN:handle:[0x%0X], OUT:contentType:[])", gDisplayHandle);
+
+    status = dsGetAVIContentType(gDisplayHandle, &contentType);
+
+    UT_LOG_INFO("Result dsGetAVIContentType(handle:[0x%0X], dsAviContentType_t:[%s], dsError_t=[%s])",
+                gDisplayHandle,
+                UT_Control_GetMapString(dsAviContentType_mapTable, contentType),
+                UT_Control_GetMapString(dsDisplayError_mapTable, status));
+
+    DS_ASSERT(status == dsERR_NONE);
+
+    UT_LOG_INFO("Out %s", __FUNCTION__);
+}
+
+/**
+ * @brief Sets the AVI scan information of the display.
+ *
+ * Sets the AVI scan information of the display.
+ *
+ * **Test Group ID:** 03@n
+ * **Test Case ID:** 010@n
+ *
+ * **Test Procedure:**
+ * Refer to Test specification documentation
+ * [ds-display_L3_Low-Level_TestSpecification.md](../../docs/pages/ds-display_L3_Low-Level_TestSpecification.md)
+ */
+void test_l3_dsDisplay_set_aviscaninformation(void)
+{
+    gTestID = 10;
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t status = dsERR_NONE;
+    int32_t choice, scanInfo;
+    dsAVIScanInformation_t setScanInfo;
+
+    UT_LOG_INFO("Supported Scan Information");
+    UT_LOG_INFO("------------------------------------------");
+    
+    for (scanInfo = 0; scanInfo < dsAVI_SCAN_TYPE_MAX; scanInfo++)
+    {
+        UT_LOG_INFO("\t%d. %s ", scanInfo, UT_Control_GetMapString(dsAVIScanInformation_mapTable, scanInfo));
+    }
+
+    UT_LOG_INFO("Select Scan Information: ");
+    scanf("%d", &choice);
+    readAndDiscardRestOfLine(stdin);
+    setScanInfo = (dsAVIScanInformation_t)choice;
+
+    UT_LOG_INFO("Calling dsSetAVIScanInformation(IN: Handle:[0x%0X], scanInfo: [%s])", gDisplayHandle,
+                UT_Control_GetMapString(dsAVIScanInformation_mapTable, setScanInfo));
+
+    status = dsSetAVIScanInformation(gDisplayHandle, setScanInfo);
+
+    UT_LOG_INFO("Result dsSetAVIScanInformation(IN: Handle:[0x%0X], scanInfo: [%s], status: [%s])",
+                gDisplayHandle,
+                UT_Control_GetMapString(dsAVIScanInformation_mapTable, setScanInfo),
+                UT_Control_GetMapString(dsDisplayError_mapTable, status));
+
+    DS_ASSERT(status == dsERR_NONE);
+
+    UT_LOG_INFO("Out %s", __FUNCTION__);
+}
+
+/**
+ * @brief Retrieves the AVI scan information of the display.
+ *
+ * Retrieves the AVI scan information of the display.
+ *
+ * **Test Group ID:** 03@n
+ * **Test Case ID:** 011@n
+ *
+ * **Test Procedure:**
+ * Refer to Test specification documentation
+ * [ds-display_L3_Low-Level_TestSpecification.md](../../docs/pages/ds-display_L3_Low-Level_TestSpecification.md)
+ */
+void test_l3_dsDisplay_get_aviscaninformation(void)
+{
+    gTestID = 11;
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t status = dsERR_NONE;
+    dsAVIScanInformation_t scanInfo = dsAVI_SCAN_TYPE_MAX;
+
+    UT_LOG_INFO("Calling dsGetAVIScanInformation(IN:handle:[0x%0X], OUT:scanInfo:[])", gDisplayHandle);
+
+    status = dsGetAVIScanInformation(gDisplayHandle, &scanInfo);
+
+    UT_LOG_INFO("Result dsGetAVIScanInformation(handle:[0x%0X], dsAVIScanInformation_t:[%s], dsError_t:[%s])",
+                gDisplayHandle,
+                UT_Control_GetMapString(dsAVIScanInformation_mapTable, scanInfo),
+                UT_Control_GetMapString(dsDisplayError_mapTable, status));
+
+    DS_ASSERT(status == dsERR_NONE);
+
+    UT_LOG_INFO("Out %s", __FUNCTION__);
+}
+/**
+ * @brief This test terminates the dsDisplay Module.
+ *
+ * This test function terminates the dsDisplay Module.
+ *
+ * **Test Group ID:** 03@n
+ * **Test Case ID:** 012@n
+ *
+ * **Test Procedure:**
+ * Refer to Test specification documentation
+ * [ds-display_L3_Low-Level_TestSpecification.md](../../docs/pages/ds-display_L3_Low-Level_TestSpecification.md)
+ */
+void test_l3_dsDisplay_terminate(void)
+{
+    gTestID = 12;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
@@ -565,6 +748,10 @@ int test_l3_dsDisplay_register (void)
     UT_add_test( pSuite, "Get display AspectRatio",test_l3_dsDisplay_get_aspectratio);
     UT_add_test( pSuite, "Set Allm Enabled", test_l3_dsDisplay_SetAllmEnabled);
     UT_add_test( pSuite, "Get Allm Enabled", test_l3_dsDisplay_GetAllmEnabled);
+    UT_add_test( pSuite, "Set display AVI content type", test_l3_dsDisplay_set_avicontenttype);
+    UT_add_test( pSuite, "Get display AVI content type", test_l3_dsDisplay_get_avicontenttype);
+    UT_add_test( pSuite, "Set display AVI scan information", test_l3_dsDisplay_set_aviscaninformation);
+    UT_add_test( pSuite, "Get display AVI scan information", test_l3_dsDisplay_get_aviscaninformation);
     UT_add_test( pSuite, "Terminate dsDisplay", test_l3_dsDisplay_terminate);
 
     return 0;
