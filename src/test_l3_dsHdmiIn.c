@@ -255,6 +255,15 @@ const static ut_control_keyStringMapping_t bool_mapTable [] =
   {  NULL, -1 }
 };
 
+/* dsHdmiMaxCapabilityVersion_t */
+const static ut_control_keyStringMapping_t dsHdmiMaxCapabilityVersion_mapTable[] = {
+  { "HDMI_COMPATIBILITY_VERSION_14",   (int32_t)HDMI_COMPATIBILITY_VERSION_14 },
+  { "HDMI_COMPATIBILITY_VERSION_20",   (int32_t)HDMI_COMPATIBILITY_VERSION_20 },
+  { "HDMI_COMPATIBILITY_VERSION_21",   (int32_t)HDMI_COMPATIBILITY_VERSION_21 },
+  { "HDMI_COMPATIBILITY_VERSION_MAX",  (int32_t)HDMI_COMPATIBILITY_VERSION_MAX },
+  { NULL, -1 }
+};
+
 /**
  * @brief This function clears the stdin buffer.
  *
@@ -1363,6 +1372,54 @@ void test_l3_HdmiIn_get_vrrstatus(void)
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
+/**
+ * @brief This test retrieves the maximum HDMI compatibility version supported by a selected HDMI input port.
+ *
+ * This test function retrieves the maximum HDMI compatibility version supported by the selected HdmiInput port on the platform.
+ *
+ * **Test Group ID:** 03
+ * **Test Case ID:** 018
+ *
+ * **Test Procedure:**
+ * Refer to Test specification documentation [ds-hdmi-in_halSpec.md](../../docs/pages/ds-hdmi-in_halSpec.md)
+ */
+void test_l3_HdmiIn_get_hdmi_version(void)
+{
+    gTestID = 18;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t ret = dsERR_NONE;
+    dsHdmiMaxCapabilityVersion_t maxCompatibilityVersion = HDMI_COMPATIBILITY_VERSION_MAX;
+    int32_t select = 0;
+    dsHdmiInPort_t port = dsHDMI_IN_PORT_NONE;
+
+    // List available HDMI ports and read user input
+    listPorts();
+    UT_LOG_MENU_INFO("Select port:");
+    readInput(&select);
+    if (select < dsHDMI_IN_PORT_0 || select >= dsHDMI_IN_PORT_MAX)
+    {
+        UT_LOG_ERROR("\nInvalid port selected\n");
+        UT_LOG_INFO("Out %s", __FUNCTION__);
+        return;
+    }
+
+    port = select;
+
+    UT_LOG_INFO("Calling dsGetHdmiVersion IN:port:[%s]:[%d], OUT:maxCompatibilityVersion:[ ]",
+                UT_Control_GetMapString(dsHdmiInPort_mapTable, port), port);
+
+    ret = dsGetHdmiVersion(port, &maxCompatibilityVersion);
+
+    UT_LOG_INFO("Result dsGetHdmiVersion IN:port:[%s]:[%d], OUT:maxCompatibilityVersion:[%s]:[%d], dsError_t:[%s]",
+                UT_Control_GetMapString(dsHdmiInPort_mapTable, port), port,
+                UT_Control_GetMapString(dsHdmiMaxCapabilityVersion_mapTable, maxCompatibilityVersion),
+                maxCompatibilityVersion, UT_Control_GetMapString(dsError_mapTable, ret));
+
+    DS_ASSERT(ret == dsERR_NONE);
+
+    UT_LOG_INFO("Out %s", __FUNCTION__);
+}
 
 static UT_test_suite_t * pSuite = NULL;
 
@@ -1397,6 +1454,7 @@ int test_l3_dsHdmiIn_register ( void )
    UT_add_test( pSuite, "Set VRR Support" ,test_l3_HdmiIn_set_vrrsupport );
    UT_add_test( pSuite, "Get VRR Support" ,test_l3_HdmiIn_get_vrrsupport );
    UT_add_test( pSuite, "Get VRR Status" ,test_l3_HdmiIn_get_vrrstatus );
+   UT_add_test( pSuite, "Get HDMI Version" ,test_l3_HdmiIn_get_hdmi_version );
 
    return 0;
 }
