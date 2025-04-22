@@ -2829,6 +2829,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSetVRRSupport_sink(void) {
     gTestID = 55;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     uint8_t numInputPorts = 0;
+    tv_hdmi_edid_version_t ver20 = UT_KVP_PROFILE_GET_UINT32("dsHdmiIn/EdidVersion/1");
 
     numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
@@ -2836,10 +2837,18 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSetVRRSupport_sink(void) {
 
     if (gSourceType == 0) {
         for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
-              // Step 2: Call dsHdmiInSetVRRSupport() to enable VRR support for each port
-              UT_ASSERT_EQUAL(dsHdmiInSetVRRSupport(port, true), dsERR_NONE);
-			  // Step 2: Call dsHdmiInSetVRRSupport() to disable VRR support for each port
-              UT_ASSERT_EQUAL(dsHdmiInSetVRRSupport(port, false), dsERR_NONE);
+              if(port == dsHDMI_IN_PORT_0 || port == dsHDMI_IN_PORT_1){
+                  // Step 2: Call dsHdmiInSetVRRSupport() to enable VRR support for each port
+                  UT_ASSERT_EQUAL(dsHdmiInSetVRRSupport(port, true), dsERR_OPERATION_NOT_SUPPORTED);
+                          // Step 3: Call dsHdmiInSetVRRSupport() to disable VRR support for each port
+                  UT_ASSERT_EQUAL(dsHdmiInSetVRRSupport(port, false), dsERR_OPERATION_NOT_SUPPORTED);
+               }
+              else if(port == dsHDMI_IN_PORT_2 || port == dsHDMI_IN_PORT_3) {
+                  UT_ASSERT_EQUAL(dsSetEdidVersion(port, ver20), dsERR_NONE);
+                  UT_ASSERT_EQUAL(dsHdmiInSetVRRSupport(port, true), dsERR_NONE);
+                          // Step 3: Call dsHdmiInSetVRRSupport() to disable VRR support for each port
+                  UT_ASSERT_EQUAL(dsHdmiInSetVRRSupport(port, false), dsERR_NONE);
+              }
          }
     } else if (gSourceType == 1) {
        // Step 4: Call dsHdmiInSetVRRSupport() with valid values for source devices
@@ -2880,7 +2889,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSetVRRSupport_sink(void) {
 
     // Step 1: Call dsHdmiInSetVRRSupport() without prior initialization of HDMI input
     dsError_t result = dsHdmiInSetVRRSupport(dsHDMI_IN_PORT_0, true);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     // Step 2: Initialize HDMI input using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
@@ -2893,7 +2902,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSetVRRSupport_sink(void) {
 
     // Step 5: Call dsHdmiInSetVRRSupport() after termination
     result = dsHdmiInSetVRRSupport(dsHDMI_IN_PORT_0, true);
-    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -2922,8 +2931,8 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetVRRStatus_sink(void) {
     gTestID = 57;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsError_t  result = dsERR_NONE;
-    dsVRRType_t vrr_type_1 = dsVRR_NONE;
-    dsVRRType_t vrr_type_2 = dsVRR_NONE;
+    dsVRRType_t vrr_type_1 = false;
+    dsVRRType_t vrr_type_2 = false;
     uint8_t numInputPorts = 0;
     numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
 
