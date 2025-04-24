@@ -13,6 +13,8 @@
   - [dsDisplay_test03_AspectRatioVerificationTest.py](#dsdisplay_test03_aspectratioverificationtestpy)
   - [dsDisplay_test04_TestVerifyDisplayEdidBytes.py](#dsdisplay_test04_testverifydisplayedidbytes)
   - [dsDisplay_test07_VerifyALLM_Mode.py](#dsdisplay_test07_verifyallm_modepy)
+  - [dsDisplay_test05_AVIContentTypeVerificationTest.py](#dsdisplay_test05_avicontenttypeverificationtest)
+  - [dsDisplay_test06_AVIScanInfoVerificationTest.py](#dsdisplay_test06_aviscaninfoverificationtest)
   - [dsDisplay_L3_Runall_Source.py](#dsdisplay_l3_runall_sourcepy)
   - [dsDisplay_L3_Runall_Sink.py](#dsdisplay_l3_runall_sinkpy)
 
@@ -346,6 +348,89 @@ dsDisplay_test07_VerifyALLM_Mode.py --config /host/tests/configs/example_rack_co
 - Prompt the user to verify that respective ALLM mode is displayed on the HDMI analyzer.
 - The test will pass if the user confirms that the ALLM mode is disabled.
 
+### dsDisplay_test05_AVIContentTypeVerificationTest.py
+
+**Overview:**
+
+This test case is designed for Source devices and focuses on setting and verifying the AVI Content Type (Graphics, Photo, Cinema, Game, NotSignaled) through the HDMI InfoFrame. It ensures that the correct content type is displayed on the HDMI analyzer and is validated using the dsGetAVIContentType() API.
+
+**Platform Supported:**
+
+- Source
+
+**User Input Required:**
+
+Yes: The user must confirm that the correct AVI Content Type is visible on the HDMI analyzer after setting it.
+
+**Acceptance Criteria:**
+
+The test uses dsSetAVIContentType() to set the content type and validates it using both HDMI analyzer output and dsGetAVIContentType(). The test passes when both validations succeed.
+
+**Expected Results:**
+
+For each content type set, the analyzer correctly reflects the HDMI InfoFrame content type and the API returns the expected value.
+
+**Test Steps:**
+
+- Run the Python file `dsDisplay_test05_AVIContentTypeVerificationTest.py
+
+```bash
+dsDisplay_test05_AVIContentTypeVerificationTest --config /host/tests/configs/example_rack_config.yml --deviceConfig /host/tests/configs/deviceConfig.yml
+```
+
+- The test will download the required artifacts, then copy them to the target directory.
+
+- AVI Content Verification
+  - For each AVI Content Type (Graphics, Photo, Cinema, Game, NotSignaled), the test sets the value using dsSetAVIContentType().
+  - The user is prompted to confirm the visibility of the correct content type on the HDMI analyzer.
+  - The current value is retrieved using dsGetAVIContentType() and compared with the expected content type.
+  - The result is logged as PASS/FAIL based on the manual confirmation from the HDMI analyzer and the API result.
+
+- Completion and Results:
+
+ If all expected content types are verified for each port, the test will conclude and display the final result (PASS/FAIL).
+
+### dsDisplay_test06_AVIScanInfoVerificationTest.py
+
+**Overview:**
+
+This test case is designed for Source devices and focuses on setting and verifying the AVI Scan Information (NoData, Overscan, Underscan) through the HDMI InfoFrame. The test confirms that the correct scan info bits (S1/S0) are reflected on the HDMI analyzer and verifies that the getAVIScanInfo API returns the expected value.
+
+**Platform Supported:**
+
+- Source
+
+**User Input Required:**
+
+Yes: The user must confirm whether the correct Scan Info (S1/S0 bits) is displayed on the HDMI analyzer after setting it.
+
+**Acceptance Criteria:**
+
+This test sets the Scan Info using dsSetAVIScanInformation(), confirms visibility through an HDMI analyzer, and verifies it using dsGetAVIScanInfo(). The test passes if both manual and API verifications are successful.
+
+**Expected Results:**
+
+Each configured Scan Info setting is correctly reflected on the HDMI analyzer and accurately returned by the get API.
+
+**Test Steps:**
+
+- Run the Python file `dsDisplay_test06_AVIScanInfoVerificationTest.py` with the appropriate configuration:
+
+```bash
+dsDisplay_test06_AVIScanInfoVerificationTest --config /host/tests/configs/example_rack_config.yml --deviceConfig /host/tests/configs/deviceConfig.yml
+```
+
+- The test will download the required artifacts, then copy them to the target directory.
+
+- AVI Scan Info Verification
+  - For each Scan Info setting (NoData, Overscan, Underscan), the test sets the value using dsSetAVIScanInformation().
+  - The user is prompted to check the HDMI analyzer for the correct bit representation (S1/S0).
+  - The current Scan Info is retrieved using dsGetAVIScanInfo() and compared with the expected value.
+  - The result is logged as PASS/FAIL based on the manual confirmation from the HDMI analyzer and the API result.
+
+- Completion and Results:
+
+  If all expected AVI scan information is verified for each port, the test will conclude and display the final result (PASS/FAIL).
 
 ### dsDisplay_L3_Runall_Source.py 
 
