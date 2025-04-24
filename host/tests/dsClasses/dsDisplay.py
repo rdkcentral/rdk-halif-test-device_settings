@@ -94,7 +94,7 @@ class dsDisplayClass():
 
             # Copy the profile file to the target
             self.utils.scpCopy(self.testSession, moduleConfigProfileFile, targetWorkspace)
-        
+
         # Start the user interface menu
         self.utMenu.start()
 
@@ -317,6 +317,40 @@ class dsDisplayClass():
         return bool(output_list)
 
 
+    def getaviscaninfolist(self):
+        """
+        gets supported scaninfolist.
+
+        Args:
+            None.
+
+        Returns:
+            A list of scaninfolist.
+        """
+
+        aviscaninfolist = []
+        for modeindex in dsAVIScanInformation:
+            aviscaninfolist.append(dsAVIScanInformation(modeindex).name)
+
+        return aviscaninfolist
+
+    def getavicontenttypelist(self):
+        """
+        gets supported avicontenttypelist.
+
+        Args:
+            None.
+
+        Returns:
+            A list of avicontenttypelist.
+        """
+
+        avicontenttypelist = []
+        for modeindex in dsAviContentType:
+            avicontenttypelist.append(dsAviContentType(modeindex).name)
+
+        return avicontenttypelist
+
     def getAspectRatio(self):
         """
         Gets the display aspect ratio.
@@ -340,10 +374,10 @@ class dsDisplayClass():
 
         Args:
             contentType (str): One of [
-            "dsAVICONTENT_TYPE_GRAPHICS", 
-            "dsAVICONTENT_TYPE_PHOTO", 
-            "dsAVICONTENT_TYPE_CINEMA", 
-            "dsAVICONTENT_TYPE_GAME", 
+            "dsAVICONTENT_TYPE_GRAPHICS",
+            "dsAVICONTENT_TYPE_PHOTO",
+            "dsAVICONTENT_TYPE_CINEMA",
+            "dsAVICONTENT_TYPE_GAME",
             "dsAVICONTENT_TYPE_NOT_SIGNALLED"
         ]
         """
@@ -360,12 +394,12 @@ class dsDisplayClass():
 
     def getAVIContentType(self):
         """
-        Gets the AVI Content Type from the display.
+        Gets the AVI Content Type.
 
         Returns:
                 str or None: The AVI Content Type string (e.g., 'dsAVICONTENT_TYPE_PHOTO') or None if not found.
         """
-        result = self.utMenu.select(self.testSuite, "Get AVI Content Type")
+        result = self.utMenu.select(self.testSuite, "Get display AVI content type")
         if result is None:
            return None
 
@@ -391,12 +425,12 @@ class dsDisplayClass():
 
     def getAVIScanInformation(self):
         """
-        Gets the AVI Scan Information from the display port.
+        Gets the AVI Scan Information.
 
         Returns:
             str or None: The scan information value like "dsAVI_SCAN_TYPE_UNDERSCAN" or None if not matched.
         """
-        result = self.utMenu.select(self.testSuite, "Get AVI Scan Information")
+        result = self.utMenu.select(self.testSuite, "Get display AVI scan information")
         if result is None:
             return None
 

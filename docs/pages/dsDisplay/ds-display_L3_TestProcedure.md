@@ -352,7 +352,7 @@ dsDisplay_test07_VerifyALLM_Mode.py --config /host/tests/configs/example_rack_co
 
 **Overview:**
 
-This test case is designed for Source devices and focuses on setting and verifying the AVI Content Type (Graphics, Photo, Cinema, Game, NotSignaled) through the HDMI InfoFrame. It ensures that the correct content type is displayed on the HDMI analyzer and is validated using the dsGetAVIContentType() API.
+This test case is designed for Source devices and focuses on setting and verifying the AVI Content Type (dsAVICONTENT_TYPE_GRAPHICS,dsAVICONTENT_TYPE_PHOTO,dsAVICONTENT_TYPE_CINEMA,dsAVICONTENT_TYPE_GAME) through the HDMI InfoFrame. It ensures that the correct content type is displayed on the HDMI analyzer and is validated using the dsGetAVIContentType() API.
 
 **Platform Supported:**
 
@@ -381,7 +381,7 @@ dsDisplay_test05_AVIContentTypeVerificationTest --config /host/tests/configs/exa
 - The test will download the required artifacts, then copy them to the target directory.
 
 - AVI Content Verification
-  - For each AVI Content Type (Graphics, Photo, Cinema, Game, NotSignaled), the test sets the value using dsSetAVIContentType().
+  - For each AVI Content Type (dsAVICONTENT_TYPE_GRAPHICS,dsAVICONTENT_TYPE_PHOTO,dsAVICONTENT_TYPE_CINEMA,dsAVICONTENT_TYPE_GAME), the test sets the value using dsSetAVIContentType().
   - The user is prompted to confirm the visibility of the correct content type on the HDMI analyzer.
   - The current value is retrieved using dsGetAVIContentType() and compared with the expected content type.
   - The result is logged as PASS/FAIL based on the manual confirmation from the HDMI analyzer and the API result.
@@ -394,7 +394,7 @@ dsDisplay_test05_AVIContentTypeVerificationTest --config /host/tests/configs/exa
 
 **Overview:**
 
-This test case is designed for Source devices and focuses on setting and verifying the AVI Scan Information (NoData, Overscan, Underscan) through the HDMI InfoFrame. The test confirms that the correct scan info bits (S1/S0) are reflected on the HDMI analyzer and verifies that the getAVIScanInfo API returns the expected value.
+This test case is designed for Source devices and focuses on setting and verifying the AVI Scan Information (dsAVI_SCAN_TYPE_NO_DATA,dsAVI_SCAN_TYPE_OVERSCAN,dsAVI_SCAN_TYPE_UNDERSCAN) through the HDMI InfoFrame. The test confirms that the correct scan info bits (S1/S0) are reflected on the HDMI analyzer and verifies that the getAVIScanInfo API returns the expected value.
 
 **Platform Supported:**
 
@@ -423,7 +423,7 @@ dsDisplay_test06_AVIScanInfoVerificationTest --config /host/tests/configs/exampl
 - The test will download the required artifacts, then copy them to the target directory.
 
 - AVI Scan Info Verification
-  - For each Scan Info setting (NoData, Overscan, Underscan), the test sets the value using dsSetAVIScanInformation().
+  - For each Scan Info setting (dsAVI_SCAN_TYPE_NO_DATA,dsAVI_SCAN_TYPE_OVERSCAN,dsAVI_SCAN_TYPE_UNDERSCAN), the test sets the value using dsSetAVIScanInformation().
   - The user is prompted to check the HDMI analyzer for the correct bit representation (S1/S0).
   - The current Scan Info is retrieved using dsGetAVIScanInfo() and compared with the expected value.
   - The result is logged as PASS/FAIL based on the manual confirmation from the HDMI analyzer and the API result.
