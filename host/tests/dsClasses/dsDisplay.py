@@ -47,6 +47,20 @@ class dsVideoPortType(Enum):
     dsVIDEOPORT_TYPE_HDMI_INPUT =auto()
     dsVIDEOPORT_TYPE_INTERNAL =auto()
 
+class dsAVIScanInformation(Enum):
+    dsAVI_SCAN_TYPE_NO_DATA = 0
+    dsAVI_SCAN_TYPE_OVERSCAN = 1
+    dsAVI_SCAN_TYPE_UNDERSCAN = 2
+    dsAVI_SCAN_TYPE_MAX = 3
+
+class dsAviContentType(Enum):
+    dsAVICONTENT_TYPE_GRAPHICS = 0
+    dsAVICONTENT_TYPE_PHOTO = 1
+    dsAVICONTENT_TYPE_CINEMA = 2
+    dsAVICONTENT_TYPE_GAME = 3
+    dsAVICONTENT_TYPE_NOT_SIGNALLED = 4
+    dsAVICONTENT_TYPE_MAX = 5
+
 class dsDisplayClass():
 
     """
@@ -319,6 +333,76 @@ class dsDisplayClass():
         aspectRatioPattern = r"Result dsGetDisplayAspectRatio\(handle:\[.*\], dsVideoAspectRatio_t:\[(.*?)\], dsError_t=\[.*?\]\)"
         aspectRatio = self.searchPattern(result, aspectRatioPattern)
         return aspectRatio
+
+    def setAVIContentType(self, contentType: str):
+        """
+        Sets the AVI Content Type.
+
+        Args:
+            contentType (str): One of [
+            "dsAVICONTENT_TYPE_GRAPHICS", 
+            "dsAVICONTENT_TYPE_PHOTO", 
+            "dsAVICONTENT_TYPE_CINEMA", 
+            "dsAVICONTENT_TYPE_GAME", 
+            "dsAVICONTENT_TYPE_NOT_SIGNALLED"
+        ]
+        """
+        promptWithAnswers = [
+                {
+                    "query_type": "list",
+                    "query": "Select AVI Content Type to set:",
+                    "input": str(contentType)
+                }
+        ]
+
+        result = self.utMenu.select(self.testSuite, "Set display AVI content type", promptWithAnswers)
+        return result
+
+    def getAVIContentType(self):
+        """
+        Gets the AVI Content Type from the display.
+
+        Returns:
+                str or None: The AVI Content Type string (e.g., 'dsAVICONTENT_TYPE_PHOTO') or None if not found.
+        """
+        result = self.utMenu.select(self.testSuite, "Get AVI Content Type")
+        if result is None:
+           return None
+
+        avicontentPattern = r"Result dsGetAVIContentType\(handle:\[.*?\], dsAviContentType_t:\[(.*?)\], dsError_t:\[.*?\]\)"
+        contentType = self.searchPattern(result, avicontentPattern)
+        return contentType
+
+    def setAVIScanInformation(self, scanInfo: str):
+        """
+        Sets the AVI Scan Information on the selected display port.
+        """
+
+        promptWithAnswers = [
+            {
+                "query_type": "list",
+                "query": "Select Scan Information:",
+                "input": str(scanInfo)
+           }
+        ]
+
+        result = self.utMenu.select(self.testSuite, "Set display AVI scan information", promptWithAnswers)
+        return result
+
+    def getAVIScanInformation(self):
+        """
+        Gets the AVI Scan Information from the display port.
+
+        Returns:
+            str or None: The scan information value like "dsAVI_SCAN_TYPE_UNDERSCAN" or None if not matched.
+        """
+        result = self.utMenu.select(self.testSuite, "Get AVI Scan Information")
+        if result is None:
+            return None
+
+        pattern = r"Result dsGetAVIScanInformation\(handle:\[.*?\], dsAVIScanInformation_t:\[(.*?)\], dsError_t:\[.*?\]\)"
+        scanInfo = self.searchPattern(result, pattern)
+        return scanInfo
 
     def getDisplayEventFromCallback(self):
         """
