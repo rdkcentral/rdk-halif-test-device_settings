@@ -975,6 +975,8 @@ class dsHdmiInClass():
             maxcapabilityversion = match.group(2)
             return maxcapabilityversion
 
+        return None
+
     def getVrrTypeCallbackStatus(self):
         """
         Retrieves the VRR Type change from the device using a callback.
@@ -1000,8 +1002,6 @@ class dsHdmiInClass():
             porttype = match.group(1)
             vrrtype = match.group(2)
             return porttype, vrrtype
-
-        return None
 
         return None
 
