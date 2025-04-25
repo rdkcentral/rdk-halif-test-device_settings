@@ -917,7 +917,7 @@ class dsHdmiInClass():
         typeStatusPattern = r"Result dsHdmiInGetVRRSupport IN:port:\[(\w+)\]:\[.*\], OUT:vrrSupport:\[(\w+)\], dsError_t:\[(dsERR_\w+)\]"
         match = re.search(typeStatusPattern, result)
         if match:
-            vrrstate = bool(match.group(2))
+            vrrstate = match.group(2)
             returncode = match.group(3)
             return vrrstate, returncode
 
