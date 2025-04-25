@@ -129,4 +129,8 @@ dsHdmiIn:  # Prefix must always exist
                     - "Get EdidVersion"
                     - "Set Edid 2 Allm Support"
                     - "Get Allm Status"
+                    - "Set VRR Support"
+                    - "Get VRR Support"
+                    - "Get VRR Status"
+                    - "Get HDMI Version"
                     - "Terminate HdmiIn"

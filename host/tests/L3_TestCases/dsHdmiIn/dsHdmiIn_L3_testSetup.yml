@@ -31,3 +31,5 @@ dsHdmiIn:
         streams: []
       test14_SetAndGetEDID2ALLMSupport:
         streams: []
+      test15_SetGetVrrStatusAndCallback:
+        streams: []

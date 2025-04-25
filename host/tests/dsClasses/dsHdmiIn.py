@@ -110,6 +110,18 @@ class hdmiEdidVersion(Enum):
       HDMI_EDID_VER_20 = 1
       HDMI_EDID_VER_MAX = 2
 
+class hdmiCapabilityVersion(Enum):
+      HDMI_COMPATIBILITY_VERSION_14 = 0
+      HDMI_COMPATIBILITY_VERSION_20 = 1
+      HDMI_COMPATIBILITY_VERSION_21 = 2
+      HDMI_EDID_VER_MAX = 3
+
+class hdmiVRRType(Enum):
+      dsVRR_NONE = 0
+      dsVRR_HDMI_VRR = 1
+      dsVRR_AMD_FREESYNC = 2
+      dsVRR_AMD_FREESYNC_PREMIUM = 3
+      dsVRR_AMD_FREESYNC_PREMIUM_PRO = 4
 
 class dsHdmiInClass():
     """
@@ -614,6 +626,40 @@ class dsHdmiInClass():
 
         return aviContentTypeList
 
+    def getVRRTypeList(self):
+        """
+        gets supported VRR types as list.
+
+        Args:
+            None.
+
+        Returns:
+            A list of VRR types please refer hdmiVRRType enum class.
+        """
+
+        vrrTypeList = []
+        for modeindex in hdmiVRRType:
+            vrrTypeList.append(hdmiVRRType(modeindex).name)
+
+        return vrrTypeList
+
+    def getHDMIVersionList(self):
+        """
+        gets supported max capability HDMI versions as list.
+
+        Args:
+            None.
+
+        Returns:
+            A list of max capability HDMI versions list please refer  enum class.
+        """
+
+        versionList = []
+        for versionindex in hdmiCapabilityVersion:
+            versionList.append(hdmiCapabilityVersion(versionindex).name)
+
+        return versionList
+
     def setHdmiInZoomMode(self, zoom_mode:str=0):
         """
         sets zoommode  on a HdmiIn port.
@@ -822,6 +868,142 @@ class dsHdmiInClass():
         ]
 
         result = self.utMenu.select(self.testSuite, "Set Edid 2 Allm Support", promptWithAnswers)
+
+    def setVRRSupport(self, port_type:str=0, vrrstate:int=0):
+        """
+        sets edid version  on a particular HdmiIn port.
+
+        Args:
+            hdmiin_port (str): Defaults to 0
+            edidversion (str, optional): edidversion. Defaults to 0
+
+        Returns:
+            None.
+        """
+        promptWithAnswers = [
+             {
+                "query_type": "list",
+                "query": "List of supported ports:",
+                "input": str(port_type)
+             },
+             {
+                "query_type": "direct",
+                "query": "Enter the VRR support value to set",
+                "input": str(vrrstate)
+             }
+        ]
+
+        result = self.utMenu.select(self.testSuite, "Set VRR Support", promptWithAnswers)
+
+    def getVRRSupport(self, port_type:str=0):
+        """
+        Gets vrr status.
+
+        Args:
+            None.
+        Returns:
+            VRR status as string.
+        """
+        promptWithAnswers = [
+            {
+                "query_type": "list",
+                "query": "List of supported ports:",
+                "input": str(port_type)
+            }
+        ]
+
+        result = self.utMenu.select( self.testSuite, "Get VRR Support", promptWithAnswers)
+
+        typeStatusPattern = r"Result dsHdmiInGetVRRSupport IN:port:\[(\w+)\]:\[.*\], OUT:vrrSupport:\[(\w+)\], dsError_t:\[(dsERR_\w+)\]"
+        match = re.search(typeStatusPattern, result)
+        if match:
+            vrrstate = bool(match.group(2))
+            returncode = match.group(3)
+            return vrrstate, returncode
+
+        return None
+
+    def getVRRType(self, port_type:str=0):
+        """
+        Gets current VRR type.
+
+        Args:
+            None.
+        Returns:
+            current VRR type as string.
+        """
+        promptWithAnswers = [
+            {
+                "query_type": "list",
+                "query": "List of supported ports:",
+                "input": str(port_type)
+            }
+        ]
+
+        result = self.utMenu.select( self.testSuite, "Get VRR Status", promptWithAnswers)
+
+        typeStatusPattern = r"Result dsHdmiInGetVRRStatus IN:port:\[(\w+)\]:\[.*\], OUT:vrrStatus:\[(\w+)\], dsError_t:\[(dsERR_\w+)\]"
+        match = re.search(typeStatusPattern, result)
+        if match:
+            vrrType = match.group(2)
+            return vrrType
+
+        return None
+
+    def getMaxCapabilityVersion(self, port_type:str=0):
+        """
+        Gets Hdmi max capablity version.
+
+        Args:
+            None.
+        Returns:
+            Hdmi max capablity as string.
+        """
+        promptWithAnswers = [
+            {
+                "query_type": "list",
+                "query": "List of supported ports:",
+                "input": str(port_type)
+            }
+        ]
+
+        result = self.utMenu.select( self.testSuite, "Get HDMI Version", promptWithAnswers)
+
+        typeStatusPattern = r"Result dsGetHdmiVersion IN:port:\[(\w+)\]:\[.*\], OUT:maxCompatibilityVersion:\[(\w+)\]:\[.*\], dsError_t:\[(dsERR_\w+)\]"
+        match = re.search(typeStatusPattern, result)
+        if match:
+            maxcapabilityversion = match.group(2)
+            return maxcapabilityversion
+
+    def getVrrTypeCallbackStatus(self):
+        """
+        Retrieves the VRR Type change from the device using a callback.
+
+        This function reads the output from the device session to detect the
+        VRR Type change status. The callback message contains the port number
+        and the VRR type. The function parses the message
+        and returns the port and VRR type as strings.
+
+        Args:
+            None.
+        Returns:
+            tuple:
+                - porttype (str): The HDMI port number as a string.
+                - vrrtype (str): The VRR type as a string.
+            None: If no matching connection status is found.
+        """
+        result = self.testSession.read_until("Received VRR Type change callback port:")
+        avipattern = r"Received VRR Type change callback port:\s*\[(.*?)\].*?vrrType:\s*\[(.*?)\]"
+        match = re.search(avipattern, result)
+
+        if match:
+            porttype = match.group(1)
+            vrrtype = match.group(2)
+            return porttype, vrrtype
+
+        return None
+
+        return None
 
     def __del__(self):
         """
