@@ -48,18 +48,19 @@ class dsHdmiIn_test15_SetGetVrrStatusAndCallback(dsHdmiInHelperClass):
             None.
         """
         self.testName  = "test15_SetGetVrrStatusAndCallback"
-        self.qcID = '10'
+        self.qcID = '15'
         super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
     def CheckDeviceStatusAndVerifyVRR(self, Manual=False, port_type:str=0,verifyVrr:str=0, vrrState:bool=False):
         """
-        Verifies whether the particular zoom mode is selected or not.
+        Verifies whether the VRR mode is changes in HDMI analyser.
 
         Args:
             manual (bool, optional): Indicates if manual verification is needed.
             port_type (str): The type of the port being verified.
-            video_zoom_mode (bool): Indicates if zoom mode verification is required.
+            verifyVrr (bool): Indicates if VRR verification is required.
+            vrrState (bool): The state of VRR to be changed in source device
 
         Returns:
             bool: True if verification is successful, otherwise False.
@@ -100,28 +101,35 @@ class dsHdmiIn_test15_SetGetVrrStatusAndCallback(dsHdmiInHelperClass):
                 time.sleep(5)
                 self.log.step(f'Port Selected {port}')
 
+            # Get if the VRR is supported for specific port
             getresponse = self.testdsHdmiIn.getVRRSupport(port)
+            # If the VRR is not suppoorted for specific port then continue with next port
             if getresponse:
                 if "dsERR_OPERATION_NOT_SUPPORTED" in getresponse[1]: continue
 
+            # If the VRR support is disabled for port then set the VRR support to enable
                 if getresponse[0] == False:
                     self.testdsHdmiIn.setVRRSupport(port,1)
                 vrrstate = [True, False]
                 for state in vrrstate:
+                    # Enable/Disable the VRR at source device
                     status = self.CheckDeviceStatusAndVerifyVRR(True,port,True,state)
                     time.sleep(3)
+                    # Check for the VRR callback when VRR  state changed at source device
                     vrrcallback = self.testdsHdmiIn.getVrrTypeCallbackStatus()
                     if vrrcallback != None and vrrcallback[0] == port:
                         self.log.stepResult(True,f'VRR status:{vrrcallback[1]} on port:{vrrcallback[0]} found')
                         result &= True
                         self.log.step(f'Verify VRR type')
+                        # Get the current VRR type
                         getstatusresponse = self.testdsHdmiIn.getVRRType(port)
                         if getstatusresponse:
-                            if vrrcallback[1] == getstatusresponse[0]:
-                                self.log.stepResult(True,f'VRR Type set in HDMI analyser same as the GET Api')
+                            # Compare the current VRR type with the one received in callback
+                            if vrrcallback[1] == getstatusresponse:
+                                self.log.stepResult(True,f'VRR Type set in HDMI analyser[{vrrcallback[1]}] same as the GET Api[{getstatusresponse}]')
                                 result &= True
                             else:
-                                self.log.stepResult(False,f'VRR Type set in HDMI analyser is not same as GET Api')
+                                self.log.stepResult(False,f'VRR Type set in HDMI analyser[{vrrcallback[1]}] is not same as GET Api[{getstatusresponse}]')
                                 result &= False
                     else:
                         self.log.stepResult(False,f'VRR status callback not found on port:{port}')
