@@ -12,7 +12,7 @@
   - [dsDisplay_test02_TestVerifyDisplayEdid.py](#dsdisplay_test02_testverifydisplayedidpy)
   - [dsDisplay_test03_AspectRatioVerificationTest.py](#dsdisplay_test03_aspectratioverificationtestpy)
   - [dsDisplay_test04_TestVerifyDisplayEdidBytes.py](#dsdisplay_test04_testverifydisplayedidbytes)
-  - [dsDisplay_test05_VerifyALLM_Mode.py](#dsdisplay_test05_verifyallm_modepy)
+  - [dsDisplay_test07_VerifyALLM_Mode.py](#dsdisplay_test07_verifyallm_modepy)
   - [dsDisplay_L3_Runall_Source.py](#dsdisplay_l3_runall_sourcepy)
   - [dsDisplay_L3_Runall_Sink.py](#dsdisplay_l3_runall_sinkpy)
 
@@ -306,7 +306,7 @@ dsDisplay_test04_TestVerifyDisplayEdidBytes --config /host/tests/configs/example
 
   If all expected `EDID` bytes are verified, the test will conclude and display the final result (PASS/FAIL).
 
-### dsDisplay_test05_VerifyALLM_Mode.py
+### dsDisplay_test07_VerifyALLM_Mode.py
 
 **Overview:**
 
@@ -332,10 +332,10 @@ The test will Enables/Disables ALLM mode for HDMI output port connected to displ
 
 **Test Steps:**
 
-- Run the Python file `dsDisplay_test05_VerifyALLM_Mode.py` with the appropriate configuration:
+- Run the Python file `dsDisplay_test07_VerifyALLM_Mode.py` with the appropriate configuration:
 
 ```bash
-dsDisplay_test05_VerifyALLM_Mode.py --config /host/tests/configs/example_rack_config.yml --deviceConfig /host/tests/configs/deviceConfig.yml
+dsDisplay_test07_VerifyALLM_Mode.py --config /host/tests/configs/example_rack_config.yml --deviceConfig /host/tests/configs/deviceConfig.yml
 ```
 
 - Download and copy all required assets to the target directory.

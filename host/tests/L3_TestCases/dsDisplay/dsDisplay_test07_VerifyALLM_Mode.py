@@ -33,7 +33,7 @@ from dsDisplayHelperClass import dsDisplayHelperClass
 from raft.framework.core.logModule import logModule
 
 
-class dsDisplay_test05_VerifyALLM_Mode(dsDisplayHelperClass):
+class dsDisplay_test07_VerifyALLM_Mode(dsDisplayHelperClass):
     """
     A class to test and verify Enables/Disables ALLM mode for HDMI output port.
 
@@ -50,8 +50,8 @@ class dsDisplay_test05_VerifyALLM_Mode(dsDisplayHelperClass):
 
         Initializes sessions, reads the test setup, and prepares the user response.
         """
-        self.testName  = "test05_VerifyALLM_Mode"
-        self.qcID      = '5'
+        self.testName  = "test07_VerifyALLM_Mode"
+        self.qcID      = '7'
 
         super().__init__(self.testName, self.qcID, log)
 
@@ -115,5 +115,5 @@ class dsDisplay_test05_VerifyALLM_Mode(dsDisplayHelperClass):
 if __name__ == '__main__':
     summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
     summeryLog = logModule(summerLogName, level=logModule.INFO)
-    test = dsDisplay_test05_VerifyALLM_Mode(summeryLog)
+    test = dsDisplay_test07_VerifyALLM_Mode(summeryLog)
     test.run(False)
