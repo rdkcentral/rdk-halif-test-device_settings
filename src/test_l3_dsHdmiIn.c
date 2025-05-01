@@ -1421,6 +1421,43 @@ void test_l3_HdmiIn_get_hdmi_version(void)
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
+/**
+* @brief This test get supported game features.
+*
+* This test function gets supported game features on platform.
+*
+* **Test Group ID:** 03@n
+* **Test Case ID:** 019@n
+*
+* **Test Procedure:**
+* Refer to Test specification documentation
+* [ds-hdmi-in_halSpec.md](../../docs/pages/ds-hdmi-in_halSpec.md)
+*/
+void test_l3_HdmiIn_get_supported_game_features(void)
+{
+    gTestID = 19; // Assign a new test ID
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t ret = dsERR_NONE;
+    dsSupportedGameFeatureList_t features;
+
+    // Initialize the buffer to be safe
+    memset(&features, 0, sizeof(features));
+
+    UT_LOG_INFO("Calling dsGetSupportedGameFeaturesList() OUT:features:[ ]");
+
+    ret = dsGetSupportedGameFeaturesList(&features);
+
+    UT_LOG_INFO("Result dsGetSupportedGameFeaturesList() OUT:[featureCount:[%d], featureList:[%s]], dsError_t:[%s]",
+                features.gameFeatureCount,
+                features.gameFeatureList,
+                UT_Control_GetMapString(dsError_mapTable, ret));
+
+    DS_ASSERT(ret == dsERR_NONE);
+
+    UT_LOG_INFO("Out %s", __FUNCTION__);
+}
+
 static UT_test_suite_t * pSuite = NULL;
 
 /**
@@ -1455,6 +1492,7 @@ int test_l3_dsHdmiIn_register ( void )
    UT_add_test( pSuite, "Get VRR Support" ,test_l3_HdmiIn_get_vrrsupport );
    UT_add_test( pSuite, "Get VRR Status" ,test_l3_HdmiIn_get_vrrstatus );
    UT_add_test( pSuite, "Get HDMI Version" ,test_l3_HdmiIn_get_hdmi_version );
+   UT_add_test( pSuite, "Get Game Features" ,test_l3_HdmiIn_get_supported_game_features );
 
    return 0;
 }
