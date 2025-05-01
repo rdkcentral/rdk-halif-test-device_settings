@@ -1444,11 +1444,11 @@ void test_l3_HdmiIn_get_supported_game_features(void)
     // Initialize the buffer to be safe
     memset(&features, 0, sizeof(features));
 
-    UT_LOG_INFO("Calling dsGetSupportedGameFeaturesList() OUT:features:[ ]");
+    UT_LOG_INFO("Calling dsGetSupportedGameFeaturesList OUT:features:[ ]");
 
     ret = dsGetSupportedGameFeaturesList(&features);
 
-    UT_LOG_INFO("Result dsGetSupportedGameFeaturesList() OUT:[featureCount:[%d], featureList:[%s]], dsError_t:[%s]",
+    UT_LOG_INFO("Result dsGetSupportedGameFeaturesList OUT:[featureCount:[%d], featureList:[%s]], dsError_t:[%s]",
                 features.gameFeatureCount,
                 features.gameFeatureList,
                 UT_Control_GetMapString(dsError_mapTable, ret));
