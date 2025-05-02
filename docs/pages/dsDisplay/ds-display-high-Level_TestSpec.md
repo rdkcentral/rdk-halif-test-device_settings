@@ -147,3 +147,33 @@ Connect HDMI port on TV with 2.x specification
 #### Control Plane Requirements-ALLM Status
 
 Verify the `ALLM` Status with HDMI analyzer/external device
+
+## AVI Content Type Verification
+
+|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|-----------|--------|--|--|------|----|--------------------------|
+|Set the AVI Content Type through HDMI InfoFrame.|dsSetAVIContentType()|Y|Y|Y|N|N|
+|Get the AVI Content Type set on the HDMI InfoFrame.|dsGetAVIContentType()|Y|Y|Y|N|N|
+
+### Emulator Requirement - AVI Content Type Verification
+
+[Emulator Requirements](#emulator-requirements).
+
+### Control Plane Requirement - AVI Content Type Verification
+
+Verify the AVI Content Type with HDMI analyzer/external device.
+
+## AVI Scan Information Verification
+
+|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|-----------|--------|--|--|------|----|--------------------------|
+|Set the AVI Scan Information through HDMI InfoFrame.|dsSetAVIScanInformation()|N|Y|Y|N|N|
+|Retrieve the AVI Scan Information from the HDMI InfoFrame.|dsGetAVIScanInformation()|N|Y|Y|N|N|
+
+### Emulator Requirement - AVI Scan Information Verification
+
+[Emulator Requirements](#emulator-requirements).
+
+### Control Plane Requirement - AVI Scan Information Verification
+
+Verify the AVI Scan Information with HDMI analyzer/external device.
