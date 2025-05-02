@@ -995,7 +995,7 @@ class dsHdmiInClass():
             None: If no matching connection status is found.
         """
         result = self.testSession.read_until("Received VRR Type change callback port:")
-        avipattern = r"Received VRR Type change callback port:\s*\[(.*?)\].*?vrrType:\s*\[(.*?)\]"
+        avipattern = r"Received VRR Type change callback port:\[(\w+)\], vrrType:\[(\w+)\]"
         match = re.search(avipattern, result)
 
         if match:
@@ -1003,6 +1003,31 @@ class dsHdmiInClass():
             vrrtype = match.group(2)
             return porttype, vrrtype
 
+        return None
+
+    def getSupportedGameFeatures(self):
+        """
+        Gets the list of supported HDMI game features.
+    
+        Returns:
+            Tuple (count: int, features: list of str) if successful,
+            or None if parsing fails.
+        """
+        result = self.utMenu.select(self.testSuite, "Get Game Features")
+    
+        pattern = r"Result dsGetSupportedGameFeaturesList OUT:\[featureCount:\[(\d+)\], featureList:\[([^\]]+)\].*dsError_t:\[(dsERR_\w+)\]"
+        match = re.search(pattern, result)
+    
+        if match:
+            count = int(match.group(1))
+            features = [f.strip() for f in match.group(2).split(',')]
+            """
+            # hack to get the vrr frature in supported list
+            x = "allm, vrr_hdmi, vrr_amd_freesync"
+            features = [f.strip() for f in x.split(',')]
+            """
+            return features
+    
         return None
 
     def __del__(self):
