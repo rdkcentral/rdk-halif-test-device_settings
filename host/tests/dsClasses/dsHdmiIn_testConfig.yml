@@ -133,4 +133,5 @@ dsHdmiIn:  # Prefix must always exist
                     - "Get VRR Support"
                     - "Get VRR Status"
                     - "Get HDMI Version"
+                    - "Get Game Features"
                     - "Terminate HdmiIn"
