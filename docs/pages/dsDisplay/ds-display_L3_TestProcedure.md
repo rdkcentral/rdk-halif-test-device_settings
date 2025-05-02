@@ -394,7 +394,7 @@ dsDisplay_test05_AVIContentTypeVerificationTest --config /host/tests/configs/exa
 
 **Overview:**
 
-This test case is designed for Source devices and focuses on setting and verifying the AVI Scan Information (dsAVI_SCAN_TYPE_NO_DATA,dsAVI_SCAN_TYPE_OVERSCAN,dsAVI_SCAN_TYPE_UNDERSCAN) through the HDMI InfoFrame. The test confirms that the correct scan info bits (S1/S0) are reflected on the HDMI analyzer and verifies that the getAVIScanInfo API returns the expected value.
+This test case is designed for Source devices and focuses on setting and verifying the AVI Scan Information (dsAVI_SCAN_TYPE_NO_DATA,dsAVI_SCAN_TYPE_OVERSCAN,dsAVI_SCAN_TYPE_UNDERSCAN) through the HDMI InfoFrame. The test confirms that the correct scan info bits (S1/S0) are reflected on the HDMI analyzer and verifies that the dsGetAVIScanInformation API returns the expected value.
 
 **Platform Supported:**
 
@@ -406,7 +406,7 @@ Yes: The user must confirm whether the correct Scan Info (S1/S0 bits) is display
 
 **Acceptance Criteria:**
 
-This test sets the Scan Info using dsSetAVIScanInformation(), confirms visibility through an HDMI analyzer, and verifies it using dsGetAVIScanInfo(). The test passes if both manual and API verifications are successful.
+This test sets the Scan Info using dsSetAVIScanInformation(), confirms visibility through an HDMI analyzer, and verifies it using dsGetAVIScanInformation(). The test passes if both manual and API verifications are successful.
 
 **Expected Results:**
 
@@ -425,7 +425,7 @@ dsDisplay_test06_AVIScanInfoVerificationTest --config /host/tests/configs/exampl
 - AVI Scan Info Verification
   - For each Scan Info setting (dsAVI_SCAN_TYPE_NO_DATA,dsAVI_SCAN_TYPE_OVERSCAN,dsAVI_SCAN_TYPE_UNDERSCAN), the test sets the value using dsSetAVIScanInformation().
   - The user is prompted to check the HDMI analyzer for the correct bit representation (S1/S0).
-  - The current Scan Info is retrieved using dsGetAVIScanInfo() and compared with the expected value.
+  - The current Scan Info is retrieved using dsGetAVIScanInformation() and compared with the expected value.
   - The result is logged as PASS/FAIL based on the manual confirmation from the HDMI analyzer and the API result.
 
 - Completion and Results:
