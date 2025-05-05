@@ -60,6 +60,8 @@ High level overview:
 |18|[Get `ALLM` status](#get-allm-status)|The test aims to verify that `ALLM` status is enabled or disabled for the specific `HDMI` input port.|
 |19|[Set `EDID` to all `ALLM` Support](#set-edid-to-all-allm-support)|The test aims to verfiy by setting and getting the `EDID` `ALLM` support.|
 |20|[Get `HDMI` version](#get-hdmi-version)|The test is to validate getting the `HDMI` compatibility version|
+|21|[Set and Get `VRR Support` Information](#set-and-get-vrr-support)|The test is to validate by setting and getting the `VRR Support` information |
+|22|[Callback for `VRR type` Change](#callback-for-vrr-type-change)|The test validates the functionality of the callback function designed to notify when `HDMI` input `VRR type` changes|
 -----------
 
 ## Get Number of Inputs
@@ -434,3 +436,41 @@ Emulator will boot with the `EDID` coming from the configuration file.
 ### Control Plane Requirement - Get `HDMI` Version
 
 None
+
+## Set and Get `VRR` Support
+
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Set and Get `VRR` Support |Set and get `VRR` support of designated `HDMI` input port. The status information indicates whether `VRR support` is enabled or disabled |dsHdmiInSetVRRSupport(), dsHdmiInGetVRRSupport()|`Y`|`Y`|`N`|`Y`|`Y`|
+
+### Test Startup Requirement - Set and Get `VRR` Support
+
+- Connection of the source device with the `HDMI` Input.
+- The test begins with the configured `HDMI` input port numbers.
+
+### Emulator Requirement - Set and Get `VRR` Support
+
+Emulator will boot with the `VRR` support information.
+
+### Control Plane Requirement - Set and Get `VRR` Support
+
+Control plane connects/ disconnects the external devices. Validates the VRR by analyzers.
+
+## Callback for VRR Type Change
+
+|Test Functionality|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|--------|--|--|------|----|--------------------------|
+|Callback for VRR type Change|Verify that the callback function properly triggers whenever the VRR type is updated at source device and notifies the application of the `HDMI` Input VRR type change event.|dsHdmiInRegisterVRRChangeCB()|`N`|`Y`|`N`|`Y`|`Y`|
+
+### Test Startup Requirement - Callback for VRR Type Change
+
+Connection of the source device with the `HDMI` Input.
+
+### Emulator Requirement - Callback for VRR Type Change
+
+Emulator will boot with the `VRR` support information.
+
+### Control Plane Requirement - Callback for VRR Type Change
+
+- Connecting and disconnecting source devices in the `HDMI` Input will be handled by the Control Plane.
+- Provide VRR type changes on the connected device handled by Control Plane.

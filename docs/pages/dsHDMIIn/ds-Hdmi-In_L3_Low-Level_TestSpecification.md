@@ -61,6 +61,7 @@ Below are top test use-case for the HdmiIn port.
 |12|Get and verify the `SPD` info of selected port|Select the HdmiInput and get the `SPD` info for that particular Input port|`dsGetHDMISPDInfo()`|`NA`|`Y`|
 |13|Set and verify the `EDID` version on selected port|Set the `EDID` version and verify by retrieving the `EDID` version|`dsSetEdidVersion()`,`dsGetEdidVersion()`|`NA`|`Y`|
 |14|Set and verify `EDID` to `ALLM` support on selected port|Set `ALLM` on selected port connected with game controller on 4k supported panel and verify it|`dsSetEdid2AllmSupport()`|`NA`|`Y`|
+|15|Verify the HdmiIn `VRR Type` change with callbacks|Select the Hdminput device with available VRR type (like `vrr_hdmi`,`vrr_amd_freesync`,`vrr_amd-freesync_premium`,...) and check the callbacks is triggered when there is change|`dsHdmiInSetVRRSupport()`, `dsHdmiInGetVRRSupport`, `dsHdmiInGetVRRStatus`, `dsHdmiInRegisterVRRChangeCB`|`NA`|`Y`|
 
 ## Level 3 Python Test Cases High Level Overview
 
