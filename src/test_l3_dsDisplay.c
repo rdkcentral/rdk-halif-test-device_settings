@@ -436,9 +436,9 @@ void test_l3_dsDisplay_get_aspectratio(void)
 }
 
 /**
- * @brief This test terminates the dsDisplay Module.
+ * @brief Enables/Disables ALLM mode for HDMI output port connected to display.
  *
- * This test function terminates the dsDisplay Module.
+ * Enables/Disables ALLM mode for HDMI output port connected to display.
  *
  * **Test Group ID:** 03@n
  * **Test Case ID:** 006@n
@@ -447,9 +447,85 @@ void test_l3_dsDisplay_get_aspectratio(void)
  * Refer to Test specification documentation
  * [ds-display_L3_Low-Level_TestSpecification.md](../../docs/pages/ds-display_L3_Low-Level_TestSpecification.md)
  */
+void test_l3_dsDisplay_SetAllmEnabled()
+{
+    dsError_t status = dsERR_NONE;
+    int32_t choice = -1;
+    int32_t j = 0;
+    gTestID = 6;
+    
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
+
+    UT_LOG_INFO(" \t  Supported ALLM Modes are:");
+    for (j = 0; j < 2; j++)
+    {
+        UT_LOG_INFO("\t%d. %-20s", j,((j==0)?"Disable":"Enable"));
+    }
+
+    UT_LOG_INFO("------------------------------------------");
+    UT_LOG_INFO(" Choose ALLM mode to be Enable/Disable:");
+    readInt(&choice);
+
+    if(choice == 0 || choice == 1) 
+    {
+        UT_LOG_INFO("Calling dsSetAllmEnabled(IN:Handle:[0x%0X],IN:ALLM_Status:[]) ", gDisplayHandle);
+        status = dsSetAllmEnabled(gDisplayHandle, choice);
+        UT_LOG_INFO("Result dsSetAllmEnabled(IN:Handle:[0x%0X],IN:ALLM_Status:[%s]) ,dsError_t=[%s]",
+                        gDisplayHandle, UT_Control_GetMapString(bool_mapTable, choice), 
+                        UT_Control_GetMapString(dsDisplayError_mapTable, status));
+        DS_ASSERT(status == dsERR_NONE);
+    }
+    else
+    {
+        UT_LOG_ERROR("\nInvalid ALLM mode selected\n");
+    }
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);
+}
+
+/**
+ * @brief Checks whether ALLM mode of HDMI output port connected to display is enabled or not.
+ *
+ * Checks whether ALLM mode of HDMI output port connected to display is enabled or not.
+ *
+ * **Test Group ID:** 03@n
+ * **Test Case ID:** 007@n
+ *
+ * **Test Procedure:**
+ * Refer to Test specification documentation
+ * [ds-display_L3_Low-Level_TestSpecification.md](../../docs/pages/ds-display_L3_Low-Level_TestSpecification.md)
+ */
+void test_l3_dsDisplay_GetAllmEnabled()
+{
+    dsError_t status   = dsERR_NONE;
+    bool AllmMode = false;
+    gTestID = 7;
+
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
+    
+    UT_LOG_INFO("Calling dsGetAllmEnabled(IN:Handle:[0x%0X],OUT:ALLM_Status:[]) ", gDisplayHandle);
+    status = dsGetAllmEnabled(gDisplayHandle, &AllmMode);
+    UT_LOG_INFO("Result dsGetAllmEnabled(IN:Handle:[0x%0X],OUT:ALLM_Status:[%s]) ,dsError_t=[%s]",
+                    gDisplayHandle, UT_Control_GetMapString(bool_mapTable, AllmMode),
+                    UT_Control_GetMapString(dsDisplayError_mapTable, status));
+    DS_ASSERT(status == dsERR_NONE);
+    UT_LOG_INFO("OUT %s ",__FUNCTION__);   
+}
+
+/**
+ * @brief This test terminates the dsDisplay Module.
+ *
+ * This test function terminates the dsDisplay Module.
+ *
+ * **Test Group ID:** 03@n
+ * **Test Case ID:** 008@n
+ *
+ * **Test Procedure:**
+ * Refer to Test specification documentation
+ * [ds-display_L3_Low-Level_TestSpecification.md](../../docs/pages/ds-display_L3_Low-Level_TestSpecification.md)
+ */
 void test_l3_dsDisplay_terminate(void)
 {
-    gTestID = 6;
+    gTestID = 8;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t status = dsERR_NONE;
@@ -487,6 +563,8 @@ int test_l3_dsDisplay_register (void)
     UT_add_test( pSuite, "Get display EDID", test_l3_dsDisplay_get_edid);
     UT_add_test( pSuite, "Get display EDIDBytes", test_l3_dsDisplay_get_edidbytes);
     UT_add_test( pSuite, "Get display AspectRatio",test_l3_dsDisplay_get_aspectratio);
+    UT_add_test( pSuite, "Set Allm Enabled", test_l3_dsDisplay_SetAllmEnabled);
+    UT_add_test( pSuite, "Get Allm Enabled", test_l3_dsDisplay_GetAllmEnabled);
     UT_add_test( pSuite, "Terminate dsDisplay", test_l3_dsDisplay_terminate);
 
     return 0;
