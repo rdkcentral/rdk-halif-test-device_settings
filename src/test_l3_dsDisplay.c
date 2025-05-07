@@ -530,18 +530,19 @@ void test_l3_dsDisplay_GetAllmEnabled()
     DS_ASSERT(status == dsERR_NONE);
     UT_LOG_INFO("OUT %s ",__FUNCTION__);   
 }
-/*
- * @brief Sets the AVI content type of the display.
- *
- * Sets the AVI content type of the display.
- *
- * **Test Group ID:** 03@n
- * **Test Case ID:** 008@n
- *
- * **Test Procedure:**
- * Refer to Test specification documentation
- * [ds-display_L3_Low-Level_TestSpecification.md](../../docs/pages/ds-display_L3_Low-Level_TestSpecification.md)
- */
+
+/**
+* @brief Sets the AVI content type of the display.
+*
+* Sets the AVI content type of the display.
+*
+* **Test Group ID:** 03@n
+* **Test Case ID:** 008@n
+*
+* **Test Procedure:**
+* Refer to Test specification documentation
+* [ds-display_L3_Low-Level_TestSpecification.md](../../docs/pages/ds-display_L3_Low-Level_TestSpecification.md)
+*/
 void test_l3_dsDisplay_set_avicontenttype(void)
 {
     gTestID = 8;
@@ -694,6 +695,7 @@ void test_l3_dsDisplay_get_aviscaninformation(void)
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
+
 /**
  * @brief This test terminates the dsDisplay Module.
  *
@@ -745,7 +747,7 @@ int test_l3_dsDisplay_register (void)
     UT_add_test( pSuite, "Select Display Port", test_l3_dsDisplay_select_display_port);
     UT_add_test( pSuite, "Get display EDID", test_l3_dsDisplay_get_edid);
     UT_add_test( pSuite, "Get display EDIDBytes", test_l3_dsDisplay_get_edidbytes);
-    UT_add_test( pSuite, "Get display AspectRatio",test_l3_dsDisplay_get_aspectratio);
+    UT_add_test( pSuite, "Get display AspectRatio", test_l3_dsDisplay_get_aspectratio);
     UT_add_test( pSuite, "Set Allm Enabled", test_l3_dsDisplay_SetAllmEnabled);
     UT_add_test( pSuite, "Get Allm Enabled", test_l3_dsDisplay_GetAllmEnabled);
     UT_add_test( pSuite, "Set display AVI content type", test_l3_dsDisplay_set_avicontenttype);
