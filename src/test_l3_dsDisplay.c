@@ -461,7 +461,7 @@ void test_l3_dsDisplay_get_aspectratio(void)
  * Enables/Disables ALLM mode for HDMI output port connected to display.
  *
  * **Test Group ID:** 03@n
- * **Test Case ID:** 006@n
+ * **Test Case ID:** 008@n
  *
  * **Test Procedure:**
  * Refer to Test specification documentation
