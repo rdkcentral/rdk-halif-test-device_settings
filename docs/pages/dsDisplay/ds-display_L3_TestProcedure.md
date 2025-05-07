@@ -12,6 +12,7 @@
   - [dsDisplay_test02_TestVerifyDisplayEdid.py](#dsdisplay_test02_testverifydisplayedidpy)
   - [dsDisplay_test03_AspectRatioVerificationTest.py](#dsdisplay_test03_aspectratioverificationtestpy)
   - [dsDisplay_test04_TestVerifyDisplayEdidBytes.py](#dsdisplay_test04_testverifydisplayedidbytes)
+  - [dsDisplay_test07_VerifyALLM_Mode.py](#dsdisplay_test07_verifyallm_modepy)
   - [dsDisplay_L3_Runall_Source.py](#dsdisplay_l3_runall_sourcepy)
   - [dsDisplay_L3_Runall_Sink.py](#dsdisplay_l3_runall_sinkpy)
 
@@ -304,6 +305,47 @@ dsDisplay_test04_TestVerifyDisplayEdidBytes --config /host/tests/configs/example
 - Completion and Results:
 
   If all expected `EDID` bytes are verified, the test will conclude and display the final result (PASS/FAIL).
+
+### dsDisplay_test07_VerifyALLM_Mode.py
+
+**Overview:**
+
+This test is designed to verify the functionality of the dsSetAllmEnabled API in enabling or disabling Auto Low Latency Mode (`ALLM`) for an HDMI output port. The test will check the API's ability to correctly toggle ALLM based on the sink device's compatibility with HDMI 2.1 specifications. Users will validate the `ALLM` status using an HDMI analyzer.
+
+**Platform Supported:**
+
+Source
+
+**User Input Required:**
+
+Yes: The user is required to verify the `ALLM` mode on an external HDMI analyzer connected to the device. (This will be automated later).
+
+**Acceptance Criteria:**
+
+The test must successfully enable/disable ALLM mode, and the user must confirm that respective mode is displayed on the HDMI analyzer for the test to pass.
+
+**Expected Results:**
+
+The test will Enables/Disables ALLM mode for HDMI output port connected to display. The user will confirm the correct ALLM mode using a supported HDMI analyzer.
+
+**Note:** Currently unable to verify this test case.
+
+**Test Steps:**
+
+- Run the Python file `dsDisplay_test07_VerifyALLM_Mode.py` with the appropriate configuration:
+
+```bash
+dsDisplay_test07_VerifyALLM_Mode.py --config /host/tests/configs/example_rack_config.yml --deviceConfig /host/tests/configs/deviceConfig.yml
+```
+
+- Download and copy all required assets to the target directory.
+- Enable ALLM mode.
+- Prompt the user to verify that respective ALLM mode is displayed on the HDMI analyzer.
+- The test will pass if the user confirms that the ALLM mode is enabled.
+- Disable ALLM mode.
+- Prompt the user to verify that respective ALLM mode is displayed on the HDMI analyzer.
+- The test will pass if the user confirms that the ALLM mode is disabled.
+
 
 ### dsDisplay_L3_Runall_Source.py 
 
