@@ -44,7 +44,10 @@ High level overview:
 |1|[Get EDID Information](#get-edid-information)|Test validates the accuracy and functionality of the display device module's functions (dsGetEDID and dsGetEDIDBytes) in retrieving the Extended Display Identification Data (EDID) from connected display devices|
 |2|[Get Aspect Ratio](#get-aspect-ratio)| Test provides the aspect ratio of the display device|
 |3|[Callback Registration for Display Related Events](#callback-registration-for-display-related-events)|To verify the callback registration for display related events. The display events are Display connected event, Display disconnected event, Rx Sense ON event, Rx Sense OFF event, HDCP protocol version change event|
-|4|[Check ALLM mode](#check-allm-mode)|Check the ALLM mode|
+|4|[AVI Content Type Verification](#avi-content-type-verification)|Verify HDMI AVI
+InfoFrame Content Type|
+|5|[AVI Scan Information Verification](#avi-scan-information-verification)|Verify HDMI AVI InfoFrame Scan Information|
+|6|[Check ALLM mode](#check-allm-mode)|Check the ALLM mode|
 -----------
 
 ## Get EDID Information
