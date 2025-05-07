@@ -129,6 +129,13 @@ dsError_t dsHdmiInRegisterAviContentTypeChangeCB(dsHdmiInAviContentTypeChangeCB_
   return (dsError_t)0;
 }
 
+dsError_t dsHdmiInRegisterVRRChangeCB(dsHdmiInVRRChangeCB_t cb)
+{
+  /*TODO: Implement Me!*/
+  (void)cb;
+  return (dsError_t)0;
+}
+
 dsError_t dsIsHdmiARCPort(dsHdmiInPort_t iPort, bool* isArcPort)
 {
   /*TODO: Implement Me!*/
@@ -206,5 +213,29 @@ dsError_t dsGetHdmiVersion(dsHdmiInPort_t iHdmiPort, dsHdmiMaxCapabilityVersion_
   /*TODO: Implement Me!*/
   (void)iHdmiPort;
   (void)iVersion;
+  return (dsError_t)0;
+}
+
+dsError_t dsHdmiInGetVRRSupport(dsHdmiInPort_t port, bool * vrrSupport)
+{
+  /*TODO: Implement Me!*/
+  (void)port;
+  (void)vrrSupport;
+  return (dsError_t)0;
+}
+
+dsError_t dsHdmiInSetVRRSupport(dsHdmiInPort_t port, bool vrrSupport)
+{
+  /*TODO: Implement Me!*/
+  (void)port;
+  (void)vrrSupport;
+  return (dsError_t)0;
+}
+
+dsError_t dsHdmiInGetVRRStatus(dsHdmiInPort_t port, dsVRRType_t *vrrType)
+{
+  /*TODO: Implement Me!*/
+  (void)port;
+  (void)vrrType;
   return (dsError_t)0;
 }
