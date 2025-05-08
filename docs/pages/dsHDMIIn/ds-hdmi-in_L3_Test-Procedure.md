@@ -20,6 +20,7 @@
   - [dsHdmiIn_test12_GetSpdInfo_Verify.py](#dshdmiin_test12_getspdinfo_verifypy)
   - [dsHdmiIn_test13_SetAndGetEDIDVersion.py](#dshdmiin_test13_setandgetedidversionpy)
   - [dsHdmiIn_test14_SetEDID2ALLMSupport.py](#dshdmiin_test14_setedid2allmsupportpy)
+  - [dsHdmiIn_test15_SetGetVrrStatusAndCallback.py](#dshdmiin_test15_setgetvrrstatusandcallbackpy)
   - [dsHdmiIn_L3_Runall_Sink.py](#dshdmiin_l3_runall_sinkpy)
 
 ## Acronyms, Terms and Abbreviations
@@ -874,6 +875,72 @@ This test set ALLM and verifies the same by retrieving the ALLM.
 - Test Conclusion:
 
 Upon receiving user responses for all ports, the test will conclude and present a final result: PASS or FAIL based on the user inputs throughout the test execution.
+
+### dsHdmiIn_test15_SetGetVrrStausAndCallback.py
+
+#### Platform Supported - test15
+
+- Sink
+
+#### User Input Required - test15
+
+- **Yes**: User interaction is necessary to connect the Hdmi In device and to change the VRR type on connected device (like Hdmi Analyzer) (This will be automated later).
+
+#### Acceptance Criteria - test15
+
+- Verify the VRR type status
+
+#### Expected Results - test15
+
+- The test registers the event and check for VRR type change event callback.
+
+#### Test Steps - test15
+
+- Initiate the Test:
+
+  - Select and execute the Python file: **`dsHdmiIn_test15_SetGetVrrStausAndCallback.py`**
+  - The test will automatically download all required artifacts and streams, copying them to the designated target directory before commencing execution.
+- The test checks if the platform supports VRR. If not supported then returns and make the test as PASS
+
+-  Device Connect prompt:
+
+    The test will prompt the User if needed to connect a Source device:
+
+  - Question: "Please connect the port_typ and press Enter:"
+  - Press **Y** if Device is connected (this will mark the step as PASS).
+  - Press **N** if user could not connect the device (this will mark the step as FAIL).
+
+-  Device Change Required prompt:
+
+    The test will prompt the User to connect a different Source device:
+
+  - Question: "If required to connect other source device which supports VRR {type} Y/N: "
+  - Press **Y** if User wants to connect a different source device which supports the specified VRR type.
+  - Press **N** if User does not wants to connect a different source device.
+
+- VRR Type Confirmation:
+
+  - Test will check if the vrr type change event has reached the device.
+  - If event is detected, the step will marked as PASS
+  - If event not detected, the step will marked as FAIL
+
+- VRR Type Confirmation for disabled ports:
+
+  - Test will check if the vrr type change event has not reached the device when port is disabled.
+  - If event is detected, the step will marked as FAIL
+  - If event not detected, the step will marked as PASS
+
+- Repeat for All Ports:
+
+  The test will iterate through all suppeorted Hdmi IN ports which supports VRR, collects VRR type change accordingly.
+
+- Test Conclusion:
+
+  Upon receiving user responses for all ports, the test will conclude and present a final result: PASS or FAIL based on the user inputs throughout the test execution.
+
+- Completion and Result:
+
+  Once all necessary user actions are completed, the test will evaluate the results and display whether the test Passed or Failed.
 
 ### dsHdmiIn_L3_Runall_Sink.py
 
