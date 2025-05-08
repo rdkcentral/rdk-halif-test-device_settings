@@ -603,7 +603,7 @@ void test_l3_dsDisplay_get_avicontenttype(void)
 
     status = dsGetAVIContentType(gDisplayHandle, &contentType);
 
-    UT_LOG_INFO("Result dsGetAVIContentType(handle:[0x%0X], dsAviContentType_t:[%s], dsError_t=[%s])",
+    UT_LOG_INFO("Result dsGetAVIContentType(handle:[0x%0X], dsAviContentType_t:[%s], dsError_t:[%s])",
                 gDisplayHandle,
                 UT_Control_GetMapString(dsAviContentType_mapTable, contentType),
                 UT_Control_GetMapString(dsDisplayError_mapTable, status));
