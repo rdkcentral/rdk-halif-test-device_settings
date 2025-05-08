@@ -403,7 +403,7 @@ class dsDisplayClass():
         if result is None:
            return None
 
-       avicontentPattern = r"Result dsGetAVIContentType\(handle:\[.*?\], dsAviContentType_t:\[(.*?)\], dsError_t:\[.*?\]\)"
+        avicontentPattern = r"Result dsGetAVIContentType\(handle:\[.*?\], dsAviContentType_t:\[(.*?)\], dsError_t:\[.*?\]\)"
         contentType = self.searchPattern(result, avicontentPattern)
         return contentType
 
@@ -467,7 +467,6 @@ class dsDisplayClass():
             None
         """
         result = self.utMenu.select(self.testSuite, "Terminate dsDisplay")
-
 
     def getSupportedPorts(self):
         """
