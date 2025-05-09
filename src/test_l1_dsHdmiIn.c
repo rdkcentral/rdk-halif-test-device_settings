@@ -1821,6 +1821,8 @@ void test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo_sink(void) {
     if (gSourceType == 0) {
         // Step 2 to Step 3: Retrieve HDMI SPD information for each HDMI input port and compare results
         for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
+            
+            UT_ASSERT_EQUAL(dsHdmiInSelectPort(port, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
 
             UT_ASSERT_EQUAL(dsGetHDMISPDInfo(port, spdInfo1), dsERR_NONE);
 
@@ -1874,6 +1876,10 @@ void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo_sink(void) {
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
+
+    UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_0, spdInfo1), dsERR_OPERATION_FAILED);
+
+    UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
 
     // Step 3: Call dsGetHDMISPDInfo() with invalid values (dsHDMI_IN_PORT_MAX)
     UT_ASSERT_EQUAL(dsGetHDMISPDInfo(dsHDMI_IN_PORT_MAX, spdInfo1), dsERR_INVALID_PARAM);
