@@ -325,7 +325,7 @@ void test_l2_dsHdmiIn_SetAndGetEdidVersionAndValidateEdidLength_sink(void)
 
     dsError_t ret = dsERR_NONE;
     uint8_t numInputs = 0; // Initialize to 0
-    dsHdmiInPort_t hdmiPort[] = {dsHDMI_IN_PORT_0, dsHDMI_IN_PORT_1, dsHDMI_IN_PORT_2};
+    dsHdmiInPort_t hdmiPort[] = {dsHDMI_IN_PORT_0, dsHDMI_IN_PORT_1, dsHDMI_IN_PORT_2, dsHDMI_IN_PORT_3, dsHDMI_IN_PORT_4};
     tv_hdmi_edid_version_t edidVersion[] = {HDMI_EDID_VER_14, HDMI_EDID_VER_20};
     tv_hdmi_edid_version_t getEdidVersion = HDMI_EDID_VER_MAX;
     char keyString[DS_HDMIIN_KEY_SIZE] = {0};
