@@ -461,7 +461,7 @@ void test_l3_dsDisplay_get_aspectratio(void)
  * Enables/Disables ALLM mode for HDMI output port connected to display.
  *
  * **Test Group ID:** 03@n
- * **Test Case ID:** 008@n
+ * **Test Case ID:** 006@n
  *
  * **Test Procedure:**
  * Refer to Test specification documentation
@@ -564,12 +564,12 @@ void test_l3_dsDisplay_set_avicontenttype(void)
     readAndDiscardRestOfLine(stdin);
     contentType = (dsAviContentType_t)choice;
 
-    UT_LOG_INFO("Calling dsSetAVIContentType(IN:handle:[0x%0X], contentType:[%s])",
+    UT_LOG_INFO("Calling dsSetAVIContentType(IN:handle:[0x%0X],IN:contentType:[%s])",
                 gDisplayHandle, UT_Control_GetMapString(dsAviContentType_mapTable, contentType));
 
     status = dsSetAVIContentType(gDisplayHandle, contentType);
 
-    UT_LOG_INFO("Result dsSetAVIContentType(handle:[0x%0X], contentType:[%s], dsError_t:[%s])",
+    UT_LOG_INFO("Result dsSetAVIContentType(IN:handle:[0x%0X],IN:contentType:[%s],dsError_t:[%s])",
                 gDisplayHandle,
                 UT_Control_GetMapString(dsAviContentType_mapTable, contentType),
                 UT_Control_GetMapString(dsDisplayError_mapTable, status));
@@ -599,11 +599,11 @@ void test_l3_dsDisplay_get_avicontenttype(void)
     dsError_t status = dsERR_NONE;
     dsAviContentType_t contentType = dsAVICONTENT_TYPE_MAX;
 
-    UT_LOG_INFO("Calling dsGetAVIContentType(IN:handle:[0x%0X], OUT:contentType:[])", gDisplayHandle);
+    UT_LOG_INFO("Calling dsGetAVIContentType(IN:handle:[0x%0X],OUT:contentType:[])", gDisplayHandle);
 
     status = dsGetAVIContentType(gDisplayHandle, &contentType);
 
-    UT_LOG_INFO("Result dsGetAVIContentType(handle:[0x%0X], dsAviContentType_t:[%s], dsError_t:[%s])",
+    UT_LOG_INFO("Result dsGetAVIContentType(IN:handle:[0x%0X],OUT:dsAviContentType_t:[%s],dsError_t:[%s])",
                 gDisplayHandle,
                 UT_Control_GetMapString(dsAviContentType_mapTable, contentType),
                 UT_Control_GetMapString(dsDisplayError_mapTable, status));
@@ -647,12 +647,12 @@ void test_l3_dsDisplay_set_aviscaninformation(void)
     readAndDiscardRestOfLine(stdin);
     setScanInfo = (dsAVIScanInformation_t)choice;
 
-    UT_LOG_INFO("Calling dsSetAVIScanInformation(IN: Handle:[0x%0X], scanInfo: [%s])", gDisplayHandle,
+    UT_LOG_INFO("Calling dsSetAVIScanInformation(IN:Handle:[0x%0X],IN:scanInfo: [%s])", gDisplayHandle,
                 UT_Control_GetMapString(dsAVIScanInformation_mapTable, setScanInfo));
 
     status = dsSetAVIScanInformation(gDisplayHandle, setScanInfo);
 
-    UT_LOG_INFO("Result dsSetAVIScanInformation(IN: Handle:[0x%0X], scanInfo: [%s], status: [%s])",
+    UT_LOG_INFO("Result dsSetAVIScanInformation(IN:Handle:[0x%0X],IN:scanInfo: [%s],dsError_t: [%s])",
                 gDisplayHandle,
                 UT_Control_GetMapString(dsAVIScanInformation_mapTable, setScanInfo),
                 UT_Control_GetMapString(dsDisplayError_mapTable, status));
@@ -682,11 +682,11 @@ void test_l3_dsDisplay_get_aviscaninformation(void)
     dsError_t status = dsERR_NONE;
     dsAVIScanInformation_t scanInfo = dsAVI_SCAN_TYPE_MAX;
 
-    UT_LOG_INFO("Calling dsGetAVIScanInformation(IN:handle:[0x%0X], OUT:scanInfo:[])", gDisplayHandle);
+    UT_LOG_INFO("Calling dsGetAVIScanInformation(IN:handle:[0x%0X],OUT:scanInfo:[])", gDisplayHandle);
 
     status = dsGetAVIScanInformation(gDisplayHandle, &scanInfo);
 
-    UT_LOG_INFO("Result dsGetAVIScanInformation(handle:[0x%0X], dsAVIScanInformation_t:[%s], dsError_t:[%s])",
+    UT_LOG_INFO("Result dsGetAVIScanInformation(IN:handle:[0x%0X],OUT:dsAVIScanInformation_t:[%s],dsError_t:[%s])",
                 gDisplayHandle,
                 UT_Control_GetMapString(dsAVIScanInformation_mapTable, scanInfo),
                 UT_Control_GetMapString(dsDisplayError_mapTable, status));
@@ -750,10 +750,10 @@ int test_l3_dsDisplay_register (void)
     UT_add_test( pSuite, "Get display AspectRatio", test_l3_dsDisplay_get_aspectratio);
     UT_add_test( pSuite, "Set Allm Enabled", test_l3_dsDisplay_SetAllmEnabled);
     UT_add_test( pSuite, "Get Allm Enabled", test_l3_dsDisplay_GetAllmEnabled);
-    UT_add_test( pSuite, "Set display AVI content type", test_l3_dsDisplay_set_avicontenttype);
-    UT_add_test( pSuite, "Get display AVI content type", test_l3_dsDisplay_get_avicontenttype);
-    UT_add_test( pSuite, "Set display AVI scan information", test_l3_dsDisplay_set_aviscaninformation);
-    UT_add_test( pSuite, "Get display AVI scan information", test_l3_dsDisplay_get_aviscaninformation);
+    UT_add_test( pSuite, "Set AVI Type", test_l3_dsDisplay_set_avicontenttype);
+    UT_add_test( pSuite, "Get AVI Type", test_l3_dsDisplay_get_avicontenttype);
+    UT_add_test( pSuite, "Set AVI Scan Info", test_l3_dsDisplay_set_aviscaninformation);
+    UT_add_test( pSuite, "Get AVI Scan Info", test_l3_dsDisplay_get_aviscaninformation);
     UT_add_test( pSuite, "Terminate dsDisplay", test_l3_dsDisplay_terminate);
 
     return 0;
