@@ -399,7 +399,7 @@ class dsDisplayClass():
         Returns:
                 str or None: The AVI Content Type string (e.g., 'dsAVICONTENT_TYPE_PHOTO') or None if not found.
         """
-        result = self.utMenu.select(self.testSuite, "Get AVI type")
+        result = self.utMenu.select(self.testSuite, "Get AVI Type")
         if result is None:
            return None
 
