@@ -403,7 +403,7 @@ class dsDisplayClass():
         if result is None:
            return None
 
-        avicontentPattern = r"Result dsGetAVIContentType\(handle:\[.*?\], dsAviContentType_t:\[(.*?)\], dsError_t:\[.*?\]\)"
+        avicontentPattern = r"Result dsGetAVIContentType\(IN:handle:\[.*?\],OUT:dsAviContentType_t:\[(.*?)\],dsError_t:\[.*?\]\)"
         contentType = self.searchPattern(result, avicontentPattern)
         return contentType
 
@@ -434,7 +434,7 @@ class dsDisplayClass():
         if result is None:
             return None
 
-        pattern = r"Result dsGetAVIScanInformation\(handle:\[.*?\], dsAVIScanInformation_t:\[(.*?)\], dsError_t:\[.*?\]\)"
+        pattern = r"Result dsGetAVIScanInformation\(IN:handle:\[.*?\],OUT:dsAVIScanInformation_t:\[(.*?)\],dsError_t:\[.*?\]\)"
         scanInfo = self.searchPattern(result, pattern)
         return scanInfo
 
