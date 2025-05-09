@@ -47,6 +47,20 @@ class dsVideoPortType(Enum):
     dsVIDEOPORT_TYPE_HDMI_INPUT =auto()
     dsVIDEOPORT_TYPE_INTERNAL =auto()
 
+class dsAVIScanInformation(Enum):
+    dsAVI_SCAN_TYPE_NO_DATA = 0
+    dsAVI_SCAN_TYPE_OVERSCAN = 1
+    dsAVI_SCAN_TYPE_UNDERSCAN = 2
+    dsAVI_SCAN_TYPE_MAX = 3
+
+class dsAviContentType(Enum):
+    dsAVICONTENT_TYPE_GRAPHICS = 0
+    dsAVICONTENT_TYPE_PHOTO = 1
+    dsAVICONTENT_TYPE_CINEMA = 2
+    dsAVICONTENT_TYPE_GAME = 3
+    dsAVICONTENT_TYPE_NOT_SIGNALLED = 4
+    dsAVICONTENT_TYPE_MAX = 5
+
 class dsDisplayClass():
 
     """
@@ -80,7 +94,7 @@ class dsDisplayClass():
 
             # Copy the profile file to the target
             self.utils.scpCopy(self.testSession, moduleConfigProfileFile, targetWorkspace)
-        
+
         # Start the user interface menu
         self.utMenu.start()
 
@@ -303,6 +317,40 @@ class dsDisplayClass():
         return bool(output_list)
 
 
+    def getaviscaninfolist(self):
+        """
+        gets supported scaninfolist.
+
+        Args:
+            None.
+
+        Returns:
+            A list of scaninfolist.
+        """
+
+        aviscaninfolist = []
+        for modeindex in dsAVIScanInformation:
+            aviscaninfolist.append(dsAVIScanInformation(modeindex).name)
+
+        return aviscaninfolist
+
+    def getavicontenttypelist(self):
+        """
+        gets supported avicontenttypelist.
+
+        Args:
+            None.
+
+        Returns:
+            A list of avicontenttypelist.
+        """
+
+        avicontenttypelist = []
+        for modeindex in dsAviContentType:
+            avicontenttypelist.append(dsAviContentType(modeindex).name)
+
+        return avicontenttypelist
+
     def getAspectRatio(self):
         """
         Gets the display aspect ratio.
@@ -319,6 +367,76 @@ class dsDisplayClass():
         aspectRatioPattern = r"Result dsGetDisplayAspectRatio\(handle:\[.*\], dsVideoAspectRatio_t:\[(.*?)\], dsError_t=\[.*?\]\)"
         aspectRatio = self.searchPattern(result, aspectRatioPattern)
         return aspectRatio
+
+    def setAVIContentType(self, contentType: str):
+        """
+        Sets the AVI Content Type.
+
+        Args:
+            contentType (str): One of [
+            "dsAVICONTENT_TYPE_GRAPHICS",
+            "dsAVICONTENT_TYPE_PHOTO",
+            "dsAVICONTENT_TYPE_CINEMA",
+            "dsAVICONTENT_TYPE_GAME",
+            "dsAVICONTENT_TYPE_NOT_SIGNALLED"
+        ]
+        """
+        promptWithAnswers = [
+                {
+                    "query_type": "list",
+                    "query": "Select AVI Content Type to set:",
+                    "input": str(contentType)
+                }
+        ]
+
+        result = self.utMenu.select(self.testSuite, "Set AVI Type", promptWithAnswers)
+        return result
+
+    def getAVIContentType(self):
+        """
+        Gets the AVI Content Type.
+
+        Returns:
+                str or None: The AVI Content Type string (e.g., 'dsAVICONTENT_TYPE_PHOTO') or None if not found.
+        """
+        result = self.utMenu.select(self.testSuite, "Get AVI Type")
+        if result is None:
+           return None
+
+        avicontentPattern = r"Result dsGetAVIContentType\(IN:handle:\[.*?\],OUT:dsAviContentType_t:\[(.*?)\],dsError_t:\[.*?\]\)"
+        contentType = self.searchPattern(result, avicontentPattern)
+        return contentType
+
+    def setAVIScanInformation(self, scanInfo: str):
+        """
+        Sets the AVI Scan Information on the selected display port.
+        """
+
+        promptWithAnswers = [
+            {
+                "query_type": "list",
+                "query": "Select Scan Information:",
+                "input": str(scanInfo)
+           }
+        ]
+
+        result = self.utMenu.select(self.testSuite, "Set AVI Scan Info", promptWithAnswers)
+        return result
+
+    def getAVIScanInformation(self):
+        """
+        Gets the AVI Scan Information.
+
+        Returns:
+            str or None: The scan information value like "dsAVI_SCAN_TYPE_UNDERSCAN" or None if not matched.
+        """
+        result = self.utMenu.select(self.testSuite, "Get AVI Scan Info")
+        if result is None:
+            return None
+
+        pattern = r"Result dsGetAVIScanInformation\(IN:handle:\[.*?\],OUT:dsAVIScanInformation_t:\[(.*?)\],dsError_t:\[.*?\]\)"
+        scanInfo = self.searchPattern(result, pattern)
+        return scanInfo
 
     def getDisplayEventFromCallback(self):
         """
@@ -349,7 +467,6 @@ class dsDisplayClass():
             None
         """
         result = self.utMenu.select(self.testSuite, "Terminate dsDisplay")
-
 
     def getSupportedPorts(self):
         """

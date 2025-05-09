@@ -44,7 +44,9 @@ High level overview:
 |1|[Get EDID Information](#get-edid-information)|Test validates the accuracy and functionality of the display device module's functions (dsGetEDID and dsGetEDIDBytes) in retrieving the Extended Display Identification Data (EDID) from connected display devices|
 |2|[Get Aspect Ratio](#get-aspect-ratio)| Test provides the aspect ratio of the display device|
 |3|[Callback Registration for Display Related Events](#callback-registration-for-display-related-events)|To verify the callback registration for display related events. The display events are Display connected event, Display disconnected event, Rx Sense ON event, Rx Sense OFF event, HDCP protocol version change event|
-|4|[Check ALLM mode](#check-allm-mode)|Check the ALLM mode|
+|4|[AVI Content Type Verification](#avi-content-type-verification)|Verify HDMI AVI content type Information|
+|5|[AVI Scan Information Verification](#avi-scan-information-verification)|Verify HDMI AVI InfoFrame Scan Information|
+|6|[Check ALLM mode](#check-allm-mode)|Check the ALLM mode|
 -----------
 
 ## Get EDID Information
@@ -147,3 +149,33 @@ Connect HDMI port on TV with 2.x specification
 #### Control Plane Requirements-ALLM Status
 
 Verify the `ALLM` Status with HDMI analyzer/external device
+
+## AVI Content Type Verification
+
+|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|-----------|--------|--|--|------|----|--------------------------|
+|Set the AVI Content Type through HDMI InfoFrame.|dsSetAVIContentType()|Y|Y|Y|N|N|
+|Get the AVI Content Type set on the HDMI InfoFrame.|dsGetAVIContentType()|Y|Y|Y|N|N|
+
+### Emulator Requirement - AVI Content Type Verification
+
+[Emulator Requirements](#emulator-requirements).
+
+### Control Plane Requirement - AVI Content Type Verification
+
+Verify the AVI Content Type with HDMI analyzer/external device.
+
+## AVI Scan Information Verification
+
+|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|-----------|--------|--|--|------|----|--------------------------|
+|Set the AVI Scan Information through HDMI InfoFrame.|dsSetAVIScanInformation()|N|Y|Y|N|N|
+|Retrieve the AVI Scan Information from the HDMI InfoFrame.|dsGetAVIScanInformation()|N|Y|Y|N|N|
+
+### Emulator Requirement - AVI Scan Information Verification
+
+[Emulator Requirements](#emulator-requirements).
+
+### Control Plane Requirement - AVI Scan Information Verification
+
+Verify the AVI Scan Information with HDMI analyzer/external device.
