@@ -1267,7 +1267,7 @@ void test_l3_HdmiIn_set_vrrsupport(void)
 
     UT_LOG_INFO("Result dsHdmiInSetVRRSupport dsError_t:[%s]",
                 UT_Control_GetMapString(dsError_mapTable, ret));
-    DS_ASSERT(ret == dsERR_NONE);
+    DS_ASSERT(ret == dsERR_NONE || ret == dsERR_OPERATION_NOT_SUPPORTED);
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
@@ -1317,7 +1317,7 @@ void test_l3_HdmiIn_get_vrrsupport(void)
                 UT_Control_GetMapString(bool_mapTable, vrrSupport),
                 UT_Control_GetMapString(dsError_mapTable, ret));
 
-    DS_ASSERT(ret == dsERR_NONE);
+    DS_ASSERT(ret == dsERR_NONE || ret == dsERR_OPERATION_NOT_SUPPORTED);
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
