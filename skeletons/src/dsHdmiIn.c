@@ -208,3 +208,33 @@ dsError_t dsGetHdmiVersion(dsHdmiInPort_t iHdmiPort, dsHdmiMaxCapabilityVersion_
   (void)iVersion;
   return (dsError_t)0;
 }
+dsError_t dsHdmiInGetVRRSupport(dsHdmiInPort_t port, bool * vrrSupport)
+{
+  /*TODO: Implement Me!*/
+  (void)port;
+  (void)vrrSupport;
+  return (dsError_t)0;
+}
+
+dsError_t dsHdmiInSetVRRSupport(dsHdmiInPort_t port, bool vrrSupport)
+{
+  /*TODO: Implement Me!*/
+  (void)port;
+  (void)vrrSupport;
+  return (dsError_t)0;
+}
+
+dsError_t dsHdmiInGetVRRStatus(dsHdmiInPort_t port, dsVRRType_t *vrrType)
+{
+  /*TODO: Implement Me!*/
+  (void)port;
+  (void)vrrType;
+  return (dsError_t)0;
+}
+
+dsError_t dsHdmiInRegisterVRRChangeCB(dsHdmiInVRRChangeCB_t CBFunc)
+{
+  /*TODO: Implement Me!*/
+  (void)CBFunc;
+  return (dsError_t)0;
+}
