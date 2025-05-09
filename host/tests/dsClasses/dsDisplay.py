@@ -389,7 +389,7 @@ class dsDisplayClass():
                 }
         ]
 
-        result = self.utMenu.select(self.testSuite, "Set display AVI content type", promptWithAnswers)
+        result = self.utMenu.select(self.testSuite, "Set AVI Type", promptWithAnswers)
         return result
 
     def getAVIContentType(self):
@@ -399,7 +399,7 @@ class dsDisplayClass():
         Returns:
                 str or None: The AVI Content Type string (e.g., 'dsAVICONTENT_TYPE_PHOTO') or None if not found.
         """
-        result = self.utMenu.select(self.testSuite, "Get display AVI content type")
+        result = self.utMenu.select(self.testSuite, "Get AVI type")
         if result is None:
            return None
 
@@ -420,7 +420,7 @@ class dsDisplayClass():
            }
         ]
 
-        result = self.utMenu.select(self.testSuite, "Set display AVI scan information", promptWithAnswers)
+        result = self.utMenu.select(self.testSuite, "Set AVI Scan Info", promptWithAnswers)
         return result
 
     def getAVIScanInformation(self):
@@ -430,7 +430,7 @@ class dsDisplayClass():
         Returns:
             str or None: The scan information value like "dsAVI_SCAN_TYPE_UNDERSCAN" or None if not matched.
         """
-        result = self.utMenu.select(self.testSuite, "Get display AVI scan information")
+        result = self.utMenu.select(self.testSuite, "Get AVI Scan Info")
         if result is None:
             return None
 

@@ -41,10 +41,10 @@ dsDisplay:
                     - "Get display AspectRatio"
                     - "Set Allm Enabled"
                     - "Get Allm Enabled"
-                    - "Set display AVI content type"
-                    - "Get display AVI content type"
-                    - "Set display AVI scan information"
-                    - "Get display AVI scan information"
+                    - "Set AVI Type"
+                    - "Get AVI Type"
+                    - "Set AVI Scan Info"
+                    - "Get AVI Scan Info"
                     - "Terminate dsDisplay"
 
 
