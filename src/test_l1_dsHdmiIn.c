@@ -1607,6 +1607,8 @@ void test_l1_dsHdmiIn_positive_dsIsHdmiARCPort_sink(void) {
     if (gSourceType == 0) {
         // step 2 to Step 3: validating dsIsHdmiARCPort with valid Input and compare the Results
         for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
+            UT_ASSERT_EQUAL(dsHdmiInSelectPort(port, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
+
             result = dsIsHdmiARCPort(port, &PortResult1);
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -1662,6 +1664,9 @@ void test_l1_dsHdmiIn_negative_dsIsHdmiARCPort_sink(void) {
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
+    UT_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_0, &isArcPort), dsERR_OPERATION_FAILED);
+    UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
+
     // Step 3: Call dsIsHdmiARCPort() with invalid value (dsHDMI_IN_PORT_MAX)
     UT_ASSERT_EQUAL(dsIsHdmiARCPort(dsHDMI_IN_PORT_MAX, &isArcPort),dsERR_INVALID_PARAM);
 
@@ -1713,6 +1718,7 @@ void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo_sink(void) {
     if (gSourceType == 0) {
         // Step 2 to Step 3: Retrieve EDID bytes information for each HDMI input port and compare results
         for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
+            UT_ASSERT_EQUAL(dsHdmiInSelectPort(port, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
             UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(port, edidBytes1, &edidSize1), dsERR_NONE);
 
             UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(port, edidBytes2, &edidSize2), dsERR_NONE);
@@ -1767,6 +1773,10 @@ void test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo_sink(void) {
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
+
+    UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_0, edidBytes, &edidSize), dsERR_OPERATION_FAILED);
+
+    UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
 
     // Step 3: Call dsGetEDIDBytesInfo() with invalid value (dsHDMI_IN_PORT_MAX)
     UT_ASSERT_EQUAL(dsGetEDIDBytesInfo(dsHDMI_IN_PORT_MAX, edidBytes, &edidSize),dsERR_INVALID_PARAM);
@@ -1930,6 +1940,7 @@ void test_l1_dsHdmiIn_positive_dsSetEdidVersion_sink(void) {
 
     if (gSourceType == 0) {
         for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
+              UT_ASSERT_EQUAL(dsHdmiInSelectPort(port, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
               // Step 2: Call dsSetEdidVersion() with valid values for each port and each EDID version
               UT_ASSERT_EQUAL(dsSetEdidVersion(port, ver14), dsERR_NONE);
               UT_ASSERT_EQUAL(dsSetEdidVersion(port, ver20), dsERR_NONE);
@@ -1979,6 +1990,10 @@ void test_l1_dsHdmiIn_negative_dsSetEdidVersion_sink(void) {
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
+
+    UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_0, ver14), dsERR_OPERATION_FAILED);
+
+    UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
 
     // Step 3: Call dsSetEdidVersion() with invalid inputs (dsHDMI_IN_PORT_MAX)
     UT_ASSERT_EQUAL(dsSetEdidVersion(dsHDMI_IN_PORT_MAX, ver14), dsERR_INVALID_PARAM);
@@ -2031,6 +2046,7 @@ void test_l1_dsHdmiIn_positive_dsGetEdidVersion_sink(void) {
     if (gSourceType == 0) {
        // Step 2 to Step 3: Call dsGetEdidVersion() with valid values (dsHDMI_IN_PORT_0, tv_hdmi_edid_version_t*)
        for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
+            UT_ASSERT_EQUAL(dsHdmiInSelectPort(port, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
             result = dsGetEdidVersion(port, &edid_version_1);
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -2086,6 +2102,10 @@ void test_l1_dsHdmiIn_negative_dsGetEdidVersion_sink(void) {
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
+    UT_ASSERT_EQUAL(dsGetEdidVersion(dsHDMI_IN_PORT_0, &edid_version), dsERR_OPERATION_FAILED);
+
+    UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
+
     // Step 3: Call dsGetEdidVersion() with invalid inputs (dsHDMI_IN_PORT_MAX)
     UT_ASSERT_EQUAL(dsGetEdidVersion(dsHDMI_IN_PORT_MAX, &edid_version), dsERR_INVALID_PARAM);
 
@@ -2135,6 +2155,8 @@ void test_l1_dsHdmiIn_positive_dsGetAllmStatus_sink(void) {
     if (gSourceType == 0) {
         // Step 2: Call dsGetAllmStatus() with valid inputs
         for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
+             UT_ASSERT_EQUAL(dsHdmiInSelectPort(port, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
+
              result = dsGetAllmStatus(port, &allm_status_1);
              UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -2190,6 +2212,10 @@ void test_l1_dsHdmiIn_negative_dsGetAllmStatus_sink(void) {
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
+    UT_ASSERT_EQUAL(dsGetAllmStatus(dsHDMI_IN_PORT_0, &allm_status), dsERR_OPERATION_FAILED);
+
+    UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
+
     // Step 3: Call dsGetAllmStatus() without valid inputs (dsHDMI_IN_PORT_MAX)
     UT_ASSERT_EQUAL(dsGetAllmStatus(dsHDMI_IN_PORT_MAX, &allm_status), dsERR_INVALID_PARAM);
 
@@ -2235,6 +2261,7 @@ void test_l1_dsHdmiIn_positive_dsGetSupportedGameFeaturesList_sink(void) {
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
     if (gSourceType == 0) {
+       UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
        // Step 2: Call dsGetSupportedGameFeaturesList() with valid inputs (dsSupportedGameFeatureList_t*)
        UT_ASSERT_EQUAL(dsGetSupportedGameFeaturesList(&supported_features_1), dsERR_NONE);
 
@@ -2286,6 +2313,10 @@ void test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList_sink(void) {
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
+
+    UT_ASSERT_EQUAL(dsGetSupportedGameFeaturesList(&supported_features), dsERR_OPERATION_FAILED);
+
+    UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
 
     // Step 3: Call dsGetSupportedGameFeaturesList() with invalid input (NULL)
     UT_ASSERT_EQUAL(dsGetSupportedGameFeaturesList(NULL), dsERR_INVALID_PARAM);
@@ -2382,6 +2413,10 @@ void test_l1_dsHdmiIn_negative_dsGetAVLatency_sink(void) {
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
+    UT_ASSERT_EQUAL(dsGetAVLatency(&audioLatency, &videoLatency), dsERR_OPERATION_FAILED);
+
+    UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
+
     // Step 3: Call dsGetAVLatency() with valid inputs (NULL, int*)
     UT_ASSERT_EQUAL(dsGetAVLatency(NULL, &videoLatency), dsERR_INVALID_PARAM);
 
@@ -2431,7 +2466,9 @@ void test_l1_dsHdmiIn_positive_dsSetEdid2AllmSupport_sink(void) {
 
     if (gSourceType == 0) {
         for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++)
-        {     // Step 2: Enable EDID ALLM support
+        {     
+              UT_ASSERT_EQUAL(dsHdmiInSelectPort(port, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);           
+              // Step 2: Enable EDID ALLM support
               result = dsSetEdid2AllmSupport(port, true);
               UT_ASSERT_EQUAL(result, dsERR_NONE);
 	      // Step 3: Disable EDID ALLM support
@@ -2484,6 +2521,10 @@ void test_l1_dsHdmiIn_negative_dsSetEdid2AllmSupport_sink(void) {
     // Step 2: Initialize HDMI input using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
+    UT_ASSERT_EQUAL(dsSetEdid2AllmSupport(dsHDMI_IN_PORT_0, true), dsERR_OPERATION_FAILED);
+
+    UT_ASSERT_EQUAL(dsHdmiInSelectPort(dsHDMI_IN_PORT_0, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
+
     // Step 3: Call dsSetEdid2AllmSupport() with an invalid HDMI port
     UT_ASSERT_EQUAL(dsSetEdid2AllmSupport(dsHDMI_IN_PORT_MAX, true), dsERR_INVALID_PARAM);
 
@@ -2530,6 +2571,7 @@ void test_l1_dsHdmiIn_positive_dsGetHdmiVersion(void) {
     for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
         dsHdmiMaxCapabilityVersion_t version = HDMI_COMPATIBILITY_VERSION_MAX;
         if (gSourceType == 0) {
+            UT_ASSERT_EQUAL(dsHdmiInSelectPort(port, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
             // Step 2: Call dsGetHdmiVersion() with valid values (dsHDMI_IN_PORT_0, dsHdmiMaxCapabilityVersion_t*)
             result = dsGetHdmiVersion(port, &version);
             UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -2592,6 +2634,10 @@ void test_l1_dsHdmiIn_negative_dsGetHdmiVersion(void) {
 
     for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
         if (gSourceType == 0) {
+            UT_ASSERT_EQUAL(dsGetHdmiVersion(port, &version), dsERR_OPERATION_FAILED);
+
+            UT_ASSERT_EQUAL(dsHdmiInSelectPort(port, false, dsVideoPlane_PRIMARY, false), dsERR_NONE);
+            
             // Step 3: Call dsGetHdmiVersion() with invalid inputs (dsHDMI_IN_PORT_MAX)
             UT_ASSERT_EQUAL(dsGetHdmiVersion(dsHDMI_IN_PORT_MAX, &version), dsERR_INVALID_PARAM);
 
