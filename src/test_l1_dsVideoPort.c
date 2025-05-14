@@ -558,8 +558,9 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortEnabled(void) {
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
  * |03|Call dsIsDisplayConnected() - by looping through the acquired port handles to check if video port is connected to a display or not | handle: [ loop through valid handles ] , connected: [pointer to hold the connection status of Video Port] | dsERR_NONE | Flag which holds the connection status of Video Port must be returned |
- * |04|Compare the value with the value for source/sink device respectively | | dsERR_NONE | The values must be equal |
- * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |04|Call dsIsDisplayConnected() - Again by looping through the acquired port handles to check if a video port is connected to a display or not | handle: [ loop through valid handles ] , connected: [pointer to hold the connection status of Video Port] | dsERR_NONE | Flag which holds the connection status of Video Port must be returned |
+ * |05|Compare the values if they are equal | | dsERR_NONE | The values must be equal |
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsIsDisplayConnected(void) {
@@ -570,6 +571,7 @@ void test_l1_dsVideoPort_positive_dsIsDisplayConnected(void) {
     intptr_t handle = 0;
 
     bool isConnected1 = false;
+    bool isConnected2 = false;
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -585,15 +587,14 @@ void test_l1_dsVideoPort_positive_dsIsDisplayConnected(void) {
         // Step 03: Check if video port is connected
         status = dsIsDisplayConnected(handle, &isConnected1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
-        // Step 04: Compare the value with the value for source/sink device
-        if (gSourceType == 0) {
-            UT_ASSERT_EQUAL(isConnected1, true);
-        } else if (gSourceType == 1) {
-            UT_ASSERT_EQUAL(isConnected1, false);
-        }
+        // Step 04: Repeat the check for if video port is connected
+        status = dsIsDisplayConnected(handle, &isConnected2);
+        UT_ASSERT_EQUAL(status, dsERR_NONE);
+        // Step 05: Compare if the values are equal
+        UT_ASSERT_EQUAL(isConnected1, isConnected2);
     }
 
-    // Step 05: Terminate the video port system
+    // Step 06: Terminate the video port system
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 

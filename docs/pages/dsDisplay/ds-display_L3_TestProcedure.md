@@ -12,6 +12,9 @@
   - [dsDisplay_test02_TestVerifyDisplayEdid.py](#dsdisplay_test02_testverifydisplayedidpy)
   - [dsDisplay_test03_AspectRatioVerificationTest.py](#dsdisplay_test03_aspectratioverificationtestpy)
   - [dsDisplay_test04_TestVerifyDisplayEdidBytes.py](#dsdisplay_test04_testverifydisplayedidbytes)
+  - [dsDisplay_test05_AVIContentTypeVerificationTest.py](#dsdisplay_test05_avicontenttypeverificationtestpy)
+  - [dsDisplay_test06_AVIScanInfoVerificationTest.py](#dsdisplay_test06_aviscaninfoverificationtestpy)
+  - [dsDisplay_test07_VerifyALLM_Mode.py](#dsdisplay_test07_verifyallm_modepy)
   - [dsDisplay_L3_Runall_Source.py](#dsdisplay_l3_runall_sourcepy)
   - [dsDisplay_L3_Runall_Sink.py](#dsdisplay_l3_runall_sinkpy)
 
@@ -304,6 +307,131 @@ dsDisplay_test04_TestVerifyDisplayEdidBytes --config /host/tests/configs/example
 - Completion and Results:
 
   If all expected `EDID` bytes are verified, the test will conclude and display the final result (PASS/FAIL).
+
+### dsDisplay_test05_AVIContentTypeVerificationTest.py
+
+**Overview:**
+
+This test case is designed for Source devices and focuses on setting and verifying the AVI Content Type (dsAVICONTENT_TYPE_GRAPHICS,dsAVICONTENT_TYPE_PHOTO,dsAVICONTENT_TYPE_CINEMA,dsAVICONTENT_TYPE_GAME) through the HDMI InfoFrame. It ensures that the correct content type is displayed on the HDMI analyzer and is validated using the dsGetAVIContentType() API.
+
+**Platform Supported:**
+
+- Source
+
+**User Input Required:**
+
+Yes: The user must confirm that the correct AVI Content Type is visible on the HDMI analyzer after setting it.
+
+**Acceptance Criteria:**
+
+The test uses dsSetAVIContentType() to set the content type and validates it using both HDMI analyzer output and dsGetAVIContentType(). The test passes when both validations succeed.
+
+**Expected Results:**
+
+For each content type set, the analyzer correctly reflects the HDMI InfoFrame content type and the API returns the expected value.
+
+**Test Steps:**
+
+- Run the Python file `dsDisplay_test05_AVIContentTypeVerificationTest.py
+
+```bash
+dsDisplay_test05_AVIContentTypeVerificationTest --config /host/tests/configs/example_rack_config.yml --deviceConfig /host/tests/configs/deviceConfig.yml
+```
+
+- The test will download the required artifacts, then copy them to the target directory.
+
+- AVI Content Verification
+  - For each AVI Content Type (dsAVICONTENT_TYPE_GRAPHICS,dsAVICONTENT_TYPE_PHOTO,dsAVICONTENT_TYPE_CINEMA,dsAVICONTENT_TYPE_GAME), the test sets the value using dsSetAVIContentType().
+  - The user is prompted to confirm the visibility of the correct content type on the HDMI analyzer.
+  - The current value is retrieved using dsGetAVIContentType() and compared with the expected content type.
+  - The result is logged as PASS/FAIL based on the manual confirmation from the HDMI analyzer and the API result.
+
+- Completion and Results:
+
+ If all expected content types are verified for each port, the test will conclude and display the final result (PASS/FAIL).
+
+### dsDisplay_test06_AVIScanInfoVerificationTest.py
+
+**Overview:**
+
+This test case is designed for Source devices and focuses on setting and verifying the AVI Scan Information (dsAVI_SCAN_TYPE_NO_DATA,dsAVI_SCAN_TYPE_OVERSCAN,dsAVI_SCAN_TYPE_UNDERSCAN) through the HDMI InfoFrame. The test confirms that the correct scan info bits (S1/S0) are reflected on the HDMI analyzer and verifies that the dsGetAVIScanInformation API returns the expected value.
+
+**Platform Supported:**
+
+- Source
+
+**User Input Required:**
+
+Yes: The user must confirm whether the correct Scan Info (S1/S0 bits) is displayed on the HDMI analyzer after setting it.
+
+**Acceptance Criteria:**
+
+This test sets the Scan Info using dsSetAVIScanInformation(), confirms visibility through an HDMI analyzer, and verifies it using dsGetAVIScanInformation(). The test passes if both manual and API verifications are successful.
+
+**Expected Results:**
+
+Each configured Scan Info setting is correctly reflected on the HDMI analyzer and accurately returned by the get API.
+
+**Test Steps:**
+
+- Run the Python file `dsDisplay_test06_AVIScanInfoVerificationTest.py` with the appropriate configuration:
+
+```bash
+dsDisplay_test06_AVIScanInfoVerificationTest --config /host/tests/configs/example_rack_config.yml --deviceConfig /host/tests/configs/deviceConfig.yml
+```
+
+- The test will download the required artifacts, then copy them to the target directory.
+
+- AVI Scan Info Verification
+  - For each Scan Info setting (dsAVI_SCAN_TYPE_NO_DATA,dsAVI_SCAN_TYPE_OVERSCAN,dsAVI_SCAN_TYPE_UNDERSCAN), the test sets the value using dsSetAVIScanInformation().
+  - The user is prompted to check the HDMI analyzer for the correct bit representation (S1/S0).
+  - The current Scan Info is retrieved using dsGetAVIScanInformation() and compared with the expected value.
+  - The result is logged as PASS/FAIL based on the manual confirmation from the HDMI analyzer and the API result.
+
+- Completion and Results:
+
+  If all expected AVI scan information is verified for each port, the test will conclude and display the final result (PASS/FAIL).
+
+### dsDisplay_test07_VerifyALLM_Mode.py
+
+**Overview:**
+
+This test is designed to verify the functionality of the dsSetAllmEnabled API in enabling or disabling Auto Low Latency Mode (`ALLM`) for an HDMI output port. The test will check the API's ability to correctly toggle ALLM based on the sink device's compatibility with HDMI 2.1 specifications. Users will validate the `ALLM` status using an HDMI analyzer.
+
+**Platform Supported:**
+
+Source
+
+**User Input Required:**
+
+Yes: The user is required to verify the `ALLM` mode on an external HDMI analyzer connected to the device. (This will be automated later).
+
+**Acceptance Criteria:**
+
+The test must successfully enable/disable ALLM mode, and the user must confirm that respective mode is displayed on the HDMI analyzer for the test to pass.
+
+**Expected Results:**
+
+The test will Enables/Disables ALLM mode for HDMI output port connected to display. The user will confirm the correct ALLM mode using a supported HDMI analyzer.
+
+**Note:** Currently unable to verify this test case.
+
+**Test Steps:**
+
+- Run the Python file `dsDisplay_test07_VerifyALLM_Mode.py` with the appropriate configuration:
+
+```bash
+dsDisplay_test07_VerifyALLM_Mode.py --config /host/tests/configs/example_rack_config.yml --deviceConfig /host/tests/configs/deviceConfig.yml
+```
+
+- Download and copy all required assets to the target directory.
+- Enable ALLM mode.
+- Prompt the user to verify that respective ALLM mode is displayed on the HDMI analyzer.
+- The test will pass if the user confirms that the ALLM mode is enabled.
+- Disable ALLM mode.
+- Prompt the user to verify that respective ALLM mode is displayed on the HDMI analyzer.
+- The test will pass if the user confirms that the ALLM mode is disabled.
+
 
 ### dsDisplay_L3_Runall_Source.py 
 
