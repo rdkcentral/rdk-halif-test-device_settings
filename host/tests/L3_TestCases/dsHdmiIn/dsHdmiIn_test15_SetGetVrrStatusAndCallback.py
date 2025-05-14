@@ -64,7 +64,7 @@ class dsHdmiIn_test15_SetGetVrrStatusAndCallback(dsHdmiInHelperClass):
         """
         if Manual == True:
             # Check the HdmiIn device connected is active
-            self.testUserResponse.getUserYN(f'Please connect the {port_type} and press Enter:')
+            self.testUserResponse.getUserYN(f'Please connect source device to the {port_type} and press Enter:')
             time.sleep(1)
             self.testdsHdmiIn.selectHDMIInPort(port_type, audMix=0, videoPlane=0, topmost=1)
             time.sleep(1)
@@ -153,7 +153,7 @@ class dsHdmiIn_test15_SetGetVrrStatusAndCallback(dsHdmiInHelperClass):
                             result &= True
                         else:
                             result &= False
-                        self.log.stepResult(result, f'No VRR callback for VRR support disabled port {port}')
+                        self.log.stepResult(result, f'No VRR callback should be received for VRR support disabled port {port}')
                 else:
                     for type in supportedVrrList:
                         status = self.testUserResponse.getUserYN(f'If required to connect other source device which supports VRR {type} Y/N: ')
@@ -192,9 +192,9 @@ class dsHdmiIn_test15_SetGetVrrStatusAndCallback(dsHdmiInHelperClass):
                             result &= True
                         else:
                             result &= False
-                        self.log.stepResult(result, f'No VRR callback for VRR support disabled port {port}')
+                        self.log.stepResult(result, f'No VRR callback should be received for VRR support disabled port {port}')
                     # Set the VRR support value back old state
-                    self.testdsHdmiIn.setVRRSupport(port,vrrSupport)
+                    self.testdsHdmiIn.setVRRSupport(port,int(vrrSupport))
 
         self.log.stepResult(result,f"Verified  VRR Type and Callback")
 
