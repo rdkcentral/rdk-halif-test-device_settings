@@ -454,12 +454,11 @@ class dsHdmiInClass():
             None: If no matching connection status is found.
         """
         result = self.testSession.read_until("Received AviContentType change callback port:")
-        avipattern = r"Received AviContentType change callback port:\s*\[(.*?)\].*?avi_content_type:\s*\[(.*?)\]"
-        match = re.search(avipattern, result)
+        avipattern = r'Received AviContentType change callback port:\[(.*?)\], avi_content_type:\[(.*?)\]'
+        match = re.findall(avipattern, result)
 
         if match:
-            porttype = match.group(1)
-            avi_content_type = match.group(2)
+            porttype, avi_content_type = match[-1]
             return porttype, avi_content_type
 
         return None
