@@ -1666,7 +1666,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterVRRChangeCB(void) {
  * @brief Ensure dsIsHdmiARCPort() correctly checks for an HDMI ARC port during positive scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 031@n
+ * **Test Case ID:** 033@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1683,7 +1683,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterVRRChangeCB(void) {
  */
 void test_l1_dsHdmiIn_positive_dsIsHdmiARCPort_sink(void) {
 
-    gTestID = 31;
+    gTestID = 33;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t  result = dsERR_NONE;
@@ -1722,7 +1722,7 @@ void test_l1_dsHdmiIn_positive_dsIsHdmiARCPort_sink(void) {
  * @brief Ensure dsIsHdmiARCPort() returns correct error codes during negative scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 032@n
+ * **Test Case ID:** 034@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1742,7 +1742,7 @@ void test_l1_dsHdmiIn_positive_dsIsHdmiARCPort_sink(void) {
  */
 void test_l1_dsHdmiIn_negative_dsIsHdmiARCPort_sink(void) {
 
-    gTestID = 32;
+    gTestID = 34;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     bool isArcPort = false;
 
@@ -1773,7 +1773,7 @@ void test_l1_dsHdmiIn_negative_dsIsHdmiARCPort_sink(void) {
  * @brief Ensure dsGetEDIDBytesInfo() correctly retrieves the EDID bytes information during positive scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 033@n
+ * **Test Case ID:** 035@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1790,7 +1790,7 @@ void test_l1_dsHdmiIn_negative_dsIsHdmiARCPort_sink(void) {
  */
 void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo_sink(void) {
 
-    gTestID = 33;
+    gTestID = 35;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     unsigned char edidBytes1[255] = {0}, edidBytes2[255]={0};
     int edidSize1 = 0, edidSize2 = 0;
@@ -1826,7 +1826,7 @@ void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo_sink(void) {
  * @brief Ensure dsGetEDIDBytesInfo() returns correct error codes during negative scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 034@n
+ * **Test Case ID:** 036@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1847,7 +1847,7 @@ void test_l1_dsHdmiIn_positive_dsGetEDIDBytesInfo_sink(void) {
  */
 void test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo_sink(void) {
 
-    gTestID = 34;
+    gTestID = 36;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     unsigned char edidBytes[255] = {0};
     int edidSize = 0;
@@ -1883,7 +1883,7 @@ void test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo_sink(void) {
  * @brief Ensure dsGetHDMISPDInfo() correctly retrieves the HDMI SPD information during positive scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 035@n
+ * **Test Case ID:** 037@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1900,7 +1900,7 @@ void test_l1_dsHdmiIn_negative_dsGetEDIDBytesInfo_sink(void) {
  */
 void test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo_sink(void) {
 
-    gTestID = 35;
+    gTestID = 37;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     unsigned char spdInfo1[sizeof(struct dsSpd_infoframe_st)] = {0}, spdInfo2[sizeof(struct dsSpd_infoframe_st)] = {0};
     uint8_t numInputPorts = 0;
@@ -1934,7 +1934,7 @@ void test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo_sink(void) {
  * @brief Ensure dsGetHDMISPDInfo() returns correct error codes during negative scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 036@n
+ * **Test Case ID:** 038@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -1954,7 +1954,7 @@ void test_l1_dsHdmiIn_positive_dsGetHDMISPDInfo_sink(void) {
  */
 void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo_sink(void) {
 
-    gTestID = 36;
+    gTestID = 38;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     unsigned char spdInfo1[sizeof(struct dsSpd_infoframe_st)] = {0};
@@ -1987,7 +1987,7 @@ void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo_sink(void) {
  * @brief Ensure dsSetEdidVersion() correctly sets the EDID version during positive scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 037@n
+ * **Test Case ID:** 039@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2003,7 +2003,7 @@ void test_l1_dsHdmiIn_negative_dsGetHDMISPDInfo_sink(void) {
  */
 void test_l1_dsHdmiIn_positive_dsSetEdidVersion_sink(void) {
 
-    gTestID = 37;
+    gTestID = 39;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     tv_hdmi_edid_version_t ver14 = UT_KVP_PROFILE_GET_UINT32("dsHdmiIn/EdidVersion/0");
     tv_hdmi_edid_version_t ver20 = UT_KVP_PROFILE_GET_UINT32("dsHdmiIn/EdidVersion/1");
@@ -2034,7 +2034,7 @@ void test_l1_dsHdmiIn_positive_dsSetEdidVersion_sink(void) {
  * @brief Ensure dsSetEdidVersion() returns correct error codes during negative scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 038@n
+ * **Test Case ID:** 040@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2054,7 +2054,7 @@ void test_l1_dsHdmiIn_positive_dsSetEdidVersion_sink(void) {
  */
 void test_l1_dsHdmiIn_negative_dsSetEdidVersion_sink(void) {
 
-    gTestID = 38;
+    gTestID = 40;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     tv_hdmi_edid_version_t ver14 = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/EdidVersion/0");
 
@@ -2085,7 +2085,7 @@ void test_l1_dsHdmiIn_negative_dsSetEdidVersion_sink(void) {
  * @brief Ensure dsGetEdidVersion() correctly retrieves the EDID version during positive scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 039@n
+ * **Test Case ID:** 041@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2102,7 +2102,7 @@ void test_l1_dsHdmiIn_negative_dsSetEdidVersion_sink(void) {
  */
 void test_l1_dsHdmiIn_positive_dsGetEdidVersion_sink(void) {
 
-    gTestID = 39;
+    gTestID = 41;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsError_t  result = dsERR_NONE;
     tv_hdmi_edid_version_t edid_version_1 = HDMI_EDID_VER_MAX;
@@ -2140,7 +2140,7 @@ void test_l1_dsHdmiIn_positive_dsGetEdidVersion_sink(void) {
  * @brief Ensure dsGetEdidVersion() returns correct error codes during negative scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 040@n
+ * **Test Case ID:** 042@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2160,7 +2160,7 @@ void test_l1_dsHdmiIn_positive_dsGetEdidVersion_sink(void) {
  */
 void test_l1_dsHdmiIn_negative_dsGetEdidVersion_sink(void) {
 
-    gTestID = 40;
+    gTestID = 42;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     tv_hdmi_edid_version_t edid_version = HDMI_EDID_VER_MAX;
 
@@ -2191,7 +2191,7 @@ void test_l1_dsHdmiIn_negative_dsGetEdidVersion_sink(void) {
  * @brief Ensure dsGetAllmStatus() correctly retrieves the ALLM status during positive scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 041@n
+ * **Test Case ID:** 043@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2207,7 +2207,7 @@ void test_l1_dsHdmiIn_negative_dsGetEdidVersion_sink(void) {
  */
 void test_l1_dsHdmiIn_positive_dsGetAllmStatus_sink(void) {
 
-    gTestID = 41;
+    gTestID = 43;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     bool allm_status_1 = 0 , allm_status_2 = 0;
     dsError_t  result = dsERR_NONE;
@@ -2244,7 +2244,7 @@ void test_l1_dsHdmiIn_positive_dsGetAllmStatus_sink(void) {
  * @brief Ensure dsGetAllmStatus() returns correct error codes during negative scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 042@n
+ * **Test Case ID:** 044@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2264,7 +2264,7 @@ void test_l1_dsHdmiIn_positive_dsGetAllmStatus_sink(void) {
  */
 void test_l1_dsHdmiIn_negative_dsGetAllmStatus_sink(void) {
 
-    gTestID = 42;
+    gTestID = 44;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     bool allm_status = false;
 
@@ -2295,7 +2295,7 @@ void test_l1_dsHdmiIn_negative_dsGetAllmStatus_sink(void) {
  * @brief Ensure dsGetSupportedGameFeaturesList() correctly retrieves the list of supported game features during positive scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 043@n
+ * **Test Case ID:** 045@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2312,7 +2312,7 @@ void test_l1_dsHdmiIn_negative_dsGetAllmStatus_sink(void) {
  */
 void test_l1_dsHdmiIn_positive_dsGetSupportedGameFeaturesList_sink(void) {
 
-    gTestID = 43;
+    gTestID = 45;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsSupportedGameFeatureList_t supported_features_1 = {0};
 
@@ -2342,7 +2342,7 @@ void test_l1_dsHdmiIn_positive_dsGetSupportedGameFeaturesList_sink(void) {
  * @brief Ensure dsGetSupportedGameFeaturesList() returns correct error codes during negative scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 044@n
+ * **Test Case ID:** 046@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2361,7 +2361,7 @@ void test_l1_dsHdmiIn_positive_dsGetSupportedGameFeaturesList_sink(void) {
  */
 void test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList_sink(void) {
 
-    gTestID = 44;
+    gTestID = 46;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsSupportedGameFeatureList_t supported_features ={0};
 
@@ -2389,7 +2389,7 @@ void test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList_sink(void) {
  * @brief Ensure dsGetAVLatency() correctly retrieves the current AV latency during positive scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 045@n
+ * **Test Case ID:** 047@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2406,7 +2406,7 @@ void test_l1_dsHdmiIn_negative_dsGetSupportedGameFeaturesList_sink(void) {
  */
 void test_l1_dsHdmiIn_positive_dsGetAVLatency_sink(void) {
 
-    gTestID = 45;
+    gTestID = 47;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     int audioLatency1 =0;
     int videoLatency1 =0;
@@ -2435,7 +2435,7 @@ void test_l1_dsHdmiIn_positive_dsGetAVLatency_sink(void) {
  * @brief Ensure dsGetAVLatency() returns correct error codes during negative scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 046@n
+ * **Test Case ID:** 048@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2455,7 +2455,7 @@ void test_l1_dsHdmiIn_positive_dsGetAVLatency_sink(void) {
  */
 void test_l1_dsHdmiIn_negative_dsGetAVLatency_sink(void) {
 
-    gTestID = 46;
+    gTestID = 48;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     int audioLatency =0;
     int	videoLatency =0;
@@ -2487,7 +2487,7 @@ void test_l1_dsHdmiIn_negative_dsGetAVLatency_sink(void) {
  * @brief Ensure dsSetEdid2AllmSupport() sets the EDID ALLM support correctly during positive scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 047@n
+ * **Test Case ID:** 049@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2504,7 +2504,7 @@ void test_l1_dsHdmiIn_negative_dsGetAVLatency_sink(void) {
  */
 void test_l1_dsHdmiIn_positive_dsSetEdid2AllmSupport_sink(void) {
 
-    gTestID = 47;
+    gTestID = 49;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t  result = dsERR_NONE;
@@ -2540,7 +2540,7 @@ void test_l1_dsHdmiIn_positive_dsSetEdid2AllmSupport_sink(void) {
  * @brief Ensure dsSetEdid2AllmSupport() returns correct error codes during negative scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 048@n
+ * **Test Case ID:** 050@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2559,7 +2559,7 @@ void test_l1_dsHdmiIn_positive_dsSetEdid2AllmSupport_sink(void) {
  */
 void test_l1_dsHdmiIn_negative_dsSetEdid2AllmSupport_sink(void) {
 
-    gTestID = 48;
+    gTestID = 50;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     // Step 1: Call dsSetEdid2AllmSupport() without prior initialization of HDMI input
@@ -2586,7 +2586,7 @@ void test_l1_dsHdmiIn_negative_dsSetEdid2AllmSupport_sink(void) {
  * @brief Ensure dsGetHdmiVersion() correctly retrieves the HDMI compatibility version during positive scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 049@n
+ * **Test Case ID:** 051@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2602,7 +2602,7 @@ void test_l1_dsHdmiIn_negative_dsSetEdid2AllmSupport_sink(void) {
  */
 void test_l1_dsHdmiIn_positive_dsGetHdmiVersion(void) {
 
-    gTestID = 49;
+    gTestID = 51;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsError_t  result = dsERR_NONE;
     uint8_t numInputPorts = 0;
@@ -2639,7 +2639,7 @@ void test_l1_dsHdmiIn_positive_dsGetHdmiVersion(void) {
  * @brief Ensure dsGetHdmiVersion() returns correct error codes during negative scenarios.
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 050@n
+ * **Test Case ID:** 052@n
  *
  * **Dependencies:** None@n
  * **User Interaction:** None
@@ -2659,7 +2659,7 @@ void test_l1_dsHdmiIn_positive_dsGetHdmiVersion(void) {
  */
 void test_l1_dsHdmiIn_negative_dsGetHdmiVersion(void) {
 
-    gTestID = 50;
+    gTestID = 52;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsError_t  result = dsERR_NONE;
     dsHdmiMaxCapabilityVersion_t version = HDMI_COMPATIBILITY_VERSION_MAX;
