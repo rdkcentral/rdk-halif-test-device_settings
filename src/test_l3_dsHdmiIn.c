@@ -197,6 +197,18 @@ const static ut_control_keyStringMapping_t dsAviContentType_mapTable [] =
   {  NULL, -1 }
 };
 
+/* dsVRRType_t */
+const static ut_control_keyStringMapping_t dsVRRType_mapTable[] =
+{
+  { "dsVRR_NONE",                     (int32_t)dsVRR_NONE },
+  { "dsVRR_HDMI_VRR",                 (int32_t)dsVRR_HDMI_VRR },
+  { "dsVRR_AMD_FREESYNC",             (int32_t)dsVRR_AMD_FREESYNC },
+  { "dsVRR_AMD_FREESYNC_PREMIUM",     (int32_t)dsVRR_AMD_FREESYNC_PREMIUM },
+  { "dsVRR_AMD_FREESYNC_PREMIUM_PRO", (int32_t)dsVRR_AMD_FREESYNC_PREMIUM_PRO },
+  { NULL, -1 }
+};
+
+
 /* dsVideoPlaneType_t */
 const static ut_control_keyStringMapping_t dsVideoPlaneType_mapTable [] =
 {
@@ -241,6 +253,15 @@ const static ut_control_keyStringMapping_t bool_mapTable [] =
   { "False", (int32_t)false },
   { "True",  (int32_t)true  },
   {  NULL, -1 }
+};
+
+/* dsHdmiMaxCapabilityVersion_t */
+const static ut_control_keyStringMapping_t dsHdmiMaxCapabilityVersion_mapTable[] = {
+  { "HDMI_COMPATIBILITY_VERSION_14",   (int32_t)HDMI_COMPATIBILITY_VERSION_14 },
+  { "HDMI_COMPATIBILITY_VERSION_20",   (int32_t)HDMI_COMPATIBILITY_VERSION_20 },
+  { "HDMI_COMPATIBILITY_VERSION_21",   (int32_t)HDMI_COMPATIBILITY_VERSION_21 },
+  { "HDMI_COMPATIBILITY_VERSION_MAX",  (int32_t)HDMI_COMPATIBILITY_VERSION_MAX },
+  { NULL, -1 }
 };
 
 /**
@@ -396,6 +417,19 @@ static void hdmiInAviContentTypeChangeCB(dsHdmiInPort_t port, dsAviContentType_t
     gavi_content_type = avi_content_type;
 }
 
+/**
+ * @brief Callback function for HdmiIn VRR type change.
+ *
+ * This function is invoked whenever a VRR type change occurs in the HDMI connection.
+ */
+static void hdmiInVRRChangeCB(dsHdmiInPort_t port, dsVRRType_t vrrType)
+{
+    UT_LOG_INFO("Received VRR Type change callback port:[%s], vrrType:[%s]\n",
+                 UT_Control_GetMapString(dsHdmiInPort_mapTable, port),
+                 UT_Control_GetMapString(dsVRRType_mapTable, vrrType));
+
+}
+
 
 /**
 * @brief This test initializes the HdmiIn Module.
@@ -486,6 +520,13 @@ void test_l3_HdmiIn_initialize(void)
         ret = dsHdmiInRegisterAviContentTypeChangeCB(hdmiInAviContentTypeChangeCB);
         UT_LOG_INFO("Result dsHdmiInRegisterAviContentTypeChangeCB(IN:CBFun:[0x%0X]) dsError_t:[%s]",
                             hdmiInAviContentTypeChangeCB, UT_Control_GetMapString(dsError_mapTable, ret));
+        DS_ASSERT(ret == dsERR_NONE);
+
+        /* Register VRR Type changes callback */
+        UT_LOG_INFO("Calling dsHdmiInRegisterVRRChangeCB(IN:CBFun:[0x%0X])", hdmiInVRRChangeCB);
+        ret = dsHdmiInRegisterVRRChangeCB(hdmiInVRRChangeCB);
+        UT_LOG_INFO("Result dsHdmiInRegisterVRRChangeCB(IN:CBFun:[0x%0X]) dsError_t:[%s]",
+                      hdmiInVRRChangeCB, UT_Control_GetMapString(dsError_mapTable, ret));
         DS_ASSERT(ret == dsERR_NONE);
     }
 
@@ -1133,9 +1174,7 @@ void test_l3_HdmiIn_get_allmstatus(void)
                  UT_Control_GetMapString(bool_mapTable, allmStatus),
                  UT_Control_GetMapString(dsError_mapTable, ret));
 
-    DS_ASSERT(ret == dsERR_NONE || ret == dsERR_OPERATION_NOT_SUPPORTED ||
-              ret == dsERR_NOT_INITIALIZED || ret == dsERR_INVALID_PARAM ||
-              ret == dsERR_OPERATION_FAILED);
+    DS_ASSERT(ret == dsERR_NONE);
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
@@ -1169,6 +1208,255 @@ void test_l3_dsHdmiIn_terminate(void)
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
+/**
+* @brief This test sets VRR support.
+*
+* This test function sets the VRR (Variable Refresh Rate) support of an HdmiInput port
+*
+*
+* **Test Group ID:** 03@n
+* **Test Case ID:** 015@n
+*
+* **Test Procedure:**
+* Refer to Test specification documentation
+* [ds-hdmi-in_halSpec.md](../../docs/pages/ds-hdmi-in_halSpec.md)
+*/
+void test_l3_HdmiIn_set_vrrsupport(void)
+{
+    gTestID = 15;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t ret = dsERR_NONE;
+    dsHdmiInPort_t port = dsHDMI_IN_PORT_MAX;
+    int32_t select = 0;
+    bool vrrSupportSet = false;
+
+    listPorts();
+    readInput(&select);
+    if (select < dsHDMI_IN_PORT_0 || select >= dsHDMI_IN_PORT_MAX)
+    {
+        UT_LOG_ERROR("\nInvalid port selected\n");
+        UT_LOG_INFO("Out %s", __FUNCTION__);
+        return;
+    }
+
+    port = select;
+
+    UT_LOG_MENU_INFO("Enter the VRR support value to set\n"
+                     "\tAcceptable inputs are:\n"
+                     "\t0. false\n"
+                     "\t1. true\n"
+                     "\nSelect VRR support");
+
+    readInput(&select);
+    if (select < 0 || select > 1)
+    {
+        UT_LOG_ERROR("\nInvalid VRR support value selected\n");
+        UT_LOG_INFO("Out %s", __FUNCTION__);
+        return;
+    }
+
+    vrrSupportSet = (bool)select;
+
+    // Set VRR support
+    UT_LOG_INFO("Calling dsHdmiInSetVRRSupport IN:port:[%s]:[%d] ,IN:vrrSupport:[%s]",
+                UT_Control_GetMapString(dsHdmiInPort_mapTable, port), port,
+                UT_Control_GetMapString(bool_mapTable, vrrSupportSet));
+
+    ret = dsHdmiInSetVRRSupport(port, vrrSupportSet);
+
+    UT_LOG_INFO("Result dsHdmiInSetVRRSupport dsError_t:[%s]",
+                UT_Control_GetMapString(dsError_mapTable, ret));
+    DS_ASSERT(ret == dsERR_NONE || ret == dsERR_OPERATION_NOT_SUPPORTED);
+
+    UT_LOG_INFO("Out %s", __FUNCTION__);
+}
+
+/**
+* @brief This test gets VRR support.
+*
+* This test function retrieves the VRR (Variable Refresh Rate) support status
+* of an HdmiInput port on the platform.
+*
+* **Test Group ID:** 03@n
+* **Test Case ID:** 016@n
+*
+* **Test Procedure:**
+* Refer to Test specification documentation
+* [ds-hdmi-in_halSpec.md](../../docs/pages/ds-hdmi-in_halSpec.md)
+*/
+void test_l3_HdmiIn_get_vrrsupport(void)
+{
+    gTestID = 16;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t ret = dsERR_NONE;
+    dsHdmiInPort_t port = dsHDMI_IN_PORT_MAX;
+    int32_t select = 0;
+    bool vrrSupport = false;
+
+    listPorts();
+    UT_LOG_MENU_INFO("Select port:");
+    readInput(&select);
+    if (select < dsHDMI_IN_PORT_0 || select >= dsHDMI_IN_PORT_MAX)
+    {
+        UT_LOG_ERROR("\nInvalid port selected\n");
+        UT_LOG_INFO("Out %s", __FUNCTION__);
+        return;
+    }
+
+    port = select;
+
+    UT_LOG_INFO("Calling dsHdmiInGetVRRSupport IN:port:[%s]:[%d], OUT:vrrSupport:[ ]",
+                UT_Control_GetMapString(dsHdmiInPort_mapTable, port), port);
+
+    ret = dsHdmiInGetVRRSupport(port, &vrrSupport);
+
+    UT_LOG_INFO("Result dsHdmiInGetVRRSupport IN:port:[%s]:[%d], OUT:vrrSupport:[%s], dsError_t:[%s]",
+                UT_Control_GetMapString(dsHdmiInPort_mapTable, port), port,
+                UT_Control_GetMapString(bool_mapTable, vrrSupport),
+                UT_Control_GetMapString(dsError_mapTable, ret));
+
+    DS_ASSERT(ret == dsERR_NONE || ret == dsERR_OPERATION_NOT_SUPPORTED);
+
+    UT_LOG_INFO("Out %s", __FUNCTION__);
+}
+
+/**
+* @brief This test gets current VRR status.
+*
+* This test function retrieves the current VRR (Variable Refresh Rate) type/status
+* of an HdmiInput port on the platform.
+*
+* **Test Group ID:** 03@n
+* **Test Case ID:** 017@n
+*
+* **Test Procedure:**
+* Refer to Test specification documentation
+* [ds-hdmi-in_halSpec.md](../../docs/pages/ds-hdmi-in_halSpec.md)
+*/
+void test_l3_HdmiIn_get_vrrstatus(void)
+{
+    gTestID = 15;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t ret = dsERR_NONE;
+    dsHdmiInPort_t port = dsHDMI_IN_PORT_MAX;
+    int32_t select = 0;
+    dsVRRType_t vrrStatus = dsVRR_NONE;
+
+    listPorts();
+    UT_LOG_MENU_INFO("Select port:");
+    readInput(&select);
+    if (select < dsHDMI_IN_PORT_0 || select >= dsHDMI_IN_PORT_MAX)
+    {
+        UT_LOG_ERROR("\nInvalid port selected\n");
+        UT_LOG_INFO("Out %s", __FUNCTION__);
+        return;
+    }
+
+    port = select;
+
+    UT_LOG_INFO("Calling dsHdmiInGetVRRStatus IN:port:[%s]:[%d], OUT:vrrStatus:[ ]",
+                UT_Control_GetMapString(dsHdmiInPort_mapTable, port), port);
+
+    ret = dsHdmiInGetVRRStatus(port, &vrrStatus);
+
+    UT_LOG_INFO("Result dsHdmiInGetVRRStatus IN:port:[%s]:[%d], OUT:vrrStatus:[%s], dsError_t:[%s]",
+                UT_Control_GetMapString(dsHdmiInPort_mapTable, port), port,
+                UT_Control_GetMapString(dsVRRType_mapTable, vrrStatus),
+                UT_Control_GetMapString(dsError_mapTable, ret));
+
+    DS_ASSERT(ret == dsERR_NONE);
+
+    UT_LOG_INFO("Out %s", __FUNCTION__);
+}
+
+/**
+ * @brief This test retrieves the maximum HDMI compatibility version supported by a selected HDMI input port.
+ *
+ * This test function retrieves the maximum HDMI compatibility version supported by the selected HdmiInput port on the platform.
+ *
+ * **Test Group ID:** 03
+ * **Test Case ID:** 018
+ *
+ * **Test Procedure:**
+ * Refer to Test specification documentation [ds-hdmi-in_halSpec.md](../../docs/pages/ds-hdmi-in_halSpec.md)
+ */
+void test_l3_HdmiIn_get_hdmi_version(void)
+{
+    gTestID = 18;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t ret = dsERR_NONE;
+    dsHdmiMaxCapabilityVersion_t maxCompatibilityVersion = HDMI_COMPATIBILITY_VERSION_MAX;
+    int32_t select = 0;
+    dsHdmiInPort_t port = dsHDMI_IN_PORT_NONE;
+
+    // List available HDMI ports and read user input
+    listPorts();
+    UT_LOG_MENU_INFO("Select port:");
+    readInput(&select);
+    if (select < dsHDMI_IN_PORT_0 || select >= dsHDMI_IN_PORT_MAX)
+    {
+        UT_LOG_ERROR("\nInvalid port selected\n");
+        UT_LOG_INFO("Out %s", __FUNCTION__);
+        return;
+    }
+
+    port = select;
+
+    UT_LOG_INFO("Calling dsGetHdmiVersion IN:port:[%s]:[%d], OUT:maxCompatibilityVersion:[ ]",
+                UT_Control_GetMapString(dsHdmiInPort_mapTable, port), port);
+
+    ret = dsGetHdmiVersion(port, &maxCompatibilityVersion);
+
+    UT_LOG_INFO("Result dsGetHdmiVersion IN:port:[%s]:[%d], OUT:maxCompatibilityVersion:[%s]:[%d], dsError_t:[%s]",
+                UT_Control_GetMapString(dsHdmiInPort_mapTable, port), port,
+                UT_Control_GetMapString(dsHdmiMaxCapabilityVersion_mapTable, maxCompatibilityVersion),
+                maxCompatibilityVersion, UT_Control_GetMapString(dsError_mapTable, ret));
+
+    DS_ASSERT(ret == dsERR_NONE);
+
+    UT_LOG_INFO("Out %s", __FUNCTION__);
+}
+
+/**
+* @brief This test get supported game features.
+*
+* This test function gets supported game features on platform.
+*
+* **Test Group ID:** 03@n
+* **Test Case ID:** 019@n
+*
+* **Test Procedure:**
+* Refer to Test specification documentation
+* [ds-hdmi-in_halSpec.md](../../docs/pages/ds-hdmi-in_halSpec.md)
+*/
+void test_l3_HdmiIn_get_supported_game_features(void)
+{
+    gTestID = 19; // Assign a new test ID
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t ret = dsERR_NONE;
+    dsSupportedGameFeatureList_t features;
+
+    // Initialize the buffer to be safe
+    memset(&features, 0, sizeof(features));
+
+    UT_LOG_INFO("Calling dsGetSupportedGameFeaturesList OUT:features:[ ]");
+
+    ret = dsGetSupportedGameFeaturesList(&features);
+
+    UT_LOG_INFO("Result dsGetSupportedGameFeaturesList OUT:[featureCount:[%d], featureList:[%s]], dsError_t:[%s]",
+                features.gameFeatureCount,
+                features.gameFeatureList,
+                UT_Control_GetMapString(dsError_mapTable, ret));
+
+    DS_ASSERT(ret == dsERR_NONE);
+
+    UT_LOG_INFO("Out %s", __FUNCTION__);
+}
 
 static UT_test_suite_t * pSuite = NULL;
 
@@ -1200,6 +1488,11 @@ int test_l3_dsHdmiIn_register ( void )
    UT_add_test( pSuite, "Set Edid 2 Allm Support" ,test_l3_HdmiIn_set_edid2allmsupport );
    UT_add_test( pSuite, "Get Allm Status" ,test_l3_HdmiIn_get_allmstatus );
    UT_add_test( pSuite, "Terminate HdmiIn" ,test_l3_dsHdmiIn_terminate );
+   UT_add_test( pSuite, "Set VRR Support" ,test_l3_HdmiIn_set_vrrsupport );
+   UT_add_test( pSuite, "Get VRR Support" ,test_l3_HdmiIn_get_vrrsupport );
+   UT_add_test( pSuite, "Get VRR Status" ,test_l3_HdmiIn_get_vrrstatus );
+   UT_add_test( pSuite, "Get HDMI Version" ,test_l3_HdmiIn_get_hdmi_version );
+   UT_add_test( pSuite, "Get Game Features" ,test_l3_HdmiIn_get_supported_game_features );
 
    return 0;
 }
