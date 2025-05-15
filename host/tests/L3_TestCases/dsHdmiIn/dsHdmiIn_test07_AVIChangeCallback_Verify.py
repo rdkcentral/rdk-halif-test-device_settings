@@ -107,7 +107,7 @@ class dsHdmiIn_test07_AVIChangeCallback_Verify(dsHdmiInHelperClass):
             #get the list avi content type list
             aviContentTypeList = self.testdsHdmiIn.getAviContentTypeList()
             for aviContentType in aviContentTypeList:
-                if aviContentType not in ["dsAVICONTENT_TYPE_INVALID", "dsAVICONTENT_TYPE_MAX"]:
+                if aviContentType not in ["dsAVICONTENT_TYPE_NOT_SIGNALLED", "dsAVICONTENT_TYPE_MAX"]:
                     self.CheckDeviceStatus(True, port, True, aviContentType)
                     time.sleep(5)
                     aviStatus = self.testdsHdmiIn.getAVIContentCallbackStatus()
