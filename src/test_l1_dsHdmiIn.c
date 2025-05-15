@@ -1571,6 +1571,97 @@ void test_l1_dsHdmiIn_negative_dsHdmiInRegisterAviContentTypeChangeCB(void) {
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
+void mockVRRSignalChangeCallback(dsHdmiInPort_t port, dsVRRType_t vrrType){
+// Mock implementation, can be customized for testing
+}
+
+/**
+ * @brief Ensure dsHdmiInRegisterVRRChangeCB() correctly registers a callback during positive scenarios.
+ *
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 031@n
+ *
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ *
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Call dsHdmiInRegisterVRRChangeCB() based on the device type |dsHdmiInVRRChangeCB_t| dsERR_NONE | Callback should be registered |
+ * |03|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ *
+ */
+void test_l1_dsHdmiIn_positive_dsHdmiInRegisterVRRChangeCB(void) {
+
+    gTestID = 31;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 2: Call dsHdmiInRegisterVRRChangeCB() based on the device type
+    if (gSourceType == 0) {
+        // For sink devices
+         UT_ASSERT_EQUAL(dsHdmiInRegisterVRRChangeCB(mockVRRSignalChangeCallback), dsERR_NONE);
+
+    } else if (gSourceType == 1) {
+        // For source devices
+        UT_ASSERT_EQUAL(dsHdmiInRegisterVRRChangeCB(mockVRRSignalChangeCallback), dsERR_OPERATION_NOT_SUPPORTED);
+    }
+
+    // Step 3: Call dsHdmiInTerm() to ensure deinitialization
+    UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
+
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsHdmiInRegisterVRRChangeCB() returns correct error codes during negative scenarios.
+ *
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 032@n
+ *
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ *
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsHdmiInRegisterVRRChangeCB() without initializing the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsHdmiInRegisterVRRChangeCB() with invalid input |NULL| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |05|Call dsHdmiInRegisterVRRChangeCB() after terminating the HDMI input sub-system | dsERR_NOT_INITIALIZED | Should Pass |
+ *
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
+ *
+ */
+void test_l1_dsHdmiIn_negative_dsHdmiInRegisterVRRChangeCB(void) {
+
+    gTestID = 32;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    // Step 1: Call dsHdmiInRegisterVRRChangeCB() without initializing the HDMI input sub-system
+    dsError_t result = dsHdmiInRegisterVRRChangeCB(mockVRRSignalChangeCallback);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInRegisterVRRChangeCB() with invalid input
+    UT_ASSERT_EQUAL(dsHdmiInRegisterVRRChangeCB(NULL), dsERR_INVALID_PARAM);
+
+    // Step 4: Call dsHdmiInTerm() to ensure deinitialization
+    UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 5: Call dsHdmiInRegisterVRRChangeCB() after terminating the HDMI input sub-system
+    result = dsHdmiInRegisterVRRChangeCB(mockVRRSignalChangeCallback);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
 /**
  * @brief Ensure dsIsHdmiARCPort() correctly checks for an HDMI ARC port during positive scenarios.
  *
@@ -2608,6 +2699,320 @@ void test_l1_dsHdmiIn_negative_dsGetHdmiVersion(void) {
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
+/**
+ * @brief Ensure dsHdmiInGetVRRSupport() correctly retrieves the VRR support during positive scenarios.
+ *
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 053@n
+ *
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ *
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Call dsHdmiInGetVRRSupport() with all valid ports twice|[Valid Port], bool *| dsERR_NONE | Should Pass |
+ * |03|Compare the values of VRR support for each port in step 2 and make sure they match || Success | The values should be the same |
+ * |04|Call dsHdmiInGetVRRSupport() with valid ports | dsERR_OPERATION_NOT_SUPPORTED | For source devices
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ *
+ */
+void test_l1_dsHdmiIn_positive_dsHdmiInGetVRRSupport_sink(void) {
+
+    gTestID = 53;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    dsError_t  result = dsERR_NONE;
+    bool vrr_support_1 = false;
+    bool vrr_support_2 = false;
+    uint8_t numInputPorts = 0;
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
+
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
+
+    if (gSourceType == 0) {
+       // Step 2 to Step 3: Call dsHdmiInGetVRRSupport() with valid values (dsHDMI_IN_PORT_0, bool*)
+       for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
+            result = dsHdmiInGetVRRSupport(port, &vrr_support_1);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+            result = dsHdmiInGetVRRSupport(port, &vrr_support_2);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+            UT_ASSERT_EQUAL(vrr_support_1, vrr_support_2);
+
+       }
+    } else if (gSourceType == 1) {
+       // Step 4: Call dsHdmiInGetVRRSupport() with valid ports
+       UT_ASSERT_EQUAL(dsHdmiInGetVRRSupport(dsHDMI_IN_PORT_0, &vrr_support_1), dsERR_OPERATION_NOT_SUPPORTED);
+    }
+
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
+    UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
+
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsHdmiInGetVRRSupport() returns correct error codes during negative scenarios.
+ *
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 054@n
+ *
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ *
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsHdmiInGetVRRSupport() without initializing the HDMI input sub-system |dsHDMI_IN_PORT_0, bool*| dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsHdmiInGetVRRSupport() with invalid inputs |dsHDMI_IN_PORT_MAX, bool*| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsHdmiInGetVRRSupport() with invalid inputs |dsHDMI_IN_PORT_0, NULL| dsERR_INVALID_PARAM | Should Pass |
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |06|Call dsHdmiInGetVRRSupport() without initializing the HDMI input sub-system |dsHDMI_IN_PORT_0, bool*| dsERR_NOT_INITIALIZED | Should Pass |
+ *
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
+ *
+ */
+void test_l1_dsHdmiIn_negative_dsHdmiInGetVRRSupport_sink(void) {
+
+    gTestID = 54;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    bool vrr_support = false;
+
+    // Step 1: Call dsHdmiInGetVRRSupport() without initializing the HDMI input sub-system
+    dsError_t result = dsHdmiInGetVRRSupport(dsHDMI_IN_PORT_0, &vrr_support);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInGetVRRSupport() with invalid inputs (dsHDMI_IN_PORT_MAX)
+    UT_ASSERT_EQUAL(dsHdmiInGetVRRSupport(dsHDMI_IN_PORT_MAX, &vrr_support), dsERR_INVALID_PARAM);
+
+    // Step 4: Call dsHdmiInGetVRRSupport() with invalid inputs (NULL)
+    UT_ASSERT_EQUAL(dsHdmiInGetVRRSupport(dsHDMI_IN_PORT_0, NULL), dsERR_INVALID_PARAM);
+
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
+    UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 6: Call dsHdmiInGetVRRSupport() without initializing the HDMI input sub-system
+    result = dsHdmiInGetVRRSupport(dsHDMI_IN_PORT_0, &vrr_support);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsHdmiInSetVRRSupport() correctly sets the EDID version during positive scenarios.
+ *
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 055@n
+ *
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ *
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Call dsHdmiInSetVRRSupport() with valid values for each port and enable VRR support
+ * |03|Call dsHdmiInSetVRRSupport() with valid values for each port and enable VRR support
+ * |04|Call dsHdmiInSetVRRSupport() with valid values | dsHDMI_IN_PORT_0, true | dsERR_OPERATION_NOT_SUPPORTED | For source devices
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ *
+ */
+void test_l1_dsHdmiIn_positive_dsHdmiInSetVRRSupport_sink(void) {
+
+    gTestID = 55;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    uint8_t numInputPorts = 0;
+    tv_hdmi_edid_version_t ver20 = UT_KVP_PROFILE_GET_UINT32("dsHdmiIn/EdidVersion/1");
+
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
+
+    if (gSourceType == 0) {
+        for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
+              if(port == dsHDMI_IN_PORT_0 || port == dsHDMI_IN_PORT_1){
+                  // Step 2: Call dsHdmiInSetVRRSupport() to enable VRR support for each port
+                  UT_ASSERT_EQUAL(dsHdmiInSetVRRSupport(port, true), dsERR_OPERATION_NOT_SUPPORTED);
+                          // Step 3: Call dsHdmiInSetVRRSupport() to disable VRR support for each port
+                  UT_ASSERT_EQUAL(dsHdmiInSetVRRSupport(port, false), dsERR_OPERATION_NOT_SUPPORTED);
+               }
+              else if(port == dsHDMI_IN_PORT_2 || port == dsHDMI_IN_PORT_3) {
+                  UT_ASSERT_EQUAL(dsSetEdidVersion(port, ver20), dsERR_NONE);
+                  UT_ASSERT_EQUAL(dsHdmiInSetVRRSupport(port, true), dsERR_NONE);
+                          // Step 3: Call dsHdmiInSetVRRSupport() to disable VRR support for each port
+                  UT_ASSERT_EQUAL(dsHdmiInSetVRRSupport(port, false), dsERR_NONE);
+              }
+         }
+    } else if (gSourceType == 1) {
+       // Step 4: Call dsHdmiInSetVRRSupport() with valid values for source devices
+       UT_ASSERT_EQUAL(dsHdmiInSetVRRSupport(dsHDMI_IN_PORT_0, true), dsERR_OPERATION_NOT_SUPPORTED);
+    }
+
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
+    UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
+
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsHdmiInSetVRRSupport() returns correct error codes during negative scenarios.
+ *
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 056@n
+ *
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ *
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsHdmiInSetVRRSupport() without prior initialization of HDMI input | iHdmiPort: dsHDMI_IN_PORT_0, vrrSupport: true | dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize HDMI input using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsHdmiInSetVRRSupport() with an invalid HDMI port | iHdmiPort: dsHDMI_IN_PORT_MAX, vrrSupport: true | dsERR_INVALID_PARAM | Should Pass |
+ * |04|Terminate the HDMI input using dsHdmiInTerm() | | dsERR_NONE | Clean up after test |
+ * |05|Call dsHdmiInSetVRRSupport() after termination | iHdmiPort: dsHDMI_IN_PORT_0, vrrSupport: true | dsERR_NOT_INITIALIZED | Should Pass |
+ *
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported or has failed respectively.
+ *
+ */
+void test_l1_dsHdmiIn_negative_dsHdmiInSetVRRSupport_sink(void) {
+
+    gTestID = 56;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    // Step 1: Call dsHdmiInSetVRRSupport() without prior initialization of HDMI input
+    dsError_t result = dsHdmiInSetVRRSupport(dsHDMI_IN_PORT_0, true);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+
+    // Step 2: Initialize HDMI input using dsHdmiInInit()
+    UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInSetVRRSupport() with an invalid HDMI port
+    UT_ASSERT_EQUAL(dsHdmiInSetVRRSupport(dsHDMI_IN_PORT_MAX, true), dsERR_INVALID_PARAM);
+
+    // Step 4: Terminate the HDMI input using dsHdmiInTerm()
+    UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 5: Call dsHdmiInSetVRRSupport() after termination
+    result = dsHdmiInSetVRRSupport(dsHDMI_IN_PORT_0, true);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsHdmiInGetVRRStatus() correctly retrieves the VRR support during positive scenarios.
+ *
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 057@n
+ *
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ *
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |02|Call dsHdmiInGetVRRStatus() with all valid ports twice|[Valid Port], dsVRRType_t *| dsERR_NONE | Should Pass |
+ * |03|Compare the values of VRR support for each port in step 2 and make sure they match || Success | The values should be the same |
+ * |04|Call dsHdmiInGetVRRStatus() with valid ports | dsERR_OPERATION_NOT_SUPPORTED | For source devices
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ *
+ */
+void test_l1_dsHdmiIn_positive_dsHdmiInGetVRRStatus_sink(void) {
+
+    gTestID = 57;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    dsError_t  result = dsERR_NONE;
+    dsVRRType_t vrr_type_1 = false;
+    dsVRRType_t vrr_type_2 = false;
+    uint8_t numInputPorts = 0;
+    numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
+
+    // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
+    UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
+
+    if (gSourceType == 0) {
+       // Step 2 to Step 3: Call dsHdmiInGetVRRStatus() with valid values (dsHDMI_IN_PORT_0, dsVRRType_t*)
+       for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
+            result = dsHdmiInGetVRRStatus(port, &vrr_type_1);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+            result = dsHdmiInGetVRRStatus(port, &vrr_type_2);
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+            UT_ASSERT_EQUAL(vrr_type_1, vrr_type_2);
+
+        }
+    } else if (gSourceType == 1) {
+       // Step 4: Call dsHdmiInGetVRRStatus() with valid ports
+       UT_ASSERT_EQUAL(dsHdmiInGetVRRStatus(dsHDMI_IN_PORT_0, &vrr_type_1), dsERR_OPERATION_NOT_SUPPORTED);
+    }
+
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
+    UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
+
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsHdmiInGetVRRStatus() returns correct error codes during negative scenarios.
+ *
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 058@n
+ *
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ *
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsHdmiInGetVRRStatus() without initializing the HDMI input sub-system |dsHDMI_IN_PORT_0, dsVRRType_t*| dsERR_NOT_INITIALIZED | Should Pass |
+ * |02|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
+ * |03|Call dsHdmiInGetVRRStatus() with invalid inputs |dsHDMI_IN_PORT_MAX, dsVRRType_t*| dsERR_INVALID_PARAM | Should Pass |
+ * |04|Call dsHdmiInGetVRRStatus() with invalid inputs |dsHDMI_IN_PORT_0, NULL| dsERR_INVALID_PARAM | Should Pass |
+ * |05|Call dsHdmiInTerm() to ensure deinitialization | | dsERR_NONE | Clean up after test |
+ * |06|Call dsHdmiInGetVRRStatus() without initializing the HDMI input sub-system |dsHDMI_IN_PORT_0, dsVRRType_t*| dsERR_NOT_INITIALIZED | Should Pass |
+ *
+ * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_OPERATION_FAILED` might be challenging since it requires a specific scenario where the attempted operation is not supported.
+ *
+ */
+void test_l1_dsHdmiIn_negative_dsHdmiInGetVRRStatus_sink(void) {
+
+    gTestID = 58;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    dsVRRType_t vrr_type = dsVRR_NONE;
+
+    // Step 1: Call dsHdmiInGetVRRStatus() without initializing the HDMI input sub-system
+    dsError_t result = dsHdmiInGetVRRStatus(dsHDMI_IN_PORT_0, &vrr_type);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
+    UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
+
+    // Step 3: Call dsHdmiInGetVRRStatus() with invalid inputs (dsHDMI_IN_PORT_MAX)
+    UT_ASSERT_EQUAL(dsHdmiInGetVRRStatus(dsHDMI_IN_PORT_MAX, &vrr_type), dsERR_INVALID_PARAM);
+
+    // Step 4: Call dsHdmiInGetVRRStatus() with invalid inputs (NULL)
+    UT_ASSERT_EQUAL(dsHdmiInGetVRRStatus(dsHDMI_IN_PORT_0, NULL), dsERR_INVALID_PARAM);
+
+    // Step 5: Call dsHdmiInTerm() to ensure deinitialization
+    UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
+
+    // Step 6: Call dsHdmiInGetVRRStatus() without initializing the HDMI input sub-system
+    result = dsHdmiInGetVRRStatus(dsHDMI_IN_PORT_0, &vrr_type);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
+
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
 static UT_test_suite_t * pSuite = NULL;
 
 /**
@@ -2679,6 +3084,8 @@ int test_l1_dsHdmiIn_register ( void )
     UT_add_test( pSuite, "dsHdmiInAllmChangeCB_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInRegisterAllmChangeCB );
     UT_add_test( pSuite, "dsHdmiInAVLatChangeCB_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInRegisterAVLatencyChangeCB );
     UT_add_test( pSuite, "dsHdmiInAviContTypeCB_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInRegisterAviContentTypeChangeCB );
+    UT_add_test( pSuite, "dsHdmiInVRRChangeCB_pos", test_l1_dsHdmiIn_positive_dsHdmiInRegisterVRRChangeCB );
+    UT_add_test( pSuite, "dsHdmiInVRRChangeCB_neg", test_l1_dsHdmiIn_negative_dsHdmiInRegisterVRRChangeCB );
     UT_add_test( pSuite, "dsHdmiInGetStatus_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInGetStatus );
 
 
@@ -2704,6 +3111,12 @@ int test_l1_dsHdmiIn_register ( void )
     UT_add_test( pSuite, "dsIsHdmiARCPort_neg" ,test_l1_dsHdmiIn_negative_dsIsHdmiARCPort_sink );
     UT_add_test( pSuite, "dsGetHdmiVersion_pos" ,test_l1_dsHdmiIn_positive_dsGetHdmiVersion );
     UT_add_test( pSuite, "dsGetHdmiVersion_neg" ,test_l1_dsHdmiIn_negative_dsGetHdmiVersion );
+    UT_add_test( pSuite, "dsGetHdmiVRRSupport_pos" ,test_l1_dsHdmiIn_positive_dsHdmiInGetVRRSupport_sink );
+    UT_add_test( pSuite, "dsGetHdmiVRRSupport_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInGetVRRSupport_sink );
+    UT_add_test( pSuite, "dsSetVRRSupport_pos" ,test_l1_dsHdmiIn_positive_dsHdmiInSetVRRSupport_sink );
+    UT_add_test( pSuite, "dsSetVRRSupport_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInSetVRRSupport_sink );
+    UT_add_test( pSuite, "dsGetVRRStatus_pos" ,test_l1_dsHdmiIn_positive_dsHdmiInGetVRRStatus_sink );
+    UT_add_test( pSuite, "dsGetVRRStatus_neg" ,test_l1_dsHdmiIn_negative_dsHdmiInGetVRRStatus_sink );
 
    extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "dsHdmiIn/features/extendedEnumsSupported" );
 
