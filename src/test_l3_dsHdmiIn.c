@@ -501,12 +501,17 @@ void test_l3_HdmiIn_initialize(void)
                             hdmiInVideoModeUpdateCB, UT_Control_GetMapString(dsError_mapTable, ret));
         DS_ASSERT(ret == dsERR_NONE);
 
-        /* Register Allm changes callback */
-        UT_LOG_INFO("Calling dsHdmiInRegisterAllmChangeCB(IN:CBFun:[0x%0X])", hdmiInAllmChangeCB);
-        ret = dsHdmiInRegisterAllmChangeCB(hdmiInAllmChangeCB);
-        UT_LOG_INFO("Result dsHdmiInRegisterAllmChangeCB(IN:CBFun:[0x%0X]) dsError_t:[%s]",
-                            hdmiInAllmChangeCB, UT_Control_GetMapString(dsError_mapTable, ret));
-        DS_ASSERT(ret == dsERR_NONE);
+        dsSupportedGameFeatureList_t features;
+        memset(&features, 0, sizeof(features));
+        ret = dsGetSupportedGameFeaturesList(&features);
+        if ((features.gameFeatureCount > 0) && ((strstr(features.gameFeatureList, "allm") != NULL) || (strstr(features.gameFeatureList, "ALLM") != NULL))) {
+            /* Register Allm changes callback */
+            UT_LOG_INFO("Calling dsHdmiInRegisterAllmChangeCB(IN:CBFun:[0x%0X])", hdmiInAllmChangeCB);
+            ret = dsHdmiInRegisterAllmChangeCB(hdmiInAllmChangeCB);
+            UT_LOG_INFO("Result dsHdmiInRegisterAllmChangeCB(IN:CBFun:[0x%0X]) dsError_t:[%s]",
+                                hdmiInAllmChangeCB, UT_Control_GetMapString(dsError_mapTable, ret));
+            DS_ASSERT(ret == dsERR_NONE);
+        }
 
         /* Register AV latency changes callback */
         UT_LOG_INFO("Calling dsHdmiInRegisterAVLatencyChangeCB(IN:CBFun:[0x%0X])", hdmiInAVLatencyChangeCB);
@@ -522,12 +527,14 @@ void test_l3_HdmiIn_initialize(void)
                             hdmiInAviContentTypeChangeCB, UT_Control_GetMapString(dsError_mapTable, ret));
         DS_ASSERT(ret == dsERR_NONE);
 
-        /* Register VRR Type changes callback */
-        UT_LOG_INFO("Calling dsHdmiInRegisterVRRChangeCB(IN:CBFun:[0x%0X])", hdmiInVRRChangeCB);
-        ret = dsHdmiInRegisterVRRChangeCB(hdmiInVRRChangeCB);
-        UT_LOG_INFO("Result dsHdmiInRegisterVRRChangeCB(IN:CBFun:[0x%0X]) dsError_t:[%s]",
-                      hdmiInVRRChangeCB, UT_Control_GetMapString(dsError_mapTable, ret));
-        DS_ASSERT(ret == dsERR_NONE);
+        if ((features.gameFeatureCount > 0) && ((strstr(features.gameFeatureList, "vrr") != NULL) || (strstr(features.gameFeatureList, "VRR") != NULL))) {
+            /* Register VRR Type changes callback */
+            UT_LOG_INFO("Calling dsHdmiInRegisterVRRChangeCB(IN:CBFun:[0x%0X])", hdmiInVRRChangeCB);
+            ret = dsHdmiInRegisterVRRChangeCB(hdmiInVRRChangeCB);
+            UT_LOG_INFO("Result dsHdmiInRegisterVRRChangeCB(IN:CBFun:[0x%0X]) dsError_t:[%s]",
+                          hdmiInVRRChangeCB, UT_Control_GetMapString(dsError_mapTable, ret));
+            DS_ASSERT(ret == dsERR_NONE);
+        }
     }
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
