@@ -29,12 +29,13 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 # Import required classes from modules
-from dsVideoPortHelperClass import dsVideoPortHelperClass
+from dsDisplayHelperClass import dsDisplayHelperClass
 from raft.framework.core.logModule import logModule
 
-class dsVideoPort_test10_VerifyALLM_Mode(dsVideoPortHelperClass):
+
+class dsDisplay_test07_VerifyALLM_Mode(dsDisplayHelperClass):
     """
-    A class to test and verify Enables/Disables ALLM mode for HDMI output video port.
+    A class to test and verify Enables/Disables ALLM mode for HDMI output port.
 
     Attributes:
         testName (str): Name of the test.
@@ -49,8 +50,8 @@ class dsVideoPort_test10_VerifyALLM_Mode(dsVideoPortHelperClass):
 
         Initializes sessions, reads the test setup, and prepares the user response.
         """
-        self.testName  = "test10_VerifyALLM_Mode"
-        self.qcID      = '10'
+        self.testName  = "test07_VerifyALLM_Mode"
+        self.qcID      = '7'
 
         super().__init__(self.testName, self.qcID, log)
 
@@ -58,7 +59,7 @@ class dsVideoPort_test10_VerifyALLM_Mode(dsVideoPortHelperClass):
     #TODO: Current version supports only manual verification.
     def testVerifyAllmMode(self, manual=False, mode:str=''):
         """
-        Verifies Enables/Disables ALLM mode for HDMI output video port..
+        Verifies Enables/Disables ALLM mode for HDMI output port..
 
         Args:
             manual (bool, optional): If True, manual verification is done using user response; otherwise,
@@ -75,37 +76,44 @@ class dsVideoPort_test10_VerifyALLM_Mode(dsVideoPortHelperClass):
 
     def testFunction(self):
         """
-        Main test function that enables video ports and verifies the ALLM Mode.
+        Main test function that Enables/Disables ALLM mode for HDMI output port connected to display.
 
         Downloads assets, runs prerequisites, enables/disables ports, and verifies ALLM Mode.
 
         Returns:
             bool: Final result of the ALLM Mode verification.
         """
+        # Initialize the dsDisplay module
+        self.testdsDisplay.initialise()
 
-        # Loop through supported video ports and verify ALLM Mode
-        for port, index in self.testdsVideoPort.getSupportedPorts():
-            self.testEnablePort(port, index)
-            # Set the ALLM Mode as Enable
-            self.testdsVideoPort.setAllmMode(port, index, 'Enable')
+        # Loop through supported ports and verify ALLM Mode
+        for port, index in self.testdsDisplay.getSupportedPorts():
+            self.testdsDisplay.selectDisplayPort(port, index)
 
-            # Verify ALLM Mode when enabled
-            self.log.stepStart(f'Verify ALLM mode Enabled')
-            result = self.testVerifyAllmMode(True,'Enable')
-            self.log.stepResult(result, f'Verified ALLM mode Enabled')
+            hdmi_version = self.testUserResponse.getUserYN(f'Please use an HDMI port on your HDMI analyzer/ TV that supports HDMI 2.x (Y/N):')
+            if hdmi_version:
+                # Set the ALLM Mode as Enable
+                self.testdsDisplay.setAllmMode('Enable')
 
-            # Set the ALLM Mode as Disable
-            self.testdsVideoPort.setAllmMode(port, index, 'Disable')
+                # Verify ALLM Mode when enabled
+                self.log.stepStart(f'Verify ALLM mode Enabled')
+                result = self.testVerifyAllmMode(True,'Enable')
+                self.log.stepResult(result, f'Verified ALLM mode Enabled')
 
-            # Verify ALLM Mode when disabled
-            self.log.stepStart(f'Verify ALLM mode Disabled')
-            result = self.testVerifyAllmMode(True,'Disable')
-            self.log.stepResult(result, f'Verified ALLM mode Disabled')
+                # Set the ALLM Mode as Disable
+                self.testdsDisplay.setAllmMode('Disable')
+
+                # Verify ALLM Mode when disabled
+                self.log.stepStart(f'Verify ALLM mode Disabled')
+                result = self.testVerifyAllmMode(True,'Disable')
+                self.log.stepResult(result, f'Verified ALLM mode Disabled')
+            else:
+                self.log.stepResult(False, f'The ALLM feature is only available on devices/TVs with HDMI 2.x ports. Therefore, testing this feature is not possible with the current setup/equipment.')
 
         return result
 
 if __name__ == '__main__':
     summerLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summery"
     summeryLog = logModule(summerLogName, level=logModule.INFO)
-    test = dsVideoPort_test10_VerifyALLM_Mode(summeryLog)
+    test = dsDisplay_test07_VerifyALLM_Mode(summeryLog)
     test.run(False)

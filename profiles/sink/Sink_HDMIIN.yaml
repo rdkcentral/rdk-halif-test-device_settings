@@ -21,8 +21,8 @@ dsHdmiIn:
   spdInfo: [83,01,19,00,dc,51,44,49,00,00,00,00,00,48,44,4d,49,20,41,4e,41,4c,59,5a,45,52,00,00,00] # quantum data Analyzer M41h
   HdmiArcPortID: 1
   gameFeatures:
-    feature: "allm"
-    count: 1
+    feature: "allm, vrr_hdmi, vrr_amd_freesync_premium"
+    count: 3
   # HDMI_COMPATIBILITY_VERSION_14 = 0x00, /*!< Hdmi Compatibility Version 1.4 */
   # HDMI_COMPATIBILITY_VERSION_20 = 0x01,     /*!< Hdmi Compatibility Version 2.0 */
   # HDMI_COMPATIBILITY_VERSION_21 = 0x02,     /*!< Hdmi Compatibility Version 2.1 */

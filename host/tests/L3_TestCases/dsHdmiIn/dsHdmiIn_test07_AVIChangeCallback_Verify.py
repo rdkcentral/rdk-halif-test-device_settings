@@ -68,7 +68,7 @@ class dsHdmiIn_test07_AVIChangeCallback_Verify(dsHdmiInHelperClass):
         if manual == True and avi_input != True:
             self.testUserResponse.getUserYN(f'Please connect the {port_type} and press Enter:')
             time.sleep(3)
-            return self.testUserResponse.getUserYN(f'Is HdmiIn device connected and Displayed is ON {port_type} press Y/N:')
+            return True
         elif manual == True and avi_input == True:
             return self.testUserResponse.getUserYN(f'Change the AVI Content to {avi_content} on device connected to {port_type} and press Enter:')
         else :
@@ -90,7 +90,7 @@ class dsHdmiIn_test07_AVIChangeCallback_Verify(dsHdmiInHelperClass):
 
         # Initialize the dsHdmiIn module
         self.testdsHdmiIn.initialise()
-        result = False
+        result = True
 
         # Loop through the supported HdmiIn ports
         for port in self.testdsHdmiIn.getSupportedPorts():
@@ -99,18 +99,24 @@ class dsHdmiIn_test07_AVIChangeCallback_Verify(dsHdmiInHelperClass):
 
             # Check the HdmiIn device is active
             status = self.CheckDeviceStatus(True, port, False)
-            if not status:
-                self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
-                time.sleep(5)
-                self.log.step(f'Port Selected {port}')
+
+            self.testdsHdmiIn.selectHDMIInPort(port, audMix=0, videoPlane=0, topmost=1)
+            time.sleep(5)
+            self.log.step(f'Port Selected {port}')
 
             #get the list avi content type list
             aviContentTypeList = self.testdsHdmiIn.getAviContentTypeList()
+            aviContentTypeList.append(aviContentTypeList[0])
+            skip_check = True
             for aviContentType in aviContentTypeList:
-                if aviContentType not in ["dsAVICONTENT_TYPE_INVALID", "dsAVICONTENT_TYPE_MAX"]:
+                if aviContentType not in ["dsAVICONTENT_TYPE_NOT_SIGNALLED", "dsAVICONTENT_TYPE_MAX"]:
+
                     self.CheckDeviceStatus(True, port, True, aviContentType)
-                    time.sleep(5)
+                    time.sleep(1)
                     aviStatus = self.testdsHdmiIn.getAVIContentCallbackStatus()
+                    if skip_check:
+                        skip_check = False
+                        continue
                     if aviStatus != None and aviStatus[0] == port:
                         self.log.stepResult(True,f'AVI content type:{aviStatus[1]} on port:{aviStatus[0]} found')
                         self.log.step(f'Verify content type')

@@ -96,7 +96,12 @@ dsHdmiIn:  # Prefix must always exist
                     - "dsIsHdmiARCPort_neg"
                     - "dsGetHdmiVersion_pos"
                     - "dsGetHdmiVersion_neg"
-
+                    - "dsGetHdmiVRRSupport_pos"
+                    - "dsGetHdmiVRRSupport_neg"
+                    - "dsSetVRRSupport_pos"
+                    - "dsSetVRRSupport_neg"
+                    - "dsGetVRRStatus_pos"
+                    - "dsGetVRRStatus_neg"
             2:
                 name: "L2 dsHdmiIn - Source"
                 tests:
@@ -114,6 +119,7 @@ dsHdmiIn:  # Prefix must always exist
                     - "SetGetEdidVer_EdidLength_sink"
                     - "GetGameFeaturesList_sink"
                     - "GetHdmiVersionValidate_sink"
+                    - "SetGetHdmiVRRSupport_sink"
             4:
                 name: "L3 dsHdmiIn"
                 tests:
@@ -129,4 +135,9 @@ dsHdmiIn:  # Prefix must always exist
                     - "Get EdidVersion"
                     - "Set Edid 2 Allm Support"
                     - "Get Allm Status"
+                    - "Set VRR Support"
+                    - "Get VRR Support"
+                    - "Get VRR Status"
+                    - "Get HDMI Version"
+                    - "Get Game Features"
                     - "Terminate HdmiIn"
