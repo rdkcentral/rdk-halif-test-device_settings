@@ -1034,6 +1034,8 @@ void test_l1_dsVideoDevice_negative_dsGetVideoCodecInfo(void)
  * |03|Force disable HDR support using dsForceDisableHDRSupport() with the obtained handle |int=handle, bool=true| dsERR_NONE | HDR support should be force disabled successfully |
  * |04|Force disable HDR support using dsForceDisableHDRSupport() with the obtained handle |int=handle, bool=false| dsERR_NONE | HDR support should be force disabled successfully |
  * |05|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ * @note For source and sink devices, this function is expected to return dsERR_OPERATION_NOT_SUPPORTED.
  *
  */
 void test_l1_dsVideoDevice_positive_dsForceDisableHDRSupport(void)
@@ -1091,6 +1093,7 @@ void test_l1_dsVideoDevice_positive_dsForceDisableHDRSupport(void)
  * |06|Call dsForceDisableHDRSupport() after termination of video devices |int=handle, bool=true| dsERR_NOT_INITIALIZED | Should report module not initialized |
  *
  * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
+ * @note For source and sink devices, this function is expected to return dsERR_OPERATION_NOT_SUPPORTED.
  *
  */
 void test_l1_dsVideoDevice_negative_dsForceDisableHDRSupport(void)
@@ -1118,7 +1121,7 @@ void test_l1_dsVideoDevice_negative_dsForceDisableHDRSupport(void)
 
         // Step 04: Call dsForceDisableHDRSupport() with an invalid handle
         result = dsForceDisableHDRSupport(-1, true);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     }
 
     // Step 05: De-initialize the video devices
@@ -1148,6 +1151,8 @@ void test_l1_dsVideoDevice_negative_dsForceDisableHDRSupport(void)
  * |02|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
  * |03|Set the FRF mode using dsSetFRFMode() with the obtained handle and a valid framerate value | int=handle, int| dsERR_NONE | FRF mode should be set successfully |
  * |04|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ * @note For source devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
  *
  */
 void test_l1_dsVideoDevice_positive_dsSetFRFMode(void)
@@ -1220,6 +1225,7 @@ void test_l1_dsVideoDevice_positive_dsSetFRFMode(void)
  * |07|Call dsSetFRFMode() after termination of video devices | int=handle, int| dsERR_NOT_INITIALIZED | Should report module not initialized |
  *
  * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
+ * @note For source devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
  *
  */
 void test_l1_dsVideoDevice_negative_dsSetFRFMode(void)
@@ -1231,7 +1237,11 @@ void test_l1_dsVideoDevice_negative_dsSetFRFMode(void)
 
     // Step 01: Call dsSetFRFMode() without prior initialization
     result = dsSetFRFMode(handle, 1); // Note: uninitialized 'handle' used here
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    } else {
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    }
 
     // Step 02: Initialize video devices
     result = dsVideoDeviceInit();
@@ -1247,11 +1257,19 @@ void test_l1_dsVideoDevice_negative_dsSetFRFMode(void)
 
         // Step 04: Call dsSetFRFMode() with an invalid handle
         result = dsSetFRFMode(-1, 1);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if (gSourceType == 1){
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        }
 
         // Step 05: Call dsSetFRFMode() with an invalid framerate
         result = dsSetFRFMode(handle, -1);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if (gSourceType == 1){
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        }
     }
 
     // Step 06: De-initialize the video devices
@@ -1260,7 +1278,11 @@ void test_l1_dsVideoDevice_negative_dsSetFRFMode(void)
 
     // Step 07: Call dsSetFRFMode() after termination
     result = dsSetFRFMode(handle, 1);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    } else {
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    }
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
@@ -1283,6 +1305,8 @@ void test_l1_dsVideoDevice_negative_dsSetFRFMode(void)
  * |04|Get the FRF mode using dsGetFRFMode() again |int=handle,int*| dsERR_NONE | Should fetch the FRF mode successfully |
  * |05|Compare the returned values to make sure they are the same || Success | The values should be the same value |
  * |06|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ * @note For source devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
  *
  */
 void test_l1_dsVideoDevice_positive_dsGetFRFMode(void)
@@ -1345,6 +1369,7 @@ void test_l1_dsVideoDevice_positive_dsGetFRFMode(void)
  * |07|Call dsGetFRFMode() after termination of video devices |int=handle,int*| dsERR_NOT_INITIALIZED | Should report module not initialized |
  *
  * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
+ * @note For source devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
  *
  */
 void test_l1_dsVideoDevice_negative_dsGetFRFMode(void)
@@ -1357,7 +1382,11 @@ void test_l1_dsVideoDevice_negative_dsGetFRFMode(void)
 
     // Step 01: Call dsGetFRFMode() without prior initialization
     result = dsGetFRFMode(handle, &fetchedFRFMode); // Note: uninitialized 'handle' used here
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    } else {
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    }
 
     // Step 02: Initialize video devices
     result = dsVideoDeviceInit();
@@ -1373,11 +1402,19 @@ void test_l1_dsVideoDevice_negative_dsGetFRFMode(void)
 
         // Step 04: Call dsGetFRFMode() with an invalid handle
         result = dsGetFRFMode(-1, &fetchedFRFMode);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if (gSourceType == 1){
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        }
 
         // Step 05: Call dsGetFRFMode() with null value
         result = dsGetFRFMode(handle, NULL);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if (gSourceType == 1){
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        }
     }
 
     // Step 06: De-initialize the video devices
@@ -1386,7 +1423,11 @@ void test_l1_dsVideoDevice_negative_dsGetFRFMode(void)
 
     // Step 07: Call dsGetFRFMode() after termination
     result = dsGetFRFMode(handle, &fetchedFRFMode);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    } else {
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    }
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
@@ -1409,7 +1450,9 @@ void test_l1_dsVideoDevice_negative_dsGetFRFMode(void)
  * |04|Get the current display framerate using dsGetCurrentDisplayframerate() again |int=handle,char*| dsERR_NONE | Should fetch the current framerate successfully |
  * |05|Compare the results to make sure they are the same || Success | The results should equal one another |
  * |06|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
- *
+ * 
+ * @note For source devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
+ * 
  */
 void test_l1_dsVideoDevice_positive_dsGetCurrentDisplayframerate(void)
 {
@@ -1481,6 +1524,7 @@ void test_l1_dsVideoDevice_positive_dsGetCurrentDisplayframerate(void)
  * |07|Call dsGetCurrentDisplayframerate() after termination of video devices|int=handle,char*| dsERR_NOT_INITIALIZED | Should report module not initialized |
  *
  * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
+ * @note For source devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
  *
  */
 void test_l1_dsVideoDevice_negative_dsGetCurrentDisplayframerate(void)
@@ -1493,7 +1537,11 @@ void test_l1_dsVideoDevice_negative_dsGetCurrentDisplayframerate(void)
 
     // Step 01: Call dsGetCurrentDisplayframerate() without prior initialization
     result = dsGetCurrentDisplayframerate(handle, fetchedFramerate); // Note: uninitialized 'handle' used here
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    } else {
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    }
 
     // Step 02: Initialize video devices
     result = dsVideoDeviceInit();
@@ -1509,11 +1557,19 @@ void test_l1_dsVideoDevice_negative_dsGetCurrentDisplayframerate(void)
 
         // Step 04: Call dsGetCurrentDisplayframerate() with an invalid handle
         result = dsGetCurrentDisplayframerate(-1, fetchedFramerate);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if (gSourceType == 1){
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        }
 
         // Step 05: Call dsGetCurrentDisplayframerate() with NULL value
         result = dsGetCurrentDisplayframerate(handle, NULL);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if (gSourceType == 1){
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        }
     }
 
     // Step 06: De-initialize the video devices
@@ -1522,7 +1578,11 @@ void test_l1_dsVideoDevice_negative_dsGetCurrentDisplayframerate(void)
 
     // Step 07: Call dsGetCurrentDisplayframerate() after termination
     result = dsGetCurrentDisplayframerate(handle, fetchedFramerate);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    } else {
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    }
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
@@ -1543,6 +1603,8 @@ void test_l1_dsVideoDevice_negative_dsGetCurrentDisplayframerate(void)
  * |02|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
  * |03|Set the display framerate using dsSetDisplayframerate() with the obtained handle and a valid framerate |int=handle,char*| dsERR_NONE | Display framerate should be set successfully |
  * |04|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ * @note For source devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
  *
  */
 void test_l1_dsVideoDevice_positive_dsSetDisplayframerate(void)
@@ -1565,13 +1627,13 @@ void test_l1_dsVideoDevice_positive_dsSetDisplayframerate(void)
             break;
 
         // Step 03: Set the display framerate using the obtained handle
-        if(gSourceType == 0) {
-            for(int j=0;j<gDSVideoDeviceConfiguration[i].NoOfSupportedDFR;j++){
-                result = dsSetDisplayframerate(handle, gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate[j]);
+        for(int j=0;j<gDSVideoDeviceConfiguration[i].NoOfSupportedDFR;j++){
+            result = dsSetDisplayframerate(handle, gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate[j]);
+            if(gSourceType == 0) {
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
+            } else if(gSourceType == 1){
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
             }
-        } else if(gSourceType == 1){
-            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
     }
 
@@ -1604,6 +1666,7 @@ void test_l1_dsVideoDevice_positive_dsSetDisplayframerate(void)
  * |08|Call dsSetDisplayframerate() after termination of video devices |int=handle,char*| dsERR_NOT_INITIALIZED | Should report module not initialized |
  *
  * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
+ * @note For source devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
  *
  */
 void test_l1_dsVideoDevice_negative_dsSetDisplayframerate(void)
@@ -1615,7 +1678,11 @@ void test_l1_dsVideoDevice_negative_dsSetDisplayframerate(void)
 
     // Step 01: Call dsSetDisplayframerate() without prior initialization
     result = dsSetDisplayframerate(handle, "30fps"); // Note: uninitialized 'handle' used here
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    } else {
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    }
 
     // Step 02: Initialize video devices
     result = dsVideoDeviceInit();
@@ -1631,16 +1698,28 @@ void test_l1_dsVideoDevice_negative_dsSetDisplayframerate(void)
 
         // Step 04: Call dsSetDisplayframerate() with an invalid handle
         result = dsSetDisplayframerate(-1, "30fps");
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if (gSourceType == 1){
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        }
 
         // Step 05: Call dsSetDisplayframerate() with NULL char*
         result = dsSetDisplayframerate(handle, NULL);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if (gSourceType == 1){
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        }
     }
 
     // Step 06: Call dsSetDisplayframerate() with invalid char*
     result = dsSetDisplayframerate(handle, "junk");
-    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+    if (gSourceType == 1){
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    } else {
+        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+    }
 
     // Step 07: De-initialize the video devices
     result = dsVideoDeviceTerm();
@@ -1648,7 +1727,11 @@ void test_l1_dsVideoDevice_negative_dsSetDisplayframerate(void)
 
     // Step 08: Call dsSetDisplayframerate() after termination
     result = dsSetDisplayframerate(handle, "30fps");
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    } else {
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    }
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
@@ -1670,6 +1753,7 @@ void test_l1_dsVideoDevice_negative_dsSetDisplayframerate(void)
  * |03|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
  *
  * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
+ * @note For source devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
  *
  */
 
@@ -1722,6 +1806,7 @@ void test_l1_dsVideoDevice_positive_dsRegisterFrameratePreChangeCB(void)
  * |05|Call dsRegisterFrameratePostChangeCB() - Attempt to register for display framerate pre change event callback without initializing the video devices | cb = [valid callback function ] | dsERR_NOT_INITIALIZED | Callback registration must fail as module is not initialized |
  *
  * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
+ * @note For source devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
  *
  */
 void test_l1_dsVideoDevice_negative_dsRegisterFrameratePreChangeCB(void)
@@ -1732,7 +1817,11 @@ void test_l1_dsVideoDevice_negative_dsRegisterFrameratePreChangeCB(void)
 
     // Step 01: Attempt to register callback without initialization
     result = dsRegisterFrameratePreChangeCB(mockFrameRatePreChangeCallback);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    } else {
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
 
     // Step 02: Initialize video devices
     result = dsVideoDeviceInit();
@@ -1740,7 +1829,11 @@ void test_l1_dsVideoDevice_negative_dsRegisterFrameratePreChangeCB(void)
 
     // Step 03: Register with invalid callback (NULL)
     result = dsRegisterFrameratePreChangeCB(NULL);
-    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+    if (gSourceType == 1){
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    } else {
+        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+    }
 
     // Step 04: De-initialize the video devices
     result = dsVideoDeviceTerm();
@@ -1748,7 +1841,11 @@ void test_l1_dsVideoDevice_negative_dsRegisterFrameratePreChangeCB(void)
 
     // Step 05: Attempt to register callback after termination
     result = dsRegisterFrameratePreChangeCB(mockFrameRatePreChangeCallback);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    } else {
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
@@ -1770,6 +1867,7 @@ void test_l1_dsVideoDevice_negative_dsRegisterFrameratePreChangeCB(void)
  * |03|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
  *
  * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
+ * @note For source devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
  *
  */
 
@@ -1822,6 +1920,7 @@ void test_l1_dsVideoDevice_positive_dsRegisterFrameratePostChangeCB(void)
  * |05|Call dsRegisterFrameratePostChangeCB() - Attempt to register for frame rate update callback without initializing the video devices | cb = [valid callback function ] | dsERR_NOT_INITIALIZED | Callback registration must fail as module is not initialized |
  *
  * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
+ * @note For source devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
  *
  */
 void test_l1_dsVideoDevice_negative_dsRegisterFrameratePostChangeCB(void)
@@ -1832,7 +1931,11 @@ void test_l1_dsVideoDevice_negative_dsRegisterFrameratePostChangeCB(void)
 
     // Step 01: Attempt to register callback without initialization
     result = dsRegisterFrameratePostChangeCB(mockFrameRatePostChangeCallback);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    } else {
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
 
     // Step 02: Initialize video devices
     result = dsVideoDeviceInit();
@@ -1840,7 +1943,11 @@ void test_l1_dsVideoDevice_negative_dsRegisterFrameratePostChangeCB(void)
 
     // Step 03: Register with invalid callback (NULL)
     result = dsRegisterFrameratePostChangeCB(NULL);
-    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+    if (gSourceType == 1){
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    } else {
+        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+    }
 
     // Step 04: De-initialize the video devices
     result = dsVideoDeviceTerm();
@@ -1848,7 +1955,11 @@ void test_l1_dsVideoDevice_negative_dsRegisterFrameratePostChangeCB(void)
 
     // Step 05: Attempt to register callback after termination
     result = dsRegisterFrameratePostChangeCB(mockFrameRatePostChangeCallback);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    if (gSourceType == 1) {
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    } else {
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
