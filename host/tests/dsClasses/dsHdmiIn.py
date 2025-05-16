@@ -83,12 +83,12 @@ class hdmiVideoFrameRate(Enum):
       dsVIDEO_FRAMERATE_MAX = 9      # Out of range
 
 class hdmiInAviContentType(Enum):
-      dsAVICONTENT_TYPE_GRAPHICS = 0   #/*!< Content type Graphics. */
-      dsAVICONTENT_TYPE_PHOTO = 1      #/*!< Content type Photo */
-      dsAVICONTENT_TYPE_CINEMA = 2     #/*!< Content type Cinema */
-      dsAVICONTENT_TYPE_GAME = 3       #/*!< Content type Game */
-      dsAVICONTENT_TYPE_INVALID = 4    #/*!< Content type Invalid */
-      dsAVICONTENT_TYPE_MAX = 5        #/*!< Out of range */
+      dsAVICONTENT_TYPE_GRAPHICS = 0      #/*!< Content type Graphics. */
+      dsAVICONTENT_TYPE_PHOTO = 1         #/*!< Content type Photo */
+      dsAVICONTENT_TYPE_CINEMA = 2        #/*!< Content type Cinema */
+      dsAVICONTENT_TYPE_GAME = 3          #/*!< Content type Game */
+      dsAVICONTENT_TYPE_NOT_SIGNALLED = 4 #/*!< Content type Invalid */
+      dsAVICONTENT_TYPE_MAX = 5           #/*!< Out of range */
 
 class hdmiInZoomMode(Enum):
       dsVIDEO_ZOOM_NONE = 0
@@ -454,12 +454,11 @@ class dsHdmiInClass():
             None: If no matching connection status is found.
         """
         result = self.testSession.read_until("Received AviContentType change callback port:")
-        avipattern = r"Received AviContentType change callback port:\s*\[(.*?)\].*?avi_content_type:\s*\[(.*?)\]"
-        match = re.search(avipattern, result)
+        avipattern = r'Received AviContentType change callback port:\[(.*?)\], avi_content_type:\[(.*?)\]'
+        match = re.findall(avipattern, result)
 
         if match:
-            porttype = match.group(1)
-            avi_content_type = match.group(2)
+            porttype, avi_content_type = match[-1]
             return porttype, avi_content_type
 
         return None
