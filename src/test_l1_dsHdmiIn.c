@@ -2889,7 +2889,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSetVRRSupport_sink(void) {
 
     // Step 1: Call dsHdmiInSetVRRSupport() without prior initialization of HDMI input
     dsError_t result = dsHdmiInSetVRRSupport(dsHDMI_IN_PORT_0, true);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 2: Initialize HDMI input using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
@@ -2902,7 +2902,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInSetVRRSupport_sink(void) {
 
     // Step 5: Call dsHdmiInSetVRRSupport() after termination
     result = dsHdmiInSetVRRSupport(dsHDMI_IN_PORT_0, true);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
