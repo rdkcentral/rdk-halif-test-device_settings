@@ -376,7 +376,9 @@ void test_l1_dsVideoDevice_negative_dsGetVideoDevice(void)
  * |02|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
  * |03|Set the DFC mode by looping through the supported zoom modes | int=handle | dsERR_NONE | Should successfully set the DFC mode |
  * |04|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
- *
+ * 
+ * @note For sink devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
+ * 
  */
 void test_l1_dsVideoDevice_positive_dsSetDFC (void)
 {
@@ -439,6 +441,7 @@ void test_l1_dsVideoDevice_positive_dsSetDFC (void)
  * |07|Call dsSetDFC() after termination of video devices | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_NONE | dsERR_NOT_INITIALIZED | Should report module not initialized |
  *
  * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
+ * @note For sink devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
  *
  */
 void test_l1_dsVideoDevice_negative_dsSetDFC (void)
@@ -450,7 +453,11 @@ void test_l1_dsVideoDevice_negative_dsSetDFC (void)
 
     // 01: Call dsSetDFC() without initialization
     result = dsSetDFC(-1, gDSVideoDeviceConfiguration[0].DefaultDFC);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    if (gSourceType == 0){
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    } else {
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    }
 
     // 02: Initialize video devices
     result = dsVideoDeviceInit();
@@ -466,25 +473,19 @@ void test_l1_dsVideoDevice_negative_dsSetDFC (void)
 
         // 04: Call dsSetDFC() with an invalid handle
         result = dsSetDFC(-1, gDSVideoDeviceConfiguration[i].DefaultDFC);
-        if (gSourceType == 1)
-        {
-            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
-        }
-        else if (gSourceType == 0)
-        {
+        if (gSourceType == 0){
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);  
         }
 
         // 05: Call dsSetDFC() with an invalid zoom mode
         int32_t numSupportedDFCs = gDSVideoDeviceConfiguration[i].NoOfSupportedDFCs;
         result = dsSetDFC(handle, gDSVideoDeviceConfiguration[i].SupportedDFCs[numSupportedDFCs - 1] + 1);
-        if (gSourceType == 1)
-        {
-            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
-        }
-        else if (gSourceType == 0)
-        {
+        if (gSourceType == 0){
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);  
         }
     }
 
@@ -494,7 +495,11 @@ void test_l1_dsVideoDevice_negative_dsSetDFC (void)
 
     // 07: Call dsSetDFC() after termination
     result = dsSetDFC(handle, gDSVideoDeviceConfiguration[0].DefaultDFC);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    if (gSourceType == 0){
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    } else {
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    }
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
@@ -516,6 +521,8 @@ void test_l1_dsVideoDevice_negative_dsSetDFC (void)
  * |03|Get the DFC mode using dsGetDFC() with the obtained handle |int=handle, dsVideoZoom_t*| dsERR_NONE | Should successfully fetch the DFC mode |
  * |04|Compare the dfc mode with the value from profile to make sure they match || Success | Should be equal |
  * |05|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * 
+ * @note For sink devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
  *
  */
 void test_l1_dsVideoDevice_positive_dsGetDFC(void)
@@ -598,7 +605,11 @@ void test_l1_dsVideoDevice_negative_dsGetDFC(void)
 
     // Step 01: Call dsGetDFC() without prior initialization
     result = dsGetDFC(handle, &dfc_mode);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    if (gSourceType == 0){
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    } else {
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    }
 
     // Step 02: Initialize video devices
     result = dsVideoDeviceInit();
@@ -614,11 +625,20 @@ void test_l1_dsVideoDevice_negative_dsGetDFC(void)
 
         // Step 04: Call dsGetDFC() with an invalid handle
         result = dsGetDFC(-1, &dfc_mode);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if (gSourceType == 0){
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);  
+        }
 
         // Step 05: Call dsGetDFC() with an invalid pointer
         result = dsGetDFC(handle, NULL);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if (gSourceType == 0){
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);  
+        }
+
     }
 
     // Step 06: De-initialize the video devices
@@ -627,7 +647,11 @@ void test_l1_dsVideoDevice_negative_dsGetDFC(void)
 
     // Step 07: Call dsGetDFC() after termination
     result = dsGetDFC(handle, &dfc_mode);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    if (gSourceType == 0){
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    } else {
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    }
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
@@ -891,6 +915,8 @@ void test_l1_dsVideoDevice_negative_dsGetSupportedVideoCodingFormats(void)
  * |03|Get video codec information using dsGetVideoCodecInfo() with the obtained handle and compare with the profile file | int=handle, dsVIDEO_CODEC_MPEGHPART2, dsVideoCodecInfo_t*| dsERR_NONE | Should successfully fetch the supported video formats |
  * |04|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
  *
+ * @note For sink devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED
+ * 
  */
 void test_l1_dsVideoDevice_positive_dsGetVideoCodecInfo(void)
 {
@@ -979,7 +1005,11 @@ void test_l1_dsVideoDevice_negative_dsGetVideoCodecInfo(void)
 
     // Step 01: Call dsGetVideoCodecInfo() without prior initialization
     result = dsGetVideoCodecInfo(handle, dsVIDEO_CODEC_MPEGHPART2, &codecInfo);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
+    if (gSourceType == 0){
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    } else {
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    }
 
     // Step 02: Initialize video devices
     result = dsVideoDeviceInit();
@@ -995,15 +1025,27 @@ void test_l1_dsVideoDevice_negative_dsGetVideoCodecInfo(void)
 
         // Step 04: Call dsGetVideoCodecInfo() with an invalid handle
         result = dsGetVideoCodecInfo(-1, dsVIDEO_CODEC_MPEGHPART2, &codecInfo);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if (gSourceType == 0){
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);  
+        }
 
         // Step 05: Call dsGetVideoCodecInfo() with an invalid coding format
         result = dsGetVideoCodecInfo(handle, dsVIDEO_CODEC_MAX, &codecInfo);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if (gSourceType == 0){
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);  
+        }
 
         // Step 06: Call dsGetVideoCodecInfo() with a null parameter
         result = dsGetVideoCodecInfo(handle, dsVIDEO_CODEC_MPEGHPART2, NULL);
-        UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+        if (gSourceType == 0){
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+        } else {
+            UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);  
+        }
     }
 
     // Step 07: De-initialize the video devices
@@ -1012,7 +1054,11 @@ void test_l1_dsVideoDevice_negative_dsGetVideoCodecInfo(void)
 
     // Step 08: Call dsGetVideoCodecInfo() after termination
     result = dsGetVideoCodecInfo(handle, dsVIDEO_CODEC_MPEGHPART2, &codecInfo);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
+    if (gSourceType == 0){
+        UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+    } else {
+        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    }
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
