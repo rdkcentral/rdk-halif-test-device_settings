@@ -271,6 +271,25 @@ dsHdmiIn:
     - name: "L1 dsHdmiIn - Sink"
       test_cases:
         - dsGetHdmiVersion_neg
+    - name: "L1 dsHdmiIn - Sink"
+      test_cases:
+        - dsGetHdmiVRRSupport_pos
+    - name: "L1 dsHdmiIn - Sink"
+      test_cases:
+        - dsGetHdmiVRRSupport_neg
+    - name: "L1 dsHdmiIn - Sink"
+      test_cases:
+        - dsSetVRRSupport_pos
+    - name: "L1 dsHdmiIn - Sink"
+      test_cases:
+        - dsSetVRRSupport_neg
+    - name: "L1 dsHdmiIn - Sink"
+      test_cases:
+        - dsGetVRRStatus_pos
+    - name: "L1 dsHdmiIn - Sink"
+      test_cases:
+        - dsGetVRRStatus_neg
+
     ######################################
     # Entries to run selected test case
     ######################################
@@ -319,3 +338,6 @@ dsHdmiIn:
     - name: "L2 dsHdmiIn - Sink"
       test_cases:
         - GetHdmiVersionValidate_sink
+    - name: "L2 dsHdmiIn - Sink"
+      test_cases:
+        - SetGetHdmiVRRSupport_sink

@@ -39,6 +39,12 @@ dsDisplay:
                     - "Get display EDID"
                     - "Get display EDIDBytes"
                     - "Get display AspectRatio"
+                    - "Set Allm Enabled"
+                    - "Get Allm Enabled"
+                    - "Set AVI Type"
+                    - "Get AVI Type"
+                    - "Set AVI Scan Info"
+                    - "Get AVI Scan Info"
                     - "Terminate dsDisplay"
 
 
