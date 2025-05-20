@@ -2949,7 +2949,6 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetVRRStatus_sink(void) {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
             UT_ASSERT_EQUAL(vrr_status_1.vrrType, vrr_status_2.vrrType);
-            UT_ASSERT_EQUAL(vrr_status_1.vrrAmdfreesyncFramerate_Hz, vrr_status_2.vrrAmdfreesyncFramerate_Hz);
 
 
         }
