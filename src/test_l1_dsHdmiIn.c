@@ -2931,8 +2931,8 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetVRRStatus_sink(void) {
     gTestID = 57;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsError_t  result = dsERR_NONE;
-    dsVRRType_t vrr_type_1 = false;
-    dsVRRType_t vrr_type_2 = false;
+    dsHdmiInVrrStatus_t vrr_status_1 = {dsVRR_NONE,0};
+    dsHdmiInVrrStatus_t vrr_status_2 = {dsVRR_NONE,0};
     uint8_t numInputPorts = 0;
     numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
 
@@ -2940,20 +2940,22 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetVRRStatus_sink(void) {
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
     if (gSourceType == 0) {
-       // Step 2 to Step 3: Call dsHdmiInGetVRRStatus() with valid values (dsHDMI_IN_PORT_0, dsVRRType_t*)
+       // Step 2 to Step 3: Call dsHdmiInGetVRRStatus() with valid values (dsHDMI_IN_PORT_0, dsHdmiInVrrStatus_t*)
        for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
-            result = dsHdmiInGetVRRStatus(port, &vrr_type_1);
+            result = dsHdmiInGetVRRStatus(port, &vrr_status_1);
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-            result = dsHdmiInGetVRRStatus(port, &vrr_type_2);
+            result = dsHdmiInGetVRRStatus(port, &vrr_status_2);
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
-            UT_ASSERT_EQUAL(vrr_type_1, vrr_type_2);
+            UT_ASSERT_EQUAL(vrr_status_1.vrrType, vrr_status_2.vrrType);
+            UT_ASSERT_EQUAL(vrr_status_1.vrrAmdfreesyncFramerate_Hz, vrr_status_2.vrrAmdfreesyncFramerate_Hz);
+
 
         }
     } else if (gSourceType == 1) {
        // Step 4: Call dsHdmiInGetVRRStatus() with valid ports
-       UT_ASSERT_EQUAL(dsHdmiInGetVRRStatus(dsHDMI_IN_PORT_0, &vrr_type_1), dsERR_OPERATION_NOT_SUPPORTED);
+       UT_ASSERT_EQUAL(dsHdmiInGetVRRStatus(dsHDMI_IN_PORT_0, &vrr_status_1), dsERR_OPERATION_NOT_SUPPORTED);
     }
 
     // Step 5: Call dsHdmiInTerm() to ensure deinitialization
@@ -2988,17 +2990,17 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetVRRStatus_sink(void) {
 
     gTestID = 58;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-    dsVRRType_t vrr_type = dsVRR_NONE;
+    dsHdmiInVrrStatus_t vrr_status = {dsVRR_NONE,0};
 
     // Step 1: Call dsHdmiInGetVRRStatus() without initializing the HDMI input sub-system
-    dsError_t result = dsHdmiInGetVRRStatus(dsHDMI_IN_PORT_0, &vrr_type);
+    dsError_t result = dsHdmiInGetVRRStatus(dsHDMI_IN_PORT_0, &vrr_status);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     // Step 2: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
     // Step 3: Call dsHdmiInGetVRRStatus() with invalid inputs (dsHDMI_IN_PORT_MAX)
-    UT_ASSERT_EQUAL(dsHdmiInGetVRRStatus(dsHDMI_IN_PORT_MAX, &vrr_type), dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(dsHdmiInGetVRRStatus(dsHDMI_IN_PORT_MAX, &vrr_status), dsERR_INVALID_PARAM);
 
     // Step 4: Call dsHdmiInGetVRRStatus() with invalid inputs (NULL)
     UT_ASSERT_EQUAL(dsHdmiInGetVRRStatus(dsHDMI_IN_PORT_0, NULL), dsERR_INVALID_PARAM);
@@ -3007,7 +3009,7 @@ void test_l1_dsHdmiIn_negative_dsHdmiInGetVRRStatus_sink(void) {
     UT_ASSERT_EQUAL_FATAL(dsHdmiInTerm(), dsERR_NONE);
 
     // Step 6: Call dsHdmiInGetVRRStatus() without initializing the HDMI input sub-system
-    result = dsHdmiInGetVRRStatus(dsHDMI_IN_PORT_0, &vrr_type);
+    result = dsHdmiInGetVRRStatus(dsHDMI_IN_PORT_0, &vrr_status);
     UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
