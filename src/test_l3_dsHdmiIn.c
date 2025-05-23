@@ -1350,7 +1350,8 @@ void test_l3_HdmiIn_get_vrrstatus(void)
     dsError_t ret = dsERR_NONE;
     dsHdmiInPort_t port = dsHDMI_IN_PORT_MAX;
     int32_t select = 0;
-    dsVRRType_t vrrStatus = dsVRR_NONE;
+    dsHdmiInVrrStatus_t vrrStatus;
+    memset(&vrrStatus, 0, sizeof(vrrStatus));
 
     listPorts();
     UT_LOG_MENU_INFO("Select port:");
@@ -1369,9 +1370,10 @@ void test_l3_HdmiIn_get_vrrstatus(void)
 
     ret = dsHdmiInGetVRRStatus(port, &vrrStatus);
 
-    UT_LOG_INFO("Result dsHdmiInGetVRRStatus IN:port:[%s]:[%d], OUT:vrrStatus:[%s], dsError_t:[%s]",
+    UT_LOG_INFO("Result dsHdmiInGetVRRStatus IN:port:[%s]:[%d], OUT:[vrrType:[%s], vrrAmdfreesyncFramerate_Hz:[%0.4lf]], dsError_t:[%s]",
                 UT_Control_GetMapString(dsHdmiInPort_mapTable, port), port,
-                UT_Control_GetMapString(dsVRRType_mapTable, vrrStatus),
+                UT_Control_GetMapString(dsVRRType_mapTable, vrrStatus.vrrType),
+                vrrStatus.vrrAmdfreesyncFramerate_Hz,
                 UT_Control_GetMapString(dsError_mapTable, ret));
 
     DS_ASSERT(ret == dsERR_NONE);
