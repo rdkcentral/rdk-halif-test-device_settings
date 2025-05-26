@@ -430,6 +430,23 @@ static void hdmiInVRRChangeCB(dsHdmiInPort_t port, dsVRRType_t vrrType)
 
 }
 
+/**
+*
+*This function is to check if the supported feature has allm/vrr.
+*/
+bool feature_exists(const char *featureslist, const char *featurestr) {
+    size_t str_len = strlen(featurestr);
+
+    if (str_len == 0) return false;
+
+    for (; *featureslist; featureslist++) {
+        if (strncasecmp(featureslist, featurestr, str_len) == 0) {
+            return true;  // Found a match
+        }
+    }
+
+    return false;  // No match
+}
 
 /**
 * @brief This test initializes the HdmiIn Module.
@@ -504,7 +521,7 @@ void test_l3_HdmiIn_initialize(void)
         dsSupportedGameFeatureList_t features;
         memset(&features, 0, sizeof(features));
         ret = dsGetSupportedGameFeaturesList(&features);
-        if ((features.gameFeatureCount > 0) && ((strstr(features.gameFeatureList, "allm") != NULL) || (strstr(features.gameFeatureList, "ALLM") != NULL))) {
+        if ((features.gameFeatureCount > 0) && (feature_exists(features.gameFeatureList, "ALLM"))) {
             /* Register Allm changes callback */
             UT_LOG_INFO("Calling dsHdmiInRegisterAllmChangeCB(IN:CBFun:[0x%0X])", hdmiInAllmChangeCB);
             ret = dsHdmiInRegisterAllmChangeCB(hdmiInAllmChangeCB);
@@ -527,7 +544,7 @@ void test_l3_HdmiIn_initialize(void)
                             hdmiInAviContentTypeChangeCB, UT_Control_GetMapString(dsError_mapTable, ret));
         DS_ASSERT(ret == dsERR_NONE);
 
-        if ((features.gameFeatureCount > 0) && ((strstr(features.gameFeatureList, "vrr") != NULL) || (strstr(features.gameFeatureList, "VRR") != NULL))) {
+        if ((features.gameFeatureCount > 0) && (feature_exists(features.gameFeatureList, "VRR"))) {
             /* Register VRR Type changes callback */
             UT_LOG_INFO("Calling dsHdmiInRegisterVRRChangeCB(IN:CBFun:[0x%0X])", hdmiInVRRChangeCB);
             ret = dsHdmiInRegisterVRRChangeCB(hdmiInVRRChangeCB);
