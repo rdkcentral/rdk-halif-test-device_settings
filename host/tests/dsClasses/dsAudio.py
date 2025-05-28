@@ -74,18 +74,18 @@ class dsAudioCodecs(Enum):
 
 class dsMS12Capabilities(Enum):
     """Enumeration for audio processing capabilities."""
-    DolbyVolume          = 0x01
-    IntelligentEqualizer = 0x02
-    DialogueEnhancer     = 0x04
-    Volumeleveller       = 0x08
-    BassEnhancer         = 0x10
-    SurroundDecoder      = 0x20
-    DRCMode              = 0x40
-    SurroundVirtualizer  = 0x80
-    MISteering           = 0x100
-    GraphicEqualizer     = 0x200
-    LEConfig             = 0x400
-
+    DolbyVolume          = (1 << 0)
+    IntelligentEqualizer = (1 << 1)
+    DialogueEnhancer     = (1 << 2)
+    Volumeleveller       = (1 << 3)
+    BassEnhancer         = (1 << 4)
+    SurroundDecoder      = (1 << 5)
+    DRCMode              = (1 << 6)
+    SurroundVirtualizer  = (1 << 7)
+    MISteering           = (1 << 8)
+    GraphicEqualizer     = (1 << 9)
+    LEConfig             = (1 << 10)
+    
 class dsAudioClass():
     """
     Device Settings Audio Class.
