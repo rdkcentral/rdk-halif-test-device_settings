@@ -33,10 +33,7 @@ from raft.framework.core.logModule import logModule
 class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
 
     """
-    Test class to retrieve and verify the display aspect ratio.
-
-    This class uses the `dsDisplayClass` to interact with the device's display,
-    downloading necessary test assets, retrieving the aspect ratio, and performing verification.
+    Test class to verify display aspect ratio by playing a known resolution stream and comparing with expected aspect ratio.
     """
 
     def __init__(self, log:logModule=None):
@@ -47,13 +44,13 @@ class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
             None.
         """
         # Class variables
-        self.testAspectRatios = ["16x9", "4x3"]
+        self.testAspectRatios = ["dsVIDEO_ASPECT_RATIO_16x9", "dsVIDEO_ASPECT_RATIO_4x3"]
         self.testName  = "test03_AspectRatioVerificationTest"
         self.qcID = '3'
         super().__init__(self.testName, self.qcID, log)
 
     #TODO: Current version supports only manual verification.
-    def testChangeDisplayAspectRatio(self, port:str, aspectRatio:str, manual=False):
+    def testChangeDisplayAspectRatio(self, port:str, aspectRatio:str, manual=False) -> bool:
         """
         Gets the aspectratio of the display.
         Args:
@@ -64,15 +61,17 @@ class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
         Returns:
             None
         """
-        self.testUserResponse.getUserYN(f"Set the aspectratio {aspectRatio} to Port: {port} and Press Enter:")
+        if manual:
+            return self.testUserResponse.getUserYN(f"Is the aspect ratio {aspectRatio} correctly applied on Port: {port}? (Y/N):")
+        else :
+            return False
 
     def testFunction(self):
         """
-        This function will test the Display by getting the aspectratio of the display.
-
-        This function:
-        - Retrieves aspectratio for each supported port and verifies them.
-        - Cleans up assets after the test.
+        Executes the aspect ratio verification test by:
+        - Playing a known-resolution stream.
+        - Getting current aspect ratio from dsDisplay.
+        - Comparing it with expected value.
 
         Returns:
             bool: Final result of the test.
@@ -81,17 +80,25 @@ class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
         # Initialize the dsDisplay module
         self.testdsDisplay.initialise()
 
-        result = False
-        # Loop through the supported video ports
-        for port, index in self.testdsDisplay.getSupportedPorts():
-            self.testdsDisplay.selectDisplayPort(port, index)
+        result = True
 
-            for aspectRatio in self.testAspectRatios:
-                self.log.stepStart(f'Test Display Aspect Ratio {aspectRatio} Port: {port}')
-                self.testChangeDisplayAspectRatio(port, aspectRatio, True)
-                ratio = self.testdsDisplay.getAspectRatio()
-                result = ratio and aspectRatio in ratio
-                self.log.stepResult(result, f'Test Display Aspect Ratio {aspectRatio} Port: {port}')
+        for streamUrl, aspectRatio in zip(self.streamPaths, self.testAspectRatios):
+                streamPath = self.downloadStreamToDevice(streamUrl)
+                streamPath = streamPath.replace("\\", "/")
+                for port, index in self.testdsDisplay.getSupportedPorts():
+                    self.testdsDisplay.selectDisplayPort(port, index)
+                    self.testPlayer.play(streamPath)
+                    self.log.stepStart(f"Testing Display Aspect Ratio {aspectRatio} on Port: {port}")
+                    userConfirmed = self.testChangeDisplayAspectRatio(port, aspectRatio, manual=True)
+                    reportedAspect = self.testdsDisplay.getAspectRatio()
+                    matched = aspectRatio in reportedAspect if reportedAspect else False
+                    stepResult = userConfirmed and matched
+                    self.log.stepResult(stepResult, f"Expected: {aspectRatio}, Reported: {reportedAspect}, Port: {port}")
+
+                    result = result and stepResult
+                    self.testPlayer.stop()
+
+                self.testDeleteSingleStream(streamPath)
 
         #Terminate dsDisplay Module
         self.testdsDisplay.terminate()

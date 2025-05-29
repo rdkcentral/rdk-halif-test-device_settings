@@ -29,6 +29,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../../"))
 
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
+from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 from raft.framework.plugins.ut_raft import utHelperClass
 from raft.framework.core.logModule import logModule
@@ -63,8 +64,12 @@ class dsDisplayHelperClass(utHelperClass):
 
         #open Hal Session
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
+        self.player_session = self.dut.getConsoleSession("ssh_player")
 
         deviceTestSetup = self.cpe.get("test")
+        socVendor = self.cpe.get("soc_vendor")
+
+        self.testPlayer = utPlayer(self.player_session, socVendor)
 
          # Create user response Class
         self.testUserResponse = utUserResponse()
@@ -74,6 +79,47 @@ class dsDisplayHelperClass(utHelperClass):
 
         self.targetWorkspace = self.cpe.get("target_directory")
         self.targetWorkspace = os.path.join(self.targetWorkspace, self.moduleName)
+        self.streamDownloadURL = deviceTestSetup.get("streams_download_url")
+
+    def downloadStreamToDevice(self, stream_url:str="") -> str:
+        """
+        Downloads a single stream listed in the test-setup configuration file to the dut.
+
+        Args:
+            stream_url (str): The URL of the stream to download.
+        Return:
+                Returns the stream path on device
+        """
+        url=[]
+        self.testStreams = []
+        if stream_url == "":
+            self.streamPaths = self.testSetup.get("assets").get("device").get(self.testName).get("streams")
+        # Download the specified stream to the device
+        if stream_url != "":
+            url.append(os.path.join(self.streamDownloadURL, stream_url))
+            self.testStreams.append(os.path.join(self.targetWorkspace, os.path.basename(stream_url)))
+            self.downloadToDevice(url, self.targetWorkspace, self.rackDevice)
+            return self.testStreams[0]
+
+        return None
+
+    def testDeleteSingleStream(self, streamPath:str):
+        """
+        Removes the test stream from the DUT after test execution.
+
+        Args:
+            None
+        """
+        self.deleteFromDevice([streamPath])
+
+    def testCleanAssets(self):
+        """
+        Removes the downloaded assets and test streams from the DUT after test execution.
+
+        Args:
+            None
+        """
+        self.deleteFromDevice(self.testStreams)
 
     def extractMonitorName(self, edid_data):
         """
@@ -236,12 +282,18 @@ class dsDisplayHelperClass(utHelperClass):
             bool
         """
 
+        self.downloadStreamToDevice()
+
         # Create the dsDisplay class
         self.testdsDisplay = dsDisplayClass(self.moduleConfigProfileFile, self.hal_session, self.testsuite, self.targetWorkspace)
 
         return True
 
     def testEndFunction(self, powerOff=True):
-
         # Clean up the dsDisplay instance
+        self.testCleanAssets()
         del self.testdsDisplay
+
+    def testExceptionCleanUp (self):
+        # Clean the assets downloaded to the device
+        self.testCleanAssets()

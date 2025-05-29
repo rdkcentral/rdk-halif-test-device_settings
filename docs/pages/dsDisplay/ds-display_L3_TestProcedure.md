@@ -230,7 +230,8 @@ dsDisplay_test02_TestVerifyDisplayEdid.py --config /host/tests/configs/example_r
 
 **Overview:**
 
-This test retrieves and verifies the aspect ratio of the display on each supported video port. For each specified aspect ratio, the test checks that the retrieved aspect ratio matches the expected value, ensuring that the display correctly adapts to the given configuration.
+This test verify display aspect ratio by playing a known-resolution video stream on each supported video port. For each specified aspect ratio, the test checks whether the retrieved aspect ratio matches the expected value, ensuring that the display correctly
+adapts to the given configuration.
 
 **Platform Supported:**
 
@@ -238,7 +239,7 @@ This test retrieves and verifies the aspect ratio of the display on each support
 
 **User Input Required:**
 
-Yes: User input is required to manually set the aspect ratio for the specified port, with the prompt question `Set the aspect ratio {aspectRatio} to Port: {port} and Press Enter:` (This will be automated later).
+Yes: The user is required to manually verify whether the aspect ratio is correctly applied to the specified port, using the prompt question, `Is the aspect ratio {aspectRatio} correctly applied on Port: {port}? (Y/N):` (This will be automated later).
 
 **Acceptance Criteria:**
 
@@ -246,7 +247,7 @@ Verify that the display’s aspect ratio is correctly retrieved for each configu
 
 **Expected Results:**
 
-The test will set various aspect ratios, retrieve the current aspect ratio from the display, and confirm that it matches the expected value. The test will pass if all aspect ratios are correctly identified; otherwise, it will fail.
+The test plays video streams with known aspect ratios, retrieves the current aspect ratio from the display for each case, and compares it with the expected value. The test will pass if all retrieved aspect ratios match the expected ones; otherwise, it will fail.
 
 **Test Steps:**
 
@@ -256,12 +257,12 @@ The test will set various aspect ratios, retrieve the current aspect ratio from 
 dsDisplay_test03_AspectRatioVerificationTest.py --config /host/tests/configs/example_rack_config.yml --deviceConfig /host/tests/configs/deviceConfig.yml
 ```
 
-- The test will download the required artifacts, then copy them to the target directory.
+- The test will download the required artifacts and streams, then copy them to the target directory.
 
 - Aspect Ratio Verification
-  - For each video port, the user will be prompted to set the specified aspect ratio on the port and confirm by pressing Enter.
+  - For each supported video port, the user will be prompted to manually verify that the specified aspect ratio is correctly applied.
   - The test will retrieve the aspect ratio from the connected display device.
-  - The retrieved aspect ratio will be compared to the expected value for each configuration.
+  - The retrieved aspect ratio is then compared against the expected value for validation.
 
 - Completion and Results:
 
