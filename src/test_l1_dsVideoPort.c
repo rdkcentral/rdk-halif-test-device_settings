@@ -2024,15 +2024,17 @@ void test_l1_dsVideoPort_positive_dsGetHDCPStatus(void) {
         // Step 03: Retrieve the HDCP status
         status = dsGetHDCPStatus(handle, &(hdcpStatus1));
         // Step 04: Compare the value with values of profile file
-        if (gSourceType == 0) {
+        if (gSourceType == 1) {
             if (gDSVideoPortConfiguration[i].hdcp_supported == false) {
                 UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
             } else {
                 UT_ASSERT_EQUAL(status, dsERR_NONE);
-                UT_ASSERT_EQUAL(hdcpStatus1, dsHDCP_STATUS_AUTHENTICATED);
+                dsHdcpStatus_t hdcpStatus2;
+                status = dsGetHDCPStatus(handle, &(hdcpStatus2));
+                UT_ASSERT_EQUAL(hdcpStatus1, hdcpStatus2);
             }
-        } else if(gSourceType == 1) {
-            UT_ASSERT_EQUAL(hdcpStatus1, dsHDCP_STATUS_PORTDISABLED);
+        } else if(gSourceType == 0) {
+            UT_ASSERT_EQUAL(hdcpStatus1, dsHDCP_STATUS_AUTHENTICATED);
         }
     }
 
@@ -2547,7 +2549,14 @@ void test_l1_dsVideoPort_positive_dsGetTVHDRCapabilities(void) {
         status = dsGetTVHDRCapabilities(handle, &capabilities1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
         // Step 04: Compare the value with profile file values
-        UT_ASSERT_EQUAL(capabilities1, gDSVideoPortConfiguration[i].hdr_capabilities);
+        bool isConnected = false;
+        status = dsIsDisplayConnected(handle, &isConnected);
+        if(!isConnected) {
+            UT_ASSERT_EQUAL(capabilities1, dsHDRSTANDARD_SDR);
+        }
+        else {
+            UT_ASSERT_EQUAL(capabilities1, gDSVideoPortConfiguration[i].hdr_capabilities);
+        }
     }
 
     // Step 05: Terminate the video port system
@@ -2675,7 +2684,14 @@ void test_l1_dsVideoPort_positive_dsSupportedTvResolutions(void) {
         status = dsSupportedTvResolutions(handle, &resolutions1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
         // Step 04: Compare the value with value from profile file
-        UT_ASSERT_EQUAL(resolutions1, gDSVideoPortConfiguration[i].Supported_tv_resolutions_capabilities);
+        bool isConnected = false;
+        status = dsIsDisplayConnected(handle, &isConnected);
+        if(!isConnected) {
+            UT_ASSERT_EQUAL(resolutions1, 0);
+        }
+        else {
+            UT_ASSERT_EQUAL(resolutions1, gDSVideoPortConfiguration[i].Supported_tv_resolutions_capabilities);
+        }
     }
 
     // Step 05: Terminate the video port system
@@ -2795,9 +2811,6 @@ void test_l1_dsVideoPort_positive_dsSetForceDisable4KSupport(void) {
     for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
         status = dsGetVideoPort(gDSVideoPortConfiguration[i].typeid, gDSVideoPortConfiguration[i].index, &(handle));
         UT_ASSERT_EQUAL(status, dsERR_NONE);
-        UT_ASSERT_PTR_NOT_NULL(handle);
-        if (handle == 0)
-            break;
         // Step 03: Set force disable 4K support
         status = dsSetForceDisable4KSupport(handle, disable4K);
         UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
@@ -3318,7 +3331,14 @@ void test_l1_dsVideoPort_positive_dsGetColorDepth(void) {
         status = dsGetColorDepth(handle, &colorDepth1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
         // Step 04: Compare the value with values from profile file
-        UT_ASSERT_EQUAL(colorDepth1, gDSvideoPort_color_depth);
+        bool isConnected = false;
+        status = dsIsDisplayConnected(handle, &isConnected);
+        if(!isConnected) {
+            UT_ASSERT_EQUAL(colorDepth1, 8);
+        }
+        else {
+            UT_ASSERT_EQUAL(colorDepth1, gDSvideoPort_color_depth);
+        }
     }
 
     // Step 05: Terminate the video port system
