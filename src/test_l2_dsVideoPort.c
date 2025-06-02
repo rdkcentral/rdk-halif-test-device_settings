@@ -443,10 +443,12 @@ void test_l2_dsVideoPort_VerifySupportedTvResolutions(void)
         ret = dsSupportedTvResolutions(handle, &resolutions);
         UT_LOG_DEBUG("Returned status: %d, resolutions: %d", ret, resolutions);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
-        if(gSourceType == 1) {
+        bool isConnected = false;
+        ret = dsIsDisplayConnected(handle, &isConnected);
+        if(!isConnected) {
             UT_ASSERT_EQUAL(resolutions, 0);
         }
-        else if(gSourceType == 0) {
+        else {
             UT_ASSERT_EQUAL(resolutions, gDSVideoPortConfiguration[port].Supported_tv_resolutions_capabilities);
         }
     } /* for (port) */
@@ -506,11 +508,12 @@ void test_l2_dsVideoPort_GetHDRCapabilities(void)
         ret = dsGetTVHDRCapabilities(handle, &capabilities);
         UT_LOG_DEBUG("Returned status: %d, capabilities: %d", ret, capabilities);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
-
-        if(gSourceType == 1) {
+        bool isConnected = false;
+        ret = dsIsDisplayConnected(handle, &isConnected);
+        if(!isConnected) {
             UT_ASSERT_EQUAL(capabilities, dsHDRSTANDARD_SDR);
         }
-        else if(gSourceType == 0) {
+        else {
             UT_ASSERT_EQUAL(capabilities, gDSVideoPortConfiguration[port].hdr_capabilities);
         }
     } /* for (port) */
@@ -544,7 +547,7 @@ void test_l2_dsVideoPort_GetHDCPStatus(void)
 
     dsError_t ret   = dsERR_NONE;
     intptr_t handle = 0;
-    dsHdcpStatus_t status;
+    dsHdcpStatus_t status = dsHDCP_STATUS_UNPOWERED;
 
     UT_LOG_DEBUG("Invoking dsVideoPortInit()");
     ret = dsVideoPortInit();
@@ -891,7 +894,14 @@ void test_l2_dsVideoPort_GetColorDepth(void)
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         UT_LOG_DEBUG("dsGetColorDepth() returned color_depth=%u and status=%d", color_depth, ret);
 
-        UT_ASSERT_EQUAL(color_depth, gDSvideoPort_color_depth);
+        bool isConnected = false;
+        ret = dsIsDisplayConnected(handle, &isConnected);
+        if(!isConnected) {
+            UT_ASSERT_EQUAL(color_depth, 8);
+        }
+        else {
+            UT_ASSERT_EQUAL(color_depth, gDSvideoPort_color_depth);
+        }
     } /* for (port) */
 
     UT_LOG_DEBUG("Invoking dsVideoPortTerm()");
