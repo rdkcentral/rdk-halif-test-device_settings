@@ -2015,7 +2015,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPStatus(void) {
 
     // Step 02: Get the video port handle
     for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
-        dsHdcpStatus_t hdcpStatus1;
+        dsHdcpStatus_t hdcpStatus1 = dsHDCP_STATUS_UNPOWERED;
         status = dsGetVideoPort(gDSVideoPortConfiguration[i].typeid, gDSVideoPortConfiguration[i].index, &(handle));
         UT_ASSERT_EQUAL(status, dsERR_NONE);
         UT_ASSERT_PTR_NOT_NULL(handle);
@@ -2029,11 +2029,12 @@ void test_l1_dsVideoPort_positive_dsGetHDCPStatus(void) {
                 UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
             } else {
                 UT_ASSERT_EQUAL(status, dsERR_NONE);
-                dsHdcpStatus_t hdcpStatus2;
+                dsHdcpStatus_t hdcpStatus2 = dsHDCP_STATUS_UNPOWERED;
                 status = dsGetHDCPStatus(handle, &(hdcpStatus2));
                 UT_ASSERT_EQUAL(hdcpStatus1, hdcpStatus2);
             }
         } else if(gSourceType == 0) {
+            UT_ASSERT_EQUAL(status, dsERR_NONE);
             UT_ASSERT_EQUAL(hdcpStatus1, dsHDCP_STATUS_AUTHENTICATED);
         }
     }
