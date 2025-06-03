@@ -2029,9 +2029,13 @@ void test_l1_dsVideoPort_positive_dsGetHDCPStatus(void) {
                 UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
             } else {
                 UT_ASSERT_EQUAL(status, dsERR_NONE);
-                dsHdcpStatus_t hdcpStatus2 = dsHDCP_STATUS_UNPOWERED;
-                status = dsGetHDCPStatus(handle, &(hdcpStatus2));
-                UT_ASSERT_EQUAL(hdcpStatus1, hdcpStatus2);
+                bool isConnected = false;
+                status = dsIsDisplayConnected(handle, &isConnected);
+                if (!isConnected) {
+                    UT_ASSERT_EQUAL(hdcpStatus1, dsHDCP_STATUS_PORTDISABLED)
+                } else {
+                    UT_ASSERT_EQUAL(hdcpStatus1, dsHDCP_STATUS_AUTHENTICATED)
+                }
             }
         } else if(gSourceType == 0) {
             UT_ASSERT_EQUAL(status, dsERR_NONE);
