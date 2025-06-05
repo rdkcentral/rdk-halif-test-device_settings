@@ -85,7 +85,7 @@ class dsMS12Capabilities(Enum):
     MISteering           = (1 << 8)
     GraphicEqualizer     = (1 << 9)
     LEConfig             = (1 << 10)
-    
+
 class dsAudioClass():
     """
     Device Settings Audio Class.
