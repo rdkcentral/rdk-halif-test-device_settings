@@ -839,7 +839,7 @@ void test_l1_dsAudio_positive_dsGetDialogEnhancement(void)
         max_de_level = gDSAudioPortConfiguration[i].max_dialog_enhancement_level;
 
         result = dsGetDialogEnhancement(handle, &dialogEnhancementLevel);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x04)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_DialogueEnhancer)
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -919,7 +919,7 @@ void test_l1_dsAudio_negative_dsGetDialogEnhancement(void)
 
         // Step 05: Attempt to get dialog enhancement with a null pointer
         result = dsGetDialogEnhancement(handle, NULL);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x04)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_DialogueEnhancer)
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
@@ -989,7 +989,7 @@ void test_l1_dsAudio_positive_dsSetDialogEnhancement(void)
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
 
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x04)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_DialogueEnhancer)
         {
 
             // Step 03: Set Dialog Enhancement level - Min DE Level(0)
@@ -1079,7 +1079,7 @@ void test_l1_dsAudio_negative_dsSetDialogEnhancement(void)
 
         // Step 05: Attempt to set dialog enhancement with an invalid level(20)
         result = dsSetDialogEnhancement(handle, invalid_de_level_pos);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x04)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_DialogueEnhancer)
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
@@ -1149,7 +1149,7 @@ void test_l1_dsAudio_positive_dsGetDolbyVolumeMode(void)
 
         // Step 03: Get the Dolby Volume mode for each port
         result = dsGetDolbyVolumeMode(handle, &dolbyVolumeMode);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x01)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_DolbyVolume)
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
         }
@@ -1226,7 +1226,7 @@ void test_l1_dsAudio_negative_dsGetDolbyVolumeMode(void)
 
         // Step 05: Attempt to get Dolby Volume mode with a null pointer
         result = dsGetDolbyVolumeMode(handle, NULL);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x01)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_DolbyVolume)
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
@@ -1293,7 +1293,7 @@ void test_l1_dsAudio_positive_dsSetDolbyVolumeMode(void)
 
         // Step 03: Set Dolby Volume Mode for each port and for each valid mode
         result = dsSetDolbyVolumeMode(handle, mode);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x01)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_DolbyVolume)
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
         }
@@ -1425,7 +1425,7 @@ void test_l1_dsAudio_positive_dsGetIntelligentEqualizerMode(void)
 
         // Step 03: Get the Intelligent Equalizer Mode for each port
         result = dsGetIntelligentEqualizerMode(handle, &intelligentEqualizerMode);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x02)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_InteligentEqualizer)
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
             UT_ASSERT_TRUE(intelligentEqualizerMode >= 0 && intelligentEqualizerMode <= 6); // Valid mode range check
@@ -1503,7 +1503,7 @@ void test_l1_dsAudio_negative_dsGetIntelligentEqualizerMode(void)
 
         // Step 05: Attempt to get Intelligent Equalizer Mode with a null pointer
         result = dsGetIntelligentEqualizerMode(handle, NULL);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x02)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_InteligentEqualizer)
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
@@ -1566,7 +1566,7 @@ void test_l1_dsAudio_positive_dsSetIntelligentEqualizerMode(void)
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
 
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x02)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_InteligentEqualizer)
         {
             // Step 03: Set Intelligent Equalizer Mode for each port with a valid mode (0 to 6)
             for (int mode = 0; mode <= 6; mode++)
@@ -1636,7 +1636,7 @@ void test_l1_dsAudio_negative_dsSetIntelligentEqualizerMode(void)
 
     // Step 03: Attempt to set Intelligent Equalizer Mode using an invalid handle
     result = dsSetIntelligentEqualizerMode(handle, valid_mode);
-    if (gDSAudioPortConfiguration[0].ms12_capabilites & 0x02)
+    if (gDSAudioPortConfiguration[0].ms12_capabilites & dsMS12SUPPORT_InteligentEqualizer)
     {
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     }
@@ -1654,7 +1654,7 @@ void test_l1_dsAudio_negative_dsSetIntelligentEqualizerMode(void)
 
         // Step 05: Attempt to set Intelligent Equalizer Mode with an invalid mode value
         result = dsSetIntelligentEqualizerMode(handle, invalid_mode);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x02)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_InteligentEqualizer)
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
@@ -1720,7 +1720,7 @@ void test_l1_dsAudio_positive_dsGetVolumeLeveller(void)
 
         // Step 03: Get the Volume Leveller settings for each port
         result = dsGetVolumeLeveller(handle, &volLeveller);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x08)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_Volumeleveller)
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
         }
@@ -1797,7 +1797,7 @@ void test_l1_dsAudio_negative_dsGetVolumeLeveller(void)
 
         // Step 05: Attempt to get Volume Leveller settings with a null pointer
         result = dsGetVolumeLeveller(handle, NULL);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x08)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_Volumeleveller)
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
@@ -1862,7 +1862,7 @@ void test_l1_dsAudio_positive_dsSetVolumeLeveller(void)
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
 
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x08)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_Volumeleveller)
         {
             // Step 03: Set Volume Leveller with valid mode and level for each audio port
             // Assuming dsVolumeLeveller_t is a struct or similar with mode and level fields
@@ -1959,7 +1959,7 @@ void test_l1_dsAudio_negative_dsSetVolumeLeveller(void)
         volLeveller.mode = invalid_mode;
         volLeveller.level = valid_level;
         result = dsSetVolumeLeveller(handle, volLeveller);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x08)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_Volumeleveller)
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
@@ -1972,7 +1972,7 @@ void test_l1_dsAudio_negative_dsSetVolumeLeveller(void)
         volLeveller.mode = valid_mode;
         volLeveller.level = invalid_level;
         result = dsSetVolumeLeveller(handle, volLeveller);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x08)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_Volumeleveller)
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
@@ -2041,7 +2041,7 @@ void test_l1_dsAudio_positive_dsGetBassEnhancer(void)
 
         // Step 03: Get the Bass Enhancer of each port
         result = dsGetBassEnhancer(handle, &boostarray1);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x10)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_BassEnhancer)
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
             UT_ASSERT_TRUE(boostarray1 >= 0 && boostarray1 <= 100); // Valid range check for boost
@@ -2124,7 +2124,7 @@ void test_l1_dsAudio_negative_dsGetBassEnhancer(void)
 
         // Step 05: Attempt to get Bass Enhancer with a null pointer
         result = dsGetBassEnhancer(handle, NULL);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x10)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_BassEnhancer)
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
@@ -2188,7 +2188,7 @@ void test_l1_dsAudio_positive_dsSetBassEnhancer(void)
         UT_ASSERT_EQUAL(result, dsERR_NONE);
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
 
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x10)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_BassEnhancer)
         {
             // Step 03: Set Bass Enhancer for each audio port with valid range (0 to 100)
             result = dsSetBassEnhancer(handle, min_boost);
@@ -2274,7 +2274,7 @@ void test_l1_dsAudio_negative_dsSetBassEnhancer(void)
 
         // Step 05: Attempt to set Bass Enhancer with an invalid boost value
         result = dsSetBassEnhancer(handle, invalidBoost_pos);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x10)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_BassEnhancer)
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
@@ -2343,7 +2343,7 @@ void test_l1_dsAudio_positive_dsIsSurroundDecoderEnabled(void)
 
         // Step 03: Check if the Surround Decoder is enabled for each port
         result = dsIsSurroundDecoderEnabled(handle, &surroundDecoderEnabled);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x20)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_SurroundDecoder)
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
         }
@@ -2420,7 +2420,7 @@ void test_l1_dsAudio_negative_dsIsSurroundDecoderEnabled(void)
 
         // Step 05: Attempt to check Surround Decoder status with a null pointer
         result = dsIsSurroundDecoderEnabled(handle, NULL);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x20)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_SurroundDecoder)
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
@@ -2486,7 +2486,7 @@ void test_l1_dsAudio_positive_dsEnableSurroundDecoder(void)
 
         // Step 03: Enable Surround Decoder for each port
         result = dsEnableSurroundDecoder(handle, enabledValue);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x20)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_SurroundDecoder)
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
         }
@@ -2620,7 +2620,7 @@ void test_l1_dsAudio_positive_dsGetDRCMode(void)
 
         // Step 03: Get the DRC mode for each port
         result = dsGetDRCMode(handle, &drcModearray1);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x40)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_DRCMode)
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -2704,7 +2704,7 @@ void test_l1_dsAudio_negative_dsGetDRCMode(void)
 
         // Step 05: Attempt to get DRC Mode with an invalid pointer
         result = dsGetDRCMode(handle, NULL);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x40)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_DRCMode)
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
@@ -2770,7 +2770,7 @@ void test_l1_dsAudio_positive_dsSetDRCMode(void)
 
         // Step 03: Set DRC Mode for each port with valid values
         result = dsSetDRCMode(handle, mode);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x40)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_DRCMode)
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
         }
@@ -2847,7 +2847,7 @@ void test_l1_dsAudio_negative_dsSetDRCMode(void)
 
         // Step 05: Attempt to set DRC Mode with an invalid mode value
         result = dsSetDRCMode(handle, invalidMode);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x40)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_DRCMode)
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
@@ -2915,7 +2915,7 @@ void test_l1_dsAudio_positive_dsGetSurroundVirtualizer(void)
 
         // Step 03: Get the Surround Virtualizer level for each port
         result = dsGetSurroundVirtualizer(handle, &surroundVirtualizer1);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x80)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_SurroundVirtualizer)
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -2986,7 +2986,7 @@ void test_l1_dsAudio_negative_dsGetSurroundVirtualizer(void)
 
     // Step 03: Attempt to get Surround Virtualizer using an invalid handle
     result = dsGetSurroundVirtualizer(handle, &virtualizerLevel);
-    if (gDSAudioPortConfiguration[0].ms12_capabilites & 0x80)
+    if (gDSAudioPortConfiguration[0].ms12_capabilites & dsMS12SUPPORT_SurroundVirtualizer)
     {
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     }
@@ -3004,7 +3004,7 @@ void test_l1_dsAudio_negative_dsGetSurroundVirtualizer(void)
 
         // Step 05: Attempt to get Surround Virtualizer with an invalid pointer
         result = dsGetSurroundVirtualizer(handle, NULL);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x80)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_SurroundVirtualizer)
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
@@ -3075,7 +3075,7 @@ void test_l1_dsAudio_positive_dsSetSurroundVirtualizer(void)
             virtualizer.mode = mode;
             virtualizer.boost = boost_min;
             result = dsSetSurroundVirtualizer(handle, virtualizer);
-            if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x80)
+            if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_SurroundVirtualizer)
             {
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -3169,7 +3169,7 @@ void test_l1_dsAudio_negative_dsSetSurroundVirtualizer(void)
         virtualizer.mode = invalid_mode;
         virtualizer.boost = valid_boost;
         result = dsSetSurroundVirtualizer(handle, virtualizer);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x80)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_SurroundVirtualizer)
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
@@ -3245,7 +3245,7 @@ void test_l1_dsAudio_positive_dsGetMISteering(void)
 
         // Step 03: Get the MI Steering status for each port
         result = dsGetMISteering(handle, &miSteeringEnabled1);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x100)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_MISteering)
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
@@ -3329,7 +3329,7 @@ void test_l1_dsAudio_negative_dsGetMISteering(void)
 
         // Step 05: Attempt to get MI Steering with an invalid pointer
         result = dsGetMISteering(handle, NULL);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x100)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_MISteering)
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
@@ -3395,7 +3395,7 @@ void test_l1_dsAudio_positive_dsSetMISteering(void)
 
         // Step 03: Enable or Disable MI Steering for each port
         result = dsSetMISteering(handle, enabledValue);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x100)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_MISteering)
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
         }
@@ -3525,7 +3525,7 @@ void test_l1_dsAudio_positive_dsGetGraphicEqualizerMode(void)
 
         // Step 03: Get the Graphic Equalizer Mode for each port
         result = dsGetGraphicEqualizerMode(handle, &graphicEqMode1);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x200)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_GraphicEqualizer)
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
             UT_ASSERT_TRUE(graphicEqMode1 >= 0 && graphicEqMode1 <= 3);
@@ -3611,7 +3611,7 @@ void test_l1_dsAudio_negative_dsGetGraphicEqualizerMode(void)
 
         // Step 05: Attempt to get Graphic Equalizer Mode with an invalid pointer
         result = dsGetGraphicEqualizerMode(handle, NULL);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x200)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_GraphicEqualizer)
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
@@ -3679,7 +3679,7 @@ void test_l1_dsAudio_positive_dsSetGraphicEqualizerMode(void)
         for (int j = 0; j < sizeof(validModes) / sizeof(validModes[0]); j++)
         {
             result = dsSetGraphicEqualizerMode(handle, validModes[j]);
-            if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x200)
+            if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_GraphicEqualizer)
             {
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
             }
@@ -3757,7 +3757,7 @@ void test_l1_dsAudio_negative_dsSetGraphicEqualizerMode(void)
 
         // Step 05: Attempt to set Graphic Equalizer Mode with an invalid mode value
         result = dsSetGraphicEqualizerMode(handle, invalid_mode_neg);
-        if (gDSAudioPortConfiguration[i].ms12_capabilites & 0x200)
+        if (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_GraphicEqualizer)
         {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
@@ -6409,7 +6409,7 @@ void test_l1_dsAudio_positive_dsEnableLEConfig(void)
 
         // Enable LE Config
         result = dsEnableLEConfig(handle, true);
-        if ((gSourceType == 0) && (gDSAudioPortConfiguration[i].ms12_capabilites & 0x400))
+        if ((gSourceType == 0) && (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_LEConfig))
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
         }
@@ -6542,7 +6542,7 @@ void test_l1_dsAudio_positive_dsGetLEConfig(void)
 
         // Step 03: Retrieve LE Config
         result = dsGetLEConfig(handle, &leconfig1);
-        if ((gSourceType == 0) && (gDSAudioPortConfiguration[i].ms12_capabilites & 0x400))
+        if ((gSourceType == 0) && (gDSAudioPortConfiguration[i].ms12_capabilites & dsMS12SUPPORT_LEConfig))
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
 
