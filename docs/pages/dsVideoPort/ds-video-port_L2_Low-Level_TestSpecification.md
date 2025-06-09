@@ -472,7 +472,7 @@ E -->|dsERR_NONE|E1[Test case fail]
 |Title|Details|
 |-----|-------|
 |Function Name|`test_l2_dsVideoPort_CheckColorDepthCapabilities_source`|
-|Description|Check each port Color Depth Capabilities and compare with the configuration file or default value.|
+|Description|Check each port Color Depth Capabilities and compare with the configuration file.|
 |Test Group|02|
 |Test Case ID|011|
 |Priority|High|
