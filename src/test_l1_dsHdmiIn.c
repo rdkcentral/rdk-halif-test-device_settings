@@ -2950,7 +2950,6 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetVRRStatus_sink(void) {
 
             UT_ASSERT_EQUAL(vrr_status_1.vrrType, vrr_status_2.vrrType);
 
-
         }
     } else if (gSourceType == 1) {
        // Step 4: Call dsHdmiInGetVRRStatus() with valid ports
