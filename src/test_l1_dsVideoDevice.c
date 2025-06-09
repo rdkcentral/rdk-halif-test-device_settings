@@ -1151,7 +1151,7 @@ void test_l1_dsVideoDevice_negative_dsForceDisableHDRSupport(void)
 
     // Step 01: Call dsForceDisableHDRSupport() without prior initialization
     result = dsForceDisableHDRSupport(handle, true); // Note: uninitialized 'handle' used here
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
+    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED); 
 
     // Step 02: Initialize video devices
     result = dsVideoDeviceInit();
@@ -1176,7 +1176,7 @@ void test_l1_dsVideoDevice_negative_dsForceDisableHDRSupport(void)
 
     // Step 06: Call dsForceDisableHDRSupport() after termination
     result = dsForceDisableHDRSupport(handle, true);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_OPERATION_NOT_SUPPORTED);
+    UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
