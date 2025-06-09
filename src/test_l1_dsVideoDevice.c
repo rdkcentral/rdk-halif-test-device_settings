@@ -374,8 +374,9 @@ void test_l1_dsVideoDevice_negative_dsGetVideoDevice(void)
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
  * |02|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
- * |03|Set the DFC mode by looping through the supported zoom modes | int=handle | dsERR_NONE | Should successfully set the DFC mode |
- * |04|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * |03|If the device is a source, set the DFC mode by looping through the supported zoom modes | int=handle | dsERR_NONE | Should successfully set the DFC mode |
+ * |04|If the device is a sink, call dsSetDFC() | int=handle | dsERR_OPERATION_NOT_SUPPORTED | API is not supported on sink devices |
+ * |05|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
  * 
  * @note For sink devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
  * 
@@ -409,12 +410,13 @@ void test_l1_dsVideoDevice_positive_dsSetDFC (void)
             }
             else if (gSourceType == 0)
             {
+                // 04: API is not supported on sink devices    
                 UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
             }
         }
     }
 
-    // 04: De-initialize video devices
+    // 05: De-initialize video devices
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -432,14 +434,18 @@ void test_l1_dsVideoDevice_positive_dsSetDFC (void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsSetDFC() without prior initialization of video devices | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_NONE | dsERR_NOT_INITIALIZED | Should report module not initialized |
- * |02|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
- * |03|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
- * |04|Call dsSetDFC() with an invalid handle | int=-1, dsVideoZoom_t=dsVIDEO_ZOOM_NONE | dsERR_INVALID_PARAM | Should report invalid parameter |
- * |05|Call dsSetDFC() with an invalid zoom mode | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_MAX | dsERR_INVALID_PARAM | Should report invalid parameter |
- * |06|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
- * |07|Call dsSetDFC() after termination of video devices | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_NONE | dsERR_NOT_INITIALIZED | Should report module not initialized |
- *
+ * |01|If the device is a source, call dsSetDFC() without prior initialization of video devices | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_NONE | dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |02|If the device is a sink, call dsSetDFC() without prior initialization of video devices | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_NONE | dsERR_OPERATION_NOT_SUPPORTED | API is not supported on sink devices |
+ * |03|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
+ * |04|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
+ * |05|If the device is a source, call dsSetDFC() with an invalid handle | int=-1, dsVideoZoom_t=dsVIDEO_ZOOM_NONE | dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |06|If the device is a sink, call dsSetDFC() | int=-1, dsVideoZoom_t=dsVIDEO_ZOOM_NONE | dsERR_OPERATION_NOT_SUPPORTED | API is not supported on sink devices |
+ * |07|If the device is a source, call dsSetDFC() with an invalid zoom mode | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_MAX | dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |08|If the device is a sink, call dsSetDFC() | int=-1, dsVideoZoom_t=dsVIDEO_ZOOM_MAX | dsERR_OPERATION_NOT_SUPPORTED | API is not supported on sink devices |
+ * |09|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * |10|If the device is a source, call dsSetDFC() after termination of video devices | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_NONE | dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |11|If the device is a sink, call dsSetDFC() after termination of video devices | int=handle, dsVideoZoom_t=dsVIDEO_ZOOM_NONE | dsERR_OPERATION_NOT_SUPPORTED | API is not supported on sink devices | 
+ * 
  * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
  * @note For sink devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
  *
@@ -454,16 +460,17 @@ void test_l1_dsVideoDevice_negative_dsSetDFC (void)
     // 01: Call dsSetDFC() without initialization
     result = dsSetDFC(-1, gDSVideoDeviceConfiguration[0].DefaultDFC);
     if (gSourceType == 0){
+        // 02: API is not supported on Sink devices
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else {
         CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     }
 
-    // 02: Initialize video devices
+    // 03: Initialize video devices
     result = dsVideoDeviceInit();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // 03: Obtain video device handle
+    // 04: Obtain video device handle
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -471,31 +478,34 @@ void test_l1_dsVideoDevice_negative_dsSetDFC (void)
         if (handle == 0)
             break;
 
-        // 04: Call dsSetDFC() with an invalid handle
+        // 05: Call dsSetDFC() with an invalid handle
         result = dsSetDFC(-1, gDSVideoDeviceConfiguration[i].DefaultDFC);
         if (gSourceType == 0){
+            // 06: API is not supported on sink devices
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         } else {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);  
         }
 
-        // 05: Call dsSetDFC() with an invalid zoom mode
+        // 07: Call dsSetDFC() with an invalid zoom mode
         int32_t numSupportedDFCs = gDSVideoDeviceConfiguration[i].NoOfSupportedDFCs;
         result = dsSetDFC(handle, gDSVideoDeviceConfiguration[i].SupportedDFCs[numSupportedDFCs - 1] + 1);
         if (gSourceType == 0){
+            // 08: API is not supported on sink devices
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         } else {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);  
         }
     }
 
-    // 06: De-initialize video devices
+    // 09: De-initialize video devices
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // 07: Call dsSetDFC() after termination
+    // 10: Call dsSetDFC() after termination
     result = dsSetDFC(handle, gDSVideoDeviceConfiguration[0].DefaultDFC);
     if (gSourceType == 0){
+        //11: API is not supported on sink devices 
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else {
         CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
@@ -518,9 +528,10 @@ void test_l1_dsVideoDevice_negative_dsSetDFC (void)
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
  * |02|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
- * |03|Get the DFC mode using dsGetDFC() with the obtained handle |int=handle, dsVideoZoom_t*| dsERR_NONE | Should successfully fetch the DFC mode |
- * |04|Compare the dfc mode with the value from profile to make sure they match || Success | Should be equal |
- * |05|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * |03|If the device is a source, get the DFC mode using dsGetDFC() with the obtained handle |int=handle, dsVideoZoom_t* | dsERR_NONE | Should successfully fetch the DFC mode |
+ * |04|If the device is a sink, call dsGetDFC() with the obtained handle | nt=handle, dsVideoZoom_t* | dsERR_OPERATION_NOT_SUPPORTED | API is not supported on sink devices |
+ * |05|Compare the dfc mode with the value from profile to make sure they match || Success | Should be equal |
+ * |06|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
  * 
  * @note For sink devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
  *
@@ -550,7 +561,7 @@ void test_l1_dsVideoDevice_positive_dsGetDFC(void)
         result = dsGetDFC(handle, &dfc_mode);
         if(gSourceType == 1) {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
-            // Step 04: Compare the DFC mode with value from the profile
+            // Step 05: Compare the DFC mode with value from the profile
             for (int j = 0; j < gDSVideoDeviceConfiguration[i].NoOfSupportedDFCs; ++j) {
                 UT_LOG_DEBUG("SupportedDFCs: %d",gDSVideoDeviceConfiguration[i].SupportedDFCs[j]);
                 if(dfc_mode == gDSVideoDeviceConfiguration[i].SupportedDFCs[j]) {
@@ -562,11 +573,12 @@ void test_l1_dsVideoDevice_positive_dsGetDFC(void)
                 }
             }
         } else if(gSourceType == 0) {
+            // 04: API is not supported on sink devices 
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
     }
 
-    // Step 05: De-initialize the video devices
+    // Step 06: De-initialize the video devices
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
     UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -584,15 +596,19 @@ void test_l1_dsVideoDevice_positive_dsGetDFC(void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsGetDFC() without prior initialization of video devices |int=handle, dsVideoZoom_t*| dsERR_NOT_INITIALIZED | Should report module not initialized |
- * |02|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
- * |03|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
- * |04|Call dsGetDFC() with an invalid handle |int=-1, dsVideoZoom_t*| dsERR_INVALID_PARAM | Should report invalid parameter |
- * |05|Call dsGetDFC() with an invalid pointer |int=handle, NULL| dsERR_INVALID_PARAM | Should report invalid parameter |
- * |06|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
- * |07|Call dsGetDFC() after termination of video devices |int=handle, dsVideoZoom_t*| dsERR_NOT_INITIALIZED | Should report module not initialized |
- *
+ * |01|If the device is a source, call dsGetDFC() without prior initialization of video devices |int=handle, dsVideoZoom_t*| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |02|If the device is a sink, call dsGetDFC() without prior initialization of video devices |int=handle, dsVideoZoom_t*| dsERR_OPERATION_NOT_SUPPORTED | API is not supported on sink devices |
+ * |03|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
+ * |04|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
+ * |05|If the device is a source, call dsGetDFC() with an invalid handle |int=-1, dsVideoZoom_t*| dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |06|If the device is a sink, call dsGetDFC() with an invalid handle |int=-1, dsVideoZoom_t*| dsERR_OPERATION_NOT_SUPPORTED | API is not supported on sink devices |
+ * |07|If the device is a source, call dsGetDFC() with an invalid pointer |int=handle, NULL| dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |08|If the device is a sink, call dsGetDFC() with an invalid pointer |int=handle, NULL| dsERR_OPERATION_NOT_SUPPORTED | API is not supported on sink devices |
+ * |09|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * |10|If the device is a source, call dsGetDFC() after termination of video devices |int=handle, dsVideoZoom_t*| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |11|If the device is a sink, call dsGetDFC() after termination of video devices |int=handle, dsVideoZoom_t*| dsERR_OPERATION_NOT_SUPPORTED | API is not supported on sink devices|
  * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
+ * @note For sink devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
  *
  */
 void test_l1_dsVideoDevice_negative_dsGetDFC(void)
@@ -606,16 +622,17 @@ void test_l1_dsVideoDevice_negative_dsGetDFC(void)
     // Step 01: Call dsGetDFC() without prior initialization
     result = dsGetDFC(handle, &dfc_mode);
     if (gSourceType == 0){
+        // Step 02: API is not supported on sink devices
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else {
         CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     }
 
-    // Step 02: Initialize video devices
+    // Step 03: Initialize video devices
     result = dsVideoDeviceInit();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // Step 03: Obtain video device handle
+    // Step 04: Obtain video device handle
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -623,17 +640,19 @@ void test_l1_dsVideoDevice_negative_dsGetDFC(void)
         if (handle == 0)
             break;
 
-        // Step 04: Call dsGetDFC() with an invalid handle
+        // Step 05: Call dsGetDFC() with an invalid handle
         result = dsGetDFC(-1, &dfc_mode);
         if (gSourceType == 0){
+            // Step 06: API is not supported on sink devices
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         } else {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);  
         }
 
-        // Step 05: Call dsGetDFC() with an invalid pointer
+        // Step 07: Call dsGetDFC() with an invalid pointer
         result = dsGetDFC(handle, NULL);
         if (gSourceType == 0){
+            // Step 08: API is not supported on sink devices
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         } else {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);  
@@ -641,13 +660,14 @@ void test_l1_dsVideoDevice_negative_dsGetDFC(void)
 
     }
 
-    // Step 06: De-initialize the video devices
+    // Step 09: De-initialize the video devices
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // Step 07: Call dsGetDFC() after termination
+    // Step 10: Call dsGetDFC() after termination
     result = dsGetDFC(handle, &dfc_mode);
     if (gSourceType == 0){
+        // Step 11: API is not supported on sink devices 
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else {
         CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
@@ -912,8 +932,9 @@ void test_l1_dsVideoDevice_negative_dsGetSupportedVideoCodingFormats(void)
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
  * |02|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
- * |03|Get video codec information using dsGetVideoCodecInfo() with the obtained handle and compare with the profile file | int=handle, dsVIDEO_CODEC_MPEGHPART2, dsVideoCodecInfo_t*| dsERR_NONE | Should successfully fetch the supported video formats |
- * |04|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * |03|If the device is a source, get video codec information using dsGetVideoCodecInfo() with the obtained handle and compare with the profile file | int=handle, dsVIDEO_CODEC_MPEGHPART2, dsVideoCodecInfo_t*| dsERR_NONE | Should successfully fetch the supported video formats |
+ * |04|If the device is a sink, call dsGetVideoCodecInfo()| int=handle, dsVIDEO_CODEC_MPEGHPART2, dsVideoCodecInfo_t*| dsERR_OPERATION_NOT_SUPPORTED| API is not supported on sink devices |  
+ * |05|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
  *
  * @note For sink devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED
  * 
@@ -959,12 +980,13 @@ void test_l1_dsVideoDevice_positive_dsGetVideoCodecInfo(void)
                 }
                 codec = (dsVideoCodingFormat_t)(0x01 << (j++));
             } else if(gSourceType == 0) {
+                // Step 04: API is not supported on sink devices
                 UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
             }
         }
     }
 
-    // Step 04: De-initialize the video devices
+    // Step 05: De-initialize the video devices
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
@@ -983,16 +1005,22 @@ void test_l1_dsVideoDevice_positive_dsGetVideoCodecInfo(void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsGetVideoCodecInfo() without prior initialization of video devices | int=handle, dsVIDEO_CODEC_MPEGHPART2, dsVideoCodecInfo_t*| dsERR_NOT_INITIALIZED | Should report module not initialized |
- * |02|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
- * |03|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
- * |04|Call dsGetVideoCodecInfo() with an invalid handle | int=-1, dsVIDEO_CODEC_MPEGHPART2, dsVideoCodecInfo_t*| dsERR_INVALID_PARAM | Should report invalid parameter |
- * |05|Call dsGetVideoCodecInfo() with an invalid coding format | int=handle, dsVIDEO_CODEC_MAX, dsVideoCodecInfo_t*| dsERR_INVALID_PARAM | Should report invalid parameter |
- * |06|Call dsGetVideoCodecInfo() with null parameter | int=handle, dsVIDEO_CODEC_MPEGHPART2, NULL| dsERR_INVALID_PARAM | Should report invalid parameter |
- * |07|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
- * |08|Call dsGetVideoCodecInfo() without prior initialization of video devices | int=handle, dsVIDEO_CODEC_MPEGHPART2, dsVideoCodecInfo_t*| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |01|If the device is a source, call dsGetVideoCodecInfo() without prior initialization of video devices | int=handle, dsVIDEO_CODEC_MPEGHPART2, dsVideoCodecInfo_t*| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |02|If the device is a sink, call dsGetVideoCodecInfo() without prior initialization of video devices | nt=handle, dsVIDEO_CODEC_MPEGHPART2, dsVideoCodecInfo_t*| dsERR_OPERATION_NOT_SUPPORTED| API is not supported on sink devices |
+ * |03|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
+ * |04|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
+ * |05|If the device is a source, call dsGetVideoCodecInfo() with an invalid handle | int=-1, dsVIDEO_CODEC_MPEGHPART2, dsVideoCodecInfo_t*| dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |06|If the device is a sink, call dsGetVideoCodecInfo() with an invalid handle | int=-1, dsVIDEO_CODEC_MPEGHPART2, dsVideoCodecInfo_t*| dsERR_OPERATION_NOT_SUPPORTED| API is not supported on sink devices |
+ * |07|If the device is a source, call dsGetVideoCodecInfo() with an invalid coding format | int=handle, dsVIDEO_CODEC_MAX, dsVideoCodecInfo_t*| dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |08|If the device is a sink, call dsGetVideoCodecInfo() with an invalid coding format | int=handle, dsVIDEO_CODEC_MAX, dsVideoCodecInfo_t*| dsERR_OPERATION_NOT_SUPPORTED| API is not supported on sink devices |
+ * |09|If the device is a source, call dsGetVideoCodecInfo() with null parameter | int=handle, dsVIDEO_CODEC_MPEGHPART2, NULL| dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |10|If the device is a sink, call dsGetVideoCodecInfo() with null parameter | int=handle, dsVIDEO_CODEC_MPEGHPART2, NULL | dsERR_OPERATION_NOT_SUPPORTED| API is not supported on sink devices |
+ * |11|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * |12|If the device is a source, call dsGetVideoCodecInfo() without prior initialization of video devices | int=handle, dsVIDEO_CODEC_MPEGHPART2, dsVideoCodecInfo_t*| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |13|If the device is a sink, call dsGetVideoCodecInfo() without prior initialization of video devices | int=handle, dsVIDEO_CODEC_MPEGHPART2, dsVideoCodecInfo_t*| dsERR_OPERATION_NOT_SUPPORTED| API is not supported on sink devices |
  *
  * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
+ * @note For sink devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED
  *
  */
 void test_l1_dsVideoDevice_negative_dsGetVideoCodecInfo(void)
@@ -1006,16 +1034,17 @@ void test_l1_dsVideoDevice_negative_dsGetVideoCodecInfo(void)
     // Step 01: Call dsGetVideoCodecInfo() without prior initialization
     result = dsGetVideoCodecInfo(handle, dsVIDEO_CODEC_MPEGHPART2, &codecInfo);
     if (gSourceType == 0){
+        // Step 02: API is not supported on sink devices
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else {
         CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     }
 
-    // Step 02: Initialize video devices
+    // Step 03: Initialize video devices
     result = dsVideoDeviceInit();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // Step 03: Obtain video device handle
+    // Step 04: Obtain video device handle
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -1023,38 +1052,42 @@ void test_l1_dsVideoDevice_negative_dsGetVideoCodecInfo(void)
         if (handle == 0)
             break;
 
-        // Step 04: Call dsGetVideoCodecInfo() with an invalid handle
+        // Step 05: Call dsGetVideoCodecInfo() with an invalid handle
         result = dsGetVideoCodecInfo(-1, dsVIDEO_CODEC_MPEGHPART2, &codecInfo);
         if (gSourceType == 0){
+            // Step 06: API is not supported on sink devices
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         } else {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);  
         }
 
-        // Step 05: Call dsGetVideoCodecInfo() with an invalid coding format
+        // Step 07: Call dsGetVideoCodecInfo() with an invalid coding format
         result = dsGetVideoCodecInfo(handle, dsVIDEO_CODEC_MAX, &codecInfo);
         if (gSourceType == 0){
+            // Step 08: API is not supported on sink devices
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         } else {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);  
         }
 
-        // Step 06: Call dsGetVideoCodecInfo() with a null parameter
+        // Step 09: Call dsGetVideoCodecInfo() with a null parameter
         result = dsGetVideoCodecInfo(handle, dsVIDEO_CODEC_MPEGHPART2, NULL);
         if (gSourceType == 0){
+            // Step 10: API is not supported on sink devices
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         } else {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);  
         }
     }
 
-    // Step 07: De-initialize the video devices
+    // Step 11: De-initialize the video devices
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // Step 08: Call dsGetVideoCodecInfo() after termination
+    // Step 12: Call dsGetVideoCodecInfo() after termination
     result = dsGetVideoCodecInfo(handle, dsVIDEO_CODEC_MPEGHPART2, &codecInfo);
     if (gSourceType == 0){
+        // Step 13: API is not supported on sink devices
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else {
         CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
@@ -1077,8 +1110,8 @@ void test_l1_dsVideoDevice_negative_dsGetVideoCodecInfo(void)
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
  * |02|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
- * |03|Force disable HDR support using dsForceDisableHDRSupport() with the obtained handle |int=handle, bool=true| dsERR_NONE | HDR support should be force disabled successfully |
- * |04|Force disable HDR support using dsForceDisableHDRSupport() with the obtained handle |int=handle, bool=false| dsERR_NONE | HDR support should be force disabled successfully |
+ * |03|Force disable HDR support using dsForceDisableHDRSupport() with the obtained handle |int=handle, bool=true| dsERR_OPERATION_NOT_SUPPORTED | dsForceDisableHDRSupport is not currently supported by sink or source devices |
+ * |04|Force disable HDR support using dsForceDisableHDRSupport() with the obtained handle |int=handle, bool=false| dsERR_OPERATION_NOT_SUPPORTED | dsForceDisableHDRSupport is not currently supported by sink or source devices |
  * |05|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
  * 
  * @note For source and sink devices, this function is expected to return dsERR_OPERATION_NOT_SUPPORTED.
@@ -1131,12 +1164,12 @@ void test_l1_dsVideoDevice_positive_dsForceDisableHDRSupport(void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsForceDisableHDRSupport() without prior initialization of video devices |int=handle, bool=true| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |01|Call dsForceDisableHDRSupport() without prior initialization of video devices |int=handle, bool=true| dsERR_OPERATION_NOT_SUPPORTED | dsForceDisableHDRSupport is not currently supported by sink or source devices |
  * |02|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
  * |03|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
- * |04|Call dsForceDisableHDRSupport() with an invalid handle |int=-1, bool=true| dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |04|Call dsForceDisableHDRSupport() with an invalid handle |int=-1, bool=true| dsERR_OPERATION_NOT_SUPPORTED | dsForceDisableHDRSupport is not currently supported by sink or source devices  |
  * |05|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
- * |06|Call dsForceDisableHDRSupport() after termination of video devices |int=handle, bool=true| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |06|Call dsForceDisableHDRSupport() after termination of video devices |int=handle, bool=true| dsERR_OPERATION_NOT_SUPPORTED | dsForceDisableHDRSupport is not currently supported by sink or source devices |
  *
  * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
  * @note For source and sink devices, this function is expected to return dsERR_OPERATION_NOT_SUPPORTED.
