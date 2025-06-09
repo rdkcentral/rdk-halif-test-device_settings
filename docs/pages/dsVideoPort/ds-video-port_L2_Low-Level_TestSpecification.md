@@ -218,7 +218,7 @@ graph TB
 |Title|Details|
 |-----|-------|
 |Function Name|`test_l2_dsVideoPort_VerifySupportedTvResolutions`|
-|Description|Get the handle for supported video port from configuration file(`dsVideoPort/Number_of_ports`), check the status of each supported video port type `dsVideoPort/Ports/[port no]/Typeid`.Gets the supported port Resolutions of TV and verify with the configuration file `dsVideoPort/Ports/[port no]/Supported_tv_resolutions_capabilities`|
+|Description|Get the handle for supported video port from configuration file(`dsVideoPort/Number_of_ports`), check the status of each supported video port type `dsVideoPort/Ports/[port no]/Typeid`.Gets the supported port Resolutions of TV and verify with the configuration file `dsVideoPort/Ports/[port no]/Supported_tv_resolutions_capabilities` or default value based on the dsIsDisplayConnected status|
 |Test Group|02|
 |Test Case ID|005|
 |Priority|High|
@@ -239,7 +239,7 @@ If user chose to run the test in interactive mode, then the test case has to be 
 |01|Initialize the video port using `dsVideoPortInit`|None|`dsERR_NONE`|Should be successful|
 |02|Get the video port handle for supported type of video port using `dsGetVideoPort` Loop through each video port and get the handle using `dsGetVideoPort`| type = `dsVideoPort/Ports/[port no]/Typeid` index = `dsVideoPort/Ports/[port no]/Index`.|`dsERR_NONE`|Should be successful|
 |03|Get the supported TV resolutions using `dsSupportedTvResolutions` with the obtained handle|handle = obtained from previous step|`dsERR_NONE`|Should be successful|
-|04|Verify the obtained resolutions with the expected resolutions from the configuration file|resolutions = value in `dsVideoPort/Ports/[port no]/Supported_tv_resolutions_capabilities`|`dsERR_NONE`|Should be successful|
+|04|Verify the obtained resolutions with the expected resolutions from the configuration file or default value based on the dsIsDisplayConnected status|resolutions = value in `dsVideoPort/Ports/[port no]/Supported_tv_resolutions_capabilities` or default value |`dsERR_NONE`|Should be successful|
 |05|Terminate the video port using `dsVideoPortTerm`|None|`dsERR_NONE`|Should be successful|
 
 ```mermaid
@@ -261,7 +261,7 @@ graph TB
 |Title|Details|
 |-----|-------|
 |Function Name|`test_l2_dsVideoPort_GetHDRCapabilities`|
-|Description|Get the handle for supported video port from configuration file(`dsVideoPort/Number_of_ports`), check the status of each supported video port type `dsVideoPort/Ports/[port no]/Typeid`.Get the each supported port HDR capabilities & verify with the configuration file `dsVideoPort/Ports/[port no]/hdr_capabilities`|
+|Description|Get the handle for supported video port from configuration file(`dsVideoPort/Number_of_ports`), check the status of each supported video port type `dsVideoPort/Ports/[port no]/Typeid`.Get the each supported port HDR capabilities & verify with the configuration file `dsVideoPort/Ports/[port no]/hdr_capabilities` or default value based on the dsIsDisplayConnected status|
 |Test Group|02|
 |Test Case ID|006|
 |Priority|High|
@@ -282,7 +282,7 @@ If user chose to run the test in interactive mode, then the test case has to be 
 |01|Initialize the video port using `dsVideoPortInit`|None|`dsERR_NONE`|Should be successful|
 |02|Get the video port handle for supported type of video port using dsGetVideoPort Loop through each video port and get the handle using `dsGetVideoPort`| type = `dsVideoPort/Ports/[port no]/Typeid` index = `dsVideoPort/Ports/[port no]/Index`.|`dsERR_NONE`|Should be successful|
 |03|Get the HDR capabilities of the TV using `dsGetTVHDRCapabilities` with the obtained handle|handle = obtained from previous step|`dsERR_NONE`|Should be successful|
-|04|Verify the obtained capabilities with the configuration file `dsVideoPort/Ports/[port no]/hdr_capabilities`|Values should match|capabilities = value in `dsVideoPort/Ports/[port no]/hdr_capabilities`|Should be successful|
+|04|Verify the obtained capabilities with the configuration file `dsVideoPort/Ports/[port no]/hdr_capabilities` or default value based on the dsIsDisplayConnected status|Values should match|capabilities = value in `dsVideoPort/Ports/[port no]/hdr_capabilities` or default value|Should be successful|
 |05|Terminate the video port using `dsVideoPortTerm`|None|`dsERR_NONE`|Should be successful|
 
 ```mermaid
@@ -303,7 +303,7 @@ graph TB
 |Title|Details|
 |-----|-------|
 |Function Name|`test_l2_dsVideoPort_GetHDCPStatus`|
-|Description|Get the handle for supported video port from configuration file(`dsVideoPort/Number_of_ports`), check the status of each supported video port type `dsVideoPort/Ports/[port no]/Typeid`.Check the `HDCP` status of each supported port and verify if `dsHDCP_STATUS_AUTHENTICATED` is returned for sinks and `dsHDCP_STATUS_UNPOWERED`/`dsHDCP_STATUS_PORTDISABLED` is returned for sources.|
+|Description|Get the handle for supported video port from configuration file(`dsVideoPort/Number_of_ports`), check the status of each supported video port type `dsVideoPort/Ports/[port no]/Typeid`.Check the `HDCP` status of each supported port and verify if `dsHDCP_STATUS_AUTHENTICATED` is returned when display is connected and `dsHDCP_STATUS_UNPOWERED`/`dsHDCP_STATUS_PORTDISABLED` is returned when display not connected|
 |Test Group|02|
 |Test Case ID|007|
 |Priority|High|
@@ -324,7 +324,7 @@ If user chose to run the test in interactive mode, then the test case has to be 
 |01|Initialize the video port using `dsVideoPortInit`|None|`dsERR_NONE`|Should be successful|
 |02|Get the video port handle for supported type of video port using `dsGetVideoPort` Loop through each video port and get the handle using `dsGetVideoPort`| type = `dsVideoPort/Ports/[port no]/Typeid` index = `dsVideoPort/Ports/[port no]/Index`.|`dsERR_NONE`|Should be successful|
 |03|Get the `HDCP` status for each handle using `dsGetHDCPStatus`|handle = obtained from dsGetVideoPort()|`dsERR_NONE`|Should be successful|
-|04|Check if the `HDCP` status is authenticated|status = obtained from `dsGetHDCPStatus`|`dsHDCP_STATUS_AUTHENTICATED`|Should be successful|
+|04|Check if the `HDCP` status for source and sink devices based on the isDisplayConnected status |status = obtained from `dsGetHDCPStatus`|`dsHDCP_STATUS_AUTHENTICATED` or `dsHDCP_STATUS_UNPOWERED`/`dsHDCP_STATUS_PORTDISABLED`|Should be successful|
 |05|Terminate the video port using `dsVideoPortTerm`|None|`dsERR_NONE`|Should be successful|
 
 ```mermaid
@@ -472,7 +472,7 @@ E -->|dsERR_NONE|E1[Test case fail]
 |Title|Details|
 |-----|-------|
 |Function Name|`test_l2_dsVideoPort_CheckColorDepthCapabilities_source`|
-|Description|Check each port Color Depth Capabilities and compare with the configuration file.|
+|Description|Check each port Color Depth Capabilities and compare with the configuration file or default value.|
 |Test Group|02|
 |Test Case ID|011|
 |Priority|High|
@@ -514,7 +514,7 @@ graph TB
 |Title|Details|
 |-----|-------|
 |Function Name|`test_l2_dsVideoPort_GetColorDepth`|
-|Description|Get each port Color Depth and verify with the configuration file.|
+|Description|Get each port Color Depth and verify with the configuration file or default value.|
 |Test Group|02|
 |Test Case ID|012|
 |Priority|High|
@@ -535,7 +535,7 @@ If user chose to run the test in interactive mode, then the test case has to be 
 |01|Initialize the video port using `dsVideoPortInit`|None|`dsERR_NONE`|Should be successful|
 |02|Get the video port handle using `dsGetVideoPort` with type=`dsVIDEOPORT_TYPE_INTERNAL` and index=0|type=`dsVIDEOPORT_TYPE_INTERNAL`, index=0|`dsERR_NONE`|Should be successful|
 |03|Get the color depth using `dsGetColorDepth` with the obtained handle|handle=obtained handle|`dsERR_NONE`|Should be successful|
-|04|Verify the obtained color depth with the value from the configuration file|color_depth=value in `dsVideoPort/Ports/[port no]/Supported_color_depth_capabilities`|Should be equal|Should be successful|
+|04|Verify the obtained color depth with the value from the configuration file or default value based on the isDisplayConnected status |color_depth=value in `dsVideoPort/color_depth` or default value|Should be equal|Should be successful|
 |05|Terminate the video port using `dsVideoPortTerm`|None|`dsERR_NONE`|Should be successful|
 
 ```mermaid
