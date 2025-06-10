@@ -1544,9 +1544,9 @@ void test_l1_dsVideoDevice_negative_dsGetFRFMode(void)
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
  * |02|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
- * |03|Get the current display framerate using dsGetCurrentDisplayframerate() with the obtained handle |int=handle,char*| dsERR_NONE | Should fetch the current framerate successfully |
- * |04|Get the current display framerate using dsGetCurrentDisplayframerate() again |int=handle,char*| dsERR_NONE | Should fetch the current framerate successfully |
- * |05|Compare the results to make sure they are the same || Success | The results should equal one another |
+ * |03|If the device is a sink, get the current display framerate using dsGetCurrentDisplayframerate() with the obtained handle |int=handle,char*| dsERR_NONE | Should fetch the current framerate successfully |
+ * |04|If the device is a sink, compare the current display framerate with the values from the profile|| Success | The results should equal one another |
+ * |05|If the device is a source, call dsGetCurrentDisplayframerate() with the obtained handle |int=handle,char*| dsERR_OPERATION_NOT_SUPPORTED | API is not supported on source devices |
  * |06|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
  * 
  * @note For source devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
@@ -1590,11 +1590,12 @@ void test_l1_dsVideoDevice_positive_dsGetCurrentDisplayframerate(void)
                 }
             }
         } else if(gSourceType == 1){
+                // Step 05: API is not supported on source devices 
                 UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
     }
 
-    // Step 05: De-initialize the video devices
+    // Step 06: De-initialize the video devices
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
@@ -1613,13 +1614,17 @@ void test_l1_dsVideoDevice_positive_dsGetCurrentDisplayframerate(void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsGetCurrentDisplayframerate() without prior initialization of video devices|int=handle,char*| dsERR_NOT_INITIALIZED | Should report module not initialized |
- * |02|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
- * |03|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
- * |04|Call dsGetCurrentDisplayframerate() with an invalid handle |int=-1,char* |dsERR_INVALID_PARAM | Should report invalid parameter |
- * |05|Call dsGetCurrentDisplayframerate() with NULL value |int=handle, NULL |dsERR_INVALID_PARAM | Should report invalid parameter |
- * |06|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
- * |07|Call dsGetCurrentDisplayframerate() after termination of video devices|int=handle,char*| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |01|If the device is a sink, call dsGetCurrentDisplayframerate() without prior initialization of video devices|int=handle,char*| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |02|If the device is a source, call dsGetCurrentDisplayframerate() without prior initialization of video devices|int=handle,char*| dsERR_OPERATION_NOT_SUPPORTED | API is not supported on source devices |
+ * |03|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
+ * |04|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
+ * |05|If the device is a sink, call dsGetCurrentDisplayframerate() with an invalid handle |int=-1,char* | dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |06|If the device is a source, call dsGetCurrentDisplayframerate() with an invalid handle |int=-1,char* | dsERR_OPERATION_NOT_SUPPORTED | API is not supported on source devices | 
+ * |07|If the device is a sink, call dsGetCurrentDisplayframerate() with NULL value |int=handle, NULL | dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |08|If the device is a source,  call dsGetCurrentDisplayframerate() with NULL value |int=handle, NULL | dsERR_OPERATION_NOT_SUPPORTED | API is not supported on source devices |
+ * |09|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * |10|If the device is a sink, call dsGetCurrentDisplayframerate() after termination of video devices|int=handle,char*| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |11|If the device is a source, call dsGetCurrentDisplayframerate() after termination of video devices|int=handle,char*| dsERR_OPERATION_NOT_SUPPORTED | API is not supported on source devices |
  *
  * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
  * @note For source devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
@@ -1636,16 +1641,17 @@ void test_l1_dsVideoDevice_negative_dsGetCurrentDisplayframerate(void)
     // Step 01: Call dsGetCurrentDisplayframerate() without prior initialization
     result = dsGetCurrentDisplayframerate(handle, fetchedFramerate); // Note: uninitialized 'handle' used here
     if (gSourceType == 1) {
+        // Step 02: API is not supported on source devices
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else {
         CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     }
 
-    // Step 02: Initialize video devices
+    // Step 03: Initialize video devices
     result = dsVideoDeviceInit();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // Step 03: Obtain video device handle
+    // Step 04: Obtain video device handle
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -1653,30 +1659,33 @@ void test_l1_dsVideoDevice_negative_dsGetCurrentDisplayframerate(void)
         if (handle == 0)
             break;
 
-        // Step 04: Call dsGetCurrentDisplayframerate() with an invalid handle
+        // Step 05: Call dsGetCurrentDisplayframerate() with an invalid handle
         result = dsGetCurrentDisplayframerate(-1, fetchedFramerate);
         if (gSourceType == 1){
+            // Step 06: API is not supported on source devices
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         } else {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
 
-        // Step 05: Call dsGetCurrentDisplayframerate() with NULL value
+        // Step 07: Call dsGetCurrentDisplayframerate() with NULL value
         result = dsGetCurrentDisplayframerate(handle, NULL);
         if (gSourceType == 1){
+            // Step 08: API is not supported on source devices
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         } else {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
     }
 
-    // Step 06: De-initialize the video devices
+    // Step 09: De-initialize the video devices
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // Step 07: Call dsGetCurrentDisplayframerate() after termination
+    // Step 10: Call dsGetCurrentDisplayframerate() after termination
     result = dsGetCurrentDisplayframerate(handle, fetchedFramerate);
     if (gSourceType == 1) {
+        // Step 11: API is not supported on source devices
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else {
         CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
@@ -1699,8 +1708,9 @@ void test_l1_dsVideoDevice_negative_dsGetCurrentDisplayframerate(void)
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
  * |02|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
- * |03|Set the display framerate using dsSetDisplayframerate() with the obtained handle and a valid framerate |int=handle,char*| dsERR_NONE | Display framerate should be set successfully |
- * |04|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * |03|If the device is a sink, set the display framerate using dsSetDisplayframerate() with the obtained handle and a valid framerate |int=handle,char*| dsERR_NONE | Display framerate should be set successfully |
+ * |04|If the device is a source, call dsSetDisplayframerate() with the obtained handle |int=handle,char*| dsERR_OPERATION_NOT_SUPPORTED | API is not supported on source devices |
+ * |05|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
  * 
  * @note For source devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
  *
@@ -1730,12 +1740,13 @@ void test_l1_dsVideoDevice_positive_dsSetDisplayframerate(void)
             if(gSourceType == 0) {
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
             } else if(gSourceType == 1){
+                // Step 04: API is not supported on source devices
                 UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
             }
         }
     }
 
-    // Step 04: De-initialize the video devices
+    // Step 05: De-initialize the video devices
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
@@ -1754,14 +1765,19 @@ void test_l1_dsVideoDevice_positive_dsSetDisplayframerate(void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsSetDisplayframerate() without prior initialization of video devices |int=handle,char*| dsERR_NOT_INITIALIZED | Should report module not initialized |
- * |02|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
- * |03|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
- * |04|Call dsSetDisplayframerate() with an invalid handle |int=-1,char*| dsERR_INVALID_PARAM | Should report invalid parameter |
- * |05|Call dsSetDisplayframerate() with NULL char*|int=handle,NULL| dsERR_INVALID_PARAM | Should report invalid parameter |
- * |06|Call dsSetDisplayframerate() with invalid char* |int=-1,char*="junk"| dsERR_INVALID_PARAM | Should report invalid parameter |
- * |07|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
- * |08|Call dsSetDisplayframerate() after termination of video devices |int=handle,char*| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |01|If the device is a sink, call dsSetDisplayframerate() without prior initialization of video devices |int=handle,char*| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |02|If the device is a source, call dsSetDisplayframerate() without prior initialization of video devices |int=handle,char*| dsERR_OPERATION_NOT_SUPPORTED | API is not supported for source devices |
+ * |03|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
+ * |04|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
+ * |05|If the device is a sink, call dsSetDisplayframerate() with an invalid handle |int=-1,char*| dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |06|If the device is a source, call dsSetDisplayframerate() with an invalid handle |int=-1,char*| dsERR_OPERATION_NOT_SUPPORTED | API is not supported for source devices |
+ * |07|If the device is a sink, call dsSetDisplayframerate() with NULL char*|int=handle,NULL| dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |08|If the device is a source, call dsSetDisplayframerate() with NULL char*|int=handle,NULL| dsERR_OPERATION_NOT_SUPPORTED | API is not supported for source devices |
+ * |09|If the device is a sink, call dsSetDisplayframerate() with invalid char* |int=-1,char*="junk"| dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |10|If the device is a source, call dsSetDisplayframerate() with invalid char* |int=-1,char*="junk"| dsERR_OPERATION_NOT_SUPPORTED | API is not supported for source devices |
+ * |11|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * |12|If the device is a sink, call dsSetDisplayframerate() after termination of video devices |int=handle,char*| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |13|If the device is a source, call dsSetDisplayframerate() after termination of video devices |int=handle,char*| dsERR_OPERATION_NOT_SUPPORTED | API is not supported for source devices |
  *
  * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
  * @note For source devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
@@ -1777,16 +1793,17 @@ void test_l1_dsVideoDevice_negative_dsSetDisplayframerate(void)
     // Step 01: Call dsSetDisplayframerate() without prior initialization
     result = dsSetDisplayframerate(handle, "30fps"); // Note: uninitialized 'handle' used here
     if (gSourceType == 1) {
+        // Step 02: API is not supported on source devices
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else {
         CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     }
 
-    // Step 02: Initialize video devices
+    // Step 03: Initialize video devices
     result = dsVideoDeviceInit();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // Step 03: Obtain video device handle
+    // Step 04: Obtain video device handle
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -1794,38 +1811,42 @@ void test_l1_dsVideoDevice_negative_dsSetDisplayframerate(void)
         if (handle == 0)
             break;
 
-        // Step 04: Call dsSetDisplayframerate() with an invalid handle
+        // Step 05: Call dsSetDisplayframerate() with an invalid handle
         result = dsSetDisplayframerate(-1, "30fps");
         if (gSourceType == 1){
+            // Step 06: API is not supported on source devices
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         } else {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
 
-        // Step 05: Call dsSetDisplayframerate() with NULL char*
+        // Step 07: Call dsSetDisplayframerate() with NULL char*
         result = dsSetDisplayframerate(handle, NULL);
         if (gSourceType == 1){
+            // Step 08: API is not supported on source devices
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         } else {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
     }
 
-    // Step 06: Call dsSetDisplayframerate() with invalid char*
+    // Step 09: Call dsSetDisplayframerate() with invalid char*
     result = dsSetDisplayframerate(handle, "junk");
     if (gSourceType == 1){
+        // Step 10: API is not supported on source devices
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else {
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     }
 
-    // Step 07: De-initialize the video devices
+    // Step 11: De-initialize the video devices
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // Step 08: Call dsSetDisplayframerate() after termination
+    // Step 12: Call dsSetDisplayframerate() after termination
     result = dsSetDisplayframerate(handle, "30fps");
     if (gSourceType == 1) {
+        // Step 13: API is not supported on source devices
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else {
         CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
