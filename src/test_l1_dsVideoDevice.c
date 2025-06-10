@@ -1228,8 +1228,9 @@ void test_l1_dsVideoDevice_negative_dsForceDisableHDRSupport(void)
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
  * |02|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
- * |03|Set the FRF mode using dsSetFRFMode() with the obtained handle and a valid framerate value | int=handle, int| dsERR_NONE | FRF mode should be set successfully |
- * |04|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * |03|If the device is a sink, Set the FRF mode using dsSetFRFMode() with the obtained handle and a valid framerate value | int=handle, int| dsERR_NONE | FRF mode should be set successfully |
+ * |04|If the device is a source, call dsSetFRFMode() | int=handle, int| dsERR_OPERATION_NOT_SUPPORTED | API is not supported on source devices |  
+ * |05|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
  * 
  * @note For source devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
  *
@@ -1253,26 +1254,27 @@ void test_l1_dsVideoDevice_positive_dsSetFRFMode(void)
         if (handle == 0)
             break;
 
-        // Step 03: Set the FRF mode using a valid framerate
+        // Step 03: Set the FRF mode using a valid framerate mode
         uint32_t framerateMode = 0;
         result = dsSetFRFMode(handle, framerateMode);
-        if (gSourceType == 1)
-        {
+        if (gSourceType == 0){
+            UT_ASSERT_EQUAL(result, dsERR_NONE);
+        } 
+        else if (gSourceType == 1){
+            // Step 04: API is not supported on source device 
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
-        else if (gSourceType == 0)
-        {
-            UT_ASSERT_EQUAL(result, dsERR_NONE);
-        }
+
+        // Repeat Steps 03 and 04 with alternative valid framerate mode
         framerateMode = 1;
         result = dsSetFRFMode(handle, framerateMode);
-        if (gSourceType == 1)
-        {
-            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
-        }
-        else if (gSourceType == 0)
+        if (gSourceType == 0)
         {
             UT_ASSERT_EQUAL(result, dsERR_NONE);
+        }
+        else if (gSourceType == 1)
+        {
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
     }
 
@@ -1295,13 +1297,17 @@ void test_l1_dsVideoDevice_positive_dsSetFRFMode(void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsSetFRFMode() without prior initialization of video devices | int=handle, int| dsERR_NOT_INITIALIZED | Should report module not initialized |
- * |02|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
- * |03|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
- * |04|Call dsSetFRFMode() with an invalid handle | int=-1, int| dsERR_INVALID_PARAM | Should report invalid parameter |
- * |05|Call dsSetFRFMode() with an invalid framerate | int=handle, int=-1| dsERR_INVALID_PARAM | Should report invalid parameter |
- * |06|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
- * |07|Call dsSetFRFMode() after termination of video devices | int=handle, int| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |01|If the device is a sink, call dsSetFRFMode() without prior initialization of video devices | int=handle, int| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |02|If the device is a source, call dsSetFRFMode() without prior initialization of video devices | int=handle, int | dsERR_OPERATION_NOT_SUPPORTED | API is not supported on source devices |
+ * |03|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
+ * |04|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
+ * |05|If the device is a sink, call dsSetFRFMode() with an invalid handle | int=-1, int| dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |06|If the device is a source, call dsSetFRFMode() with an invalid handle | int=-1, int| dsERR_OPERATION_NOT_SUPPORTED | API is not supported on source devices |
+ * |07|If the device is a sink, call dsSetFRFMode() with an invalid framerate | int=handle, int=-1| dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |08|If the device is a source, call dsSetFRFMode() with an invalid framerate | int=handle, int=-1| dsERR_OPERATION_NOT_SUPPORTED | API is not supported on source devices |
+ * |09|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * |10|If the device is a sink, call dsSetFRFMode() after termination of video devices | int=handle, int| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |11|If the device is a source, call dsSetFRFMode() after termination of video devices | int=handle, int| dsERR_OPERATION_NOT_SUPPORTED | API is not supported on source devices |
  *
  * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
  * @note For source devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
@@ -1317,16 +1323,17 @@ void test_l1_dsVideoDevice_negative_dsSetFRFMode(void)
     // Step 01: Call dsSetFRFMode() without prior initialization
     result = dsSetFRFMode(handle, 1); // Note: uninitialized 'handle' used here
     if (gSourceType == 1) {
+        // Step 02: API is not supported on source devices
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else {
         CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     }
 
-    // Step 02: Initialize video devices
+    // Step 03: Initialize video devices
     result = dsVideoDeviceInit();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // Step 03: Obtain video device handle
+    // Step 04: Obtain video device handle
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -1334,30 +1341,33 @@ void test_l1_dsVideoDevice_negative_dsSetFRFMode(void)
         if (handle == 0)
             break;
 
-        // Step 04: Call dsSetFRFMode() with an invalid handle
+        // Step 05: Call dsSetFRFMode() with an invalid handle
         result = dsSetFRFMode(-1, 1);
         if (gSourceType == 1){
+            // Step 06: API is not supported on source devices
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         } else {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
 
-        // Step 05: Call dsSetFRFMode() with an invalid framerate
+        // Step 07: Call dsSetFRFMode() with an invalid framerate
         result = dsSetFRFMode(handle, -1);
         if (gSourceType == 1){
+            // Step 08: API is not supported on source devices
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         } else {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
     }
 
-    // Step 06: De-initialize the video devices
+    // Step 09: De-initialize the video devices
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // Step 07: Call dsSetFRFMode() after termination
+    // Step 10: Call dsSetFRFMode() after termination
     result = dsSetFRFMode(handle, 1);
     if (gSourceType == 1) {
+        // Step 11: API is not supported on source devices
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else {
         CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
@@ -1380,9 +1390,9 @@ void test_l1_dsVideoDevice_negative_dsSetFRFMode(void)
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
  * |02|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
- * |03|Get the FRF mode using dsGetFRFMode() with the obtained handle |int=handle,int*| dsERR_NONE | Should fetch the FRF mode successfully |
- * |04|Get the FRF mode using dsGetFRFMode() again |int=handle,int*| dsERR_NONE | Should fetch the FRF mode successfully |
- * |05|Compare the returned values to make sure they are the same || Success | The values should be the same value |
+ * |03|If the device is a sink, Get the FRF mode using dsGetFRFMode() with the obtained handle |int=handle,int*| dsERR_NONE | Should fetch the FRF mode successfully |
+ * |04|If the device is a sink, Compare the returned values with the values in the profile || Success | The values should be the same value |
+ * |05|If the device is a source, call dsGetFRFMode with the obtained handle |int=handle,int*| dsERR_OPERATION_NOT_SUPPORTED | API is not supported on source devices |
  * |06|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
  * 
  * @note For source devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
@@ -1416,11 +1426,12 @@ void test_l1_dsVideoDevice_positive_dsGetFRFMode(void)
             // Step 04: Compare the FRF mode with the value from the profile
             UT_ASSERT_EQUAL(fetchedFRFMode, gDSVideoDeviceConfiguration[i].DefaultDFC);
         } else if(gSourceType == 1) {
+            // Step 05: API is not supported on source device
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
     }
 
-    // Step 05: De-initialize the video devices
+    // Step 06: De-initialize the video devices
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
@@ -1439,13 +1450,17 @@ void test_l1_dsVideoDevice_positive_dsGetFRFMode(void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsGetFRFMode() without prior initialization of video devices |int=handle,int*| dsERR_NOT_INITIALIZED | Should report module not initialized |
- * |02|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
- * |03|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
- * |04|Call dsGetFRFMode() with an invalid handle |int=-1,int*| dsERR_INVALID_PARAM | Should report invalid parameter |
- * |05|Call dsGetFRFMode() with null value |int=handle,NULL| dsERR_INVALID_PARAM | Should report invalid parameter |
- * |06|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
- * |07|Call dsGetFRFMode() after termination of video devices |int=handle,int*| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |01|If the device is a sink, call dsGetFRFMode() without prior initialization of video devices |int=handle,int*| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |02|If the device is a source, call dsGetFRFMode() without prior initialization of video devices |int=handle,int*| dsERR_OPERATION_NOT_SUPPORTED | API is not supported on source devices |
+ * |03|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
+ * |04|Obtain video device handle using dsGetVideoDevice() | int=index, int=*handle | dsERR_NONE and (handle >= 0) | Should obtain a valid handle successfully |
+ * |05|If the device is a sink, call dsGetFRFMode() with an invalid handle |int=-1,int*| dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |06|If the device is a source, call dsGetFRFMode() with an invalid handle |int=-1,int*| dsERR_OPERATION_NOT_SUPPORTED | API is not supported on source devices |
+ * |07|If the device is a sink, call dsGetFRFMode() with null value |int=handle,NULL| dsERR_INVALID_PARAM | Should report invalid parameter |
+ * |08If the device is a source, call dsGetFRFMode() with null value |int=handle,NULL| dsERR_OPERATION_NOT_SUPPORTED | API is not supported on source devices |
+ * |09|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * |10|If the device is a sink, call dsGetFRFMode() after termination of video devices |int=handle,int*| dsERR_NOT_INITIALIZED | Should report module not initialized |
+ * |11|If the device is a source, call dsGetFRFMode() after termination of video devices |int=handle,int*| dsERR_OPERATION_NOT_SUPPORTED | API is not supported on source devices |
  *
  * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
  * @note For source devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
@@ -1462,16 +1477,17 @@ void test_l1_dsVideoDevice_negative_dsGetFRFMode(void)
     // Step 01: Call dsGetFRFMode() without prior initialization
     result = dsGetFRFMode(handle, &fetchedFRFMode); // Note: uninitialized 'handle' used here
     if (gSourceType == 1) {
+        // Step 02: API is not supported on source devices
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else {
         CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
     }
 
-    // Step 02: Initialize video devices
+    // Step 03: Initialize video devices
     result = dsVideoDeviceInit();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // Step 03: Obtain video device handle
+    // Step 04: Obtain video device handle
     for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++){
         result = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
@@ -1479,30 +1495,33 @@ void test_l1_dsVideoDevice_negative_dsGetFRFMode(void)
         if (handle == 0)
             break;
 
-        // Step 04: Call dsGetFRFMode() with an invalid handle
+        // Step 05: Call dsGetFRFMode() with an invalid handle
         result = dsGetFRFMode(-1, &fetchedFRFMode);
         if (gSourceType == 1){
+            // Step 06: API is not supported on source devices
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         } else {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
 
-        // Step 05: Call dsGetFRFMode() with null value
+        // Step 07: Call dsGetFRFMode() with null value
         result = dsGetFRFMode(handle, NULL);
         if (gSourceType == 1){
+            // Step 08: API is not supported on source devices
             UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         } else {
             UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
         }
     }
 
-    // Step 06: De-initialize the video devices
+    // Step 09: De-initialize the video devices
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // Step 07: Call dsGetFRFMode() after termination
+    // Step 10: Call dsGetFRFMode() after termination
     result = dsGetFRFMode(handle, &fetchedFRFMode);
     if (gSourceType == 1) {
+        // Step 11: API is not supported on source devices
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else {
         CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
