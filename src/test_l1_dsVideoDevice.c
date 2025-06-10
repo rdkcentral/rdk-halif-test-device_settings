@@ -1868,8 +1868,9 @@ void test_l1_dsVideoDevice_negative_dsSetDisplayframerate(void)
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
- * |02|Call dsRegisterFrameratePreChangeCB() - Register a valid callback for Display framerate pre change event | cb = [valid callback function] | dsERR_NONE | Display framerate pre change event update callback registration must be successful |
- * |03|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * |02|If the device is a sink, call dsRegisterFrameratePreChangeCB() - Register a valid callback for Display framerate pre change event | cb = [valid callback function] | dsERR_NONE | Display framerate pre change event update callback registration must be successful |
+ * |03|If the device is a source, call dsRegisterFrameratePreChangeCB() | cb = [valid callback function] | dsERR_OPERATION_NOT_SUPPORTED | API is not supported on source devices |
+ * |04|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
  *
  * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
  * @note For source devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
@@ -1894,12 +1895,13 @@ void test_l1_dsVideoDevice_positive_dsRegisterFrameratePreChangeCB(void)
     // Step 02: Register a valid callback function for Display framerate pre change event
     result = dsRegisterFrameratePreChangeCB(mockFrameRatePreChangeCallback);
     if(gSourceType == 1) {
+        // Step 03: API is not supported on source devices
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else if(gSourceType == 0) {
         UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
-    // Step 03: De-initialize the video devices
+    // Step 04: De-initialize the video devices
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
@@ -1918,11 +1920,14 @@ void test_l1_dsVideoDevice_positive_dsRegisterFrameratePreChangeCB(void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsRegisterFrameratePostChangeCB() - Attempt to register for display framerate pre change event callback without initializing the video device | cb = [valid callback function ] | dsERR_NOT_INITIALIZED | Callback registration must fail as module is not initialized |
- * |02|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
- * |03|Call dsRegisterFrameratePostChangeCB() with an invalid callback (NULL)| cb = NULL | dsERR_INVALID_PARAM | Invalid paramter error must be returned |
- * |04|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
- * |05|Call dsRegisterFrameratePostChangeCB() - Attempt to register for display framerate pre change event callback without initializing the video devices | cb = [valid callback function ] | dsERR_NOT_INITIALIZED | Callback registration must fail as module is not initialized |
+ * |01|If the device is a sink, call dsRegisterFrameratePostChangeCB() - Attempt to register for display framerate pre change event callback without initializing the video device | cb = [valid callback function ] | dsERR_NOT_INITIALIZED | Callback registration must fail as module is not initialized |
+ * |02|If the device is a source, call dsRegisterFrameratePostChangeCB() - Attempt to register for display framerate pre change event callback without initializing the video device | cb = [valid callback function ] | dsERR_OPERATION_NOT_SUPPORTED | API is not supported on source devices |
+ * |03|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully | 
+ * |04|If the device is a sink, call dsRegisterFrameratePostChangeCB() with an invalid callback (NULL)| cb = NULL | dsERR_INVALID_PARAM | Invalid paramter error must be returned |
+ * |05|If the device is a source, call dsRegisterFrameratePostChangeCB() with an invalid callback (NULL)| cb = NULL | dsERR_OPERATION_NOT_SUPPORTED | API is not supported on source devices |
+ * |06|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * |07|If the device is a sink, call dsRegisterFrameratePostChangeCB() - Attempt to register for display framerate pre change event callback without initializing the video devices | cb = [valid callback function ] | dsERR_NOT_INITIALIZED | Callback registration must fail as module is not initialized |
+ * |08|If the device is a source, call dsRegisterFrameratePostChangeCB() - Attempt to register for display framerate pre change event callback without initializing the video devices | cb = [valid callback function ] | dsERR_OPERATION_NOT_SUPPORTED | API is not supported on source devices |
  *
  * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
  * @note For source devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
@@ -1937,30 +1942,33 @@ void test_l1_dsVideoDevice_negative_dsRegisterFrameratePreChangeCB(void)
     // Step 01: Attempt to register callback without initialization
     result = dsRegisterFrameratePreChangeCB(mockFrameRatePreChangeCallback);
     if (gSourceType == 1) {
+        // Step 02: API is not supported on source devices
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else {
         CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
     }
 
-    // Step 02: Initialize video devices
+    // Step 03: Initialize video devices
     result = dsVideoDeviceInit();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // Step 03: Register with invalid callback (NULL)
+    // Step 04: Register with invalid callback (NULL)
     result = dsRegisterFrameratePreChangeCB(NULL);
     if (gSourceType == 1){
+        // Step 05: API is not supported on source devices
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else {
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     }
 
-    // Step 04: De-initialize the video devices
+    // Step 06: De-initialize the video devices
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // Step 05: Attempt to register callback after termination
+    // Step 07: Attempt to register callback after termination
     result = dsRegisterFrameratePreChangeCB(mockFrameRatePreChangeCallback);
     if (gSourceType == 1) {
+        // Step 08: API is not supported on source devices
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else {
         CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
@@ -1982,8 +1990,9 @@ void test_l1_dsVideoDevice_negative_dsRegisterFrameratePreChangeCB(void)
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
- * |02|Call dsRegisterFrameratePostChangeCB() - Register a valid callback for Display framerate post change event | cb = [valid callback function] | dsERR_NONE | Display framerate Update callback registration must be successful |
- * |03|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * |02|If the device is a sink, call dsRegisterFrameratePostChangeCB() - Register a valid callback for Display framerate post change event | cb = [valid callback function] | dsERR_NONE | Display framerate Update callback registration must be successful |
+ * |03|If the device is a source, call dsRegisterFrameratePostChangeCB() | cb = [valid callback function] | dsERR_OPERATION_NOT_SUPPORTED | API is not supported on source devices |
+ * |04|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
  *
  * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
  * @note For source devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
@@ -2008,12 +2017,13 @@ void test_l1_dsVideoDevice_positive_dsRegisterFrameratePostChangeCB(void)
     // Step 02: Register a valid callback function for Display framerate post change event
     result = dsRegisterFrameratePostChangeCB(mockFrameRatePostChangeCallback);
     if(gSourceType == 1) {
+        // Step 03: API is not supported on source devices 
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else if(gSourceType == 0) {
         UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
-    // Step 03: De-initialize the video devices
+    // Step 04: De-initialize the video devices
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
@@ -2032,11 +2042,14 @@ void test_l1_dsVideoDevice_positive_dsRegisterFrameratePostChangeCB(void)
  * **Test Procedure:**@n
  * |Variation / Step|Description|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
- * |01|Call dsRegisterFrameratePostChangeCB() - Attempt to register for frame rate update callback without initializing the video device | cb = [valid callback function ] | dsERR_NOT_INITIALIZED | Callback registration must fail as module is not initialized |
- * |02|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
- * |03|Call dsRegisterFrameratePostChangeCB() with an invalid callback (NULL)| cb = NULL | dsERR_INVALID_PARAM | Invalid paramter error must be returned |
- * |04|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
- * |05|Call dsRegisterFrameratePostChangeCB() - Attempt to register for frame rate update callback without initializing the video devices | cb = [valid callback function ] | dsERR_NOT_INITIALIZED | Callback registration must fail as module is not initialized |
+ * |01|If the device is a sink, call dsRegisterFrameratePostChangeCB() - Attempt to register for frame rate update callback without initializing the video device | cb = [valid callback function ] | dsERR_NOT_INITIALIZED | Callback registration must fail as module is not initialized |
+ * |02|If the device is a source, call dsRegisterFrameratePostChangeCB() - Attempt to register for frame rate update callback without initializing the video device | cb = [valid callback function ] | dsERR_OPERATION_NOT_SUPPORTED | API is not supported on source devices |
+ * |03|Initialize video devices using dsVideoDeviceInit() | | dsERR_NONE | Video devices should be initialized successfully |
+ * |04|If the device is a sink, call dsRegisterFrameratePostChangeCB() with an invalid callback (NULL)| cb = NULL | dsERR_INVALID_PARAM | Invalid paramter error must be returned |
+ * |05|If the device is a source, call dsRegisterFrameratePostChangeCB() with an invalid callback (NULL)| cb = NULL | dsERR_OPERATION_NOT_SUPPORTED | API is not supported on source devices |
+ * |06|De-initialize the video devices using dsVideoDeviceTerm() | | dsERR_NONE | Video devices should be de-initialized successfully|
+ * |07|If the device is a sink, call dsRegisterFrameratePostChangeCB() - Attempt to register for frame rate update callback without initializing the video devices | cb = [valid callback function ] | dsERR_NOT_INITIALIZED | Callback registration must fail as module is not initialized |
+ * |08|If the device is a source, call dsRegisterFrameratePostChangeCB() - Attempt to register for frame rate update callback without initializing the video devices | cb = [valid callback function ] | dsERR_OPERATION_NOT_SUPPORTED | API is not supported on source devices |
  *
  * @note The return value dsERR_GENERAL and dsERR_OPERATION_NOT_SUPPORTED may be difficult to test in a simulated environment
  * @note For source devices, this function is expected to always return dsERR_OPERATION_NOT_SUPPORTED.
@@ -2051,30 +2064,33 @@ void test_l1_dsVideoDevice_negative_dsRegisterFrameratePostChangeCB(void)
     // Step 01: Attempt to register callback without initialization
     result = dsRegisterFrameratePostChangeCB(mockFrameRatePostChangeCallback);
     if (gSourceType == 1) {
+        // Step 02: API is not supported on source devices
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else {
         CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
     }
 
-    // Step 02: Initialize video devices
+    // Step 03: Initialize video devices
     result = dsVideoDeviceInit();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // Step 03: Register with invalid callback (NULL)
+    // Step 04: Register with invalid callback (NULL)
     result = dsRegisterFrameratePostChangeCB(NULL);
     if (gSourceType == 1){
+        // Step 05: API is not supported on source devices
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else {
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     }
 
-    // Step 04: De-initialize the video devices
+    // Step 06: De-initialize the video devices
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
-    // Step 05: Attempt to register callback after termination
+    // Step 07: Attempt to register callback after termination
     result = dsRegisterFrameratePostChangeCB(mockFrameRatePostChangeCallback);
     if (gSourceType == 1) {
+        // Step 08: API is not supported on source devices
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else {
         CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
