@@ -74,9 +74,11 @@
 #include <ut_log.h>
 #include <ut_kvp_profile.h>
 #include <ut_kvp.h>
+#include <unistd.h>
 
 #include "test_parse_configuration.h"
 #include "dsVideoPort.h"
+#include "dsDisplay.h"
 
 static int gTestGroup = 2;
 static int gTestID = 1;
@@ -443,6 +445,7 @@ void test_l2_dsVideoPort_VerifySupportedTvResolutions(void)
         ret = dsSupportedTvResolutions(handle, &resolutions);
         UT_LOG_DEBUG("Returned status: %d, resolutions: %d", ret, resolutions);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        ret = dsDisplayInit();
         bool isConnected = false;
         ret = dsIsDisplayConnected(handle, &isConnected);
         if(!isConnected) {
@@ -451,6 +454,7 @@ void test_l2_dsVideoPort_VerifySupportedTvResolutions(void)
         else {
             UT_ASSERT_EQUAL(resolutions, gDSVideoPortConfiguration[port].Supported_tv_resolutions_capabilities);
         }
+        ret = dsDisplayTerm();
     } /* for (port) */
 
     UT_LOG_DEBUG("Invoking dsVideoPortTerm");
@@ -508,6 +512,7 @@ void test_l2_dsVideoPort_GetHDRCapabilities(void)
         ret = dsGetTVHDRCapabilities(handle, &capabilities);
         UT_LOG_DEBUG("Returned status: %d, capabilities: %d", ret, capabilities);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        ret = dsDisplayInit();
         bool isConnected = false;
         ret = dsIsDisplayConnected(handle, &isConnected);
         if(!isConnected) {
@@ -516,6 +521,7 @@ void test_l2_dsVideoPort_GetHDRCapabilities(void)
         else {
             UT_ASSERT_EQUAL(capabilities, gDSVideoPortConfiguration[port].hdr_capabilities);
         }
+        ret = dsDisplayTerm();
     } /* for (port) */
 
     UT_LOG_DEBUG("Invoking dsVideoPortTerm()");
@@ -568,6 +574,15 @@ void test_l2_dsVideoPort_GetHDCPStatus(void)
         if (handle == 0)
             break;
 
+        ret = dsDisplayInit();
+        bool isConnected = false;
+        ret = dsIsDisplayConnected(handle, &isConnected);
+        if (isConnected){
+            char hdcpKey[HDCP_KEY_MAX_SIZE] = "ADEF";
+            int keySize = HDCP_KEY_MAX_SIZE;
+            ret = dsEnableHDCP(handle, true, hdcpKey, keySize);
+            sleep(2);
+        }
         UT_LOG_DEBUG("Invoking dsGetHDCPStatus() with handle: %ld", handle);
         ret = dsGetHDCPStatus(handle, &status);
         if (ret != dsERR_NONE)
@@ -577,9 +592,6 @@ void test_l2_dsVideoPort_GetHDCPStatus(void)
         }
         UT_LOG_DEBUG("Return status: %d, HDCP Status: %d", ret, status);
 
-        bool isConnected = false;
-        ret = dsIsDisplayConnected(handle, &isConnected);
-        /* check for source */
         if(!isConnected) {
             UT_ASSERT_TRUE(status == dsHDCP_STATUS_UNPOWERED || status == dsHDCP_STATUS_PORTDISABLED);
             if (status != dsHDCP_STATUS_UNPOWERED || status != dsHDCP_STATUS_PORTDISABLED) {
@@ -587,12 +599,12 @@ void test_l2_dsVideoPort_GetHDCPStatus(void)
             }
         }
         else {
-            /*check for sink*/
             UT_ASSERT_EQUAL(status, dsHDCP_STATUS_AUTHENTICATED);
             if (status != dsHDCP_STATUS_AUTHENTICATED) {
                 UT_LOG_ERROR("HDCP status is not authenticated. Status: %d", status);
             }
         }
+        ret = dsDisplayTerm();
     } /* for (port) */
 
     UT_LOG_DEBUG("Invoking dsVideoPortTerm()");
@@ -896,6 +908,7 @@ void test_l2_dsVideoPort_GetColorDepth(void)
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         UT_LOG_DEBUG("dsGetColorDepth() returned color_depth=%u and status=%d", color_depth, ret);
 
+        ret = dsDisplayInit();
         bool isConnected = false;
         ret = dsIsDisplayConnected(handle, &isConnected);
         if(!isConnected) {
@@ -904,6 +917,7 @@ void test_l2_dsVideoPort_GetColorDepth(void)
         else {
             UT_ASSERT_EQUAL(color_depth, gDSvideoPort_color_depth);
         }
+        ret = dsDisplayTerm();
     } /* for (port) */
 
     UT_LOG_DEBUG("Invoking dsVideoPortTerm()");
