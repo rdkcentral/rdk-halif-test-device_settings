@@ -578,6 +578,8 @@ void test_l2_dsVideoPort_GetHDCPStatus(void)
         bool isConnected = false;
         ret = dsIsDisplayConnected(handle, &isConnected);
         if (isConnected){
+            // For vendor image enableHDCP has to be done from code
+            // enableHDCP only if displayconnected is true
             char hdcpKey[HDCP_KEY_MAX_SIZE] = "ADEF";
             int keySize = HDCP_KEY_MAX_SIZE;
             ret = dsEnableHDCP(handle, true, hdcpKey, keySize);
