@@ -72,6 +72,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "dsVideoPort.h"
+#include "dsDisplay.h"
 #include "test_parse_configuration.h"
 
 #include <ut.h>
@@ -2021,6 +2022,14 @@ void test_l1_dsVideoPort_positive_dsGetHDCPStatus(void) {
         UT_ASSERT_PTR_NOT_NULL(handle);
         if (handle == 0)
             break;
+        status = dsDisplayInit();
+        bool isConnected = false;
+        status = dsIsDisplayConnected(handle, &isConnected);
+        if (isConnected){
+            char hdcpKey[HDCP_KEY_MAX_SIZE] = "ADEF";
+            int keySize = HDCP_KEY_MAX_SIZE;
+            status = dsEnableHDCP(handle, true, hdcpKey, keySize);
+        }
         // Step 03: Retrieve the HDCP status
         status = dsGetHDCPStatus(handle, &(hdcpStatus1));
         // Step 04: Compare the value with values of profile file
@@ -2029,8 +2038,6 @@ void test_l1_dsVideoPort_positive_dsGetHDCPStatus(void) {
                 UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
             } else {
                 UT_ASSERT_EQUAL(status, dsERR_NONE);
-                bool isConnected = false;
-                status = dsIsDisplayConnected(handle, &isConnected);
                 if (!isConnected) {
                     UT_ASSERT_EQUAL(hdcpStatus1, dsHDCP_STATUS_PORTDISABLED)
                 } else {
@@ -2041,6 +2048,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPStatus(void) {
             UT_ASSERT_EQUAL(status, dsERR_NONE);
             UT_ASSERT_EQUAL(hdcpStatus1, dsHDCP_STATUS_AUTHENTICATED);
         }
+        status = dsDisplayTerm();
     }
 
     // Step 05: Terminate the video port system
@@ -2554,6 +2562,7 @@ void test_l1_dsVideoPort_positive_dsGetTVHDRCapabilities(void) {
         status = dsGetTVHDRCapabilities(handle, &capabilities1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
         // Step 04: Compare the value with profile file values
+        status = dsDisplayInit();
         bool isConnected = false;
         status = dsIsDisplayConnected(handle, &isConnected);
         if(!isConnected) {
@@ -2562,6 +2571,7 @@ void test_l1_dsVideoPort_positive_dsGetTVHDRCapabilities(void) {
         else {
             UT_ASSERT_EQUAL(capabilities1, gDSVideoPortConfiguration[i].hdr_capabilities);
         }
+        status = dsDisplayTerm();
     }
 
     // Step 05: Terminate the video port system
@@ -2689,6 +2699,7 @@ void test_l1_dsVideoPort_positive_dsSupportedTvResolutions(void) {
         status = dsSupportedTvResolutions(handle, &resolutions1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
         // Step 04: Compare the value with value from profile file
+        status = dsDisplayInit();
         bool isConnected = false;
         status = dsIsDisplayConnected(handle, &isConnected);
         if(!isConnected) {
@@ -2697,6 +2708,7 @@ void test_l1_dsVideoPort_positive_dsSupportedTvResolutions(void) {
         else {
             UT_ASSERT_EQUAL(resolutions1, gDSVideoPortConfiguration[i].Supported_tv_resolutions_capabilities);
         }
+        status = dsDisplayTerm();
     }
 
     // Step 05: Terminate the video port system
@@ -3336,6 +3348,7 @@ void test_l1_dsVideoPort_positive_dsGetColorDepth(void) {
         status = dsGetColorDepth(handle, &colorDepth1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
         // Step 04: Compare the value with values from profile file
+        status = dsDisplayInit();
         bool isConnected = false;
         status = dsIsDisplayConnected(handle, &isConnected);
         if(!isConnected) {
@@ -3344,6 +3357,7 @@ void test_l1_dsVideoPort_positive_dsGetColorDepth(void) {
         else {
             UT_ASSERT_EQUAL(colorDepth1, gDSvideoPort_color_depth);
         }
+        status = dsDisplayTerm();
     }
 
     // Step 05: Terminate the video port system
