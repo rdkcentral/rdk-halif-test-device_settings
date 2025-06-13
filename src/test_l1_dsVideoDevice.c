@@ -1278,7 +1278,7 @@ void test_l1_dsVideoDevice_positive_dsSetFRFMode(void)
         }
     }
 
-    // Step 04: De-initialize the video devices
+    // Step 05: De-initialize the video devices
     result = dsVideoDeviceTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
