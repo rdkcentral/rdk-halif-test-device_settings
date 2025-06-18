@@ -101,7 +101,7 @@ class dsAudio_test24_PrimarySecondaryLanguage(dsAudioHelperClass):
 
             for i, stream in enumerate(self.testStreams):
 
-                self.testdsAudio.enableAssociateAudioMixig(False)
+                self.testdsAudio.enableAssociateAudioMixig(port, index, False)
 
                 # Start the stream playback
                 self.testPlayer.play(stream)
@@ -109,7 +109,7 @@ class dsAudio_test24_PrimarySecondaryLanguage(dsAudioHelperClass):
                 for secondary in self.streamLanguage[i]["Secondary"]:
                     self.log.stepStart(f'Secondary Language Test Stream: {stream} Language: {secondary}')
 
-                    self.testdsAudio.setPrimarySecondaryLanguage("Secondary", secondary)
+                    self.testdsAudio.setPrimarySecondaryLanguage(port, index, "Secondary", secondary)
 
                     result = self.testVerifyAudio(port, "Secondary", secondary, True)
 
@@ -126,7 +126,7 @@ class dsAudio_test24_PrimarySecondaryLanguage(dsAudioHelperClass):
                 for primary in self.streamLanguage[i]["Primary"]:
                     self.log.stepStart(f'Primary Language Test Stream: {stream} Language: {primary}')
 
-                    self.testdsAudio.setPrimarySecondaryLanguage("Primary", primary)
+                    self.testdsAudio.setPrimarySecondaryLanguage(port, index, "Primary", primary)
 
                     result = self.testVerifyAudio(port, "Primary", primary, True)
 
