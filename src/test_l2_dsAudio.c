@@ -638,7 +638,7 @@ void test_l2_dsAudio_SetAndGetVolumeLeveller(void)
 
     for (int port = 0; port < gDSAudioNumberOfPorts; port++) {
         //Note: dsMS12SUPPORT_Volumeleveller is not defined yet in interface file
-        if(!(gDSAudioPortConfiguration[port].ms12_capabilites & 0x08)) {
+        if(!(gDSAudioPortConfiguration[port].ms12_capabilites & dsMS12SUPPORT_Volumeleveller)) {
             continue;
         }
 
@@ -718,7 +718,7 @@ void test_l2_dsAudio_SetAndGetBassEnhancer(void)
 
     for (int port = 0; port < gDSAudioNumberOfPorts; port++) {
         //Note: dsMS12SUPPORT_BassEnhancer is not defined yet in interface file
-        if(!(gDSAudioPortConfiguration[port].ms12_capabilites & 0x10)) {
+        if(!(gDSAudioPortConfiguration[port].ms12_capabilites & dsMS12SUPPORT_BassEnhancer)) {
             continue;
         }
 
@@ -791,7 +791,7 @@ void test_l2_dsAudio_EnableAndVerifySurroundDecoder(void)
 
     for (int port = 0; port < gDSAudioNumberOfPorts; port++) {
         //Note: dsMS12SUPPORT_SurroundDecoder is not defined yet in interface file
-        if(!(gDSAudioPortConfiguration[port].ms12_capabilites & 0x20)) {
+        if(!(gDSAudioPortConfiguration[port].ms12_capabilites & dsMS12SUPPORT_SurroundDecoder)) {
             continue;
         }
 
@@ -879,7 +879,7 @@ void test_l2_dsAudio_SetAndGetDRCMode(void)
 
     for (int port = 0; port < gDSAudioNumberOfPorts; port++) {
         //Note: dsMS12SUPPORT_DRCMode is not defined yet in interface file
-        if(!(gDSAudioPortConfiguration[port].ms12_capabilites & 0x40)) {
+        if(!(gDSAudioPortConfiguration[port].ms12_capabilites & dsMS12SUPPORT_DRCMode)) {
             continue;
         }
 
@@ -955,7 +955,7 @@ void test_l2_dsAudio_SetAndGetSurroundVirtualizer(void)
 
     for (int port = 0; port < gDSAudioNumberOfPorts; port++) {
         //Note: dsMS12SUPPORT_SurroundVirtualizer is not defined yet in interface file
-        if(!(gDSAudioPortConfiguration[port].ms12_capabilites & 0x80)) {
+        if(!(gDSAudioPortConfiguration[port].ms12_capabilites & dsMS12SUPPORT_SurroundVirtualizer)) {
             continue;
         }
 
@@ -1033,7 +1033,7 @@ void test_l2_dsAudio_SetAndGetMISteering(void)
 
     for (int port = 0; port < gDSAudioNumberOfPorts; port++) {
         //Note: dsMS12SUPPORT_MISteering is not defined yet in interface file
-        if(!(gDSAudioPortConfiguration[port].ms12_capabilites & 0x100)) {
+        if(!(gDSAudioPortConfiguration[port].ms12_capabilites & dsMS12SUPPORT_MISteering)) {
             continue;
         }
 
@@ -1125,7 +1125,7 @@ void test_l2_dsAudio_SetAndGetGraphicEqualizerMode(void)
 
     for (int port = 0; port < gDSAudioNumberOfPorts; port++) {
         //Note: dsMS12SUPPORT_GraphicEqualizer is not defined yet in interface file
-        if(!(gDSAudioPortConfiguration[port].ms12_capabilites & 0x200)) {
+        if(!(gDSAudioPortConfiguration[port].ms12_capabilites & dsMS12SUPPORT_GraphicEqualizer)) {
             continue;
         }
 
@@ -1200,7 +1200,7 @@ void test_l2_dsAudio_EnableDisableAndRetrieveLEConfig(void)
 
     for (int port = 0; port < gDSAudioNumberOfPorts; port++) {
         //Note: dsMS12SUPPORT_LEConfig is not defined yet in interface file
-        if(!(gDSAudioPortConfiguration[port].ms12_capabilites & 0x400)) {
+        if(!(gDSAudioPortConfiguration[port].ms12_capabilites & dsMS12SUPPORT_LEConfig)) {
             continue;
         }
 
@@ -2013,7 +2013,7 @@ void test_l2_dsAudio_GetAudioCapabilities(void)
 
     dsError_t retStatus;
     intptr_t handle;
-    int capabilities;
+    int capabilities = 0;
 
     UT_LOG_DEBUG("Invoking dsAudioPortInit");
     retStatus = dsAudioPortInit();
