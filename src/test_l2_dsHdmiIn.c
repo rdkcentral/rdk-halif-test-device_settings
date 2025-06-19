@@ -70,6 +70,7 @@
 #include <ut.h>
 #include <ut_log.h>
 #include <ut_kvp_profile.h>
+#include <ut_control_plane.h>
 #include "dsHdmiIn.h"
 #include "test_parse_configuration.h"
 
@@ -77,6 +78,18 @@
 
 static int gTestGroup = 2;
 static int gTestID = 1;
+
+const static ut_control_keyStringMapping_t dsHdmiInPort_mapTable [] =
+{
+  { "dsHDMI_IN_PORT_NONE",     (int32_t)dsHDMI_IN_PORT_NONE },
+  { "dsHDMI_IN_PORT_0",        (int32_t)dsHDMI_IN_PORT_0    },
+  { "dsHDMI_IN_PORT_1",        (int32_t)dsHDMI_IN_PORT_1    },
+  { "dsHDMI_IN_PORT_2",        (int32_t)dsHDMI_IN_PORT_2    },
+  { "dsHDMI_IN_PORT_3",        (int32_t)dsHDMI_IN_PORT_3    },
+  { "dsHDMI_IN_PORT_4",        (int32_t)dsHDMI_IN_PORT_4    },
+  { "dsHDMI_IN_PORT_MAX",      (int32_t)dsHDMI_IN_PORT_MAX  },
+  {  NULL, -1 }
+};
 
 /**
 * @brief Test for getting the number of HDMI inputs from the source
@@ -509,60 +522,67 @@ void test_l2_dsHdmiIn_SetAndGetVRRSupport_sink(void)
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret = dsERR_NONE;
-    uint8_t numInputs = 0; // Initialize to 0
     bool vrrSupport_1 = false;
     bool vrrSupport_2 = false;
+
+    uint8_t vrr_supported_ports_count = 0;
+    uint8_t vrr_unsupported_ports_count = 0;
+    char keyString[DS_HDMIIN_KEY_SIZE] = {0};
+
+    tv_hdmi_edid_version_t ver20 = UT_KVP_PROFILE_GET_UINT32("dsHdmiIn/EdidVersion/1");
+    vrr_supported_ports_count = UT_KVP_PROFILE_GET_LIST_COUNT("dsHdmiIn/VrrSupportedPorts");
+    vrr_unsupported_ports_count = UT_KVP_PROFILE_GET_LIST_COUNT("dsHdmiIn/VrrUnsupportedPorts");
+
+    char vrr_supported_ports[vrr_supported_ports_count];
+    char vrr_unsupported_ports[vrr_unsupported_ports_count];
 
     UT_LOG_DEBUG("Invoking dsHdmiInInit");
     ret = dsHdmiInInit();
     UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
 
-    ret = dsHdmiInGetNumberOfInputs(&numInputs);
-    if (ret != dsERR_NONE)
+    for (int i = 0; i < vrr_unsupported_ports_count; i++)
     {
-        UT_LOG_ERROR("Failed to get the number of hdmi inputs\n");
+        memset(keyString, 0, DS_HDMIIN_KEY_SIZE);
+        snprintf(keyString, DS_HDMIIN_KEY_SIZE, "dsHdmiIn/VrrUnsupportedPorts/%d", i);
+        // Read the unsupported ports from the profile
+        char vrr_unsupported_port[DS_HDMIIN_KEY_SIZE] = {0};
+        UT_ASSERT_EQUAL(ut_kvp_getStringField(ut_kvp_profile_getInstance(), keyString, vrr_unsupported_port, DS_HDMIIN_KEY_SIZE), UT_KVP_STATUS_SUCCESS);
+
+        UT_LOG_DEBUG("Invoking dsHdmiInSetVRRSupport with hdmiPort=%s and VRR support %d\n", vrr_unsupported_port, vrrSupport_1);
+        ret = dsHdmiInSetVRRSupport(UT_Control_GetMapValue(dsHdmiInPort_mapTable, vrr_unsupported_port, 10), vrrSupport_1);
+        UT_ASSERT_EQUAL(ret, dsERR_OPERATION_NOT_SUPPORTED);
+
+        UT_LOG_DEBUG("Invoking dsHdmiInGetVRRSupport with hdmiPort=%s\n", vrr_unsupported_port);
+        ret = dsHdmiInGetVRRSupport(UT_Control_GetMapValue(dsHdmiInPort_mapTable, vrr_unsupported_port, 10), &vrrSupport_2);
+        UT_ASSERT_EQUAL(vrrSupport_2, dsVRR_NONE);
     }
-
-    UT_ASSERT_TRUE(numInputs >= 0 && numInputs <= UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts"));
-
-    for (int port = dsHDMI_IN_PORT_0; port < numInputs; port++)
+    for (int i = 0; i < vrr_supported_ports_count; i++)
     {
+        memset(keyString, 0, DS_HDMIIN_KEY_SIZE);
+        snprintf(keyString, DS_HDMIIN_KEY_SIZE, "dsHdmiIn/VrrSupportedPorts/%d", i);
+        // Read the supported ports from the profile
+        char vrr_supported_port[DS_HDMIIN_KEY_SIZE] = {0};
+        UT_ASSERT_EQUAL(ut_kvp_getStringField(ut_kvp_profile_getInstance(), keyString, vrr_supported_port, DS_HDMIIN_KEY_SIZE), UT_KVP_STATUS_SUCCESS);
 
-        if(port == dsHDMI_IN_PORT_0 || port == dsHDMI_IN_PORT_1) {
-            UT_LOG_DEBUG("Invoking dsHdmiInSetVRRSupport with hdmiPort=%d and VRR support %d\n", port, vrrSupport_1);
-            ret = dsHdmiInSetVRRSupport(port, vrrSupport_1);
-            UT_ASSERT_EQUAL(ret, dsERR_OPERATION_NOT_SUPPORTED);
+        UT_ASSERT_EQUAL(dsSetEdidVersion(UT_Control_GetMapValue(dsHdmiInPort_mapTable, vrr_supported_port, 10), ver20), dsERR_NONE);
 
-            UT_LOG_DEBUG("Invoking dsHdmiInGetVRRSupport with hdmiPort=%d \n", port);
-            ret = dsHdmiInGetVRRSupport(port, &vrrSupport_2);
-            UT_ASSERT_EQUAL(vrrSupport_2, dsVRR_NONE);
-        }
+        vrrSupport_1 = true; // Set VRR support to true for supported ports
+        UT_LOG_DEBUG("Invoking dsHdmiInSetVRRSupport with hdmiPort=%s and VRR support %d\n", vrr_supported_port, vrrSupport_1);
+        ret = dsHdmiInSetVRRSupport(UT_Control_GetMapValue(dsHdmiInPort_mapTable, vrr_supported_port, 10), true);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_LOG_DEBUG("Invoking dsHdmiInGetVRRSupport with hdmiPort=%s\n", vrr_supported_port);
+        ret = dsHdmiInGetVRRSupport(UT_Control_GetMapValue(dsHdmiInPort_mapTable, vrr_supported_port, 10), &vrrSupport_2);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_EQUAL(vrrSupport_1, vrrSupport_2);
 
-
-        if(port == dsHDMI_IN_PORT_2 || port == dsHDMI_IN_PORT_3) {
-            vrrSupport_1 = true;
-            UT_LOG_DEBUG("Invoking dsHdmiInSetVRRSupport with hdmiPort=%d and VRR support %d\n", port, vrrSupport_1);
-            ret = dsHdmiInSetVRRSupport(port, vrrSupport_1);
-            UT_ASSERT_EQUAL(ret, dsERR_NONE);
-
-            UT_LOG_DEBUG("Invoking dsHdmiInGetVRRSupport with hdmiPort=%d \n", port);
-            ret = dsHdmiInGetVRRSupport(port, &vrrSupport_2);
-            UT_ASSERT_EQUAL(ret, dsVRR_NONE);
-
-            UT_ASSERT_EQUAL(vrrSupport_1, vrrSupport_2);
-
-	    vrrSupport_1 = false;
-
-            UT_LOG_DEBUG("Invoking dsHdmiInSetVRRSupport with hdmiPort=%d and VRR support %d\n", port, vrrSupport_1);
-            ret = dsHdmiInSetVRRSupport(port, vrrSupport_1);
-            UT_ASSERT_EQUAL(ret, dsERR_NONE);
-
-            UT_LOG_DEBUG("Invoking dsHdmiInGetVRRSupport with hdmiPort=%d \n", port);
-            ret = dsHdmiInGetVRRSupport(port, &vrrSupport_2);
-            UT_ASSERT_EQUAL(ret, dsVRR_NONE);
-
-            UT_ASSERT_EQUAL(vrrSupport_1, vrrSupport_2);
-        }
+        vrrSupport_1 = false; // Set VRR support to false for supported ports
+        UT_LOG_DEBUG("Invoking dsHdmiInSetVRRSupport with hdmiPort=%s and VRR support %d\n", vrr_supported_port, vrrSupport_1);
+        ret = dsHdmiInSetVRRSupport(UT_Control_GetMapValue(dsHdmiInPort_mapTable, vrr_supported_port, 10), vrrSupport_1);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_LOG_DEBUG("Invoking dsHdmiInGetVRRSupport with hdmiPort=%s\n", vrr_supported_port);
+        ret = dsHdmiInGetVRRSupport(UT_Control_GetMapValue(dsHdmiInPort_mapTable, vrr_supported_port, 10), &vrrSupport_2);
+        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_ASSERT_EQUAL(vrrSupport_1, vrrSupport_2);
     }
 
     UT_LOG_DEBUG("Invoking dsHdmiInTerm");
@@ -627,7 +647,7 @@ int test_l2_dsHdmiIn_register(void)
         UT_add_test( pSuite, "SetGetEdidVer_EdidLength_sink", test_l2_dsHdmiIn_SetAndGetEdidVersionAndValidateEdidLength_sink);
         UT_add_test( pSuite, "GetGameFeaturesList_sink", test_l2_dsHdmiIn_GetSupportedGameFeaturesList_sink);
         UT_add_test( pSuite, "GetHdmiVersionValidate_sink", test_l2_dsHdmiIn_GetHdmiVersionAndValidate_sink);
-	UT_add_test( pSuite, "SetGetHdmiVRRSupport_sink", test_l2_dsHdmiIn_SetAndGetVRRSupport_sink);
+	    UT_add_test( pSuite, "SetGetHdmiVRRSupport_sink", test_l2_dsHdmiIn_SetAndGetVRRSupport_sink);
     }
 
     return 0;
