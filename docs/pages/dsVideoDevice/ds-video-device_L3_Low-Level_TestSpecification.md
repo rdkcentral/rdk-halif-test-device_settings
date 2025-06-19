@@ -54,9 +54,9 @@ Below are top test use-case for the Video Display.
 
 |#|Test-case|Description|HAL APIs|Source|Sink|Streams Number|
 |-|---------|-----------|--------|------|----|--------------|
-|1|Verify the Video Display framerate change with pre and post change callback.|Set the auto framerate mode and check the callback is triggered before and after when the framerate of a display changes|`dsRegisterFrameratePreChangeCB()`, `dsRegisterFrameratePostChangeCB()`|`NA`|`Y`|1,2,3,4,5,6,7,8|
+|1|Verify the Video Display framerate change with pre and post change callback.|Set the auto framerate mode and check the callback is triggered before and after when the framerate of a display changes|`dsRegisterFrameratePreChangeCB()`, `dsRegisterFrameratePostChangeCB()`|`NA`|`Y`|1,2,3,4,5,6,7,8,9,10,11,12,13,14|
 |2|Set and verify the Zoom mode of the source device|Play any video content and Set the supported Zoom mode and verify the selected Zoom mode|`dsSetDFC()`, `dsGetDFC()`|`Y`|`NA`|9|
-|3|Select the Device Frame Rate of Sink device|Select the Device Frame Rate of Sink device and on playing video playback verify `dsSetDisplayframerate()`|`dsSetDisplayframerate()`|`NA`|`Y`|1,2,3,4,5,6,7,8|
+|3|Select the Device Frame Rate of Sink device|Select the Device Frame Rate of Sink device and on playing video playback verify `dsSetDisplayframerate()`|`dsSetDisplayframerate()`|`NA`|`Y`|1,2,3,4,5,6,7,8,9,10,11,12,13,14|
 |4|Set and verify the `FRF` mode|Select the`FRF`mode and verify the selected `FRF` mode with video playback|`dsSetFRFMode()`|`NA`|`Y`|1,2,3,4,5,6,7,8|
 
 ## Level 3 Python Test Cases High Level Overview
