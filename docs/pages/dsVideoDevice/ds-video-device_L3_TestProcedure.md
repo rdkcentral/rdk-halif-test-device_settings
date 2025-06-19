@@ -159,7 +159,7 @@ Refer [ds-video-device_L3_Low-Level_TestSpecification.md](./ds-video-device_L3_L
 
 #### Acceptance Criteria - test01
 
-- Play Streams `#1` `#2` `#3` `#4` `#5` `#6` `#7` `#8` of different fps sequentially and verify whether pre and post display framerate change callbacks triggered or not.
+- Play Streams `#1` `#2` `#3` `#4` `#5` `#6` `#7` `#8`  `#9` `#10` `#11` `#12` `#13` `#14` `#8`  of different fps sequentially and verify whether pre and post display framerate change callbacks triggered or not.
 
 #### Expected Results - test01
 
@@ -247,7 +247,7 @@ Yes (This will be automated later).
 
 #### Acceptance Criteria - test03
 
-Play Streams `#1` `#2` `#3` `#4` `#5` `#6` `#7` `#8` of different fps sequentially an verify the impact of the supported display framerates.
+Play Streams `#1` `#2` `#3` `#4` `#5` `#6` `#7` `#8` `#9` `#10` `#11` `#12` `#13` `#14` `#8`  of different fps sequentially an verify the impact of the supported display framerates.
 
 #### Expected Results - test03
 
@@ -307,7 +307,7 @@ Yes (This will be automated later).
 
 #### Acceptance Criteria - test04
 
-Play Streams `#1` `#2` `#3` `#4` `#5` `#6` `#7` `#8` sequentially and verify the video playback and Framerate with `FRF` mode enabled.
+Play Streams `#1` `#2` `#3` `#4` `#5` `#6` `#7` `#8` `#9` `#10` `#11` `#12` `#13` `#14` `#8` sequentially and verify the video playback and Framerate with `FRF` mode enabled.
 
 #### Expected Results - test04
 
