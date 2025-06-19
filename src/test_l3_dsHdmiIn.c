@@ -430,6 +430,23 @@ static void hdmiInVRRChangeCB(dsHdmiInPort_t port, dsVRRType_t vrrType)
 
 }
 
+/**
+*
+*This function is to check if the supported feature has allm/vrr.
+*/
+bool feature_exists(const char *featureslist, const char *featurestr) {
+    size_t str_len = strlen(featurestr);
+
+    if (str_len == 0) return false;
+
+    for (; *featureslist; featureslist++) {
+        if (strncasecmp(featureslist, featurestr, str_len) == 0) {
+            return true;  // Found a match
+        }
+    }
+
+    return false;  // No match
+}
 
 /**
 * @brief This test initializes the HdmiIn Module.
@@ -504,7 +521,7 @@ void test_l3_HdmiIn_initialize(void)
         dsSupportedGameFeatureList_t features;
         memset(&features, 0, sizeof(features));
         ret = dsGetSupportedGameFeaturesList(&features);
-        if ((features.gameFeatureCount > 0) && ((strstr(features.gameFeatureList, "allm") != NULL) || (strstr(features.gameFeatureList, "ALLM") != NULL))) {
+        if ((features.gameFeatureCount > 0) && (feature_exists(features.gameFeatureList, "ALLM"))) {
             /* Register Allm changes callback */
             UT_LOG_INFO("Calling dsHdmiInRegisterAllmChangeCB(IN:CBFun:[0x%0X])", hdmiInAllmChangeCB);
             ret = dsHdmiInRegisterAllmChangeCB(hdmiInAllmChangeCB);
@@ -527,7 +544,7 @@ void test_l3_HdmiIn_initialize(void)
                             hdmiInAviContentTypeChangeCB, UT_Control_GetMapString(dsError_mapTable, ret));
         DS_ASSERT(ret == dsERR_NONE);
 
-        if ((features.gameFeatureCount > 0) && ((strstr(features.gameFeatureList, "vrr") != NULL) || (strstr(features.gameFeatureList, "VRR") != NULL))) {
+        if ((features.gameFeatureCount > 0) && (feature_exists(features.gameFeatureList, "VRR"))) {
             /* Register VRR Type changes callback */
             UT_LOG_INFO("Calling dsHdmiInRegisterVRRChangeCB(IN:CBFun:[0x%0X])", hdmiInVRRChangeCB);
             ret = dsHdmiInRegisterVRRChangeCB(hdmiInVRRChangeCB);
@@ -1350,7 +1367,8 @@ void test_l3_HdmiIn_get_vrrstatus(void)
     dsError_t ret = dsERR_NONE;
     dsHdmiInPort_t port = dsHDMI_IN_PORT_MAX;
     int32_t select = 0;
-    dsVRRType_t vrrStatus = dsVRR_NONE;
+    dsHdmiInVrrStatus_t vrrStatus;
+    memset(&vrrStatus, 0, sizeof(vrrStatus));
 
     listPorts();
     UT_LOG_MENU_INFO("Select port:");
@@ -1369,9 +1387,10 @@ void test_l3_HdmiIn_get_vrrstatus(void)
 
     ret = dsHdmiInGetVRRStatus(port, &vrrStatus);
 
-    UT_LOG_INFO("Result dsHdmiInGetVRRStatus IN:port:[%s]:[%d], OUT:vrrStatus:[%s], dsError_t:[%s]",
+    UT_LOG_INFO("Result dsHdmiInGetVRRStatus IN:port:[%s]:[%d], OUT:[vrrType:[%s], vrrAmdfreesyncFramerate_Hz:[%0.4lf]], dsError_t:[%s]",
                 UT_Control_GetMapString(dsHdmiInPort_mapTable, port), port,
-                UT_Control_GetMapString(dsVRRType_mapTable, vrrStatus),
+                UT_Control_GetMapString(dsVRRType_mapTable, vrrStatus.vrrType),
+                vrrStatus.vrrAmdfreesyncFramerate_Hz,
                 UT_Control_GetMapString(dsError_mapTable, ret));
 
     DS_ASSERT(ret == dsERR_NONE);
