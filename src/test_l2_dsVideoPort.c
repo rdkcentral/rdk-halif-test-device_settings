@@ -578,8 +578,6 @@ void test_l2_dsVideoPort_GetHDCPStatus(void)
         bool isConnected = false;
         ret = dsIsDisplayConnected(handle, &isConnected);
         if (isConnected){
-            // For vendor image enableHDCP has to be done from code
-            // enableHDCP only if displayconnected is true
             char hdcpKey[HDCP_KEY_MAX_SIZE] = "ADEF";
             int keySize = HDCP_KEY_MAX_SIZE;
             ret = dsEnableHDCP(handle, true, hdcpKey, keySize);
@@ -595,8 +593,8 @@ void test_l2_dsVideoPort_GetHDCPStatus(void)
         UT_LOG_DEBUG("Return status: %d, HDCP Status: %d", ret, status);
 
         if(!isConnected) {
-            UT_ASSERT_TRUE(status == dsHDCP_STATUS_UNPOWERED || status == dsHDCP_STATUS_PORTDISABLED);
-            if (status != dsHDCP_STATUS_UNPOWERED || status != dsHDCP_STATUS_PORTDISABLED) {
+            UT_ASSERT_TRUE(status == dsHDCP_STATUS_UNPOWERED);
+            if (status != dsHDCP_STATUS_UNPOWERED) {
                 UT_LOG_ERROR("HDCP status is not unpowered or portdisabled. Status: %d", status);
             }
         }
