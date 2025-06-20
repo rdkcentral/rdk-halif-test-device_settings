@@ -2842,46 +2842,54 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSetVRRSupport_sink(void) {
     gTestID = 55;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     tv_hdmi_edid_version_t ver20 = UT_KVP_PROFILE_GET_UINT32("dsHdmiIn/EdidVersion/1");
-    uint8_t vrr_supported_ports_count = 0;
-    uint8_t vrr_unsupported_ports_count = 0;
+    uint8_t vrr_supported_ports_count = UT_KVP_PROFILE_GET_LIST_COUNT("dsHdmiIn/VrrSupportedPorts");
     char keyString[DS_HDMIIN_KEY_SIZE] = {0};
 
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
-    vrr_supported_ports_count = UT_KVP_PROFILE_GET_LIST_COUNT("dsHdmiIn/VrrSupportedPorts");
-    vrr_unsupported_ports_count = UT_KVP_PROFILE_GET_LIST_COUNT("dsHdmiIn/VrrUnsupportedPorts");
-
     if (gSourceType == 0)
     {
-        for (int i = 0; i < vrr_unsupported_ports_count; i++)
-        {
-            memset(keyString, 0, DS_HDMIIN_KEY_SIZE);
-            snprintf(keyString, DS_HDMIIN_KEY_SIZE, "dsHdmiIn/VrrUnsupportedPorts/%d", i);
-            // Read the unsupported ports from the profile
-            char vrr_unsupported_port[DS_HDMIIN_KEY_SIZE] = {0};
-            UT_ASSERT_EQUAL(ut_kvp_getStringField(ut_kvp_profile_getInstance(), keyString, vrr_unsupported_port, DS_HDMIIN_KEY_SIZE), UT_KVP_STATUS_SUCCESS);
-            UT_LOG_DEBUG("VRR Unsupported Port: %s\n", vrr_unsupported_port);
+        // Handle unsupported ports by deriving them from numberOfPorts and supported list
+        uint8_t number_of_ports = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
 
-            // Step 2: Call dsHdmiInSetVRRSupport() to enable VRR support for each port
-            UT_ASSERT_EQUAL(dsHdmiInSetVRRSupport(UT_Control_GetMapValue(dsHdmiInPort_mapTable, vrr_unsupported_port, 10), true), dsERR_OPERATION_NOT_SUPPORTED);
-            // Step 3: Call dsHdmiInSetVRRSupport() to disable VRR support for each port
-            UT_ASSERT_EQUAL(dsHdmiInSetVRRSupport(UT_Control_GetMapValue(dsHdmiInPort_mapTable, vrr_unsupported_port, 10), false), dsERR_OPERATION_NOT_SUPPORTED);
-        }
+        bool is_supported[number_of_ports];
+        memset(is_supported, 0, sizeof(is_supported));
+
+        // Mark supported ports
         for (int i = 0; i < vrr_supported_ports_count; i++)
         {
-            memset(keyString, 0, DS_HDMIIN_KEY_SIZE);
+            char port_string[DS_HDMIIN_KEY_SIZE] = {0};
             snprintf(keyString, DS_HDMIIN_KEY_SIZE, "dsHdmiIn/VrrSupportedPorts/%d", i);
             // Read the supported ports from the profile
-            char vrr_supported_port[DS_HDMIIN_KEY_SIZE] = {0};
-            UT_ASSERT_EQUAL(ut_kvp_getStringField(ut_kvp_profile_getInstance(), keyString, vrr_supported_port, DS_HDMIIN_KEY_SIZE), UT_KVP_STATUS_SUCCESS);
-            UT_LOG_DEBUG("VRR Supported Port: %s\n", vrr_supported_port);
+            UT_ASSERT_EQUAL(ut_kvp_getStringField(ut_kvp_profile_getInstance(), keyString, port_string, DS_HDMIIN_KEY_SIZE), UT_KVP_STATUS_SUCCESS);
 
-            UT_ASSERT_EQUAL(dsSetEdidVersion(UT_Control_GetMapValue(dsHdmiInPort_mapTable, vrr_supported_port, 10), ver20), dsERR_NONE);
+            int port = UT_Control_GetMapValue(dsHdmiInPort_mapTable, port_string, 10);
+            if (port >= 0 && port < number_of_ports)
+            {
+                is_supported[port] = true;
+            }
+
+            UT_LOG_DEBUG("VRR Supported Port: %d\n", port);
+
+            UT_ASSERT_EQUAL(dsSetEdidVersion(port, ver20), dsERR_NONE);
             // Step 2: Call dsHdmiInSetVRRSupport() to enable VRR support for each port
-            UT_ASSERT_EQUAL(dsHdmiInSetVRRSupport(UT_Control_GetMapValue(dsHdmiInPort_mapTable, vrr_supported_port, 10), true), dsERR_NONE);
+            UT_ASSERT_EQUAL(dsHdmiInSetVRRSupport(port, true), dsERR_NONE);
             // Step 3: Call dsHdmiInSetVRRSupport() to disable VRR support for each port
-            UT_ASSERT_EQUAL(dsHdmiInSetVRRSupport(UT_Control_GetMapValue(dsHdmiInPort_mapTable, vrr_supported_port, 10), false), dsERR_NONE);
+            UT_ASSERT_EQUAL(dsHdmiInSetVRRSupport(port, false), dsERR_NONE);
+        }
+
+        // Handle unsupported ports
+        for (int port = 0; port < number_of_ports; port++)
+        {
+            if (!is_supported[port])
+            {
+                UT_LOG_DEBUG("VRR Unsupported Port: %d\n", port);
+                // Step 2: Call dsHdmiInSetVRRSupport() to enable VRR support for each port
+                UT_ASSERT_EQUAL(dsHdmiInSetVRRSupport(port, true), dsERR_OPERATION_NOT_SUPPORTED);
+                // Step 3: Call dsHdmiInSetVRRSupport() to disable VRR support for each port
+                UT_ASSERT_EQUAL(dsHdmiInSetVRRSupport(port, false), dsERR_OPERATION_NOT_SUPPORTED);
+            }
         }
     }
     else if (gSourceType == 1)
