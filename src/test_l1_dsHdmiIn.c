@@ -2852,9 +2852,6 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSetVRRSupport_sink(void) {
     vrr_supported_ports_count = UT_KVP_PROFILE_GET_LIST_COUNT("dsHdmiIn/VrrSupportedPorts");
     vrr_unsupported_ports_count = UT_KVP_PROFILE_GET_LIST_COUNT("dsHdmiIn/VrrUnsupportedPorts");
 
-    char vrr_supported_ports[vrr_supported_ports_count];
-    char vrr_unsupported_ports[vrr_unsupported_ports_count];
-
     if (gSourceType == 0)
     {
         for (int i = 0; i < vrr_unsupported_ports_count; i++)

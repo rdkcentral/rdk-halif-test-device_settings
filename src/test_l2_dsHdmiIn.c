@@ -533,9 +533,6 @@ void test_l2_dsHdmiIn_SetAndGetVRRSupport_sink(void)
     vrr_supported_ports_count = UT_KVP_PROFILE_GET_LIST_COUNT("dsHdmiIn/VrrSupportedPorts");
     vrr_unsupported_ports_count = UT_KVP_PROFILE_GET_LIST_COUNT("dsHdmiIn/VrrUnsupportedPorts");
 
-    char vrr_supported_ports[vrr_supported_ports_count];
-    char vrr_unsupported_ports[vrr_unsupported_ports_count];
-
     UT_LOG_DEBUG("Invoking dsHdmiInInit");
     ret = dsHdmiInInit();
     UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
@@ -555,6 +552,7 @@ void test_l2_dsHdmiIn_SetAndGetVRRSupport_sink(void)
         UT_LOG_DEBUG("Invoking dsHdmiInGetVRRSupport with hdmiPort=%s\n", vrr_unsupported_port);
         ret = dsHdmiInGetVRRSupport(UT_Control_GetMapValue(dsHdmiInPort_mapTable, vrr_unsupported_port, 10), &vrrSupport_2);
         UT_ASSERT_EQUAL(vrrSupport_2, dsVRR_NONE);
+        UT_ASSERT_EQUAL(ret, dsERR_OPERATION_NOT_SUPPORTED);
     }
     for (int i = 0; i < vrr_supported_ports_count; i++)
     {
