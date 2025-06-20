@@ -2039,7 +2039,7 @@ void test_l1_dsVideoPort_positive_dsGetHDCPStatus(void) {
             } else {
                 UT_ASSERT_EQUAL(status, dsERR_NONE);
                 if (!isConnected) {
-                    UT_ASSERT_EQUAL(hdcpStatus1, dsHDCP_STATUS_PORTDISABLED)
+                    UT_ASSERT_EQUAL(hdcpStatus1, dsHDCP_STATUS_UNPOWERED)
                 } else {
                     UT_ASSERT_EQUAL(hdcpStatus1, dsHDCP_STATUS_AUTHENTICATED)
                 }
