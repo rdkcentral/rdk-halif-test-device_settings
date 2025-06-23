@@ -224,11 +224,11 @@ dsError_t dsHdmiInSetVRRSupport(dsHdmiInPort_t port, bool vrrSupport)
   return (dsError_t)0;
 }
 
-dsError_t dsHdmiInGetVRRStatus(dsHdmiInPort_t port, dsVRRType_t *vrrType)
+dsError_t dsHdmiInGetVRRStatus(dsHdmiInPort_t port, dsHdmiInVrrStatus_t *vrrStatus)
 {
   /*TODO: Implement Me!*/
   (void)port;
-  (void)vrrType;
+  (void)vrrStatus;
   return (dsError_t)0;
 }
 
