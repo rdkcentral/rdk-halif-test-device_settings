@@ -449,7 +449,7 @@ void test_l2_dsVideoPort_VerifySupportedTvResolutions(void)
         bool isConnected = false;
         ret = dsIsDisplayConnected(handle, &isConnected);
         if(!isConnected) {
-            UT_ASSERT_EQUAL(resolutions, 0);
+            UT_ASSERT_EQUAL(resolutions, (int)dsTV_RESOLUTION_480i);
         }
         else {
             UT_ASSERT_EQUAL(resolutions, gDSVideoPortConfiguration[port].Supported_tv_resolutions_capabilities);
