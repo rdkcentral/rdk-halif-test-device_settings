@@ -941,7 +941,7 @@ class dsHdmiInClass():
 
         result = self.utMenu.select( self.testSuite, "Get VRR Status", promptWithAnswers)
 
-        typeStatusPattern = r"Result dsHdmiInGetVRRStatus IN:port:\[(\w+)\]:\[.*\], OUT:vrrStatus:\[(\w+)\], dsError_t:\[(dsERR_\w+)\]"
+        typeStatusPattern = r"Result dsHdmiInGetVRRStatus IN:port:\[(\w+)\]:\[.*\], OUT:\[vrrType:\[(\w+)\], vrrAmdfreesyncFramerate_Hz:\[(\d+(?:\.\d+)?)\]\], dsError_t:\[(dsERR_\w+)\]"
         match = re.search(typeStatusPattern, result)
         if match:
             vrrType = match.group(2)
@@ -1020,11 +1020,6 @@ class dsHdmiInClass():
         if match:
             count = int(match.group(1))
             features = [f.strip() for f in match.group(2).split(',')]
-            """
-            # hack to get the vrr frature in supported list
-            x = "allm, vrr_hdmi, vrr_amd_freesync"
-            features = [f.strip() for f in x.split(',')]
-            """
             return features
     
         return None
