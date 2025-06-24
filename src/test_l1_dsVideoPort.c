@@ -2703,7 +2703,7 @@ void test_l1_dsVideoPort_positive_dsSupportedTvResolutions(void) {
         bool isConnected = false;
         status = dsIsDisplayConnected(handle, &isConnected);
         if(!isConnected) {
-            UT_ASSERT_EQUAL(resolutions1, (int)dsTV_RESOLUTION_480i);
+            UT_ASSERT_EQUAL(resolutions1, (int)dsTV_RESOLUTION_480p);
         }
         else {
             UT_ASSERT_EQUAL(resolutions1, gDSVideoPortConfiguration[i].Supported_tv_resolutions_capabilities);
@@ -3355,7 +3355,7 @@ void test_l1_dsVideoPort_positive_dsGetColorDepth(void) {
         bool isConnected = false;
         status = dsIsDisplayConnected(handle, &isConnected);
         if(!isConnected) {
-            UT_ASSERT_EQUAL(colorDepth1, 8);
+            UT_ASSERT_EQUAL(colorDepth1, DS_VIDEO_PORT_DEFAULT_COLORDEPTH);
         }
         else {
             UT_ASSERT_EQUAL(colorDepth1, gDSvideoPort_color_depth);
