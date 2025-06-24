@@ -52,7 +52,7 @@ class dsVideoDevice_test3_SetDisplayFramerate(dsVideoDeviceHelperClass):
         """
         self.testName = "test3_SetDisplayFramerate"
         self.qcID = '3'
-        self.testStreamFrameRates = ["23.98", "24", "25", "29.97", "30", "50", "59.94", "60"]
+        self.testStreamFrameRates = ["23.98", "24", "25", "29.97", "30", "50", "59.94", "60", "100", "119.88", "120", "200", "239.76", "240"]
         super().__init__(self.testName, self.qcID, log)
 
 

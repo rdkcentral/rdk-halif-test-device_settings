@@ -133,15 +133,21 @@ const static ut_control_keyStringMapping_t dsCompInResolutionMappingTable[] = {
 /* Mapping table for dsVideoFrameRate_t */
 const static ut_control_keyStringMapping_t dsCompInFrameRateMappingTable[] = {
     {"dsVIDEO_FRAMERATE_UNKNOWN", (int32_t)dsVIDEO_FRAMERATE_UNKNOWN},
-    {"dsVIDEO_FRAMERATE_24", (int32_t)dsVIDEO_FRAMERATE_24},
-    {"dsVIDEO_FRAMERATE_25", (int32_t)dsVIDEO_FRAMERATE_25},
-    {"dsVIDEO_FRAMERATE_30", (int32_t)dsVIDEO_FRAMERATE_30},
-    {"dsVIDEO_FRAMERATE_60", (int32_t)dsVIDEO_FRAMERATE_60},
+    {"dsVIDEO_FRAMERATE_24",      (int32_t)dsVIDEO_FRAMERATE_24},
+    {"dsVIDEO_FRAMERATE_25",      (int32_t)dsVIDEO_FRAMERATE_25},
+    {"dsVIDEO_FRAMERATE_30",      (int32_t)dsVIDEO_FRAMERATE_30},
+    {"dsVIDEO_FRAMERATE_60",      (int32_t)dsVIDEO_FRAMERATE_60},
     {"dsVIDEO_FRAMERATE_23dot98", (int32_t)dsVIDEO_FRAMERATE_23dot98},
     {"dsVIDEO_FRAMERATE_29dot97", (int32_t)dsVIDEO_FRAMERATE_29dot97},
-    {"dsVIDEO_FRAMERATE_50", (int32_t)dsVIDEO_FRAMERATE_50},
+    {"dsVIDEO_FRAMERATE_50",      (int32_t)dsVIDEO_FRAMERATE_50},
     {"dsVIDEO_FRAMERATE_59dot94", (int32_t)dsVIDEO_FRAMERATE_59dot94},
-    {"dsVIDEO_FRAMERATE_MAX", (int32_t)dsVIDEO_FRAMERATE_MAX},
+    {"dsVIDEO_FRAMERATE_100",     (int32_t)dsVIDEO_FRAMERATE_100},
+    {"dsVIDEO_FRAMERATE_119dot88",(int32_t)dsVIDEO_FRAMERATE_119dot88},
+    {"dsVIDEO_FRAMERATE_120",     (int32_t)dsVIDEO_FRAMERATE_120},
+    {"dsVIDEO_FRAMERATE_200",     (int32_t)dsVIDEO_FRAMERATE_200},
+    {"dsVIDEO_FRAMERATE_239dot76",(int32_t)dsVIDEO_FRAMERATE_239dot76},
+    {"dsVIDEO_FRAMERATE_240",     (int32_t)dsVIDEO_FRAMERATE_240},
+    {"dsVIDEO_FRAMERATE_MAX",     (int32_t)dsVIDEO_FRAMERATE_MAX},
     {NULL, -1}
 };
 
