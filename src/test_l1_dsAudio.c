@@ -8027,7 +8027,7 @@ void test_l1_dsAudio_negative_dsGetAssociatedAudioMixing(void)
         UT_ASSERT_NOT_EQUAL(handle, null_handle);
 
         // Step 05: Call with NULL mixing pointer
-        result = dsGetAssociatedAudioMixing(handle, &mixing);
+        result = dsGetAssociatedAudioMixing(handle, NULL);
         UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
     }
 
