@@ -2703,7 +2703,7 @@ void test_l1_dsVideoPort_positive_dsSupportedTvResolutions(void) {
         bool isConnected = false;
         status = dsIsDisplayConnected(handle, &isConnected);
         if(!isConnected) {
-            UT_ASSERT_EQUAL(resolutions1, 0);
+            UT_ASSERT_EQUAL(resolutions1, (int)dsTV_RESOLUTION_480i);
         }
         else {
             UT_ASSERT_EQUAL(resolutions1, gDSVideoPortConfiguration[i].Supported_tv_resolutions_capabilities);
@@ -2828,6 +2828,9 @@ void test_l1_dsVideoPort_positive_dsSetForceDisable4KSupport(void) {
     for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
         status = dsGetVideoPort(gDSVideoPortConfiguration[i].typeid, gDSVideoPortConfiguration[i].index, &(handle));
         UT_ASSERT_EQUAL(status, dsERR_NONE);
+        UT_ASSERT_PTR_NOT_NULL(handle);
+        if (handle == 0)
+            break;
         // Step 03: Set force disable 4K support
         status = dsSetForceDisable4KSupport(handle, disable4K);
         UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
