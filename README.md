@@ -42,14 +42,14 @@ This repository contains the Unit Test Suites (`L1` , `L2` and `L3`) for the fol
 |SNo|Document Name|Document Description|Document Link|
 |---|-------------|--------------------|-------------|
 |1|Device Settings `HAL`|This document provides specific information on each `DS` sub-module's `APIs` for which tests are written in this module|[`DS` `HAL` Guide](https://github.com/rdkcentral/rdk-halif-device_settings/blob/main/docs/pages/README.md)|
-|2|`DS` Audio Test Suits Specifications |`L1`,`L2`,`L3` Test Specification Documentation for `DS` Audio module.|[dsAudioTestDoc]( docs/pages/dsAudio/)|
-|3|`DS` Video Device Test Suits Specifications |`L1`,`L2`,`L3` Test Specification Documentation for `DS` Video Device module.|[dsVideoDeviceTestDoc]( docs/pages/dsVideoDevice/)|
-|4|`DS` Video Port  Test Suits Specifications |`L1`,`L2`,`L3` Test Specification Documentation for `DS` Video Port  module.|[dsVideoPortTestDoc]( docs/pages/dsVideoPort/)|
-|5|`DS` Display Test Suits Specifications |`L1`,`L2`,`L3` Test Specification Documentation for `DS` Display module.|[dsDisplayTestDoc]( docs/pages/dsDisplay/)|
-|6|`DS` Front Panel Display Test Suits Specifications |`L1`,`L2`,`L3` Test Specification Documentation for `DS` Front Panel Display module.|[dsFPDTestDoc]( docs/pages/dsFPD/)|
-|7|`DS` Host Test Suits Specifications |`L1`,`L2`,`L3` Test Specification Documentation for `DS` Host module.|[dsHostTestDoc]( docs/pages/dsHost/)|
-|8|`DS` HDMI Input Test Suits Specifications |`L1`,`L2`,`L3` Test Specification Documentation for `DS` HDMI Input module.|[dsHDMIInTestDoc]( docs/pages/dsHDMIIn/)|
-|9|`DS` Composite Input Test Suits Specifications |`L1`,`L2`,`L3` Test Specification Documentation for `DS` Composite Input module.|[dsCompositeInTestDoc]( docs/pages/dsCompositeIn/)|
+|2|`DS` Audio Test Suits Specifications |`L1`,`L2`,`L3` Test Specification Documentation for `DS` Audio module.|[dsAudioTestDoc]( https://github.com/rdkcentral/rdk-halif-test-device_settings/tree/main/docs/pages/dsAudio)|
+|3|`DS` Video Device Test Suits Specifications |`L1`,`L2`,`L3` Test Specification Documentation for `DS` Video Device module.|[dsVideoDeviceTestDoc](https://github.com/rdkcentral/rdk-halif-test-device_settings/tree/main/docs/pages/dsVideoDevice)|
+|4|`DS` Video Port  Test Suits Specifications |`L1`,`L2`,`L3` Test Specification Documentation for `DS` Video Port  module.|[dsVideoPortTestDoc](https://github.com/rdkcentral/rdk-halif-test-device_settings/tree/main/docs/pages/dsVideoPort)|
+|5|`DS` Display Test Suits Specifications |`L1`,`L2`,`L3` Test Specification Documentation for `DS` Display module.|[dsDisplayTestDoc](https://github.com/rdkcentral/rdk-halif-test-device_settings/tree/main/docs/pages/dsDisplay)|
+|6|`DS` Front Panel Display Test Suits Specifications |`L1`,`L2`,`L3` Test Specification Documentation for `DS` Front Panel Display module.|[dsFPDTestDoc](https://github.com/rdkcentral/rdk-halif-test-device_settings/tree/main/docs/pages/dsFPD)|
+|7|`DS` Host Test Suits Specifications |`L1`,`L2`,`L3` Test Specification Documentation for `DS` Host module.|[dsHostTestDoc](https://github.com/rdkcentral/rdk-halif-test-device_settings/tree/main/docs/pages/dsHost)|
+|8|`DS` HDMI Input Test Suits Specifications |`L1`,`L2`,`L3` Test Specification Documentation for `DS` HDMI Input module.|[dsHDMIInTestDoc](https://github.com/rdkcentral/rdk-halif-test-device_settings/tree/main/docs/pages/dsHDMIIn)|
+|9|`DS` Composite Input Test Suits Specifications |`L1`,`L2`,`L3` Test Specification Documentation for `DS` Composite Input module.|[dsCompositeInTestDoc](https://github.com/rdkcentral/rdk-halif-test-device_settings/tree/main/docs/pages/dsCompositeIn)|
 
 ## Notes
 
@@ -115,11 +115,11 @@ Alternatively, use the run.sh script with the profile file:
 ./run.sh -p /absolute/path/to/profile/file
  ```
 
-- Profiles files defines the configuration for the platform available for sink and source [profile yaml file](./profiles/)
+- Profiles files defines the configuration for the platform available for sink and source [profile yaml file](https://github.com/rdkcentral/rdk-halif-test-device_settings/tree/main/profiles)
 
 ### Setting Python environment for running the `L1` `L2` and `L3` automation test cases
 
 - For running the `L1` `L2` and `L3` test suite, a host PC or server with a Python environment is required.
 - Install Python Environment and Activation Scripts as detailed in the [HPK Documentation](https://github.com/rdkcentral/rdk-hpk-documentation/tree/main?tab=readme-ov-file#installing-the-python-environment-for-l3-testing-suite)
-- To run the `L1` and `L2` test cases of `DS` sub-modules follow the [L1 L2 TestProcedure docs](./docs/pages/)
-- To run the `L3` test cases of `DS` sub-modules follow the [L3 TestProcedure docs](./docs/pages/)
+- To run the `L1` and `L2` test cases of `DS` sub-modules follow the [L1 L2 TestProcedure docs](https://github.com/rdkcentral/rdk-halif-test-device_settings/tree/main/docs/pages)
+- To run the `L3` test cases of `DS` sub-modules follow the [L3 TestProcedure docs](https://github.com/rdkcentral/rdk-halif-test-device_settings/tree/main/docs/pages)

@@ -6,7 +6,7 @@
 - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
 - [References](#references)
 - [Level 3 Test cases High Level Overview](#level-3-test-cases-high-level-overview)
-- [Level 3 Python Test Cases High Level Overview](#level-3-Python-test-cases-high-level-overview)
+- [Level 3 Python Test Cases High Level Overview](#level-3-python-test-cases-high-level-overview)
 
 ## Overview
 
@@ -118,7 +118,7 @@ classDiagram
 
 - **testSetupConfig.yaml**
   - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams etc.
-  - Example configuration file [dsHdmiIn_L3_testSetup.yml](../../../host/tests/dsHdmiIn_L3_Tests/dsHdmiIn_L3_testSetup.yml)
+  - Example configuration file [dsHdmiIn_L3_testSetup.yml](https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/main/host/tests/L3_TestCases/dsHdmiIn/dsHdmiIn_L3_testSetup.yml)
 
 - **testSuite.yaml**
   - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
