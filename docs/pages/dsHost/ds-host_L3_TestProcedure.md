@@ -104,7 +104,7 @@ deviceConfig:
 
 #### Test Setup Configuration File
 
-Example Test Setup configuration File: [dsHost_L3_testSetup.yml](https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/main/host/tests/L3_TestCases/dsHost/dsHost_L3_testSetup.yml)
+Example Test Setup configuration File: [dsHost_L3_testSetup.yml](../../../host/tests/L3_TestCases/dsHost/dsHost_L3_testSetup.yml)
 
 Update the artifact paths from which the binaries should be copied to the device.
 

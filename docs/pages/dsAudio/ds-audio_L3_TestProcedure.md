@@ -70,7 +70,7 @@ To execute `HAL` `L3` Python test cases, need a Python environment. Follow these
 
 #### Rack Configuration File
 
-Example Rack configuration File: [example_rack_config.yml](https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/main/host/tests/configs/example_rack_config.yml)
+Example Rack configuration File: [example_rack_config.yml](../../../host/tests/configs/example_rack_config.yml)
 
 For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_rack_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_rack_config.yml)
 
@@ -122,7 +122,7 @@ rackConfig:
 
 #### Device Configuration File
 
-Example Device configuration File: [deviceConfig.yml](https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/main/host/tests/configs/deviceConfig.yml)
+Example Device configuration File: [deviceConfig.yml](../../../host/tests/configs/deviceConfig.yml)
 
 For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_device_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_device_config.yml)
 
@@ -158,7 +158,7 @@ deviceConfig:
 
 #### Test Setup Configuration File
 
-Example Test Setup configuration File: [dsAudio_L3_testSetup.yml](https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/main/host/tests/L3_TestCases/dsAudio/dsAudio_L3_testSetup.yml)
+Example Test Setup configuration File: [dsAudio_L3_testSetup.yml](../../../host/tests/L3_TestCases/dsAudio/dsAudio_L3_testSetup.yml)
 
 Streams required for each test case was provided in this file. This path is appended with `streams_download_url` entry from [Device Configuration File](#device-configuration-file)
 
@@ -185,7 +185,7 @@ dsAudio:
 
 #### Test Configuration
 
-Example Test Setup configuration File: [dsAudio_testConfig.yml](https://github.com/rdkcentral/rdk-halif-test-device_settings/blob/main/host/tests/dsClasses/dsAudio_testConfig.yml)
+Example Test Setup configuration File: [dsAudio_testConfig.yml](../../../host/tests/dsClasses/dsAudio_testConfig.yml)
 
 Execute command to run te HAL binary was provided in this file.
 
