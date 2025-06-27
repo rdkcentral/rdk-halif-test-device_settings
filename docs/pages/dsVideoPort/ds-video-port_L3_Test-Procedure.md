@@ -16,7 +16,6 @@
   - [dsVideoPort_test7_ResetToSDRMode.py](#dsvideoport_test7_resettosdrmodepy)
   - [dsVideoPort_test8_VerifyColorDepth.py](#dsvideoport_test8_verifycolordepthpy)
   - [dsVideoPort_test9_VerifyBackgroundColor.py](#dsvideoport_test9_verifybackgroundcolorpy)
-  - [dsVideoPort_test10_VerifyALLM_Mode.py](#dsvideoport_test10_verifyallm_modepy)
 
 ## Overview
 
