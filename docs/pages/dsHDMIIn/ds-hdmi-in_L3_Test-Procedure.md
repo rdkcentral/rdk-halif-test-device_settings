@@ -4,14 +4,13 @@
 
 - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
 - [Setting Up Test Environment](#setting-up-test-environment)
-- [Streams Required](#streams-required)
 - [Test Cases](#test-cases)
   - [dsHdmiIn_test1_ConnectionCallback_Verify.py](#dshdmiin_test1_connectioncallback_verifypy)
   - [dsHdmiIn_test2_SignalChangeCallback_Verify.py](#dshdmiin_test2_signalchangecallback_verifypy)
   - [dsHdmiIn_test3_PortStatusCallback_Verify.py](#dshdmiin_test3_portstatuscallback_verifypy)
   - [dsHdmiIn_test4_VideoModeChangeCallback_Verify.py](#dshdmiin_test4_videomodechangecallback_verifypy)
   - [dsHdmiIn_test5_AllmChangeCallback_Verify.py](#dshdmiin_test5_allmchangecallback_verifypy)
-  - [dsHdmiIn_test6_AVlatncyCallback_Verify.py](#dshdmiin_test6_avlatncycallback_verifypy)
+  - [dsHdmiIn_test6_AVlatencyCallback_Verify.py](#dshdmiin_test6_avlatencycallback_verifypy)
   - [dsHdmiIn_test7_AVIChangeCallback_Verify.py](#dshdmiin_test7_avichangecallback_verifypy)
   - [dsHdmiIn_test8_SelectPortAndVerifyPortStatus.py](#dshdmiin_test8_selectportandverifyportstatuspy)
   - [dsHdmiIn_test9_ScaleVideoAndVerify.py](#dshdmiin_test9_scalevideoandverifypy)
@@ -19,7 +18,8 @@
   - [dsHdmiIn_test11_GetEDIDInfo_Verify.py](#dshdmiin_test11_getedidinfo_verifypy)
   - [dsHdmiIn_test12_GetSpdInfo_Verify.py](#dshdmiin_test12_getspdinfo_verifypy)
   - [dsHdmiIn_test13_SetAndGetEDIDVersion.py](#dshdmiin_test13_setandgetedidversionpy)
-  - [dsHdmiIn_test14_SetAndGetEDID2ALLMSupport.py](#dshdmiin_test14_setandgetedid2allmsupportpy)
+  - [dsHdmiIn_test14_SetEDID2ALLMSupport.py](#dshdmiin_test14_setedid2allmsupportpy)
+  - [dsHdmiIn_test15_SetGetVrrStausAndCallback.py](#dshdmiin_test15_setgetvrrstausandcallbackpy)
   - [dsHdmiIn_L3_Runall_Sink.py](#dshdmiin_l3_runall_sinkpy)
 
 ## Acronyms, Terms and Abbreviations

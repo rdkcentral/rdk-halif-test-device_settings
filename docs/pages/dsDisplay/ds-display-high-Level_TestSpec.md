@@ -6,7 +6,7 @@
 - [References](#references)
 - [Introduction](#introduction)
 - [Module Description](#module-description)
-- [Testing Scope](#test-scope)
+- [Testing Scope](#testing-scope)
 
 ## Acronyms, Terms and Abbreviations
 
@@ -109,3 +109,70 @@ Emulator will boot with the predefined set of HDCP keys coming from the configur
 
 - The control plane will generate events for HDMI connection and disconnection. It also supplies signals to the receiving devices to initiate the Rx Sense ON/Rx Sense OFF events.
 - The Control Plane will handle connection/disconnection, measuring the timing between both and ensuring it meets the expected time.
+
+### Check ALLM mode
+
+|Test Functionality|Description|HAL API's|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|---------|--|--|------|----|--------------------------|
+|Check ALLM mode|Enables/Disables ALLM mode for HDMI output port connected to display. For source devices, this function enables or disables the ALLM mode for specified HDMI output port.|dsSetAllmEnabled()|`Y`|`Y`|`Y`|`NA`|`Y`|
+||Checks whether ALLM mode of HDMI output port connected to display is enabled or not.|dsGetAllmEnabled()|`Y`|`Y`|`Y`|`NA`|`Y`|
+
+#### Test Startup Requirement-Check the ALLM mode
+
+A device must have HDMI 2.x capabilities
+
+#### Emulator Requirements-Check the ALLM mode
+
+Emulator will boot with the port informations coming from the configuration file.
+
+#### Control Plane Requirements-Check the ALLM mode
+
+Check ALLM mode is Enabled or Disabled and verify with HDMI analyzer
+
+#### ALLM Status
+
+|Test Functionality|Description|HAL API's|L2|L3|Source|Sink|Control plane requirements|
+|------------------|-----------|---------|--|--|------|----|--------------------------|
+|Check `ALLM` Status|Enable/Disable `ALLM` feature and verify with HDMI analyzer|dsSetAllmEnabled()|`Y`|`Y`|`Y`|`N`|`NA`|
+
+#### Test Startup Requirement-ALLM Status
+
+Connect HDMI port on TV with 2.x specification
+
+#### Emulator Requirements-ALLM Status
+
+Emulator will boot with the port informations coming from the configuration file.
+
+#### Control Plane Requirements-ALLM Status
+
+Verify the `ALLM` Status with HDMI analyzer/external device
+
+## AVI Content Type Verification
+
+|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|-----------|--------|--|--|------|----|--------------------------|
+|Set the AVI Content Type through HDMI InfoFrame.|dsSetAVIContentType()|Y|Y|Y|N|N|
+|Get the AVI Content Type set on the HDMI InfoFrame.|dsGetAVIContentType()|Y|Y|Y|N|N|
+
+### Emulator Requirement - AVI Content Type Verification
+
+Emulator will boot with the port informations coming from the configuration file.
+
+### Control Plane Requirement - AVI Content Type Verification
+
+Verify the AVI Content Type with HDMI analyzer/external device.
+
+## AVI Scan Information Verification
+
+|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|-----------|--------|--|--|------|----|--------------------------|
+|Set the AVI Scan Information through HDMI InfoFrame.|dsSetAVIScanInformation()|N|Y|Y|N|N|
+|Retrieve the AVI Scan Information from the HDMI InfoFrame.|dsGetAVIScanInformation()|N|Y|Y|N|N|
+
+### Emulator Requirement - AVI Scan Information Verification
+
+Emulator will boot with the port informations coming from the configuration file.
+
+### Control Plane Requirement - AVI Scan Information Verification
+
+Verify the AVI Scan Information with HDMI analyzer/external device.
