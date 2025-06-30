@@ -114,7 +114,7 @@ classDiagram
 
 - **testSetupConfig.yaml**
   - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams, setting environment variables etc.
-  - Example configuration file [dsVideoDevice_L3_testSetup.yml](../../../host/tests/dsVideoDevice_L3_Tests/dsVideoDevice_L3_testSetup.yml)
+  - Example configuration file [dsVideoDevice_L3_testSetup.yml](../../../host/tests/L3_TestCases/dsVideoDevice/dsVideoDevice_L3_testSetup.yml)
 
 - **testConfig.yaml**
   - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
