@@ -599,7 +599,7 @@ class dsAudioClass():
         ]
         result = self.utMenu.select(self.testSuite, "Set MS12 Profiles", promptWithAnswers)
 
-    def enableAssociateAudioMixig(self, enable:bool = True, fader:int = 0):
+    def enableAssociateAudioMixig(self, audio_port, port_index, enable:bool = True, fader:int = 0):
         """
         Enables or disables associated audio mixing for the system.
 
@@ -611,6 +611,16 @@ class dsAudioClass():
             None
         """
         promptWithAnswers = [
+                {
+                    "query_type": "list",
+                    "query": "Select dsAudio Port:",
+                    "input": str(audio_port)
+                },
+                {
+                    "query_type": "direct",
+                    "query": "Select dsAudio Port Index[0-10]:",
+                    "input": str(port_index)
+                },
                 {
                     "query_type": "direct",
                     "query": "Enable/Disable Associated Audio Mixing[1:Enable, 2:Disable]:",
@@ -627,7 +637,7 @@ class dsAudioClass():
 
         result = self.utMenu.select(self.testSuite, "Set Associate Audio Mixing", promptWithAnswers)
 
-    def setAudioMixerLevels(self, mixer_input:str, volume:int = 0):
+    def setAudioMixerLevels(self, audio_port, port_index, mixer_input:str, volume:int = 0):
         """
         Sets the audio mixer levels for primary or system audio.
 
@@ -639,6 +649,16 @@ class dsAudioClass():
             None
         """
         promptWithAnswers = [
+                {
+                    "query_type": "list",
+                    "query": "Select dsAudio Port:",
+                    "input": str(audio_port)
+                },
+                {
+                    "query_type": "direct",
+                    "query": "Select dsAudio Port Index[0-10]:",
+                    "input": str(port_index)
+                },
                 {
                     "query_type": "list",
                     "query": "Select Mixer Input:",
@@ -653,7 +673,7 @@ class dsAudioClass():
 
         result = self.utMenu.select(self.testSuite, "Set Audio Mixer Levels", promptWithAnswers)
 
-    def setPrimarySecondaryLanguage(self, language_type:str, language:str):
+    def setPrimarySecondaryLanguage(self, audio_port, port_index, language_type:str, language:str):
         """
         Sets the primary or secondary language for the audio system.
 
@@ -665,6 +685,16 @@ class dsAudioClass():
             None
         """
         promptWithAnswers = [
+                {
+                    "query_type": "list",
+                    "query": "Select dsAudio Port:",
+                    "input": str(audio_port)
+                },
+                {
+                    "query_type": "direct",
+                    "query": "Select dsAudio Port Index[0-10]:",
+                    "input": str(port_index)
+                },
                 {
                     "query_type": "direct",
                     "query": "Select the Language Type[1: Primary, 2: Secondary]:",
@@ -678,9 +708,9 @@ class dsAudioClass():
         ]
 
         if (language_type == "Primary"):
-            promptWithAnswers[0]["input"] = "1"
+            promptWithAnswers[2]["input"] = "1"
         else:
-            promptWithAnswers[0]["input"] = "2"
+            promptWithAnswers[2]["input"] = "2"
 
         result = self.utMenu.select(self.testSuite, "Primary/Secondary Language", promptWithAnswers)
 
@@ -756,7 +786,7 @@ class dsAudioClass():
             return port, index, connection
         return None
 
-    def getAudioFormat(self):
+    def getAudioFormat(self, audio_port, port_index):
         """
         Retrieves the current audio format being Played.
 
@@ -766,7 +796,19 @@ class dsAudioClass():
         Returns:
             str: The audio format in use, as a string (e.g., 'dsAUDIO_FORMAT_DD', 'dsAUDIO_FORMAT_AAC').
         """
-        result = self.utMenu.select( self.testSuite, "Get Audio Format")
+        promptWithAnswers = [
+                {
+                    "query_type": "list",
+                    "query": "Select dsAudio Port:",
+                    "input": str(audio_port)
+                },
+                {
+                    "query_type": "direct",
+                    "query": "Select dsAudio Port Index[0-10]:",
+                    "input": str(port_index)
+                }
+        ]
+        result = self.utMenu.select( self.testSuite, "Get Audio Format", promptWithAnswers)
         audioFormatPattern = r"Result dsGetAudioFormat\(IN:handle:\[.*\], OUT:audioFormat:\[(dsAUDIO_FORMAT_\w+)\]\)"
         audioFormat = self.searchPattern(result, audioFormatPattern)
 
