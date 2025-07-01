@@ -6,7 +6,7 @@
 - [References](#references)
 - [Introduction](#introduction)
 - [Module Description](#module-description)
-- [Testing Scope](#test-scope)
+- [Testing Scope](#testing-scope)
 
 ## Acronyms, Terms and Abbreviations
 
@@ -126,7 +126,7 @@ A device must have HDMI 2.x capabilities
 
 #### Emulator Requirements-Check the ALLM mode
 
-[Emulator Requirements](#emulator-requirements)
+Emulator will boot with the port informations coming from the configuration file.
 
 #### Control Plane Requirements-Check the ALLM mode
 
@@ -144,7 +144,7 @@ Connect HDMI port on TV with 2.x specification
 
 #### Emulator Requirements-ALLM Status
 
-[Emulator Requirements](#emulator-requirements)
+Emulator will boot with the port informations coming from the configuration file.
 
 #### Control Plane Requirements-ALLM Status
 
@@ -159,7 +159,7 @@ Verify the `ALLM` Status with HDMI analyzer/external device
 
 ### Emulator Requirement - AVI Content Type Verification
 
-[Emulator Requirements](#emulator-requirements).
+Emulator will boot with the port informations coming from the configuration file.
 
 ### Control Plane Requirement - AVI Content Type Verification
 
@@ -174,7 +174,7 @@ Verify the AVI Content Type with HDMI analyzer/external device.
 
 ### Emulator Requirement - AVI Scan Information Verification
 
-[Emulator Requirements](#emulator-requirements).
+Emulator will boot with the port informations coming from the configuration file.
 
 ### Control Plane Requirement - AVI Scan Information Verification
 
