@@ -1724,6 +1724,22 @@ void test_l3_dsAudio_get_audio_format(void)
     dsError_t ret = dsERR_NONE;
     intptr_t handle = (intptr_t)NULL;
     dsAudioFormat_t getAudioFormat = dsAUDIO_FORMAT_NONE;
+    bool enabled = false;
+    dsAudioPortType_t port = dsAUDIOPORT_TYPE_MAX;
+    int32_t portIndex = 0;
+
+    if(dsAudio_list_select_ports(&port, &portIndex))
+    {
+        goto exit;
+    }
+
+    handle = dsAudio_getPort(port, portIndex, &enabled);
+
+    if(enabled == false)
+    {
+        UT_LOG_WARNING("Port is not enabled");
+        goto exit;
+    }
 
     UT_LOG_INFO("Calling dsGetAudioFormat(IN:handle:[0x%0X], OUT:audioFormat:[])", handle);
 
@@ -1735,7 +1751,7 @@ void test_l3_dsAudio_get_audio_format(void)
                 UT_Control_GetMapString(dsError_mapTable, ret));
 
     DS_ASSERT(ret == dsERR_NONE);
-
+exit:
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
 
@@ -1760,6 +1776,22 @@ void test_l3_dsAudio_set_atmos_mode(void)
     intptr_t handle = (intptr_t)NULL;
     int32_t choice = 0;
     bool enable = false;
+    bool enabled = false;
+    dsAudioPortType_t port = dsAUDIOPORT_TYPE_MAX;
+    int32_t portIndex = 0;
+
+    if(dsAudio_list_select_ports(&port, &portIndex))
+    {
+        goto exit;
+    }
+
+    handle = dsAudio_getPort(port, portIndex, &enabled);
+
+    if(enabled == false)
+    {
+        UT_LOG_WARNING("Port is not enabled");
+        goto exit;
+    }
 
     UT_LOG_MENU_INFO("Enable/Disable ATMOS Mode[1:Enable, 2:Disable]: ");
     readInt(&choice);
@@ -1942,6 +1974,22 @@ void test_l3_dsAudio_set_associate_audio_mixing(void)
     int32_t choice = -1;
     bool mixing = false;
     bool mixing_g = false;
+    bool enabled = false;
+    dsAudioPortType_t port = dsAUDIOPORT_TYPE_MAX;
+    int32_t portIndex = 0;
+
+    if(dsAudio_list_select_ports(&port, &portIndex))
+    {
+        goto exit;
+    }
+
+    handle = dsAudio_getPort(port, portIndex, &enabled);
+
+    if(enabled == false)
+    {
+        UT_LOG_WARNING("Port is not enabled");
+        goto exit;
+    }
 
     UT_LOG_MENU_INFO("Enable/Disable Associated Audio Mixing[1:Enable, 2:Disable]: ");
     readInt(&choice);
@@ -2037,6 +2085,22 @@ void test_l3_dsAudio_set_audio_mixerlevels(void)
     intptr_t handle = (intptr_t)NULL;
     int32_t volume = 0;
     int32_t aInput = 0;
+    bool enabled = false;
+    dsAudioPortType_t port = dsAUDIOPORT_TYPE_MAX;
+    int32_t portIndex = 0;
+
+    if(dsAudio_list_select_ports(&port, &portIndex))
+    {
+        goto exit;
+    }
+
+    handle = dsAudio_getPort(port, portIndex, &enabled);
+
+    if(enabled == false)
+    {
+        UT_LOG_WARNING("Port is not enabled");
+        goto exit;
+    }
 
     UT_LOG_MENU_INFO("----------------------------------------------------------");
     UT_LOG_MENU_INFO("Mixer Input");
@@ -2103,6 +2167,22 @@ void test_l3_dsAudio_set_language(void)
     int32_t language_type = 0;
     char language[4] = {0};
     char language_g[4] = {0};
+    bool enabled = false;
+    dsAudioPortType_t port = dsAUDIOPORT_TYPE_MAX;
+    int32_t portIndex = 0;
+
+    if(dsAudio_list_select_ports(&port, &portIndex))
+    {
+        goto exit;
+    }
+
+    handle = dsAudio_getPort(port, portIndex, &enabled);
+
+    if(enabled == false)
+    {
+        UT_LOG_WARNING("Port is not enabled");
+        goto exit;
+    }
 
     UT_LOG_MENU_INFO("Select the Language Type[1: Primary, 2: Secondary]: ");
     readInt(&language_type);

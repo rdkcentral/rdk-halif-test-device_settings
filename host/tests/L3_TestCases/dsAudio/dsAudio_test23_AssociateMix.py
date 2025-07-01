@@ -99,7 +99,7 @@ class dsAudio_test23_AssociateMix(dsAudioHelperClass):
 
                 self.log.stepStart(f'Associate Mixing Disabled, Stream: {stream} Fader: 0')
 
-                self.testdsAudio.enableAssociateAudioMixig(False)
+                self.testdsAudio.enableAssociateAudioMixig(port, index, False)
 
                 # Start the stream playback
                 self.testPlayer.play(stream)
@@ -111,7 +111,7 @@ class dsAudio_test23_AssociateMix(dsAudioHelperClass):
                 for fade in self.faderValues:
                     self.log.stepStart(f'Associate Mixing Stream: {stream} Fader: {fade}')
 
-                    self.testdsAudio.enableAssociateAudioMixig(True, fade)
+                    self.testdsAudio.enableAssociateAudioMixig(port, index, True, fade)
 
                     result = self.testVerifyAssociateAudioMix(port, True, fade, True)
 
