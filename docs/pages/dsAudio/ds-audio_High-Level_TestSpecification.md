@@ -54,7 +54,7 @@ The Audio device setting interface provides control to enable or disable Audio O
 |01|[Test Audio Port](#test-audio-port)|Test for audio port configuration|
 |02|[Test MS12 `DAP` Capabilities](#test-ms12-dap-capabilities)|Test for MS12 `DAP` capabilities like compression, dialogue enhancement, volume mode, intelligent equalizer, bass enhancer Surround decode, `DRC` mode, Surround Virtualizer, `MI` Steering, Graphic equalizer, `LE` configuration|
 |03|[Test MS12 Capabilities](#test-ms12-capabilities)|Test for MS12 capabilities|
-|04|[Test `ARC` Support - Sink Device](#test-arc-support---sink-device)|Test for `ARC` Ports|
+|04|[Test `ARC` Support Sink Device](#test-arc-support-sink-device)|Test for `ARC` Ports|
 |05|[Test Stereo Mode Support](#test-stereo-mode-support)|Test for Stereo mode configurations|
 |06|[Test Audio Gain and Mute](#test-audio-gain-and-mute)|Test for audio gain level configurations and mute functionality|
 |07|[Test Audio Delay](#test-audio-delay)|Test for audio delay configuration|
@@ -164,7 +164,7 @@ Playback of stream is required for the L3 testcases. [Audio Format Requirements 
 
 `NA`
 
-## Test `ARC` Support - Sink Device
+## Test `ARC` Support Sink Device
 
 |Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
 |-----------|--------|--|--|------|----|--------------------------|
