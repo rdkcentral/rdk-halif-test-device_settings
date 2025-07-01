@@ -152,7 +152,7 @@ Check video out is HDR or SDR and verify with analyzer
 ||Check the HDCP status of each port and verify if dsHDCP_STATUS_AUTHENTICATED is returned for sinks, and dsHDCP_STATUS_UNPOWERED/dsHDCP_STATUS_PORTDISABLED is returned for sources. |dsGetHDCPStatus()|`Y`|`NA`|`Y`|`Y`|`NA`|
 ||Check current active port HDCP status and check with connected device|dsIsVideoPortActive(), dsGetHDCPStatus() |`NA`|`Y`|`Y`|`NA`|`NA`|
 ||Check the HDCP protocol status of each port and verify it with the configuration YAML file. If it is a sink device, retrieve the value from the 'Sink_4K_VideoPort.yaml' file using the path "dsVideoPort/Ports/[port no]/hdcp_protocol_version" supported by INTERNAL port. For a source device, retrieve the value from the 'Source_4K_VideoPort.yaml' file using the path "dsVideoPort/Ports/[port no]/hdcp_protocol_version" supported by `HDMI` port.|dsGetHDCPProtocol()|`Y`|`NA`|`Y`|`Y`|`NA`|
-||Check current active port HDCP protocol Status with connected device |dsIsVideoPortActive(), dsGetHDCPCurrentProtocol()|`NA`|`Y`|`Y`|`Y`|`Y`|
+||Check current active port HDCP protocol Status with connected device |dsIsVideoPortActive(), dsGetHDCPCurrentProtocol()|`NA`|`Y`|`Y`|`NA`|`Y`|
 ||Check active port HDCP Receiver protocol version with connected device|dsIsVideoPortActive(), dsGetHDCPReceiverProtocol(),|`NA`|`Y`|`Y`|`NA`|`Y`|
 ||Ignore EDID status for active port with connected device|dsIsVideoPortActive(), dsGetIgnoreEDIDStatus()|`N`|`Y`|`Y`|`NA`|`Y`|
 ||Set the preferred HDCP Protocol version for each valid port and verify it using the get function.|dsSetHdmiPreference(), dsGetHdmiPreference()|`Y`|`NA`|`Y`|`Y`|`NA`|

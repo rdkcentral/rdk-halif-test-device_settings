@@ -227,7 +227,7 @@ This test is designed to verify the correct `HDCP` version used during video pla
 
 **Platform Supported:**
 
-Source, Sink
+Source
 
 **User Input Required:**
 
