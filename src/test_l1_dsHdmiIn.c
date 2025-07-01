@@ -2864,7 +2864,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInSetVRRSupport_sink(void) {
             // Read the supported ports from the profile
             UT_ASSERT_EQUAL(ut_kvp_getStringField(ut_kvp_profile_getInstance(), keyString, port_string, DS_HDMIIN_KEY_SIZE), UT_KVP_STATUS_SUCCESS);
 
-            int port = UT_Control_GetMapValue(dsHdmiInPort_mapTable, port_string, 10);
+            int port = UT_Control_GetMapValue(dsHdmiInPort_mapTable, port_string, TEST_DS_DEFAULT_VALUE);
             if (port >= 0 && port < number_of_ports)
             {
                 is_supported[port] = true;

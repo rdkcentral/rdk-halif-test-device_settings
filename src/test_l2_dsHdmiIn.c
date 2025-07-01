@@ -549,7 +549,7 @@ void test_l2_dsHdmiIn_SetAndGetVRRSupport_sink(void)
         snprintf(keyString, DS_HDMIIN_KEY_SIZE, "dsHdmiIn/VrrSupportedPorts/%d", i);
         UT_ASSERT_EQUAL(ut_kvp_getStringField(ut_kvp_profile_getInstance(), keyString, vrr_supported_port, DS_HDMIIN_KEY_SIZE), UT_KVP_STATUS_SUCCESS);
 
-        int port = UT_Control_GetMapValue(dsHdmiInPort_mapTable, vrr_supported_port, 10);
+        int port = UT_Control_GetMapValue(dsHdmiInPort_mapTable, vrr_supported_port, TEST_DS_DEFAULT_VALUE);
         if (port >= 0 && port < number_of_ports)
         {
             is_supported[port] = true;
