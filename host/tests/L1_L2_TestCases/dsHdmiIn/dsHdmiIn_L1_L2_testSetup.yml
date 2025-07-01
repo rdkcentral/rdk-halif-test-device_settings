@@ -18,109 +18,10 @@ dsHdmiIn:
     #  test_cases:
     #    - all
 
-    #######################################
-    # Entries to run individual test cases
-    #######################################
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInInit_pos
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInTerm_pos
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInGetInputs_pos
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInGetStatus_pos
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInSelectPort_pos
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInScaleVideo_pos
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInGetVideoMode_pos
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInConnectCB_pos
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInSigChangeCB_pos
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInStatChangeCB_pos
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInVMUpdateCB_pos
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInAllmChangeCB_pos
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInAVLatChangeCB_pos
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInAviContTypeCB_pos
-    #- name: "L1 dsHdmiIn - Source"
-      #test_cases:
-       # - dsHdmiInInit_neg
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInTerm_neg
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInGetInputs_neg
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInSelectPort_neg
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInScaleVideo_neg
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInGetVideoMode_neg
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInConnectCB_neg
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInSignalChangeCB_neg
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInStatusChangeCB_neg
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInVMUpdateCB_neg
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInAllmChangeCB_neg
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInAVLatChangeCB_neg
-    #- name: "L1 dsHdmiIn - Source"
-      #test_cases:
-       #- dsHdmiInAviContTypeCB_neg
-    #- name: "L1 dsHdmiIn - Source"
-    #  test_cases:
-    #   - dsHdmiInGetStatus_neg
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInSelZoomMode_pos
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsHdmiInSelZoomMode_neg
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsGetHdmiVersion_pos
-    #- name: "L1 dsHdmiIn - Source"
-     # test_cases:
-      #  - dsGetHdmiVersion_neg
+    ###############################################
+    # Entries to run individual test cases L1 Sink
+    ###############################################
 
-    #######################################
-    # Entries to run individual test cases
-    #######################################
     - name: "L1 dsHdmiIn - Sink"
       test_cases:
         - dsHdmiInInit_pos
@@ -204,6 +105,12 @@ dsHdmiIn:
         - dsHdmiInAviContTypeCB_neg
     - name: "L1 dsHdmiIn - Sink"
       test_cases:
+        - dsHdmiInVRRChangeCB_pos
+    - name: "L1 dsHdmiIn - Sink"
+      test_cases:
+        - dsHdmiInVRRChangeCB_neg
+    - name: "L1 dsHdmiIn - Sink"
+      test_cases:
         - dsHdmiInGetStatus_neg
     - name: "L1 dsHdmiIn - Sink"
       test_cases:
@@ -271,6 +178,205 @@ dsHdmiIn:
     - name: "L1 dsHdmiIn - Sink"
       test_cases:
         - dsGetHdmiVersion_neg
+    - name: "L1 dsHdmiIn - Sink"
+      test_cases:
+        - dsGetHdmiVRRSupport_pos
+    - name: "L1 dsHdmiIn - Sink"
+      test_cases:
+        - dsGetHdmiVRRSupport_neg
+    - name: "L1 dsHdmiIn - Sink"
+      test_cases:
+        - dsSetVRRSupport_pos
+    - name: "L1 dsHdmiIn - Sink"
+      test_cases:
+        - dsSetVRRSupport_neg
+    - name: "L1 dsHdmiIn - Sink"
+      test_cases:
+        - dsGetVRRStatus_pos
+    - name: "L1 dsHdmiIn - Sink"
+      test_cases:
+        - dsGetVRRStatus_neg
+
+    ################################################
+    # Entries to run individual test cases L1 Source
+    #################################################
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInInit_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInTerm_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInGetInputs_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInGetStatus_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInSelectPort_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInScaleVideo_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInGetVideoMode_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInConnectCB_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInSigChangeCB_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInStatChangeCB_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInVMUpdateCB_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInAllmChangeCB_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInAVLatChangeCB_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInAviContTypeCB_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInInit_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInTerm_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInGetInputs_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInSelectPort_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInScaleVideo_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInGetVideoMode_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInConnectCB_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInSignalChangeCB_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInStatusChangeCB_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInVMUpdateCB_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInAllmChangeCB_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInAVLatChangeCB_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInAviContTypeCB_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInVRRChangeCB_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInVRRChangeCB_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInGetStatus_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInSelZoomMode_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsHdmiInSelZoomMode_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsIsHdmiARCPort_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsGetEDIDBytesInfo_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsGetHDMISPDInfo_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsSetEdidVersion_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsGetEdidVersion_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsGetAllmStatus_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsGetGameFeaturesList_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsGetAVLatency_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsSetEdid2AllmSupport_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsGetEDIDBytesInfo_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsGetHDMISPDInfo_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsSetEdidVersion_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsGetEdidVersion_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsGetAllmStatus_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsGetGameFeaturesList_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsGetAVLatency_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsSetEdid2AllmSupport_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsIsHdmiARCPort_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsGetHdmiVersion_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsGetHdmiVersion_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsGetHdmiVRRSupport_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsGetHdmiVRRSupport_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsSetVRRSupport_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsSetVRRSupport_neg
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsGetVRRStatus_pos
+    # - name: "L1 dsHdmiIn - Source"
+    #   test_cases:
+    #     - dsGetVRRStatus_neg
+
+
+
     ######################################
     # Entries to run selected test case
     ######################################
@@ -295,27 +401,44 @@ dsHdmiIn:
     #  test_cases:
     #    - all
 
-    #######################################
-    # Entries to run individual test cases
-    #######################################
-    - name: "L2 dsHdmiIn - Sink"
-      test_cases:
-        - GetNumberOfInputs
-    - name: "L2 dsHdmiIn - Sink"
-      test_cases:
-        - GetStatus
-    - name: "L2 dsHdmiIn - Sink"
-      test_cases:
-        - VerifyHdmiInputPortStatus
-    - name: "L2 dsHdmiIn - Sink"
-      test_cases:
-        - VerifyHdmiArcPort_sink
-    - name: "L2 dsHdmiIn - Sink"
-      test_cases:
-        - SetGetEdidVer_EdidLength_sink
-    - name: "L2 dsHdmiIn - Sink"
-      test_cases:
-        - GetGameFeaturesList_sink
-    - name: "L2 dsHdmiIn - Sink"
-      test_cases:
-        - GetHdmiVersionValidate_sink
+    ###############################################
+    # Entries to run individual test cases L2 Sink
+    ###############################################
+    # - name: "L2 dsHdmiIn - Sink"
+    #   test_cases:
+    #     - GetNumberOfInputs
+    # - name: "L2 dsHdmiIn - Sink"
+    #   test_cases:
+    #     - GetStatus
+    # - name: "L2 dsHdmiIn - Sink"
+    #   test_cases:
+    #     - VerifyHdmiInputPortStatus
+    # - name: "L2 dsHdmiIn - Sink"
+    #   test_cases:
+    #     - VerifyHdmiArcPort_sink
+    # - name: "L2 dsHdmiIn - Sink"
+    #   test_cases:
+    #     - SetGetEdidVer_EdidLength_sink
+    # - name: "L2 dsHdmiIn - Sink"
+    #   test_cases:
+    #     - GetGameFeaturesList_sink
+    # - name: "L2 dsHdmiIn - Sink"
+    #   test_cases:
+    #     - GetHdmiVersionValidate_sink
+    # - name: "L2 dsHdmiIn - Sink"
+    #   test_cases:
+    #     - SetGetHdmiVRRSupport_sink
+
+
+    ###############################################
+    # Entries to run individual test cases L2 Source
+    ###############################################
+    # - name: "L2 dsHdmiIn - Source"
+    #   test_cases:
+    #     - GetNumberOfInputs
+    # - name: "L2 dsHdmiIn - Source"
+    #   test_cases:
+    #     - GetStatus
+    # - name: "L2 dsHdmiIn - Source"
+    #   test_cases:
+    #     - VerifyHdmiInputPortStatus

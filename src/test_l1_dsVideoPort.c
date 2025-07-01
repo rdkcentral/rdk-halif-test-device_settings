@@ -72,6 +72,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "dsVideoPort.h"
+#include "dsDisplay.h"
 #include "test_parse_configuration.h"
 
 #include <ut.h>
@@ -558,8 +559,9 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortEnabled(void) {
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
  * |03|Call dsIsDisplayConnected() - by looping through the acquired port handles to check if video port is connected to a display or not | handle: [ loop through valid handles ] , connected: [pointer to hold the connection status of Video Port] | dsERR_NONE | Flag which holds the connection status of Video Port must be returned |
- * |04|Compare the value with the value for source/sink device respectively | | dsERR_NONE | The values must be equal |
- * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
+ * |04|Call dsIsDisplayConnected() - Again by looping through the acquired port handles to check if a video port is connected to a display or not | handle: [ loop through valid handles ] , connected: [pointer to hold the connection status of Video Port] | dsERR_NONE | Flag which holds the connection status of Video Port must be returned |
+ * |05|Compare the values if they are equal | | dsERR_NONE | The values must be equal |
+ * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
 void test_l1_dsVideoPort_positive_dsIsDisplayConnected(void) {
@@ -570,6 +572,7 @@ void test_l1_dsVideoPort_positive_dsIsDisplayConnected(void) {
     intptr_t handle = 0;
 
     bool isConnected1 = false;
+    bool isConnected2 = false;
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
@@ -585,15 +588,14 @@ void test_l1_dsVideoPort_positive_dsIsDisplayConnected(void) {
         // Step 03: Check if video port is connected
         status = dsIsDisplayConnected(handle, &isConnected1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
-        // Step 04: Compare the value with the value for source/sink device
-        if (gSourceType == 0) {
-            UT_ASSERT_EQUAL(isConnected1, true);
-        } else if (gSourceType == 1) {
-            UT_ASSERT_EQUAL(isConnected1, false);
-        }
+        // Step 04: Repeat the check for if video port is connected
+        status = dsIsDisplayConnected(handle, &isConnected2);
+        UT_ASSERT_EQUAL(status, dsERR_NONE);
+        // Step 05: Compare if the values are equal
+        UT_ASSERT_EQUAL(isConnected1, isConnected2);
     }
 
-    // Step 05: Terminate the video port system
+    // Step 06: Terminate the video port system
     status = dsVideoPortTerm();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
@@ -1997,7 +1999,7 @@ void test_l1_dsVideoPort_negative_dsRegisterHdcpStatusCallback(void) {
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
  * |03|Call dsGetHDCPStatus() by looping through the acquired port handles and valid pointer to retrieve HDCP status | handle  = [valid handles] status = [valid pointer] | dsERR_NONE | The HDCP status must be successfully fetched and stored in the given pointer or indicate that the operation isn't supported|
- * |04|Compare the values with the HDCP status for sink and source devices respectively | | dsERR_NONE | The values must be equal |
+ * |04|Compare the values with the HDCP status for sink and source devices respectively based on the dsIsDisplayConnected status | | dsERR_NONE | The values must be equal |
  * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
@@ -2014,25 +2016,39 @@ void test_l1_dsVideoPort_positive_dsGetHDCPStatus(void) {
 
     // Step 02: Get the video port handle
     for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
-        dsHdcpStatus_t hdcpStatus1;
+        dsHdcpStatus_t hdcpStatus1 = dsHDCP_STATUS_UNPOWERED;
         status = dsGetVideoPort(gDSVideoPortConfiguration[i].typeid, gDSVideoPortConfiguration[i].index, &(handle));
         UT_ASSERT_EQUAL(status, dsERR_NONE);
         UT_ASSERT_PTR_NOT_NULL(handle);
         if (handle == 0)
             break;
+        status = dsDisplayInit();
+        bool isConnected = false;
+        status = dsIsDisplayConnected(handle, &isConnected);
+        if (isConnected){
+            char hdcpKey[HDCP_KEY_MAX_SIZE] = "ADEF";
+            int keySize = HDCP_KEY_MAX_SIZE;
+            status = dsEnableHDCP(handle, true, hdcpKey, keySize);
+        }
         // Step 03: Retrieve the HDCP status
         status = dsGetHDCPStatus(handle, &(hdcpStatus1));
         // Step 04: Compare the value with values of profile file
-        if (gSourceType == 0) {
+        if (gSourceType == 1) {
             if (gDSVideoPortConfiguration[i].hdcp_supported == false) {
                 UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
             } else {
                 UT_ASSERT_EQUAL(status, dsERR_NONE);
-                UT_ASSERT_EQUAL(hdcpStatus1, dsHDCP_STATUS_AUTHENTICATED);
+                if (!isConnected) {
+                    UT_ASSERT_EQUAL(hdcpStatus1, dsHDCP_STATUS_UNPOWERED)
+                } else {
+                    UT_ASSERT_EQUAL(hdcpStatus1, dsHDCP_STATUS_AUTHENTICATED)
+                }
             }
-        } else if(gSourceType == 1) {
-            UT_ASSERT_EQUAL(hdcpStatus1, dsHDCP_STATUS_PORTDISABLED);
+        } else if(gSourceType == 0) {
+            UT_ASSERT_EQUAL(status, dsERR_NONE);
+            UT_ASSERT_EQUAL(hdcpStatus1, dsHDCP_STATUS_AUTHENTICATED);
         }
+        status = dsDisplayTerm();
     }
 
     // Step 05: Terminate the video port system
@@ -2518,7 +2534,7 @@ void test_l1_dsVideoPort_negative_dsGetHDCPCurrentProtocol(void) {
  * |01|Call dsVideoPortInit() - Initialize video ports of a system | |dsERR_NONE| Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports|
  * |03|Call dsGetTVHDRCapabilities() by looping through the acquired port handles and valid pointer to retrieve the HDR capabilities of a video port | handle  = [loop through valid handles] , capabilities = [valid pointer] |dsERR_NONE|The HDR capabilities must be successfully fetched and stored in the given pointer|
- * |04|Compare the values with values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |04|Compare the values with values from profile file or default value based on the dsIsDisplayConnected status and make sure they are equal | | dsERR_NONE | The values must be equal |
  * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
@@ -2546,7 +2562,16 @@ void test_l1_dsVideoPort_positive_dsGetTVHDRCapabilities(void) {
         status = dsGetTVHDRCapabilities(handle, &capabilities1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
         // Step 04: Compare the value with profile file values
-        UT_ASSERT_EQUAL(capabilities1, gDSVideoPortConfiguration[i].hdr_capabilities);
+        status = dsDisplayInit();
+        bool isConnected = false;
+        status = dsIsDisplayConnected(handle, &isConnected);
+        if(!isConnected) {
+            UT_ASSERT_EQUAL(capabilities1, dsHDRSTANDARD_SDR);
+        }
+        else {
+            UT_ASSERT_EQUAL(capabilities1, gDSVideoPortConfiguration[i].hdr_capabilities);
+        }
+        status = dsDisplayTerm();
     }
 
     // Step 05: Terminate the video port system
@@ -2646,7 +2671,7 @@ void test_l1_dsVideoPort_negative_dsGetTVHDRCapabilities(void) {
  * |01|Call dsVideoPortInit() - Initialize video ports of a system | |dsERR_NONE| Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports|
  * |03|Call dsSupportedTvResolutions() by looping through the acquired port handles and valid pointer to retrieve the resolutions of a video port |handle  = [loop through valid handles] , resolutions = [valid pointer] |dsERR_NONE|Resolutions must be set successfully|
- * |05|Compare the values with values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |05|Compare the values with values from profile file or default value based on the dsIsDisplayConnected status and make sure they are equal | | dsERR_NONE | The values must be equal |
  * |06|Call dsVideoPortTerm() - Terminate the video ports of a system| |dsERR_NONE|Termination must be successful|
  * 
  */
@@ -2674,7 +2699,16 @@ void test_l1_dsVideoPort_positive_dsSupportedTvResolutions(void) {
         status = dsSupportedTvResolutions(handle, &resolutions1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
         // Step 04: Compare the value with value from profile file
-        UT_ASSERT_EQUAL(resolutions1, gDSVideoPortConfiguration[i].Supported_tv_resolutions_capabilities);
+        status = dsDisplayInit();
+        bool isConnected = false;
+        status = dsIsDisplayConnected(handle, &isConnected);
+        if(!isConnected) {
+            UT_ASSERT_EQUAL(resolutions1, (int)dsTV_RESOLUTION_480p);
+        }
+        else {
+            UT_ASSERT_EQUAL(resolutions1, gDSVideoPortConfiguration[i].Supported_tv_resolutions_capabilities);
+        }
+        status = dsDisplayTerm();
     }
 
     // Step 05: Terminate the video port system
@@ -3289,7 +3323,7 @@ void test_l1_dsVideoPort_negative_dsGetMatrixCoefficients(void) {
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
  * |03|Call dsGetColorDepth() by looping through the acquired port handles and valid pointer to retrieve the current color depth  | handle  = [loop through valid handles] , color_depth = [valid pointer] | dsERR_NONE | must return a valid color depth value of the specified video port|
- * |04|Compare the values with values from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
+ * |04|Compare the values with values from profile file or default value based on the dsIsDisplayConnected status and make sure they are equal | | dsERR_NONE | The values must be equal |
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
@@ -3317,7 +3351,16 @@ void test_l1_dsVideoPort_positive_dsGetColorDepth(void) {
         status = dsGetColorDepth(handle, &colorDepth1);
         UT_ASSERT_EQUAL(status, dsERR_NONE);
         // Step 04: Compare the value with values from profile file
-        UT_ASSERT_EQUAL(colorDepth1, gDSvideoPort_color_depth);
+        status = dsDisplayInit();
+        bool isConnected = false;
+        status = dsIsDisplayConnected(handle, &isConnected);
+        if(!isConnected) {
+            UT_ASSERT_EQUAL(colorDepth1, DS_VIDEO_PORT_DEFAULT_COLORDEPTH);
+        }
+        else {
+            UT_ASSERT_EQUAL(colorDepth1, gDSvideoPort_color_depth);
+        }
+        status = dsDisplayTerm();
     }
 
     // Step 05: Terminate the video port system

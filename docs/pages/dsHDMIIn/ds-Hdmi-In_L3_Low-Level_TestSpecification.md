@@ -6,7 +6,7 @@
 - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
 - [References](#references)
 - [Level 3 Test cases High Level Overview](#level-3-test-cases-high-level-overview)
-- [Level 3 Python Test Cases High Level Overview](#level-3-Python-test-cases-high-level-overview)
+- [Level 3 Python Test Cases High Level Overview](#level-3-python-test-cases-high-level-overview)
 
 ## Overview
 
@@ -61,6 +61,7 @@ Below are top test use-case for the HdmiIn port.
 |12|Get and verify the `SPD` info of selected port|Select the HdmiInput and get the `SPD` info for that particular Input port|`dsGetHDMISPDInfo()`|`NA`|`Y`|
 |13|Set and verify the `EDID` version on selected port|Set the `EDID` version and verify by retrieving the `EDID` version|`dsSetEdidVersion()`,`dsGetEdidVersion()`|`NA`|`Y`|
 |14|Set and verify `EDID` to `ALLM` support on selected port|Set `ALLM` on selected port connected with game controller on 4k supported panel and verify it|`dsSetEdid2AllmSupport()`|`NA`|`Y`|
+|15|Verify the HdmiIn `VRR Type` change with callbacks|Select the Hdminput device with available VRR type (like `vrr_hdmi`,`vrr_amd_freesync`,`vrr_amd-freesync_premium`,...) and check the callbacks is triggered when there is change|`dsHdmiInSetVRRSupport()`, `dsHdmiInGetVRRSupport`, `dsHdmiInGetVRRStatus`, `dsHdmiInRegisterVRRChangeCB`|`NA`|`Y`|
 
 ## Level 3 Python Test Cases High Level Overview
 
@@ -117,7 +118,7 @@ classDiagram
 
 - **testSetupConfig.yaml**
   - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams etc.
-  - Example configuration file [dsHdmiIn_L3_testSetup.yml](../../../host/tests/dsHdmiIn_L3_Tests/dsHdmiIn_L3_testSetup.yml)
+  - Example configuration file [dsHdmiIn_L3_testSetup.yml](../../../host/tests/L3_TestCases/dsHdmiIn/dsHdmiIn_L3_testSetup.yml)
 
 - **testSuite.yaml**
   - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
