@@ -112,9 +112,9 @@ class dsAudio_test25_AudioMix(dsAudioHelperClass):
                     for system in self.systemVolume:
                         self.log.stepStart(f'Audio Mixing Stream: Port:{port} Primary Voulme: {prime}, System Volume: {system}')
 
-                        self.testdsAudio.setAudioMixerLevels("dsAUDIO_INPUT_PRIMARY", prime)
+                        self.testdsAudio.setAudioMixerLevels(port, index, "dsAUDIO_INPUT_PRIMARY", prime)
 
-                        self.testdsAudio.setAudioMixerLevels("dsAUDIO_INPUT_SYSTEM", system)
+                        self.testdsAudio.setAudioMixerLevels(port, index, "dsAUDIO_INPUT_SYSTEM", system)
 
                         result = self.testVerifyAudio(port, prime, system, True)
 
