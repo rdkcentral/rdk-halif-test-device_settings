@@ -89,7 +89,7 @@ classDiagram
 
 - **testSetupConfig.yaml**
   - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams, setting environment variables etc.
-  - Example configuration file [dsHost_L3_testSetup.yml](../../../host/tests/dsHost_L3_Tests/dsHost_L3_testSetup.yml)
+  - Example configuration file [dsHost_L3_testSetup.yml](../../../host/tests/L3_TestCases/dsHost/dsHost_L3_testSetup.yml)
 
 - **testSuite.yaml**
   - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
