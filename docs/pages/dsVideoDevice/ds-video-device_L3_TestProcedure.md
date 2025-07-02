@@ -307,7 +307,7 @@ Yes (This will be automated later).
 
 #### Acceptance Criteria - test04
 
-Play Streams `#1` `#2` `#3` `#4` `#5` `#6` `#7` `#8` `#9` `#10` `#11` `#12` `#13` `#14` `#8` sequentially and verify the video playback and Framerate with `FRF` mode enabled.
+Play Streams `#1` `#2` `#3` `#4` `#5` `#6` `#7` `#8` `#9` `#10` `#11` `#12` `#13` `#14` sequentially and verify the video playback and Framerate with `FRF` mode enabled.
 
 #### Expected Results - test04
 
