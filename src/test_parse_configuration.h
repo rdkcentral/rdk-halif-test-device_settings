@@ -73,6 +73,7 @@
 
 #define TEST_TYPE_SOURCE_VALUE     "source"
 #define TEST_TYPE_SINK_VALUE       "sink"
+#define TEST_DS_DEFAULT_VALUE 100
 
 /* Global variables */
 extern char gDeviceType[TEST_DS_DEVICE_TYPE_SIZE];
