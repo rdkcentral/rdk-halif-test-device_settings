@@ -47,6 +47,12 @@ This document describes the L3 Low Level Test Specification and Procedure Docume
 |7|scrolling_text_fast_3840x2160_59.94fps.mp4|Resolution: 3840x2160, Framerate Per Second: 59.94|
 |8|scrolling_text_fast_3840x2160_60fps.mp4|Resolution: 3840x2160, Framerate Per Second: 60|
 |9|scrolling_text_fast_1920x1080_60fps.mp4|Resolution: 1920x1080, Framerate Per Second: 60|
+|10|scrolling_text_fast_3840x2160_100fps.mp4|Resolution: 3840x2160, Framerate Per Second: 100|
+|11|scrolling_text_fast_3840x2160_119.88fps.mp4|Resolution: 3840x2160, Framerate Per Second: 119.88|
+|12|scrolling_text_fast_3840x2160_120fps.mp4|Resolution: 3840x2160, Framerate Per Second: 120|
+|13|scrolling_text_fast_3840x2160200fps.mp4|Resolution: 3840x2160, Framerate Per Second: 200|
+|14|scrolling_text_fast_3840x2160_239.76fps.mp4|Resolution: 3840x2160, Framerate Per Second: 239.76|
+|15|scrolling_text_fast_3840x2160_240fps.mp4|Resolution: 3840x2160, Framerate Per Second: 240|
 
 ## Level 3 Test Cases High Level Overview
 
