@@ -669,11 +669,19 @@ void test_l2_dsAudio_SetAndGetVolumeLeveller(void)
                 if (retStatus != dsERR_NONE) {
                     UT_LOG_ERROR("dsGetVolumeLeveller failed with status: %d", retStatus);
                 }
-
                 UT_LOG_DEBUG("Retrieved volLeveller: {mode: %d, level: %d}", volLevellerGet.mode, volLevellerGet.level);
-                UT_ASSERT_EQUAL(volLevellerGet.mode, volLevellerSet.mode);
-                UT_ASSERT_EQUAL(volLevellerGet.level, volLevellerSet.level);
-            } /* for (mode) */
+
+                if (mode == 0){
+                    // When mode is 0 volume leveller is off.
+                    // Do not check the level amount as it is irrelevant in this mode.
+                    UT_ASSERT_EQUAL(volLevellerGet.mode, volLevellerSet.mode);
+                    UT_ASSERT_EQUAL(volLevellerGet.mode, 0)
+                    break;
+                } else {
+                    UT_ASSERT_EQUAL(volLevellerGet.mode, volLevellerSet.mode);
+                    UT_ASSERT_EQUAL(volLevellerGet.level, volLevellerSet.level);
+                }
+            } /* for (level) */
         } /* for (mode) */
     } /* for (port) */
 
