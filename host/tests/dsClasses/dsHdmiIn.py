@@ -71,16 +71,22 @@ class hdmiVideoStereoScopicMode(Enum):
       dsVIDEO_SSMODE_MAX = 4                #Out of range
 
 class hdmiVideoFrameRate(Enum):
-      dsVIDEO_FRAMERATE_UNKNOWN = 0  #Unknown frame rate
-      dsVIDEO_FRAMERATE_24 = 1       # Played at 24 frames per second
-      dsVIDEO_FRAMERATE_25 = 2       # Played at 25 frames per second
-      dsVIDEO_FRAMERATE_30 = 3       # Played at 30 frames per second
-      dsVIDEO_FRAMERATE_60 = 4       # Played at 60 frames per second
-      dsVIDEO_FRAMERATE_23dot98 = 5  # Played at 23.98 frames per second
-      dsVIDEO_FRAMERATE_29dot97 = 6  # Played at 29.97 frames per second
-      dsVIDEO_FRAMERATE_50 = 7       # Played at 50 frames per second
-      dsVIDEO_FRAMERATE_59dot94 = 8  # Played at 59.94 frames per second
-      dsVIDEO_FRAMERATE_MAX = 9      # Out of range
+      dsVIDEO_FRAMERATE_UNKNOWN = 0   #Unknown frame rate
+      dsVIDEO_FRAMERATE_24 = 1        # Played at 24 frames per second
+      dsVIDEO_FRAMERATE_25 = 2        # Played at 25 frames per second
+      dsVIDEO_FRAMERATE_30 = 3        # Played at 30 frames per second
+      dsVIDEO_FRAMERATE_60 = 4        # Played at 60 frames per second
+      dsVIDEO_FRAMERATE_23dot98 = 5   # Played at 23.98 frames per second
+      dsVIDEO_FRAMERATE_29dot97 = 6   # Played at 29.97 frames per second
+      dsVIDEO_FRAMERATE_50 = 7        # Played at 50 frames per second
+      dsVIDEO_FRAMERATE_59dot94 = 8   # Played at 59.94 frames per second
+      dsVIDEO_FRAMERATE_100 = 9       # Played at 100 frames per second
+      dsVIDEO_FRAMERATE_119dot88 = 10 # Played at 119.88 frames per second
+      dsVIDEO_FRAMERATE_120 = 11      # Played at 120 frames per second
+      dsVIDEO_FRAMERATE_200 = 12      # Played at 200 frames per second
+      dsVIDEO_FRAMERATE_239dot76 = 13 # Played at 239.76 frames per second
+      dsVIDEO_FRAMERATE_240 = 14      # Played at 240 frames per second
+      dsVIDEO_FRAMERATE_MAX = 15      # Out of range
 
 class hdmiInAviContentType(Enum):
       dsAVICONTENT_TYPE_GRAPHICS = 0      #/*!< Content type Graphics. */
@@ -941,7 +947,7 @@ class dsHdmiInClass():
 
         result = self.utMenu.select( self.testSuite, "Get VRR Status", promptWithAnswers)
 
-        typeStatusPattern = r"Result dsHdmiInGetVRRStatus IN:port:\[(\w+)\]:\[.*\], OUT:vrrStatus:\[(\w+)\], dsError_t:\[(dsERR_\w+)\]"
+        typeStatusPattern = r"Result dsHdmiInGetVRRStatus IN:port:\[(\w+)\]:\[.*\], OUT:\[vrrType:\[(\w+)\], vrrAmdfreesyncFramerate_Hz:\[(\d+(?:\.\d+)?)\]\], dsError_t:\[(dsERR_\w+)\]"
         match = re.search(typeStatusPattern, result)
         if match:
             vrrType = match.group(2)
@@ -1020,11 +1026,6 @@ class dsHdmiInClass():
         if match:
             count = int(match.group(1))
             features = [f.strip() for f in match.group(2).split(',')]
-            """
-            # hack to get the vrr frature in supported list
-            x = "allm, vrr_hdmi, vrr_amd_freesync"
-            features = [f.strip() for f in x.split(',')]
-            """
             return features
     
         return None

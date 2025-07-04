@@ -78,6 +78,7 @@
 #define DS_VIDEO_PORT_RESOLUTION_NUM_MAX      32
 
 #define DS_VIDEO_PORT_MODULE_NAME             "dsVideoPort"
+#define DS_VIDEO_PORT_DEFAULT_COLORDEPTH      8
 
 /* Video Port configuration */
 typedef struct 

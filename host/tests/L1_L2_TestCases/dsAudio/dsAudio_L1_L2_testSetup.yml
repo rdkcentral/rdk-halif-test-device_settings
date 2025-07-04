@@ -11,9 +11,9 @@ dsAudio:
     #  test_cases:
     #    - all
 
-    #######################################
-    # Entries to run individual test cases
-    #######################################
+    #########################################
+    # Entries to run individual test cases L1
+    #########################################
     - name: "L1 dsAudio"
       test_cases:
         - dsAudioPortInit_pos
@@ -416,120 +416,182 @@ dsAudio:
     - name: "L1 dsAudio"
       test_cases:
         - dsAudioEnableARC_neg
+        
+    ##############################################
+    # Entries to run individual test cases L2 Sink
+    ##############################################
 
-    ######################################
-    # Entries to run selected test case
-    ######################################
-    #- name: "L1 dsAudio"  # Name of the test suit to run
-    #  test_cases:  # List of test cases to execute, to run all test cases in test suite with R option use `all`
-    #    - dsAudioPortInit_pos
-    #    - dsAudioPortInit_neg
-    #    - dsAudioPortTerm_pos
-    #    - dsAudioPortTerm_neg
-    #    - dsGetAudioPort_pos
-    #    - dsGetAudioPort_neg
-    #    - dsGetAudioFormat_pos
-    #    - dsGetAudioFormat_neg
-    #    - dsGetAudioCompression_pos
-    #    - dsGetAudioCompression_neg
-    #    - dsSetAudioCompression_pos
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - EnableDisableVerifyPortStatus
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - CheckHeadphoneConnectionStatus
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - GetAndVerifyMS12Capabilities
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - SetAndGetAudioCompression
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - SetAndGetDialogEnhancement
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - SetAndGetDolbyVolumeMode
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - SetAndGetIntelligentEqualizerMode
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - SetAndGetVolumeLeveller
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - SetAndGetBassEnhancer
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - EnableAndVerifySurroundDecoder
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - SetAndGetDRCMode
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - SetAndGetSurroundVirtualizer
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - SetAndGetMISteering
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - SetAndGetGraphicEqualizerMode
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - EnableDisableAndRetrieveLEConfig
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - CheckMS12DecodeSupport
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - CheckMS11DecodeSupport
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - VerifyMS12AudioProfiles
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - SetAndGetMS12AudioProfile
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - SetAndGetStereoMode
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - SetAndGetStereoAuto
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - SetAndGetAudioGain
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - SetAndGetAudioLevel
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - AudioMuteVerification
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - SetAndGetAudioDelay
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - VerifyAtmosCapabilities
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - GetAudioCapabilities
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - EnableDisableRetrieveAudioMixing
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - AudioPortControl
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - SetAndGetPrimaryLanguage
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - SetAndGetSecondaryLanguage
 
-    #######################################
-    # Entries to run individual test cases
-    #######################################
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - EnableDisableVerifyPortStatus
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - GetAndVerifyMS12Capabilities
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetAudioCompression
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetDialogEnhancement
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetDolbyVolumeMode
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetIntelligentEqualizerMode
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetVolumeLeveller
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetBassEnhancer
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - EnableAndVerifySurroundDecoder
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetDRCMode
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetSurroundVirtualizer
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetMISteering
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetGraphicEqualizerMode
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - EnableDisableAndRetrieveLEConfig
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - CheckMS12DecodeSupport
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - CheckMS11DecodeSupport
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetStereoMode
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - AudioMuteVerification
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetAudioDelay
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - GetAudioCapabilities
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - EnableDisableRetrieveAudioMixing
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - AudioPortControl
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetPrimaryLanguage
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetSecondaryLanguage
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - CheckHeadphoneConnectionStatus
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - VerifyMS12AudioProfiles
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetMS12AudioProfile
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetStereoAuto
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetAudioGain
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - SetAndGetAudioLevel
-    #- name: "L2 dsAudio - Sink"
-    #  test_cases:
-    #    - VerifyAtmosCapabilities
+    ################################################
+    # Entries to run individual test cases L2 Source
+    ################################################
+
+    # - name: "L2 dsAudio - Source"
+    #   test_cases:
+    #     - EnableDisableVerifyPortStatus
+    # - name: "L2 dsAudio - Source"
+    #   test_cases:
+    #     - GetAndVerifyMS12Capabilities
+    # - name: "L2 dsAudio - Source"
+    #   test_cases:
+    #     - SetAndGetAudioCompression
+    # - name: "L2 dsAudio - Source"
+    #   test_cases:
+    #     - SetAndGetDialogEnhancement
+    # - name: "L2 dsAudio - Source"
+    #   test_cases:
+    #     - SetAndGetDolbyVolumeMode
+    # - name: "L2 dsAudio - Source"
+    #   test_cases:
+    #     - SetAndGetIntelligentEqualizerMode
+    # - name: "L2 dsAudio - Source"
+    #   test_cases:
+    #     - SetAndGetVolumeLeveller
+    # - name: "L2 dsAudio - Source"
+    #   test_cases:
+    #     - SetAndGetBassEnhancer
+    # - name: "L2 dsAudio - Source"
+    #   test_cases:
+    #     - EnableAndVerifySurroundDecoder
+    # - name: "L2 dsAudio - Source"
+    #   test_cases:
+    #     - SetAndGetDRCMode
+    # - name: "L2 dsAudio - Source"
+    #   test_cases:
+    #     - SetAndGetSurroundVirtualizer
+    # - name: "L2 dsAudio - Source"
+    #   test_cases:
+    #     - SetAndGetMISteering
+    # - name: "L2 dsAudio - Source"
+    #   test_cases:
+    #     - SetAndGetGraphicEqualizerMode
+    # - name: "L2 dsAudio - Source"
+    #   test_cases:
+    #     - EnableDisableAndRetrieveLEConfig
+    # - name: "L2 dsAudio - Source"
+    #   test_cases:
+    #     - CheckMS12DecodeSupport
+    # - name: "L2 dsAudio - Source"
+    #   test_cases:
+    #     - CheckMS11DecodeSupport
+    # - name: "L2 dsAudio - Source"
+    #   test_cases:
+    #     - SetAndGetStereoMode
+    # - name: "L2 dsAudio - Source"
+    #   test_cases:
+    #     - AudioMuteVerification
+    # - name: "L2 dsAudio - Source"
+    #   test_cases:
+    #     - SetAndGetAudioDelay
+    # - name: "L2 dsAudio - Source"
+    #   test_cases:
+    #     - GetAudioCapabilities
+    # - name: "L2 dsAudio - Source"
+    #   test_cases:
+    #     - EnableDisableRetrieveAudioMixing
+    # - name: "L2 dsAudio - Source"
+    #   test_cases:
+    #     - AudioPortControl
+    # - name: "L2 dsAudio - Source"
+    #   test_cases:
+    #     - SetAndGetPrimaryLanguage
+    # - name: "L2 dsAudio - Source"
+    #   test_cases:
+    #     - SetAndGetSecondaryLanguage
+
 
     ######################################
     # Entries to run selected test case

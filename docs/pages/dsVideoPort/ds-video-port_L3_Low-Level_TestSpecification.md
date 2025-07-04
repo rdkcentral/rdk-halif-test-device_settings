@@ -49,7 +49,7 @@ Below are top test use-case for the video port.
 |-|---------|-----------|--------|------|----|--------------|
 |1|Verify the Video content Formats with callbacks|Play the pre-defined streams with different video content format(`HDR`,`HLG`,DolbyVision,..) and check the callbacks is triggered when the video content format changes|`dsVideoFormatUpdateRegisterCB()` `dsGetVideoEOTF()`|`NA`|`Y`|1,2,3,4,5|
 |2|Check DisplayConnected|Verify the Display by enabling and disable each supported video port|`dsEnableVideoPort()` `dsIsDisplayConnected()` `dsIsVideoPortActive()`|`Y`|`Y`|1|
-|3|Select the `HDCP` Version |Select the Supported `HDCP` version and verify|`dsSetHdmiPreference()`|`Y`|`Y`|`NA`|
+|3|Select the `HDCP` Version |Select the Supported `HDCP` version and verify|`dsSetHdmiPreference()`|`Y`|`NA`|`NA`|
 |4|Verify the Resolution for source|Play the pre-defined stream and set supported resolution and verify the resolution of the TV|`dsSetResolution()`|`Y`|`NA`|`NA`|
 |5|Verify the `HDCP` status using callbacks for Source|Power off and power on TV or pug/unplug `HDMI` and Check the `HDCP` status using callbacks(i.e.UNPOWERED,AUTHENTICATED,..)|`dsEnableHDCP()`|`Y`|`NA`|`NA`|
 |6|Select video content formats for Source |Select the Supported `HDR` modes & Verify the video content formats using callbacks|`dsSetForceHDRMode()`|`Y`|`NA`|1,2,3,4,5|

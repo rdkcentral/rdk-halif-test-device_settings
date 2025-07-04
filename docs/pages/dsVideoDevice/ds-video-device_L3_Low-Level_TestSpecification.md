@@ -47,6 +47,12 @@ This document describes the L3 Low Level Test Specification and Procedure Docume
 |7|scrolling_text_fast_3840x2160_59.94fps.mp4|Resolution: 3840x2160, Framerate Per Second: 59.94|
 |8|scrolling_text_fast_3840x2160_60fps.mp4|Resolution: 3840x2160, Framerate Per Second: 60|
 |9|scrolling_text_fast_1920x1080_60fps.mp4|Resolution: 1920x1080, Framerate Per Second: 60|
+|10|scrolling_text_fast_3840x2160_100fps.mp4|Resolution: 3840x2160, Framerate Per Second: 100|
+|11|scrolling_text_fast_3840x2160_119.88fps.mp4|Resolution: 3840x2160, Framerate Per Second: 119.88|
+|12|scrolling_text_fast_3840x2160_120fps.mp4|Resolution: 3840x2160, Framerate Per Second: 120|
+|13|scrolling_text_fast_3840x2160200fps.mp4|Resolution: 3840x2160, Framerate Per Second: 200|
+|14|scrolling_text_fast_3840x2160_239.76fps.mp4|Resolution: 3840x2160, Framerate Per Second: 239.76|
+|15|scrolling_text_fast_3840x2160_240fps.mp4|Resolution: 3840x2160, Framerate Per Second: 240|
 
 ## Level 3 Test Cases High Level Overview
 
@@ -54,9 +60,9 @@ Below are top test use-case for the Video Display.
 
 |#|Test-case|Description|HAL APIs|Source|Sink|Streams Number|
 |-|---------|-----------|--------|------|----|--------------|
-|1|Verify the Video Display framerate change with pre and post change callback.|Set the auto framerate mode and check the callback is triggered before and after when the framerate of a display changes|`dsRegisterFrameratePreChangeCB()`, `dsRegisterFrameratePostChangeCB()`|`NA`|`Y`|1,2,3,4,5,6,7,8|
+|1|Verify the Video Display framerate change with pre and post change callback.|Set the auto framerate mode and check the callback is triggered before and after when the framerate of a display changes|`dsRegisterFrameratePreChangeCB()`, `dsRegisterFrameratePostChangeCB()`|`NA`|`Y`|1,2,3,4,5,6,7,8,9,10,11,12,13,14|
 |2|Set and verify the Zoom mode of the source device|Play any video content and Set the supported Zoom mode and verify the selected Zoom mode|`dsSetDFC()`, `dsGetDFC()`|`Y`|`NA`|9|
-|3|Select the Device Frame Rate of Sink device|Select the Device Frame Rate of Sink device and on playing video playback verify `dsSetDisplayframerate()`|`dsSetDisplayframerate()`|`NA`|`Y`|1,2,3,4,5,6,7,8|
+|3|Select the Device Frame Rate of Sink device|Select the Device Frame Rate of Sink device and on playing video playback verify `dsSetDisplayframerate()`|`dsSetDisplayframerate()`|`NA`|`Y`|1,2,3,4,5,6,7,8,9,10,11,12,13,14|
 |4|Set and verify the `FRF` mode|Select the`FRF`mode and verify the selected `FRF` mode with video playback|`dsSetFRFMode()`|`NA`|`Y`|1,2,3,4,5,6,7,8|
 
 ## Level 3 Python Test Cases High Level Overview
@@ -114,7 +120,7 @@ classDiagram
 
 - **testSetupConfig.yaml**
   - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams, setting environment variables etc.
-  - Example configuration file [dsVideoDevice_L3_testSetup.yml](../../../host/tests/dsVideoDevice_L3_Tests/dsVideoDevice_L3_testSetup.yml)
+  - Example configuration file [dsVideoDevice_L3_testSetup.yml](../../../host/tests/L3_TestCases/dsVideoDevice/dsVideoDevice_L3_testSetup.yml)
 
 - **testConfig.yaml**
   - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`

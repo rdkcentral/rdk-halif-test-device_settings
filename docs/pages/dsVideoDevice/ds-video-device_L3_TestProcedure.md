@@ -10,8 +10,8 @@
   - [dsVideoDevice_test2_SetAndGetZoomMode.py](#dsvideodevice_test2_setandgetzoommodepy)
   - [dsVideoDevice_test3_SetDisplayFramerate.py](#dsvideodevice_test3_setdisplayframeratepy)
   - [dsVideoDevice_test4_SetAndGetFRFMode.py](#dsvideodevice_test4_setandgetfrfmodepy)
-  - [dsVideoDevice_L3_Runall_Sink.py](#dsVideoDevice_L3_Runall_Sinkpy)
-  - [dsVideoDevice_L3_Runall_Source.py](#dsVideoDevice_L3_Runall_Sourcepy)
+  - [dsVideoDevice_L3_Runall_Sink.py](#dsvideodevice_l3_runall_sinkpy)
+  - [dsVideoDevice_L3_Runall_Source.py](#dsvideodevice_l3_runall_sourcepy)
   
   
 ## Acronyms, Terms and Abbreviations
@@ -159,7 +159,7 @@ Refer [ds-video-device_L3_Low-Level_TestSpecification.md](./ds-video-device_L3_L
 
 #### Acceptance Criteria - test01
 
-- Play Streams `#1` `#2` `#3` `#4` `#5` `#6` `#7` `#8` of different fps sequentially and verify whether pre and post display framerate change callbacks triggered or not.
+- Play Streams `#1` `#2` `#3` `#4` `#5` `#6` `#7` `#8`  `#9` `#10` `#11` `#12` `#13` `#14`  of different fps sequentially and verify whether pre and post display framerate change callbacks triggered or not.
 
 #### Expected Results - test01
 
@@ -247,7 +247,7 @@ Yes (This will be automated later).
 
 #### Acceptance Criteria - test03
 
-Play Streams `#1` `#2` `#3` `#4` `#5` `#6` `#7` `#8` of different fps sequentially an verify the impact of the supported display framerates.
+Play Streams `#1` `#2` `#3` `#4` `#5` `#6` `#7` `#8` `#9` `#10` `#11` `#12` `#13` `#14` of different fps sequentially an verify the impact of the supported display framerates.
 
 #### Expected Results - test03
 
@@ -307,7 +307,7 @@ Yes (This will be automated later).
 
 #### Acceptance Criteria - test04
 
-Play Streams `#1` `#2` `#3` `#4` `#5` `#6` `#7` `#8` sequentially and verify the video playback and Framerate with `FRF` mode enabled.
+Play Streams `#1` `#2` `#3` `#4` `#5` `#6` `#7` `#8` `#9` `#10` `#11` `#12` `#13` `#14` sequentially and verify the video playback and Framerate with `FRF` mode enabled.
 
 #### Expected Results - test04
 

@@ -159,6 +159,7 @@ class dsHdmiIn_test15_SetGetVrrStatusAndCallback(dsHdmiInHelperClass):
                         status = self.testUserResponse.getUserYN(f'If required to connect other source device which supports VRR {type} Y/N: ')
                         if status:
                             self.ChangeAndVerifyConnect(True,port)
+                        self.testdsHdmiIn.setEdidVersion(port, "HDMI_EDID_VER_20")
                         # Enable/Disable the VRR at source device
                         status = self.ChangeAndVerifyVRR(True,port,type)
                         if not status: continue

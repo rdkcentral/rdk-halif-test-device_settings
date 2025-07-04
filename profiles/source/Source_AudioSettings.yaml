@@ -89,20 +89,20 @@ dsAudio:
             # dsAUDIO_STEREO_PASSTHRU                  = 0x04,  ///< Passthrough mode
             stereo_modes: [0x02, 0x03, 0x04]  # STEREO, SURROUND, PASSTHRU
             stereo_auto_mode: true
-            # dsMS12SUPPORT_NONE                       = 0x0,   ///< MS12 Supported None
-            # dsMS12SUPPORT_DolbyVolume                = 0x01,  //< MS12 supported Dolby Volume
-            # dsMS12SUPPORT_InteligentEqualizer        = 0x02,  ///< MS12 supported Intelligent Equalizer
-            # dsMS12SUPPORT_DialogueEnhancer           = 0x04,  ///< MS12 Dialogue Enhancer supported
-            # dsMS12SUPPORT_Volumeleveller             = 0x08,  ///< MS12 Volume leveller
-            # dsMS12SUPPORT_BassEnhancer               = 0x10,  ///< MS12 Bass Enhancer
-            # dsMS12SUPPORT_SurroundDecoder            = 0x20,  ///< MS12 Surround Decoder
-            # dsMS12SUPPORT_DRCMode                    = 0x40,  ///< MS12 DRC Mode
-            # dsMS12SUPPORT_SurroundVirtualizer        = 0x80,  ///< MS12 Surround Virtualizer
-            # dsMS12SUPPORT_MISteering                 = 0x100, ///< MS12 MI Steering
-            # dsMS12SUPPORT_GraphicEqualizer           = 0x200, ///< MS12 Graphic equalizer
-            # dsMS12SUPPORT_LEConfig                   = 0x400, ///< MS12 LE config
-            # dsMS12SUPPORT_Invalid                    = 0x800  ///< Invalid / Out of range
-            MS12_Capabilities: 0x4D  # DolbyVolume | IntelligentEqualizer | DialogueEnhancer
+            # dsMS12SUPPORT_NONE = 0x0,                        ///< MS12 Supported None
+            # dsMS12SUPPORT_DolbyVolume = (1 << 0),            ///< MS12 supported Dolby Volume
+            # dsMS12SUPPORT_InteligentEqualizer = (1 << 1),    ///< MS12 supported Intelligent Equalizer
+            # dsMS12SUPPORT_DialogueEnhancer = (1 << 2),       ///< MS12 Dialogue Enhancer supported
+            # dsMS12SUPPORT_Volumeleveller   = (1 << 3),       ///< MS12 Volume leveller
+            # dsMS12SUPPORT_BassEnhancer     = (1 << 4),       ///< MS12 Bass Enhancer
+            # dsMS12SUPPORT_SurroundDecoder  = (1 << 5),       ///< MS12 Surround Decoder
+            # dsMS12SUPPORT_DRCMode          = (1 << 6),       ///< MS12 DRC Mode
+            # dsMS12SUPPORT_SurroundVirtualizer = (1 << 7),    ///< MS12 Surround Virtualizer
+            # dsMS12SUPPORT_MISteering       = (1 << 8),       ///< MS12 MI Steering
+            # dsMS12SUPPORT_GraphicEqualizer = (1 << 9),       ///< MS12 Graphic equalizer
+            # dsMS12SUPPORT_LEConfig         = (1 << 10),      ///< MS12 LE config
+            # dsMS12SUPPORT_Invalid = (1 << 31)                ///< Invalid / Out of range
+            MS12_Capabilities: 0x4D  # DolbyVolume | DialogueEnhancer | Volumeleveller | DRCMode
             MS12_AudioProfiles:
             # number of counts from the "ms12_audio_profiles.ini" file
             MS12_AudioProfileCount: 0

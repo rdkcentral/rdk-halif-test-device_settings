@@ -95,7 +95,13 @@ class dsVideoFrameRate(Enum):
     dsVIDEO_FRAMERATE_29dot97 = 6         # Played at 29.97 frames per second
     dsVIDEO_FRAMERATE_50 = 7              # Played at 50 frames per second
     dsVIDEO_FRAMERATE_59dot94 = 8         # Played at 59.94 frames per second
-    dsVIDEO_FRAMERATE_MAX = 9             # Out of range
+    dsVIDEO_FRAMERATE_100 = 9             # Played at 100 frames per second
+    dsVIDEO_FRAMERATE_119dot88 = 10       # Played at 119.88 frames per second
+    dsVIDEO_FRAMERATE_120 = 11            # Played at 120 frames per second
+    dsVIDEO_FRAMERATE_200 = 12            # Played at 200 frames per second
+    dsVIDEO_FRAMERATE_239dot76 = 13       # Played at 239.76 frames per second
+    dsVIDEO_FRAMERATE_240 = 14            # Played at 240 frames per second
+    dsVIDEO_FRAMERATE_MAX = 15            # Out of range
 
 class dsVideoStereoScopicMode(Enum):
     dsVIDEO_SSMODE_UNKNOWN = 0           # Unknown mode
