@@ -8,7 +8,12 @@ dsDisplay:  # Prefix must always exist
       test01_VerifyDisplayConnectCallBackTest:
       test02_TestVerifyDisplayEdid:
       test03_AspectRatioVerificationTest:
+        streams:
+          - "streams/BlackRed.mp4"
+          - "streams/1280x960.mp4"
       test04_TestVerifyDisplayEdidBytes:
+      test05_AVIContentTypeVerificationTest:
+      test06_AVIScanInfoVerificationTest:
 
 
 
