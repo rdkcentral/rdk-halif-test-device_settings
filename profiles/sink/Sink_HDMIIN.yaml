@@ -28,3 +28,6 @@ dsHdmiIn:
   # HDMI_COMPATIBILITY_VERSION_21 = 0x02,     /*!< Hdmi Compatibility Version 2.1 */
   # HDMI_COMPATIBILITY_VERSION_MAX = 0x03     /*!< Out of bounds */
   HdmiCompatibilityVersion: [0x01, 0x01, 0x01] #update vertion based on port number
+  VrrSupportedPorts:
+    - dsHDMI_IN_PORT_2
+    - dsHDMI_IN_PORT_3

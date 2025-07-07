@@ -74,41 +74,48 @@ class dsAudio_test22_AudioFormat(dsAudioHelperClass):
         # Initialize the dsAudio module
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
-        self.log.stepStart(f'Audio Format NONE Test')
+        for port,index in self.testdsAudio.getSupportedPorts():
+            # Enable the audio port
+            self.testdsAudio.enablePort(port, index)
 
-        # Get the Audio Format
-        audioFormat = self.testdsAudio.getAudioFormat()
-
-        self.log.stepResult("NONE" in audioFormat, f'Audio Format NONE Test')
-
-        self.supportedCodecs = self.testdsAudio.getSupportedAudioCodecs()
-
-        for format, stream in zip(self.audioFormats, self.testStreams):
-            if format not in self.supportedCodecs:
-                self.log.step(f"Skipping unsupported codec: {format}")
-                continue  # Skip unsupported formats
-
-            self.log.step(f"Testing supported codec: {format}")
-
-            # Start the stream playback
-            self.testPlayer.play(stream)
-            time.sleep(3)
-
-            self.log.stepStart(f'Audio Format {format} Callback Test')
-
-            cbAudioFormat = self.testdsAudio.getAudioFormatCallbackStatus()
-
-            self.log.stepResult(cbAudioFormat and format in cbAudioFormat, f'Audio Format {format} Callback Test')
-
-            self.log.stepStart(f'Audio Format {format} Test')
+            self.log.stepStart(f'Audio Format NONE Test')
 
             # Get the Audio Format
-            audioFormat = self.testdsAudio.getAudioFormat()
+            audioFormat = self.testdsAudio.getAudioFormat(port, index)
 
-            self.log.stepResult(format in audioFormat, f'Audio Format {format} Test')
+            self.log.stepResult("NONE" in audioFormat, f'Audio Format NONE Test')
 
-            # Stop the stream playback
-            self.testPlayer.stop()
+            self.supportedCodecs = self.testdsAudio.getSupportedAudioCodecs()
+
+            for format, stream in zip(self.audioFormats, self.testStreams):
+                if format not in self.supportedCodecs:
+                    self.log.step(f"Skipping unsupported codec: {format}")
+                    continue  # Skip unsupported formats
+
+                self.log.step(f"Testing supported codec: {format}")
+
+                # Start the stream playback
+                self.testPlayer.play(stream)
+                time.sleep(3)
+
+                self.log.stepStart(f'Audio Format {format} Callback Test')
+
+                cbAudioFormat = self.testdsAudio.getAudioFormatCallbackStatus()
+
+                self.log.stepResult(cbAudioFormat and format in cbAudioFormat, f'Audio Format {format} Callback Test')
+
+                self.log.stepStart(f'Audio Format {format} Test')
+
+                # Get the Audio Format
+                audioFormat = self.testdsAudio.getAudioFormat(port, index)
+
+                self.log.stepResult(format in audioFormat, f'Audio Format {format} Test')
+
+                # Stop the stream playback
+                self.testPlayer.stop()
+
+            # Disable the audio port
+            self.testdsAudio.disablePort(port, index)
 
         # Terminate dsAudio Module
         self.testdsAudio.terminate()
