@@ -6,7 +6,7 @@
 - [References](#references)
 - [Introduction](#introduction)
 - [Module Description](#module-description)
-- [Testing Scope](#test-scope)
+- [Testing Scope](#testing-scope)
 
 ## Acronyms, Terms and Abbreviations
 
