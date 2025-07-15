@@ -1,14 +1,5 @@
 # Device Setting FPD L2 Low Level Test Specification and Procedure Documentation
 
-## Table of Contents
-
-- [Table of Contents](#table-of-contents)
-- [Overview](#overview)
-- [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-- [Definitions](#definitions)
-- [References](#references)
-- [Level 2 Test Procedure](#level-2-test-procedure)
-
 ## Overview
 
 This document describes the Low level l2 Specification and Procedure Documentation for the DSFPD module.

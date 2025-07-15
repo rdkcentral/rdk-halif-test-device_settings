@@ -1,18 +1,5 @@
 # Device Settings Video Port High Level Test Specification Documentation
 
-## Table of Contents
-
-- [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-- [Introduction](#introduction)
-- [Module Description](#module-description)
-- [Testing Scope](#testing-scope)
-  - [Emulator Requirements](#emulator-requirements)
-  - [Check the Video port status](#check-the-video-port-status)
-  - [Check Video Content Format and Resolution](#check-video-content-format-and-resolution)
-  - [Check HDR Capability](#check-hdr-capability)
-  - [HDCP Management](#hdcp-management)
-  - [Color Capabilities](#color-capabilities)
-
 ## Acronyms, Terms and Abbreviations
 
 - `HAL`    - Hardware Abstraction Layer

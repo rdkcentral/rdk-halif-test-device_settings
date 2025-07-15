@@ -1,13 +1,5 @@
 # Device Settings Display High Level Test Specification Document
 
-## Table of Contents
-
-- [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-- [References](#references)
-- [Introduction](#introduction)
-- [Module Description](#module-description)
-- [Testing Scope](#testing-scope)
-
 ## Acronyms, Terms and Abbreviations
 
 - `HAL`       - Hardware Abstraction layer

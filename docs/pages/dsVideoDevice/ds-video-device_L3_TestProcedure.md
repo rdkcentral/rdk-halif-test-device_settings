@@ -1,17 +1,4 @@
 # dsVideoDevice HAL L3 Python Test Procedure
-
-## Table of Contents
-
-- [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-- [Setting Up Test Environment](#setting-up-test-environment)
-- [Streams Required](#streams-required)
-- [Test Cases](#test-cases)
-  - [dsVideoDevice_test1_FrameratePreChangePostChangeCallback_Verify.py](#dsvideodevice_test1_framerateprechangepostchangecallback_verifypy)
-  - [dsVideoDevice_test2_SetAndGetZoomMode.py](#dsvideodevice_test2_setandgetzoommodepy)
-  - [dsVideoDevice_test3_SetDisplayFramerate.py](#dsvideodevice_test3_setdisplayframeratepy)
-  - [dsVideoDevice_test4_SetAndGetFRFMode.py](#dsvideodevice_test4_setandgetfrfmodepy)
-  - [dsVideoDevice_L3_Runall_Sink.py](#dsvideodevice_l3_runall_sinkpy)
-  - [dsVideoDevice_L3_Runall_Source.py](#dsvideodevice_l3_runall_sourcepy)
   
   
 ## Acronyms, Terms and Abbreviations

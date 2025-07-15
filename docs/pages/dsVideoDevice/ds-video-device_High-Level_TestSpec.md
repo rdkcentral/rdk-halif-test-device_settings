@@ -1,17 +1,5 @@
 # Device Settings Video Device High Level Test Specification Documentation
 
-## Table of Contents
-
-- [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-- [Introduction](#introduction)
-- [Module Description](#module-description)
-- [Testing Scope](#testing-scope)
-  - [Emulator Requirements](#emulator-requirements)
-  - [Check the Zoom Control](#check-the-zoom-control)
-  - [Check the HDR Capability](#check-the-hdr-capability)
-  - [Check Video codec and Formats](#check-video-codec-and-formats)
-  - [Check the Display frame rate Capability](#check-the-display-frame-rate-capability)
-
 ## Acronyms, Terms and Abbreviations
 
 - `HAL`  - Hardware Abstraction Layer

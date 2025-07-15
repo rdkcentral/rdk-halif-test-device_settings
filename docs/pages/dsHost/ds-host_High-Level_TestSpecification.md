@@ -1,13 +1,5 @@
 # Device Settings Host High Level Test Specification Document
 
-## Table of Contents
-
-- [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-- [References](#references)
-- [Introduction](#introduction)
-- [Module Description](#module-description)
-- [Testing Scope](#testing-scope)
-
 ## Acronyms, Terms and Abbreviations
 
 - `SoC`    - System On a Chip

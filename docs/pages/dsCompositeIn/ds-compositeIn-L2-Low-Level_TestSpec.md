@@ -1,12 +1,5 @@
 # Device Settings Composite Input L2 Low Level Test Specification and Procedure Documentation
 
-## Table of Contents
-
-- [Overview](#overview)
-- [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-- [Definitions](#definitions)
-- [References](#references)
-- [Level 2 Test Procedure](#level-2-test-procedure)
 
 ## Overview
 

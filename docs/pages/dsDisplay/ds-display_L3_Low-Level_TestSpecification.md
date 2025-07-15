@@ -1,13 +1,5 @@
 # Display Settings L3 Low Level Test Specification and Procedure Documentation
 
-## Table of Contents
-
-- [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-- [Overview](#overview)
-- [References](#references)
-- [Level 3 Test Procedure](#level-3-test-cases-high-level-overview)
-- [Level 3 Python Test](#level-3-python-test-cases-high-level-overview)
-
 ### Acronyms, Terms and Abbreviations
 
 - `HAL`  \- Hardware Abstraction Layer, may include some common components

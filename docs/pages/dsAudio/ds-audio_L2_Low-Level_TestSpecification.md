@@ -1,13 +1,5 @@
 # Audio Settings L2 Low Level Test Specification and Procedure Documentation
 
-## Table of Contents
-
-- [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-- [Overview](#overview)
-- [Definitions](#definitions)
-- [References](#references)
-- [Level 2 Test Procedure](#level-2-test-procedure)
-
 ### Acronyms, Terms and Abbreviations
 
 - `HAL`    - Hardware Abstraction Layer

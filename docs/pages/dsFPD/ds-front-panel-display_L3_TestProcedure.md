@@ -1,17 +1,5 @@
 # dsFPD HAL L3 Python Test Procedure
 
-## Table of Contents
-
-- [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-- [Setting Up Test Environment](#setting-up-test-environment)
-- [Test Cases](#test-cases)
-  - [dsFPD_test01_EnableDisableAndVerifyLEDIndicators.py](#dsfpd_test01_enabledisableandverifyledindicatorspy)
-  - [dsFPD_test02_SetVerifyLEDIndicatorsBrightness.py](#dsfpd_test02_setverifyledindicatorsbrightnesspy)
-  - [dsFPD_test03_SetVerifyLEDIndicatorsBlink.py](#dsfpd_test03_setverifyledindicatorsblinkpy)
-  - [dsFPD_test04_SetVerifyLEDIndicatorsColor.py](#dsfpd_test04_setverifyledindicatorscolorpy)
-  - [dsFPD_test05_SetVerifyFPPattern.py](#dsfpd_test05_setverifyfppatternpy)
-  - [dsFPD_L3_Runall.py](#dsfpd_l3_runallpy)
-
 ## Acronyms, Terms and Abbreviations
 
 - `HAL`    - Hardware Abstraction Layer

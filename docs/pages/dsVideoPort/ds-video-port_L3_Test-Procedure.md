@@ -1,22 +1,5 @@
 # Device Settings Video Port L3 Test Case and Procedure Documentation
 
-## Table of Contents
-
-- [Overview](#overview)
-- [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-- [References](#references)
-- [Setting Up Test Environment](#setting-up-test-environment)
-- [Test Case Procedure](#test-case-procedure)
-  - [dsVideoPort_test1_VerifyVideoContent_Format_Callback.py](#dsvideoport_test1_verifyvideocontent_format_callbackpy)
-  - [dsVideoPort_test2_EnableDisableAndVerifyPortStatus.py](#dsvideoport_test2_enabledisableandverifyportstatuspy)
-  - [dsVideoPort_test3_VerifyHDCP_Version.py](#dsvideoport_test3_verifyhdcp_versionpy)
-  - [dsVideoPort_test4_VerifyResolution.py](#dsvideoport_test4_verifyresolutionpy)
-  - [dsVideoPort_test5_VerifyHDCP_Callback.py](#dsvideoport_test5_verifyhdcp_callbackpy)
-  - [dsVideoPort_test6_VerifyVideoContentFormats.py](#dsvideoport_test6_verifyvideocontentformatspy)
-  - [dsVideoPort_test7_ResetToSDRMode.py](#dsvideoport_test7_resettosdrmodepy)
-  - [dsVideoPort_test8_VerifyColorDepth.py](#dsvideoport_test8_verifycolordepthpy)
-  - [dsVideoPort_test9_VerifyBackgroundColor.py](#dsvideoport_test9_verifybackgroundcolorpy)
-
 ## Overview
 
 This document describes the L3 Test case Procedure Documentation for the Device Settings Video Port module.

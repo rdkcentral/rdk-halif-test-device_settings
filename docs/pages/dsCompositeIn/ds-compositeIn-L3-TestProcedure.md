@@ -1,18 +1,5 @@
 # dscompositeIn HAL L3 Python Test Procedure
 
-## Table of Contents
-
-- [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-- [Setting Up Test Environment](#setting-up-test-environment)
-- [Run Test Cases](#run-test-cases)
-- [Test Cases](#test-cases)
-  - [dsCompositeIn_test1_VerifyConnect_Callback.py](#dscompositein_test1_verifyconnect_callbackpy)
-  - [dsCompositeIn_test2_VerifyStatus_Callback.py](#dscompositein_test2_verifystatus_callbackpy)
-  - [dsCompositeIn_test3_ScaleAndVerify_Video.py](#dscompositein_test3_scaleandverify_videopy)
-  - [dsCompositeIn_test4_VerifySignal_Callback.py](#dscompositein_test4_verifysignal_callbackpy)
-  - [dsCompositeIn_test5_VerifyVideoMode_Callback.py](#dscompositein_test5_verifyvideomode_callbackpy)
-  - [dsCompositeIn_L3_Runall_Sink.py](#dscompositein_l3_runall_sinkpy)
-
 ## Acronyms, Terms and Abbreviations
 
 - `HAL`     - Hardware Abstraction Layer

@@ -1,13 +1,5 @@
 # Device Settings Host L2 Low Level Test Specification and Procedure Documentation
 
-## Table of Contents
-
-- [Overview](#overview)
-- [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-- [Definitions](#definitions)
-- [References](#references)
-- [Level 2 Test Procedure](#level-2-test-procedure)
-
 ## Overview
 
 This document describes the Low Level L2 Test Specification and Procedure for the Device Settings Host module.

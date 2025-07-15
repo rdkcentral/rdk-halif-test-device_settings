@@ -1,14 +1,5 @@
 # Device Settings Video Port L3 Low Level Test Specification and Procedure Documentation
 
-## Table of Contents
-
-- [Overview](#overview)
-- [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-- [References](#references)
-- [Level 3 Test cases High Level Overview](#level-3-test-cases-high-level-overview)
-- [Level 3 Python Test Cases High Level Overview](#level-3-python-test-cases-high-level-overview)
-- [L3 Test Procedure Documentation](#l3-test-procedure-documentation)
-
 ## Overview
 
 This document describes the L3 Low Level Test Specification and Procedure Documentation for the Device Settings Video Port module.

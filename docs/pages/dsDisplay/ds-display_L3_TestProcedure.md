@@ -1,20 +1,5 @@
 # Device Settings Display L3 Test Case and Procedure Documentation
 
-## Table of Contents
-
-- [Overview](#overview)
-- [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-- [References](#references)
-- [Setting Up Test Environment](#setting-up-test-environment)
-- [Run Test Cases](#run-test-cases)
-- [Test Case Procedure](#test-case-procedure)
-  - [dsDisplay_test01_VerifyDisplayConnectCallBackTest.py](#dsdisplay_test01_verifydisplayconnectcallbacktestpy)
-  - [dsDisplay_test02_TestVerifyDisplayEdid.py](#dsdisplay_test02_testverifydisplayedidpy)
-  - [dsDisplay_test03_AspectRatioVerificationTest.py](#dsdisplay_test03_aspectratioverificationtestpy)
-  - [dsDisplay_test04_TestVerifyDisplayEdidBytes.py](#dsdisplay_test04_testverifydisplayedidbytes)
-  - [dsDisplay_L3_Runall_Source.py](#dsdisplay_l3_runall_sourcepy)
-  - [dsDisplay_L3_Runall_Sink.py](#dsdisplay_l3_runall_sinkpy)
-
 ## Overview
 
 This document describes the VTS Level 3 Test scenarios and the execution process for the Device Setting Display Module.

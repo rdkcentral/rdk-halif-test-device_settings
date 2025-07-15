@@ -1,13 +1,5 @@
 # dsHost HAL L3 Python Test Procedure
 
-## Table of Contents
-
-- [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-- [Setting Up Test Environment](#setting-up-test-environment)
-- [Run Test Cases](#run-test-cases)
-- [Test Setup Connections](#test-setup-connections)
-- [Test Cases](#test-cases)
-  - [dsHost_test1_VerifyTemperature.py](#dshost_test1_verifytemperaturepy)
 ## Acronyms, Terms and Abbreviations
 
 - `HAL`    - Hardware Abstraction Layer

@@ -1,40 +1,5 @@
 # dsAudio HAL L3 Python Test Procedure
 
-## Table of Contents
-
-- [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-- [Setting Up Test Environment](#setting-up-test-environment)
-- [Streams Required](#streams-required)
-- [Test Cases](#test-cases)
-  - [dsAudio_L3_Runall_Sink.py](#dsaudio_l3_runall_sinkpy)
-  - [dsAudio_L3_Runall_Source.py](#dsaudio_l3_runall_sourcepy)
-  - [dsaudio_test01_enabledisableandverifyaudioportstatus.py](#dsaudio_test01_enabledisableandverifyaudioportstatuspy)
-  - [dsaudio_test02_portconnectionstatus.py](#dsaudio_test02_portconnectionstatuspy)
-  - [dsaudio_test03_ms12audiocompression.py](#dsaudio_test03_ms12audiocompressionpy)
-  - [dsaudio_test04_ms12dialogueenhancer.py](#dsaudio_test04_ms12dialogueenhancerpy)
-  - [dsaudio_test05_ms12dolbyvolume.py](#dsaudio_test05_ms12dolbyvolumepy)
-  - [dsaudio_test06_ms12intelligentequalizer.py](#dsaudio_test06_ms12intelligentequalizerpy)
-  - [dsaudio_test07_ms12volumeleveller.py](#dsaudio_test07_ms12volumelevellerpy)
-  - [dsaudio_test08_ms12bassenhancer.py](#dsaudio_test08_ms12bassenhancerpy)
-  - [dsaudio_test09_ms12surrounddecoder.py](#dsaudio_test09_ms12surrounddecoderpy)
-  - [dsaudio_test10_ms12drcmode.py](#dsaudio_test10_ms12drcmodepy)
-  - [dsaudio_test11_ms12surroundvirtualizer.py](#dsaudio_test11_ms12surroundvirtualizerpy)
-  - [dsaudio_test12_ms12misteering.py](#dsaudio_test12_ms12misteeringpy)
-  - [dsaudio_test13_ms12graphicequalizer.py](#dsaudio_test13_ms12graphicequalizerpy)
-  - [dsaudio_test14_ms12leconfig.py](#dsaudio_test14_ms12leconfigpy)
-  - [dsaudio_test15_arcport.py](#dsaudio_test15_arcportpy)
-  - [dsaudio_test16_arcsad.py](#dsaudio_test16_arcsadpy)
-  - [dsaudio_test17_outputmode.py](#dsaudio_test17_outputmodepy)
-  - [dsaudio_test18_audiolevel.py](#dsaudio_test18_audiolevelpy)
-  - [dsaudio_test19_speakeraudiogain.py](#dsaudio_test19_speakeraudiogainpy)
-  - [dsaudio_test20_muteunmute.py](#dsaudio_test20_muteunmutepy)
-  - [dsaudio_test21_audiodelay.py](#dsaudio_test21_audiodelaypy)
-  - [dsaudio_test22_audioformat.py](#dsaudio_test22_audioformatpy)
-  - [dsaudio_test23_associatemix.py](#dsaudio_test23_associatemixpy)
-  - [dsaudio_test24_primarysecondarylanguage.py](#dsaudio_test24_primarysecondarylanguagepy)
-  - [dsaudio_test25_audiomix.py](#dsaudio_test25_audiomixpy)
-  - [dsaudio_test26_ms12audioprofiles.py](#dsaudio_test26_ms12audioprofilespy)
-
 ## Acronyms, Terms and Abbreviations
 
 - `HAL`    - Hardware Abstraction Layer
