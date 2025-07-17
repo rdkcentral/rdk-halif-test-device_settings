@@ -2224,8 +2224,11 @@ void test_l1_dsHdmiIn_positive_dsGetAllmStatus_sink(void) {
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     bool allm_status_1 = 0 , allm_status_2 = 0;
     dsError_t  result = dsERR_NONE;
+    char allmFeature[255] = {0};
     uint8_t numInputPorts = 0;
     numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
+    
+    UT_KVP_PROFILE_GET_STRING("dsHdmiIn/gameFeatures/feature", allmFeature);
 
     // Step 1: Initialize the HDMI input sub-system using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
@@ -2234,10 +2237,24 @@ void test_l1_dsHdmiIn_positive_dsGetAllmStatus_sink(void) {
         // Step 2: Call dsGetAllmStatus() with valid inputs
         for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++) {
              result = dsGetAllmStatus(port, &allm_status_1);
-             UT_ASSERT_EQUAL(result, dsERR_NONE);
+             if(strstr(allmFeature,"allm") != NULL)
+            {
+                UT_ASSERT_EQUAL(result, dsERR_NONE);
+            }
+            else
+            {
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+            }
 
              result = dsGetAllmStatus(port, &allm_status_2);
-             UT_ASSERT_EQUAL(result, dsERR_NONE);
+             if(strstr(allmFeature,"allm") != NULL)
+            {
+                UT_ASSERT_EQUAL(result, dsERR_NONE);
+            }
+            else
+            {
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+            }
 
              UT_ASSERT_EQUAL(allm_status_1, allm_status_2);
         }
@@ -2522,19 +2539,36 @@ void test_l1_dsHdmiIn_positive_dsSetEdid2AllmSupport_sink(void) {
 
     dsError_t  result = dsERR_NONE;
     uint8_t numInputPorts = 0;
+    char allmFeature[255] = {0};
     numInputPorts = UT_KVP_PROFILE_GET_UINT8("dsHdmiIn/numberOfPorts");
+    UT_KVP_PROFILE_GET_STRING("dsHdmiIn/gameFeatures/feature", allmFeature);
 
     // Step 1: Initialize HDMI input using dsHdmiInInit()
     UT_ASSERT_EQUAL_FATAL(dsHdmiInInit(), dsERR_NONE);
 
     if (gSourceType == 0) {
         for (int port = dsHDMI_IN_PORT_0; port < numInputPorts; port++)
-        {     // Step 2: Enable EDID ALLM support
-              result = dsSetEdid2AllmSupport(port, true);
-              UT_ASSERT_EQUAL(result, dsERR_NONE);
-	      // Step 3: Disable EDID ALLM support
-	      result = dsSetEdid2AllmSupport(port, false);
-	      UT_ASSERT_EQUAL(result, dsERR_NONE);
+        {     
+            // Step 2: Enable EDID ALLM support
+            result = dsSetEdid2AllmSupport(port, true);
+            if(strstr(allmFeature,"allm") != NULL)
+            {
+                UT_ASSERT_EQUAL(result, dsERR_NONE);
+            }
+            else
+            {
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+            }
+            // Step 3: Disable EDID ALLM support
+            result = dsSetEdid2AllmSupport(port, false);
+            if(strstr(allmFeature,"allm") != NULL)
+            {
+                UT_ASSERT_EQUAL(result, dsERR_NONE);
+            }
+            else
+            {
+                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+            }
 
         }
 
