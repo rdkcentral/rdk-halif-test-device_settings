@@ -969,16 +969,19 @@ void test_l1_dsVideoDevice_positive_dsGetVideoCodecInfo(void)
                 {
                     continue;
                 }
-                UT_ASSERT_EQUAL(result, dsERR_NONE);
                 // Compare with profile file
-                UT_ASSERT_EQUAL(codecInfo.num_entries, gDSVideoDeviceConfiguration[i].num_codec_entries);
                 if (codec == dsVIDEO_CODEC_MPEGHPART2)
                 {
-                    UT_ASSERT_EQUAL(codecInfo.entries->profile, gDSVideoDeviceConfiguration[i].profile);
-                    // Support for float values in KVP
-                    UT_ASSERT_EQUAL(codecInfo.entries->level, gDSVideoDeviceConfiguration[i].level);
+                    UT_ASSERT_EQUAL(result, dsERR_NONE);
+                    UT_ASSERT_EQUAL(codecInfo.num_entries, gDSVideoDeviceConfiguration[i].info.num_entries);
+                    for(int k = 0; k < codecInfo.num_entries; k++)
+                    {
+                        UT_ASSERT_EQUAL(codecInfo.entries[k].profile, gDSVideoDeviceConfiguration[i].info.entries[k].profile);
+                        UT_ASSERT_EQUAL(codecInfo.entries[k].level, gDSVideoDeviceConfiguration[i].info.entries[k].level);
+                    }
                 }
                 codec = (dsVideoCodingFormat_t)(0x01 << (j++));
+                memset(&codecInfo, 0, sizeof(codecInfo));
             } else if(gSourceType == 0) {
                 // Step 04: API is not supported on sink devices
                 UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
@@ -1037,7 +1040,7 @@ void test_l1_dsVideoDevice_negative_dsGetVideoCodecInfo(void)
         // Step 02: API is not supported on sink devices
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else {
-        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+        UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     }
 
     // Step 03: Initialize video devices
@@ -1090,7 +1093,7 @@ void test_l1_dsVideoDevice_negative_dsGetVideoCodecInfo(void)
         // Step 13: API is not supported on sink devices
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else {
-        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+        UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     }
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
