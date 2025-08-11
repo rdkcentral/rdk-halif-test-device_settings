@@ -4756,7 +4756,14 @@ void test_l1_dsVideoPort_negative_dsSetForceHDRMode(void) {
 
     // Step 01: Attempt to set HDR mode without initialization
     status = dsSetForceHDRMode(-1, mode );
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    if (gSourceType == 1)
+    {
+        CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     // Step 02: Initialize video port system
     status = dsVideoPortInit();
@@ -4764,7 +4771,14 @@ void test_l1_dsVideoPort_negative_dsSetForceHDRMode(void) {
 
     // Step 03: Set HDR mode with invalid handle
     status = dsSetForceHDRMode(handle,mode );
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    if (gSourceType == 1)
+    {
+        UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     // Step 04: Get the port handle for supported video ports
     for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
@@ -4775,7 +4789,11 @@ void test_l1_dsVideoPort_negative_dsSetForceHDRMode(void) {
             break;
         // Step 05: Set HDR mode with invalid mode values
         status = dsSetForceHDRMode(handle, dsHDRSTANDARD_Invalid );
-        UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+        if (gSourceType == 1) {
+            UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+        } else if (gSourceType == 0) {
+            UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+        }
     }
 
     // Step 06: Terminate the video port system
@@ -4784,7 +4802,14 @@ void test_l1_dsVideoPort_negative_dsSetForceHDRMode(void) {
 
     // Step 07: Attempt to set HDR mode after termination
     status = dsSetForceHDRMode(handle, mode);
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    if (gSourceType == 1)
+    {
+        CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
