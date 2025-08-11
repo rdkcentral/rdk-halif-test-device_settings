@@ -911,10 +911,19 @@ void test_l2_dsVideoPort_GetColorDepth(void)
         ret = dsDisplayInit();
         bool isConnected = false;
         ret = dsIsDisplayConnected(handle, &isConnected);
-        if(!isConnected) {
-            UT_ASSERT_EQUAL(color_depth, DS_VIDEO_PORT_DEFAULT_COLORDEPTH);
+        if (gSourceType == 1)
+        {
+            if (!isConnected)
+            {
+                UT_ASSERT_EQUAL(color_depth, DS_VIDEO_PORT_DEFAULT_COLORDEPTH);
+            }
+            else
+            {
+                UT_ASSERT_EQUAL(color_depth, gDSvideoPort_color_depth);
+            }
         }
-        else {
+        else
+        {
             UT_ASSERT_EQUAL(color_depth, gDSvideoPort_color_depth);
         }
         ret = dsDisplayTerm();

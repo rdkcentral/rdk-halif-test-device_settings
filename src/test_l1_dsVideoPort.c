@@ -1158,7 +1158,7 @@ void test_l1_dsVideoPort_positive_dsEnableHDCP(void) {
  * |07|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * |08|Call dsEnableHDCP() Attempt to enable HDCP without initializing the video ports | handle: [ valid handle ], contentProtect: [true = enable/ false = disable], hdcpKey: [valid hdcp key], keySize: [valid key size] | dsERR_NOT_INITIALIZED | Enable HDCP must fail as module is not initialized |
  * 
- * 
+ * @note For sink devices, API must return `dsERR_OPERATION_NOT_SUPPORTED` as per interface specification.
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsEnableHDCP(void) {
@@ -1174,7 +1174,14 @@ void test_l1_dsVideoPort_negative_dsEnableHDCP(void) {
 
     // Step 01: Attempt to enable HDCP without initialization
     status = dsEnableHDCP(-1, enableHDCP, hdcpKey, keySize);
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    if (gSourceType == 0)
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
+    else
+    {
+        CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
 
     // Step 02: Initialize video port system
     status = dsVideoPortInit();
@@ -1182,7 +1189,14 @@ void test_l1_dsVideoPort_negative_dsEnableHDCP(void) {
 
     // Step 03: Attempt to enable HDCP with an invalid handle
     status = dsEnableHDCP(handle, enableHDCP, hdcpKey, keySize);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    if (gSourceType == 0)
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    }
 
     // Step 04: Get the video port handle for supported video ports
     for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
@@ -1195,11 +1209,25 @@ void test_l1_dsVideoPort_negative_dsEnableHDCP(void) {
         // Step 05: Enable HDCP with invalid key size
         enableHDCP = gDSVideoPortConfiguration[i].hdcp_supported;
         status = dsEnableHDCP(handle,enableHDCP, hdcpKey, HDCP_KEY_MAX_SIZE+1);
-        UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+        if (gSourceType == 0)
+        {
+            UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+        }
+        else
+        {
+            UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+        }
 
         // Step 06: Enable HDCP with NULL hdcpKey pointer
         status = dsEnableHDCP(handle, enableHDCP, NULL, keySize);
-        UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+        if (gSourceType == 0)
+        {
+            UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+        }
+        else
+        {
+            UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+        }
     }
 
     // Step 07: Terminate the video port system
@@ -1208,7 +1236,14 @@ void test_l1_dsVideoPort_negative_dsEnableHDCP(void) {
 
     // Step 08: Attempt to enable HDCP after termination
     status = dsEnableHDCP(handle, enableHDCP, hdcpKey, keySize);
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    if (gSourceType == 0)
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
+    else
+    {
+        CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
 
     UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
@@ -2807,7 +2842,7 @@ void test_l1_dsVideoPort_negative_dsSupportedTvResolutions(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call dsSetForceDisable4KSupport() by looping through the acquired port handles and valid value to Set the 4K support to be forcefully disabled or not | handle  = [loop through valid handles] , disable= [valid value] | dsERR_NONE | The 4K support must be successfully disabled/not or indicate that the operation isn't supported |
+ * |03|Call dsSetForceDisable4KSupport() by looping through the acquired port handles and valid value to Set the 4K support to be forcefully disabled or not | handle  = [loop through valid handles] , disable= [valid value] | dsERR_OPERATION_NOT_SUPPORTED | The 4K support must be successfully disabled/not or indicate that the operation isn't supported |
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
  */
@@ -2859,12 +2894,12 @@ void test_l1_dsVideoPort_positive_dsSetForceDisable4KSupport(void) {
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsSetForceDisable4KSupport() Attempt to disable or not to disable 4K support with out initializing video ports| handle = [invalid handle] , disable = [valid value]| dsERR_NOT_INITIALIZED| dsSetForceDisable4KSupport call must fail as module is not initialized |
+ * |01|Call dsSetForceDisable4KSupport() Attempt to disable or not to disable 4K support with out initializing video ports| handle = [invalid handle] , disable = [valid value]| dsERR_OPERATION_NOT_SUPPORTED| dsSetForceDisable4KSupport call must fail as module is not initialized |
  * |02|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
- * |03|Call dsSetForceDisable4KSupport() Using an invalid handle but with valid disable parameter value | handle = [invalid handle], disable = [valid value] | dsERR_INVALID_PARAM | Invalid paramerter must be returned |
+ * |03|Call dsSetForceDisable4KSupport() Using an invalid handle but with valid disable parameter value | handle = [invalid handle], disable = [valid value] | dsERR_OPERATION_NOT_SUPPORTED | Invalid paramerter must be returned |
  * |04|Call dsGetVideoPort() Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports |
  * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
- * |06|Call dsSetForceDisable4KSupport() Again after terminating video ports attempt to disable or not to disable 4k support of video ports | handle= [valid handle ] , disable = [valid value] | dsERR_NOT_INITIALIZED | dsSetForceDisable4KSupport call must fail as module is not initialized |
+ * |06|Call dsSetForceDisable4KSupport() Again after terminating video ports attempt to disable or not to disable 4k support of video ports | handle= [valid handle ] , disable = [valid value] | dsERR_OPERATION_NOT_SUPPORTED | dsSetForceDisable4KSupport call must fail as module is not initialized |
  * 
  * 
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
@@ -2880,7 +2915,7 @@ void test_l1_dsVideoPort_negative_dsSetForceDisable4KSupport(void) {
 
     // Step 01: Attempt to set force disable 4K support without initialization
     status = dsSetForceDisable4KSupport(-1, disable4K);
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_OPERATION_NOT_SUPPORTED, dsERR_OPERATION_NOT_SUPPORTED);
 
     // Step 02: Initialize video port system
     status = dsVideoPortInit();
@@ -2888,7 +2923,7 @@ void test_l1_dsVideoPort_negative_dsSetForceDisable4KSupport(void) {
 
     // Step 03: Invalid handle check
     status = dsSetForceDisable4KSupport(handle, disable4K);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
 
     // Step 04: Get valid video port handle
     for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
@@ -2905,7 +2940,7 @@ void test_l1_dsVideoPort_negative_dsSetForceDisable4KSupport(void) {
 
     // Step 06: Attempt to set force disable 4K support after termination
     status = dsSetForceDisable4KSupport(handle, disable4K);
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_OPERATION_NOT_SUPPORTED, dsERR_OPERATION_NOT_SUPPORTED);
 
     UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
@@ -2928,8 +2963,8 @@ void test_l1_dsVideoPort_negative_dsSetForceDisable4KSupport(void) {
  * |:--:|---------|----------|--------------|-----|
  * |01|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
  * |02|Call dsGetVideoPort() - Get the video port handle for valid video port type and valid index | type, index = [Loop through kPorts] , handle = [valid handle] | dsERR_NONE | Valid port handle must be returned |
- * |03|Call  dsGetForceDisable4KSupport() by looping through the acquired port handles and valid pointer to get the 4K support disabled or not and store it | handle  = [loop through valid handles] , disable= [valid pointer] | dsERR_NONE | The 4K support disabled or not must be successfully retrieved |
- * |04|Call  dsGetForceDisable4KSupport() - Again by looping through the acquired port handles and valid pointer to get the 4K support disabled or not and store it | handle  = [loop through valid handles] , disable= [valid pointer] | dsERR_NONE | The 4K support disabled or not must be successfully retrieved or indicate that the operation isn't supported |
+ * |03|Call  dsGetForceDisable4KSupport() by looping through the acquired port handles and valid pointer to get the 4K support disabled or not and store it | handle  = [loop through valid handles] , disable= [valid pointer] | dsERR_OPERATION_NOT_SUPPORTED | The 4K support disabled or not must be successfully retrieved |
+ * |04|Call  dsGetForceDisable4KSupport() - Again by looping through the acquired port handles and valid pointer to get the 4K support disabled or not and store it | handle  = [loop through valid handles] , disable= [valid pointer] | dsERR_OPERATION_NOT_SUPPORTED | The 4K support disabled or not must be successfully retrieved or indicate that the operation isn't supported |
  * |05|Check if the values are equal | | dsERR_NONE | The values must be equal |
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful | 
  * 
@@ -2988,13 +3023,13 @@ void test_l1_dsVideoPort_positive_dsGetForceDisable4KSupport(void) {
  * **Test Procedure:**@n
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|---------|----------|--------------|-----|
- * |01|Call dsGetForceDisable4KSupport() Attempt to get 4k support disable or not with out initializing video ports| handle = [invalid handle] , disable = [valid pointer]| dsERR_NOT_INITIALIZED| dsGetForceDisable4KSupport call must fail as module is not initialized |
+ * |01|Call dsGetForceDisable4KSupport() Attempt to get 4k support disable or not with out initializing video ports| handle = [invalid handle] , disable = [valid pointer]| dsERR_OPERATION_NOT_SUPPORTED| dsGetForceDisable4KSupport call must fail as module is not initialized |
  * |02|Call dsVideoPortInit() - Initialize video port system | | dsERR_NONE | Initialization must be successful |
- * |03|Call dsGetForceDisable4KSupport() Using an invalid handle but with valid pointer | handle = [invalid handle], disable = [valid pointer] | dsERR_INVALID_PARAM | Invalid paramerter must be returned |
+ * |03|Call dsGetForceDisable4KSupport() Using an invalid handle but with valid pointer | handle = [invalid handle], disable = [valid pointer] | dsERR_OPERATION_NOT_SUPPORTED | Invalid paramerter must be returned |
  * |04|Call dsGetVideoPort() Get the port handle for all supported video ports on the platform  |type ,  index = [ Loop through kPorts ] |dsERR_NONE | Valid port handle must be returned for all supported video ports |
- * |05|Call dsGetForceDisable4KSupport() By looping through acquired port handles but with a invalid pointer | handle = [valid handle], disable = [invalid pointer] | dsERR_INVALID_PARAM | Invalid paramerter must be returned |
+ * |05|Call dsGetForceDisable4KSupport() By looping through acquired port handles but with a invalid pointer | handle = [valid handle], disable = [invalid pointer] | dsERR_OPERATION_NOT_SUPPORTED | Invalid paramerter must be returned |
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
- * |07|Call dsGetForceDisable4KSupport() Again after terminating video ports attempt to get whether 4K support of video ports disabled or not | handle= [valid handle ] , disable = [valid pointer] | dsERR_NOT_INITIALIZED | dsGetForceDisable4KSupport call must fail as module is not initialized | 
+ * |07|Call dsGetForceDisable4KSupport() Again after terminating video ports attempt to get whether 4K support of video ports disabled or not | handle= [valid handle ] , disable = [valid pointer] | dsERR_OPERATION_NOT_SUPPORTED | dsGetForceDisable4KSupport call must fail as module is not initialized | 
  * 
  * 
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
@@ -3010,7 +3045,7 @@ void test_l1_dsVideoPort_negative_dsGetForceDisable4KSupport(void) {
 
     // Step 01: Attempt to get 4K support status without initialization
     status = dsGetForceDisable4KSupport(-1, &disable4K);
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_OPERATION_NOT_SUPPORTED, dsERR_OPERATION_NOT_SUPPORTED);
 
     // Step 02: Initialize video port system
     status = dsVideoPortInit();
@@ -3018,7 +3053,7 @@ void test_l1_dsVideoPort_negative_dsGetForceDisable4KSupport(void) {
 
     // Step 03: Invalid handle check
     status = dsGetForceDisable4KSupport(handle, &disable4K);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
 
     // Step 04: Get valid video port handle
     for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
@@ -3029,7 +3064,7 @@ void test_l1_dsVideoPort_negative_dsGetForceDisable4KSupport(void) {
             break;
         // Step 05: Get 4K support status with invalid pointer
         status = dsGetForceDisable4KSupport(handle, NULL);
-        UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
     }
 
     // Step 06: Terminate the video port system
@@ -3038,7 +3073,7 @@ void test_l1_dsVideoPort_negative_dsGetForceDisable4KSupport(void) {
 
     // Step 07: Attempt to get 4K support status after termination
     status = dsGetForceDisable4KSupport(handle, &disable4K);
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_OPERATION_NOT_SUPPORTED, dsERR_OPERATION_NOT_SUPPORTED);
 
     UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
@@ -3354,10 +3389,19 @@ void test_l1_dsVideoPort_positive_dsGetColorDepth(void) {
         status = dsDisplayInit();
         bool isConnected = false;
         status = dsIsDisplayConnected(handle, &isConnected);
-        if(!isConnected) {
-            UT_ASSERT_EQUAL(colorDepth1, DS_VIDEO_PORT_DEFAULT_COLORDEPTH);
+        if(gSourceType == 1)
+        {
+            if (!isConnected)
+            {
+                UT_ASSERT_EQUAL(colorDepth1, DS_VIDEO_PORT_DEFAULT_COLORDEPTH);
+            }
+            else
+            {
+                UT_ASSERT_EQUAL(colorDepth1, gDSvideoPort_color_depth);
+            }
         }
-        else {
+        else
+        {
             UT_ASSERT_EQUAL(colorDepth1, gDSvideoPort_color_depth);
         }
         status = dsDisplayTerm();
@@ -3471,7 +3515,7 @@ void test_l1_dsVideoPort_positive_dsGetColorSpace(void) {
     dsError_t status;
     intptr_t handle = 0;
 
-    dsDisplayColorSpace_t colorSpace1;
+    dsDisplayColorSpace_t colorSpace1 = dsDISPLAY_COLORSPACE_UNKNOWN;
 
     // Step 01: Initialize video port system
     status = dsVideoPortInit();
