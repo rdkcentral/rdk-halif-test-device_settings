@@ -824,6 +824,7 @@ void test_l1_dsVideoPort_negative_dsIsDisplaySurround(void) {
  * |04|Compare the values with the value from profile file and make sure they are equal | | dsERR_NONE | The values must be equal |
  * |05|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
+ * @note For sink devices, API must return `dsERR_OPERATION_NOT_SUPPORTED` as per interface specification.
  */
 void test_l1_dsVideoPort_positive_dsGetSurroundMode(void) {
     gTestID = 13;
@@ -887,7 +888,7 @@ void test_l1_dsVideoPort_positive_dsGetSurroundMode(void) {
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * |07|Call dsGetSurroundMode() - Attempt to get the surround mode without initializing video ports | handle: [ valid handle ], surround: [pointer to hold the surround mode] | dsERR_NOT_INITIALIZED | Get surround mode of video ports must fail as module is not initialized |
  * 
- * 
+ * @note For sink devices, API must return `dsERR_OPERATION_NOT_SUPPORTED` as per interface specification.
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetSurroundMode(void) {
@@ -901,7 +902,14 @@ void test_l1_dsVideoPort_negative_dsGetSurroundMode(void) {
 
     // Step 01: Attempt to get surround mode without initialization
     status = dsGetSurroundMode(-1, &surroundMode);
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    if (gSourceType == 1)
+    {
+        CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     // Step 02: Initialize video port system
     status = dsVideoPortInit();
@@ -909,7 +917,14 @@ void test_l1_dsVideoPort_negative_dsGetSurroundMode(void) {
 
     // Step 03: Invalid handle check
     status = dsGetSurroundMode(handle, &surroundMode);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    if (gSourceType == 1)
+    {
+        UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     // Step 04: Get valid video port handle
     for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
@@ -920,7 +935,14 @@ void test_l1_dsVideoPort_negative_dsGetSurroundMode(void) {
             break;
         // Step 05: Check surround mode with null pointer
         status = dsGetSurroundMode(handle, NULL);
-        UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+        if (gSourceType == 1)
+        {
+            UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+        }
+        else
+        {
+            UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+        }
     }
 
     // Step 06: Terminate the video port system
@@ -929,7 +951,14 @@ void test_l1_dsVideoPort_negative_dsGetSurroundMode(void) {
 
     // Step 07: Attempt to get surround mode after termination
     status = dsGetSurroundMode(handle, &surroundMode);
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    if (gSourceType == 1)
+    {
+        CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
@@ -1088,6 +1117,7 @@ void test_l1_dsVideoPort_negative_dsIsVideoPortActive(void) {
  * |03|Call dsEnableHDCP() by looping through the acquired port handles to enable HDCP for source device ports which support HDCP | handle: [ loop through valid handles ] , contentProtect: [1] (enable HDCP), hdcpKey: [ HDCP key ], keySize: [HDCP key size]|dsERR_NONE| API must either successfully enable HDCP or indicate that the operation isn't supported if the particular video does not have HDCP support|
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
+ * @note For sink devices, API must return `dsERR_OPERATION_NOT_SUPPORTED` as per interface specification.
  */
 void test_l1_dsVideoPort_positive_dsEnableHDCP(void) {
     gTestID = 17;
@@ -1525,6 +1555,7 @@ void test_l1_dsVideoPort_negative_dsEnableVideoPort(void) {
  * |03|Call dsSetResolution() by looping through the acquired port handles and valid resolution pointer to set the video port resolution |handle  = [loop through valid handles] , resolution = [valid pointer]|dsERR_NONE|Resolution must be set successfully or indicate that the operation isn't supported|
  * |04|Call dsVideoPortTerm() - Terminate the video ports of a system| |dsERR_NONE|Termination must be successful|
  * 
+ * @note For sink devices, API must return `dsERR_OPERATION_NOT_SUPPORTED` as per interface specification.
  */
 void test_l1_dsVideoPort_positive_dsSetResolution(void) {
     gTestID = 23;
@@ -1589,7 +1620,7 @@ void test_l1_dsVideoPort_positive_dsSetResolution(void) {
  * |07|Call dsVideoPortTerm() - Terminate the video ports of a system | | dsERR_NONE | Termination must be successful |
  * |08|Call dsSetResolution() - Again after terminating video ports attempt to set the resolution | handle= [valid handle from step 04 ] , resolution = [valid pointer] | dsERR_NOT_INITIALIZED | dsSetResolution call must fail as module is not initialized |
  * 
- * 
+ * @note For sink devices, API must return `dsERR_OPERATION_NOT_SUPPORTED` as per interface specification.
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSetResolution(void) {
@@ -1601,7 +1632,14 @@ void test_l1_dsVideoPort_negative_dsSetResolution(void) {
 
     // Step 01: Attempt to set resolution without initialization
     status = dsSetResolution(-1, &(gDSVideoPortConfiguration[0].supportedResolutions[0]));
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    if (gSourceType == 1)
+    {
+        CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     // Step 02: Initialize video port system
     status = dsVideoPortInit();
@@ -1609,7 +1647,14 @@ void test_l1_dsVideoPort_negative_dsSetResolution(void) {
 
     // Step 03: Invalid handle check
     status = dsSetResolution(handle, &(gDSVideoPortConfiguration[0].supportedResolutions[0]));
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    if (gSourceType == 1)
+    {
+        UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     // Step 04: Get valid video port handle
     for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
@@ -1620,7 +1665,14 @@ void test_l1_dsVideoPort_negative_dsSetResolution(void) {
             break;
         // Step 05: Set resolution with invalid pointer
         status = dsSetResolution(handle, NULL);
-        UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+        if (gSourceType == 1)
+        {
+            UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+        }
+        else
+        {
+            UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+        }
         // Step 06: Set resolution with invalid resolution parameters
         dsVideoPortResolution_t  resolutions;
         strcpy(resolutions.name, "NULL");
@@ -1630,7 +1682,14 @@ void test_l1_dsVideoPort_negative_dsSetResolution(void) {
         resolutions.frameRate = dsVIDEO_FRAMERATE_MAX;
         resolutions.interlaced = dsVIDEO_SCANMODE_PROGRESSIVE;
         status = dsSetResolution(handle, &resolutions);
-        UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+        if (gSourceType == 1)
+        {
+            UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+        }
+        else
+        {
+            UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+        }
     }
 
     // Step 07: Terminate the video port system
@@ -1639,7 +1698,14 @@ void test_l1_dsVideoPort_negative_dsSetResolution(void) {
 
     // Step 08: Attempt to set resolution after termination
     status = dsSetResolution(handle, &(gDSVideoPortConfiguration[0].supportedResolutions[0]));
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    if (gSourceType == 1)
+    {
+        CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
@@ -4084,9 +4150,12 @@ void test_l1_dsVideoPort_positive_dsResetOutputToSDR(void) {
 
     // Step 02: Reset video output to SDR
     status = dsResetOutputToSDR();
-    if (gSourceType == 1) {
+    if (gSourceType == 1)
+    {
         UT_ASSERT_EQUAL(status, dsERR_NONE);
-    } else if (gSourceType == 0) {
+    }
+    else
+    {
         UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
     }
 
@@ -4118,7 +4187,7 @@ void test_l1_dsVideoPort_positive_dsResetOutputToSDR(void) {
  * |03|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * |04|Call dsResetOutputToSDR() - Again attempt to reset the video output to SDR after terminating the video ports | dsERR_NOT_INITIALIZED| Reset Video output to SDR must fail as video port is not initialized |
  * 
- * 
+ * @note For sink devices, API must return `dsERR_OPERATION_NOT_SUPPORTED` as per interface specification.
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsResetOutputToSDR(void) {
@@ -4129,7 +4198,14 @@ void test_l1_dsVideoPort_negative_dsResetOutputToSDR(void) {
 
     // Step 01: Attempt reset without initialization
     status = dsResetOutputToSDR();
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    if (gSourceType == 1)
+    {
+        CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
+    else if (gSourceType == 0)
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     // Step 02: Initialize video port system
     status = dsVideoPortInit();
@@ -4141,7 +4217,14 @@ void test_l1_dsVideoPort_negative_dsResetOutputToSDR(void) {
 
     // Step 04: Attempt reset after termination
     status = dsResetOutputToSDR();
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_NONE);
+    if (gSourceType == 1)
+    {
+        CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
@@ -4422,6 +4505,7 @@ void test_l1_dsVideoPort_negative_dsGetHdmiPreference(void) {
  * |05|Check if the values are equal | | dsERR_NONE | The values must be equal |
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
+ * @note For sink devices, API must return `dsERR_OPERATION_NOT_SUPPORTED` as per interface specification.
  */
 void test_l1_dsVideoPort_positive_dsGetIgnoreEDIDStatus(void) {
     gTestID = 67;
@@ -4446,14 +4530,17 @@ void test_l1_dsVideoPort_positive_dsGetIgnoreEDIDStatus(void) {
             break;
         // Step 03: Get IgnoreEDID status
         status = dsGetIgnoreEDIDStatus(handle, &ignoreEDIDStatus1);
-        if (gSourceType == 1) {
+        if (gSourceType == 1)
+        {
             UT_ASSERT_EQUAL(status, dsERR_NONE);
             // Step 04: Repeat getting IgnoreEDID status
             status = dsGetIgnoreEDIDStatus(handle, &ignoreEDIDStatus2);
             UT_ASSERT_EQUAL(status, dsERR_NONE);
             // Step 05: Check if the values are equal
             UT_ASSERT_EQUAL(ignoreEDIDStatus1, ignoreEDIDStatus2);
-        } else if (gSourceType == 0) {
+        }
+        else if (gSourceType == 0)
+        {
             UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
         }
     }
@@ -4489,7 +4576,7 @@ void test_l1_dsVideoPort_positive_dsGetIgnoreEDIDStatus(void) {
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * |07|Call dsGetIgnoreEDIDStatus()  Again after terminating video ports | handle=[valid handle from step 04 ] , status=[valid pointer] | dsERR_NOT_INITIALIZED | call must fail as module is not initialized |
  * 
- * 
+ * @note For sink devices, API must return `dsERR_OPERATION_NOT_SUPPORTED` as per interface specification.
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetIgnoreEDIDStatus(void) {
@@ -4503,7 +4590,14 @@ void test_l1_dsVideoPort_negative_dsGetIgnoreEDIDStatus(void) {
 
     // Step 01: Attempt to get IgnoreEDID status without initialization
     status = dsGetIgnoreEDIDStatus(-1, &ignoreEDIDStatus);
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    if (gSourceType == 1)
+    {
+        CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     // Step 02: Initialize video port system
     status = dsVideoPortInit();
@@ -4511,7 +4605,14 @@ void test_l1_dsVideoPort_negative_dsGetIgnoreEDIDStatus(void) {
 
     // Step 03: Get IgnoreEDID status with invalid handle
     status = dsGetIgnoreEDIDStatus(handle, &ignoreEDIDStatus);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    if (gSourceType == 1)
+    {
+        UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     // Step 04: Get the port handle for supported video ports
     for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
@@ -4522,7 +4623,14 @@ void test_l1_dsVideoPort_negative_dsGetIgnoreEDIDStatus(void) {
             break;
         // Step 05: Get IgnoreEDID status with valid handle but null pointer
         status = dsGetIgnoreEDIDStatus(handle, NULL);
-        UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+        if (gSourceType == 1)
+        {
+            UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+        }
+        else
+        {
+            UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+        }
     }
 
     // Step 06: Terminate the video port system
@@ -4531,7 +4639,14 @@ void test_l1_dsVideoPort_negative_dsGetIgnoreEDIDStatus(void) {
 
     // Step 07: Attempt to get IgnoreEDID status after termination
     status = dsGetIgnoreEDIDStatus(handle, &ignoreEDIDStatus);
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    if (gSourceType == 1)
+    {
+        CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
@@ -4557,6 +4672,7 @@ void test_l1_dsVideoPort_negative_dsGetIgnoreEDIDStatus(void) {
  * |03|Call dsSetBackgroundColor by looping through the acquired prots and valid color values| handle=[Valid handle], color=[valid values] | dsERR_NONE|Background color must be set successfully or indicate that the operation isn't supported |
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
+ * @note For sink devices, API must return `dsERR_OPERATION_NOT_SUPPORTED` as per interface specification.
  */
 void test_l1_dsVideoPort_positive_dsSetBackgroundColor(void) {
     gTestID = 69;
@@ -4579,9 +4695,12 @@ void test_l1_dsVideoPort_positive_dsSetBackgroundColor(void) {
             // Step 03: Set background color for each port by looping through dsVideoBackgroundColor_t enum
         for(dsVideoBackgroundColor_t color = dsVIDEO_BGCOLOR_BLUE; color < dsVIDEO_BGCOLOR_MAX ; color++){
             status = dsSetBackgroundColor(handle, color);
-            if (gSourceType == 1) {
+            if (gSourceType == 1)
+            {
                 UT_ASSERT_EQUAL(status, dsERR_NONE);
-            } else if (gSourceType == 0) {
+            }
+            else
+            {
                 UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
             }
         } 
@@ -4618,7 +4737,7 @@ void test_l1_dsVideoPort_positive_dsSetBackgroundColor(void) {
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * |07|Call dsSetBackgroundColor() after termination video ports |handle= [valid handle from step 04 ] , color= [valid values] | dsERR_NOT_INITIALIZED | call must fail as module is not initialized |
  *
- * 
+ * @note For sink devices, API must return `dsERR_OPERATION_NOT_SUPPORTED` as per interface specification.
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSetBackgroundColor(void) {
@@ -4630,7 +4749,14 @@ void test_l1_dsVideoPort_negative_dsSetBackgroundColor(void) {
 
     // Step 01: Attempt to set background color without initialization
     status = dsSetBackgroundColor(-1, dsVIDEO_BGCOLOR_BLUE);
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    if (gSourceType == 1)
+    {
+        CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     // Step 02: Initialize video port system
     status = dsVideoPortInit();
@@ -4638,7 +4764,14 @@ void test_l1_dsVideoPort_negative_dsSetBackgroundColor(void) {
 
     // Step 03: Set background color with invalid handle
     status = dsSetBackgroundColor(handle, dsVIDEO_BGCOLOR_BLUE);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    if (gSourceType == 1)
+    {
+        UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     // Step 04: Get the port handle for supported video ports
     for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
@@ -4649,7 +4782,14 @@ void test_l1_dsVideoPort_negative_dsSetBackgroundColor(void) {
             break;
         // Step 05: Set background color with valid handle but invalid color
         status = dsSetBackgroundColor(handle, dsVIDEO_BGCOLOR_MAX);
-        UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+        if (gSourceType == 1)
+        {
+            UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+        }
+        else
+        {
+            UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+        }
     }
 
     // Step 06: Terminate the video port system
@@ -4658,7 +4798,14 @@ void test_l1_dsVideoPort_negative_dsSetBackgroundColor(void) {
 
     // Step 07: Attempt to set background color after termination
     status = dsSetBackgroundColor(handle, dsVIDEO_BGCOLOR_BLACK);
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    if (gSourceType == 1)
+    {
+        CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
@@ -4684,6 +4831,7 @@ void test_l1_dsVideoPort_negative_dsSetBackgroundColor(void) {
  * |03|Call dsSetForceHDRMode() by looping through acquired handles and valid mode values|handle=[valid handle], mode=[valid values]|dsERR_NONE|HDR mode must be set successfully or indicate that the operation isn't supported|
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
+ * @note For sink devices, API must return `dsERR_OPERATION_NOT_SUPPORTED` as per interface specification.
  */
 void test_l1_dsVideoPort_positive_dsSetForceHDRMode(void) {
     gTestID = 71;
@@ -4705,9 +4853,12 @@ void test_l1_dsVideoPort_positive_dsSetForceHDRMode(void) {
             break;
         // Step 03: Set HDR mode
         status = dsSetForceHDRMode(handle, gDSVideoPortConfiguration[i].hdr_capabilities);
-        if (gSourceType == 1) {
+        if (gSourceType == 1)
+        {
             UT_ASSERT_EQUAL(status, dsERR_NONE);
-        } else if (gSourceType == 0) {
+        }
+        else
+        {
             UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
         }
     }
@@ -4743,7 +4894,7 @@ void test_l1_dsVideoPort_positive_dsSetForceHDRMode(void) {
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * |07|Call dsSetForceHDRMode() after termination video ports |handle=[valid handle from step 04 ] , mode=[valid values] | dsERR_NOT_INITIALIZED | call must fail as module is not initialized |
  * 
- * 
+ * @note For sink devices, API must return `dsERR_OPERATION_NOT_SUPPORTED` as per interface specification.
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSetForceHDRMode(void) {
@@ -4789,9 +4940,12 @@ void test_l1_dsVideoPort_negative_dsSetForceHDRMode(void) {
             break;
         // Step 05: Set HDR mode with invalid mode values
         status = dsSetForceHDRMode(handle, dsHDRSTANDARD_Invalid );
-        if (gSourceType == 1) {
+        if (gSourceType == 1)
+        {
             UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
-        } else if (gSourceType == 0) {
+        }
+        else if (gSourceType == 0)
+        {
             UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
         }
     }
@@ -4836,6 +4990,7 @@ void test_l1_dsVideoPort_negative_dsSetForceHDRMode(void) {
  * |05|Compare the values with the value read from profile file | dsERR_NONE | The values must be equal |
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
+ * @note For sink devices, API must return `dsERR_OPERATION_NOT_SUPPORTED` as per interface specification.
  */
 void test_l1_dsVideoPort_positive_dsColorDepthCapabilities(void) {
     gTestID = 73;
@@ -4859,11 +5014,14 @@ void test_l1_dsVideoPort_positive_dsColorDepthCapabilities(void) {
             break;
         // Step 03: Get color depth capabilities
         status = dsColorDepthCapabilities(handle, &colorDepthCapability1);
-        if (gSourceType == 1) {
+        if (gSourceType == 1)
+        {
             UT_ASSERT_EQUAL(status, dsERR_NONE);
             // Step 04: Compare value with value from profile file
             UT_ASSERT_EQUAL(colorDepthCapability1, gDSvideoPort_color_depth);
-        } else if (gSourceType == 0) {
+        }
+        else if (gSourceType == 0)
+        {
             UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
         }
     }
@@ -4899,7 +5057,7 @@ void test_l1_dsVideoPort_positive_dsColorDepthCapabilities(void) {
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * |07|Call dsColorDepthCapabilities() after terminating videop ports |handle= [valid handle from step 04 ] , colorDepthCapability= [valid pointer] | dsERR_NOT_INITIALIZED|call must fail as module not initialized |
  * 
- * 
+ * @note For sink devices, API must return `dsERR_OPERATION_NOT_SUPPORTED` as per interface specification.
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsColorDepthCapabilities(void) {
@@ -4913,7 +5071,14 @@ void test_l1_dsVideoPort_negative_dsColorDepthCapabilities(void) {
 
     // Step 01: Attempt to get capabilities without initialization
     status = dsColorDepthCapabilities(-1, &colorDepthCapability);
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    if (gSourceType == 1)
+    {
+        CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     // Step 02: Initialize video port system
     status = dsVideoPortInit();
@@ -4921,7 +5086,14 @@ void test_l1_dsVideoPort_negative_dsColorDepthCapabilities(void) {
 
     // Step 03: Get capabilities with invalid handle
     status = dsColorDepthCapabilities(handle, &colorDepthCapability);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    if (gSourceType == 1)
+    {
+        UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     // Step 04: Get the port handle for supported video ports
     for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
@@ -4932,7 +5104,14 @@ void test_l1_dsVideoPort_negative_dsColorDepthCapabilities(void) {
             break;
         // Step 05: Get capabilities with invalid pointer
         status = dsColorDepthCapabilities(handle, NULL);
-        UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+        if (gSourceType == 1)
+        {
+            UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+        }
+        else
+        {
+            UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+        }
     }
 
     // Step 06: Terminate the video port system
@@ -4941,7 +5120,14 @@ void test_l1_dsVideoPort_negative_dsColorDepthCapabilities(void) {
 
     // Step 07: Attempt to get capabilities after termination
     status = dsColorDepthCapabilities(handle, &colorDepthCapability);
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    if (gSourceType == 1)
+    {
+        CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
@@ -4966,6 +5152,7 @@ void test_l1_dsVideoPort_negative_dsColorDepthCapabilities(void) {
  * |03|Call dsGetPreferredColorDepth by looping through acquired handles and valid pointer to get the preferred color depth of each port |handle=[valid handle] , colorDepth=[valid pointer]|dsERR_NONE|Preferred Color depth must be retrieved successfully or indicate that the operation isn't supported|
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
+ * @note For sink devices, API must return `dsERR_OPERATION_NOT_SUPPORTED` as per interface specification.
  */
 void test_l1_dsVideoPort_positive_dsGetPreferredColorDepth(void) {
     gTestID = 75;
@@ -4994,10 +5181,13 @@ void test_l1_dsVideoPort_positive_dsGetPreferredColorDepth(void) {
     // Step 03: Get preferred color depth
     for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
         status = dsGetPreferredColorDepth(handle, &colorDepth1);
-        if (gSourceType == 1) {
+        if (gSourceType == 1)
+        {
             UT_ASSERT_EQUAL(status, dsERR_NONE);
             UT_ASSERT_EQUAL(colorDepth1, gDSvideoPort_color_depth);
-        } else if (gSourceType == 0) {
+        }
+        else if (gSourceType == 0)
+        {
             UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
         }
     }
@@ -5033,7 +5223,7 @@ void test_l1_dsVideoPort_positive_dsGetPreferredColorDepth(void) {
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * |07|Call dsGetPreferredColorDepth() after terminating video ports |handle=[valid handle] , colorDepth=[valid pointer] |dsERR_NOT_INITIALIZED|call must fail as module is not initialized|
  *
- * 
+ * @note For sink devices, API must return `dsERR_OPERATION_NOT_SUPPORTED` as per interface specification.
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsGetPreferredColorDepth(void) {
@@ -5047,15 +5237,28 @@ void test_l1_dsVideoPort_negative_dsGetPreferredColorDepth(void) {
 
     // Step 01: Attempt to get color depth without initialization
     status = dsGetPreferredColorDepth(-1, &colorDepth);
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
-
+    if (gSourceType == 1)
+    {
+        CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
     // Step 02: Initialize video port system
     status = dsVideoPortInit();
     UT_ASSERT_EQUAL_FATAL(status, dsERR_NONE);
 
     // Step 03: Get color depth with invalid handle
     status = dsGetPreferredColorDepth(handle, &colorDepth);
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    if (gSourceType == 1)
+    {
+        UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     // Step 04: Get the port handle for supported video ports
     for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
@@ -5066,7 +5269,14 @@ void test_l1_dsVideoPort_negative_dsGetPreferredColorDepth(void) {
             break;
         // Step 05: Get color depth with invalid pointer
         status = dsGetPreferredColorDepth(handle, NULL);
-        UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+        if (gSourceType == 1)
+        {
+            UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+        }
+        else
+        {
+            UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+        }
     }
 
     // Step 06: Terminate the video port system
@@ -5075,7 +5285,14 @@ void test_l1_dsVideoPort_negative_dsGetPreferredColorDepth(void) {
 
     // Step 07: Attempt to get color depth after termination
     status = dsGetPreferredColorDepth(handle, &colorDepth);
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    if (gSourceType == 1)
+    {
+        CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
@@ -5100,6 +5317,7 @@ void test_l1_dsVideoPort_negative_dsGetPreferredColorDepth(void) {
  * |03|Call dsSetPreferredColorDepth() by looping through the acquired handles and Valid colorDepth values|handle=[invalid handle] , colorDepth=[valid values] |dsERR_NONE|Color depth must be set successfully or indicate that the operation isn't supported |
  * |04|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * 
+ * @note For sink devices, API must return `dsERR_OPERATION_NOT_SUPPORTED` as per interface specification.
  */
 void test_l1_dsVideoPort_positive_dsSetPreferredColorDepth(void) {
     gTestID = 77;
@@ -5121,9 +5339,12 @@ void test_l1_dsVideoPort_positive_dsSetPreferredColorDepth(void) {
             break;
         // Step 03: Set preferred color depth
         status = dsSetPreferredColorDepth(handle, gDSvideoPort_color_depth);
-        if (gSourceType == 1) {
+        if (gSourceType == 1)
+        {
             UT_ASSERT_EQUAL(status, dsERR_NONE);
-        } else if (gSourceType == 0) {
+        }
+        else if (gSourceType == 0)
+        {
             UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
         }
     }
@@ -5159,7 +5380,7 @@ void test_l1_dsVideoPort_positive_dsSetPreferredColorDepth(void) {
  * |06|Call dsVideoPortTerm() - Terminate the video port system | | dsERR_NONE | Termination must be successful |
  * |07|Call dsSetPreferredColorDepth() after terminating video ports|handle=[valid handle] , colorDepth=[valid values]|dsERR_NOT_INITIALIZED|call must fail as module not initialized|
  * 
- * 
+ * @note For sink devices, API must return `dsERR_OPERATION_NOT_SUPPORTED` as per interface specification.
  * @note Testing for the `dsERR_OPERATION_NOT_SUPPORTED` and `dsERR_GENERAL` might be challenging since it requires a specific scenarios.
  */
 void test_l1_dsVideoPort_negative_dsSetPreferredColorDepth(void) {
@@ -5171,7 +5392,14 @@ void test_l1_dsVideoPort_negative_dsSetPreferredColorDepth(void) {
 
     // Step 01: Attempt to set color depth without initialization
     status = dsSetPreferredColorDepth(-1, dsDISPLAY_COLORDEPTH_8BIT );
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    if (gSourceType == 1)
+    {
+        CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     // Step 02: Initialize video port system
     status = dsVideoPortInit();
@@ -5179,7 +5407,14 @@ void test_l1_dsVideoPort_negative_dsSetPreferredColorDepth(void) {
 
     // Step 03: Set color depth with invalid handle
     status = dsSetPreferredColorDepth(handle, dsDISPLAY_COLORDEPTH_8BIT );
-    UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    if (gSourceType == 1)
+    {
+        UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     // Step 04: Get the port handle for supported video ports
     for (int i = 0; i < gDSvideoPort_NumberOfPorts; i++) {
@@ -5190,7 +5425,14 @@ void test_l1_dsVideoPort_negative_dsSetPreferredColorDepth(void) {
             break;
         // Step 05: Set unsupported color depth
         status = dsSetPreferredColorDepth(handle, 0x60);
-        UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+        if (gSourceType == 1)
+        {
+            UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
+        }
+        else
+        {
+            UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+        }
     }
 
     // Step 06: Terminate the video port system
@@ -5199,7 +5441,14 @@ void test_l1_dsVideoPort_negative_dsSetPreferredColorDepth(void) {
 
     // Step 07: Attempt to set color depth after termination
     status = dsSetPreferredColorDepth(handle, dsDISPLAY_COLORDEPTH_12BIT );
-    CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    if (gSourceType == 1)
+    {
+        CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    }
+    else
+    {
+        UT_ASSERT_EQUAL(status, dsERR_OPERATION_NOT_SUPPORTED);
+    }
 
     UT_LOG_INFO(" Out %s", __FUNCTION__);
 }
