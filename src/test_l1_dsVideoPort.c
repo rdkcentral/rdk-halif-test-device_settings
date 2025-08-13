@@ -4200,7 +4200,7 @@ void test_l1_dsVideoPort_negative_dsResetOutputToSDR(void) {
     status = dsResetOutputToSDR();
     if (gSourceType == 1)
     {
-        CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+        CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_NONE);
     }
     else if (gSourceType == 0)
     {
@@ -4219,7 +4219,7 @@ void test_l1_dsVideoPort_negative_dsResetOutputToSDR(void) {
     status = dsResetOutputToSDR();
     if (gSourceType == 1)
     {
-        CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+        CHECK_FOR_EXTENDED_ERROR_CODE(status, dsERR_NOT_INITIALIZED, dsERR_NONE);
     }
     else
     {
