@@ -2193,7 +2193,7 @@ void test_l2_dsAudio_SetAndGetPrimaryLanguage(void)
     dsError_t ret;
     intptr_t handle;
     const char* setLang = "eng";
-    char getLang[4];
+    char getLang[4] = {0};
 
     UT_LOG_DEBUG("Invoking dsAudioPortInit()");
     ret = dsAudioPortInit();
@@ -2249,7 +2249,7 @@ void test_l2_dsAudio_SetAndGetSecondaryLanguage(void)
     dsError_t ret;
     intptr_t handle;
     const char* setLang = "eng";
-    char getLang[4];
+    char getLang[4] = {0};
 
     UT_LOG_DEBUG("Invoking dsAudioPortInit");
     ret = dsAudioPortInit();
