@@ -4,7 +4,7 @@ dsAudio:
 
     # Profile for L1
     features:
-        extendedEnumsSupported: false
+        extendedEnumsSupported: true
 
     # dsAUDIOPORT_TYPE_ID_LR       = 0x00,  ///< RCA audio output
     # dsAUDIOPORT_TYPE_HDMI        = 0x01,  ///< HDMI audio output
