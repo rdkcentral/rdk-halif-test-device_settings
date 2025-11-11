@@ -313,8 +313,11 @@ int test_l3_dsHost_register(void)
     UT_add_test( pSuite, "Initialize dsHost", test_l3_dsHost_hal_Init);
     UT_add_test( pSuite, "Get CPU Temperature", test_l3_dsHost_hal_get_Temperature);
     UT_add_test( pSuite, "Get SoC ID", test_l3_dsHost_hal_get_SocID);
-    UT_add_test( pSuite_SOB_Only, "Get Host EDID", test_l3_dsHost_hal_get_hostEdid);
     UT_add_test( pSuite, "Terminate dsHost", test_l3_dsHost_hal_Term);
+
+    UT_add_test( pSuite_SOB_Only, "Initialize dsHost", test_l3_dsHost_hal_Init);
+    UT_add_test( pSuite_SOB_Only, "Get Host EDID", test_l3_dsHost_hal_get_hostEdid);
+    UT_add_test( pSuite_SOB_Only, "Terminate dsHost", test_l3_dsHost_hal_Term);
 
     return 0;
 }
