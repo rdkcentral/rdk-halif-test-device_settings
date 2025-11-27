@@ -2,7 +2,7 @@ dsCompositeIn:
   Type: sink
   Name: Panel_compositeIn_1_port
   features:
-    extendedEnumsSupported: false
+    extendedEnumsSupported: true
   composite_input_configurations:
     #dsCOMPOSITE_IN_PORT_NONE = -1,  ///< No composite port.
     #dsCOMPOSITE_IN_PORT_0,          ///< Composite port index 0.
