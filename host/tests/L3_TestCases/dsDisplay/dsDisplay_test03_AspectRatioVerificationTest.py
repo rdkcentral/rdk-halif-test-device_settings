@@ -29,6 +29,8 @@ sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsDisplayHelperClass import dsDisplayHelperClass
 from raft.framework.core.logModule import logModule
+from dsClasses.dsVideoPort import dsVideoPortClass, dsVideoResolution, dsVideoAspectRatio, dsVideoStereoScopicMode, dsVideoFrameRate, dsVideoScanModeMode
+from raft.framework.plugins.ut_raft.configRead import ConfigRead
 
 class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
 
@@ -47,24 +49,202 @@ class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
             None.
         """
         # Class variables
-        self.testAspectRatios = ["16x9", "4x3"]
         self.testName  = "test03_AspectRatioVerificationTest"
         self.qcID = '3'
         super().__init__(self.testName, self.qcID, log)
-
-    #TODO: Current version supports only manual verification.
-    def testChangeDisplayAspectRatio(self, port:str, aspectRatio:str, manual=False):
+    
+    def enablePort(self, video_port:int, port_index:int=0):
         """
-        Gets the aspectratio of the display.
+        Enables the specified Video port.
+
         Args:
-            port (str): Port name
-            aspectRatio (str) : aspectRatio ratio eg: 4x3, 16x9
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                    Defaults to other verification methods
+        video_port (int): The enumeration value representing the video port to enable.
+                           Refer to the appropriate enum for valid options.
+        port_index (int, optional): The index of the specific port to enable. Defaults to 0.
+
         Returns:
             None
+
+        Example:
+            enablePort(video_port=dsVIDEOPORT_TYPE_HDMI, port_index=1)
         """
-        self.testUserResponse.getUserYN(f"Set the aspectratio {aspectRatio} to Port: {port} and Press Enter:")
+        promptWithAnswers = [
+            {
+                "query_type": "list",
+                "query": "Select the Video Port",
+                "input": "dsVIDEOPORT_TYPE_HDMI"
+            },
+            {
+                "query_type": "direct",
+                "query": "Select the Video Port Index[0-9]:",
+                "input": "0"
+            }
+        ]
+
+        # Convert input arguments to strings and update the prompts
+        promptWithAnswers[0]["input"] = str(video_port)
+        promptWithAnswers[1]["input"] = str(port_index)
+
+        result = self.testdsDisplay.utMenu.select(self.videoPortTestSuit, "Enable VideoPort", promptWithAnswers)
+        type = self.testdsDisplay.moduleConfigProfile.get("Type")
+        # Enable HDCP for source devices
+        if type == "source":
+            result = self.testdsDisplay.utMenu.select(self.videoPortTestSuit, "Enable HDCP", promptWithAnswers)
+
+    def getResolutions(self):
+        """
+        Returns the supported Resolutions on device.
+
+        Args:
+            None.
+
+        Returns:
+            returns the supported resolutions
+        """
+        # Store the resolutions in a list
+        resolutions_list = []
+        pixel_res = 0
+
+        for i in range(1, len(self.ports)+1):
+            entry = self.ports[i]
+            num_supported_resolutions = entry["numSupportedResolutions"]
+            supported_resolutions = entry["supportedResolutions"]
+            for j in range(1, num_supported_resolutions + 1):
+                resolutions_data = supported_resolutions.get(j)
+                if resolutions_data:
+                    # Convert pixelResolution value to dsVideoResolution enum and add to list
+                    pixel_res = resolutions_data.get("pixelResolution")
+                    resolution_enum = dsVideoResolution(pixel_res).name
+                    aspectRatio_res = resolutions_data.get("aspectRatio")
+                    aspectRatio_enum = dsVideoAspectRatio(aspectRatio_res).name
+                    stereoScopicMode_res = resolutions_data.get("stereoScopicMode")
+                    stereoScopicMode_enum = dsVideoStereoScopicMode(stereoScopicMode_res).name
+                    frameRate_res = resolutions_data.get("frameRate")
+                    frameRate_enum = dsVideoFrameRate(frameRate_res).name
+                    scanModes_res = resolutions_data.get("interlaced")
+                    scanModes_enum = dsVideoScanModeMode(scanModes_res).name
+
+                    resolutions_list.append({
+                        "pixelResolution":resolution_enum,
+                        "aspectRatio":aspectRatio_enum,
+                        "stereoScopicMode":stereoScopicMode_enum,
+                        "frameRate":frameRate_enum,
+                         "interlaced":scanModes_enum
+                        })
+
+        return resolutions_list
+
+    def select_Resolution(self,video_port:int, port_index:int=0, resolution: dict = None ):
+        """
+        Sets the resolution of the specified video port.
+
+        This method configures the resolution settings for a video port, including pixel resolution,
+        aspect ratio, stereoscopic mode, frame rate, and scan mode. It provides options based on
+        the specified parameters or defaults to predefined values if not provided.
+
+        Args:
+            video_port (int): The enumeration value representing the video port.
+                            Refer to the dsVideoPortType enum for valid options.
+            port_index (int, optional): The index of the specific port to configure. Defaults to 0.
+            resolution (dict, optional): A dictionary containing resolution settings:
+                - "pixelResolution" (str): Desired pixel resolution (e.g., 'dsVIDEO_PIXELRES_1920x1080').
+                - "aspectRatio" (str): Desired aspect ratio (e.g., 'dsVIDEO_ASPECT_RATIO_16x9').
+                - "stereoScopicMode" (str): Desired stereoscopic mode (e.g., 'dsVIDEO_SSMODE_2D').
+                - "frameRate" (str): Desired frame rate (e.g., 'dsVIDEO_FRAMERATE_24').
+                - "interlaced" (str): Desired scan mode (e.g., 'dsVIDEO_SCANMODE_INTERLACED').
+
+        Returns:
+            None
+
+        Example:
+            select_Resolution(video_port=dsVIDEOPORT_TYPE_HDMI, port_index=0, resolution={
+                "pixelResolution": "dsVIDEO_PIXELRES_3840x2160",
+                "aspectRatio": "dsVIDEO_ASPECT_RATIO_16x9",
+                "stereoScopicMode": "dsVIDEO_SSMODE_3D",
+                "frameRate": "dsVIDEO_FRAMERATE_60",
+                "interlaced": "dsVIDEO_SCANMODE_PROGRESSIVE"
+            })
+        """
+        promptWithAnswers = [
+            {
+                "query_type": "list",
+                "query": "Select the Video Port",
+                "input": "dsVIDEOPORT_TYPE_HDMI"
+            },
+            {
+                "query_type": "direct",
+                "query": "Select the Video Port Index[0-9]:",
+                "input": "0"
+            }]
+        """
+        promptWithAnswers.append(
+            {
+                "query_type": "list",
+                "query": "Select Resolution",
+                "input": "dsVIDEO_PIXELRES_1920x1080"
+            },
+            {
+                "query_type": "list",
+                "query": "Select Aspect Ratio",
+                "input": "dsVIDEO_ASPECT_RATIO_16x9"
+            },
+            {
+                "query_type": "list",
+                "query": "Select Stereo ScopicMode",
+                "input": "dsVIDEO_SSMODE_2D"
+            },
+            {
+                "query_type": "list",
+                "query": "Select Frame Rates",
+                "input": "dsVIDEO_FRAMERATE_24"
+            },
+            {
+                "query_type": "list",
+                "query": "Select Scan modes",
+                "input": "dsVIDEO_SCANMODE_INTERLACED"
+            }
+        )
+        """
+
+        # Convert input arguments to strings and update the prompts
+        promptWithAnswers[0]["input"] = str(video_port)
+        promptWithAnswers[1]["input"] = str(port_index)
+
+        # Check if a valid resolution dictionary is provided
+        if resolution:
+            # Add resolution-related prompts using the provided resolution details
+            promptWithAnswers.extend([
+                {
+                "query_type": "list",
+                "query": "Supported Resolution",
+                "input": resolution.get("pixelResolution", "dsVIDEO_PIXELRES_1920x1080")  # Fallback if missing
+                },
+                {
+                    "query_type": "list",
+                    "query": "Supported Aspect Ratio",
+                    "input": resolution.get("aspectRatio", "dsVIDEO_ASPECT_RATIO_16x9")  # Fallback if missing
+                },
+                {
+                    "query_type": "list",
+                    "query": "Supported Stereo ScopicMode",
+                    "input": resolution.get("stereoScopicMode", "dsVIDEO_SSMODE_2D")  # Fallback if missing
+                },
+                {
+                    "query_type": "list",
+                    "query": "Supported Frame Rates",
+                    "input": resolution.get("frameRate", "dsVIDEO_FRAMERATE_24")  # Fallback if missing
+                },
+                {
+                    "query_type": "list",
+                    "query": "Supported Scan modes",
+                    "input": resolution.get("interlaced", "dsVIDEO_SCANMODE_INTERLACED")  # Fallback if missing
+                }
+            ])
+        else:
+            # If no resolution is provided, use defaults or provide a prompt
+            print("No resolution provided, using defaults.")
+
+        result = self.testdsDisplay.utMenu.select(self.videoPortTestSuit, "Set Resolution", promptWithAnswers)
 
     def testFunction(self):
         """
@@ -78,21 +258,39 @@ class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
             bool: Final result of the test.
         """
 
+        self.videoPortProfilefile = os.path.join(dir_path, "../../../../profiles/source/Source_4K_VideoPort.yaml")
+        self.testdsDisplay.utils.scpCopy(self.hal_session, self.videoPortProfilefile, self.targetWorkspace)
+        self.videoPortTestSuit = "L3 dsVideoPort"
+        self.videoPortmoduleName     = "dsVideoPort"
+        self.videoPortmoduleConfigProfile     = ConfigRead(self.videoPortProfilefile , self.videoPortmoduleName)
+        self.ports                   = self.videoPortmoduleConfigProfile.fields.get("Ports")
+        result = self.testdsDisplay.utMenu.select( self.videoPortTestSuit, "VideoPort Init")
         # Initialize the dsDisplay module
         self.testdsDisplay.initialise()
 
         result = False
         # Loop through the supported video ports
         for port, index in self.testdsDisplay.getSupportedPorts():
-            self.testdsDisplay.selectDisplayPort(port, index)
+            # Enable video port
+            self.enablePort(port, index)
 
-            for aspectRatio in self.testAspectRatios:
+            for resolution in self.getResolutions():
+                #set videoport resolution
+                self.select_Resolution(port, index, resolution)
+
+                self.testdsDisplay.selectDisplayPort(port, index)
+
+                aspectRatio = "dsVIDEO_ASPECT_RATIO_16x9"
+                pixelResolution = resolution.get("pixelResolution")
+                if pixelResolution in ["dsVIDEO_PIXELRES_720x480", "dsVIDEO_PIXELRES_720x576"]:
+                    aspectRatio = "dsVIDEO_ASPECT_RATIO_4x3"
                 self.log.stepStart(f'Test Display Aspect Ratio {aspectRatio} Port: {port}')
-                self.testChangeDisplayAspectRatio(port, aspectRatio, True)
                 ratio = self.testdsDisplay.getAspectRatio()
-                result = ratio and aspectRatio in ratio
+                if ratio == aspectRatio:
+                    result = True
                 self.log.stepResult(result, f'Test Display Aspect Ratio {aspectRatio} Port: {port}')
 
+        result = self.testdsDisplay.utMenu.select(self.videoPortTestSuit, "VideoPort Term")
         #Terminate dsDisplay Module
         self.testdsDisplay.terminate()
 
@@ -103,3 +301,4 @@ if __name__ == '__main__':
     summeryLog = logModule(summerLogName, level=logModule.INFO)
     test = dsDisplay_test03_AspectRatioVerificationTest(summeryLog)
     test.run(False)
+
