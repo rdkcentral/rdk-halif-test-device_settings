@@ -280,10 +280,8 @@ class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
 
                 self.testdsDisplay.selectDisplayPort(port, index)
 
-                aspectRatio = "dsVIDEO_ASPECT_RATIO_16x9"
-                pixelResolution = resolution.get("pixelResolution")
-                if pixelResolution in ["dsVIDEO_PIXELRES_720x480", "dsVIDEO_PIXELRES_720x576"]:
-                    aspectRatio = "dsVIDEO_ASPECT_RATIO_4x3"
+                aspectRatio = resolution.get("aspectRatio")
+
                 self.log.stepStart(f'Test Display Aspect Ratio {aspectRatio} Port: {port}')
                 ratio = self.testdsDisplay.getAspectRatio()
                 if ratio == aspectRatio:
