@@ -51,6 +51,10 @@ class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
         self.testName  = "test03_AspectRatioVerificationTest"
         self.qcID = '3'
         super().__init__(self.testName, self.qcID, log)
+        self.videoPortProfilefile = os.path.join(dir_path, "../../../../profiles/source/Source_4K_VideoPort.yaml")
+        self.videoportsession = self.dut.getConsoleSession("ssh_hal_test1")
+        self.testdsVideoPort = dsVideoPortClass(self.videoPortProfilefile, self.videoportsession, "L3 dsVideoPort", self.targetWorkspace)
+
 
     def testFunction(self):
         """
@@ -64,10 +68,7 @@ class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
             bool: Final result of the test.
         """
 
-        self.videoPortProfilefile = os.path.join(dir_path, "../../../../profiles/source/Source_4K_VideoPort.yaml")
-        self.videoportsession = self.dut.getConsoleSession("ssh_player")
-        testdsVideoPort = dsVideoPortClass(self.videoPortProfilefile, self.videoportsession, "L3 dsVideoPort", self.targetWorkspace)
-        testdsVideoPort.initialise()
+        self.testdsVideoPort.initialise()
         # Initialize the dsDisplay module
         self.testdsDisplay.initialise()
 
@@ -75,14 +76,14 @@ class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
         # Loop through the supported video ports
         for port, index in self.testdsDisplay.getSupportedPorts():
             # Enable video port
-            testdsVideoPort.enablePort(port, index)
+            self.testdsVideoPort.enablePort(port, index)
             # Enable HDCP for source devices
-            if testdsVideoPort.getDeviceType():
-                testdsVideoPort.enable_HDCP(port, index)
+            if self.testdsVideoPort.getDeviceType():
+                self.testdsVideoPort.enable_HDCP(port, index)
 
-            for resolution in testdsVideoPort.getResolutions():
-                #set videoport resolution
-                testdsVideoPort.select_Resolution(port, index, resolution)
+            for resolution in self.testdsVideoPort.getResolutions():
+                # set videoport resolution
+                self.testdsVideoPort.select_Resolution(port, index, resolution)
 
                 self.testdsDisplay.selectDisplayPort(port, index)
 
@@ -96,7 +97,7 @@ class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
                     result = False
                 self.log.stepResult(result, f'Test Display Aspect Ratio {aspectRatio} Port: {port}')
 
-        testdsVideoPort.terminate()
+        self.testdsVideoPort.terminate()
         #Terminate dsDisplay Module
         self.testdsDisplay.terminate()
 
