@@ -29,8 +29,7 @@ sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsDisplayHelperClass import dsDisplayHelperClass
 from raft.framework.core.logModule import logModule
-from dsClasses.dsVideoPort import dsVideoPortClass, dsVideoResolution, dsVideoAspectRatio, dsVideoStereoScopicMode, dsVideoFrameRate, dsVideoScanModeMode
-from raft.framework.plugins.ut_raft.configRead import ConfigRead
+from dsClasses.dsVideoPort import dsVideoPortClass
 
 class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
 
@@ -93,6 +92,8 @@ class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
                 ratio = self.testdsDisplay.getAspectRatio()
                 if ratio == aspectRatio:
                     result = True
+                else:
+                    result = False
                 self.log.stepResult(result, f'Test Display Aspect Ratio {aspectRatio} Port: {port}')
 
         testdsVideoPort.terminate()
