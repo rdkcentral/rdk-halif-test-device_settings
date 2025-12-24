@@ -51,9 +51,9 @@ class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
         self.testName  = "test03_AspectRatioVerificationTest"
         self.qcID = '3'
         super().__init__(self.testName, self.qcID, log)
-        self.videoPortProfilefile = os.path.join(dir_path, "../../../../profiles/source/Source_4K_VideoPort.yaml")
-        self.videoportsession = self.dut.getConsoleSession("ssh_hal_test1")
-        self.testdsVideoPort = dsVideoPortClass(self.videoPortProfilefile, self.videoportsession, "L3 dsVideoPort", self.targetWorkspace)
+        self.videoPortProfileFile = os.path.join(dir_path, "../../../../profiles/source/Source_4K_VideoPort.yaml")
+        self.videoport_session = self.dut.getConsoleSession("ssh_hal_test1")
+        self.testdsVideoPort = dsVideoPortClass(self.videoPortProfileFile, self.videoport_session, "L3 dsVideoPort", self.targetWorkspace)
 
 
     def testFunction(self):
