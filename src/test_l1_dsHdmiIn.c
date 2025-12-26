@@ -2736,7 +2736,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetVRRSupport_sink(void) {
     gTestID = 53;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     dsError_t  result = dsERR_NONE;
-    bool vrr_support_1 = false;
+    bool vrr_support = false;
     char keyString[DS_HDMIIN_KEY_SIZE] = {0};
     uint8_t vrr_supported_ports_count = UT_KVP_PROFILE_GET_LIST_COUNT("dsHdmiIn/VrrSupportedPorts");
 
@@ -2770,21 +2770,29 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetVRRSupport_sink(void) {
         // Step 03: Validate GetVRRSupport behavior for all ports
         for (int port = 0; port < number_of_ports; port++)
         {
-            bool vrr_support = false;
-            dsError_t result = dsHdmiInGetVRRSupport(port, &vrr_support);
+            bool vrr_support_1 = false;
+        	bool vrr_support_2 = false;
+
+        	dsError_t result1 = dsHdmiInGetVRRSupport(port, &vrr_support_1);
 
             if (is_supported[port])
             {
-                UT_ASSERT_EQUAL(result, dsERR_NONE);
+                UT_ASSERT_EQUAL(result1, dsERR_NONE);
+
+	            dsError_t result2 = dsHdmiInGetVRRSupport(port, &vrr_support_2);
+	            UT_ASSERT_EQUAL(result2, dsERR_NONE);
+	
+	            // Validate output parameter consistency
+	            UT_ASSERT_EQUAL(vrr_support_1, vrr_support_2);
             }
             else
             {
-                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
+                UT_ASSERT_EQUAL(result1, dsERR_OPERATION_NOT_SUPPORTED);
             }
         }
     } else if (gSourceType == 1) {
        // Step 4: Call dsHdmiInGetVRRSupport() with valid ports
-       UT_ASSERT_EQUAL(dsHdmiInGetVRRSupport(dsHDMI_IN_PORT_0, &vrr_support_1), dsERR_OPERATION_NOT_SUPPORTED);
+       UT_ASSERT_EQUAL(dsHdmiInGetVRRSupport(dsHDMI_IN_PORT_0, &vrr_support), dsERR_OPERATION_NOT_SUPPORTED);
     }
 
     // Step 5: Call dsHdmiInTerm() to ensure deinitialization
