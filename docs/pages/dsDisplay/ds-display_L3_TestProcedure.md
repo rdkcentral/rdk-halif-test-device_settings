@@ -78,6 +78,12 @@ rackConfig:
             username: "root"
             ip: "XXX.XXX.XXX" # IP address of the device
             password: ' '
+        - ssh_hal_test1:
+            type: "ssh"
+            port: 10022
+            username: "root"
+            ip: "XXX.XXX.XXX" # IP address of the device
+            password: ' '
       outbound:
         download_url: "tftp://tftp-server.com/rack1/slot1/"    # Download location for the CPE device
         upload_url: "sftp://server-address/home/workspace/tftp/rack1/slot1/" # Upload location
@@ -230,7 +236,7 @@ dsDisplay_test02_TestVerifyDisplayEdid.py --config /host/tests/configs/example_r
 
 **Overview:**
 
-This test retrieves and verifies the aspect ratio of the display on each supported video port. For each specified aspect ratio, the test checks that the retrieved aspect ratio matches the expected value, ensuring that the display correctly adapts to the given configuration.
+This test retrieves and verifies the aspect ratio of the display based on the resolution on each supported video port. For each specified resolution, the test checks that the retrieved aspect ratio matches the expected value, ensuring that the display correctly adapts to the given configuration.
 
 **Platform Supported:**
 
@@ -238,15 +244,15 @@ This test retrieves and verifies the aspect ratio of the display on each support
 
 **User Input Required:**
 
-Yes: User input is required to manually set the aspect ratio for the specified port, with the prompt question `Set the aspect ratio {aspectRatio} to Port: {port} and Press Enter:` (This will be automated later).
+Nil
 
 **Acceptance Criteria:**
 
-Verify that the display’s aspect ratio is correctly retrieved for each configured setting (16x9, 4x3).
+Verify that the display’s aspect ratio is correctly retrieved for each configured resolution.
 
 **Expected Results:**
 
-The test will set various aspect ratios, retrieve the current aspect ratio from the display, and confirm that it matches the expected value. The test will pass if all aspect ratios are correctly identified; otherwise, it will fail.
+The test will set various resolutions on the video port, retrieve the current aspect ratio from the display, and confirm that it matches the expected value. The test will pass if all aspect ratios are correctly identified; otherwise, it will fail.
 
 **Test Steps:**
 
@@ -259,7 +265,7 @@ dsDisplay_test03_AspectRatioVerificationTest.py --config /host/tests/configs/exa
 - The test will download the required artifacts, then copy them to the target directory.
 
 - Aspect Ratio Verification
-  - For each video port, the user will be prompted to set the specified aspect ratio on the port and confirm by pressing Enter.
+  - For each video port, the test will set the supported resolution on the port.
   - The test will retrieve the aspect ratio from the connected display device.
   - The retrieved aspect ratio will be compared to the expected value for each configuration.
 

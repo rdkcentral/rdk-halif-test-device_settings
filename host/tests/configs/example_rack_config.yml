@@ -84,6 +84,12 @@ rackConfig:
                             username: "root"
                             ip: "" #IP address
                             password: ''
+                        - ssh_hal_test1:
+                            type: "ssh"
+                            port: 20022
+                            username: "root"
+                            ip: "" #IP address
+                            password: ''
                     remoteController:
                         # [ remoteController: ]
                         # [ type: "olimex" ip: "192.168.0.17" port: 7 map: "llama_rc6", config: "remote_commander.yml" ]
