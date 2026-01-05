@@ -2750,7 +2750,6 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetVRRSupport_sink(void) {
         {
 			for (int i = dsHDMI_IN_PORT_0; i < number_of_ports; i++)
             {
-                //char port_string[DS_HDMIIN_KEY_SIZE] = {0};
                 bool vrr_support_0 = false;
 				dsError_t result = dsHdmiInGetVRRSupport(i, &vrr_support_0);
                 UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
