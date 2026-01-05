@@ -2725,7 +2725,7 @@ void test_l1_dsHdmiIn_negative_dsGetHdmiVersion(void) {
  * |Variation / Step|Description|Test Data|Expected Result|Notes|
  * |:--:|-----------|----------|--------------|-----|
  * |01|Initialize the HDMI input sub-system using dsHdmiInInit() | | dsERR_NONE | Should Pass |
- * |02|If device is Sink and VRR-supported ports are available, call dsHdmiInGetVRRSupport() twice for all valid ports|[Valid Port], bool *| dsERR_NONE | Only for VRR-supported ports |
+ * |02|If device is Sink and VRR-supported ports are available, call dsHdmiInGetVRRSupport() twice|[Valid Port], bool *| dsERR_NONE | Only for VRR-supported ports |
  * |03|Compare VRR support values returned in Step 02 and ensure consistency| | Success | Values must match |
  * |04|If device is Sink but no VRR-supported ports are available, call dsHdmiInGetVRRSupport() with a valid port|[Valid Port], bool *| dsERR_OPERATION_NOT_SUPPORTED | VRR not supported on sink |
  * |05|If device is Source, call dsHdmiInGetVRRSupport() with a valid port|[Valid Port], bool *| dsERR_OPERATION_NOT_SUPPORTED | API is sink-specific |
@@ -2750,8 +2750,8 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetVRRSupport_sink(void) {
         {
 			for (int i = dsHDMI_IN_PORT_0; i < number_of_ports; i++)
             {
-                bool vrr_support_0 = false;
-				dsError_t result = dsHdmiInGetVRRSupport(i, &vrr_support_0);
+                bool is_vrr_supported_for_port = false;
+				dsError_t result = dsHdmiInGetVRRSupport(i, &is_vrr_supported_for_port);
                 UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
 			}
 		}
@@ -2768,7 +2768,7 @@ void test_l1_dsHdmiIn_positive_dsHdmiInGetVRRSupport_sink(void) {
 	
 	            UT_ASSERT_EQUAL(ut_kvp_getStringField(ut_kvp_profile_getInstance(), keyString, port_string, DS_HDMIIN_KEY_SIZE), UT_KVP_STATUS_SUCCESS);
 	
-	            int port = UT_Control_GetMapValue(dsHdmiInPort_mapTable, port_string,TEST_DS_DEFAULT_VALUE);
+	            int port = UT_Control_GetMapValue(dsHdmiInPort_mapTable, port_string, TEST_DS_DEFAULT_VALUE);
 	
 	            UT_ASSERT_NOT_EQUAL(port, TEST_DS_DEFAULT_VALUE);
 	
