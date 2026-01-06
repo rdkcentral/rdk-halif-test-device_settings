@@ -1487,7 +1487,8 @@ void test_l2_dsAudio_SetAndGetMS12AudioProfile_sink(void)
         ret = dsGetAudioPort(gDSAudioPortConfiguration[port].typeid, gDSAudioPortConfiguration[port].index, &handle);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         UT_ASSERT_PTR_NOT_NULL(handle);
-        if (ret != dsERR_NONE) {
+        if (ret != dsERR_NONE)
+        {
             UT_LOG_ERROR("dsGetAudioPort failed with error %d", ret);
             continue;
         }
@@ -1495,31 +1496,82 @@ void test_l2_dsAudio_SetAndGetMS12AudioProfile_sink(void)
         UT_LOG_DEBUG("Invoking dsGetMS12AudioProfileList() with handle=%p", handle);
         ret = dsGetMS12AudioProfileList(handle, &profiles);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
-        if (ret != dsERR_NONE) {
+        if (ret != dsERR_NONE)
+        {
             UT_LOG_ERROR("dsGetMS12AudioProfileList() failed with status=%d", ret);
+            continue;
         }
 
-        char *profileName = strtok(profiles.audioProfileList, ",");
+        const char *list = profiles.audioProfileList;
+        const char *start = list;
+        char profileName[DS_AUDIO_MAX_MS12_PROFILE_LEN];
         char profile[DS_AUDIO_MAX_MS12_PROFILE_LEN];
-        while (profileName != NULL) {
-            UT_LOG_DEBUG("Invoking dsSetMS12AudioProfile() with handle=%p and profile=%s", handle, profileName);
-            ret = dsSetMS12AudioProfile(handle, profileName);
-            UT_ASSERT_EQUAL(ret, dsERR_NONE);
-            if (ret != dsERR_NONE) {
-                UT_LOG_ERROR("dsSetMS12AudioProfile() failed with status=%d", ret);
-                continue;
+        UT_LOG_DEBUG("Audio Profile List: %s", list);
+
+        // Iterate through the comma-separated list of profiles
+        while (*start != '\0')
+        {
+            // Skip leading spaces and commas
+            while (*start == ' ' || *start == ',')
+            {
+                start++;
             }
 
-            UT_LOG_DEBUG("Invoking dsGetMS12AudioProfile() with handle=%p", handle);
-            ret = dsGetMS12AudioProfile(handle, profile);
-            UT_ASSERT_EQUAL(ret, dsERR_NONE);
-            if (ret != dsERR_NONE) {
-                UT_LOG_ERROR("dsGetMS12AudioProfile() failed with status=%d", ret);
+            // Find the end of the current token
+            const char *end = start;
+            while (*end != ',' && *end != '\0')
+            {
+                end++;
             }
 
-            UT_ASSERT_STRING_EQUAL(profile, profileName);
-            profileName = strtok(NULL, ",");
-        } /* while (profileName) */
+            // Trim trailing spaces
+            const char *trim_end = end;
+            while (trim_end > start && (*(trim_end - 1) == ' '))
+            {
+                trim_end--;
+            }
+
+            size_t len = trim_end - start;
+            if (len >= DS_AUDIO_MAX_MS12_PROFILE_LEN)
+            {
+                len = DS_AUDIO_MAX_MS12_PROFILE_LEN - 1;
+            }
+
+            // Only process non-empty tokens
+            if (len > 0)
+            {
+                strncpy(profileName, start, len);
+                profileName[len] = '\0';
+
+                // Process the profile
+                UT_LOG_DEBUG("Invoking dsSetMS12AudioProfile() with handle=%p and profile=%s", handle, profileName);
+                ret = dsSetMS12AudioProfile(handle, profileName);
+                UT_ASSERT_EQUAL(ret, dsERR_NONE);
+                if (ret == dsERR_NONE)
+                {
+                    UT_LOG_DEBUG("Invoking dsGetMS12AudioProfile() with handle=%p", handle);
+                    memset(profile, 0, sizeof(profile));
+                    ret = dsGetMS12AudioProfile(handle, profile);
+                    UT_ASSERT_EQUAL(ret, dsERR_NONE);
+
+                    if (ret == dsERR_NONE)
+                    {
+                        UT_ASSERT_STRING_EQUAL(profile, profileName);
+                    }
+                    else
+                    {
+                        UT_LOG_ERROR("dsGetMS12AudioProfile() failed with status=%d", ret);
+                    }
+                }
+                else
+                {
+                    UT_LOG_ERROR("dsSetMS12AudioProfile() failed with status=%d for profile=%s", ret, profileName);
+                }
+            }
+
+            // Move to the next token
+            start = (*end == ',') ? end + 1 : end;
+        } /* while (*start != '\0') */
     } /* for (port) */
 
     UT_LOG_DEBUG("Invoking dsAudioPortTerm()");
