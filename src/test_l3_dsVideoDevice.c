@@ -670,7 +670,6 @@ int test_l3_dsVideoDevice_register(void)
     }
 
     UT_add_test( pSuite, "VideoDevice_Init", test_l3_dsVideoDevice_Init);
-    UT_add_test( pSuite, "VideoDevice_Term", test_l3_dsVideoDevice_Term);
     UT_add_test( pSuite, "GetHDRCapabilities", test_l3_dsVideoDevice_GetHDRCapabilities);
     UT_add_test( pSuite, "GetSupportedVideoCodingFormat", test_l3_dsVideoDevice_GetSupportedVideoCodingFormat);
     UT_add_test( pSuite, "SetDisplayFramerate", test_l3_dsVideoDevice_SetDisplayFramerate);
@@ -680,6 +679,7 @@ int test_l3_dsVideoDevice_register(void)
     UT_add_test( pSuite, "SetZoomMode", test_l3_dsVideoDevice_SetZoomMode);
     UT_add_test( pSuite, "GetZoomMode", test_l3_dsVideoDevice_dsGetZoomMode);
     UT_add_test( pSuite, "GetVideoCodecInfo", test_l3_dsVideoDevice_GetVideoCodecInfo);
+    UT_add_test( pSuite, "VideoDevice_Term", test_l3_dsVideoDevice_Term);
 
     return 0;
 }
