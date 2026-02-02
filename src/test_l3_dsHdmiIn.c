@@ -77,7 +77,7 @@
 #include <ut_kvp_profile.h>
 #include <ut_control_plane.h>
 
-#define DS_ASSERT assert
+#define DS_ASSERT UT_ASSERT
 #define UT_LOG_MENU_INFO UT_LOG_INFO
 
 /* Global Variables */

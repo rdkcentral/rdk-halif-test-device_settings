@@ -87,7 +87,7 @@
 
 #define UT_LOG_MENU_INFO UT_LOG_INFO
 
-#define DS_ASSERT assert
+#define DS_ASSERT UT_ASSERT
 
 #define DS_CONNECTION_CB_FILE "dsAudio_connection_callback.txt"
 #define DS_FORMAT_CB_FILE "dsAudio_format_callback.txt"

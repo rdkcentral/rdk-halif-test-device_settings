@@ -78,7 +78,7 @@
 #include "dsFPD.h"
 
 #define DS_FPD_KEY_SIZE 128
-#define DS_ASSERT assert
+#define DS_ASSERT UT_ASSERT
 #define UT_LOG_MENU_INFO UT_LOG_INFO
 
 static int32_t gTestGroup = 3;

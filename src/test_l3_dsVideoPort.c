@@ -81,7 +81,7 @@
 
 #include "dsVideoPort.h"
 
-#define DS_ASSERT assert
+#define DS_ASSERT UT_ASSERT
 
 intptr_t gHandle = 0;
 

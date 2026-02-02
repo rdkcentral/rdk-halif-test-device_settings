@@ -79,7 +79,7 @@
 #include "test_parse_configuration.h"
 #include "dsCompositeIn.h"
 
-#define ASSERT assert
+#define ASSERT UT_ASSERT
 
 /* Global Variables */
 static int32_t gTestGroup = 3;
