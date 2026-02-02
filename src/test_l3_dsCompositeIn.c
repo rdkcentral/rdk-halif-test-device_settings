@@ -79,7 +79,7 @@
 #include "test_parse_configuration.h"
 #include "dsCompositeIn.h"
 
-#define ASSERT assert
+#define DS_ASSERT UT_ASSERT
 
 /* Global Variables */
 static int32_t gTestGroup = 3;
@@ -276,35 +276,35 @@ void test_l3_CompositeIn_initialize(void)
     UT_LOG_INFO("Calling dsCompositeInInit()");
     ret = dsCompositeInInit(); 
     UT_LOG_INFO("Result dsCompositeInInit() dsError_t:[%s]", UT_Control_GetMapString(dsError_mapTable, ret));
-    ASSERT(ret == dsERR_NONE);
+    DS_ASSERT(ret == dsERR_NONE);
 
     /* Register connection status callback */
     UT_LOG_INFO("Calling dsCompositeInRegisterConnectCB(IN:CBFunc:[0x%0X])", compositeInConnectCB);
     ret = dsCompositeInRegisterConnectCB(compositeInConnectCB);
     UT_LOG_INFO("Result dsCompositeInRegisterConnectCB(IN:CBFunc:[0x%0X]) dsError_t:[%s]",
                         compositeInConnectCB, UT_Control_GetMapString(dsError_mapTable, ret));
-    ASSERT(ret == dsERR_NONE);
+    DS_ASSERT(ret == dsERR_NONE);
 
     /* Register Signal change callback */
     UT_LOG_INFO("Calling dsCompositeInRegisterSignalChangeCB(IN:CBFunc:[0x%0X])", compositeInSignalChangeCB);
     ret = dsCompositeInRegisterSignalChangeCB(compositeInSignalChangeCB);
     UT_LOG_INFO("Result dsCompositeInRegisterSignalChangeCB(IN:CBFunc:[0x%0X]) dsError_t:[%s]",
                         compositeInSignalChangeCB, UT_Control_GetMapString(dsError_mapTable, ret));
-    ASSERT(ret == dsERR_NONE);
+    DS_ASSERT(ret == dsERR_NONE);
 
     /* Register Status change callback */
     UT_LOG_INFO("Calling dsCompositeInRegisterStatusChangeCB(IN:CBFunc:[0x%0X])", compositeInStatusChangeCB);
     ret = dsCompositeInRegisterStatusChangeCB(compositeInStatusChangeCB);
     UT_LOG_INFO("Result dsCompositeInRegisterStatusChangeCB(IN:CBFunc:[0x%0X]) dsError_t:[%s]",
                         compositeInStatusChangeCB, UT_Control_GetMapString(dsError_mapTable, ret));
-    ASSERT(ret == dsERR_NONE);
+    DS_ASSERT(ret == dsERR_NONE);
 
     /* Register videomode change callback */
     UT_LOG_INFO("Calling dsCompositeInRegisterVideoModeUpdateCB(IN:CBFunc:[0x%0X])", compositeInVideoModeChangeCB);
     ret = dsCompositeInRegisterVideoModeUpdateCB(compositeInVideoModeChangeCB);
     UT_LOG_INFO("Result dsCompositeInRegisterVideoModeUpdateCB(IN:CBFunc:[0x%0X]) dsError_t:[%s]",
                         compositeInVideoModeChangeCB, UT_Control_GetMapString(dsError_mapTable, ret));
-    ASSERT(ret == dsERR_NONE);
+    DS_ASSERT(ret == dsERR_NONE);
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
@@ -336,7 +336,7 @@ void test_l3_CompositeIn_get_status(void)
                 UT_Control_GetMapString(bool_mapTable, inputstatus.isPortConnected[i]),
                 UT_Control_GetMapString(dsCompositeInPortMappingTable, inputstatus.activePort));
     }
-    ASSERT(ret == dsERR_NONE);
+    DS_ASSERT(ret == dsERR_NONE);
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
@@ -386,7 +386,7 @@ void test_l3_CompositeIn_select_port(void)
     UT_LOG_INFO("Result dsCompositeInSelectPort(IN:port[%s] dsError_t:[%s])",
                 UT_Control_GetMapString(dsCompositeInPortMappingTable, port), 
                 UT_Control_GetMapString(dsError_mapTable, ret));
-    ASSERT(ret == dsERR_NONE);
+    DS_ASSERT(ret == dsERR_NONE);
 
     exit:
         UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -469,7 +469,7 @@ void test_l3_CompositeIn_scale_video(void)
     ret = dsCompositeInScaleVideo(x, y, width, height);
     UT_LOG_INFO("Result : dsCompositeInScaleVideo(IN:x[%d], IN:y[%d], IN:width[%d], IN:height[%d]) dsError_t:[%s]",
                 x, y , width, height, UT_Control_GetMapString(dsError_mapTable, ret));
-    ASSERT(ret == dsERR_NONE);
+    DS_ASSERT(ret == dsERR_NONE);
 
     exit:
         UT_LOG_INFO("Out %s", __FUNCTION__);
@@ -494,7 +494,7 @@ void test_l3_dsCompositeIn_terminate(void)
     UT_LOG_INFO("Calling dsCompositeInTerm()");
     ret = dsCompositeInTerm();
     UT_LOG_INFO("Result dsCompositeInTerm() dsError_t:[%s]", UT_Control_GetMapString(dsError_mapTable, ret));
-    ASSERT(ret == dsERR_NONE);
+    DS_ASSERT(ret == dsERR_NONE);
 
     UT_LOG_INFO("Out %s", __FUNCTION__);
 }
@@ -511,7 +511,7 @@ int test_l3_dsCompositeIn_register(void)
 {
     // Create the test suite for sink type
     pSuite = UT_add_suite_withGroupID("[L3 dsCompositeIn]", NULL, NULL, UT_TESTS_L3);
-    ASSERT( pSuite != NULL );
+    DS_ASSERT( pSuite != NULL );
 
     UT_add_test( pSuite, "Initialize CompositeIn" ,test_l3_CompositeIn_initialize );
     UT_add_test( pSuite, "Get status of ports" ,test_l3_CompositeIn_get_status );

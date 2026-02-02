@@ -79,7 +79,7 @@
 #include "dsVideoDevice.h"
 
 
-#define DS_ASSERT(actual,expected) assert(actual==expected)
+#define DS_ASSERT(actual,expected) UT_ASSERT(actual==expected)
 #define UT_LOG_MENU_INFO UT_LOG_INFO
 #define DS_FRAMERATE_KEY_SIZE 50
 

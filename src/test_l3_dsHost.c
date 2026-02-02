@@ -76,9 +76,9 @@
 #include "test_parse_configuration.h"
 
 #define DSHOST_SOC_LENGTH    20
-#define DS_HOST_KVP_SIZE     128
+#define DS_HOST_EDID_SIZE     1024
 
-#define DS_ASSERT assert
+#define DS_ASSERT UT_ASSERT
 
 static int gTestGroup = 3;
 static int gTestID = 1;
@@ -131,7 +131,7 @@ void test_l3_dsHost_hal_Init(void)
     UT_LOG_INFO("Result dsHostInit: dsError_t:[%s]",
                   UT_Control_GetMapString(dsError_mapTable, status));
 
-    assert(status == dsERR_NONE);
+    DS_ASSERT(status == dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -168,7 +168,7 @@ void test_l3_dsHost_hal_get_Temperature(void)
     UT_LOG_INFO("Result dsGetCPUTemperature(cpuTemperature: %f), dsError_t:[%s]",
                   cpuTemperature, UT_Control_GetMapString(dsError_mapTable, status));
 
-    assert(status == dsERR_NONE);
+    DS_ASSERT(status == dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -205,7 +205,7 @@ void test_l3_dsHost_hal_get_SocID(void)
     UT_LOG_INFO("Result dsGetSocIDFromSDK(socID: %s), dsError_t:[%s]",
                   socID,UT_Control_GetMapString(dsError_mapTable, status));
 
-    assert(status == dsERR_NONE);
+    DS_ASSERT(status == dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -232,8 +232,8 @@ void test_l3_dsHost_hal_get_hostEdid(void)
     gTestID = 4;
     dsError_t status = dsERR_NONE ;
 
-    unsigned char hostEdid[DS_HOST_KVP_SIZE] = {0};
-    int length;
+    unsigned char hostEdid[DS_HOST_EDID_SIZE] = {0};
+    int length = 0;
 
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
@@ -243,7 +243,7 @@ void test_l3_dsHost_hal_get_hostEdid(void)
     UT_LOG_INFO("Result dsGetHostEDID(hostEdid[%s], length[%d]), dsError_t:[%s]",
                   hostEdid, length, UT_Control_GetMapString(dsError_mapTable, status));
 
-    assert(status == dsERR_NONE);
+    DS_ASSERT(status == dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -278,7 +278,7 @@ void test_l3_dsHost_hal_Term(void)
     UT_LOG_INFO("Result dsHostTerm() dsError_t:[%s]",
                   UT_Control_GetMapString(dsError_mapTable, status));
 
-    assert(status == dsERR_NONE);
+    DS_ASSERT(status == dsERR_NONE);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
