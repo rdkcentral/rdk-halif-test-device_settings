@@ -76,7 +76,6 @@
 #include <ut_kvp_profile.h>
 #include <ut_kvp.h>
 #include <ut_control_plane.h>
-#include <assert.h>
 
 
 #include "dsVideoPort.h"

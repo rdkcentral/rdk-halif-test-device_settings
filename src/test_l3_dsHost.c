@@ -76,7 +76,7 @@
 #include "test_parse_configuration.h"
 
 #define DSHOST_SOC_LENGTH    20
-#define DS_HOST_KVP_SIZE     128
+#define DS_HOST_EDID_SIZE     1024
 
 #define DS_ASSERT UT_ASSERT
 
@@ -232,8 +232,8 @@ void test_l3_dsHost_hal_get_hostEdid(void)
     gTestID = 4;
     dsError_t status = dsERR_NONE ;
 
-    unsigned char hostEdid[DS_HOST_KVP_SIZE] = {0};
-    int length;
+    unsigned char hostEdid[DS_HOST_EDID_SIZE] = {0};
+    int length = 0;
 
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
