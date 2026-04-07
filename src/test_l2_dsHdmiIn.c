@@ -71,6 +71,7 @@
 #include <ut_log.h>
 #include <ut_kvp_profile.h>
 #include <ut_control_plane.h>
+#include <unistd.h>
 #include "dsHdmiIn.h"
 #include "test_parse_configuration.h"
 
@@ -241,6 +242,7 @@ void test_l2_dsHdmiIn_VerifyHdmiInputPortStatus(void)
             continue;
         }
 
+	sleep(2);
         UT_LOG_DEBUG("Invoking dsHdmiInGetStatus()");
         ret = dsHdmiInGetStatus(&status);
         UT_LOG_DEBUG("Active port: %d, Is presented: %d, Is port connected: %d, Return status: %d", status.activePort, status.isPresented, status.isPortConnected[i], ret);
