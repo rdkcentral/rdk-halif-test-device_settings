@@ -248,14 +248,18 @@ void test_l2_dsHdmiIn_VerifyHdmiInputPortStatus(void)
             uint8_t port_selected = i;
             UT_LOG_DEBUG("Invoking dsHdmiInGetStatus() attempt %d", j);
             ret = dsHdmiInGetStatus(&status);
-            if (ret != dsERR_NONE)
-            {
-                continue;
-            }
-            if (status.activePort == port_selected) {
+            UT_LOG_DEBUG("dsHdmiInGetStatus Return status: %d", ret);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
+            if ((ret != dsERR_NONE) || (status.activePort == port_selected)) {
                 break;
             }
             sleep(1);
+        }
+
+        if (ret != dsERR_NONE)
+        {
+            UT_LOG_ERROR("Failed to get status of HDMI Input ports\n");
+            continue;
         }
         UT_LOG_DEBUG("Active port: %d, Is presented: %d, Is port connected: %d, Return status: %d", status.activePort, status.isPresented, status.isPortConnected[i], ret);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
