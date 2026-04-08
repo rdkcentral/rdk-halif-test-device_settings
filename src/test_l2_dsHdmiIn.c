@@ -76,6 +76,7 @@
 #include "test_parse_configuration.h"
 
 #define DS_HDMIIN_KEY_SIZE 64
+#define MAX_GETSTATUS_ATTEMPTS 3
 
 static int gTestGroup = 2;
 static int gTestID = 1;
@@ -242,9 +243,14 @@ void test_l2_dsHdmiIn_VerifyHdmiInputPortStatus(void)
             continue;
         }
 
-	sleep(2);
-        UT_LOG_DEBUG("Invoking dsHdmiInGetStatus()");
-        ret = dsHdmiInGetStatus(&status);
+        for (uint8_t j = 1; j <= MAX_GETSTATUS_ATTEMPTS; j++)
+        {
+            UT_LOG_DEBUG("Invoking dsHdmiInGetStatus() attempt %d", j);
+            ret = dsHdmiInGetStatus(&status);
+            if (status.activePort == i)
+                break;
+            sleep(1);
+        }
         UT_LOG_DEBUG("Active port: %d, Is presented: %d, Is port connected: %d, Return status: %d", status.activePort, status.isPresented, status.isPortConnected[i], ret);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
         UT_ASSERT_EQUAL(status.activePort, i);
