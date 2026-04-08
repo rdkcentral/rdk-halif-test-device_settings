@@ -248,6 +248,10 @@ void test_l2_dsHdmiIn_VerifyHdmiInputPortStatus(void)
             uint8_t port_selected = i;
             UT_LOG_DEBUG("Invoking dsHdmiInGetStatus() attempt %d", j);
             ret = dsHdmiInGetStatus(&status);
+            if (ret != dsERR_NONE)
+            {
+                continue;
+            }
             if (status.activePort == port_selected) {
                 break;
             }
