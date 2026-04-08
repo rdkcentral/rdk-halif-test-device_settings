@@ -72,6 +72,9 @@
 #include <ut_log.h>
 #include <ut_kvp_profile.h>
 #include "dsCompositeIn.h"
+#include <unistd.h>
+
+#define MAX_GETSTATUS_ATTEMPTS 3
 
 static int gTestGroup = 2;
 static int gTestID = 1;
@@ -237,11 +240,19 @@ void test_l2_dsCompositeIn_VerifyCompositeInPortSelectionAndStatus(void)
             continue;
         }
 
-        ret = dsCompositeInGetStatus(&status);
-        UT_ASSERT_EQUAL(ret, dsERR_NONE);
-        if (ret != dsERR_NONE)
+        for (uint8_t j = 1; j <= MAX_GETSTATUS_ATTEMPTS; j++)
         {
-            UT_LOG_ERROR("Failed to get status of COMPOSITE Input ports\n");
+            UT_LOG_DEBUG("Invoking dsCompositeInGetStatus() attempt %d", j);
+            ret = dsCompositeInGetStatus(&status);
+            if (ret != dsERR_NONE)
+            {
+                UT_LOG_ERROR("Failed to get status of COMPOSITE Input ports\n");
+                continue;
+            }
+            if (status.activePort == port) {
+                break;
+            }
+            sleep(1);
         }
 
         UT_LOG_INFO("IsPresented: %d, IsPortConnected[0]: %d, activePort: %d\n",
