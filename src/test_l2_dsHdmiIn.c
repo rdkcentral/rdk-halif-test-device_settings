@@ -245,10 +245,12 @@ void test_l2_dsHdmiIn_VerifyHdmiInputPortStatus(void)
 
         for (uint8_t j = 1; j <= MAX_GETSTATUS_ATTEMPTS; j++)
         {
+            uint8_t port_selected = i;
             UT_LOG_DEBUG("Invoking dsHdmiInGetStatus() attempt %d", j);
             ret = dsHdmiInGetStatus(&status);
-            if (status.activePort == i)
+            if (status.activePort == port_selected) {
                 break;
+            }
             sleep(1);
         }
         UT_LOG_DEBUG("Active port: %d, Is presented: %d, Is port connected: %d, Return status: %d", status.activePort, status.isPresented, status.isPortConnected[i], ret);
