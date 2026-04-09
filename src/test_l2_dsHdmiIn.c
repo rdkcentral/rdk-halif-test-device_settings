@@ -250,20 +250,22 @@ void test_l2_dsHdmiIn_VerifyHdmiInputPortStatus(void)
             UT_LOG_DEBUG("Invoking dsHdmiInGetStatus() attempt %d", j);
             getstatus_ret = dsHdmiInGetStatus(&status);
             UT_ASSERT_EQUAL(getstatus_ret, dsERR_NONE);
-            if (getstatus_ret != dsERR_NONE) {
-                // when dsHdmiInGetStatus break and continue to next port
+            // Break immediately on API failure
+            if (getstatus_ret != dsERR_NONE) 
+            {
                 break;
             } 
-            if (status.activePort == port_selected) {
-                // when the active port matches the selected port, break and continue with assertions
+            // Break if desired condition is met
+            if (status.activePort == port_selected) 
+            {
                 break;
             }
             sleep(1);
         }
 
+        // Continue on API failure
         if (getstatus_ret != dsERR_NONE)
         {
-            // when dsHdmiInGetStatus fails continue to next port
             UT_LOG_ERROR("Failed to get status of HDMI Input ports  Return status: %d\n", getstatus_ret);
             continue;
         }

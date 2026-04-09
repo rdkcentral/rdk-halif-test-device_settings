@@ -247,20 +247,22 @@ void test_l2_dsCompositeIn_VerifyCompositeInPortSelectionAndStatus(void)
             getstatus_ret = dsCompositeInGetStatus(&status);
             UT_LOG_DEBUG("dsCompositeInGetStatus Return status: %d", getstatus_ret);
             UT_ASSERT_EQUAL(getstatus_ret, dsERR_NONE);
-            if (getstatus_ret != dsERR_NONE) {
-                // when dsCompositeInGetStatus break and continue to next port
+            // Break immediately on API failure
+            if (getstatus_ret != dsERR_NONE) 
+            {
                 break;
-            } 
-            if (status.activePort == port) {
-                // when the active port matches the selected port, break and continue with assertions
+            }
+            // Break if desired condition is met
+            if (status.activePort == port) 
+            {
                 break;
             }
             sleep(1);
         }
 
+        // Continue on API failure
         if (getstatus_ret != dsERR_NONE)
         {
-            // when dsCompositeInGetStatus fails, continue to next port
             UT_LOG_ERROR("Failed to get status of COMPOSITE Input ports\n");
             continue;
         }
