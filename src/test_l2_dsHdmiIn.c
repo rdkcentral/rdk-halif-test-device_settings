@@ -243,26 +243,31 @@ void test_l2_dsHdmiIn_VerifyHdmiInputPortStatus(void)
             continue;
         }
 
+        dsError_t getstatus_ret = 0;
         for (uint8_t j = 1; j <= MAX_GETSTATUS_ATTEMPTS; j++)
         {
             uint8_t port_selected = i;
             UT_LOG_DEBUG("Invoking dsHdmiInGetStatus() attempt %d", j);
-            ret = dsHdmiInGetStatus(&status);
-            UT_LOG_DEBUG("dsHdmiInGetStatus Return status: %d", ret);
-            UT_ASSERT_EQUAL(ret, dsERR_NONE);
-            if ((ret != dsERR_NONE) || (status.activePort == port_selected)) {
+            getstatus_ret = dsHdmiInGetStatus(&status);
+            UT_ASSERT_EQUAL(getstatus_ret, dsERR_NONE);
+            if (getstatus_ret != dsERR_NONE) {
+                // when dsHdmiInGetStatus break and continue to next port
+                break;
+            } 
+            if (status.activePort == port_selected) {
+                // when the active port matches the selected port, break and continue with assertions
                 break;
             }
             sleep(1);
         }
 
-        if (ret != dsERR_NONE)
+        if (getstatus_ret != dsERR_NONE)
         {
-            UT_LOG_ERROR("Failed to get status of HDMI Input ports\n");
+            // when dsHdmiInGetStatus fails continue to next port
+            UT_LOG_ERROR("Failed to get status of HDMI Input ports  Return status: %d\n", getstatus_ret);
             continue;
         }
-        UT_LOG_DEBUG("Active port: %d, Is presented: %d, Is port connected: %d, Return status: %d", status.activePort, status.isPresented, status.isPortConnected[i], ret);
-        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        UT_LOG_DEBUG("Active port: %d, Is presented: %d, Is port connected: %d, Return status: %d", status.activePort, status.isPresented, status.isPortConnected[i], getstatus_ret);
         UT_ASSERT_EQUAL(status.activePort, i);
         UT_ASSERT_FALSE(status.isPortConnected[i]);
         UT_ASSERT_FALSE(status.isPresented);

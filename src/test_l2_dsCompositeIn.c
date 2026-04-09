@@ -240,20 +240,27 @@ void test_l2_dsCompositeIn_VerifyCompositeInPortSelectionAndStatus(void)
             continue;
         }
 
+        dsError_t getstatus_ret = dsERR_NONE;
         for (uint8_t j = 1; j <= MAX_GETSTATUS_ATTEMPTS; j++)
         {
             UT_LOG_DEBUG("Invoking dsCompositeInGetStatus() attempt %d", j);
-            ret = dsCompositeInGetStatus(&status);
-            UT_LOG_DEBUG("dsCompositeInGetStatus Return status: %d", ret);
-            UT_ASSERT_EQUAL(ret, dsERR_NONE);
-            if ((ret != dsERR_NONE) || (status.activePort == port)) {
+            getstatus_ret = dsCompositeInGetStatus(&status);
+            UT_LOG_DEBUG("dsCompositeInGetStatus Return status: %d", getstatus_ret);
+            UT_ASSERT_EQUAL(getstatus_ret, dsERR_NONE);
+            if (getstatus_ret != dsERR_NONE) {
+                // when dsHdmiInGetStatus break and continue to next port
+                break;
+            } 
+            if (status.activePort == port) {
+                // when the active port matches the selected port, break and continue with assertions
                 break;
             }
             sleep(1);
         }
 
-        if (ret != dsERR_NONE)
+        if (getstatus_ret != dsERR_NONE)
         {
+            // when dsCompositeInGetStatus fails, continue to next port
             UT_LOG_ERROR("Failed to get status of COMPOSITE Input ports\n");
             continue;
         }
