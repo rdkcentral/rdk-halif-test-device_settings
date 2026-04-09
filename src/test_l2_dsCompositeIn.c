@@ -248,7 +248,7 @@ void test_l2_dsCompositeIn_VerifyCompositeInPortSelectionAndStatus(void)
             UT_LOG_DEBUG("dsCompositeInGetStatus Return status: %d", getstatus_ret);
             UT_ASSERT_EQUAL(getstatus_ret, dsERR_NONE);
             if (getstatus_ret != dsERR_NONE) {
-                // when dsHdmiInGetStatus break and continue to next port
+                // when dsCompositeInGetStatus break and continue to next port
                 break;
             } 
             if (status.activePort == port) {
