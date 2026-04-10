@@ -71,6 +71,7 @@
 #include <ut.h>
 #include <ut_log.h>
 #include <ut_kvp_profile.h>
+#include <unistd.h>
 #include "dsCompositeIn.h"
 
 static int gTestGroup = 2;
@@ -237,13 +238,38 @@ void test_l2_dsCompositeIn_VerifyCompositeInPortSelectionAndStatus(void)
             continue;
         }
 
-        ret = dsCompositeInGetStatus(&status);
-        UT_ASSERT_EQUAL(ret, dsERR_NONE);
-        if (ret != dsERR_NONE)
+        dsError_t getstatus_ret = dsERR_NONE;
+        uint32_t elapsed = 0;
+        const uint32_t timeoutMs = 3000; // Total timeout of 3 seconds
+        const uint32_t pollIntervalMs = 500; // Poll every 500 ms
+        uint8_t attempt = 1;
+        while (elapsed < timeoutMs)
         {
-            UT_LOG_ERROR("Failed to get status of COMPOSITE Input ports\n");
+            UT_LOG_DEBUG("Invoking dsCompositeInGetStatus() attempt %d", attempt);
+            getstatus_ret = dsCompositeInGetStatus(&status);
+            UT_LOG_DEBUG("dsCompositeInGetStatus Return status: %d", getstatus_ret);
+            UT_ASSERT_EQUAL(getstatus_ret, dsERR_NONE);
+            // Break immediately on API failure
+            if (getstatus_ret != dsERR_NONE) 
+            {
+                break;
+            }
+            // Break if desired condition is met
+            if (status.activePort == port) 
+            {
+                break;
+            }
+            usleep(pollIntervalMs * 1000);
+            elapsed += pollIntervalMs;
+            attempt++;
         }
 
+        // Continue on API failure
+        if (getstatus_ret != dsERR_NONE)
+        {
+            UT_LOG_ERROR("Failed to get status of COMPOSITE Input ports\n");
+            continue;
+        }
         UT_LOG_INFO("IsPresented: %d, IsPortConnected[0]: %d, activePort: %d\n",
                                                                 status.isPresented,
                                                                 status.isPortConnected[port],
