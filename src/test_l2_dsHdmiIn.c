@@ -76,7 +76,6 @@
 #include "test_parse_configuration.h"
 
 #define DS_HDMIIN_KEY_SIZE 64
-#define MAX_GETSTATUS_ATTEMPTS 3
 
 static int gTestGroup = 2;
 static int gTestID = 1;
@@ -244,10 +243,14 @@ void test_l2_dsHdmiIn_VerifyHdmiInputPortStatus(void)
         }
 
         dsError_t getstatus_ret = 0;
-        for (uint8_t j = 1; j <= MAX_GETSTATUS_ATTEMPTS; j++)
+        uint32_t elapsed = 0;
+        const uint32_t timeoutMs = 3000; // Total timeout of 3 seconds
+        const uint32_t pollIntervalMs = 500; // Poll every 500 ms
+        uint8_t attempt = 1;
+        while (elapsed < timeoutMs)
         {
             uint8_t port_selected = i;
-            UT_LOG_DEBUG("Invoking dsHdmiInGetStatus() attempt %d", j);
+            UT_LOG_DEBUG("Invoking dsHdmiInGetStatus() attempt %d", attempt);
             getstatus_ret = dsHdmiInGetStatus(&status);
             UT_ASSERT_EQUAL(getstatus_ret, dsERR_NONE);
             // Break immediately on API failure
@@ -260,7 +263,9 @@ void test_l2_dsHdmiIn_VerifyHdmiInputPortStatus(void)
             {
                 break;
             }
-            sleep(1);
+            usleep(pollIntervalMs * 1000);
+            elapsed += pollIntervalMs;
+            attempt++;
         }
 
         // Continue on API failure

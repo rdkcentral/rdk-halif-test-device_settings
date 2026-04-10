@@ -71,10 +71,8 @@
 #include <ut.h>
 #include <ut_log.h>
 #include <ut_kvp_profile.h>
-#include "dsCompositeIn.h"
 #include <unistd.h>
-
-#define MAX_GETSTATUS_ATTEMPTS 3
+#include "dsCompositeIn.h"
 
 static int gTestGroup = 2;
 static int gTestID = 1;
@@ -241,9 +239,13 @@ void test_l2_dsCompositeIn_VerifyCompositeInPortSelectionAndStatus(void)
         }
 
         dsError_t getstatus_ret = dsERR_NONE;
-        for (uint8_t j = 1; j <= MAX_GETSTATUS_ATTEMPTS; j++)
+        uint32_t elapsed = 0;
+        const uint32_t timeoutMs = 3000; // Total timeout of 3 seconds
+        const uint32_t pollIntervalMs = 500; // Poll every 500 ms
+        uint8_t attempt = 1;
+        while (elapsed < timeoutMs)
         {
-            UT_LOG_DEBUG("Invoking dsCompositeInGetStatus() attempt %d", j);
+            UT_LOG_DEBUG("Invoking dsCompositeInGetStatus() attempt %d", attempt);
             getstatus_ret = dsCompositeInGetStatus(&status);
             UT_LOG_DEBUG("dsCompositeInGetStatus Return status: %d", getstatus_ret);
             UT_ASSERT_EQUAL(getstatus_ret, dsERR_NONE);
@@ -257,7 +259,9 @@ void test_l2_dsCompositeIn_VerifyCompositeInPortSelectionAndStatus(void)
             {
                 break;
             }
-            sleep(1);
+            usleep(pollIntervalMs * 1000);
+            elapsed += pollIntervalMs;
+            attempt++;
         }
 
         // Continue on API failure
