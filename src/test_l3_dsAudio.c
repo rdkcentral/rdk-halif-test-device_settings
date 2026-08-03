@@ -2353,9 +2353,10 @@ exit:
 }
 
 /**
-* @brief This test terminates the dsAudio.
+* @brief This test retrieves and displays the list of supported application audio configurations.
 *
-* This test function terminates the dsAudio.
+* This test calls dsGetApplicationAudioConfigList() and logs all returned
+* configuration names so the user can verify platform support.
 *
 * **Test Group ID:** 03@n
 * **Test Case ID:** 021@n
@@ -2364,9 +2365,155 @@ exit:
 * Refer to Test specification documentation
 * [dsAudio_L3_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L3_Low-Level_TestSpecification.md)
 */
-void test_l3_dsAudio_terminate(void)
+void test_l3_dsAudio_get_application_audio_config_list(void)
 {
     gTestID = 21;
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t ret = dsERR_NONE;
+    dsApplicationAudioConfigList_t list;
+
+    memset(&list, 0, sizeof(list));
+    list.size = sizeof(dsApplicationAudioConfigList_t);
+
+    UT_LOG_INFO("Calling dsGetApplicationAudioConfigList(IN:handle:[0], IN:size:[%u])", list.size);
+
+    ret = dsGetApplicationAudioConfigList(0, &list);
+
+    UT_LOG_INFO("Result dsGetApplicationAudioConfigList(OUT:totalCount:[%u], OUT:returnedCount:[%u]) dsError_t:[%s]",
+                list.totalCount, list.returnedCount,
+                UT_Control_GetMapString(dsError_mapTable, ret));
+
+    DS_ASSERT(ret == dsERR_NONE);
+
+    UT_LOG_MENU_INFO("----------------------------------------------------------");
+    UT_LOG_MENU_INFO("Supported Application Audio Configurations");
+    UT_LOG_MENU_INFO("----------------------------------------------------------");
+    UT_LOG_MENU_INFO("\t#  %-60s", "Config Name");
+    for (uint32_t i = 0; i < list.returnedCount; i++)
+    {
+        UT_LOG_MENU_INFO("\t%u.  %-60s", i, list.config[i].configName);
+    }
+    UT_LOG_MENU_INFO("----------------------------------------------------------");
+    UT_LOG_MENU_INFO("Total supported: %u, Returned: %u", list.totalCount, list.returnedCount);
+
+    UT_LOG_INFO("Out %s", __FUNCTION__);
+}
+
+/**
+* @brief This test interactively sets and verifies an application audio configuration.
+*
+* This test retrieves the list of supported application audio configurations,
+* lets the user select one and choose to enable or disable it, then calls
+* dsSetApplicationAudioConfig() and verifies the result with dsGetApplicationAudioConfig().
+*
+* **Test Group ID:** 03@n
+* **Test Case ID:** 022@n
+*
+* **Test Procedure:**
+* Refer to Test specification documentation
+* [dsAudio_L3_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L3_Low-Level_TestSpecification.md)
+*/
+void test_l3_dsAudio_set_application_audio_config(void)
+{
+    gTestID = 22;
+    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t ret = dsERR_NONE;
+    dsApplicationAudioConfigList_t list;
+    bool enabled = false;
+    bool readBack = false;
+    int32_t configIndex = 0;
+    int32_t enableChoice = 0;
+
+    memset(&list, 0, sizeof(list));
+    list.size = sizeof(dsApplicationAudioConfigList_t);
+
+    UT_LOG_INFO("Calling dsGetApplicationAudioConfigList(IN:handle:[0])");
+    ret = dsGetApplicationAudioConfigList(0, &list);
+    UT_LOG_INFO("Result dsGetApplicationAudioConfigList(OUT:returnedCount:[%u]) dsError_t:[%s]",
+                list.returnedCount, UT_Control_GetMapString(dsError_mapTable, ret));
+
+    DS_ASSERT(ret == dsERR_NONE);
+
+    if (list.returnedCount == 0)
+    {
+        UT_LOG_WARNING("No application audio configurations supported on this platform");
+        goto exit;
+    }
+
+    UT_LOG_MENU_INFO("----------------------------------------------------------");
+    UT_LOG_MENU_INFO("Supported Application Audio Configurations");
+    UT_LOG_MENU_INFO("----------------------------------------------------------");
+    for (uint32_t i = 0; i < list.returnedCount; i++)
+    {
+        UT_LOG_MENU_INFO("\t%u.  %s", i, list.config[i].configName);
+    }
+    UT_LOG_MENU_INFO("----------------------------------------------------------");
+    UT_LOG_MENU_INFO("Select Configuration Index[0-%u]: ", list.returnedCount - 1);
+    readInt(&configIndex);
+    if (configIndex < 0 || (uint32_t)configIndex >= list.returnedCount)
+    {
+        UT_LOG_ERROR("Invalid configuration index");
+        goto exit;
+    }
+
+    UT_LOG_MENU_INFO("Enable/Disable Configuration[0: Disable, 1: Enable]: ");
+    readInt(&enableChoice);
+    if (enableChoice < 0 || enableChoice > 1)
+    {
+        UT_LOG_ERROR("Invalid choice");
+        goto exit;
+    }
+
+    enabled = (bool)enableChoice;
+
+    UT_LOG_INFO("Calling dsSetApplicationAudioConfig(IN:handle:[0], IN:config:[%s], IN:enable:[%s])",
+                list.config[configIndex].configName,
+                UT_Control_GetMapString(bool_mapTable, enabled));
+
+    ret = dsSetApplicationAudioConfig(0, &list.config[configIndex], enabled);
+
+    UT_LOG_INFO("Result dsSetApplicationAudioConfig(IN:config:[%s], IN:enable:[%s]) dsError_t:[%s]",
+                list.config[configIndex].configName,
+                UT_Control_GetMapString(bool_mapTable, enabled),
+                UT_Control_GetMapString(dsError_mapTable, ret));
+
+    DS_ASSERT(ret == dsERR_NONE);
+
+    // Verify the set value by reading it back
+    UT_LOG_INFO("Calling dsGetApplicationAudioConfig(IN:handle:[0], IN:config:[%s])",
+                list.config[configIndex].configName);
+
+    ret = dsGetApplicationAudioConfig(0, &list.config[configIndex], &readBack);
+
+    UT_LOG_INFO("Result dsGetApplicationAudioConfig(IN:config:[%s], OUT:enabled:[%s]) dsError_t:[%s]",
+                list.config[configIndex].configName,
+                UT_Control_GetMapString(bool_mapTable, readBack),
+                UT_Control_GetMapString(dsError_mapTable, ret));
+
+    DS_ASSERT(ret == dsERR_NONE);
+    DS_ASSERT(readBack == enabled);
+
+exit:
+    UT_LOG_INFO("Out %s", __FUNCTION__);
+}
+
+/**
+* @brief This test terminates the dsAudio.
+*
+* This test function terminates the dsAudio.
+*
+* **Test Group ID:** 03@n
+* **Test Case ID:** 023@n
+*
+* **Test Procedure:**
+* Refer to Test specification documentation
+* [dsAudio_L3_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L3_Low-Level_TestSpecification.md)
+*/
+void test_l3_dsAudio_terminate(void)
+{
+    gTestID = 23;
     UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t ret = dsERR_NONE;
@@ -2421,6 +2568,8 @@ int32_t test_l3_dsAudio_register(void)
     UT_add_test(pSuite, "Primary/Secondary Language", test_l3_dsAudio_set_language);
     UT_add_test(pSuite, "Get ARC Type", test_l3_dsAudio_getArc_type);
     UT_add_test(pSuite, "Set SAD List", test_l3_dsAudio_setSAD);
+    UT_add_test(pSuite, "Get Application Audio Config List", test_l3_dsAudio_get_application_audio_config_list);
+    UT_add_test(pSuite, "Set Application Audio Config", test_l3_dsAudio_set_application_audio_config);
     UT_add_test(pSuite, "Terminate dsAudio", test_l3_dsAudio_terminate);
 
     return 0;

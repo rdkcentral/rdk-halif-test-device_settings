@@ -9604,6 +9604,399 @@ void test_l1_dsAudio_negative_dsAudioEnableARC(void)
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
 
+/**
+ * @brief Ensure dsGetApplicationAudioConfigList() retrieves the list of supported audio configurations correctly during positive scenarios.
+ *
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 137@n
+ *
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ *
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |02|Call dsGetApplicationAudioConfigList() with handle=0 and valid list pointer (size pre-set) | handle: [0], audioConfigList: [valid pointer] | dsERR_NONE | List of supported audio configurations must be returned |
+ * |03|Call dsGetApplicationAudioConfigList() again with a new list pointer | handle: [0], audioConfigList: [valid pointer] | dsERR_NONE | List of supported audio configurations must be returned |
+ * |04|Compare totalCount and returnedCount from both calls | | Values must be equal | Results must be consistent |
+ * |05|Validate totalCount matches profile value gDSAudioApplicationConfigCount | totalCount: [returned], gDSAudioApplicationConfigCount: [profile value] | totalCount == gDSAudioApplicationConfigCount | Returned count must match profile configuration |
+ * |06|Validate each returned config name matches the corresponding profile entry | config[i].configName: [returned], gDSAudioApplicationConfigs[i]: [profile value] | Names must match | All returned config names must match profile |
+ * |07|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE | Termination must be successful |
+ *
+ */
+void test_l1_dsAudio_positive_dsGetApplicationAudioConfigList(void)
+{
+    gTestID = 137;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t result;
+    dsApplicationAudioConfigList_t list1, list2;
+
+    // Step 01: Initialize audio ports
+    result = dsAudioPortInit();
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
+
+    // Step 02: Get application audio config list (first call)
+    memset(&list1, 0, sizeof(list1));
+    list1.size = sizeof(dsApplicationAudioConfigList_t);
+    result = dsGetApplicationAudioConfigList(0, &list1);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 03: Get application audio config list (second call)
+    memset(&list2, 0, sizeof(list2));
+    list2.size = sizeof(dsApplicationAudioConfigList_t);
+    result = dsGetApplicationAudioConfigList(0, &list2);
+    UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+    // Step 04: Compare results - totalCount and returnedCount must be consistent
+    UT_ASSERT_EQUAL(list1.totalCount, list2.totalCount);
+    UT_ASSERT_EQUAL(list1.returnedCount, list2.returnedCount);
+
+    // Step 05: Validate totalCount against profile configuration
+    UT_ASSERT_EQUAL(list1.totalCount, (uint32_t)gDSAudioApplicationConfigCount);
+
+    // Step 06: Validate each returned config name matches the profile
+    for (uint32_t i = 0; i < list1.returnedCount && i < (uint32_t)gDSAudioApplicationConfigCount; i++)
+    {
+        UT_ASSERT_STRING_EQUAL(list1.config[i].configName, gDSAudioApplicationConfigs[i]);
+    }
+
+    // Step 07: Terminate audio ports
+    result = dsAudioPortTerm();
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
+
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsGetApplicationAudioConfigList() returns correct error codes during negative scenarios.
+ *
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 138@n
+ *
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ *
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsGetApplicationAudioConfigList() without initializing audio ports | handle=[0], audioConfigList=[valid pointer] | dsERR_NOT_INITIALIZED | Must fail as module not initialized |
+ * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |03|Call dsGetApplicationAudioConfigList() with non-zero handle | handle=[1], audioConfigList=[valid pointer] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |04|Call dsGetApplicationAudioConfigList() with NULL audioConfigList | handle=[0], audioConfigList=[NULL] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |05|Call dsGetApplicationAudioConfigList() with size too small | handle=[0], audioConfigList=[pointer with size=sizeof(uint32_t)] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE | Termination must be successful |
+ * |07|Call dsGetApplicationAudioConfigList() after terminating audio ports | handle=[0], audioConfigList=[valid pointer] | dsERR_NOT_INITIALIZED | Must fail as module not initialized |
+ *
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
+ */
+void test_l1_dsAudio_negative_dsGetApplicationAudioConfigList(void)
+{
+    gTestID = 138;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t result;
+    dsApplicationAudioConfigList_t list;
+
+    // Step 01: Call without initializing audio ports
+    memset(&list, 0, sizeof(list));
+    list.size = sizeof(dsApplicationAudioConfigList_t);
+    result = dsGetApplicationAudioConfigList(0, &list);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+
+    // Step 02: Initialize audio ports
+    result = dsAudioPortInit();
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
+
+    // Step 03: Call with non-zero handle (only handle=0 is valid)
+    list.size = sizeof(dsApplicationAudioConfigList_t);
+    result = dsGetApplicationAudioConfigList(1, &list);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 04: Call with NULL audioConfigList pointer
+    result = dsGetApplicationAudioConfigList(0, NULL);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 05: Call with size too small to hold even one config entry
+    list.size = sizeof(uint32_t);
+    result = dsGetApplicationAudioConfigList(0, &list);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 06: Terminate audio ports
+    result = dsAudioPortTerm();
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
+
+    // Step 07: Call after terminating audio ports
+    list.size = sizeof(dsApplicationAudioConfigList_t);
+    result = dsGetApplicationAudioConfigList(0, &list);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsSetApplicationAudioConfig() sets audio configuration correctly during positive scenarios.
+ *
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 139@n
+ *
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ *
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |02|For each config name defined in the profile (gDSAudioApplicationConfigs), enable it using dsSetApplicationAudioConfig() | handle=[0], audioConfig=[profile config name], enable=[true] | dsERR_NONE | Configuration enabled successfully |
+ * |03|For each config name defined in the profile, disable it using dsSetApplicationAudioConfig() | handle=[0], audioConfig=[profile config name], enable=[false] | dsERR_NONE | Configuration disabled successfully |
+ * |04|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE | Termination must be successful |
+ *
+ */
+void test_l1_dsAudio_positive_dsSetApplicationAudioConfig(void)
+{
+    gTestID = 139;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t result;
+    dsApplicationAudioConfig_t cfg;
+
+    // Step 01: Initialize audio ports
+    result = dsAudioPortInit();
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
+
+    // Steps 02-03: For each profile-defined config, enable then disable it
+    for (int i = 0; i < gDSAudioApplicationConfigCount; i++)
+    {
+        memset(&cfg, 0, sizeof(cfg));
+        strncpy(cfg.configName, gDSAudioApplicationConfigs[i], DS_MAX_APPLICATION_AUDIO_CONFIG_NAME_LEN - 1);
+        cfg.configName[DS_MAX_APPLICATION_AUDIO_CONFIG_NAME_LEN - 1] = '\0';
+
+        // Step 02: Enable the audio configuration
+        result = dsSetApplicationAudioConfig(0, &cfg, true);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+
+        // Step 03: Disable the audio configuration
+        result = dsSetApplicationAudioConfig(0, &cfg, false);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 04: Terminate audio ports
+    result = dsAudioPortTerm();
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
+
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsSetApplicationAudioConfig() returns correct error codes during negative scenarios.
+ *
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 140@n
+ *
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ *
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsSetApplicationAudioConfig() without initializing audio ports | handle=[0], audioConfig=[valid pointer], enable=[true] | dsERR_NOT_INITIALIZED | Must fail as module not initialized |
+ * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |03|Call dsSetApplicationAudioConfig() with non-zero handle | handle=[1], audioConfig=[valid pointer], enable=[true] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |04|Call dsSetApplicationAudioConfig() with NULL audioConfig pointer | handle=[0], audioConfig=[NULL], enable=[true] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |05|Call dsSetApplicationAudioConfig() with configName missing NUL terminator | handle=[0], audioConfig=[no-NUL name], enable=[true] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |06|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE | Termination must be successful |
+ * |07|Call dsSetApplicationAudioConfig() after terminating audio ports | handle=[0], audioConfig=[valid pointer], enable=[true] | dsERR_NOT_INITIALIZED | Must fail as module not initialized |
+ *
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
+ */
+void test_l1_dsAudio_negative_dsSetApplicationAudioConfig(void)
+{
+    gTestID = 140;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t result;
+    dsApplicationAudioConfig_t config;
+    dsApplicationAudioConfig_t noNulConfig;
+
+    // Prepare a valid config name from profile (fallback to canonical constant if profile is empty)
+    if (gDSAudioApplicationConfigCount > 0)
+    {
+        strncpy(config.configName, gDSAudioApplicationConfigs[0], DS_MAX_APPLICATION_AUDIO_CONFIG_NAME_LEN - 1);
+    }
+    else
+    {
+        strncpy(config.configName, DS_APPLICATION_AUDIO_CONFIG_CONTINUOUS_AUDIO_OUTPUT,
+                DS_MAX_APPLICATION_AUDIO_CONFIG_NAME_LEN - 1);
+    }
+    config.configName[DS_MAX_APPLICATION_AUDIO_CONFIG_NAME_LEN - 1] = '\0';
+
+    // Prepare a config with no NUL terminator within bounds
+    memset(noNulConfig.configName, 'A', DS_MAX_APPLICATION_AUDIO_CONFIG_NAME_LEN);
+
+    // Step 01: Call without initializing audio ports
+    result = dsSetApplicationAudioConfig(0, &config, true);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+
+    // Step 02: Initialize audio ports
+    result = dsAudioPortInit();
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
+
+    // Step 03: Call with non-zero handle (only handle=0 is valid)
+    result = dsSetApplicationAudioConfig(1, &config, true);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 04: Call with NULL audioConfig pointer
+    result = dsSetApplicationAudioConfig(0, NULL, true);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 05: Call with configName that has no NUL terminator within DS_MAX_APPLICATION_AUDIO_CONFIG_NAME_LEN bytes
+    result = dsSetApplicationAudioConfig(0, &noNulConfig, true);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 06: Terminate audio ports
+    result = dsAudioPortTerm();
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
+
+    // Step 07: Call after terminating audio ports
+    result = dsSetApplicationAudioConfig(0, &config, true);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsGetApplicationAudioConfig() retrieves audio configuration state correctly during positive scenarios.
+ *
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 141@n
+ *
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ *
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |02|For each config name defined in the profile (gDSAudioApplicationConfigs), call dsGetApplicationAudioConfig() to retrieve its enabled state | handle=[0], audioConfig=[profile config name], enable=[valid pointer] | dsERR_NONE | Configuration state retrieved successfully |
+ * |03|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE | Termination must be successful |
+ *
+ */
+void test_l1_dsAudio_positive_dsGetApplicationAudioConfig(void)
+{
+    gTestID = 141;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t result;
+    dsApplicationAudioConfig_t cfg;
+    bool enabled;
+
+    // Step 01: Initialize audio ports
+    result = dsAudioPortInit();
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
+
+    // Step 02: For each profile-defined config, get its current enabled state
+    for (int i = 0; i < gDSAudioApplicationConfigCount; i++)
+    {
+        memset(&cfg, 0, sizeof(cfg));
+        strncpy(cfg.configName, gDSAudioApplicationConfigs[i], DS_MAX_APPLICATION_AUDIO_CONFIG_NAME_LEN - 1);
+        cfg.configName[DS_MAX_APPLICATION_AUDIO_CONFIG_NAME_LEN - 1] = '\0';
+
+        enabled = false;
+        result = dsGetApplicationAudioConfig(0, &cfg, &enabled);
+        UT_ASSERT_EQUAL(result, dsERR_NONE);
+    }
+
+    // Step 03: Terminate audio ports
+    result = dsAudioPortTerm();
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
+
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
+/**
+ * @brief Ensure dsGetApplicationAudioConfig() returns correct error codes during negative scenarios.
+ *
+ * **Test Group ID:** Basic: 01@n
+ * **Test Case ID:** 142@n
+ *
+ * **Dependencies:** None@n
+ * **User Interaction:** None
+ *
+ * **Test Procedure:**@n
+ * |Variation / Step|Description|Test Data|Expected Result|Notes|
+ * |:--:|-----------|----------|--------------|-----|
+ * |01|Call dsGetApplicationAudioConfig() without initializing audio ports | handle=[0], audioConfig=[valid pointer], enable=[valid pointer] | dsERR_NOT_INITIALIZED | Must fail as module not initialized |
+ * |02|Call dsAudioPortInit() - Initialize audio ports | | dsERR_NONE | Initialization must be successful |
+ * |03|Call dsGetApplicationAudioConfig() with non-zero handle | handle=[1], audioConfig=[valid pointer], enable=[valid pointer] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |04|Call dsGetApplicationAudioConfig() with NULL audioConfig pointer | handle=[0], audioConfig=[NULL], enable=[valid pointer] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |05|Call dsGetApplicationAudioConfig() with NULL enable pointer | handle=[0], audioConfig=[valid pointer], enable=[NULL] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |06|Call dsGetApplicationAudioConfig() with configName missing NUL terminator | handle=[0], audioConfig=[no-NUL name], enable=[valid pointer] | dsERR_INVALID_PARAM | Invalid parameter error must be returned |
+ * |07|Call dsAudioPortTerm() - Terminate audio ports | | dsERR_NONE | Termination must be successful |
+ * |08|Call dsGetApplicationAudioConfig() after terminating audio ports | handle=[0], audioConfig=[valid pointer], enable=[valid pointer] | dsERR_NOT_INITIALIZED | Must fail as module not initialized |
+ *
+ * @note Testing dsERR_OPERATION_NOT_SUPPORTED and dsERR_GENERAL might be challenging as they require specific platform conditions.
+ */
+void test_l1_dsAudio_negative_dsGetApplicationAudioConfig(void)
+{
+    gTestID = 142;
+    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t result;
+    dsApplicationAudioConfig_t config;
+    dsApplicationAudioConfig_t noNulConfig;
+    bool enabled;
+
+    // Prepare a valid config name from profile (fallback to canonical constant if profile is empty)
+    if (gDSAudioApplicationConfigCount > 0)
+    {
+        strncpy(config.configName, gDSAudioApplicationConfigs[0], DS_MAX_APPLICATION_AUDIO_CONFIG_NAME_LEN - 1);
+    }
+    else
+    {
+        strncpy(config.configName, DS_APPLICATION_AUDIO_CONFIG_CONTINUOUS_AUDIO_OUTPUT,
+                DS_MAX_APPLICATION_AUDIO_CONFIG_NAME_LEN - 1);
+    }
+    config.configName[DS_MAX_APPLICATION_AUDIO_CONFIG_NAME_LEN - 1] = '\0';
+
+    // Prepare a config with no NUL terminator within bounds
+    memset(noNulConfig.configName, 'A', DS_MAX_APPLICATION_AUDIO_CONFIG_NAME_LEN);
+
+    // Step 01: Call without initializing audio ports
+    result = dsGetApplicationAudioConfig(0, &config, &enabled);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+
+    // Step 02: Initialize audio ports
+    result = dsAudioPortInit();
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
+
+    // Step 03: Call with non-zero handle (only handle=0 is valid)
+    result = dsGetApplicationAudioConfig(1, &config, &enabled);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 04: Call with NULL audioConfig pointer
+    result = dsGetApplicationAudioConfig(0, NULL, &enabled);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 05: Call with NULL enable pointer
+    result = dsGetApplicationAudioConfig(0, &config, NULL);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 06: Call with configName that has no NUL terminator within DS_MAX_APPLICATION_AUDIO_CONFIG_NAME_LEN bytes
+    result = dsGetApplicationAudioConfig(0, &noNulConfig, &enabled);
+    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
+
+    // Step 07: Terminate audio ports
+    result = dsAudioPortTerm();
+    UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
+
+    // Step 08: Call after terminating audio ports
+    result = dsGetApplicationAudioConfig(0, &config, &enabled);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+
+    UT_LOG("\n Out %s\n", __FUNCTION__);
+}
+
 static UT_test_suite_t *pSuite = NULL;
 
 /**
@@ -9755,6 +10148,13 @@ int test_l1_dsAudio_register(void)
     UT_add_test(pSuite, "dsAudioSetSAD_neg", test_l1_dsAudio_negative_dsAudioSetSAD);
     UT_add_test(pSuite, "dsAudioEnableARC_pos", test_l1_dsAudio_positive_dsAudioEnableARC);
     UT_add_test(pSuite, "dsAudioEnableARC_neg", test_l1_dsAudio_negative_dsAudioEnableARC);
+
+    UT_add_test(pSuite, "dsGetAppAudioCfgList_pos", test_l1_dsAudio_positive_dsGetApplicationAudioConfigList);
+    UT_add_test(pSuite, "dsGetAppAudioCfgList_neg", test_l1_dsAudio_negative_dsGetApplicationAudioConfigList);
+    UT_add_test(pSuite, "dsSetAppAudioCfg_pos", test_l1_dsAudio_positive_dsSetApplicationAudioConfig);
+    UT_add_test(pSuite, "dsSetAppAudioCfg_neg", test_l1_dsAudio_negative_dsSetApplicationAudioConfig);
+    UT_add_test(pSuite, "dsGetAppAudioCfg_pos", test_l1_dsAudio_positive_dsGetApplicationAudioConfig);
+    UT_add_test(pSuite, "dsGetAppAudioCfg_neg", test_l1_dsAudio_negative_dsGetApplicationAudioConfig);
 
    /*disabled dsEnableMS12Config tests as API is deprecated
     UT_add_test( pSuite, "dsEnableMS12Config_positive" ,test_l1_dsAudio_positive_dsEnableMS12Config );

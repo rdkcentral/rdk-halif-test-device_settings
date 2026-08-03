@@ -339,3 +339,8 @@ dsAudio:
             dialog_enhancement_level:
                 min: 0
                 max: 12
+    # Number of Application Audio Configurations supported by the platform
+    Application_Audio_Config_Count: 1
+    # Canonical application audio configuration names supported (see DS_APPLICATION_AUDIO_CONFIG_* macros)
+    Application_Audio_Configs:
+        0: CONTINUOUS_AUDIO_OUTPUT
