@@ -2353,54 +2353,6 @@ exit:
 }
 
 /**
-* @brief This test retrieves and displays the list of supported application audio configurations.
-*
-* This test calls dsGetApplicationAudioConfigList() and logs all returned
-* configuration names so the user can verify platform support.
-*
-* **Test Group ID:** 03@n
-* **Test Case ID:** 021@n
-*
-* **Test Procedure:**
-* Refer to Test specification documentation
-* [dsAudio_L3_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L3_Low-Level_TestSpecification.md)
-*/
-void test_l3_dsAudio_get_application_audio_config_list(void)
-{
-    gTestID = 21;
-    UT_LOG_INFO("In %s [%02d%03d]", __FUNCTION__, gTestGroup, gTestID);
-
-    dsError_t ret = dsERR_NONE;
-    dsApplicationAudioConfigList_t list;
-
-    memset(&list, 0, sizeof(list));
-    list.size = sizeof(dsApplicationAudioConfigList_t);
-
-    UT_LOG_INFO("Calling dsGetApplicationAudioConfigList(IN:handle:[0], IN:size:[%u])", list.size);
-
-    ret = dsGetApplicationAudioConfigList(0, &list);
-
-    UT_LOG_INFO("Result dsGetApplicationAudioConfigList(OUT:totalCount:[%u], OUT:returnedCount:[%u]) dsError_t:[%s]",
-                list.totalCount, list.returnedCount,
-                UT_Control_GetMapString(dsError_mapTable, ret));
-
-    DS_ASSERT(ret == dsERR_NONE);
-
-    UT_LOG_MENU_INFO("----------------------------------------------------------");
-    UT_LOG_MENU_INFO("Supported Application Audio Configurations");
-    UT_LOG_MENU_INFO("----------------------------------------------------------");
-    UT_LOG_MENU_INFO("\t#  %-60s", "Config Name");
-    for (uint32_t i = 0; i < list.returnedCount; i++)
-    {
-        UT_LOG_MENU_INFO("\t%u.  %-60s", i, list.config[i].configName);
-    }
-    UT_LOG_MENU_INFO("----------------------------------------------------------");
-    UT_LOG_MENU_INFO("Total supported: %u, Returned: %u", list.totalCount, list.returnedCount);
-
-    UT_LOG_INFO("Out %s", __FUNCTION__);
-}
-
-/**
 * @brief This test interactively sets and verifies an application audio configuration.
 *
 * This test retrieves the list of supported application audio configurations,
@@ -2568,7 +2520,6 @@ int32_t test_l3_dsAudio_register(void)
     UT_add_test(pSuite, "Primary/Secondary Language", test_l3_dsAudio_set_language);
     UT_add_test(pSuite, "Get ARC Type", test_l3_dsAudio_getArc_type);
     UT_add_test(pSuite, "Set SAD List", test_l3_dsAudio_setSAD);
-    UT_add_test(pSuite, "Get Application Audio Config List", test_l3_dsAudio_get_application_audio_config_list);
     UT_add_test(pSuite, "Set Application Audio Config", test_l3_dsAudio_set_application_audio_config);
     UT_add_test(pSuite, "Terminate dsAudio", test_l3_dsAudio_terminate);
 

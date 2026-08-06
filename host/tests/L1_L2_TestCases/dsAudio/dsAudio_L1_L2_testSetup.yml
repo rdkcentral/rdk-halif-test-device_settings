@@ -416,7 +416,25 @@ dsAudio:
     - name: "L1 dsAudio"
       test_cases:
         - dsAudioEnableARC_neg
-        
+    - name: "L1 dsAudio"
+      test_cases:
+        - dsGetAppAudioCfgList_pos
+    - name: "L1 dsAudio"
+      test_cases:
+        - dsGetAppAudioCfgList_neg
+    - name: "L1 dsAudio"
+      test_cases:
+        - dsSetAppAudioCfg_pos
+    - name: "L1 dsAudio"
+      test_cases:
+        - dsSetAppAudioCfg_neg
+    - name: "L1 dsAudio"
+      test_cases:
+        - dsGetAppAudioCfg_pos
+    - name: "L1 dsAudio"
+      test_cases:
+        - dsGetAppAudioCfg_neg
+
     ##############################################
     # Entries to run individual test cases L2 Sink
     ##############################################
@@ -514,6 +532,9 @@ dsAudio:
     # - name: "L2 dsAudio - Sink"
     #   test_cases:
     #     - SetAndGetSecondaryLanguage
+    # - name: "L2 dsAudio - Sink"
+    #   test_cases:
+    #     - SetAndGetApplicationAudioConfig
 
     ################################################
     # Entries to run individual test cases L2 Source
@@ -591,6 +612,9 @@ dsAudio:
     # - name: "L2 dsAudio - Source"
     #   test_cases:
     #     - SetAndGetSecondaryLanguage
+    # - name: "L2 dsAudio - Source"
+    #   test_cases:
+    #     - SetAndGetApplicationAudioConfig
 
 
     ######################################
@@ -610,3 +634,4 @@ dsAudio:
     #    - SetAndGetDRCMode
     #    - SetAndGetSurroundVirtualizer
     #    - SetAndGetMISteering
+    #    - SetAndGetApplicationAudioConfig

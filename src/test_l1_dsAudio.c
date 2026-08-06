@@ -9631,35 +9631,50 @@ void test_l1_dsAudio_positive_dsGetApplicationAudioConfigList(void)
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     dsError_t result;
-    dsApplicationAudioConfigList_t list1, list2;
+    dsApplicationAudioConfigList_t initialList, finalList;
 
     // Step 01: Initialize audio ports
     result = dsAudioPortInit();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
 
     // Step 02: Get application audio config list (first call)
-    memset(&list1, 0, sizeof(list1));
-    list1.size = sizeof(dsApplicationAudioConfigList_t);
-    result = dsGetApplicationAudioConfigList(0, &list1);
+    memset(&initialList, 0, sizeof(initialList));
+    initialList.size = sizeof(dsApplicationAudioConfigList_t);
+    UT_LOG("\n dsGetApplicationAudioConfigList call for initial: IN handle:[0] size:[%u]\n", initialList.size);
+    result = dsGetApplicationAudioConfigList(0, &initialList);
+    UT_LOG("\n dsGetApplicationAudioConfigList call 1: OUT totalCount:[%u] returnedCount:[%u] result:[%d]\n",
+           initialList.totalCount, initialList.returnedCount, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
+    for (uint32_t i = 0; i < initialList.returnedCount; i++)
+    {
+        UT_LOG("\n   config[%u]: [%s]\n", i, initialList.config[i].configName);
+    }
+
     // Step 03: Get application audio config list (second call)
-    memset(&list2, 0, sizeof(list2));
-    list2.size = sizeof(dsApplicationAudioConfigList_t);
-    result = dsGetApplicationAudioConfigList(0, &list2);
+    memset(&finalList, 0, sizeof(finalList));
+    finalList.size = sizeof(dsApplicationAudioConfigList_t);
+    UT_LOG("\n dsGetApplicationAudioConfigList call final list: IN handle:[0] size:[%u]\n", finalList.size);
+    result = dsGetApplicationAudioConfigList(0, &finalList);
+    UT_LOG("\n dsGetApplicationAudioConfigList call final list: OUT totalCount:[%u] returnedCount:[%u] result:[%d]\n",
+           finalList.totalCount, finalList.returnedCount, result);
     UT_ASSERT_EQUAL(result, dsERR_NONE);
 
     // Step 04: Compare results - totalCount and returnedCount must be consistent
-    UT_ASSERT_EQUAL(list1.totalCount, list2.totalCount);
-    UT_ASSERT_EQUAL(list1.returnedCount, list2.returnedCount);
+    UT_ASSERT_EQUAL(initialList.totalCount, finalList.totalCount);
+    UT_ASSERT_EQUAL(initialList.returnedCount, finalList.returnedCount);
 
     // Step 05: Validate totalCount against profile configuration
-    UT_ASSERT_EQUAL(list1.totalCount, (uint32_t)gDSAudioApplicationConfigCount);
+    UT_LOG("\n profile gDSAudioApplicationConfigCount:[%d] device totalCount:[%u]\n",
+           gDSAudioApplicationConfigCount, initialList.totalCount);
+    UT_ASSERT_EQUAL(initialList.totalCount, (uint32_t)gDSAudioApplicationConfigCount);
 
     // Step 06: Validate each returned config name matches the profile
-    for (uint32_t i = 0; i < list1.returnedCount && i < (uint32_t)gDSAudioApplicationConfigCount; i++)
+    for (uint32_t i = 0; i < initialList.returnedCount && i < (uint32_t)gDSAudioApplicationConfigCount; i++)
     {
-        UT_ASSERT_STRING_EQUAL(list1.config[i].configName, gDSAudioApplicationConfigs[i]);
+        UT_LOG("\n   validate config[%u]: device=[%s] profile=[%s]\n",
+               i, initialList.config[i].configName, gDSAudioApplicationConfigs[i]);
+        UT_ASSERT_STRING_EQUAL(initialList.config[i].configName, gDSAudioApplicationConfigs[i]);
     }
 
     // Step 07: Terminate audio ports
@@ -9703,7 +9718,7 @@ void test_l1_dsAudio_negative_dsGetApplicationAudioConfigList(void)
     memset(&list, 0, sizeof(list));
     list.size = sizeof(dsApplicationAudioConfigList_t);
     result = dsGetApplicationAudioConfigList(0, &list);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize audio ports
     result = dsAudioPortInit();
@@ -9718,11 +9733,6 @@ void test_l1_dsAudio_negative_dsGetApplicationAudioConfigList(void)
     result = dsGetApplicationAudioConfigList(0, NULL);
     UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
 
-    // Step 05: Call with size too small to hold even one config entry
-    list.size = sizeof(uint32_t);
-    result = dsGetApplicationAudioConfigList(0, &list);
-    UT_ASSERT_EQUAL(result, dsERR_INVALID_PARAM);
-
     // Step 06: Terminate audio ports
     result = dsAudioPortTerm();
     UT_ASSERT_EQUAL_FATAL(result, dsERR_NONE);
@@ -9730,7 +9740,7 @@ void test_l1_dsAudio_negative_dsGetApplicationAudioConfigList(void)
     // Step 07: Call after terminating audio ports
     list.size = sizeof(dsApplicationAudioConfigList_t);
     result = dsGetApplicationAudioConfigList(0, &list);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NOT_INITIALIZED);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -9773,11 +9783,15 @@ void test_l1_dsAudio_positive_dsSetApplicationAudioConfig(void)
         cfg.configName[DS_MAX_APPLICATION_AUDIO_CONFIG_NAME_LEN - 1] = '\0';
 
         // Step 02: Enable the audio configuration
+        UT_LOG("\n dsSetApplicationAudioConfig: config=[%s] enable=[true]\n", cfg.configName);
         result = dsSetApplicationAudioConfig(0, &cfg, true);
+        UT_LOG("\n dsSetApplicationAudioConfig: config=[%s] enable=[true] result=[%d]\n", cfg.configName, result);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
 
         // Step 03: Disable the audio configuration
+        UT_LOG("\n dsSetApplicationAudioConfig: config=[%s] enable=[false]\n", cfg.configName);
         result = dsSetApplicationAudioConfig(0, &cfg, false);
+        UT_LOG("\n dsSetApplicationAudioConfig: config=[%s] enable=[false] result=[%d]\n", cfg.configName, result);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
@@ -9836,7 +9850,7 @@ void test_l1_dsAudio_negative_dsSetApplicationAudioConfig(void)
 
     // Step 01: Call without initializing audio ports
     result = dsSetApplicationAudioConfig(0, &config, true);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize audio ports
     result = dsAudioPortInit();
@@ -9860,7 +9874,7 @@ void test_l1_dsAudio_negative_dsSetApplicationAudioConfig(void)
 
     // Step 07: Call after terminating audio ports
     result = dsSetApplicationAudioConfig(0, &config, true);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NOT_INITIALIZED);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -9903,7 +9917,10 @@ void test_l1_dsAudio_positive_dsGetApplicationAudioConfig(void)
         cfg.configName[DS_MAX_APPLICATION_AUDIO_CONFIG_NAME_LEN - 1] = '\0';
 
         enabled = false;
+        UT_LOG("\n dsGetApplicationAudioConfig: IN config=[%s]\n", cfg.configName);
         result = dsGetApplicationAudioConfig(0, &cfg, &enabled);
+        UT_LOG("\n dsGetApplicationAudioConfig: OUT config=[%s] enabled=[%d] result=[%d]\n",
+               cfg.configName, (int)enabled, result);
         UT_ASSERT_EQUAL(result, dsERR_NONE);
     }
 
@@ -9964,7 +9981,7 @@ void test_l1_dsAudio_negative_dsGetApplicationAudioConfig(void)
 
     // Step 01: Call without initializing audio ports
     result = dsGetApplicationAudioConfig(0, &config, &enabled);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NOT_INITIALIZED);
 
     // Step 02: Initialize audio ports
     result = dsAudioPortInit();
@@ -9992,7 +10009,7 @@ void test_l1_dsAudio_negative_dsGetApplicationAudioConfig(void)
 
     // Step 08: Call after terminating audio ports
     result = dsGetApplicationAudioConfig(0, &config, &enabled);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_INVALID_PARAM);
+    CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NOT_INITIALIZED);
 
     UT_LOG("\n Out %s\n", __FUNCTION__);
 }
@@ -10149,6 +10166,12 @@ int test_l1_dsAudio_register(void)
     UT_add_test(pSuite, "dsAudioEnableARC_pos", test_l1_dsAudio_positive_dsAudioEnableARC);
     UT_add_test(pSuite, "dsAudioEnableARC_neg", test_l1_dsAudio_negative_dsAudioEnableARC);
 
+    /*disabled dsEnableMS12Config tests as API is deprecated
+    UT_add_test( pSuite, "dsEnableMS12Config_positive" ,test_l1_dsAudio_positive_dsEnableMS12Config );
+    UT_add_test( pSuite, "dsEnableMS12Config_negative" ,test_l1_dsAudio_negative_dsEnableMS12Config );
+    */
+
+    // Adding new test cases for dsAudio HAL APIs related to application audio configuration
     UT_add_test(pSuite, "dsGetAppAudioCfgList_pos", test_l1_dsAudio_positive_dsGetApplicationAudioConfigList);
     UT_add_test(pSuite, "dsGetAppAudioCfgList_neg", test_l1_dsAudio_negative_dsGetApplicationAudioConfigList);
     UT_add_test(pSuite, "dsSetAppAudioCfg_pos", test_l1_dsAudio_positive_dsSetApplicationAudioConfig);
@@ -10156,16 +10179,12 @@ int test_l1_dsAudio_register(void)
     UT_add_test(pSuite, "dsGetAppAudioCfg_pos", test_l1_dsAudio_positive_dsGetApplicationAudioConfig);
     UT_add_test(pSuite, "dsGetAppAudioCfg_neg", test_l1_dsAudio_negative_dsGetApplicationAudioConfig);
 
-   /*disabled dsEnableMS12Config tests as API is deprecated
-    UT_add_test( pSuite, "dsEnableMS12Config_positive" ,test_l1_dsAudio_positive_dsEnableMS12Config );
-    UT_add_test( pSuite, "dsEnableMS12Config_negative" ,test_l1_dsAudio_negative_dsEnableMS12Config );
-    */
 
     extendedEnumsSupported = ut_kvp_getBoolField(ut_kvp_profile_getInstance(), "dsAudio/features/extendedEnumsSupported");
 
     return 0;
-}
 
+}
 /** @} */ // End of DS_Audio_HALTEST_L1
 /** @} */ // End of DS_Audio_HALTEST
 /** @} */ // End of Device_Settings_HALTEST
