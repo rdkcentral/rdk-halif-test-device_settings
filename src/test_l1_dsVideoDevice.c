@@ -1735,14 +1735,14 @@ void test_l1_dsVideoDevice_positive_dsSetDisplayframerate(void)
             break;
 
         // Step 03: Set the display framerate using the obtained handle
-        for(int j=0;j<gDSVideoDeviceConfiguration[i].NoOfSupportedDFR;j++){
-            result = dsSetDisplayframerate(handle, gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate[j]);
-            if(gSourceType == 0) {
+        if(gSourceType == 0) {
+            for(int j=0;j<gDSVideoDeviceConfiguration[i].NoOfSupportedDFR;j++){
+                result = dsSetDisplayframerate(handle, gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate[j]);
                 UT_ASSERT_EQUAL(result, dsERR_NONE);
-            } else if(gSourceType == 1){
-                // Step 04: API is not supported on source devices
-                UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
             }
+        } else if(gSourceType == 1){
+            result = dsSetDisplayframerate(handle, gDSVideoDeviceConfiguration[0].SupportedDisplayFramerate[0]);
+            UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
         }
     }
 
