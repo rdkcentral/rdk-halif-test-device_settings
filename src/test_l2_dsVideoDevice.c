@@ -329,15 +329,18 @@ void test_l2_dsVideoDevice_GetVideoCodecInfo_source(void)
             UT_ASSERT_EQUAL(retStatus, dsERR_NONE);
             UT_LOG_DEBUG("dsGetVideoCodecInfo return status: %d, num_entries: %d", retStatus, info.num_entries);
 
-            UT_ASSERT_EQUAL(info.num_entries, gDSVideoDeviceConfiguration[i].num_codec_entries);
             /* for now hal get info supports only MPEGHPART2 */
             if(codec == dsVIDEO_CODEC_MPEGHPART2)
             {
-                UT_LOG_DEBUG("Profile: %d", info.entries->profile);
-                UT_ASSERT_EQUAL(info.entries->profile,gDSVideoDeviceConfiguration[i].profile);
-                //TODO : kvp profile support for float type is not available now
-                //UT_ASSERT_EQUAL(info.entries->level,gDSVideoDeviceConfiguration[i].level);
+                for(int k = 0; k < info.num_entries; k++)
+                {
+                    UT_LOG_DEBUG("Codec Info[%d]: profile: %d, level: %f", k, info.entries[k].profile, info.entries[k].level);
+                    UT_ASSERT_EQUAL(info.num_entries, gDSVideoDeviceConfiguration[i].info.num_entries);
+                    UT_ASSERT_EQUAL(info.entries[k].profile, gDSVideoDeviceConfiguration[i].info.entries[k].profile);
+                    UT_ASSERT_EQUAL(info.entries[k].level, gDSVideoDeviceConfiguration[i].info.entries[k].level);
+                }
             }
+            memset(&info, 0, sizeof(info));
             codec = (0x01 << (j++));
         } /* for(codec)*/
     } /* for(i)*/
