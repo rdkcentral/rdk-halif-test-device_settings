@@ -216,6 +216,8 @@ dsVideoPort:
             #dsTV_RESOLUTION_2160p30      = 0x040000,  ///< 2160p30 Resolution
             #dsTV_RESOLUTION_2160p50      = 0x080000,  ///< 2160p50 Resolution
             #dsTV_RESOLUTION_2160p60      = 0x100000   ///< 2160p60 Resolution
+            #dsTV_RESOLUTION_2160p100     = 0x200000,  ///< 2160p100 Resolution
+            #dsTV_RESOLUTION_2160p120     = 0x400000   ///< 2160p120 Resolution
             Supported_tv_resolutions_capabilities: 0x1FFBFB #OR-ed value of 480i | 480p | 576p50 | 720p | 720p50 | 1080i | 1080p | 1080p24 | 1080i50 | 2160p30 | 2160p60
 
             #dsHDRSTANDARD_NONE               = 0x0,   ///< When No video format is decoded
