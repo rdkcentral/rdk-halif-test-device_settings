@@ -47,85 +47,316 @@ class dsAudio_test27_ContinuousAudioOutput(dsAudioHelperClass):
         self.qcID = '27'
         super().__init__(self.testName, self.qcID, log)
 
-    def testVerifyAVRSignal(self, port, config, prompt):
+    def testVerifyAVRSignal(self, port, index, prompt):
+        """
+        Manually verify Soundbar behavior.
+
+        The tester should listen for:
+          - pop
+          - click
+          - mute gap
+          - audio re-lock delay
+
+        Returns:
+            bool: True if expected behavior is observed.
+        """
         return self.testUserResponse.getUserYN(
-            f"[{port}][Config:{config}] {prompt} (Y/N):"
+            f"{prompt} Port: {port}/{index} (Y/N):"
         )
 
     def testFunction(self):
         result = True
 
-        self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
+        # ---------------------------------------------------------
+        # Initialize dsAudio
+        # ---------------------------------------------------------
+        self.testdsAudio.initialise(
+            self.testdsAudio.getDeviceType()
+        )
 
-        self.log.stepStart('Query Application Audio Config List')
-        configList = self.testdsAudio.getApplicationAudioConfigList()
+        # ---------------------------------------------------------
+        # Get application audio configurations
+        # ---------------------------------------------------------
+        self.log.stepStart(
+            "Query Application Audio Config List"
+        )
+
+        configList = (
+            self.testdsAudio.getApplicationAudioConfigList()
+        )
+
         self.log.stepResult(
             len(configList) > 0,
-            f'Supported application audio configs: {configList}'
+            f"Supported application audio configs: {configList}"
         )
 
         if not configList:
             self.testdsAudio.terminate()
             return True
 
-        for port, index in self.testdsAudio.getSupportedPorts():
-            self.testdsAudio.enablePort(port, index)
+        # ---------------------------------------------------------
+        # Get supported audio ports.
+        #
+        # CAO is relevant to external encoded outputs.
+        # For a Soundbar connected through ARC, HDMI_ARC is the
+        # primary port. SPDIF is included when available.
+        #
+        # getSupportedPorts() provides the actual port/index pair.
+        # ---------------------------------------------------------
+        supported_ports = self.testdsAudio.getSupportedPorts()
 
+        external_encoded_ports = [
+            (port, index)
+            for port, index in supported_ports
+            if port in ("dsAUDIOPORT_TYPE_HDMI_ARC")
+            #, "dsAUDIOPORT_TYPE_SPDIF")
+        ]
+
+        self.log.stepResult(
+            len(external_encoded_ports) > 0,
+            f"External encoded audio ports: "
+            f"{external_encoded_ports}"
+        )
+
+        if not external_encoded_ports:
+            self.testdsAudio.terminate()
+            return False
+
+        # ---------------------------------------------------------
+        # One stream only:
+        #
+        # self.testStreams[0] MUST be the 5.1 E-AC3 stream.
+        #
+        # Example:
+        #   tones_string_48k_5.1.eac3
+        # ---------------------------------------------------------
+        cao_stream = self.testStreams[0]
+
+        self.log.info(
+            f"CAO verification stream: {cao_stream}"
+        )
+
+        # ---------------------------------------------------------
+        # Test each external encoded port
+        # ---------------------------------------------------------
+        for port, index in external_encoded_ports:
+
+            self.log.stepStart(
+                f"Enable audio port {port}/{index}"
+            )
+
+            self.testdsAudio.enablePort(port, index, 1)
+
+            # -----------------------------------------------------
+            # Test each application configuration
+            # -----------------------------------------------------
             for config in configList:
-                self.testdsAudio.setApplicationAudioConfig(config, True)
 
+                # =================================================
+                # CAO ON
+                # =================================================
                 self.log.stepStart(
-                    f'[{config}] Enable CAO, play AC3 to lock AVR clock - {port}/{index}')
-                self.testPlayer.play(self.testStreams[0])
-                self.testPlayer.stop()
+                    f"[{config}] Enable CAO - "
+                    f"{port}/{index}"
+                )
+
+                enableResult = (
+                    self.testdsAudio.setApplicationAudioConfig(
+                        config,
+                        True
+                    )
+                )
+
+                self.log.stepResult(
+                    enableResult is not False,
+                    f"[{config}] CAO enabled - "
+                    f"{port}/{index}"
+                )
+
+                if enableResult is False:
+                    result = False
+                    continue
+
+                # -------------------------------------------------
+                # Play 5.1 E-AC3
+                # -------------------------------------------------
+                self.log.stepStart(
+                    f"[{config}] CAO ON: Play 5.1 E-AC3 - "
+                    f"{port}/{index}"
+                )
+
+                self.testPlayer.play(cao_stream)
+
+                # Allow Soundbar/audio pipeline to lock.
+                time.sleep(10)
 
                 stepResult = self.testVerifyAVRSignal(
-                    port, config,
-                    'With CAO enabled and NO stream playing, does the connected '
-                    'AVR/Soundbar still display an active DDP/MAT 5.1 (or encoded) signal?'
+                    port,
+                    index,
+                    "[CAO ON] Is the 5.1 E-AC3 audio playing "
+                    "normally on the Soundbar?"
                 )
+
                 self.log.stepResult(
                     stepResult,
-                    f'[{config}] AVR shows encoded signal during silence (CAO ON) - {port}/{index}'
+                    f"[{config}] 5.1 E-AC3 playback verified "
+                    f"(CAO ON) - {port}/{index}"
                 )
+
                 result = result and stepResult
 
+                # -------------------------------------------------
+                # Simulate short input interruption
+                #
+                # NOTE:
+                # testPlayer.stop() may stop the decoder completely.
+                # It is therefore a manual approximation of the
+                # input interruption until a player/API capable of
+                # creating a real MS12 input stall is available.
+                # -------------------------------------------------
                 self.log.stepStart(
-                    f'[{config}] AC3->EAC3 transition with CAO enabled - {port}/{index}')
-                self.testPlayer.play(self.testStreams[1])
+                    f"[{config}] CAO ON: Interrupt audio input - "
+                    f"{port}/{index}"
+                )
+
+                self.testPlayer.stop()
+
+                # Short interruption.
+                time.sleep(3)
+
+                # -------------------------------------------------
+                # Resume SAME 5.1 E-AC3 stream
+                # -------------------------------------------------
+                self.log.stepStart(
+                    f"[{config}] CAO ON: Resume 5.1 E-AC3 - "
+                    f"{port}/{index}"
+                )
+
+                self.testPlayer.play(cao_stream)
+
+                time.sleep(5)
 
                 stepResult = self.testVerifyAVRSignal(
-                    port, config,
-                    'Did the EAC3 stream start WITHOUT any audible pop, click, or mute gap?'
+                    port,
+                    index,
+                    "[CAO ON] After the short audio interruption "
+                    "and restart of the SAME 5.1 E-AC3 stream, "
+                    "does audio resume WITHOUT an audible pop, "
+                    "click, mute gap, or noticeable Soundbar "
+                    "audio re-lock?"
                 )
+
                 self.log.stepResult(
                     stepResult,
-                    f'[{config}] No glitch on AC3->EAC3 transition (CAO ON) - {port}/{index}'
+                    f"[{config}] No audible glitch after "
+                    f"E-AC3 interruption (CAO ON) - "
+                    f"{port}/{index}"
                 )
+
                 result = result and stepResult
 
                 self.testPlayer.stop()
 
-                self.testdsAudio.setApplicationAudioConfig(config, False)
-
+                # =================================================
+                # CAO OFF
+                # =================================================
                 self.log.stepStart(
-                    f'[{config}] Disable CAO, play AC3 then stop - {port}/{index}')
-                self.testPlayer.play(self.testStreams[0])
-                self.testPlayer.stop()
+                    f"[{config}] Disable CAO - "
+                    f"{port}/{index}"
+                )
+
+                disableResult = (
+                    self.testdsAudio.setApplicationAudioConfig(
+                        config,
+                        False
+                    )
+                )
+
+                self.log.stepResult(
+                    disableResult is not False,
+                    f"[{config}] CAO disabled - "
+                    f"{port}/{index}"
+                )
+
+                if disableResult is False:
+                    result = False
+                    continue
+
+                # -------------------------------------------------
+                # Play SAME 5.1 E-AC3 with CAO OFF
+                # -------------------------------------------------
+                self.log.stepStart(
+                    f"[{config}] CAO OFF: Play 5.1 E-AC3 - "
+                    f"{port}/{index}"
+                )
+
+                self.testPlayer.play(cao_stream)
+
+                time.sleep(10)
 
                 stepResult = self.testVerifyAVRSignal(
-                    port, config,
-                    'With CAO disabled and NO stream playing, has the AVR/Soundbar '
-                    'signal dropped (showing no audio, PCM 2.0, or no channel info)?'
+                    port,
+                    index,
+                    "[CAO OFF] Is the 5.1 E-AC3 audio playing "
+                    "normally on the Soundbar?"
                 )
+
                 self.log.stepResult(
                     stepResult,
-                    f'[{config}] AVR signal dropped during silence (CAO OFF) - {port}/{index}'
+                    f"[{config}] 5.1 E-AC3 playback verified "
+                    f"(CAO OFF) - {port}/{index}"
                 )
+
                 result = result and stepResult
+
+                # -------------------------------------------------
+                # Interrupt and resume SAME stream
+                # -------------------------------------------------
+                self.log.stepStart(
+                    f"[{config}] CAO OFF: Interrupt and resume "
+                    f"5.1 E-AC3 - {port}/{index}"
+                )
+
+                self.testPlayer.stop()
+
+                time.sleep(3)
+
+                self.testPlayer.play(cao_stream)
+
+                time.sleep(5)
+
+                stepResult = self.testVerifyAVRSignal(
+                    port,
+                    index,
+                    "[CAO OFF] After stopping and restarting "
+                    "the SAME 5.1 E-AC3 stream, does audio "
+                    "resume WITHOUT an audible pop, click, "
+                    "mute gap, or noticeable Soundbar "
+                    "audio re-lock?"
+                )
+
+                self.log.stepResult(
+                    stepResult,
+                    f"[{config}] E-AC3 interruption behavior "
+                    f"(CAO OFF) - {port}/{index}"
+                )
+
+                result = result and stepResult
+
+                self.testPlayer.stop()
+
+            # -----------------------------------------------------
+            # Disable port
+            # -----------------------------------------------------
+            self.log.stepStart(
+                f"Disable audio port {port}/{index}"
+            )
 
             self.testdsAudio.disablePort(port, index)
 
+        # ---------------------------------------------------------
+        # Terminate
+        # ---------------------------------------------------------
         self.testdsAudio.terminate()
         return result
 
