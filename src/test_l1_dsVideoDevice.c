@@ -1585,9 +1585,9 @@ void test_l1_dsVideoDevice_positive_dsGetCurrentDisplayframerate(void)
                     UT_LOG_INFO("SupportedDisplayFramerate %s fetchedFramerate %s ",gDSVideoDeviceConfiguration[i].SupportedDisplayFramerate[j], fetchedFramerate);
                     count++;
                 }
-                if(count < 1) {
-                    UT_FAIL("SupportedDisplayFramerate are not present");
-                }
+            }
+            if(count < 1) {
+                UT_FAIL("SupportedDisplayFramerate are not present");
             }
         } else if(gSourceType == 1){
                 // Step 05: API is not supported on source devices
