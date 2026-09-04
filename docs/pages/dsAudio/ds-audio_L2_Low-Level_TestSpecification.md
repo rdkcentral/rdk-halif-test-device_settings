@@ -1449,3 +1449,103 @@ D -->|!=dsERR_NONE|D1[Test case fail]
 E -->|dsERR_NONE|F[Test case pass]
 E -->|!=dsERR_NONE|E1[Test case fail]
 ```
+
+### Test 32
+
+|Title|Details|
+|-----|-------|
+|Function Name|`test_l2_dsAudio_GetApplicationAudioConfigList`|
+|Description|Retrieve the supported application audio configuration list using the global audio handle and verify the returned list is well formed and consistent across repeated calls|
+|Test Group|02|
+|Test Case ID|032|
+|Priority|High|
+
+**Pre-Conditions :**
+None
+
+**Dependencies :**
+None
+
+**User Interaction :**
+If user chose to run the test in interactive mode, then the test case has to be selected via console.
+
+#### Test Procedure - Test 32
+
+|Variation / Steps|Description|Test Data|Expected Result|Notes|
+|-----------------|-----------|---------|---------------|-----|
+|01|Initialize the audio port using `dsAudioPortInit`|None|`dsERR_NONE`|Should be successful|
+|02|Call `dsGetApplicationAudioConfigList` using the global audio handle|handle = `0`, list = valid `dsApplicationAudioConfigList_t` with `size` initialized|`dsERR_NONE`|Should be successful|
+|03|Verify the returned list counters are valid|`returnedCount <= totalCount`|`True`|Should be successful|
+|04|Call `dsGetApplicationAudioConfigList` again for consistency check|handle = `0`, list = second valid `dsApplicationAudioConfigList_t` with `size` initialized|`dsERR_NONE`|Should be successful|
+|05|Verify the total and returned counts match across both calls|first call result, second call result|Counts should match|Should be successful|
+|06|Verify each returned `configName` is NUL terminated within `DS_MAX_APPLICATION_AUDIO_CONFIG_NAME_LEN`|each `config[i].configName` entry|`True`|Should be successful|
+|07|Terminate the audio port using `dsAudioPortTerm`|None|`dsERR_NONE`|Should be successful|
+
+```mermaid
+graph TB
+A[Call dsAudioPortInit] -->|dsERR_NONE|B[Call dsGetApplicationAudioConfigList with handle 0]
+A -->|Failure|A1[Test case fail]
+B -->|dsERR_NONE|C[Verify returnedCount <= totalCount]
+B -->|Failure|B1[Test case fail]
+C -->|Valid|D[Call dsGetApplicationAudioConfigList again]
+C -->|Invalid|C1[Test case fail]
+D -->|dsERR_NONE|E[Compare counts across both calls]
+D -->|Failure|D1[Test case fail]
+E -->|Match|F[Verify each configName is NUL terminated]
+E -->|Mismatch|E1[Test case fail]
+F -->|Valid|G[Call dsAudioPortTerm]
+F -->|Invalid|F1[Test case fail]
+G -->|dsERR_NONE|H[Test case pass]
+G -->|Failure|G1[Test case fail]
+```
+
+### Test 33
+
+|Title|Details|
+|-----|-------|
+|Function Name|`test_l2_dsAudio_SetAndGetApplicationAudioConfig`|
+|Description|Loop through the supported application audio configurations, enable and disable each configuration using the global audio handle, and retrieve the state for verification|
+|Test Group|02|
+|Test Case ID|033|
+|Priority|High|
+
+**Pre-Conditions :**
+None
+
+**Dependencies :**
+None
+
+**User Interaction :**
+If user chose to run the test in interactive mode, then the test case has to be selected via console.
+
+#### Test Procedure - Test 33
+
+|Variation / Steps|Description|Test Data|Expected Result|Notes|
+|-----------------|-----------|---------|---------------|-----|
+|01|Initialize the audio port using `dsAudioPortInit`|None|`dsERR_NONE`|Should be successful|
+|02|Retrieve the supported application audio configuration list|handle = `0`, list = valid `dsApplicationAudioConfigList_t` with `size` initialized|`dsERR_NONE`|Should be successful|
+|03|Loop through each returned configuration and enable it using `dsSetApplicationAudioConfig`|handle = `0`, config = `list.config[i]`, enable = `true`|`dsERR_NONE`|Should be successful|
+|04|Read back the enabled state using `dsGetApplicationAudioConfig`|handle = `0`, config = `list.config[i]`, enabled = valid pointer|`dsERR_NONE`, enabled = `true`|Should be successful|
+|05|Disable the same configuration using `dsSetApplicationAudioConfig`|handle = `0`, config = `list.config[i]`, enable = `false`|`dsERR_NONE`|Should be successful|
+|06|Read back the disabled state using `dsGetApplicationAudioConfig`|handle = `0`, config = `list.config[i]`, enabled = valid pointer|`dsERR_NONE`, enabled = `false`|Should be successful|
+|07|Terminate the audio port using `dsAudioPortTerm`|None|`dsERR_NONE`|Should be successful|
+
+```mermaid
+graph TB
+A[Call dsAudioPortInit] -->|dsERR_NONE|B[Call dsGetApplicationAudioConfigList with handle 0]
+A -->|Failure|A1[Test case fail]
+B -->|dsERR_NONE|C{For each returned config}
+B -->|Failure|B1[Test case fail]
+C --> D[Call dsSetApplicationAudioConfig with enable true]
+D -->|dsERR_NONE|E[Call dsGetApplicationAudioConfig]
+D -->|Failure|D1[Test case fail]
+E -->|enabled == true|F[Call dsSetApplicationAudioConfig with enable false]
+E -->|Mismatch or failure|E1[Test case fail]
+F -->|dsERR_NONE|G[Call dsGetApplicationAudioConfig]
+F -->|Failure|F1[Test case fail]
+G -->|enabled == false|C
+G -->|Mismatch or failure|G1[Test case fail]
+C -->|End of loop|H[Call dsAudioPortTerm]
+H -->|dsERR_NONE|I[Test case pass]
+H -->|Failure|H1[Test case fail]
+```

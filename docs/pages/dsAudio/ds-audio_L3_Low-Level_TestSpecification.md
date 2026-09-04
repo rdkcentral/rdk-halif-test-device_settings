@@ -97,6 +97,7 @@ Below are top test use-case for the audio port.
 |24|Test Primary/Secondary Language|Play the predefined audio streams. Set the primary and secondary languages and verify| `dsSetPrimaryLanguage()`, `dsSetSecondaryLanguage()`|`Y`|`Y`|19|
 |25|Test Audio Mixer Levels|Play the predefined audio streams. Set the mixer levels for primary and system audio and verify| `dsSetAudioMixerLevels()`|`N`|`Y`|20, 21|
 |26|Test MS12 Audio Profiles|Play the predefined audio streams. Set the MS12 profiles and verify| `dsSetMS12AudioProfile()`|`N`|`Y`|03|
+|27|Test Continuous Audio Output|Enable the application audio configuration for Continuous Audio Output, verify the connected receiver/soundbar keeps encoded lock during silence, verify the AC3 to EAC3 transition resumes without audible glitch, then disable the configuration and verify the encoded indication drops| `dsSetApplicationAudioConfig()`, `dsGetApplicationAudioConfig()`, `dsGetApplicationAudioConfigList()`|`Y`|`Y`|01, 08|
 
 ## Level 3 Python Test Cases High Level Overview
 
