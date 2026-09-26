@@ -166,6 +166,12 @@ dsAudio:
                     - dsAudioSetSAD_neg
                     - dsAudioEnableARC_pos
                     - dsAudioEnableARC_neg
+                    - dsGetAppAudioCfgList_pos
+                    - dsGetAppAudioCfgList_neg
+                    - dsSetAppAudioCfg_pos
+                    - dsSetAppAudioCfg_neg
+                    - dsGetAppAudioCfg_pos
+                    - dsGetAppAudioCfg_neg
             1:
                 name: "L2 dsAudio - Sink"
                 tests:
@@ -200,6 +206,7 @@ dsAudio:
                     - SetAndGetAudioGain
                     - SetAndGetAudioLevel
                     - VerifyAtmosCapabilities
+                    - SetAndGetApplicationAudioConfig
             2:
                 name: "L2 dsAudio - Source"
                 tests:
@@ -227,6 +234,7 @@ dsAudio:
                     - AudioPortControl
                     - SetAndGetPrimaryLanguage
                     - SetAndGetSecondaryLanguage
+                    - SetAndGetApplicationAudioConfig
             3:
                 name: "L3 dsAudio"
                 tests:
@@ -251,4 +259,7 @@ dsAudio:
                     - "Primary/Secondary Language"
                     - "Get ARC Type"
                     - "Set SAD List"
+                    - "Get Application Audio Config List"
+                    - "Get Application Audio Config"
+                    - "Set Application Audio Config"
                     - "Terminate dsAudio"

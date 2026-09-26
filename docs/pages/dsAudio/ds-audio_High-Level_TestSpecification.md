@@ -63,6 +63,7 @@ The Audio device setting interface provides control to enable or disable Audio O
 |10|[Test Associated Audio Mixing](#test-associated-audio-mixing)|Test for Associated Audio Mixing|
 |11|[Test Primary/Secondary Language](#test-primarysecondary-language)|Test for primary/secondary language configuration|
 |12|[Test Audio Mixer Levels](#test-audio-mixer-levels)|Test for Primary and secondary Audio mixer levels|
+|13|[Test Application Audio Config](#test-application-audio-config)|Test for application audio configuration and Continuous Audio Output behavior|
 
 ## Emulator Requirements
 
@@ -351,4 +352,25 @@ Playback of stream is required for the L3 testcases. [Audio Format Requirements 
 ### Control Plane Requirements - Test Audio Mixer Levels
 
 - Control the external analyzer
+- Control the port connections
+
+## Test Application Audio Config
+
+|Description|HAL APIs|L2|L3|Source|Sink|Control plane requirements|
+|-----------|--------|--|--|------|----|--------------------------|
+|Retrieve the supported application audio configuration list using the global audio handle and verify that the list is well formed and consistent across repeated calls|dsGetApplicationAudioConfigList()|`Y`|`NA`|`Y`|`Y`|`NA`|
+|Loop through the supported application audio configurations, enable and disable each configuration using the global audio handle, and retrieve the state for verification|dsSetApplicationAudioConfig(), dsGetApplicationAudioConfig(), dsGetApplicationAudioConfigList()|`Y`|`NA`|`Y`|`Y`|`NA`|
+|Enable the Continuous Audio Output application audio configuration, stop and resume encoded playback, and verify on the connected receiver/soundbar that encoded lock is maintained during silence and resumes without audible glitch|dsSetApplicationAudioConfig(), dsGetApplicationAudioConfig(), dsGetApplicationAudioConfigList()|`NA`|`Y`|`Y`|`Y`|`Y`|
+
+### Test Startup Requirement - Test Application Audio Config
+
+Playback of stream is required for the L3 testcases. [Audio Format Requirements for Playback](#audio-format-requirements-for-playback)
+
+### Emulator Requirements - Test Application Audio Config
+
+[Emulator Requirements](#emulator-requirements)
+
+### Control Plane Requirements - Test Application Audio Config
+
+- Control the external analyzer / connected receiver indication
 - Control the port connections

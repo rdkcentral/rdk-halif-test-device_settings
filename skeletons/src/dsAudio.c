@@ -581,3 +581,29 @@ dsError_t dsSetAudioMixerLevels(intptr_t handle,dsAudioInput_t aInput, int volum
   (void)volume;
   return (dsError_t)0;
 }
+
+dsError_t dsGetApplicationAudioConfigList(intptr_t handle, dsApplicationAudioConfigList_t* audioConfigList)
+{
+  /*TODO: Implement Me!*/
+  (void)handle;
+  (void)audioConfigList;
+  return (dsError_t)0;
+}
+
+dsError_t dsSetApplicationAudioConfig(intptr_t handle, const dsApplicationAudioConfig_t* audioConfig, bool enable)
+{
+  /*TODO: Implement Me!*/
+  (void)handle;
+  (void)audioConfig;
+  (void)enable;
+  return (dsError_t)0;
+}
+
+dsError_t dsGetApplicationAudioConfig(intptr_t handle, const dsApplicationAudioConfig_t* audioConfig, bool *enable)
+{
+  /*TODO: Implement Me!*/
+  (void)handle;
+  (void)audioConfig;
+  (void)enable;
+  return (dsError_t)0;
+}

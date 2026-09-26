@@ -80,6 +80,8 @@ dsAudioPortConfiguration_t* gDSAudioPortConfiguration   = NULL;
 char gDSAudioDeviceName[DS_AUDIO_DEVICE_NAME_SIZE]      = {0};
 int32_t gDSAudioNumberOfPorts = 0;
 int32_t gAudioCapabilities = 0x0;
+int32_t gDSAudioApplicationConfigCount = 0;
+char    gDSAudioApplicationConfigs[DS_AUDIO_MAX_APP_AUDIO_CONFIG_COUNT][DS_MAX_APPLICATION_AUDIO_CONFIG_NAME_LEN] = {{0}};
 
 /* Parse Audio Configuration file */
 int test_dsAudio_parse_configuration()
@@ -117,6 +119,14 @@ int test_dsAudio_parse_configuration()
     gAudioCapabilities    = UT_KVP_PROFILE_GET_UINT32("dsAudio/Audio_Capabilities");
     gDSAudioNumberOfPorts = UT_KVP_PROFILE_GET_UINT32("dsAudio/Number_of_supported_ports");
     UT_LOG_DEBUG("gDSAudioNumberOfPorts =%d ",gDSAudioNumberOfPorts);
+
+    gDSAudioApplicationConfigCount = UT_KVP_PROFILE_GET_UINT32("dsAudio/Application_Audio_Config_Count");
+    for (int j = 0; j < gDSAudioApplicationConfigCount && j < DS_AUDIO_MAX_APP_AUDIO_CONFIG_COUNT; j++)
+    {
+        snprintf(key_string, DS_AUDIO_KVP_SIZE, "dsAudio/Application_Audio_Configs/%d", j);
+        ut_kvp_getStringField(ut_kvp_profile_getInstance(), key_string,
+                              gDSAudioApplicationConfigs[j], DS_MAX_APPLICATION_AUDIO_CONFIG_NAME_LEN);
+    }
 
     gDSAudioPortConfiguration = (dsAudioPortConfiguration_t*) calloc(gDSAudioNumberOfPorts, sizeof(dsAudioPortConfiguration_t));
     if(gDSAudioPortConfiguration == NULL)

@@ -72,6 +72,7 @@
 #define DS_AUDIO_MAX_MS12_PROFILE_LIST 10
 #define DS_AUDIO_MAX_MS12_PROFILE_LEN  32
 #define DS_AUDIO_DEVICE_NAME_SIZE      64
+#define DS_AUDIO_MAX_APP_AUDIO_CONFIG_COUNT 10
 
 #define DS_AUDIO_MOULE_NAME             "dsAudio"
 
@@ -101,6 +102,8 @@ extern dsAudioPortConfiguration_t* gDSAudioPortConfiguration;
 extern char gDSAudioDeviceName[];
 extern int32_t gDSAudioNumberOfPorts;
 extern int32_t gAudioCapabilities;
+extern int32_t gDSAudioApplicationConfigCount;
+extern char    gDSAudioApplicationConfigs[DS_AUDIO_MAX_APP_AUDIO_CONFIG_COUNT][DS_MAX_APPLICATION_AUDIO_CONFIG_NAME_LEN];
 
 /*Function prototypes */
 int test_dsAudio_parse_configuration();

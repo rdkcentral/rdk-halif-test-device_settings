@@ -2333,6 +2333,101 @@ void test_l2_dsAudio_SetAndGetSecondaryLanguage(void)
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
+/**
+* @brief This test sets and gets application audio configurations to verify round-trip consistency.
+*
+* For each configuration returned by dsGetApplicationAudioConfigList(), this test enables
+* the config via dsSetApplicationAudioConfig(), reads back the state via
+* dsGetApplicationAudioConfig() and asserts it is enabled, then disables it and
+* asserts it is disabled.
+*
+* **Test Group ID:** 02@n
+* **Test Case ID:** 032@n
+*
+* **Test Procedure:**
+* Refer to Test specification documentation
+* [dsAudio_L2_Low-Level_TestSpecification.md](../docs/pages/ds-audio_L2_Low-Level_TestSpecification.md)
+*/
+void test_l2_dsAudio_SetAndGetApplicationAudioConfig(void)
+{
+    gTestID = 32;
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+
+    dsError_t ret;
+    dsApplicationAudioConfigList_t list;
+    bool enabled;
+
+    UT_LOG_DEBUG("Invoking dsAudioPortInit");
+    ret = dsAudioPortInit();
+    UT_ASSERT_EQUAL_FATAL(ret, dsERR_NONE);
+
+    // Retrieve the list of supported audio configurations
+    memset(&list, 0, sizeof(list));
+    list.size = sizeof(dsApplicationAudioConfigList_t);
+    UT_LOG_DEBUG("Invoking dsGetApplicationAudioConfigList with handle: 0");
+    ret = dsGetApplicationAudioConfigList(0, &list);
+    UT_LOG_DEBUG("Return status: %d, returnedCount: %u", ret, list.returnedCount);
+    UT_ASSERT_EQUAL(ret, dsERR_NONE);
+    if (ret != dsERR_NONE) {
+        UT_LOG_ERROR("dsGetApplicationAudioConfigList failed: %d", ret);
+    } else {
+        // For each supported configuration, perform set/get round-trip
+        for (uint32_t i = 0; i < list.returnedCount; i++) {
+            UT_LOG_DEBUG("Testing config[%u]: %s", i, list.config[i].configName);
+
+            // Enable the configuration
+            UT_LOG_DEBUG("Invoking dsSetApplicationAudioConfig with config: %s, enable: true",
+                         list.config[i].configName);
+            ret = dsSetApplicationAudioConfig(0, &list.config[i], true);
+            UT_LOG_DEBUG("Return status: %d", ret);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
+            if (ret != dsERR_NONE) {
+                UT_LOG_ERROR("dsSetApplicationAudioConfig enable failed: %d", ret);
+                continue;
+            }
+
+            // Verify it is enabled
+            enabled = false;
+            UT_LOG_DEBUG("Invoking dsGetApplicationAudioConfig with config: %s", list.config[i].configName);
+            ret = dsGetApplicationAudioConfig(0, &list.config[i], &enabled);
+            UT_LOG_DEBUG("Return status: %d, enabled: %d", ret, enabled);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
+            UT_ASSERT_EQUAL(enabled, true);
+            if (!enabled) {
+                UT_LOG_ERROR("Config should be enabled but is not");
+            }
+
+            // Disable the configuration
+            UT_LOG_DEBUG("Invoking dsSetApplicationAudioConfig with config: %s, enable: false",
+                         list.config[i].configName);
+            ret = dsSetApplicationAudioConfig(0, &list.config[i], false);
+            UT_LOG_DEBUG("Return status: %d", ret);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
+            if (ret != dsERR_NONE) {
+                UT_LOG_ERROR("dsSetApplicationAudioConfig disable failed: %d", ret);
+                continue;
+            }
+
+            // Verify it is disabled
+            enabled = true;
+            UT_LOG_DEBUG("Invoking dsGetApplicationAudioConfig with config: %s", list.config[i].configName);
+            ret = dsGetApplicationAudioConfig(0, &list.config[i], &enabled);
+            UT_LOG_DEBUG("Return status: %d, enabled: %d", ret, enabled);
+            UT_ASSERT_EQUAL(ret, dsERR_NONE);
+            UT_ASSERT_EQUAL(enabled, false);
+            if (enabled) {
+                UT_LOG_ERROR("Config should be disabled but is not");
+            }
+        }
+    }
+
+    UT_LOG_DEBUG("Invoking dsAudioPortTerm");
+    ret = dsAudioPortTerm();
+    UT_ASSERT_EQUAL(ret, dsERR_NONE);
+
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
+}
+
 static UT_test_suite_t * pSuite = NULL;
 
 /**
@@ -2405,6 +2500,7 @@ int test_l2_dsAudio_register(void)
     UT_add_test( pSuite, "AudioPortControl", test_l2_dsAudio_AudioPortControl);
     UT_add_test( pSuite, "SetAndGetPrimaryLanguage", test_l2_dsAudio_SetAndGetPrimaryLanguage);
     UT_add_test( pSuite, "SetAndGetSecondaryLanguage", test_l2_dsAudio_SetAndGetSecondaryLanguage);
+    UT_add_test( pSuite, "SetAndGetApplicationAudioConfig", test_l2_dsAudio_SetAndGetApplicationAudioConfig);
 
     return 0;
 }

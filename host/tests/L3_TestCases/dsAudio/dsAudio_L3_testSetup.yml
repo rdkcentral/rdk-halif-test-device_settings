@@ -110,3 +110,7 @@ dsAudio:
       test26_MS12AudioProfiles:
         streams:
           - "streams/multi_tone.ac3"
+      test27_ContinuousAudioOutput:
+        streams:
+          - "streams/tones_string_48k_stereo.ac3"
+          - "streams/tones_string_48k_stereo.eac3"

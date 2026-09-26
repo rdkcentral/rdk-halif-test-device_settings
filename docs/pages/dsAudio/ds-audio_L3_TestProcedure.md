@@ -34,6 +34,7 @@
   - [dsaudio_test24_primarysecondarylanguage.py](#dsaudio_test24_primarysecondarylanguagepy)
   - [dsaudio_test25_audiomix.py](#dsaudio_test25_audiomixpy)
   - [dsaudio_test26_ms12audioprofiles.py](#dsaudio_test26_ms12audioprofilespy)
+  - [dsaudio_test27_continuousaudiooutput.py](#dsaudio_test27_continuousaudiooutputpy)
 
 ## Acronyms, Terms and Abbreviations
 
@@ -1550,3 +1551,53 @@ Play **Stream #3** and verify the MS12 Audio Profile modes for the supported aud
 
   - Once all user responses are collected, the test will conclude.
   - If all profile modes are verified successfully, the test will end with Result: PASS. If any of the modes fail, the test will conclude with Result: FAIL.
+
+### dsAudio_test27_ContinuousAudioOutput.py
+
+#### Platform Supported - test27
+
+- Source
+- Sink
+
+#### User Input Required - test27
+
+Yes (This will be Automated later).
+
+#### Acceptance Criteria - test27
+
+Play **Streams #1 and #8** and verify that the Continuous Audio Output application audio configuration keeps the encoded output indication active during silence and allows encoded playback to resume without audible pop, click, or mute gap.
+
+#### Expected Results - test27
+
+- The test queries the supported application audio configurations before execution. If none are reported by the device, the test ends without port-level validation.
+- When the Continuous Audio Output configuration is enabled and **Stream #1** is stopped, the connected receiver/soundbar should continue to show an encoded audio indication during silence.
+- When **Stream #8** starts while the configuration remains enabled, playback should resume without audible pop, click, or mute gap.
+- After the configuration is disabled and **Stream #1** is stopped again, the encoded audio indication on the connected receiver/soundbar should drop.
+
+#### Test Steps - test27
+
+- Run the Test Script:
+
+  - Select the Python file **`dsAudio_test27_ContinuousAudioOutput.py`** and execute it.
+
+- Download and Prepare Artifacts:
+
+  The test will automatically download all required artifacts and streams, copying them to the target directory before execution begins.
+
+- Query Application Audio Configurations:
+
+  - The test queries the supported application audio configuration list from the device.
+  - If the device reports no supported configurations, the test logs the result and exits.
+
+- Continuous Audio Output Verification:
+
+  For each supported audio port and each returned application audio configuration, the test performs the following sequence:
+
+  - Enable the port and enable the selected application audio configuration.
+  - Play **Stream #1**, stop playback, and prompt the user to confirm that the connected receiver/soundbar still shows an active encoded signal during silence.
+  - Play **Stream #8** and prompt the user to confirm that playback resumes without audible pop, click, or mute gap.
+  - Stop playback, disable the selected application audio configuration, play **Stream #1** again, stop playback, and prompt the user to confirm that the encoded signal indication drops.
+
+- Test Completion:
+
+  - After all supported ports and application audio configurations are evaluated, the test disables the port, terminates the audio session, and reports the final result as PASS or FAIL.
