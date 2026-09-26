@@ -438,7 +438,4 @@ dsHdmiIn:
     #     - GetNumberOfInputs
     # - name: "L2 dsHdmiIn - Source"
     #   test_cases:
-    #     - GetStatus
-    # - name: "L2 dsHdmiIn - Source"
-    #   test_cases:
     #     - VerifyHdmiInputPortStatus
