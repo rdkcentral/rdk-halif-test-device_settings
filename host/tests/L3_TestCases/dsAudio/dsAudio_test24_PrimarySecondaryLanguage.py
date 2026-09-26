@@ -118,7 +118,17 @@ class dsAudio_test24_PrimarySecondaryLanguage(dsAudioHelperClass):
                 # Stop the stream playback
                 self.testPlayer.stop()
 
-                time.sleep(3)
+            self.testdsAudio.disablePort(port, index)
+			
+            time.sleep(3)
+			
+        for port,index in self.testdsAudio.getSupportedPorts():
+            # Enable the audio port
+            self.testdsAudio.enablePort(port, index)
+
+            for i, stream in enumerate(self.testStreams):
+
+                self.testdsAudio.enableAssociateAudioMixig(port, index, False)
 
                 # Start the stream playback
                 self.testPlayer.play(stream)
@@ -140,7 +150,6 @@ class dsAudio_test24_PrimarySecondaryLanguage(dsAudioHelperClass):
 
         # Terminate dsAudio Module
         self.testdsAudio.terminate()
-
         return True
 
 if __name__ == '__main__':
