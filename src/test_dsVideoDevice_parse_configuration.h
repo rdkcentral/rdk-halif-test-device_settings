@@ -85,9 +85,7 @@ typedef struct
     uint32_t SupportedVideoCodingFormats;
     int32_t  NoOfSupportedDFR;
     char     SupportedDisplayFramerate[DS_VIDEO_DEVICE_MAX_FRAMERATE_LIST][DS_VIDEO_DEVICE_MAX_FRAMERATE_LEN];
-    int32_t  num_codec_entries;
-    float    level;
-    dsVideoCodecHevcProfiles_t  profile;
+    dsVideoCodecInfo_t info;
 }dsVideoDeviceConfiguration_t;
 
 /* Global variables */
