@@ -1593,7 +1593,7 @@ void test_l1_dsVideoPort_negative_dsSetResolution(void) {
         resolutions.aspectRatio = dsVIDEO_ASPECT_RATIO_MAX;
         resolutions.stereoScopicMode = dsVIDEO_SSMODE_MAX;
         resolutions.frameRate = dsVIDEO_FRAMERATE_MAX;
-        resolutions.interlaced = dsVIDEO_SCANMODE_PROGRESSIVE;
+        resolutions.interlaced = dsVIDEO_SCANMODE_MAX;
         status = dsSetResolution(handle, &resolutions);
         UT_ASSERT_EQUAL(status, dsERR_INVALID_PARAM);
     }
