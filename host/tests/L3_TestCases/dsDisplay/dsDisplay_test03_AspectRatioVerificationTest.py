@@ -29,6 +29,7 @@ sys.path.append(os.path.join(dir_path, "../../"))
 
 from dsDisplayHelperClass import dsDisplayHelperClass
 from raft.framework.core.logModule import logModule
+from dsClasses.dsVideoPort import dsVideoPortClass
 
 class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
 
@@ -47,24 +48,13 @@ class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
             None.
         """
         # Class variables
-        self.testAspectRatios = ["16x9", "4x3"]
         self.testName  = "test03_AspectRatioVerificationTest"
         self.qcID = '3'
         super().__init__(self.testName, self.qcID, log)
+        self.videoPortProfileFile = os.path.join(dir_path, "../../../../profiles/source/Source_4K_VideoPort.yaml")
+        self.videoport_session = self.dut.getConsoleSession("ssh_hal_test1")
+        self.testdsVideoPort = dsVideoPortClass(self.videoPortProfileFile, self.videoport_session, "L3 dsVideoPort", self.targetWorkspace)
 
-    #TODO: Current version supports only manual verification.
-    def testChangeDisplayAspectRatio(self, port:str, aspectRatio:str, manual=False):
-        """
-        Gets the aspectratio of the display.
-        Args:
-            port (str): Port name
-            aspectRatio (str) : aspectRatio ratio eg: 4x3, 16x9
-            manual (bool, optional): Manual verification (True: manual, False: other verification methods).
-                                    Defaults to other verification methods
-        Returns:
-            None
-        """
-        self.testUserResponse.getUserYN(f"Set the aspectratio {aspectRatio} to Port: {port} and Press Enter:")
 
     def testFunction(self):
         """
@@ -78,21 +68,36 @@ class dsDisplay_test03_AspectRatioVerificationTest(dsDisplayHelperClass):
             bool: Final result of the test.
         """
 
+        self.testdsVideoPort.initialise()
         # Initialize the dsDisplay module
         self.testdsDisplay.initialise()
 
         result = False
         # Loop through the supported video ports
         for port, index in self.testdsDisplay.getSupportedPorts():
-            self.testdsDisplay.selectDisplayPort(port, index)
+            # Enable video port
+            self.testdsVideoPort.enablePort(port, index)
+            # Enable HDCP for source devices
+            if self.testdsVideoPort.getDeviceType():
+                self.testdsVideoPort.enable_HDCP(port, index)
 
-            for aspectRatio in self.testAspectRatios:
+            for resolution in self.testdsVideoPort.getResolutions():
+                # set videoport resolution
+                self.testdsVideoPort.select_Resolution(port, index, resolution)
+
+                self.testdsDisplay.selectDisplayPort(port, index)
+
+                aspectRatio = resolution.get("aspectRatio")
+
                 self.log.stepStart(f'Test Display Aspect Ratio {aspectRatio} Port: {port}')
-                self.testChangeDisplayAspectRatio(port, aspectRatio, True)
                 ratio = self.testdsDisplay.getAspectRatio()
-                result = ratio and aspectRatio in ratio
+                if ratio == aspectRatio:
+                    result = True
+                else:
+                    result = False
                 self.log.stepResult(result, f'Test Display Aspect Ratio {aspectRatio} Port: {port}')
 
+        self.testdsVideoPort.terminate()
         #Terminate dsDisplay Module
         self.testdsDisplay.terminate()
 
@@ -103,3 +108,4 @@ if __name__ == '__main__':
     summeryLog = logModule(summerLogName, level=logModule.INFO)
     test = dsDisplay_test03_AspectRatioVerificationTest(summeryLog)
     test.run(False)
+

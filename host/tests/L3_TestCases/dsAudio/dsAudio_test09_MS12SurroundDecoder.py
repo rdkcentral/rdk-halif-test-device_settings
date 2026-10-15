@@ -86,6 +86,7 @@ class dsAudio_test09_MS12SurroundDecoder(dsAudioHelperClass):
             bool: The overall result of the test execution.
         """
         # Initialize the dsAudio module
+        result = True
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
         for stream in self.testStreams:
@@ -118,6 +119,8 @@ class dsAudio_test09_MS12SurroundDecoder(dsAudioHelperClass):
 
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)
+                else:
+                    self.log.step(f'MS12 {self.ms12DAPFeature} Feature not supported Port:{port} Index:{index}. Can Ignore Test')
 
             # Stop the stream playback
             self.testPlayer.stop()

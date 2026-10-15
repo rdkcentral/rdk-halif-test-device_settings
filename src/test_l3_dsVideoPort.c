@@ -76,12 +76,11 @@
 #include <ut_kvp_profile.h>
 #include <ut_kvp.h>
 #include <ut_control_plane.h>
-#include <assert.h>
 
 
 #include "dsVideoPort.h"
 
-#define DS_ASSERT assert
+#define DS_ASSERT UT_ASSERT
 
 intptr_t gHandle = 0;
 

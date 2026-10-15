@@ -61,6 +61,9 @@ dsFPD:
         - dsSetFPColor_pos
     - name: "L1 dsFPD"
       test_cases:
+        - dsSetFPColor_neg
+    - name: "L1 dsFPD"
+      test_cases:
         - dsGetFPColor_pos
     - name: "L1 dsFPD"
       test_cases:

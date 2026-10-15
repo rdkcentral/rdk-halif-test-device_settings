@@ -39,6 +39,7 @@ TARGET_EXEC :=hal_test_$(HAL_LIB)
 # Export the tag version
 VERSION := $(shell git describe --tags | head -n1)
 KCFLAGS := -D HALIF_TEST_TAG_VERSION=\"$(VERSION)\"
+KCFLAGS += -DNDEBUG
 
 # Check if TARGET is unset
 ifeq ($(TARGET),)

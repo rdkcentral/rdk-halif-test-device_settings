@@ -81,7 +81,7 @@
 #include "test_parse_configuration.h"
 
 #define UT_LOG_MENU_INFO UT_LOG_INFO
-#define DS_ASSERT assert
+#define DS_ASSERT UT_ASSERT
 #define EDID_MAX_DATA_SIZE 256
 #define DS_VIDEO_MAX_INDEX 10
 

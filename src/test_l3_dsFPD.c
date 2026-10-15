@@ -74,11 +74,10 @@
 #include <ut_log.h>
 #include <ut_kvp_profile.h>
 #include <ut_control_plane.h>
-#include <assert.h>
 #include "dsFPD.h"
 
 #define DS_FPD_KEY_SIZE 128
-#define DS_ASSERT assert
+#define DS_ASSERT UT_ASSERT
 #define UT_LOG_MENU_INFO UT_LOG_INFO
 
 static int32_t gTestGroup = 3;

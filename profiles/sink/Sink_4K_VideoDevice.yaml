@@ -41,4 +41,6 @@ dsVideoDevice:
         - "3840x2160px50"
         - "3840x2160px59"
         - "3840x2160px60"
+        - "3840x2160px100"
+        - "3840x2160px120"
       VideoCodecInfo: 0 #Not supported
