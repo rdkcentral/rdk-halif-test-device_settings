@@ -71,6 +71,7 @@
 #include <ut_log.h>
 #include <ut_kvp_profile.h>
 #include <ut_control_plane.h>
+#include <unistd.h>
 #include "dsHdmiIn.h"
 #include "test_parse_configuration.h"
 
@@ -241,10 +242,39 @@ void test_l2_dsHdmiIn_VerifyHdmiInputPortStatus(void)
             continue;
         }
 
-        UT_LOG_DEBUG("Invoking dsHdmiInGetStatus()");
-        ret = dsHdmiInGetStatus(&status);
-        UT_LOG_DEBUG("Active port: %d, Is presented: %d, Is port connected: %d, Return status: %d", status.activePort, status.isPresented, status.isPortConnected[i], ret);
-        UT_ASSERT_EQUAL(ret, dsERR_NONE);
+        dsError_t getstatus_ret = 0;
+        uint32_t elapsed = 0;
+        const uint32_t timeoutMs = 3000; // Total timeout of 3 seconds
+        const uint32_t pollIntervalMs = 500; // Poll every 500 ms
+        uint8_t attempt = 1;
+        while (elapsed < timeoutMs)
+        {
+            uint8_t port_selected = i;
+            UT_LOG_DEBUG("Invoking dsHdmiInGetStatus() attempt %d", attempt);
+            getstatus_ret = dsHdmiInGetStatus(&status);
+            UT_ASSERT_EQUAL(getstatus_ret, dsERR_NONE);
+            // Break immediately on API failure
+            if (getstatus_ret != dsERR_NONE) 
+            {
+                break;
+            } 
+            // Break if desired condition is met
+            if (status.activePort == port_selected) 
+            {
+                break;
+            }
+            usleep(pollIntervalMs * 1000);
+            elapsed += pollIntervalMs;
+            attempt++;
+        }
+
+        // Continue on API failure
+        if (getstatus_ret != dsERR_NONE)
+        {
+            UT_LOG_ERROR("Failed to get status of HDMI Input ports  Return status: %d\n", getstatus_ret);
+            continue;
+        }
+        UT_LOG_DEBUG("Active port: %d, Is presented: %d, Is port connected: %d, Return status: %d", status.activePort, status.isPresented, status.isPortConnected[i], getstatus_ret);
         UT_ASSERT_EQUAL(status.activePort, i);
         UT_ASSERT_FALSE(status.isPortConnected[i]);
         UT_ASSERT_FALSE(status.isPresented);

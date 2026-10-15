@@ -114,6 +114,8 @@ class dsAudio_test22_AudioFormat(dsAudioHelperClass):
                 # Stop the stream playback
                 self.testPlayer.stop()
 
+                self.hal_session.read_all()  # Clear any remaining output
+
             # Disable the audio port
             self.testdsAudio.disablePort(port, index)
 
