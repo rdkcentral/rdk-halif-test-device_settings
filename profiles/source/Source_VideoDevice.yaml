@@ -39,11 +39,10 @@ dsVideoDevice:
         SupportedVideoCodingFormats: 0x07  #dsVIDEO_CODEC_MPEG2|dsVIDEO_CODEC_MPEG4PART10
         SupportedDisplayFramerate: 0 #Not supported
         VideoCodecInfo:
-          num_entries: 1
-          VideoCodec0:
-            level: 5.1 #HEVC profile level
-            #dsVIDEO_CODEC_HEVC_PROFILE_MAIN             = (0x01 << 0)     /*!< 8-bit HEVC video profile. */
-            #dsVIDEO_CODEC_HEVC_PROFILE_MAIN10           = (0x01 << 1)     /*!< 10-bit HEVC video profile. */
-            #dsVIDEO_CODEC_HEVC_PROFILE_MAINSTILLPICTURE = (0x01 << 2)     /*!< HECV Main Still Picture profile */
-            #dsVIDEO_CODEC_HEVC_MAX                      = (0x01 << 3)     /*!< Out of range  */
-            profile: 2 #dsVIDEO_CODEC_HEVC_PROFILE_MAIN10
+          - VideoCodec0:
+              level: 5.1 #HEVC profile level
+              #dsVIDEO_CODEC_HEVC_PROFILE_MAIN             = (0x01 << 0)     /*!< 8-bit HEVC video profile. */
+              #dsVIDEO_CODEC_HEVC_PROFILE_MAIN10           = (0x01 << 1)     /*!< 10-bit HEVC video profile. */
+              #dsVIDEO_CODEC_HEVC_PROFILE_MAINSTILLPICTURE = (0x01 << 2)     /*!< HECV Main Still Picture profile */
+              #dsVIDEO_CODEC_HEVC_MAX                      = (0x01 << 3)     /*!< Out of range  */
+              profile: 2 #dsVIDEO_CODEC_HEVC_PROFILE_MAIN10
