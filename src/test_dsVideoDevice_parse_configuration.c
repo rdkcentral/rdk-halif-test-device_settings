@@ -185,34 +185,28 @@ int test_dsVideoDevice_parse_configuration()
         /* check for only source */
         if (gSourceType == 1)
         {
-            // snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo" , i+1);
-            // gDSVideoDeviceConfiguration[i].info.num_entries = ut_kvp_getInt32Field(ut_kvp_profile_getInstance(), key_string );
-            // UT_LOG_DEBUG("num_codec_entries %d",gDSVideoDeviceConfiguration[i].info.num_entries);
+            snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo", i + 1);
+            gDSVideoDeviceConfiguration[i].numVideoCodecInfos = ut_kvp_getListCount(ut_kvp_profile_getInstance(), key_string);
+            UT_LOG_DEBUG("numVideoCodecInfos = %u", gDSVideoDeviceConfiguration[i].numVideoCodecInfos);
 
-            // /* kvp profile support for float type */
-            // //snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo/VideoCodec0/level" , i+1);
-            // //status = ut_kvp_getStringField(ut_kvp_profile_getInstance(), key_string, gDSVideoDeviceConfiguration[i].level, sizeof(key_string));
-            // for (size_t j = 0; j < gDSVideoDeviceConfiguration[i].info.num_entries; j++)
-            // {
-            //     snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo/%d/VideoCodec%d/level" , i+1, j, j);
-            //     gDSVideoDeviceConfiguration[i].info.entries[j].level = ut_kvp_getFloatField(ut_kvp_profile_getInstance(), key_string );
-            //     UT_LOG_DEBUG("gDSVideoDeviceConfiguration[i].info.entries[%d].level:%f", j, gDSVideoDeviceConfiguration[i].info.entries[j].level);
-            //     snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo/%d/VideoCodec%d/profile" , i+1, j, j);
-            //     gDSVideoDeviceConfiguration[i].info.entries[j].profile = (dsVideoCodecHevcProfiles_t)ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string );
-            //     UT_LOG_DEBUG("gDSVideoDeviceConfiguration[i].info.entries[%d].profile :%d", j, gDSVideoDeviceConfiguration[i].info.entries[j].profile);
-            // }
-            snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo/num_entries", i + 1);
-            gDSVideoDeviceConfiguration[i].info.num_entries = ut_kvp_getInt32Field(ut_kvp_profile_getInstance(), key_string);
-            UT_LOG_DEBUG("num_codec_entries %d", gDSVideoDeviceConfiguration[i].info.num_entries);
-
-            for (size_t j = 0; j < gDSVideoDeviceConfiguration[i].info.num_entries; j++)
+            for (size_t codecIdx = 0; codecIdx < gDSVideoDeviceConfiguration[i].numVideoCodecInfos; codecIdx++)
             {
-                snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo/entries/%zu/level", i + 1, j);
-                gDSVideoDeviceConfiguration[i].info.entries[j].level = ut_kvp_getFloatField(ut_kvp_profile_getInstance(), key_string);
-                UT_LOG_DEBUG( "gDSVideoDeviceConfiguration[%d].info.entries[%zu].level = %f", i, j, gDSVideoDeviceConfiguration[i].info.entries[j].level);
-                snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo/entries/%zu/profile", i + 1, j);
-                gDSVideoDeviceConfiguration[i].info.entries[j].profile = (dsVideoCodecHevcProfiles_t) ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
-                UT_LOG_DEBUG("gDSVideoDeviceConfiguration[%d].info.entries[%zu].profile = %d", i, j, gDSVideoDeviceConfiguration[i].info.entries[j].profile);
+                snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo/%zu/VideoCodec%zu/format", i + 1, codecIdx, codecIdx);
+                gDSVideoDeviceConfiguration[i].VideoCodecInfos[codecIdx].format = (dsVideoCodingFormat_t)ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
+                UT_LOG_DEBUG("VideoCodecInfos[%zu].format = %d", codecIdx, gDSVideoDeviceConfiguration[i].VideoCodecInfos[codecIdx].format);
+                snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo/%zu/VideoCodec%zu/num_entries", i + 1, codecIdx, codecIdx);
+                gDSVideoDeviceConfiguration[i].VideoCodecInfos[codecIdx].codecInfo.num_entries = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
+                UT_LOG_DEBUG("VideoCodecInfos[%zu].num_entries = %u", codecIdx, gDSVideoDeviceConfiguration[i].VideoCodecInfos[codecIdx].codecInfo.num_entries);
+
+                for (size_t entryIdx = 0; entryIdx < gDSVideoDeviceConfiguration[i].VideoCodecInfos[codecIdx].codecInfo.num_entries; entryIdx++)
+                {
+                    snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo/%zu/VideoCodec%zu/entry%zu/level", i + 1, codecIdx, codecIdx, entryIdx);
+                    gDSVideoDeviceConfiguration[i].VideoCodecInfos[codecIdx].codecInfo.entries[entryIdx].level = ut_kvp_getFloatField(ut_kvp_profile_getInstance(), key_string);
+                    UT_LOG_DEBUG("VideoCodecInfos[%zu].entries[%zu].level = %f", codecIdx, entryIdx, gDSVideoDeviceConfiguration[i].VideoCodecInfos[codecIdx].codecInfo.entries[entryIdx].level);
+                    snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo/%zu/VideoCodec%zu/entry%zu/profile", i + 1, codecIdx, codecIdx, entryIdx);
+                    gDSVideoDeviceConfiguration[i].VideoCodecInfos[codecIdx].codecInfo.entries[entryIdx].profile = (dsVideoCodecHevcProfiles_t)ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(),key_string);
+                    UT_LOG_DEBUG("VideoCodecInfos[%zu].entries[%zu].profile = %d", codecIdx, entryIdx, gDSVideoDeviceConfiguration[i].VideoCodecInfos[codecIdx].codecInfo.entries[entryIdx].profile);
+                }
             }
         }
     }
