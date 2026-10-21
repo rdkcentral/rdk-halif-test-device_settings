@@ -5018,7 +5018,7 @@ void test_l1_dsVideoPort_positive_dsColorDepthCapabilities(void) {
         {
             UT_ASSERT_EQUAL(status, dsERR_NONE);
             // Step 04: Compare value with value from profile file
-            UT_ASSERT_EQUAL(colorDepthCapability1, gDSVideoPortConfiguration[i].colordepth_capabilities);
+	    UT_ASSERT_EQUAL(colorDepthCapability1, gDSVideoPortConfiguration[i].colordepth_capabilities);
         }
         else if (gSourceType == 0)
         {
