@@ -2902,7 +2902,7 @@ void test_l1_dsFPD_positive_dsFPSetLEDState(void)
 
 
     // Step 02: Call dsFPSetLEDState() and loop through all supported LED states
-    supportedStates = UT_KVP_PROFILE_GET_UINT8("dsFPD/SupportedLEDStates");
+    supportedStates = UT_KVP_PROFILE_GET_UINT32("dsFPD/SupportedLEDStates");
     for (state = dsFPD_LED_DEVICE_NONE; state < dsFPD_LED_DEVICE_MAX; state++)
     {
         if (!(supportedStates & (1 << state)))
@@ -3011,7 +3011,7 @@ void test_l1_dsFPD_positive_dsFPGetLEDState(void)
 
 
     // Step 03: Compare the retrieved LED state is valid supported state
-    supportedStates = UT_KVP_PROFILE_GET_UINT8("dsFPD/SupportedLEDStates");
+    supportedStates = UT_KVP_PROFILE_GET_UINT32("dsFPD/SupportedLEDStates");
     if (!(supportedStates & (1 << ledState1)))
     {
         UT_FAIL("Unsupported LED State Recieved.")
