@@ -304,6 +304,6 @@ dsVideoPort:
             #dsDISPLAY_COLORDEPTH_UNKNOWN = 0x00, ///< Unknown color depth
             #dsDISPLAY_COLORDEPTH_8BIT    = 0x01, ///< 8-bit color depth
             #dsDISPLAY_COLORDEPTH_10BIT   = 0x02, ///< 10-bit color depth
-            #dsDISPLAY_COLORDEPTH_12BIT   = 0x03, ///< 12-bit color depth
-            #dsDISPLAY_COLORDEPTH_16BIT   = 0x04, ///< 16-bit color depth
+            #dsDISPLAY_COLORDEPTH_12BIT   = 0x04, ///< 12-bit color depth
+            #dsDISPLAY_COLORDEPTH_AUTO    = 0x08, ///< Automatic color depth
             colordepth_capabilities: 0x01
