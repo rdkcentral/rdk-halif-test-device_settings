@@ -335,6 +335,7 @@ void test_l2_dsVideoDevice_GetVideoCodecInfo_source(void)
                 for(int k = 0; k < info.num_entries; k++)
                 {
                     UT_LOG_DEBUG("Codec Info[%d]: profile: %d, level: %f", k, info.entries[k].profile, info.entries[k].level);
+                    UT_LOG_DEBUG("Expected Codec Info[%d]: profile: %d, level: %f", k, gDSVideoDeviceConfiguration[i].info.entries[k].profile, gDSVideoDeviceConfiguration[i].info.entries[k].level);
                     UT_ASSERT_EQUAL(info.num_entries, gDSVideoDeviceConfiguration[i].info.num_entries);
                     UT_ASSERT_EQUAL(info.entries[k].profile, gDSVideoDeviceConfiguration[i].info.entries[k].profile);
                     UT_ASSERT_EQUAL(info.entries[k].level, gDSVideoDeviceConfiguration[i].info.entries[k].level);
