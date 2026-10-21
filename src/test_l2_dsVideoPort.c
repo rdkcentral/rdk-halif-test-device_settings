@@ -850,7 +850,7 @@ void test_l2_dsVideoPort_CheckColorDepthCapabilities_source(void)
         ret = dsColorDepthCapabilities(handle, &colorDepthCapability);
         UT_LOG_DEBUG("Return status: %d, Color Depth Capability: %u", ret, colorDepthCapability);
         UT_ASSERT_EQUAL(ret, dsERR_NONE);
-        UT_ASSERT_EQUAL(colorDepthCapability, dsDISPLAY_COLORDEPTH_8BIT);
+	UT_ASSERT_EQUAL(colorDepthCapability, gDSVideoPortConfiguration[port].colordepth_capabilities);
     } /* for (port) */
 
     UT_LOG_DEBUG("Invoking dsVideoPortTerm");
