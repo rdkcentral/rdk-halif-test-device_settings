@@ -308,7 +308,6 @@ void test_l2_dsVideoDevice_GetVideoCodecInfo_source(void)
         retStatus = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(retStatus, dsERR_NONE);
         UT_LOG_DEBUG("dsGetVideoDevice return status: %d, handle: %ld", retStatus, handle);
-
         if (retStatus != dsERR_NONE)
         {
             UT_LOG_ERROR("dsGetVideoDevice failed with error %d",retStatus);
@@ -316,19 +315,16 @@ void test_l2_dsVideoDevice_GetVideoCodecInfo_source(void)
         }
 
         UT_ASSERT_PTR_NOT_NULL(handle);
-
         if (handle == 0)
         {
             break;
         }
-
         for (codec = dsVIDEO_CODEC_MPEGHPART2; codec < dsVIDEO_CODEC_MAX; codec = (dsVideoCodingFormat_t)(codec << 1))
         {
             if (!(gDSVideoDeviceConfiguration[i].SupportedVideoCodingFormats & codec))
             {
                 continue;
             }
-
             memset(&info, 0, sizeof(info));
             UT_LOG_DEBUG("Invoking dsGetVideoCodecInfo with handle: %ld, codec: %d", handle, codec);
             retStatus = dsGetVideoCodecInfo(handle, codec, &info);
@@ -351,9 +347,7 @@ void test_l2_dsVideoDevice_GetVideoCodecInfo_source(void)
             if (codec == dsVIDEO_CODEC_MPEGHPART2)
             {
                 dsVideoCodecInfo_t *expectedInfo = &gDSVideoDeviceConfiguration[i].VideoCodecInfos[expectedCodecIdx].codecInfo;
-
                 UT_ASSERT_EQUAL(info.num_entries,expectedInfo->num_entries);
-
                 for (uint32_t k = 0;k < info.num_entries;k++)
                 {
                     UT_LOG_DEBUG("Codec Info[%u]: profile=%d level=%f", k, info.entries[k].profile, info.entries[k].level);

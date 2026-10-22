@@ -185,25 +185,25 @@ int test_dsVideoDevice_parse_configuration()
         /* check for only source */
         if (gSourceType == 1)
         {
-            snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo", i + 1);
+            snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo", i + 1); // Construct the key for VideoCodecInfo list count
             gDSVideoDeviceConfiguration[i].numVideoCodecInfos = ut_kvp_getListCount(ut_kvp_profile_getInstance(), key_string);
             UT_LOG_DEBUG("numVideoCodecInfos = %u", gDSVideoDeviceConfiguration[i].numVideoCodecInfos);
 
             for (size_t codecIdx = 0; codecIdx < gDSVideoDeviceConfiguration[i].numVideoCodecInfos; codecIdx++)
             {
-                snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo/%zu/VideoCodec%zu/format", i + 1, codecIdx, codecIdx);
+                snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo/%zu/VideoCodec%zu/format", i + 1, codecIdx, codecIdx); // Construct the key for VideoCodec format
                 gDSVideoDeviceConfiguration[i].VideoCodecInfos[codecIdx].format = (dsVideoCodingFormat_t)ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
                 UT_LOG_DEBUG("VideoCodecInfos[%zu].format = %d", codecIdx, gDSVideoDeviceConfiguration[i].VideoCodecInfos[codecIdx].format);
-                snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo/%zu/VideoCodec%zu/num_entries", i + 1, codecIdx, codecIdx);
+                snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo/%zu/VideoCodec%zu/num_entries", i + 1, codecIdx, codecIdx); // Construct the key for VideoCodec num_entries
                 gDSVideoDeviceConfiguration[i].VideoCodecInfos[codecIdx].codecInfo.num_entries = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
                 UT_LOG_DEBUG("VideoCodecInfos[%zu].num_entries = %u", codecIdx, gDSVideoDeviceConfiguration[i].VideoCodecInfos[codecIdx].codecInfo.num_entries);
 
                 for (size_t entryIdx = 0; entryIdx < gDSVideoDeviceConfiguration[i].VideoCodecInfos[codecIdx].codecInfo.num_entries; entryIdx++)
                 {
-                    snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo/%zu/VideoCodec%zu/entry%zu/level", i + 1, codecIdx, codecIdx, entryIdx);
+                    snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo/%zu/VideoCodec%zu/entry%zu/level", i + 1, codecIdx, codecIdx, entryIdx); // Construct the key for VideoCodec entry level
                     gDSVideoDeviceConfiguration[i].VideoCodecInfos[codecIdx].codecInfo.entries[entryIdx].level = ut_kvp_getFloatField(ut_kvp_profile_getInstance(), key_string);
                     UT_LOG_DEBUG("VideoCodecInfos[%zu].entries[%zu].level = %f", codecIdx, entryIdx, gDSVideoDeviceConfiguration[i].VideoCodecInfos[codecIdx].codecInfo.entries[entryIdx].level);
-                    snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo/%zu/VideoCodec%zu/entry%zu/profile", i + 1, codecIdx, codecIdx, entryIdx);
+                    snprintf(key_string, DS_VIDEO_DEVICE_KVP_SIZE, "dsVideoDevice/Device/%d/VideoCodecInfo/%zu/VideoCodec%zu/entry%zu/profile", i + 1, codecIdx, codecIdx, entryIdx); // Construct the key for VideoCodec entry profile
                     gDSVideoDeviceConfiguration[i].VideoCodecInfos[codecIdx].codecInfo.entries[entryIdx].profile = (dsVideoCodecHevcProfiles_t)ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(),key_string);
                     UT_LOG_DEBUG("VideoCodecInfos[%zu].entries[%zu].profile = %d", codecIdx, entryIdx, gDSVideoDeviceConfiguration[i].VideoCodecInfos[codecIdx].codecInfo.entries[entryIdx].profile);
                 }
@@ -213,7 +213,6 @@ int test_dsVideoDevice_parse_configuration()
 
     return 0;
 }
-
 /* Free Parse Video Device Configuration */
 void test_dsVideoDevice_parse_configuration_term()
 {
