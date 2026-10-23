@@ -960,8 +960,11 @@ void test_l1_dsVideoDevice_positive_dsGetVideoCodecInfo(void)
         if (handle == 0)
             break;
 
-        // Step 03: Iterate over all codecs
-        for(dsVideoCodingFormat_t codec = dsVIDEO_CODEC_MPEGHPART2; codec < dsVIDEO_CODEC_MAX; codec = (dsVideoCodingFormat_t)(codec + 1)){
+        // // Step 03: Iterate over all codecs
+        dsVideoCodingFormat_t codec;
+        for (codec = dsVIDEO_CODEC_MPEGHPART2; codec < dsVIDEO_CODEC_MAX; codec = (dsVideoCodingFormat_t)(codec << 1))
+        {
+            memset(&codecInfo, 0, sizeof(codecInfo));
             result = dsGetVideoCodecInfo(handle, codec, &codecInfo);
             if (gSourceType == 1)
             {
@@ -969,18 +972,30 @@ void test_l1_dsVideoDevice_positive_dsGetVideoCodecInfo(void)
                 {
                     continue;
                 }
-                UT_ASSERT_EQUAL(result, dsERR_NONE);
-                // Compare with profile file
-                UT_ASSERT_EQUAL(codecInfo.num_entries, gDSVideoDeviceConfiguration[i].num_codec_entries);
-                if (codec == dsVIDEO_CODEC_MPEGHPART2)
+
+                /* Find matching expected codec configuration */
+                int expectedCodecIdx = -1;
+                for (uint32_t cfgIdx = 0; cfgIdx < gDSVideoDeviceConfiguration[i].numVideoCodecInfos; cfgIdx++)
                 {
-                    UT_ASSERT_EQUAL(codecInfo.entries->profile, gDSVideoDeviceConfiguration[i].profile);
-                    // Support for float values in KVP
-                    UT_ASSERT_EQUAL(codecInfo.entries->level, gDSVideoDeviceConfiguration[i].level);
+                    if (gDSVideoDeviceConfiguration[i].VideoCodecInfos[cfgIdx].format == codec)
+                    {
+                        expectedCodecIdx = cfgIdx;
+                        break;
+                    }
                 }
-                codec = (dsVideoCodingFormat_t)(0x01 << (j++));
-            } else if(gSourceType == 0) {
-                // Step 04: API is not supported on sink devices
+
+                dsVideoCodecInfo_t *expectedInfo = &gDSVideoDeviceConfiguration[i].VideoCodecInfos[expectedCodecIdx].codecInfo;
+                UT_ASSERT_EQUAL(result, dsERR_NONE);
+                UT_ASSERT_EQUAL(codecInfo.num_entries, expectedInfo->num_entries);
+
+                for (uint32_t k = 0; k < codecInfo.num_entries; k++)
+                {
+                    UT_ASSERT_EQUAL(codecInfo.entries[k].profile, expectedInfo->entries[k].profile);
+                    UT_ASSERT_EQUAL(codecInfo.entries[k].level, expectedInfo->entries[k].level);
+                }
+            }
+            else if (gSourceType == 0)
+            {
                 UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
             }
         }
@@ -1037,7 +1052,7 @@ void test_l1_dsVideoDevice_negative_dsGetVideoCodecInfo(void)
         // Step 02: API is not supported on sink devices
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else {
-        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+        UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     }
 
     // Step 03: Initialize video devices
@@ -1090,7 +1105,7 @@ void test_l1_dsVideoDevice_negative_dsGetVideoCodecInfo(void)
         // Step 13: API is not supported on sink devices
         UT_ASSERT_EQUAL(result, dsERR_OPERATION_NOT_SUPPORTED);
     } else {
-        CHECK_FOR_EXTENDED_ERROR_CODE(result, dsERR_NOT_INITIALIZED, dsERR_NONE);
+        UT_ASSERT_EQUAL(result, dsERR_NOT_INITIALIZED);
     }
 
     UT_LOG_INFO("Out %s", __FUNCTION__);

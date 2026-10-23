@@ -302,45 +302,62 @@ void test_l2_dsVideoDevice_GetVideoCodecInfo_source(void)
     UT_LOG_DEBUG("dsVideoDeviceInit return status: %d", retStatus);
     UT_ASSERT_EQUAL_FATAL(retStatus, dsERR_NONE);
 
-    for(int i = 0; i < gDSvideoDevice_NumVideoDevices; i++)
+    for (int i = 0; i < gDSvideoDevice_NumVideoDevices; i++)
     {
         UT_LOG_DEBUG("Invoking dsGetVideoDevice with index: %d", i);
         retStatus = dsGetVideoDevice(i, &handle);
         UT_ASSERT_EQUAL(retStatus, dsERR_NONE);
         UT_LOG_DEBUG("dsGetVideoDevice return status: %d, handle: %ld", retStatus, handle);
-        if(retStatus != dsERR_NONE)
+        if (retStatus != dsERR_NONE)
         {
-            UT_LOG_ERROR("dsGetVideoDevice failed with error %d", retStatus);
+            UT_LOG_ERROR("dsGetVideoDevice failed with error %d",retStatus);
             continue;
         }
 
         UT_ASSERT_PTR_NOT_NULL(handle);
         if (handle == 0)
-            break;
-
-        for(codec = dsVIDEO_CODEC_MPEGHPART2 ; codec < dsVIDEO_CODEC_MAX; )
         {
-            if(!(gDSVideoDeviceConfiguration[i].SupportedVideoCodingFormats & codec))
+            break;
+        }
+        for (codec = dsVIDEO_CODEC_MPEGHPART2; codec < dsVIDEO_CODEC_MAX; codec = (dsVideoCodingFormat_t)(codec << 1))
+        {
+            if (!(gDSVideoDeviceConfiguration[i].SupportedVideoCodingFormats & codec))
             {
                 continue;
             }
+            memset(&info, 0, sizeof(info));
             UT_LOG_DEBUG("Invoking dsGetVideoCodecInfo with handle: %ld, codec: %d", handle, codec);
             retStatus = dsGetVideoCodecInfo(handle, codec, &info);
             UT_ASSERT_EQUAL(retStatus, dsERR_NONE);
             UT_LOG_DEBUG("dsGetVideoCodecInfo return status: %d, num_entries: %d", retStatus, info.num_entries);
 
-            UT_ASSERT_EQUAL(info.num_entries, gDSVideoDeviceConfiguration[i].num_codec_entries);
-            /* for now hal get info supports only MPEGHPART2 */
-            if(codec == dsVIDEO_CODEC_MPEGHPART2)
+            /* Find the expected codec configuration */
+            int expectedCodecIdx = -1;
+
+            for (uint32_t cfgIdx = 0; cfgIdx < gDSVideoDeviceConfiguration[i].numVideoCodecInfos; cfgIdx++)
             {
-                UT_LOG_DEBUG("Profile: %d", info.entries->profile);
-                UT_ASSERT_EQUAL(info.entries->profile,gDSVideoDeviceConfiguration[i].profile);
-                //TODO : kvp profile support for float type is not available now
-                //UT_ASSERT_EQUAL(info.entries->level,gDSVideoDeviceConfiguration[i].level);
+                if (gDSVideoDeviceConfiguration[i].VideoCodecInfos[cfgIdx].format == codec)
+                {
+                    expectedCodecIdx = cfgIdx;
+                    break;
+                }
             }
-            codec = (0x01 << (j++));
-        } /* for(codec)*/
-    } /* for(i)*/
+
+            /* HAL currently supports only MPEGHPART2 codec info */
+            if (codec == dsVIDEO_CODEC_MPEGHPART2)
+            {
+                dsVideoCodecInfo_t *expectedInfo = &gDSVideoDeviceConfiguration[i].VideoCodecInfos[expectedCodecIdx].codecInfo;
+                UT_ASSERT_EQUAL(info.num_entries,expectedInfo->num_entries);
+                for (uint32_t k = 0;k < info.num_entries;k++)
+                {
+                    UT_LOG_DEBUG("Codec Info[%u]: profile=%d level=%f", k, info.entries[k].profile, info.entries[k].level);
+                    UT_LOG_DEBUG("Expected Codec Info[%u]: profile=%d level=%f", k, expectedInfo->entries[k].profile, expectedInfo->entries[k].level);
+                    UT_ASSERT_EQUAL(info.entries[k].profile, expectedInfo->entries[k].profile);
+                    UT_ASSERT_EQUAL(info.entries[k].level, expectedInfo->entries[k].level);
+                }
+            }
+        } /* for(codec) */
+    } /* for(i) */
     UT_LOG_DEBUG("Invoking dsVideoDeviceTerm");
     retStatus = dsVideoDeviceTerm();
     UT_LOG_DEBUG("dsVideoDeviceTerm return status: %d", retStatus);

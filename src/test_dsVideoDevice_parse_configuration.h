@@ -75,6 +75,17 @@
 
 #define DS_VIDEO_DEVICE_MODULE_NAME    "dsVideoDevice"
 
+/**
+ * @brief Codec format and its corresponding profile information
+ */
+typedef struct
+{
+    dsVideoCodingFormat_t format;  /*!< Codec format */
+    dsVideoCodecInfo_t codecInfo;  /*!< Profile information */
+} dsVideoCodecCapability_t;
+
+#define DS_MAX_VIDEO_CODEC_CAPABILITIES 10
+
 /* Video Device configuration */
 typedef struct 
 {
@@ -85,9 +96,8 @@ typedef struct
     uint32_t SupportedVideoCodingFormats;
     int32_t  NoOfSupportedDFR;
     char     SupportedDisplayFramerate[DS_VIDEO_DEVICE_MAX_FRAMERATE_LIST][DS_VIDEO_DEVICE_MAX_FRAMERATE_LEN];
-    int32_t  num_codec_entries;
-    float    level;
-    dsVideoCodecHevcProfiles_t  profile;
+    uint32_t       numVideoCodecInfos;
+    dsVideoCodecCapability_t VideoCodecInfos[DS_MAX_VIDEO_CODEC_CAPABILITIES];
 }dsVideoDeviceConfiguration_t;
 
 /* Global variables */
