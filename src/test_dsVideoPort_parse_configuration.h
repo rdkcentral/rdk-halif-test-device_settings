@@ -96,6 +96,7 @@ typedef struct
     dsSURROUNDMode_t  SurroundMode;
     int32_t  Supported_tv_resolutions_capabilities;
     int32_t  hdr_capabilities;
+    int32_t  colordepth_capabilities;
     dsHdcpProtocolVersion_t  hdcp_protocol_version;
     dsDisplayQuantizationRange_t  quantization_ranges;
     dsDisplayMatrixCoefficients_t  matrix_coefficients;

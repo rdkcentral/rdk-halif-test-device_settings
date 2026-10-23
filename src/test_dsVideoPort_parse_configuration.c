@@ -162,6 +162,9 @@ int test_dsVideoPort_parse_configuration()
         snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/hdr_capabilities" , i+1 );
         gDSVideoPortConfiguration[i].hdr_capabilities = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
 
+        snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/colordepth_capabilities" , i+1 );
+        gDSVideoPortConfiguration[i].colordepth_capabilities = ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
+
         snprintf(key_string, DS_VIDEO_PORT_KVP_SIZE, "dsVideoPort/Ports/%d/hdcp_protocol_version" , i+1 );
         gDSVideoPortConfiguration[i].hdcp_protocol_version = (dsHdcpProtocolVersion_t)ut_kvp_getUInt32Field(ut_kvp_profile_getInstance(), key_string);
 
