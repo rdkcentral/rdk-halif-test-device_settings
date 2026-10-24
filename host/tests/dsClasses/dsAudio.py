@@ -1039,6 +1039,60 @@ class dsAudioClass():
                 return entry['dialog_enhancement_level']
         return []
 
+    def getApplicationAudioConfigList(self):
+        """
+        Retrieves the list of supported application audio configuration names from the device.
+
+        The device is queried via the test menu and the returned configuration names are
+        parsed from the output. The order of names in the returned list matches the
+        numeric indices that the device assigns to each entry, which is required when
+        calling setApplicationAudioConfig().
+
+        Returns:
+            list: A list of configuration name strings.
+        """
+        result = self.utMenu.select(self.testSuite, "Get Application Audio Config List")
+
+        configPattern = r"\t(\d+)\.\s+(\w+)"
+        matches = re.findall(configPattern, result)
+        return [name for _, name in matches]
+
+    def setApplicationAudioConfig(self, configName: str, enable: bool):
+        """
+        Enables or disables the specified application audio configuration on the device.
+
+        Args:
+            configName (str): Canonical configuration name.
+            enable (bool): True to enable, False to disable.
+
+        Returns:
+            bool | None: Read-back enabled state, or None if the config is not found.
+        """
+        configList = self.getApplicationAudioConfigList()
+        if configName not in configList:
+            return None
+        configIndex = configList.index(configName)
+
+        promptWithAnswers = [
+            {
+                "query_type": "direct",
+                "query": "Select Configuration Index",
+                "input": str(configIndex)
+            },
+            {
+                "query_type": "direct",
+                "query": "Enable/Disable Configuration",
+                "input": "1" if enable else "0"
+            }
+        ]
+        result = self.utMenu.select(self.testSuite, "Set Application Audio Config", promptWithAnswers)
+
+        readBackPattern = r"Result dsGetApplicationAudioConfig\(IN:config:\[(\w+)\], OUT:enabled:\[(true|false)\]\)"
+        match = re.search(readBackPattern, result)
+        if match:
+            return match.group(2) == "true"
+        return None
+
     def __del__(self):
         """
         Cleans up and de-initializes the dsAudio helper by stopping the test menu.
