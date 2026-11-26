@@ -90,6 +90,7 @@ class dsAudio_test12_MS12MISteering(dsAudioHelperClass):
             bool: The final result of the test execution (True if successful, False otherwise).
         """
         # Initialize the dsAudio module
+        result = True
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
         for stream in self.testStreams:
@@ -122,6 +123,10 @@ class dsAudio_test12_MS12MISteering(dsAudioHelperClass):
 
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)
+                else:
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{False} Port:{port} Index:{index} Stream:{stream}')
+                    result = "SKIPPED"
+                    self.log.stepResult(result,f'MS12 {self.ms12DAPFeature} Feature not supported Port:{port} Index:{index}. Can Ignore Test')
 
             # Stop the stream playback
             self.testPlayer.stop()

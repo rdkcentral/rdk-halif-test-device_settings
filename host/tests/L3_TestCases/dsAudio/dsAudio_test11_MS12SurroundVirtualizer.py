@@ -92,6 +92,7 @@ class dsAudio_test11_MS12SurroundVirtualizer(dsAudioHelperClass):
             bool : The result of the last audio verification.
         """
         # Initialize the dsAudio module
+        result = True
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
         for stream in self.testStreams:
@@ -140,6 +141,10 @@ class dsAudio_test11_MS12SurroundVirtualizer(dsAudioHelperClass):
 
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)
+                else:
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{False} Port:{port} Index:{index} Stream:{stream}')
+                    result = "SKIPPED"
+                    self.log.stepResult(result,f'MS12 {self.ms12DAPFeature} Feature not supported Port:{port} Index:{index}. Can Ignore Test')
 
             # Stop the stream playback
             self.testPlayer.stop()

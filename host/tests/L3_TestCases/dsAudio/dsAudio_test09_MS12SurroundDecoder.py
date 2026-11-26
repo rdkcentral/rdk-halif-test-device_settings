@@ -120,7 +120,9 @@ class dsAudio_test09_MS12SurroundDecoder(dsAudioHelperClass):
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)
                 else:
-                    self.log.step(f'MS12 {self.ms12DAPFeature} Feature not supported Port:{port} Index:{index}. Can Ignore Test')
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{False} Port:{port} Index:{index} Stream:{stream}')
+                    result = "SKIPPED"
+                    self.log.stepResult(result,f'MS12 {self.ms12DAPFeature} Feature not supported Port:{port} Index:{index}. Can Ignore Test')
 
             # Stop the stream playback
             self.testPlayer.stop()

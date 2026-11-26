@@ -88,6 +88,7 @@ class dsAudio_test08_MS12BassEnhancer(dsAudioHelperClass):
             bool: Status of the last verification result.
         """
         # Initialize the dsAudio module
+        result = True
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
         for stream in self.testStreams:
@@ -114,6 +115,10 @@ class dsAudio_test08_MS12BassEnhancer(dsAudioHelperClass):
                     self.testdsAudio.setMS12Feature(port, index, {"name":self.ms12DAPFeature, "value":0})
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)
+                else:
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{False} Port:{port} Index:{index} Stream:{stream}')
+                    result = "SKIPPED"
+                    self.log.stepResult(result,f'MS12 {self.ms12DAPFeature} Feature not supported Port:{port} Index:{index}. Can Ignore Test')
 
             # Stop the stream playback
             self.testPlayer.stop()
