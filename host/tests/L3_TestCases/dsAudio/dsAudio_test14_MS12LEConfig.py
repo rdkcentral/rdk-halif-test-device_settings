@@ -93,6 +93,7 @@ class dsAudio_test14_MS12LEConfig(dsAudioHelperClass):
             bool: Overall result of the test execution.
         """
         # Initialize the dsAudio module
+        result = True
         self.testdsAudio.initialise(self.testdsAudio.getDeviceType())
 
         for stream in self.testStreams:
@@ -134,6 +135,10 @@ class dsAudio_test14_MS12LEConfig(dsAudioHelperClass):
 
                     # Disable the audio port
                     self.testdsAudio.disablePort(port, index)
+                else:
+                    self.log.stepStart(f'MS12 {self.ms12DAPFeature} :{False} Port:{port} Index:{index} Stream:{stream}')
+                    result = "SKIPPED"
+                    self.log.stepResult(result,f'MS12 {self.ms12DAPFeature} Feature not supported Port:{port} Index:{index}. Can Ignore Test')
 
         # Terminate dsAudio Module
         self.testdsAudio.terminate()

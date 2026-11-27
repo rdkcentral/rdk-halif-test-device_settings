@@ -214,6 +214,8 @@ Connect each specified display device, retrieve `EDID` data, and confirm that th
 
 **Test Steps:**
 
+- Update the `dsDisplay_test_MonitorDetails.yml` file with the details of the monitors that are available in the test environment.
+
 - Run the Python file `dsDisplay_test02_TestVerifyDisplayEdid.py` with the appropriate configuration:
 
 ```bash
@@ -296,6 +298,8 @@ Connect each display to the supported video ports, retrieve the `EDID` bytes, an
 The test will retrieve and parse `EDID` bytes for each connected display. It will verify that the `EDID` information, including fields like manufacturerId and monitorName, matches the expected values for each display. The test will pass if all expected `EDID` details are retrieved and verified correctly for each display and port.
 
 **Test Steps:**
+
+- Update the `dsDisplay_test_MonitorDetails.yml` file with the details of the monitors that are available in the test environment.
 
 - Run the Python file `dsDisplay_test04_TestVerifyDisplayEdidBytes` with the appropriate configuration:
 

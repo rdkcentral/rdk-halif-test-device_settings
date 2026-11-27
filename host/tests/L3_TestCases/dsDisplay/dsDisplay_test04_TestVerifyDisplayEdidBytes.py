@@ -64,7 +64,7 @@ class dsDisplay_test04_TestVerifyDisplayEdidBytes(dsDisplayHelperClass):
             bool
         """
         if manual == True:
-            return self.testUserResponse.getUserYN(f"Connect Device: {display} to Port: {port} and Press Enter")
+            return self.testUserResponse.getUserYN(f"Connect Device: {display} to Port: {port} and Press Y/N: ")
         else :
             #TODO: Add automation verification methods
             return False
@@ -93,7 +93,10 @@ class dsDisplay_test04_TestVerifyDisplayEdidBytes(dsDisplayHelperClass):
                 result = False
                 self.log.stepStart(f'Test Display Edid Port: {port} Device: {display["Product"]}')
                 # Wait for the device connection
-                self.testConnectDisplay(port, display["Product"], True)
+                if not self.testConnectDisplay(port, display["Product"], True):
+                    self.log.stepResult("SKIPPED",
+                        f"Display {display['Product']} not connected")
+                    continue
 
                 # Get the Edid Bytes
                 edidData = self.testdsDisplay.getEdidBytes()
